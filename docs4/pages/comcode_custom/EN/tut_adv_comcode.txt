@@ -1,0 +1,134 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Advanced Comcode[/title]
+
+This tutorial will explain some of the more advanced aspects of the Comcode system, for those who already have a handle on the basics.
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Comcode Security[/title]
+
+A great deal of emphasis is placed on making sure Comcode is secure, as it is available to all members of an ocPortal website. There is a privilege, 'allow insecure Comcode', and another 'allow nuisance Comcode': we recommend that these are left turned off except for staff.
+There are additional mechanisms in Comcode to aid security, such as ones to stop Javascript-powered URLs, and ones to stop people trying to using HTML entities to bypass Javascript filtering.
+
+Users can use HTML in Comcode, but it is subject to a security filter. There are two security filters used:
+1) The whitelist filter. This is the most secure filter, and is used by default. It only allows certain HTML fragments to be used (fragments likely to be produced via usage of the WYSIWYG editor).
+2) The blacklist filter. This is designed for high security, filtering out anything it sees as dangerous. Members are subjected to this filter if they have the "Subject to a more liberal HTML filter" permission.
+
+[title="2"]Comcode Menus[/title]
+
+ocPortal has had a dedicated menu editor since version 2.5. Before this, menus were written directly into Comcode rather than being tied to a menu-editor menu via a block. The old method of writing a 'Comcode menu' is still available though, and some users, especially those with disabilities, may prefer this method of menu generation.
+
+[exp_thumb="The example in action" float="right"]comcode_menu[/exp_thumb]
+The menu Comcode tag is only intended for use in the Comcode pages. It is designed to be a user friendly way of defining what links are on your site, but it is important to be careful not to break the syntactic rules for the menu formation.
+The menu tag takes a single parameter -- the codename assigned to the menu. Each menu should be assigned a different codename, and you may just make one up as you write the Comcode.
+
+The menu is [b]only[/b] designed for organising links. You should not attempt to store other content in a Comcode menu tag.
+
+Here is an example of a menu tag in action...
+
+[code]
+[menu='some_codename']
+-contracted section
+ +expanded section
+  page = URL
+  page = URL
++expanded section
+ page = URL
+ page = URL
+[/menu]
+[/code]
+
+[box="Tip" breadth="250px" type="light" float="right"]You can put a '~' symbol (tilde, commonly known as 'that wiggly/twiddly symbol') before a URL if you want it to open in a new window.[/box]
+Like the list syntax, the menu syntax specifies a tree structure, and uses indentation to do it. Things within a section, including the definition of sub-sections, are indented from the section start line itself.
+
+The '-' means that a section is not expanded by default, whilst the '+' means that a section is. Those lines without a '+' or '-' are lines that are actually entries on the menu, and contain the caption of the entry, followed by ' = ', followed the the URL of the entry.
+
+Menu entries are typed so that their indentation is equal to the indentation of the start of the section's title. i.e. one further depth of indentation from the section's '+' or '-'.
+
+[title="2"]Bulk media upload[/title]
+
+[exp_thumb="The Bulk-Upload assistant" float="right"]adv_comcode_bulk[/exp_thumb]
+{!bulkupload:DOC_BULK_UPLOAD}
+
+[title="2"]Custom Comcode[/title]
+
+[exp_thumb="Adding a custom Comcode tag" float="right"]adv_comcode_custom[/exp_thumb]
+{!custom_comcode:DOC_CUSTOM_COMCODE}
+To add a custom tag, do as follows:
+ - Enter the Admin Zone
+ - In the Setup section, go to 'Custom Comcode'
+ - Choose 'Add custom Comcode tag'
+ - Choose the tag codename you would like to use, a title for the tag, a description, and an example of how the tag would be used.
+ - Tick the various check boxes as necessary.
+ - Place the HTML you wish to use inside the 'Replacement text' field, and put '{content}' at the place where you wish for the tag content to be (the text that sits between the opening of the Comcode tag and the closing of the Comcode tag).
+ - If you have additional parameters for the tag, list your chosen codenames, separated by commas, in the 'Parameters' field. Then place the codenames in the 'Replacement text' field, in a similar way to as you did for '{content}'.
+ - Click the 'Add custom Comcode tag' button
+Your tag will be shown in your local copy of the Comcode tutorial, with your title, description and usage example.
+
+[title="2"]Semi-HTML[/title]
+
+The \[semihtml] tag is a special tag that allows Comcode and HTML to be naturally mixed together. Primarily, the tag is used so that the WYSIWYG editor, which is an HTML editor, may have Comcode placed within it that is not visual, and thus could not be edited in a WYSIWYG fashion.
+
+The \[semihtml] tag is also useful if you are writing some content that has very tight formatting, so it involves a lot of HTML, but also includes elements of Comcode, such as blocks. Without the \[semihtml] tag, it would be necessary to keep opening and closing \[html] tags to achieve the same effect.
+
+[title="2"]BBCode compatibility[/title]
+
+Comcode, at the time of writing, can be considered an extension of [concept]BBCode[/concept], which is popular among standalone forum systems (some derivatives of 'BBCode' include 'vbCode', and 'BBCode' is itself originally based on 'UBB Code'). In actual fact, Comcode was created as an amalgamation of a number of pre-ocPortal syntaxes, and was not intentionally designed to be like BBCode at all; after time, we consciously moved it to appear more like BBCode, for compatibility reasons.
+
+Comcode can now support all major features of all the major BBCode-like languages, and lax syntax (for example, missing quotation symbols) as is often allowed in BBCode (mainly, so that importers and forum drivers do not have to convert from BBCode dialects to Comcode to display the data). However, BBCode implementations do not support a lot of the functionality of Comcode, such as the 'block' tag and our list syntax; in addition, the Comcode implementation is that of a fully parsed language, with a well-defined syntax, whilst BBCode is almost always implemented as an adhoc language to be turned into HTML via [concept]regular expressions[/concept].
+
+[title="2"]Wiki-Code compatibility[/title]
+
+One of the original syntaxes that came before Comcode was similar to that of [concept]WIKI-Code[/concept], in that it was not a text-formatting based language, rather than a tag based language. The Comcode list and ruled-line syntaxes are examples of this.
+
+Since version 3 of ocPortal we have made a conscious decision to support a few other WIKI-Code conventions, in a way that is most similar to that of MediaWIKI. We have opted to maintain most similarity to BBCode though, and have not provided [concept]WIKI-Code[/concept] syntax where there was already support via existing Comcode syntax.
+
+[title="2"]Comcode-XML[/title]
+
+The form of Comcode that is documented and primarily used is now formally known as 'Comcode-Text'.
+
+Since version 3 of ocPortal we have introduced support for Comcode-XML. This is a formally specified XML language that is a bit harder to write, but is easier to integrate with other systems because a parser can be written using standard XML technology. If you do not know what XML is then you do not need to know about Comcode-XML because it won't provide any benefits to you.
+
+
+We do not intend to document Comcode-XML separately even though the set of tags and attributes is not exactly the same as Comcode-Text. Instead, we provide a schema that is available at http://ocportal.com/data/comcode4.xsd
+
+The following is an example of Comcode-XML:
+[code="XML"]
+<comcode>
+   Please leave us some product feedback.<br /><br />
+   <block>main_feedback<blockParam key="param" value="product_feedback" /></block>
+</comcode>
+[/code]
+in Comcode-Text, it would have looked as follows:
+[code="Comcode"]
+Please leave us some product feedback.
+
+[block="product_feedback"]main_feedback[/block]
+[/code]
+
+ocPortal contains a simple URL-based web service that can convert Comcode-Text into Comcode-XML, in preparation for integration.
+
+[title="2"]Semantics and accessibility[/title]
+
+Comcode is designed to be a language that is easy to use, versatile, rich, indistinguishable from plain-text in the simple case, and useful for writing small code snippets as well as long documents. It is not designed to be a 'semantic' language, with any kind of special separation between visual coding (such as a font tag) and structural coding (such as a block tag, or arguably a ticker tag). Whilst the separation of concerns is appropriate for a website's main layout, which is often worked upon by different people, and where the mark-up is complex and detailed enough to warrant a separation, it is not appropriate for Comcode. This said, the resultant XHTML is highly semantic.
+
+It is worth noting that the 'tag contents' of certain tags is of no visual significance what-so-ever (such as the block tag, where it has the codename of a block placed there, which is not itself displayed). This fact could be used to argue that Comcode is not a pure mark-up language.
+
+There are some accessibility issues with certain Comcode tags, and these are described in the 'Helping improve site accessibility for disabled users' tutorial.
+
+[title="2"]Syntax highlighting[/title]
+
+ocPortal supports syntax highlighting via [url="GeSHi"]http://qbnz.com/highlighter/[/url]. This operates using the normal 'code' and 'codebox' tags, adding support for GeSHi highlighter codes to the 'param' attribute of the tags. For this support to function it is necessary for you to download GeSHi and extract the [tt]geshi.php[/tt] file and [tt]geshi[/tt] directory into ocPortal's [tt]sources_custom[/tt] directory. This is for licensing reasons.
+
+
+
+
+[concepts
+ 1_key="WIKI-Code"   1_value="The mark-up language used on most WIKI systems"
+ 2_key="BBCode"      2_value="The mark-up language used on many discussion forum systems, which is similar to Comcode"
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page caption="Comcode and the attachment system"]tut_comcode[/page]
+ - [page caption="Helping improve site accessibility for disabled users"]tut_accessibility[/page]
+

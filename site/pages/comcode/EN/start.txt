@@ -1,0 +1,17 @@
+[title="1"]Member section of {$SITE_NAME}[/title]
+
+[block="3" failsafe="1"]main_greeting[/block]
+
+
+[semihtml]
+<div class="float_surrounder">
+<div class="fp_col_block" style="float: left">[block failsafe="1"]main_content[/block]</div>
+<div class="fp_col_block" style="float: right">[block failsafe="1"]main_poll[/block]</div>
+</div>
+[/semihtml]
+
+[block failsafe="1"]main_leader_board[/block]
+
+[block="http://news.google.co.uk/news?hs=UTT&tab=wn&topic=w&output=atom" failsafe="1"]main_rss[/block]
+
+[block]main_comcode_page_children[/block]

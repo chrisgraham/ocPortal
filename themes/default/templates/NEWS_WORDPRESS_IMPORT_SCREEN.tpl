@@ -1,0 +1,9 @@
+{TITLE}
+
+<h2>{!IMPORT_FROM_XML}</h2>
+
+{XML_UPLOAD_FORM}
+
+<h2>{!IMPORT_FROM_DB}</h2>
+	
+{DB_IMPORT_FORM}

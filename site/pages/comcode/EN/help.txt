@@ -1,0 +1,51 @@
+[title="1"]Help[/title]
+
+[title="2"]Logging-in[/title]
+
+You need to login to the site in order to conduct actions under the privileges of your username, and to be able to claim control (if you have the permissions), and point reward, over the content you submit.
+
+You may also need to login to access restricted zones, categories, and pages.
+
+{+START,IF,{$ADDON_INSTALLED,points}}[title="2"]Points[/title]
+
+Every logged-in member can gain points as they contribute to our community, in ways like...
+ - Posting on the forums
+ - Contributing content to the site, such as images of the day
+
+As you gain points, you can spend them on various fun or useful things, such as buying your own e-mail account.
+
+The points system extends further than this though, as members have the ability to give each-other points via gift-points. Gift-points are given out to all our members at a rate of 1 per day for every day they are a member but are useless until they are given to people who you feel have done you or the community a good service. When they are given to someone they show up on their personal points page, and they count towards their point total (which they can use to buy things with). For example, somebody might release some works to the community and then members might give them a whole load of points for it, given them credit for their work.
+Occasionally upon giving a gift, you will be awarded points yourself, as a random award for your consideration.
+
+Members of staff have the ability to give any number of points they like to people, including huge numbers, or even negative numbers. Please the staff and you could be awarded massively in points; abuse our systems and you could be penalised.
+
+Please have fun with the system and use your gift-points well.
+{+END}
+{+START,IF,{$ADDON_INSTALLED,pointstore}}[title="2"]The point-store[/title]
+
+{$ANCHOR,POINT_STORE}The [page caption="point-store"]pointstore[/page] contains all the items you can buy using your points. You can then select some and buy them.
+
+The items that are purchasable may include:
+ - Flagrant text messages. These are messages displayed in a prominent position on the website. All flagrant messages are placed in a queue and activated manually (and thus subject to moderation).
+ - Banner advertisements, and upgrades. Through this you may advertise something of your own that ordinarily the staff would not allocate advertising space for.
+ - E-mail addresses. You may be able to purchase forwarding and POP3 e-mail addresses
+
+Products that require manual set-up will usually only be charged for upon activation, not at point of sale.
+{+END}
+{+START,IF,{$ADDON_INSTALLED,news}}[title="2"]News/Blogs[/title]
+
+{$ANCHOR,ADD_NEWS}[page="_SEARCH" caption="The add news page" type="ad"]cms_news[/page] allows you to add your news to the site. For most members, this will put the news into a validation queue and inform the staff of the submission.
+{+START,IF,{$HAS_SPECIFIC_PERMISSION,have_personal_category,cms_news}}You may also get a chance to submit to your own personal news category; this is your own blog on the website.{+END}
+
+{+END}[title="2"]Other things you may do[/title]
+
+You may see submission links on the menus, and in other places. Submitting any kind of entry will be a similar process to submitting news: your entry will likely be put in a validation queue.
+
+{+START,IF,{$ADDON_INSTALLED,cedi}}[title="2"]CEDI[/title]
+
+CEDI stands for 'Collaborative/encyclopaedic database interface', and is a system that allows users to post content into a database of posts. This system is similar to that of a forum, however rather than having a structure of forums and user created topics, it has a staff-managed hierarchical structure of pages.
+
+The system can be used for all kinds of things, such as posting reference material indexed hierarchically by category, organising ideas indexed by topic, or discussing TV programmes indexed by episode name.
+
+The staff will make clear how the CEDI system is employed on this website.
+{+END}

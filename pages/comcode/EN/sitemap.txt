@@ -1,0 +1,4 @@
+[title]{$SITE_NAME} Site-Map[/title]
+
+[block quick_cache="1"]main_sitemap[/block]
+

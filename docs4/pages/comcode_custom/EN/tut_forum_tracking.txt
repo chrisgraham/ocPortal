@@ -1,0 +1,76 @@
+[title sub="Written by Philip Withnall, ocProducts"]ocPortal Tutorial: Keeping on track of busy forums[/title]
+
+Once you've got a community set up and running, and it has attracted lots of members, it can get quite hard to keep up with all the discussion on your forums. However, OCF provides several methods to assist you in keeping up with the activity. (This tutorial only applies to websites using [concept]OCF[/concept]).
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Virtual forums[/title]
+
+Virtual forums are basically special types of forum that list topics in a distinctive and hard-coded way. An example of this would be the 'personal topics' virtual forum, which instead of listing normal topics, lists all the personal topics the current member has access to.
+
+[title="3"]Posts since last visit[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The link to see posts since your last forum visit" float="left"]forum_tracking_Posts-since-last-visit-link[/exp_thumb]
+[exp_thumb="A sample of the interface" float="right"]forum_tracking_Posts-since-last-visit[/exp_thumb]
+The 'posts since last visit' virtual forum displays all the posts that were made since you last visited the site. The virtual forum displays the posts as a list of links to the respective topics, with all the normal trimmings, such as topic icon, jump to first unread link, previews, etc. Clicking on one of the listed links would take you straight to the first new post in the specified topic.
+
+The last-visit detection system works using session cookies. If the last-visit cookie is not present then ocPortal knows that you are starting a new visit, and loads in a new copy of the cookie using the last-active time stored in the database against your account.
+This has three ramifications:
+ - Session cookies must be enabled for it to work (almost certainly they will be, as cookie restrictions rarely work upon the short-term session cookies).
+ - If you switch around between accounts the reports will not be accurate, as your existing last-visit session cookie will continue to persist.
+ - If you do not shut down your browser window then this will be considered an on-going visit (closing a tab is not sufficient to make the web browser delete session cookies for a site).
+[html]</div>[/html]
+[title="3"]Topics with unread posts[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The link to see topics with unread posts" float="left"]forum_tracking_Topics-with-unread-posts-link[/exp_thumb]
+[exp_thumb="A sample of the interface" float="right"]forum_tracking_Topics-with-unread-posts[/exp_thumb]
+The 'topics with unread posts' virtual forum displays any topics on the forum that have unread posts -- posts that you have not viewed.  Again, the virtual forum displays the posts as a list of links to the respective topics, with all the normal trimmings, such as topic icon, jump to first unread link, previews, etc. Clicking on one of the listed links would take you straight to the first unread post in the specified topic.
+[html]</div>[/html]
+[title="2"]Read status[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="How the read/unread status of a topic works" float="right"]forum_tracking_Topic-read-status[/exp_thumb]
+A topic can either be 'read', or 'unread'. If a topic is unread, it is shown in bold in the topic listing, and has a little triangle icon next to it (the 'jump to first unread' link).
+[html]</div>[/html]
+[title="3"]Marking as unread[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The button to mark a topic as unread" float="left"]forum_tracking_Mark-topic-unread-link[/exp_thumb]
+Marking as unread is a convenient way to tell yourself to come back to a topic without any hassle. When you open up a topic, it is automatically marked as 'read'. However, you may want to make the topic appear as unread again, perhaps for the aforementioned reason. To do this, you need to click the "mark 'unread'" button.
+
+This function is available for forums as well as topics. If you use it on a forum then it is the same as doing it on every unread topic within that forum, and any sub-forums thereof.
+[html]</div>[/html]
+[title="3"]Marking as read[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The button to mark a topic as read" float="right"]forum_tracking_Mark-forum-read-link[/exp_thumb]
+Marking as read is a function only available for forums, to save you the hassle of going through each topic and reading them when you might not want to, or they might not be relevant. Simply go to the forum view of the forum you want to mark as read (or any of its parents, such as the home forum), and click the "mark 'read'" button.
+
+This function is not available for individual topics, as to reach the button, you would be marking the topic as read anyway.
+[html]</div>[/html]
+[title="2"]Tracking[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The button to track a forum" float="left"]forum_tracking_Track-forum-link[/exp_thumb]
+[exp_thumb="Options for tracking a topic in your member profile" float="right"]forum_tracking_Tracking-options[/exp_thumb]
+Tracking allows you to mark topics for notification; when a new reply is posted, you will be notified by e-mail of its presence. Also an e-mail notification will be sent if a topic is moved (as long as there is activity within the last two weeks). There is an automatic tracking option that each member may set in his/her profile (options for automatically marking topics the member posts in to be tracked).
+
+As well as automatic tracking, you can tell ocPortal to track topics manually, by clicking the "track topic" button in the topic view.
+[exp_thumb="The button to track a topic" float="right"]forum_tracking_Track-topic-link[/exp_thumb]
+
+You can also mark whole forums to be tracked, by clicking the "track forum" button in the forum view. Note that if you mark a forum to be tracked, all sub-forums will be marked to be tracked too.
+[html]</div>[/html]
+[title="2"]Untracking[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The button to untrack a forum" float="left"]forum_tracking_Untrack-forum-link[/exp_thumb]
+[exp_thumb="The button to untrack a topic" float="right"]forum_tracking_Untrack-topic-link[/exp_thumb]
+As well as tracking topics and forums, you can easily mark them to not be tracked, using the untrack buttons. To untrack a topic, just click the "untrack topic" button in the topic view, and to untrack a forum, click the "untrack forum" button in the forum view.
+[html]</div>[/html]
+
+[concepts
+ 1_key="Virtual forum"   1_value="A special, separate forum view that lists special types of topic, such as personal topics."
+ 2_key="Tracking"        2_value="By tracking a topic, you get e-mail notifications when there are new posts to that topic. Also known as subscribing in some forum systems."
+ 3_key="Forum view"      3_value="The screen where you view a forum on. From it you see a list of the topics in the forum you are in any any subforums."
+ 4_key="Topic view"      4_value="The screen where you view a topic on. From it you can read the posts in the topic."
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page caption="Organising discussion forums"]tut_forums[/page]
+

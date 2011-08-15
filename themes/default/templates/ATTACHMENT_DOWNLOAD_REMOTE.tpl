@@ -1,0 +1,8 @@
+<a rel="enclosure" target="_blank" title="{!DOWNLOAD_ATTACHMENT_REMOTE,{A_ORIGINAL_FILENAME*},{$ATTACHMENT_DOWNLOADS*,{ID}}}: {!LINK_NEW_WINDOW}" href="{A_URL*}">{!DOWNLOAD_ATTACHMENT_REMOTE,{A_ORIGINAL_FILENAME*},{$ATTACHMENT_DOWNLOADS*,{ID}}}</a>
+
+{+START,IF_NON_EMPTY,{A_DESCRIPTION}}
+	<p class="associated_caption">
+		{A_DESCRIPTION}
+	</p>
+{+END}
+

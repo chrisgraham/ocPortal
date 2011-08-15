@@ -1,0 +1,1 @@
+<form title="{!REINSTALL}: {NAME*}" onsubmit="disable_button_just_clicked(this);" class="inline" action="{URL*}" method="post"><input name="submit" type="image" src="{$IMG*,tableitem/reinstall}" title="{!REINSTALL}: {NAME*}" alt="{!REINSTALL}: {NAME*}" />{HIDDEN}</form>

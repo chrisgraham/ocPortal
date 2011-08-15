@@ -1,0 +1,4 @@
+<?php
+return unserialize("a:6:{i:0;a:1:{i:0;a:5:{i:0;s:27:\"tcpfunc_COMCODE_IF_IN_GROUP\";i:1;a:0:{}i:2;i:1;i:3;s:0:\"\";i:4;s:0:\"\";}}i:1;a:0:{}i:2;s:19:\"COMCODE_IF_IN_GROUP\";i:3;N;i:4;N;i:5;s:516:\"\$TPL_FUNCS['tcpfunc_COMCODE_IF_IN_GROUP']=\"eval(\\\$RESET_VAR_CODE); echo (in_array(ecv(\\\$cl,array(),0,\\\"IS_IN_GROUP\\\",array(output_tempcode_parameter( isset (\\\$bound_GROUPS)?\\\$bound_GROUPS:NULL,\\\"GROUPS\\\",\\\"COMCODE_IF_IN_GROUP\\\"),output_tempcode_parameter( isset (\\\$bound_TYPE)?\\\$bound_TYPE:NULL,\\\"TYPE\\\",\\\"COMCODE_IF_IN_GROUP\\\"))).\\\"\\\",\\\$GLOBALS['TRUTH_PARAMETERS'])?(\\\"\\\\n	\\\".output_tempcode_parameter( isset (\\\$bound_CONTENT)?\\\$bound_CONTENT:NULL,\\\"CONTENT\\\",\\\"COMCODE_IF_IN_GROUP\\\").\\\"\\\\n\\\"):''),\\n	\\\"\\\\n\\\\n\\\";\";\n\";}");
+
+?>

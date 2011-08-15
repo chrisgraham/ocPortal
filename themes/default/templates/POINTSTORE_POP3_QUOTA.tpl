@@ -1,0 +1,6 @@
+{+START,BOX,{!PURCHASE_QUOTA},,med,,,<a href="{QUOTA_URL*}">{!PURCHASE_QUOTA}</a>}
+	<p>
+		{!PURCHASE_POP3_QUOTA,{MAX_QUOTA}}
+	</p>
+{+END}
+

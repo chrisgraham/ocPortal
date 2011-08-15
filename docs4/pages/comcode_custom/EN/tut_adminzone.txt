@@ -1,0 +1,47 @@
+[title sub="Written by Allen Ellis, ocProducts"]ocPortal Tutorial: Admin Zone overview[/title]
+
+{!menus:DOC_ADMIN_ZONE} It can be accessed from anywhere by choosing the 'Admin Zone' zone link which appears at the bottom of every default-themed ocPortal page. You may be prompted to login again to confirm your current session -- this is for added security.
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]First glance[/title]
+
+[exp_thumb="The Admin Zone at first glance" float="right"]adminzone_first_glance[/exp_thumb]
+The Admin Zone is divided into sections, with links across the top-panel to allow easy access to each -- most of the tabs will take you to an interface with icons that allows you to navigate throughout the system.
+
+[title="2"]Content Management Zone[/title]
+
+{!menus:DOC_CMS}
+
+[title="2"]Admin Zone[/title]
+
+[title="3"]To-do list[/title]
+
+[exp_thumb="The to-do list" float="right"]adminzone_todo_list[/exp_thumb]
+The first section in your content area is your to-do list. This is an automatically generated list of things that need to be done on your website. Some are day-to-day updates, such as changing your image of the day or adding news. Some are less frequent and more critical, such as making backups and sending newsletters.
+
+ocPortal will attempt to mark whether or not these actions have been completely recently. For example, if it has been more than 24 hours since you updated your image of the day, it will be marked as 'not done'. You can choose how often you would like to do these activities (for example, making backups monthly instead of weekly) by going to the Setup Section then the 'Configuration' icon and then 'Administrative options'.
+
+[title="3"]Version Information[/title]
+
+This section shows information about the current version of ocPortal that you are using, and whether or not it is the most recent one. If not, you will be given a link to upgrade to the latest version.
+
+[title="3"]Notes[/title]
+
+[exp_thumb="The note area" float="right"]adminzone_notes[/exp_thumb]
+This is an area for you and your staff to make notes. You can write anything you need in this space, and it will be shared between you and all of your other staff.
+
+[title="3"]Tips[/title]
+
+You will be provided with a large number of handy tips. They are organised into 4 levels of increasing difficulty with a combined total of about 60 tips.
+
+[title="2"]Simplified Admin Zone[/title]
+
+If a user who does not have permission to use many aspects of the Admin Zone enters either the Admin or CMS zones, then they will be presented with a simplified interface, consisting just of one screen of icons, and an informative front page. This feature is particularly useful if you are using ocPortal to create a website for somebody else, and you do not want them to be off-put by the full complexity of the Admin Zone. By using this feature you'll be able to tailor your clients administration experience to the extent that they won't really consider the website to be an ocPortal website, but rather a website built from scratch just for them.
+
+
+
+[concepts
+ 1_key="Admin Zone"   1_value="The zone used to perform most site maintenance, accessible only by staff"
+]Concepts[/concepts]
+

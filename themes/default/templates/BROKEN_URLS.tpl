@@ -1,0 +1,17 @@
+{+START,IF_ARRAY_NON_EMPTY,FOUND}
+	{+START,BOX,{!BROKEN_URLS} {!BROKEN_URLS_FILES}}
+		{+START,LOOP,FOUND}
+			<p>{URL*} ({TABLE*}:{FIELD*}:{ID*})</p>
+		{+END}
+	{+END}
+{+END}
+{+START,IF_ARRAY_NON_EMPTY,FOUND_404}
+	<br />
+
+	{+START,BOX,{!BROKEN_URLS} {!BROKEN_URLS_404}}
+		{+START,LOOP,FOUND_404}
+			<p><a href="{URL*}">{URL*}</a>{+START,IF_NON_EMPTY,{SPOT}} [{!ADVANCED}&hellip; {SPOT*}]{+END}</p>
+		{+END}
+	{+END}
+{+END}
+

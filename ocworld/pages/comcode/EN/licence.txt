@@ -1,0 +1,6 @@
+[title]ocWorld licensing[/title]
+
+Distributed under the same license as ocPortal.
+
+
+Some clip art is used with permission from "Madlantern Arts Clipart".

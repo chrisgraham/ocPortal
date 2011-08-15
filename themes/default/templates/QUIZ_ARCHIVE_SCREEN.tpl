@@ -1,0 +1,23 @@
+{TITLE}
+
+<div{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+	{+START,IF_NON_EMPTY,{CONTENT_TESTS}}
+		<h2>{!TESTS}</h2>
+
+		{CONTENT_TESTS}
+	{+END}
+
+	{+START,IF_NON_EMPTY,{CONTENT_COMPETITIONS}}
+		<h2>{!COMPETITIONS}</h2>
+	
+		{CONTENT_COMPETITIONS}
+	{+END}
+
+	{+START,IF_NON_EMPTY,{CONTENT_SURVEYS}}
+		<h2>{!SURVEYS}</h2>
+
+		{CONTENT_SURVEYS}
+	{+END}
+</div>
+
+{BROWSE}

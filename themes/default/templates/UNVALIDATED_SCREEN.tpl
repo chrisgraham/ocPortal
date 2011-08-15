@@ -1,0 +1,7 @@
+{TITLE}
+
+<p>
+	{!UNVALIDATED_PAGE_TEXT}
+</p>
+
+{SECTIONS}

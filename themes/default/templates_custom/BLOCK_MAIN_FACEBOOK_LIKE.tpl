@@ -1,0 +1,1 @@
+<script type="text/javascript" src="http://connect.facebook.net/en_US/all.js#appId={$CONFIG_OPTION*,facebook_appid}&amp;xfbml=1"></script><span xmlns:fb="http://api.facebook.com/1.0/"><fb:like layout="button_count" width="30"></fb:like></span>

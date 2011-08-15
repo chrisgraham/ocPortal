@@ -1,0 +1,1 @@
+<a onclick="window.top.scrollTo(0,0);" rel="next{+START,IF_PASSED,REL} {REL*}{+END}" accesskey="k" target="_self" href="{URL*}" title="{!NEXT}&nbsp;&raquo;: {!RESULTS_LAUNCHER_JUMP,{P*},{TITLE*}}" class="light results_continue">{!NEXT}&nbsp;&raquo;</a>

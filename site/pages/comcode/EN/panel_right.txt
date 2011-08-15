@@ -1,0 +1,5 @@
+[block failsafe="1"]side_stats[/block]
+[block]side_personal_stats[/block]
+[block failsafe="1"]side_users_online[/block]
+[block failsafe="1"]main_search[/block]
+

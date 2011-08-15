@@ -1,0 +1,8 @@
+{TITLE}
+
+<p>
+	{!POINTSTORE_LOG_TEXT}
+</p>
+
+{CONTENT}
+

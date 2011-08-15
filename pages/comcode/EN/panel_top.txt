@@ -1,0 +1,3 @@
+{+START,IF,{$AND,{$OCF},{$ADDON_INSTALLED,redirects_editor},{$OR,{$EQ,{$PAGE},recommend},{$EQ,{$PAGE},onlinemembers},{$EQ,{$PAGE},points},{$EQ,{$PAGE},warnings},{$EQ,{$PAGE},contactmember},{$EQ,{$PAGE},groups},{$EQ,{$PAGE},rules},{$EQ,{$PAGE},members},{$EQ,{$ZONE},forum},{$EQ,{$ZONE},personalzone}}}}
+[block="_community" type="top"]side_stored_menu[/block]
+{+END}

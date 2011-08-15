@@ -1,0 +1,3 @@
+[title]Google Search Results[/title]
+
+[block]main_google_results[/block]

@@ -1,0 +1,6 @@
+[title="3"]{NAME@}[/title]
+
+{+START,IF_PASSED,DESCRIPTION}{+START,IF_NON_EMPTY,{DESCRIPTION}}{DESCRIPTION}
+
+{+END}{+END}[url="{!VIEW#}"]{URL@}[/url]
+

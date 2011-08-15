@@ -1,0 +1,7 @@
+[title]Donate money[/title]
+
+
+
+[center][b](Remember: this is a default {$BRAND_NAME} page and should probably be edited as needed.)[/b][/center]
+[title="2"]Donate[/title]
+There are significant costs involved with maintaining our website, and if you feel you can assist by donating money, please do.

@@ -1,0 +1,1 @@
+<a {+START,IF,{$IN_STR,{CAPTION},<img}}class="link_exempt" {+END}{+START,IF_NON_EMPTY,{TITLE}}title="{$STRIP_TAGS,{CAPTION}}: {TITLE*}" {+END}target="{TARGET*}" {+START,IF,{$EQ,{TARGET,_blank}}}rel="external" {+END}href="{$STRIP_TAGS,{URL*}}" rel="{REL*}">{CAPTION}</a>

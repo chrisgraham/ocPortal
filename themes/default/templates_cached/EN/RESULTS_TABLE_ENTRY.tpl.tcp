@@ -1,0 +1,4 @@
+<?php
+return unserialize("a:6:{i:0;a:1:{i:0;a:5:{i:0;s:27:\"tcpfunc_RESULTS_TABLE_ENTRY\";i:1;a:0:{}i:2;i:1;i:3;s:0:\"\";i:4;s:0:\"\";}}i:1;a:0:{}i:2;s:19:\"RESULTS_TABLE_ENTRY\";i:3;N;i:4;N;i:5;s:445:\"\$TPL_FUNCS['tcpfunc_RESULTS_TABLE_ENTRY']=\$KEEP_TPL_FUNCS['tcpfunc_RESULTS_TABLE_ENTRY']=create_function('\$parameters,\$cl,\$last_attach',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo \\\"<tr class=\\\\\\\"\\\",\\n	ecv(\\\$cl,array(),0,\\\"CYCLE\\\",array(\\\"results_table_zebra\\\",\\\"zebra_0\\\",\\\"zebra_1\\\")),\\n	\\\"\\\\\\\">\\\\n	\\\",\\n	output_tempcode_parameter( isset (\\\$bound_VALUES)?\\\$bound_VALUES:NULL,\\\"VALUES\\\",\\\"RESULTS_TABLE_ENTRY\\\"),\\n	\\\"\\\\n</tr>\\\\n\\\";\");\n\";}");
+
+?>

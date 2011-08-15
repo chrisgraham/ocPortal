@@ -1,0 +1,8 @@
+{+START,IF_ARRAY_NON_EMPTY,FOUND}
+	{+START,BOX,{!ORPHANED_UPLOADS}}
+		{+START,LOOP,FOUND}
+			<p><a href="{URL*}">{URL*}</a></p>
+		{+END}
+	{+END}
+{+END}
+

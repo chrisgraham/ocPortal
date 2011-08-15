@@ -1,0 +1,14 @@
+{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
+[block="root_website" type="tree" caption="Web site"]side_stored_menu[/block]
+[block failsafe="1"]side_users_online[/block]
+[block failsafe="1"]side_stats[/block]
+[block]side_personal_stats[/block]
+{+END}
+
+{+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
+[block="main_features" type="tree" caption="Features"]side_stored_menu[/block]
+[block="main_content" type="tree" caption="Content"]side_stored_menu[/block]
+[block="main_community" type="tree" caption="Community"]side_stored_menu[/block]
+[block="main_website" type="tree" caption="Web site"]side_stored_menu[/block]
+[block="cedi_features" type="tree" silent_failure="1" caption="CEDI"]side_stored_menu[/block]
+{+END}

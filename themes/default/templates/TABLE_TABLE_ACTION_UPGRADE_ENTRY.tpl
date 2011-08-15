@@ -1,0 +1,1 @@
+<form title="{!UPGRADE}: {NAME*}" onsubmit="disable_button_just_clicked(this);" class="inline" action="{URL*}" method="post"><input name="submit" type="image" src="{$IMG*,tableitem/upgrade}" title="{!UPGRADE}: {NAME*}" alt="{!UPGRADE}: {NAME*}" />{HIDDEN}</form>

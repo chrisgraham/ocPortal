@@ -1,0 +1,153 @@
+/* CSS for the activities feed and the status posting box */
+
+.news-box {
+	overflow: hidden;
+	height: auto;
+	list-style: none;
+	/*float: {!en_left};
+	width: 100%;*/
+	margin-top: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-bottom: 1px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-{!en_left}: 5px;
+	vertical-align: top;
+}
+
+/*.news-icon {
+	background:url({$IMG,news-feed-icon}) no-repeat 60% 4px;
+	margin: 10px 0;
+	padding: 10px 0;
+	color: #000;
+	border: none;
+}*/
+/*.status-icon {
+	background:url({$IMG,status-update-icon}) no-repeat right 4px; width:190px;
+	margin: 10px 0;
+	padding: 10px 0;
+	color: #000;
+	border: none;
+}*/
+.avatar-box {
+	width:40px;
+	float:left;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	display: inline;	/* Fix for IE */
+}
+
+.name {
+	float:left;
+	padding-{!en_left}: 10px;
+	margin-top: 10px;
+	font-size:0.95em;
+	font-weight:bold;
+}
+
+.news_line {
+	/*float: right;*/
+	margin-top: 0px;
+	font-size:0.95em;
+	/*font-weight:bold;*/
+}
+
+.remove {
+	float: right;
+	overflow: hidden;
+	width: 22px;
+}
+
+.remove .remove_cross {
+	width: 14px;
+	height: 14px;
+	background: url('{$IMG,stop12}') transparent no-repeat;
+	font-size: 0;
+	color: transparent;
+	border: none;
+	margin-top: 7px;
+	padding: 0;
+}
+
+.remove .remove_cross:hover {
+	background: url('{$IMG,stop12Hover}') transparent no-repeat;
+	cursor: pointer;
+}
+
+.remove .remove_cross:active {
+	background: url('{$IMG,stop12Active}') transparent no-repeat;
+	cursor: pointer;
+}
+
+/* What's this all about, eh? Standards compliant are we Mozilla? What-ever*/
+.remove input.remove_cross::-moz-focus-inner {
+	border: 0px;
+}
+
+.news-content {
+	width: auto;
+	float:none;
+	padding:2px 5px 5px; 10px;
+	font-size:0.85em;
+	color:#333;
+	word-wrap: break-word;
+}
+
+.name a, .news-box .name a[href*=".php"] {
+	color: #333;
+	text-decoration: none;
+}
+
+.name a:hover, .news-box .name a[href*=".php"]:hover {
+	color: #005567;
+}
+
+/*.news-box .news-content span {width:360px; display:block; float:left;}*/
+.time {
+	color:#999;
+	margin: 5px 10px 0 0;
+	font-size:0.70em;
+	text-decoration:none;
+	float: right;
+}
+
+.status_box_outer {
+	border:1px solid #999;
+	margin:0 10px 0 0;
+	font-size:0.80em;
+	font-family:Arial, Helvetica, sans-serif;
+	padding:5px 5px 0 5px;
+}
+
+.status_box {
+	border: none;
+	background: #FFFFFF;
+	width: 100%;
+	overflow: auto;
+}
+
+.status_box_outer_ie {
+}
+
+.status_box_outer_ie .status_box {
+	height: 3.5em;
+}
+
+.status_controls {
+	
+}
+
+.status_table {
+	width: 100%;
+}
+
+#notify {
+	white-space: normal;
+}
+
+.news_holder {
+	padding-left: 0px;
+	margin-left: 0;
+}

@@ -1,0 +1,40 @@
+{TITLE}
+
+<form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
+	<div>
+		<input type="hidden" name="theme" value="{THEME*}" />
+		<input type="hidden" name="template_preview_op" value="1" />
+
+		{+START,IF,{MULTIPLE}}
+			<div class="float_surrounder">
+				<p class="right">
+					<label for="template_switcher">{!TEMPLATE}</label>:
+					<select onchange="document.getElementById('template_editing_'+(window.previous_value?window.previous_value:{FIRST_ID*})).style.display='none'; document.getElementById('template_editing_'+this.options[this.selectedIndex].value).style.display='block'; window.previous_value=this.options[this.selectedIndex].value; /* Workaround to make editarea render right */ eAL.toggle('f'+this.options[this.selectedIndex].value+'_new'); eAL.toggle('f'+this.options[this.selectedIndex].value+'_new');" id="template_switcher" name="template_switcher">
+						{+START,LOOP,TEMPLATES}
+							<option value="{I*}">{FILE*}</option>
+						{+END}
+					</select>
+				</p>
+			</div>
+		{+END}
+
+		{TEMPLATE_EDITORS}
+		
+		<br />
+
+		<div class="float_surrounder">
+			<div class="right">
+				<input onclick="disable_button_just_clicked(this); this.form.target='_self'; this.form.action='{URL*}';" class="button_page" type="submit" value="{!SAVE}" />
+			</div>
+			{+START,IF,{$JS_ON}}
+				<div class="right">
+					<input onclick="disable_button_just_clicked(this); this.form.target='save_frame'; this.form.action='{URL*}{$?,{$IN_STR,{URL},?},&amp;,?}save_and_stay=1';" class="button_page" type="submit" value="{!SAVE_AND_STAY}" />
+				</div>
+			{+END}
+		</div>
+	</div>
+</form>
+
+{+START,IF,{$NEQ,{$VALUE_OPTION,no_frames},2}}
+	<iframe name="save_frame" id="save_frame" title="{!SAVE_AND_STAY}" style="width: 100%; height: 0px" src="{$BASE_URL*}/uploads/index.html">{!SAVE_AND_STAY}</iframe>
+{+END}

@@ -1,0 +1,3 @@
+<p>
+	{!REFERENCE_SOURCE}: {SOURCE}
+</p>

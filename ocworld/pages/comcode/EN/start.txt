@@ -1,0 +1,5 @@
+[title]ocWorld[/title]
+
+Welcome to ocWorld, an addon for ocPortal.
+
+[page="_SELF" caption="Enter/Return"]ocworld[/page] to the ocWorld multi-user dungeon.

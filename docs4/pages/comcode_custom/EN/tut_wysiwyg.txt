@@ -1,0 +1,130 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: WYSIWYG editing[/title]
+
+ocPortal "Long text" Comcode content is, by default, edited using a WYSIWYG editor. This tutorial provides some advanced information on the WYSIWYG editor, for those wanting to push it to the limit.
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]WYSIWYG editors on the web[/title]
+
+A WYSIWYG (What You See Is What You Get) editor is a document editor where the editor's editing interface mirrors the appearance of the final document. Web sites deploy WYSIWYG editors via a combination of Javascript and built-in (non-standard) editing features that are present in some of the popular modern web browsers. Online WYSIWYG editors are HTML editors: the document created is manipulated and transmitted as HTML.
+
+[title="2"]Origins of the editor[/title]
+
+The ocPortal WYSIWYG editor is (as of version 5.1) CKEditor.
+
+ocPortal can, in principle, support almost any WYSIWYG editor component. ocPortal binds itself to the editor via Javascript code stored in ocPortal's [tt]HTML_EDIT[/tt] and [tt]JAVASCRIPT_POSTING[/tt] templates. The editor itself is stored in [tt]data/ckeditor[/tt].
+
+[title="2"]Highlighting of Comcode tags[/title]
+
+Comcode tags that can not be represented visually in the editor will be shown as raw Comcode, and highlighted with a purple background.
+
+If you put the mouse over the Comcode you will see a tooltip showing how it looks (shown in the bottom-right of the browser window).
+
+Do not worry if this purple background spreads around (this can happen if you type in certain places) -- it will be stripped when you save.
+
+This said, if you want to do nice tidy editing, you can do. Once you click on a bit of Comcode it will go into edit mode for that Comcode. To end edit mode hold down the alt key and click again. Using this technique you can control how the purple highlighting runs on, and also keep the how-Comcode-will-look tooltips properly representative.
+
+[title="2"]Pasting on Windows: RTF and images[/title]
+
+Microsoft Windows basically transfers formatted data between applications in the 'clipboard', using a format called RTF, rather than HTML. RTF is the format Microsoft have used since Windows 3, and has been extended since.
+This leads to a small problem, as it means that any data that is copy & pasted into and out of the WYSIWYG editor undergoes an automated conversion, by Windows. Even data pasted directly between web pages undergoes conversions, although these conversions are usually very accurate.
+
+It is for this reason that data copied from programs such as Microsoft Word may not be displayed identically once pasted into the WYSIWYG editor.
+
+There is another problem with using the clipboard, and that is that any images pasted via the clipboard, can not be pasted into the WYSIWYG editor. This is because such images are local files, and do not exist on the Web yet. Web browsers have no capability to upload files that they are not directly told to upload, for security reasons.
+
+There are two ways to get images (and other files) into the WYSIWYG editor:
+ - Attachments
+ - URL
+
+[title="3"]Attachments[/title]
+
+ocPortal has its own system for making attachments. If the WYSIWYG editor is for a 'Post area' then there will be an attachment facility beneath it. Files may be chosen using this attachment facility, and when this is done, a marker will be placed into the editor. The marker looks something like:
+[code]
+[attachment]new_1[/attachment]
+[/code]
+
+You may move this marker around by cutting and pasting it -- placing it anywhere you desire within the editor.
+
+You may also choose the attachment display method using a drop-down list near to where you chose the file. There are options there to 'float' the attachment, or to display it as an inline image, amongst others.
+
+[title="3"]Referencing uploaded images[/title]
+
+Another way to embed images is to use the image icon that exists within the WYSIWYG editor (or manually via the Comcode 'img' tag if you prefer).
+With this, you may reference any image that already exists on the web, via URL.
+
+The drawback with this is that the file must already exist, and be stored outside of the context of the ocPortal website that it is being referenced on.
+
+However, one handy convention for ocPortal website administrators, is to upload the file to the [tt]uploads/website_specific[/tt] directory using FTP, and then referencing the image from there. This pre-created directory is designed for storing this kind of file, and will help you keep things tidy. As long as you backup this directory with the rest of your website, the URLs should not break.
+
+[title="2"]Manually editing HTML source[/title]
+
+Toward the top-left of the editor is a button to toggle HTML source view in the editor. When in HTML source view, you may manually enter and edit the HTML that will be used. This is useful:
+ - in circumstances where things have not pasted into the editor as you expected
+ - when you have some specific HTML in mind that is hard to re-create visually, such as HTML involving Javascript (note that only super-administrators may input Javascript)
+
+[title="2"]HTML filtering[/title]
+
+ocPortal does not accept the HTML from the WYSIWYG editor directly as input for ocPortal content. This is for three reasons:
+ - This poses a severe security risk
+ - The HTML generates via WYSIWYG is often a mess
+ - ocPortal rich content is defined in Comcode, not HTML
+
+[title="3"]Security filtering[/title]
+
+HTML acts as a container for numerous technologies, including CSS and Javascript. Javascript can be used as a vehicle for attacking websites via a technique called 'XSS' (Cross Site Scripting). Basically an XSS attack can be used to steal logins; it works by a user submitting content that includes malicious Javascript code that causes hijacking of the web browser of the viewer of the said-content. This is a major issue, and means that ocPortal has to go to great lengths to protect against it.
+
+The HTML is treated to one of two possible security filters, depending on circumstances:
+ - The white-list filter (more finicky)
+ - The black-list filter (more liberal)
+ - ([i]super-administrators are not subject to any filter[/i])
+
+The white-list filter is subjected to those users who do not have the "Use Dangerous Comcode" permission, and blocks any HTML that is not known as safe. Users subjected to the white-list filter will find that some complex formatting may be lost.
+
+The black-list filter is subjected to the users who do have the "Subject to a more liberal HTML filter" permission, and will go to great lengths to try and strip any Javascript from the HTML. There are no known problems with the black-list filter, but ocProducts can not accept any liability for the consequences of using it (although we have gone to great lengths to make the black-list filter very safe).
+
+[title="3"]Cleanup[/title]
+
+The HTML that comes from directly from the WYSIWYG editor is often very messy for a number of reasons:
+ - If it was created via pasting from Microsoft Word, there is a high likelihood that it contains great amounts of superfluous code
+ - The process of visual editing itself often results in code complexity, as formatting changes are often made that override existing formatting, yet leave both sets of formatting code in-place.
+Messyness presents numerous problems:
+ - Slow-down on the server
+ - Extra bandwidth usage
+ - Bad "semantics" (difficulties for users of screen readers)
+ - Challenges for anyone hand-editing the code
+
+In addition, ocPortal works via XHTML, not HTML; for the cases where HTML and XHTML are non-equivalent, it is best that ocPortal clean things up.
+
+[title="3"]Comcode conversion[/title]
+
+It is the view of ocProducts that, where possible, content should be able to be hand-edited, and usable in different contexts (e.g. on mobile phones as well as on the web). Modern HTML does not lend itself to this, but Comcode does (HTML is designed to do more than Comcode, but for the case of content slots, the extra functionality is rarely needed, and creates a burden). ocPortal will thus go to great efforts to turn complex HTML into equivalent simple Comcode, where possibly fully eliminating all direct usage of HTML.
+
+Where HTML cannot be fully eliminated, ocPortal will encapsulate it with Comcode 'semihtml' tags, within the wider Comcode.
+
+If you do not want Comcode conversion, you can disable the "Convert XHTML to Comcode" option or include this hint in your code:
+[codebox]
+{$,page hint: no_smart_conversion}
+[/codebox]
+If you are using the WYSIWYG editor to edit e-mails, it is very ill-advised to disable this option, for two reasons:
+ - web browsers strip down URLs to relative links, meaning any URLs you enter to the WYSIWYG editor will break (as relative links don't work in e-mails). When ocPortal converts to Comcode it reverses the browser behaviour.
+ - ocPortal uses Comcode as the text-version of e-mails sent, as it is designed to be very human-readable. If you don't convert to Comcode users will get much poorer quality text-versions which are basically just the HTML with the HTML tags stripped.
+
+[title="2"]Problem areas, and turning the editor off[/title]
+
+Sometimes WYSIWYG editing is more trouble than it's worth. When particularly complex layouts are produced, or code pasted from documents, it can still result messy and slow code; especially when content is long. This is particularly bad for web-sites that favour very high web standards (such as perfect WCAG accessibility), which will always need to have a degree of hand-coding in them, to maintain those high standards.
+Generally it's also not a good idea to have anything that is not directly WYSIWYG in the WYSIWYG editor, including careful use of tags to apply custom CSS styles, or Javascript. Various things can relate to it getting stripped or corrupted.
+For these situations it is best to simply turn the WYSIWYG editor off. You can do this on a per document basis by pasting this bit into your code:
+[code]
+{$,page hint: no_wysiwyg}
+[/code]
+
+[concepts
+ 1_key="WYSIWYG"     1_value="What You See Is What You Get; the term for document editors where the editor's editing interface mirrors the appearance of the final document."
+ 2_key="RTF"         2_value="Rich Text Format; the format used by Microsoft Windows for transferring formatted clipboard data."
+ 3_key="CKEditor"    3_value="The WYSIWYG editor that ocPortal uses"
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page caption="Comcode and the attachment system"]tut_comcode[/page]

@@ -1,0 +1,60 @@
+<html>
+	<head>
+		<title>FTP upload demo</title>
+		<script type="text/javascript">
+			/**
+			 * check to see if the JVM supports the file uploader...
+			 */
+			function isValidJVM()
+			{
+				var checker = document.getElementById("checker");
+				return (checker.getVersion != null &&
+					checker.getVendor != null &&
+					checker.getVendor().indexOf("Sun") > -1 &&
+					checker.getVersion().substr(0,3) == "1.5")
+			}
+
+			/**
+			 * check to see if the file has been uploaded...
+			 */
+			function checkFileUploaded()
+			{
+				var uploader = document.getElementById("uploader");
+				if (!uploader.hasUploaded())
+				{
+					alert("Please upload the file before submitting the form");
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		</script>
+	</head>
+	<body>
+
+		<form action="" method="get" onsubmit="return checkFileUploaded();">
+			<applet code="Checker.class" width="0" height="0" id="checker"></applet>
+			<div id="error">
+				Please download and enable the latest java runtime environment from www.java.com
+			</div>
+			<script type="text/javascript">
+				// if we have a valid virtual machine, we print out the code for the applet...
+				if (isValidJVM())
+				{
+					document.write('<applet code="Uploader.class" archive="Uploader.jar,Net.jar" width="430" height="29" id="uploader">');
+					document.write('	<param name="address" value="192.168.0.1" />');
+					document.write('	<param name="username" value="username" />');
+					document.write('	<param name="password" value="password" />');
+					document.write('	<param name="uploadedFileName" value="/home/rjohnson/abc123" />');
+					document.write('	<param name="backgroundColor" value="#FFFFFF" />');
+					document.write('	<param name="foregroundColor" value="#000000" />');
+					document.write('</applet>');
+					document.getElementById("error").style.display = "none";
+				}
+			</script>
+			<input type="submit" />
+		</form>
+	</body>
+</html>

@@ -1,0 +1,621 @@
+<parameters>
+
+  <!-- iisapp - This identities a parameter as the application path to
+       install the app. The defaultValue will be displayed by most
+       installers.  The defaultValue should be set to something like
+       "Default Web Site/application1" where "application1" should be
+       replaced with the value of the "path" attribute of the iisApp
+       provider in the manifest.xml file.  Web PI and other installers will
+       use this data to suggest a Web Site location for the installation,
+       when they do not already know where the user wants to install the
+       application. This is a required tag. There must be at least one
+       parameter that has this tag, and that specifies the iisApp provider
+       as its target.  
+  -->
+
+  <parameter 
+    name="Application Path" 
+    description="Full site path where you would like to install ocPortal (for example, Default Web Site/ocportal)."
+    defaultValue="Default Web Site/ocportal"
+    tags="iisapp"
+    >
+    <parameterEntry
+      type="ProviderPath"
+      scope="iisapp"
+      match="ocportal"
+      />
+  </parameter>
+
+	<parameter
+		name="Local Application URL"
+		description="The URL of the application on the target box such as http://myserver.com/ocportal. This needs to be correct for where you are hosting ocPortal, although you can leave it blank for it to be autodetected at run-time."
+		defaultValue=""
+		tags="AppURL"
+		>
+       <parameterValidation type="AllowEmpty" />
+	</parameter>
+
+	<parameter
+		name="Automatic Local Application URL"
+		defaultValue="$SITE_INFO['base_url']='{Local Application URL}';"
+		tags="Hidden"
+		>
+	    <parameterEntry
+	      type="TextFile"
+	      scope="info.php"
+	      match="\$SITE_INFO\s*\['base_url'\]='([^']*)';"
+	      />
+	</parameter>
+
+	<parameter
+		name="Domain name"
+		description="The domain name you intend to run on, such as myserver.com. This needs to be correct for where you are hosting ocPortal, although you can leave it blank for it to be autodetected at run-time."
+		defaultValue=""
+		>
+       <parameterValidation type="AllowEmpty" />
+	</parameter>
+
+	<parameter
+		name="Automatic Domain name"
+		defaultValue="$SITE_INFO['domain']='{Domain name}';"
+		tags="Hidden"
+		>
+	    <parameterEntry
+	      type="TextFile"
+	      scope="info.php"
+	      match="\$SITE_INFO\s*\['domain'\]='([^']*)';"
+	      />
+	</parameter>
+
+
+  <!-- Prompts for database server name, this is used in the
+       ConString parameter later
+  -->
+
+  <parameter
+    name="dbServer"
+    defaultValue="127.0.0.1"
+    tags="MySQL, dbServer"
+    >
+  </parameter>
+
+  <parameter
+    name="Automatic DB Server"
+    defaultValue="$SITE_INFO['db_site_host']='{dbServer}';"
+    tags="Hidden"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['db_site_host'\]='([^']*)';"
+      />
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['db_forums_host'\]='([^']*)';"
+      />
+  </parameter>
+
+  <!-- Prompts for the database name and fills it into the database
+       scripts
+  -->
+
+  <!-- #ocPortal - Note that there are two "parameterEntry" elements.
+       the Web Deployment Tool needs a unique parameterEntry element for
+       each combination of type, scope and match where a parameter
+       replacement is required.
+  -->
+
+  <parameter
+    name="dbName"
+    defaultValue="ocportal"
+    tags="MySQL, dbName"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="user.sql"
+      match="PlaceHolderForDb"
+      />
+  </parameter>
+
+  <parameter
+    name="Automatic DB name"
+    defaultValue="$SITE_INFO['db_site']='{dbName}';"
+    tags="Hidden"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['db_site'\]='([^']*)';"
+      />
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['db_forums'\]='([^']*)';"
+      />
+  </parameter>
+
+  <!-- The Database Username is the user id that is used by the
+       application to communicate with the database.  It is usually not
+       part of the connectionString for running SQL scripts from the Web
+       Deployment Tool.  However, some UIs (including the WebPI) will use
+       this parameter for the connectionString when the user states that
+       the database for the application already exists.
+  -->
+
+  <!-- #ocPortal - The Database Username is used in the user.sql
+       script to GRANT privileges to the user here.
+  -->
+
+  <parameter
+    name="dbUsername"
+    defaultValue="ocportalUser"
+    tags="MySQL, dbUsername"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="user.sql"
+      match="PlaceHolderForUser"
+      />
+  </parameter>
+
+  <parameter
+    name="Automatic DB username"
+    defaultValue="$SITE_INFO['db_site_user']='{dbUsername}';"
+    tags="Hidden"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['db_site_user'\]='([^']*)';"
+      />
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['db_forums_user'\]='([^']*)';"
+      />
+  </parameter>
+
+  <!-- This is the password that corresponds to the Database Username.
+       The user.sql script will set the users password to this value.
+  -->
+
+  <parameter
+    name="dbUserPassword"
+    tags="New, Password, MySQL, dbUserPassword"
+    >
+    <parameterValidation type="AllowEmpty" />
+    <parameterEntry
+      type="TextFile"
+      scope="user.sql"
+      match="PlaceHolderForPassword"
+      />
+  </parameter>
+
+  <parameter
+    name="Automatic DB password"
+    defaultValue="$SITE_INFO['db_site_password']='{dbUserPassword}';"
+    tags="Hidden"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['db_site_password'\]='([^']*)';"
+      />
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['db_forums_password'\]='([^']*)';"
+      />
+  </parameter>
+
+  <!-- Prompts for the admin credentials and uses them for the
+       database connection string. This is used to create a login and
+       assign permissions. The MySQL tag indicates it is a parameter
+       required for MySQL.  The DbAdminUsername tag indicates it should be
+       used when the user is creating a new database. If they are not, it
+       can be filled in with the DbUsername value.  The UI should be able
+       to figure out whether or not the user needs to be prompted for this.
+  -->
+
+  <parameter
+    name="dbAdminUsername"
+    defaultValue="root"
+    tags="MySQL, dbAdminUsername"
+    >
+  </parameter>
+
+  <!-- This is the password that corresponds to the Database
+       Administrator.
+  -->
+
+  <parameter
+    name="dbAdminPassword"
+    tags="Password, MySQL, dbAdminPassword"
+    >
+    <parameterValidation type="AllowEmpty" />
+  </parameter>
+
+  <!-- #ocPortal - These are ocPortal specific parameters.
+  -->
+
+  <parameter
+    name="Master password"
+    description="Password for the ocPortal upgrader and config editor."
+    tags="New, Password"
+    >
+    <parameterValidation type="AllowEmpty" />
+  </parameter>
+
+  <parameter
+    name="Automatic Master password"
+    defaultValue="$SITE_INFO['admin_password']='{Master password}';"
+    tags="Hidden"
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="info.php"
+      match="\$SITE_INFO\s*\['admin_password'\]='([^']*)';" />
+  </parameter>
+
+  <parameter
+    name="Admin user username"
+    defaultValue="admin"
+    description="The username for your ocPortal admin account."
+    tags=""
+    >
+    <parameterEntry
+      type="TextFile"
+      scope="postinstall.sql"
+      match="AdminUsername" />
+  </parameter>
+
+  <parameter
+    name="Admin user password"
+    description="The password for your ocPortal admin account."
+    tags="New, Password"
+    >
+    <parameterValidation type="AllowEmpty" />
+    <parameterEntry
+      type="TextFile"
+      scope="postinstall.sql"
+      match="AdminPassword" />
+  </parameter>
+
+
+  <!-- This is the hidden admin connection string used to run the
+       database scripts.  Note that this connection string is just used
+       here, and will probably be different from the connection string that
+       is used by the application itself.
+  -->
+
+  <!-- #ocPortal - Note that each SQL script has a dedicated
+       parameterEntry.  The scope for these matches the provider type in
+       the manifest.xml file.  The match is a regular expression for the
+       value of the path attribute of the provider.
+
+       The user.sql script should be run using administrative credentials.
+
+    defaultValue="Server={Database Server};Database={Database Name};uid={Database Username};Pwd={Database Password};"
+
+       Then the parameterEntries for the scripts that should be run by the
+       Database User would be moved to be part of this second Connection
+       String parameter.
+  -->
+
+  <parameter
+    name="ConString"
+    defaultValue="Server={dbServer};Database={dbName};uid={dbAdminUsername};Pwd={dbAdminPassword};"
+    tags="SQL, Hidden, MySqlConnectionString, Validate"
+    >
+    <parameterEntry
+      type="ProviderPath"
+      scope="dbMySql"
+      match="user.sql"
+      />
+    <parameterEntry
+      type="ProviderPath"
+      scope="dbMySql"
+      match="install1.sql"
+      />
+    <parameterEntry
+      type="ProviderPath"
+      scope="dbMySql"
+      match="install2.sql"
+      />
+    <parameterEntry
+      type="ProviderPath"
+      scope="dbMySql"
+      match="install3.sql"
+      />
+    <parameterEntry
+      type="ProviderPath"
+      scope="dbMySql"
+      match="install4.sql"
+      />
+    <parameterEntry
+      type="ProviderPath"
+      scope="dbMySql"
+      match="postinstall.sql"
+      />
+  </parameter>
+
+  <!-- This is the parameter that is used to set the ACL for the
+       files directory.  Note that the {Application Path} in the
+       defaultValue below gets expanded to the ocportal Path entered
+       by the user.  The name of this variable (in the {}s) matches the
+       parameter name above.  The user is never prompted for this -
+       the Web Deployment Tool has all it needs to generate this.
+
+       Also, note that the match attribute is a regular expression to
+       identify the path for the setAcl directive in the manifest.xml
+       that this substitution should apply to.
+  -->
+
+
+  <parameter
+    name="SetAclParameter0" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/modules/chat" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/modules/chat" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter1" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/modules/admin_backup" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/modules/admin_backup" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter2" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling/output.log" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling/output.log" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter3" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling/write.log" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling/write.log" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter4" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling/personal_dicts" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling/personal_dicts" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter5" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter6" description="Sets the ACL on the right file" defaultValue="{Application Path}/text_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/text_custom" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter7" description="Sets the ACL on the right file" defaultValue="{Application Path}/text_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/text_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter8" description="Sets the ACL on the right file" defaultValue="{Application Path}/persistant_cache" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/persistant_cache" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter10" description="Sets the ACL on the right file" defaultValue="{Application Path}/safe_mode_temp" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/safe_mode_temp" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter13" description="Sets the ACL on the right file" defaultValue="{Application Path}/lang_cached/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/lang_cached/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter14" description="Sets the ACL on the right file" defaultValue="{Application Path}/lang_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/lang_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter18" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/map.ini" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/map.ini" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter19" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter20" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default/css_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default/css_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter22" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default/images_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default/images_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter24" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default/templates_custom" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default/templates_custom" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter28" description="Sets the ACL on the right file" defaultValue="{Application Path}/themes/default/templates_cached/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/themes/default/templates_cached/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter29" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/fields.xml" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/fields.xml" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter30" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/breadcrumbs.xml" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/breadcrumbs.xml" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter31" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/errorlog.php" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/errorlog.php" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter32" description="Sets the ACL on the right file" defaultValue="{Application Path}/ocp_sitemap.xml" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/ocp_sitemap.xml" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter34" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/modules/admin_stats" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/modules/admin_stats" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter36" description="Sets the ACL on the right file" defaultValue="{Application Path}/imports/mods" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/imports/mods" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter38" description="Sets the ACL on the right file" defaultValue="{Application Path}/exports/backups" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/exports/backups" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter39" description="Sets the ACL on the right file" defaultValue="{Application Path}/exports/file_backups" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/exports/file_backups" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter40" description="Sets the ACL on the right file" defaultValue="{Application Path}/exports/mods" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/exports/mods" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter42" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/banners" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/banners" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter43" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/catalogues" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/catalogues" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter44" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/downloads" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/downloads" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter45" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/filedump" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/filedump" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter46" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/galleries" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/galleries" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter47" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/galleries_thumbs" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/galleries_thumbs" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter48" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/iotds" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/iotds" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter49" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/iotds_thumbs" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/iotds_thumbs" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter50" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/attachments" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/attachments" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter51" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/attachments_thumbs" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/attachments_thumbs" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter52" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/auto_thumbs" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/auto_thumbs" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter53" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/ocf_photos" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/ocf_photos" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter54" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/ocf_photos_thumbs" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/ocf_photos_thumbs" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter55" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/ocf_avatars" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/ocf_avatars" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter56" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/ocf_cpf_upload" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/ocf_cpf_upload" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter57" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/grepimages" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/grepimages" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter58" description="Sets the ACL on the right file" defaultValue="{Application Path}/uploads/watermarks" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/uploads/watermarks" />
+  </parameter> 
+
+  <parameter
+    name="SetAclParameter60" description="Sets the ACL on the right file" defaultValue="{Application Path}/pages/comcode_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/pages/comcode_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter63" description="Sets the ACL on the right file" defaultValue="{Application Path}/forum/pages/comcode_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/forum/pages/comcode_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter66" description="Sets the ACL on the right file" defaultValue="{Application Path}/personalzone/pages/comcode_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/personalzone/pages/comcode_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter68" description="Sets the ACL on the right file" defaultValue="{Application Path}/cms/pages/comcode_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/cms/pages/comcode_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter72" description="Sets the ACL on the right file" defaultValue="{Application Path}/docs/pages/comcode_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/docs/pages/comcode_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter74" description="Sets the ACL on the right file" defaultValue="{Application Path}/site/pages/comcode_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/site/pages/comcode_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter77" description="Sets the ACL on the right file" defaultValue="{Application Path}/adminzone/pages/comcode_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/adminzone/pages/comcode_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter80" description="Sets the ACL on the right file" defaultValue="{Application Path}/collaboration/pages/comcode_custom/EN" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/collaboration/pages/comcode_custom/EN" />
+  </parameter>
+
+  <parameter
+    name="SetAclParameter83" description="Sets the ACL on the right file" defaultValue="{Application Path}/info.php" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/info.php" />
+  </parameter>
+
+</parameters>

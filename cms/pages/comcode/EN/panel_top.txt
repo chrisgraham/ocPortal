@@ -1,0 +1,1 @@
+[block="_management" type="dropdown"]side_stored_menu[/block]

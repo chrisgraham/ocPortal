@@ -1,0 +1,8 @@
+{TITLE}
+
+<p>
+	{!LEADERBOARD_PAGE_TEXT}
+</p>
+
+{WEEKS}
+

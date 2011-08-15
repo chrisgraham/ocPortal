@@ -1,0 +1,3 @@
+echo "Hello world!"
+edit /database/ocp3_zones/0/zone_wide
+echo "Goodbye world!"

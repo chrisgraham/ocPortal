@@ -1,0 +1,100 @@
+[title sub="Written by Philip Withnall, ocProducts"]ocPortal Tutorial: Correspondence between members[/title]
+
+At times you'll want to know how to talk to your members privately (i.e. not on the public forum). This tutorial only applies to websites using [concept]OCF[/concept] -- if you're running another forum system, you'll have to consult its documentation with reference to "private/personal messaging". This tutorial covers personal topics and inline personal posts.
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Personal topics[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The link to start a new personal topic" float="left"]correspondance_hovering-over-startPT-link[/exp_thumb]
+[exp_thumb="Choosing what kind of whisper to use" float="right"]correspondance_whisper-page[/exp_thumb]
+Personal topics are very similar in concept to "private/personal messaging" -- a common feature among other forum systems. However, when designing OCF, we took the concept one step further, and integrated private messaging with the forum system in a new way. Private messaging systems are usually segregated from the main forum system; different layout, posting mechanisms, etc. With OCF, personal topics are just that: topics. They are simply topics that are marked as between two users, and are shown in a special "personal topics" virtual forum.
+
+Since version 4.0 personal topics may involve more than 2 people -- a topic is initially between 2 members but other members may be invited.
+[html]</div>[/html]
+[title="2"]Inline personal posts (whispers)[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="Typing in a personal post" float="left"]correspondance_whisper-form[/exp_thumb]
+[exp_thumb="A personal post as displayed" float="right"]correspondance_whisper[/exp_thumb]
+Another innovation we have developed for OCF is that of inline personal posts (henceforth known as "whispers" for brevity's sake). Whispers allow forum-goers to privately reply within a public forum topic.
+
+The whispers are like regular posts but marked as only viewable by the sender and receiver, and nobody else (apart from staff).
+[html]</div>[/html]
+[title="2"]Using personal topics[/title]
+
+[title="3"]Starting a personal topic[/title]
+
+Starting a personal topic is rather easy. There are 3 ways to do it:
+1) Simply go to the member page of the person you would like to converse with, and click on the "Start personal topic" link in the "Actions" box at the bottom of the page [[exp_ref]correspondance_hovering-over-startPT-link[/exp_ref]].
+2) Alternatively, you could click on the "Whisper" button on the bottom of a forum post by the person with whom you would like to converse; then click on the "Quote post to a new personal topic with this member" option [[exp_ref]correspondance_whisper-page[/exp_ref]].
+3) It is also possible to start a personal topic with any member without having to find their exact username or member profile. All you need to do now is to visit your own Account, and select to start a personal topic; you will then be able to type in the username that you wish to send a message to and ocPortal will search for the username for you.
+
+All 3 methods take you to a standard "new topic" page. Fill out all the fields, and hit "Add topic" to create the personal topic with your chosen conversant [[exp_ref]correspondance_create-PT-page[/exp_ref] and [exp_ref]correspondance_create-PT-page1[/exp_ref]]. Once your input has been processed, you will be redirected to the newly-created personal topic [[exp_ref]correspondance_new-PT[/exp_ref]]
+
+The new personal topic will have also appeared in your personal topics list, so you can easily access it. To get to your personal topics list, just click on the "Personal topics" link in either the top bar, or the side menu in OCF [[exp_ref]correspondance_hovering-over-PT-link[/exp_ref]]. The page lists all the personal topics you have ever started, or been a participant in, in much the same way as a normal forum [[exp_ref]correspondance_PT-page[/exp_ref]].
+
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The personal topics link" float="left"]correspondance_hovering-over-PT-link[/exp_thumb]
+[exp_thumb="Creating a personal topic (1)" float="left"]correspondance_create-PT-page[/exp_thumb]
+[exp_thumb="Our new personal topic" float="right"]correspondance_new-PT[/exp_thumb]
+[exp_thumb="Creating a personal topic (2)" float="right"]correspondance_create-PT-page1[/exp_thumb]
+[html]</div>[/html]
+[title="3"]Personal topic notifications[/title]
+
+[exp_thumb="An e-mail notification of a new personal topic" float="left"]correspondance_Thunderbird-notification-e-mail[/exp_thumb]
+[exp_thumb="Notification of a new personal message" float="right"]correspondance_forum-notification-message[/exp_thumb]
+When a new post is added by another conversant in a personal topic that you are part of, you will be notified by the system of its presence. If your options allow it, you will be e-mailed about the new post [[exp_ref]correspondance_Thunderbird-notification-e-mail[/exp_ref]], and you will always be notified by a little message at the top of the forums [[exp_ref]correspondance_forum-notification-message[/exp_ref]]. The notification message at the top of the forums will disappear once you've viewed the personal topic, or replied to it.
+
+[title="3"]Replying to a personal topic[/title]
+
+[exp_thumb="Our personal topic listed on the personal topics page" float="right"]correspondance_PT-page[/exp_thumb]
+When you receive notification about a new post in one of your personal topics, you'll probably want to reply. You can either click the "Reply" link in the notification message at the top of the forums, which will take you straight to the reply page, or you can go to the topic (via your personal topics virtual forum), and reply to the message just like you would in a normal topic: with the quick reply box, or the reply button [[exp_ref]correspondance_reply-to-PT[/exp_ref]].
+
+[title="2"]Deleting personal topics[/title]
+
+Most members do not have permission to delete a personal topic -- this is because unlike "personal/private messages" in some software, a personal topic is shared.
+However, there is an alternative mechanism that can be used to achieve the same effect. The two primary members involved in a personal topic may categorise the topic for their own purposes, and there is a 'Trash' category that exists by default.
+
+To 'trash' a topic:
+ - click its checkbox (tickbox) in the main "Personal topics" screen;
+ - scroll down and select "Categorise personal topics" from the "Topic/poll actions" dropdown list of actions;
+ - click the Proceed button directly adjacent to the dropdown list;
+ - click 'Trash' in the 'Category' field;
+ - click 'Categorise personal topics'.
+
+If you wish to access the topic again, you can do so from under the "Trash" category shown at the top of the main "Personal topics" screen.
+
+[title="2"]Administrating personal topics[/title]
+
+[concept]Super administrators[/concept] may access the personal topics of any member from that member's [concept]Account[/concept].
+As personal topics behave in a similar fashion to normal topics, they are moderated and administrated in the same way. There are a set of global privileges relating to personal topics, that define who may moderate/administrate them. Please see the "Basic forum moderation" tutorial for information on forum moderation.
+
+[title="2"]Using whispers[/title]
+
+[exp_thumb="Replying to a personal topic" float="left"]correspondance_reply-to-PT[/exp_thumb]
+[exp_thumb="The button to whisper to a poster" float="right"]correspondance_whisper-link[/exp_thumb]
+To post a whisper, click the "Whisper" link at the bottom of a forum post you would like to quote to the respective member. Then select the "In-topic personal post to this member" option [[exp_ref]correspondance_whisper-link[/exp_ref]].
+
+Fill out the posting form as you would for a normal post, and submit it. You will be redirected to the correct topic, and see your whisper highlighted in the topic view.
+
+When somebody sends you a whisper, you would be notified on receipt just as you would be notified of a new post in a personal topic.
+
+
+[title="2"]Administrating whispers[/title]
+
+As inline personal posts are just enhanced posts, they are moderated and administrated in the same way as posts. Please see the "Basic forum moderation" tutorial for information on forum moderation.
+
+
+
+
+[concepts
+ 1_key="Personal topics"   1_value="Topics visible only to selected conversants, available only from each conversant's \"personal topics\" virtual forum."
+ 2_key="Whispering"        2_value="In-topic posts only visible to the sender, and one specific recipient."
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page caption="Running chatrooms (features and advice)"]tut_chat[/page]
+ - [page caption="ocPortal member system"]tut_members[/page]
+ - [page caption="Basic forum moderation"]tut_mod[/page]
+

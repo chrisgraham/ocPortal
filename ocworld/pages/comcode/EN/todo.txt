@@ -1,0 +1,7 @@
+[title]ocWorld todo list[/title]
+
+These are unlikely to be done by ocProducts, but under the licence, changes may be made and redistributed by anyone as long as the licence terms are met.
+
+
+New features
+ - Support for fighting between members and other forms of troll (implies weapons, armour, experience, etc...)

@@ -1,0 +1,5 @@
+[block="pc_edit" type="tree" caption="Settings" silent_failure="1"]side_stored_menu[/block]
+[block="pc_features" type="tree" caption="Features"]side_stored_menu[/block]
+[block failsafe="1"]side_users_online[/block]
+[block failsafe="1"]side_stats[/block]
+[block]side_personal_stats[/block]

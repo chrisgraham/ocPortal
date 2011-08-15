@@ -1,0 +1,5 @@
+{!CATEGORIES}:
+<ul>
+	{CONTENT}
+</ul>
+

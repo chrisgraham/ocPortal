@@ -1,0 +1,1 @@
+<form title="{!AUTO_TRANSLATE}: {NAME*}" onsubmit="disable_button_just_clicked(this);" class="inline" action="{URL*}" method="post"><input name="submit" type="image" src="{$IMG*,tableitem/translate}" title="{!AUTO_TRANSLATE}: {NAME*}" alt="{!AUTO_TRANSLATE}: {NAME*}" /></form>

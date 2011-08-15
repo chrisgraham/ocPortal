@@ -1,0 +1,7 @@
+{TITLE}
+
+{OUT}
+
+{+START,BOX}
+	{!SUCCESS}
+{+END}
