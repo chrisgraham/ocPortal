@@ -2067,3 +2067,11 @@ theme_fixer
 -----------
 
 # # adminzone/pages/minimodules_custom/fix_partial_themewizard_css.php
+
+signup_referrals
+----------------
+
+# # data_custom/signup_refer.ini
+# # lang_custom/EN/signup_refer.ini
+# # pages/modules_custom/join.php
+# # sources_custom/hooks/systems/ecommerce/usergroup.php
