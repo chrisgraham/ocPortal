@@ -2027,25 +2027,6 @@ workflows
 # # site/pages/modules_custom/galleries.php
 # # adminzone/pages/modules_custom/admin_unvalidated.php
 
-ocp_reset
----------
-
-# # themes/ocp_reset/css/index.html
-# # themes/ocp_reset/css_custom/global.css
-# # themes/ocp_reset/css_custom/index.html
-# # themes/ocp_reset/images/index.html
-# # themes/ocp_reset/images/logo/index.html
-# # themes/ocp_reset/images_custom/index.html
-# # themes/ocp_reset/index.html
-# # themes/ocp_reset/templates/index.html
-# # themes/ocp_reset/templates_cached/EN/index.html
-# # themes/ocp_reset/templates_cached/index.html
-# # themes/ocp_reset/templates_custom/FOOTER.tpl
-# # themes/ocp_reset/templates_custom/GLOBAL.tpl
-# # themes/ocp_reset/templates_custom/HEADER.tpl
-# # themes/ocp_reset/templates_custom/index.html
-# # themes/ocp_reset/theme.ini
-
 tracking
 --------
 
@@ -2081,3 +2062,8 @@ gallery_carousel
 # # themes/default/templates_custom/GALLERY_VIDEO.tpl
 # # themes/default/templates_custom/GALLERY_ENTRY_WRAP.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_GALLERY_EMBED.tpl
+
+theme_fixer
+-----------
+
+# # adminzone/pages/minimodules_custom/fix_partial_themewizard_css.php

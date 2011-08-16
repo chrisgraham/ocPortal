@@ -665,7 +665,7 @@ class Module_admin_setupwizard
 				if ($duplicate['cnt']>1)
 					delete_menu_item($duplicate['id']);
 			}
-			delete_menu_item_simple('_SELF:');
+			delete_menu_item_simple('site:');
 			
 			// Remove panel_top
 			if (addon_installed('redirects_editor'))

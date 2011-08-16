@@ -1,4 +1,0 @@
-<?php
-return unserialize("a:6:{i:0;a:1:{i:0;a:5:{i:0;s:26:\"tcpfunc_BREADCRUMB_ESCAPED\";i:1;a:0:{}i:2;i:1;i:3;s:0:\"\";i:4;s:0:\"\";}}i:1;a:0:{}i:2;s:18:\"BREADCRUMB_ESCAPED\";i:3;N;i:4;N;i:5;s:158:\"\$TPL_FUNCS['tcpfunc_BREADCRUMB_ESCAPED']=\$KEEP_TPL_FUNCS['tcpfunc_BREADCRUMB_ESCAPED']=create_function('\$parameters,\$cl,\$last_attach',\"echo \\\" &raquo; \\\";\");\n\";}");
-
-?>

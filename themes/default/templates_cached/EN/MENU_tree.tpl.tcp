@@ -1,4 +1,0 @@
-<?php
-return unserialize("a:6:{i:0;a:1:{i:0;a:5:{i:0;s:17:\"tcpfunc_MENU_tree\";i:1;a:0:{}i:2;i:1;i:3;s:0:\"\";i:4;s:0:\"\";}}i:1;a:0:{}i:2;s:9:\"MENU_tree\";i:3;N;i:4;N;i:5;s:606:\"\$TPL_FUNCS['tcpfunc_MENU_tree']=\"eval(\\\$RESET_VAR_CODE); echo ((output_tempcode_parameter( isset (\\\$bound_CONTENT)?\\\$bound_CONTENT:NULL,\\\"CONTENT\\\",\\\"MENU_tree\\\").\\\"\\\"!='')?(\\\"\\\\n	<\\\".ecv(\\\$cl,array(),0,\\\"?\\\",array(ecv(\\\$cl,array(),0,\\\"VALUE_OPTION\\\",array(\\\"html5\\\")),\\\"nav\\\",\\\"div\\\")).\\\" class=\\\\\\\"menu_type__tree\\\\\\\">\\\\n		<ul class=\\\\\\\"nl\\\\\\\">\\\\n			\\\".output_tempcode_parameter( isset (\\\$bound_CONTENT)?\\\$bound_CONTENT:NULL,\\\"CONTENT\\\",\\\"MENU_tree\\\").\\\"\\\\n		</ul>\\\\n	</\\\".ecv(\\\$cl,array(),0,\\\"?\\\",array(ecv(\\\$cl,array(),0,\\\"VALUE_OPTION\\\",array(\\\"html5\\\")),\\\"nav\\\",\\\"div\\\")).\\\">\\\\n\\\"):''),\\n	\\\"\\\\n\\\";\";\n\";}");
-
-?>

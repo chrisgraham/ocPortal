@@ -67,10 +67,13 @@ foreach (array_keys($all_groups) as $_group_id)
 	$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($cat_id),'group_id'=>$_group_id));
 }*/
 
+header('Content-type: text/plain');
+
+$admin=2;
+
 $categories = category_list_from_details($FILE_BASE);
 //if(!is_dir("uploads/downloads/$get_cat"))
 //	mkdir("uploads/downloads/$get_cat");
-$admin=2;
 foreach($categories as $category)
 {
 	$cid = check_and_add_category($category, $c_main_id);
@@ -124,5 +127,47 @@ $attribute";
 	}
 }
 
-header('Content-type: text/plain');
 echo "All addons have been imported as downloads";
+
+// Now themes
+
+$cid = check_and_add_category('Themes', $c_main_id);
+
+$dh=opendir(get_custom_file_base().'/exports/mods');
+while (($file=readdir($dh))!==false)
+{
+	if (preg_match('#^theme-.*\.tar$#',$file)!=0)
+	{
+		$from = get_custom_file_base().'/exports/mods/'.$file;
+		$new_file = basename($file,'.tar').$version_for_name.'.tar';
+		$to = get_custom_file_base()."/uploads/downloads/".$new_file;
+		copy($from, $to);
+		$addon_path = 'uploads/downloads/'.$new_file;
+
+		$fsize = filesize($addon_path);
+
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
+		if (is_null($test))
+		{
+			require_code('tar');
+			$tar=tar_open($from,'rb');
+			$info_file=tar_get_file($tar,'mod.inf',true);
+			$info=better_parse_ini_file(NULL,$info_file['data']);
+			tar_close($tar);
+
+			$name=$info['name'];
+			$description=$info['description'];
+			$author=$info['author'];
+			
+			$downid = add_download($cid,$name,$addon_path,$description,$author,'',NULL,1,1,2,1,'',$new_file,$fsize,0,0,NULL,NULL,0,0,$admin);
+		
+			$url = "data_custom/addon_screenshots/".basename($file,'.tar').".png";
+			if (!file_exists($url)) $url = "data_custom/addon_screenshots/".strtolower(basename($file,'.tar')).".png";
+			if (file_exists($url))
+				add_image('download_'.strval($downid),'',str_replace(' ','%20',$url),str_replace(' ','%20',$url),1,0,0,0,'',NULL,NULL,NULL,0);
+		}
+	}
+}
+closedir($dh);
+
+echo "All themes have been imported as downloads";

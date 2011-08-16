@@ -1,4 +1,0 @@
-<?php
-return unserialize("a:6:{i:0;a:1:{i:0;a:5:{i:0;s:33:\"tcpfunc_BLOCK_MAIN_RSS_FROM_TITLE\";i:1;a:0:{}i:2;i:1;i:3;s:0:\"\";i:4;s:0:\"\";}}i:1;a:0:{}i:2;s:25:\"BLOCK_MAIN_RSS_FROM_TITLE\";i:3;N;i:4;N;i:5;s:394:\"\$TPL_FUNCS['tcpfunc_BLOCK_MAIN_RSS_FROM_TITLE']=\"eval(\\\$RESET_VAR_CODE); echo ( isset (\\\$bound_NEWS_TITLE)?apply_tempcode_escaping_inline(array(11),output_tempcode_parameter( isset (\\\$bound_NEWS_TITLE)?\\\$bound_NEWS_TITLE:NULL,\\\"NEWS_TITLE\\\",\\\"BLOCK_MAIN_RSS_FROM_TITLE\\\")):attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',\\\"NEWS_TITLE\\\",\\\"BLOCK_MAIN_RSS_FROM_TITLE\\\"),\\\"warn\\\"));\";\n\";}");
-
-?>

@@ -1,8 +1,8 @@
 <br />
 
 {+START,IF_NON_EMPTY,{COMMENT_URL}}
-<a name="last_comment" id="last_comment" rel="docomment"></a>
-<form title="{TITLE*}" id="comments_form" onsubmit="return ({+START,IF_PASSED,MORE_URL}(this.getAttribute('action')=='{MORE_URL*}') || {+END}(checkFieldForBlankness(this.elements['post'],event)){+START,IF,{$AND,{GET_EMAIL},{$NOT,{EMAIL_OPTIONAL}}}} &amp;&amp; (checkFieldForBlankness(this.elements['email'],event)){+END});" action="{COMMENT_URL*}#last_comment" method="post" enctype="multipart/form-data">
+{+START,IF_PASSED,COMMENTS}<a name="last_comment" id="last_comment" rel="docomment"></a>{+END}
+<form title="{TITLE*}" id="comments_form" onsubmit="return ({+START,IF_PASSED,MORE_URL}(this.getAttribute('action')=='{MORE_URL*}') || {+END}(checkFieldForBlankness(this.elements['post'],event)){+START,IF,{$AND,{GET_EMAIL},{$NOT,{EMAIL_OPTIONAL}}}} &amp;&amp; (checkFieldForBlankness(this.elements['email'],event)){+END});" action="{COMMENT_URL*}{+START,IF_PASSED,COMMENTS}#last_comment{+END}" method="post" enctype="multipart/form-data">
 <input type="hidden" name="_comment_form_post" value="1" />
 {+END}
 

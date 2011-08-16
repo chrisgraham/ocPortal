@@ -79,7 +79,7 @@ class Module_admin_menus
 		if (!in_array(get_forum_type(),array('ocf','none'))) add_menu_item_simple('root_website',NULL,'SECTION_FORUMS',get_forum_base_url(true));
 
 		// main_features
-		add_menu_item_simple('main_features',NULL,'FRONT_PAGE','_SELF:');
+		add_menu_item_simple('main_features',NULL,'FRONT_PAGE','site:');
 		add_menu_item_simple('main_features',NULL,'GUIDE','_SEARCH:help');
 		add_menu_item_simple('main_features',NULL,'RULES','_SEARCH:rules');
 

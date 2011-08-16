@@ -48,6 +48,7 @@ require_code('dump_addons');
 $version = ocp_version();
 $version_for_name = preg_replace('/\./','',$version);
 
+header('Content-type: text/plain');
 
 if(!file_exists($FILE_BASE.'/data_custom/addon_files.txt'))
 {
@@ -63,9 +64,10 @@ $addon_list = get_details_of_addons($FILE_BASE);
 
 foreach($addon_list as $addon => $val)
 {
-	$file = preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
 	if($addon == 'proper_name')
 		continue;
+
+	$file = preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
 
 	foreach($val as $k => $v)
 	{
@@ -95,9 +97,50 @@ foreach($addon_list as $addon => $val)
 		}
 	}
 
-  	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods',$category, $license, $attribute);
+  	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
 }
-header('Content-type: text/plain');
-echo "All addons have been exported at 'export/mods/'";
+echo "All addons have been exported to 'export/mods/'";
 
+require_code('themes2');
+require_code('files2');
+$themes=find_all_themes();
 
+foreach (array_keys($themes) as $theme)
+{
+	if ($theme=='default') continue;
+	
+	$name='';
+	$description='';
+	$author='ocProducts';
+	$ini_file=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini';
+	if (file_exists($ini_file))
+	{
+		$details=better_parse_ini_file($ini_file);
+		if (array_key_exists('title',$details)) $name=$details['title'];
+		if (array_key_exists('description',$details)) $description=$details['description'];
+		if ((array_key_exists('author',$details)) && ($details['author']!='admin')) $author=$details['author'];
+	}
+
+	$file='theme-'.preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$theme)).$version_for_name.'.tar';
+
+	$files2=array();
+	$theme_files=get_directory_contents(get_custom_file_base().'/themes/'.$theme,'themes/'.$theme);
+	foreach ($theme_files as $file2)
+	{
+		if ((substr($file2,-4)!='.tcp') && (substr($file2,-4)!='.tcd'))
+			$files2[]=$file2;
+	}
+	$page_files=get_directory_contents(get_custom_file_base().'/','');
+	foreach ($page_files as $file2)
+	{
+		$matches=array();
+		if ((preg_match('#^/((\w+)/)?pages/comcode_custom/[^/]*/'.str_replace('#','\#',preg_quote($theme)).'\_\_(\w+)\.txt$#',$file2,$matches)!=0) && ($matches[1]!='docs'.strval(ocp_version())))
+		{
+			$files2[]=$file2;
+		}
+	}
+
+  	create_addon($file,$files2,$name,array(),array(),$author,'ocProducts Ltd','1.0',$description,'exports/mods');
+}
+
+echo "All themes have been exported to 'export/mods/'";

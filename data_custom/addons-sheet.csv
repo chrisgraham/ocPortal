@@ -139,5 +139,4 @@ PHP5 is required, as well as OpenSSL support in PHP.",,,,,"Third Party Integrati
 New content enters the default workflow (unless another is specified) and notifications are sent to those users with permission to approve the next level. This continues until all of the levels are approved, at which point the content goes live.
 
 Note that this addon only affects galleries at the moment, and it requires the ""unvalidated"" system to be installed (this comes with ocPortal but may have been uninstalled). Other content types can be added by a programmer as this addon has been implemented in a modular way.","Yes",,"unvalidated",,"New Features",,"Licensed on the same terms as ocPortal",,,,
-"ocp_reset","Allen Ellis","Yes","Yes","Yes","Yes","No","Slimmed-down version of the default theme.","Yes",,,,"Themes",,"Licensed on the same terms as ocPortal",,,,
 "tracking","Sujith","Yes","Yes","Yes","Yes","No","New/edited entry tracking support for additional content types in ocPortal.","Yes",,,,"New Features",,"Licensed on the same terms as ocPortal",,,,

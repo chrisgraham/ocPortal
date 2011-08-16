@@ -1,1 +1,0 @@
-a:4:{s:29:"BATCH_IMPORT_ARCHIVE_CONTENTS";s:29:"Batch import archive contents";s:19:"DESCRIPTION_ARCHIVE";s:75:"An archive, containing multiple images (formats supported: <kbd>{1}</kbd>).";s:18:"BAD_ARCHIVE_FORMAT";s:51:"The uploaded file is not of a known archive format.";s:15:"ZIP_NOT_ENABLED";s:66:"The PHP ZIP library is not installed and/or enabled on this server";}
