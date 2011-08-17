@@ -1,0 +1,5 @@
+*.lcd
+*.tcp
+*.tcd
+*.gcd
+uploads
