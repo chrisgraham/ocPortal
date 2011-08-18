@@ -67,6 +67,7 @@ class Module_admin_ocgifts extends standard_aed_module
 				'category'=>'SHORT_TEXT',
 			));
 
+			$default_gifts=array();
 			$default_gifts[]=array('name'=>'A Bouquet of Flowers','image'=>'uploads/ocgifts_addon/bouquet_of_flowers.gif','price'=>10,'enabled'=>1);
 			$default_gifts[]=array('name'=>'A bag of Money!','image'=>'uploads/ocgifts_addon/Money_Bag_Icon.gif','price'=>10,'enabled'=>1);
 			$default_gifts[]=array('name'=>'A glass of Beer','image'=>'uploads/ocgifts_addon/glass_of_beer.gif','price'=>10,'enabled'=>1);
@@ -192,8 +193,8 @@ class Module_admin_ocgifts extends standard_aed_module
 		$category='';
 		$enabled=do_lang_tempcode('GIFT_DISABLED');
 
-		$id=get_param('id',0);
-		if($id>0)
+		$id=get_param_integer('id',NULL);
+		if($id!==NULL)
 		{
 			$rows=$GLOBALS['FORUM_DB']->query_select('ocgifts',array('*'),array('id'=>$id));
 

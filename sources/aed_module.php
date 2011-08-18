@@ -351,7 +351,7 @@ class standard_aed_module
 		$catalogue_name=get_param('catalogue_name','');
 		if ($catalogue_name!='') return NULL;
 
-		$tree=nice_get_catalogues();
+		$tree=nice_get_catalogues(NULL,false,true);
 		if ($tree->is_empty())
 		{
 			return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
@@ -523,7 +523,7 @@ class standard_aed_module
 		}
 		elseif (!is_null($this->posting_form_title))
 		{
-			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$posting_form_tabindex,NULL,$this->posting_field_required);
+			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$posting_form_tabindex,$this->posting_field_required);
 			return do_template('POSTING_SCREEN',array('_GUID'=>'15930ba8cc02634ed3a225c9714c3eac'.get_class($this),'TITLE'=>$title,'PREVIEW'=>$this->do_preview,'SEPARATE_PREVIEW'=>$this->second_stage_preview,'TEXT'=>$this->add_text,'POSTING_FORM'=>$posting_form->evaluate()/*FUDGEFUDGE*/,'JAVASCRIPT'=>$this->javascript));
 		} else
 		{

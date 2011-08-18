@@ -51,13 +51,13 @@ function set_coordinates()
 {
 	header('Content-Type: text/plain');
 
-	$coords=get_param('coord','');
+	$_coords=get_param('coord','');
 	$member_id=get_param_integer('mid',get_member());
 
 	//prevent hack attepts
 	if ($member_id!=get_member()) return;
 
-	$coords=explode('_',$coords);
+	$coords=explode('_',$_coords);
 
 
 	$latitude_cpf_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>'ocp_latitude'));

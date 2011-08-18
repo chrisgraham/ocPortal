@@ -20,7 +20,7 @@ require_code('aed_module');
  */
 class Module_admin_ocdeadpeople extends standard_aed_module
 {
-	var $lang_type='DESEASE';
+	var $lang_type='DISEASE';
 	var $select_name='NAME';
 	var $award_type='group';
 	var $possibly_some_kind_of_upload=true;
@@ -41,7 +41,8 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 		$info['organisation']='ocProducts'; 
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=2;
+		$info['version']=3;
+		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
 	}
@@ -54,12 +55,12 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-
-		//if (!$GLOBALS['SITE_DB']->table_exists('diseases')) {
+		if (is_null($upgrade_from))
+		{
 			$GLOBALS['SITE_DB']->create_table('diseases',array(
 				'id'=>'*AUTO',
 				'name'=>'SHORT_TEXT',
-				'image'=>'SHORT_TEXT',
+				'image'=>'URLPATH',
 				'cure'=>'SHORT_TEXT',
 				'cure_price'=>'INTEGER',
 				'immunisation'=>'SHORT_TEXT',
@@ -69,32 +70,28 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 				'last_spread_time'=>'INTEGER',
 				'enabled'=>'BINARY'
 			));
-		//}
 
-		$tablename='members_diseases';
-		//if(!$GLOBALS['SITE_DB']->table_exists($tablename)) {
-		  $GLOBALS['SITE_DB']->create_table($tablename,array(
-			'user_id'=>'*INTEGER',
-			'desease_id'=>'*INTEGER',
-			'sick'=>'BINARY',
-			'cure'=>'BINARY',
-			'immunisation'=>'BINARY',
-		   ));
-		//}
+			$GLOBALS['SITE_DB']->create_table('members_diseases',array(
+				'user_id'=>'*USER',
+				'disease_id'=>'*AUTO_LINK',
+				'sick'=>'BINARY',
+				'cure'=>'BINARY',
+				'immunisation'=>'BINARY',
+			));
 
-		$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Zombiism','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Zombiism vaccine','cure_price'=>'100','immunisation'=>'Immunise yourself from Zombiism','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
-
-		$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'A bad case of Hiccups','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Hiccup vaccine','cure_price'=>'100','immunisation'=>'Immunise yourself from the Hiccups','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
-
-		$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Vampirism','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Vampirism vaccine','cure_price'=>'100','immunisation'=>'Immunise yourself against Vampirism','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
-
-		$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'The Flu','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Flu vaccine','cure_price'=>'100','immunisation'=>'Immunise yourself against the Flu','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
-
-		$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Lice','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Lice-Away Spray','cure_price'=>'100','immunisation'=>'Lice repellant','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
-
-		$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Fleas','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Flea spray','cure_price'=>'100','immunisation'=>'Flea repellant','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
-
-		$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Man-Flu','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Lots and lots of TLC','cure_price'=>'1000','immunisation'=>'Anti Man-Flu Serum','immunisation_price'=>'250','spread_rate'=>'12','points_per_spread'=>'100','last_spread_time'=>'0','enabled'=>'1'),true);
+			$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Zombiism','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Zombiism vaccine','cure_price'=>'100','immunisation'=>'Immunise yourself from Zombiism','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
+			$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'A bad case of Hiccups','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Hiccup vaccine','cure_price'=>'100','immunisation'=>'Immunise yourself from the Hiccups','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
+			$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Vampirism','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Vampirism vaccine','cure_price'=>'100','immunisation'=>'Immunise yourself against Vampirism','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
+			$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'The Flu','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Flu vaccine','cure_price'=>'100','immunisation'=>'Immunise yourself against the Flu','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
+			$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Lice','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Lice-Away Spray','cure_price'=>'100','immunisation'=>'Lice repellant','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
+			$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Fleas','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Flea spray','cure_price'=>'100','immunisation'=>'Flea repellant','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
+			$GLOBALS['FORUM_DB']->query_insert('diseases',array('name'=>'Man-Flu','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Lots and lots of TLC','cure_price'=>'1000','immunisation'=>'Anti Man-Flu Serum','immunisation_price'=>'250','spread_rate'=>'12','points_per_spread'=>'100','last_spread_time'=>'0','enabled'=>'1'),true);
+		}
+		
+		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('members_diseases','desease_id','AUTO_LINK','disease_id');
+		}
 	}
 
 	/**
@@ -116,7 +113,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_DESEASES'),parent::get_entry_points());
+		return array_merge(array('misc'=>'MANAGE_DISEASES'),parent::get_entry_points());
 	}
 	
 	/**
@@ -152,8 +149,8 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 		return do_next_manager(get_page_title('OCDEADPEOPLE_TITLE'),comcode_lang_string('DOC_OCDEADPEOPLE'),
 					array(
 						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DESEASE')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DESEASE')),
+						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DISEASE')),
+						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DISEASE')),
 					),
 					do_lang('OCDEADPEOPLE_TITLE')
 		);
@@ -175,7 +172,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 		$immunization_price=0;
 		$spread_rate=0;
 		$points_per_spread=10;
-		$enabled=do_lang_tempcode('DESEASE_DISABLED');
+		$enabled=do_lang_tempcode('DISEASE_DISABLED');
 
 		$id=get_param('id',0);
 		if($id>0)
@@ -193,15 +190,15 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 				$immunization_price=$rows[0]['immunisation_price'];
 				$spread_rate=$rows[0]['spread_rate'];
 				$points_per_spread=$rows[0]['points_per_spread'];
-				$enabled=($rows[0]['enabled']==1)?do_lang_tempcode('DESEASE_ENABLED'):do_lang_tempcode('DESEASE_DISABLED');
+				$enabled=($rows[0]['enabled']==1)?do_lang_tempcode('DISEASE_ENABLED'):do_lang_tempcode('DISEASE_DISABLED');
 			}
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('OCDEADPEOPLE_TITLE'))));
-		breadcrumb_set_self(do_lang_tempcode('VIEW_DESEASE'));
+		breadcrumb_set_self(do_lang_tempcode('VIEW_DISEASE'));
 
 		require_code('templates_view_space');
-		return view_space(get_page_title('VIEW_DESEASE'),array('NAME'=>$name,'IMAGE'=>$image,'CURE'=>$cure,'CURE_PRICE'=>integer_format($cure_price),'IMMUNIZATION'=>$immunization,'IMMUNIZATION_PRICE'=>integer_format($immunization_price),'SPREAD_RATE'=>integer_format($spread_rate),'POINTS_PER_SPREAD'=>integer_format($points_per_spread),'ENABLED'=>$enabled));
+		return view_space(get_page_title('VIEW_DISEASE'),array('NAME'=>$name,'IMAGE'=>$image,'CURE'=>$cure,'CURE_PRICE'=>integer_format($cure_price),'IMMUNIZATION'=>$immunization,'IMMUNIZATION_PRICE'=>integer_format($immunization_price),'SPREAD_RATE'=>integer_format($spread_rate),'POINTS_PER_SPREAD'=>integer_format($points_per_spread),'ENABLED'=>$enabled));
 
 	}
 
@@ -221,7 +218,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 
 		require_code('form_templates');
 
-		$fields->attach(form_input_line(do_lang_tempcode('DESEASE'),do_lang_tempcode('DESCRIPTION_DESEASE'),'name',$name,true));
+		$fields->attach(form_input_line(do_lang_tempcode('DISEASE'),do_lang_tempcode('DESCRIPTION_DISEASE'),'name',$name,true));
 
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'image',false));
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$image,false));
@@ -239,7 +236,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 
 		$fields->attach(form_input_line(do_lang_tempcode('POINTS_PER_SPREAD'),do_lang_tempcode('DESCRIPTION_POINTS_PER_SPREAD'),'points_per_spread',strval($points_per_spread),true));
 		
-		$fields->attach(form_input_tick(do_lang_tempcode('DESEASE_ENABLED'),do_lang_tempcode('DESCRIPTION_DESEASE_ENABLED'),'enabled',$enabled==1));
+		$fields->attach(form_input_tick(do_lang_tempcode('DISEASE_ENABLED'),do_lang_tempcode('DESCRIPTION_DISEASE_ENABLED'),'enabled',$enabled==1));
 
 		return array($fields,$hidden);
 	}

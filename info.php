@@ -8,6 +8,7 @@ $SITE_INFO['default_lang']='EN';
 $SITE_INFO['db_type']='mysql';
 $SITE_INFO['forum_type']='ocf';
 $SITE_INFO['domain']='localhost';
+$SITE_INFO['base_url']='http://localhost/git';
 $SITE_INFO['table_prefix']='ocp_';
 $SITE_INFO['admin_password']='d41d8cd98f00b204e9800998ecf8427e';
 $SITE_INFO['db_site']='ocf';

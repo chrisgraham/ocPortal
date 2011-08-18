@@ -27,7 +27,7 @@ class Hook_do_next_menus_ocdeadpeople
 		//if (!addon_installed('ocdeadpeople')) return array();
 
 		return array(
-			array('setup','ocdeadpeoplelog',array('admin_ocdeadpeople',array('type'=>'misc'),get_module_zone('admin_ocdeadpeople')),do_lang_tempcode('MANAGE_DESEASES'),('DOC_OCDEADPEOPLE'))
+			array('setup','ocdeadpeoplelog',array('admin_ocdeadpeople',array('type'=>'misc'),get_module_zone('admin_ocdeadpeople')),do_lang_tempcode('MANAGE_DISEASES'),('DOC_OCDEADPEOPLE'))
 		);
 	}
 

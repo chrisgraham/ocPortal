@@ -36,7 +36,7 @@ ocdeadpeople
 # # sources_custom/hooks/systems/do_next_menus/ocdeadpeople.php
 # # themes/default/images_custom/bigicons/ocdeadpeoplelog.png
 # # themes/default/templates_custom/POINTSTORE_OCDEADPEOPLE.tpl
-# # themes/default/templates_custom/POINTSTORE_OCDEADPEOPLE_DESEASES.tpl
+# # themes/default/templates_custom/POINTSTORE_OCDEADPEOPLE_DISEASES.tpl
 # # uploads/diseases_addon/index.html
 
 ocgiftgiver

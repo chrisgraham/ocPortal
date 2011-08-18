@@ -513,17 +513,19 @@ class Module_admin_themes
 		if (!array_key_exists('mobile_pages',$details)) $details['mobile_pages']='';
 		if (!array_key_exists('supports_wide',$details)) $details['supports_wide']='1';
 		$fields=$this->get_theme_fields($theme,$details['title'],$details['description'],$details['author'],$details['mobile_pages'],intval($details['supports_wide']),false);
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
-		$fields->attach(form_input_tick(do_lang_tempcode('COPY_THEME'),do_lang_tempcode('DESCRIPTION_COPY_THEME',escape_html($theme)),'copy',false));
 		if ($theme!='default')
+		{
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(form_input_tick(do_lang_tempcode('COPY_THEME'),do_lang_tempcode('DESCRIPTION_COPY_THEME',escape_html($theme)),'copy',false));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
+		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit_theme','old_theme'=>$theme),'_SELF');
 		$submit_name=do_lang_tempcode('EDIT_THEME');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMES'))));
 		
-		$javascript='var themee=document.getElementById(\'theme\'), themet=document.getElementById(\'title\'), copy=document.getElementById(\'copy\'); copy.onchange=function() { if (copy.checked && themee.value.indexOf(\'-copy\')==-1) { themee.value+=\'-copy\'; themet.value+=\' copy\'; } };';
+		$javascript='var themee=document.getElementById(\'theme\'), themet=document.getElementById(\'title\'), copy=document.getElementById(\'copy\'); if (copy) copy.onchange=function() { if (copy.checked && themee.value.indexOf(\'-copy\')==-1) { themee.value+=\'-copy\'; themet.value+=\' copy\'; } };';
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'2734c55cd4d7cfa785d307d932ce8af1','JAVASCRIPT'=>$javascript,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}

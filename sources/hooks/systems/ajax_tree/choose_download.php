@@ -129,7 +129,7 @@ class Hook_choose_download
 		// Mark parent cats for pre-expansion
 		if ((!is_null($default)) && ($default!=''))
 		{
-			$cat=$GLOBALS['SITE_DB']->quey_value_null_ok('download_downloads','category_id',array('id'=>intval($default)));
+			$cat=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','category_id',array('id'=>intval($default)));
 			while (!is_null($cat))
 			{
 				$out.='<expand>'.strval($cat).'</expand>';

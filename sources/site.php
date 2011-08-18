@@ -11,6 +11,7 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
+/*EXTRA FUNCTIONS: memory_get_usage*/
 
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License

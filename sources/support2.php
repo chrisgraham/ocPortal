@@ -45,7 +45,7 @@ function ocp_mb_str_split($str)
  */
 function ocp_mb_chunk_split($str,$len=76,$glue="\r\n")
 {
-	if ($str=='') return false;
+	if ($str=='') return '';
 	$array=ocp_mb_str_split($str);
 	$n=-1;
 	$new='';

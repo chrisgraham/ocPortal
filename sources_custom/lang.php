@@ -114,7 +114,7 @@ if (!function_exists('_do_lang'))
 					}
 				} elseif (substr($codename,0,3)=='FC_')
 				{
-					$ret=ocp_mb_substr(trim(do_lang(substr($codename,3)),$token1,$token2,$token3,$lang),0,1);
+					$ret=ocp_mb_substr(trim(do_lang(substr($codename,3),$token1,$token2,$token3,$lang)),0,1);
 				} elseif ($codename=='locale')
 				{
 					$ret=strtolower($lang).'_'.strtoupper($lang);
@@ -438,7 +438,8 @@ function google_translate($str_in, $lang)
 
 		save_google_cache($str_in, $lang, $convertedstring);
 		$str = $convertedstring;
-	} else {
+	} else
+	{
 		$str = $chache['t_result'];
 	}
 	$DOING_TRANSLATE=false;

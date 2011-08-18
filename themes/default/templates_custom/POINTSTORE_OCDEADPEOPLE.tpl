@@ -1,7 +1,7 @@
 <div class="pointstore_item">
-	{+START,BOX,{!DESEASES_CURES_IMMUNIZATIONS_TITLE},,med,,,<a title="{!ENTER}: {!DESEASES_TITLE}" href="{NEXT_URL*}">{!ENTER}</a>}
+	{+START,BOX,{!DISEASES_CURES_IMMUNIZATIONS_TITLE},,med,,,<a title="{!ENTER}: {!DISEASES_TITLE}" href="{NEXT_URL*}">{!ENTER}</a>}
 		<p>
-			{!DESEASES_DESCRIPTION}
+			{!DISEASES_DESCRIPTION}
 		</p>
 	{+END}
 </div>

@@ -3,3 +3,13 @@
 *.tcd
 *.gcd
 uploads
+themes/[abcefghijklmnopqrstuvwxyz0123456789]*
+templates_cached
+*.[1234567890]*
+comcode_custom
+*log.php
+exports
+imports
+html_custom
+spelling
+

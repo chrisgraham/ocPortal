@@ -878,7 +878,7 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
 }
 
-.standardbox_classic {
+.standardbox_classic, .standardbox_links_classic {
 	margin: 0;
 
 	/* Want to change the tiled background?

@@ -1764,6 +1764,7 @@ function maintain_theme_in_link(url)
 	if (url.indexOf('&keep_theme=')!=-1) return url;
 	if (url.indexOf('?keep_theme=')!=-1) return url;
 	
+	if (typeof window.ocp_theme=='undefined') window.ocp_theme='{$THEME;}';
 	if (typeof window.ocp_theme!='undefined')
 	{
 		if (url.indexOf('?')==-1) url+='?'; else url+='&';

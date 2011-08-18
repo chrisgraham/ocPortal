@@ -205,6 +205,8 @@ function findCSSSheets(win)
 	var possibilities=[],sheet,i,j,k,ok;
 	try
 	{
+		if (typeof window.ocp_theme=='undefined') window.ocp_theme='{$THEME;}';
+		if (typeof window.ocp_lang=='undefined') window.ocp_lang='{$LANG;}';
 		if ((typeof win.document.querySelectorAll!='undefined') && (typeof window.ocp_lang!='undefined') && (typeof window.ocp_theme!='undefined'))
 		{
 			for (i=0;i<win.document.styleSheets.length;i++)
@@ -294,6 +296,8 @@ function promotePageCaching()
 
 function handleImageMouseOver(event)
 {
+	if (typeof window.ocp_theme=='undefined') window.ocp_theme='{$THEME;}';
+	if (typeof window.ocp_lang=='undefined') window.ocp_lang='{$LANG;}';
 	if (typeof window.ocp_theme=='undefined') return;
 
 	var target=event.target || event.srcElement;

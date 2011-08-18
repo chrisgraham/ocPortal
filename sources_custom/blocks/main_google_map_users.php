@@ -67,8 +67,8 @@ class Block_main_google_map_users
 		$mapwidth=array_key_exists('width',$map)?$map['width']:'100%';
 		$mapheight=array_key_exists('height',$map)?$map['height']:'300px';
 		$api_key=array_key_exists('api_key',$map)?$map['api_key']:'';
-		$setZoom=array_key_exists('zoom',$map)?$map['zoom']:'3';
-		$setCenter=array_key_exists('center',$map)?$map['center']:'0';
+		$set_zoom=array_key_exists('zoom',$map)?$map['zoom']:'3';
+		$set_center=array_key_exists('center',$map)?$map['center']:'0';
 		$cluster=array_key_exists('cluster',$map)?$map['cluster']:'0';
 
 		// Ensure installed
@@ -132,13 +132,13 @@ class Block_main_google_map_users
 		// See if we need to detect the current user's long/lat
 		$member_longitude=get_ocp_cpf('longitude',get_member());
 		$member_latitude=get_ocp_cpf('latitude',get_member());
-		$update_url=get_base_url().'/data_custom/set_coordinates.php?mid='.get_member().'&coord=';
+		$update_url=get_base_url().'/data_custom/set_coordinates.php?mid='.strval(get_member()).'&coord=';
 		if ((!empty($member_longitude) && !empty($member_latitude)) || (is_guest()))
 		{
 			$update_url='';
 		}
 		
-		return do_template('BLOCK_MAIN_GOOGLE_MAP_USERS',array('TITLE'=>$map['title'],'GEOLOCATE_USER'=>$geolocate_user,'CLUSTER'=>$cluster,'SET_COORD_URL'=>$update_url,'REGION'=>$map['region'],'DATA'=>$member_data_js,'USERNAME_PREFIX'=>$map['username_prefix'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'], 'LONGITUDE'=>$map['longitude'], 'ZOOM'=>$setZoom,'CENTER'=>$setCenter));
+		return do_template('BLOCK_MAIN_GOOGLE_MAP_USERS',array('TITLE'=>$map['title'],'GEOLOCATE_USER'=>$geolocate_user,'CLUSTER'=>$cluster,'SET_COORD_URL'=>$update_url,'REGION'=>$map['region'],'DATA'=>$member_data_js,'USERNAME_PREFIX'=>$map['username_prefix'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'], 'LONGITUDE'=>$map['longitude'], 'ZOOM'=>$set_zoom,'CENTER'=>$set_center));
 	}
 }
 

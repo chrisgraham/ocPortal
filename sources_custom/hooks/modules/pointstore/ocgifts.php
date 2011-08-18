@@ -69,6 +69,7 @@ class Hook_pointstore_ocgifts
 
 		$rows=$GLOBALS['FORUM_DB']->query_select('ocgifts g',array('*','(SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'members_gifts m WHERE m.gift_id=g.id) AS popularity'),$map,'ORDER BY popularity DESC',$max,$start);
 		$username=get_param('username','');
+		$gifts=array();
 		foreach($rows as $gift)
 		{
 			$gift_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocgifts','gift'=>$gift['id'],'username'=>$username),'_SEARCH');

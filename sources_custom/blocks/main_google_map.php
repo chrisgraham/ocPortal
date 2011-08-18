@@ -53,9 +53,9 @@ class Block_main_google_map
 		$mapwidth=array_key_exists('width',$map)?$map['width']:'100%';
 		$mapheight=array_key_exists('height',$map)?$map['height']:'300px';
 		$api_key=array_key_exists('api_key',$map)?$map['api_key']:'';
-		$setZoom=array_key_exists('zoom',$map)?$map['zoom']:'3';
-		$setCenter=array_key_exists('center',$map)?$map['center']:'0';
-		$setShowLinks=array_key_exists('show_links',$map)?$map['show_links']:'1';
+		$set_zoom=array_key_exists('zoom',$map)?$map['zoom']:'3';
+		$set_center=array_key_exists('center',$map)?$map['center']:'0';
+		$set_show_links=array_key_exists('show_links',$map)?$map['show_links']:'1';
 		$cluster=array_key_exists('cluster',$map)?$map['cluster']:'0';
 		if ((!array_key_exists('catalogue',$map)) || ($map['catalogue']=='')) $map['catalogue']='contacts'; //default value
 		if (!array_key_exists('longfield',$map)) $map['longfield']='Longitude';
@@ -132,6 +132,6 @@ class Block_main_google_map
 		$uniqid=uniqid('');
 		$div_id='div_'.$catalogue_name.'_'.$uniqid;
 
-		return do_template('BLOCK_MAIN_GOOGLE_MAP',array('TITLE'=>$map['title'],'DATA'=>$data,'ENTRIES_URL'=>$entries_url,'SHOW_LINKS'=>$setShowLinks,'DIV_ID'=>$div_id,'CLUSTER'=>$cluster,'REGION'=>$map['region'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'], 'LONGITUDE'=>$map['longitude'], 'ZOOM'=>$setZoom,'CENTER'=>$setCenter));
+		return do_template('BLOCK_MAIN_GOOGLE_MAP',array('TITLE'=>$map['title'],'DATA'=>$data,'ENTRIES_URL'=>$entries_url,'SHOW_LINKS'=>$set_show_links,'DIV_ID'=>$div_id,'CLUSTER'=>$cluster,'REGION'=>$map['region'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'], 'LONGITUDE'=>$map['longitude'], 'ZOOM'=>$set_zoom,'CENTER'=>$set_center));
 	}
 }

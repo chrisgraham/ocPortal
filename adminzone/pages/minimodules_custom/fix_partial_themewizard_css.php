@@ -48,7 +48,7 @@ while (($sheet=readdir($dh))!==false)
 	if (substr($sheet,-4)=='.css')
 	{
 		$saveat=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/'.$sheet;
-		if ((!file_exists($saveat)) || ($source_theme!='default') || ($algorithm=='hsv'))
+		if (!file_exists($saveat))
 		{
 			$output=file_get_contents($saveat);
 			$before=$output;
@@ -76,7 +76,7 @@ while (($sheet=readdir($dh))!==false)
 
 			if ($output!=$before)
 			{
-				$fp=@fopen($saveat,'wt') OR intelligent_write_error($saveat);
+				$fp=@fopen($saveat,'wb') OR intelligent_write_error($saveat);
 				if (fwrite($fp,$output)<strlen($output)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 				fclose($fp);
 				fix_permissions($saveat);

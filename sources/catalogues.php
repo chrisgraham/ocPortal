@@ -613,9 +613,10 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
  *
  * @param  ?ID_TEXT		The name of the currently selected catalogue (NULL: none selected)
  * @param  boolean		If there are too many to list prefer to get ones with entries rather than just the newest
+ * @param  boolean		Whether to only show catalogues that can be submitted to
  * @return tempcode		Catalogue selection list
  */
-function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false)
+function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_submittable=false)
 {
 	$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 	if ($prefer_ones_with_entries)
@@ -630,6 +631,8 @@ function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false)
 	foreach ($rows as $row)
 	{
 		if (!has_category_access(get_member(),'catalogues_catalogue',$row['c_name'])) continue;
+		
+		if (($only_submittable) && (!has_specific_permission(get_member(),'submit_midrange_content','cms_catalogues',array('catalogues_catalogue',$row['c_name'])))) continue;
 
 		if (($row['c_ecommerce']==0) || (addon_installed('shopping')))
 		{

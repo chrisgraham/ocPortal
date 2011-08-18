@@ -421,6 +421,7 @@ function _parse_command_actual($no_term_needed=false)
 					// function's parameter list for the moment, as that's simplest,
 					// although it accepts a bit too much
 					pparse__parser_expect('BRACKET_OPEN');
+					pparse__parser_expect('IDENTIFIER'); // E.g. 'EXCEPTION'
 					$exception = _parse_comma_parameters();
 					pparse__parser_expect('BRACKET_CLOSE');
 					if (pparse__parser_peek() != 'CURLY_OPEN') parser_error ('Expected code block after "catch".');
@@ -702,7 +703,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 				break;
 
 			case 'FUNCTION':
-				if ($is_interface && in_array('private',$modifiers) || in_array('protected',$modifiers)) log_warning('All methods in an interface must be public');
+				if ($is_interface && in_array('private',$modifiers)) log_warning('All methods in an interface must be public or protected');
 				if ($is_interface && in_array('abstract',$modifiers)) log_warning('Everything in an interface is inherently abstract. Do not use the abstract keyword');
 				$_function=_parse_function_dec(array_merge($modifiers,$is_interface?array('abstract'):array()));		// Interface methods are inherently abstract
 				foreach ($class['functions'] as $_)

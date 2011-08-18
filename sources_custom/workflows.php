@@ -115,7 +115,8 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
 	// have to check that too!
 	// Need different paths based on ID type, to prevent breaking strict
 	// databases
-	if ($numeric) {
+	if ($numeric)
+	{
 		// Query the database for content matching the found parameters
 		if ($GLOBALS['SITE_DB']->query_select($content_table,array($content_field),array($content_field=>$numeric_id),'',1)==array())
 		{
@@ -488,7 +489,7 @@ function get_workflow_content_id($source_type=NULL,$source_id=NULL)
 	$content = $GLOBALS['SITE_DB']->query_select('workflow_content',array('id'),array('source_type'=>$source_type,'source_id'=>$source_id),'',1);
 	if ($content == array())
 	{
-		warn_exit(do_lang_tempcode('_MISSING_RESOURCE', strval($source_id)));
+		warn_exit(do_lang_tempcode('_MISSING_RESOURCE', get_translated_text($source_id)));
 	}
 	return $content[0]['id'];
 }

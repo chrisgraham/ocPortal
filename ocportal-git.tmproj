@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>themes/green/theme.ini</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -393,20 +395,6 @@
 	<integer>352</integer>
 	<key>metaData</key>
 	<dict>
-		<key>_tests/codechecker/code_quality.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>83</integer>
-				<key>line</key>
-				<integer>1652</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1623</integer>
-		</dict>
 		<key>_tests/codechecker/lang/validation.ini</key>
 		<dict>
 			<key>caret</key>
@@ -1018,20 +1006,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>sources/aed_module.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>43</integer>
-				<key>line</key>
-				<integer>353</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>334</integer>
 		</dict>
 		<key>sources/blocks/main_contact_simple.php</key>
 		<dict>
@@ -1983,20 +1957,6 @@
 				<integer>209</integer>
 			</dict>
 		</dict>
-		<key>sources/lang2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>128</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>126</integer>
-		</dict>
 		<key>sources/m_zip.php</key>
 		<dict>
 			<key>caret</key>
@@ -2735,20 +2695,6 @@
 				<integer>2</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates/JAVASCRIPT_STAFF.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>50</integer>
-				<key>line</key>
-				<integer>296</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>284</integer>
-		</dict>
 		<key>themes/default/templates/MENU_BRANCH_select.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -3347,10 +3293,28 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/green/theme.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>themes/green/theme.ini</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{592, 191}, {1179, 910}}</string>
+	<string>{{593, 192}, {1179, 910}}</string>
 </dict>
 </plist>

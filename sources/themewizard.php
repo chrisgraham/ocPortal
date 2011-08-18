@@ -68,7 +68,7 @@ function load_themewizard_params_from_theme($theme)
 			$map+=better_parse_ini_file($ini_path);
 	}
 	$ini_path=get_file_base().'/themes/default/theme.ini';
-	$map+=better_parse_ini_file($ini_path);
+	$map+=better_parse_ini_file($ini_path); // NB: Does not take precedence
 
 	global $THEME_WIZARD_IMAGES,$THEME_WIZARD_IMAGES_NO_WILD;
 	$THEME_WIZARD_IMAGES=explode(',',$map['theme_wizard_images']);

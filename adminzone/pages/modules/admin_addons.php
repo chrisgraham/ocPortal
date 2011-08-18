@@ -470,7 +470,15 @@ class Module_admin_addons
 		{
 			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).date('-dmY-Hm',time()).'.tar';
 		}
-		create_addon($file,$addon_row['addon_files'],$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/mods');
+		
+		$new_addon_files=array();
+		foreach ($addon_row['addon_files'] as $_file)
+		{
+			if (substr($_file,-9)!='.editfrom') // This would have been added back in automatically
+				$new_addon_files[]=$_file;
+		}
+
+		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/mods');
 
 		uninstall_addon($name);
 

@@ -346,7 +346,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'THEME':
-				$value=$GLOBALS['FORUM_DRIVER']->get_theme();
+				if (isset($GLOBALS['FORUM_DRIVER']))
+				{
+					$value=$GLOBALS['FORUM_DRIVER']->get_theme();
+				} else
+				{
+					$value='default';
+				}
 				break;
 
 			case 'IS_EMPTY':
