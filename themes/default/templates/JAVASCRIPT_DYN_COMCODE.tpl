@@ -75,9 +75,11 @@ function initialise_carousel(id)
 	main.appendChild(carousel_ns);
 	carousel.style.display='block';
 	carousel.refresh_func=function() {
-		var h=findHeight(main)+'px';
-		get_elements_by_class_name(carousel,'move_left')[0].style.height=h;
-		get_elements_by_class_name(carousel,'move_right')[0].style.height=h;
+		addEventListenerAbstract(window,'real_load',function() {
+			var h=findHeight(main)+'px';
+			get_elements_by_class_name(carousel,'move_left')[0].style.height=h;
+			get_elements_by_class_name(carousel,'move_right')[0].style.height=h;
+		} );
 		if (browser_matches('ie6')) main.style.width=(findWidth(main.parentNode)-92)+'px';
 		_create_faders(main);
 		_update_faders(main);

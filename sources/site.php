@@ -361,12 +361,15 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint=true)
 	{
 		if (!$stub->is_empty()) $stub->attach(do_template('BREADCRUMB_ESCAPED'));
 		$title=is_null($BREADCRUMB_SET_SELF)?$DISPLAYED_TITLE:$BREADCRUMB_SET_SELF;
-		$title=symbol_truncator(array(is_object($title)?$title:escape_html($title),(strlen(strip_tags($stub->evaluate()))<BREADCRUMB_CROP_LENGTH)?(BREADCRUMB_CROP_LENGTH*2):BREADCRUMB_CROP_LENGTH,'1','1'),'spread');
-		if (((is_object($title)) && (!$title->is_empty())) || ((is_string($title)) && ($title!='')))
+		if (!is_null($title))
 		{
-			$stub->attach('<span>');
-			$stub->attach($title);
-			$stub->attach('</span>');
+			$title=symbol_truncator(array(is_object($title)?$title:escape_html($title),(strlen(strip_tags($stub->evaluate()))<BREADCRUMB_CROP_LENGTH)?(BREADCRUMB_CROP_LENGTH*2):BREADCRUMB_CROP_LENGTH,'1','1'),'spread');
+			if (((is_object($title)) && (!$title->is_empty())) || ((is_string($title)) && ($title!='')))
+			{
+				$stub->attach('<span>');
+				$stub->attach($title);
+				$stub->attach('</span>');
+			}
 		}
 	}
 

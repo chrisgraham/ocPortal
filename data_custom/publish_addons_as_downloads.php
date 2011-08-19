@@ -132,6 +132,7 @@ echo "All addons have been imported as downloads";
 // Now themes
 
 $cid = check_and_add_category('Themes', $c_main_id);
+$cid = check_and_add_category('Commercial', $cid);
 
 $dh=opendir(get_custom_file_base().'/exports/mods');
 while (($file=readdir($dh))!==false)

@@ -317,7 +317,7 @@ class forum_driver_ocf extends forum_driver_base
 				$theme=$this->get_member_row_field($member,'m_theme');
 			}
 		}
-		if ($theme=='')
+		if (($theme=='') || ($theme=='-1'))
 		{
 			$theme=substr(preg_replace('#[^A-Za-z\d]#','_',get_site_name()),0,80);
 			if (file_exists(get_custom_file_base().'/themes/'.$theme)) return $theme;

@@ -194,7 +194,7 @@ function fix_permissions($path,$perms=0666) // We call this function assuming we
 		@chmod($path,$perms);
 	} else // Otherwise we do not
 	{
-		if ($perms==0666) @chmod($path,0655);
+		if ($perms==0666) @chmod($path,0644);
 		elseif ($perms==0777) @chmod($path,0755);
 		else @chmod($path,$perms);
 	}

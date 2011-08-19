@@ -54,8 +54,9 @@ function init__themewizard()
  * Given a source theme name, configure the theme wizard for theme generation from it.
  *
  * @param  ID_TEXT			The theme name
+ * @param  boolean			Whether we suspect the theme might not be well defined
  */
-function load_themewizard_params_from_theme($theme)
+function load_themewizard_params_from_theme($theme,$guess_images_if_needed=false)
 {
 	global $THEME_WIZARD_IMAGES_CACHE;
 	if (isset($THEME_WIZARD_IMAGES_CACHE[$theme])) return;
@@ -68,7 +69,28 @@ function load_themewizard_params_from_theme($theme)
 			$map+=better_parse_ini_file($ini_path);
 	}
 	$ini_path=get_file_base().'/themes/default/theme.ini';
+	$autodetect_background_images=$guess_images_if_needed && (!isset($map['theme_wizard_images']));
 	$map+=better_parse_ini_file($ini_path); // NB: Does not take precedence
+
+	if ($autodetect_background_images)
+	{
+		$dh=opendir(get_file_base().'/themes/'.filter_naughty($theme).(($theme=='default')?'/css/':'/css_custom/'));
+		while (($sheet=readdir($dh))!==false)
+		{
+			if (substr($sheet,-4)=='.css')
+			{
+				$css_path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/'.$sheet;
+				$css_file=file_get_contents($css_path);
+				$matches=array();
+				$num_matches=preg_match_all('#\{\$IMG[;\#]?,([\w\_\-\d]+)\}#',$css_file,$matches);
+				for ($i=0;$i<$num_matches;$i++)
+				{
+					if ((preg_match('#'.preg_quote($matches[0][$i]).'[\'"]?\)[^\n]*no-repeat#',$css_file)==0) || (preg_match('#'.preg_quote($matches[0][$i]).'[\'"]?\)[^\n]*width:\s*\d\d\d+px#',$css_file)!=0) || (preg_match('#width:\s*\d\d\d+px;[^\n]*'.preg_quote($matches[0][$i]).'[\'"]?\)#',$css_file)!=0))
+						$map['theme_wizard_images'].=','.$matches[1][$i];
+				}
+			}
+		}
+	}
 
 	global $THEME_WIZARD_IMAGES,$THEME_WIZARD_IMAGES_NO_WILD;
 	$THEME_WIZARD_IMAGES=explode(',',$map['theme_wizard_images']);
@@ -93,9 +115,10 @@ function load_themewizard_params_from_theme($theme)
  * Find the seed of a theme.
  *
  * @param  ID_TEXT			The theme name
+ * @param  boolean			Whether we can't assume the theme has any ocPortal default colour information defined, if not in theme.ini
  * @return ID_TEXT			The seed colour
  */
-function find_theme_seed($theme)
+function find_theme_seed($theme,$no_easy_anchor=false)
 {
 	global $THEME_SEED_CACHE;
 	if (isset($THEME_SEED_CACHE[$theme])) return $THEME_SEED_CACHE[$theme];
@@ -122,7 +145,13 @@ function find_theme_seed($theme)
 			$THEME_SEED_CACHE[$theme]=$matches[1];
 		} else
 		{
-			$THEME_SEED_CACHE[$theme]='426aa9'; // Not ideal, but default theme is this
+			/*if ($no_easy_anchor)
+			{
+				Ideally we would put some auto-detection code here
+			} else*/
+			{
+				$THEME_SEED_CACHE[$theme]='426aa9'; // Not ideal, but default theme is this
+			}
 		}
 	} else
 	{
@@ -168,7 +197,7 @@ function find_theme_dark($theme)
  */
 function find_theme_image_themewizard_preview($id)
 {
-	load_themewizard_params_from_theme(get_param('keep_theme_source','default'));
+	load_themewizard_params_from_theme(get_param('keep_theme_source','default'),get_param('keep_theme_algorithm')=='hsv');
 
 	$seed=get_param('keep_theme_seed');
 	if ($seed=='random')
@@ -349,7 +378,7 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
-	load_themewizard_params_from_theme($source_theme);
+	load_themewizard_params_from_theme($source_theme,$algorithm=='hsv');
 
 	if (file_exists(get_custom_file_base().'/themes/'.$themename))
 	{
@@ -624,7 +653,13 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 			'L/D'=>$light_dark,
 			'!D/D'=>$anti_light_dark
 		);
-		list($colours,$landscape)=calculate_dynamic_css_colours($colours,$source_theme);
+		if ($algorithm=='equations')
+		{
+			list($colours,$landscape)=calculate_dynamic_css_colours($colours,$source_theme);
+		} else
+		{
+			$landscape=array();
+		}
 	}
 
 	if ($show!='colours')
@@ -1010,17 +1045,17 @@ function execute_css_colour_expression($expression,$colours)
 
 		case 'hue_to':
 			list($h,$s,$v)=rgb_to_hsv($operand_a);
-			$result=hsv_to_rgb(floatval(fix_colour(255*intval($operand_b)/(100.0))),floatval($s),floatval($v));
+			$result=hsv_to_rgb(floatval(fix_colour(255*intval($operand_b)/(100.0),true)),floatval($s),floatval($v));
 			break;
 
 		case 'hue_add':
 			list($h,$s,$v)=rgb_to_hsv($operand_a);
-			$result=hsv_to_rgb(floatval(fix_colour($h+intval($operand_b))),floatval($s),floatval($v));
+			$result=hsv_to_rgb(floatval(fix_colour($h+intval($operand_b),true)),floatval($s),floatval($v));
 			break;
 
 		case 'hue':
 			list($h,$s,$v)=rgb_to_hsv($operand_a);
-			$result=hsv_to_rgb(floatval(fix_colour($h*intval($operand_b)/(100.0))%255),floatval($s),floatval($v));
+			$result=hsv_to_rgb(floatval(fix_colour($h*intval($operand_b)/(100.0),true)%255),floatval($s),floatval($v));
 			break;
 
 		case '&':
@@ -1089,14 +1124,22 @@ function execute_css_colour_expression($expression,$colours)
  * Make sure a colour component fits within the necessary range (0<=x<256).
  *
  * @param  mixed		Colour component (float or integer).
+ * @param  boolean	Whether this is hue (meaning it cycles around)
  * @return integer	Constrained colour component.
  */
-function fix_colour($x)
+function fix_colour($x,$hue=false)
 {
 	if (is_float($x)) $x=intval(round($x));
 
-	if ($x>255) $x=255;
-	if ($x<0) $x=0;	
+	if ($hue)
+	{
+		while ($x>255) $x-=255;
+		while ($x<0) $x+=255;
+	} else
+	{
+		if ($x>255) $x=255;
+		if ($x<0) $x=0;
+	}
 	
 	return $x;
 }
@@ -1252,7 +1295,7 @@ function theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorith
 
 	if ($algorithm=='hsv')
 	{
-		list($ocportal_h,$ocportal_s,$ocportal_v)=rgb_to_hsv(find_theme_seed($source_theme));
+		list($ocportal_h,$ocportal_s,$ocportal_v)=rgb_to_hsv(find_theme_seed($source_theme,true));
 		list($desired_h,$desired_s,$desired_v)=rgb_to_hsv($seed);
 		$hue_dif=$desired_h-$ocportal_h;
 		$sat_dif=0;//$desired_s-$ocportal_s;		Actually causes weirdness
@@ -1263,7 +1306,7 @@ function theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorith
 		for ($i=0;$i<$num_matches;$i++)
 		{
 			list($h,$s,$v)=rgb_to_hsv($matches[1][$i]);
-			$new_colour=hsv_to_rgb(floatval(fix_colour($h+$hue_dif)),floatval(fix_colour($s+$sat_dif)),floatval(fix_colour($v+$val_dif)));
+			$new_colour=hsv_to_rgb(floatval(fix_colour($h+$hue_dif,true)),floatval(fix_colour($s+$sat_dif)),floatval(fix_colour($v+$val_dif)));
 			$sheet=str_replace('#'.$matches[1][$i],'#'.$new_colour,$sheet);
 		}
 
@@ -1376,10 +1419,10 @@ function re_hue_image($path,$seed,$source_theme,$also_s_and_v=false,$invert=fals
 			if ($also_s_and_v)
 			{
 				$sat_dif=0; // Actually causes weirdness
-				$result=hsv_to_rgb(floatval(fix_colour($h+$hue_dif)),floatval(fix_colour($s+$sat_dif)),floatval(fix_colour($v+$val_dif)));
+				$result=hsv_to_rgb(floatval(fix_colour($h+$hue_dif,true)),floatval(fix_colour($s+$sat_dif)),floatval(fix_colour($v+$val_dif)));
 			} else
 			{
-				$result=hsv_to_rgb(floatval(fix_colour($h+$hue_dif)),floatval($s),floatval($v));
+				$result=hsv_to_rgb(floatval(fix_colour($h+$hue_dif,true)),floatval($s),floatval($v));
 			}
 
 			$new_colour_r=hexdec(substr($result,0,2));

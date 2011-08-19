@@ -2046,7 +2046,7 @@ function convert_data_encodings($known_utf8=false)
  */
 function will_be_unicode_neutered($data)
 {
-	$data=htmlentities($data,ENT_COMPAT,'UTF-8');
+	$data=@htmlentities($data,ENT_COMPAT,'UTF-8');
 	if ($data=='') return false; // Some servers fail at the first step
 	for ($i=0;$i<strlen($data);$i++)
 	{
