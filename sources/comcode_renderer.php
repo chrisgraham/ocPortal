@@ -1026,8 +1026,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$temp_tpl=make_string_tempcode('<h'.strval($level).(($level==1)?' class="main_page_title"':'').'><span class="inner">'.$embed->evaluate().'</span></h'.strval($level).'>');
 				break;
 			}
-
-			$tpl_map=array('ID'=>$uniq_id,'TITLE'=>$embed,'HELP_URL'=>'','HELP_TERM'=>'');
+			$tpl_map=array('ID'=>($pass_id=='panel')?NULL:$uniq_id,'TITLE'=>$embed,'HELP_URL'=>'','HELP_TERM'=>'');
 			if (array_key_exists('sub',$attributes)) $tpl_map['SUB']=protect_from_escaping(comcode_to_tempcode($attributes['sub'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member));
 			$temp_tpl=do_template($template,$tpl_map);
 			break;

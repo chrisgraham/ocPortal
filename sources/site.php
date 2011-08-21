@@ -1327,7 +1327,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 				if (array_key_exists(0,$comcode_page)) $comcode_page_row=$comcode_page[0];
 
 				require_code('site2');
-				list($html,$title_to_use,$comcode_page_row)=_load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row);
+				list($html,$title_to_use,$comcode_page_row)=_load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row,$being_included);
 			}
 
 			persistant_cache_set(array('COMCODE_PAGE',$codename,$zone,$theme,user_lang()),array($html,$title_to_use,$comcode_page_row));
@@ -1338,7 +1338,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 	} else
 	{
 		require_code('site2');
-		list($html,$comcode_page_row,$title_to_use)=_load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row);
+		list($html,$comcode_page_row,$title_to_use)=_load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included);
 	}
 	if ((substr($codename,0,6)!='panel_') && (!is_null($title_to_use)) && (!$being_included))
 	{
@@ -1503,7 +1503,7 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 function log_stats($string,$pg_time)
 {
 	if (!addon_installed('stats')) return;
-	
+
 	if ((get_option('site_closed')=='1') && (get_option('no_stats_when_closed',true)==='1')) return;
 
 	if ((get_option('super_logging')=='1') || (!is_null(get_param('track',NULL))))

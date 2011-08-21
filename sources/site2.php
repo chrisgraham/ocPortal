@@ -260,9 +260,10 @@ function page_not_found($codename,$zone)
  * @param  PATH			The file base to load from
  * @param  ?array			Row from database (holds submitter etc) (NULL: no row, originated first from disk)
  * @param  array			New row for database, used if necessary (holds submitter etc)
+ * @param  boolean		Whether the page is being included from another
  * @return array			A triple: The page, Title to use, New Comcode page row
  */
-function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row)
+function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row,$being_included=false)
 {
 	global $COMCODE_PARSE_TITLE;
 
@@ -299,7 +300,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
-	$_text2=comcode_to_tempcode($result,$page_submitter,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,60,NULL);
+	$_text2=comcode_to_tempcode($result,$page_submitter,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,60,($being_included || (strpos($codename,'panel_')!==false))?'panel':NULL);
 	$LAX_COMCODE=$temp;
 	$text2=$_text2->to_assembly();
 
@@ -356,9 +357,10 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
  * @param  ID_TEXT		The codename of the page
  * @param  PATH			The file base to load from
  * @param  array			New row for database, used if nesessary (holds submitter etc)
+ * @param  boolean		Whether the page is being included from another
  * @return array			A tuple: The page, New Comcode page row, Title
  */
-function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row)
+function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included=false)
 {
 	global $COMCODE_PARSE_TITLE;
 	
@@ -380,7 +382,7 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
-	$html=comcode_to_tempcode(file_get_contents($file_base.'/'.$string,FILE_TEXT),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member(),(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])));
+	$html=comcode_to_tempcode(file_get_contents($file_base.'/'.$string,FILE_TEXT),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member(),(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),60,($being_included || (strpos($codename,'panel_')!==false))?'panel':NULL);
 	$LAX_COMCODE=$temp;
 	$title_to_use=is_null($COMCODE_PARSE_TITLE)?NULL:clean_html_title($COMCODE_PARSE_TITLE);
 
