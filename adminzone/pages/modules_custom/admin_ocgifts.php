@@ -91,7 +91,7 @@ class Module_admin_ocgifts extends standard_aed_module
 			$default_gifts[]=array('name'=>'A Santa hat','image'=>'uploads/ocgifts_addon/Santa_Hat.jpg','price'=>10,'enabled'=>1);
 			foreach ($default_gifts as $dg)
 			{
-				$GLOBALS['FORUM_DB']->query_insert('ocgifts',$dg);
+				$GLOBALS['FORUM_DB']->query_insert('ocgifts',$dg+array('category'=>do_lang('DEFAULT')));
 			}
 
 			$GLOBALS['FORUM_DB']->create_table('members_gifts',array(

@@ -127,7 +127,7 @@ foreach (array_keys($themes) as $theme)
 	$theme_files=get_directory_contents(get_custom_file_base().'/themes/'.$theme,'themes/'.$theme);
 	foreach ($theme_files as $file2)
 	{
-		if ((substr($file2,-4)!='.tcp') && (substr($file2,-4)!='.tcd'))
+		if ((substr($file2,-4)!='.tcp') && (substr($file2,-4)!='.tcd') && (substr($file2,-9)!='.editfrom'))
 			$files2[]=$file2;
 	}
 	$page_files=get_directory_contents(get_custom_file_base().'/','');

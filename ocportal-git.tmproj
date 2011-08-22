@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/comcode_renderer.php</string>
+	<string>data_custom/build_addons.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -441,6 +441,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>adminzone/pages/modules/admin_addons.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>479</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>456</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>473</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>479</integer>
+			</dict>
+		</dict>
 		<key>adminzone/pages/modules/admin_import.php</key>
 		<dict>
 			<key>caret</key>
@@ -636,6 +666,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>data_custom/build_addons.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>106</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>97</integer>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -1051,6 +1095,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>sources/addons.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>294</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>291</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>294</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>294</integer>
+			</dict>
+		</dict>
 		<key>sources/blocks/main_contact_simple.php</key>
 		<dict>
 			<key>caret</key>
@@ -1168,34 +1242,6 @@
 				<key>line</key>
 				<integer>36</integer>
 			</dict>
-		</dict>
-		<key>sources/comcode_add.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>129</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>112</integer>
-		</dict>
-		<key>sources/comcode_renderer.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>24</integer>
-				<key>line</key>
-				<integer>101</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>89</integer>
 		</dict>
 		<key>sources/comcode_text.php</key>
 		<dict>
@@ -3440,11 +3486,9 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/blocks/main_custom_comcode_tags.php</string>
-		<string>sources/comcode_text.php</string>
-		<string>sources/comcode.php</string>
-		<string>sources/comcode_renderer.php</string>
-		<string>sources/comcode_add.php</string>
+		<string>adminzone/pages/modules/admin_addons.php</string>
+		<string>data_custom/build_addons.php</string>
+		<string>sources/addons.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
