@@ -111,6 +111,7 @@ class Hook_search_ocf_clubs
 	function render($row)
 	{
 		$leader=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['g_group_leader']);
+		require_code('ocf_groups');
 		$group_name=ocf_get_group_name($row['id']);
 		require_code('ocf_groups2');
 		$num_members=ocf_get_group_members_raw_count($row['id'],false,false,true,false);

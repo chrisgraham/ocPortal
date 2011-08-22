@@ -4010,8 +4010,8 @@ CREATE TABLE `ocp7_values` (
   KEY `date_and_time` (`date_and_time`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_values` values('version','6','1295956121'),
- ('ocf_version','6','1295956121');
+insert into `ocp7_values` values('version','7.1','1295956121'),
+ ('ocf_version','7.1','1295956121');
 
 DROP TABLE IF EXISTS `ocp7_zones`;
 

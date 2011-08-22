@@ -124,32 +124,35 @@ class Module_admin_errorlog
 		require_all_lang();
 		if (is_readable(get_custom_file_base().'/data_custom/permissioncheckslog.php'))
 		{
-			$myfile=fopen(get_custom_file_base().'/data_custom/permissioncheckslog.php','rt');
-			fseek($myfile,SEEK_END,-40000);
-			$data='';
-			while (!feof($myfile)) $data.=fread($myfile,8192);
-			fclose($myfile);
-			$lines=explode(chr(10),$data);
-			if (count($lines)!=0)
+			$myfile=@fopen(get_custom_file_base().'/data_custom/permissioncheckslog.php','rt');
+			if ($myfile!==false)
 			{
-				if (strpos($lines[0],'<'.'?php')!==false)
+				fseek($myfile,-40000,SEEK_END);
+				$data='';
+				while (!feof($myfile)) $data.=fread($myfile,8192);
+				fclose($myfile);
+				$lines=explode(chr(10),$data);
+				if (count($lines)!=0)
 				{
-					array_shift($lines);
-				} else
-				{
-					if (strlen($data)==40000) $lines[0]='...';
-				}
-			}
-			foreach ($lines as $i=>$line)
-			{
-				$matches=array();
-				if (preg_match('#^\s+has\_specific\_permission: (\w+)#',$line,$matches)!=0)
-				{
-					$looked_up=do_lang('PT_'.$matches[1],NULL,NULL,NULL,NULL,false);
-					if (!is_null($looked_up))
+					if (strpos($lines[0],'<'.'?php')!==false)
 					{
-						$line=str_replace($matches[1],$looked_up,$line);
-						$lines[$i]=$line;
+						array_shift($lines);
+					} else
+					{
+						if (strlen($data)==40000) $lines[0]='...';
+					}
+				}
+				foreach ($lines as $i=>$line)
+				{
+					$matches=array();
+					if (preg_match('#^\s+has\_specific\_permission: (\w+)#',$line,$matches)!=0)
+					{
+						$looked_up=do_lang('PT_'.$matches[1],NULL,NULL,NULL,NULL,false);
+						if (!is_null($looked_up))
+						{
+							$line=str_replace($matches[1],$looked_up,$line);
+							$lines[$i]=$line;
+						}
 					}
 				}
 			}

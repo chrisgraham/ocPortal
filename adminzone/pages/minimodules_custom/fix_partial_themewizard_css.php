@@ -40,52 +40,129 @@ list($canonical_theme_map,$canonical_theme_landscape)=calculate_theme($default_s
 
 list($theme_map,$theme_landscape)=calculate_theme($seed,'default','equations','colours',$dark);
 
+// ===
+// CSS
+// ===
+
 echo '<p>Made changes for:</p><ul>';
 
-$dh=opendir(get_file_base().'/themes/'.filter_naughty($theme).(($theme=='default')?'/css/':'/css_custom/'));
+$dh=opendir(get_file_base().'/themes/default/css');
 while (($sheet=readdir($dh))!==false)
 {
 	if (substr($sheet,-4)=='.css')
 	{
 		$saveat=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/'.$sheet;
-		if (!file_exists($saveat))
+		
+		if (!file_exists($saveat)) copy(get_file_base().'/themes/default/css/'.$sheet,$saveat);
+
+		$output=file_get_contents($saveat);
+		$before=$output;
+
+		foreach ($canonical_theme_landscape as $peak)
 		{
-			$output=file_get_contents($saveat);
-			$before=$output;
+			$matches=array();
 
-			foreach ($canonical_theme_landscape as $peak)
+			$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$output,$matches);
+			for ($i=0;$i<$num_matches;$i++)
 			{
-				$matches=array();
-
-				$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$output,$matches);
-				for ($i=0;$i<$num_matches;$i++)
+				if ($matches[0][$i]=='#'.$peak[3].$matches[1][$i].$peak[2]) // i.e. unaltered in our theme
 				{
-					if ($matches[0][$i]=='#'.$peak[3].$matches[1][$i].$peak[2]) // i.e. unaltered in our theme
+					foreach ($theme_landscape as $new_peak) // Try and find the new-seeded solution to this particular equation
 					{
-						foreach ($theme_landscape as $new_peak) // Try and find the new-seeded solution to this particular equation
+						if ($new_peak[2]==$peak[2])
 						{
-							if ($new_peak[2]==$peak[2])
-							{
-								$output=str_replace($matches[0][$i],'#'.$new_peak[3].$matches[1][$i].$new_peak[2],$output);
-								break;
-							}
+							$output=str_replace($matches[0][$i],'#'.$new_peak[3].$matches[1][$i].$new_peak[2],$output);
+							break;
 						}
 					}
 				}
 			}
+		}
 
-			if ($output!=$before)
+		if ($output!=$before)
+		{
+			$fp=@fopen($saveat,'wb') OR intelligent_write_error($saveat);
+			if (fwrite($fp,$output)<strlen($output)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			fclose($fp);
+			fix_permissions($saveat);
+			sync_file($saveat);
+		
+			echo '<li>'.escape_html($sheet).'</li>';
+		}
+	}
+}
+
+echo '</ul><p>Finished CSS.</p>';
+
+// =================
+// Make theme images
+// =================
+
+echo '<p>Making missing theme images</p><ul>';
+
+load_themewizard_params_from_theme('default');
+
+global $THEME_WIZARD_IMAGES,$THEME_WIZARD_IMAGES_NO_WILD,$IMG_CODES;
+if (function_exists('imagecolorallocatealpha'))
+{
+	require_code('themes2');
+	require_code('abstract_file_manager');
+	$full_img_set=array();
+	foreach ($THEME_WIZARD_IMAGES as $expression)
+	{
+		if (substr($expression,-1)=='*')
+		{
+			$expression=substr($expression,0,strlen($expression)-2); // remove "/*"
+			$full_img_set=array_merge($full_img_set,array_keys(get_all_image_codes(get_file_base().'/'.filter_naughty('default').'/default/images',$expression)));
+			$full_img_set=array_merge($full_img_set,array_keys(get_all_image_codes(get_file_base().'/themes/'.filter_naughty('default').'/images/'.fallback_lang(),$expression)));
+		} else
+		{
+			$full_img_set[]=$expression;
+		}
+	}
+
+	$temp_all_ids=collapse_2d_complexity('id','path',$GLOBALS['SITE_DB']->query_select('theme_images',array('id','path'),array('theme'=>$theme)));
+
+	foreach ($full_img_set as $image_code)
+	{
+		if (!in_array($image_code,$THEME_WIZARD_IMAGES_NO_WILD))
+		{
+			if (($extending_existing) && (array_key_exists($image_code,$temp_all_ids)) && (strpos($temp_all_ids[$image_code],$theme.'/images_custom/')!==false) && ((!url_is_local($temp_all_ids[$image_code])) || (file_exists(get_custom_file_base().'/'.$temp_all_ids[$image_code])))) continue;
+
+			$orig_path=find_theme_image($image_code,true,true,'default','EN');
+			if ($orig_path=='') continue; // Theme has specified non-existent image as themewizard-compatible
+
+			if (strpos($orig_path,'/'.fallback_lang().'/')!==false)
 			{
-				$fp=@fopen($saveat,'wb') OR intelligent_write_error($saveat);
-				if (fwrite($fp,$output)<strlen($output)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-				fclose($fp);
-				fix_permissions($saveat);
-				sync_file($saveat);
-			
-				echo '<li>'.escape_html($sheet).'</li>';
+				$composite='themes/'.filter_naughty($theme).'/images/EN/';
+			} else
+			{
+				$composite='themes/'.filter_naughty($theme).'/images/';
+			}
+			afm_make_directory($composite,true);
+			$saveat=get_custom_file_base().'/'.$composite.$image_code.'.png';
+			$saveat_url=$composite.$image_code.'.png';
+			if (!file_exists($saveat))
+			{
+				$image=calculate_theme($seed,'default','equations',$image_code,$dark,$theme_map,$theme_landscape,'EN');
+				if (!is_null($image))
+				{
+					$pos=strpos($image_code,'/');
+					if (($pos!==false) || (strpos($orig_path,'/EN/')!==false))
+					{
+						afm_make_directory($composite.substr($image_code,0,$pos),true,true);
+					}
+					@imagepng($image,$saveat) OR intelligent_write_error($saveat);
+					imagedestroy($image);
+					fix_permissions($saveat);
+					sync_file($saveat);
+					actual_edit_theme_image($image_code,$theme,'EN',$image_code,$saveat_url,true);
+
+					echo '<li>'.escape_html($image_code).'</li>';
+				}
 			}
 		}
 	}
 }
 
-echo '</ul><p>Finished.</p>';
+echo '</ul><p>Finished theme images.</p>';

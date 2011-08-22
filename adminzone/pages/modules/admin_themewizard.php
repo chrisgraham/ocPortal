@@ -102,7 +102,7 @@ class Module_admin_themewizard
 			$hidden->attach(form_input_hidden('source_theme',$source_theme));
 		} else
 		{
-			$themes=nice_get_themes($source_theme);
+			$themes=nice_get_themes($source_theme,true);
 		}
 
 		$fields=new ocp_tempcode();
@@ -134,6 +134,11 @@ class Module_admin_themewizard
 		$script=find_script('snippet');
 		$javascript="
 			var form=document.getElementById('main_form');
+			form.elements['source_theme'].onchange=function() {
+				var default_theme=(form.elements['source_theme'].options[form.elements['source_theme'].selectedIndex].value=='default');
+				form.elements['algorithm'][0].checked=default_theme;
+				form.elements['algorithm'][1].checked=!default_theme;
+			}
 			form.old_submit=form.onsubmit;
 			form.onsubmit=function()
 				{
