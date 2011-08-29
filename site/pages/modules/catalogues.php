@@ -283,7 +283,8 @@ class Module_catalogues
 				array('CONTACT_HOMEPAGE','','short_text',0,1),
 				array('CONTACT_IM','','short_text',0,1),
 				array('CONTACT_EVENTS','','long_text',0,1),
-				array('CONTACT_NOTES','','long_text',0,1)
+				array('CONTACT_NOTES','','long_text',0,1),
+				array('CONTACT_PHOTO','','picture',0,1)
 			);
 			foreach ($fields as $i=>$field)
 				actual_add_catalogue_field('contacts',lang_code_to_default_content($field[0],false,3),insert_lang('',2),$field[2],$i,$field[3],1,1,'',$field[4]);

@@ -35,6 +35,7 @@
 {+START,IF,{$NOT,{$MOBILE}}}
 	.main_search_form #search_content {
 		width: 300px;
+		max-width: 100%;
 	}
 {+END}
 
@@ -61,10 +62,12 @@
 	.search_option {
 		float: {!en_left};
 		width: 350px;
+		max-width: 100%;
 	}
 
 	.search_option_value {
 		width: 200px;
+		max-width: 100%;
 	}
 {+END}
 
