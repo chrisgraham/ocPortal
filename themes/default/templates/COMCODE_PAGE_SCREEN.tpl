@@ -1,4 +1,4 @@
-{+START,IF,{$NEQ,{$SUBSTR,{NAME},0,6},panel_}}{+START,IF_EMPTY,{$TRIM,{CONTENT}}}
+{+START,IF,{$NOT,{$IN_STR,{NAME},panel_}}}{+START,IF_EMPTY,{$TRIM,{CONTENT}}}
 	<p class="nothing_here">{!NO_PAGE_OUTPUT}</p>
 {+END}{+END}
 
@@ -35,7 +35,7 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{EDIT_URL}}
-		{+START,IF,{$NEQ,{$SUBSTR,{NAME},0,6},panel_}}
+		{+START,IF,{$NOT,{$IN_STR,{NAME},panel_}}}
 			{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
 			<br />

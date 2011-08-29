@@ -1,4 +1,4 @@
-<div{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/{$?,{BLOG},BlogPosting,NewsArticle}}">
+<div{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/{$?,{BLOG},BlogPosting,NewsArticle}"}>
 	{TITLE}
 
 	{+START,IF_PASSED,WARNING_DETAILS}

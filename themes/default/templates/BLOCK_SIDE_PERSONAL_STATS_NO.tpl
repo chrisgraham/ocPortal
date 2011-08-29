@@ -20,7 +20,7 @@
 						</div>
 					{+END}
 				</div>
-				<input class="wide_button" type="submit" value="{!_LOGIN}" />
+				<div class="constrain_field"><input class="wide_button" type="submit" value="{!_LOGIN}" /></div>
 			</div>
 		</form>
 		<p class="button_panel">

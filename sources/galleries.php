@@ -205,7 +205,7 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 			$lang=do_lang_tempcode('SUBGALLERY_BITS',integer_format($num_children),integer_format($num_images),array(integer_format($num_videos),integer_format($num_images+$num_videos)));
 		}
 	}
-	$tpl=do_template('GALLERY_SUBGALLERY',array('_GUID'=>'0dbec2f11de63b0402471fe5c8b32865','NUM_VIDEOS'=>strval($num_videos),'NUM_IMAGES'=>strval($num_images),'NUM_CHILDREN'=>strval($num_children),'ID'=>$child['name'],'LANG'=>$lang,'ADD_DATE_RAW'=>$add_date,'ADD_DATE'=>strval($child['add_date']),'MEMBER_INFO'=>$member_info,'URL'=>$url,'THUMB'=>$thumb,'PIC'=>$pic,'TITLE'=>$_title,'COMMENTS'=>$comments));
+	$tpl=do_template('GALLERY_SUBGALLERY',array('_GUID'=>'0dbec2f11de63b0402471fe5c8b32865','NUM_VIDEOS'=>strval($num_videos),'NUM_IMAGES'=>strval($num_images),'NUM_CHILDREN'=>strval($num_children),'ID'=>$child['name'],'LANG'=>$lang,'ADD_DATE'=>$add_date,'ADD_DATE_RAW'=>strval($child['add_date']),'MEMBER_INFO'=>$member_info,'URL'=>$url,'THUMB'=>$thumb,'PIC'=>$pic,'TITLE'=>$_title,'COMMENTS'=>$comments));
 
 	return $tpl;
 }
