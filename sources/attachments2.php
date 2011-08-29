@@ -35,6 +35,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	require_lang('comcode');
 
 	global $COMCODE_ATTACHMENTS;
+	unset($COMCODE_ATTACHMENTS[$id]); // In case we have some kind of conflict
 
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 

@@ -106,15 +106,13 @@ class Database_Static_mysql extends Database_super_mysql
 		$LAST_SELECT_DB=$db_name;
 
 		global $SITE_INFO;
-		if (array_key_exists('database_charset',$SITE_INFO))
+		if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
+		if (function_exists('mysql_set_charset'))
 		{
-			if (function_exists('mysql_set_charset'))
-			{
-				mysql_set_charset($SITE_INFO['database_charset'],$db);
-			} else
-			{
-				@mysql_query('SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"',$db);
-			}
+			mysql_set_charset($SITE_INFO['database_charset'],$db);
+		} else
+		{
+			@mysql_query('SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"',$db);
 		}
 		@mysql_query('SET SQL_BIG_SELECTS=1',$db);
 		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysql_query('SET sql_mode=STRICT_ALL_TABLES',$db); else @mysql_query('SET sql_mode=MYSQL40',$db);

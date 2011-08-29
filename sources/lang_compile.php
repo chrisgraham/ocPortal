@@ -212,7 +212,13 @@ function get_lang_file_map($lang,$file,$non_custom=false)
 			if (!file_exists($b)) $b=get_custom_file_base().'/lang/'.$lang.'/'.$file.'-'.strtolower($lang).'.po';
 		}
 		
-		if (file_exists($b)) $a=$b;
+		if (file_exists($b))
+		{
+			$a=$b;
+		} else
+		{
+			if ($non_custom) return array();
+		}
 	}
 
 	$target=array();

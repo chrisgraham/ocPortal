@@ -242,6 +242,30 @@ class forum_driver_none extends forum_driver_base
 		if ($name==$this->get_admin_username()) return array(1);
 		return NULL;
 	}
+	
+	/**
+	 * Get a member row.
+	 *
+	 * @param  AUTO_LINK		The member ID
+	 * @return array			The profile-row
+	 */
+	function get_member_row($id)
+	{
+		unset($id);
+		return array(0);
+	}
+
+	/**
+	 * Get a member row.
+	 *
+	 * @param  AUTO_LINK		The member ID
+	 * @return ?array			The result (NULL: unknown)
+	 */
+	function get_member_row_field($id,$field)
+	{
+		unset($id);
+		return NULL;
+	}
 
 	/**
 	 * From a member profile-row, get the member's primary usergroup.

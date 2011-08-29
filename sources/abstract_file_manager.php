@@ -487,6 +487,8 @@ function afm_make_directory($basic_path,$world_access,$recursive=false)
 		}
 		@ftp_chmod($conn,$access,$path);
 
+		clearstatcache();
+
 		sync_file(get_custom_file_base().'/'.$basic_path);
 	} else
 	{
@@ -571,6 +573,8 @@ function afm_delete_directory($basic_path,$recursive=false)
 			{
 				ftp_rmdir($conn,$path);
 
+				clearstatcache();
+
 				sync_file(get_custom_file_base().'/'.$basic_path);
 			} else
 			{
@@ -619,6 +623,8 @@ function afm_make_file($basic_path,$contents,$world_access)
 		unlink($path2);
 
 		@ftp_chmod($conn,$access,$path);
+
+		clearstatcache();
 
 		sync_file(get_custom_file_base().'/'.$basic_path);
 	} else
@@ -687,6 +693,8 @@ function afm_move($basic_old_path,$basic_new_path)
 			warn_exit(protect_from_escaping(@strval($php_errormsg)));
 		}
 
+		clearstatcache();
+
 		sync_file_move(get_custom_file_base().'/'.$basic_old_path,get_custom_file_base().'/'.$basic_new_path);
 	} else
 	{
@@ -718,6 +726,8 @@ function afm_delete_file($basic_path)
 			}
 			warn_exit(protect_from_escaping(@strval($php_errormsg)));
 		}
+		
+		clearstatcache();
 
 		sync_file(get_custom_file_base().'/'.$basic_path);
 	} else

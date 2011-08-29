@@ -58,7 +58,7 @@ function send_alert($c_type,$user_list,$url,$title='',$post='')
 	if (post_param_integer('do_tracking',NULL)===0) return;
 	
 	require_lang('tracking');
-	$msg=do_lang(strtoupper($c_type).'_TRACKING_MESSAGE',comcode_escape(get_site_name()),comcode_escape($url->evaluate()),array($title,$post));
+	$msg=do_lang(strtoupper($c_type).'_TRACKING_MESSAGE',comcode_escape(get_site_name()),comcode_escape($url->evaluate()),array($title,$post,$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
 	$subject=do_lang(strtoupper($c_type).'_NEW_ENTRY_POSTED',comcode_escape(get_site_name()));
 
 	foreach ($user_list as $key=>$val)

@@ -25,15 +25,17 @@ function erase_comcode_page_cache()
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
-	$rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('*'),NULL,'',NULL,NULL,true);
-	if (!is_null($rows))
+	do
 	{
+		$rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),NULL,'',50,NULL,true);
+		if (is_null($rows)) $rows=array();
 		foreach ($rows as $row)
 		{
 			delete_lang($row['string_index']);
+			$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('string_index'=>$row['string_index']));
 		}
-		$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages');
 	}
+	while (count($rows)!=0);
 	persistant_cache_empty();
 
 	$GLOBALS['NO_QUERY_LIMIT']=false;
