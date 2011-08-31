@@ -54,7 +54,8 @@ function _mail_css_rep_callback($matches)
 {
 	global $CID_IMG_ATTACHMENT;
 	$cid=uniqid('').'@'.get_domain();
-	$CID_IMG_ATTACHMENT[$cid]=$matches[1];
+	if ((basename($matches[1])!='keyboard.png') && (basename($matches[1])!='email_link.png') && (basename($matches[1])!='external_link.png'))
+		$CID_IMG_ATTACHMENT[$cid]=$matches[1];
 	return 'url(\'cid:'.$cid.'\')';
 }
 
@@ -196,7 +197,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
-			'm_subject'=>$subject_tag,
+			'm_subject'=>substr($subject_tag,0,255),
 			'm_message'=>$message_raw,
 			'm_to_email'=>serialize($to_email),
 			'm_to_name'=>serialize($to_name),

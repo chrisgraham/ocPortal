@@ -392,7 +392,7 @@ function autogenerate_new_url_moniker($ob_info,$url_parts)
 	$select=array($ob_info['id_field']);
 	if ((substr($ob_info['title_field'],0,5)!='EVAL:') && (substr($ob_info['title_field'],0,5)!='CALL:')) $select[]=$ob_info['title_field'];
 	if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
-	$db=(substr($ob_info['table'],0,2)!='f_')?$GLOBALS['SITE_DB']:$GLOBALS['FORUM_DB'];
+	$db=((substr($ob_info['table'],0,2)!='f_') || (get_forum_type()=='none'))?$GLOBALS['SITE_DB']:$GLOBALS['FORUM_DB'];
 	$_moniker_src=$db->query_select($ob_info['table'],$select,array($ob_info['id_field']=>$ob_info['id_field_numeric']?intval($url_parts['id']):$url_parts['id']));
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 	if (!array_key_exists(0,$_moniker_src)) return NULL; // been deleted?

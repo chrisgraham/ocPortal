@@ -1313,6 +1313,7 @@ class Module_admin_stats
 		$path=get_file_base().'/data/modules/admin_stats/IP_Country.txt';
 		$file=@fopen($path,'rt');
 		if ($file===false) warn_exit(do_lang_tempcode('READ_ERROR',escape_html($path)));
+		$to_insert=array('begin_num'=>array(),'end_num'=>array(),'country'=>array());
 		while ((!feof($file)) && ($i<($position+$lines)))
 		{
 			$data=fgets($file,1024);
@@ -1320,13 +1321,27 @@ class Module_admin_stats
 			{
 				$_data=explode(',',$data);
 				if (count($_data)==3)
-					$GLOBALS['SITE_DB']->query_insert('ip_country',array('begin_num'=>$_data[0],'end_num'=>$_data[1],'country'=>substr($_data[2],0,2))); // FUDGEFUDGE. Intentionally passes in as strings, to workaround problem in PHP integer sizes (can't store unsigned data type)
+				{
+					$to_insert['begin_num'][]=$_data[0]; // FUDGEFUDGE. Intentionally passes in as strings, to workaround problem in PHP integer sizes (can't store unsigned data type)
+					$to_insert['end_num'][]=$_data[1];
+					$to_insert['country'][]=substr($_data[2],0,2);
+					
+					if (count($to_insert['begin_num'])==100)
+					{
+						$GLOBALS['SITE_DB']->query_insert('ip_country',$to_insert);
+						$to_insert=array('begin_num'=>array(),'end_num'=>array(),'country'=>array());
+					}
+				}
 			}
 
 			$i++;
 		}
 		fclose($file);
 		fix_permissions($path);
+		if (count($to_insert['begin_num'])!=0)
+		{
+			$GLOBALS['SITE_DB']->query_insert('ip_country',$to_insert);
+		}
 
 		if ($i>=$last)
 		{

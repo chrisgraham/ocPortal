@@ -317,7 +317,7 @@ class Module_members
 		{
 			$modules=array_merge($modules,array(
 								((!addon_installed('ocf_member_avatars')) || (!has_actual_page_access(get_member(),'editavatar')))?NULL:array('profile',do_lang_tempcode('EDIT_AVATAR'),build_url(array('page'=>'editavatar','type'=>'misc','id'=>$member_id),get_module_zone('editavatar')),'edit'),
-								(has_actual_page_access(get_member(),'editprofile'))?NULL:array('profile',do_lang_tempcode('EDIT_PROFILE'),build_url(array('page'=>'editprofile','type'=>'misc','id'=>$member_id),get_module_zone('editprofile')),'edit'),
+								(!has_actual_page_access(get_member(),'editprofile'))?NULL:array('profile',do_lang_tempcode('EDIT_PROFILE'),build_url(array('page'=>'editprofile','type'=>'misc','id'=>$member_id),get_module_zone('editprofile')),'edit'),
 								((!addon_installed('ocf_member_photos')) || (!has_actual_page_access(get_member(),'editphoto')))?NULL:array('profile',do_lang_tempcode('EDIT_PHOTO'),build_url(array('page'=>'editphoto','type'=>'misc','id'=>$member_id),get_module_zone('editphoto')),'edit'),
 								((!addon_installed('ocf_signatures')) || (!has_actual_page_access(get_member(),'editsignature')))?NULL:array('profile',do_lang_tempcode('EDIT_SIGNATURE'),build_url(array('page'=>'editsignature','type'=>'misc','id'=>$member_id),get_module_zone('editsignature')),'edit'),
 								((!addon_installed('ocf_member_titles')) || (!has_actual_page_access(get_member(),'edittitle')))?NULL:array('profile',do_lang_tempcode('EDIT_TITLE'),build_url(array('page'=>'edittitle','type'=>'misc','id'=>$member_id),get_module_zone('edittitle')),'edit'),

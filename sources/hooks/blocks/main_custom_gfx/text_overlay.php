@@ -30,7 +30,7 @@ class Hook_main_custom_gfx_text_overlay
 	 */
 	function run($map,&$block)
 	{
-		if (!function_exists('imagettftext')) return do_lang_tempcode('REQUIRES_TTF');
+		if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info()))) return do_lang_tempcode('REQUIRES_TTF');
 		
 		if (!array_key_exists('img',$map)) $map['img']='button1';
 		$img_path=find_theme_image($map['img'],true,true);

@@ -1318,6 +1318,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 		var nameStub=name.substring(0,mid+1);
 		var thisNum=name.substring(mid+1,name.length)-0;
 		var nextNum=thisNum+1;
+		var txtFileName=document.getElementById('txtFileName_multi_1');
 		var nextField=document.getElementById('txtFileName_multi_'+nextNum);
 		var name=nameStub+nextNum;
 		var thisId=name;

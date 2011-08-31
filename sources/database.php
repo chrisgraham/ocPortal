@@ -1095,21 +1095,24 @@ class database_driver
 		}
 
 		// Copy results to lang cache, but only if not null AND unset to avoid any confusion
-		foreach ($lang_strings_expecting as $bits)
+		if ($ret!==NULL)
 		{
-			list($field,$original,$parsed)=$bits;
-			
-			foreach ($ret as $row)
+			foreach ($lang_strings_expecting as $bits)
 			{
-				$entry=$row[$field];
+				list($field,$original,$parsed)=$bits;
+
+				foreach ($ret as $row)
+				{
+					$entry=$row[$field];
 				
-				if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
-					$this->text_lookup_original_cache[$entry]=$row[$original];
-				if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
-					$this->text_lookup_cache[$entry]=$row[$parsed];
+					if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
+						$this->text_lookup_original_cache[$entry]=$row[$original];
+					if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
+						$this->text_lookup_cache[$entry]=$row[$parsed];
 				
-				unset($row[$original]);
-				unset($row[$parsed]);
+					unset($row[$original]);
+					unset($row[$parsed]);
+				}
 			}
 		}
 

@@ -99,7 +99,7 @@ foreach($addon_list as $addon => $val)
 
   	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
 }
-echo "All addons have been exported to 'export/mods/'";
+echo "All addons have been exported to 'export/mods/'\n";
 
 require_code('themes2');
 require_code('files2');

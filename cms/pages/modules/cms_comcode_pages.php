@@ -321,7 +321,14 @@ class Module_cms_comcode_pages
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
 		$search_url=build_url(array('page'=>'search','id'=>'comcode_pages'),get_module_zone('search'));
-		$archive_url=build_url(array('page'=>'sitemap'),get_page_zone('sitemap'));
+		$sitemap_zone=get_page_zone('sitemap',false);
+		if ($sitemap_zone!==NULL)
+		{
+			$archive_url=build_url(array('page'=>'sitemap'),$sitemap_zone);
+		} else
+		{
+			$archive_url=build_url(array('page'=>''),'');
+		}
 		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST_EXTRA',escape_html($search_url->evaluate()),escape_html($archive_url->evaluate())));
 		if (addon_installed('page_management'))
 		{

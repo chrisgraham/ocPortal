@@ -118,7 +118,7 @@ class Module_vforums
 	 */
 	function recently_read()
 	{
-		$title=do_lang('TOPICS_UNREAD');
+		$title=do_lang('RECENTLY_READ');
 		$condition='l_time>'.strval(time()-60*60*24*2);
 
 		return array(get_page_title('RECENTLY_READ'),$this->_vforum($title,$condition,'l_time DESC',true));
@@ -139,7 +139,7 @@ class Module_vforums
 		$start=get_param_integer('start',0);
 		$type=get_param('type','misc');
 		$forum_name=do_lang_tempcode('VIRTUAL_FORUM');
-	
+
 		// Find topics
 		$extra='';
 		if (!has_specific_permission(get_member(),'see_unvalidated')) $extra='t_validated=1';
@@ -196,8 +196,8 @@ class Module_vforums
 		{
 			$topics_array[]=ocf_get_topic_array($topic_row,get_member(),$hot_topic_definition,in_array($topic_row['id'],$involved));
 		}
-	
-		// Find topics
+
+		// Display topics
 		$topics=new ocp_tempcode();
 		$pinned=false;
 		require_code('templates_results_browser');

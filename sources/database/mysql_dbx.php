@@ -82,10 +82,8 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		$LAST_SELECT_DB=$db;
 	
 		global $SITE_INFO;
-		if (array_key_exists('database_charset',$SITE_INFO))
-		{
-			@dbx_query($db,'SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"');
-		}
+		if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
+		@dbx_query($db,'SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"');
 		@dbx_query($db,'SET SQL_BIG_SELECTS=1');
 		if (get_forum_type()=='ocf') @dbx_query($db,'SET sql_mode=STRICT_ALL_TABLES');
 

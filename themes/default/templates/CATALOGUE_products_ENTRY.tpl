@@ -3,6 +3,12 @@
 {+START,BOX,,,light}
 	<div class="hproduct"{$?,{$AND,{$MATCH_KEY_MATCH,_WILD:_WILD:misc},{$VALUE_OPTION,html5}}, itemscope="itemscope" itemtype="http://schema.org/Offer"}>
 		<div class="float_surrounder">
+			{+START,IF_NON_EMPTY,{FIELD_7_THUMB}}
+				<p class="product-img-box">
+					<a class="link_exempt" href="{+START,IF,{$NOT,{$IN_STR,{FIELD_7_PLAIN},://}}}{$BASE_URL*}/{+END}{FIELD_7_PLAIN*}" target="_blank" alt="{FIELD_0}" title="{!IMAGE}: {!LINK_NEW_WINDOW}"{$?,{$VALUE_OPTION,html5}, itemprop="image"}>{$TRIM,{FIELD_7_THUMB}}</a>
+				</p>
+			{+END}
+
 			<div class="product-view">
 				<div class="product-main-info">
 					{+START,IF_NON_EMPTY,{FIELD_0}}
@@ -30,12 +36,6 @@
 					{+END}
 				</div>
 			</div>
-
-			{+START,IF_NON_EMPTY,{FIELD_7_THUMB}}
-				<p class="product-img-box">
-					<a class="link_exempt" href="{+START,IF,{$NOT,{$IN_STR,{FIELD_7_PLAIN},://}}}{$BASE_URL*}/{+END}{FIELD_7_PLAIN*}" target="_blank" alt="{FIELD_0}" title="{!IMAGE}: {!LINK_NEW_WINDOW}"{$?,{$VALUE_OPTION,html5}, itemprop="image"}>{$TRIM,{FIELD_7_THUMB}}</a>
-				</p>
-			{+END}
 		</div>
 
 		{+START,IF_NON_EMPTY,{$TRIM,{FIELDS}}}

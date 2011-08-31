@@ -283,7 +283,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo-template'
 
 	$ttf_font=get_file_base().'/data/fonts/Vera.ttf';
 
-	if ((!function_exists('imagettftext')) || (!file_exists($ttf_font)))
+	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (!file_exists($ttf_font)))
 	{
 		$font=intval($logo_wizard_details['site_name_font_size_small_non_ttf']);
 		$font_width=imagefontwidth($font)*strlen($name);
@@ -313,7 +313,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo-template'
 	$do=array(array($slogan,intval($logo_wizard_details['slogan_x_offset']),intval($logo_wizard_details['slogan_y_offset'])/*73 on some servers?? Weird*/,intval($logo_wizard_details['slogan_font_size']),$ttf_font,$white));
 	if (($font_width>intval($logo_wizard_details['site_name_split'])) && (strpos($name,' ')!==false)) // Split in two
 	{
-		if ((function_exists('imagettftext')) && (file_exists($ttf_font)))
+		if ((function_exists('imagettftext')) && (array_key_exists('FreeType Support',gd_info())) && (file_exists($ttf_font)))
 		{
 			list(,,$font_width,,,,,$font_height)=imagettfbbox(floatval($logo_wizard_details['site_name_font_size_small']),0.0,$ttf_font,foxy_utf8_to_nce($name));
 			$font_height=max($font_height,-$font_height);
@@ -329,7 +329,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo-template'
 		$do[]=array($b,intval($logo_wizard_details['site_name_x_offset']),intval($logo_wizard_details['site_name_y_offset_small'])+$font_height*2+intval($logo_wizard_details['site_name_split_gap']),intval($logo_wizard_details['site_name_font_size_small']),$ttf_font,$blue);
 	} elseif ($font_width>intval($logo_wizard_details['site_name_split'])) // Smaller font
 	{
-		if ((function_exists('imagettftext')) && (file_exists($ttf_font)))
+		if ((function_exists('imagettftext')) && (array_key_exists('FreeType Support',gd_info())) && (file_exists($ttf_font)))
 		{
 			list(,,$font_width,,,,,$font_height)=imagettfbbox(floatval($logo_wizard_details['site_name_font_size_small']),0.0,$ttf_font,foxy_utf8_to_nce($name));
 			$font_height=max($font_height,-$font_height);
@@ -342,7 +342,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo-template'
 	foreach ($do as $i=>$doing)
 	{
 		//if ($i==1) continue;
-		if ((function_exists('imagettftext')) && (file_exists($doing[4])))
+		if ((function_exists('imagettftext')) && (array_key_exists('FreeType Support',gd_info())) && (file_exists($doing[4])))
 		{
 			imagettftext($img,(float)($doing[3]),0.0,$doing[1],$doing[2],$doing[5],$doing[4],foxy_utf8_to_nce($doing[0]));
 		} else

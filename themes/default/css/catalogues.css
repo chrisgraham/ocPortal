@@ -63,16 +63,11 @@ li.catalogue_product_box {
 }
 
 .product-view {
-	float:left;
-	width:350px;
 }
 
 .product-img-box {
 	float: right;
 	margin: 30px 0 30px 30px;
-	position: relative;
-	width:180px;
-	text-align: right;
 }
 
 .data-table {

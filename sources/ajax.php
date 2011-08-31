@@ -203,7 +203,7 @@ function change_detection_script()
 
 	$page=get_param('page');
 
-	require_code('hooks/systems/change_detection/'.filter_naughty($page));
+	require_code('hooks/systems/change_detection/'.filter_naughty($page),true);
 
 	$refresh_if_changed=either_param('refresh_if_changed');
 	$object=object_factory('Hook_'.$page);
@@ -501,7 +501,7 @@ function ajax_tree_script()
 	$_options=get_param('options','',true);
 	if ($_options=='') $_options=serialize(array());
 	$options=unserialize($_options);
-	$val=$object->run($id,$options,get_param('default',NULL));
+	$val=$object->run($id,$options,get_param('default',NULL,true));
 	echo str_replace('</body>','<br id="ended" /></body>',$val);
 	echo ($html_mask?'</html>':'</request>');
 }

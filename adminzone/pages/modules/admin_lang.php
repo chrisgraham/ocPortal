@@ -782,7 +782,7 @@ msgstr ""
 		foreach (array_unique(array_merge(array_keys($for_base_lang),array_keys($for_base_lang_2))) as $key)
 		{
 			$val=post_param($key);
-			if (($val!='') && ((!array_key_exists($key,$for_base_lang)) || ($val!=$for_base_lang[$key])))
+			if (($val!='') && ((!array_key_exists($key,$for_base_lang)) || (str_replace(chr(10),'\n',$val)!=$for_base_lang[$key])))
 			{
 				if (fwrite($myfile,$key.'='.str_replace(chr(10),'\n',$val)."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			}
@@ -829,7 +829,7 @@ msgstr ""
 			foreach ($for_base_lang_2+$for_base_lang as $key=>$now_val)
 			{
 				$val=post_param('l_'.$key,array_key_exists($key,$for_base_lang_2)?$for_base_lang_2[$key]:$now_val);
-				if (($val!=$now_val) || (!array_key_exists($key,$for_base_lang)) || ($for_base_lang[$key]!=$val) || (!file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$lang_file.'.ini'))) // if it's changed from default ocPortal, or not in default ocPortal, or was already changed in language file, or whole file is not in default ocPortal
+				if ((str_replace(chr(10),'\n',$val)!=$now_val) || (!array_key_exists($key,$for_base_lang)) || ($for_base_lang[$key]!=$val) || (!file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$lang_file.'.ini'))) // if it's changed from default ocPortal, or not in default ocPortal, or was already changed in language file, or whole file is not in default ocPortal
 					$out.=$key.'='.str_replace(chr(10),'\n',$val)."\n";
 			}
 
