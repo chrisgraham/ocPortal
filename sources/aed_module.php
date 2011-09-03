@@ -985,7 +985,8 @@ class standard_aed_module
 			
 			// Existing fields
 			$field_count=0;
-			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>get_param('id',false,true)),'ORDER BY cf_order');
+			$c_name=get_param('id',false,true);
+			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$c_name),'ORDER BY cf_order');
 			$fields_existing=new ocp_tempcode();
 			foreach ($rows as $i=>$myrow)
 			{
@@ -993,8 +994,11 @@ class standard_aed_module
 				$description=get_translated_text($myrow['cf_description']);
 				$prefix='existing_field_'.strval($myrow['id']).'_';
 				list($_fields_existing,$_fields_hidden)=$this->get_field_fields($i==0,count($rows)+10,$prefix,$field_count,$name,$description,$myrow['cf_type'],$myrow['cf_defines_order'],$myrow['cf_visible'],$myrow['cf_searchable'],$myrow['cf_default'],$myrow['cf_required'],$myrow['cf_put_in_category'],$myrow['cf_put_in_search']);
-				$_fields_existing->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
-				$_fields_existing->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),$prefix.'delete',false));
+				if ((!is_ecommerce_catalogue($c_name)) || ($i>9))
+				{
+					$_fields_existing->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+					$_fields_existing->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),$prefix.'delete',false));
+				}
 				$temp=do_template('FORM_FIELD_SET_GROUPER',array('_GUID'=>'1492d973db45cbecff892ad4ac1af28f'.get_class($this),'NAME'=>$name,'ID'=>'FIELD_'.strval($i+1),'FIELDS'=>$_fields_existing->evaluate()/*FUDGEFUDGE*/));
 				$fields_existing->attach($temp);
 				$hidden->attach($_fields_hidden);

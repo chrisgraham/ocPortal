@@ -149,6 +149,7 @@ function ocf_ensure_groups_cached($groups)
 function ocf_get_group_link($id)
 {
 	$_row=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id'=>$id),'',1);
+	if (!array_key_exists(0,$_row)) return make_string_tempcode(do_lang('UNKNOWN'));
 	$row=$_row[0];
 	
 	if ($row['id']==db_get_first_id()) return make_string_tempcode(escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])));

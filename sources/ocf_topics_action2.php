@@ -483,8 +483,8 @@ function sent_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$
 	$post_lang_id=is_integer($post)?$post:$GLOBALS['FORUM_DB']->query_value('f_posts','p_post',array('id'=>$post_id));
 	$post_comcode=get_translated_text((integer)$post_lang_id,$GLOBALS['FORUM_DB']);
 	$message=do_lang('NEW_PERSONAL_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_link($topic_id)),$post_comcode),get_lang($to_id));
-	$username='';//$GLOBALS['FORUM_DRIVER']->get_username($to_id);
-	//if (is_null($username)) warn_exit('USER_NO_EXIST');
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($to_id);
+	if (is_null($username)) $username=get_site_name();
 	$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_id);
 	mail_wrap(do_lang('NEW_PERSONAL_TOPIC',NULL,NULL,NULL,get_lang($to_id)),$message,array($GLOBALS['FORUM_DRIVER']->get_member_email_address($to_id)),$username,$from_email,$GLOBALS['FORUM_DRIVER']->get_username($from_id),3,NULL,true,$from_id);
 

@@ -209,11 +209,18 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL)
 	require_code('comcode_check');
 	check_comcode($description,NULL,false,NULL,true);
 
-	$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'seedy_views'=>0,'notes'=>$notes,'description'=>0,'title'=>insert_lang($title,2),'add_date'=>time()),true);
-	update_stat('num_seedy_pages',1);
+	if ($description!='')
+	{
+		$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'seedy_views'=>0,'notes'=>$notes,'description'=>0,'title'=>insert_lang($title,2),'add_date'=>time()),true);
 
-	require_code('attachments2');
-	$GLOBALS['SITE_DB']->query_update('seedy_pages',array('description'=>insert_lang_comcode_attachments(2,$description,'cedi_page',strval($id),NULL,false,$member)),array('id'=>$id),'',1);
+		require_code('attachments2');
+		$GLOBALS['SITE_DB']->query_update('seedy_pages',array('description'=>insert_lang_comcode_attachments(2,$description,'cedi_page',strval($id),NULL,false,$member)),array('id'=>$id),'',1);
+	} else
+	{
+		$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'seedy_views'=>0,'notes'=>$notes,'description'=>insert_lang($description,2),'title'=>insert_lang($title,2),'add_date'=>time()),true);
+	}
+
+	update_stat('num_seedy_pages',1);
 
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_ADD_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
 

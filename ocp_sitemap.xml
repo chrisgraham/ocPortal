@@ -1,5 +1,785 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	
+   <url>
+      <loc>http://localhost/git/index.php?page=cedi&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=cedi&amp;type=random</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=cedi&amp;type=changes</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=cedi&amp;type=tree</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=chat&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=chat&amp;type=private</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=chat&amp;type=blocking_interface</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=chat&amp;type=set_effects</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=chat&amp;type=room&amp;id=1</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=galleries&amp;type=list</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=galleries&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=join&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=quiz&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=authors&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=awards&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=awards&amp;type=overview</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=banners&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=bookmarks&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=bookmarks&amp;type=ad</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=calendar&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=calendar&amp;type=misc&amp;id=2</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=calendar&amp;type=misc&amp;id=3</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=calendar&amp;type=misc&amp;id=4</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=calendar&amp;type=misc&amp;id=5</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=calendar&amp;type=misc&amp;id=6</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=calendar&amp;type=misc&amp;id=7</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=calendar&amp;type=misc&amp;id=8</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=catalogues&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=catalogues&amp;type=category&amp;id=super-member-projects</loc>
+      <lastmod>2011-08-29T12:15:04+00:00</lastmod>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=catalogues&amp;type=category&amp;id=hosted-sites</loc>
+      <lastmod>2011-08-29T12:15:04+00:00</lastmod>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=catalogues&amp;type=category&amp;id=links</loc>
+      <lastmod>2011-08-29T12:15:05+00:00</lastmod>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=catalogues&amp;type=category&amp;id=frequently-asked</loc>
+      <lastmod>2011-08-29T12:15:05+00:00</lastmod>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=catalogues&amp;type=category&amp;id=products-home</loc>
+      <lastmod>2011-08-29T12:15:05+00:00</lastmod>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=downloads&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=downloads&amp;type=tree_view</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=guests</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=administrators</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=super-moderators</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=super-members</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=local-hero</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=old-timer</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=local</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=regular</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=newbie</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=groups&amp;type=view&amp;id=probation</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=invoices&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=iotds&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=leader_board</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=login&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=login&amp;type=logout</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=login&amp;type=concede</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=login&amp;type=invisible</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=lostpassword&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=members&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=members&amp;type=view</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=members&amp;type=view&amp;id=admin</loc>
+      <lastmod>2011-08-29T12:14:31+00:00</lastmod>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=members&amp;type=view&amp;id=test</loc>
+      <lastmod>2011-08-29T12:14:31+00:00</lastmod>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=cat_select</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=blog_select</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=select</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=misc&amp;id=general</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=misc&amp;id=technology</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=misc&amp;id=difficulties</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=misc&amp;id=community</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=misc&amp;id=entertainment</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=news&amp;type=misc&amp;id=business</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=newsletter&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=onlinemembers</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=points&amp;type=member</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=points&amp;type=browser</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=points&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=pointstore</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=polls&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=purchase&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=recommend&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=search&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=search&amp;type=my</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=search&amp;type=misc&amp;id=comcode_pages</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=search&amp;type=misc&amp;id=ocf_posts</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=search&amp;type=misc&amp;id=ocf_within_topic</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.2</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=shopping&amp;type=my_orders</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=shopping&amp;type=view_cart</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=staff&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=subscriptions&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=tester&amp;type=add_test</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=tester&amp;type=ad</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=tester&amp;type=ed</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=tester&amp;type=go</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=tester&amp;type=stats</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=tickets&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=tickets&amp;type=ticket&amp;default=Other</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=tickets&amp;type=ticket&amp;default=Complaint</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=warnings&amp;type=ad</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=warnings&amp;type=ed</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=Business-theme1__panel_bottom</loc>
+      <lastmod>2011-08-17T13:21:02+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=Business-theme1__panel_left</loc>
+      <lastmod>2011-08-17T13:21:02+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=Business-theme1__panel_menu_top</loc>
+      <lastmod>2011-08-17T13:21:02+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=Business-theme1__panel_right</loc>
+      <lastmod>2011-08-17T13:21:02+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=Business-theme1__panel_top</loc>
+      <lastmod>2011-08-17T13:21:02+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=Business-theme1__start</loc>
+      <lastmod>2011-08-17T13:21:02+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=feedback</loc>
+      <lastmod>2011-08-15T19:26:57+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=google_search</loc>
+      <lastmod>2010-07-06T14:38:53+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=results_page</loc>
+      <lastmod>2010-07-06T14:38:53+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=rules</loc>
+      <lastmod>2011-08-26T13:22:08+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=start</loc>
+      <lastmod>2011-08-26T13:22:08+00:00</lastmod>
+      <priority>1</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=topsites</loc>
+      <lastmod>2010-09-22T16:01:01+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=advertise</loc>
+      <lastmod>2011-06-05T20:07:22+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=donate</loc>
+      <lastmod>2011-06-04T14:20:54+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=guestbook</loc>
+      <lastmod>2009-10-05T13:25:12+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=help</loc>
+      <lastmod>2011-04-26T15:15:55+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=hosting-submit</loc>
+      <lastmod>2008-11-29T10:58:58+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=keymap</loc>
+      <lastmod>2011-03-24T21:12:24+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=privacy</loc>
+      <lastmod>2011-05-16T22:35:27+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=recommend_help</loc>
+      <lastmod>2010-09-21T09:11:21+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=sitemap</loc>
+      <lastmod>2010-07-21T13:04:21+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=userguide_chatcode</loc>
+      <lastmod>2008-11-29T10:58:58+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=userguide_comcode</loc>
+      <lastmod>2011-06-20T14:49:33+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=cedi_tree_made</loc>
+      <lastmod>2011-06-03T14:28:27+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/index.php?page=download_tree_made</loc>
+      <lastmod>2011-08-17T16:35:30+00:00</lastmod>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=forumview&amp;type=pt</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=forumview</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=forumview&amp;id=news</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=forumview&amp;id=general-chat</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=forumview&amp;id=website-comment-topics</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=topics&amp;type=new_pt</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=vforums&amp;type=misc</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=vforums&amp;type=unread</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
+   <url>
+      <loc>http://localhost/git/forum/index.php?page=vforums&amp;type=recently_read</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.7</priority>
+   </url>
+	
 </urlset> 
 	

@@ -86,7 +86,7 @@ class Block_main_staff_checklist
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_GOOGLE').'"]http://www.google.com/addurl/[/url]',
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_DMOZ').'"]http://www.dmoz.org/add.html[/url]',
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_BING').'"]http://www.bing.com/webmaster/SubmitSitePage.aspx[/url]',
-				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_YAHOO').'"]http://publisher.yahoo.com/rss_guide/submit.php[/url]',
+//				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_YAHOO').'"]http://publisher.yahoo.com/rss_guide/submit.php[/url]',
 			);
 			foreach ($tasks as $task)
 			{

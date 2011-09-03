@@ -3,7 +3,7 @@
 		<div class="product-list">
 			{+START,IF_NON_EMPTY,{FIELD_7_THUMB}}
 				<div class="product-image-box">
-					<a class="product-image">{FIELD_7_THUMB}</a>
+					<a href="{VIEW_URL*}" class="product-image">{FIELD_7_THUMB}</a>
 				</div>
 			{+END}
 			<div class="ratings">

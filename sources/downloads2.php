@@ -358,20 +358,20 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 		{
 			$actual_path=$direct_path?$url:get_custom_file_base().'/'.rawurldecode($url);
 
-			switch ($extension)
-			{
-				case 'zip':
-				case 'odt':
-				case 'odp':
-				case 'docx':
-				case 'tar':
-				case 'gz':
-					if (filesize($actual_path)>1024*1024*3) return '';
-					break;
-			}
-
 			if (file_exists($actual_path))
 			{
+				switch ($extension)
+				{
+					case 'zip':
+					case 'odt':
+					case 'odp':
+					case 'docx':
+					case 'tar':
+					case 'gz':
+						if (filesize($actual_path)>1024*1024*3) return '';
+						break;
+				}
+
 				$tmp_file=$actual_path;
 				if (filesize($actual_path)>1024*1024*3)
 				{
@@ -646,7 +646,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 	{
 		if (url_is_local($url))
 		{
-			$file_size=filesize(get_custom_file_base().'/'.rawurldecode($url));
+			$file_size=@filesize(get_custom_file_base().'/'.rawurldecode($url)) OR $file_size=NULL;
 		} else
 		{
 			$file_size=@filesize($url) OR $file_size=NULL;

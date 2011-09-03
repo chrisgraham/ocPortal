@@ -284,7 +284,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 				{
 					$orderings.='<option '.(($_i==$category_position)?'selected="selected"':'').'>'.strval($_i+1).'</option>';
 				}
-				$orderings='<label for="category_order_'.strval($id).'_'.strval($category_id).'">'.do_lang('ORDER').'<span class="accessibility_hidden"> ('.escape_html($C_TITLE[$category_id]).')</span> <select id="category_order_'.strval($id).'_'.strval($category_id).'" name="category_order_'.strval($id).'_'.strval($category_id).'">'.$orderings.'</select></label>'; // XHTMLXHTML
+				$orderings='<label for="category_order_'.strval($id).'_'.strval($category_id).'">'.do_lang('ORDER').'<span class="accessibility_hidden"> ('.(array_key_exists($category_id,$C_TITLE)?escape_html($C_TITLE[$category_id]):'').')</span> <select id="category_order_'.strval($id).'_'.strval($category_id).'" name="category_order_'.strval($id).'_'.strval($category_id).'">'.$orderings.'</select></label>'; // XHTMLXHTML
 			}
 
 			$forums->attach($this->get_forum_tree($subforum['id'],$subforum['f_name'],$all_forums,$position_in_cat,$sub_num_in_category,$subforum['f_order_sub_alpha'],$order_sub_alpha,$huge));

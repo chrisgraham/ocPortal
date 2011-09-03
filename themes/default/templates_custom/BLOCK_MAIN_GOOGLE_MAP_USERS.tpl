@@ -49,48 +49,10 @@
 		{DATA}
 
 		{$,Show markers}
-		{+START,IF,{$EQ,{CLUSTER},1}}
 		var markers = [];
-		{+END}
 		for (var i = 0; i < data.length; i++)
 		{
-			var latLng = new google.maps.LatLng(data[i][1], data[i][2]);
-			bounds.extend(latLng);
-
-			var markerOptions = {
-				position: latLng,
-				title: '{USERNAME_PREFIX}' + data[i][0]
-			};
-
-			{$, Reenable if you have put appropriate images in place
-				var usergroupIcon = new GIcon(G_DEFAULT_ICON);
-				usergroupIcon.image = "{$BASE_URL#}/themes/default/images_custom/map_icons/usergroup_" + data[i][3] + ".png";
-				markerOptions.icon = usergroupIcon;
-			}
-
-			var marker = new google.maps.Marker(markerOptions);
-
-			{+START,IF,{$EQ,{CLUSTER},1}}
-				markers.push(marker);
-			{+END}
-			{+START,IF,{$NEQ,{CLUSTER},1}}
-				marker.setMap(map);
-			{+END}
-
-			google.maps.event.addListener(marker, 'click', (function (argMarker, argMember)
-			{
-				return function ()
-				{
-					{$,Dynamically load a specific members details only when their marker is clicked.}
-					var reply = load_XML_doc("{$BASE_URL}/data_custom/get_member_tooltip.php?member=" + argMember+keep_stub());
-					var content = reply.responseXML.documentElement.getElementsByTagName('result')[0].firstChild.nodeValue;
-					if (content != "")
-					{
-						infoWindow.setContent(content);
-						infoWindow.open(map, argMarker);
-					}
-				};
-			})(marker, data[i][0])); {$,These are the args passed to the dynamic function above.}
+			add_data_point(data[i],bounds,markers,infoWindow,map);
 		}
 
 		{+START,IF,{$EQ,{CLUSTER},1}}
@@ -113,6 +75,8 @@
 							load_XML_doc('{SET_COORD_URL;}'+position.coords.latitude+'_'+position.coords.longitude+keep_stub());
 							var initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 							map.setCenter(initialLocation);
+
+							add_data_point(['{$USERNAME;}',position.coords.latitude,position.coords.longitude,''],bounds,markers,infoWindow,map);
 						});
 					}
 					catch (e) {};
@@ -130,6 +94,48 @@
 			\});
 		}
 	}
+	
+	function add_data_point(data_point,bounds,markers,infoWindow,map)
+	{
+		var latLng = new google.maps.LatLng(data_point[1], data_point[2]);
+		bounds.extend(latLng);
+
+		var markerOptions = {
+			position: latLng,
+			title: '{USERNAME_PREFIX}' + data_point[0]
+		};
+
+		{$, Reenable if you have put appropriate images in place
+			var usergroupIcon = new GIcon(G_DEFAULT_ICON);
+			usergroupIcon.image = "{$BASE_URL#}/themes/default/images_custom/map_icons/usergroup_" + data_point[3] + ".png";
+			markerOptions.icon = usergroupIcon;
+		}
+
+		var marker = new google.maps.Marker(markerOptions);
+
+		{+START,IF,{$EQ,{CLUSTER},1}}
+			markers.push(marker);
+		{+END}
+		{+START,IF,{$NEQ,{CLUSTER},1}}
+			marker.setMap(map);
+		{+END}
+
+		google.maps.event.addListener(marker, 'click', (function (argMarker, argMember)
+		{
+			return function ()
+			{
+				{$,Dynamically load a specific members details only when their marker is clicked.}
+				var reply = load_XML_doc("{$BASE_URL}/data_custom/get_member_tooltip.php?member=" + argMember+keep_stub());
+				var content = reply.responseXML.documentElement.getElementsByTagName('result')[0].firstChild.nodeValue;
+				if (content != "")
+				{
+					infoWindow.setContent(content);
+					infoWindow.open(map, argMarker);
+				}
+			};
+		})(marker, data_point[0])); {$,These are the args passed to the dynamic function above.}
+	}
+	
 	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=false"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
 //]]></script>
 

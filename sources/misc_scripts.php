@@ -32,7 +32,7 @@ function gd_text_script()
 
 	$font=get_param('font',get_file_base().'/data/fonts/Vera.ttf');
 
-	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (strlen($text)==0))
+	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')===false) || (strlen($text)==0))
 	{
 		$pfont=4;
 		$height=intval(imagefontwidth($pfont)*strlen($text)*1.05);
@@ -59,7 +59,7 @@ function gd_text_script()
 	imagealphablending($img,false);
 	$black_color=array_key_exists('fgcolor',$_GET)?$_GET['fgcolor']:'000000';
 	$black=imagecolorallocate($img,hexdec(substr($black_color,0,2)),hexdec(substr($black_color,2,2)),hexdec(substr($black_color,4,2)));
-	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (strlen($text)==0))
+	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')===false) || (strlen($text)==0))
 	{
 		$trans=imagecolorallocate($img,hexdec(substr($trans_color,0,2)),hexdec(substr($trans_color,2,2)),hexdec(substr($trans_color,4,2)));
 		imagefill($img,0,0,$trans);

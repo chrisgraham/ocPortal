@@ -796,6 +796,10 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 
 	if ((error_reporting() & $errno) || ($GLOBALS['DYING_BADLY']))
 	{
+		// Strip down path for security
+		if (substr(str_replace(DIRECTORY_SEPARATOR,'/',$errfile),0,strlen(get_file_base().'/'))==str_replace(DIRECTORY_SEPARATOR,'/',get_file_base().'/'))
+			$errfile=substr($errfile,strlen(get_file_base().'/'));
+		
 		// Work out the error type
 		if (!defined('E_RECOVERABLE_ERROR')) define('E_RECOVERABLE_ERROR',4096);
 		switch ($errno)
