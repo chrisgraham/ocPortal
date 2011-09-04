@@ -196,13 +196,17 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
  * @param  BINARY			Whether this field is required
  * @param  BINARY			Whether the field is to be shown in category views (not applicable for the list display type)
  * @param  BINARY			Whether the field is to be shown in search views (not applicable for the list display type)
+ * @param  ?AUTO_LINK	Force this ID (NULL: auto-increment as normal)
  * @return AUTO_LINK		Field ID
  */
-function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category=1,$put_in_search=1)
+function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category=1,$put_in_search=1,$id=NULL)
 {
 	if (!is_integer($description)) $description=insert_lang($description,2);
 	if (!is_integer($name)) $name=insert_lang($name,2);
-	$cf_id=$GLOBALS['SITE_DB']->query_insert('catalogue_fields',array('c_name'=>$c_name,'cf_name'=>$name,'cf_description'=>$description,'cf_type'=>$type,'cf_order'=>$order,'cf_defines_order'=>$defines_order,'cf_visible'=>$visible,'cf_searchable'=>$searchable,'cf_default'=>$default,'cf_required'=>$required,'cf_put_in_category'=>$put_in_category,'cf_put_in_search'=>$put_in_search),true);
+	$map=array('c_name'=>$c_name,'cf_name'=>$name,'cf_description'=>$description,'cf_type'=>$type,'cf_order'=>$order,'cf_defines_order'=>$defines_order,'cf_visible'=>$visible,'cf_searchable'=>$searchable,'cf_default'=>$default,'cf_required'=>$required,'cf_put_in_category'=>$put_in_category,'cf_put_in_search'=>$put_in_search);
+	if (!is_null($id)) $map['id']=$id;
+	$cf_id=$GLOBALS['SITE_DB']->query_insert('catalogue_fields',$map,true);
+	if (!is_null($id)) $cf_id=$id;
 
 	require_code('hooks/modules/catalogue_fields/'.filter_naughty($type));
 	$ob=object_factory('Hook_catalogue_field_'.filter_naughty($type));

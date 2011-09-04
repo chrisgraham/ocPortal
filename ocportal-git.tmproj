@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/database/mysql.php</string>
+	<string>sources/cedi.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -89,6 +89,8 @@
 			<string>data</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>data_custom</string>
 			<key>regexFolderFilter</key>
@@ -158,7 +160,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2011-08-16T17:59:40Z</date>
+			<date>2011-08-29T12:16:45Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -170,7 +172,7 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2011-07-01T15:07:43Z</date>
+			<date>2011-09-02T11:15:13Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -205,8 +207,6 @@
 			<string>ocworld</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>selected</key>
-			<true/>
 			<key>sourceDirectory</key>
 			<string>ocworld</string>
 		</dict>
@@ -437,36 +437,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>adminzone/pages/modules/admin_addons.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>479</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>456</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>473</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>479</integer>
-			</dict>
-		</dict>
 		<key>adminzone/pages/modules/admin_config.php</key>
 		<dict>
 			<key>caret</key>
@@ -524,6 +494,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>cms/pages/modules/cms_cedi.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>455</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>427</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>455</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>455</integer>
+			</dict>
 		</dict>
 		<key>collaboration/index.php</key>
 		<dict>
@@ -1035,6 +1035,66 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
+		<key>site/pages/modules/catalogues.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>326</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>311</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>327</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>326</integer>
+			</dict>
+		</dict>
+		<key>site/pages/modules/cedi.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>37</integer>
+				<key>line</key>
+				<integer>345</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>332</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>35</integer>
+				<key>line</key>
+				<integer>345</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>39</integer>
+				<key>line</key>
+				<integer>345</integer>
+			</dict>
+		</dict>
 		<key>site/pages/modules/pointstore.php</key>
 		<dict>
 			<key>caret</key>
@@ -1048,6 +1108,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>sources/aed_module.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>968</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>962</integer>
 		</dict>
 		<key>sources/blocks/main_contact_simple.php</key>
 		<dict>
@@ -1078,6 +1152,20 @@
 				<key>line</key>
 				<integer>102</integer>
 			</dict>
+		</dict>
+		<key>sources/blocks/main_content.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>43</integer>
+				<key>line</key>
+				<integer>236</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>225</integer>
 		</dict>
 		<key>sources/blocks/main_custom_comcode_tags.php</key>
 		<dict>
@@ -1122,6 +1210,34 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>27</integer>
+		</dict>
+		<key>sources/catalogues2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>176</integer>
+				<key>line</key>
+				<integer>201</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>179</integer>
+		</dict>
+		<key>sources/cedi.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>182</integer>
+				<key>line</key>
+				<integer>219</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>180</integer>
 		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
@@ -1181,62 +1297,6 @@
 			<key>firstVisibleLine</key>
 			<integer>255</integer>
 		</dict>
-		<key>sources/database.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1067</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1059</integer>
-		</dict>
-		<key>sources/database/mysql.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>5</integer>
-				<key>line</key>
-				<integer>101</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>87</integer>
-		</dict>
-		<key>sources/database/mysql_dbx.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>85</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>62</integer>
-		</dict>
-		<key>sources/database/mysqli.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>115</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>97</integer>
-		</dict>
 		<key>sources/downloads.php</key>
 		<dict>
 			<key>caret</key>
@@ -1251,20 +1311,6 @@
 			<key>firstVisibleLine</key>
 			<integer>442</integer>
 		</dict>
-		<key>sources/forum/phpbb3.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>43</integer>
-				<key>line</key>
-				<integer>225</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>220</integer>
-		</dict>
 		<key>sources/forum/smf.php</key>
 		<dict>
 			<key>caret</key>
@@ -1278,6 +1324,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>963</integer>
+		</dict>
+		<key>sources/galleries.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>405</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>379</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -2069,20 +2129,6 @@
 				<integer>209</integer>
 			</dict>
 		</dict>
-		<key>sources/m_zip.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>29</integer>
-				<key>line</key>
-				<integer>99</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>64</integer>
-		</dict>
 		<key>sources/ocf_general_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -2329,6 +2375,34 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>sources_custom/hooks/modules/tracking/cedi.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>102</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>77</integer>
+		</dict>
+		<key>sources_custom/hooks/systems/upon_query/tracking_cedi.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>39</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>30</integer>
+		</dict>
 		<key>sources_custom/miniblocks/.htaccess</key>
 		<dict>
 			<key>caret</key>
@@ -2544,6 +2618,34 @@
 				<key>line</key>
 				<integer>1</integer>
 			</dict>
+		</dict>
+		<key>themes/default/templates/CATALOGUE_products_ENTRY.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>9</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/CATALOGUE_products_LINE.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>26</integer>
+				<key>line</key>
+				<integer>5</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>themes/default/templates/COMCODE_CONTENTS.tpl</key>
 		<dict>
@@ -3466,13 +3568,15 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/database/mysql.php</string>
-		<string>sources/database/mysql_dbx.php</string>
-		<string>sources/database/mysqli.php</string>
+		<string>site/pages/modules/cedi.php</string>
+		<string>cms/pages/modules/cms_cedi.php</string>
+		<string>sources_custom/hooks/modules/tracking/cedi.php</string>
+		<string>sources/cedi.php</string>
+		<string>sources_custom/hooks/systems/upon_query/tracking_cedi.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{600, 203}, {1179, 910}}</string>
+	<string>{{683, 198}, {1179, 910}}</string>
 </dict>
 </plist>

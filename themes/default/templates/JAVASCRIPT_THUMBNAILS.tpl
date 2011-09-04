@@ -11,7 +11,7 @@ function nereidFade(fadeElement,destPercentOpacity,periodInMsecs,increment)
 	{+END}
 
 	if (typeof thumbFadeTimers=='undefined') return;
-	if (typeof fadeElement.faderKey=='undefined') fadeElement.faderKey=fadeElement.id+'_'+Math.round(Math.random()*10000);
+	if (typeof fadeElement.faderKey=='undefined') fadeElement.faderKey=fadeElement.id+'_'+Math.round(Math.random()*1000000);
 
 	if (thumbFadeTimers[fadeElement.faderKey])
 	{

@@ -620,10 +620,13 @@ class Module_downloads
 		{
 			$edit_url=build_url(array('page'=>'cms_downloads','type'=>'_ed','id'=>$id),get_module_zone('cms_downloads'));
 		}
-		if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries','download_'.strval($id)))))
+		if (addon_installed('galleries'))
 		{
-			require_lang('galleries');
-			$add_img_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>'download_'.strval($id)),get_module_zone('cms_galleries'));
+			if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries','download_'.strval($id)))))
+			{
+				require_lang('galleries');
+				$add_img_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>'download_'.strval($id)),get_module_zone('cms_galleries'));
+			}
 		}
 
 		// Outmoding

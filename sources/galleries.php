@@ -401,8 +401,9 @@ function get_gallery_tree($category_id='root',$tree='',$gallery_info=NULL,$do_st
 	{
 		if ($child['name']=='root') continue;
 
-		$can_submit=!$addable_filter || can_submit_to_gallery($child['name']);
-		if ($can_submit!==false)
+		$can_submit=can_submit_to_gallery($child['name']);
+		if ($can_submit===false) $can_submit=!$addable_filter;
+		if (($can_submit!==false) && ($can_submit!==true))
 		{
 			$found_own_gallery=true;
 			$found_member_galleries[$can_submit]=1;
@@ -498,7 +499,7 @@ function get_gallery_tree($category_id='root',$tree='',$gallery_info=NULL,$do_st
 			}
 		}
 
-		if (((!$done_for_all) || (!$found_own_gallery)) && (!is_guest()) && (!$purity) && (has_specific_permission(get_member(),'have_personal_category')))
+		if (((!$done_for_all) || (!$found_own_gallery)) && (!array_key_exists(get_member(),$found_member_galleries)) && (!is_guest()) && (!$purity) && (has_specific_permission(get_member(),'have_personal_category')))
 		{
 			$this_category_id='member_'.strval(get_member()).'_'.$category_id;
 			if ((is_null($filter)) || (call_user_func_array($filter,array($this_category_id,$member_id,0))))

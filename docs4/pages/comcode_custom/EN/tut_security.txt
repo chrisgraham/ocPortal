@@ -60,7 +60,10 @@ To remove the possibility of search engines indexing the login screens of your A
 [code]
 User-agent: *
 Disallow: /adminzone/
+Sitemap: /ocp_sitemap.xml
 [/code]
+
+I also added a line there to say where your XML Sitemap is.
 
 [title="2"]File-type white-list[/title]
 

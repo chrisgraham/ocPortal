@@ -643,7 +643,7 @@ function filter_css($css,$context)
 		$pos2=strpos($css,'}',$last_pos);
 		if (($pos1===false) && ($pos2===false)) break;
 
-		if (($pos1===false) || ($pos2<$pos1))
+		if (($pos1===false) || (($pos2!==false) && ($pos2<$pos1)))
 		{
 			if (count($stack)!=0)
 			{

@@ -360,7 +360,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 			if (!array_key_exists($i,$entries)) break;
 
 			$entry=$entries[$i];
-			$extra_map[$i]['ADD_TO_CART']=build_url(array('page'=>'shopping','type'=>'add_item','product_id'=>$entry['id'],'hook'=>'catalogue_items'),'_SELF');
+			$extra_map[$i]['ADD_TO_CART']=build_url(array('page'=>'shopping','type'=>'add_item','product_id'=>$entry['id'],'hook'=>'catalogue_items'),get_module_zone('shopping'));
 		}
 	}
 
@@ -1075,6 +1075,7 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
 function is_ecommerce_catalogue($catalogue_name)
 {
 	if (!addon_installed('ecommerce')) return false;
+	if (!addon_installed('shopping')) return false;
 
 	if(is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>$catalogue_name,'c_ecommerce'=>1))))
 		return false;

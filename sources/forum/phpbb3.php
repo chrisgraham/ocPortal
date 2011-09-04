@@ -1040,7 +1040,8 @@ class forum_driver_phpbb3 extends forum_driver_base
 	{
 		global $EMOTICON_CACHE;
 		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
-		$rows=$this->connection->query_select('smilies',array('*'));
+		$rows=$this->connection->query_select('smilies',array('*'),NULL,'',NULL,NULL,true);
+		if (is_null($rows)) $rows=array();
 		$EMOTICON_CACHE=array();
 		foreach ($rows as $myrow)
 		{

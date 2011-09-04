@@ -32,7 +32,7 @@ function init__m_zip()
 	if (!function_exists('zip_open'))
 {
 
-class ZIPARCHIVE
+if (substr(phpversion(),0,2)!='4.') eval("class ZIPARCHIVE
 {
 	const ER_OK=0;  /* N No error */
 	const ER_MULTIDISK=1;  /* N Multi-disk zip archives not supported */
@@ -59,6 +59,7 @@ class ZIPARCHIVE
 	const ER_REMOVE=22;  /* S Can't remove file */
 	const ER_DELETED=23;  /* N Entry has been deleted */
 }
+");
 
 /**
  * Open a zip file for reading.

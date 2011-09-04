@@ -434,7 +434,7 @@ class Module_cms_cedi
 				// Find ID and title
 				$q_pos=strpos($newlink,'!');
 				$child_id_on_start=(($q_pos!==false) && ($q_pos>0) && (is_numeric(substr($newlink,0,$q_pos))));
-	
+
 				if ($child_id_on_start) // Existing
 				{
 					$title=substr($newlink,$q_pos+1);
@@ -446,7 +446,8 @@ class Module_cms_cedi
 						$title=get_translated_text($title_id);
 					} else
 					{
-						$GLOBALS['SITE_DB']->query_update('seedy_pages',array('title'=>lang_remap($title_id,$title)),array('id'=>$child_id),'',1);
+						if (get_translated_text($title_id)!=$title)
+							$GLOBALS['SITE_DB']->query_update('seedy_pages',array('title'=>lang_remap($title_id,$title)),array('id'=>$child_id),'',1);
 					}
 				}
 				else // New
@@ -468,9 +469,9 @@ class Module_cms_cedi
 			}
 			$start=$start+$length+1;
 		}
-	
+
 		$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_TREE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
-	
+
 		// Show it worked / Refresh
 		$url=get_param('redirect');
 		return redirect_screen($_title,$url,do_lang_tempcode('SUCCESS'));

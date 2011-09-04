@@ -129,9 +129,11 @@ class Block_side_calendar
 				$explode3=explode(':',$date2);
 				$test=date('d',$to);
 				$test2=date('d',$from);
-				if ((intval($test)>intval($test2)) || (intval(date('m',$to))!=intval(date('m',$from))) || (intval(date('Y',$to))!=intval(date('Y',$from))))
+				if ((!is_null($to)) && ((intval($test)>intval($test2)) || (intval(date('m',$to))!=intval(date('m',$from))) || (intval(date('Y',$to))!=intval(date('Y',$from)))))
 				{
-					$happenings[]=array($e_id,$event,mktime(0,0,0,intval(date('m',$from)),intval($test2)+1,intval(date('Y',$from))),$to);
+					$ntime=mktime(0,0,0,intval(date('m',$from)),intval($test2)+1,intval(date('Y',$from)));
+					if ($ntime<$period_end)
+						$happenings[]=array($e_id,$event,$ntime,$to);
 				}
 			}
 	
