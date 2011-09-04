@@ -1306,12 +1306,12 @@ function theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorith
 		$val_dif=$desired_v-$ocportal_v;
 
 		$matches=array();
-		$num_matches=preg_match_all('#\#([A-Fa-f0-9]{3,6})#',$sheet,$matches);
+		$num_matches=preg_match_all('#\#([A-Fa-f0-9]{3,6})([^A-Fa-f0-9])#',$sheet,$matches);
 		for ($i=0;$i<$num_matches;$i++)
 		{
 			list($h,$s,$v)=rgb_to_hsv((strlen($matches[1][$i])==3)?($matches[1][$i][0].$matches[1][$i][0].$matches[1][$i][1].$matches[1][$i][1].$matches[1][$i][2].$matches[1][$i][2]):$matches[1][$i]);
 			$new_colour=hsv_to_rgb(floatval(fix_colour($h+$hue_dif,true)),floatval(fix_colour($s+$sat_dif)),floatval(fix_colour($v+$val_dif)));
-			$sheet=str_replace('#'.$matches[1][$i],'#'.$new_colour,$sheet);
+			$sheet=str_replace($matches[0][$i],'#'.$new_colour.$matches[2][$i],$sheet);
 		}
 
 		return $sheet;
