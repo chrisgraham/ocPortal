@@ -1,0 +1,29 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2010
+*/
+
+.iotd_admin_preview_picture {
+	float: {!en_right};
+}
+
+.iotd_expose {
+	overflow: hidden;
+	outline: 0;
+	text-align: center;
+}
+
+.iotd_expose a {
+	outline: 0;
+}
+
+.iotd_full_expose {
+	overflow: hidden;
+	width: 100%;
+	outline: 0;
+}
+
+.iotd_full_expose {
+	text-align: center;
+}
+

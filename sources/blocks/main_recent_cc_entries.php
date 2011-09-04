@@ -87,7 +87,7 @@ class Block_main_recent_cc_entries
 			return do_template('BLOCK_NO_ENTRIES',array('HIGH'=>false,'TITLE'=>do_lang_tempcode('RECENT',escape_html(integer_format($number)),escape_html($catalogue_title)),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title)),'SUBMIT_URL'=>$submit_url));
 		}
 
-		return do_template('BLOCK_MAIN_RECENT_CC_ENTRIES',array('_GUID'=>'a57fa1b83d1b6fe3acbceb2b618e6d7f','CATALOGUE_TITLE'=>$catalogue_title,'CONTENT'=>$content,'NUMBER'=>integer_format($number)));
+		return do_template('BLOCK_MAIN_RECENT_CC_ENTRIES',array('_GUID'=>'a57fa1b83d1b6fe3acbceb2b618e6d7f','CATALOGUE_TITLE'=>$catalogue_title,'CATALOGUE'=>$catalogue,'CONTENT'=>$content,'NUMBER'=>integer_format($number)));
 	}
 
 }

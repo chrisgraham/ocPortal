@@ -1,0 +1,54 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+.login_page {
+	text-align: center;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.login_extra_info {
+	margin-top: 60px;
+}
+
+.login_page_form {
+	width: 45%;
+	float: left;
+	padding-right: 12px;
+	border-right: 1px solid #c4cbd3; /* {$,wizard, 33% seed + 67% W/B} */
+	margin-right: 12px;
+}
+
+.login_page_form th {
+	text-align: {!en_right};
+	padding-{!en_right}: 6px;
+	font-weight: bold !important;
+	vertical-align: middle !important;
+}
+
+.login_page_form td {
+	text-align: {!en_left};
+	vertical-align: middle !important;
+}
+
+.login_page_options {
+	margin: 15px 0 30px 0;
+	text-align: left;
+}
+
+.login_page_options .associated_details {
+	padding-left: 2.5em;
+	display: inline-block;
+}
+
+.login_note a {
+	font-size: 1.1em;
+}
+
+.login_note {
+	font-size: 0.85em;
+	opacity: 0.9;
+}
+

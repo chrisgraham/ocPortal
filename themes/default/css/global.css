@@ -279,7 +279,6 @@ form { /* For IE6 */
 		float: left;
 	}
 
-
 	/*
 	Commented out by default.
 	If you enable it will turn off the standard logo and replace it with a big header image.
@@ -1921,7 +1920,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	border: none;
 	cursor: pointer;
 	border: 1px solid #072d65; /* {$,wizard, 100% bordcolor}*/
-	background-color: #5882c2; /* {$,wizard, 100% lgradcolor} */
+	background-color: #5a85c5; /* {$,wizard, 100% lgradcolor} */
 	color: #ffffff; /* {$,wizard, 100% W/B} */
 	border-radius: 6px 6px 6px 6px;
 	-moz-border-radius: 6px;
@@ -3047,6 +3046,7 @@ ul.sitemap li li {
 }
 
 .comments_end {
+	overflow: hidden;
 	{+START,IF,{$MOBILE}}
 		margin: 4px 20px 10px 0px;
 		padding: 0;

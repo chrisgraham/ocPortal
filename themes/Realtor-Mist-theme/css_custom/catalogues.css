@@ -1,0 +1,98 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+/* These styles are all related to eCommerce catalogues */
+
+.addtocart {
+	width: 100%;
+}
+
+.products-grid {
+	margin: 0 0 15px;
+	padding: 0 0 0 5px;
+	position: relative;
+	z-index: 1;
+	border: 1px;
+}
+
+li.catalogue_product_box {
+	float: left;
+	width: 25%;
+	list-style-type: none;
+}
+
+.catalogue_product_box_inner {
+	margin-right: 5px;
+	margin-bottom: 5px;
+	overflow: hidden;
+}
+
+.ratings .rating-box {
+	float: left;
+	margin-right: 5px;
+}
+
+.price-box {
+	font-weight: bold;
+	color: #282015; /* {$,wizard, 20% seed + 80% !W/B} */
+	margin: 10px 0;
+	font-size: 1.2em;
+}
+
+.cart_info {
+	text-align: right;
+	height: 60px;
+	overflow: visible;
+}
+
+.cartlink {
+	display: inline;
+	float: right;
+}
+
+.cart-logo {
+	display: inline;
+	float: right;
+	margin-right:18px;
+}
+
+.actions {
+	width:100%;
+}
+
+.product-view {
+	float:left;
+	width:350px;
+}
+
+.product-img-box {
+	float: right;
+	margin: 30px 0 30px 30px;
+	position: relative;
+	width:180px;
+	text-align: right;
+}
+
+.data-table {
+	margin-bottom: 10px;
+	font-size: 0.85em;
+}
+
+.data-table th, .data-table td {
+	padding:5px 12px;
+	text-align:left;
+}
+
+.purchase_buy {
+	float:left;
+	margin-right:5px;
+}
+
+.product-image-box	{
+	padding:5px 5px 5px 5px;	
+}
+.tax_opted_out {
+	font-size:0.85em;
+}

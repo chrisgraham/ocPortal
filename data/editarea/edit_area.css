@@ -67,7 +67,6 @@ body, html, table, form, textarea{
 	overflow: visible;
 }
 
-
 #selection_field, #selection_field_text{
 	margin: 0; 
 	background-color: #E1F2F9; 
@@ -158,7 +157,6 @@ pre{
 #result .edit_area_selection_field .overline{
 	background-color: #996600;
 }
-
 
 /* area popup */
 .editarea_popup{
@@ -393,7 +391,6 @@ table.statusbar{
 }
 /* end */
 
-
 /**** tab browsing area ****/
 #tab_browsing_area{
 	display: none;
@@ -464,7 +461,6 @@ table.statusbar{
 	color: #FFF;
 }
 
-
 #no_file_selected{
 	height: 100%;
 	width: 150%; /* Opera need more than 100% */
@@ -473,7 +469,6 @@ table.statusbar{
 	z-index: 20;
 	position: absolute;
 }
-
 
 /*** Non-editable mode ***/
 .non_editable #editor

@@ -1,0 +1,48 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+#pe_cedi_page_description {
+	margin-bottom: 15px;
+}
+
+.cedi_buttons {
+	float: {!en_right};
+}
+
+.cedi_post_below {
+	padding-top: 4px;
+}
+
+.cedi_post_expand_button {
+	text-align: {!en_right};
+	padding: 11px 5px 0 5px;
+}
+
+.cedi_merge_posts_button {
+	padding-top: 10px;
+	float: {!en_right};
+}
+
+.cedi_rating_inside {
+	padding-left: 30px;
+}
+
+.ocf_cedi_poster_name {
+	padding: 0 !important;
+	font-size: 0.85em;
+}
+
+.cedi_page_children {
+	margin-bottom: 1.5em;
+}
+
+#page_running_cedi .cedi_exp_ref {
+	font-size: 1em !important;
+}
+
+#page_running_cedi .cedi_exp_ref a {
+	background: none !important;
+	padding: 0 !important;
+}

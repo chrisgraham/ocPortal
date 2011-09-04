@@ -93,6 +93,7 @@ class Hook_addon_registry_shopping
 			'CATALOGUE_products_ENTRY_FIELD.tpl',
 			'CATALOGUE_products_ENTRY_SCREEN.tpl',
 			'CATALOGUE_products_ENTRY.tpl',
+			'CATALOGUE_products_ENTRY_EMBED.tpl',
 			'CATALOGUE_products_LINE.tpl',
 			'CATALOGUE_products_LINE_WRAP.tpl',
 			'CATEGORY_products_ENTRY.tpl',
@@ -162,6 +163,7 @@ class Hook_addon_registry_shopping
 				'CATALOGUE_products_ENTRY_FIELD.tpl'=>'field_map_products_entry_screen',
 				'CATALOGUE_products_ENTRY_SCREEN.tpl'=>'field_map_products_entry_screen',
 				'CATALOGUE_products_ENTRY.tpl'=>'field_map_products_entry_screen',
+				'CATALOGUE_products_ENTRY_EMBED.tpl'=>'field_map_products_entry_screen',
 				'CATALOGUE_products_LINE.tpl'=>'list_catalogue_screen_products',
 				'CATALOGUE_products_LINE_WRAP.tpl'=>'list_catalogue_screen_products',
 				'CATALOGUE_ENTRY_ADD_TO_CART.tpl'=>'table_category_screen_products',
@@ -555,7 +557,7 @@ class Hook_addon_registry_shopping
 		$subcategories = new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$subcategories->attach(do_lorem_template('CATEGORY_products_ENTRY',array('ID'=>placeholder_id(),'NAME_FIELD'=>lorem_word(),'AJAX_EDIT_URL'=>placeholder_url(),'URL'=>placeholder_url(),'REP_IMAGE'=>placeholder_image(),'CHILDREN'=>lorem_phrase(),'NAME'=>lorem_phrase(),'NAME_PLAIN'=>lorem_phrase(),'DESCRIPTION'=>lorem_phrase()),NULL,false,'CATEGORY_ENTRY'));
+			$subcategories->attach(do_lorem_template('CATEGORY_products_ENTRY',array('ID'=>placeholder_id(),'NAME_FIELD'=>lorem_word(),'AJAX_EDIT_URL'=>placeholder_url(),'URL'=>placeholder_url(),'REP_IMAGE'=>placeholder_image(),'CHILDREN'=>lorem_phrase(),'NAME'=>lorem_phrase(),'NAME_PLAIN'=>lorem_phrase(),'DESCRIPTION'=>lorem_phrase())));
 		}
 
 		$results_browser = placeholder_result_browser();
@@ -647,6 +649,24 @@ class Hook_addon_registry_shopping
 					'FIELDS'=>$fields,
 						)
 			);
+
+		$entry->attach(do_lorem_template('CATALOGUE_products_ENTRY_EMBED',array(
+					'FIELD_0'=>lorem_phrase(),
+					'FIELD_1'=>lorem_phrase(),
+					'PRODUCT_CODE'=>placeholder_id(),
+					'FIELD_9'=>lorem_phrase(),
+					'FIELD_2'=>placeholder_number(),
+					'PRICE'=>placeholder_number(),
+					'RATING'=>$rating_inside,
+					'FIELD_7_THUMB'=>placeholder_image(),
+					'FIELD_7_PLAIN'=>placeholder_url(),
+					'MAP_TABLE'=>placeholder_table(),
+					'CART_BUTTONS'=>$cart_link,
+					'CART_LINK'=>$cart_logo,
+					'FIELDS'=>$fields,
+					'URL'=>placeholder_url(),
+						)
+			));
 
 		return array(
 			lorem_globalise(

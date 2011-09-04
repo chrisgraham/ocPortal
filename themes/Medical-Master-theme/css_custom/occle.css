@@ -1,0 +1,77 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+#command_line {
+	/*Style to look like generic command prompt*/
+	height: 600px;
+	overflow-y: auto;
+	background-color: #000;
+	border-left: 2px solid #666666;
+	border-top: 2px solid #666666;
+	border-bottom: 2px solid #999999;
+	border-right: 2px solid #999999;
+	padding: 3px;
+	color: #FFF;
+	font-family: monospace;
+	font-size: 1.2em;
+	direction: ltr;
+}
+
+#occle_command {
+	/*Style to blend in with #command_line*/
+	background-color: #444;
+	padding: 2px;
+	color: #FFF;
+	border: 0;
+	border-bottom: 1px dashed #777;
+	font-family: monospace;
+	width: 400px;
+}
+
+#command_prompt {
+	width: 98%; /* not 100% for IE6 */
+}
+
+.past_command {
+	color: #DDDDDD;
+	margin-left: 10px;
+}
+
+.text_output {
+	white-space: pre;
+	overflow-x: auto;
+}
+
+.command_output {
+	color: #454545;
+}
+
+.error_output {
+	color: #FF0000;
+}
+
+.occle_dir {
+	color: #39669F;
+	font-weight: bold;
+}
+
+.occle_file {
+	color: #39FF9F;
+}
+
+.occle_notification {
+	border: 1px solid orange;
+	background-color: #444400;
+	color: #FFFFAA;
+/*	font-family: sans-serif;*/
+	margin: 5px;
+	padding: 3px;
+}
+
+.whois_ip {
+	font-weight: bolder;
+	color: #FFF;
+}
+

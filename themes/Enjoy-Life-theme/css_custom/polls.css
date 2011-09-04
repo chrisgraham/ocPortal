@@ -1,0 +1,26 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+.poll_answer {
+	margin: 6px 0;
+}
+
+.poll_answer img {
+	vertical-align: text-bottom;
+}
+
+.poll_question {
+	font-weight: bold;
+	margin-top: 0;
+}
+
+.poll_form {
+	text-align: {!en_left};
+}
+
+.poll_details {
+	margin-bottom: 30px;
+}
+

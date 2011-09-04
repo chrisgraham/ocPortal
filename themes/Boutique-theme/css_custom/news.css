@@ -1,0 +1,72 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2010
+*/
+
+.news_piece_summary h3 {
+	margin-{!en_right}: 0px;
+	font-size:0.94em; 
+	margin:0 0 5px 0; 
+	padding:0 0 5px 0; 
+	margin:0 0 5px 0;
+}
+
+.news_piece_summary h3  a { font-size:1.25em; padding-left:0px; color: #73314D; font-weight:bold;}
+
+.news_piece_summary h3  a:hover {color: #f7583e;}
+
+.rss_summary h3 {
+	margin-{!en_right}: 130px;
+}
+
+.newscat_img_author, .newscat_img_member {
+	padding: 0px;
+	float:left;
+	margin-right: 25px;
+}
+
+.newscat_img_member {
+	margin-top: 15px;
+	text-align: center;
+}
+
+.newscat_img_author img {
+	margin-top: 8px;
+}
+
+.news_summary_p {
+	margin-top: 5px;
+	word-wrap: break-word;
+	width: 420px;
+	float: left;
+}
+
+.news_goto {
+	text-align: right;
+	font-size: 0.85em;
+	padding-bottom: 4px;
+	padding-right:10px;
+	margin-bottom: 10px;
+}
+
+.news_goto a:link, .news_goto a:visited, .news_goto a:active {
+	text-decoration: none;
+}
+
+.news_by {
+	text-align:left;
+	padding-bottom:10px;
+}
+
+.chicklet {
+	padding-bottom: 5px;
+}
+
+.chicklets {
+	float: {!en_right};
+}
+
+.chicklets_spacer {
+	margin-{!en_right}: 120px;
+}
+

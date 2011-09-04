@@ -1,12 +1,12 @@
 <div class="standardbox_wrap_classic">
 	<div class="standardbox_classic">
-	<div class="standardbox_title_classic">
+	<h3 class="standardbox_title_classic">
 		<div class="ocf_category_hide_button">
 			<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionTable('c_{CATEGORY_ID*;}'); return false;"><img id="e_c_{CATEGORY_ID*}" title="{!TOGGLE_CATEGORY_VISIBILITY}" alt="{!TOGGLE_CATEGORY_VISIBILITY}" src="{$IMG*,{EXPAND_TYPE*}}" /></a>
 		</div>
 		{+START,FRACTIONAL_EDITABLE,{CATEGORY_TITLE},title,_SEARCH:admin_ocf_categories:type=__ed:id={CATEGORY_ID}}{CATEGORY_TITLE*}{+END}
 		{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_categories}}<span class="associated_details">(<a href="{$PAGE_LINK*,_SEARCH:admin_ocf_categories:type=_ed:id={CATEGORY_ID}}">{!EDIT}</a>)</span>{+END}
-	</div>
+	</h3>
 	{+START,IF_NON_EMPTY,{CATEGORY_DESCRIPTION}}
 		<div class="ocf_forum_category_description solidborder">
 			{CATEGORY_DESCRIPTION*}

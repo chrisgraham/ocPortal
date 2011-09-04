@@ -618,6 +618,7 @@ class Hook_addon_registry_catalogues
 					'CATALOGUE_TITLE'=>lorem_word(),
 					'CONTENT'=>lorem_phrase(),
 					'NUMBER'=>placeholder_number(),
+					'CATALOGUE'=>lorem_word(),
 						)
 			),NULL,'',true),
 		);

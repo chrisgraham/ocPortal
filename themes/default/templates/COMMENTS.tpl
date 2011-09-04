@@ -12,12 +12,12 @@
 	<div class="standardbox_wrap_classic">
 		{+START,IF_NON_EMPTY,{TITLE}}
 			<div class="standardbox_classic">
-				<div class="standardbox_title_classic toggle_div_title">
+				<h3 class="standardbox_title_classic toggle_div_title">
 					{TITLE*}
 					{+START,IF_PASSED,EXPAND_TYPE}
 						&nbsp; <a class="hide_button hide_button_spacing" href="#" onclick="event.returnValue=false; toggleSectionInline('comments_outer','block'); return false;"><img id="e_comments_outer" alt="{$?,{$EQ,{EXPAND_TYPE},contract},{!CONTRACT},{!EXPAND}}" title="{$?,{$EQ,{EXPAND_TYPE},contract},{!CONTRACT},{!EXPAND}}" src="{$IMG*,{EXPAND_TYPE*}}" /></a>
 					{+END}
-				</div>
+				</h3>
 			</div>
 		{+END}
 		<div class="toggler_main hide_button_spacing" id="comments_outer" style="{$JS_ON,display: {DISPLAY*},}">

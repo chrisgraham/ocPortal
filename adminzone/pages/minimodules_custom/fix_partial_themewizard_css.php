@@ -13,7 +13,7 @@ $theme=get_param('theme',NULL);
 if ($theme===NULL)
 {
 	echo '<p>You must pick a theme&hellip;</p><ul>';
-	
+
 	require_code('themes2');
 	$themes=find_all_themes();
 	foreach (array_keys($themes) as $theme)
@@ -23,16 +23,16 @@ if ($theme===NULL)
 			echo '<li><a href="'.static_evaluate_tempcode(build_url(array('page'=>'fix_partial_themewizard_css','theme'=>$theme),'adminzone')).'">'.escape_html($theme).'</a></li>';
 		}
 	}
-	
+
 	echo '</ul>';
-	
+
 	return;
 }
 
 $seed=find_theme_seed($theme);
 $dark=find_theme_dark($theme);
 
-$default_seed=find_theme_seed('default');
+$default_seed=get_param('force_default_seed',find_theme_seed('default'));
 
 if ($default_seed==$seed) warn_exit('Theme has same seed as default theme, cannot continue, would be a no-op.');
 
@@ -52,7 +52,7 @@ while (($sheet=readdir($dh))!==false)
 	if (substr($sheet,-4)=='.css')
 	{
 		$saveat=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/'.$sheet;
-		
+
 		if (!file_exists($saveat)) copy(get_file_base().'/themes/default/css/'.$sheet,$saveat);
 
 		$output=file_get_contents($saveat);
@@ -61,17 +61,16 @@ while (($sheet=readdir($dh))!==false)
 		foreach ($canonical_theme_landscape as $peak)
 		{
 			$matches=array();
-
 			$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$output,$matches);
 			for ($i=0;$i<$num_matches;$i++)
 			{
-				if ($matches[0][$i]=='#'.$peak[3].$matches[1][$i].$peak[2]) // i.e. unaltered in our theme
+				if (strtolower($matches[0][$i])==strtolower('#'.$peak[3].$matches[1][$i].$peak[2])) // i.e. unaltered in our theme
 				{
 					foreach ($theme_landscape as $new_peak) // Try and find the new-seeded solution to this particular equation
 					{
 						if ($new_peak[2]==$peak[2])
 						{
-							$output=str_replace($matches[0][$i],'#'.$new_peak[3].$matches[1][$i].$new_peak[2],$output);
+							$output=str_replace(array(strtoupper($matches[0][$i]),strtolower($matches[0][$i])),array('#'.$new_peak[3].$matches[1][$i].$new_peak[2],'#'.$new_peak[3].$matches[1][$i].$new_peak[2]),$output);
 							break;
 						}
 					}

@@ -1,0 +1,144 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+.leaderboard_table th, .leaderboard_table td {
+	padding: 5px;
+	vertical-align: middle;
+}
+
+#charge_amount {
+	background-color: red; /* {$,wizard, 100% FF0000} */
+	color: #ffffff; /* {$,wizard, 100% FFFFFF} */
+}
+
+.pointstore_item {
+}
+
+.pointstore_item_tag {
+	font-style: italic;
+}
+
+.pointstore_welcome {
+	padding: 5px;
+	font-size: 0.8em;
+	text-align: center;
+}
+
+.points_give_box_header {
+	margin-top: 0;
+	font-size: 0.85em;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #3f6171; /* {$,wizard, 76% seed + 24% !W/B} */
+}
+
+.points_give_box_header span {
+	color: #3f6171; /* {$,wizard, 76% seed + 24% !W/B} */
+	font-size: 1.1em;
+	display: inline-block;
+	font-weight: bold;
+	padding-right: 7px;
+	border-right: 1px solid #c6d5dc; /* {$,wizard, 33% seed + 67% W/B} */
+	margin-right: 5px;
+}
+
+.points_anon {
+	margin-left: 2em;
+}
+
+.points_give_choice_line .points_anon {
+	margin-left: 0;
+}
+
+.points_anon *, .points_give_choices input {
+	vertical-align: middle;
+	margin: 0;
+}
+
+.points_earned {
+	margin-right: {$?,{$MOBILE},5.1,15}em;
+}
+
+.points_give_choices {
+	font-size: 0.9em;
+	padding-right: 1em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		border-right: 1px solid #c6d5dc; /* {$,wizard, 33% seed + 67% W/B} */
+		margin-right: 27em;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		margin-right: 1em;
+	{+END}
+}
+
+.points_give_choices .sub_option {
+	font-size: 0.9em;
+}
+
+.points_give_choices_line {
+	margin: 0;
+}
+
+.points_give_choices_line.first {
+	padding-bottom: 5px;
+	border-bottom: 1px solid #c6d5dc; /* {$,wizard, 33% seed + 67% W/B} */
+}
+
+.points_give_shared_options {
+	float: right;
+	{+START,IF,{$MOBILE}}
+		width: 21.9em;
+		margin: 4em 0em 1em 0em;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 23em;
+		margin-top: 1em;
+	{+END}
+}
+
+.points_boxes {
+	float: right;
+}
+
+.points_box {
+	width: 14em;
+	margin: 10px 0 0 10px;
+	text-align: center;
+}
+
+.points_box .intro {
+	font-weight: bold;
+}
+
+.points_box .figure {
+	font-size: 1.8em;
+}
+
+table.points_summary_table {
+	border-collapse: collapse;
+	{+START,IF,{$MOBILE}}
+		margin-left: 2em;
+		width: 100%;
+	{+END}
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-left: 0;
+	{+END}
+}
+
+table.points_summary_table thead {
+	display: none;
+}
+
+table.points_summary_table td {
+	padding: 2px 7px;
+}
+
+table.points_summary_table .equation {
+	border-left: 1px solid #5f7e8e; /* {$,wizard, 100% medborder.border} */
+}
+
+table.points_summary_table .answer {
+	font-weight: bold;
+	padding-left: 0;
+}

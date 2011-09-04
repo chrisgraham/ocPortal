@@ -1,0 +1,84 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+
+ See text/EN/licence.txt for full licencing information.
+
+*/
+
+.search_advanced_title {
+	padding: 15px 0;
+}
+
+.google_search_box {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.search_tabular_header {
+	margin: 20px 0;
+}
+
+.google_search_button {
+	white-space: nowrap;
+}
+
+.google_search_descrip {
+	font-size: 0.8em;
+}
+
+.google_search_descrip img {
+	float: {!en_left};
+	margin-{!en_right}: 5px;
+}
+
+{+START,IF,{$NOT,{$MOBILE}}}
+	.main_search_form #search_content {
+		width: 300px;
+		max-width: 100%;
+	}
+{+END}
+
+.search_for_search_domain {
+	font-style: italic;
+	padding-{!en_left}: 30px;
+}
+
+.search_for_search_domain_more {
+	text-align: {!en_right};
+}
+
+#boolean_options {
+	margin-{!en_left}: 40px;
+}
+
+{+START,IF,{$MOBILE}}
+	.search_option {
+		float: {!en_left};
+	}
+{+END}
+
+{+START,IF,{$NOT,{$MOBILE}}}
+	.search_option {
+		float: {!en_left};
+		width: 350px;
+		max-width: 100%;
+	}
+
+	.search_option_value {
+		width: 200px;
+		max-width: 100%;
+	}
+{+END}
+
+.search_result {
+	margin-top: 10px;
+}
+
+.search_field_table th {
+	vertical-align: middle;
+}
+
+#search_sort {
+	max-width: 100%;
+}

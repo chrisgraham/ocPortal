@@ -53,8 +53,9 @@ class Block_main_image_fader
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
 
 		$images=array();
-		$image_rows=$GLOBALS['SITE_DB']->query_select('images',array('thumb_url'),array('cat'=>$cat),'',100/*reasonable amount*/);
-		$video_rows=$GLOBALS['SITE_DB']->query_select('videos',array('thumb_url'),array('cat'=>$cat),'',100/*reasonable amount*/);
+		$images_full=array();
+		$image_rows=$GLOBALS['SITE_DB']->query_select('images',array('thumb_url','url'),array('cat'=>$cat),'',100/*reasonable amount*/);
+		$video_rows=$GLOBALS['SITE_DB']->query_select('videos',array('thumb_url','thumb_url AS url'),array('cat'=>$cat),'',100/*reasonable amount*/);
 		$image_rows=array_merge($image_rows,$video_rows);
 		require_code('images');
 		foreach ($image_rows as $row)
@@ -62,13 +63,17 @@ class Block_main_image_fader
 			$url=$row['thumb_url'];
 			if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 			$images[]=$url;
+
+			$full_url=$row['url'];
+			if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
+			$images_full[]=$full_url;
 		}
 
 		if (count($images)==0) return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('NO_ENTRIES')));
 
 		$gallery_url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$cat),$zone);
 
-		return do_template('BLOCK_MAIN_IMAGE_FADER',array('GALLERY_URL'=>$gallery_url,'RAND'=>uniqid(''),'FIRST_URL'=>$images[0],'IMAGES'=>$images,'MILL'=>strval($mill)));
+		return do_template('BLOCK_MAIN_IMAGE_FADER',array('GALLERY_URL'=>$gallery_url,'RAND'=>uniqid(''),'FIRST_URL'=>$images[0],'FIRST_URL_FULL'=>$images_full[0],'IMAGES'=>$images,'IMAGES_FULL'=>$images_full,'MILL'=>strval($mill)));
 	}
 
 }

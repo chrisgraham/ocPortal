@@ -1,0 +1,3 @@
+{+START,BOX,{TITLE}}
+	{CONTENT}
+{+END}

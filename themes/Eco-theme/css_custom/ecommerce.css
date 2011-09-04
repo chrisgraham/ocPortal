@@ -1,0 +1,23 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2010
+*/
+
+.purchase_button {
+	text-align: center;
+}
+
+.purchase_licence {
+	width: 100%;
+	font-family: Courier;
+}
+
+.purchase_table {
+	min-height: 18em;
+	width: 100%;
+}
+
+.subscriptions_cancel_button {
+	text-align: {!en_right};
+}
+

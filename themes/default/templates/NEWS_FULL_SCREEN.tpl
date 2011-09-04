@@ -6,7 +6,7 @@
 	{+END}
 
 	<div class="medborder medborder_detailhead_wrap">
-		<div class="float_surrounder"}>
+		<div class="float_surrounder">
 			<div class="medborder_detailhead">
 				{+START,IF,{$INLINE_STATS}}{!VIEWS,{VIEWS*}}<br />{+END}
 				{+START,IF,{$VALUE_OPTION,html5}}

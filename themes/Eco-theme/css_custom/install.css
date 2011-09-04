@@ -1,0 +1,157 @@
+/*
+ {$BRAND_NAME}
+ Copyright (c) ocProducts, 2004-2010
+*/
+
+#installer_body {
+	background-color: #45608B;
+}
+
+#install_welcome {
+	background-color: #d0eff8;
+	border: 1px solid #79dbf7;
+	text-align: center;
+	padding: 5px 0;
+	margin: 20px 0;
+}
+
+#install_newsletter {
+	border: 1px dotted #758AAC;
+	width: 15em;
+	float: {!en_right};
+	background-color: #eaeff6;
+	padding: 5px;
+}
+
+#install_versiontop {
+	text-align: {!en_left};
+	width: 75%;
+	height: 100%;
+	margin: 0 auto;
+	border-left: 1px solid #758AAC;
+	border-right: 1px solid #758AAC;
+	border-bottom: 1px solid #758AAC;
+	font-weight: bold;
+	padding: 3px 5px 6px 5px;
+	background-color: #F4F7FA;
+}
+
+.installer_main_internal .standardbox_main_classic {
+	padding: 4px 10px;
+}
+
+.install_log_table {
+	border: 1px solid #072A66;
+	border-collapse: collapse;
+	display: inline-block;
+	background-color: #5A84C4;
+	color: white;
+	padding: 4px;
+}
+
+.install_log_table_title {
+	font-weight: bold;
+}
+
+.installer_section {
+	text-align: {!en_left};
+	width: 75%;
+	margin: 0 auto;
+}
+
+.installer_main {
+	width: 324px;
+	text-align: center;
+	margin: 25px auto 0 auto;
+	border: 1px solid;
+}
+
+.installer_main_internal {
+	width: 80%;
+	margin: 0 10%;
+	background: white; /* So if things go haywire, at least we have a white background to render on */
+}
+
+.installer_main_min {
+	min-height: 410px;
+}
+
+.installer_terms_title {
+	padding: 1em 0 1.5em 1em;
+}
+
+.installer_version {
+	margin-top: 25px;
+	font-size: 0.8em;
+	text-align: center;
+	color: white;
+}
+
+.installer_version a:link,
+.installer_version a:visited,
+.installer_version a:active {
+	color: #EEE;
+}
+
+.installer_version a:hover {
+	color: #FFF;
+}
+
+.installer_ocp_licence {
+	margin-bottom: 20px;
+}
+
+.installer_forums {
+	text-align: {!en_left};
+	border: 1px solid #758AAC;
+	border-collapse: collapse;
+	width: 90%;
+	margin: 0 auto;
+}
+
+.installer_forum_headers {
+	background-color: #EBEFF5;
+	height: 15px;
+}
+
+.installer_forum_list {
+	background-color: #EBEFF5;
+	width: 65%;
+	border-right: 1px solid #C3CDDD;
+}
+
+.installer_forum_version {
+	padding-top: 20px;
+	background-color: #F2F5F9;
+}
+
+.long_warning ul {
+	overflow: auto;
+	max-height: 400px;
+}
+
+.long_warning li {
+	list-style-type: circle;
+}
+
+.installer_warning {
+	color: red;
+	background: white;
+	padding: 5px;
+}
+
+.installer_notice {
+	color: green;
+}
+
+.radio_horiz_spacer {
+	padding-{!en_left}: 20px;
+}
+
+.actions_list_strong {
+	font-weight: bold;
+}
+
+textarea.mono_textbox {
+	font-family: 'Courier';
+}

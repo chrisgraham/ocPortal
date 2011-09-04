@@ -1,0 +1,22 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+.award_extra_details {
+	float: left;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 200px;
+	{+END}
+}
+
+.award_main {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-left: 220px;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		float: left;
+	{+END}
+	border-left: 1px solid #b19f77; /* {$,wizard, 100% medborder.border} */
+	padding-left: 20px;
+}

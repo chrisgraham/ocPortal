@@ -1,0 +1,29 @@
+{$BROWSER,ie,.standardbox_classic \{ overflow-x: hidden; \} }
+
+.float_surrounder, .float_surrounder_precise {
+	overflow: {$BROWSER,ie,{$BROWSER,ie_decent,hidden,auto},hidden}; {$,auto causes scroll glitches in Firefox and hidden won't work right in IE }
+}
+
+{$BROWSER,firefox,.float_surrounder \{ padding-top: 1px; \} } {$,fixes glitch with table borders}
+
+{$BROWSER,ie|safari|opera,.wide_table_wrap \{ padding-right: 1px; \},.wide_table_wrap \{ padding-top: 1px; padding-left: 1px; \} } {$,To add in the extra pixel needed for 2x1/2 overhanging borders that tables have, and also to shunt the alignment to compensate}
+{$BROWSER,ie,,{$BROWSER,safari,,.table_crop_protect \{ margin-top: 1px; margin-left: 1px; \} }} {$,To add in the extra pixel needed for 2x1/2 overhanging borders that tables have, and also to shunt the alignment to compensate}
+
+{$BROWSER,ie_old,.global_middle div\, .global_middle table \{	zoom: 1;	\}}
+{$BROWSER,ie_old,.global_side .constrain_field \{	width: 93%; padding-{!en_right}: 0;	\}}
+
+{$BROWSER,ie,{$BROWSER,ie_decent,,.breadcrumbs \{ width: 100%; text-align: {!en_right}; \} }}
+
+{$BROWSER,ie_old,#global_middle_ph \{ width: 98.5% !important; /* Needed to stop common random problem of content showing under panels or horizontal scrollbar  */ \}}
+
+{$BROWSER,ie_old,.menu_type__tree ul li a\, .menu_type__popup ul li a\, .menu_type__dropdown ul.nlevel li a \{	display: inline-block; \}}
+
+{$BROWSER,ie_old,.constrain_field \{ width: 98%; \} }
+
+{$BROWSER,ie_old,.menu_type__popup .nlevel li \, .menu_type__dropdown .nlevel li \{ width: 300px; \} }
+
+{$BROWSER,ie,{$BROWSER,ie_decent,,input[type="submit"].button_page\, input[type="button"].button_page\, button.button_page \{ min-width: 0 !important; \} }}
+
+{$BROWSER,ie_old,.arr \{ vertical-align: -20%; \} }
+
+{$BROWSER,ie_old, .global_helper_panel \{ height: 450px; \}, .global_helper_panel \{ min-height: 450px; \} }

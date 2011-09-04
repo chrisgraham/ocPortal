@@ -67,6 +67,12 @@ class Block_side_rss
 
 		$url=array_key_exists('param',$map)?$map['param']:'http://ocportal.com/backend.php?type=rss&mode=news&filter=16,17,18,19,20'; // http://channel9.msdn.com/Feeds/RSS/
 
+		if (strpos($url,'{')!==false)
+		{
+			require_code('tempcode_compiler');
+			$url=static_evaluate_tempcode(template_to_tempcode($url));
+		}
+
 		$ticker=(array_key_exists('ticker',$map)) && ($map['ticker']=='1');
 
 		require_code('rss');

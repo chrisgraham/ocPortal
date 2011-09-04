@@ -1,0 +1,118 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+.cart-table {
+	border-width:1px 0;
+}
+
+.cart-table thead {
+	font-size:0.85em;
+}
+
+.cart-table th {
+	color:#2D2D2D; /* {$,wizard, 11% (seed sat_to 100) + 89% W/B} */
+	font-weight:normal;
+	white-space:nowrap;
+	text-align:left;
+}
+
+.nobr {
+	white-space:nowrap !important;
+}
+
+.amount-totals {
+	color: #0f1418; /* {$,wizard, 20% seed + 80% !W/B} */
+	float:right;
+	font-size:0.90em;
+	width:100%;
+	margin-top:15px;
+}
+
+.cart-checkout {
+	text-align:right;
+	padding-right:15px;
+}
+
+.result-table {
+	width:100%;
+}
+
+.cart-actions {
+	width:100%;
+	margin-top:25px;
+	padding-left:10px;
+}
+
+.product-fields {
+	font-size:0.85em;
+	vertical-align:middle;
+	border-bottom: 1px solid #919fad; /* {$,wizard, 61% seed + 39% W/B} */
+	color: #0f1418; /* {$,wizard, 20% seed + 80% !W/B} */
+	background-color: #e3e9f0; /* {$,wizard, 11% (seed sat_to 100) + 89% W/B} */
+}
+
+.price {
+	white-space:nowrap !important;
+	padding-left:25px;
+	font-weight:bold;
+}
+
+.a-right {
+	text-align:right;
+	padding-right:15px;
+	background-color: #e4e8eb; /* {$,wizard, 100% sb_color } */
+}
+
+.a-middle {
+	text-align:center;
+	padding-right:15px;
+	background-color: #e4e8eb; /* {$,wizard, 100% sb_color } */
+}
+
+.proceed-button {
+	float:right;
+	padding-right:15px;
+	padding-bottom:10px;
+}
+
+.result-table th {
+	font-size:0.85em;
+	font-weight:bold;
+	text-align:left;
+	vertical-align:top;
+}
+
+.checkout-text {
+	color: #0f1418; /* {$,wizard, 20% seed + 80% !W/B} */
+	font-size:0.85em;
+	margin-top: 10px;
+	margin-left:10px;
+}
+
+.ecom_actions_list {
+	width:100px;
+}
+
+.receiver-det {
+	border:0px;
+}
+
+.proceed-box {
+	float:right;
+	width:100%;
+}
+
+.purchase_button {
+	float:right;
+	margin-left: 20px;
+}
+
+.show_in_bold {
+	font-weight:bold;
+}
+
+.product_title {
+	padding:5px;
+}

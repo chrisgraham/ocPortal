@@ -1,0 +1,20 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+.whos_read {
+	float: {!en_right};
+	margin-{!en_left}: 5px;
+	width: 20em;
+}
+
+.message_main {
+	margin-{!en_right}: 20em;
+}
+
+.responsibility_bit {
+	text-align: center;
+	font-size: 1.2em;
+}
+

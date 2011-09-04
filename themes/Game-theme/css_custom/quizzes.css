@@ -1,0 +1,98 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+#survey table {
+	counter-reset: quiz_num;
+}
+
+#survey th, #survey td {
+	padding: 20px 20px 30px 20px;
+}
+
+#survey th>span {
+	position: relative;
+	display: block;
+	padding-left: 60px;
+	z-index: 10;
+}
+
+#survey th:before {
+	content: counter(quiz_num);
+	counter-increment: quiz_num;
+	z-index: 5;
+	line-height: 1.6em;
+	font-size: 4em;
+	position: absolute;
+	margin-left: -10px;
+	color: #e7e2d8; /* {$,wizard, 35% seed + 65% W/B} */
+}
+
+#survey .filledin th:before {
+	font-size: 1.5em;
+}
+
+#survey .filledin td:before {
+	float: right;
+	width: 30px;
+	height: 30px;
+	content: " ";
+/*	content: "\221a"; Cool but misleading */
+	color: green;
+	opacity: 0.6;
+	background: url('{$IMG;,ocf_emoticons/thumbs}') top right no-repeat; /* For IE8, which doesn't support CSS3 */
+}
+
+#survey .filledin:nth-child(7n+1) td:before {
+	background: url('{$IMG;,ocf_emoticons/thumbs}') top right no-repeat;
+}
+
+#survey .filledin:nth-child(7n+2) td:before {
+	background: url('{$IMG;,ocf_emoticons/hippie}') top right no-repeat;
+}
+
+#survey .filledin:nth-child(7n+3) td:before {
+	background: url('{$IMG;,ocf_emoticons/guitar}') top right no-repeat;
+}
+
+#survey .filledin:nth-child(7n+4) td:before {
+	background: url('{$IMG;,ocf_emoticons/cool}') top right no-repeat;
+}
+
+#survey .filledin:nth-child(7n+5) td:before {
+	background: url('{$IMG;,ocf_emoticons/glee}') top right no-repeat;
+}
+
+#survey .filledin:nth-child(7n+6) td:before {
+	background: url('{$IMG;,ocf_emoticons/nod}') top right no-repeat;
+}
+
+#survey .filledin:nth-child(7n+7) td:before {
+	background: url('{$IMG;,ocf_emoticons/party}') top right no-repeat;
+}
+
+#survey tr.filledin.field_input th, #survey tr.filledin.field_input td {
+	opacity: 0.5;
+}
+
+#survey tr.field_input th, #survey tr.field_input td {
+	opacity: 0.8;
+}
+
+#survey tr.field_input:hover th, #survey tr.field_input:hover td {
+	opacity: 1.0 !important;
+}
+
+#survey td .input_radio {
+	margin-bottom: 10px;
+	display: inline-block;
+}
+
+#survey td label {
+	vertical-align: top;
+}
+
+#survey tr.field_input .constrain_field {
+	margin-right: 35px;
+}

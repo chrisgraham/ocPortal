@@ -1,0 +1,66 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2011
+*/
+
+.wide_ticker {
+	overflow: hidden;
+	height: 240px;
+}
+
+.topic_list_topic {
+	margin-bottom: 15px;
+}
+
+.topic_list_title {
+	font-weight: bold;
+	width: 100%;
+	text-align: center;
+	padding: 2px;
+}
+
+.topic_list_meta {
+	font-size: 0.8em;
+}
+
+.topic_list_by {
+	font-weight: bold;
+}
+
+.login_block_username {
+	margin-bottom: 1px;
+}
+
+.login_block_cookies {
+	text-align: {!en_right};
+}
+
+.logged_in_block_su_input {
+	width: 65%;
+}
+
+.logged_in_block_su_button {
+	float: {!en_right};
+}
+
+.zone_choose_list {
+	width: 130px;
+}
+
+.side_block_form {
+	display: block;
+	overflow: hidden;
+	width: 100%;
+	margin: 0;
+}
+
+.expandable_iframe {
+	width: 100%;
+	height: 150px; /* Referenced also in JAVASCRIPT.tpl */
+}
+
+.personal_stats_avatar {
+	text-align: center;
+	margin-bottom: 10px;
+}
+

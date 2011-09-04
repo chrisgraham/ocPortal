@@ -1,0 +1,4 @@
+<ul>
+	{ENTRIES}
+</ul>
+
