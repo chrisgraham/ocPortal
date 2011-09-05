@@ -1,0 +1,10 @@
+[semihtml]
+	[surround="welcome1"]
+		[title="2"]Welcome[/title]
+
+		[block="3"]main_greeting[/block]
+	[/surround]
+	[surround="blog1"]
+		[block="14" member_based="0" multiplier="0.5" fallback_full="3" fallback_archive="6" title="News" show_in_full="0"]main_news[/block]
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

@@ -1,0 +1,20 @@
+[semihtml]
+<div class="search">
+	[block]main_search[/block]
+</div>
+
+<div id="blog">
+	<h4>Latest Blog Entries</h4>
+	<ul>
+		<li>[block]side_news[/block]</li>
+	</ul>
+</div>
+
+<div id="rep">
+	<h4>Representatives</h4>
+	<ul>
+		<li>[block="5" display_type="0"]main_cc_embed[/block]</li>
+	</ul>
+</div>
+[/semihtml]
+{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

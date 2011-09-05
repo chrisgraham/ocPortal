@@ -1,0 +1,26 @@
+[semihtml]
+	[surround="slide-show"]
+		[surround="banner-bg"]
+			[surround="banner-img"]
+				[surround="one contentslider"]
+					[surround="cs_wrapper"]
+						[surround="cs_slider"]
+							[block="root" time="8000"]main_image_fader[/block]
+						[/surround]
+					[/surround]
+				[/surround]
+			[/surround]
+		[/surround]
+	[/surround]
+	[surround="welcome"]
+		[surround="head"]
+			Welcome to our website
+		[/surround]
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec nibh nibh. Pellentesque mattis leo sed augue pellentesque sodales. Integer bibendum eros sit amet arcu scelerisque eget vestibulum odio sagittis. Nunc lorem neque, porttitor id tempus ac, euismod ut felis. Maecenas iaculis ultrices orci, ac euismod orci mattis nec. In sodales quam at arcu dapibus volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam ut mauris ac orci tristique ullamcorper. Nunc posuere fermentum iaculis. Donec molestie, justo vel molestie porta, justo enim dapibus odio, vitae blandit felis orci nec dui. Duis et velit non arcu porta euismod vitae et ante.
+		</p>
+		<p>
+			Donec in ipsum et augue rutrum pretium. Quisque eget nunc metus, ac accumsan metus. Duis ornare, orci ac suscipit dignissim, mauris nunc sodales sapien, eget interdum tortor quam sit amet metus. Donec dolor eros, faucibus quis scelerisque sagittis, hendrerit sit amet nibh. Nunc gravida nunc vel massa commodo vel imperdiet enim scelerisque. Sed id mi accumsan urna molestie lacinia. Proin at diam non sapien fermentum ultricies vitae accumsan augue. Suspendisse tempus turpis ac lorem varius ultrices. Aenean sem odio, vestibulum sit amet interdum ac, laoreet nec dolor.
+		</p>
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

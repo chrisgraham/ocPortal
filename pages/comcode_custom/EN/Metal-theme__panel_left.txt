@@ -1,0 +1,5 @@
+{+START,IF,{$MATCH_KEY_MATCH,:start}}
+[block="4" title="New Releases"]main_recent_galleries[/block]
+[block="3" news="1"]side_news[/block]
+[block]side_personal_stats[/block]
+{+END}

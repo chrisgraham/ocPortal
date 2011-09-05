@@ -1,0 +1,3 @@
+[block]main_search[/block]
+[block title="News"]side_news[/block]
+[block="listing" days="30" title="Upcoming Events"]side_calendar[/block]

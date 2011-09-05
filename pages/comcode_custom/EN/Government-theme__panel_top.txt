@@ -1,0 +1,66 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,_WILD:start}}
+<ul id="banner">
+	<li class="image-holder">
+		[img]{$IMG,banner-image}[/img]
+	</li>
+	<li class="text-holder">
+		[title="2"]Lorem ipsum dolor sit amet[/title]
+		<h4>consectetur adipisicing elit, sed do eiusmod tempor incididunt ut</h4>
+		[surround="para"]
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+		[/surround]
+		<br />
+		[surround="para"]
+			[page="site:section_1"]Read more[/page]
+		[/surround]
+		<br />
+	</li>
+</ul>
+{+END} {+START,IF,{$MATCH_KEY_MATCH,_WILD:start}}
+<ul class="content-box">
+	<li class="black-box">
+		[surround="inside"]
+			[surround="inside1"]
+				<h4>Lorem ipsum dolor</h4>
+				<h6>consectetur adipisicing elit, sed do eiusmod tempor incididunt ut</h6>
+				[surround="para"]
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+				[/surround]
+				[surround="para"]
+					[page="site:section_2"]Read more[/page]
+				[/surround]
+			[/surround]
+		[/surround]
+	</li>
+	<li class="grey-box">
+		[surround="inside"]
+			[surround="inside1"]
+				<h4>Lorem ipsum dolor</h4>
+				<h6>consectetur adipisicing elit, sed do eiusmod tempor incididunt ut</h6>
+				[surround="para"]
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+				[/surround]
+				[surround="para"]
+					[page="site:section_3"]Read more[/page]
+				[/surround]
+			[/surround]
+		[/surround]
+	</li>
+	<li class="brown-box">
+		[surround="inside"]
+			[surround="inside1"]
+				<h4>Lorem ipsum dolor</h4>
+				<h6>consectetur adipisicing elit, sed do eiusmod tempor incididunt ut</h6>
+				[surround="para"]
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+				[/surround]
+				[surround="para"]
+					[page="site:section_4"]Read more[/page]
+				[/surround]
+			[/surround]
+		[/surround]
+	</li>
+</ul>
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

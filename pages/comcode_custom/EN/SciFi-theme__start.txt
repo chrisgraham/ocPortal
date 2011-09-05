@@ -1,0 +1,23 @@
+[semihtml]
+	<ul class="offer-table">
+		<li>
+			<a href="{$PAGE_LINK*,site:offer_1}"><img src="{$IMG*,offer-image1}" alt="Offer1" /></a>
+		</li>
+		<li>
+			<a href="{$PAGE_LINK*,site:offer_2}"><img src="{$IMG*,offer-image2}" alt="Offer1" /></a>
+		</li>
+		<li>
+			<a href="{$PAGE_LINK*,site:offer_3}"><img src="{$IMG*,offer-image3}" alt="Offer1" /></a>
+		</li>
+	</ul>
+
+	<div class="release-part">
+		<span class="content-part-right-head2"></span>
+		[block="5" catalogue="products"]main_recent_cc_entries[/block]
+	</div>
+
+	<div class="blog-part">
+		<span class="content-part-right-head3"></span>
+		[block="3" news="1"]main_news[/block]
+	</div>
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

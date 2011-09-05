@@ -1,0 +1,26 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,:start}}
+	<div class="container">
+		[block]side_personal_stats[/block]
+	</div>
+	<div class="right-box">
+		<h1 class="head1">Top Artist of the Week</h1>
+		<div class="right-box-in">
+			<div class="right-box-mid">
+				[block]main_poll[/block]
+				<div class="bot"><a href="{$PAGE_LINK*,site:polls}">more</a></div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="right-box">
+		<h1 class="head2">Featured Stories</h1>
+		<div class="right-box-in">
+			<div class="right-box-mid">
+				[block]side_news[/block]
+				<div class="bot"><a href="{$PAGE_LINK*,site:news}">more</a></div>
+			</div>
+		</div>
+	</div>
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

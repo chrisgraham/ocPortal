@@ -1,0 +1,21 @@
+[semihtml]
+	[surround="search"]
+		[surround="header"]
+			Search
+		[/surround]
+		[block]main_search[/block]
+	[/surround]
+	[surround="login"]
+		[surround="head"]
+			Members Area
+		[/surround]
+		[block]side_personal_stats[/block]
+	[/surround]
+	[surround="twitter"]
+		[surround="head"]
+			Twitter Feed
+		[/surround]
+		[block="http://api.twitter.com/1/statuses/user_timeline.rss?screen_name={$CONFIG_OPTION,twitter_login}"]side_rss[/block]
+		[surround="button"][url="twitter page"]http://api.twitter.com/1/statuses/user_timeline.rss?screen_name={$CONFIG_OPTION,twitter_login}[/url][/surround]
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

@@ -1,0 +1,13 @@
+[semihtml]
+	[surround="box3"]
+		[block="root" title="Facilities" max="3"]main_gallery_embed[/block]
+	[/surround]
+	[surround="left_indent_surround"]
+		[surround="box1"]
+			[block]main_news[/block]
+		[/surround]
+		[surround="box1"]
+			[block="quotes" title="Quotes"]main_quotes[/block]
+		[/surround]
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

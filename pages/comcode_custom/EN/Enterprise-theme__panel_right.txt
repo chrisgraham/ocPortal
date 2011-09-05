@@ -1,0 +1,41 @@
+[semihtml]
+<div id="welcome">
+	<h4>Welcome to Our website</h4>
+	<p>
+		Consectetur adipisicing elit, sed do eiusmod tempor. Consectetur adipisicing elit, sed do eiusmod tempor. Consectetur adipisicing elit, sed do eiusmod tempor. Consectetur adipisicing elit, sed do eiusmod tempor. Consectetur adipisicing elit, sed do eiusmod tempor. Consectetur adipisicing elit, sed do eiusmod tempor.
+		<br />
+		<br />
+		Consectetur adipisicing elit, sed do eiusmod tempor. Consectetur adipisicing elit, sed do eiusmod tempor. Consectetur adipisicing elit, sed do eiusmod tempor.
+	</p>
+	<div class="main-links">
+		<span id="local-events">
+			<a href="{$PAGE_LINK*,site:calendar}">Find Business Events</a>
+		</span>
+		<span id="submit-events">
+			<a href="{$PAGE_LINK*,cms:cms_calendar}">Submit an Event</a>
+		</span>
+		<span id="get-involved">
+			<a href="{$PAGE_LINK*,forum}">Get Involved</a>
+		</span>
+	</div>
+</div>
+<div id="wider-box">
+	<h4>Latest Events</h4>
+	<ul class="wider-box-in">
+		<li class="search-middle">
+			[block="5" blogs="-1"]main_news[/block]
+		</li>
+		<li class="search-bottom">
+		</li>
+	</ul>
+</div>
+<div id="wider-box">
+	<h4 class="cont">Contact Us</h4>
+	<ul class="wider-box-in1">
+		<li class="search-middle">
+			[block title="Contact Us" private="0" email_optional="1"]main_contact_simple[/block]
+		</li>
+	</ul>
+	<div id="bottom"></div>
+</div>
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

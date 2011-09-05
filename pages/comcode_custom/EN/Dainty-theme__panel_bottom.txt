@@ -1,0 +1,22 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,_WILD:start}}
+	[surround="wider-box"]
+		[surround="b"]
+			[url="Follow us on"]http://twitter.com/ocProducts[/url]
+		[/surround]
+		[title="4"]TWITTER POSTS[/title]
+		[surround="search-middle"]
+			[block="http://api.twitter.com/1/statuses/user_timeline.rss?screen_name={$CONFIG_OPTION,twitter_login}" max_entries="2" title=""]side_rss[/block]
+		[/surround]
+	[/surround]
+	[surround="wider-box wider-box-right"]
+		[title="4"]LATEST EVENTS[/title]
+		[surround="search-middle"]
+			[block="listing" title=""]side_calendar[/block]
+		[/surround]
+		[surround="search-bottom"]
+			[page="site:calendar"]View calendar[/page]
+		[/surround]
+	[/surround]
+	{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

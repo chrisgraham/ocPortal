@@ -1,0 +1,12 @@
+[surround="main-links"]
+	[surround="head"]
+		Main Links
+	[/surround]
+	[block="3" display_type="1"]main_cc_embed[/block]
+[/surround]
+[surround="category"]
+	[surround="head"]
+		Categories
+	[/surround]
+	[block]side_news_categories[/block]
+[/surround]

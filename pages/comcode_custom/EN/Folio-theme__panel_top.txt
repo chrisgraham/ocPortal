@@ -1,0 +1,26 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,:start}}
+<div id="top-box">
+	<ul>
+		<li class="welcome">
+			<h1>Welcome</h1>
+			<h4>Folio Theme </h4>
+			<p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
+			<a title="Lorem Ipsum" href="{$PAGE_LINK*,:about_1}">&nbsp;</a>
+		</li>
+		<li class="extra1" >
+			<h1>Lorem Ipsum</h1>
+			<h4>Lorem Ipsum</h4>
+			<p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
+			<a title="Lorem Ipsum" href="{$PAGE_LINK*,:about_2}">&nbsp;</a>
+		</li>
+		<li class="extra2">
+			<h1>Lorem Ipsum</h1>
+			<h4>Lorem Ipsum</h4>
+			<p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
+			<a title="Lorem Ipsum" href="{$PAGE_LINK*,:about_3}">&nbsp;</a>
+		</li>
+	</ul>
+</div>
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

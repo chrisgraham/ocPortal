@@ -1,0 +1,17 @@
+[semihtml]
+	[surround="left-box"]
+		[surround="header-part"]
+			Services
+		[/surround]
+		[surround="list"]
+			[block="1" display_type="1"]main_cc_embed[/block]
+		[/surround]
+	[/surround]
+	[surround="left-box1"]
+		[surround="login1"]
+			[block]side_personal_stats[/block]
+		[/surround]
+		[surround="left-box-bot"]
+		[/surround]
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

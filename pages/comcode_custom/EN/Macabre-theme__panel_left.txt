@@ -1,0 +1,19 @@
+[semihtml]{+START,IF,{$MATCH_KEY_MATCH,:start}}
+<div class="left-box">
+	<div class="header-part"><img src="{$IMG,in-theators}" alt="" /></div>
+	<div class="content-part">[block="1"]main_cc_embed[/block]</div>
+	<div class="footer-part"></div>
+</div>
+
+<div class="left-box">
+	<div class="header-part"><img src="{$IMG,news}" alt="Latest News" /></div>
+	<div class="content-part">[block]side_news[/block]</div>
+	<div class="footer-part"></div>
+</div>
+
+<div class="left-box">
+	<div class="header-part"><img src="{$IMG,social}" alt="Social actions" /></div>
+	<div class="content-part">[block]main_screen_actions[/block]</div>
+	<div class="footer-part"></div>
+</div>
+{+END}[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

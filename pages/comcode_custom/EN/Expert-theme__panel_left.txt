@@ -1,0 +1,23 @@
+[semihtml]
+	[surround="login"]
+		[surround="header"]
+			Login
+		[/surround]
+		[block]side_personal_stats[/block]
+	[/surround]
+	[surround="news"]
+		[surround="header"]
+			Latest News
+		[/surround]
+		[block="5" blogs="-1"]side_news[/block]
+	[/surround]
+	[surround="project"]
+		[surround]
+			[surround="header"]
+				Latest Projects
+			[/surround]
+			[block="1" display_type="1"]main_cc_embed[/block]
+			[surround="more-link"][page="site:catalogues:category:catalogue_name=projects"]more[/page][/surround]
+		[/surround]
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

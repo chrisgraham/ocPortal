@@ -1,0 +1,7 @@
+[semihtml]
+	[surround="news"]
+		[block="5" blogs="-1"]main_news[/block]
+	[/surround]
+	[block="10"]main_top_galleries[/block]
+	[surround="nice_button"][page="site_galleries"]more[/page][/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

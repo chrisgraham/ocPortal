@@ -1,0 +1,50 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,:start}}
+	<div id="news">
+		<h4>Latest News</h4>
+		<ul>
+			<li>
+				[block]main_news[/block]
+			</li>
+		</ul>
+	</div>
+	<div id="project">
+		[box type="panel"]
+			<h4>Latest Projects</h4>
+			
+			[block="1" display_type="1"]main_cc_embed[/block]
+
+			<p class="more-link">
+				<a href="{$PAGE_LINK*,site:catalogues:category:1}">More</a>
+			</p>
+		[/box]
+	</div>
+	<div id="extra">
+		[box type="panel"]
+			<div class="float_surrounder">
+				<h4>Lorem Ipsum</h4>
+				<ul>
+					<li>
+						<p>
+							Consectetur adipisicing elit, sed do.
+						</p>
+					</li>
+					<li>
+						<p>
+							Consectetur adipisicing elit, sed elit.
+						</p>
+					</li>
+					<li>
+						<p>
+							Incididunt consectetur adipisicing elit.
+						</p>
+					</li>
+					<li class="more-link">
+						<a href="{$PAGE_LINK*,:about}">More</a>
+					</li>
+				</ul>
+			</div>
+		[/box]
+	</div>
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

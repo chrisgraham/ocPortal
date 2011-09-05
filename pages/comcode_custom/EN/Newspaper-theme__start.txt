@@ -1,0 +1,24 @@
+[semihtml]
+<div class="mid-box">
+	<h4>Top Galleries</h4>
+	[block="4"]main_top_galleries[/block]
+</div>
+<div class="mid-box">
+	<h4>Voice of the Day</h4>
+	<div class="quote1">
+		<div class="top"></div>
+		[block="quotes" title="Quotes"]main_quotes[/block]
+	</div>
+</div>
+<div class="mid-box1">
+	<h4>Blogs</h4>
+	<ul>
+		<li class="box3">
+			[block]main_news[/block]
+		</li>
+		<li class="bottom-link">
+			<a href="{$PAGE_LINK*,site:news:blog_select}">more</a>
+		</li>
+	</ul>
+</div>
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

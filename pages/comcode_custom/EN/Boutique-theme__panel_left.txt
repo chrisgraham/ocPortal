@@ -1,0 +1,12 @@
+[semihtml]
+	[box="" type="panel"]
+		[block="main_content" type="tree"]side_stored_menu[/block]
+	[/box]
+	[block="1"]main_newsletter_signup[/block]
+	[box="Share with us" type="panel"]
+		[block]main_screen_actions[/block]
+	[/box]
+	[box="" type="panel"]
+		[block="quotes" title="Quotes"]main_quotes[/block]
+	[/box]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

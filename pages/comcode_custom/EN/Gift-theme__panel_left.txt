@@ -1,0 +1,13 @@
+[semihtml]
+	[surround="news"]
+		[surround="header"]Latest News[/surround]
+		[block="5" blogs="-1"]side_news[/block]
+	[/surround]
+	[surround="follow"]
+		[surround="header"]Follow Us[/surround]
+		[block]main_screen_actions[/block]
+	[/surround]
+	[surround="quotes-box"]
+		[block="quotes" title="Quotes"]main_quotes[/block]
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

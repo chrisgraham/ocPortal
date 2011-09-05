@@ -1,0 +1,9 @@
+[semihtml]
+[block]side_news[/block]
+<div class="bottom-box">
+	[box="Projects" type="panel"]
+		[block="1" display_type="1"]main_cc_embed[/block]
+	[/box]
+</div>
+[block]main_newsletter_signup[/block]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

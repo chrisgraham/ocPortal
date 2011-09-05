@@ -1,0 +1,15 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,:start}}
+	[surround="welcome1"]
+		[block=&quot;3&quot;]main_greeting[/block]
+	[/surround]
+	[surround="blog"]
+		[surround="blog-head"][/surround]
+		[block="14" member_based="0" multiplier="0.5" fallback_full="3" fallback_archive="6" blogs="1" title="News" show_in_full="0"]main_news[/block]
+	[/surround]
+	[surround="twitter"]
+		[surround="twitter-head"][/surround]
+		[block="http://api.twitter.com/1/statuses/user_timeline.rss?screen_name={$CONFIG_OPTION,twitter_login}"]side_rss[/block]
+	[/surround]
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

@@ -1,0 +1,49 @@
+[semihtml]
+	<div class="right-box">
+		<ul class="right-box-in">
+			<li>
+				[block]main_search[/block]
+			</li>
+		</ul>
+	</div>
+	<div class="right-box top-space">
+		<ul class="right-box-in">
+			<li>
+				<h4>Twitter</h4>
+			</li>
+			<li class="box1-mid">
+				[block="http://api.twitter.com/1/statuses/user_timeline.rss?screen_name={$CONFIG_OPTION,twitter_login}"]side_rss[/block]
+			</li>
+		</ul>
+	</div>
+	<div class="right-box top-space">
+		<ul class="right-box-in">
+			<li class="newsletter">
+				<h4>Subscribe our Newsletter</h4>
+			</li>
+			<li>
+				[block="1"]main_newsletter_signup[/block]
+			</li>
+		</ul>
+	</div>
+	<div class="right-box top-space">
+		<ul class="right-box-in">
+			<li class="sports">
+				<h4>Sports</h4>
+			</li>
+			<li class="box1-mid">
+				[block="5" filter="4"]side_news[/block]
+			</li>
+		</ul>
+	</div>
+	<div class="right-box top-space">
+		<ul class="right-box-in">
+			<li class="poll">
+				<h4>Poll</h4>
+			</li>
+			<li class="box1-mid">
+				[block]main_poll[/block]
+			</li>
+		</ul>
+	</div>
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

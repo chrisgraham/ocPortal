@@ -1,0 +1,30 @@
+[semihtml]
+	<a href="{$PAGE_LINK*,:start}"><span class="logo"></span></a>
+	[surround="main-menu"]
+		[block="main_content" type="tree"]side_stored_menu[/block]
+	[/surround]
+	[surround="search"]
+		[block]main_search[/block]
+	[/surround]
+	[surround="follow"]
+		[surround="follow-head"][/surround]
+		[block]main_screen_actions[/block]
+	[/surround]
+	[surround="login"]
+		[surround="login-head"][/surround]
+		[block]side_personal_stats[/block]
+	[/surround]
+	[surround="copyright"]
+		[surround="copyright-head"][/surround]
+		<ul class="footer1">
+			<li class="power">
+				Powered by [url="http://ocportal.com"]ocPortal[/url] and designed by [url="http://ocproducts.com"]ocProducts[/url]
+			</li>
+			<li class="rights">
+				{$COPYRIGHT`}
+			</li>
+		</ul>
+		<br />
+		[block="main_website" type="zone"]side_stored_menu[/block]
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

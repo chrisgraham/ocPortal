@@ -1,0 +1,8 @@
+[semihtml]
+[block="main_content" type="tree"]side_stored_menu[/block]
+<div class="ad">
+	{$BANNER,180x106} {$,You need to add a banner type called 180x106}
+</div>
+[block="current"]main_iotd[/block]
+[block]side_personal_stats[/block]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

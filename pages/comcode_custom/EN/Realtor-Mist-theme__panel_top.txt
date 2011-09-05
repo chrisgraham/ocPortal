@@ -1,0 +1,26 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,_WILD:start}}
+	<div id="listing-part">
+		<div id="vtab">
+			<ul>
+				<li class="home" onclick="document.getElementById('tab_1').style.display='block'; document.getElementById('tab_2').style.display='none';">Our Projects</li>
+				<li class="login" onclick="document.getElementById('tab_1').style.display='none'; document.getElementById('tab_2').style.display='block';">Our Specialities</li>
+			</ul>
+
+			<div id="tab_1" class="project">
+				[block="1" display_type="1"]main_cc_embed[/block]
+			</div>
+
+			<div id="tab_2" class="special">
+				<ol class="banner-list">
+					<li>Lorem ipsum dolor sit amet</li>
+					<li>Lorem ipsum dolor sit amet</li>
+					<li>Lorem ipsum dolor sit amet</li>
+					<li>Lorem ipsum dolor sit amet</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+	<div id="picture-part"></div>
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

@@ -1,0 +1,16 @@
+[semihtml]{+START,IF,{$MATCH_KEY_MATCH,:start}}
+	[surround="box1"]
+		[surround="box1-top"]
+		[/surround]
+		[surround="box1-mid"]
+			[block="1" display_type="1"]main_cc_embed[/block]
+		[/surround]
+	[/surround]
+	[surround="box1"]
+		[surround="box1-top"]
+		[/surround]
+		[surround="box1-mid"]
+			[block]main_recent_downloads[/block]
+		[/surround]
+	[/surround]
+{+END}[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

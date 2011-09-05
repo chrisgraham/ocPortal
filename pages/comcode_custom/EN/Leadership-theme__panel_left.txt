@@ -1,0 +1,11 @@
+[semihtml]
+	[surround="blog"]
+		[block="5" blogs="1" title="Latest Blog Entries"]side_news[/block]
+	[/surround]
+	[surround="twitter"]
+		[url="[img]{$IMG,twitter}[/img]"]http://twitter.com/{$CONFIG_OPTION,twitter_login}[/url]
+	[/surround]
+	[surround="blog"]
+		[block="listing" title="Events"]side_calendar[/block]
+	[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

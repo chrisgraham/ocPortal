@@ -1,0 +1,7 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,_WILD:start}}
+	<div id="main-banner">
+		[title="3"]Sed ut perspiciatis unde omnis iste natus[/title]
+	</div>
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

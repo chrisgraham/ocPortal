@@ -1,0 +1,33 @@
+[semihtml]
+[surround]
+	[surround="welcome"]
+		[title="4"]Welcome to Enjoy Life[/title]
+		[surround="para"]
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+		[/surround]
+	[/surround]
+	<div class="mid-box mid-box-side">
+		[block="2"]main_recent_galleries[/block]
+	</div>
+	<div class="mid-box">
+		[block]main_poll[/block]
+	</div>
+	<div class="mid-box1">
+		<div class="mid-box1-in">
+			[block="quotes" title="Quotes"]main_quotes[/block]
+		</div>
+	</div>
+	<div class="mid-box2">
+		<div class="mid-box1-in">
+			<h2>Latest News</h2>
+			[block]main_news[/block]
+		</div>
+	</div>
+	<div class="mid-box mid-box-side">
+		[block="2"]main_top_galleries[/block]
+	</div>
+	<div class="mid-box4">
+		[block="listing"]side_calendar[/block]
+	</div>
+[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

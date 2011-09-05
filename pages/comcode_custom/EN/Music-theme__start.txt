@@ -1,0 +1,29 @@
+[semihtml]
+	[block]main_image_fader[/block]
+
+	<ul class="section1">
+		<li class="head">Top Videos</li>
+		[block="video" mode="top" title="" max="3"]main_multi_content[/block]
+	</ul>
+	<ul class="section1">
+		<li class="head">New Videos</li>
+		[block="video" mode="recent" title="" max="3"]main_multi_content[/block]
+	</ul>
+
+	<div class="blog-container">
+		<ul class="tabs1">
+			<li class="active"><a href="#tab1" onclick="return music_select_tab(this.parentNode,'tab1','tab');">Twitter Feed</a></li>
+			<li><a href="#tab2" onclick="return music_select_tab(this.parentNode,'tab2','tab');">Latest from Blog</a></li>
+		</ul>
+		<div class="tab_container1">
+			<div style="display: block;" id="tab1" class="tab_content">
+				<div id="twitter">
+					[block="http://api.twitter.com/1/statuses/user_timeline.rss?screen_name={$CONFIG_OPTION,twitter_login}"]side_rss[/block]
+				</div>
+			</div>
+			<div style="display: none;" id="tab2" class="tab_content">
+				[block]main_news[/block]
+			</div>
+		</div>
+	</div>
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

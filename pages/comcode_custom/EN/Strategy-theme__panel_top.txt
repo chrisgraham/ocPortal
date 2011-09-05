@@ -1,0 +1,8 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,_WILD:start}}
+	<ul id="header-part">
+		<li class="part1">[img param="header-image1"]{$IMG,header-image1}[/img]</li>
+		<li class="part2">[img param="header-image2"]{$IMG,header-image2}[/img]</li>
+	</ul>
+{+END}
+[/semihtml]

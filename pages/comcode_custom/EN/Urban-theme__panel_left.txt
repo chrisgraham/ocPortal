@@ -1,0 +1,16 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,:start}}
+	<ul class="box1">
+		<li class="head-part">Sed ut perspiciatis unde omnis iste natus</li>
+		<li class="image-part"><img src="{$IMG*,box1-image}" /></li>
+		<li class="text-part"><p> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p></li>
+		<li><a href="{$PAGE_LINK*,:about}" class="more">Read more</a></li>
+	</ul>
+	[surround="box2"]
+		[block]side_personal_stats[/block]
+	[/surround]
+	[surround="box2"]
+		[block]main_screen_actions[/block]
+	[/surround]
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

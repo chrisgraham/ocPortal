@@ -1,0 +1,23 @@
+[semihtml]
+{+START,IF,{$MATCH_KEY_MATCH,:start}}
+	<div class="welcome">
+		[block="2"]main_awards[/block]
+	</div>
+	<ul class="side-section">
+		<li class="head">
+			Other Headlines Today
+		</li>
+		<li>
+			[block="5" blogs="-1"]side_news[/block]
+		</li>
+	</ul>
+	<ul class="side-section">
+		<li class="head">
+			Recent listings
+		</li>
+		<li>
+			[block="10" display_type="1" catalogue="projects"]main_recent_cc_entries[/block]
+		</li>
+	</ul>
+{+END}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

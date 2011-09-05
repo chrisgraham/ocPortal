@@ -1,0 +1,26 @@
+[semihtml]
+[surround="col1"]
+	[surround="blog-post"]
+		[block="14" member_based="0" multiplier="1" fallback_full="3" fallback_archive="6" blogs="1" title="Welcome" show_in_full="1"]main_news[/block]
+	[/surround]
+[/surround]
+[surround="col2"]
+	[surround="search"]
+		[block]main_search[/block]
+	[/surround]
+	[surround="dark-shade"]
+		[surround="head"]
+			Twitter feed
+		[/surround]
+		[block="http://ocportal.com/backend.php?mode=news&filter=1,2,3,29" max_entries="10"]side_rss[/block]
+	[/surround]
+	[surround="news"]
+		[surround="head"]
+			Recent Posts
+		[/surround]
+		{$SET,in_panel,_true}
+		[block="0" fallback_full="10" fallback_archive="10" news="1"]main_news[/block]
+		{$SET,in_panel,_false}
+	[/surround]
+[/surround]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

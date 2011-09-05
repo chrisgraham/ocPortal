@@ -1,0 +1,16 @@
+[semihtml]
+	[surround]
+		[surround="box2"]
+			[block="download" title="Random Download"]main_content[/block]
+		[/surround]
+		[surround="box2"]
+			[block]main_iotd[/block]
+		[/surround]
+	[/surround]
+
+	[block="2" blogs="-1" filter="2" title="Features &amp; Reviews"]side_news[/block]
+
+	[block title="Latest Downloads"]main_recent_downloads[/block]
+
+	[block title="Browse Downloads"]main_download_category[/block]
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

@@ -1,0 +1,19 @@
+[semihtml]
+<div class="grey1-box">
+	<div class="inside">
+		<div class="inside1">
+			<div class="news">
+				[block="14" title="Latest news" member_based="0" filter="1" multiplier="0.5" fallback_full="3" fallback_archive="6" blogs="-1"]main_news[/block]
+			</div>
+		</div>
+	</div>
+</div>
+<div class="twitter border1">
+	<h4>Follow us on</h4>
+	<a href="http://twitter.com/{$CONFIG_OPTION*,twitter_login}"><img src="{$IMG*,twitter}" alt="twitter" /></a>
+</div>
+<div class="twitter">
+	<h4>Call us</h4>
+	<span>0123456789</span>
+</div>
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

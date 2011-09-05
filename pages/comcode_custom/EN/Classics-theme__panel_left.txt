@@ -1,0 +1,3 @@
+[surround="search"][box="Search" type="panel"][block]main_search[/block][/box][/surround]
+[surround="follow"][box="Share us with" type="panel"][block]main_screen_actions[/block][/box][/surround]
+[surround="members"][block]side_personal_stats[/block][/surround]

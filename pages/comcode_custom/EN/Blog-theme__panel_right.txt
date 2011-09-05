@@ -1,0 +1,13 @@
+[semihtml]
+	[surround="col3"]
+		{$SET,in_panel,_true}
+		[box="Main Links" type="panel"]
+			<ul>[block="3" display_type="0"]main_cc_embed[/block]</ul>
+		[/box]
+		[block title="Blog Category"]side_news_categories[/block]
+		[block="news" title="Tags"]side_tag_cloud[/block]
+		{$SET,in_panel,_false}
+		[block]side_personal_stats[/block]
+	[/surround]
+	{$SET,in_panel,_false}
+[/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}
