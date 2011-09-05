@@ -1235,7 +1235,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function _get_usergroup_list()
 	{
-		$results=$this->connection->query('SELECT group_id,group_name FROM '.$this->connection->get_table_prefix().'groups WHERE group_id=1');
+		$results=$this->connection->query('SELECT group_id,group_name FROM '.$this->connection->get_table_prefix().'groups WHERE group_type=1');
 		$results2=collapse_2d_complexity('group_id','group_name',$results);
 		return $results2;
 	}

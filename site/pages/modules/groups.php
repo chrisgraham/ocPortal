@@ -491,7 +491,16 @@ class Module_groups
 	{
 		$title=get_page_title('ADD_MEMBER_TO_GROUP');
 
-		$id=get_param_integer('id');
+		$_id=get_param('id');
+		if (is_numeric($_id))
+		{
+			$id=intval($_id);
+		} else // Collaboration zone has a text link like this
+		{
+			$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
+			if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		}
+
 		if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 		if (is_null($username)) $username=trim(post_param('username'));

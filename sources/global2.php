@@ -1672,7 +1672,7 @@ function javascript_tempcode($position=NULL)
 
 			if ($good_to_merge)
 			{
-				$myfile=fopen($write_path,'wb'); // Intentionally wb to stop line ending conversions on Windows
+				$myfile=@fopen($write_path,'wb') OR intelligent_write_error($write_path); // Intentionally wb to stop line ending conversions on Windows
 				fwrite($myfile,$data);
 				fclose($myfile);
 				fix_permissions($write_path,0777);

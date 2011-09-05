@@ -436,7 +436,7 @@ function chat_room_prune($room_id,$room_row=NULL)
 					require_lang('chat');
 					$_message_parsed=insert_lang_comcode(do_lang('LEFT_ROOM',$GLOBALS['FORUM_DRIVER']->get_username($p['member_id'])),4);
 					$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$p['room_id'],'user_id'=>$p['member_id'],'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
-					$myfile=fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+					$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 					fwrite($myfile,strval($message_id));
 					fclose($myfile);
 					sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
@@ -1128,7 +1128,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 	require_lang('chat');
 	$_message_parsed=insert_lang_comcode('[private="'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'"]'.do_lang('FLOOD_CONTROL_BLOCKED',integer_format($time_left)).'[/private]',4,NULL,false,NULL/*,$wrap_pos*/); // Can't wrap system messages, the Comcode parser won't know 'private' is a real tag so will wrap inside it's definition
 	$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
-	$myfile=fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+	$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 	fwrite($myfile,strval($message_id));
 	fclose($myfile);
 	sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
@@ -1177,7 +1177,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 		{
 			$_message_parsed=insert_lang_comcode('[private="'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'"]'.$_entering_room.'[/private]',4);
 			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
-			$myfile=fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+			$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 			fwrite($myfile,strval($message_id));
 			fclose($myfile);
 			sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
@@ -1185,7 +1185,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 
 		$_message_parsed=insert_lang_comcode(do_lang('ENTERED_THE_ROOM',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),4);
 		$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
-		$myfile=fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+		$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		fwrite($myfile,strval($message_id));
 		fclose($myfile);
 		sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
@@ -1464,7 +1464,7 @@ function _deal_with_chatcode_newroom($pm_user,$pm_message,$username,$text,$cutof
 					{
 						$_message_parsed=insert_lang_comcode('[invite="'.$person.'"]'.get_chatroom_name($new_room_id).'[/invite]',4);
 						$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('ip_address'=>get_ip_address(),'room_id'=>$room['id'],'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
-						$myfile=fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+						$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 						fwrite($myfile,strval($message_id));
 						fclose($myfile);
 						sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');

@@ -67,5 +67,28 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	echo strip_comcode('[tt]{+START,IF,{$NOT,{$IS_GUEST}}}[/tt]...[tt]{+END}[/tt]');
+	require_code('points');
+	require_code('points2');
+
+	$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true,true);
+	$group_points=get_group_points();
+
+	$fields=new ocp_tempcode();
+
+	foreach ($groups as $group_id=>$group_name)
+	{
+		if (isset($group_points[$group_id]))
+		{
+			$points=$group_points[$group_id];
+			if ($points['p_points_per_month']!=0)
+			{
+				$members=$GLOBALS['FORUM_DRIVER']->member_group_query(array($group_id));
+				foreach ($members as $member_row)
+				{
+					$member_id=$GLOBALS['FORUM_DRIVER']->pname_id($member_row);
+					system_gift_transfer('Being in the '.$group_name.' usergroup',$points['p_points_per_month'],$member_id);
+				}
+			}
+		}
+	}
 }

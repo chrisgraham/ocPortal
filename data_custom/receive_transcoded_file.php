@@ -79,7 +79,7 @@ function run() {
 	}
 
 	require_code('files');
-	$file_handle=fopen(get_custom_file_base().'/uploads/'.$type.'/'.$file,'wb');
+	$file_handle=@fopen(get_custom_file_base().'/uploads/'.$type.'/'.$file,'wb') OR intelligent_write_error(get_custom_file_base().'/uploads/'.$type.'/'.$file);
 	http_download_file($_GET['url'],NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$file_handle,NULL,NULL,6.0);
 	fclose($file_handle);
 

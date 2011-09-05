@@ -212,6 +212,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 			$fields->attach(form_input_integer(do_lang_tempcode('GIFT_POINTS_PER_DAY'),do_lang_tempcode('DESCRIPTION_GIFT_POINTS_PER_DAY'),'gift_points_per_day',$gift_points_per_day,true));
 		}
 
+		require_lang('security');
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('SECURITY'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('HIDDEN_USERGROUP'),do_lang_tempcode('DESCRIPTION_GROUP_HIDDEN'),'hidden',$group_is_hidden==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENQUIRE_ON_NEW_IPS'),do_lang_tempcode('DESCRIPTION_ENQUIRE_ON_NEW_IPS'),'enquire_on_new_ips',$enquire_on_new_ips==1));

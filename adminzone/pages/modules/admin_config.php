@@ -214,7 +214,7 @@ class Module_admin_config
 			add_config_option('GLOBAL_DONEXT_ICONS','global_donext_icons','tick','return is_null($old=get_value(\'disable_donext_global\'))?\'1\':invert_value($old);','SITE','ADVANCED');
 			add_config_option('NO_STATS_WHEN_CLOSED','no_stats_when_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
 			add_config_option('NO_BOT_STATS','no_bot_stats','tick','return \'0\';','SITE','GENERAL');
-			add_config_option('FILE_SYSTEM_CACHING','filesystem_caching','tick','return (substr(ocp_srv(\'SERVER_SOFTWARE\'),0,10)==\'LiteSpeed\')?\'1\':\'0\';','SITE','CACHES');
+			add_config_option('FILE_SYSTEM_CACHING','filesystem_caching','tick','return \'0\';','SITE','CACHES');
 
 			// Java/FTP upload
 			add_config_option('ENABLE_JAVA_UPLOAD','java_upload','tick','return \'0\';','SITE','JAVA_UPLOAD');

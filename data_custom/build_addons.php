@@ -45,31 +45,45 @@ require($FILE_BASE.'/sources/global.php');
 require_code('addons');
 require_code('version');
 require_code('dump_addons');
-$version = ocp_version();
-$version_for_name = preg_replace('/\./','',$version);
+$version=ocp_version();
+$version_for_name=preg_replace('/\./','',$version);
 
 header('Content-type: text/plain');
 
-if(!file_exists($FILE_BASE.'/data_custom/addon_files.txt'))
+if (!file_exists($FILE_BASE.'/data_custom/addon_files.txt'))
 {
 	exit("File missing : <br />".$FILE_BASE.'/data_custom/addon_files.txt');
 }
-if(!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
+if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
 {
 	exit("File missing : <br />".$FILE_BASE.'/data_custom/addons-sheet.csv');
 }
 
-$file_list = get_file_list_of_addons($FILE_BASE);
-$addon_list = get_details_of_addons($FILE_BASE);
+$file_list=get_file_list_of_addons($FILE_BASE);
+$addon_list=get_details_of_addons($FILE_BASE);
 
-foreach($addon_list as $addon => $val)
+foreach ($file_list as $addon => $files)
 {
-	if($addon == 'proper_name')
+	if ($addon == 'proper_name')
 		continue;
 
-	$file = preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
+	if (!isset($addon_list[$addon]))
+	{
+		$addon_list[$addon]=array(
+			'name' => $addon,
+			'incompatibilities' => '',
+			'dependencies' => '',
+			'author' => 'ocProducts',
+			'version' => '1.0',
+			'description' => '',
+		);
+	}
 
-	foreach($val as $k => $v)
+	$val=$addon_list[$addon];
+
+	$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
+
+	foreach ($val as $k => $v)
 	{
 		if ($k=='dependencies')
 		{
@@ -85,16 +99,7 @@ foreach($addon_list as $addon => $val)
 			}
 		}
 		
-		$$k = $v;
-	}
-
-	$files = array();
-	if(isset($file_list[$addon]))
-	{
-		foreach($file_list[$addon] as $f)
-		{
-			$files[] = $f;
-		}
+		$$k=$v;
 	}
 
   	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
@@ -105,6 +110,7 @@ require_code('themes2');
 require_code('files2');
 $themes=find_all_themes();
 
+$page_files=get_directory_contents(get_custom_file_base().'/','');
 foreach (array_keys($themes) as $theme)
 {
 	if ($theme=='default') continue;
@@ -130,17 +136,18 @@ foreach (array_keys($themes) as $theme)
 		if ((substr($file2,-4)!='.tcp') && (substr($file2,-4)!='.tcd') && (substr($file2,-9)!='.editfrom'))
 			$files2[]=$file2;
 	}
-	$page_files=get_directory_contents(get_custom_file_base().'/','');
 	foreach ($page_files as $file2)
 	{
 		$matches=array();
-		if ((preg_match('#^/((\w+)/)?pages/comcode_custom/[^/]*/'.str_replace('#','\#',preg_quote($theme)).'\_\_(\w+)\.txt$#',$file2,$matches)!=0) && ($matches[1]!='docs'.strval(ocp_version())))
+		$regexp='#^((\w+)/)?pages/comcode_custom/[^/]*/'.str_replace('#','\#',preg_quote($theme)).'\_\_([\w\_]+)\.txt$#';
+		if ((preg_match($regexp,$file2,$matches)!=0) && ($matches[1]!='docs'.strval(ocp_version())))
 		{
-			$files2[]=$file2;
+			$files2[]=dirname($file2).substr(basename($file2),strlen($theme)+2);
 		}
 	}
-
-  	create_addon($file,$files2,$name,array(),array(),$author,'ocProducts Ltd','1.0',$description,'exports/mods');
+ 	$_GET['keep_theme_test']='1';
+ 	$_GET['theme']=$theme;
+ 	create_addon($file,$files2,$name,array(),array(),$author,'ocProducts Ltd','1.0',$description,'exports/mods');
 }
 
 echo "All themes have been exported to 'export/mods/'";

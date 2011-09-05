@@ -194,7 +194,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 							{
 								$path=get_custom_file_base().'/themes/default/images_custom/ocf_emoticons__'.basename($_file);
 							}
-							$outfile=fopen($path,'wb');
+							$outfile=@fopen($path,'wb') OR intelligent_write_error($path);
 
 							$more=mixed();
 							do

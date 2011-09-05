@@ -76,7 +76,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 
 	// Copy to tmp file
 	$temp_file=get_custom_file_base().'/themes/'.$destination_theme.'/css_custom/'.basename($fullpath,'.css').'__tmp_copy.css';
-	$myfile=fopen($temp_file,'wt');
+	$myfile=@fopen($temp_file,'wt') OR intelligent_write_error($temp_file);
 	fwrite($myfile,$sheet);
 	fclose($myfile);
 	fix_permissions($temp_file);

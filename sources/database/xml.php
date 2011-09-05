@@ -1205,7 +1205,7 @@ class Database_Static_xml
 		$bc=count($bits)-2;
 		$i=0;
 		if (trim($bits[$i])=='') $i++; // Whitespace between tags
-		if ((!isset($bits[$i])) || ($bits[$i]!='ocportal')) fatal_exit('Unrecognised XML in '.$path);
+		if ((!isset($bits[$i])) || ($bits[$i]!='ocportal')) warn_exit('Unrecognised XML in '.$path);
 		$i++; // Skip past "ocPortal"
 		if (trim($bits[$i])=='') $i++; // Whitespace between tags
 		while ($i<$bc)

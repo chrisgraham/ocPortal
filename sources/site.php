@@ -838,7 +838,7 @@ function do_site()
 
 			$out_evaluated=$out->evaluate(NULL,false);
 
-			$myfile=fopen($fast_cache_path,'wb');
+			$myfile=@fopen($fast_cache_path,'wb') OR intelligent_write_error($fast_cache_path);
 			if (function_exists('gzencode'))
 			{
 				fwrite($myfile,gzencode($out_evaluated,9));

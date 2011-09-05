@@ -702,7 +702,7 @@ class Module_admin_import
 		// info.php
 		global $FILE_BASE;
 		$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
-		$info=fopen($FILE_BASE.'/'.$info_file,'wt');
+		$info=@fopen($FILE_BASE.'/'.$info_file,'wt') OR intelligent_write_error($FILE_BASE.'/'.$info_file);
 		fwrite($info,"<"."?php\n");
 		global $SITE_INFO;
 		$SITE_INFO['forum_type']='ocf';

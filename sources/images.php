@@ -605,7 +605,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				copy($from,$to);
 			} else
 			{
-				$_to=fopen($to,'wb');
+				$_to=@fopen($to,'wb') OR intelligent_write_error($to);
 				fwrite($_to,$from_file);
 				fclose($_to);
 			}

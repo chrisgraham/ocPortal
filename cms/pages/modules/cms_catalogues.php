@@ -682,9 +682,12 @@ class Module_cms_catalogues extends standard_aed_module
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
 		$fixed_contents=unixify_line_format(file_get_contents($csv_name));
-		$myfile=fopen($csv_name,'wb');
-		fwrite($myfile,$fixed_contents);
-		fclose($myfile);
+		$myfile=@fopen($csv_name,'wb');
+		if ($myfile!==false)
+		{
+			fwrite($myfile,$fixed_contents);
+			fclose($myfile);
+		}
 
 		$handle=fopen($csv_name,'rb');
 

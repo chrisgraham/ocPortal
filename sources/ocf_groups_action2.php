@@ -107,7 +107,7 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 	if (!is_null($is_presented_at_install)) $map['g_is_presented_at_install']=$is_presented_at_install;
 	if (!is_null($is_super_admin)) $map['g_is_super_admin']=$is_super_admin;
 	if (!is_null($is_super_moderator)) $map['g_is_super_moderator']=$is_super_moderator;
-	if (!is_null($group_leader)) $map['g_group_leader']=$group_leader;
+	$map['g_group_leader']=$group_leader;
 	if (!is_null($title)) $map['g_title']=lang_remap($_title,$title,$GLOBALS['FORUM_DB']);
 	$map['g_promotion_target']=$promotion_target;
 	$map['g_promotion_threshold']=$promotion_threshold;
@@ -222,18 +222,24 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 
 	if ($validated==0)
 	{
+		$group_name=get_translated_text($group_info[0]['g_name'],$GLOBALS['FORUM_DB']);
+		$_url=build_url(array('page'=>'groups','type'=>'view','id'=>$group_id),get_module_zone('groups'),NULL,false,false,true);
+		$url=$_url->evaluate();
+		$their_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
+
 		$leader_id=$group_info[0]['g_group_leader'];
 		if (!is_null($leader_id))
 		{
-			$group_name=get_translated_text($group_info[0]['g_name'],$GLOBALS['FORUM_DB']);
 			$leader_name=$GLOBALS['OCF_DRIVER']->get_member_row_field($leader_id,'m_username');
 			$leader_email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($leader_id,'m_email_address');
-			$their_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
-			$_url=build_url(array('page'=>'groups','type'=>'view','id'=>$group_id),get_module_zone('groups'),NULL,false,false,true);
-			$url=$_url->evaluate();
 			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',$their_username,$group_name,array($url),get_lang($leader_id));
 			$subject=do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($leader_id));
 			mail_wrap($subject,$mail,array($leader_email_address),$leader_name);
+		} else
+		{
+			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',$their_username,$group_name,array($url),get_site_default_lang());
+			$subject=do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
+			mail_wrap($subject,$mail);
 		}
 	}
 }

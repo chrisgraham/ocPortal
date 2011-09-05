@@ -85,14 +85,14 @@ function incoming_uploads_script()
 		if (($is_uploaded) && (file_exists($_FILES['Filedata']['tmp_name']))) // file_exists check after is_uploaded_file to avoid race conditions
 		{
 			header('Content-type: text/plain');
-			
-			move_uploaded_file($_FILES['Filedata']['tmp_name'],get_custom_file_base().'/'.$savename);
+
+			@move_uploaded_file($_FILES['Filedata']['tmp_name'],get_custom_file_base().'/'.$savename) OR intelligent_write_error(get_custom_file_base().'/'.$savename);
 			require_code('files');
-			
+
 			if (get_param_integer('base64',0)==1)
 			{
 				$new=base64_decode(file_get_contents(get_custom_file_base().'/'.$savename));
-				$myfile=fopen(get_custom_file_base().'/'.$savename,'wb');
+				$myfile=@fopen(get_custom_file_base().'/'.$savename,'wb') OR intelligent_write_error(get_custom_file_base().'/'.$savename);
 				fwrite($myfile,$new);
 				fclose($myfile);
 			}

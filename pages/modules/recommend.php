@@ -318,9 +318,12 @@ class Module_recommend
 				$possible_name_fields=array('Name','Forename','First Name','Display Name','First');
 
 				$fixed_contents=unixify_line_format(file_get_contents($_FILES['upload']['tmp_name']));
-				$myfile=fopen($_FILES['upload']['tmp_name'],'wb');
-				fwrite($myfile,$fixed_contents);
-				fclose($myfile);
+				$myfile=@fopen($_FILES['upload']['tmp_name'],'wb');
+				if ($myfile!==false)
+				{
+					fwrite($myfile,$fixed_contents);
+					fclose($myfile);
+				}
 
 				$myfile=fopen($_FILES['upload']['tmp_name'],'rb');
 				

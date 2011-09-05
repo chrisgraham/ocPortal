@@ -391,6 +391,8 @@ function get_gallery_tree($category_id='root',$tree='',$gallery_info=NULL,$do_st
 		}
 		$sub=true;
 	}
+	
+	$can_submit=mixed();
 
 	// Children of this category
 	$tree.=' > ';

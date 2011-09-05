@@ -222,7 +222,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 								$i++;
 							}
 
-							$out_file=fopen($place,'wb');
+							$out_file=@fopen($place,'wb') OR intelligent_write_error($place);
 							fwrite($out_file,$file_details['data']);
 							fclose($out_file);
 

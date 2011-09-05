@@ -131,7 +131,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	$logfile_path=get_custom_file_base().'/exports/backups/'.$file.'.txt';
-	$logfile=fopen($logfile_path,'wt'); // .txt file because IIS doesn't allow .log download
+	$logfile=@fopen($logfile_path,'wt') OR intelligent_write_error($logfile_path); // .txt file because IIS doesn't allow .log download
 	@ini_set('log_errors','1');
 	@ini_set('error_log',$logfile_path);
 	fwrite($logfile,'This is a log file for an ocPortal backup. The backup is not complete unless this log terminates with a completion message.'."\n\n");
@@ -208,7 +208,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	{
 		if (fwrite($logfile,"\n".do_lang('COMPRESSING')."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 
-		$myfile=gzopen(get_custom_file_base().'/exports/backups/'.$file.'.tar.gz.tmp','wb');
+		$myfile=gzopen(get_custom_file_base().'/exports/backups/'.$file.'.tar.gz.tmp','wb') OR intelligent_write_error(get_custom_file_base().'/exports/backups/'.$file.'.tar.gz.tmp');
 		$tar_path=get_custom_file_base().'/exports/backups/'.filter_naughty($file).'.tar';
 
 		$fp_in=fopen($tar_path,'rb');
