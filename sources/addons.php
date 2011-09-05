@@ -307,13 +307,13 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 
 		$full=get_file_base().'/'.filter_naughty($val);
 
-		if (!file_exists($full))
+		$themed_version=dirname($full).'/'.get_param('theme',$GLOBALS['FORUM_DRIVER']->get_theme()).'__'.basename($full);
+
+		if ((!file_exists($full)) && (!file_exists($themed_version)))
 		{
-			//@exit($full);
 			continue;
 		}
 
-		$themed_version=dirname($full).'/'.get_param('theme',$GLOBALS['FORUM_DRIVER']->get_theme()).'__'.basename($full);
 		if ((get_param_integer('keep_theme_test',0)==1) && (file_exists($themed_version)))
 		{
 			$mode=fileperms($themed_version);

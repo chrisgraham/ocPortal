@@ -59,95 +59,101 @@ if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
 	exit("File missing : <br />".$FILE_BASE.'/data_custom/addons-sheet.csv');
 }
 
-$file_list=get_file_list_of_addons($FILE_BASE);
-$addon_list=get_details_of_addons($FILE_BASE);
-
-foreach ($file_list as $addon => $files)
+if (get_param_integer('export_addons',1)==1)
 {
-	if ($addon == 'proper_name')
-		continue;
-
-	if (!isset($addon_list[$addon]))
+	$file_list=get_file_list_of_addons($FILE_BASE);
+	$addon_list=get_details_of_addons($FILE_BASE);
+	
+	foreach ($file_list as $addon => $files)
 	{
-		$addon_list[$addon]=array(
-			'name' => $addon,
-			'incompatibilities' => '',
-			'dependencies' => '',
-			'author' => 'ocProducts',
-			'version' => '1.0',
-			'description' => '',
-		);
-	}
-
-	$val=$addon_list[$addon];
-
-	$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
-
-	foreach ($val as $k => $v)
-	{
-		if ($k=='dependencies')
+		if ($addon == 'proper_name')
+			continue;
+	
+		if (!isset($addon_list[$addon]))
 		{
-			$vs=explode(',',$v);
-			$v='';
-			foreach ($vs as $_v)
+			$addon_list[$addon]=array(
+				'name' => $addon,
+				'incompatibilities' => '',
+				'dependencies' => '',
+				'author' => 'ocProducts',
+				'version' => '1.0',
+				'description' => '',
+			);
+		}
+	
+		$val=$addon_list[$addon];
+	
+		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
+	
+		foreach ($val as $k => $v)
+		{
+			if ($k=='dependencies')
 			{
-				if ((!addon_installed($_v)) || (array_key_exists($_v,$addon_list)) || (!file_exists(get_file_base().'/exports/mods/'.$_v.'.tar')) || (!file_exists(get_file_base().'/imports/mods/'.$_v.'.tar')))
+				$vs=explode(',',$v);
+				$v='';
+				foreach ($vs as $_v)
 				{
-					if ($v!='') $v.=',';
-					$v.=$_v;
+					if ((!addon_installed($_v)) || (array_key_exists($_v,$addon_list)) || (!file_exists(get_file_base().'/exports/mods/'.$_v.'.tar')) || (!file_exists(get_file_base().'/imports/mods/'.$_v.'.tar')))
+					{
+						if ($v!='') $v.=',';
+						$v.=$_v;
+					}
 				}
 			}
+			
+			$$k=$v;
 		}
-		
-		$$k=$v;
-	}
-
-  	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
-}
-echo "All addons have been exported to 'export/mods/'\n";
-
-require_code('themes2');
-require_code('files2');
-$themes=find_all_themes();
-
-$page_files=get_directory_contents(get_custom_file_base().'/','');
-foreach (array_keys($themes) as $theme)
-{
-	if ($theme=='default') continue;
 	
-	$name='';
-	$description='';
-	$author='ocProducts';
-	$ini_file=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini';
-	if (file_exists($ini_file))
-	{
-		$details=better_parse_ini_file($ini_file);
-		if (array_key_exists('title',$details)) $name=$details['title'];
-		if (array_key_exists('description',$details)) $description=$details['description'];
-		if ((array_key_exists('author',$details)) && ($details['author']!='admin')) $author=$details['author'];
+	  	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
 	}
-
-	$file='theme-'.preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$theme)).$version_for_name.'.tar';
-
-	$files2=array();
-	$theme_files=get_directory_contents(get_custom_file_base().'/themes/'.$theme,'themes/'.$theme);
-	foreach ($theme_files as $file2)
-	{
-		if ((substr($file2,-4)!='.tcp') && (substr($file2,-4)!='.tcd') && (substr($file2,-9)!='.editfrom'))
-			$files2[]=$file2;
-	}
-	foreach ($page_files as $file2)
-	{
-		$matches=array();
-		$regexp='#^((\w+)/)?pages/comcode_custom/[^/]*/'.str_replace('#','\#',preg_quote($theme)).'\_\_([\w\_]+)\.txt$#';
-		if ((preg_match($regexp,$file2,$matches)!=0) && ($matches[1]!='docs'.strval(ocp_version())))
-		{
-			$files2[]=dirname($file2).substr(basename($file2),strlen($theme)+2);
-		}
-	}
- 	$_GET['keep_theme_test']='1';
- 	$_GET['theme']=$theme;
- 	create_addon($file,$files2,$name,array(),array(),$author,'ocProducts Ltd','1.0',$description,'exports/mods');
+	echo "All addons have been exported to 'export/mods/'\n";
 }
 
-echo "All themes have been exported to 'export/mods/'";
+if (get_param_integer('export_themes',1)==1)
+{
+	require_code('themes2');
+	require_code('files2');
+	$themes=find_all_themes();
+	
+	$page_files=get_directory_contents(get_custom_file_base().'/','');
+	foreach (array_keys($themes) as $theme)
+	{
+		if ($theme=='default') continue;
+		
+		$name='';
+		$description='';
+		$author='ocProducts';
+		$ini_file=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini';
+		if (file_exists($ini_file))
+		{
+			$details=better_parse_ini_file($ini_file);
+			if (array_key_exists('title',$details)) $name=$details['title'];
+			if (array_key_exists('description',$details)) $description=$details['description'];
+			if ((array_key_exists('author',$details)) && ($details['author']!='admin')) $author=$details['author'];
+		}
+	
+		$file='theme-'.preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$theme)).$version_for_name.'.tar';
+	
+		$files2=array();
+		$theme_files=get_directory_contents(get_custom_file_base().'/themes/'.$theme,'themes/'.$theme);
+		foreach ($theme_files as $file2)
+		{
+			if ((substr($file2,-4)!='.tcp') && (substr($file2,-4)!='.tcd') && (substr($file2,-9)!='.editfrom'))
+				$files2[]=$file2;
+		}
+		foreach ($page_files as $file2)
+		{
+			$matches=array();
+			$regexp='#^((\w+)/)?pages/comcode_custom/[^/]*/'.str_replace('#','\#',preg_quote($theme)).'\_\_([\w\_]+)\.txt$#';
+			if ((preg_match($regexp,$file2,$matches)!=0) && ($matches[1]!='docs'.strval(ocp_version())))
+			{
+				$files2[]=dirname($file2).'/'.substr(basename($file2),strlen($theme)+2);
+			}
+		}
+	 	$_GET['keep_theme_test']='1';
+	 	$_GET['theme']=$theme;
+	 	create_addon($file,$files2,$name,array(),array(),$author,'ocProducts Ltd','1.0',$description,'exports/mods');
+	}
+	
+	echo "All themes have been exported to 'export/mods/'";
+}

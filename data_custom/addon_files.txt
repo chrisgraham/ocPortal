@@ -7,13 +7,10 @@ octhumbsup
 ----------
 
 # # themes/default/templates_custom/ATTACHMENT_IMG_MINI.tpl
-# # sources_custom/hooks/modules/admin_cleanup
 # # sources_custom/hooks/modules/admin_cleanup/image_thumbs.php
 # # sources_custom/hooks/modules/admin_cleanup/index.html
 # # sources_custom/hooks/modules/admin_cleanup/.htaccess
-# # data_custom/upload-crop
 # # data_custom/upload-crop/upload_crop_v1.2.php
-# # data_custom/upload-crop/js
 # # data_custom/upload-crop/js/jquery.imgareaselect.min.js
 # # data_custom/upload-crop/js/jquery-pack.js
 
@@ -2140,7 +2137,6 @@ better_mail
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Message.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/Attachment.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/CharsetObserver.php
-# # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/ContentEncoder
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/ContentEncoder/Base64ContentEncoder.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/ContentEncoder/PlainContentEncoder.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/ContentEncoder/QpContentEncoder.php
@@ -2149,12 +2145,10 @@ better_mail
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/EncodingObserver.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/Grammar.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/Header.php
-# # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/HeaderEncoder
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/HeaderEncoder/Base64HeaderEncoder.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/HeaderEncoder/QpHeaderEncoder.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/HeaderEncoder.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/HeaderFactory.php
-# # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/Headers
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/Headers/AbstractHeader.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/Headers/DateHeader.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Mime/Headers/IdentificationHeader.php
@@ -2189,7 +2183,6 @@ better_mail
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Plugins/RedirectingPlugin.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Plugins/Reporter.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Plugins/ReporterPlugin.php
-# # sources_custom/Swift-4.1.1/lib/classes/Swift/Plugins/Reporters
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Plugins/Reporters/HitReporter.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Plugins/Reporters/HtmlReporter.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Plugins/Sleeper.php
@@ -2208,8 +2201,6 @@ better_mail
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/StreamFilters/StringReplacementFilterFactory.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/SwiftException.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Transport/AbstractSmtpTransport.php
-# # sources_custom/Swift-4.1.1/lib/classes/Swift/Transport/Esmtp
-# # sources_custom/Swift-4.1.1/lib/classes/Swift/Transport/Esmtp/Auth
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Transport/Esmtp/Auth/CramMd5Authenticator.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Transport/Esmtp/Auth/LoginAuthenticator.php
 # # sources_custom/Swift-4.1.1/lib/classes/Swift/Transport/Esmtp/Auth/PlainAuthenticator.php
