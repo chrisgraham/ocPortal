@@ -58,7 +58,8 @@ if($get_cat == NULL)
 // $file_list = get_file_list_of_addons($FILE_BASE);
 $addon_list = get_details_of_addons($FILE_BASE);
 
-$c_main_id = check_and_add_category($get_cat);
+$parent_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>'Addons'));
+$c_main_id = check_and_add_category($get_cat,$parent_id);
 
 /*$cat_id=add_download_category('Themes',$c_main_id,'','','');
 $all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
@@ -71,33 +72,36 @@ header('Content-type: text/plain');
 
 $admin=2;
 
-$categories = category_list_from_details($FILE_BASE);
-//if(!is_dir("uploads/downloads/$get_cat"))
-//	mkdir("uploads/downloads/$get_cat");
-foreach($categories as $category)
+if (get_param_integer('import_addons',1)==1)
 {
-	$cid = check_and_add_category($category, $c_main_id);
-// exit('id : '.$cid);
-	$addon_arr = get_addons_list_under_category($category,$FILE_BASE);
-	foreach($addon_arr as $addon)
+	$categories = category_list_from_details($FILE_BASE);
+	//if(!is_dir("uploads/downloads/$get_cat"))
+	//	mkdir("uploads/downloads/$get_cat");
+	foreach($categories as $category)
 	{
-		$file = $addon.$version_for_name.'.tar';
-		$from = get_custom_file_base().'/exports/mods/'.$addon.$version_for_name.'.tar';
-		$to = get_custom_file_base()."/uploads/downloads/".$file;
-		copy($from, $to);
-		$addon_path = 'uploads/downloads/'.$file;
-	
-		$fsize = filesize($addon_path);
-		
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
-		if (is_null($test))
+		$cid = check_and_add_category($category, $c_main_id);
+	// exit('id : '.$cid);
+		$addon_arr = get_addons_list_under_category($category,$FILE_BASE);
+		foreach($addon_arr as $addon)
 		{
-			foreach($addon_list[$addon] as $k => $v)
+			$file = $addon.$version_for_name.'.tar';
+			$from = get_custom_file_base().'/exports/mods/'.$addon.$version_for_name.'.tar';
+			$to = get_custom_file_base()."/uploads/downloads/".$file;
+			@unlink($to);
+			copy($from, $to);
+			$addon_path = 'uploads/downloads/'.$file;
+		
+			$fsize = filesize($addon_path);
+			
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
+			if (is_null($test))
 			{
-				$$k = $v;
-			}
-			if ($dependencies!='') $description .= "
-
+				foreach($addon_list[$addon] as $k => $v)
+				{
+					$$k = $v;
+				}
+				if ($dependencies!='') $description .= "
+	
 [title=\"2\"]System Requirements / Dependencies[/title]
 
 $dependencies";
@@ -116,59 +120,65 @@ $license";
 [title=\"2\"]Additional credits/attributions[/title]
 
 $attribute";
-			$downid = add_download($cid,$name,$addon_path,$description,$author,'',NULL,1,1,2,1,'',$addon.'.tar',$fsize,0,0,NULL,NULL,0,0,$admin);
-			
-			$url = "data_custom/addon_screenshots/".$name.".png";
-			if (!file_exists($url)) $url = "data_custom/addon_screenshots/".strtolower($name).".png";
-			if (!file_exists($url)) $url = "data_custom/addon_screenshots/".$addon.".png";
-			if (file_exists($url))
-				add_image('download_'.strval($downid),'',str_replace(' ','%20',$url),str_replace(' ','%20',$url),1,0,0,0,'',NULL,NULL,NULL,0);
+				$downid = add_download($cid,$name,$addon_path,$description,$author,'',NULL,1,1,2,1,'',$addon.'.tar',$fsize,0,0,NULL,NULL,0,0,$admin);
+				
+				$url = "data_custom/addon_screenshots/".$name.".png";
+				if (!file_exists(get_custom_file_base().'/'.$url)) $url = "data_custom/addon_screenshots/".strtolower($name).".png";
+				if (!file_exists(get_custom_file_base().'/'.$url)) $url = "data_custom/addon_screenshots/".$addon.".png";
+				if (file_exists(get_custom_file_base().'/'.$url))
+					add_image('download_'.strval($downid),'',str_replace(' ','%20',$url),'',1,0,0,0,'',NULL,NULL,NULL,0);
+			}
 		}
 	}
+	
+	echo "All addons have been imported as downloads";
 }
-
-echo "All addons have been imported as downloads";
 
 // Now themes
 
-$cid = check_and_add_category('Themes', $c_main_id);
-$cid = check_and_add_category('Commercial', $cid);
-
-$dh=opendir(get_custom_file_base().'/exports/mods');
-while (($file=readdir($dh))!==false)
+if (get_param_integer('import_themes',1)==1)
 {
-	if (preg_match('#^theme-.*\.tar$#',$file)!=0)
+	$cid = check_and_add_category('Themes', $c_main_id);
+	$cid = check_and_add_category('Professional Themes', $cid);
+	
+	$dh=opendir(get_custom_file_base().'/exports/mods');
+	while (($file=readdir($dh))!==false)
 	{
-		$from = get_custom_file_base().'/exports/mods/'.$file;
-		$new_file = basename($file,'.tar').$version_for_name.'.tar';
-		$to = get_custom_file_base()."/uploads/downloads/".$new_file;
-		copy($from, $to);
-		$addon_path = 'uploads/downloads/'.$new_file;
-
-		$fsize = filesize($addon_path);
-
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
-		if (is_null($test))
+		if (preg_match('#^theme-.*\.tar$#',$file)!=0)
 		{
-			require_code('tar');
-			$tar=tar_open($from,'rb');
-			$info_file=tar_get_file($tar,'mod.inf',true);
-			$info=better_parse_ini_file(NULL,$info_file['data']);
-			tar_close($tar);
+			$from = get_custom_file_base().'/exports/mods/'.$file;
+			$new_file = basename($file,'.tar').$version_for_name.'.tar';
+			$to = get_custom_file_base()."/uploads/downloads/".$new_file;
+			@unlink($to);
+			copy($from, $to);
+			$addon_path = 'uploads/downloads/'.$new_file;
+	
+			$fsize = filesize($addon_path);
+	
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
+			if (is_null($test))
+			{
+				require_code('tar');
+				$tar=tar_open($from,'rb');
+				$info_file=tar_get_file($tar,'mod.inf',true);
+				$info=better_parse_ini_file(NULL,$info_file['data']);
+				tar_close($tar);
+	
+				$name=$info['name'];
+				$description=str_replace('\n',"\n",$info['description']);
+				$author=$info['author'];
+				
+				$url = "data_custom/addon_screenshots/".preg_replace('#^theme-#','theme__',preg_replace('#\d+$#','',basename($file,'.tar'))).".png";
+				if (!file_exists(get_custom_file_base().'/'.$url)) $url = "data_custom/addon_screenshots/".strtolower(preg_replace('#^theme-#','theme__',preg_replace('#\d+$#','',basename($file,'.tar')))).".png";
 
-			$name=$info['name'];
-			$description=$info['description'];
-			$author=$info['author'];
-			
-			$downid = add_download($cid,$name,$addon_path,$description,$author,'',NULL,1,1,2,1,'',$new_file,$fsize,0,0,NULL,NULL,0,0,$admin);
-		
-			$url = "data_custom/addon_screenshots/".basename($file,'.tar').".png";
-			if (!file_exists($url)) $url = "data_custom/addon_screenshots/".strtolower(basename($file,'.tar')).".png";
-			if (file_exists($url))
-				add_image('download_'.strval($downid),'',str_replace(' ','%20',$url),str_replace(' ','%20',$url),1,0,0,0,'',NULL,NULL,NULL,0);
+				$downid = add_download($cid,$name,$addon_path,$description,$author,'',NULL,1,1,2,1,'',$new_file,$fsize,0,0,NULL,NULL,0,0,$admin);
+
+				if (file_exists(get_custom_file_base().'/'.$url))
+					add_image('download_'.strval($downid),'',str_replace(' ','%20',$url),'',1,0,0,0,'',NULL,NULL,NULL,0);
+			}
 		}
 	}
+	closedir($dh);
+	
+	echo "All themes have been imported as downloads";
 }
-closedir($dh);
-
-echo "All themes have been imported as downloads";
