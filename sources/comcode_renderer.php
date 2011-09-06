@@ -369,7 +369,7 @@ function test_url($url_full,$tag_type,$given_url)
 			if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 			{
 				$GLOBALS['COMCODE_BROKEN_URLS'][]=array($url_full,NULL);
-			} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
+			} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')) && (!running_script('comcode_convert')) && (!running_script('preview')))
 			{
 				$found_in_post=false; // We don't want to send email if someone's just posting it right now, because they'll see the error on their screen, and we don't want staff spammed by member mistakes
 				foreach ($_POST as $val)

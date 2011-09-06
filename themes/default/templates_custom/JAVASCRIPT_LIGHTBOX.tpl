@@ -154,11 +154,14 @@ Lightbox.prototype = {
                         Builder.node('span',{id:'caption'}),
                         Builder.node('span',{id:'numberDisplay'})
                     ]),
-                    Builder.node('div',{id:'bottomNav'},
+                    Builder.node('div',{id:'bottomNav'}, [
+                        Builder.node('a',{style: 'float: left', target: '_blank' , onclick: "this.href=document.getElementById('lightboxImage').src;", href: LightboxOptions.fileLoadingImage },
+                            "Open full image in new tab"
+                        ),
                         Builder.node('a',{id:'bottomNavClose', href: '#' },
                             Builder.node('img', { src: LightboxOptions.fileBottomNavCloseImage })
                         )
-                    )
+                    ] )
                 ])
             )
         ]));

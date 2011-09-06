@@ -156,6 +156,7 @@ class Hook_pointstore_permission
 			$cost=post_param_integer('permission_cost_'.strval($i));
 			$delete=post_param_integer('delete_permission_'.strval($i),0);
 			$hours=post_param_integer('permission_hours_'.strval($i));
+			if ($hours>24*365*5) warn_exit(do_lang_tempcode('HOURS_MUST_BE_LESS_5_YEARS'));
 			$type=post_param('permission_type_'.strval($i));
 			$specific_permission=post_param('permission_specific_permission_'.strval($i));
 			$zone=post_param('permission_zone_'.strval($i));
@@ -194,6 +195,7 @@ class Hook_pointstore_permission
 			$enabled=post_param_integer('permission_enabled',0);
 			$cost=post_param_integer('permission_cost');
 			$hours=post_param_integer('permission_hours');
+			if ($hours>24*365*5) warn_exit(do_lang_tempcode('HOURS_MUST_BE_LESS_5_YEARS'));
 			$type=post_param('permission_type');
 			$specific_permission=post_param('permission_specific_permission');
 			$zone=post_param('permission_zone');
