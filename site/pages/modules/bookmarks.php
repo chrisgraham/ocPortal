@@ -73,7 +73,7 @@ class Module_bookmarks
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'MANAGE_BOOKMARKS','ad'=>'ADD_BOOKMARK');
+		return is_guest()?array():array('misc'=>'MANAGE_BOOKMARKS','ad'=>'ADD_BOOKMARK');
 	}
 
 	/**

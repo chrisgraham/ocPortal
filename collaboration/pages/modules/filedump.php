@@ -158,6 +158,15 @@ class Module_filedump
 		}
 		if (!$file_tree->is_empty()) breadcrumb_add_segment($file_tree,$d); else breadcrumb_set_self(make_string_tempcode(escape_html($d)));
 
+		// Check directory exists
+		$fullpath=get_custom_file_base().'/uploads/filedump'.$place;
+		if (!file_exists(get_custom_file_base().'/uploads/filedump'.$place))
+		{
+			@mkdir($fullpath,0777) OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',escape_html($fullpath),escape_html(dirname($fullpath))));
+			fix_permissions($fullpath,0777);
+			sync_file($fullpath);
+		}
+
 		// Find all files in the incoming directory
 		$handle=opendir(get_custom_file_base().'/uploads/filedump'.$place);
 		$i=0;

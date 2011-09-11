@@ -97,7 +97,7 @@ class Module_groups
 			$start=0;
 			do
 			{
-				$groups=$GLOBALS['FORUM_DB']->query_select('f_groups c LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.g_name',array('c.g_name','c.id','t.text_original AS title'),NULL,'',500,$start);
+				$groups=$GLOBALS['FORUM_DB']->query_select('f_groups c LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.g_name',array('c.g_name','c.id','t.text_original AS title'),array('g_hidden'=>0),'',500,$start);
 
 				foreach ($groups as $row)
 				{

@@ -48,7 +48,7 @@ class Module_forumview
 	 */
 	function get_entry_points()
 	{
-		return array('pt'=>'PERSONAL_TOPICS','!'=>'ROOT_FORUM');
+		return is_guest()?array('!'=>'ROOT_FORUM'):array('pt'=>'PERSONAL_TOPICS','!'=>'ROOT_FORUM');
 	}
 
 	/**

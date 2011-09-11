@@ -48,7 +48,7 @@ class Module_vforums
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'POSTS_SINCE_LAST_VISIT','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ');
+		return is_guest()?array():array('misc'=>'POSTS_SINCE_LAST_VISIT','unread'=>'TOPICS_UNREAD','recently_read'=>'RECENTLY_READ');
 	}
 
 	/**

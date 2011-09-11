@@ -2247,3 +2247,10 @@ group_points
 # # sources_custom/hooks/systems/cron/group_points.php
 # # pages/comcode_custom/EN/group_points.txt
 # # sources_custom/miniblocks/group_points.php
+
+member_filedumps
+----------------
+
+# # sources_custom/hooks/modules/members/filedump.php
+# # sources_custom/miniblocks/myfiles.php
+# # themes/default/templates_custom/OCF_MEMBER_HOME_SCREEN.tpl

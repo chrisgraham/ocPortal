@@ -764,7 +764,7 @@ class Module_cms_comcode_pages
 		$hidden_fields->attach(form_input_hidden('zone',$zone));
 		$hidden_fields->attach(form_input_hidden('redirect',get_param('redirect','')));
 
-		$posting_form=get_posting_form(do_lang($simple_add?'COMCODE_PAGE_ADD':'SAVE'),$contents,$post_url,$hidden_fields,$fields,do_lang_tempcode('COMCODE_PAGE'),'',$fields2,$parsed);
+		$posting_form=get_posting_form(do_lang($simple_add?'COMCODE_PAGE_ADD':'SAVE'),$contents,$post_url,$hidden_fields,$fields,do_lang_tempcode('COMCODE_PAGE'),'',$fields2,$parsed,NULL,NULL,false);
 
 		$export_url=build_url(array('page'=>'_SELF','type'=>'export','page_link'=>$page_link,'export'=>$restore_from,'lang'=>$lang),'_SELF');
 

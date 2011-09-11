@@ -41,7 +41,7 @@ class Module_warnings extends standard_aed_module
 	 */
 	function get_entry_points()
 	{
-		return parent::get_entry_points();
+		return is_guest()?array():(parent::get_entry_points());
 	}
 
 	/**
