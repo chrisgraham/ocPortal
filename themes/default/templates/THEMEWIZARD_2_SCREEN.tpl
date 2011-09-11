@@ -17,11 +17,11 @@
 {+START,IF,{$NOT,{$VALUE_OPTION,xhtml_strict}}}
 	<div class="theme_wizard_preview_wrap">
 		{+START,BOX,{!PREVIEW}}
-			<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} title="{!PREVIEW}" class="theme_wizard_preview" src="{$PAGE_LINK*,::keep_theme_seed={SEED#}:keep_theme_dark={DARK#}:keep_theme_source={SOURCE_THEME#}:keep_theme_algorithm={ALGORITHM#}:wide=1:keep_theme=default}">{!PREVIEW}</iframe>
+			<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} title="{!PREVIEW}" class="theme_wizard_preview" src="{$PAGE_LINK*,::keep_theme_seed={SEED#}:keep_theme_dark={DARK#}:keep_theme_source={SOURCE_THEME#}:keep_theme={SOURCE_THEME#}:keep_theme_algorithm={ALGORITHM#}:wide=1:keep_theme=default}">{!PREVIEW}</iframe>
 		{+END}
 	</div>
 {+END}
 
 <p class="theme_wizard_use_colour">[ <a href="{STAGE3_LINK*}">{!THEMEWIZARD_2_USE}</a> ]</p>
 
-<p class="theme_wizard_use_colour">[ <a target="_blank" title="{!PREVIEW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,::keep_theme_seed={SEED#}:keep_theme_dark={DARK#}:keep_theme_source={SOURCE_THEME#}:keep_theme_algorithm={ALGORITHM#}}">{!PREVIEW}</a> ]</p>
+<p class="theme_wizard_use_colour">[ <a target="_blank" title="{!PREVIEW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,::keep_theme_seed={SEED#}:keep_theme_dark={DARK#}:keep_theme_source={SOURCE_THEME#}:keep_theme={SOURCE_THEME#}:keep_theme_algorithm={ALGORITHM#}}">{!PREVIEW}</a> ]</p>

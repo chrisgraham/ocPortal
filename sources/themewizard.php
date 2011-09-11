@@ -454,6 +454,16 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 						}
 						$saveat=get_custom_file_base().'/'.$composite.$image_code.'.png';
 						$saveat_url=$composite.$image_code.'.png';
+
+						// Wipe out ones that might have been copied from source theme
+						if (($source_theme!='default') && (strpos($orig_path,'images_custom')!==false))
+						{
+							@unlink(str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.png');
+							@unlink(str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.jpg');
+							@unlink(str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.gif');
+							@unlink(str_replace('/images/','/images_custom/',basename($saveat,'.png')).'.jpeg');
+						}
+
 						if ((!file_exists($saveat)) || ($source_theme!='default') || ($algorithm=='hsv'))
 						{
 							$image=calculate_theme($seed,$source_theme,$algorithm,$image_code,$dark,$colours,$landscape,$lang);

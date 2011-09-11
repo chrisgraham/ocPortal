@@ -821,6 +821,8 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_member_avatar_url($member)
 	{
+		if ((!addon_installed('ocf_member_avatars')) && (!addon_installed('ocf_member_photos'))) return '';
+
 		/*if (!addon_installed('ocf_member_avatars'))	Actually when photo is chosen, avatar is set - and will have been resized right
 		{
 			if (!addon_installed('ocf_member_photos')) return '';

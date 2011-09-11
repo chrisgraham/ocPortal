@@ -27,7 +27,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 {
 	var $lang_type='GROUP';
 	var $select_name='NAME';
-	var $javascript='standardAlternateFields(\'file\',\'theme_img_code*\',null,true); if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { if (form.elements[\'new_usergroup\']) form.elements[\'new_usergroup\'].disabled=(!form.elements[\'delete\'].checked); }; crf(); form.elements[\'delete\'].onchange=crf; } if (document.getElementById(\'is_presented_at_install\')) { var form=document.getElementById(\'is_presented_at_install\').form; var crf2=function() { if (form.elements[\'is_default\']) form.elements[\'is_default\'].disabled=(form.elements[\'is_presented_at_install\'].checked); if (form.elements[\'is_presented_at_install\'].checked) form.elements[\'is_default\'].checked=false; }; crf2(); form.elements[\'is_presented_at_install\'].onchange=crf2; var crf3=function() { if (form.elements[\'absorb\']) form.elements[\'absorb\'].disabled=(form.elements[\'is_private_club\'].checked); }; crf3(); form.elements[\'is_private_club\'].onchange=crf3; }';
+	var $javascript='standardAlternateFields(\'file\',\'theme_img_code*\',null,true); if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { if (form.elements[\'new_usergroup\']) form.elements[\'new_usergroup\'].disabled=(form.elements[\'delete\'] && !form.elements[\'delete\'].checked); }; crf(); form.elements[\'delete\'].onchange=crf; } if (document.getElementById(\'is_presented_at_install\')) { var form=document.getElementById(\'is_presented_at_install\').form; var crf2=function() { if (form.elements[\'is_default\']) form.elements[\'is_default\'].disabled=(form.elements[\'is_presented_at_install\'].checked); if (form.elements[\'is_presented_at_install\'].checked) form.elements[\'is_default\'].checked=false; }; crf2(); form.elements[\'is_presented_at_install\'].onchange=crf2; var crf3=function() { if (form.elements[\'absorb\']) form.elements[\'absorb\'].disabled=(form.elements[\'is_private_club\'] && form.elements[\'is_private_club\'].checked); }; crf3(); form.elements[\'is_private_club\'].onchange=crf3; }';
 	var $award_type='group';
 	var $possibly_some_kind_of_upload=true;
 	var $output_of_action_is_confirmation=true;
@@ -274,7 +274,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 		$table=new ocp_tempcode();
 		
 		require_code('templates_results_table');
-		
+
 		$default_order='g_promotion_threshold ASC,id ASC';
 		$current_ordering=get_param('sort',$default_order,true);
 		$sortables=array(
@@ -526,7 +526,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 		if ($promotion_target==-1) $promotion_target=NULL;
 		$promotion_threshold=post_param_integer('promotion_threshold',-1);
 		if ($promotion_threshold==-1) $promotion_threshold=NULL;
-	
+
 		return array($group_leader,$promotion_target,$promotion_threshold);
 	}
 	

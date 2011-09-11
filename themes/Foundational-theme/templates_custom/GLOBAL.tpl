@@ -13,7 +13,7 @@
 				{$GET,panel_left}
 			</div>
 		{+END}
-		<div class="col2"{+START,IF_EMPTY,{$TRIM,{$GET,panel_right}}} style="width: auto{+START,IF_EMPTY,{$TRIM,{$GET,panel_left}{$GET,panel_right}}}; float: none{+END}"{+END}>
+		<div class="col2"{+START,IF_EMPTY,{$TRIM,{$GET,panel_right}}} style="width: auto; float: none"{+END}>
 			{+START,IF_NON_EMPTY,{BREADCRUMBS}}
 				<{$?,{$VALUE_OPTION,html5},nav,div} class="breadcrumbs breadcrumbs_always"{$?,{$VALUE_OPTION,html5}, itemprop="breadcrumb"}>
 					<img class="breadcrumbs_img" src="{$IMG*,treenav}" title="{!YOU_ARE_HERE}" alt="{!YOU_ARE_HERE}" />

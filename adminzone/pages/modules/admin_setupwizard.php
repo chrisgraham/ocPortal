@@ -313,7 +313,7 @@ class Module_admin_setupwizard
 		$addons_installed=find_installed_addons();
 		foreach ($addons_installed as $row)
 		{
-			if ((substr($row['addon_name'],0,5)!='core_') && (substr($row['addon_name'],-7)!='_shared') && (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$row['addon_name'].'.php')))
+			if ((substr($row['addon_name'],0,5)!='core_') && (substr($row['addon_name'],-7)!='_shared') && ($row['addon_name']!='setupwizard') && (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$row['addon_name'].'.php')))
 			{
 				$is_hidden_on_by_default=in_array($row['addon_name'],$addon_list_advanced_on_by_default);
 				$is_hidden_off_by_default=in_array($row['addon_name'],$addon_list_advanced_off_by_default);

@@ -66,6 +66,8 @@ class Hook_choose_download
 			$_id=$t['id'];
 			if ($id===strval($_id)) // Possible when we look under as a root
 			{
+				asort($t['entries']);
+			
 				foreach ($t['entries'] as $eid=>$etitle)
 				{
 					$lang_id=$GLOBALS['SITE_DB']->query_value('download_downloads','description',array('id'=>$eid));
