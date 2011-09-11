@@ -164,10 +164,10 @@ hr { /* Fixes difference with Opera */
 	text-align: left;
 }
 
-input[type="text"],textarea { /* So Comcode can be typed */
+/*input[type="text"],textarea {  So Comcode can be typed 
 	unicode-bidi: bidi-override;
 	direction: ltr;
-}
+}*/
 
 #htmlarea input[type="text"], #htmlarea textarea {
 	unicode-bidi: normal;

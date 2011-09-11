@@ -379,7 +379,7 @@ function block_helper_script()
 	check_specific_permission('comcode_dangerous');
 
 	$title=get_page_title('BLOCK_HELPER');
-	$submit_name=do_lang_tempcode('PROCEED');
+	$submit_name=do_lang_tempcode('SAVE');
 
 	require_code('form_templates');
 	require_all_lang();

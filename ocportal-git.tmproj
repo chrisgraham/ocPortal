@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/cedi.php</string>
+	<string>sources/ocf_groups_action2.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -64,7 +64,7 @@
 			<key>filename</key>
 			<string>code_editor.php</string>
 			<key>lastUsed</key>
-			<date>2011-07-11T08:43:03Z</date>
+			<date>2011-09-05T09:14:10Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -211,6 +211,8 @@
 			<string>ocworld</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>pages</string>
 			<key>regexFolderFilter</key>
@@ -265,6 +267,8 @@
 			<string>site</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>selected</key>
+			<true/>
 			<key>sourceDirectory</key>
 			<string>site</string>
 		</dict>
@@ -437,49 +441,19 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>adminzone/pages/modules/admin_config.php</key>
+		<key>adminzone/pages/modules/admin_ocf_groups.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>129</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>212</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>187</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>121</integer>
-				<key>line</key>
-				<integer>212</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>129</integer>
-				<key>line</key>
-				<integer>212</integer>
-			</dict>
-		</dict>
-		<key>adminzone/pages/modules/admin_import.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>45</integer>
-				<key>line</key>
-				<integer>516</integer>
+				<integer>588</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>492</integer>
+			<integer>564</integer>
 		</dict>
 		<key>cms/pages/comcode/EN/panel_top.txt</key>
 		<dict>
@@ -523,6 +497,36 @@
 				<integer>28</integer>
 				<key>line</key>
 				<integer>455</integer>
+			</dict>
+		</dict>
+		<key>cms/pages/modules/cms_ocf_groups.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>325</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>296</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>325</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>325</integer>
 			</dict>
 		</dict>
 		<key>collaboration/index.php</key>
@@ -949,6 +953,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>lang/EN/ocf.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>591</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>453</integer>
+			<key>firstVisibleLine</key>
+			<integer>567</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>591</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>591</integer>
+			</dict>
+		</dict>
 		<key>lang/EN/ocf_privacy.ini</key>
 		<dict>
 			<key>caret</key>
@@ -1095,6 +1129,36 @@
 				<integer>345</integer>
 			</dict>
 		</dict>
+		<key>site/pages/modules/groups.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>623</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>625</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>623</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>623</integer>
+			</dict>
+		</dict>
 		<key>site/pages/modules/pointstore.php</key>
 		<dict>
 			<key>caret</key>
@@ -1225,20 +1289,6 @@
 			<key>firstVisibleLine</key>
 			<integer>179</integer>
 		</dict>
-		<key>sources/cedi.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>182</integer>
-				<key>line</key>
-				<integer>219</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>180</integer>
-		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
 			<key>caret</key>
@@ -1324,20 +1374,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>963</integer>
-		</dict>
-		<key>sources/galleries.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>405</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>379</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -2129,6 +2165,36 @@
 				<integer>209</integer>
 			</dict>
 		</dict>
+		<key>sources/mail.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>18</integer>
+				<key>line</key>
+				<integer>182</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>158</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>182</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>18</integer>
+				<key>line</key>
+				<integer>182</integer>
+			</dict>
+		</dict>
 		<key>sources/ocf_general_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -2142,6 +2208,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>139</integer>
+		</dict>
+		<key>sources/ocf_groups_action2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>18</integer>
+				<key>line</key>
+				<integer>93</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>55</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>93</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>93</integer>
+			</dict>
 		</dict>
 		<key>sources/ocf_members_action2.php</key>
 		<dict>
@@ -2245,19 +2341,65 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>sources/urls.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>33</integer>
+				<key>line</key>
+				<integer>206</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>187</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>206</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>33</integer>
+				<key>line</key>
+				<integer>206</integer>
+			</dict>
+		</dict>
 		<key>sources/users.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>44</integer>
+				<integer>36</integer>
 				<key>line</key>
-				<integer>577</integer>
+				<integer>642</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>566</integer>
+			<integer>618</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>24</integer>
+				<key>line</key>
+				<integer>642</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>642</integer>
+			</dict>
 		</dict>
 		<key>sources/version.php</key>
 		<dict>
@@ -2388,20 +2530,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>77</integer>
-		</dict>
-		<key>sources_custom/hooks/systems/upon_query/tracking_cedi.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>39</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>30</integer>
 		</dict>
 		<key>sources_custom/miniblocks/.htaccess</key>
 		<dict>
@@ -2922,6 +3050,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>33</integer>
+		</dict>
+		<key>themes/default/templates/HEADER.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>41</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>69</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>29</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>46</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
 		</dict>
 		<key>themes/default/templates/INFORM_SCREEN.tpl</key>
 		<dict>
@@ -3537,6 +3695,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/default/templates_custom/POINTS_SCREEN.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>35</integer>
+				<key>line</key>
+				<integer>89</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>61</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>89</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>35</integer>
+				<key>line</key>
+				<integer>89</integer>
+			</dict>
+		</dict>
 		<key>themes/default/templates_custom/W_INVENTORY_SCREEN.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -3568,15 +3756,19 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>site/pages/modules/cedi.php</string>
-		<string>cms/pages/modules/cms_cedi.php</string>
-		<string>sources_custom/hooks/modules/tracking/cedi.php</string>
-		<string>sources/cedi.php</string>
-		<string>sources_custom/hooks/systems/upon_query/tracking_cedi.php</string>
+		<string>site/pages/modules/groups.php</string>
+		<string>sources/ocf_groups_action2.php</string>
+		<string>cms/pages/modules/cms_ocf_groups.php</string>
+		<string>adminzone/pages/modules/admin_ocf_groups.php</string>
+		<string>themes/default/templates/HEADER.tpl</string>
+		<string>sources/urls.php</string>
+		<string>sources/users.php</string>
+		<string>lang/EN/ocf.ini</string>
+		<string>sources/mail.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{683, 198}, {1179, 910}}</string>
+	<string>{{633, 170}, {1179, 910}}</string>
 </dict>
 </plist>

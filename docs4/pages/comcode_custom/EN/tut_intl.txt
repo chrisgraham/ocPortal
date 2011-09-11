@@ -296,15 +296,14 @@ By default ocPortal supplies language codes and their names, based on the ISO 63
 
 ocPortal has built-in support for right-to-left languages. You need to change the 'dir', 'en_left' and 'en_right' language strings to activate it.
 However there is one issue. Because Comcode is written in English, and punctuation symbols are considered right-to-left punctuation when "automatic bi-directional detection" is enabled, there is a conflict between the desire to type Comcode in English and the desire to type normal right-to-left script.
-The following is in our CSS:
+The following is in our CSS, but commented out:
 [codebox]
 input[type="text"],textarea { /* So Comcode can be typed */
 	unicode-bidi: bidi-override;
 	direction: ltr;
 }
 [/codebox]
-This makes text input areas work in left-to-right. You can choose to remove it, and then Comcode will be harder to type, but it may provide an overall better experience for your users.
-It is not advisable to try to turn off "automatic bi-direction detection" for the site, as this would cause much bigger problems.
+Uncommenting this makes text input areas work in left-to-right. You can choose to enable it, to make Comcode easier to type, but it will make right-to-left languages harder to type and understand.
 
 We have tried to make our default theme support right-to-left nicely, but unfortunately there are many cases where we could not elegantly do it because we are setting things on a pixel-way instead of a left/right-way. For example, you may see list bullets displaying on the wrong side of a list element. It is caused by CSS like:
 [code]
