@@ -162,9 +162,12 @@ class Module_filedump
 		$fullpath=get_custom_file_base().'/uploads/filedump'.$place;
 		if (!file_exists(get_custom_file_base().'/uploads/filedump'.$place))
 		{
-			@mkdir($fullpath,0777) OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',escape_html($fullpath),escape_html(dirname($fullpath))));
-			fix_permissions($fullpath,0777);
-			sync_file($fullpath);
+			if (has_specific_permission(get_member(),'upload_filedump'))
+			{
+				@mkdir($fullpath,0777) OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',escape_html($fullpath),escape_html(dirname($fullpath))));
+				fix_permissions($fullpath,0777);
+				sync_file($fullpath);
+			}
 		}
 
 		// Find all files in the incoming directory
