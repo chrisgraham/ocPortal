@@ -252,6 +252,11 @@ function has_page_access($member,$page,$zone,$at_now=false)
 		$pg_where.=' OR page_name LIKE \''.db_encode_like($zone.':'.$page.':%').'\'';
 		$pg_where.=' OR page_name LIKE \''.db_encode_like('\_WILD:\_WILD:%').'\'';
 		$pg_where.=' OR page_name LIKE \''.db_encode_like($zone.':\_WILD:%').'\'';
+		$pg_where.=' OR page_name LIKE \''.db_encode_like('\_WILD:'.$page).'\'';
+		$pg_where.=' OR page_name LIKE \''.db_encode_like($zone.':'.$page).'\'';
+		$pg_where.=' OR page_name LIKE \''.db_encode_like('\_WILD:\_WILD').'\'';
+		$pg_where.=' OR page_name LIKE \''.db_encode_like($zone.':\_WILD').'\'';
+		$pg_where.=' OR page_name LIKE \''.db_encode_like($zone).'\'';
 	}
 	$select.=',group_id';
 	$perhaps=((array_key_exists($groups,$GLOBALS['TOTAL_PP_CACHE'])) && (!$at_now))?$GLOBALS['TOTAL_PP_CACHE'][$groups]:$GLOBALS['SITE_DB']->query('SELECT '.$select.' FROM '.get_table_prefix().'group_page_access WHERE ('.$pg_where.') AND ('.$groups.')');

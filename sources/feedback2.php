@@ -84,6 +84,8 @@ function trackback_script()
  */
 function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews=NULL,$default_off=false)
 {
+	if (get_value('disable_feedback')==='1') return new ocp_tempcode();
+
 	require_code('feedback');
 	require_code('form_templates');
 	$fields=new ocp_tempcode();

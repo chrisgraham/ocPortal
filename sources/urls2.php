@@ -496,7 +496,7 @@ function _choose_moniker($page,$type,$moniker_src,$no_exists_check_for=NULL)
 	$moniker_src=strip_comcode($moniker_src);
 
 	$moniker=str_replace(array('ä','ö','ü','ß'),array('ae','oe','ue','ss'),$moniker_src);
-	$moniker=strtolower(preg_replace('#[^\w\d\_\-]#','-',$moniker));
+	$moniker=strtolower(preg_replace('#[^A-Za-z\d\_\-]#','-',$moniker));
 	if (strlen($moniker)>24)
 	{
 		$pos=strrpos(substr($moniker,0,24),'-');

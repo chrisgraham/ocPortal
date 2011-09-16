@@ -1449,7 +1449,7 @@ function step_5_write_config()
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
 		if ($key=='admin_password') $val=md5($val);
 		if ($key=='base_url') $val=$base_url;
-		$_val=str_replace('\\','\\\\',trim($val));
+		$_val=addslashes(trim($val));
 		fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
 	}
 	fclose($info);

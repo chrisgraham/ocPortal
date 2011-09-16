@@ -125,8 +125,15 @@ function _symbol_thumbnail($param)
 		{
 			if ($exp_dimensions[0]=='') $exp_dimensions[0]='-1';
 
-			$thumb_save_dir=rawurldecode((isset($param[2]) && $param[2] != '')?$param[2]:basename(dirname($orig_url))); // Where we are saving to
+			if (isset($param[2]) && $param[2] != '') // Where we are saving to
+			{
+				$thumb_save_dir=$param[2];
+			} else
+			{
+				$thumb_save_dir=basename(dirname(rawurldecode($orig_url)));
+			}
 			if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
+			if (!file_exists(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
 			$filename=rawurldecode(basename((isset($param[3]) && $param[3] != '')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
 			$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
 

@@ -82,7 +82,7 @@ function incoming_uploads_script()
 			sync_file(get_custom_file_base().'/uploads/incoming');
 		}
 
-		if (($is_uploaded) && (file_exists($_FILES['Filedata']['tmp_name']))) // file_exists check after is_uploaded_file to avoid race conditions
+		if ($is_uploaded)// && (file_exists($_FILES['Filedata']['tmp_name']))) // file_exists check after is_uploaded_file to avoid race conditions. >>> Actually, open_basedir might block it
 		{
 			header('Content-type: text/plain');
 

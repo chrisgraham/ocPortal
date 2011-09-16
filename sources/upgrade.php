@@ -338,10 +338,10 @@ function upgrade_script()
 										}
 										$file_data=tar_get_file($upgrade_resource,$upgrade_file['path']);
 										tar_add_file($new_mod_file,$upgrade_file['path'],$file_data['data'],$upgrade_file['mode'],$upgrade_file['mtime']);
-										unlink(get_file_base().'/imports/mods/'.$found.'.tar');
-										rename(get_file_base().'/imports/mods/'.$found.'.new.tar',get_file_base().'/imports/mods/'.$found.'.tar');
 										tar_close($new_mod_file);
 										tar_close($old_mod_file);
+										unlink(get_file_base().'/imports/mods/'.$found.'.tar');
+										rename(get_file_base().'/imports/mods/'.$found.'.new.tar',get_file_base().'/imports/mods/'.$found.'.tar');
 
 										echo do_lang('U_PACKING_MESSAGE',escape_html($upgrade_file['path'])).'<br />';
 									}

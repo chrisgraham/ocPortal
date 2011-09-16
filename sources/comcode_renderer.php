@@ -954,8 +954,11 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			else $template='COMCODE_VERY_MINOR_TITLE';
 			if ($level==1)
 			{
-				$COMCODE_PARSE_TITLE=$embed->evaluate();
-				if (is_object($COMCODE_PARSE_TITLE)) $COMCODE_PARSE_TITLE=$COMCODE_PARSE_TITLE->evaluate();
+				if (is_null($COMCODE_PARSE_TITLE))
+				{
+					$COMCODE_PARSE_TITLE=$embed->evaluate();
+					if (is_object($COMCODE_PARSE_TITLE)) $COMCODE_PARSE_TITLE=$COMCODE_PARSE_TITLE->evaluate();
+				}
 			}
 
 			$base=array_key_exists('base',$attributes)?intval($attributes['base']):2;

@@ -106,7 +106,8 @@ class Module_onlinemembers
 					if (!is_null($test)) $ip=$test;
 				} else
 				{
-					$ip=$GLOBALS['FORUM_DRIVER']->get_member_ip($member);
+					$test=$GLOBALS['FORUM_DRIVER']->get_member_ip($member);
+					if (!is_null($test)) $ip=$test;
 				}
 			}
 

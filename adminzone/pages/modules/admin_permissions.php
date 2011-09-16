@@ -486,6 +486,13 @@ class Module_admin_permissions
 
 		$header_cells=$this->_access_header($admin_groups,$groups);
 
+		$cols=new ocp_tempcode();
+		foreach ($groups as $id=>$g_name)
+		{
+			if (in_array($id,$admin_groups)) continue;
+			$cols->attach(do_template('PERMISSION_COLUMN_SIZER'));
+		}
+
 		// Match-key permissions
 		$p_rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT page_name FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE '.db_string_equal_to('zone_name','/').' ORDER BY page_name');
 		$p_rows[]=array('page_name'=>'');
@@ -528,7 +535,7 @@ class Module_admin_permissions
 			$rows2->attach(do_template('PERMISSION_KEYS_MESSAGE_ROW',array('KEY'=>$row['k_match_key'],'MSG'=>$msg,'UID'=>strval($row['id']))));
 		}
 
-		return do_template('PERMISSION_KEYS_PERMISSIONS_SCREEN',array('_GUID'=>'61a702db2df67adb2702ae6c7081b4ab','TITLE'=>$title,'URL'=>$url,'HEADER_CELLS'=>$header_cells,'ROWS'=>$rows,'ROWS2'=>$rows2));
+		return do_template('PERMISSION_KEYS_PERMISSIONS_SCREEN',array('_GUID'=>'61a702db2df67adb2702ae6c7081b4ab','TITLE'=>$title,'COLS'=>$cols,'URL'=>$url,'HEADER_CELLS'=>$header_cells,'ROWS'=>$rows,'ROWS2'=>$rows2));
 	}
 
 	/**

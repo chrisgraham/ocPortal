@@ -1235,7 +1235,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function _get_usergroup_list()
 	{
-		$results=$this->connection->query('SELECT group_id,group_name FROM '.$this->connection->get_table_prefix().'groups WHERE group_type=1');
+		$results=$this->connection->query('SELECT group_id,group_name FROM '.$this->connection->get_table_prefix().'groups');
 		$results2=collapse_2d_complexity('group_id','group_name',$results);
 		return $results2;
 	}
@@ -1248,7 +1248,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function _get_members_groups($member)
 	{
-		if ($member==$this->get_guest_id()) return array(1);
+		//if ($member==$this->get_guest_id()) return array(1); May not hold true
 	
 		$groups=collapse_1d_complexity('group_id',$this->connection->query_select('user_group',array('group_id'),array('user_pending'=>0,'user_id'=>$member)));
 		$groups[]=$this->get_member_row_field($member,'group_id');

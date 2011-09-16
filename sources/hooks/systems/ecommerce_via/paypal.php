@@ -176,7 +176,11 @@ class Hook_paypal
 		}
 		while ((is_null($res)) && ($x<3));
 		if (is_null($res)) my_exit(do_lang('IPN_SOCKET_ERROR'));
-		if (!(strcmp($res,'VERIFIED')==0)) my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post));
+		if (!(strcmp($res,'VERIFIED')==0))
+		{
+			if (post_param('txn_type','')=='send_money') exit('Unexpected'); // PayPal has been seen to mess up on send_money transactions, making the IPN unverifiable
+			my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post));
+		}
 
 		$txn_type=str_replace('-','_',post_param('txn_type'));
 		if ($txn_type=='subscr-modify')

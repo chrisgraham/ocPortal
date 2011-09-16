@@ -462,7 +462,7 @@ class Hook_addon_registry_news
 					'_TITLE'=>lorem_phrase(),
 					'TAGS'=>do_lorem_template('TAGS',array('TAGS'=>$tags, 'TYPE'=>'')),
 					'CATEGORIES'=>placeholder_array(),
-					'NEWSLETTER_URL'=>placeholder_url(),
+					'NEWSLETTER_URL'=>addon_installed('newsletter')?placeholder_url():'',
 					'ADD_DATE_RAW'=>placeholder_date_raw(),
 					'EDIT_DATE_RAW'=>'',
 					'SUBMITTER'=>placeholder_id(),

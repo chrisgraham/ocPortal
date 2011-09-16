@@ -9,7 +9,8 @@
 		<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table solidborder specific_permissions">
 			<colgroup>
 				<col style="width: 250px" />
-				<col style="width: 100%" />
+				{COLS}
+				<col style="width: 35px" />
 			</colgroup>
 
 			<thead>

@@ -1,6 +1,6 @@
 <{$?,{$VALUE_OPTION,html5},aside,div} class="medborder_box medborder" id="screen_actions_outer"><div id="screen_actions">
-	<div class="print"><a rel="print" target="_blank" title="{!PRINT_THIS_SCREEN}: {!LINK_NEW_WINDOW}" href="{PRINT_URL*}">{!PRINT_THIS_SCREEN}</a></div>
-	<div class="recommend"><a target="_blank" title="{!OCP_RECOMMEND}: {!LINK_NEW_WINDOW}" href="{RECOMMEND_URL*}">{!OCP_RECOMMEND}</a></div>
+	<div class="print"><a rel="print nofollow" target="_blank" title="{!PRINT_THIS_SCREEN}: {!LINK_NEW_WINDOW}" href="{PRINT_URL*}">{!PRINT_THIS_SCREEN}</a></div>
+	<div class="recommend"><a rel="nofollow" target="_blank" title="{!OCP_RECOMMEND}: {!LINK_NEW_WINDOW}" href="{RECOMMEND_URL*}">{!OCP_RECOMMEND}</a></div>
 	{+START,IF,{$BROWSER_MATCHES,ie}}
 		<div class="favorites"><a href="#" onclick="window.external.AddFavorite(window.location.href,document.title); return false;">{!ADD_TO_FAVORITES}</a></div>
 	{+END}

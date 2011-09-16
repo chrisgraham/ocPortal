@@ -487,7 +487,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	{
 		$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_auto_fund_source'=>$source,'s_auto_fund_key'=>$txn_id,'s_state'=>'active'),array('id'=>intval($purchase_id)),'',1);
 	}
-							 
+
 	// Check completed: if not, proceed no further
 	elseif (($payment_status!='Completed') && ($payment_status!='SCancelled') && (get_option('ecommerce_test_mode')!='1'))
 		my_exit(do_lang('TRANSACTION_NOT_COMPLETE',$product.':'.strval($purchase_id),$payment_status),true);

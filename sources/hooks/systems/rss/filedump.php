@@ -44,7 +44,8 @@ class Hook_rss_filedump
 
 		$content=new ocp_tempcode();
 		$files=get_directory_contents(get_custom_file_base().'/uploads/filedump/');
-		$_rows=$GLOBALS['SITE_DB']->query_select('filedump');
+		$_rows=$GLOBALS['SITE_DB']->query_select('filedump',NULL,NULL,'',NULL,NULL,true);
+		if (is_null($_rows)) return NULL;
 		$rows=array();
 		foreach ($_rows as $row)
 		{

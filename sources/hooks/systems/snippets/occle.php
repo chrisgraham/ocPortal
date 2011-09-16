@@ -39,6 +39,8 @@ class Hook_occle
 
 			return do_template('OCCLE_MAIN',array('COMMANDS'=>'','SUBMIT_URL'=>build_url(array('page'=>'admin_occle'),'adminzone'),'PROMPT'=>do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())))));
 		}
+		
+		return new ocp_tempcode();
 	}
 
 }

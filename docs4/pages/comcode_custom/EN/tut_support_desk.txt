@@ -37,7 +37,7 @@ The support ticket system supports attachments, but only in [concept]OCF[/concep
 
 Guests may create support tickets, but they need to leave their e-mail address (there is a field for this) if they want a reply.
 
-Staff may see all support tickets when they visit the support ticket page, but users may only seen their own. If the support ticket list is left open then it will automatically make your computer beep if a new ticket is made, and refresh to show that new ticket. Likewise, if a support ticket is left open, your computer will beep and the ticket will refresh, if a new post is made in the ticket.
+Staff will see all open support tickets when they visit the support ticket page, but users may only seen their own. If the support ticket list is left open then it will automatically make your computer beep if a new ticket is made, and refresh to show that new ticket. Likewise, if a support ticket is left open, your computer will beep and the ticket will refresh, if a new post is made in the ticket.
 
 [html]
 <table class="solidborder wide_table" summary="Columned table">

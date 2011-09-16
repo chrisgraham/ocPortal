@@ -82,8 +82,19 @@ class Hook_chat_bot_octavius
 			if (get_value('octavius_installed')!=='1')
 			{
 				disable_php_memory_limit();
+				
+				if (function_exists('set_time_limit')) @set_time_limit(600);
 
-				set_value('octavius_installed','1');
+				$GLOBALS['SITE_DB']->query("DROP TABLE bot",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE bots",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE conversationlog",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE dstore",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE gmcache",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE gossip",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE patterns",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE templates",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE thatindex",NULL,NULL,true);
+				$GLOBALS['SITE_DB']->query("DROP TABLE thatstack",NULL,NULL,true);
 
 				$GLOBALS['SITE_DB']->query("CREATE TABLE bot (
 				  id int(11) NOT NULL auto_increment,
@@ -92,13 +103,13 @@ class Hook_chat_bot_octavius
 				  value text NOT NULL,
 				  PRIMARY KEY  (id),
 				  KEY botname (bot,name)
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE bots (
 				  id tinyint(3) unsigned NOT NULL auto_increment,
 				  botname varchar(255) NOT NULL default '',
 				  PRIMARY KEY  (botname),
 				  KEY id (id)
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE conversationlog (
 				  bot tinyint(3) unsigned NOT NULL default '0',
 				  id int(11) NOT NULL auto_increment,
@@ -108,7 +119,7 @@ class Hook_chat_bot_octavius
 				  enteredtime timestamp(14) NOT NULL,
 				  PRIMARY KEY  (id),
 				  KEY botid (bot)
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE dstore (
 				  uid varchar(255) default NULL,
 				  name text,
@@ -117,7 +128,7 @@ class Hook_chat_bot_octavius
 				  id int(11) NOT NULL auto_increment,
 				  PRIMARY KEY  (id),
 				  KEY nameidx (name(40))
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE gmcache (
 				  id int(11) NOT NULL auto_increment,
 				  bot tinyint(3) unsigned NOT NULL default '0',
@@ -130,14 +141,14 @@ class Hook_chat_bot_octavius
 				  combined text NOT NULL,
 				  PRIMARY KEY  (id),
 				  KEY combined (bot,combined(255))
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE gossip (
 				  bot tinyint(3) unsigned NOT NULL default '0',
 				  gossip text,
 				  id int(11) NOT NULL auto_increment,
 				  PRIMARY KEY  (id),
 				  KEY botidx (bot)
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE patterns (
 				  bot tinyint(3) unsigned NOT NULL default '0',
 				  id int(11) NOT NULL auto_increment,
@@ -148,7 +159,7 @@ class Hook_chat_bot_octavius
 				  PRIMARY KEY  (id),
 				  KEY wordparent (parent,word),
 				  KEY botid (bot)
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE templates (
 				  bot tinyint(3) unsigned NOT NULL default '0',
 				  id int(11) NOT NULL default '0',
@@ -158,20 +169,20 @@ class Hook_chat_bot_octavius
 				  topic varchar(255) default NULL,
 				  PRIMARY KEY  (id),
 				  KEY bot (id)
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE thatindex (
 				  uid varchar(255) default NULL,
 				  enteredtime timestamp(14) NOT NULL,
 				  id int(11) NOT NULL auto_increment,
 				  PRIMARY KEY  (id)
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 				$GLOBALS['SITE_DB']->query("CREATE TABLE thatstack (
 				  thatid int(11) NOT NULL default '0',
 				  id int(11) NOT NULL auto_increment,
 				  value varchar(255) default NULL,
 				  enteredtime timestamp(14) NOT NULL,
 				  PRIMARY KEY  (id)
-				) TYPE=MyISAM");
+				) TYPE=MyISAM",NULL,NULL,true);
 
 				$fp = "";
 
@@ -196,6 +207,8 @@ class Hook_chat_bot_octavius
 			
 				loadstartup();
 				makesubscode();
+
+				set_value('octavius_installed','1');
 			}
 
 			require_code('programe/respond');
@@ -203,7 +216,7 @@ class Hook_chat_bot_octavius
 
 			restrictify();
 
-			if ($response->response=='') return NULL;
+			if (is_null($response) || $response->response=='') return NULL;
 			return '[html]'.$response->response.'[/html]';
 		}
 

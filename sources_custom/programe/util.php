@@ -874,18 +874,21 @@ function ss_timing_current ($name = 'default') {
 *
 * @return array             Array containing only uppercase array keys.
 */
-function upperkeysarray($testa){
+if (!function_exists('upperkeysarray'))
+{
+	function upperkeysarray($testa){
 	
-	$newtesta=$testa;
-	if (is_array($testa)){
-		$newtesta=array();
-		$newkeys=array_keys($testa);
-		for ($x=0;$x<sizeof($newkeys);$x++){
-			$newtesta[strtoupper($newkeys[$x])]=$testa[$newkeys[$x]];
+		$newtesta=$testa;
+		if (is_array($testa)){
+			$newtesta=array();
+			$newkeys=array_keys($testa);
+			for ($x=0;$x<sizeof($newkeys);$x++){
+				$newtesta[strtoupper($newkeys[$x])]=$testa[$newkeys[$x]];
+			}
 		}
-	}
-	return $newtesta;
+		return $newtesta;
 
+	}
 }
 
 /**

@@ -90,6 +90,8 @@ function find_installed_addons()
 				if (!file_exists($path))
 					$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
 
+				if (file_exists($path)) continue; // Race condition?
+
 				$_hook_bits=extract_module_functions($path,array('get_description','get_file_list','get_version'));
 				if (is_null($_hook_bits[0]))
 				{
