@@ -15,11 +15,23 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_user
+class Hook_fields_author
 {
+
+	/**
+	 * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
+	 *
+	 * @return array			Map of field type to field type title
+	 */
+	function get_field_types()
+	{
+		if (!addon_installed('authors')) return array();
+
+		return array('author'=>do_lang_tempcode('FIELD_TYPE_author'));
+	}
 
 	// ==============
 	// Module: search
@@ -45,61 +57,50 @@ class Hook_catalogue_field_user
 	 */
 	function inputted_to_sql_for_search($row,$i)
 	{
-		$table=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
-		$search_field='f'.strval($i).'.cv_value';
-		$param=get_param('option_'.strval($row['id']),'');
-		$where_clause='';
-		if ($param!='')
-		{
-			$param=strval($GLOBALS['FORUM_DRIVER']->get_member_from_username($param));
-			$where_clause=db_string_equal_to($search_field,$param);
-		}
-		return array(array(),array('f'.strval($i).'.cv_value'),$table,$search_field,$where_clause);
+		return NULL;
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
+		unset($field);
 		if (!is_null($required))
 		{
-			if (($required) && ($default=='')) $default=strval($GLOBALS['FORUM_DRIVER']->get_guest_id());
+			if (($required) && ($default=='')) $default='default';
 		}
-		return array('short_unescaped',$default,'short');
+		return array('short_text',$default,'short');
 	}
 
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-
-		if ($ev=='') return new ocp_tempcode();
-
-		return $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink(intval($ev));
+		return escape_html($ev);
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
@@ -111,36 +112,22 @@ class Hook_catalogue_field_user
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
-		if ($actual_value=='')
-		{
-			if ($field['cf_default']=='!')
-			{
-				$actual_value=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-			}
-		} else
-		{
-			$actual_value=$GLOBALS['FORUM_DRIVER']->get_username(intval($actual_value));
-		}
-		return form_input_username($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
+		return form_input_author($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		$value=post_param($tmp_name,strval(INTEGER_MAGIC_NULL));
-		if ((!is_numeric($value)) && ($value!=''))
-		{
-			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($value);
-			$value=is_null($member_id)?'':strval($member_id);
-		}
-		return $value;
+		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
 
 }

@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_short_text
+class Hook_fields_tick
 {
 
 	// ==============
@@ -33,7 +33,15 @@ class Hook_catalogue_field_short_text
 	 */
 	function get_search_inputter($row)
 	{
-		return NULL;
+		$fields=array();
+		$type='_LIST';
+		$special=new ocp_tempcode();
+		$special->attach(form_input_list_entry('',get_param('option_'.strval($row['id']),'')=='',do_lang_tempcode('NA_EM')));
+		$special->attach(form_input_list_entry('0',get_param('option_'.strval($row['id']),'')=='0',do_lang_tempcode('NO')));
+		$special->attach(form_input_list_entry('1',get_param('option_'.strval($row['id']),'')=='1',do_lang_tempcode('YES')));
+		$display=get_translated_text($row['cf_name']);
+		$fields[]=array('NAME'=>strval($row['id']),'DISPLAY'=>$display,'TYPE'=>$type,'SPECIAL'=>$special);
+		return $fields;
 	}
 
 	/**
@@ -49,45 +57,48 @@ class Hook_catalogue_field_short_text
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
+		unset($field);
 		if (!is_null($required))
 		{
-			if (($required) && ($default=='')) $default='default';
+			if (($required) && ($default=='')) $default='0';
 		}
-		return array('short_text',$default,'short');
+		return array('short_unescaped',$default,'short');
 	}
 
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-		return escape_html($ev);
+
+		if ($ev=='') return do_lang_tempcode('NA_EM');
+		return ($ev=='1')?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
@@ -98,21 +109,30 @@ class Hook_catalogue_field_short_text
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
-		return form_input_line($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
+		if ($field['cf_required']==1)
+		{
+			return form_input_tick($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value=='1');
+		}
+		$_list=new ocp_tempcode();
+		$_list->attach(form_input_list_entry('',is_null($actual_value) || ($actual_value===''),do_lang_tempcode('NA_EM')));
+		$_list->attach(form_input_list_entry('0',$actual_value==='0',do_lang_tempcode('NO')));
+		$_list->attach(form_input_list_entry('1',$actual_value==='1',do_lang_tempcode('YES')));
+		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		return post_param($tmp_name,($editing && is_null(post_param('tick_on_form__'.$tmp_name,NULL)))?STRING_MAGIC_NULL:'');
 	}
 
 }

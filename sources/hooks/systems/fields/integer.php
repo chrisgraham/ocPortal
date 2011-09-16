@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_float
+class Hook_fields_integer
 {
 
 	// ==============
@@ -49,20 +49,20 @@ class Hook_catalogue_field_float
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
+		unset($field);
 		if (!is_null($required))
 		{
 			if (($required) && ($default=='')) $default='0';
@@ -73,21 +73,22 @@ class Hook_catalogue_field_float
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-		return escape_html($ev);
+		return escape_html(preg_replace('#^0*#','',$ev));
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
@@ -98,20 +99,24 @@ class Hook_catalogue_field_float
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		return form_input_float($_cf_name,$_cf_description,'field_'.strval($field['id']),(is_null($actual_value) || ($actual_value===''))?NULL:floatval($actual_value),$field['cf_required']==1);
+		return form_input_integer($_cf_name,$_cf_description,'field_'.strval($field['id']),(is_null($actual_value) || ($actual_value===''))?NULL:intval($actual_value),$field['cf_required']==1);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		$ret=post_param($tmp_name,STRING_MAGIC_NULL);
+		if ($ret!=STRING_MAGIC_NULL) $ret=str_pad($ret,10,'0',STR_PAD_LEFT);
+		return $ret;
 	}
 
 }

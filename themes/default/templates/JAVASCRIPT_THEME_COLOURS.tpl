@@ -38,7 +38,7 @@ function doColorChange(e)
 	var d=parseInt(id.substring(7,b),10); // Get the colour row (0-2)
 	var i=parseInt(id.substring(b+1,id.indexOf('#')),10); // Get the colour (0-255)
 
-	var rgb=new Array;
+	var rgb=[];
 	rgb[0]=0; rgb[1]=0; rgb[2]=0;
 	rgb[d]=last_cc_i[d+names_to_numbers[_id]*3];
 	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+_id);
@@ -46,11 +46,15 @@ function doColorChange(e)
 	{
 		temp_last_cc.style.backgroundColor='#'+decToHex(rgb[0])+decToHex(rgb[1])+decToHex(rgb[2]);
 		temp_last_cc.style.cursor='pointer';
+		temp_last_cc.style.outline='none';
+		temp_last_cc.style.position='static';
 		last_cc_i[d+names_to_numbers[_id]*3]=i;
 
 		// Show a white line over the colour we clicked
 		targ.style.backgroundColor='#FFFFFF';
 		targ.style.cursor='';
+		targ.style.outline='3px solid gray';
+		targ.style.position='relative';
 
 		var element=document.getElementById('cc_target_'+_id);
 		var bgColor=element.style.backgroundColor;
@@ -84,11 +88,13 @@ function updateChoose(id,d,i)
 	var tid='cc_col_'+d+'_'+i+'#'+id;
 	var targ=document.getElementById(tid);
 	if (!targ) return false;
-	var rgb=new Array;
+	var rgb=[];
 	rgb[0]=0; rgb[1]=0; rgb[2]=0;
 	rgb[d]=last_cc_i[d+names_to_numbers[id]*3];
 	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+id);
 	temp_last_cc.style.backgroundColor='#'+decToHex(rgb[0])+decToHex(rgb[1])+decToHex(rgb[2]); // Reset old
+	temp_last_cc.style.outline='none';
+	temp_last_cc.style.position='static';
 	last_cc_i[d+names_to_numbers[id]*3]=i;
 
 	var element=document.getElementById('cc_target_'+id);
@@ -101,6 +107,8 @@ function updateChoose(id,d,i)
 	element.style.color='#'+decToHex(255-rgb[0])+decToHex(255-rgb[1])+decToHex(255-rgb[2]);
 
 	targ.style.backgroundColor='#FFFFFF';
+	targ.style.outline='3px solid gray';
+	targ.style.position='relative';
 
 	return true;
 }
@@ -108,7 +116,7 @@ function updateChoose(id,d,i)
 function doColorChooser()
 {
 	var elements=document.getElementsByTagName('div');
-	var ce,a=0,my_elements=new Array;
+	var ce,a=0,my_elements=[];
 	for (ce=0;ce<elements.length;ce++)
 	{
 		if (elements[ce].id.substring(0,10)=='cc_target_')
@@ -146,13 +154,12 @@ function doColorChooserElement(element)
 		source.style.color=element.style.color;
 	}
 
-	var c=new Array;
-
+	var c=[];
 	c[0]=document.getElementById('cc_0_'+id);
 	c[1]=document.getElementById('cc_1_'+id);
 	c[2]=document.getElementById('cc_2_'+id);
 
-	var d,i,_rgb=new Array,bg,innert,tid;
+	var d,i,_rgb=[],bg,innert,tid,selected,style;
 	for (d=0;d<=2;d++)
 	{
 		last_cc_i[d+names_to_numbers[id]*3]=0;
@@ -160,7 +167,8 @@ function doColorChooserElement(element)
 //		for (i=0;i<256;i++)
 		for (i=0;i<256;i+=4)
 		{
-			if (i!=rgb[d])
+			selected=(i==rgb[d]);
+			if (!selected)
 			{
 				_rgb[0]=0; _rgb[1]=0; _rgb[2]=0;
 				_rgb[d]=i;
@@ -170,10 +178,11 @@ function doColorChooserElement(element)
 				last_cc_i[d+names_to_numbers[id]*3]=i;
 			}
 			bg='rgb('+_rgb[0]+','+_rgb[1]+','+_rgb[2]+')';
-
 			tid='cc_col_'+d+'_'+i+'#'+id;
 
-			innert=innert+'<div onclick="doColorChange(event);" class="css_colour_strip" style="'+((i==rgb[d])?'':'cursor: pointer; ')+'background-color: '+bg+'" id="'+tid+'"></div>';
+			style=((i==rgb[d])?'':'cursor: pointer; ')+'background-color: '+bg+';';
+			if (selected) style+='outline: 3px solid gray; position: relative;';
+			innert=innert+'<div onclick="doColorChange(event);" class="css_colour_strip" style="'+style+'" id="'+tid+'"></div>';
 		}
 		setInnerHTML(c[d],innert);
 	}
@@ -188,13 +197,18 @@ function makeColourChooser(name,color,context,tabindex,label,className)
 
 	var p=document.getElementById('colours_go_here');
 
-	if ((color!='') && (color.substr(0,1)!='#') && (color.substr(0,3)!='rgb')) color='#000000';
+	if ((color!='') && (color.substr(0,1)!='#') && (color.substr(0,3)!='rgb'))
+	{
+		if (color.match(/[A-Fa-f\d]{6}/)) color='#'+color;
+		elsecolor='#000000';
+	}
 
 	var t='';
 	t=t+'<div class="css_colour_chooser">';
 	t=t+'	<div class="css_colour_chooser_name">';
 	t=t+'		<label for="'+name+'"> '+label+'</label><br />';
-	t=t+'		<input type="button" '+(tabindex?('tabindex="'+tabindex+'" '):'')+'value="#" onclick="updateChooser(\''+name+'\'); return false;" /><input '+className+'alt="{!COLOUR^;}" type="text" value="'+color.substr(1)+'" maxlength="6" id="'+name+'" name="'+name+'" size="6" />';
+	t=t+'		<input type="button" '+(tabindex?('tabindex="'+tabindex+'" '):'')+'value="#" onclick="updateChooser(\''+name+'\'); return false;" />';
+	t=t+    '<input '+className+'alt="{!COLOUR^;}" type="{+START,IF,{$VALUE_OPTION,html5}}color{+END}{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}text{+END}" value="'+color.substr(1)+'" maxlength="6" id="'+name+'" name="'+name+'" size="6" />';
 	t=t+'	</div>';
 	t=t+'	<div class="css_colour_chooser_fixed">';
 	t=t+'	<div class="css_colour_chooser_from" style="background-color: '+((color=='')?'#000':color)+'" id="cc_source_'+name+'">';

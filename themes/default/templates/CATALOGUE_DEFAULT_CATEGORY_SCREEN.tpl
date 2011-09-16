@@ -13,13 +13,25 @@
 
 {+START,IF_NON_EMPTY,{ENTRIES}}
 	{ENTRIES}
-	<br />
 {+END}
 
 {+START,IF_EMPTY,{ENTRIES}{SUBCATEGORIES}}
 	<p class="nothing_here">
 		{!NO_ENTRIES}
 	</p>
+{+END}
+
+{+START,IF_NON_EMPTY,{SORTING}}
+	<div class="medborder special_category_sorter inline_block">
+		{$SET,show_sort_button,_true}
+		{SORTING}
+	</div>
+{+END}
+
+{+START,IF_NON_EMPTY,{BROWSER}}
+	<div class="float_surrounder">
+		{BROWSER}
+	</div>
 {+END}
 
 {+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
@@ -38,33 +50,6 @@
 	3_REL=edit
 	4_URL={EDIT_CATALOGUE_URL*}
 	4_TITLE={!EDIT_CATALOGUE}
-{+END}
-
-{+START,IF_NON_EMPTY,{SORT_OPTIONS}}
-	<div class="medborder special_category_sorter inline_block">
-		<form title="{!SORT}" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" method="get" class="inline">
-			{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1}}
-
-			<div>
-				<label for="c_order">{!SORT_BY}</label><br />
-				<select{+START,IF,{$JS_ON}} onchange="this.form.submit();"{+END} id="c_order" name="order">
-					{SORT_OPTIONS}
-				</select>
-
-				{+START,IF,{$NOT,{$JS_ON}}}
-					<div class="mini_proceed_button">
-						<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SORT}" />
-					</div>
-				{+END}
-			</div>
-		</form>
-	</div>
-{+END}
-
-{+START,IF_NON_EMPTY,{BROWSER}}
-	<div class="float_surrounder">
-		{BROWSER}
-	</div>
 {+END}
 
 {+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}

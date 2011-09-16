@@ -260,7 +260,13 @@ function closure_loop($param,$args,$main_function)
 	if (isset($param[0]))
 	{
 		$key=$param[0];
-		$array=isset($param['vars'][$key])?$param['vars'][$key]:array();
+		if ((is_numeric($key)) || (strpos($key,',')!==false))
+		{
+			$array=explode(',',$key);
+		} else
+		{
+			$array=isset($param['vars'][$key])?$param['vars'][$key]:array();
+		}
 		if (isset($param[1+1])) /* NB: +1 is due to there being a non-numeric index here too */
 		{
 			$columns=intval($param[1]);

@@ -88,7 +88,7 @@ function loaded()
 									values[e1[i].id]=(['checked',e1[i].id,e1[i].checked]); \
 								} \
 							} \
-							else if (e1[i].type=='text' || e1[i].type=='password') \
+							else if (e1[i].type=='text' || e1[i].type=='password' || e1[i].type=='color' || e1[i].type=='email' || e1[i].type=='number' || e1[i].type=='range' || e1[i].type=='search' || e1[i].type=='tel' || e1[i].type=='url') \
 							{ \
 								if ((!last_values) || (!last_values[e1[i].id]) || (last_values[e1[i].id][2]!=e1[i].value)) \
 								{ \

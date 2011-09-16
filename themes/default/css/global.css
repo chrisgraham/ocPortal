@@ -41,7 +41,7 @@ input[type="text"]:focus, input[type="password"]:focus {
 	background: url('{$IMG;,keyboard}') right center no-repeat white;
 }
 
-input[type="text"],input[type="password"],textarea,select { /* Normally a browser default, but gets inherited on some phones */
+input[type="text"],input[type="password"],input[type="color"],input[type="email"],input[type="number"],input[type="range"],input[type="search"],input[type="tel"],input[type="url"],textarea,select { /* Normally a browser default, but gets inherited on some phones */
 	background: white;
 }
 
@@ -1645,6 +1645,10 @@ hr.long_break {
 
 .staff_actions a {
 	white-space: nowrap !important;
+}
+
+.bookmarks_menu_box {
+	width: 320px;
 }
 
 .edited {

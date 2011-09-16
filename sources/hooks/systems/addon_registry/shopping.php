@@ -729,7 +729,7 @@ class Hook_addon_registry_shopping
 					'TAGS'=>'',
 					'CATALOGUE'=>lorem_word_2(),
 					'BROWSER'=>'',
-					'SORT_OPTIONS'=>'',
+					'SORTING'=>'',
 					'ADD_LINK'=>placeholder_url(),
 					'ADD_CAT_URL'=>placeholder_url(),
 					'EDIT_CAT_URL'=>placeholder_url(),

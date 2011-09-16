@@ -208,8 +208,9 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 	$cf_id=$GLOBALS['SITE_DB']->query_insert('catalogue_fields',$map,true);
 	if (!is_null($id)) $cf_id=$id;
 
-	require_code('hooks/modules/catalogue_fields/'.filter_naughty($type));
-	$ob=object_factory('Hook_catalogue_field_'.filter_naughty($type));
+	require_code('fields');
+
+	$ob=get_fields_hook($type);
 	
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -226,7 +227,7 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 				$entries=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id'),array('cc_id'=>$category),'',300,$start2));
 				foreach ($entries as $entry)
 				{
-					list($raw_type,$_default,$_type)=$ob->get_field_value_row_bits($cf_id,$required==1,$default);
+					list($raw_type,$_default,$_type)=$ob->get_field_value_row_bits($map+array('id'=>$cf_id),$required==1,$default);
 
 					if (strpos($raw_type,'trans')!==false) $_default=intval($_default);
 
@@ -245,63 +246,6 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 	while (array_key_exists(0,$categories));
 	
 	return $cf_id;
-}
-
-/**
- * Get a fresh value for an auto_increment valued field.
- *
- * @param  AUTO_LINK		The field ID
- * @param  string			The field default
- * @return string			The value
- */
-function get_field_auto_increment($field_id,$default='')
-{
-	// Get most recent value, to start with- we will iterate forward on it
-	$value=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_short','cv_value',array('cf_id'=>$field_id),'ORDER BY ce_id DESC');
-	if (is_null($value))
-	{
-		$value=strval(intval($default)-1);
-	}
-
-	$test=NULL;
-	do
-	{
-		$value=strval(intval($value)+1);
-
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_short','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
-	}
-	while (!is_null($test));
-
-	return $value;
-}
-
-/**
- * Get a fresh value for a random valued field.
- *
- * @param  AUTO_LINK		The field ID
- * @param  string			The field default
- * @return string			The value
- */
-function get_field_random($field_id,$default='')
-{
-	$rand_array='1234567890abcdefghijklmnopqrstuvwxyz';
-	$c=strlen($rand_array)-1;
-	$length=intval($default);
-	if ($length==0) $length=10;
-	$test=NULL;
-	do
-	{
-		$value='';
-		for ($i=0;$i<$length;$i++)
-		{
-			$value.=$rand_array[mt_rand(0,$c)];
-		}
-
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_short','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
-	}
-	while (!is_null($test));
-
-	return $value;
 }
 
 /**
@@ -662,28 +606,29 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	{
 		$type=$fields[$field_id];
 
-		if (($type=='short_trans') || ($type=='long_trans'))
+		$ob=get_fields_hook($type);
+		list($raw_type)=$ob->get_field_value_row_bits($fields[$field_id]);
+
+		if (strpos($raw_type,'_trans')!==false)
 			check_comcode($val);
 	}
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_entries',$imap,true);
-	$done_attachments=false;
+	require_code('fields');
 	foreach ($map as $field_id=>$val)
 	{
 		if ($val==STRING_MAGIC_NULL) $val='';
 
 		$type=$fields[$field_id];
 
-		require_code('hooks/modules/catalogue_fields/'.filter_naughty($type));
-		$ob=object_factory('Hook_catalogue_field_'.filter_naughty($type));
-		list(,,$sup_table_name)=$ob->get_field_value_row_bits($field_id);
+		$ob=get_fields_hook($type);
+		list($raw_type,,$sup_table_name)=$ob->get_field_value_row_bits($fields[$field_id]);
 
-		if (($type=='short_trans') || ($type=='long_trans'))
+		if (strpos($raw_type,'_trans')!==false)
 		{
-			if (($type=='long_trans') && (!$done_attachments))
+			if ($type=='posting_field')
 			{
 				require_code('attachments2');
 				$val=insert_lang_comcode_attachments(3,$val,'catalogue_entry',strval($id));
-				$done_attachments=true;
 			} else
 			{
 				$val=insert_lang_comcode($val,3);
@@ -736,14 +681,13 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_edit_date'=>time(),'cc_id'=>$category_id,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks),array('id'=>$id),'',1);
-	$done_attachments=false;
+	require_code('fields');
 	foreach ($map as $field_id=>$val)
 	{
 		$type=$fields[$field_id];
 
-		require_code('hooks/modules/catalogue_fields/'.filter_naughty($type));
-		$ob=object_factory('Hook_catalogue_field_'.filter_naughty($type));
-		list(,,$sup_table_name)=$ob->get_field_value_row_bits($field_id);
+		$ob=get_fields_hook($type);
+		list(,,$sup_table_name)=$ob->get_field_value_row_bits($fields[$field_id]);
 
 		if (substr($sup_table_name,-6)=='_trans')
 		{
@@ -753,12 +697,11 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 				$_val=insert_lang_comcode($val,3);
 			} else
 			{
-				if (($type=='long_trans') && (!$done_attachments))
+				if ($type=='posting_field')
 				{
 					require_code('attachments2');
 					require_code('attachments3');
 					$_val=update_lang_comcode_attachments($_val,$val,'catalogue_entry',strval($id),NULL,false,$original_submitter);
-					$done_attachments=true;
 				} else
 				{
 					$_val=lang_remap_comcode($_val,$val);

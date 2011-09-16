@@ -335,27 +335,41 @@ class Module_cms_catalogues extends standard_aed_module
 			$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 		}
 
+		$field_groups=array();
+
+		require_code('fields');
 		foreach ($special_fields as $field_num=>$field)
 		{
-			require_code('hooks/modules/catalogue_fields/'.filter_naughty($field['cf_type']));
-			$ob=object_factory('Hook_catalogue_field_'.filter_naughty($field['cf_type']));
-
+			$ob=get_fields_hook($field['cf_type']);
 			$default=$field['cf_default'];
 			if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
 			elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
+
 			$_cf_name=get_translated_text($field['cf_name']);
+			$field_cat='';
+			$matches=array();
+			if (strpos($_cf_name,': ')!==false)
+			{
+				$field_cat=substr($_cf_name,0,strpos($_cf_name,': '));
+				$_cf_name=substr($_cf_name,strpos($_cf_name,': ')+2);
+			}
+			if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
+
 			$_cf_description=escape_html(get_translated_text($field['cf_description']));
+
 			$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
 			$result=$ob->get_field_inputter($_cf_name,$_cf_description,$field,$default,is_null($id),!array_key_exists($field_num+1,$special_fields));
 			$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=false;
+
 			if (is_null($result)) continue;
+
 			if (is_array($result))
 			{
-				$fields->attach($result[0]);
+				$field_groups[$field_cat]->attach($result[0]);
 				$hidden->attach($result[1]);
 			} else
 			{
-				$fields->attach($result);
+				$field_groups[$field_cat]->attach($result);
 			}
 			
 			if (strpos($field['cf_type'],'_trans')!==false) $this->do_preview=true;
@@ -364,6 +378,21 @@ class Module_cms_catalogues extends standard_aed_module
 			unset($ob);
 		}
 	
+		if (array_key_exists('',$field_groups)) // Blank prefix must go first
+		{
+			$field_groups_blank=$field_groups[''];
+			unset($field_groups['']);
+			$field_groups=array_merge(array($field_groups_blank),$field_groups);
+		}
+		foreach ($field_groups as $field_group_title=>$extra_fields)
+		{
+			if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
+		
+			if ($field_group_title!='')
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
+			$fields->attach($extra_fields);
+		}
+
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
@@ -453,11 +482,11 @@ class Module_cms_catalogues extends standard_aed_module
 		// Get field values
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 		$map=array();
+		require_code('fields');
 		foreach ($fields as $field)
 		{
-			require_code('hooks/modules/catalogue_fields/'.filter_naughty($field['cf_type']));
-			$ob=object_factory('Hook_catalogue_field_'.filter_naughty($field['cf_type']));
-			$value=$ob->inputted_to_field_value($editing,$field['id'],$field['cf_default']);
+			$ob=get_fields_hook($field['cf_type']);
+			$value=$ob->inputted_to_field_value($editing,$field,$field['cf_default']);
 
 			$map[$field['id']]=$value;
 		}
@@ -1345,7 +1374,6 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	 * @param  SHORT_TEXT	The name of the field
 	 * @param  LONG_TEXT		Description for the field
 	 * @param  ID_TEXT		The field type
-	 * @set    short_text long_text short_trans long_trans integer float picture upload url email user
 	 * @param  BINARY			Whether the field defines entry ordering
 	 * @param  BINARY			Whether the field is searchable
 	 * @param  BINARY			Whether the field is visible when an entry is viewed
@@ -1365,31 +1393,33 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_FIELD_DESCRIPTION'),$prefix.'description',$description,false));
 		$fields->attach(form_input_line(do_lang_tempcode('DEFAULT_VALUE'),do_lang_tempcode('DESCRIPTION_FIELD_DEFAULT'),$prefix.'default',$default,false,NULL,10000));
 
-		$all_types=find_all_hooks('modules','catalogue_fields');
-		if ($name!='')
+		require_code('fields');
+		require_lang('fields');
+
+		$all_types=find_all_hooks('systems','fields');
+		if ($name!='') // Already set, so we need to do a search to see what we can limit our types to (things with the same backend DB storage)
 		{
-			require_code('hooks/modules/catalogue_fields/'.$type);
-			$ob=object_factory('Hook_catalogue_field_'.$type);
+			$ob=get_fields_hook($type);
 			$types=array();
-			list(,,$db_type)=$ob->get_field_value_row_bits(db_get_first_id());
+			list(,,$db_type)=$ob->get_field_value_row_bits(NULL);
 			foreach ($all_types as $this_type=>$hook_type)
 			{
-				require_code('hooks/modules/catalogue_fields/'.$this_type);
-				$ob=object_factory('Hook_catalogue_field_'.$this_type);
-				list(,,$this_db_type)=$ob->get_field_value_row_bits(db_get_first_id());
+				$ob=get_fields_hook($this_type);
+				list(,,$this_db_type)=$ob->get_field_value_row_bits(NULL);
 
 				if ($this_db_type==$db_type)
 					$types[$this_type]=$hook_type;
 			}
 		} else $types=$all_types;
 		$orderings=array(
-			do_lang_tempcode('FIELD_TYPES__TEXT'),'short_trans','long_trans','short_text','long_text',
+			do_lang_tempcode('FIELD_TYPES__TEXT'),'short_trans','short_trans_multi','short_text','short_text_multi','long_trans','long_text','posting_field','codename','password','email',
 			do_lang_tempcode('FIELD_TYPES__NUMBERS'),'integer','float',
-			do_lang_tempcode('FIELD_TYPES__CHOICES'),'list','radiolist','tick',
-			do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','picture','url','page_link',
-			do_lang_tempcode('FIELD_TYPES__MAGIC'),'auto_increment','random',
-			do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference');
-//			do_lang_tempcode('FIELD_TYPES__OTHER'),'user','email','date',			Will go under OTHER automatically
+			do_lang_tempcode('FIELD_TYPES__CHOICES'),'list','radiolist','tick','multilist','tick_multi',
+			do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','picture','url','page_link','theme_image','theme_image_multi',
+			do_lang_tempcode('FIELD_TYPES__MAGIC'),'auto_increment','random','guid',
+			do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference','content_link','content_link_multi','user','user_multi','author',
+//			do_lang_tempcode('FIELD_TYPES__OTHER'),'date',			Will go under OTHER automatically
+		);
 		$_types=array();
 		$done_one_in_section=true;
 		foreach ($orderings as $o)
@@ -1423,7 +1453,19 @@ class Module_cms_catalogues_alt extends standard_aed_module
 				$type_list->attach(form_input_list_entry('',false,$_type,false,true));
 			} else
 			{
-				$type_list->attach(form_input_list_entry($_type,($_type==$type),do_lang_tempcode('FIELD_TYPE_'.$_type)));
+				$ob=get_fields_hook($_type);
+				if (method_exists($ob,'get_field_types'))
+				{
+					$sub_types=$ob->get_field_types();
+				} else
+				{
+					$sub_types=array($_type=>do_lang_tempcode('FIELD_TYPE_'.$_type));
+				}
+	
+				foreach ($sub_types as $_type=>$_title)
+				{
+					$type_list->attach(form_input_list_entry($_type,($_type==$type),$_title));
+				}
 			}
 		}
 

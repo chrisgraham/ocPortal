@@ -115,6 +115,8 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 
 		require_code('form_templates');
 		require_code('encryption');
+		require_lang('fields');
+
 		if ($locked==0)
 			$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name',$name,true));
 		else

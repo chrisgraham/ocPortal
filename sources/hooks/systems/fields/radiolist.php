@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_url
+class Hook_fields_radiolist
 {
 
 	// ==============
@@ -33,7 +33,18 @@ class Hook_catalogue_field_url
 	 */
 	function get_search_inputter($row)
 	{
-		return NULL;
+		$fields=array();
+		$type='_LIST';
+		$special=new ocp_tempcode();
+		$special->attach(form_input_list_entry(/*'option_'.strval($row['id']),*/'',get_param('option_'.strval($row['id']),'')=='','---'));
+		$list=explode('|',$row['cf_default']);
+		$display=get_translated_text($row['cf_name']);
+		foreach ($list as $l)
+		{
+			$special->attach(form_input_list_entry(/*'option_'.strval($row['id']),*/$l,get_param('option_'.strval($row['id']),'')==$l));
+		}
+		$fields[]=array('NAME'=>strval($row['id']),'DISPLAY'=>$display,'TYPE'=>$type,'SPECIAL'=>$special);
+		return $fields;
 	}
 
 	/**
@@ -45,80 +56,80 @@ class Hook_catalogue_field_url
 	 */
 	function inputted_to_sql_for_search($row,$i)
 	{
-		return NULL;
+		return exact_match_sql($row,$i,'long');
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
-		/*if (!is_null($required))
-		{
-			Nothing special for this hook
-		}*/
-		return array('short_unescaped',$default,'short');
+		unset($field);
+		return array('long_unescaped',$default,'long');
 	}
 
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
 
-		if ($ev=='') return '';
-		
-		return hyperlink((url_is_local($ev)?(get_base_url().'/'):'').$ev,escape_html(basename($ev)),true);
+		return escape_html($ev);
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
 	 * @param  array			The field details
 	 * @param  ?string		The actual current value of the field (NULL: none)
-	 * @param  boolean		Whether this is for a new entry
 	 * @return ?tempcode		The Tempcode for the input field (NULL: skip the field - it's not input)
 	 */
-	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
 	{
-		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
-
-		return form_input_line($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
+		$default=$field['cf_default'];
+		$list=explode('|',$default);
+		$_list=new ocp_tempcode();
+		if (($field['cf_required']) && (($actual_value=='') || (is_null($actual_value)))) $_list->attach(form_input_radio_entry('field_'.strval($field['id']),'',($actual_value=='') || (is_null($actual_value)),do_lang_tempcode('NA_EM')));
+		foreach ($list as $l)
+		{
+			$_list->attach(form_input_radio_entry('field_'.strval($field['id']),$l,$l==$actual_value,$l));
+		}
+		return form_input_radio($_cf_name,$_cf_description,$_list);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		$value=post_param($tmp_name,STRING_MAGIC_NULL);
-		if ($value!=STRING_MAGIC_NULL) $value=fixup_protocolless_urls($value);
-		return $value;
+		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
 
 }

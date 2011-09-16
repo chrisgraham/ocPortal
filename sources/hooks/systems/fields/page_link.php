@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_upload
+class Hook_fields_page_link
 {
 
 	// ==============
@@ -49,24 +49,20 @@ class Hook_catalogue_field_upload
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
-		/*if (!is_null($required))
-		{
-			Nothing special for this hook
-		}*/
+		unset($field);
 		return array('short_unescaped',$default,'short');
 	}
 
@@ -82,92 +78,54 @@ class Hook_catalogue_field_upload
 
 		if ($ev=='') return '';
 		
-		$original_filename=basename($ev);
-		$download_url=(url_is_local($ev)?(get_custom_base_url().'/'):'').$ev;
-		if (strpos($ev,'::')!==false)
-		{
-			list($ev,$original_filename)=explode('::',$ev);
-			$keep=symbol_tempcode('KEEP');
-			$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($ev)).$keep->evaluate();
-		}
+		$_ev=explode(' ',$ev,2);
+		if (!array_key_exists(1,$_ev)) $_ev[1]=$_ev[0];
+
+		list($zone,$attributes,)=page_link_decode($_ev[0]);
+		$url=build_url($attributes,$zone);
 		
-		$extension=get_file_extension($ev);
-		require_code('mime_types');
-		$mime_type=get_mime_type($extension);
-		if (((strpos($mime_type,'video')!==false) || (strpos($mime_type,'audio')!==false)) && (addon_installed('galleries')))
-		{
-			// Video/Audio HTML
-			switch ($mime_type)
-			{
-				case 'video/quicktime':
-					$tpl='GALLERY_VIDEO_QT';
-					break;
-				case 'audio/x-pn-realaudio':
-					$tpl='GALLERY_VIDEO_RM';
-					break;
-				default:
-					$tpl='GALLERY_VIDEO_GENERAL';
-			}
-			return do_template($tpl,array('URL'=>url_is_local($ev)?(get_custom_base_url().'/'.$ev):$ev,'WIDTH'=>get_option('default_video_width'),'HEIGHT'=>get_option('default_video_height'),'MIME_TYPE'=>$mime_type));
-		}
-		return hyperlink($download_url,$original_filename,true,true);
+		return hyperlink($url,escape_html($_ev[1]),true);
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
 	 * @param  array			The field details
 	 * @param  ?string		The actual current value of the field (NULL: none)
 	 * @param  boolean		Whether this is for a new entry
-	 * @return ?array			A pair: The Tempcode for the input field, Tempcode for hidden fields (NULL: skip the field - it's not input)
+	 * @return ?tempcode		The Tempcode for the input field (NULL: skip the field - it's not input)
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		if (strpos($actual_value,'::')!==false)
-		{
-			list($actual_value,)=explode('::',$actual_value);
-		}
+		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
 
-		$say_required=($field['cf_required']==1) && (($actual_value=='') || (is_null($actual_value)));
-		$ffield=form_input_upload($_cf_name,$_cf_description,'field_'.strval($field['id']),$say_required,($field['cf_required']==1)?NULL/*so unlink option not shown*/:$actual_value);
+		$_actual_value=explode(' ',$actual_value,2);
+		if (!array_key_exists(1,$_actual_value)) $_actual_value[1]=$_actual_value[0];
 
-		$hidden=new ocp_tempcode();
-		handle_max_file_size($hidden);
-
-		return array($ffield,$hidden);
+		return form_input_page_link($_cf_name,$_cf_description,'field_'.strval($field['id']),$_actual_value[0],$field['cf_required']==1);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		if (!fractional_edit())
-		{
-			require_code('uploads');
-			$temp=get_url('',$tmp_name,'uploads/catalogues',3,OCP_UPLOAD_ANYTHING);
-			$value=$temp[0];
-			if ($value!='')
-			{
-				$value=$value.'::'.$temp[2];
-			}
-			if (($editing) && ($value=='') && (post_param_integer($tmp_name.'_unlink',0)!=1))
-				return STRING_MAGIC_NULL;
-		} else
-		{
-			$value=STRING_MAGIC_NULL;
-		}
+
+		$value=post_param($tmp_name,STRING_MAGIC_NULL);
+
 		return $value;
 	}
 

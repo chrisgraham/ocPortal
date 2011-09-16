@@ -2092,8 +2092,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 					}
 
 					$array_key=$param[0]->evaluate();
-					$array=array_key_exists($array_key,$param['vars'])?$param['vars'][$array_key]:array();
-					if (!is_array($array)) $array=array();
+					if ((is_numeric($array_key)) || (strpos($array_key,',')!==false))
+					{
+						$array=explode(',',$array_key);
+					} else
+					{
+						$array=array_key_exists($array_key,$param['vars'])?$param['vars'][$array_key]:array();
+						if (!is_array($array)) $array=array();
+					}
 
 					$value='';
 					if (array_key_exists(1+1,$param))

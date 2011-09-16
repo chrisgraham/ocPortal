@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_long_trans
+class Hook_fields_posting_field
 {
 
 	// ==============
@@ -49,20 +49,20 @@ class Hook_catalogue_field_long_trans
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
+		unset($field);
 		if (!is_null($required))
 		{
 			if (($required) && ($default=='')) $default='default';
@@ -74,21 +74,22 @@ class Hook_catalogue_field_long_trans
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
 		return escape_html($ev);
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
@@ -102,77 +103,73 @@ class Hook_catalogue_field_long_trans
 	{
 		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
 
-		static $attachments_done=false;
-		if (!$attachments_done)
+		require_lang('javascript');
+		require_javascript('javascript_posting');
+		require_javascript('javascript_editing');
+		require_javascript('javascript_ajax');
+		require_javascript('javascript_swfupload');
+		require_css('swfupload');
+
+		require_lang('comcode');
+
+		$tabindex=get_form_field_tabindex();
+
+		$actual_value=filter_form_field_default($_cf_name,$actual_value);
+
+		list($attachments,$attach_size_field)=get_attachments('field_'.strval($field['id']));
+
+		$hidden_fields=new ocp_tempcode();
+		$hidden_fields->attach($attach_size_field);
+
+		$comcode_help=build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false));
+
+		$emoticon_chooser=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser('field_'.strval($field['id']));
+
+		$comcode_editor=get_comcode_editor('field_'.strval($field['id']));
+		$comcode_editor_small=get_comcode_editor('field_'.strval($field['id']),true);
+
+		$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value,'{$,page hint: no_wysiwyg}')===false));
+
+		$class='';
+		global $JAVASCRIPT,$WYSIWYG_ATTACHED;
+		if (!$WYSIWYG_ATTACHED)
+			$JAVASCRIPT->attach(do_template('HTML_EDIT'));
+		$WYSIWYG_ATTACHED=true;
+
+		@header('Content-type: text/html; charset='.get_charset());
+
+		if ($w) $class.=' wysiwyg';
+
+		global $LAX_COMCODE;
+		$temp=$LAX_COMCODE;
+		$LAX_COMCODE=true;
+		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
+		/*if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($actual_value,NULL,false,60,NULL,NULL,true);
+		$LAX_COMCODE=$temp;
+
+		$attachments_done=true;
+
+		$ret=do_template('POSTING_FIELD',array('REQUIRED'=>$field['cf_required']==1,'DESCRIPTION'=>$_cf_description,'HIDDEN_FIELDS'=>$hidden_fields,'PRETTY_NAME'=>$_cf_name,'NAME'=>'field_'.strval($field['id']),'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EMOTICON_CHOOSER'=>$emoticon_chooser,'COMCODE_HELP'=>$comcode_help,'POST'=>$actual_value,'DEFAULT_PARSED'=>$default_parsed,'ATTACHMENTS'=>$attachments));
+		
+		if (!$last)
 		{
-			require_lang('javascript');
-			require_javascript('javascript_posting');
-			require_javascript('javascript_editing');
-			require_javascript('javascript_ajax');
-			require_javascript('javascript_swfupload');
-			require_css('swfupload');
-
-			require_lang('comcode');
-
-			$tabindex=get_form_field_tabindex();
-
-			$actual_value=filter_form_field_default($_cf_name,$actual_value);
-
-			list($attachments,$attach_size_field)=get_attachments('field_'.strval($field['id']));
-
-			$hidden_fields=new ocp_tempcode();
-			$hidden_fields->attach($attach_size_field);
-
-			$comcode_help=build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false));
-
-			$emoticon_chooser=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser('field_'.strval($field['id']));
-
-			$comcode_editor=get_comcode_editor('field_'.strval($field['id']));
-			$comcode_editor_small=get_comcode_editor('field_'.strval($field['id']),true);
-
-			$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value,'{$,page hint: no_wysiwyg}')===false));
-
-			$class='';
-			global $JAVASCRIPT,$WYSIWYG_ATTACHED;
-			if (!$WYSIWYG_ATTACHED)
-				$JAVASCRIPT->attach(do_template('HTML_EDIT'));
-			$WYSIWYG_ATTACHED=true;
-
-			@header('Content-type: text/html; charset='.get_charset());
-
-			if ($w) $class.=' wysiwyg';
-
-			global $LAX_COMCODE;
-			$temp=$LAX_COMCODE;
-			$LAX_COMCODE=true;
-			$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-			/*if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($actual_value,NULL,false,60,NULL,NULL,true);
-			$LAX_COMCODE=$temp;
-
-			$attachments_done=true;
-
-			$ret=do_template('POSTING_FIELD',array('REQUIRED'=>$field['cf_required']==1,'DESCRIPTION'=>$_cf_description,'HIDDEN_FIELDS'=>$hidden_fields,'PRETTY_NAME'=>$_cf_name,'NAME'=>'field_'.strval($field['id']),'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EMOTICON_CHOOSER'=>$emoticon_chooser,'COMCODE_HELP'=>$comcode_help,'POST'=>$actual_value,'DEFAULT_PARSED'=>$default_parsed,'ATTACHMENTS'=>$attachments));
-			
-			if (!$last)
-			{
-				$ret->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADDITIONAL_INFO'))));
-			}
-			
-			return $ret;
+			$ret->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADDITIONAL_INFO'))));
 		}
 		
-		return form_input_text_comcode($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
+		return $ret;
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}

@@ -111,6 +111,10 @@ function filter_form_field_default($name,$val)
 							if (simulated_wildcard_match(strtolower($val),strtolower($attributes['embed']),true))
 								warn_exit(array_key_exists('error',$attributes)?make_string_tempcode($attributes['error']):do_lang_tempcode('FXML_FIELD_SHUNNED',escape_html($name)));
 							break;
+						case 'pattern':
+							if (preg_match('#'.str_replace('#','\#',$attributes['embed']).'#',$val)==0)
+								warn_exit(array_key_exists('error',$attributes)?make_string_tempcode($attributes['error']):do_lang_tempcode('FXML_FIELD_PATTERN_FAIL',escape_html($name),escape_html($attributes['embed'])));
+							break;
 						case 'possibilityset':
 							$values=explode(',',$attributes['embed']);
 							$found=false;
