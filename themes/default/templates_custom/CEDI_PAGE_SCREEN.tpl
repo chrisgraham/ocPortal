@@ -1,17 +1,23 @@
 {TITLE}
 
+{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,seedy_page,{ID}}}
+
 {+START,IF_NON_EMPTY,{DESCRIPTION}}
 	{+START,IF,{$NOT,{HIDE_POSTS}}}
 		<div id="pe_cedi_page_description"{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
 			{+START,BOX}
 				{DESCRIPTION}
 			{+END}
+
+			{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}<br />{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 		</div>
 	{+END}
 	{+START,IF,{HIDE_POSTS}}
 		<div id="pe_cedi_page_description">
 			{DESCRIPTION}
 		</div>
+
+		{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}<br />{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 		<hr class="spaced_rule" />
 	{+END}

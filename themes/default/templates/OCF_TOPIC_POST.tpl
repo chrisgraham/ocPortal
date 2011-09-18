@@ -12,6 +12,7 @@
 		</th>
 	</tr>
 {+END}{+END}
+
 <tr>
 	<th class="{CLASS*}">{EMPHASIS*}{+START,IF_NON_EMPTY,{ID}}<a name="post_{ID*}" id="post_{ID*}"></a>{+END}{FIRST_UNREAD}</th>
 	<th{+START,IF,{$NOT,{$VALUE_OPTION,html5}}} abbr="#{ID*}"{+END} class="ocf_post_details">
@@ -38,6 +39,10 @@
 		{+END}
 	</th>
 </tr>
+{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,post,{ID}}}
+{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}
+	{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry},1}
+{+END}
 <tr>
 	<td class="ocf_topic_post_member_details">
 		<div class="ocf_topic_poster_name">

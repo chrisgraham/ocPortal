@@ -47,6 +47,7 @@ class Hook_awards_quiz
 		$info['category_is_string']=true;
 		$info['archive_url']=build_url(array('page'=>'quiz'),get_module_zone('quiz'));
 		$info['cms_page']='cms_quiz';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

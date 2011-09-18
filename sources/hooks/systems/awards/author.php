@@ -42,6 +42,7 @@ class Hook_awards_author
 		$info['category_is_string']=true;
 		$info['archive_url']=build_url(array('page'=>'authors'),get_module_zone('authors'));
 		$info['cms_page']='cms_authors';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

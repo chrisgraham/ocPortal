@@ -91,7 +91,7 @@ class Module_cms_catalogues extends standard_aed_module
 			require_javascript('javascript_ajax');
 			$script=find_script('snippet');
 			$this->alt_aed_module->javascript.="
-				var form=document.getElementById('name').form;
+				var form=document.getElementById('new_field_0_name').form;
 				form.old_submit=form.onsubmit;
 				form.onsubmit=function()
 					{
@@ -148,8 +148,10 @@ class Module_cms_catalogues extends standard_aed_module
 			$has_categories=($cat_count!=0);
 		} else $has_categories=true;
 
+		require_code('fields');
+
 		return do_next_manager(($catalogue_name!='')?get_page_title(escape_html(get_translated_text($cat_title)),false):get_page_title('MANAGE_CATALOGUES'),($catalogue_name!='')?get_translated_tempcode($cat_description):comcode_lang_string('DOC_CATALOGUES'),
-					array(
+					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						(has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues') && ($catalogue_name==''))?array('add_one_catalogue',array('_SELF',array_merge($extra_map,array('type'=>'add_catalogue')),'_SELF'),do_lang('ADD_CATALOGUE')):NULL,
 						has_specific_permission(get_member(),'edit_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array_merge($extra_map_2,array('type'=>($catalogue_name=='')?'edit_catalogue':'_edit_catalogue')),'_SELF'),do_lang('EDIT_CATALOGUE')):NULL,
@@ -159,7 +161,7 @@ class Module_cms_catalogues extends standard_aed_module
 						(!$has_categories)?NULL:(has_specific_permission(get_member(),'edit_midrange_content','cms_catalogues')?array('edit_one',array('_SELF',array_merge($extra_map,array('type'=>'edit_entry')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_edit_one'):do_lang('EDIT_CATALOGUE_ENTRY')):NULL),
 						(!$has_categories)?NULL:(has_specific_permission(get_member(),'mass_import','cms_catalogues')?array('import',array('_SELF',array_merge($extra_map,array('type'=>'import')),'_SELF'),do_lang('IMPORT_CATALOGUE_ENTRIES')):NULL),
 						(!$has_categories)?NULL:($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?array('export',array('_SELF',array_merge($extra_map,array('type'=>'export')),'_SELF'),do_lang('EXPORT_CATALOGUE_ENTRIES')):NULL),
-					),
+					),manage_custom_fields_donext_link('catalogue'),manage_custom_fields_donext_link('catalogue_category')),
 					($catalogue_name!='')?escape_html(get_translated_text($cat_title)):do_lang('MANAGE_CATALOGUES')
 		);
 	}
@@ -1314,52 +1316,79 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		$hidden=new ocp_tempcode();
 		require_code('form_templates');
 
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
-		$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'name',$name,true));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_CATALOGUE_DESCRIPTION'),'description',$description,false));
-
-		$display_types=new ocp_tempcode();
-		$display_types->attach(form_input_list_entry(strval(0),$display_type==0,do_lang_tempcode('DT_MAPS')));
-		$display_types->attach(form_input_list_entry(strval(1),$display_type==1,do_lang_tempcode('DT_LIST')));
-		$display_types->attach(form_input_list_entry(strval(2),$display_type==2,do_lang_tempcode('DT_MATRIX')));
-		$fields->attach(form_input_list(do_lang_tempcode('DISPLAY_TYPE'),do_lang_tempcode('DESCRIPTION_DISPLAY_TYPE'),'display_type',$display_types));
-
-		if (addon_installed('shopping'))
+		if ($name=='') $name=get_param('id');
+		$tied_to_content_type=(substr($name,0,1)=='_') && ((file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.substr($name,1).'.php')) || (file_exists(get_file_base().'/sources/hooks/systems/awards/'.substr($name,1).'.php')));
+		if ($tied_to_content_type)
 		{
-			if ($ecommerce==1)
+			$content_type=substr($name,1);
+
+			require_code('hooks/systems/awards/'.$content_type);
+			$ob=object_factory('Hook_awards_'.$content_type);
+			$info=$ob->info();
+
+			$title=do_lang('CUSTOM_FIELDS_FOR',$info['title']->evaluate());
+
+			$hidden->attach(form_input_hidden('title',$title));
+			$hidden->attach(form_input_hidden('name',$name));
+			$hidden->attach(form_input_hidden('description',''));
+			$hidden->attach(form_input_hidden('notes',''));
+			$hidden->attach(form_input_hidden('auto_fill',''));
+			$hidden->attach(form_input_hidden('display_type','0'));
+			$hidden->attach(form_input_hidden('submit_points','0'));
+			$hidden->attach(form_input_hidden('send_view_reports','never'));
+
+			attach_message(do_lang_tempcode('EDITING_CUSTOM_FIELDS_HELP',$info['title']));
+
+			$actions=new ocp_tempcode();
+		} else
+		{
+			$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
+			$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'name',$name,true));
+			$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_CATALOGUE_DESCRIPTION'),'description',$description,false));
+
+			$display_types=new ocp_tempcode();
+			$display_types->attach(form_input_list_entry(strval(0),$display_type==0,do_lang_tempcode('DT_MAPS')));
+			$display_types->attach(form_input_list_entry(strval(1),$display_type==1,do_lang_tempcode('DT_LIST')));
+			$display_types->attach(form_input_list_entry(strval(2),$display_type==2,do_lang_tempcode('DT_MATRIX')));
+			$fields->attach(form_input_list(do_lang_tempcode('DISPLAY_TYPE'),do_lang_tempcode('DESCRIPTION_DISPLAY_TYPE'),'display_type',$display_types));
+
+			if (addon_installed('shopping'))
 			{
-				if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF'));
+				if ($ecommerce==1)
+				{
+					if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF'));
+				}
+				
+				$fields->attach(form_input_tick(do_lang_tempcode('CAT_ECOMMERCE'),do_lang_tempcode('DESCRIPTION_CAT_ECOMMERCE'),'ecommerce',$ecommerce==1));
 			}
-			
-			$fields->attach(form_input_tick(do_lang_tempcode('CAT_ECOMMERCE'),do_lang_tempcode('DESCRIPTION_CAT_ECOMMERCE'),'ecommerce',$ecommerce==1));
+			$fields->attach(form_input_tick(do_lang_tempcode('IS_TREE'),do_lang_tempcode('DESCRIPTION_IS_TREE'),'is_tree',$is_tree==1));
+			if ($name=='') $fields->attach(form_input_line(do_lang_tempcode('AUTO_FILL'),do_lang_tempcode('DESCRIPTION_AUTO_FILL'),'auto_fill','',false,NULL,10000));
+	
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='' && $submit_points==0 && $send_view_reports=='never','TITLE'=>do_lang_tempcode('ADVANCED'))));
+	
+			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+			if (addon_installed('points'))
+			{
+				$fields->attach(form_input_integer(do_lang_tempcode('SUBMIT_POINTS'),do_lang_tempcode('DESCRIPTION_SUBMIT_POINTS'),'submit_points',$submit_points,false));
+			}
+	
+			$view_report_types=new ocp_tempcode();
+			$view_report_types->attach(form_input_list_entry('never',$send_view_reports=='never',do_lang_tempcode('VR_NEVER')));
+			$view_report_types->attach(form_input_list_entry('daily',$send_view_reports=='daily',do_lang_tempcode('VR_DAILY')));
+			$view_report_types->attach(form_input_list_entry('weekly',$send_view_reports=='weekly',do_lang_tempcode('VR_WEEKLY')));
+			$view_report_types->attach(form_input_list_entry('monthly',$send_view_reports=='monthly',do_lang_tempcode('VR_MONTHLY')));
+			$view_report_types->attach(form_input_list_entry('quarterly',$send_view_reports=='quarterly',do_lang_tempcode('VR_QUARTERLY')));
+			$fields->attach(form_input_list(do_lang_tempcode('VIEW_REPORTS'),do_lang_tempcode('DESCRIPTION_VIEW_REPORTS'),'send_view_reports',$view_report_types));
+	
+			// Permissions
+			$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
+	
+			$actions=new ocp_tempcode();
+			if ($name!='')
+				$actions->attach(form_input_tick(do_lang_tempcode('RESET_CATEGORY_PERMISSIONS'),do_lang_tempcode('DESCRIPTION_RESET_CATEGORY_PERMISSIONS'),'reset_category_permissions',false));
+			if ($name=='')
+				$actions->attach(form_input_tick(do_lang_tempcode('ADD_TO_MENU'),do_lang_tempcode('DESCRIPTION_ADD_TO_MENU'),'add_to_menu',true));
 		}
-		$fields->attach(form_input_tick(do_lang_tempcode('IS_TREE'),do_lang_tempcode('DESCRIPTION_IS_TREE'),'is_tree',$is_tree==1));
-		if ($name=='') $fields->attach(form_input_line(do_lang_tempcode('AUTO_FILL'),do_lang_tempcode('DESCRIPTION_AUTO_FILL'),'auto_fill','',false,NULL,10000));
-
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='' && $submit_points==0 && $send_view_reports=='never','TITLE'=>do_lang_tempcode('ADVANCED'))));
-
-		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
-		if (addon_installed('points'))
-		{
-			$fields->attach(form_input_integer(do_lang_tempcode('SUBMIT_POINTS'),do_lang_tempcode('DESCRIPTION_SUBMIT_POINTS'),'submit_points',$submit_points,false));
-		}
-
-		$view_report_types=new ocp_tempcode();
-		$view_report_types->attach(form_input_list_entry('never',$send_view_reports=='never',do_lang_tempcode('VR_NEVER')));
-		$view_report_types->attach(form_input_list_entry('daily',$send_view_reports=='daily',do_lang_tempcode('VR_DAILY')));
-		$view_report_types->attach(form_input_list_entry('weekly',$send_view_reports=='weekly',do_lang_tempcode('VR_WEEKLY')));
-		$view_report_types->attach(form_input_list_entry('monthly',$send_view_reports=='monthly',do_lang_tempcode('VR_MONTHLY')));
-		$view_report_types->attach(form_input_list_entry('quarterly',$send_view_reports=='quarterly',do_lang_tempcode('VR_QUARTERLY')));
-		$fields->attach(form_input_list(do_lang_tempcode('VIEW_REPORTS'),do_lang_tempcode('DESCRIPTION_VIEW_REPORTS'),'send_view_reports',$view_report_types));
-
-		// Permissions
-		$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
-
-		$actions=new ocp_tempcode();
-		if ($name!='')
-			$actions->attach(form_input_tick(do_lang_tempcode('RESET_CATEGORY_PERMISSIONS'),do_lang_tempcode('DESCRIPTION_RESET_CATEGORY_PERMISSIONS'),'reset_category_permissions',false));
-		if ($name=='')
-			$actions->attach(form_input_tick(do_lang_tempcode('ADD_TO_MENU'),do_lang_tempcode('DESCRIPTION_ADD_TO_MENU'),'add_to_menu',true));
 
 		return array($fields,$hidden,NULL,NULL,false,NULL,$actions);
 	}
@@ -1473,7 +1502,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		$order_list=new ocp_tempcode();
 		for ($i=0;$i<$num_fields_to_show;$i++)
 		{
-			$order_list->attach(form_input_list_entry(strval($i),$i==$order,integer_format($i+1).(($i==0)?do_lang('NEW_FIELD_TITLE'):'')));
+			$order_list->attach(form_input_list_entry(strval($i),$i==$order,integer_format($i+1).(($i==0 && substr(get_param('id',''),0,1)!='_')?do_lang('NEW_FIELD_TITLE'):'')));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('ORDER'),do_lang_tempcode('DESCRIPTION_FIELD_ORDER_CLEVER'),$prefix.'order',$order_list));
 

@@ -90,8 +90,6 @@ class Block_main_contact_catalogues
 		{
 			$ob=get_fields_hook($field['cf_type']);
 			$default=$field['cf_default'];
-			if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
-			elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
 
 			$_cf_name=get_translated_text($field['cf_name']);
 			$field_cat='';

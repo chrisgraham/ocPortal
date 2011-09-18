@@ -6,6 +6,9 @@
 
 {POLL}
 
+{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,topic,{$_GET,id}}}
+{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}<br />{+END}
+
 {+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
 	<div class="non_accessibility_redundancy">
 		<div class="results_browser_spacing float_surrounder">

@@ -48,6 +48,7 @@ class Hook_awards_gallery
 		$info['archive_url']=build_url(array('page'=>'galleries'),get_module_zone('galleries'));
 		$info['cms_page']='cms_galleries';
 		$info['where']='name NOT LIKE \''.db_encode_like('download\_%').'\'';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

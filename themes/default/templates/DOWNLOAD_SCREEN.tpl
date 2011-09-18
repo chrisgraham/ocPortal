@@ -130,6 +130,9 @@
 	
 				{ADDITIONAL_DETAILS}
 			{+END}
+
+			{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,download,{ID}}}
+			{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}<br /><br />{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 		</div>
 	</div>
 

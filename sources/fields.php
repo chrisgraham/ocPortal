@@ -45,3 +45,220 @@ function get_fields_hook($type)
 	return object_factory('Hook_fields_'.filter_naughty($type));
 }
 
+/**
+ * Get extra do-next icon for managing custom fields for a content type.
+ *
+ * @param  ID_TEXT		Award hook codename
+ * @return array			Extra do-next icon (single item array, or empty array if catalogues not installed)
+ */
+function manage_custom_fields_donext_link($content_type)
+{
+	if (addon_installed('catalogues'))
+	{
+		require_lang('fields');
+
+		require_code('hooks/systems/awards/'.$content_type);
+		$ob=object_factory('Hook_awards_'.$content_type);
+		$info=$ob->info();
+
+		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']))
+		{
+			$exists=!is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'_'.$content_type)));
+
+			return array(
+				array('edit_one_catalogue',array('cms_catalogues',array('type'=>$exists?'_edit_catalogue':'add_catalogue','id'=>'_'.$content_type,'redirect'=>get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',$info['title'])),
+			);
+		}
+	}
+
+	return array();
+}
+
+/**
+ * Find whether a content type has a tied catalogue.
+ *
+ * @param  ID_TEXT		Award hook codename
+ * @return boolean		Whether it has
+ */
+function has_tied_catalogue($content_type)
+{
+	if (addon_installed('catalogues'))
+	{
+		require_code('hooks/systems/awards/'.$content_type);
+		$ob=object_factory('Hook_awards_'.$content_type);
+		$info=$ob->info();
+		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']))
+		{
+			$exists=!is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'_'.$content_type)));
+			if ($exists)
+			{
+				$first_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
+				if (is_null($first_cat)) // Repair needed, must have a category
+				{
+					require_code('catalogues2');
+					require_lang('catalogues');
+					actual_add_catalogue_category('_'.$content_type,do_lang('CUSTOM_FIELDS_FOR',$info['title']->evaluate()),'','',NULL);
+				}
+
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Get catalogue entry ID bound to a content entry.
+ *
+ * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content entry ID
+ * @return ?AUTO_LINK	Bound catalogue entry ID (NULL: none)
+ */
+function get_bound_content_entry($content_type,$id)
+{
+	return $GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entry_linkage','catalogue_entry_id',array(
+		'content_type'=>$content_type,
+		'content_id'=>$id,
+	));
+}
+
+/**
+ * Append fields to content add/edit form for gathering custom fields.
+ *
+ * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content entry ID
+ * @param  tempcode		Fields (passed by reference)
+ * @param  tempcode		Hidden Fields (passed by reference)
+ */
+function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
+{
+	require_code('catalogues');
+
+	$catalogue_entry_id=get_bound_content_entry($content_type,$id);
+	if (!is_null($catalogue_entry_id))
+	{
+		$special_fields=get_catalogue_entry_field_values('_'.$content_type,$catalogue_entry_id);
+	} else
+	{
+		$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_'.$content_type),'ORDER BY cf_order');
+	}
+
+	$field_groups=array();
+
+	require_code('fields');
+	foreach ($special_fields as $field_num=>$field)
+	{
+		$ob=get_fields_hook($field['cf_type']);
+		$default=$field['cf_default'];
+		if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
+		elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
+
+		$_cf_name=get_translated_text($field['cf_name']);
+		$field_cat='';
+		$matches=array();
+		if (strpos($_cf_name,': ')!==false)
+		{
+			$field_cat=substr($_cf_name,0,strpos($_cf_name,': '));
+			$_cf_name=substr($_cf_name,strpos($_cf_name,': ')+2);
+		}
+		if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
+
+		$_cf_description=escape_html(get_translated_text($field['cf_description']));
+
+		$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
+		$result=$ob->get_field_inputter($_cf_name,$_cf_description,$field,$default,true,!array_key_exists($field_num+1,$special_fields));
+		$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=false;
+
+		if (is_null($result)) continue;
+
+		if (is_array($result))
+		{
+			$field_groups[$field_cat]->attach($result[0]);
+		} else
+		{
+			$field_groups[$field_cat]->attach($result);
+		}
+		
+		$hidden->attach(form_input_hidden('label_for__field_'.strval($field['id']),$_cf_name));
+		
+		unset($result);
+		unset($ob);
+	}
+
+	if (array_key_exists('',$field_groups)) // Blank prefix must go first
+	{
+		$field_groups_blank=$field_groups[''];
+		unset($field_groups['']);
+		$field_groups=array_merge(array($field_groups_blank),$field_groups);
+	}
+	foreach ($field_groups as $field_group_title=>$extra_fields)
+	{
+		if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
+	
+		if ($field_group_title!='')
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
+		$fields->attach($extra_fields);
+	}
+}
+
+/**
+ * Save custom fields to a content item.
+ *
+ * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content entry ID
+ */
+function save_form_custom_fields($content_type,$id)
+{
+	$existing=get_bound_content_entry($content_type,$id);
+
+	// Get field values
+	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_'.$content_type),'ORDER BY cf_order');
+	$map=array();
+	require_code('fields');
+	foreach ($fields as $field)
+	{
+		$ob=get_fields_hook($field['cf_type']);
+		$value=$ob->inputted_to_field_value(!is_null($existing),$field,$field['cf_default']);
+
+		$map[$field['id']]=$value;
+	}
+
+	$first_cat=$GLOBALS['SITE_DB']->query_value('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
+
+	require_code('catalogues2');
+
+	if (!is_null($existing))
+	{
+		actual_edit_catalogue_entry($existing,$first_cat,1,'',0,0,0,$map);
+	} else
+	{
+		$catalogue_entry_id=actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
+
+		$GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
+			'catalogue_entry_id'=>$catalogue_entry_id,
+			'content_type'=>$content_type,
+			'content_id'=>$id,
+		));
+	}
+}
+
+/**
+ * Delete custom fields for content item.
+ *
+ * @param  ID_TEXT		Award hook codename
+ * @param  ID_TEXT		Content entry ID
+ */
+function	delete_form_custom_fields($content_type,$id)
+{
+	require_code('catalogues2');
+
+	$existing=get_bound_content_entry($content_type,$id);
+	if (!is_null($existing))
+	{
+		actual_delete_catalogue_entry($existing);
+
+		$GLOBALS['SITE_DB']->query_delete('catalogue_entry_linkage',array(
+			'catalogue_entry_id'=>$existing,
+		));
+	}
+}

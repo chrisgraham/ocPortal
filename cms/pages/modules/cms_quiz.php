@@ -93,12 +93,13 @@ class Module_cms_quiz extends standard_aed_module
 		}
 
 		require_code('templates_donext');
+		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
-					array(
+					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_QUIZ')),
 						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_QUIZ')),
-					),
+					),manage_custom_fields_donext_link('quiz')),
 					do_lang('MANAGE_QUIZZES')
 		);
 	}

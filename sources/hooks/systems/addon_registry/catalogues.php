@@ -105,7 +105,6 @@ class Hook_addon_registry_catalogues
 			'CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl',
 			'CATALOGUE_DEFAULT_ENTRY.tpl',
 			'CATALOGUE_DEFAULT_ENTRY_FIELD.tpl',
-			'CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE.tpl',
 			'CATALOGUE_DEFAULT_ENTRY_SCREEN.tpl',
 			'CATALOGUE_DEFAULT_LINE.tpl',
 			'CATALOGUE_DEFAULT_LINE_WRAP.tpl',
@@ -173,7 +172,6 @@ class Hook_addon_registry_catalogues
 			'CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl'=>'field_map_category_screen',
 			'CATALOGUE_DEFAULT_SUBCATEGORY.tpl'=>'field_map_category_screen',
 			'CATALOGUE_DEFAULT_SUBCATEGORY_WRAP.tpl'=>'field_map_category_screen',
-			'CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE.tpl'=>'field_map_category_screen',
 			'CATALOGUE_DEFAULT_ENTRY_EMBED.tpl'=>'field_map_category_screen',
 
 			'CATALOGUE_DEFAULT_TAB_WRAP.tpl'=>'table_category_screen',
@@ -232,8 +230,6 @@ class Hook_addon_registry_catalogues
 		{
 			$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_ENTRY_FIELD',array('ENTRYID'=>placeholder_random_id(),'CATALOGUE'=>lorem_phrase(),'TYPE'=>lorem_word(),'FIELD'=>lorem_word(),'FIELDID'=>placeholder_random_id(),'_FIELDID'=>placeholder_id(),'FIELDTYPE'=>lorem_word(),'VALUE_PLAIN'=>lorem_phrase(),'VALUE'=>lorem_phrase()),NULL,false,'CATALOGUE_DEFAULT_ENTRY_FIELD'));
 		}
-		$value = do_lorem_template('CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE',array('URL'=>placeholder_url(), 'THUMB_URL'=>placeholder_image_url(),'I'=>"0"));
-		$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_ENTRY_FIELD',array('ENTRYID'=>placeholder_random_id(),'CATALOGUE'=>lorem_phrase(),'TYPE'=>lorem_word(),'FIELD'=>lorem_word(),'FIELDID'=>placeholder_random_id(),'_FIELDID'=>placeholder_id(),'FIELDTYPE'=>lorem_word(),'VALUE_PLAIN'=>lorem_phrase(),'VALUE'=>$value),NULL,false,'CATALOGUE_DEFAULT_ENTRY_FIELD'));
 		$content=do_lorem_template('CATALOGUE_DEFAULT_ENTRY_EMBED',array(
 				'FIELDS'=>$fields,
 				'VIEW_URL'=>placeholder_url(),

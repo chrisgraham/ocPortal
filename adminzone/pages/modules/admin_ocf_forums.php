@@ -98,8 +98,9 @@ class Module_admin_ocf_forums extends standard_aed_module
 			$menu_links[]=array('multimods',array('admin_ocf_multimoderations',array('type'=>'misc'),get_module_zone('admin_ocf_multimoderations')),do_lang_tempcode('MULTI_MODERATIONS'),('DOC_MULTI_MODERATIONS'));
 		
 		require_code('templates_donext');
+		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_FORUMS'),comcode_to_tempcode(do_lang('DOC_FORUMS')."\n\n".do_lang('DOC_FORUM_CATEGORIES'),NULL,true),
-					$menu_links,
+					array_merge($menu_links,manage_custom_fields_donext_link('post'),manage_custom_fields_donext_link('topic'),manage_custom_fields_donext_link('forum')),
 					do_lang('MANAGE_FORUMS')
 		);
 	}

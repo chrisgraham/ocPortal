@@ -48,6 +48,7 @@ class Hook_awards_seedy_post
 		$info['category_is_string']=false;
 		$info['archive_url']=build_url(array('page'=>'cedi'),get_module_zone('cedi'));
 		$info['cms_page']='cedi';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

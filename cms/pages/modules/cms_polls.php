@@ -36,6 +36,7 @@ class Module_cms_polls extends standard_aed_module
 	var $menu_label='POLLS';
 	var $table='poll';
 	var $title_is_multi_lang=true;
+	var $award_type='poll';
 
 	/**
 	 * Standard aed_module run_start.
@@ -86,12 +87,13 @@ class Module_cms_polls extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
+		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
-					array(
+					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_midrange_content','cms_polls')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
 						has_specific_permission(get_member(),'edit_own_midrange_content','cms_polls')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):NULL,
-					),
+					),manage_custom_fields_donext_link('poll')),
 					do_lang('MANAGE_POLLS')
 		);
 	}

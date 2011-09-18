@@ -50,6 +50,7 @@ class Hook_awards_video
 		$info['cms_page']='cms_galleries';
 		$info['where']='cat NOT LIKE \''.db_encode_like('download\_%').'\'';
 		$info['views_field']='video_views';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

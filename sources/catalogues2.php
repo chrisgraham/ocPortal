@@ -663,7 +663,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
  * @param  ?SHORT_TEXT		Meta keywords for this resource (NULL: do not edit)
  * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit)
  */
-function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords,$meta_description)
+function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords='',$meta_description='')
 {
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
 	$fields=collapse_2d_complexity('id','cf_type',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));

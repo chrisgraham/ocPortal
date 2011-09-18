@@ -383,7 +383,22 @@ class standard_aed_module
 
 		return do_template('CONFIRM_SCREEN',array('_GUID'=>'06a3eb06338a7f821676d8ca3eb66aa6','TITLE'=>$title,'PREVIEW'=>$output,'URL'=>$url,'FIELDS'=>$fields));
 	}
-
+	
+	/**
+	 * Find whether this content type has a tied catalogue.
+	 *
+	 * @return boolean	Whether it has
+	 */
+	function has_tied_catalogue()
+	{
+		if (!is_null($this->award_type))
+		{
+			require_code('fields');
+			return has_tied_catalogue($this->award_type);
+		}
+		return false;
+	}
+	
 	/**
 	 * Standard modular UI to add an entry.
 	 *
@@ -450,6 +465,14 @@ class standard_aed_module
 		{
 			$fields=$bits;
 			$hidden=new ocp_tempcode();
+		}
+		
+		// Add in custom fields
+		if ($this->has_tied_catalogue())
+		{
+			require_code('fields');
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MORE'))));
+			append_form_custom_fields($this->award_type,NULL,$fields,$hidden);
 		}
 
 		// SEO?
@@ -583,6 +606,13 @@ class standard_aed_module
 		} else
 		{
 			$id=$temp;
+		}
+
+		// Save custom fields
+		if ($this->has_tied_catalogue())
+		{
+			require_code('fields');
+			save_form_custom_fields($this->award_type,$id);
 		}
 
 		if ($this->user_facing)
@@ -904,6 +934,14 @@ class standard_aed_module
 			$hidden=new ocp_tempcode();
 		}
 
+		// Add in custom fields
+		if ($this->has_tied_catalogue())
+		{
+			require_code('fields');
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MORE'))));
+			append_form_custom_fields($this->award_type,$id,$fields,$hidden);
+		}
+
 		// SEO?
 		if (!is_null($this->seo_type))
 		{
@@ -1123,6 +1161,13 @@ class standard_aed_module
 
 			$this->delete_actualisation($id);
 
+			// Delete custom fields
+			if ($this->has_tied_catalogue())
+			{
+				require_code('fields');
+				delete_form_custom_fields($this->award_type,$id);
+			}
+
 			/*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))		No - resource is gone now, and redirect would almost certainly try to take us back there
 			{
 				$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?get_param('redirect'):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
@@ -1154,6 +1199,14 @@ class standard_aed_module
 			if (!is_null($this->upload)) require_code('uploads');
 			$description=$this->edit_actualisation($id);
 			if (!is_null($this->new_id)) $id=$this->new_id;
+
+			// Save custom fields
+			if ($this->has_tied_catalogue())
+			{
+				require_code('fields');
+				save_form_custom_fields($this->award_type,$id);
+			}
+
 			if (($this->output_of_action_is_confirmation) && (!is_null($description))) return $description;
 
 			if (is_null($description)) $description=do_lang_tempcode('SUCCESS');

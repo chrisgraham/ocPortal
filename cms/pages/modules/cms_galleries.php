@@ -153,8 +153,9 @@ class Module_cms_galleries extends standard_aed_module
 		$allow_videos=($GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)',array('accept_videos'=>1))>0);
 		
 		require_code('templates_donext');
+		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_GALLERIES'),comcode_lang_string('DOC_GALLERIES'),
-					array(
+					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_midrange_content','cms_galleries')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_GALLERY')):NULL,
 						has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_galleries')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_GALLERY')):NULL,
@@ -163,7 +164,7 @@ class Module_cms_galleries extends standard_aed_module
 						(!$allow_images)?NULL:has_specific_permission(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_image',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_IMAGE')):NULL,
 						(!$allow_videos)?NULL:has_specific_permission(get_member(),'submit_midrange_content','cms_galleries')?array('add_one_video',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_VIDEO')):NULL,
 						(!$allow_videos)?NULL:has_specific_permission(get_member(),'edit_own_midrange_content','cms_galleries')?array('edit_one_video',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_VIDEO')):NULL,
-					),
+					),manage_custom_fields_donext_link('image'),manage_custom_fields_donext_link('video'),manage_custom_fields_donext_link('gallery')),
 					do_lang('MANAGE_GALLERIES')
 		);
 	}

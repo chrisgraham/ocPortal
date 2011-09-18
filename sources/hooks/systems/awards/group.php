@@ -44,6 +44,7 @@ class Hook_awards_group
 		$info['category_is_string']=false;
 		$info['archive_url']=build_url(array('page'=>'groups'),get_module_zone('groups'));
 		$info['cms_page']='groups';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

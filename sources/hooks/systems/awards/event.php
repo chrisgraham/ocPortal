@@ -48,6 +48,7 @@ class Hook_awards_event
 		$info['archive_url']=build_url(array('page'=>'calendar'),get_module_zone('calendar'));
 		$info['cms_page']='cms_calendar';
 		$info['views_field']='e_views';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

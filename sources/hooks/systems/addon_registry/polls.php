@@ -306,6 +306,7 @@ class Hook_addon_registry_polls
 					'COMMENT_DETAILS'=>$comment_details,
 					'EDIT_URL'=>placeholder_url(),
 					'POLL_DETAILS'=>$poll_details,
+					'ID'=>placeholder_id(),
 						)
 			),NULL,'',true),
 		);

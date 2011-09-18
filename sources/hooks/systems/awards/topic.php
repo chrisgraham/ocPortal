@@ -51,6 +51,7 @@ class Hook_awards_topic
 		$info['archive_url']=build_url(array('page'=>'forumview'),get_module_zone('forumview'));
 		$info['cms_page']='topics';
 		$info['views_field']='t_num_views';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}
