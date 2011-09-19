@@ -112,7 +112,7 @@ function _custom_comcode_import($connection)
 		$tags=array();
 		if (addon_installed('custom_comcode'))
 		{
-			if (($GLOBALS['FORUM_DB']!=$connection) && (!is_null($GLOBALS['FORUM_DB'])))
+			if (($GLOBALS['FORUM_DB']!=$connection) && (!is_null($GLOBALS['FORUM_DB'])) && (get_forum_type()=='ocf'))
 				$tags=array_merge($tags,$GLOBALS['FORUM_DB']->query_select('custom_comcode',array('tag_parameters','tag_replace','tag_tag','tag_dangerous_tag','tag_block_tag','tag_textual_tag'),array('tag_enabled'=>1)));
 			if ($connection!=$GLOBALS['SITE_DB'])
 				$tags=array_merge($tags,$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_parameters','tag_replace','tag_tag','tag_dangerous_tag','tag_block_tag','tag_textual_tag'),array('tag_enabled'=>1)));
