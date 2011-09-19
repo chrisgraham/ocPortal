@@ -1041,9 +1041,16 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'EXTRA_FOOT':
+				if ($GLOBALS['EXTRA_FOOT']===NULL) $GLOBALS['EXTRA_FOOT']=new ocp_tempcode();
 				$_value=$GLOBALS['EXTRA_FOOT'];
-				if ($_value===NULL) $_value=new ocp_tempcode();
-				$value=$_value->evaluate();
+
+				if (array_key_exists(0,$param)) // Set
+				{
+					$GLOBALS['EXTRA_FOOT']->attach($param[0]);
+				} else // Get
+				{
+					$value=$_value->evaluate();
+				}
 				break;
 
 			case 'RAND':
