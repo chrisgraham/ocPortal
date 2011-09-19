@@ -289,6 +289,38 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('SEND_STAFF_MESSAGE_POST_VALIDATION','send_staff_message_post_validation','tick','return \'1\';','SECTION_FORUMS','GENERAL');
 	}
 
+	if ((!is_null($upgrade_from)) && ($upgrade_from<7.2))
+	{
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT m_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'db_meta WHERE ('.db_string_equal_to('m_type','?INTEGER').' OR '.db_string_equal_to('m_type','BINARY').') AND '.db_string_equal_to('m_table','f_member_custom_fields'));
+		foreach ($rows as $row)
+		{
+			$GLOBALS['FORUM_DB']->alter_table_field('f_member_custom_fields',$row['m_name'],'SHORT_TEXT');
+		}
+	
+		$i=0;
+		do
+		{
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*'),NULL,'',100,$i);
+			foreach ($rows as $j=>$row)
+			{
+				foreach ($row as $key=>$val)
+				{
+					if (substr($key,0,6)=='field_')
+					{
+						$val=str_replace('|',chr(10),$val);
+						$row[$key]=$val;
+					}
+				}
+				if ($rows[$j]!=$row)
+				{
+					$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',array('mf_member_id'=>$row['mf_member_id']),$row,'',1);
+				}
+			}
+			$i+=100;
+		}
+		while (count($rows)!=0);
+	}
+
 	if ((!is_null($upgrade_from)) && ($upgrade_from<4.0))
 	{
 		$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_password_compatibility_scheme','ID_TEXT','m_password_compat_scheme');

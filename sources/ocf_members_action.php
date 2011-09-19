@@ -149,15 +149,10 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	// Supplement custom field values given with defaults, and check constraints
 	if (is_null($groups)) $groups=ocf_get_all_default_groups(true);
 	$all_fields=ocf_get_all_custom_fields_match($groups);
+	require_code('fields');
 	foreach ($all_fields as $field)
 	{
 		$field_id=$field['id'];
-		$default=$field['cf_default'];
-		if (substr($field['cf_type'],-4)=='list')
-		{
-			$_default=explode('|',$default);
-			$default=$_default[0];
-		}
 
 		if (array_key_exists($field_id,$custom_fields))
 		{
@@ -167,7 +162,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 			}
 		} else
 		{
-			$custom_fields[$field_id]=$default;
+			$custom_fields[$field_id]='';
 		}
 	}
 
@@ -248,13 +243,14 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	foreach ($custom_fields as $field_num=>$value)
 	{
 		if (!array_key_exists($field_num,$all_fields_types)) continue; // Trying to set a field we're not allowed to (doesn't apply to our group)
-		
-		if (($all_fields_types[$field_num]=='short_trans') || ($all_fields_types[$field_num]=='long_trans'))
+
+		$ob=get_fields_hook($all_fields_types[$field_num]);
+		list(,,$storage_type)=$ob->get_field_value_row_bits($all_fields_types[$field_num]);
+
+		if (strpos($storage_type,'_trans')!==false)
 		{
 			$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
 		}
-		if (is_null($value)) $value='';
-		if (($all_fields_types[$field_num]=='integer') || ($all_fields_types[$field_num]=='tick')) $value=intval($value);
 		$row['field_'.strval($field_num)]=$value;
 	}
 
@@ -264,15 +260,15 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	{
 		if (!array_key_exists('field_'.strval($field['id']),$row))
 		{
-			if (($field['cf_type']=='short_trans') || ($field['cf_type']=='long_trans'))
+			$ob=get_fields_hook($field['cf_type']);
+			list(,,$storage_type)=$ob->get_field_value_row_bits($field);
+	
+			$value='';
+			if (strpos($storage_type,'_trans')!==false)
 			{
-				$row['field_'.strval($field['id'])]=insert_lang('',3,$GLOBALS['FORUM_DB']);
-			} else
-			{
-				$row['field_'.strval($field['id'])]='';
-				if (($field['cf_type']=='integer') || ($field['cf_type']=='tick')) $row['field_'.strval($field['id'])]=0;
-				elseif ($field['cf_type']=='float') $row['field_'.strval($field['id'])]='0.0';
+				$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
 			}
+			$row['field_'.strval($field['id'])]=$value;
 		}
 	}
 	$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
@@ -327,6 +323,58 @@ function ocf_make_boiler_custom_field($type)
 	$CUSTOM_FIELD_CACHE=array();
 
 	return ocf_make_custom_field(do_lang('DEFAULT_CPF_'.$type.'_NAME'),0,do_lang('DEFAULT_CPF_'.$type.'_DESCRIPTION'),'',$public_view,$owner_view,$owner_set,0,$_type,0,0,0,NULL,'',true);
+}
+
+/**
+ * Find how to store a field in the database.
+ *
+ * @param  ID_TEXT	The field type.
+ * @param  array		A pair: the DB field type, whether to index.
+ */
+function get_cpf_storage_for($type)
+{
+	require_code('fields');
+	$ob=get_fields_hook($type);
+	list(,,$storage_type)=$ob->get_field_value_row_bits(array('cf_type'=>$type,'cf_default'=>''));
+	$_type='SHORT_TEXT';
+	switch ($storage_type)
+	{
+		case 'short_trans':
+			$_type='SHORT_TRANS';
+			break;
+		case 'long_trans':
+			$_type='LONG_TRANS';
+			break;
+		case 'long':
+			$_type='LONG_TEXT';
+			break;
+	}
+
+	$index=true;
+	switch ($type)
+	{
+		case 'short_trans':
+		case 'short_trans_multi':
+		case 'long_trans':
+		case 'posting_field':
+		case 'tick':
+		case 'integer':
+		case 'float':
+		case 'color':
+		case 'content_link':
+		case 'date':
+		case 'just_date':
+		case 'just_time':
+		case 'date':
+		case 'picture':
+		case 'password':
+		case 'page_link':
+		case 'upload':
+			$index=false;
+			break;
+	}
+	
+	return array($_type,$index);
 }
 
 /**
@@ -406,30 +454,8 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	$id=$GLOBALS['SITE_DB']->query_insert('f_custom_fields',$map+array('cf_encrypted'=>$encrypted),true,true);
 	if (is_null($id)) $id=$GLOBALS['SITE_DB']->query_insert('f_custom_fields',$map,true); // Still upgrading, cf_encrypted does not exist yet
 
-	$index=false;
-	switch ($type)
-	{
-		case 'multilist':
-		case 'long_text':
-			$index=true;
-			$_type='LONG_TEXT';
-			break;
-		case 'short_trans':
-			$_type='?SHORT_TRANS';
-			break;
-		case 'long_trans':
-			$_type='?LONG_TRANS';
-			break;
-		case 'tick':
-			$_type='BINARY';
-			break;
-		case 'integer':
-			$_type='?INTEGER';
-			break;
-		default:
-			$index=true;
-			$_type=($encrypted==1)?'LONG_TEXT':'SHORT_TEXT';
-	}
+	list($_type,$index)=get_cpf_storage_for($type);
+
 	require_code('database_action');
 	// ($index?'#':'').
 	$GLOBALS['SITE_DB']->add_table_field('f_member_custom_fields','field_'.strval($id),$_type); // Default will be made explicit when we insert rows

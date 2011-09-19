@@ -199,61 +199,14 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true)
  */
 function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
 {
+	require_code('fields');
+
 	$actual_custom_fields=array();
 	foreach ($custom_fields as $custom_field)
 	{
-		switch ($custom_field['cf_type'])
-		{
-			case 'picture':
-			case 'upload':
-				require_code('uploads');
-				$_upload=get_url('','custom_'.strval($custom_field['id']).'_value',file_exists(get_custom_file_base().'/uploads/cpf_upload')?'uploads/cpf_upload':'uploads/ocf_cpf_upload',($custom_field['cf_type']=='picture')?0:2,($custom_field['cf_type']=='picture')?OCP_UPLOAD_IMAGE:OCP_UPLOAD_ANYTHING);
-				if ((!is_null($member_id)) && ($_upload[0]=='') && (post_param_integer('custom_'.strval($custom_field['id']).'_value_unlink',0)!=1))
-				{
-					$old_value=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval($custom_field['id']),array('mf_member_id'=>$member_id));
-					$upload_path=file_exists(get_custom_file_base().'/uploads/cpf_upload')?'uploads/cpf_upload':'uploads/ocf_cpf_upload';
-					if ((url_is_local($old_value)) && (substr($old_value,0,strlen($upload_path)+1)==$upload_path.'/'))
-					{
-						@unlink(get_custom_file_base().'/'.rawurldecode($old_value));
-						sync_file(rawurldecode($old_value));
-					}
-				}
-				$actual_custom_fields[$custom_field['id']]=$_upload[0];
-				if ((function_exists('imagecreatefromstring')) && ($_upload[0]!='') && ($custom_field['cf_type']=='picture') && (preg_match('#^\d+\|\d+$#',$custom_field['cf_default'])!=0))
-				{
-					$parts=explode('|',$custom_field['cf_default'],2);
-					$width=intval($parts[0]);
-					$height=intval($parts[1]);
-					$file_path=get_custom_file_base().'/'.$_upload[0];
-					convert_image($file_path,$file_path,$width,$height,-1,true,NULL,true,true);
-				}
-				break;
-
-			case 'integer':
-				$actual_custom_fields[$custom_field['id']]=post_param_integer('custom_'.strval($custom_field['id']).'_value',NULL);
-				break;
-
-			case 'multilist':
-				$value='';
-				if (array_key_exists('custom_'.strval($custom_field['id']).'_value',$_POST))
-				{
-					foreach ($_POST['custom_'.strval($custom_field['id']).'_value'] as $val)
-					{
-						if ($value!='') $value.='|';
-						if (get_magic_quotes_gpc()) $val=stripslashes($val);
-						$value.=$val;
-					}
-				}
-				$actual_custom_fields[$custom_field['id']]=$value;
-				break;
-
-			case 'tick':
-				$actual_custom_fields[$custom_field['id']]=post_param_integer('custom_'.strval($custom_field['id']).'_value',0);
-				break;
-
-			default:
-				$actual_custom_fields[$custom_field['id']]=post_param('custom_'.strval($custom_field['id']).'_value','');
-		}
+		$ob=get_fields_hook($custom_field['cf_type']);
+		$old_value=is_null($member_id)?NULL:$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval($custom_field['id']),array('mf_member_id'=>$member_id));
+		$actual_custom_fields[$custom_field['id']]=$ob->inputted_to_field_value(true,$custom_field,'uploads/ocf_cpf_upload',$old_value);
 	}
 	return $actual_custom_fields;
 }
@@ -384,43 +337,28 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 	if (count($_custom_fields)!=0) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PROFILE'))));
 	$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
 	$field_groups=array();
+	require_code('fields');
 	foreach ($_custom_fields as $custom_field)
 	{
 //		if (($custom_field['cf_locked']==0) || (!is_null($member_id)))
 //		{
-			$function='form_input_line';
-			if ($custom_field['cf_type']=='tick') $function='form_input_tick';
-			if ($custom_field['cf_type']=='integer') $function='form_input_integer';
-			if ($custom_field['cf_type']=='float') $function='form_input_float';
-			if ($custom_field['cf_type']=='upload') $function='form_input_upload';
-			if ($custom_field['cf_type']=='picture') $function='form_input_upload';
-			if (substr($custom_field['cf_type'],0,5)=='long_') $function='form_input_text';
-			if ($custom_field['cf_type']=='list') $function='form_input_list';
-			if ($custom_field['cf_type']=='multilist') $function='form_input_multi_list';
-			if ($custom_field['cf_type']=='radiolist') $function='form_input_radio';
-			if ((!is_null($custom_fields)) && (array_key_exists($custom_field['id'],$custom_fields)))
+			$ob=get_fields_hook($custom_field['cf_type']);
+			list(,,$storage_type)=$ob->get_field_value_row_bits($custom_field);
+
+			$existing_field=(!is_null($custom_fields)) && (array_key_exists($custom_field['id'],$custom_fields));
+			if ($existing_field)
 			{
 				$value=mixed();
 				$value=$custom_fields[$custom_field['id']];
-				if (($custom_field['cf_type']=='short_trans') || ($custom_field['cf_type']=='long_trans'))
+				if (strpos($storage_type,'_trans')!==false)
 				{
 					$value=((is_null($value)) || ($value==0))?'':get_translated_text($value,$GLOBALS['FORUM_DB']);
-					$function.='_comcode';
 				}
 				if (($custom_field['cf_encrypted']==1) && (is_encryption_enabled()))
 					$value=remove_magic_encryption_marker($value);
 			} else
 			{
 				$value=$custom_field['cf_default'];
-				if (substr($custom_field['cf_type'],-4)=='list')
-				{
-					$_value=explode('|',$value);
-					$value=($custom_field['cf_type']=='multilist')?'':$_value[0];
-				}
-				if (($custom_field['cf_type']=='tick') || ($custom_field['cf_type']=='integer'))
-				{
-					$value=intval($value);
-				}
 			}
 			$result=new ocp_tempcode();
 			$_description=escape_html(get_translated_text($custom_field['cf_description'],$GLOBALS['FORUM_DB']));
@@ -436,73 +374,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 				$field_cat=trim($matches[0],'() ');
 				$custom_field['trans_name']=str_replace($matches[0],'',$custom_field['trans_name']);
 			}
-			switch ($function)
-			{
-				case 'form_input_multi_list':
-				case 'form_input_list':
-				case 'form_input_radio':
-					$list=new ocp_tempcode();
-					$_value=explode('|',$custom_field['cf_default']);
-					// asort($_value);
-					$list_required=true;
-					if ($function=='form_input_list')
-					{
-						if ($value=='') $value=$_value[0];
-						foreach ($_value as $__value)
-						{
-							if ($__value=='') $list_required=false;
-							$list->attach(form_input_list_entry($__value,$value==$__value));
-						}
-						if (($custom_field['cf_encrypted']==1) && (is_encryption_enabled()))
-							$list->attach(form_input_list_entry(do_lang('PRESERVE_ENCRYPTION'),true));
-						$result=form_input_list($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',$list,NULL,false,$list_required);
-					}
-					elseif ($function=='form_input_multi_list')
-					{
-						$all_values=explode('|',$value);
-						foreach ($_value as $__value)
-						{
-							if ($__value!='')
-								$list->attach(form_input_list_entry($__value,in_array($__value,$all_values)));
-						}
-						$result=form_input_multi_list($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',$list);
-					} else
-					{
-						if ($value=='') $value=$_value[0];
-						foreach ($_value as $__value)
-						{
-							if ($__value!='')
-								$list->attach(form_input_radio_entry('custom_'.strval($custom_field['id']).'_value',$__value,$value==$__value,$__value));
-						}
-						$result=form_input_radio($custom_field['trans_name'],$_description,$list);
-					}
-					break;
-				case 'form_input_upload':
-					$result=form_input_upload($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',$custom_field['cf_required']==1,($value=='')?NULL:$value);
-					handle_max_file_size($hidden);
-					break;
-				case 'form_input_tick':
-					$result=form_input_tick($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',$value==1);
-					break;
-				case 'form_input_float':
-					$result=form_input_float($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',floatval($value),$custom_field['cf_required']==1);
-					break;
-				case 'form_input_integer':
-					$result=form_input_integer($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',$value,$custom_field['cf_required']==1);
-					break;
-				case 'form_input_line':
-					$result=form_input_line($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',$value,$custom_field['cf_required']==1);
-					break;
-				case 'form_input_line_comcode':
-					$result=form_input_line_comcode($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',$value,$custom_field['cf_required']==1);
-					break;
-				case 'form_input_text':
-					$result=form_input_text($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',is_null($value)?'':$value,$custom_field['cf_required']==1);
-					break;
-				case 'form_input_text_comcode':
-					$result=form_input_text_comcode($custom_field['trans_name'],$_description,'custom_'.strval($custom_field['id']).'_value',is_null($value)?'':$value,$custom_field['cf_required']==1);
-					break;
-			}
+			$result=$ob->get_field_inputter($custom_field['trans_name'],$_description,$custom_field,$value,!$existing_field);
 			if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
 			$field_groups[$field_cat]->attach($result);
 			$hidden->attach(form_input_hidden('label_for__custom_'.strval($custom_field['id']).'_value',$custom_field['trans_name']));
@@ -883,12 +755,33 @@ function ocf_delete_member($member_id)
 	$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>get_member()),array('g_group_leader'=>$member_id));
 
 	// Delete custom profile fields
-	$lang_fields=$GLOBALS['FORUM_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields WHERE '.db_string_equal_to('cf_type','long_trans').' OR '.db_string_equal_to('cf_type','short_trans'));
+	$cpfs=$GLOBALS['FORUM_DB']->query_select('f_custom_fields');
 	$fields_row=$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id'=>$member_id),'',1);
-	foreach ($lang_fields as $field)
+	foreach ($cpfs as $field)
 	{
 		$l=$fields_row[0]['field_'.strval($field['id'])];
-		if (is_numeric($l)) delete_lang($l);
+
+		$object=get_fields_hook($field['cf_type']);
+
+		list(,,$storage_type)=$object->get_field_value_row_bits($field);
+
+		if (method_exists($object,'cleanup'))
+		{
+			$object->cleanup($l);
+		}
+		
+		if ((strpos($storage_type,'_trans')!==false) && (!is_null($l)))
+		{
+			if (true) // Always do this just in case it is for attachments
+			{
+				require_code('attachments2');
+				require_code('attachments3');
+				delete_lang_comcode_attachments($l,'null',strval($id),$GLOBALS['FORUM_DB']);
+			} else
+			{
+				delete_lang($l,$GLOBALS['FORUM_DB']);
+			}
+		}
 	}
 	$GLOBALS['FORUM_DB']->query_delete('f_member_custom_fields',array('mf_member_id'=>$member_id),'',1);
 
@@ -998,18 +891,8 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 
 	$GLOBALS['SITE_DB']->query_update('f_custom_fields',$map,array('id'=>$id),'',1);
 
-	$index=false;
-	switch ($type)
-	{
-		case 'short_trans':
-		case 'long_trans':
-		case 'tick':
-		case 'integer':
-			break;
-		default:
-			$index=true;
-			break;
-	}
+	list(,$index)=get_cpf_storage_for($type);
+
 	require_code('database_action');
 	$GLOBALS['SITE_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
 	if ($index)
@@ -1080,24 +963,42 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			require_code('encryption');
 			$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
 			if ((remove_magic_encryption_marker($value)==remove_magic_encryption_marker($current)) && (is_data_encrypted($current))) return NULL;
-			if (($type=='list') && ($value==do_lang('PRESERVE_ENCRYPTION'))) return NULL;
 			$value=encrypt_data($value);
 		}
 	} else $encrypted=false;
 
-	if ((is_null($value)) && ($type!='integer') && ($type!='float')) $value='';
-	if (($type=='short_trans') || ($type=='long_trans'))
+	require_code('fields');
+	$ob=get_fields_hook($type);
+	list(,,$storage_type)=$ob->get_field_value_row_bits(array('cf_default'=>'','cf_type'=>$type));
+
+	if (strpos($storage_type,'_trans')!==false)
 	{
 		if (is_integer($value)) $value=get_translated_text($value,$GLOBALS['FORUM_DB']);
 		
 		$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
-		if ((is_null($current)) || ($current==0))
+		if (is_null($current))
 		{
-			$current=insert_lang($value,3);
+			if ($type=='posting_field')
+			{
+				require_code('attachments2');
+				$current=insert_lang_comcode_attachments(3,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
+			} else
+			{
+				$current=insert_lang_comcode($value,3,$GLOBALS['FORUM_DB']);
+			}
+
 			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',array('field_'.strval(intval($field))=>$current),array('mf_member_id'=>$member_id),'',1);
 		} else
 		{
-			lang_remap($current,$value,$GLOBALS['FORUM_DB']);
+			if ($type=='posting_field')
+			{
+				require_code('attachments2');
+				require_code('attachments3');
+				update_lang_comcode_attachments($current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
+			} else
+			{
+				lang_remap_comcode($current,$value,$GLOBALS['FORUM_DB']);
+			}
 		}
 	} else
 	{

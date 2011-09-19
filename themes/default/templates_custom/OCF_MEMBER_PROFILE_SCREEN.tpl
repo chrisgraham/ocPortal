@@ -209,7 +209,7 @@
 										<td>
 											<span{+START,IF,{$EQ,{NAME},{!SPECIAL_CPF__ocp_fullname}}} class="fn given-name"{+END}>
 												{+START,IF_EMPTY,{ENCRYPTED_VALUE}}
-													{$PREG_REPLACE,\|,\,,{$PREG_REPLACE,\n,<br />,{VALUE}}}
+													{VALUE}
 												{+END}
 												{+START,IF_NON_EMPTY,{ENCRYPTED_VALUE}}
 													{+START,IF,{$JS_ON}}{!DATA_ENCRYPTED} <a href="javascript:decrypt_data('{ENCRYPTED_VALUE;}');" title="{!DECRYPT_DATA}: {!DESCRIPTION_DECRYPT_DATA*}">{!DECRYPT_DATA}</a>{+END}

@@ -378,7 +378,7 @@ class forum_driver_ocf extends forum_driver_base
 		$out=array();
 		foreach ($info as $field=>$value)
 		{
-			$out[substr($field,4)]=$value;
+			$out[substr($field,4)]=$value['RAW'];
 		}
 		return $out;
 	}

@@ -141,7 +141,7 @@ class Module_cms_authors
 				$info=ocf_get_all_custom_fields_match_member(get_member());
 				if (array_key_exists(do_lang('DEFAULT_CPF_SELF_DESCRIPTION_NAME'),$info))
 				{
-					$description=$info[do_lang('DEFAULT_CPF_SELF_DESCRIPTION_NAME')];
+					$description=$info[do_lang('DEFAULT_CPF_SELF_DESCRIPTION_NAME')]['RENDERED'];
 					if (is_object($description)) $description=$description->evaluate();
 				}
 			}

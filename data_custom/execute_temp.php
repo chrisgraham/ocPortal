@@ -67,28 +67,32 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('points');
-	require_code('points2');
-
-	$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true,true);
-	$group_points=get_group_points();
-
-	$fields=new ocp_tempcode();
-
-	foreach ($groups as $group_id=>$group_name)
+	$rows=$GLOBALS['FORUM_DB']->query('SELECT m_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'db_meta WHERE ('.db_string_equal_to('m_type','?INTEGER').' OR '.db_string_equal_to('m_type','BINARY').') AND '.db_string_equal_to('m_table','f_member_custom_fields'));
+	foreach ($rows as $row)
 	{
-		if (isset($group_points[$group_id]))
+		$GLOBALS['FORUM_DB']->alter_table_field('f_member_custom_fields',$row['m_name'],'SHORT_TEXT');
+	}
+
+	$i=0;
+	do
+	{
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*'),NULL,'',100,$i);
+		foreach ($rows as $j=>$row)
 		{
-			$points=$group_points[$group_id];
-			if ($points['p_points_per_month']!=0)
+			foreach ($row as $key=>$val)
 			{
-				$members=$GLOBALS['FORUM_DRIVER']->member_group_query(array($group_id));
-				foreach ($members as $member_row)
+				if (substr($key,0,6)=='field_')
 				{
-					$member_id=$GLOBALS['FORUM_DRIVER']->pname_id($member_row);
-					system_gift_transfer('Being in the '.$group_name.' usergroup',$points['p_points_per_month'],$member_id);
+					$val=str_replace('|',chr(10),$val);
+					$row[$key]=$val;
 				}
 			}
+			if ($rows[$j]!=$row)
+			{
+				$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',array('mf_member_id'=>$row['mf_member_id']),$row,'',1);
+			}
 		}
+		$i+=100;
 	}
+	while (count($rows)!=0);
 }

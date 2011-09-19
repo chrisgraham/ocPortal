@@ -74,8 +74,8 @@ class Hook_fields_theme_image
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
 	 * @param  ?array			The field details (NULL: new field)
-	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
-	 * @param  ?string		The given default value (NULL: don't try and find a default value)
+	 * @param  ?boolean		Whether a default value cannot be blank (NULL: don't "lock in" a new default value)
+	 * @param  ?string		The given default value as a string (NULL: don't "lock in" a new default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
@@ -119,6 +119,7 @@ class Hook_fields_theme_image
 			}
 			$img_thumb_url=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 		}*/
+		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
 		$tpl_set=$field['c_name'];
 
 		$GLOBALS['META_DATA']+=array(
@@ -151,12 +152,14 @@ class Hook_fields_theme_image
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
-	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
+	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
 	 * @param  array			The field details
 	 * @param  string			The default value
+	 * @param  string			Where the files will be uploaded to
+	 * @param  ?string		Former value of field (NULL: none)
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$field,$default)
+	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);

@@ -218,7 +218,10 @@ function save_form_custom_fields($content_type,$id)
 	foreach ($fields as $field)
 	{
 		$ob=get_fields_hook($field['cf_type']);
-		$value=$ob->inputted_to_field_value(!is_null($existing),$field,$field['cf_default']);
+
+		list(,,$storage_type)=$ob->get_field_value_row_bits($field);
+
+		$value=$ob->inputted_to_field_value(!is_null($existing),$field,'uploads/catalogues',is_null($existing)?NULL:_get_catalogue_entry_field($field['id'],$existing,$storage_type));
 
 		$map[$field['id']]=$value;
 	}
@@ -261,4 +264,91 @@ function	delete_form_custom_fields($content_type,$id)
 			'catalogue_entry_id'=>$existing,
 		));
 	}
+}
+
+/**
+ * Get a list of all field types to choose from.
+ *
+ * @param  ID_TEXT		Field type to select
+ * @param  boolean		Whether to only show options in the same storage set as $type
+ * @return tempcode		List of field types
+ */
+function nice_get_field_type($type='',$limit_to_storage_set=false)
+{
+	require_lang('fields');
+
+	$all_types=find_all_hooks('systems','fields');
+	if ($limit_to_storage_set) // Already set, so we need to do a search to see what we can limit our types to (things with the same backend DB storage)
+	{
+		$ob=get_fields_hook($type);
+		$types=array();
+		list(,,$db_type)=$ob->get_field_value_row_bits(NULL);
+		foreach ($all_types as $this_type=>$hook_type)
+		{
+			$ob=get_fields_hook($this_type);
+			list(,,$this_db_type)=$ob->get_field_value_row_bits(NULL);
+
+			if ($this_db_type==$db_type)
+				$types[$this_type]=$hook_type;
+		}
+	} else $types=$all_types;
+	$orderings=array(
+		do_lang_tempcode('FIELD_TYPES__TEXT'),'short_trans','short_trans_multi','short_text','short_text_multi','long_trans','long_text','posting_field','codename','password','email',
+		do_lang_tempcode('FIELD_TYPES__NUMBERS'),'integer','float',
+		do_lang_tempcode('FIELD_TYPES__CHOICES'),'list','radiolist','tick','multilist','tick_multi',
+		do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','picture','url','page_link','theme_image','theme_image_multi',
+		do_lang_tempcode('FIELD_TYPES__MAGIC'),'auto_increment','random','guid',
+		do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference','content_link','content_link_multi','user','user_multi','author',
+//			do_lang_tempcode('FIELD_TYPES__OTHER'),'date',			Will go under OTHER automatically
+	);
+	$_types=array();
+	$done_one_in_section=true;
+	foreach ($orderings as $o)
+	{
+		if (is_object($o))
+		{
+			if (!$done_one_in_section) array_pop($_types);
+			$_types[]=$o;
+			$done_one_in_section=false;
+		} else
+		{
+			if (array_key_exists($o,$types))
+			{
+				$_types[]=$o;
+				unset($types[$o]);
+				$done_one_in_section=true;
+			}
+		}
+	}
+	if (!$done_one_in_section) array_pop($_types);
+	if (count($types)!=0)
+	{
+		$types=array_merge($_types,array(do_lang_tempcode('FIELD_TYPES__OTHER')),array_keys($types));
+	} else $types=$_types;
+	$type_list=new ocp_tempcode();
+	foreach ($types as $_type)
+	{
+		if (is_object($_type))
+		{
+			if (!$type_list->is_empty()) $type_list->attach(form_input_list_entry('',false,escape_html(''),false,true));
+			$type_list->attach(form_input_list_entry('',false,$_type,false,true));
+		} else
+		{
+			$ob=get_fields_hook($_type);
+			if (method_exists($ob,'get_field_types'))
+			{
+				$sub_types=$ob->get_field_types();
+			} else
+			{
+				$sub_types=array($_type=>do_lang_tempcode('FIELD_TYPE_'.$_type));
+			}
+
+			foreach ($sub_types as $_type=>$_title)
+			{
+				$type_list->attach(form_input_list_entry($_type,($_type==$type),$_title));
+			}
+		}
+	}
+	
+	return make_string_tempcode($type_list->evaluate()); // XHTMLXHTML
 }

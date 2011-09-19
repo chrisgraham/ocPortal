@@ -476,19 +476,23 @@ class Module_cms_catalogues extends standard_aed_module
 	 * Get a entry-id=>value map of what a submitted catalogue entry form has set
 	 *
 	 * @param  ID_TEXT		The name of the catalogue that was used
-	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
+	 * @param  ?AUTO_LINK	ID of entry being edited (NULL: not being edited)
 	 * @return array			The map
 	 */
-	function get_set_field_map($catalogue_name,$editing=false)
+	function get_set_field_map($catalogue_name,$editing_id=NULL)
 	{
 		// Get field values
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 		$map=array();
 		require_code('fields');
+		require_code('catalogues');
 		foreach ($fields as $field)
 		{
-			$ob=get_fields_hook($field['cf_type']);
-			$value=$ob->inputted_to_field_value($editing,$field,$field['cf_default']);
+			$object=get_fields_hook($field['cf_type']);
+
+			list(,,$storage_type)=$object->get_field_value_row_bits($field);
+
+			$value=$object->inputted_to_field_value($editing,$field,'uploads/catalogues',_get_catalogue_entry_field($field['id'],$id,$storage_type));
 
 			$map[$field['id']]=$value;
 		}
@@ -552,7 +556,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 		$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$category_id));
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$map=$this->get_set_field_map($catalogue_name,true);
+		$map=$this->get_set_field_map($catalogue_name,$id);
 
 		actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
 
@@ -1425,78 +1429,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		require_code('fields');
 		require_lang('fields');
 
-		$all_types=find_all_hooks('systems','fields');
-		if ($name!='') // Already set, so we need to do a search to see what we can limit our types to (things with the same backend DB storage)
-		{
-			$ob=get_fields_hook($type);
-			$types=array();
-			list(,,$db_type)=$ob->get_field_value_row_bits(NULL);
-			foreach ($all_types as $this_type=>$hook_type)
-			{
-				$ob=get_fields_hook($this_type);
-				list(,,$this_db_type)=$ob->get_field_value_row_bits(NULL);
-
-				if ($this_db_type==$db_type)
-					$types[$this_type]=$hook_type;
-			}
-		} else $types=$all_types;
-		$orderings=array(
-			do_lang_tempcode('FIELD_TYPES__TEXT'),'short_trans','short_trans_multi','short_text','short_text_multi','long_trans','long_text','posting_field','codename','password','email',
-			do_lang_tempcode('FIELD_TYPES__NUMBERS'),'integer','float',
-			do_lang_tempcode('FIELD_TYPES__CHOICES'),'list','radiolist','tick','multilist','tick_multi',
-			do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','picture','url','page_link','theme_image','theme_image_multi',
-			do_lang_tempcode('FIELD_TYPES__MAGIC'),'auto_increment','random','guid',
-			do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference','content_link','content_link_multi','user','user_multi','author',
-//			do_lang_tempcode('FIELD_TYPES__OTHER'),'date',			Will go under OTHER automatically
-		);
-		$_types=array();
-		$done_one_in_section=true;
-		foreach ($orderings as $o)
-		{
-			if (is_object($o))
-			{
-				if (!$done_one_in_section) array_pop($_types);
-				$_types[]=$o;
-				$done_one_in_section=false;
-			} else
-			{
-				if (array_key_exists($o,$types))
-				{
-					$_types[]=$o;
-					unset($types[$o]);
-					$done_one_in_section=true;
-				}
-			}
-		}
-		if (!$done_one_in_section) array_pop($_types);
-		if (count($types)!=0)
-		{
-			$types=array_merge($_types,array(do_lang_tempcode('FIELD_TYPES__OTHER')),array_keys($types));
-		} else $types=$_types;
-		$type_list=new ocp_tempcode();
-		foreach ($types as $_type)
-		{
-			if (is_object($_type))
-			{
-				if (!$type_list->is_empty()) $type_list->attach(form_input_list_entry('',false,escape_html(''),false,true));
-				$type_list->attach(form_input_list_entry('',false,$_type,false,true));
-			} else
-			{
-				$ob=get_fields_hook($_type);
-				if (method_exists($ob,'get_field_types'))
-				{
-					$sub_types=$ob->get_field_types();
-				} else
-				{
-					$sub_types=array($_type=>do_lang_tempcode('FIELD_TYPE_'.$_type));
-				}
-	
-				foreach ($sub_types as $_type=>$_title)
-				{
-					$type_list->attach(form_input_list_entry($_type,($_type==$type),$_title));
-				}
-			}
-		}
+		$type_list=nice_get_field_type($type,$name!='');
 
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode(($name=='')?'DESCRIPTION_FIELD_TYPE_FIRST_TIME':'DESCRIPTION_FIELD_TYPE'),$prefix.'type',$type_list));
 		$order_list=new ocp_tempcode();

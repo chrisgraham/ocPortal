@@ -670,15 +670,6 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 
 	$original_submitter=$GLOBALS['SITE_DB']->query_value('catalogue_entries','ce_submitter',array('id'=>$id));
 
-	require_code('files2');
-	foreach ($fields as $cf_id=>$cf_type)
-	{
-		if ((($cf_type=='upload') || ($cf_type=='picture')) && (array_key_exists($cf_id,$map)) && ($map[$cf_id]!=STRING_MAGIC_NULL))
-		{
-			delete_upload('uploads/catalogues','catalogue_efv_short','cv_value',array('ce_id'=>$id,'cf_id'=>$cf_id),$id,$map[$cf_id]);
-		}
-	}
-
 	if (!addon_installed('unvalidated')) $validated=1;
 	$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_edit_date'=>time(),'cc_id'=>$category_id,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks),array('id'=>$id),'',1);
 	require_code('fields');
@@ -735,10 +726,19 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 function actual_delete_catalogue_entry($id)
 {
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$id));
-	$url_fields=$GLOBALS['SITE_DB']->query('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_fields WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND ('.db_string_equal_to('cf_type','upload').' OR '.db_string_equal_to('cf_type','picture').')');
-	require_code('files2');
-	foreach ($url_fields as $field)
-		delete_upload('uploads/catalogues','catalogue_efv_short','cv_value',array('ce_id'=>$id,'cf_id'=>$field['id']),$id);
+
+	require_code('fields');
+	require_code('catalogues');
+	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name));
+	foreach ($fields as $field)
+	{
+		$object=get_fields_hook($field['cf_type']);
+		if (method_exists($object,'cleanup'))
+		{
+			list(,,$storage_type)=$object->get_field_value_row_bits($field);
+			$object->cleanup(_get_catalogue_entry_field($field['id'],$id,$storage_type));
+		}
+	}
 
 	$lang1=$GLOBALS['SITE_DB']->query_select('catalogue_efv_long_trans',array('cv_value'),array('ce_id'=>$id));
 	$lang2=$GLOBALS['SITE_DB']->query_select('catalogue_efv_short_trans',array('cv_value'),array('ce_id'=>$id));
