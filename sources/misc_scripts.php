@@ -685,7 +685,7 @@ function block_helper_script()
 				elseif ($block.':'.$parameter=='main_poll:param') // special case for polls
 				{
 					$list=new ocp_tempcode();
-					$rows=$GLOBALS['SITE_DB']->query_select('poll',array('id','question'),NULL,'',100/*In case insane number*/);
+					$rows=$GLOBALS['SITE_DB']->query_select('poll',array('id','question'),NULL,'ORDER BY id DESC',100/*In case insane number*/);
 					$list->attach(form_input_list_entry('',false,do_lang('NA')));
 					foreach ($rows as $row)
 					{

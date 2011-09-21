@@ -18,7 +18,7 @@ function set_edited_panel(object_ignore /* No longer used */,id)
 		store.value=getTextbox(object);
 	}
 
-	/* The WYSIWYG setting */
+	/* The WYSIWYG setting (not the actual HTML text value of the editor, the setting of whether WYSIWYG was used or not) */
 
 	var object=document.getElementById('edit_'+id+'_textarea__is_wysiwyg');
 	if (object)
@@ -57,6 +57,7 @@ function fetch_more_fields()
 	set_edited_panel(null,'panel_right');
 	set_edited_panel(null,'panel_top');
 	set_edited_panel(null,'panel_bottom');
+	set_edited_panel(null,'start');
 	
 	var form=document.getElementById('middle_fields');
 	var edit_field_store=document.getElementById('edit_field_store');

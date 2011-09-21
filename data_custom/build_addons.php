@@ -59,6 +59,8 @@ if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
 	exit("File missing : <br />".$FILE_BASE.'/data_custom/addons-sheet.csv');
 }
 
+@set_time_limit(0);
+
 if (get_param_integer('export_addons',1)==1)
 {
 	$file_list=get_file_list_of_addons($FILE_BASE);

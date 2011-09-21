@@ -35,7 +35,7 @@ class Hook_users_online
 		{
 			$count=0;
 			$members=get_online_members(true,NULL,$count);
-			if (is_null($members)) return array('','',do_lang('TOO_MANY_USERS_ONLINE'));
+			if (is_null($members)) return array('','',do_lang('TOO_MANY_USERS_ONLINE'),'');
 			$out=new ocp_tempcode();
 			$guests=0;
 

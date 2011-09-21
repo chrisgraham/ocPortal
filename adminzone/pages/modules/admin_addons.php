@@ -164,7 +164,7 @@ class Module_admin_addons
 		{
 			if (!array_key_exists($addon['name'],$addons_installed))
 			{
-				$actions=do_template('TABLE_TABLE_ACTION_INSTALL_ENTRY',array('_GUID'=>'e6e2bdac62c0d3afcd5251b3d525a1c9','GET'=>true,'NAME'=>$row['addon_name'],'HIDDEN'=>'','URL'=>build_url(array('page'=>'_SELF','type'=>'addon_install','file'=>$filename),'_SELF')));
+				$actions=do_template('TABLE_TABLE_ACTION_INSTALL_ENTRY',array('_GUID'=>'e6e2bdac62c0d3afcd5251b3d525a1c9','GET'=>true,'NAME'=>$addon['name'],'HIDDEN'=>'','URL'=>build_url(array('page'=>'_SELF','type'=>'addon_install','file'=>$filename),'_SELF')));
 				$status=do_lang_tempcode('STATUS_NOT_INSTALLED');
 				$description=$addon['description'];
 				$file_list=$addon['files'];
