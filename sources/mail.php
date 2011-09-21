@@ -841,17 +841,21 @@ function form_to_email_entry_script()
  * @param  ?string	The subject of the email (NULL: from posted subject parameter).
  * @param  string		The intro text to the mail.
  * @param  ?array		A map of fields to field titles to transmit. (NULL: all posted fields, except subject and email)
+ * @param  ?string	Email address to send to (NULL: look from post environment / staff address).
  */
-function form_to_email($subject=NULL,$intro='',$fields=NULL)
+function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 {
 	if (is_null($subject)) $subject=post_param('subject',get_site_name());
 	if (is_null($fields))
 	{
 		$fields=array();
-		foreach (array_diff(array_keys($_POST),array('x','y','name','subject','email','to_members_email','to_written_name','redirect','http_referer')) as $key)
+		foreach (array_diff(array_keys($_POST),array('MAX_FILE_SIZE','perform_validation','_validated','posting_ref_id','f_face','f_colour','f_size','x','y','name','subject','email','to_members_email','to_written_name','redirect','http_referer')) as $key)
 		{
+			$is_hidden=(strpos($key,'hour')!==false) || (strpos($key,'access_')!==false) || (strpos($key,'minute')!==false) || (strpos($key,'confirm')!==false) || (strpos($key,'pre_f_')!==false) || (strpos($key,'label_for__')!==false) || (strpos($key,'wysiwyg_version_of_')!==false) || (strpos($key,'is_wysiwyg')!==false) || (strpos($key,'require__')!==false) || (strpos($key,'tempcodecss__')!==false) || (strpos($key,'comcode__')!==false) || (strpos($key,'_parsed')!==false) || (preg_match('#^caption\d+$#',$key)!=0) || (preg_match('#^attachmenttype\d+$#',$key)!=0) || (substr($key,0,1)=='_') || (substr($key,0,9)=='hidFileID') || (substr($key,0,11)=='hidFileName');
+			if ($is_hidden) continue;
+
 			if (substr($key,0,1)!='_')
-				$fields[$key]=ucwords(str_replace('_',' ',$key));
+				$fields[$key]=post_param('label_for__'.$key,ucwords(str_replace('_',' ',$key)));
 		}
 	}
 
@@ -865,14 +869,16 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL)
 	}
 	$from_email=trim(post_param('email',''));
 
-	$from_name=post_param('name','');
-	$to=post_param_integer('to_members_email',NULL);
-	$to_email=NULL;
-	$to_name='';
-	if (!is_null($to))
+	$to_name=get_site_name();
+	if (is_null($to_email))
 	{
-		$to_email=array($GLOBALS['FORUM_DRIVER']->get_member_email_address($to));
-		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to);
+		$from_name=post_param('name',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		$to=post_param_integer('to_members_email',NULL);
+		if (!is_null($to))
+		{
+			$to_email=array($GLOBALS['FORUM_DRIVER']->get_member_email_address($to));
+			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to);
+		}
 	}
 
 	$attachments=array();

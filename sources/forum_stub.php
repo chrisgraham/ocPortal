@@ -200,7 +200,7 @@ class forum_driver_base
 		global $IS_STAFF_CACHE;
 		if (array_key_exists($id,$IS_STAFF_CACHE)) return $IS_STAFF_CACHE[$id];
 
-		if (($this->connection!=$GLOBALS['SITE_DB']) && (get_option('is_on_staff_filter',true)==='1') && (get_forum_type()!='none') && (!$GLOBALS['FORUM_DRIVER']->disable_staff_filter()))
+		if (($this->connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) && (get_option('is_on_staff_filter',true)==='1') && (get_forum_type()!='none') && (!$GLOBALS['FORUM_DRIVER']->disable_staff_filter()))
 		{
 			if (strpos(strtolower(get_ocp_cpf('sites',$id)),strtolower(substr(get_site_name(),0,200)))===false)
 			{

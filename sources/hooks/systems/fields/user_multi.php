@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_isbn
+class Hook_fields_user_multi
 {
 
 	// ==============
@@ -45,50 +45,64 @@ class Hook_catalogue_field_isbn
 	 */
 	function inputted_to_sql_for_search($row,$i)
 	{
-		return NULL;
+		$param=get_param('option_'.strval($row['id']),'');
+		$where_clause='';
+		if ($param!='')
+		{
+			$param=strval($GLOBALS['FORUM_DRIVER']->get_member_from_username($param));
+		}
+		return nl_delim_match_sql($row,$i,'long',$param);
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
-		/*if (!is_null($required))
+		unset($field);
+		if (!is_null($required))
 		{
-			Nothing special for this hook
-		}*/
-		return array('short_unescaped',$default,'short');
+			if (($required) && ($default=='')) $default=strval($GLOBALS['FORUM_DRIVER']->get_guest_id());
+		}
+		return array('long_unescaped',$default,'long');
 	}
 
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
-		if (is_object($ev)) $ev=$ev->evaluate();
+		if (is_object($ev)) return $ev;
 
-		return hyperlink(escape_html('http://isbndb.com/search-all.html?kw='.$ev),$ev,true);
+		if ($ev=='') return new ocp_tempcode();
+
+		$out=new ocp_tempcode();
+		foreach (explode(chr(10),$ev) as $ev)
+		{
+			$out->attach(paragraph($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink(intval($ev))));
+		}
+		return $out;
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
@@ -100,20 +114,48 @@ class Hook_catalogue_field_isbn
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
-		return form_input_line($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
+		if ($actual_value=='')
+		{
+			if ($field['cf_default']=='!')
+			{
+				$actual_value=strval(get_member());
+			}
+		}
+		$usernames=array();
+		foreach (explode(chr(10),$actual_value) as $actual_value)
+		{
+			$usernames[]=$GLOBALS['FORUM_DRIVER']->get_username(intval($actual_value));
+		}
+		return form_input_username_multi($_cf_name,$_cf_description,'field_'.strval($field['id']),$usernames,($field['cf_required']==1)?1:0,true);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
-		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		$id=$field['id'];
+		$i=0;
+		$value='';
+		do
+		{
+			$tmp_name='field_'.strval($id).'_'.strval($i);
+			$_value=post_param($tmp_name,NULL);
+			if (($_value!==NULL) && ($_value!=''))
+			{
+				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_value);
+				if ($value!='') $value.=chr(10);
+				$value.=is_null($member_id)?'':strval($member_id);
+			}
+			$i++;
+		}
+		while ($_value!==NULL);
+		return $value;
 	}
 
 }

@@ -117,7 +117,7 @@ function count_catalogue_category_children($category_id)
  * @param  ?SHORT_INTEGER	The display type to use (NULL: lookup from $catalogue)
  * @param  boolean			Whether to perform sorting
  * @param  ?array				A list of entry rows (NULL: select them normally)
- * @return array				An array containing our built up entries (renderable tempcode), our sort options (a dropdown list of sort options), and our entries (entry records from database, with an additional 'map' field), and the max rows
+ * @return array				An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
 function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL)
 {
@@ -167,7 +167,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	if ($do_sorting)
 	{
 		$_order_by=get_param('order','');
-		if (($_order_by=='') || (strpos($_order_by,' ')===false))
+		if (($_order_by=='') || (strpos($_order_by,' ')===false/*probably some bot probing URLs -- sorting always has a space between sorter and direction*/))
 		{	
 			$order_by='0';
 			$direction='ASC';
@@ -184,12 +184,18 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		} else
 		{	
 			list($order_by,$direction)=explode(' ',$_order_by);
-			foreach ($fields as $i=>$field)
+			if ($order_by=='rating')
 			{
-				if ($order_by==$field['id'])
+				$order_by='rating';
+			} else
+			{
+				foreach ($fields as $i=>$field)
 				{
-					$order_by=strval($i);
-					break;
+					if ($order_by==$field['id'])
+					{
+						$order_by=strval($i);
+						break;
+					}
 				}
 			}
 		}
@@ -203,44 +209,51 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	$map=array('cc_id'=>$category_id);
 	if (!has_specific_permission(get_member(),'see_unvalidated')) $map['ce_validated']=1;
 	$in_db_sorting=!is_null($order_by) && $do_sorting && is_null($select);
+	require_code('fields');
 	if (is_null($entries))
 	{
 		if ($in_db_sorting)
 		{
-			require_code('hooks/modules/catalogue_fields/'.filter_naughty($fields[$order_by]['cf_type']));
-			$ob=object_factory('Hook_catalogue_field_'.filter_naughty($fields[$order_by]['cf_type']));
-			list($raw_type,,)=$ob->get_field_value_row_bits($fields[$order_by]['id']);
-			if (is_null($raw_type)) $raw_type=$fields[$order_by]['cf_type'];
-
-			switch ($raw_type)
-			{
-				case 'short_trans':
-					$table='short_trans';
-					break;
-				case 'long_trans':
-					$table='long_trans';
-					break;
-				case 'long_unescaped':
-				case 'long_text':
-					$table='long';
-					break;
-				case 'short_unescaped':
-				case 'short_text':
-					$table='short';
-					break;
-				default:
-					warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-			}
-
 			$num_entries=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',$map);
-			if (strpos($table,'_trans')!==false)
+			if ($order_by=='rating')
 			{
-				$join='catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']).' LEFT JOIN '.get_table_prefix().'translate t ON f.cv_value=t.id';
-				$entries=$GLOBALS['SITE_DB']->query_select($join,array('e.*'),$map,($num_entries>300)?'':'ORDER BY t.text_original '.$direction /* For large data sets too slow as after two MySQL joins it can't then use index for ordering */,$max,$start);
+				$select_rating='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','catalogue_entry').' AND rating_for_id=id) AS compound_rating';
+				$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries e',array('e.*',$select_rating),$map,'ORDER BY compound_rating '.$direction,$max,$start);
 			} else
 			{
-				$join='catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']);
-				$entries=$GLOBALS['SITE_DB']->query_select($join,array('e.*'),$map,'ORDER BY f.cv_value '.$direction,$max,$start);
+				$ob=get_fields_hook($fields[intval($order_by)]['cf_type']);
+				list($raw_type,,)=$ob->get_field_value_row_bits($fields[$order_by]);
+				if (is_null($raw_type)) $raw_type=$fields[$order_by]['cf_type'];
+	
+				switch ($raw_type)
+				{
+					case 'short_trans':
+						$table='short_trans';
+						break;
+					case 'long_trans':
+						$table='long_trans';
+						break;
+					case 'long_unescaped':
+					case 'long_text':
+						$table='long';
+						break;
+					case 'short_unescaped':
+					case 'short_text':
+						$table='short';
+						break;
+					default:
+						warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+				}
+	
+				if (strpos($table,'_trans')!==false)
+				{
+					$join='catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']).' LEFT JOIN '.get_table_prefix().'translate t ON f.cv_value=t.id';
+					$entries=$GLOBALS['SITE_DB']->query_select($join,array('e.*'),$map,($num_entries>300)?'':'ORDER BY t.text_original '.$direction /* For large data sets too slow as after two MySQL joins it can't then use index for ordering */,$max,$start);
+				} else
+				{
+					$join='catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']);
+					$entries=$GLOBALS['SITE_DB']->query_select($join,array('e.*'),$map,'ORDER BY f.cv_value '.$direction,$max,$start);
+				}
 			}
 			$start=0; // To stop it skipping itself
 		} else
@@ -275,24 +288,32 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	if ($do_sorting)
 	{
 		// Sort entries
-		$sort_options=new ocp_tempcode();
+		$selectors=new ocp_tempcode();
 		foreach ($fields as $i=>$field)
 		{
 			if ($field['cf_searchable']==1)
 			{
 				$potential_sorter_name=get_translated_text($field['cf_name']);
-				$asc_sel=(($order_by==strval($i)) && ($direction=='ASC'));
-				$desc_sel=(($order_by==strval($i)) && ($direction=='DESC'));
-				$_potential_sorter_name=new ocp_tempcode();
-				$_potential_sorter_name->attach(escape_html($potential_sorter_name));
-				$_potential_sorter_name->attach(do_lang_tempcode('_ASCENDING'));
-				$sort_options->attach(form_input_list_entry(strval($field['id']).' ASC',$asc_sel,protect_from_escaping($_potential_sorter_name)));
-				$_potential_sorter_name=new ocp_tempcode();
-				$_potential_sorter_name->attach(escape_html($potential_sorter_name));
-				$_potential_sorter_name->attach(do_lang_tempcode('_DESCENDING'));
-				$sort_options->attach(form_input_list_entry(strval($field['id']).' DESC',$desc_sel,protect_from_escaping($_potential_sorter_name)));
+				foreach (array('ASC'=>'_ASCENDING','DESC'=>'_DESCENDING') as $dir_code=>$dir_lang)
+				{
+					$sort_sel=(($order_by==strval($i)) && ($direction==$dir_code));
+					$_potential_sorter_name=new ocp_tempcode();
+					$_potential_sorter_name->attach(escape_html($potential_sorter_name));
+					$_potential_sorter_name->attach(do_lang_tempcode($dir_lang));
+					$selectors->attach(do_template('RESULTS_BROWSER_SORTER',array('_GUID'=>'dfdsfdsusd0fsd0dsf','SELECTED'=>$sort_sel,'NAME'=>protect_from_escaping($_potential_sorter_name),'VALUE'=>strval($field['id']).' '.$dir_code)));
+				}
 			}
 		}
+		foreach (array('ASC'=>'_ASCENDING','DESC'=>'_DESCENDING') as $dir_code=>$dir_lang)
+		{
+			$sort_sel=(($order_by=='rating') && ($direction==$dir_code));
+			$_potential_sorter_name=new ocp_tempcode();
+			$_potential_sorter_name->attach(do_lang_tempcode('RATING'));
+			$_potential_sorter_name->attach(do_lang_tempcode($dir_lang));
+			$selectors->attach(do_template('RESULTS_BROWSER_SORTER',array('_GUID'=>'xfdsfdsusd0fsd0dsf','SELECTED'=>$sort_sel,'NAME'=>protect_from_escaping($_potential_sorter_name),'VALUE'=>'rating '.$dir_code)));
+		}
+		$sort_url=get_self_url(false,false,array('order'=>NULL),false,true);
+		$sorting=do_template('RESULTS_BROWSER_SORT',array('_GUID'=>'9fgjfdklgjdfgkjlfdjgd90','SORT'=>'order','RAND'=>uniqid(''),'URL'=>$sort_url,'SELECTORS'=>$selectors));
 		if (!$in_db_sorting)
 		{
 			for ($i=0;$i<$num_entries;$i++)
@@ -345,7 +366,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				}
 			}
 		}
-	} else $sort_options=new ocp_tempcode();
+	} else $sorting=new ocp_tempcode();
 
 	// Build up entries
 	$entry_buildup=new ocp_tempcode();
@@ -439,7 +460,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		if (!$entry_buildup->is_empty()) $entry_buildup=do_template('CATALOGUE_'.$tpl_set.'_LINE_WRAP',$entry['map']+array('CATALOGUE'=>$catalogue_name,'CONTENT'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_LINE_WRAP');
 	}
 
-	return array($entry_buildup,$sort_options,$entries,$num_entries);
+	return array($entry_buildup,$sorting,$entries,$num_entries);
 }
 
 /**
@@ -478,6 +499,8 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$fields_1d=array();
 	$fields_2d=array();
 	$all_visible=true;
+	
+	require_code('fields');
 
 	foreach ($fields as $i=>$field)
 	{
@@ -492,9 +515,8 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 		$use_ev=$dereference_ev;
 		/*if (($field['cf_visible']==1) || ($i==0) || ($order_by===$i)) // If it's visible, or if it is the first (name) field, or if it is our order field        Actually we always want the data even if it's not visible, especially for catalogues */
 		{
-			require_code('hooks/modules/catalogue_fields/'.filter_naughty($field['cf_type']));
-			$ob=object_factory('Hook_catalogue_field_'.filter_naughty($field['cf_type']));
-			$use_ev=$ob->render_field_value($ev,$catalogue_name,$i,$only_fields);
+			$ob=get_fields_hook($field['cf_type']);
+			$use_ev=$ob->render_field_value($field,$ev,$i,$only_fields);
 			if (($i==0) && ($catalogue['c_display_type']==1))
 			{
 				//$use_ev=hyperlink(build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id,'root'=>$root),get_module_zone('catalogues')),$ev,false,!is_object($ev));
@@ -662,15 +684,16 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY '.($natural_order?'id':'cf_order'));
 	}
 
+	require_code('fields');
+
 	foreach ($fields as $i=>$field)
 	{
 		$field_id=$field['id'];
 
 		if ((!is_null($only_fields)) && (!in_array($i,$only_fields))) continue;
 
-		require_code('hooks/modules/catalogue_fields/'.filter_naughty($field['cf_type']));
-		$ob=object_factory('Hook_catalogue_field_'.filter_naughty($field['cf_type']));
-		list($raw_type,,)=$ob->get_field_value_row_bits($field['id']);
+		$ob=get_fields_hook($field['cf_type']);
+		list($raw_type,,)=$ob->get_field_value_row_bits($field);
 		if (is_null($raw_type)) $raw_type=$field['cf_type'];
 
 		switch ($raw_type)

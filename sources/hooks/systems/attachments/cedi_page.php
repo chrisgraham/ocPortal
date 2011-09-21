@@ -30,7 +30,7 @@ class Hook_attachments_cedi_page
 	 */
 	function run($id,$connection)
 	{
-		if ($connection!=$GLOBALS['SITE_DB']) return false;
+		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) return false;
 		
 		return (has_category_access(get_member(),'seedy_page',strval($id)));
 	}

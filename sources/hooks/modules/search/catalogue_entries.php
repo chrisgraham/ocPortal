@@ -47,11 +47,12 @@ class Hook_search_catalogue_entries
 		$catalogue_name=get_param('catalogue_name',NULL);
 		if (!is_null($catalogue_name))
 		{
+			require_code('fields');
+
 			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name','cf_type','cf_default'),array('c_name'=>$catalogue_name,'cf_searchable'=>1,'cf_visible'=>1),'ORDER BY cf_order');
 			foreach ($rows as $i=>$row)
 			{
-				require_code('hooks/modules/catalogue_fields/'.filter_naughty($row['cf_type']));
-				$ob=object_factory('Hook_catalogue_field_'.filter_naughty($row['cf_type']));
+				$ob=get_fields_hook($row['cf_type']);
 				$temp=$ob->inputted_to_sql_for_search($row,$i);
 				if (is_null($temp)) // Standard direct 'substring' search
 				{
@@ -110,10 +111,10 @@ class Hook_search_catalogue_entries
 		$fields=array();
 		$catalogue_name=get_param('catalogue_name');
 		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name','cf_type','cf_default'),array('c_name'=>$catalogue_name,'cf_searchable'=>1,'cf_visible'=>1),'ORDER BY cf_order');
+		require_code('fields');
 		foreach ($rows as $row)
 		{
-			require_code('hooks/modules/catalogue_fields/'.filter_naughty($row['cf_type']));
-			$ob=object_factory('Hook_catalogue_field_'.filter_naughty($row['cf_type']));
+			$ob=get_fields_hook($row['cf_type']);
 			$temp=$ob->get_search_inputter($row);
 			if (is_null($temp))
 			{
@@ -227,14 +228,14 @@ class Hook_search_catalogue_entries
 			$trans_fields=array('!');
 			$nontrans_fields=array();
 			$title_field=mixed();
+			require_code('fields');
 			foreach ($rows as $i=>$row)
 			{
-				require_code('hooks/modules/catalogue_fields/'.filter_naughty($row['cf_type']));
-				$ob=object_factory('Hook_catalogue_field_'.filter_naughty($row['cf_type']));
+				$ob=get_fields_hook($row['cf_type']);
 				$temp=$ob->inputted_to_sql_for_search($row,$i);
 				if (is_null($temp)) // Standard direct 'substring' search
 				{
-					list(,,$row_type)=$ob->get_field_value_row_bits($row['id']);
+					list(,,$row_type)=$ob->get_field_value_row_bits($row);
 					switch ($row_type)
 					{
 						case 'long_trans':

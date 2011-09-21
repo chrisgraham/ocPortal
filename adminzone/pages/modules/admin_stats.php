@@ -1155,7 +1155,7 @@ class Module_admin_stats
 				$output=create_pie_chart($data);
 				$this->save_graph('Regionality',$output);
 
-				$graph_regionality=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Regionality.xml','TITLE'=>do_lang_tempcode('REGIONALITY_SHARE'),'TEXT'=>do_lang_tempcode('DESCRIPTION_REGIONALITY_SHARE')));
+				$graph_regionality=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['ip']).'-Regionality.xml','TITLE'=>do_lang_tempcode('REGIONALITY_SHARE'),'TEXT'=>do_lang_tempcode('DESCRIPTION_REGIONALITY_SHARE')));
 			}
 		}
 		else

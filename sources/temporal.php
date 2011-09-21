@@ -752,16 +752,17 @@ function locale_filter($ret)
  * @param  TIME			Input timestamp
  * @param  boolean		Whether contextual times will be avoided. Note that we don't currently use contextual (relative) times. This parameter may be used in the future.
  * @param  ?MEMBER		Member for which the time is being rendered (NULL: current member)
+ * @param  boolean		Whether to work in UTC time
  * @return string			Formatted time
  */
-function get_timezoned_time($timestamp,$avoid_contextual_dates=false,$member=NULL)
+function get_timezoned_time($timestamp,$avoid_contextual_dates=false,$member=NULL,$gmt_time=false)
 {
 	if (is_null($member)) $member=get_member();
 	
 	if (get_option('use_contextual_dates')=='0') $avoid_contextual_dates=true;
 	
 	$date_string=do_lang('date_withinday');
-	$usered_timestamp=servertime_to_usertime($timestamp,$member);
+	$usered_timestamp=$gmt_time?$timestamp:servertime_to_usertime($timestamp,$member);
 	$ret=my_strftime($date_string,$usered_timestamp);
 
 	return locale_filter($ret);

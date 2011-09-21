@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_short_trans
+class Hook_fields_picture
 {
 
 	// ==============
@@ -49,71 +49,113 @@ class Hook_catalogue_field_short_trans
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
-		if (!is_null($required))
-		{
-			if (($required) && ($default=='')) $default='default';
-			$default=strval(insert_lang_comcode($default,3));
-		}
-		return array('short_trans',$default,'short_trans');
+		unset($field);
+		return array('short_unescaped',$default,'short');
 	}
 
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
+	 * @param  integer		Position in fieldset
+	 * @param  ?array			List of fields the output is being limited to (NULL: N/A)
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev,$i,$only_fields)
 	{
 		if (is_object($ev)) return $ev;
-		return escape_html($ev);
+
+		if ($ev=='') return '';
+		
+		$img_url=$ev;
+		if (url_is_local($img_url)) $img_url=get_custom_base_url().'/'.$img_url;
+		if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
+		{
+			$img_thumb_url=$img_url;
+		} else
+		{
+			$new_name=url_to_filename($ev);
+			require_code('images');
+			if (!is_saveable_image($new_name)) $new_name.='.png';
+			$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
+			if (!file_exists($file_thumb))
+			{
+				convert_image($img_url,$file_thumb,-1,-1,intval(get_option('thumb_width')),false);
+			}
+			$img_thumb_url=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
+		}
+		$tpl_set=$field['c_name'];
+
+		$GLOBALS['META_DATA']+=array(
+			'image'=>$img_url,
+		);
+
+		return do_template('CATALOGUE_'.$tpl_set.'_ENTRY_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_thumb_url),NULL,false,'CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE');
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
 	 * @param  array			The field details
 	 * @param  ?string		The actual current value of the field (NULL: none)
 	 * @param  boolean		Whether this is for a new entry
-	 * @return ?tempcode		The Tempcode for the input field (NULL: skip the field - it's not input)
+	 * @return ?array			A pair: The Tempcode for the input field, Tempcode for hidden fields (NULL: skip the field - it's not input)
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
-		return form_input_line_comcode($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
+		$say_required=($field['cf_required']==1) && (($actual_value=='') || (is_null($actual_value)));
+		$ffield=form_input_upload($_cf_name,$_cf_description,'field_'.strval($field['id']),$say_required,($field['cf_required']==1)?NULL/*so unlink option not shown*/:$actual_value);
+
+		$hidden=new ocp_tempcode();
+		handle_max_file_size($hidden,'image');
+		
+		return array($ffield,$hidden);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,STRING_MAGIC_NULL);
+		if (!fractional_edit())
+		{
+			require_code('uploads');
+			$temp=get_url('',$tmp_name,'uploads/catalogues',0,OCP_UPLOAD_IMAGE);
+			$value=$temp[0];
+			if (($editing) && ($value=='') && (post_param_integer($tmp_name.'_unlink',0)!=1))
+				return STRING_MAGIC_NULL;
+		} else
+		{
+			$value=STRING_MAGIC_NULL;
+		}
+		return $value;
 	}
 
 }

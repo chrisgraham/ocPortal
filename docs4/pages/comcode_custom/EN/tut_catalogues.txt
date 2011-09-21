@@ -82,7 +82,9 @@ To add a catalogue (amongst other functions) go to the 'Catalogues' icon in the 
 [title="2"]Editing a catalogue[/title]
 
 [exp_thumb="Editing a catalogue" float="right"]catalogues_edit[/exp_thumb]
-You can edit a catalogue to change details, add, edit or remove fields. You cannot change field data types after you have created them, as this would affect the integrity of any data that may have already been entered into them.
+You can edit a catalogue to change details, add, edit or remove fields.
+
+You cannot change field data types after you have created them (except between field types that have the same "storage" type) as this would affect the integrity of any data that may have already been entered into them. A workaround is to export to CSV, delete the field, create a new field with the same name and the new type, and reimport the CSV.
 
 [title="2"]Permissions[/title]
 

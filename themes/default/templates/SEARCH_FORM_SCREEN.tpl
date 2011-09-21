@@ -60,7 +60,7 @@
 					<td class="dottedborder_barrier" colspan="2">
 						<div class="accessibility_hidden"><label for="search_content">{!SEARCH_FOR}</label></div>
 						<div class="constrain_field">
-							<input maxlength="255" onkeyup="update_ajax_search_list(this,event);" class="wide_field" type="text" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
+							<input maxlength="255" onkeyup="update_ajax_search_list(this,event);" class="wide_field" type="{+START,IF,{$VALUE_OPTION,html5}}search{+END}{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}text{+END}" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
 						</div>
 						{$SHIFT_DECODE,search_options_message}
 					</td>

@@ -497,11 +497,11 @@ class Hook_addon_registry_core_ocf
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name));
+		$input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'VALUE'=>''));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name));
+		$input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'VALUE'=>''));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name=lorem_word().placeholder_random();

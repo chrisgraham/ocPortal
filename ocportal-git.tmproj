@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>sources/images.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -1173,36 +1171,6 @@
 			<key>firstVisibleLine</key>
 			<integer>225</integer>
 		</dict>
-		<key>sources/blocks/main_custom_comcode_tags.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>58</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>40</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>57</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>58</integer>
-			</dict>
-		</dict>
 		<key>sources/blocks/main_image_fader.php</key>
 		<dict>
 			<key>caret</key>
@@ -2107,20 +2075,6 @@
 			<key>firstVisibleLine</key>
 			<integer>31</integer>
 		</dict>
-		<key>sources/images.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>136</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>103</integer>
-		</dict>
 		<key>sources/integrator.php</key>
 		<dict>
 			<key>caret</key>
@@ -2222,34 +2176,6 @@
 				<key>line</key>
 				<integer>268</integer>
 			</dict>
-		</dict>
-		<key>sources/permissions.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>248</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>223</integer>
-		</dict>
-		<key>sources/symbols.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>2104</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2080</integer>
 		</dict>
 		<key>sources/templates_view_space.php</key>
 		<dict>
@@ -3632,11 +3558,6 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>sources/symbols.php</string>
-		<string>sources/images.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

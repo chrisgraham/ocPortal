@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_reference
+class Hook_fields_short_trans
 {
 
 	// ==============
@@ -45,50 +45,51 @@ class Hook_catalogue_field_reference
 	 */
 	function inputted_to_sql_for_search($row,$i)
 	{
-		return exact_match_sql($row,$i);
+		return NULL;
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
-		/*if (!is_null($required))
+		unset($field);
+		if ((!is_null($required)) || (!is_null($default)))
 		{
-			Nothing special for this hook
-		}*/
-		return array('short_unescaped',$default,'short');
+			if (($required) && ($default=='')) $default='default';
+			$default=strval(insert_lang_comcode($default,3));
+		}
+		return array('short_trans',$default,'short_trans');
 	}
 
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-
-		return hyperlink(build_url(array('page'=>'catalogues','type'=>'entry','id'=>$ev),get_module_zone('catalogues')),'#'.$ev,true);
+		return escape_html($ev);
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
@@ -99,24 +100,21 @@ class Hook_catalogue_field_reference
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		/*$_list=new ocp_tempcode();
-		$list=nice_get_catalogue_entries_tree($field['c_name'],intval($actual_value),NULL,false);
-		if (($field['cf_required']==0) || ($actual_value==='') || (is_null($actual_value)) || ($list->is_empty()))
-			$_list->attach(form_input_list_entry('',(($actual_value==='') || (is_null($actual_value))),do_lang_tempcode('NA_EM')));
-		$_list->attach($list);
-		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);*/
-		return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_catalogue_entry',array(),$field['cf_required']==1,$actual_value);
+		if (is_null($actual_value)) $actual_value=''; // Plug anomaly due to unusual corruption
+		return form_input_line_comcode($_cf_name,$_cf_description,'field_'.strval($field['id']),$actual_value,$field['cf_required']==1);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
 		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}

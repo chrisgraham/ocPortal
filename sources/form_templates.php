@@ -317,9 +317,10 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?integer		The maximum length of the field (NULL: default 255)
+ * @param  string			The input type (only used if HTML5 enabled)
  * @return tempcode		The input field
  */
-function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL)
+function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$type='text')
 {
 	if (is_null($default)) $default='';
 
@@ -330,7 +331,7 @@ function form_input_line($pretty_name,$description,$name,$default,$required,$tab
 	$_required=($required)?'_required':'';
 	$maxlength=get_field_restrict_property('maxlength',$name);
 	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_LINE',array('MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
+	$input=do_template('FORM_SCREEN_INPUT_LINE',array('MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'TYPE'=>$type));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -803,14 +804,15 @@ function form_input_huge($pretty_name,$description,$name,$default,$required,$tab
  * @param  ID_TEXT		The name which this input field is for
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
+ * @param  string			The default value for this input field
  * @return tempcode		The input field
  */
-function form_input_password($pretty_name,$description,$name,$required,$tabindex=NULL)
+function form_input_password($pretty_name,$description,$name,$required,$tabindex=NULL,$default='')
 {
 	$tabindex=get_form_field_tabindex($tabindex);
 
 	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_PASSWORD',array('TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name));
+	$input=do_template('FORM_SCREEN_INPUT_PASSWORD',array('TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'VALUE'=>$default));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -929,9 +931,10 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
  * @param  string			The base name which this input field is for
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
+ * @param  ?array			The default value for the field (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL)
+function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL,$default=NULL)
 {
 	require_lang('javascript');
 	require_javascript('javascript_swfupload');
@@ -941,6 +944,15 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 	$tabindex=get_form_field_tabindex($tabindex);
 
 	$_required=($required)?'_required':'';
+	$is_image=false;
+	$existing_url='';
+	if (!is_null($default))
+	{
+		require_code('images');
+		$is_image=is_image($default);
+		$existing_url=$default;
+		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
+	}
 	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'I'=>'1','NAME_STUB'=>$name));
 	return _form_input('',$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
@@ -1055,14 +1067,15 @@ function form_input_huge_list($pretty_name,$description,$name,$content,$tabindex
  * @param  tempcode		The list entries for our list
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  integer		How much space the list takes up
+ * @param  boolean		Whether at least one must be selected
  * @return tempcode		The input field
  */
-function form_input_multi_list($pretty_name,$description,$name,$content,$tabindex=NULL,$size=5)
+function form_input_multi_list($pretty_name,$description,$name,$content,$tabindex=NULL,$size=5,$required=false)
 {
 	$tabindex=get_form_field_tabindex($tabindex);
 
 	$input=do_template('FORM_SCREEN_INPUT_MULTI_LIST',array('TABINDEX'=>strval($tabindex),'SIZE'=>strval($size),'NAME'=>$name,'CONTENT'=>$content));
-	return _form_input($name,$pretty_name,$description,$input,false,false,$tabindex);
+	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1290,13 +1303,14 @@ function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$nu
  * @param  boolean		Whether this field is empty by default
  * @param  boolean		Whether to input time for this field also
  * @param  ?mixed			The default timestamp to use (either TIME or array of time components) (NULL: now)
- * @param  integer		The number of years to allow selection from (all into the future, as this field type is not meant for inputting past dates)
+ * @param  ?integer		The number of years to allow selection from (all into the future, as this field type is not meant for inputting past dates) (NULL: no limit)
  * @param  ?integer		The year to start from (NULL: this year)
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?boolean		Whether this is rendered in pink as a required field (NULL: depend on $null_ok)
+ * @param  boolean		Whether to input date for this field (if false, will just do time)
  * @return tempcode		The input field
  */
-function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL)
+function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true)
 {
 	if (is_null($required)) $required=!$null_ok;
 
@@ -1371,6 +1385,8 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 	ob_end_clean();
 
 	$time=($do_time)?do_template('FORM_SCREEN_INPUT_TIME',array('NULL_OK'=>$null_ok,'DISABLED'=>$null_default && has_js(),'TABINDEX'=>strval($tabindex),'MINUTES'=>$minutes,'HOURS'=>$hours,'STUB'=>$stub)):new ocp_tempcode();
+	if (!$do_date)
+		return _form_input($stub,$pretty_name,$description,$time,$required,false,$tabindex,false,true);
 	$null=($null_ok)?do_template('FORM_SCREEN_INPUT_DATE_NULL',array('_GUID'=>'22859d15f1b295b08036e1d0308d371a','TICKED'=>!$null_default,'TABINDEX'=>strval($tabindex),'STUB'=>$stub)):new ocp_tempcode();
 	ob_start();
 	for ($i=1;$i<=31;$i++)
@@ -1429,7 +1445,7 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 	$months=ob_get_contents();
 	ob_end_clean();
 	ob_start();
-	if ($total_years_to_show<0)
+	if ((!is_null($total_years_to_show)) && ($total_years_to_show<0))
 	{
 		$yt=$year_start+$total_years_to_show/*remember $total_years_to_show is negative so this is a subtraction in effect*/;
 		for ($i=max($untuned_year_start,$year_start);$i>=$yt;$i--)
@@ -1439,7 +1455,13 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		}
 	} else
 	{
-		$yt=max($untuned_year_start,$year_start)+$total_years_to_show;
+		if (is_null($total_years_to_show))
+		{
+			$yt=max($untuned_year_start,$year_start)+5;
+		} else
+		{
+			$yt=max($untuned_year_start,$year_start)+$total_years_to_show;
+		}
 		for ($i=$year_start;$i<=$yt;$i++)
 		{
 			$temp=form_input_list_entry(strval($i),$i===$default_year);
@@ -1448,7 +1470,7 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 	}
 	$years=ob_get_contents();
 	ob_end_clean();
-	$input=do_template('FORM_SCREEN_INPUT_DATE',array('_GUID'=>'5ace58dd0f540f70fb3bd440fb02a430','NULL_OK'=>$null_ok,'DISABLED'=>$null_default,'TABINDEX'=>strval($tabindex),'YEARS'=>$years,'MONTHS'=>$months,'DAYS'=>$days,'STUB'=>$stub,'NULL'=>$null,'TIME'=>$time));
+	$input=do_template('FORM_SCREEN_INPUT_DATE',array('_GUID'=>'5ace58dd0f540f70fb3bd440fb02a430','NULL_OK'=>$null_ok,'DISABLED'=>$null_default,'TABINDEX'=>strval($tabindex),'YEARS'=>$years,'MONTHS'=>$months,'DAYS'=>$days,'STUB'=>$stub,'NULL'=>$null,'TIME'=>$time,'UNLIMITED'=>is_null($total_years_to_show)));
 	return _form_input($stub,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 

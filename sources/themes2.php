@@ -284,7 +284,7 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL)
 
 	$ids=array();
 
-	if (($db==$GLOBALS['SITE_DB']) || (get_db_forums()==get_db_site()))
+	if (($db->connection_write==$GLOBALS['SITE_DB']->connection_write) || (get_db_forums()==get_db_site()))
 	{
 		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.$type.'/',$type,$recurse);
 		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.get_site_default_lang().'/'.$type.'/',$type,$recurse);

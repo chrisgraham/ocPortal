@@ -6,9 +6,11 @@ function fix_form_enter_key(form)
 {
 	var submit=document.getElementById('submit_button');
 	var inputs=form.getElementsByTagName('input');
+	var type;
 	for (var i=0;i<inputs.length;i++)
 	{
-		if (((inputs[i].type=='text') || (inputs[i].type=='password'))
+		type=inputs[i].type;
+		if (((type=='text') || (type=='password') || (type=='color') || (type=='email') || (type=='number') || (type=='range') || (type=='search') || (type=='tel') || (type=='url'))
 		 && (typeof submit.onclick!='undefined') && (submit.onclick)
 		 && ((typeof inputs[i].onkeypress=='undefined') || (!inputs[i].onkeypress)))
 			inputs[i].onkeypress=function(event) { if (!event) event=window.event; if (enter_pressed(event)) submit.onclick(); };

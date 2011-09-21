@@ -29,6 +29,32 @@
 <script type="text/javascript">// <![CDATA[
 	var cal{STUB%}=null;
 	var link{STUB%}=document.getElementById('cal{STUB;}Button');
-	if (link{STUB%}) link{STUB%}.onclick=function() { initialise_date_field('{STUB%}','cal{STUB%}','link{STUB%}'); };
+	if (link{STUB%}) link{STUB%}.onclick=function() { initialise_date_field('{STUB%}','cal{STUB%}','link{STUB%}', {$?,{UNLIMITED},true,false}); };
+	
+	{+START,IF,{UNLIMITED}}
+		var year_field=document.getElementById('{STUB%}_year');
+		var special_option=document.createElement('option');
+		special_option.value='-';
+		setInnerHTML(special_option,'&hellip;');
+		year_field.onchange=function() {
+			if (this.options[this.selectedIndex].value=='-')
+			{
+				var year=window.prompt('{!CHOOSE_YEAR;}');
+				if ((!year) || (!year.match(/\-?\d+/)))
+				{
+					this.selectedIndex=0;
+				} else
+				{
+					year=year.replace(/^0+/,'');
+					var custom_option=document.createElement('option');
+					custom_option.value=year;
+					setInnerHTML(custom_option,year);
+					this.appendChild(custom_option);
+					this.selectedIndex=this.options.length-1;
+				}
+			}
+		}
+		year_field.appendChild(special_option);
+	{+END}
 //]]></script>
 

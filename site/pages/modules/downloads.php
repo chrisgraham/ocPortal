@@ -373,10 +373,11 @@ class Module_downloads
 
 		if (!has_category_access(get_member(),'downloads',strval($id))) access_denied('CATEGORY_ACCESS');
 
-		$order=get_param('order','t.text_original ASC');
+		$cat_order=get_param('cat_order','t.text_original ASC');
+		$order=get_param('order',NULL);
 
-		$subcategories=get_download_sub_categories($id,$root,get_zone_name(),$order);
-		$downloads=get_category_downloads($id,$root);
+		$subcategories=get_download_sub_categories($id,$root,get_zone_name(),$cat_order);
+		$downloads=get_category_downloads($id,$root,$order);
 
 		$subdownloads=new ocp_tempcode();
 		require_code('ocfiltering');
@@ -437,7 +438,7 @@ class Module_downloads
 			$selected=($order==$selector_value);
 			$selectors->attach(do_template('RESULTS_BROWSER_SORTER',array('_GUID'=>'af660c0ebf014bb296d576b2854aa911','SELECTED'=>$selected,'NAME'=>do_lang_tempcode($selector_name),'VALUE'=>$selector_value)));
 		}
-		$sort_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>($id==db_get_first_id())?NULL:$id,'root'=>($root==db_get_first_id())?NULL:$root),'_SELF');
+		$sort_url=get_self_url(false,false,array('order'=>NULL),false,true);
 		$sorting=do_template('RESULTS_BROWSER_SORT',array('_GUID'=>'f4112dcd72d1dd04afbe7277a3871399','SORT'=>'order','RAND'=>uniqid(''),'URL'=>$sort_url,'SELECTORS'=>$selectors));
 
 		if (has_actual_page_access(NULL,'cms_downloads',NULL,array('downloads',strval($id)),'submit_midrange_content'))

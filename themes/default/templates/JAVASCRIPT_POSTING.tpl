@@ -478,11 +478,12 @@ function desetFontSizes(list)
 function init_form_saving()
 {
 	var posting_form=document.getElementById('posting_form');
-	var i,name,fields_to_do=[],cookie_name,fields_to_do_counter=0,biggest_length_data='',cookie_value,result;
+	var i,name,fields_to_do=[],cookie_name,fields_to_do_counter=0,biggest_length_data='',cookie_value,result,type;
 	for (i=0;i<posting_form.elements.length;i++)
 	{
 		name=posting_form.elements[i].name;
-		if ((name!='') && ((posting_form.elements[i].nodeName.toLowerCase()=='textarea') || (posting_form.elements[i].getAttribute('type')=='text')))
+		type=posting_form.elements[i].getAttribute('type');
+		if ((name!='') && ((posting_form.elements[i].nodeName.toLowerCase()=='textarea') || (type=='text') || (type=='color') || (type=='email') || (type=='number') || (type=='range') || (type=='search') || (type=='tel') || (type=='url')))
 		{
 			cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+name;
 			cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');

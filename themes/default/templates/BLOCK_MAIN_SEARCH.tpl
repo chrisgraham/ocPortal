@@ -6,7 +6,7 @@
 			{+START,IF,{$EQ,{INPUT_FIELDS},1}}
 				<div class="constrain_field">
 					<label class="accessibility_hidden" for="search_content">{!SEARCH}</label>
-					<input maxlength="255" class="wide_field" onkeyup="update_ajax_search_list(this,event);" type="text" id="search_content" name="content" value="" />
+					<input maxlength="255" class="wide_field" onkeyup="update_ajax_search_list(this,event);" type="{+START,IF,{$VALUE_OPTION,html5}}search{+END}{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}text{+END}" id="search_content" name="content" value="" />
 				</div>
 			{+END}
 			{+START,IF,{$NEQ,{INPUT_FIELDS},1}}

@@ -652,14 +652,14 @@ class Module_catalogues
 		$catalogue=$catalogues[0];
 		$tpl_set=$catalogue_name;
 
-		if(is_ecommerce_catalogue($catalogue_name))
+		if (is_ecommerce_catalogue($catalogue_name))
 		{
 			$is_ecommerce=true;
 			$tpl_set='products';
-		}
-		else
+		} else
+		{
 			$is_ecommerce=false;
-
+		}
 
 		$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_CATEGORY',escape_html($_title));
 		$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_CATEGORY',$_title,NULL,NULL,NULL,false);
@@ -683,7 +683,7 @@ class Module_catalogues
 		$max=get_param_integer('max',30);
 		$start=get_param_integer('start',0);
 
-		list($entry_buildup,$sort_options,$entries,$max_rows)=get_catalogue_category_entry_buildup($id,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,NULL,$root);
+		list($entry_buildup,$sorting,$entries,$max_rows)=get_catalogue_category_entry_buildup($id,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,NULL,$root);
 
 		// Build up subcategories
 		$rows_subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('cc_parent_id'=>$id),'',300);
@@ -800,19 +800,19 @@ class Module_catalogues
 			'description'=>get_translated_text($category['cc_description']),
 		);
 
-		$cart_link =	new ocp_tempcode();
+		$cart_link=new ocp_tempcode();
 
-		if($is_ecommerce) 
+		if ($is_ecommerce)
 		{
 			if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF'));
 
 			require_code('shopping');
-			require_lang('shopping'); 
+			require_lang('shopping');
 
 			$cart_link=show_cart_image(); 
-		}		
+		}
 
-		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('ID'=>strval($id),'ADD_DATE_RAW'=>strval($category['cc_add_date']),'TITLE'=>$title,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'BROWSER'=>$browser,'SORT_OPTIONS'=>$sort_options,'ADD_LINK'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$entry_buildup,'SUBCATEGORIES'=>$subcategories,'DESCRIPTION'=>get_translated_tempcode($category['cc_description']),'CART_LINK'=>$cart_link),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
+		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('ID'=>strval($id),'ADD_DATE_RAW'=>strval($category['cc_add_date']),'TITLE'=>$title,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'BROWSER'=>$browser,'SORTING'=>$sorting,'ADD_LINK'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$entry_buildup,'SUBCATEGORIES'=>$subcategories,'DESCRIPTION'=>get_translated_tempcode($category['cc_description']),'CART_LINK'=>$cart_link),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
 	}
 
 	/**
@@ -918,7 +918,7 @@ class Module_catalogues
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.(($catalogue['c_ecommerce']==1)?':ecommerce=1':''),do_lang_tempcode('CATALOGUES'))));
 
-		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('TITLE'=>$title,'CART_LINK'=>'','_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'BROWSER'=>'','SORT_OPTIONS'=>'','ADD_LINK'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$category_buildup,'SUBCATEGORIES'=>'','DESCRIPTION'=>''),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
+		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('TITLE'=>$title,'CART_LINK'=>'','_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'BROWSER'=>'','SORTING'=>'','ADD_LINK'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$category_buildup,'SUBCATEGORIES'=>'','DESCRIPTION'=>''),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
 	}
 
 	/**

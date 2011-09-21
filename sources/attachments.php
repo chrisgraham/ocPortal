@@ -301,7 +301,7 @@ function render_attachment($attributes,$attachment,$pass_id,$source_member,$as_a
 	$attachment['PASS_ID']=(intval($pass_id)<0)?strval(mt_rand(0,10000)):$pass_id;
 	$attachment['SCRIPT']=find_script('attachment');
 	$attachment['RAND']=strval(mt_rand(0,32000));
-	if ($connection!=$GLOBALS['SITE_DB'])
+	if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 	{
 		$attachment['SUP_PARAMS']='&forum_db=1';
 		$attachment['FORUM_DB_BIN']='1';

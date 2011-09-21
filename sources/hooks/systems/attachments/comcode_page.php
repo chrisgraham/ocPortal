@@ -30,7 +30,7 @@ class Hook_attachments_comcode_page
 	 */
 	function run($id,$connection)
 	{
-		if ($connection!=$GLOBALS['SITE_DB']) return false;
+		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) return false;
 		
 		$parts=explode(':',$id);
 		if (count($parts)!=2) return false;

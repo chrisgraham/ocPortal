@@ -245,7 +245,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 									$thumb_url='uploads/attachments_thumbs/'.$_file_thumb;
 									convert_image(get_custom_base_url().'/uploads/attachments/'.$_file,$place_thumb,-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
-									if ($connection!=$GLOBALS['SITE_DB']) $thumb_url=get_custom_base_url().'/'.$thumb_url;
+									if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 								} else $thumb_url='uploads/attachments/'.$_file;
 							}
 
@@ -375,7 +375,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 			// Clear any de-referenced attachments
 			foreach ($before as $ref)
 			{
-				if ((!in_array($ref['a_id'],$ids_present)) && (strpos($new_comcode,'attachment.php?id=')===false))
+				if ((!in_array($ref['a_id'],$ids_present)) && (strpos($new_comcode,'attachment.php?id=')===false) && (!multi_lang()))
 				{
 					// Delete reference (as it's not actually in the new comcode!)
 					$connection->query_delete('attachment_refs',array('id'=>$ref['id']),'',1);

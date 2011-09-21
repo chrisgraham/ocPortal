@@ -165,7 +165,7 @@ class Hook_ocp_merge
 		if ((!file_exists($file_base.'/info.php')) || (!file_exists($file_base.'/sources_custom')))
 		{
 			attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_FILES'),'warn');
-			if (($db->connection_read!=$GLOBALS['FORUM_DB']->connection_read) && (!file_exists($file_base.'/info.php')))
+			if (($db->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (!file_exists($file_base.'/info.php')))
 				attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_LINKING_POSSIBLY'),'warn');
 			$bad=true;
 		}
@@ -181,7 +181,7 @@ class Hook_ocp_merge
 			{
 				$SITE_INFO=$backup_site_info;
 				attach_message(do_lang_tempcode('ERROR_INACESSIBLE_DIR'),'warn');
-				if ($db->connection_read!=$GLOBALS['FORUM_DB']->connection_read)
+				if ($db->connection_write!=$GLOBALS['FORUM_DB']->connection_write)
 					attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_LINKING_POSSIBLY'),'warn');
 				$bad=true;
 			} else

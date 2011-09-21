@@ -35,6 +35,7 @@ The following restriction tags are supported for manipulating form results:
  - 'disallowedsubstring', provide an error if the field value contains a match for the contained wildcard expression. This is useful as a blocking word-filter. Unlike the main ocPortal word filter, you have full qualification and filter support, so it is selectively applied as you require.
  - 'disallowedword', as above but will only match whole words.
  - 'shun', provide an error if the field value equals the contained wildcard expression. This is different from 'disallowedsubstring' simply because it shuns complete matches against the field value rather than substrings.
+ - 'pattern', provide an error if the given regular expression does not pass
 
 You may give each of these restriction tags an 'error' attribute, which will be used for the case when they trigger. If you do not provide a message a default will be used based upon the restriction involved.
 

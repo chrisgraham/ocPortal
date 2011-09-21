@@ -35,7 +35,7 @@ function ocp_version()
  */
 function ocp_version_minor()
 {
-	return '1.5';
+	return '2.0 beta1';
 }
 
 /**
@@ -45,7 +45,7 @@ function ocp_version_minor()
  */
 function ocp_version_number()
 {
-	return 7.1;
+	return 7.2;
 }
 
 /**

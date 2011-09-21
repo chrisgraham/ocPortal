@@ -961,7 +961,7 @@ class database_driver
 
 		if ($DEBUG_MODE)
 		{
-			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this===$GLOBALS['SITE_DB']) && (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']!==$GLOBALS['FORUM_DB']) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
+			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
 			{
 				/*file_put_contents(get_file_base().'/uploads/downloads/test.txt',var_export(debug_backtrace(),true));
 				@exit($query);

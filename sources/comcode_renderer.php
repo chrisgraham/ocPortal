@@ -112,9 +112,9 @@ function _custom_comcode_import($connection)
 		$tags=array();
 		if (addon_installed('custom_comcode'))
 		{
-			if (($GLOBALS['FORUM_DB']!=$connection) && (!is_null($GLOBALS['FORUM_DB'])))
+			if (($GLOBALS['FORUM_DB']!=$connection) && (!is_null($GLOBALS['FORUM_DB'])) && (get_forum_type()=='ocf'))
 				$tags=array_merge($tags,$GLOBALS['FORUM_DB']->query_select('custom_comcode',array('tag_parameters','tag_replace','tag_tag','tag_dangerous_tag','tag_block_tag','tag_textual_tag'),array('tag_enabled'=>1)));
-			if ($connection!=$GLOBALS['SITE_DB'])
+			if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 				$tags=array_merge($tags,$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_parameters','tag_replace','tag_tag','tag_dangerous_tag','tag_block_tag','tag_textual_tag'),array('tag_enabled'=>1)));
 			$tags=array_merge($tags,$connection->query_select('custom_comcode',array('tag_parameters','tag_replace','tag_tag','tag_dangerous_tag','tag_block_tag','tag_textual_tag'),array('tag_enabled'=>1)));
 		}
@@ -1111,7 +1111,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				sync_file($path);
 				$_size=strlen($file);
 				$url='uploads/attachments/'.$new_filename;
-				if ($connection!=$GLOBALS['SITE_DB']) $url=get_custom_base_url().'/'.$url;
+				if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $url=get_custom_base_url().'/'.$url;
 
 				// Thumbnail
 				$thumb_url='';
@@ -1126,7 +1126,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						$thumb_url='uploads/attachments_thumbs/'.$md5.$ext;
 						convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/'.$thumb_url,-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
-						if ($connection!=$GLOBALS['SITE_DB']) $thumb_url=get_custom_base_url().'/'.$thumb_url;
+						if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 					} else $thumb_url=$url;
 				}
 
@@ -1206,7 +1206,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					break;
 				}
 				$url=$urls[0];
-				if ($connection!=$GLOBALS['SITE_DB']) $url=get_custom_base_url().'/'.$url;
+				if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $url=get_custom_base_url().'/'.$url;
 				$thumb_url=array_key_exists(1,$urls)?$urls[1]:'';
 				if (($thumb_url!='') && ($connection!=$GLOBALS['SITE_DB'])) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 				$num_downloads=0;
@@ -1272,7 +1272,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					//access_denied('REUSE_ATTACHMENT');
 				}
 
-				if ($connection!=$GLOBALS['SITE_DB'])
+				if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 				{
 					if (url_is_local($attachment['a_url'])) $attachment['a_url']=get_custom_base_url().'/'.$attachment['a_url'];
 					if (url_is_local($attachment['a_url'])) $attachment['a_thumb_url']=get_custom_base_url().'/'.$attachment['a_thumb_url'];

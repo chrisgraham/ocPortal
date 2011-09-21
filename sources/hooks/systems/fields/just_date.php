@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
-class Hook_catalogue_field_date
+class Hook_fields_just_date
 {
 
 	// ==============
@@ -49,23 +49,23 @@ class Hook_catalogue_field_date
 	}
 
 	// ===================
-	// Backend: catalogues
+	// Backend: fields API
 	// ===================
 
 	/**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
-	 * @param  AUTO_LINK		The field ID
+	 * @param  ?array			The field details (NULL: new field)
 	 * @param  ?boolean		Whether the row is required (NULL: don't try and find a default value)
 	 * @param  ?string		The given default value (NULL: don't try and find a default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($cf_id,$required=NULL,$default=NULL)
+	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($cf_id);
+		unset($field);
 		if (!is_null($required))
 		{
-			if (($required) && ($default=='')) $default=date('Y-m-d H:i:s',servertime_to_usertime());
+			if (($required) && ($default=='')) $default=date('Y-m-d',servertime_to_usertime());
 		}
 		return array('short_unescaped',$default,'short');
 	}
@@ -73,10 +73,11 @@ class Hook_catalogue_field_date
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
 
@@ -88,26 +89,22 @@ class Hook_catalogue_field_date
 			} else
 			{
 				// Y-m-d H:i:s
-				$bits=explode(' ',$ev,2);
-				$date_bits=explode((strpos($bits[0],'-')!==false)?'-':'/',$bits[0],3);
+				$date_bits=explode((strpos($ev,'-')!==false)?'-':'/',$ev,3);
 				if (!array_key_exists(1,$date_bits)) $date_bits[1]=date('m');
 				if (!array_key_exists(2,$date_bits)) $date_bits[2]=date('Y');
-				$time_bits=explode(':',$bits[1],3);
-				if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
-				if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';
-				$time=mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
+				$time=mktime(0,0,0,intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
 			}
-			$ev=get_timezoned_date($time,true,false,false,true);
+			$ev=get_timezoned_date($time,false,false,true,true);
 		}
 		return escape_html($ev);
 	}
 
 	// ======================
-	// Module: cms_catalogues
+	// Frontend: fields input
 	// ======================
 
 	/**
-	 * Convert a field value to something renderable.
+	 * Get form inputter.
 	 *
 	 * @param  string			The field name
 	 * @param  string			The field description
@@ -129,33 +126,35 @@ class Hook_catalogue_field_date
 		}
 		else
 		{
-			// Y-m-d H:i:s
-			$bits=explode(' ',$actual_value,2);
-			$date_bits=explode((strpos($bits[0],'-')!==false)?'-':'/',$bits[0],3);
+			// Y-m-d
+			$date_bits=explode((strpos($actual_value,'-')!==false)?'-':'/',$actual_value,3);
 			if (!array_key_exists(1,$date_bits)) $date_bits[1]=date('m');
 			if (!array_key_exists(2,$date_bits)) $date_bits[2]=date('Y');
-			if (!array_key_exists(1,$bits)) $bits[1]='0';
-			$time_bits=explode(':',$bits[1],3);
-			if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
-			if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';
-			//$time=mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
 			
-			$time=array(intval($time_bits[1]),intval($time_bits[0]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
+			$time=array(0,0,intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
 		}
+		/*
 		$min_year=1902; // 1902 is based on signed integer limit
-		$years_to_show=2037-$min_year; // 2037 is based on signed integer limit
-		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),true,$time,$years_to_show,$min_year);
+		$max_year=2037; // 2037 is based on signed integer limit
+		$years_to_show=$max_year-$min_year;
+		^^^ NONSENSE: Integers not used to save!
+		*/
+		$min_year=NULL;
+		$years_to_show=NULL;
+		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),false,$time,$years_to_show,$min_year);
 	}
 
 	/**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, files might need deleting)
-	 * @param  AUTO_LINK		The ID of the catalogue field
+	 * @param  array			The field details
+	 * @param  string			The default value
 	 * @return string			The value
 	 */
-	function inputted_to_field_value($editing,$id)
+	function inputted_to_field_value($editing,$field,$default)
 	{
+		$id=$field['id'];
 		$stub='field_'.strval($id);
 
 		$year=post_param_integer($stub.'_year',NULL);
@@ -164,10 +163,8 @@ class Hook_catalogue_field_date
 		if (is_null($month)) return $editing?STRING_MAGIC_NULL:'';
 		$day=post_param_integer($stub.'_day',NULL);
 		if (is_null($day)) return $editing?STRING_MAGIC_NULL:'';
-		$hour=post_param_integer($stub.'_hour',0);
-		$minute=post_param_integer($stub.'_minute',0);
 
-		return strval($year).'-'.strval($month).'-'.strval($day).' '.strval($hour).':'.strval($minute);
+		return strval($year).'-'.strval($month).'-'.strval($day);
 
 		/*$temp=get_input_date($tmp_name);
 		if (is_null($temp)) return $editing?STRING_MAGIC_NULL:'';

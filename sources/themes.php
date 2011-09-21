@@ -48,7 +48,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 	if ($RECORD_IMG_CODES)
 	{
 		global $RECORDED_IMG_CODES;
-		if ($db!==$GLOBALS['FORUM_DB'])
+		if ($db->connection_write!==$GLOBALS['FORUM_DB']->connection_write)
 			$RECORDED_IMG_CODES[serialize(array($id,$theme,$lang))]=1;
 	}
 	
@@ -110,7 +110,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		{
 			if ((url_is_local($path)) && (!$leave_local))
 			{
-				$path=(($db!=$GLOBALS['SITE_DB'])?get_forum_base_url():((substr($path,0,22)=='themes/default/images/')?get_base_url():get_custom_base_url())).'/'.$path;
+				$path=(($db->connection_write!=$GLOBALS['SITE_DB']->connection_write)?get_forum_base_url():((substr($path,0,22)=='themes/default/images/')?get_base_url():get_custom_base_url())).'/'.$path;
 			}
 
 			return cdn_filter($path);
@@ -188,7 +188,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 			}
 		}
 
-		if ($db==$GLOBALS['SITE_DB']) // If guard is here because a MSN site can't make assumptions about the file system of the central site
+		if ($db->connection_write==$GLOBALS['SITE_DB']->connection_write) // If guard is here because a MSN site can't make assumptions about the file system of the central site
 		{
 			if ((($path!==NULL) && ($path!='')) || (($silent_fail) && ($GLOBALS['SEMI_DEBUG_MODE'])))
 			{
@@ -223,7 +223,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 	}
 	if ((url_is_local($path)) && (!$leave_local) && ($path!=''))
 	{
-		if ($db!=$GLOBALS['SITE_DB'])
+		if ($db->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 		{
 			$base_url=get_forum_base_url();
 		} else

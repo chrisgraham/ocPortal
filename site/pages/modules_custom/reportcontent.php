@@ -100,39 +100,6 @@ class Module_reportcontent
 		return new ocp_tempcode();
 	}
 	
-	function _get_details($content_type,$content_id)
-	{
-		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('reported_content','r_counts',array(
-			'r_session_id'=>get_session_id(),
-			'r_content_type'=>$content_type,
-			'r_content_id'=>$content_id,
-		))))
-			warn_exit(do_lang_tempcode('ALREADY_REPORTED_CONTENT'));
-
-		require_code('hooks/systems/content_meta_aware/'.$content_type);
-		$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
-		$cma_info=$cma_ob->info();
-
-		$db=$GLOBALS[(substr($cma_info['table'],0,2)=='f_')?'FORUM_DB':'SITE_DB'];
-		if (strpos($cma_info['title_field'],'CALL:')!==false)
-		{
-			$content_title=call_user_func(trim(substr($cma_info['title_field'],5)),array('id'=>$content_id));
-		} else
-		{
-			$_content_title=$db->query_value($cma_info['table'],$cma_info['title_field'],array($cma_info['id_field']=>$cma_info['id_field_numeric']?intval($content_id):$content_id));
-			$content_title=$cma_info['title_field_dereference']?get_translated_text($_content_title):$_content_title;
-		}
-		if (isset($cma_info['submitter_field']))
-		{
-			$poster_id=$db->query_value($cma_info['table'],$cma_info['submitter_field'],array($cma_info['id_field']=>$cma_info['id_field_numeric']?intval($content_id):$content_id));
-		} else
-		{
-			$poster_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-		}
-
-		return array($content_title,$poster_id,$cma_info);
-	}
-	
 	function form()
 	{
 		$title=get_page_title('REPORT_CONTENT');
@@ -143,7 +110,16 @@ class Module_reportcontent
 		$content_type=get_param('content_type'); // Equates to a content_meta_aware hook
 		$content_id=get_param('content_id');
 		
-		list($content_title,$poster_id,)=$this->_get_details($content_type,$content_id);
+		require_code('content');
+		
+		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('reported_content','r_counts',array(
+			'r_session_id'=>get_session_id(),
+			'r_content_type'=>$content_type,
+			'r_content_id'=>$content_id,
+		))))
+			warn_exit(do_lang_tempcode('ALREADY_REPORTED_CONTENT'));
+
+		list($content_title,$poster_id,)=content_get_details($content_type,$content_id);
 		$poster=$GLOBALS['FORUM_DRIVER']->get_username($poster_id);
 		
 		// Show form with input field and CAPTCHA, like forum's report post...
@@ -199,10 +175,18 @@ class Module_reportcontent
 			require_code('captcha');
 			enforce_captcha();
 		}
+		
+		require_code('content');
 
+		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('reported_content','r_counts',array(
+			'r_session_id'=>get_session_id(),
+			'r_content_type'=>$content_type,
+			'r_content_id'=>$content_id,
+		))))
+			warn_exit(do_lang_tempcode('ALREADY_REPORTED_CONTENT'));
 		$content_type=post_param('content_type'); // Equates to a content_meta_aware hook
 		$content_id=post_param('content_id');
-		list($content_title,,$cma_info)=$this->_get_details($content_type,$content_id);
+		list($content_title,,$cma_info)=$this->content_get_details($content_type,$content_id);
 
 		// Create reported post...
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('reported_posts_forum'));

@@ -195,15 +195,36 @@ function build_search_submitter_clauses($member_field_name,$member_id,$author,$a
  * @param  integer		We're processing for the ith row
  * @param  ID_TEXT		Table type
  * @set short long
+ * @param  ?string		Search term (NULL: lookup from environment)
  * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
  */
-function exact_match_sql($row,$i,$type='short')
+function exact_match_sql($row,$i,$type='short',$param=NULL)
 {
 	$table=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 	$search_field='f'.strval($i).'.cv_value';
-	$param=get_param('option_'.strval($row['id']),'');
+	if (is_null($param)) $param=get_param('option_'.strval($row['id']),'');
 	$where_clause='';
 	if ($param!='') $where_clause=db_string_equal_to($search_field,$param);
+	return array(array(),array('f'.strval($i).'.cv_value'),$table,$search_field,$where_clause);
+}
+
+/**
+ * Get special SQL from POSTed parameters for a catalogue search field for a multi-input field that is to be exact-matched.
+ *
+ * @param  array			The row for the field to input
+ * @param  integer		We're processing for the ith row
+ * @param  ID_TEXT		Table type
+ * @set short long
+ * @param  ?string		Search term (NULL: lookup from environment)
+ * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
+ */
+function nl_delim_match_sql($row,$i,$type='short',$param=NULL)
+{
+	$table=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_'.$type.' f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
+	$search_field='f'.strval($i).'.cv_value';
+	if (is_null($param)) $param=get_param('option_'.strval($row['id']),'');
+	$where_clause='';
+	if ($param!='') $where_clause='('.$search_field.' LIKE \''.db_encode_like($param).'\' OR '.$search_field.' LIKE \''.db_encode_like('%'.chr(10).$param).'\' OR '.$search_field.' LIKE \''.db_encode_like($param.chr(10).'%').'\' OR '.$search_field.' LIKE \''.db_encode_like('%'.chr(10).$param.chr(10).'%').'\')';
 	return array(array(),array('f'.strval($i).'.cv_value'),$table,$search_field,$where_clause);
 }
 

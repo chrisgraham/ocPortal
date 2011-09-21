@@ -293,6 +293,9 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			}
 		} else // Assume entry
 		{
+			escaped_title=escape_html(node.getAttribute('title'));
+			if (escaped_title=='') escaped_title='{!NA_EM^;}';
+
 			var description='';
 			var description_in_use='';
 			if (node.getAttribute('description_html'))
@@ -307,8 +310,6 @@ tree_list.prototype.render_tree=function(xml,html,element)
 
 			// Render self
 			initially_expanded=false;
-			escaped_title=escape_html(node.getAttribute('title'));
-			if (escaped_title=='') escaped_title='{!NA_EM^;}';
 			setInnerHTML(node_self,'<img alt="{!ENTRY^;}" title="" src="'+'{$IMG*,treefield/entry}'.replace(/^http:/,window.location.protocol)+'" style="width: 14px; height: 14px; padding-left: 16px" /> <label id="'+this.name+'tsel_e_'+node.getAttribute('id')+'" style="background-color: white; color: black; cursor: pointer; color: '+colour+'" for="'+this.name+'tsel_s_'+node.getAttribute('id')+'" onmouseout="if (typeof window.deactivateTooltip!=\'undefined\') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!=\'undefined\') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!=\'undefined\') activateTooltip(this,event,'+(node.getAttribute('description_html')?'':'escape_html')+'(this.childNodes[0].title),\'800px\');"><input'+(this.tabindex?' tabindex="'+this.tabindex+'"':'')+' id="'+this.name+'tsel_s_'+node.getAttribute('id')+'" style="position: absolute; left: -10000px" type="radio" title="'+description_in_use+'" name="_'+this.name+'" value="1" />'+escaped_title+'</label>'+extra+'<br />');
 			var a=node_self.getElementsByTagName('label')[0];
 			a.handle_selection=this.handle_selection;
@@ -323,6 +324,8 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
 			}
 			html.appendChild(node_self_wrap);
+			var selected=((window.use_server_id?node.getAttribute('serverid'):node.getAttribute('id'))==element.value) || node.getAttribute('selected')=='yes';
+			this.make_element_look_selected(document.getElementById(this.name+'tsel_e_'+node.getAttribute('id')),selected);
 		}
 
 		if ((node.getAttribute('draggable')) && (node.getAttribute('draggable')!='false') && (window.Drag))

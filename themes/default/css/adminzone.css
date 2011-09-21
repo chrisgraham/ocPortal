@@ -416,6 +416,15 @@ a.topleftlink:hover {
 	max-width: 100%;
 }
 
+.dottedborder .css_colour_chooser_name {
+	width: 190px;
+}
+
+.dottedborder .css_colour_chooser {
+	width: 680px;
+	margin: 0;
+}
+
 .css_colour_strip {
 	float: left;
 	width: 4px;

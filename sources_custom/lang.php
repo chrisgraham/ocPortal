@@ -270,7 +270,7 @@ if (!function_exists('get_translated_text'))
 		if ($RECORD_LANG_STRINGS_CONTENT)
 		{
 			global $RECORDED_LANG_STRINGS_CONTENT;
-			$RECORDED_LANG_STRINGS_CONTENT[$entry]=($connection!=$GLOBALS['SITE_DB']);
+			$RECORDED_LANG_STRINGS_CONTENT[$entry]=($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write);
 		}
 
 		if ($lang===NULL) $lang=user_lang();

@@ -730,7 +730,7 @@ function block_helper_script()
 					$list=nice_get_download_category_tree(($default=='')?NULL:intval($default));
 					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif (($parameter=='catalogue') && (in_array($block,array('main_recent_cc_entries')))) // catalogue list
+				elseif ((($parameter=='param') && (in_array($block,array('main_contact_catalogues')))) || (($parameter=='catalogue') && (in_array($block,array('main_recent_cc_entries'))))) // catalogue list
 				{
 					require_code('catalogues');
 					$list=nice_get_catalogues($default,true);
