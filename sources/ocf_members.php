@@ -182,7 +182,7 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
  * @param  ?BINARY	That are to be shown in post previews (NULL: don't care).
  * @param  BINARY		That start 'ocp_'
  * @param  ?boolean	That are to go on the join form (NULL: don't care).
- * @return array		A mapping of field key to field value.
+ * @return array		A mapping of field key to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value.
  */
 function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$encrypted=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
 {
@@ -192,7 +192,9 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 	$member_value=mixed(); // Initialise type to mixed
 	$all_cpf_permissions=((get_member()==$member_id)||$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))?/*no restricts if you are the member or a super-admin*/array():list_to_map('field_id',$GLOBALS['FORUM_DB']->query_select('f_member_cpf_perms',array('*'),array('member_id'=>$member_id)));
 
-	foreach ($fields_to_show as $field_to_show)
+	require_code('fields');
+
+	foreach ($fields_to_show as $i=>$field_to_show)
 	{
 		$member_value=$member_mappings['field_'.strval($field_to_show['id'])];
 
@@ -206,26 +208,22 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 			}
 		}
 
-		if (($field_to_show['cf_type']=='short_trans') || ($field_to_show['cf_type']=='long_trans'))
+		$ob=get_fields_hook($field_to_show['cf_type']);
+		list(,,$storage_type)=$ob->get_field_value_row_bits($field_to_show);
+
+		if (strpos($storage_type,'_trans')!==false)
 		{
 			if ((is_null($member_value)) || ($member_value==0)) $member_value=''; else $member_value=get_translated_tempcode($member_value,$GLOBALS['FORUM_DB']); // This is meant to be '' for blank, not new ocp_tempcode()
 			if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
 		}
-		elseif ($field_to_show['cf_type']=='tick')
-		{
-			$member_value=($member_value==1)?do_lang('YES'):do_lang('NO');
-		}
-		elseif (($field_to_show['cf_type']=='upload') || ($field_to_show['cf_type']=='picture'))
-		{
-			$member_value=get_custom_base_url().'/'.$member_value;
-		}
 
-		//get custom permissions for the current CPF
+		// get custom permissions for the current CPF
 		$cpf_permissions=array_key_exists($field_to_show['id'],$all_cpf_permissions)?$all_cpf_permissions[$field_to_show['id']]:array();
 
 		$display_cpf=true;
-		//if there are custom permissions set and we are not showning to all
-		if((array_key_exists(0,$cpf_permissions)) && (!is_null($public_view)))
+
+		// if there are custom permissions set and we are not showing to all
+		if ((array_key_exists(0,$cpf_permissions)) && (!is_null($public_view)))
 		{
 			$display_cpf=false;
 			
@@ -238,13 +236,13 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 
 			if (!$display_cpf) // Guard this, as the code will take some time to run
 			{
-				if($cpf_permissions[0]['friend_view']==1)
+				if ($cpf_permissions[0]['friend_view']==1)
 				{
 					if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_liked',array('member_likes'=>$member_id,'member_liked'=>get_member()))))
 						$display_cpf=true;
 				}
 
-				if(strlen($cpf_permissions[0]['group_view'])>0)
+				if (strlen($cpf_permissions[0]['group_view'])>0)
 				{
 					require_code('ocfiltering');
 
@@ -266,7 +264,11 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 		}
 
 		if ($display_cpf)
-			$custom_fields[$field_to_show['trans_name']]=$member_value;
+		{
+			$rendered_value=$ob->render_field_value($field_to_show,$member_value,$i,NULL);
+
+			$custom_fields[$field_to_show['trans_name']]=array('RAW'=>$member_value,'RENDERED'=>$rendered_value);
+		}
 	}
 
 	return $custom_fields;
@@ -280,6 +282,8 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
  */
 function ocf_get_custom_field_mappings($member_id)
 {
+	require_code('fields');
+
 	global $MEMBER_CACHE_FIELD_MAPPINGS;
 	if (!array_key_exists($member_id,$MEMBER_CACHE_FIELD_MAPPINGS))
 	{
@@ -290,20 +294,15 @@ function ocf_get_custom_field_mappings($member_id)
 			$row=array('mf_member_id'=>$member_id);
 			foreach ($all_fields_regardless as $field)
 			{
-				if (($field['cf_type']=='short_trans') || ($field['cf_type']=='long_trans'))
+				$ob=get_fields_hook($field['cf_type']);
+				list(,$default,$storage_type)=$ob->get_field_value_row_bits($field,false,'',$GLOBALS['FORUM_DB']);
+		
+				if (strpos($storage_type,'_trans')!==false)
 				{
-					$row['field_'.strval($field['id'])]=insert_lang('',3,$GLOBALS['FORUM_DB']);
-				}
-				elseif (($field['cf_type']=='integer') || ($field['cf_type']=='tick'))
-				{
-					$row['field_'.strval($field['id'])]=0;
-				}
-				elseif ($field['cf_type']=='float')
-				{
-					$row['field_'.strval($field['id'])]='0.0';
+					$row['field_'.strval($field['id'])]=intval($default);
 				} else
 				{
-					$row['field_'.strval($field['id'])]='';
+					$row['field_'.strval($field['id'])]=$default;
 				}
 			}
 			$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);

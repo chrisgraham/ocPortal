@@ -42,6 +42,8 @@ class Hook_do_next_menus_catalogues
 			{
 				foreach ($catalogues as $row)
 				{
+					if (substr($row['c_name'],0,1)=='_') continue;
+				
 					if (($row['c_ecommerce']==0) || (addon_installed('shopping')))
 					{
 						if (has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$row['c_name'])))

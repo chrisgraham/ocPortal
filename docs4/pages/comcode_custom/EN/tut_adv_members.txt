@@ -84,13 +84,14 @@ In addition, members may override display settings in their Account, on a per-fi
 [title="3"]Encrypted CPFs[/title]
 
 When creating a custom profile field, it is possible to mark it as encrypted. If you have the OpenSSL PHP extension installed and configured (see the [page caption="Web Hosting for ocPortal"]tut_web_hosting[/page] tutorial), ocPortal can automatically encrypt the contents of such CPFs, such that their sensitive data would not be revealed if the server were to be compromised.
-For welcome e-mails to work the ocPortal cron bridge must be configured as discussed in the [page caption="Configuration tutorial"]tut_configuration[/page]
 
 To mark a CPF as encrypted, tick the "Encryption" box when creating the field, making sure to first have encryption set up on your server and on ocPortal.
 
 When editing the value of an encrypted CPF, the encrypted data will be shown. To change the value, simply overwrite it with the data you want to change it to. Leaving the value alone will not cause it to be doubly-encrypted.
 
 When viewing an encrypted CPF on a member's profile page, the encrypted data will not be decrypted or shown. To decrypt and view the data, click the "Decrypt" JavaScript link for the CPF. A popup will allow the decryption passphrase to be entered and the data decrypted. The decryption passphrase is the passphrase used to unlock the private key, as specified when originally generating the public/private key pair. Typically only staff will have knowledge of the passphrase, since there's only one for the entire site.
+
+Note that encrypted CPFs are not supported for any kind of CPF value that is not typed in (such as list selections).
 
 [title="3"]Categorisation of CPFs[/title]
 
@@ -101,6 +102,8 @@ If you prefix CPF names like "Example: Field A" and "Example: Field B", ocPortal
 [exp_thumb="Creating a welcome e-mail" float="right"]adv_members_welcome_email[/exp_thumb]
 ocPortal provides special support for composing a series of welcome e-mails that are sent out to new members on a predefined schedule.
 The purpose of this feature is to gradually advertise the features of your website to your members in a way that reinforces awareness. As most members will not usually return to a website, welcome e-mails provide a strong tool to keep them aware and entice them to fully embrace whatever service you are providing.
+
+For welcome e-mails to work the ocPortal cron bridge must be configured as discussed in the [page caption="Configuration tutorial"]tut_configuration[/page]
 [html]</div>[/html]
 
 [title="2"]CSV files[/title]

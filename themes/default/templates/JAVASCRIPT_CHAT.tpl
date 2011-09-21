@@ -196,7 +196,7 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 			var url="{$FIND_SCRIPT,messages}?action=post";
 			element.disabled=true;
 			top_window.currently_sending_message=true;
-			var result=load_XML_doc(maintain_theme_in_link(url)+top_window.keep_stub(false),null,"room_id="+window.encodeURIComponent(current_room_id)+"&message="+window.encodeURIComponent(message_text)+"&font="+window.encodeURIComponent(font_name)+"&colour="+window.encodeURIComponent(font_colour)+"&message_id="+window.encodeURIComponent(top_window.last_message_id)+"&event_id="+window.encodeURIComponent(top_window.last_event_id));
+			var result=load_XML_doc(maintain_theme_in_link(url)+top_window.keep_stub(false),null,"room_id="+window.encodeURIComponent(current_room_id)+"&message="+window.encodeURIComponent(message_text)+"&font="+window.encodeURIComponent(font_name)+"&colour="+window.encodeURIComponent(font_colour)+"&message_id="+window.encodeURIComponent(top_window.last_message_id)+"&event_id="+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false));
 			top_window.currently_sending_message=false;
 			element.disabled=false;
 

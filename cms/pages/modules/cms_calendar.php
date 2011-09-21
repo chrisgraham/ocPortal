@@ -151,8 +151,9 @@ class Module_cms_calendar extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
+		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_CALENDARS'),comcode_lang_string('DOC_CALENDAR'),
-					array(
+					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_calendar')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_EVENT_TYPE')):NULL,
 						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_EVENT_TYPE')):NULL,
@@ -160,7 +161,7 @@ class Module_cms_calendar extends standard_aed_module
 						has_specific_permission(get_member(),'edit_own_lowrange_content','cms_calendar')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_CALENDAR_EVENT')):NULL,
 						has_specific_permission(get_member(),'mass_import','cms_calendar')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_ICAL')):NULL,
 						array('export',array('_SELF',array('type'=>'export'),'_SELF'),do_lang('EXPORT_ICAL')),
-					),
+					),manage_custom_fields_donext_link('event')),
 					do_lang('MANAGE_CALENDARS')
 		);
 	}

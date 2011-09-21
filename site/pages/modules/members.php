@@ -409,8 +409,11 @@ class Module_members
 		$custom_fields=array();
 		require_code('encryption');
 		$value=mixed();
-		foreach ($_custom_fields as $name=>$value)
+		foreach ($_custom_fields as $name=>$_value)
 		{
+			$value=$_value['RAW'];
+			$rendered_value=$_value['RENDERED'];
+		
 			$encrypted_value='';
 			if (is_data_encrypted($value))
 			{
@@ -430,7 +433,7 @@ class Module_members
 
 			if (((!is_object($value)) && ($value!='')) || ((is_object($value)) && (!$value->is_empty())))
 			{
-				$custom_fields[]=array('NAME'=>$name,'VALUE'=>$value,'ENCRYPTED_VALUE'=>$encrypted_value);
+				$custom_fields[]=array('NAME'=>$name,'RAW_VALUE'=>$value,'VALUE'=>$rendered_value,'ENCRYPTED_VALUE'=>$encrypted_value);
 				if ($name==do_lang('KEYWORDS')) $GLOBALS['SEO_KEYWORDS']=is_object($value)?$value->evaluate():$value;
 				if ($name==do_lang('DESCRIPTION')) $GLOBALS['SEO_DESCRIPTION']=is_object($value)?$value->evaluate():$value;
 			}

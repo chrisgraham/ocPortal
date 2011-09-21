@@ -40,6 +40,7 @@ Catalogues support the following field types:
  - [tt]tick[/tt] -- A checkbox, or if the value is set as non-required, a list with 'Yes' and 'No' as selectable options
  - [tt]auto_increment[/tt] -- An auto-incremented number (i.e. each entry in the catalogue is assigned a sequential number) (this is set automatically, and not visible when adding an entry)
  - [tt]random[/tt] -- A random 10 character alphanumeric code (this is set automatically, and not visible when adding an entry)
+ - [i]and more[/i]
 [exp_thumb="There are a whole host of options available after catalogue activity" float="right"]catalogues_do_next[/exp_thumb]
 Programmers may add new field types by writing new hook code files.
 The '[tt]upload[/tt]' and '[tt]picture[/tt]' types actually allow entry submitters to upload files from their own computer.

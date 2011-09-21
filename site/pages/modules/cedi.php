@@ -910,6 +910,14 @@ class Module_cedi
 				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 		}
 
+		$hidden_fields=new ocp_tempcode();
+
+		require_code('fields');
+		if (has_tied_catalogue('seedy_post'))
+		{
+			append_form_custom_fields('seedy_post',($mode=='edit')?strval($post_id):NULL,$specialisation,$hidden_fields);
+		}
+
 		$text=new ocp_tempcode();
 
 		if (addon_installed('captcha'))
@@ -948,7 +956,6 @@ class Module_cedi
 		$redir_url=$_redir_url->evaluate();
 		$post_url=build_url(array('page'=>'_SELF','id'=>get_param('id',strval(db_get_first_id()),false),'redirect'=>$redir_url,'type'=>'_post'),'_SELF');
 
-		$hidden_fields=new ocp_tempcode();
 		$hidden_fields->attach(form_input_hidden('post_id',strval($post_id)));
 
 		$javascript=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
@@ -1032,12 +1039,24 @@ class Module_cedi
 				check_delete_permission('low',$original_poster,array('seedy_page',$myrow['page_id']),'cms_cedi');
 
 				cedi_delete_post($post_id);
+
+				require_code('fields');
+				if (has_tied_catalogue('seedy_post'))
+				{
+					delete_form_custom_fields('seedy_post',strval($post_id));
+				}
 			} else
 			{
 				check_edit_permission('low',$original_poster,array('seedy_page',$myrow['page_id']),'cms_cedi');
 
 				cedi_edit_post($post_id,$message,$validated);
 			}
+		}
+
+		require_code('fields');
+		if (has_tied_catalogue('seedy_post'))
+		{
+			save_form_custom_fields('seedy_post',strval($post_id));
 		}
 
 		if (addon_installed('awards'))

@@ -949,8 +949,8 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 	if (!is_null($default))
 	{
 		require_code('images');
-		$is_image=is_image($default);
-		$existing_url=$default;
+		$is_image=is_image($default[0]);
+		$existing_url=$default[0];
 		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
 	}
 	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'I'=>'1','NAME_STUB'=>$name));

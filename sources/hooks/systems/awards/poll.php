@@ -51,6 +51,7 @@ class Hook_awards_poll
 		$info['seo_type']='polls';
 		$info['feedback_type']='polls';
 		$info['views_field']='poll_views';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

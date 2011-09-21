@@ -103,7 +103,7 @@ function get_ocp_cpf($cpf,$member=NULL)
 	if (get_forum_type()=='ocf')
 	{
 		$values=ocf_get_all_custom_fields_match_member($member);
-		if (array_key_exists($cpf,$values)) return $values[$cpf];
+		if (array_key_exists($cpf,$values)) return $values[$cpf]['RAW'];
 	}
 	
 	return '';

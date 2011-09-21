@@ -30,6 +30,9 @@
 		</div>
 	</div>
 
+	{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,news,{ID}}}
+	{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}<br />{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
+
 	<hr class="spaced_rule" />
 
 	<{$?,{$VALUE_OPTION,html5},aside,div}>

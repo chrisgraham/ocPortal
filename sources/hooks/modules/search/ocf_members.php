@@ -71,24 +71,20 @@ class Hook_search_ocf_members
 		if (has_specific_permission(get_member(),'view_profiles'))
 		{
 			$rows=ocf_get_all_custom_fields_match(NULL,1,1);
+			require_code('fields');
 			foreach ($rows as $row)
 			{
-				if ((!array_key_exists('field_'.strval($row['id']),$indexes)) && (!in_array($row['cf_type'],array('integer','tick','long_trans','short_trans')))) continue;
+				if (!array_key_exists('field_'.strval($row['id']),$indexes)) continue;
 				
-				$type='_TEXT';
-				$special=make_string_tempcode(get_param('option_'.strval($row['id']),''));
-				if (substr($row['cf_type'],-4)=='list')
+				$ob=get_fields_hook($row['cf_type']);
+				$temp=$ob->get_search_inputter($row);
+				if (is_null($temp))
 				{
-					$type='_LIST';
-					$special=form_input_list_entry('',true,'---');
-					$list=explode('|',$row['cf_default']);
-					foreach ($list as $l)
-					{
-						$special->attach(form_input_list_entry($l,$l==get_param('option_'.strval($row['id']),'')));
-					}
-				}
-				$display=$row['trans_name'];
-				$fields[]=array('NAME'=>strval($row['id']),'DISPLAY'=>$display,'TYPE'=>$type,'SPECIAL'=>$special);
+					$type='_TEXT';
+					$special=make_string_tempcode(get_param('option_'.strval($row['id']),''));
+					$display=$row['trans_name'];
+					$fields[]=array('NAME'=>strval($row['id']),'DISPLAY'=>$display,'TYPE'=>$type,'SPECIAL'=>$special);
+				} else $fields=array_merge($fields,$temp);
 			}
 	
 			$age_range=get_param('option__age_range',get_param('option__age_range_from','').'-'.get_param('option__age_range_to',''));
@@ -199,8 +195,12 @@ class Hook_search_ocf_members
 		$trans_fields=array();
 		$rows=ocf_get_all_custom_fields_match(NULL,1,1);
 		$table='';
+		require_code('fields');
 		foreach ($rows as $i=>$row)
 		{
+			$ob=get_fields_hook($row['cf_type']);
+			list(,,$storage_type)=$ob->get_field_value_row_bits($row);
+
 			$param=get_param('option_'.strval($row['id']),'');
 			if ($param!='')
 			{
@@ -221,9 +221,9 @@ class Hook_search_ocf_members
 					$where_clause.=preg_replace('#\?#','field_'.strval($row['id']),$temp);
 				}
 			}
-			if (($row['cf_type']!='short_trans') && ($row['cf_type']!='long_trans') && ($row['cf_type']!='integer') && ($row['cf_type']!='tick') && ($row['cf_type']!='float'))
+			if (strpos($storage_type,'_trans')===false)
 				$raw_fields[]='field_'.strval($row['id']);
-			elseif (($row['cf_type']=='short_trans') || ($row['cf_type']=='long_trans'))
+			else
 				$trans_fields[]='field_'.strval($row['id']);
 		}
 		$age_range=get_param('option__age_range',get_param('option__age_range_from','').'-'.get_param('option__age_range_to',''));
@@ -387,10 +387,10 @@ class Hook_search_ocf_members
 			);
 			foreach ($fields as $key=>$val)
 			{
-				if (is_null($val)) continue;
-				if ($val!='') $_lines[$key]=is_integer($val)?integer_format($val):$val;
+				if ($val['RAW']!='') $_lines[$key]=$val['RENDERED'];
 			}
-			if ((!$preview) && (has_actual_page_access(get_member(),'contactmember')))  $_lines[do_lang('ACTIONS')]=hyperlink($email_member_url,do_lang_tempcode('_EMAIL_MEMBER'));
+			if ((!$preview) && (has_actual_page_access(get_member(),'contactmember')))
+				$_lines[do_lang('ACTIONS')]=hyperlink($email_member_url,do_lang_tempcode('_EMAIL_MEMBER'));
 		}
 		
 		return $_lines;

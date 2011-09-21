@@ -130,30 +130,8 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		if ((is_encryption_enabled()) && ($name==''))
 			$fields->attach(form_input_tick(do_lang_tempcode('ENCRYPTED'),do_lang_tempcode('DESCRIPTION_ENCRYPTED'),'encrypted',$encrypted==1));
 
-		$types=array('short_text','long_text','short_trans','long_trans','integer','float','list','multilist','radiolist','url','upload','picture','tick');
-		if ($name!='')
-		{
-			if (($type=='integer') || ($type=='tick') || ($type=='long_text'))
-			{
-				$types=array($type);
-			} else
-			{
-				if (strpos($type,'_trans')===false)
-				{
-					unset($types['long_trans']);
-					unset($types['short_trans']);
-					unset($types['integer']);
-					unset($types['tick']);
-					unset($types['long_text']);
-				} else
-				{
-					$types=array('short_trans','long_trans');
-				}
-			}
-		}
-		$type_list=new ocp_tempcode();
-		foreach ($types as $_type)
-			$type_list->attach(form_input_list_entry($_type,($_type==$type),do_lang_tempcode('FIELD_TYPE_'.$_type)));
+		require_code('fields');
+		$type_list=nice_get_field_type($type,$name!='');
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_FIELD_TYPE'),'type',$type_list));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('REQUIRED'),do_lang_tempcode('DESCRIPTION_REQUIRED'),'required',$required==1));

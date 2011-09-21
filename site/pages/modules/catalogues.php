@@ -36,7 +36,7 @@ class Module_catalogues
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -55,6 +55,7 @@ class Module_catalogues
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_short_trans');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_long');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_short');
+		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_entry_linkage');
 	
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_category'));
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_catalogue'));
@@ -401,6 +402,15 @@ class Module_catalogues
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long_trans','ltcv_value',array('cv_value'));
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short_trans','stcv_value',array('cv_value'));
 		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->create_table('catalogue_entry_linkage',array(
+				'catalogue_entry_id'=>'*AUTO_LINK',
+				'content_type'=>'ID_TEXT',
+				'content_id'=>'ID_TEXT',
+			));
+		}
 	}
 	
 	/**
@@ -463,6 +473,8 @@ class Module_catalogues
 		}
 		foreach ($rows as $row)
 		{
+			if (substr($row['c_name'],0,1)=='_') continue;
+		
 			if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
 			$kids=array();
 			if ((!is_null($max_depth)) || ($max_depth>1))
@@ -527,6 +539,7 @@ class Module_catalogues
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 		if (can_arbitrary_groupby())
 			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name GROUP BY c.c_name';
+		$query.=' AND c_name NOT LIKE \''.db_encode_like('\_%').'\'';
 		$catalogues=list_to_map('c_name',$GLOBALS['SITE_DB']->query($query));
 
 		if (!is_null($parent_pagelink_orig))
@@ -1039,6 +1052,7 @@ class Module_catalogues
 			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name';
 		$query.=' WHERE ';
 		$query.=is_null($ecommerce)?'1=1':('c_ecommerce='.strval($ecommerce));
+		$query.=' AND c.c_name NOT LIKE \''.db_encode_like('\_%').'\'';
 		$rows=$GLOBALS['SITE_DB']->query('SELECT c.* '.$query.(can_arbitrary_groupby()?' GROUP BY c.c_name':''),$max,$start);
 		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT c.c_name) '.$query);
 		$out=new ocp_tempcode();

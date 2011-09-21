@@ -114,6 +114,9 @@
 							<th>{!RECURRENCE}</th>
 							<td>{RECURRENCE*}</td>
 						</tr>
+
+						{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,event,{ID}}}
+						{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry},1}{+END}
 					</tbody>
 				</table></div>
 			{+END}

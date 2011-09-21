@@ -219,8 +219,8 @@ function init__global2()
 
 	$XSS_DETECT=function_exists('ocp_mark_as_escaped');
 
-	$GLOBALS['DEBUG_MODE']=(is_dir(get_file_base().'/.svn') || (function_exists('ocp_mark_as_escaped'))) && ((!array_key_exists('keep_no_debug_mode',$_GET) || ($_GET['keep_no_debug_mode']=='0'))) && ((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')));
-	$GLOBALS['SEMI_DEBUG_MODE']=(is_dir(get_file_base().'/.svn') || (function_exists('ocp_mark_as_escaped'))) && ((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')));
+	$GLOBALS['DEBUG_MODE']=((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped'))) && ((!array_key_exists('keep_no_debug_mode',$_GET) || ($_GET['keep_no_debug_mode']=='0'))) && ((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')));
+	$GLOBALS['SEMI_DEBUG_MODE']=((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped'))) && ((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')));
 	if (function_exists('set_time_limit')) @set_time_limit(60);
 	if ($GLOBALS['DEBUG_MODE'])
 	{

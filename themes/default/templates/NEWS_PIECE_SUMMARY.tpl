@@ -1,10 +1,10 @@
 <div class="float_surrounder news_piece_summary">
 	{+START,IF,{$AND,{$NOT,{BLOG}},{$IS_NON_EMPTY,{AUTHOR_URL}}}}
 		<div class="newscat_img_author">
-			{+START,IF_NON_EMPTY,{CATEGORY}}
+			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{CATEGORY}}
 				<img src="{IMG*}" title="{CATEGORY*}" alt="{CATEGORY*}" />
-			{+END}
-	
+			{+END}{+END}
+
 			<div class="news_by">
 				{!BY_SIMPLE,<a href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a>}
 			</div>
@@ -19,14 +19,14 @@
 				</div>
 			{+END}
 	
-			{+START,IF_NON_EMPTY,{$AVATAR*,{SUBMITTER}}}
+			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{$AVATAR*,{SUBMITTER}}}
 				<img src="{$AVATAR*,{SUBMITTER}}" title="{!AVATAR}" alt="{!AVATAR}" />
-			{+END}
+			{+END}{+END}
 			
-			{+START,IF,{$OCF}}
+			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$OCF}}
 				<br /><br />
 				{$OCF_RANK_IMAGE,{SUBMITTER}}
-			{+END}
+			{+END}{+END}
 		</div>
 	{+END}
 

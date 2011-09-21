@@ -94,14 +94,15 @@ class Module_cms_authors
 	 */
 	function misc()
 	{
+		require_code('fields');
 		require_code('templates_donext');
 		return do_next_manager(get_page_title('AUTHOR_MANAGE'),comcode_lang_string('DOC_AUTHORS'),
-					array(
+					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'set_own_author_profile')?array('set-own-profile',array('_SELF',array('type'=>'_ad'),'_SELF'),do_lang('EDIT_MY_AUTHOR_PROFILE')):NULL,
 						has_specific_permission(get_member(),'edit_midrange_content','cms_authors')?array('add_one',array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'),do_lang('ADD_AUTHOR')):NULL,
 						has_specific_permission(get_member(),'edit_midrange_content','cms_authors')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MERGE_AUTHORS')):NULL,
-					),
+					),manage_custom_fields_donext_link('author')),
 					do_lang('AUTHOR_MANAGE')
 		);
 	}
@@ -140,7 +141,7 @@ class Module_cms_authors
 				$info=ocf_get_all_custom_fields_match_member(get_member());
 				if (array_key_exists(do_lang('DEFAULT_CPF_SELF_DESCRIPTION_NAME'),$info))
 				{
-					$description=$info[do_lang('DEFAULT_CPF_SELF_DESCRIPTION_NAME')];
+					$description=$info[do_lang('DEFAULT_CPF_SELF_DESCRIPTION_NAME')]['RENDERED'];
 					if (is_object($description)) $description=$description->evaluate();
 				}
 			}
@@ -184,6 +185,12 @@ class Module_cms_authors
 		} else
 		{
 			$hidden->attach(form_input_hidden('forum_handle',strval($handle)));
+		}
+
+		require_code('fields');
+		if (has_tied_catalogue('author'))
+		{
+			append_form_custom_fields('author',$author,$fields,$hidden);
 		}
 
 		require_code('seo2');
@@ -241,6 +248,12 @@ class Module_cms_authors
 			}
 			delete_author($author);
 			$author=NULL;
+
+			require_code('fields');
+			if (has_tied_catalogue('author'))
+			{
+				delete_form_custom_fields('author',author);
+			}
 		} else
 		{
 			$_url=post_param('url');
@@ -251,6 +264,12 @@ class Module_cms_authors
 			$url=(strpos($_url,'mailto:')===false)?fixup_protocolless_urls($_url):$_url;
 			
 			add_author($author,$url,$forum_handle,post_param('description'),post_param('skills'),post_param('meta_keywords'),post_param('meta_description'));
+
+			require_code('fields');
+			if (has_tied_catalogue('author'))
+			{
+				save_form_custom_fields('author',$author);
+			}
 
 			if (addon_installed('awards'))
 			{

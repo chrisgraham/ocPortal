@@ -292,11 +292,11 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 		$users_online=new ocp_tempcode();
 		$count=0;
 		$members=get_online_members(false,NULL,$count);
+		$groups_seen=array();
 		if (!is_null($members))
 		{
 			//$members=collapse_2d_complexity('the_user','cache_username',$members);
 			$guests=0;
-			$groups_seen=array();
 			foreach ($members as $bits)
 			{
 				$member=$bits['the_user'];

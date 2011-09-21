@@ -81,6 +81,7 @@ class Module_cms_cedi
 
 		// Decide what to do
 		if ($type=='misc') return $this->misc();
+		if ($type=='choose_page_to_edit') return $this->choose_page_to_edit();
 		if ($type=='add_page') return $this->add_page();
 		if ($type=='_add_page') return $this->_add_page();
 		if ($type=='edit_page') return $this->edit_page();
@@ -92,25 +93,55 @@ class Module_cms_cedi
 	}
 
 	/**
+	 * The do-next manager for before content management.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function misc()
+	{
+		require_code('templates_donext');
+		require_code('fields');
+		return do_next_manager(get_page_title('MANAGE_CEDI'),comcode_lang_string('DOC_CEDI'),
+					array_merge(array(
+						/*	 type							  page	 params													 zone	  */
+						array('add_one',array('_SELF',array('type'=>'add_page'),'_SELF'),do_lang('CEDI_ADD_PAGE')),
+						array('edit_one',array('_SELF',array('type'=>'choose_page_to_edit'),'_SELF'),do_lang('CEDI_EDIT_PAGE')),
+					),manage_custom_fields_donext_link('seedy_post'),manage_custom_fields_donext_link('seedy_page')),
+					do_lang('MANAGE_QUIZZES')
+		);
+	}
+
+	/**
 	 * Get the fields for adding/editing a CEDI page.
 	 *
 	 * @param  SHORT_TEXT	The page title
 	 * @param  LONG_TEXT		Hidden notes pertaining to the page
 	 * @param  BINARY			Whether to hide the posts on the page by default
 	 * @param  AUTO_LINK		The ID of the page (-1 implies we're adding)
-	 * @return array			The fields, the extra fields.
+	 * @return array			The fields, the extra fields, the hidden fields.
 	 */
 	function get_page_fields($title,$notes='',$hide_posts=0,$page_id=-1)
 	{
-		require_code('form_templates');
-		$fields=form_input_line(do_lang_tempcode('SCREEN_TITLE'),do_lang_tempcode('SCREEN_TITLE_DESC'),'title',$title,true);
+		$fields=new ocp_tempcode();
 		$fields2=new ocp_tempcode();
+		$hidden=new ocp_tempcode();
+
+		require_code('form_templates');
+		$fields->attach(form_input_line(do_lang_tempcode('SCREEN_TITLE'),do_lang_tempcode('SCREEN_TITLE_DESC'),'title',$title,true));
 		$fields2->attach(form_input_tick(do_lang_tempcode('HIDE_POSTS'),do_lang_tempcode('DESCRIPTION_HIDE_POSTS'),'hide_posts',$hide_posts==1));
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields2->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+
+		require_code('fields');
+		if (has_tied_catalogue('seedy_page'))
+		{
+			append_form_custom_fields('seedy_page',($page_id==-1)?NULL:strval($page_id),$fields,$hidden);
+		}
+
 		require_code('permissions2');
 		$fields2->attach(get_category_permissions_for_environment('seedy_page',strval($page_id),'cms_cedi',NULL,($page_id==-1)));
-		return array($fields,$fields2);
+
+		return array($fields,$fields2,$hidden);
 	}
 
 	/**
@@ -128,7 +159,7 @@ class Module_cms_cedi
 
 		$add_url=build_url(array('page'=>'_SELF','type'=>'_add_page','redirect'=>get_param('redirect',NULL)),'_SELF');
 
-		list($fields,$fields2)=$this->get_page_fields($_title);
+		list($fields,$fields2,$hidden)=$this->get_page_fields($_title);
 
 		// Awards?
 		if (addon_installed('awards'))
@@ -136,8 +167,6 @@ class Module_cms_cedi
 			require_code('awards');
 			$fields2->attach(get_award_fields('seedy_page'));
 		}
-
-		$hidden=new ocp_tempcode();
 
 		$posting_form=get_posting_form(do_lang('CEDI_ADD_PAGE'),'',$add_url,$hidden,$fields,NULL,'',$fields2);
 
@@ -158,6 +187,12 @@ class Module_cms_cedi
 		$id=cedi_add_page(post_param('title'),post_param('post'),post_param('notes'),post_param_integer('hide_posts',0));
 		require_code('permissions2');
 		set_category_permissions_from_environment('seedy_page',strval($id),'cms_cedi');
+
+		require_code('fields');
+		if (has_tied_catalogue('seedy_page'))
+		{
+			save_form_custom_fields('seedy_page',strval($id));
+		}
 
 		if (addon_installed('awards'))
 		{
@@ -183,7 +218,7 @@ class Module_cms_cedi
 	 *
 	 * @return tempcode	The UI.
 	 */
-	function misc()
+	function choose_page_to_edit()
 	{
 		$title=get_page_title('CEDI_EDIT_PAGE');
 
@@ -241,7 +276,7 @@ class Module_cms_cedi
 		}
 		$edit_url=build_url(array('page'=>'_SELF','redirect'=>$redir_url,'id'=>get_param('id',false,true),'type'=>'_edit_page'),'_SELF');
 
-		list($fields,$fields2)=$this->get_page_fields($page_title,$page['notes'],$page['hide_posts'],$id);
+		list($fields,$fields2,$hidden)=$this->get_page_fields($page_title,$page['notes'],$page['hide_posts'],$id);
 		require_code('seo2');
 		$fields2->attach(seo_get_fields('seedy_page',strval($id)));
 
@@ -296,7 +331,7 @@ class Module_cms_cedi
 		breadcrumb_add_segment($tree,do_lang_tempcode('CEDI_EDIT_PAGE'));
 		breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('CHOOSE'))));
 
-		return do_template('POSTING_SCREEN',array('_GUID'=>'de53b8902ab1431e0d2d676f7d5471d3','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'REVISION_HISTORY'=>$revision_history,'POSTING_FORM'=>$posting_form,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('CEDI_EDIT_PAGE_TEXT'))));
+		return do_template('POSTING_SCREEN',array('_GUID'=>'de53b8902ab1431e0d2d676f7d5471d3','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'REVISION_HISTORY'=>$revision_history,'POSTING_FORM'=>$posting_form,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('CEDI_EDIT_PAGE_TEXT'))));
 	}
 
 	/**
@@ -319,6 +354,12 @@ class Module_cms_cedi
 
 			cedi_delete_page($id);
 
+			require_code('fields');
+			if (has_tied_catalogue('seedy_page'))
+			{
+				delete_form_custom_fields('seedy_page',strval($id));
+			}
+
 			require_code('autosave');
 			clear_ocp_autosave();
 
@@ -333,6 +374,12 @@ class Module_cms_cedi
 			require_code('permissions2');
 			set_category_permissions_from_environment('seedy_page',strval($id),'cms_cedi');
 			cedi_edit_page($id,post_param('title'),post_param('post'),post_param('notes'),post_param_integer('hide_posts',0),post_param('meta_keywords'),post_param('meta_description'));
+
+			require_code('fields');
+			if (has_tied_catalogue('seedy_page'))
+			{
+				save_form_custom_fields('seedy_page',strval($id));
+			}
 
 			require_code('autosave');
 			clear_ocp_autosave();

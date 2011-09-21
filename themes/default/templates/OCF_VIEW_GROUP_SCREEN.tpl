@@ -6,6 +6,9 @@
 	<p>{PROMOTION_INFO}</p>
 {+END}
 
+{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,group,{ID}}}
+{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
+
 <div class="sliverised_page">
 	{+START,IF_NON_EMPTY,{PRIMARY_MEMBERS}}
 		{PRIMARY_MEMBERS}

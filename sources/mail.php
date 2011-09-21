@@ -876,7 +876,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 		$to=post_param_integer('to_members_email',NULL);
 		if (!is_null($to))
 		{
-			$to_email=array($GLOBALS['FORUM_DRIVER']->get_member_email_address($to));
+			$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to);
 			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to);
 		}
 	}
@@ -899,6 +899,6 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 		}
 	}
 
-	mail_wrap($subject,$message_raw,$to_email,$to_name,$from_email,$from_name,3,$attachments);
+	mail_wrap($subject,$message_raw,array($to_email),$to_name,$from_email,$from_name,3,$attachments);
 }
 

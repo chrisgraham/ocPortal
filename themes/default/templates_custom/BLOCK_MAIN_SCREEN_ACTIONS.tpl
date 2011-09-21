@@ -10,4 +10,9 @@
 	<div class="stumbleupon"><a title="{!ADD_TO_STUMBLEUPON}" target="_blank" title="{!ADD_TO_STUMBLEUPON}: {!LINK_NEW_WINDOW}" href="http://www.stumbleupon.com/submit?url={EASY_SELF_URL*}"></a></div>
 	<div class="digg"><a title="{!ADD_TO_DIGG}" target="_blank" title="{!ADD_TO_DIGG}: {!LINK_NEW_WINDOW}" href="http://digg.com/submit?phase=2&amp;url={EASY_SELF_URL*}"></a></div>
 	{$,<div class="favorites"><a title="Bookmark this" href="{$FIND_SCRIPT*,bookmarks}?no_redirect=1&amp;type=ad&amp;url={$SELF_URL*&}&amp;title={TITLE*&}" onclick="window.open(maintain_theme_in_link(this.getAttribute('href')),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;"></a></div>}
+
+	<div class="google_plusone">
+		<div class="g-plusone" data-size="small" data-count="true" data-href="{EASY_SELF_URL*}"></div>
+		{$EXTRA_FOOT,<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>}
+	</div>
 </div></{$?,{$VALUE_OPTION,html5},aside,div}>

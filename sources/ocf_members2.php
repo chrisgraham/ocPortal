@@ -100,7 +100,7 @@ function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_obje
 	foreach ($_postdetails['custom_fields'] as $name=>$value)
 	{
 		if ((!is_null($value)) && ($value!==''))
-			$custom_fields->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('_GUID'=>'10b72cd1ec240c315e56bc8a0f3a92a1','NAME'=>$name,'VALUE'=>is_object($value)?protect_from_escaping($value):$value)));
+			$custom_fields->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('_GUID'=>'10b72cd1ec240c315e56bc8a0f3a92a1','NAME'=>$name,'RAW'=>$value['RAW'],'VALUE'=>is_object($value['RENDERED'])?protect_from_escaping($value['RENDERED']):$value['RENDERED'])));
 	}
 	$custom_fields_full=new ocp_tempcode();
 	if (array_key_exists('custom_fields_full',$_postdetails))
@@ -108,7 +108,7 @@ function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_obje
 		foreach ($_postdetails['custom_fields_full'] as $name=>$value)
 		{
 			if ((!is_null($value)) && ($value!==''))
-				$custom_fields_full->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('_GUID'=>'20b72cd1ec240c315e56bc8a0f3a92a1','NAME'=>$name,'VALUE'=>is_object($value)?protect_from_escaping($value):$value)));
+				$custom_fields_full->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('_GUID'=>'20b72cd1ec240c315e56bc8a0f3a92a1','NAME'=>$name,'RAW'=>$value['RAW'],'VALUE'=>is_object($value['RENDERED'])?protect_from_escaping($value['RENDERED']):$value['RENDERED'])));
 		}
 	}
 	$ip_address=NULL;

@@ -359,8 +359,16 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<td>Get a comma-separated list of IDs of catalogue entries that reference the given catalogue entry.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$CATALOGUE_ENTRY_FIELD_TITLE,123,0}</td>
+		<td>{$CATALOGUE_ENTRY_FIELD_VALUE,123,0}</td>
 		<td>Get the value of a field in a specific catalogue entry (example would be 1st field in entry #123).</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$CATALOGUE_ENTRY_FOR,download,3}</td>
+		<td>Get the ID of the auto-maintained catalogue entry bound to the given content entry, i.e. where the content entries custom fields are stored. This can then be used with the <kbd>CATALOGUE_ENTRY_FIELD_VALUE</kbd> symbol (above) or the <kbd>CATALOGUE_ENTRY_ALL_FIELD_VALUES</kbd> symbol (below).</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,123}</td>
+		<td>Show a field-map view of all fields in the entry. You can also pass in a second param with the value '1' if you want raw field rows, rather than a table (useful for adding field-map data into an existing table).</td>
 	</tr>
 </table>
 [/html]

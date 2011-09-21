@@ -102,12 +102,13 @@ class Module_admin_ocf_groups extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
+		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_USERGROUPS'),comcode_lang_string('DOC_GROUPS'),
-					array(
+					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_GROUP')),
 						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_GROUP')),
-					),
+					),manage_custom_fields_donext_link('group')),
 					do_lang('MANAGE_USERGROUPS')
 		);
 	}

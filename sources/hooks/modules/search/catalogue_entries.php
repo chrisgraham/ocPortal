@@ -332,6 +332,10 @@ class Hook_search_catalogue_entries
 				$extra_select=',b.cv_value AS b_cv_value';
 				$non_trans_fields=array('c.cv_value','d.cv_value');
 			}
+
+			$where_clause.=' AND ';
+			$where_clause.='r.c_name NOT LIKE \'\_%\''; // Don't want results drawn from the hidden custom-field catalogues
+
 			if ($g_or=='')
 			{
 				$rows=get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'catalogue_fields f LEFT JOIN '.get_table_prefix().'catalogue_entries r ON (r.c_name=f.c_name)'.$join,$trans_fields,$where_clause,$content_where,$_remapped_orderer,'r.*,r.id AS id,r.cc_id AS r_cc_id'.$extra_select,$non_trans_fields);

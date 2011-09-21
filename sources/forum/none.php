@@ -259,6 +259,7 @@ class forum_driver_none extends forum_driver_base
 	 * Get a member row.
 	 *
 	 * @param  AUTO_LINK		The member ID
+	 * @param  ID_TEXT		The field
 	 * @return ?array			The result (NULL: unknown)
 	 */
 	function get_member_row_field($id,$field)

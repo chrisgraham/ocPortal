@@ -49,6 +49,7 @@ class Hook_awards_news
 		$info['archive_url']=build_url(array('page'=>'news'),get_module_zone('news'));
 		$info['cms_page']='cms_news';
 		$info['views_field']='news_views';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

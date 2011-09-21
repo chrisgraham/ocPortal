@@ -125,9 +125,11 @@ function array_intersect($array1,$array2,$array3=NULL)
  * @param  array	First array.
  * @param  array	Second array.
  * @param  ?array	Third array (NULL: only 2).
+ * @param  ?array	Fourth array to merge (NULL: not this one).
+ * @param  ?array	Fifth array to merge (NULL: not this one).
  * @return array	Merged array.
  */
-function array_merge($array1,$array2,$array3=NULL)
+function array_merge($array1,$array2,$array3=NULL,$array4=NULL,$array5=NULL)
 {
 	return array();
 }
@@ -3182,9 +3184,13 @@ function sort(&$array)
  * @param  ?mixed	Argument for the formatting string (NULL: none required).
  * @param  ?mixed	Argument for the formatting string (NULL: none required).
  * @param  ?mixed	Argument for the formatting string (NULL: none required).
+ * @param  ?mixed	Argument for the formatting string (NULL: none required).
+ * @param  ?mixed	Argument for the formatting string (NULL: none required).
+ * @param  ?mixed	Argument for the formatting string (NULL: none required).
+ * @param  ?mixed	Argument for the formatting string (NULL: none required).
  * @return string	Formatted string.
  */
-function sprintf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL)
+function sprintf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=NULL,$arg8=NULL)
 {
 	return '';
 }
@@ -4955,9 +4961,10 @@ function array_sum($array)
  * @param  array	Second array to merge.
  * @param  ?array	Third array to merge (NULL: not this one).
  * @param  ?array	Fourth array to merge (NULL: not this one).
+ * @param  ?array	Fifth array to merge (NULL: not this one).
  * @return array	Result.
  */
-function array_merge_recursive($array1,$array2,$array3=NULL,$array4=NULL)
+function array_merge_recursive($array1,$array2,$array3=NULL,$array4=NULL,$array5=NULL)
 {
 	return array();
 }

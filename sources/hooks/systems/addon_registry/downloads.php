@@ -441,6 +441,7 @@ class Hook_addon_registry_downloads
 					'DOWNLOADS'=>$downloads,
 					'SUBDOWNLOADS'=>$subdownloads,
 					'SORTING'=>lorem_phrase(),
+					'ID'=>placeholder_id(),
 						)
 			),NULL,'',true),
 		);

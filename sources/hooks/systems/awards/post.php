@@ -50,6 +50,7 @@ class Hook_awards_post
 		$info['category_is_string']=false;
 		$info['archive_url']=build_url(array('page'=>'forumview'),get_module_zone('forumview'));
 		$info['cms_page']='topics';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

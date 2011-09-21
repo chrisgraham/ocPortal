@@ -42,6 +42,8 @@
 		{POST}
 	</td>
 </tr>
+{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,seedy_post,{ID}}}
+{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry},1}{+END}
 <tr>
 	<td class="cedi_post_expand_button">
 		{+START,IF,{INCLUDE_EXPANSION}}<a href="{EXPAND_URL*}"><img title="{!EXPAND_INFO}" alt="{!EXPAND_INFO}" src="{$IMG*,{EXP_IMG*}}" /></a>{+END}

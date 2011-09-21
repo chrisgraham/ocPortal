@@ -91,6 +91,14 @@
 				</div>
 			{+END}
 
+			{+START,IF_NON_PASSED,VIDEO}
+				{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,image,{ID}}}
+			{+END}
+			{+START,IF_PASSED,VIDEO}
+				{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,video,{ID}}}
+			{+END}
+			{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
+
 			{+START,IF_NON_EMPTY,{COMMENTS}}
 				<br />
 				<div{$?,{$VALUE_OPTION,html5}, itemprop="caption"}>

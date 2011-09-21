@@ -1333,6 +1333,16 @@ class Module_topics
 		$specialisation2=form_input_various_ticks($options,'');
 		if (count($moderation_options)!=0) $specialisation2->attach(form_input_various_ticks($moderation_options,'',NULL,do_lang_tempcode('MODERATION_OPTIONS')));
 
+		require_code('fields');
+		if (has_tied_catalogue('topic'))
+		{
+			append_form_custom_fields('topic',NULL,$specialisation,$hidden_fields);
+		}
+		if (has_tied_catalogue('post'))
+		{
+			append_form_custom_fields('post',NULL,$specialisation,$hidden_fields);
+		}
+
 		if (is_null($text))
 			$text=new ocp_tempcode();
 
@@ -1550,6 +1560,12 @@ class Module_topics
 		if (is_guest())
 		{
 			$specialisation->attach(form_input_line(do_lang_tempcode('_DESCRIPTION_NAME'),'','poster_name_if_guest',do_lang('GUEST'),true));
+		}
+
+		require_code('fields');
+		if (has_tied_catalogue('post'))
+		{
+			append_form_custom_fields('post',NULL,$specialisation,$hidden_fields);
 		}
 
 		$text=new ocp_tempcode();
@@ -1858,6 +1874,12 @@ class Module_topics
 				}
 			}
 			$first_post=true;
+
+			require_code('fields');
+			if (has_tied_catalogue('topic'))
+			{
+				save_form_custom_fields('topic',strval($topic_id));
+			}
 		} else
 		{
 			$_title=get_page_title('ADD_POST');
@@ -1929,6 +1951,12 @@ END;
 		}
 
 		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1,$forum_id==-1);
+
+		require_code('fields');
+		if (has_tied_catalogue('post'))
+		{
+			save_form_custom_fields('post',strval($post_id));
+		}
 
 		$validated=$GLOBALS['FORUM_DB']->query_value('f_posts','p_validated',array('id'=>$post_id));
 
@@ -2165,6 +2193,12 @@ END;
 
 			foreach ($posts as $post)
 			{
+				require_code('fields');
+				if (has_tied_catalogue('post'))
+				{
+					delete_form_custom_fields('post',$post['id']);
+				}
+
 				ocf_delete_posts_topic($post['p_topic_id'],array($post['id']),$reason);
 			}
 
@@ -2186,6 +2220,12 @@ END;
 					$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_title'=>$current_title),array('id'=>$_topic_info2[0]['t_cache_first_post_id']),'',1);
 				}
 			}
+		}
+
+		require_code('fields');
+		if (has_tied_catalogue('post'))
+		{
+			delete_form_custom_fields('post',strval($post_id));
 		}
 
 		if ($deleted_all)
@@ -2482,7 +2522,15 @@ END;
 			$moderation_options=array();
 			$hidden_fields->attach(form_input_hidden('validated','1'));
 		}
+
 		$specialisation2=new ocp_tempcode();
+
+		require_code('fields');
+		if (has_tied_catalogue('post'))
+		{
+			append_form_custom_fields('post',strval($post_id),$specialisation2,$hidden_fields);
+		}
+
 		if (count($moderation_options)!=0) $specialisation2->attach(form_input_various_ticks($moderation_options,'',NULL,do_lang_tempcode('MODERATION_OPTIONS')));
 		$specialisation2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$options=array();
@@ -2568,6 +2616,12 @@ END;
 		require_code('ocf_posts_action2');
 		require_code('ocf_posts_action3');
 		$topic_id=ocf_edit_post($post_id,$validated,post_param('title',''),post_param('post'),post_param_integer('skip_sig',0),post_param_integer('is_emphasised',0),$intended_solely_for,(post_param_integer('show_as_edited',0)==1),(post_param_integer('mark_as_unread',0)==1),post_param('reason'));
+
+		require_code('fields');
+		if (has_tied_catalogue('post'))
+		{
+			save_form_custom_fields('post',strval($post_id));
+		}
 
 		if ($old_validated!=$validated)
 		{
@@ -2695,6 +2749,12 @@ END;
 		$fields->attach(form_input_various_ticks($options,''));
 		if (count($moderation_options)!=0) $fields->attach(form_input_various_ticks($moderation_options,'',NULL,do_lang_tempcode('MODERATION_OPTIONS')));
 
+		require_code('fields');
+		if (has_tied_catalogue('topic'))
+		{
+			append_form_custom_fields('topic',strval($topic_id),$fields,$hidden_fields);
+		}
+
 		// Awards?
 		if (addon_installed('awards'))
 		{
@@ -2726,6 +2786,12 @@ END;
 		require_code('ocf_topics_action2');
 
 		ocf_edit_topic($topic_id,post_param('description',STRING_MAGIC_NULL),post_param('emoticon',STRING_MAGIC_NULL),$validated,$open,$pinned,$sunk,$cascading,post_param('reason',STRING_MAGIC_NULL),$title);
+
+		require_code('fields');
+		if (has_tied_catalogue('topic'))
+		{
+			save_form_custom_fields('topic',strval($topic_id));
+		}
 
 		if (addon_installed('awards'))
 		{
@@ -2779,9 +2845,17 @@ END;
 		$post_target_topic_id=post_param_integer('select_topic_id',-1);
 		if ($post_target_topic_id==-1) $post_target_topic_id=post_param_integer('manual_topic_id',-1);
 		if ($post_target_topic_id==-1) $post_target_topic_id=NULL;
+
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
 		$forum_id=ocf_delete_topic($topic_id,post_param('reason'),$post_target_topic_id);
+
+		require_code('fields');
+		if (has_tied_catalogue('topic'))
+		{
+			delete_form_custom_fields('topic',strval($topic_id));
+		}
+
 		return $this->redirect_to_forum('DELETE_TOPIC',$forum_id);
 	}
 

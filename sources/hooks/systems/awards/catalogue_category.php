@@ -46,6 +46,7 @@ class Hook_awards_catalogue_category
 		$info['category_is_string']=false;
 		$info['archive_url']=build_url(array('page'=>'catalogues'),get_module_zone('catalogues'));
 		$info['cms_page']='cms_catalogues';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

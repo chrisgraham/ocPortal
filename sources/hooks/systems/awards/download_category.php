@@ -46,6 +46,7 @@ class Hook_awards_download_category
 		$info['category_is_string']=false;
 		$info['archive_url']=build_url(array('page'=>'downloads'),get_module_zone('downloads'));
 		$info['cms_page']='cms_downloads';
+		$info['supports_custom_fields']=true;
 
 		return $info;
 	}

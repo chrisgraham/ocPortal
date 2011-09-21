@@ -99,8 +99,9 @@ class Module_cms_downloads extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
+		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_DOWNLOADS'),comcode_lang_string('DOC_DOWNLOADS'),
-					array(
+					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_midrange_content','cms_downloads')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_DOWNLOAD_CATEGORY')):NULL,
 						has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_DOWNLOAD_CATEGORY')):NULL,
@@ -110,7 +111,7 @@ class Module_cms_downloads extends standard_aed_module
 						has_specific_permission(get_member(),'mass_import')?array('import',array('_SELF',array('type'=>'import2'),'_SELF'),do_lang('LOAD_FILESYSTEM_FILES')):NULL,
 						has_specific_permission(get_member(),'submit_midrange_content','cms_downloads')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DOWNLOAD')):NULL,
 						has_specific_permission(get_member(),'edit_own_midrange_content','cms_downloads')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DOWNLOAD')):NULL,
-					),
+					),manage_custom_fields_donext_link('download'),manage_custom_fields_donext_link('download_category')),
 					do_lang('MANAGE_DOWNLOADS')
 		);
 	}
