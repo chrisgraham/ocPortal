@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>themes/Boutique-theme/templates_custom/BLOCK_MAIN_IMAGE_FADER.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -23,6 +21,8 @@
 			<string>adminzone</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>selected</key>
+			<true/>
 			<key>sourceDirectory</key>
 			<string>adminzone</string>
 		</dict>
@@ -609,36 +609,6 @@
 			<key>firstVisibleLine</key>
 			<integer>5</integer>
 		</dict>
-		<key>data_custom/addon_files.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>52</integer>
-				<key>line</key>
-				<integer>2232</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2188</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>2232</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>52</integer>
-				<key>line</key>
-				<integer>2232</integer>
-			</dict>
-		</dict>
 		<key>data_custom/breadcrumbs.xml</key>
 		<dict>
 			<key>caret</key>
@@ -1156,20 +1126,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>225</integer>
-		</dict>
-		<key>sources/blocks/main_image_fader.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>53</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>32</integer>
 		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
@@ -2409,20 +2365,6 @@
 				<integer>49</integer>
 			</dict>
 		</dict>
-		<key>themes/Boutique-theme/templates_custom/BLOCK_MAIN_IMAGE_FADER.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>themes/default/css_custom/index.html</key>
 		<dict>
 			<key>caret</key>
@@ -3572,13 +3514,6 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>themes/default/templates/IMG_THUMB.tpl</string>
-		<string>themes/default/templates/BLOCK_MAIN_IMAGE_FADER.tpl</string>
-		<string>themes/Boutique-theme/templates_custom/BLOCK_MAIN_IMAGE_FADER.tpl</string>
-		<string>sources/blocks/main_image_fader.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

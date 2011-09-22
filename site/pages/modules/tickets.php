@@ -436,7 +436,7 @@ class Module_tickets
 
 				$forum=1; $topic_id=1; $_ticket_type=1; // These will be returned by reference
 				$_comments=get_ticket_posts($id,$forum,$topic_id,$_ticket_type);
-				if (!is_array($_comments)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+				if ((!is_array($_comments)) || (!array_key_exists(0,$_comments))) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 				$ticket_title=$_comments[0]['title'];
 

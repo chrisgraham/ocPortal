@@ -887,12 +887,11 @@ function block_helper_script()
 		}
 		foreach ($parameters as $parameter)
 		{
-			if (($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive'))))
+			$value=post_param($parameter,NULL);
+			if (is_null($value))
 			{
-				$value=post_param($parameter,'');
-			} else
-			{
-				$value=post_param($parameter,'0');
+				if (post_param_integer('tick_on_form__'.$value,0)!=1) continue;
+				$value='0';
 			}
 			if (($value!='') && (($parameter!='failsafe') || ($value=='1')) && (($parameter!='cache') || ($value=='0')) && (($parameter!='quick_cache') || ($value=='1')))
 			{

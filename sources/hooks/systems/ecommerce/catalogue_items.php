@@ -245,7 +245,7 @@ class Hook_catalogue_items
 						'description'	=>	$product_det[9],
 						'quantity'		=>	$qty,
 						'product_type'	=>	'catalogue_items',
-						'product_weight'=>	$product_det[8]
+						'product_weight'=>	floatval($product_det[8])
 					);
 
 		return $product;
