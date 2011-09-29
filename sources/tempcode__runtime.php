@@ -554,13 +554,17 @@ function handle_symbol_preprocessing($bit,&$children)
 			$REQUEST_BLOCK_NEST_LEVEL--;
 
 			return;
-
+			
 		case 'JAVASCRIPT_INCLUDE':
 			if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) return;
 			$param=$bit[3];
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 			require_javascript($param[0]);
+			return;
+
+		case 'FACILITATE_AJAX_BLOCK_CALL':
+			require_javascript('javascript_ajax');
 			return;
 
 		case 'CSS_INCLUDE':
@@ -701,6 +705,7 @@ class ocp_tempcode
 					{
 						case 'CSS_INCLUDE':
 						case 'JAVASCRIPT_INCLUDE':
+						case 'FACILITATE_AJAX_BLOCK_CALL':
 						case 'JS_TEMPCODE':
 						case 'CSS_TEMPCODE':
 						case 'SET':

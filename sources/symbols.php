@@ -29,7 +29,7 @@ function init__symbols()
 	$LOADED_PAGES=array();
 	$LOADED_PANELS=array();
 	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
-	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'JAVASCRIPT_INCLUDE'=>1,'CSS_INCLUDE'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
+	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'JAVASCRIPT_INCLUDE'=>1,'CSS_INCLUDE'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
 	$EXTRA_SYMBOLS=NULL;
 	$DOCUMENT_HELP='';
 	$HTTP_STATUS_CODE='200';
@@ -282,6 +282,36 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'FACILITATE_AJAX_BLOCK_CALL':
+				if (isset($param[0]))
+				{
+					require_javascript('javascript_ajax');
+
+					require_code('blocks');
+					$_block_constraints=block_params_to_block_signature(block_params_str_to_arr($param[0]));
+					if (array_key_exists(1,$param))
+					{
+						$_block_constraints=array_merge($_block_constraints,block_params_str_to_arr($param[1]));
+						ksort($_block_constraints);
+					}
+					$block_constraints=block_params_arr_to_str($_block_constraints);
+
+					// Store permissions
+					$GLOBALS['SITE_DB']->query_delete('temp_block_permissions',array(
+						'p_session_id'=>get_session_id(),
+						'p_block_constraints'=>$block_constraints,
+					),'',1);
+					$auth_key=$GLOBALS['SITE_DB']->query_insert('temp_block_permissions',array(
+						'p_session_id'=>get_session_id(),
+						'p_block_constraints'=>$block_constraints,
+						'p_time'=>time(),
+					),true);
+				
+					$keep=symbol_tempcode('KEEP');
+					$value=find_script('snippet').'?snippet=block&auth_key='.urlencode(strval($auth_key)).'&block_map='.urlencode($param[0]).$keep->evaluate();
+				}
+				break;
+
 			case 'LANG':
 				$value=user_lang();
 				break;
@@ -352,6 +382,32 @@ function ecv($lang,$escaped,$type,$name,$param)
 				} else
 				{
 					$value='default';
+				}
+				break;
+				
+			case 'REVERSE':
+				if (isset($param[0]))
+				{
+					$value=implode(',',array_reverse(explode(',',$param[0])));
+				}
+				break;
+
+			case 'COMMA_LIST_GET':
+				if (isset($param[1]))
+				{
+					require_code('blocks');
+					$values=block_params_str_to_arr($param[0]);
+					$value=isset($values[$param[1]])?$values[$param[1]]:'';
+				}
+				break;
+
+			case 'COMMA_LIST_SET':
+				if (isset($param[2]))
+				{
+					require_code('blocks');
+					$values=block_params_str_to_arr($param[0]);
+					$values[$param[1]]=$param[2];
+					$value=block_params_arr_to_str($values);
 				}
 				break;
 

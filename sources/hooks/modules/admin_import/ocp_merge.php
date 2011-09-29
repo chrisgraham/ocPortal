@@ -1503,19 +1503,18 @@ class Hook_ocp_merge
 			$map=array();
 
 			// Tedious...
-			$rows2=$db->query('SELECT * FROM '.$table_prefix.'catalogue_efv_long WHERE ce_id='.strval((integer)$row['id']));
-			foreach ($rows2 as $row2)
+			foreach (array('long','short','float','integer') as $table)
 			{
-				$remapped=import_id_remap_get('catalogue_field',$row2['cf_id'],true);
-				if (is_null($remapped)) continue;
-				$map[$remapped]=$row2['cv_value'];
-			}
-			$rows2=$db->query('SELECT * FROM '.$table_prefix.'catalogue_efv_short WHERE ce_id='.strval((integer)$row['id']));
-			foreach ($rows2 as $row2)
-			{
-				$remapped=import_id_remap_get('catalogue_field',$row2['cf_id'],true);
-				if (is_null($remapped)) continue;
-				$map[$remapped]=$row2['cv_value'];
+				$rows2=$db->query('SELECT * FROM '.$table_prefix.'catalogue_efv_'.$table.' WHERE ce_id='.strval((integer)$row['id']));
+				foreach ($rows2 as $row2)
+				{
+					$remapped=import_id_remap_get('catalogue_field',$row2['cf_id'],true);
+					if (is_null($remapped)) continue;
+					$value=$row2['cv_value'];
+					if (is_integer($value)) $value=strval($value);
+					elseif (is_float($value)) $value=float_to_raw_string($value);
+					$map[$remapped]=$value;
+				}
 			}
 			$rows2=$db->query('SELECT * FROM '.$table_prefix.'catalogue_efv_long_trans WHERE ce_id='.strval((integer)$row['id']));
 			foreach ($rows2 as $row2)

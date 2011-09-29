@@ -61,7 +61,7 @@ class Hook_whats_news_catalogues
 			$c_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$row['cc_id']));
 			if (is_null($c_name)) continue; // Corruption
 			$c_title=$GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$c_name));
-			$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$c_name),'',1);
+			$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$c_name),'ORDER BY id',1);
 			$name='';
 			switch ($fields[0]['cf_type'])
 			{
@@ -71,6 +71,12 @@ class Hook_whats_news_catalogues
 					break;
 				case 'short_text':
 					$name=$GLOBALS['SITE_DB']->query_value('catalogue_efv_short','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+					break;
+				case 'float':
+					$name=float_to_raw_string($GLOBALS['SITE_DB']->query_value('catalogue_efv_float','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
+					break;
+				case 'integer':
+					$name=strval($GLOBALS['SITE_DB']->query_value('catalogue_efv_integer','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
 					break;
 			}
 

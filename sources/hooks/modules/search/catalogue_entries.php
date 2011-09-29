@@ -262,6 +262,18 @@ class Hook_search_catalogue_entries
 							$search_field='f'.strval($i).'.cv_value';
 							//$extra_select.=',f'.strval($i).'.cv_value AS f'.strval($i).'_actual_value';
 							break;
+						case 'float':
+							$nontrans_fields[]='f'.strval($i).'.cv_value';
+							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_float f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
+							$search_field='f'.strval($i).'.cv_value';
+							//$extra_select.=',f'.strval($i).'.cv_value AS f'.strval($i).'_actual_value';
+							break;
+						case 'integer':
+							$nontrans_fields[]='f'.strval($i).'.cv_value';
+							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_integer f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
+							$search_field='f'.strval($i).'.cv_value';
+							//$extra_select.=',f'.strval($i).'.cv_value AS f'.strval($i).'_actual_value';
+							break;
 					}
 
 					$param=get_param('option_'.strval($row['id']),'');
@@ -326,11 +338,11 @@ class Hook_search_catalogue_entries
 				$non_trans_fields=array('c.cv_value');
 			} else
 			{
-				$join=' LEFT JOIN '.get_table_prefix().'catalogue_efv_short_trans a ON (r.id=a.ce_id AND f.id=a.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_long_trans b ON (r.id=b.ce_id AND f.id=b.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_long d ON (r.id=d.ce_id AND f.id=d.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_short c ON (r.id=c.ce_id AND f.id=c.cf_id)';
+				$join=' LEFT JOIN '.get_table_prefix().'catalogue_efv_short_trans a ON (r.id=a.ce_id AND f.id=a.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_long_trans b ON (r.id=b.ce_id AND f.id=b.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_long d ON (r.id=d.ce_id AND f.id=d.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_short c ON (r.id=c.ce_id AND f.id=c.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_float g ON (r.id=g.ce_id AND f.id=g.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_integer h ON (r.id=h.ce_id AND f.id=h.cf_id)';
 				$trans_fields=array('a.cv_value','b.cv_value');
 				$_remapped_orderer=str_replace('b_cv_value','b.cv_value',$remapped_orderer);
 				$extra_select=',b.cv_value AS b_cv_value';
-				$non_trans_fields=array('c.cv_value','d.cv_value');
+				$non_trans_fields=array('c.cv_value','d.cv_value','g.cv_value','h.cv_value');
 			}
 
 			$where_clause.=' AND ';

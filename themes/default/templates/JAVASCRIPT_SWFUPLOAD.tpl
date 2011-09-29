@@ -1377,7 +1377,10 @@ function uploadSuccess(file, serverData, _, ob) {
 		this.customSettings.upload_successful = false;
 	} else {
 		this.customSettings.upload_successful = true;
-		document.getElementById(ob.settings.txtFileDbID).value = serverData;
+		var decodedData = eval('(' + serverData + ')');
+		document.getElementById(ob.settings.txtFileDbID).value = decodedData['upload_id'];
+		
+		if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 	}
 }
 

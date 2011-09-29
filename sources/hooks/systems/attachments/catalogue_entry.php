@@ -33,7 +33,7 @@ class Hook_attachments_catalogue_entry
 		$info=$connection->query_select('catalogue_entries',array('c_name','cc_id'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$info)) return false;
 		if (!has_category_access(get_member(),'catalogues_catalogue',$info[0]['c_name'])) return false;
-		return (has_category_access(get_member(),'catalogues_category',strval($info[0]['cc_id'])));
+		return ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_member(),'catalogues_category',strval($info[0]['cc_id']))));
 	}
 
 }

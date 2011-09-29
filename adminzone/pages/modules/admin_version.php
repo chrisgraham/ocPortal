@@ -36,7 +36,7 @@ class Module_admin_version
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=13;
+		$info['version']=14;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -76,6 +76,7 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_if_exists('link_tracker');
 		$GLOBALS['SITE_DB']->drop_if_exists('incoming_uploads');
 		$GLOBALS['SITE_DB']->drop_if_exists('f_group_member_timeouts');
+		$GLOBALS['SITE_DB']->drop_if_exists('temp_block_permissions');
 		delete_specific_permission('reuse_others_attachments');
 		delete_specific_permission('use_sms');
 		delete_specific_permission('sms_higher_limit');
@@ -547,6 +548,16 @@ class Module_admin_version
 				$GLOBALS['SITE_DB']->create_index('translate','equiv_lang',array('text_original(4)'));
 				$GLOBALS['SITE_DB']->create_index('translate','decache',array('text_parsed(2)'));
 			}
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<14))
+		{
+			$GLOBALS['SITE_DB']->create_table('temp_block_permissions',array(
+				'id'=>'*AUTO',
+				'p_session_id'=>'AUTO_LINK',
+				'p_block_constraints'=>'LONG_TEXT',
+				'p_time'=>'TIME',
+			));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

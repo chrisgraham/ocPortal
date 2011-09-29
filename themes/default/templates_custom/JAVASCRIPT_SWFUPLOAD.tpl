@@ -1390,12 +1390,13 @@ function uploadSuccess(file, serverData, _, ob) {
 	if (serverData === " ") {
 		this.customSettings.upload_successful = false;
 	} else {
-		var server_bits=serverData.split(':');
-
 		this.customSettings.upload_successful = true;
-		document.getElementById(ob.settings.txtFileDbID).value = server_bits[0];
-		if (server_bits[1])
-			implement_aviary(server_bits[2],server_bits[1],document.getElementById(ob.settings.txtFileDbID));
+
+		var decodedData = eval('(' + serverData + ')');
+		document.getElementById(ob.settings.txtFileDbID).value = decodedData['upload_id'];
+		implement_aviary(decodedData['upload_savename'],decodedData['upload_name'],document.getElementById(ob.settings.txtFileDbID));
+
+		if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 	}
 }
 

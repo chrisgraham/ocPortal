@@ -195,6 +195,7 @@ class Hook_addon_registry_galleries
 			'uploads/grepimages/.htaccess',
 			'uploads/watermarks/.htaccess',
 			'themes/default/images/audio_thumb.png',
+			'JAVASCRIPT_GALLERIES.tpl',
 		);
 	}
 
@@ -820,7 +821,7 @@ class Hook_addon_registry_galleries
 	*/
 	function tpl_preview__gallery_entry_screen()
 	{
-		$nav = do_lorem_template('GALLERY_NAV',array('X'=>placeholder_number(),'N'=>placeholder_number(),'SLIDESHOW_LINK'=>placeholder_url(),'SLIDESHOW_NEXT_LINK'=>placeholder_url(),'PREVIOUS_LINK'=>placeholder_url(),'NEXT_LINK'=>placeholder_url(),'MORE_URL'=>placeholder_url(),'CATEGORY_NAME'=>lorem_word()));
+		$nav = do_lorem_template('GALLERY_NAV',array('_X'=>placeholder_number(),'_N'=>placeholder_number(),'X'=>placeholder_number(),'N'=>placeholder_number(),'SLIDESHOW_LINK'=>placeholder_url(),'SLIDESHOW_NEXT_LINK'=>placeholder_url(),'PREVIOUS_LINK'=>placeholder_url(),'NEXT_LINK'=>placeholder_url(),'MORE_URL'=>placeholder_url(),'CATEGORY_NAME'=>lorem_word()));
 
 		$comment_details = do_lorem_template('COMMENTS',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 

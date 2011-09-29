@@ -743,6 +743,10 @@ function handle_symbol_preprocessing($bit,&$children)
 			require_javascript($param[0]);
 			return;
 
+		case 'FACILITATE_AJAX_BLOCK_CALL':
+			require_javascript('javascript_ajax');
+			return;
+
 		case 'CSS_INHERIT':
 
 		case 'CSS_INCLUDE':
@@ -921,6 +925,7 @@ class ocp_tempcode
 					{
 						case 'CSS_INCLUDE':
 						case 'JAVASCRIPT_INCLUDE':
+						case 'FACILITATE_AJAX_BLOCK_CALL':
 						case 'JS_TEMPCODE':
 						case 'CSS_TEMPCODE':
 						case 'SET':

@@ -32,13 +32,36 @@ class Block_side_weather
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		$info['parameters']=array('param','unit');
 		return $info;
 	}
 		
+	/**
+	 * Standard modular uninstall function.
+	 */
+	function uninstall()
+	{
+		$GLOBALS['SITE_DB']->drop_if_exists('cached_weather_codes');
+	}
+
+	/**
+	 * Standard modular install function.
+	 *
+	 * @param  ?integer	What version we're upgrading from (NULL: new install)
+	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+	 */
+	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
+	{
+		$GLOBALS['SITE_DB']->create_table('cached_weather_codes',array(
+			'id'=>'*AUTO',
+			'w_string'=>'SHORT_TEXT',
+			'w_code'=>'INTEGER',
+		));
+	}
+	
 	/**
 	 * Standard modular cache function.
 	 *
@@ -67,6 +90,36 @@ class Block_side_weather
 			$loc_code=$map['param']; // need to pass loc id ex :INXX0087
 		else
 			$loc_code='34503'; // if not found setting a default location for weather
+
+		if (!is_numeric($loc_code))
+		{
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('cached_weather_codes','w_code',array('w_string'=>$loc_code));
+			if (is_null($test))
+			{
+				require_code('files');
+				$result=http_download_file('http://uk.weather.yahoo.com/search/weather?p='.urlencode($loc_code));
+				$matches=array();
+				if (preg_match('#<a href=\'/redirwoei/(\d+)\'>#',$result,$matches)!=0)
+				{
+					$loc_code=$matches[1];
+				}
+				elseif (preg_match('#-(\d+)/#',$GLOBALS['HTTP_DOWNLOAD_URL'],$matches)!=0)
+				{
+					$loc_code=$matches[1];
+				}
+			
+				if (is_numeric($loc_code))
+				{
+					$GLOBALS['SITE_DB']->query_insert('cached_weather_codes',array(
+						'w_string'=>$map['param'],
+						'w_code'=>intval($loc_code),
+					));
+				}
+			} else
+			{
+				$loc_code=$test;
+			}
+		}
 
 		$temperature_unit=(array_key_exists('unit',$map) && ($map['unit']!=''))?$map['unit']:'c';
 

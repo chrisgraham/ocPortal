@@ -38,17 +38,22 @@ class Hook_do_next_menus_catalogues
 		if ($exhaustive)
 		{
 			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title','c_description','c_ecommerce'),NULL,'',10,NULL,true);
-			if (count($catalogues)<10 && !is_null($catalogues))
+			if (!is_null($catalogues))
 			{
+				$ret2=array();
 				foreach ($catalogues as $row)
 				{
 					if (substr($row['c_name'],0,1)=='_') continue;
-				
+
 					if (($row['c_ecommerce']==0) || (addon_installed('shopping')))
 					{
 						if (has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$row['c_name'])))
-							$ret[]=array('cms','of_catalogues',array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',get_translated_text($row['c_title']),escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_text($row['c_description']));
+							$ret2[]=array('cms','of_catalogues',array('cms_catalogues',array('type'=>'misc','catalogue_name'=>$row['c_name']),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',get_translated_text($row['c_title']),escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']),'',true)))),get_translated_text($row['c_description']));
 					}
+				}
+				if (count($ret2)<10)
+				{
+					$ret=array_merge($ret,$ret2);
 				}
 			}
 		}

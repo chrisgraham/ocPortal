@@ -137,10 +137,8 @@ class Block_main_content
 			}
 
 			$where='';
-			if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($efficient))
-			{
-				$query='FROM '.get_table_prefix().$info['table'];
-			} else
+			$query='FROM '.get_table_prefix().$info['table'].' g';
+			if ((!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (!$efficient))
 			{
 				$_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false,true);
 				$groups='';
@@ -262,7 +260,7 @@ class Block_main_content
 				}
 			} else $wherea[$info['id_field']]=$info['id_is_string']?$content_id:intval($content_id);
 
-			$rows=$info['connection']->query_select($info['table'],array('*'),$wherea,'',1);
+			$rows=$info['connection']->query_select($info['table'].' g',array('g.*'),$wherea,'',1);
 			if (!array_key_exists(0,$rows))
 			{
 				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'12d8cdc62cd78480b83c8daaaa68b686','HIGH'=>true,'TITLE'=>$title,'MESSAGE'=>do_lang_tempcode('MISSING_RESOURCE'),'ADD_NAME'=>do_lang_tempcode('ADD'),'SUBMIT_URL'=>str_replace('=%21','__ignore=1',$submit_url)));

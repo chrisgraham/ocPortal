@@ -66,7 +66,7 @@ class Hook_fields_random
 		{
 			$default=$this->get_field_random($field['id'],$default);
 		}
-		return array('short_unescaped',$default,'short');
+		return array('integer_unescaped',$default,'integer');
 	}
 
 	/**
@@ -148,7 +148,7 @@ class Hook_fields_random
 			}
 	
 			if (!addon_installed('catalogues')) break;
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_short','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_integer','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
 		}
 		while (!is_null($test));
 	

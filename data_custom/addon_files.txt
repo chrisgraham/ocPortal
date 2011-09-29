@@ -2059,6 +2059,7 @@ gallery_carousel
 # # themes/default/templates_custom/GALLERY_VIDEO.tpl
 # # themes/default/templates_custom/GALLERY_ENTRY_WRAP.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_GALLERY_EMBED.tpl
+# # themes/default/templates_custom/BLOCK_NO_ENTRIES.tpl
 
 theme_fixer
 -----------
@@ -2254,3 +2255,17 @@ member_filedumps
 # # sources_custom/hooks/modules/members/filedump.php
 # # sources_custom/miniblocks/myfiles.php
 # # themes/default/templates_custom/OCF_MEMBER_HOME_SCREEN.tpl
+
+locations
+---------
+
+data_custom/locations/sources.zip
+data_custom/locations/readme.txt
+sources_custom/locations.php
+sources_custom/locations_install.php
+sources_custom/locations_geopositioning.php
+sources_custom/locations/uk.php
+sources_custom/locations/us.php
+data_custom/locations_install.php
+data_custom/locations_uninstall.php
+data_custom/geoposition.php

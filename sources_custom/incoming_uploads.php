@@ -1,11 +1,5 @@
 <?php
 
-function init__incoming_uploads($old)
-{
-	$old=str_replace('echo strval($file_db_id);','echo strval($file_db_id).\':\'.$name.\':\'.$savename;',$old);
-	return $old;
-}
-
 /**
  * Function to process the file upload process
  */

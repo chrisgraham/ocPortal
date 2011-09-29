@@ -204,7 +204,20 @@ function exact_match_sql($row,$i,$type='short',$param=NULL)
 	$search_field='f'.strval($i).'.cv_value';
 	if (is_null($param)) $param=get_param('option_'.strval($row['id']),'');
 	$where_clause='';
-	if ($param!='') $where_clause=db_string_equal_to($search_field,$param);
+	if ($param!='')
+	{
+		if ($type=='float')
+		{
+			$where_clause.=$search_field.'='.$param;
+		}
+		elseif ($type=='integer')
+		{
+			$where_clause.=$search_field.'='.$param;
+		} else
+		{
+			$where_clause=db_string_equal_to($search_field,$param);
+		}
+	}
 	return array(array(),array('f'.strval($i).'.cv_value'),$table,$search_field,$where_clause);
 }
 

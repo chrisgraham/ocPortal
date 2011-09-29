@@ -79,6 +79,14 @@ class Module_cms_catalogues extends standard_aed_module
 		$this->alt_aed_module=new Module_cms_catalogues_alt();
 		$GLOBALS['MODULE_CMS_CATALOGUES']=$this;
 
+		if (get_value('disable_cat_cat_perms')==='1')
+		{
+			$this->permissions_cat_require_b=NULL;
+			$this->permissions_cat_name_b=NULL;
+			$this->cat_aed_module->permissions_cat_require=NULL;
+			$this->cat_aed_module->permissions_cat_name=NULL;
+		}
+
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_catalogues';
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/catalogues';
 
@@ -807,7 +815,8 @@ class Module_cms_catalogues extends standard_aed_module
 
 			$categories=array_merge(array($curr_cat=>$catid),$categories);
 
-			$this->set_permissions(strval($catid));					
+			if (get_value('disable_cat_cat_perms')!=='1')
+				$this->set_permissions(strval($catid));					
 		}
 				
 		foreach ($fields as $field)
@@ -1075,9 +1084,6 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		handle_max_file_size($hidden,'image');
 		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image));
-		$list=new ocp_tempcode();
-		$list->attach(form_input_list_entry(strval(-1),false,do_lang_tempcode('NA_EM')));
-		$list->attach(nice_get_catalogue_category_tree($catalogue_name,$move_target));
 
 		// Is the catalogue a tree?
 		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name));
@@ -1088,12 +1094,14 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		}
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>is_null($move_target),'TITLE'=>do_lang_tempcode('CLASSIFIED_ADS'))));
-		$fields->attach(form_input_list(do_lang_tempcode('EXPIRY_MOVE_TARGET'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_TARGET'),'move_target',$list));
+		$list=new ocp_tempcode();
+		$fields->attach(form_input_tree_list(do_lang_tempcode('EXPIRY_MOVE_TARGET'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_TARGET'),'move_target',NULL,'choose_catalogue_category',array('catalogue_name'=>$catalogue_name),false,$move_target));
 		$fields->attach(form_input_integer(do_lang_tempcode('EXPIRY_MOVE_DAYS_LOWER'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_DAYS_LOWER'),'move_days_lower',$move_days_lower,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('EXPIRY_MOVE_DAYS_HIGHER'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_DAYS_HIGHER'),'move_days_higher',$move_days_higher,true));
 
 		// Permissions
-		$fields->attach($this->get_permission_fields(is_null($id)?'':strval($id),NULL,is_null($id)));
+		if (get_value('disable_cat_cat_perms')!=='1')
+			$fields->attach($this->get_permission_fields(is_null($id)?'':strval($id),NULL,is_null($id)));
 
 		return array($fields,$hidden);
 	}
@@ -1165,11 +1173,12 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		$rep_image=$urls[0];
 		$move_days_lower=post_param_integer('move_days_lower',30);
 		$move_days_higher=post_param_integer('move_days_higher',60);
-		$move_target=post_param_integer('move_target');
+		$move_target=post_param_integer('move_target',-1);
 		if ($move_target==-1) $move_target=NULL;
 
 		$category_id=actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target);
-		$this->set_permissions(strval($category_id));
+		if (get_value('disable_cat_cat_perms')!=='1')
+			$this->set_permissions(strval($category_id));
 
 		$this->donext_category_id=$category_id;
 		$this->donext_catalogue_name=$catalogue_name;
@@ -1206,7 +1215,8 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		actual_edit_catalogue_category($category_id,$title,$description,$notes,$parent_id,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$rep_image,$move_days_lower,$move_days_higher,$move_target);
 		if (!fractional_edit())
 		{
-			$this->set_permissions(strval($category_id));
+			if (get_value('disable_cat_cat_perms')!=='1')
+				$this->set_permissions(strval($category_id));
 		}
 
 		$this->donext_category_id=$category_id;
@@ -1320,7 +1330,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		$hidden=new ocp_tempcode();
 		require_code('form_templates');
 
-		if ($name=='') $name=get_param('id');
+		if ($name=='') $name=get_param('id','');
 		$tied_to_content_type=(substr($name,0,1)=='_') && ((file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.substr($name,1).'.php')) || (file_exists(get_file_base().'/sources/hooks/systems/awards/'.substr($name,1).'.php')));
 		if ($tied_to_content_type)
 		{
@@ -1388,7 +1398,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 			$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
 	
 			$actions=new ocp_tempcode();
-			if ($name!='')
+			if (($name!='') && (get_value('disable_cat_cat_perms')!=='1'))
 				$actions->attach(form_input_tick(do_lang_tempcode('RESET_CATEGORY_PERMISSIONS'),do_lang_tempcode('DESCRIPTION_RESET_CATEGORY_PERMISSIONS'),'reset_category_permissions',false));
 			if ($name=='')
 				$actions->attach(form_input_tick(do_lang_tempcode('ADD_TO_MENU'),do_lang_tempcode('DESCRIPTION_ADD_TO_MENU'),'add_to_menu',true));
@@ -1416,7 +1426,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	 * @param  BINARY			Whether the field is to be shown in search views (not applicable for the list display type)
 	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_field_fields($first_field,$num_fields_to_show,$prefix,$order,$name='',$description='',$type='short_text',$defines_order=0,$visible=1,$searchable=1,$default='',$required=1,$put_in_category=1,$put_in_search=1)
+	function get_field_fields($first_field,$num_fields_to_show,$prefix,$order,$name='',$description='',$type='short_text',$defines_order=0,$visible=1,$searchable=1,$default='',$required=0,$put_in_category=1,$put_in_search=1)
 	{
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
@@ -1590,14 +1600,15 @@ class Module_cms_catalogues_alt extends standard_aed_module
 						$_parent_id=actual_add_catalogue_category($name,$bit,'','',$parent_id,'');
 						if (!is_null($parent_id)) $parent_id=$_parent_id;
 						require_code('permissions2');
-						set_category_permissions_from_environment('catalogues_category',strval($parent_id),$this->permission_page);
+						if (get_value('disable_cat_cat_perms')!=='1')
+							set_category_permissions_from_environment('catalogues_category',strval($parent_id),$this->permission_page);
 						$categories[$bit]=$parent_id;
 					}
 				}
 			}
 		}
 
-		if ($is_tree==0) $this->do_next_description=paragraph(do_lang_tempcode('SUGGEST_ADD_CATEGORY_NEXT'));
+		if (($is_tree==0) && (substr($name,0,1)!='_')) $this->do_next_description=paragraph(do_lang_tempcode('SUGGEST_ADD_CATEGORY_NEXT'));
 
 		return $name;
 	}

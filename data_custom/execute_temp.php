@@ -67,4 +67,22 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('locations_geopositioning');
+
+	// Nearest raw location
+	var_dump(find_nearest_location(50.81383,-0.35483));
+
+	// Nearest category
+	var_dump(find_nearest_location(50.81383,-0.35483,45,46));
+
+	// Nearest entry
+	require_code('catalogues');
+	$bits=find_nearest_location(50.81383,-0.35483,52,53);
+	if (!is_null($bits))
+	{
+		echo _get_catalogue_entry_field(43,$bits['ce_id']);
+	}
 }
+
+
+

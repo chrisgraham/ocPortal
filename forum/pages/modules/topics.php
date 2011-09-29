@@ -48,7 +48,7 @@ class Module_topics
 	 */
 	function get_entry_points()
 	{
-		return array('new_pt'=>'ADD_PERSONAL_TOPIC');
+		return is_guest()?array():array('new_pt'=>'ADD_PERSONAL_TOPIC');
 	}
 	
 	/**

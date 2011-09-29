@@ -67,7 +67,7 @@ class Hook_fields_float
 		{
 			if (($required) && ($default=='')) $default='0';
 		}
-		return array('short_unescaped',$default,'short');
+		return array('float_unescaped',$default,'float');
 	}
 
 	/**

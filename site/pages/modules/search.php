@@ -98,7 +98,7 @@ class Module_search
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'SEARCH_TITLE','my'=>'SAVED_SEARCHES');
+		return is_guest()?array('misc'=>'SEARCH_TITLE'):array('misc'=>'SEARCH_TITLE','my'=>'SAVED_SEARCHES');
 	}
 	
 	/**

@@ -69,7 +69,8 @@ class Hook_checklist_awards
 
 				if ((!is_null($date)) && (!is_null($details['date_field'])))
 				{
-					$num_queue=$details['connection']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$details['connection']->get_table_prefix().filter_naughty_harsh($details['table']).' WHERE '.filter_naughty_harsh($details['date_field']).'>'.strval(intval($date)));
+					$where=filter_naughty_harsh($details['date_field']).'>'.strval(intval($date));
+					$num_queue=$details['connection']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$details['connection']->get_table_prefix().str_replace('1=1',$where,$details['table']).' r WHERE '.$where);
 					$_num_queue=integer_format($num_queue);
 					$num_new_since=do_lang_tempcode('NUM_NEW_SINCE',$_num_queue);
 				} else $num_new_since=new ocp_tempcode();

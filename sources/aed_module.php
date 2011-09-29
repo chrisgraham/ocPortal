@@ -535,7 +535,7 @@ class standard_aed_module
 			$fields_new=new ocp_tempcode();
 			for ($i=0;$i<10;$i++) // Up to 10 new fields for catalogue, although this number is arbitrary
 			{
-				list($_fields_new,$_hidden_new)=$this->get_field_fields($i==0,10,'new_field_'.strval($i).'_',$i);
+				list($_fields_new,$_hidden_new)=$this->get_field_fields((($i==0) && (substr(get_param('id',''),0,1)!='_')),10,'new_field_'.strval($i).'_',$i);
 				$temp=do_template('FORM_FIELD_SET_GROUPER',array('_GUID'=>'3eba3a73d1fbdf922707d63216e13e03'.get_class($this),'VISIBLE'=>($i==0)?true:NULL,'NAME'=>do_lang_tempcode('NEW_FIELD',strval($i+1)),'ID'=>'NEW_FIELD_'.strval($i+1),'FIELDS'=>$_fields_new->evaluate()/*FUDGEFUDGE*/));
 				$fields_new->attach($temp);
 				$hidden->attach($_hidden_new);
@@ -1031,7 +1031,7 @@ class standard_aed_module
 				$name=get_translated_text($myrow['cf_name']);
 				$description=get_translated_text($myrow['cf_description']);
 				$prefix='existing_field_'.strval($myrow['id']).'_';
-				list($_fields_existing,$_fields_hidden)=$this->get_field_fields($i==0,count($rows)+10,$prefix,$field_count,$name,$description,$myrow['cf_type'],$myrow['cf_defines_order'],$myrow['cf_visible'],$myrow['cf_searchable'],$myrow['cf_default'],$myrow['cf_required'],$myrow['cf_put_in_category'],$myrow['cf_put_in_search']);
+				list($_fields_existing,$_fields_hidden)=$this->get_field_fields((($i==0) && (substr($c_name,0,1)!='_')),count($rows)+10,$prefix,$field_count,$name,$description,$myrow['cf_type'],$myrow['cf_defines_order'],$myrow['cf_visible'],$myrow['cf_searchable'],$myrow['cf_default'],$myrow['cf_required'],$myrow['cf_put_in_category'],$myrow['cf_put_in_search']);
 				if ((!is_ecommerce_catalogue($c_name)) || ($i>9))
 				{
 					$_fields_existing->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));

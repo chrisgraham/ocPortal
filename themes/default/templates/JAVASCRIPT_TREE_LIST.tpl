@@ -176,7 +176,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 		if (node.nodeName=='#text') continue; // A text-node
 		if (node.nodeName.toLowerCase()=='attribute') continue;
 		
-		// Special handling of 'expand' nodes, which tel say to pre-expand some categories as soon as the page loads
+		// Special handling of 'expand' nodes, which say to pre-expand some categories as soon as the page loads
 		if (node.nodeName=='expand')
 		{
 			var e=document.getElementById(this.name+'texp_c_'+getInnerHTML(node));

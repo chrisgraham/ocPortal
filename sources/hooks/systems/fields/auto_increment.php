@@ -66,7 +66,7 @@ class Hook_fields_auto_increment
 		{
 			$default=is_null($field)?0:$this->get_field_auto_increment($field['id'],intval($default));
 		}
-		return array('short_unescaped',$default,'short');
+		return array('integer_unescaped',$default,'integer');
 	}
 
 	/**
@@ -135,7 +135,7 @@ class Hook_fields_auto_increment
 	function get_field_auto_increment($field_id,$default='')
 	{
 		// Get most recent value, to start with- we will iterate forward on it
-		$value=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_short','cv_value',array('cf_id'=>$field_id),'ORDER BY ce_id DESC');
+		$value=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_integer','cv_value',array('cf_id'=>$field_id),'ORDER BY ce_id DESC');
 		if (is_null($value))
 		{
 			$value=strval(intval($default)-1);
@@ -146,7 +146,7 @@ class Hook_fields_auto_increment
 		{
 			$value=strval(intval($value)+1);
 	
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_short','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_integer','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
 		}
 		while (!is_null($test));
 	

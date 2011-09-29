@@ -304,6 +304,10 @@ class Hook_addon_registry_core_abstract_components
 						'CHILDREN'=>lorem_phrase(),
 						'NAME'=>lorem_word(),
 						'NAME_PLAIN'=>lorem_word_html(),
+						'NUM_CHILDREN'=>'3',
+						'NUM_ENTRIES'=>'2',
+						'NUM_CHILDREN_RECURSIVE'=>'3',
+						'NUM_ENTRIES_DIRECT'=>'2',
 							)
 				));
 		}

@@ -713,6 +713,27 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 }
 
 /**
+ * Convert a parameter set from a an array (for PHP code) to a string (for templates).
+ *
+ * @param  array			The parameters / acceptable parameter pattern
+ * @return string			The parameters / acceptable parameter pattern, as template safe parameter
+ */
+function block_params_arr_to_str($map)
+{
+	ksort($map);
+	
+	$_map='';
+	
+	foreach ($map as $key=>$val)
+	{
+		if ($_map!='') $_map.=',';
+		$_map.=$key.'='.str_replace(',','\,',$val);
+	}
+	
+	return $_map;
+}
+
+/**
  * Get the block object for a given block codename.
  *
  * @param  ID_TEXT		The block name

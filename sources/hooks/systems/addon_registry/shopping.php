@@ -590,7 +590,8 @@ class Hook_addon_registry_shopping
 					'_TITLE'=>lorem_phrase(),
 					'EDIT_CATALOGUE_URL'=>placeholder_url(),
 					'EDIT_CATALOGUE'=>lorem_phrase(),
-					'BROWSER'=>$results_browser
+					'BROWSER'=>$results_browser,
+					'TREE'=>lorem_phrase(),
 						)
 			),NULL,'',true),
 		);
@@ -737,7 +738,8 @@ class Hook_addon_registry_shopping
 					'ENTRIES'=>$entry,
 					'SUBCATEGORIES'=>'',
 					'DESCRIPTION'=>lorem_sentence(),
-					'CART_LINK'=>placeholder_url()
+					'CART_LINK'=>placeholder_url(),
+					'TREE'=>lorem_phrase(),
 						)
 			),NULL,'',true),
 		);

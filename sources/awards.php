@@ -66,27 +66,9 @@ function find_awards_for($content_type,$id)
  */
 function get_award_content_row($content_id,$info)
 {
-	$id_is_string=array_key_exists('id_is_string',$info)?$info['id_is_string']:false;
-	if (is_array($info['id_field']))
-	{
-		$bits=explode(':',$content_id);
-		$where=array();
-		foreach ($bits as $i=>$bit)
-		{
-			$where[$info['id_field'][$i]]=$id_is_string?$bit:intval($bit);
-		}
-	} else
-	{
-		if ($id_is_string)
-		{
-			$where=array($info['id_field']=>$content_id);
-		} else
-		{
-			$where=array($info['id_field']=>intval($content_id));
-		}
-	}
-	$_content=$info['connection']->query_select($info['table'],array('*'),$where,'',1);
-	return array_key_exists(0,$_content)?$_content[0]:NULL;
+	require_code('content');
+	list(,,,,$row)=content_get_row($content_id,$info);
+	return $row;
 }
 
 /**

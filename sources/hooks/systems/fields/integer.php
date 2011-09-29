@@ -67,7 +67,7 @@ class Hook_fields_integer
 		{
 			if (($required) && ($default=='')) $default='0';
 		}
-		return array('short_unescaped',$default,'short');
+		return array('integer_unescaped',$default,'integer');
 	}
 
 	/**

@@ -154,10 +154,8 @@ class Block_main_multi_content
 		}
 
 		$where='';
-		if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($efficient))
-		{
-			$query='FROM '.get_table_prefix().$info['table'].' r';
-		} else
+		$query='FROM '.get_table_prefix().$info['table'].' g';
+		if ((!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (!$efficient))
 		{
 			$_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false,true);
 			$groups='';
@@ -167,7 +165,6 @@ class Block_main_multi_content
 				$groups.='a.group_id='.strval((integer)$group);
 			}
 
-			$query='FROM '.get_table_prefix().$info['table'].' r';
 			if (!is_null($category_field_access))
 			{
 				if ($category_type_access==='!')

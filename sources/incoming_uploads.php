@@ -104,12 +104,36 @@ function incoming_uploads_script()
 
 			$file_db_id=$GLOBALS['SITE_DB']->query_insert('incoming_uploads',array('i_submitter'=>$member_id,'i_date_and_time'=>time(),'i_orig_filename'=>$name,'i_save_url'=>$savename),true,false);
 
-			//echo "File is valid, and was successfully uploaded.\n";
+			// File is valid, and was successfully uploaded. Now see if there is any metadata to surface from the file.
+			require_code('images');
+			$out=array();
+			if (is_image($name))
+			{
+				require_code('exif');
+				$out+=get_exif_data(get_custom_file_base().'/'.$savename);
+			}
+			$out['upload_id']=strval($file_db_id);
+			$out['upload_name']=$name;
+			$out['upload_savename']=$savename;
 			@ini_set('ocproducts.xss_detect','0');
-			echo strval($file_db_id);
+			$outstr='{';
+			$done=0;
+			foreach ($out as $key=>$val) // Put out data as JSON
+			{
+				$val=str_replace(chr(0),'',$val);
+				
+				if ((is_string($val)) && ($val!=''))
+				{
+					if ($done!=0) $outstr.=', ';
+					$outstr.='"'.str_replace(chr(10),'\n',addcslashes($key,"\\\'\"&\n\r<>")).'": "'.str_replace(chr(10),'\n',addcslashes($val,"\\\'\"&\n\r<>")).'"';
+					$done++;
+				}
+			}
+			$outstr.='}';
+			echo $outstr;
 		} else
 		{
-			//echo "Possible file upload attack!\n";
+			// Possible file upload attack!\
 			header('HTTP/1.1 500 File Upload Error');
 		}
 	} else

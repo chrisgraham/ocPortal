@@ -55,7 +55,10 @@ class Module_catalogues
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_short_trans');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_long');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_short');
+		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_float');
+		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_integer');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_entry_linkage');
+		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_cat_treecache');
 	
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_category'));
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_catalogue'));
@@ -164,21 +167,21 @@ class Module_catalogues
 				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
 				'cf_id'=>'AUTO_LINK',
 				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'LONG_TEXT', /* mine does! */
+				'cv_value'=>'LONG_TEXT',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('catalogue_efv_short_trans',array(
 				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
 				'cf_id'=>'AUTO_LINK',
 				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'SHORT_TRANS', /* mine too! */  // often Comcode
+				'cv_value'=>'SHORT_TRANS', // often Comcode
 			));
 
 			$GLOBALS['SITE_DB']->create_table('catalogue_efv_short',array(
 				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
 				'cf_id'=>'AUTO_LINK',
 				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'SHORT_TEXT', /* so who gets the job? (groan) */
+				'cv_value'=>'SHORT_TEXT',
 			));
 
 			// Add the default catalogues
@@ -410,6 +413,76 @@ class Module_catalogues
 				'content_type'=>'ID_TEXT',
 				'content_id'=>'ID_TEXT',
 			));
+			
+			// This caches ancestor relationships. It is redundant to doing tree traversals on catalogue_categories.cc_id, allowing normal efficient SQL joins to be done instead
+			// Note that self relationships (cc_id=cc_ancestor_id) are stored too, so that a single join covers that too.
+			$GLOBALS['SITE_DB']->create_table('catalogue_cat_treecache',array(
+				'cc_id'=>'*AUTO_LINK',
+				'cc_ancestor_id'=>'*AUTO_LINK',
+			));
+			$GLOBALS['SITE_DB']->create_index('catalogue_cat_treecache','cc_ancestor_id',array('cc_ancestor_id'));
+			require_code('catalogues2');
+			rebuild_catalogue_cat_treecache();
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_categories','cc_parent_id',array('cc_parent_id'));
+
+			$GLOBALS['SITE_DB']->create_table('catalogue_efv_float',array(
+				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
+				'cf_id'=>'AUTO_LINK',
+				'ce_id'=>'AUTO_LINK',
+				'cv_value'=>'?REAL',
+			));
+
+			$GLOBALS['SITE_DB']->create_table('catalogue_efv_integer',array(
+				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
+				'cf_id'=>'AUTO_LINK',
+				'ce_id'=>'AUTO_LINK',
+				'cv_value'=>'?INTEGER',
+			));
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcv_value',array('cv_value'));
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','itv_value',array('cv_value'));
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
+		{
+			// Move floats and integers into their own new tables
+			if (function_exists('set_time_limit')) @set_time_limit(0);
+			$sql_integer=db_string_equal_to('cf_type','integer').' OR '.db_string_equal_to('cf_type','auto_increment').' OR '.db_string_equal_to('cf_type','random').' OR '.db_string_equal_to('cf_type','user').' OR '.db_string_equal_to('cf_type','tick');
+			$sql_float=db_string_equal_to('cf_type','float');
+			foreach (array($sql_float=>'float',$sql_integer=>'integer') as $where=>$new_type)
+			{
+				$fields=$GLOBALS['SITE_DB']->query('SELECT id FROM '.get_table_prefix().'catalogue_fields WHERE '.$where);
+				foreach ($fields as $field)
+				{
+					do
+					{
+						$or_list='';
+						$rows=$GLOBALS['SITE_DB']->query_select('catalogue_efv_short',array('*'),array('cf_id'=>$field['id']),'',100);
+						foreach ($rows as $row)
+						{
+							if ($or_list!='') $or_list.=' OR ';
+							$or_list.='id='.strval($row['id']);
+
+							unset($row['id']);
+							if ($new_type=='float')
+							{
+								$row['cv_value']=($row['cv_value']=='')?NULL:floatval($row['cv_value']);
+							}
+							elseif ($new_type=='integer')
+							{
+								$row['cv_value']=($row['cv_value']=='')?NULL:intval($row['cv_value']);
+							}
+							$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$new_type,$row);
+						}
+						if ($or_list!='')
+						{
+							$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'catalogue_efv_short WHERE '.$or_list);
+						}
+					}
+					while (count($rows)!=0);
+				}
+			}
 		}
 	}
 	
@@ -538,7 +611,7 @@ class Module_catalogues
 			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.cc_title',array('c_name','d.id','t.text_original AS title','cc_parent_id AS parent_id','cc_add_date AS edit_date')));
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 		if (can_arbitrary_groupby())
-			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name GROUP BY c.c_name';
+			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON d.id=e.cc_id GROUP BY d.id';
 		$query.=' AND c_name NOT LIKE \''.db_encode_like('\_%').'\'';
 		$catalogues=list_to_map('c_name',$GLOBALS['SITE_DB']->query($query));
 
@@ -650,7 +723,7 @@ class Module_catalogues
 		{
 			access_denied('CATALOGUE_ACCESS');
 		}
-		if (!has_category_access(get_member(),'catalogues_category',strval($id)))
+		if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($id))))
 		{
 			access_denied('CATEGORY_ACCESS');
 		}
@@ -742,10 +815,10 @@ class Module_catalogues
 				$description=$sc['cc_description'];
 				$description=get_translated_tempcode($description);
 				$ajax_edit_url='_SEARCH:cms_catalogues:type=__edit_category:id='.strval($sc['id']);
-				$subcategories->attach(do_template('CATEGORY_'.$tpl_set.'_ENTRY',array('_GUID'=>'871f5f5195fcb426fac716e35569d6a3','ID'=>strval($sc['id']),'NAME_FIELD'=>'title','AJAX_EDIT_URL'=>$ajax_edit_url,'URL'=>$url,'REP_IMAGE'=>$rep_image,'CHILDREN'=>$display_string,'NAME'=>$sc['cc_title'],'NAME_PLAIN'=>$sc['cc_title'],'DESCRIPTION'=>$description),NULL,false,'CATEGORY_ENTRY'));
+				$subcategories->attach(do_template('CATEGORY_'.$tpl_set.'_ENTRY',array('_GUID'=>'871f5f5195fcb426fac716e35569d6a3','ID'=>strval($sc['id']),'NAME_FIELD'=>'title','AJAX_EDIT_URL'=>$ajax_edit_url,'URL'=>$url,'REP_IMAGE'=>$rep_image,'CHILDREN'=>$display_string,'NAME'=>$sc['cc_title'],'NAME_PLAIN'=>$sc['cc_title'],'DESCRIPTION'=>$description,'NUM_CHILDREN'=>integer_format($num_children),'NUM_CHILDREN_RECURSIVE'=>integer_format($child_counts['num_children_children']),'NUM_ENTRIES'=>integer_format($num_entries),'NUM_ENTRIES_DIRECT'=>integer_format($child_counts['num_entries'])),NULL,false,'CATEGORY_ENTRY'));
 			} else
 			{	
-				$subcategories->attach(do_template('CATALOGUE_'.$tpl_set.'_SUBCATEGORY',array('ID'=>strval($sc['id']),'CATALOGUE'=>$catalogue_name,'URL'=>$url,'NUM_CHILDREN'=>integer_format($num_children),'NUM_ENTRIES'=>integer_format($num_entries),'NAME'=>$sc['cc_title']),NULL,false,'CATALOGUE_DEFAULT_SUBCATEGORY'));
+				$subcategories->attach(do_template('CATALOGUE_'.$tpl_set.'_SUBCATEGORY',array('ID'=>strval($sc['id']),'CATALOGUE'=>$catalogue_name,'URL'=>$url,'NUM_CHILDREN'=>integer_format($num_children),'NUM_CHILDREN_RECURSIVE'=>integer_format($child_counts['num_children_children']),'NUM_ENTRIES'=>integer_format($num_entries),'NUM_ENTRIES_DIRECT'=>integer_format($child_counts['num_entries']),'NAME'=>$sc['cc_title']),NULL,false,'CATALOGUE_DEFAULT_SUBCATEGORY'));
 			}
 		}
 		if (!$subcategories->is_empty())
@@ -825,7 +898,7 @@ class Module_catalogues
 			$cart_link=show_cart_image(); 
 		}
 
-		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('ID'=>strval($id),'ADD_DATE_RAW'=>strval($category['cc_add_date']),'TITLE'=>$title,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'BROWSER'=>$browser,'SORTING'=>$sorting,'ADD_LINK'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$entry_buildup,'SUBCATEGORIES'=>$subcategories,'DESCRIPTION'=>get_translated_tempcode($category['cc_description']),'CART_LINK'=>$cart_link),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
+		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('ID'=>strval($id),'ADD_DATE_RAW'=>strval($category['cc_add_date']),'TITLE'=>$title,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'BROWSER'=>$browser,'SORTING'=>$sorting,'ADD_LINK'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$entry_buildup,'SUBCATEGORIES'=>$subcategories,'DESCRIPTION'=>get_translated_tempcode($category['cc_description']),'CART_LINK'=>$cart_link,'TREE'=>$tree),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
 	}
 
 	/**
@@ -890,7 +963,7 @@ class Module_catalogues
 			$entry_map=get_catalogue_entry_map($row,$catalogue,'CATEGORY','DEFAULT',$root,NULL,array(0),false,false);
 			$letter=strtoupper(substr(is_object($entry_map['FIELD_0_PLAIN'])?$entry_map['FIELD_0_PLAIN']->evaluate():'',0,1));
 
-			if (!has_category_access(get_member(),'catalogues_category',strval($row['id']))) continue;
+			if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($row['id'])))) continue;
 
 			if (!array_key_exists($letter,$cats)) $cats[$letter]=array();
 			$cats[$letter][]=$row;
@@ -989,7 +1062,7 @@ class Module_catalogues
 		$out=new ocp_tempcode();
 		foreach ($rows_subcategories as $myrow)
 		{
-			if (!has_category_access(get_member(),'catalogues_category',strval($myrow['id']))) continue;
+			if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($myrow['id'])))) continue;
 
 	//		$count=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','COUNT(*)',array('cc_id'=>$myrow['id'],'ce_validated'=>1));
 	//		if (!($count>0)) continue;

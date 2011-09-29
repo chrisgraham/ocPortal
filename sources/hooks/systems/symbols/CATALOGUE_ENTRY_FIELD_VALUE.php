@@ -32,18 +32,37 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 		$value='';
 		if (array_key_exists(1,$param))
 		{
+			$map=NULL;
+			
 			$entry_id=intval($param[0]);
 			$field_id=$param[1];
-			require_code('catalogues');
-			$entry=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$entry_id),'',1);
-			if (array_key_exists(0,$entry))
+
+			static $cache=array();
+			if (isset($cache[$entry_id]))
 			{
-				$catalogue=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$entry[0]['c_name']),'',1);
-				if (array_key_exists(0,$catalogue))
+				$map=$cache[$entry_id];
+			} else
+			{
+				require_code('catalogues');
+				$entry=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$entry_id),'',1);
+				if (array_key_exists(0,$entry))
 				{
-					$map=get_catalogue_entry_map($entry[0],$catalogue[0],'PAGE','DEFAULT',NULL,NULL,array($field_id));
-					$value=$map['FIELD_'.strval($field_id)];
+					$catalogue=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$entry[0]['c_name']),'',1);
+					if (array_key_exists(0,$catalogue))
+					{
+						$map=get_catalogue_entry_map($entry[0],$catalogue[0],'PAGE','DEFAULT',NULL,NULL/*,array($field_id)*/);
+					}
 				}
+				
+				$cache[$entry_id]=$map;
+			}
+			
+			if (!is_null($map))
+			{
+				if (isset($map['FIELD_'.strval($field_id)]))
+					$value=$map['FIELD_'.strval($field_id)];
+				elseif (isset($map['_FIELD_'.strval($field_id)]))
+					$value=$map['_FIELD_'.strval($field_id)];
 			}
 		}
 		return $value;

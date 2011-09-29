@@ -1011,7 +1011,13 @@ class Module_galleries
 			$awards=find_awards_for('image',strval($id));
 		} else $awards=array();
 
-		$title=get_page_title('VIEW_IMAGE',true,NULL,NULL,$awards);
+		if (get_param_integer('slideshow',0)==1)
+		{
+			$title=get_page_title('VIEW_SLIDESHOW');
+		} else
+		{
+			$title=get_page_title('VIEW_IMAGE',true,NULL,NULL,$awards);
+		}
 	
 		$root=get_param('root','root');
 	
@@ -1290,6 +1296,11 @@ class Module_galleries
 	 */
 	function show_nav($category_name,$cat,$current_id,$back_id,$forward_id,$root,$x,$n)
 	{
+		/*
+		Note that this code is a bit confusing.
+		Going forward is going back in gallery history. So "$previous_url" actually advances, back in history. For slideshows we flip the terminology and refer to $slideshow_next_url which also advances, back in history.
+		*/
+		
 		if ((is_null($back_id)) && (get_param('type')=='image'))
 		{
 			$back_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT MAX(id) FROM '.get_table_prefix().'videos WHERE '.db_string_equal_to('cat',$cat).' AND validated=1 ORDER BY id DESC');
@@ -1298,14 +1309,14 @@ class Module_galleries
 		if (!is_null($back_id))
 		{
 			$previous_url=build_url(array('page'=>'_SELF','type'=>$type,'root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$back_id,'slideshow'=>get_param('slideshow',NULL),'wide_high'=>get_param('wide_high',NULL)),'_SELF');
-			$slideshow_url=build_url(array('page'=>'_SELF','type'=>get_param('type'),'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$current_id,'slideshow'=>1),'_SELF');
-			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$back_id,'slideshow'=>1),'_SELF');
+			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$back_id,'slideshow'=>1),'_SELF'); // Continues, but as slideshow
 		} else
 		{
 			$previous_url=new ocp_tempcode();
-			$slideshow_url=new ocp_tempcode();
 			$slideshow_next_url=new ocp_tempcode();
 		}
+
+		$slideshow_url=build_url(array('page'=>'_SELF','type'=>get_param('type'),'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$current_id,'slideshow'=>1),'_SELF');
 
 		// Link to show more. Preserve info about where we were
 		$start=get_param_integer('start',0);
@@ -1322,7 +1333,7 @@ class Module_galleries
 			$next_url=build_url(array('page'=>'_SELF','type'=>$type,'root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$forward_id,'slideshow'=>get_param('slideshow',NULL),'wide_high'=>get_param('wide_high',NULL)),'_SELF');
 		} else $next_url=new ocp_tempcode();
 
-		return do_template('GALLERY_NAV',array('_GUID'=>'efd58f97d9c6254bd727125dfabb5a95','X'=>integer_format($x),'N'=>integer_format($n),'SLIDESHOW_LINK'=>$slideshow_url,'SLIDESHOW_NEXT_LINK'=>$slideshow_next_url,'PREVIOUS_LINK'=>$previous_url,'NEXT_LINK'=>$next_url,'MORE_URL'=>$more_url,'CATEGORY_NAME'=>$category_name));
+		return do_template('GALLERY_NAV',array('_GUID'=>'efd58f97d9c6254bd727125dfabb5a95','X'=>integer_format($x),'N'=>integer_format($n),'_X'=>strval($x),'_N'=>strval($n),'SLIDESHOW_LINK'=>$slideshow_url,'SLIDESHOW_NEXT_LINK'=>$slideshow_next_url,'PREVIOUS_LINK'=>$previous_url,'NEXT_LINK'=>$next_url,'MORE_URL'=>$more_url,'CATEGORY_NAME'=>$category_name));
 	}
 
 }

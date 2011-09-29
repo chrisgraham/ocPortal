@@ -73,7 +73,7 @@ class Hook_fields_user
 		{
 			if (($required) && ($default=='')) $default=strval($GLOBALS['FORUM_DRIVER']->get_guest_id());
 		}
-		return array('short_unescaped',$default,'short');
+		return array('integer_unescaped',$default,'integer');
 	}
 
 	/**

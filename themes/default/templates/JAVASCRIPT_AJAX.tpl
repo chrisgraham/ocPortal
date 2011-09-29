@@ -2,6 +2,54 @@ var AJAX_REQUESTS=[];
 var AJAX_METHODS=[];
 var AJAX_TIMEOUTS=[];
 
+var block_data_cache={};
+
+function call_block(url,new_params,target_div,append)
+{
+	if (typeof block_data_cache[url]=='undefined') block_data_cache[url]=getInnerHTML(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_params if returning to fresh state
+
+	var ajax_url=url+'&block_map_sup='+window.encodeURIComponent(new_params);
+	if (typeof block_data_cache[ajax_url]!='undefined')
+	{
+		show_block_html(block_data_cache[ajax_url],target_div,append);
+		return;
+	}
+
+	// Show loading image
+
+	if (!append)
+	{
+		target_div.orig_position=target_div.style.position;
+		target_div.style.position='relative';
+		var loading_image=document.createElement('img');
+		loading_image.src='{$IMG;,bottom/loading}';
+		loading_image.style.position='absolute';
+		loading_image.style.left=(findWidth(target_div)/2-10)+'px';
+		loading_image.style.top=(findHeight(target_div)/2-20)+'px';
+		target_div.appendChild(loading_image);
+	}
+
+	// Make AJAX call
+	var func=function(raw_ajax_result) { _call_block(raw_ajax_result,ajax_url,target_div,append) };
+	func.accept_raw_response=true;
+	load_XML_doc(ajax_url,func);
+	
+	return false;
+}
+
+function _call_block(raw_ajax_result,ajax_url,target_div,append)
+{
+	target_div.style.position=target_div.orig_position;
+	var new_html=raw_ajax_result.responseText;
+	block_data_cache[ajax_url]=new_html;
+	show_block_html(new_html,target_div,append);
+}
+
+function show_block_html(new_html,target_div,append)
+{
+	setInnerHTML(target_div,new_html,append);
+}
+
 /* Calls up a URL to check something, giving any 'feedback' as an error (or if just 'false' then returning false with no message) */
 function do_ajax_field_test(url,post)
 {
@@ -43,7 +91,7 @@ function ajax_form_submit(event,form,block_name,map)
 	{
 		post+='&'+form.elements[i].name+'='+window.encodeURIComponent(cleverFindValue(form,form.elements[i]));
 	}
-	var request=load_XML_doc(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}'+keep_stub(true)),false,post);
+	var request=load_XML_doc(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}'+keep_stub(true)),null,post);
 
 	if ((request.responseText!='') && (request.responseText!=''))
 	{
@@ -156,6 +204,7 @@ function process_request_changes()
 			if ((result.status) && (result.status==200) || (result.status==500) || (result.status==400) || (result.status==401))
 			{
 				//Process the result
+				if ((AJAX_METHODS[i]) && (typeof AJAX_METHODS[i].accept_raw_response!='undefined')) return AJAX_METHODS[i](result);
 				var xml=handle_errors_in_result(result);
 				if (xml)
 				{

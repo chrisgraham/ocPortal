@@ -29,7 +29,7 @@ class Block_main_google_map
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('title','region','cluster','filter_term','filter_category','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links');
+		$info['parameters']=array('title','region','cluster','filter_term','filter_category','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude');
 		return $info;
 	}
 	
@@ -60,6 +60,10 @@ class Block_main_google_map
 		if ((!array_key_exists('catalogue',$map)) || ($map['catalogue']=='')) $map['catalogue']='contacts'; //default value
 		if (!array_key_exists('longfield',$map)) $map['longfield']='Longitude';
 		if (!array_key_exists('latfield',$map)) $map['latfield']='Latitude';
+		$min_latitude=array_key_exists('min_latitude',$map)?$map['min_latitude']:'';
+		$max_latitude=array_key_exists('max_latitude',$map)?$map['max_latitude']:'';
+		$min_longitude=array_key_exists('min_longitude',$map)?$map['min_longitude']:'';
+		$max_longitude=array_key_exists('max_longitude',$map)?$map['max_longitude']:'';
 		$longitude_key=$map['longfield'];
 		$latitude_key=$map['latfield'];
 		$catalogue_name=$map['catalogue'];
@@ -89,7 +93,7 @@ class Block_main_google_map
 
 		// Get results
 		$entries_to_show=$GLOBALS['SITE_DB']->query($query.' ORDER BY ce_add_date DESC',4000/*reasonable limit*/);
-		if (count($entries_to_show)==0) // If there's nothing to show
+		if ((count($entries_to_show)==0) && (($min_latitude=='') || ($max_latitude=='') || ($min_longitude=='') || ($max_longitude==''))) // If there's nothing to show and no given bounds
 		{
 			return paragraph(do_lang_tempcode('NO_ENTRIES'),'','nothing_here');
 		}
@@ -132,6 +136,6 @@ class Block_main_google_map
 		$uniqid=uniqid('');
 		$div_id='div_'.$catalogue_name.'_'.$uniqid;
 
-		return do_template('BLOCK_MAIN_GOOGLE_MAP',array('TITLE'=>$map['title'],'DATA'=>$data,'ENTRIES_URL'=>$entries_url,'SHOW_LINKS'=>$set_show_links,'DIV_ID'=>$div_id,'CLUSTER'=>$cluster,'REGION'=>$map['region'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'], 'LONGITUDE'=>$map['longitude'], 'ZOOM'=>$set_zoom,'CENTER'=>$set_center));
+		return do_template('BLOCK_MAIN_GOOGLE_MAP',array('TITLE'=>$map['title'],'MIN_LATITUDE'=>$min_latitude,'MAX_LATITUDE'=>$max_latitude,'MIN_LONGITUDE'=>$min_longitude,'MAX_LONGITUDE'=>$max_longitude,'DATA'=>$data,'ENTRIES_URL'=>$entries_url,'SHOW_LINKS'=>$set_show_links,'DIV_ID'=>$div_id,'CLUSTER'=>$cluster,'REGION'=>$map['region'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'],'LONGITUDE'=>$map['longitude'],'ZOOM'=>$set_zoom,'CENTER'=>$set_center));
 	}
 }
