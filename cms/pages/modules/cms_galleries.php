@@ -471,6 +471,7 @@ class Module_cms_galleries extends standard_aed_module
 		$cat=post_param('cat');
 
 		require_code('images');
+		require_code('exif');
 
 		check_specific_permission('mass_import'/*,array('galleries',$cat)*/);
 
@@ -492,7 +493,9 @@ class Module_cms_galleries extends standard_aed_module
 						if (is_null($width)) $width=100;
 						if (is_null($height)) $height=100;
 						if (is_null($length)) $length=0;
-						add_video($cat,$this->simple_find_comments($url,$file),$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'',$length,$width,$height);
+						$exif=get_exif_data($url,$file);
+						$id=add_video($cat,$exif['UserComment'],$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'',$length,$width,$height);
+						store_exif('video',strval($id),$exif);
 					}
 				} else
 				{
@@ -510,7 +513,9 @@ class Module_cms_galleries extends standard_aed_module
 					}
 					if ($ok)
 					{
-						add_image($cat,$this->simple_find_comments($url,$file),$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'');
+						$exif=get_exif_data($url,$file);
+						$id=add_image($cat,$exif['UserComments'],$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'');
+						store_exif('image',strval($id),$exif);
 					}
 				}
 			}
@@ -647,6 +652,8 @@ class Module_cms_galleries extends standard_aed_module
 	 */
 	function simple_add($url,$thumb_url,$file,$cat)
 	{
+		require_code('exif');
+		
 		if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
 		{
 			// See if we need to resize the image
@@ -670,7 +677,9 @@ class Module_cms_galleries extends standard_aed_module
 				if (is_null($width)) $width=100;
 				if (is_null($height)) $height=100;
 				if (is_null($length)) $length=0;
-				add_video($cat,$this->simple_find_comments($url,$file),$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),$length,$width,$height);
+				$exif=get_exif_data($url,$file);
+				$id=add_video($cat,$exif['UserComment'],$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),$length,$width,$height);
+				store_exif('video',strval($id),$exif);
 			}
 		} else
 		{
@@ -682,63 +691,11 @@ class Module_cms_galleries extends standard_aed_module
 			}
 			if ($ok)
 			{
-				add_image($cat,$this->simple_find_comments($url,$file),$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''));
+				$exif=get_exif_data($url,$file);
+				$id=add_image($cat,$exif['UserComment'],$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''));
+				store_exif('image',strval($id),$exif);
 			}
 		}
-	}
-
-	/**
-	 * Look for comments for a media file been quickly imported.
-	 *
-	 * @param  URLPATH	The URL to the file
-	 * @param  string		The filename
-	 * @return string		Comments (or blank)
-	 */
-	function simple_find_comments($url,$file)
-	{
-		$comments='';
-
-		// Try CSV file
-		$csv_path=get_custom_file_base().'/uploads/galleries/descriptions.csv';
-		if (file_exists($csv_path))
-		{
-			$del=',';
-
-			$csv_file_handle=fopen($csv_path,'rb');
-			$csv_test_line=fgetcsv($csv_file_handle,10240,$del);
-			if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))
-				$del=';';
-			rewind($csv_file_handle);
-			while (($csv_line=fgetcsv($csv_file_handle,10240,$del))!==false)
-			{
-				if (preg_match('#(^|/|\\\\)'.str_replace('#','\#',preg_quote(trim($csv_line[0]))).'#',$file)!=0)
-				{
-					$comments=trim($csv_line[1]);
-					break;
-				}
-			}
-			fclose($csv_file_handle);
-		}
-
-		// Try EXIF
-		if (function_exists('exif_read_data'))
-		{
-			if (($comments=='') && ((substr(strtolower($file),-5)=='.jpeg') || (substr(strtolower($file),-4)=='.jpg') || (substr(strtolower($file),-5)=='.tiff') || (substr(strtolower($file),-4)=='.tif')))
-			{
-				$meta_data=function_exists('exif_read_data')?@exif_read_data(get_custom_file_base().'/'.rawurldecode($url)):NULL;
-				$comments=isset($meta_data['COMPUTED']['UserComment'])?$meta_data['COMPUTED']['UserComment']:'';
-				if ($comments=='')
-				{
-					$comments=isset($meta_data['ImageDescription'])?$meta_data['ImageDescription']:'';
-				}
-				if ($comments=='')
-				{
-					$comments=isset($meta_data['Comments'])?$meta_data['Comments']:'';
-				}
-			}
-		}
-
-		return $comments;
 	}
 
 	/**

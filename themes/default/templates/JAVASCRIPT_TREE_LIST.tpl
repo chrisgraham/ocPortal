@@ -185,7 +185,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				var html_node=document.getElementById(this.name+'tree_list_c_'+getInnerHTML(node));
 				var expanding=(html_node.style.display!='block');
 				if (expanding)
-					e.onmousedown();
+					e.onmousedown(null,true);
 			} else
 			{
 				// Now try against serverid
@@ -198,7 +198,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 						var html_node=document.getElementById(this.name+'tree_list_c_'+xml_node.getAttribute('id'));
 						var expanding=(html_node.style.display!='block');
 						if (expanding)
-							e.onmousedown();
+							e.onmousedown(null,true);
 					}
 				}
 			}
@@ -449,7 +449,7 @@ function find_overlapping_selectable(element,node,name)
 	return null;
 }
 
-tree_list.prototype.handle_tree_click=function() // Not called as a method
+tree_list.prototype.handle_tree_click=function(event,automated) // Not called as a method
 {
 	if (typeof window.load_XML_doc=='undefined') return false;
 
@@ -484,6 +484,13 @@ tree_list.prototype.handle_tree_click=function() // Not called as a method
 			var ob=this.object;
 			load_XML_doc(url,function (ajax_result_frame,ajax_result) { setInnerHTML(html_node,''); ob.response(ajax_result_frame,ajax_result,clicked_id); });
 			setInnerHTML(html_node,'<div><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> {!LOADING^;}</div>');
+			var container=document.getElementById('tree_list__root_'+ob.name);
+			if ((automated) && (container) && (container.style.overflowY=='auto'))
+			{
+				window.setTimeout(function() {
+					container.scrollTop=findPosY(html_node)-20;
+				}, 0);
+			}
 		}
 
 		html_node.style.display='block';

@@ -22,19 +22,22 @@
  * Get meta data from an image, using EXIF primarily, but also XMP and IPTC to get image descriptions.
  * Also gets GPS data and canonicalises in decimal as Latitude and Longitude.
  *
- * @param  string		This is the filename of the photo which may contain metadata
+ * @param  PATH		This is the path of the photo which may contain metadata
+ * @param  ?string	This is the original filename of the photo which may contain metadata (NULL: derive from path)
  * @return array		Map of meta data, using standard EXIF naming
  */
-function get_exif_data($path)
+function get_exif_data($path,$filename=NULL)
 {
 	$out=array();
+
+	if (is_null($filename)) $filename=rawurldecode(basename($path));
 
 	if (function_exists('exif_read_data'))
 	{
 		$out+=@exif_read_data($path,'ANY_TAG');
 	}
 
-	$caption=_get_image_caption($path);
+	$caption=get_exif_image_caption($path,$filename);
 	$out['UserComment']=$caption;
 	$out+=_get_simple_gps($out);
 
@@ -104,16 +107,39 @@ function _get_simple_gps($exif)
  * Attempt to retrieve a caption from photos seeking XMP, then EXIF, then IPTC binary last.
  * Check this file is a valid image file before passing to this function as an empty string often annoys.
  *
- * @param  string		This is the filename of the photo which may contain metadata
+ * @param  PATH		This is the path of the photo which may contain metadata
+ * @param  string		This is the original filename of the photo which may contain metadata
  * @return string		Whichever caption is found
  */
-function _get_image_caption($path)
+function get_exif_image_caption($path,$filename)
 {
 	$comments='';
 
+	// Try CSV file
+	$csv_path=get_custom_file_base().'/uploads/galleries/descriptions.csv';
+	if (file_exists($csv_path))
+	{
+		$del=',';
+
+		$csv_file_handle=fopen($csv_path,'rb');
+		$csv_test_line=fgetcsv($csv_file_handle,10240,$del);
+		if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))
+			$del=';';
+		rewind($csv_file_handle);
+		while (($csv_line=fgetcsv($csv_file_handle,10240,$del))!==false)
+		{
+			if (preg_match('#(^|/|\\\\)'.str_replace('#','\#',preg_quote(trim($csv_line[0]))).'#',$filename)!=0)
+			{
+				$comments=trim($csv_line[1]);
+				break;
+			}
+		}
+		fclose($csv_file_handle);
+	}
+
 	$file_pointer=fopen($path,'rb');
 
-	if ($file_pointer!==false) //Attempt XMP
+	if (($comments=='') && ($file_pointer!==false)) //Attempt XMP
 	{
 		$file_cap100=fread($file_pointer,102400); //Read first 100k
 
@@ -203,4 +229,47 @@ function _get_image_caption($path)
 	if (strpos($comments,'OLYMPUS')!==false) $comments='';
 
 	return $comments;
+}
+
+/**
+ * Save meta data into content type's custom fields, by looking for fields named after the EXIF/EXIF-emulated meta data (specifically in English).
+ * Spaces may be added to the names to make them prettier, but otherwise they must be the same.
+ * Designed to be used by headless-importers, e.g. bulk importing of media files, to make the process a bit smarter.
+ *
+ * @param  ID_TEXT	The content type
+ * @param  ID_TEXT	The content ID
+ * @param  array		The EXIF data
+ */
+function store_exif($content_type,$content_id,$exif)
+{
+	require_code('fields');
+
+	if (!has_tied_catalogue($content_type)) return;
+	
+	// Get field values
+	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name'),array('c_name'=>'_'.$content_type),'ORDER BY cf_order');
+	$map=array();
+	foreach ($fields as $field)
+	{
+		$name=get_translated_text($field['cf_name'],NULL,'EN');
+		
+		if (isset($exif[$name]))
+			$map[$field['id']]=$exif[$name];
+		elseif (isset($exif[str_replace(' ','',$name)]))
+			$map[$field['id']]=$exif[str_replace(' ','',$name)];
+		else $map[$field['id']]='';
+	}
+	if (count($map)==0) return;
+
+	$first_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
+
+	require_code('catalogues2');
+
+	$catalogue_entry_id=actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
+
+	$GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
+		'catalogue_entry_id'=>$catalogue_entry_id,
+		'content_type'=>$content_type,
+		'content_id'=>$content_id,
+	));
 }

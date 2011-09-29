@@ -33,7 +33,7 @@ class Hook_fields_content_link
 		foreach (array_keys($hooks) as $hook)
 		{
 			if ((substr($hook,0,7)=='choose_') && ($hook!='catalogue_entry'/*got a better field hook specifically for catalogue entries*/))
-				$ret['at_'.$hook]=do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html($hook));
+				$ret['at_'.$hook]=do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html(preg_replace('#^choose_#','',$hook)));
 		}
 		return $ret;
 	}
