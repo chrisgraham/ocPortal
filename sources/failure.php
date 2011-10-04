@@ -678,7 +678,7 @@ function _fatal_exit($text,$return=false)
 	$echo->evaluate_echo();
 
 	if (get_param_integer('keep_fatalistic',0)==0)
-		relay_error_mail((is_object($text)?$text->evaluate():$text).$echo->evaluate());
+		relay_error_mail((is_object($text)?$text->evaluate():$text).'[html]'.$error_tpl->evaluate().'[/html]');
 
 	if (!$return) exit();
 }
@@ -724,7 +724,7 @@ function relay_error_mail($text,$ocproducts=true)
 
 	$error_url=$url.'?'.ocp_srv('QUERY_STRING');
 	require_code('comcode');
-	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),str_replace('[/html]','[ /html]',$text),NULL,get_site_default_lang());
+	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),$text,NULL,get_site_default_lang());
 	if (get_option('send_error_emails',true)=='1')
 		mail_wrap(do_lang('ERROR_OCCURED',NULL,NULL,NULL,get_site_default_lang()),$mail,NULL,'','','',3,NULL,true,NULL,true);
 	if (($ocproducts) && (get_option('send_error_emails_ocproducts',true)=='1') && (!running_script('cron_bridge')) && (strpos($text,'_custom/')===false) && (strpos($text,'data/occle.php')===false) && (strpos($text,'/mini')===false) && (strpos($text,'&#')===false/*charset encoding issue*/) && (strpos($text,'has been disabled for security reasons')===false) && (strpos($text,'max_questions')/*mysql limit*/===false) && (strpos($text,'Error at offset')===false) && (strpos($text,'Unable to allocate memory for pool')===false) && (strpos($text,'Out of memory')===false) && (strpos($text,'Disk is full writing')===false) && (strpos($text,'Disk quota exceeded')===false) && (strpos($text,'from storage engine')===false) && (strpos($text,'Lost connection to MySQL server')===false) && (strpos($text,'Unable to save result set')===false) && (strpos($text,'.MYI')===false) && (strpos($text,'MySQL server has gone away')===false) && (strpos($text,'Incorrect key file')===false) && (strpos($text,'Too many connections')===false) && (strpos($text,'marked as crashed and should be repaired')===false) && (strpos($text,'connect to')===false) && (strpos($text,'Access denied for')===false) && (strpos($text,'Unknown database')===false) && (strpos($text,'headers already sent')===false) && (preg_match('#Maximum execution time of \d+ seconds#',$text)==0) && (strpos($text,'File(/tmp/) is not within the allowed path')===false))

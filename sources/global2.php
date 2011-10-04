@@ -1244,7 +1244,8 @@ function get_base_url($https=NULL,$zone_for=NULL)
 
 	if ($https)
 	{
-		$base_url='https://'.substr($base_url,strlen('http://'));
+		$base_url='https://'.preg_replace('#^\w*://#','',$base_url);
+		substr($base_url,strlen('http://'));
 		if ((!$VIRTUALISED_ZONES) || (is_null($zone_for))) $BASE_URL_HTTPS=$base_url;
 	} elseif ((!$VIRTUALISED_ZONES) || (is_null($zone_for))) $BASE_URL_HTTP=$base_url;
 

@@ -1142,7 +1142,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 		$real_member_cookie=substr($member_cookie_name,$colon_pos+1);
 		$real_pass_cookie=substr(get_pass_cookie(),$colon_pos+1);
 
-		$hash=md5(uniqid(strval(mt_rand(0,32000)),true));
+		$hash=substr(uniqid(strval(mt_rand(0,32000)),true),0,17);
 		$cookie=serialize(array($real_member_cookie=>strval($id),$real_pass_cookie=>$hash));
 		$this->connection->query_insert('sessions',array('session_id'=>md5($hash),'session_user_id'=>$id,'session_ip'=>ip2long(get_ip_address()),'session_time'=>time()));
 
@@ -1192,7 +1192,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 		}
 		if ($cookie_login)
 		{
-			$lookup=$this->connection->query_value_null_ok('sessions','session_user_id',array('session_id'=>$password_hashed));
+			$lookup=$this->connection->query_value_null_ok('sessions','session_user_id',array('session_id'=>md5($password_raw)));
 			if ($row['user_id']!==$lookup)
 			{
 				$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));

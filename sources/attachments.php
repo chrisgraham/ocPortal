@@ -118,7 +118,6 @@ function attachments_script()
 			header('Content-Disposition: inline; filename="'.$original_filename.'"');
 		}
 	}
-	header('Content-Transfer-Encoding: binary');
 	header('Accept-Ranges: bytes');
 	
 	// Caching
@@ -131,12 +130,12 @@ function attachments_script()
 	$from=0;
 	$new_length=$size;
 
+	@ini_set('zlib.output_compression','Off');
+
 	// They're trying to resume (so update our range)
 	$httprange=ocp_srv('HTTP_RANGE');
 	if (strlen($httprange)>0)
 	{
-		@ini_set('zlib.output_compression','Off');
-
 		$_range=explode('=',ocp_srv('HTTP_RANGE'));
 		if (count($_range)==2)
 		{

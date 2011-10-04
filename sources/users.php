@@ -147,14 +147,14 @@ function is_guest($member_id=NULL,$quick_only=false)
 }
 
 /**
- * Apply hashing to some input. To this date, all forum drivers use md5, but some (well, currently SMF) use it differently.
+ * Apply hashing to some input. To this date, all forum drivers use md5, but some use it differently.
  * This function will pass through the parameters to an equivalent forum_md5 function if it is defined.
  *
  * @param  string			The data to hash (the password in actuality)
  * @param  string			The string converted member-ID in actuality, although this function is more general
  * @return string			The hashed data
  */
-function my_md5($data,$key) // Adapted from SMF, for compatibility only
+function my_md5($data,$key)
 {
 	if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_md5')) return $GLOBALS['FORUM_DRIVER']->forum_md5($data,$key);
 	return md5($data);

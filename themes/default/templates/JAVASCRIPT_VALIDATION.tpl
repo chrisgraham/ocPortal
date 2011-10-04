@@ -322,6 +322,10 @@ function checkField(theElement,theForm,forPreview)
 		{
 			errorMsg="{!NOT_USERNAME^#}".replace('xxx',myValue);
 		}
+		if (((theClass=='input_codename') || (theClass=='input_codename_required')) && (myValue!='') && (myValue!='****') && (!myValue.match(/^[a-zA-Z0-9\-\.\_]*$/)))
+		{
+			errorMsg="{!NOT_CODENAME^#}".replace('xxx',myValue);
+		}
 		if (((theClass=='input_integer') || (theClass=='input_integer_required')) && (myValue!='') && (myValue!='****') && (parseInt(myValue,10)!=myValue-0))
 		{
 			errorMsg="{!NOT_INTEGER^#}".replace('xxx',myValue);

@@ -379,6 +379,8 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 		// Recalculate continent bounds, as will be outdated
 		recalculate_continent_bounds($catalogue_name);
 
+		set_value('disable_cat_cat_perms','1');
+
 		return;
 	}
 	
@@ -541,7 +543,7 @@ function _create_catalogue_position($catalogue_name,$tree_pos,$cat,$location,&$t
 	return $cat;
 }
 
-function recalculate_continent_bounds($catalogue_name)
+function recalculate_continent_bounds($catalogue_name='places')
 {
 	require_code('locations');
 	$continents=find_continents();
@@ -577,13 +579,13 @@ function recalculate_bounding_long_lat($category)
 		if ((is_null($min_latitude)) || ($_min_latitude<$min_latitude)) $min_latitude=$_min_latitude;
 		if ((is_null($max_latitude)) || ($_max_latitude>$max_latitude)) $max_latitude=$_max_latitude;
 		if ((is_null($min_longitude)) || ($_min_longitude<$min_longitude)) $min_longitude=$_min_longitude;
-		if ((is_null($max_longitude)) || ($_max_longitude>$max_longitude)) $max_longitude=$_min_longitude;
+		if ((is_null($max_longitude)) || ($_max_longitude>$max_longitude)) $max_longitude=$_max_longitude;
 	}
 
 	$assocated_catalogue_entry_id=get_bound_content_entry('catalogue_category',strval($category));
 
 	$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$min_latitude),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[5]['id']),'',1);
 	$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$max_latitude),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[5]['id']),'',1);
-	$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$min_longitud)),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[5]['id']),'',1);
-	$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$max_longitud)),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[5]['id']),'',1);
+	$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$min_longitude),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[5]['id']),'',1);
+	$GLOBALS['SITE_DB']->query_update('catalogue_efv_float',array('cv_value'=>$max_longitude),array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[5]['id']),'',1);
 }

@@ -167,7 +167,6 @@ function download_map($realm,$sx,$sy)
 	// Output to browser
 	header('Content-Type: image/png');
 	header('Content-Disposition: inline; filename=realm'.strval($realm).'_map.png');
-	header('Content-Transfer-Encoding: binary');
 	imagepng($my_img);
 }
 

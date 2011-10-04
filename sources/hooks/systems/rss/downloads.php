@@ -66,7 +66,11 @@ class Hook_rss_downloads
 			$news='';
 
 			if (!array_key_exists($row['category_id'],$categories))
-				$categories[$row['category_id']]=get_translated_text($GLOBALS['SITE_DB']->query_value('download_categories','category',array('id'=>$row['category_id'])));
+			{
+				$c=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','category',array('id'=>$row['category_id']));
+				if (is_null($c)) continue; // Slight corruption
+				$categories[$row['category_id']]=get_translated_text($c);
+			}
 			if (!array_key_exists($row['category_id'],$categories)) continue;
 			$category=$categories[$row['category_id']];
 			$category_raw=strval($row['category_id']);

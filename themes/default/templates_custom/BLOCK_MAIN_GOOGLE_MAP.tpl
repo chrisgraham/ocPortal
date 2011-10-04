@@ -84,7 +84,7 @@
 			{
 				return function ()
 				{
-					{$,Dynamically load a specific members details only when their marker is clicked.}
+					{$,Dynamically load entry details only when their marker is clicked.}
 					var content = entry_title{+START,IF,{$EQ,{SHOW_LINKS},1}}+': <a href="'+'{ENTRIES_URL*}'.replace('%21',entry_id)+'">{!GO_TO_MAP_ENTRY}</a>'{+END};
 					if (content != "")
 					{

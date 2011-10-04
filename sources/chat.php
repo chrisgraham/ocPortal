@@ -353,7 +353,6 @@ function chat_logs_script()
 		header('Content-Disposition: filename="'.$filename.'"');
 	else
 		header('Content-Disposition: attachment; filename='.$filename);
-	header('Content-Transfer-Encoding: binary');
 
 	//$message=put_in_standard_box($message_contents,do_lang_tempcode('ROOM'));
 

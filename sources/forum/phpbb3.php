@@ -278,8 +278,8 @@ class forum_driver_phpbb3 extends forum_driver_base
 			$INFO['sql_pass']=$dbpasswd;
 			$INFO['board_url']=$base_url;
 			$INFO['sql_tbl_prefix']=$table_prefix;
-			$INFO['cookie_member_id']='phpbb2mysql_data:userid';
-			$INFO['cookie_member_hash']='phpbb2mysql_data:autologinid';
+			$INFO['cookie_member_id']='phpbb_u';
+			$INFO['cookie_member_hash']='phpbb_k';
 			return true;
 		}
 		return false;
@@ -1261,7 +1261,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	}
 	
 	/**
-	 * The hashing algorithm of this forum driver.
+	 * The hashing algorithm of this forum driver. NOT used for cookie logins for this forum driver (cookies store a generated session ID).
 	 *
 	 * @param  string			The data to hash (the password in actuality)
 	 * @param  string			The string converted member-ID in actuality, although this function is more general. For cookie logins, 'ys'
@@ -1291,16 +1291,54 @@ class forum_driver_phpbb3 extends forum_driver_base
 
 		$member_cookie_name=get_member_cookie();
 		$colon_pos=strpos($member_cookie_name,':');
-		$base=substr($member_cookie_name,0,$colon_pos);
-		$real_member_cookie=substr($member_cookie_name,$colon_pos+1);
-		$real_pass_cookie=substr(get_pass_cookie(),$colon_pos+1);
+		if ($colon_pos!==false)
+		{
+			$base=substr($member_cookie_name,0,$colon_pos);
+			$real_member_cookie=substr($member_cookie_name,$colon_pos+1);
+			$real_pass_cookie=substr(get_pass_cookie(),$colon_pos+1);
+			$real_session_cookie='sid';
+		} else
+		{
+			$real_member_cookie=$member_cookie_name;
+			$real_pass_cookie=get_pass_cookie();
+			$real_session_cookie=preg_replace('#\_u$#','_sid',$real_member_cookie);
+		}
 
-		$hash=md5(uniqid(strval(mt_rand(0,32000)),true));
-		$cookie=serialize(array($real_member_cookie=>strval($id),$real_pass_cookie=>$hash));
+		$hash=substr(uniqid(strval(mt_rand(0,32000)),true),0,17);
 		$this->connection->query_insert('sessions_keys',array('key_id'=>md5($hash),'user_id'=>$id,'last_ip'=>ip2long(get_ip_address()),'last_login'=>time()));
 
-		ocp_setcookie($base,$cookie);
-		$_COOKIE[$base]=$cookie;
+		$session_id=uniqid(strval(mt_rand(0,32000)),true);
+		$this->connection->query_insert('sessions',array(
+			'session_id'=>$session_id,
+			'session_user_id'=>$id,
+			'session_forum_id'=>0,
+			'session_last_visit'=>time(),
+			'session_start'=>time(),
+			'session_time'=>time(),
+			'session_ip'=>get_ip_address(),
+			'session_browser'=>get_browser_string(),
+			'session_forwarded_for'=>'',
+			'session_page'=>'',
+			'session_viewonline'=>1,
+			'session_autologin'=>1,
+			'session_admin'=>$this->_is_super_admin($id),
+		));
+
+		$cookie=serialize(array($real_member_cookie=>strval($id),$real_pass_cookie=>$hash,$real_session_cookie=>$session_id));
+
+		if ($colon_pos!==false)
+		{
+			ocp_setcookie($base,$cookie);
+			$_COOKIE[$base]=$cookie;
+		} else
+		{
+			ocp_setcookie($real_member_cookie,strval($id));
+			ocp_setcookie($real_pass_cookie,$hash);
+			ocp_setcookie($real_session_cookie,$session_id);
+			$_COOKIE[$real_member_cookie]=strval($id);
+			$_COOKIE[$real_pass_cookie]=$hash;
+			$_COOKIE[$real_session_cookie]=$session_id;
+		}
 	}
 
 	/**
@@ -1345,7 +1383,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 		}
 		if ($cookie_login)
 		{
-			$lookup=$this->connection->query_value_null_ok('sessions_keys','user_id',array('key_id'=>$password_hashed));
+			$lookup=$this->connection->query_value_null_ok('sessions_keys','user_id',array('key_id'=>md5($password_raw)));
 			if ($row['user_id']!==$lookup)
 			{
 				$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));

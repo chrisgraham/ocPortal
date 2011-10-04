@@ -56,7 +56,6 @@ function download_gallery_script()
 		header('Content-Disposition: filename="gallery-'.$cat.'.zip"');
 	else
 		header('Content-Disposition: attachment; filename="gallery-'.$cat.'.zip"');
-	header('Content-Transfer-Encoding: binary');
 
 	disable_php_memory_limit();
 

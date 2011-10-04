@@ -263,7 +263,7 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 		NULL,
 		$validated,
 		$explicit_allow?1:NULL,
-		false,
+		$explicit_allow,
 		array(
 			is_null($self_title)?($type.'_'.$id):($self_title), /* Prettier topic title, used if the forum driver supports topic descriptions (where we will instead store the technical back-reference) */
 			do_lang('COMMENT').': #'.$type.'_'.$id, /* Topic description, used if the forum driver supports topic descriptions */

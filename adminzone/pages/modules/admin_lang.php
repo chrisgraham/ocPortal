@@ -410,7 +410,6 @@ class Module_admin_lang
 			header('Content-Disposition: filename="ocportal-'.$lang.'.tar"');
 		else
 			header('Content-Disposition: attachment; filename="ocportal-'.$lang.'.tar"');
-		header('Content-Transfer-Encoding: binary');
 
 		require_code('tar');
 		require_code('lang_compile');

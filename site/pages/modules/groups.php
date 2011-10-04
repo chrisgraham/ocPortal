@@ -70,7 +70,7 @@ class Module_groups
 		$tree=array();
 		if ((!$require_permission_support) && (($max_depth>0) || (is_null($max_depth))))
 		{
-			$rows=$dont_care_about_categories?array():$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.g_name','g.id','text_original'),array('g_is_private_club'=>0));
+			$rows=$dont_care_about_categories?array():$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.g_name','g.id','text_original'),array('g_is_private_club'=>0,'g_is_hidden'=>0));
 			foreach ($rows as $row)
 			{
 				if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);

@@ -1254,12 +1254,12 @@ function key_pressed(event,key,no_error_if_bad)
 	{
 		for (var i=0;i<key.length;i++)
 		{
-			if (key[i]==null) {$,This specifies that control characters allowed}
+			if (key[i]==null) {$,This specifies that control characters allowed (arrow keys, backspace, etc)}
 			{
 				if ((event.keyCode) && ((window.anykeyokay) || (event.keyCode<48) || (event.keyCode==86) || (event.keyCode==91) || (event.keyCode==224)) && (event.keyCode!=32))
 				{
 					window.anykeyokay=true;
-					window.setTimeout( function() { window.anykeyokay=false; } , 200);
+					window.setTimeout( function() { window.anykeyokay=false; } , 5); // In case of double event for same keypress
 					return true;
 				}
 			} else

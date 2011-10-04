@@ -149,7 +149,7 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 	foreach ($special_fields as $field_num=>$field)
 	{
 		$ob=get_fields_hook($field['cf_type']);
-		$default=$field['cf_default'];
+		$default=get_param('field_'.strval($field['id']),$field['cf_default']);
 		if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
 		elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
 

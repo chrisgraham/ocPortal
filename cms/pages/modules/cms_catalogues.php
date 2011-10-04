@@ -332,7 +332,13 @@ class Module_cms_catalogues extends standard_aed_module
 		{
 			$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
 		}
-		$fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',NULL,'choose_catalogue_category',array('catalogue_name'=>$catalogue_name,'addable_filter'=>true),true,is_null($category_id)?'':strval($category_id)));
+		if ((!is_null($category_id)) && (is_null($id)) && (get_value('no_confirm_url_spec_cats')==='1')) // Adding, but defined category ID in URL, and set option saying not to ask for passed categories
+		{
+			$hidden->attach(form_input_hidden('category_id',strval($category_id)));
+		} else
+		{
+			$fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',NULL,'choose_catalogue_category',array('catalogue_name'=>$catalogue_name,'addable_filter'=>true),true,is_null($category_id)?'':strval($category_id)));
+		}
 
 		// Special fields
 		// ==============
@@ -351,7 +357,7 @@ class Module_cms_catalogues extends standard_aed_module
 		foreach ($special_fields as $field_num=>$field)
 		{
 			$ob=get_fields_hook($field['cf_type']);
-			$default=$field['cf_default'];
+			$default=get_param('field_'.strval($field['id']),$field['cf_default']);
 			if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
 			elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
 

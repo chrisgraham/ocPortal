@@ -442,10 +442,10 @@ class Module_filedump
 			$full=get_custom_file_base().'/uploads/filedump'.$place.$_FILES['file']['name'];
 			if (is_swf_upload(true))
 			{
-				@rename($_FILES['file']['tmp_name'],$full) OR warn_exit(do_lang_tempcode('FILE_MOVE_ERROR',escape_html($file),escape_html('uploads/filedump/'.$place)));
+				@rename($_FILES['file']['tmp_name'],$full) OR warn_exit(do_lang_tempcode('FILE_MOVE_ERROR',escape_html($file),escape_html('uploads/filedump'.$place)));
 			} else
 			{
-				@move_uploaded_file($_FILES['file']['tmp_name'],$full) OR warn_exit(do_lang_tempcode('FILE_MOVE_ERROR',escape_html($file),escape_html('uploads/filedump/'.$place)));
+				@move_uploaded_file($_FILES['file']['tmp_name'],$full) OR warn_exit(do_lang_tempcode('FILE_MOVE_ERROR',escape_html($file),escape_html('uploads/filedump'.$place)));
 			}
 			fix_permissions($full);
 			sync_file($full);

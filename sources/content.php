@@ -64,25 +64,27 @@ function content_get_details($content_type,$content_id)
  */
 function content_get_row($content_id,$cma_info)
 {
-	$id_is_string=array_key_exists('id_is_string',$info)?$info['id_is_string']:false;
-	if (is_array($info['id_field']))
+	$db=$GLOBALS[(substr($cma_info['table'],0,2)=='f_')?'FORUM_DB':'SITE_DB'];
+
+	$id_is_string=array_key_exists('id_is_string',$cma_info)?$cma_info['id_is_string']:false;
+	if (is_array($cma_info['id_field']))
 	{
 		$bits=explode(':',$content_id);
 		$where=array();
 		foreach ($bits as $i=>$bit)
 		{
-			$where[$info['id_field'][$i]]=$id_is_string?$bit:intval($bit);
+			$where[$cma_info['id_field'][$i]]=$id_is_string?$bit:intval($bit);
 		}
 	} else
 	{
 		if ($id_is_string)
 		{
-			$where=array($info['id_field']=>$content_id);
+			$where=array($cma_info['id_field']=>$content_id);
 		} else
 		{
-			$where=array($info['id_field']=>intval($content_id));
+			$where=array($cma_info['id_field']=>intval($content_id));
 		}
 	}
-	$_content=$info['connection']->query_select($info['table'].' r',array('r.*'),$where,'',1);
+	$_content=$db->query_select($cma_info['table'].' r',array('r.*'),$where,'',1);
 	return array_key_exists(0,$_content)?$_content[0]:NULL;
 }

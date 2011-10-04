@@ -43,11 +43,13 @@ If you do not have such access, you will need to set permissions as specified fo
 
 You also need to delete:
 [indent]
-[tt]themes/*/templates_cached/*/*.tcd[/tt] (So template cacheing can continue to function)
+[tt]themes/*/templates_cached/*/*.tcd[/tt] / [tt]themes/*/templates_cached/*/*.tcp[/tt] (So template cacheing can continue to function)
 [tt]lang_cached/*/*.lcd[/tt] (So language cacheing can continue to function)
 [/indent]
 (we could delete these files by clearing the cache, but the cache can only be cleared if they have write permissions to these files which you would need to set manually -- so you might as well just delete the files manually anyway)
 [/box]
+
+Lastly, you should clear the block cache from Admin Zone > Tools > Cleanup Tools.
 
 [title="2"]Database contents[/title]
 

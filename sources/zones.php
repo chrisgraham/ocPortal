@@ -973,6 +973,7 @@ function extract_module_functions($path,$functions,$params=NULL)
 		return $ret;
 	}
 
+	if (!is_file($path)) return array(NULL);
 	$file=unixify_line_format(file_get_contents($path),NULL,false,true);
 	global $ARB_COUNTER;
 

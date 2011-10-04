@@ -61,6 +61,16 @@ class Module_privacy
 	}
 	
 	/**
+	 * Standard modular entry-point finder function.
+	 *
+	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 */
+	function get_entry_points()
+	{
+		return is_guest()?array():array('misc'=>'EDIT_CPF');
+	}
+	
+	/**
 	 * Standard modular run function.
 	 *
 	 * @return tempcode	The result of execution.

@@ -48,7 +48,7 @@ class Module_members
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'MEMBERS','view'=>'VIEW_PROFILE'/*,'remote'=>'LEARN_ABOUT_REMOTE_LOGINS'*/);
+		return array('misc'=>'MEMBERS'/*,'remote'=>'LEARN_ABOUT_REMOTE_LOGINS'*/);
 	}
 
 	/**

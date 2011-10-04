@@ -24,7 +24,6 @@ if (!isset($_GET['testing']))
 		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 	else
 		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
-	header('Content-Transfer-Encoding: binary');
 } else
 {
 	header('Content-type: text/plain');

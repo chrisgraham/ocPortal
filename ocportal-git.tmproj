@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>themes/ollie/templates_custom/CATALOGUE_places_ENTRY_SCREEN.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -242,7 +244,7 @@
 			<key>filename</key>
 			<string>recommended.htaccess</string>
 			<key>lastUsed</key>
-			<date>2011-09-29T01:19:08Z</date>
+			<date>2011-10-03T20:18:55Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -1185,6 +1187,20 @@
 			<key>firstVisibleLine</key>
 			<integer>442</integer>
 		</dict>
+		<key>sources/fields.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>144</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>124</integer>
+		</dict>
 		<key>sources/forum/smf.php</key>
 		<dict>
 			<key>caret</key>
@@ -1254,20 +1270,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>sources/hooks/modules/admin_newsletter/catalogues.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>57</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>44</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_newsletter/cedi.php</key>
 		<dict>
@@ -1761,20 +1763,6 @@
 			<key>firstVisibleLine</key>
 			<integer>31</integer>
 		</dict>
-		<key>sources/hooks/systems/ajax_tree/choose_catalogue_category.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>59</integer>
-				<key>line</key>
-				<integer>72</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>54</integer>
-		</dict>
 		<key>sources/hooks/systems/ajax_tree/choose_gallery.php</key>
 		<dict>
 			<key>caret</key>
@@ -2176,6 +2164,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>77</integer>
+		</dict>
+		<key>sources_custom/hooks/systems/fields/float.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>64</integer>
+				<key>line</key>
+				<integer>110</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>90</integer>
 		</dict>
 		<key>sources_custom/miniblocks/.htaccess</key>
 		<dict>
@@ -3378,47 +3380,22 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>11</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>13</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>11</integer>
-			</dict>
-		</dict>
-		<key>themes/ollie/templates_custom/CATALOGUE_places_SUBCATEGORY.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>4</integer>
+				<integer>65</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>42</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>themes/ollie/templates_custom/CATALOGUE_places_ENTRY_SCREEN.tpl</string>
+		<string>sources/fields.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{701, 149}, {1179, 910}}</string>
+	<string>{{593, 169}, {1179, 910}}</string>
 </dict>
 </plist>

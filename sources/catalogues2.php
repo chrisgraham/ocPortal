@@ -77,19 +77,18 @@ function catalogue_file_script()
 		else
 			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
 	}
-	header('Content-Transfer-Encoding: binary');
 	header('Accept-Ranges: bytes');
 	
 	// Default to no resume
 	$from=0;
 	$new_length=$size;
 
+	@ini_set('zlib.output_compression','Off');
+
 	// They're trying to resume (so update our range)
 	$httprange=ocp_srv('HTTP_RANGE');
 	if (strlen($httprange)>0)
 	{
-		@ini_set('zlib.output_compression','Off');
-
 		$_range=explode('=',ocp_srv('HTTP_RANGE'));
 		if (count($_range)==2)
 		{
@@ -227,11 +226,11 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 
 			if ($_type=='float')
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>floatval($_default));
+				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:floatval($_default));
 			}
-			if ($_type=='integer')
+			elseif ($_type=='integer')
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>intval($_default));
+				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:intval($_default));
 			} else
 			{
 				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>$_default);
@@ -699,11 +698,11 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 		if ($sup_table_name=='float')
 		{
-			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>floatval($val));
+			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>((is_null($val)) || ($val==''))?NULL:floatval($val));
 		}
-		if ($sup_table_name=='integer')
+		elseif ($sup_table_name=='integer')
 		{
-			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>intval($val));
+			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>((is_null($val)) || ($val==''))?NULL:intval($val));
 		} else
 		{
 			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>$val);
@@ -777,11 +776,11 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 		{
 			if ($sup_table_name=='float')
 			{
-				$map=array('cv_value'=>floatval($val));
+				$map=array('cv_value'=>((is_null($val)) || ($val==''))?NULL:floatval($val));
 			}
-			if ($sup_table_name=='integer')
+			elseif ($sup_table_name=='integer')
 			{
-				$map=array('cv_value'=>intval($val));
+				$map=array('cv_value'=>((is_null($val)) || ($val==''))?NULL:intval($val));
 			} else
 			{
 				$map=array('cv_value'=>$val);

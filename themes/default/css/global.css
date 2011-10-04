@@ -2237,7 +2237,7 @@ th.meta_data_title {
 }
 
 .input_colour, .input_list, .input_line, .input_integer,
-.input_author, .input_username, .input_colour, .input_email,
+.input_author, .input_username, .input_colour, .input_email, .input_codename,
 .input_tick, .input_float, .input_text, .input_upload, .input_radio {
 }
 
@@ -3328,8 +3328,8 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 
 .tab {
 	float: left;
-	background: url('{$IMG,tab}');
-	padding: 3px 5px 0 5px;
+	background: url('{$IMG,tab}') !important;
+	padding: 3px 5px 0 5px !important;
 	height: 20px;
 	text-align: center;
 	cursor: pointer;
