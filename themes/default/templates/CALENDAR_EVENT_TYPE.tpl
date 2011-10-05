@@ -11,5 +11,5 @@
 	<div class="event_interested">
 		{TYPE*}
 	</div>
+	<br />
 {+END}
-<br />

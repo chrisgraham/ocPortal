@@ -322,7 +322,7 @@ function delete_download_category($category_id)
 	require_code('seo2');
 	seo_meta_erase_storage('downloads_category',strval($category_id));
 
-	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads','category_name'=>$category_id));
+	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
 	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
 
 	decache('main_download_category');

@@ -605,7 +605,7 @@ function check_submit_permission($range,$cats=NULL,$page=NULL)
  * @param  MEMBER			The member being checked whether to have the access
  * @param  IP				The member's IP address
  * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?mixed			Either the ID code of a privilege, an array of alternatives that are acceptable (NULL: none required)
+ * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
  * @return boolean		Whether the member can submit in this range
  */
 function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
@@ -675,7 +675,7 @@ function check_edit_permission($range,$resource_owner,$cats=NULL,$page=NULL)
  * @param  MEMBER			The member being checked for access
  * @param  ?MEMBER		The member that owns this resource (NULL: no-one)
  * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?mixed			Either the ID code of a privilege, an array of alternatives that are acceptable (NULL: none required)
+ * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
  * @return boolean		Whether the member may edit the resource
  */
 function has_edit_permission($range,$member,$resource_owner,$page,$cats=NULL)
@@ -711,7 +711,7 @@ function check_delete_permission($range,$resource_owner,$cats=NULL,$page=NULL)
  * @param  MEMBER			The member being checked for access
  * @param  ?MEMBER		The member that owns this resource (NULL: no-one)
  * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?mixed			Either the ID code of a privilege, an array of alternatives that are acceptable (NULL: none required)
+ * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
  * @return boolean		Whether the member may delete the resource
  */
 function has_delete_permission($range,$member,$resource_owner,$page,$cats=NULL)

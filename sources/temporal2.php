@@ -58,7 +58,11 @@ function _get_input_date($stub,$get_also=false)
 	$time=mktime($hour,$minute,0,$month,$day,$year);
 
 	if (($year>=1970) || (@strftime('%Y',@mktime(0,0,0,1,1,1963))=='1963')) // Only try and do timezone conversion if we can do proper maths this far back
-		$time=usertime_to_servertime($time);
+	{
+		$timezone=post_param('timezone',get_users_timezone());
+		$amount_forward=tz_time($time,$timezone)-$time;
+		$time=$time-$amount_forward;
+	}
 
 	return $time;
 }

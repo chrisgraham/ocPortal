@@ -81,22 +81,30 @@
 					{+END}
 
 					<tbody>
-						<tr>
-							<th>{!TIME}</th>
-							<td>
-								{+START,IF,{$VALUE_OPTION,html5}}
-									<time class="dtstart" datetime="{TIME_VCAL*}" itemprop="startDate">{TIME*}</time>
-								{+END}
-								{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-									<abbr class="dtstart" title="{TIME_VCAL*}">{TIME*}</abbr>
-								{+END}
-							</td>
-						</tr>
+						{+START,IF_NON_EMPTY,{TIME}}
+							<tr>
+								<th>{!TIME}</th>
+								<td>
+									{+START,IF,{$VALUE_OPTION,html5}}
+										<time class="dtstart" datetime="{TIME_VCAL*}" itemprop="startDate">{TIME*}</time>
+									{+END}
+									{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
+										<abbr class="dtstart" title="{TIME_VCAL*}">{TIME*}</abbr>
+									{+END}
+								</td>
+							</tr>
+						{+END}
 						{+START,IF_NON_EMPTY,{DAY}}
 						<tr>
 							<th>{!DATE}</th>
 							<td>{DAY*}</td>
 						</tr>
+						{+END}
+						{+START,IF_PASSED,TIMEZONE}
+							<tr>
+								<th>{!TIMEZONE}</th>
+								<td>{TIMEZONE*}</td>
+							</tr>
 						{+END}
 						<tr>
 							<th>{!TYPE}</th>

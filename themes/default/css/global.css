@@ -1553,6 +1553,7 @@ input.input_box_label_within {
 	float: right;
 	{+START,IF,{$NOT,{$MOBILE}}}
 		margin-left: 10px;
+		margin-right: 26px;
 	{+END}
 	{+START,IF,{$MOBILE}}
 		width: 33%;

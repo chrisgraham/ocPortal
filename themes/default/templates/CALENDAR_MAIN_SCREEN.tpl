@@ -79,34 +79,38 @@
 	<div class="toggler_main" id="interests" style="{$JS_ON,display: none,}">
 		<div class="float_surrounder">
 			<div class="medborder_box">
-				<div class="right medborder event_interest_box">
-					<form title="{!INTERESTS}" method="post" action="{INTERESTS_URL*}">
-						<p><strong>{!DESCRIPTION_INTERESTS}</strong></p>
+				{+START,IF_NON_EMPTY,{EVENT_TYPES_1}}
+					<div class="right medborder event_interest_box">
+						<form title="{!INTERESTS}" method="post" action="{INTERESTS_URL*}">
+							<p><strong>{!DESCRIPTION_INTERESTS}</strong></p>
 
-						<div class="calendar_main_page_hidden_data">
-							{EVENT_TYPES_1}
-						</div>
+							<div class="calendar_main_page_hidden_data">
+								{EVENT_TYPES_1}
+							</div>
 		
-						<div class="proceed_button">
-							<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!INTERESTS}" />
-						</div>
-					</form>
-				</div>
-				<div class="medborder event_interest_box">
-					<form title="{!FILTER}" action="{$URL_FOR_GET_FORM*,{FILTER_URL}}" method="get">
-						{$HIDDENS_FOR_GET_FORM,{FILTER_URL}}
+							<div class="proceed_button">
+								<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!INTERESTS}" />
+							</div>
+						</form>
+					</div>
+				{+END}
+				{+START,IF_NON_EMPTY,{EVENT_TYPES_2}}
+					<div class="medborder event_interest_box">
+						<form title="{!FILTER}" action="{$URL_FOR_GET_FORM*,{FILTER_URL}}" method="get">
+							{$HIDDENS_FOR_GET_FORM,{FILTER_URL}}
 
-						<p><strong>{!DESCRIPTION_INTERESTS_2}</strong></p>
+							<p><strong>{!DESCRIPTION_INTERESTS_2}</strong></p>
 
-						<div class="calendar_main_page_hidden_data">
-							{EVENT_TYPES_2}
-						</div>
+							<div class="calendar_main_page_hidden_data">
+								{EVENT_TYPES_2}
+							</div>
 		
-						<div class="proceed_button">
-							<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!FILTER}" />
-						</div>
-					</form>
-				</div>
+							<div class="proceed_button">
+								<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!FILTER}" />
+							</div>
+						</form>
+					</div>
+				{+END}
 			</div>
 		</div>
 	</div>

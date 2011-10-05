@@ -1228,7 +1228,7 @@ class Hook_ocp_merge
 		{
 			if (import_check_if_imported('event_type',strval($row['id']))) continue;
 
-			$id_new=add_event_type($this->get_lang_string($db,$row['t_title']),$row['t_logo']);
+			$id_new=add_event_type($this->get_lang_string($db,$row['t_title']),$row['t_logo'],array_key_exists('t_external_feed',$row)?$row['t_external_feed']:'');
 
 			import_id_remap_put('event_type',strval($row['id']),$id_new);
 		}
@@ -1259,7 +1259,7 @@ class Hook_ocp_merge
 			if (!array_key_exists('allow_comments',$row)) $row['allow_comments']=1;
 			if (!array_key_exists('allow_trackbacks',$row)) $row['allow_trackbacks']=1;
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_calendar_event($row['e_geo_position'],$row['e_groups_access'],$row['e_groups_modify'],$type,$row['e_recurrence'],$row['e_recurrences'],array_key_exists('e_seg_recurrences',$row)?$row['e_seg_recurrences']:0,$this->get_lang_string($db,$row['e_title']),$this->get_lang_string($db,$row['e_content']),$row['e_priority'],$row['e_is_public'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_hour'],$row['e_start_minute'],$row['e_end_year'],$row['e_end_month'],$row['e_end_day'],$row['e_end_hour'],$row['e_end_minute'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$row['e_views'],$row['e_add_date'],$row['e_edit_date'],$id);
+			$id_new=add_calendar_event($type,$row['e_recurrence'],$row['e_recurrences'],array_key_exists('e_seg_recurrences',$row)?$row['e_seg_recurrences']:0,$this->get_lang_string($db,$row['e_title']),$this->get_lang_string($db,$row['e_content']),$row['e_priority'],$row['e_is_public'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_hour'],$row['e_start_minute'],$row['e_end_year'],$row['e_end_month'],$row['e_end_day'],$row['e_end_hour'],$row['e_end_minute'],array_key_exists('e_timezone',$row)?$row['e_timezone']:NULL,array_key_exists('e_do_timezone_conv',$row)?$row['e_do_timezone_conv']:1,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$row['e_views'],$row['e_add_date'],$row['e_edit_date'],$id);
 
 			import_id_remap_put('event',strval($row['id']),$id_new);
 		}
@@ -1708,6 +1708,9 @@ class Hook_ocp_merge
 						break;
 					case 'downloads':
 						$module='download';
+						break;
+					case 'calendar':
+						$module='event_type';
 						break;
 					case 'catalogues_catalogue':
 						$module='catalogue';

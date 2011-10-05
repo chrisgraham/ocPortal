@@ -950,6 +950,10 @@ function tz_localtime($time, $zone)
  */
 function tz_time($time, $zone)
 {
+	if ($zone!=get_users_timezone())
+	{
+		initialise_timezone_data();
+	}
 	$details=tz_localtime($time, $zone);
 	return mktime($details[2],$details[1],$details[0],$details[4]+1,$details[3],$details[5]+1900);
 }

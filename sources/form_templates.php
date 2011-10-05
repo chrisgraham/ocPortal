@@ -1308,9 +1308,10 @@ function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$nu
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?boolean		Whether this is rendered in pink as a required field (NULL: depend on $null_ok)
  * @param  boolean		Whether to input date for this field (if false, will just do time)
+ * @param  ID_TEXT		Timezone to input in
  * @return tempcode		The input field
  */
-function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true)
+function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true,$timezone=NULL)
 {
 	if (is_null($required)) $required=!$null_ok;
 
@@ -1337,6 +1338,8 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 	if ((is_array($default_time)) && ($default_time[4]<1970) && (@strftime('%Y',@mktime(0,0,0,1,1,1963))!='1963')) // Some systems can't do negative timestamps. Actually the maximum negative integer size is also an issue
 	{
 		list($default_minute,$default_hour,$default_month,$default_day,$default_year)=$default_time;
+		if (is_null($default_minute)) $default_minute=0;
+		if (is_null($default_hour)) $default_hour=0;
 	} else
 	{
 		if (is_array($default_time))
@@ -1350,11 +1353,15 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 				$default_time=mktime($default_hour,$default_minute,0,$default_month,$default_day,$default_year);
 			}
 		}
-	
+
 		$_default_time=filter_form_field_default($stub,is_null($default_time)?'':strval($default_time));
 		$default_time=($_default_time=='')?NULL:intval($_default_time);
 
-		if (!is_null($default_time)) $default_time=servertime_to_usertime($default_time);
+		if (!is_null($default_time))
+		{
+			$default_time=tz_time($default_time,$timezone);
+			if (is_null($timezone)) $timezone=get_users_timezone();
+		}
 
 		$default_minute=is_null($default_time)?NULL:intval(date('i',$default_time));
 		$default_hour=is_null($default_time)?NULL:intval(date('H',$default_time));

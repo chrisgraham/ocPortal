@@ -30,8 +30,9 @@ class Hook_attachments_calendar
 	 */
 	function run($id,$connection)
 	{
-		$info=$connection->query_select('calendar_events',array('e_submitter','e_is_public'),array('id'=>$id),'',1);
+		$info=$connection->query_select('calendar_events',array('e_submitter','e_is_public','e_type'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$info)) return false;
+		if (!has_category_access(get_member(),'calendar',strval($info['e_type']))) return false;
 		if ($info[0]['e_is_public']==1) return true;
 		if ($info[0]['e_submitter']==get_member()) return true;
 		return false;

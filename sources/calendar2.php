@@ -21,9 +21,6 @@
 /**
  * Add a calendar event.
  *
- * @param  SHORT_TEXT		A geopositioning code for where the event is happening (not currently used by ocPortal - may be removed)
- * @param  SHORT_TEXT		A comma-separated list of usergroups that have access (not currently used by ocPortal - may be removed)
- * @param  SHORT_TEXT		A comma-separated list of usergroups that have write access (not currently used by ocPortal - may be removed)
  * @param  AUTO_LINK			The event type
  * @param  SHORT_TEXT		The recurrence code (set to 'none' for no recurrences: blank means infinite and will basically time-out ocPortal)
  * @param  ?integer			The number of recurrences (NULL: none/infinite)
@@ -43,6 +40,8 @@
  * @param  ?integer			The day the event ends at (NULL: not a multi day event)
  * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
  * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
+ * @param  ID_TEXT			The timezone for the event (NULL: current user's timezone)
+ * @param  BINARY				Whether the time should be presented in the viewer's own timezone
  * @param  BINARY				Whether the event has been validated
  * @param  BINARY				Whether the event may be rated
  * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
@@ -55,10 +54,11 @@
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
  * @return AUTO_LINK			The ID of the event
  */
-function add_calendar_event($geo_position,$groups_access,$groups_modify,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_date=NULL,$edit_date=NULL,$id=NULL)
+function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=true,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_date=NULL,$edit_date=NULL,$id=NULL)
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
+	if (is_null($timezone)) $timezone=get_users_timezone();
 
 	require_code('comcode_check');
 
@@ -72,7 +72,6 @@ function add_calendar_event($geo_position,$groups_access,$groups_modify,$type,$r
 		'e_content'=>0,
 		'e_add_date'=>$add_date,
 		'e_edit_date'=>$edit_date,
-		'e_geo_position'=>$geo_position,
 		'e_recurrence'=>$recurrence,
 		'e_recurrences'=>$recurrences,
 		'e_seg_recurrences'=>$seg_recurrences,
@@ -86,9 +85,9 @@ function add_calendar_event($geo_position,$groups_access,$groups_modify,$type,$r
 		'e_end_day'=>$end_day,
 		'e_end_hour'=>$end_hour,
 		'e_end_minute'=>$end_minute,
+		'e_timezone'=>$timezone,
+		'e_do_timezone_conv'=>$do_timezone_conv,
 		'e_is_public'=>$is_public,
-		'e_groups_access'=>$groups_access,
-		'e_groups_modify'=>$groups_modify,
 		'e_priority'=>$priority,
 		'e_type'=>$type,
 		'validated'=>$validated,
@@ -108,7 +107,7 @@ function add_calendar_event($geo_position,$groups_access,$groups_modify,$type,$r
 
 	decache('side_calendar');
 
-	if ($is_public==1)
+	if (($is_public==1) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 	{
 		$timestamp=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
 
@@ -129,9 +128,6 @@ function add_calendar_event($geo_position,$groups_access,$groups_modify,$type,$r
  * Edit a calendar event.
  *
  * @param  AUTO_LINK			The ID of the event
- * @param  SHORT_TEXT		A geopositioning code for where the event is happening
- * @param  SHORT_TEXT		A comma-separated list of usergroups that have access
- * @param  SHORT_TEXT		A comma-separated list of usergroups that have write access
  * @param  ?AUTO_LINK		The event type (NULL: default)
  * @param  SHORT_TEXT		The recurrence code
  * @param  ?integer			The number of recurrences (NULL: none/infinite)
@@ -151,6 +147,8 @@ function add_calendar_event($geo_position,$groups_access,$groups_modify,$type,$r
  * @param  ?integer			The day the event ends at (NULL: not a multi day event)
  * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
  * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
+ * @param  ID_TEXT			The timezone for the event (NULL: current user's timezone)
+ * @param  BINARY				Whether the time should be presented in the viewer's own timezone
  * @param  SHORT_TEXT		Meta keywords
  * @param  LONG_TEXT			Meta description
  * @param  BINARY				Whether the download has been validated
@@ -159,7 +157,7 @@ function add_calendar_event($geo_position,$groups_access,$groups_modify,$type,$r
  * @param  BINARY				Whether the download may be trackbacked
  * @param  LONG_TEXT			Hidden notes pertaining to the download
  */
-function edit_calendar_event($id,$geo_position,$groups_access,$groups_modify,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
+function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
 {
 	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','e_content','e_submitter'),array('id'=>$id),'',1);
 	$myrow=$myrows[0];
@@ -178,7 +176,6 @@ function edit_calendar_event($id,$geo_position,$groups_access,$groups_modify,$ty
 		'e_title'=>lang_remap($myrow['e_title'],$title),
 		'e_content'=>update_lang_comcode_attachments($myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']),
 		'e_edit_date'=>time(),
-		'e_geo_position'=>$geo_position,
 		'e_recurrence'=>$recurrence,
 		'e_recurrences'=>$recurrences,
 		'e_seg_recurrences'=>$seg_recurrences,
@@ -192,9 +189,9 @@ function edit_calendar_event($id,$geo_position,$groups_access,$groups_modify,$ty
 		'e_end_day'=>$end_day,
 		'e_end_hour'=>$end_hour,
 		'e_end_minute'=>$end_minute,
+		'e_timezone'=>$timezone,
+		'e_do_timezone_conv'=>$do_timezone_conv,
 		'e_is_public'=>$is_public,
-		'e_groups_access'=>$groups_access,
-		'e_groups_modify'=>$groups_modify,
 		'e_priority'=>$priority,
 		'e_type'=>$type,
 		'validated'=>$validated,
@@ -206,7 +203,7 @@ function edit_calendar_event($id,$geo_position,$groups_access,$groups_modify,$ty
 
 	decache('side_calendar');
 
-	if ($is_public==1)
+	if (($is_public==1) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 	{
 		$timestamp=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
 
@@ -357,13 +354,15 @@ function facebook_wall_event_update($id,$title,$message,$validated,$type,$update
  *
  * @param  SHORT_TEXT		The title of the event type
  * @param  ID_TEXT			The theme image code
+ * @param  URLPATH			URL to external feed to associate with this event type
  * @return AUTO_LINK			The ID of the event type
  */
-function add_event_type($title,$logo)
+function add_event_type($title,$logo,$external_feed='')
 {
 	$id=$GLOBALS['SITE_DB']->query_insert('calendar_types',array(
 		't_title'=>insert_lang($title,2),
-		't_logo'=>$logo
+		't_logo'=>$logo,
+		't_external_feed'=>$external_feed,
 	),true);
 
 	log_it('ADD_EVENT_TYPE',strval($id),$title);
@@ -376,8 +375,9 @@ function add_event_type($title,$logo)
  * @param  AUTO_LINK			The ID of the event type
  * @param  SHORT_TEXT		The title of the event type
  * @param  ID_TEXT			The theme image code
+ * @param  URLPATH			URL to external feed to associate with this event type
  */
-function edit_event_type($id,$title,$logo)
+function edit_event_type($id,$title,$logo,$external_feed)
 {
 	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_types',array('t_title','t_logo'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -388,7 +388,8 @@ function edit_event_type($id,$title,$logo)
 
 	$GLOBALS['SITE_DB']->query_update('calendar_types',array(
 		't_title'=>lang_remap($myrow['t_title'],$title),
-		't_logo'=>$logo
+		't_logo'=>$logo,
+		't_external_feed'=>$external_feed,
 	),array('id'=>$id),'',1);
 
 	require_code('themes2');
@@ -417,6 +418,8 @@ function delete_event_type($id)
 
 	log_it('DELETE_EVENT_TYPE',strval($id),get_translated_text($myrow['t_title']));
 	delete_lang($myrow['t_title']);
+
+	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'calendar','category_name'=>strval($id)));
 
 	require_code('themes2');
 	tidy_theme_img_code(NULL,$myrow['t_logo'],'calendar_types','t_logo');

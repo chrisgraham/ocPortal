@@ -62,8 +62,8 @@ function edit_ticket_type($old_ticket_type,$new_ticket_type,$guest_emails_mandat
 function delete_ticket_type($ticket_type)
 {
 	$_ticket_type=get_translated_text($ticket_type);
-	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>$_ticket_type));
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'tickets','category_name'=>$_ticket_type));
+	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
+	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
 
 	//delete_lang($ticket_type);	Needed for if existing ticket looked up
 

@@ -99,9 +99,9 @@ class Block_side_calendar
 			{
 				$happening=$happenings[$hap_i];
 
-				list($e_id,$event,$from,$to)=$happening;
+				list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
 
-				$view_id=date('Y-m',$from);
+				$view_id=date('Y-m',$real_from);
 
 				if (is_numeric($e_id))
 				{
@@ -113,7 +113,7 @@ class Block_side_calendar
 				}
 				$icon=$event['t_logo'];
 				$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
-				$date=locale_filter(date(do_lang('calendar_date'),$from));
+				$date=locale_filter(date(do_lang('calendar_date'),$real_from));
 				$_day=intval(date('d',$from));
 				if (!array_key_exists($_day,$entries))
 				{
@@ -125,15 +125,16 @@ class Block_side_calendar
 					$priorities[$_day]=min($priorities[$_day],$event['e_priority']);
 				}
 
-				$date2=date('D:H:i',$to);
-				$explode3=explode(':',$date2);
-				$test=date('d',$to);
-				$test2=date('d',$from);
-				if ((!is_null($to)) && ((intval($test)>intval($test2)) || (intval(date('m',$to))!=intval(date('m',$from))) || (intval(date('Y',$to))!=intval(date('Y',$from)))))
+				if (!is_null($to))
 				{
-					$ntime=mktime(0,0,0,intval(date('m',$from)),intval($test2)+1,intval(date('Y',$from)));
-					if ($ntime<$period_end)
-						$happenings[]=array($e_id,$event,$ntime,$to);
+					$test=date('d',$to);
+					$test2=date('d',$from);
+					if (((intval($test)>intval($test2)) || (intval(date('m',$to))!=intval(date('m',$from))) || (intval(date('Y',$to))!=intval(date('Y',$from)))))
+					{
+						$ntime=mktime(0,0,0,intval(date('m',$from)),intval($test2)+1,intval(date('Y',$from)));
+						if ($ntime<$period_end)
+							$happenings[]=array($e_id,$event,$ntime,$to,$real_from,$real_to);
+					}
 				}
 			}
 	
@@ -210,22 +211,31 @@ class Block_side_calendar
 		{
 			$happening=$happenings[$hap_i];
 
-			list($e_id,$event,$from,$to)=$happening;
+			list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
 			$__day=date('Y-m-d',$from);
 			$bits=explode('-',$__day);
 			$day_start=mktime(12,0,0,intval($bits[1]),intval($bits[2]),intval($bits[0]));
 			if (!array_key_exists($day_start,$days))
 			{
-				$days[$day_start]=array('TIMESTAMP'=>strval($day_start),'TIME'=>get_timezoned_date(usertime_to_servertime($day_start),false),'EVENTS'=>array());
+				$days[$day_start]=array('TIMESTAMP'=>strval($day_start),'TIME'=>get_timezoned_date($day_start,false),'EVENTS'=>array());
 			}
 
-			$view_id=date('Y-m',$from);
+			$view_id=date('Y-m',$real_from);
 
 			$icon=$event['t_logo'];
 			$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 			$map2=$filter+array('page'=>'calendar','type'=>'view','id'=>$event['e_id'],'day'=>$__day,'date'=>$view_id,'back'=>'month');
 			$view_url=build_url($map2,$zone);
-			$days[$day_start]['EVENTS'][]=array('DESCRIPTION'=>get_translated_tempcode($event['e_content']),'TIMESTAMP'=>strval($from),'TIME'=>get_timezoned_time(usertime_to_servertime($from)),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','TITLE'=>$title,'VIEW_URL'=>$view_url,'ICON'=>$icon);
+			$days[$day_start]['EVENTS'][]=array('DESCRIPTION'=>get_translated_tempcode($event['e_content']),'TIMESTAMP'=>strval($real_from),'TIME'=>($real_from!=$from)?do_lang('EVENT_CONTINUES'):get_timezoned_time($real_from),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','TITLE'=>$title,'VIEW_URL'=>$view_url,'ICON'=>$icon);
+
+			$test=date('d',$to);
+			$test2=date('d',$from);
+			if ((!is_null($to)) && ((intval($test)>intval($test2)) || (intval(date('m',$to))!=intval(date('m',$from))) || (intval(date('Y',$to))!=intval(date('Y',$from)))))
+			{
+				$ntime=mktime(0,0,0,intval(date('m',$from)),intval($test2)+1,intval(date('Y',$from)));
+				if ($ntime<$period_end)
+					$happenings[]=array($e_id,$event,$ntime,$to,$real_from,$real_to);
+			}
 		}
 
 		return do_template('BLOCK_SIDE_CALENDAR_LISTING',array('_GUID'=>'52afb27d866fa6b620a55d223e2fd3ae','DAYS'=>$days,'CALENDAR_URL'=>$calendar_url,'TITLE'=>$box_title));

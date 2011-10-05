@@ -62,13 +62,30 @@ function date_from_week_of_year($year,$week)
 }
 
 /**
+ * Put a timestamp into the correct timezone for being reported onto the calendar.
+ *
+ * @param  TIME			Timestamp
+ * @param  ID_TEXT		The timezone for the event (NULL: current user's timezone)
+ * @param  boolean		Whether the time should be presented in the viewer's own timezone
+ * @return TIME			Altered timestamp
+ */
+function cal_servertime_to_usertime($time_raw,$timezone,$do_timezone_conv)
+{
+	if ($do_timezone_conv) $timezone=get_users_timezone(); // Instead of given timezone
+
+	return tz_time($time_raw,$timezone);
+}
+
+/**
  * Find a list of pairs specifying the times the event occurs, for 20 years into the future.
  *
- * @param  ?integer		The year the event starts at. This and the below are in server time (NULL: default)
- * @param  ?integer		The month the event starts at (NULL: default)
- * @param  ?integer		The day the event starts at (NULL: default)
- * @param  ?integer		The hour the event starts at (NULL: default)
- * @param  ?integer		The minute the event starts at (NULL: default)
+ * @param  ID_TEXT		The timezone for the event (NULL: current user's timezone)
+ * @param  BINARY			Whether the time should be presented in the viewer's own timezone
+ * @param  integer		The year the event starts at. This and the below are in server time
+ * @param  integer		The month the event starts at
+ * @param  integer		The day the event starts at
+ * @param  integer		The hour the event starts at
+ * @param  integer		The minute the event starts at
  * @param  ?integer		The year the event ends at (NULL: not a multi day event)
  * @param  ?integer		The month the event ends at (NULL: not a multi day event)
  * @param  ?integer		The day the event ends at (NULL: not a multi day event)
@@ -78,9 +95,9 @@ function date_from_week_of_year($year,$week)
  * @param  ?integer		The number of recurrences (NULL: none/infinite)
  * @param  ?TIME			The timestamp that found times must exceed. In user-time (NULL: now)
  * @param  ?TIME			The timestamp that found times must not exceed. In user-time (NULL: 20 years time)
- * @return array			A list of pairs for period times (timestamps, in user-time)
+ * @return array			A list of pairs for period times (timestamps, in user-time). Actually quartets, 'window-bound timestamps' is first pair in quartet, then 'true coverage timestamps' is second pair
  */
-function find_periods_recurrence($start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences,$period_start=NULL,$period_end=NULL)
+function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences,$period_start=NULL,$period_end=NULL)
 {
 	if ($recurrences===0) return array();
 
@@ -101,34 +118,47 @@ function find_periods_recurrence($start_year,$start_month,$start_day,$start_hour
 		$mask_len=1;
 	}
 
+	$a=0;
+
 	$dif_day=0;
 	$dif_month=0;
 	$dif_year=0;
-	switch ($recurrence)
+	$dif=servertime_to_usertime()-servertime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year));
+	switch ($recurrence) // If a long way out of range, accelerate forward before steadedly looping forward till we might find a match (doesn't jump fully forward, due to possibility of timezones complicating things)
 	{
 		case 'daily':
 			$dif_day=1;
+			if ($dif>60*60*24*10)
+				$start_day+=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)));
 			break;
 		case 'weekly':
 			$dif_day=7;
+			if ($dif>60*60*24*70)
+				$start_day+=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)))-70;
 			break;
 		case 'monthly':
 			$dif_month=1;
+			if ($dif>60*60*24*31*10)
+				$start_month+=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*31.0)))-10;
 			break;
 		case 'yearly':
 			$dif_year=1;
+			if ($dif>60*60*24*365*10)
+				$start_year+=$dif_year*intval(floor(floatval($dif)/(60.0*60.0*24.0*365.0)))-1;
 			break;
 	}
 
-	$a=0;
 	do
 	{
-		$a=servertime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year));
-		$b=is_null($end_year)?NULL:servertime_to_usertime(mktime($end_hour,$end_minute,0,$end_month,$end_day,$end_year));
+		$a=cal_servertime_to_usertime(mktime(is_null($start_hour)?0:$start_hour,is_null($start_minute)?0:$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv);
+		$b=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?23:$end_hour,is_null($end_minute)?59:$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv);
 
-		if (($a>=$period_start) && ($a<$period_end) && (in_array($mask[$i%$mask_len],array('1','y'))))
+		$starts_within=(($a>=$period_start) && ($a<$period_end));
+		$ends_within=(($b>$period_start) && ($b<$period_end));
+		$spans=(($a<$period_start) && ($b>$period_end));
+		if (($starts_within || $ends_within || $spans) && (in_array($mask[$i%$mask_len],array('1','y'))))
 		{
-			$times[]=array($a,$b);
+			$times[]=array(max($period_start,$a),min($period_end,$b),$a,$b);
 		}
 		$i++;
 
@@ -161,6 +191,9 @@ function nice_get_event_types($it=NULL)
 	$types=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
 	foreach ($types as $type)
 	{
+		if (!has_category_access(get_member(),'calendar',strval($type['id']))) continue;
+		if (!has_submit_permission('low',get_member(),get_ip_address(),'cms_calendar',array('calendar',$type['id']))) continue;
+
 		if ($type['id']!=db_get_first_id())
 			$type_list->attach(form_input_list_entry(strval($type['id']),$type['id']==$it,get_translated_text($type['t_title'])));
 		else $first_type=$type;
@@ -187,8 +220,8 @@ function regenerate_event_reminder_jobs($id,$force=false)
 	$GLOBALS['SITE_DB']->query_delete('calendar_jobs',array('j_event_id'=>$id));
 
 	$period_start=$force?0:NULL;
-	$recurrences=find_periods_recurrence($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],min(1,$event['e_recurrences']),$period_start);
-	if (array_key_exists(0,$recurrences))
+	$recurrences=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?23:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],$event['e_recurrence'],min(1,$event['e_recurrences']),$period_start);
+	if ((array_key_exists(0,$recurrences)) && ($recurrences[0][0]==$recurrences[0][2]/*really starts in window, not just spanning it*/))
 	{
 		if ($event['e_type']==db_get_first_id()) // Add system command job if necessary
 		{
@@ -228,15 +261,17 @@ function regenerate_event_reminder_jobs($id,$force=false)
  *
  * @param  TIME				From time
  * @param  TIME				To time
+ * @param  boolean			Whether time is included in this date range
  * @return string				Textual specially-formatted range
  */
-function date_range($from,$to)
+function date_range($from,$to,$do_time=true)
 {
-	if ($to-$from>60*60*24)
+	if (($to-$from>60*60*24) || (!$do_time))
 	{
 		$_length=do_lang('DAYS',integer_format(intval(round(($to-$from)/(60*60*24.0)))));
-		$date=locale_filter(date(do_lang('calendar_date_range_single'),$from));
-		$date2=locale_filter(date(do_lang('calendar_date_range_single'),$to));
+		if (!$do_time) return $_length;
+		$date=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$from));
+		$date2=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$to));
 	} else
 	{
 		// Duration between times
@@ -297,27 +332,91 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 
 	if (addon_installed('syndication_blocks'))
 	{
-		// Overlay some RSS
-		$event_types=NULL;
+		// Determine what feeds to overlay
+		$feed_urls_todo=array();
 		for ($i=0;$i<10;$i++)
 		{
-			$rss_url=post_param('feed_'.strval($i),ocp_admirecookie('feed_'.strval($i),''));
+			$feed_url=post_param('feed_'.strval($i),ocp_admirecookie('feed_'.strval($i),''));
 			require_code('users_active_actions');
-			ocp_setcookie('feed_'.strval($i),$rss_url);
-			if (($rss_url!='') && (preg_match('#^[\w\d\-\_]*$#',$rss_url)==0))
+			ocp_setcookie('feed_'.strval($i),$feed_url);
+			if (($feed_url!='') && (preg_match('#^[\w\d\-\_]*$#',$feed_url)==0))
+				$feed_urls_todo[$feed_url]=NULL;
+		}
+		$_event_types=list_to_map('id',$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title','t_logo','t_external_feed')));
+		foreach ($_event_types as $j=>$_event_type)
+		{
+			if (($_event_type['t_external_feed']!='') && ((is_null($filter)) || (!array_key_exists($_event_type['id'],$filter)) || ($filter[$_event_type['id']]==1)) && (has_category_access(get_member(),'calendar',strval($_event_type['id']))))
+				$feed_urls_todo[$_event_type['t_external_feed']]=$_event_type['id'];
+			
+			$_event_types[$j]['text_original']=get_translated_text($_event_type['t_title']);
+		}
+		$event_types=collapse_2d_complexity('text_original','t_logo',$_event_types);
+
+		// Overlay it
+		foreach ($feed_urls_todo as $feed_url=>$event_type)
+		{
+			$temp_file_path=ocp_tempnam('feed');
+			require_code('files');
+			$write_to_file=fopen($temp_file_path,'wb');
+			http_download_file($feed_url,1024*512,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$write_to_file);
+
+			if (($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE']=='text/calendar') || ($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE']=='application/octet-stream'))
 			{
-				if (is_null($event_types))
-				{
-					$_event_types=$GLOBALS['SITE_DB']->query_select('calendar_types',array('t_title','t_logo'));
-					foreach ($_event_types as $j=>$_event_type)
+				$data=file_get_contents($temp_file_path);
+				
+				require_code('calendar_ical');
+
+				$whole=end(explode('BEGIN:VCALENDAR',$data));
+
+				$events=explode('BEGIN:VEVENT',$whole);
+
+				$calendar_nodes=array();
+
+				foreach ($events as $key=>$items)
+				{		
+					$nodes=explode("\n",$items);
+
+					foreach ($nodes as $childs)
 					{
-						$_event_types[$j]['text_original']=get_translated_text($_event_type['t_title']);
+						$child=explode(':',$childs);
+
+						$matches=array();
+						if (preg_match('#;TZID=(.*)#',$child[0],$matches))
+							$calendar_nodes[$key]['TZID']=$matches[1];
+						$child[0]=preg_replace('#;.*#','',$child[0]);
+
+						if (array_key_exists("1",$child) && $child[0]!=='PRODID' &&  $child[0]!=='VERSION' && $child[0]!=='END')
+							$calendar_nodes[$key][$child[0]]=trim($child[1]);
 					}
-					$event_types=collapse_2d_complexity('text_original','t_logo',$_event_types);
+
+					if ($key!=0)
+					{
+						list($full_url,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
+
+						$event=array('e_recurrence'=>$recurrence,'e_content'=>$content,'e_title'=>$title,'e_id'=>$feed_url,'e_priority'=>$priority,'t_logo'=>'calendar/rss','e_recurrences'=>$recurrences,'e_seg_recurrences'=>$seg_recurrences,'e_is_public'=>$is_public,'e_start_year'=>$start_year,'e_start_month'=>$start_month,'e_start_day'=>$start_day,'e_start_hour'=>$start_hour,'e_start_minute'=>$start_minute,'e_end_year'=>$end_year,'e_end_month'=>$end_month,'e_end_day'=>$end_day,'e_end_hour'=>$end_hour,'e_end_minute'=>$end_minute,'e_timezone'=>$timezone);
+						if (!is_null($event_type)) $event['t_logo']=$_event_types[$event_type]['t_logo'];
+						if (!is_null($type))
+						{
+							$event['t_title']=$type;
+							if (array_key_exists($type,$event_types))
+								$event['t_logo']=$event_types[$type];
+						}
+
+						$their_times=find_periods_recurrence($timezone,0,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+
+						// Now search every combination to see if we can get a hit
+						foreach ($their_times as $their)
+						{
+							$matches[]=array($full_url,$event,$their[0],$their[1],$their[2],$their[3]);
+						}
+					}
 				}
+			} else
+			{
 				require_code('rss');
-				$rss=new rss($rss_url);
-	
+
+				$rss=new rss($temp_file_path,true);
+
 				$content=new ocp_tempcode();
 				foreach ($rss->gleamed_items as $item)
 				{
@@ -327,17 +426,25 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 					else $full_url='';
 					if ((array_key_exists('title',$item)) && (array_key_exists('clean_add_date',$item)) && ($full_url!=''))
 					{
-						$event=array('e_recurrence'=>'none','e_content'=>array_key_exists('news',$item)?$item['news']:'','e_title'=>$item['title'],'e_id'=>$full_url,'e_priority'=>'na','t_logo'=>'calendar/rss');
+						$event=array('e_recurrence'=>'none','e_content'=>array_key_exists('news',$item)?$item['news']:'','e_title'=>$item['title'],'e_id'=>$full_url,'e_priority'=>'na','t_logo'=>'calendar/rss','e_recurrences'=>1,'e_seg_recurrences'=>'','e_is_public'=>1,'e_timezone'=>get_users_timezone());
+						if (!is_null($event_type)) $event['t_logo']=$_event_types[$event_type]['t_logo'];
 						if (array_key_exists('category',$item))
 						{
 							$event['t_title']=$item['category'];
 							if (array_key_exists($item['category'],$event_types))
 								$event['t_logo']=$event_types[$item['category']];
 						}
-						$matches[]=array($full_url,$event,servertime_to_usertime($item['clean_add_date']),NULL);
+						$from=servertime_to_usertime($item['clean_add_date']);
+						if (($from>=$period_start) && ($from<$period_end))
+						{
+							$event+=array('e_start_year'=>date('Y',$from),'e_start_month'=>date('m',$from),'e_start_day'=>date('D',$from),'e_start_hour'=>date('H',$from),'e_start_minute'=>date('i',$from),'e_end_year'=>NULL,'e_end_month'=>NULL,'e_end_day'=>NULL,'e_end_hour'=>NULL,'e_end_minute'=>NULL);
+							$matches[]=array($full_url,$event,$from,NULL,$from,NULL);
+						}
 					}
 				}
 			}
+			
+			unlink($temp_file_path);
 		}
 	}
 
@@ -354,12 +461,14 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
 	foreach ($events as $event)
 	{
-		$their_times=find_periods_recurrence($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
+		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
+
+		$their_times=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?23:$event['e_end_hour'],is_null($event['e_end_minute'])?59:$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
 
 		// Now search every combination to see if we can get a hit
 		foreach ($their_times as $their)
 		{
-			$matches[]=array($event['e_id'],$event,$their[0],$their[1]);
+			$matches[]=array($event['e_id'],$event,$their[0],$their[1],$their[2],$their[3]);
 		}
 	}
 
@@ -384,10 +493,12 @@ function nice_get_events($only_owned,$it,$edit_viewable_events=true)
 	if (!is_null($only_owned)) $where['e_submitter']=$only_owned;
 	if (!$edit_viewable_events) $where['e_is_public']=0;
 	if ($GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)')>500) warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
-	$events=$GLOBALS['SITE_DB']->query_select('calendar_events',array('id','e_title'),$where);
+	$events=$GLOBALS['SITE_DB']->query_select('calendar_events',array('id','e_title','e_type'),$where);
 	$list=new ocp_tempcode();
 	foreach ($events as $event)
 	{
+		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
+
 		$list->attach(form_input_list_entry(strval($event['id']),$event['id']==$it,get_translated_text($event['e_title'])));
 	}
 
@@ -415,7 +526,7 @@ function nice_get_events($only_owned,$it,$edit_viewable_events=true)
  */
 function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences)
 {
-	$our_times=find_periods_recurrence($start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences);
+	$our_times=find_periods_recurrence(get_users_timezone(),1,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences);
 
 	$conflicts=detect_happening_at($member_id,$skip_id,$our_times,!has_specific_permission(get_member(),'sense_personal_conflicts'));
 
@@ -468,7 +579,9 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().$table.$where);
 	foreach ($events as $event)
 	{
-		$their_times=find_periods_recurrence($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
+		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
+
+		$their_times=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?23:$event['e_end_hour'],is_null($event['e_end_minute'])?59:$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
 
 		// Now search every combination to see if we can get a hit
 		foreach ($our_times as $our)
@@ -477,30 +590,30 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 			{
 				$conflict=false;
 
-				if ((is_null($our[1])) && (is_null($their[1]))) // Has to be exactly the same
+				if ((is_null($our[3])) && (is_null($their[3]))) // Has to be exactly the same
 				{
-					if ($our[0]==$their[0]) $conflict=true;
+					if ($our[2]==$their[2]) $conflict=true;
 				}
 
-				elseif ((is_null($our[1])) && (!is_null($their[1]))) // Ours has to occur within their period
+				elseif ((is_null($our[3])) && (!is_null($their[3]))) // Ours has to occur within their period
 				{
-					if (($our[0]>=$their[0]) && ($our[0]<$their[1])) $conflict=true;
+					if (($our[2]>=$their[2]) && ($our[2]<$their[3])) $conflict=true;
 				}
 
-				elseif ((!is_null($our[1])) && (is_null($their[1]))) // Theirs has to occur within our period
+				elseif ((!is_null($our[3])) && (is_null($their[3]))) // Theirs has to occur within our period
 				{
-					if (($their[0]>=$our[0]) && ($their[0]<$our[1])) $conflict=true;
+					if (($their[2]>=$our[2]) && ($their[2]<$our[3])) $conflict=true;
 				}
 
-				elseif ((!is_null($our[1])) && (!is_null($their[1]))) // The two periods need to overlap
+				elseif ((!is_null($our[3])) && (!is_null($their[3]))) // The two periods need to overlap
 				{
-					if (($our[0]>=$their[0]) && ($our[0]<$their[1])) $conflict=true;
-					if (($their[0]>=$our[0]) && ($their[0]<$our[1])) $conflict=true;
+					if (($our[2]>=$their[2]) && ($our[2]<$their[3])) $conflict=true;
+					if (($their[2]>=$our[2]) && ($their[2]<$our[3])) $conflict=true;
 				}
 
 				if ($conflict)
 				{
-					$conflicts[]=array($event['e_id'],$event,$their[0],$their[1]);
+					$conflicts[]=array($event['e_id'],$event,$their[2],$their[3]);
 					break 2;
 				}
 			}
@@ -509,5 +622,3 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 
 	return $conflicts;
 }
-
-

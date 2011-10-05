@@ -39,7 +39,7 @@ class Hook_cron_calendar
 			$or_list='';
 			foreach ($jobs as $job)
 			{
-				$recurrences=find_periods_recurrence($job['e_start_year'],$job['e_start_month'],$job['e_start_day'],$job['e_start_hour'],$job['e_start_minute'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],$job['e_end_hour'],$job['e_end_minute'],$job['e_recurrence'],min(1,$job['e_recurrences']));
+				$recurrences=find_periods_recurrence($job['e_timezone'],1,$job['e_start_year'],$job['e_start_month'],$job['e_start_day'],is_null($job['e_start_hour'])?0:$job['e_start_hour'],is_null($job['e_start_minute'])?0:$job['e_start_minute'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],is_null($job['e_end_hour'])?23:$job['e_end_hour'],is_null($job['e_end_minute']):59:$job['e_end_minute'],$job['e_recurrence'],min(1,$job['e_recurrences']));
 	
 				// Dispatch
 				if (is_null($job['j_reminder_id'])) // It's code/URL
@@ -79,6 +79,7 @@ class Hook_cron_calendar
 				} else
 				{
 					// Send notification
+					if (!has_category_access($job['n_member_id'],'calendar',strval($job['e_type']))) continue;
 					$title=get_translated_text($job['e_title']);
 					$timestamp=array_key_exists(0,$recurrences)?usertime_to_servertime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$job['e_start_day'],$job['e_start_year']);
 					$date=get_timezoned_date($timestamp,true,false,false,false,$job['n_member_id']);

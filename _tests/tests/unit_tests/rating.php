@@ -30,7 +30,7 @@ class rating_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('calendar2');
 		require_code('feedback');
-		$this->event_id=add_calendar_event('','','',8,'1',NULL,0,'test_event','',3,1,2010,1,10,10,15,2010,1,19,11,15,1,1,1,1,'',NULL,0,NULL,NULL,NULL);
+		$this->event_id=add_calendar_event('','','',8,'1',NULL,0,'test_event','',3,1,2010,1,10,10,15,2010,NULL,1,1,19,11,15,1,1,1,1,'',NULL,0,NULL,NULL,NULL);
 		if('test_event'==get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_events','e_title ',array('id'=>$this->event_id))))
 		{
 		   $GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>'events','rating_for_id'=>$this->event_id,'rating_member'=>get_member(),'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>4));		

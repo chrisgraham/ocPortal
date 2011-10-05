@@ -910,7 +910,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image));
 
 		// Permissions
-		$fields->attach($this->get_permission_fields(strval($category_id),NULL,($category=='')));
+		$fields->attach($this->get_permission_fields(($category_id==-1)?NULL:strval($category_id),NULL,($category=='')));
 
 		return array($fields,$hidden);
 	}

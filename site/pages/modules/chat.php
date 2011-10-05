@@ -692,7 +692,7 @@ class Module_chat
 		// Set access
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'chat','category_name'=>$new_room_id));
+		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'chat','category_name'=>strval($new_room_id)));
 		foreach (array_keys($groups) as $group_id)
 		{
 			if (in_array($group_id,$admin_groups)) continue;

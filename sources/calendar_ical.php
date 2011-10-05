@@ -45,7 +45,7 @@ function output_ical()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	$filter=get_param_integer('type_filter',NULL);
-	if($filter===0) $filter=NULL;
+	if ($filter===0) $filter=NULL;
 	$where='(e_submitter='.strval(get_member()).' OR e_is_public=1)';
 	if (!is_null($filter)) $where.=' AND e_type='.strval($filter);
 	$events=$GLOBALS['SITE_DB']->query('SELECT e_is_public,e_submitter,e_add_date,e_edit_date,e_title,e_content,e_type,validated,id,e_recurrence,e_recurrences,e_start_hour,e_start_minute,e_start_month,e_start_day,e_start_year,e_end_hour,e_end_minute,e_end_month,e_end_day,e_end_year FROM '.get_table_prefix().'calendar_events WHERE '.$where.' ORDER BY e_add_date DESC',10000/*reasonable limit*/);
@@ -67,10 +67,10 @@ function output_ical()
 		echo "X-WR-CALNAME:".ical_escape(get_site_name().": ".$categories[$filter])."\n";
 	}
 
-
-
 	foreach ($events as $event)
-	{	
+	{
+		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
+
 		if (($event['e_is_public']==1) || ($event['e_submitter']==get_member()))
 		{
 			echo "BEGIN:VEVENT\n";
@@ -125,16 +125,16 @@ function output_ical()
 			}
 			while (count($_comments)==1000);
 
-			$time=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
+			$time=mktime(is_null($event['e_start_hour'])?12:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
 			$time2=mixed();
-			$time2=is_null($event['e_end_hour'])?NULL:mktime($event['e_end_hour'],$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']);
+			$time2=is_null($event['e_end_hour'])?NULL:mktime(is_null($event['e_end_hour'])?12:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']);
 			if ($event['e_recurrence']!='none')
 			{
 				$parts=explode(' ',$event['e_recurrence']);
 				if (count($parts)==1)
 				{
-					echo "DTSTART:".date('Ymd',$time)."T".date('His',$time)."\n";
-					if (!is_null($time2)) echo "DTEND:".date('Ymd',$time2)."T".date('His',$time2)."\n";
+					echo "DTSTART;TZ=".$event['e_timezone'].":".date('Ymd',$time).(is_null($event['e_start_hour'])?"":("T".date('His',$time)))."\n";
+					if (!is_null($time2)) echo "DTEND:".date('Ymd',$time2)."T".(is_null($event['e_end_hour'])?"":("T".date('His',$time2)))."\n";
 					$recurrence_code='FREQ='.strtoupper($parts[0]);
 					echo "RRULE:".$recurrence_code.(is_null($event['e_recurrences'])?'':(";COUNT=".strval($event['e_recurrences'])))."\n";
 				} else
@@ -206,7 +206,7 @@ function output_ical()
 /**
  * Import ical events to members's event calendar.
  *
- * @param  string		file name
+ * @param  PATH		File path
 */
 function ical_import($file_name)
 {
@@ -217,40 +217,54 @@ function ical_import($file_name)
 	$events=explode('BEGIN:VEVENT',$whole);
 
 	$calendar_nodes=array();
+	
+	$new_type=NULL;
 
 	foreach($events as $key=>$items)
 	{		
 		$nodes=explode("\n",$items);
 
-		foreach($nodes as $childs)
+		foreach($nodes as $_child)
 		{
-			$child=explode(":",$childs);
-	
-			if(array_key_exists("1",$child) && $child[0]!=='PRODID' &&  $child[0]!=='VERSION' && $child[0]!=='END')
-				$calendar_nodes[$key][$child[0]]=$child[1];
+			$child=explode(':',$_child,2);
+
+			$matches=array();
+			if (preg_match('#;TZID=(.*)#',$child[0],$matches))
+				$calendar_nodes[$key]['TZID']=$matches[1];
+			$child[0]=preg_replace('#;.*#','',$child[0]);
+
+			if (array_key_exists(1,$child) && $child[0]!=='PRODID' &&  $child[0]!=='VERSION' && $child[0]!=='END')
+				$calendar_nodes[$key][$child[0]]=trim($child[1]);
 		}
 
 		if ($key!=0)
 		{
-			list($geo_position,$groups_access,$groups_modify,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
-		
-			$id=add_calendar_event($geo_position,$groups_access,$groups_modify,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+			list(,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
+
+			if (is_null($type))
+			{
+				if (is_null($new_type))
+				{
+					require_code('calendar2');
+					$new_type=add_event_type(strval(ucfirst($type)),'calendar/general');
+				}
+				$type=$new_type;
+			}
+
+			$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,1,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 		}
-	
 	}
 }
 
 /**
  * Get array of an events from node of an imported ical file
  *
- * @param  array		Array of given evnt details
+ * @param  array		Array of given event details
  * @return array		Returns array of event details for mapping
  */
 function get_event_data_ical($calendar_nodes)
 {
-	$geo_position='';
-	$groups_access='';
-	$groups_modify='';
+	$url='';
 	$type=NULL; //default value
 	$e_recurrence='none';
 	$recurrences=NULL;
@@ -269,6 +283,7 @@ function get_event_data_ical($calendar_nodes)
 	$end_day=NULL;
 	$end_hour=NULL;
 	$end_minute=NULL;
+	$timezone='Europe/London';
 	$validated=NULL;
 	$allow_rating=NULL;
 	$allow_comments=NULL;
@@ -280,71 +295,46 @@ function get_event_data_ical($calendar_nodes)
 	$allow_trackbacks=1;
 	$matches=array();
 
-	$rec_array=array('FREQ','BYDAY','BYMONTHDAY','BYMONTH','BYYEAR','INTERVAL','COUNT');
+	$rec_array=array('FREQ','BYDAY','INTERVAL','COUNT');
 	$rec_by_day=array('MO','TU','WE','TH','FR','SA','SU');
 
-	if(array_key_exists('LOCATION',$calendar_nodes))
-		$geo_position=$calendar_nodes['LOCATION'];
+//	if (array_key_exists('LOCATION',$calendar_nodes))
+//		$geo_position=$calendar_nodes['LOCATION'];
 	
 
-	if(array_key_exists('RRULE',$calendar_nodes))
+	if (array_key_exists('RRULE',$calendar_nodes))
 	{
 		$byday='';
 		foreach($rec_array as $value)
 		{
-			$str=strstr($calendar_nodes['RRULE'],$value) ? true : false;
-
-			if($str)
+			if (preg_match('/^((.)*('.$value.'=))([^;]+)/i',$calendar_nodes['RRULE'],$matches)!=0)
 			{
-				preg_match('/^((.)*('.$value.'=))?([^;]+)/i',$calendar_nodes['RRULE'], $matches);
-
 				switch ($value)
 				{
-					
 					case 'FREQ':
-
 						$e_recurrence=strtolower(end($matches));
 						break;
 
-					case 'BYDAY':
-
-						$days=explode(",",end($matches));
-						
-						foreach($rec_by_day as $day)
-						{	
-							if(in_array($day,$days))
-							$byday.="1";
-							else
-							$byday.="0";							
-						}
-						$e_recurrence .=$byday;
-						break;
-
 					case 'INTERVAL':
+						$rec_patern=' 1';
 
-						$rec_patern=" 1";
-
-						for ($i = 1; $i <= 12; $i++) 
-						{ // taking 12 values for making recurrence pattern   							
-							if($i%end($matches)==0)
-							$rec_patern.="1";
-							else
-							$rec_patern.="0";						
+						for ($i = 1; $i < intval(end($matches)); $i++) 
+						{
+							$rec_patern.='0';
 						}
 
 						$e_recurrence.=$rec_patern;
+						break;
 
 					case 'COUNT':
 						$recurrences=end($matches);
-					break;																				
+						break;																				
 				}				
 			}
-					
 		}
-	
 	}
 
-	if(array_key_exists('CATEGORIES',$calendar_nodes))
+	if (array_key_exists('CATEGORIES',$calendar_nodes))
 	{
 		$type=strtolower($calendar_nodes['CATEGORIES']);		
 	}
@@ -356,42 +346,85 @@ function get_event_data_ical($calendar_nodes)
 
 	foreach ($rows as $row)
 	{
-		if(strtolower($type)==strtolower(get_translated_text($row['t_title'])))
+		if (strtolower($type)==strtolower(get_translated_text($row['t_title'])))
 			$typeid=$row['id'];
 	}
 	
-	if(is_null($typeid))
-		$typeid=add_event_type(strval(ucfirst($type)),'calendar/general');
-	
 
-	if(array_key_exists('SUMMARY',$calendar_nodes))
+	if (array_key_exists('SUMMARY',$calendar_nodes))
 	{
 		$title=$calendar_nodes['SUMMARY'];
 		$content=$calendar_nodes['SUMMARY'];
 	}
-	if(array_key_exists('PRIORITY',$calendar_nodes))
+
+	if (array_key_exists('PRIORITY',$calendar_nodes))
 		$priority=$calendar_nodes['PRIORITY'];
 
-	if(array_key_exists('DTSTART',$calendar_nodes))
+	if (array_key_exists('TZID',$calendar_nodes))
+		$timezone=$calendar_nodes['TZID'];
+
+	if (array_key_exists('URL',$calendar_nodes))
+		$url=$calendar_nodes['URL'];
+
+	if (array_key_exists('DTSTART',$calendar_nodes))
 	{
+		$all_day=false;
+		if (strlen($calendar_nodes['DTSTART'])==8)
+		{
+			$calendar_nodes['DTSTART'].=' 00:00';
+			$all_day=true;
+		}
 		$start=strtotime($calendar_nodes['DTSTART']);
 		$start_year=intval(date('Y',$start));
 		$start_month=intval(date('m',$start));
 		$start_day=intval(date('d',$start));
-		$start_hour=intval(date('h',$start));
-		$start_minute=intval(date('i',$start));
+		$start_hour=$all_day?NULL:intval(date('H',$start));
+		$start_minute=$all_day?NULL:intval(date('i',$start));
+		if ($all_day)
+		{
+			$timestamp=mktime(0,0,0,$start_month,$start_day,$start_year);
+			$amount_forward=tz_time($timestamp,$timezone)-$timestamp;
+			$timestamp=$timestamp-$amount_forward;
+			list($start_year,$start_month,$start_day)=array_map('intval',explode('-',date('Y-m-d',$timestamp)));
+		} else
+		{
+			$timestamp=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
+			$amount_forward=tz_time($timestamp,$timezone)-$timestamp;
+			$timestamp=$timestamp-$amount_forward;
+			list($start_hour,$start_minute,$start_year,$start_month,$start_day,$start_hour,$start_minute)=array_map('intval',explode('-',date('Y-m-d',$timestamp)));
+		}
 	}
 
-	if(array_key_exists('DTEND',$calendar_nodes))
+	if (array_key_exists('DTEND',$calendar_nodes))
 	{
+		$all_day=false;
+		if (strlen($calendar_nodes['DTEND'])==8)
+		{
+			$calendar_nodes['DTEND'].=' 00:00';
+			$all_day=true;
+		}
 		$end=strtotime($calendar_nodes['DTEND']);
 		$end_year=intval(date('Y',$end));
 		$end_month=intval(date('m',$end));
 		$end_day=intval(date('d',$end));
-		$end_hour=intval(date('h',$end));
-		$end_minute=intval(date('i',$end));
+		$end_hour=$all_day?NULL:intval(date('H',$end));
+		$end_minute=$all_day?NULL:intval(date('i',$end));
+		if ($all_day)
+		{
+			$timestamp=mktime(0,0,0,$end_month,$end_day,$end_year);
+			$amount_forward=tz_time($timestamp,$timezone)-$timestamp;
+			$timestamp=$timestamp-$amount_forward;
+			list($end_year,$end_month,$end_day)=array_map('intval',explode('-',date('Y-m-d',$timestamp-1)));
+		} else
+		{
+			$timestamp=mktime($end_hour,$end_minute,0,$end_month,$end_day,$end_year);
+			$amount_forward=tz_time($timestamp,$timezone)-$timestamp;
+			$timestamp=$timestamp-$amount_forward;
+			list($end_hour,$end_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute)=array_map('intval',explode('-',date('Y-m-d',$timestamp-1)));
+		}
 	}
 
-	return array($geo_position,$groups_access,$groups_modify,$typeid,$e_recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+	$ret=array($url,$typeid,$e_recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+	return $ret;
 }
 

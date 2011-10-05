@@ -1024,7 +1024,7 @@ class Hook_vb3
 			list($start_year,$start_month,$start_day,$start_hour,$start_minute)=explode('-',date('Y-m-d-h-i',strtotime($row['dateline'])));
 			list($end_year,$end_month,$end_day,$end_hour,$end_minute)=array(NULL,NULL,NULL,NULL,NULL);
 			ocf_over_msn();
-			$id_new=add_calendar_event('','','',db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['event'],3,$row['visible'],$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$submitter,0,$row['dateline']);
+			$id_new=add_calendar_event('','','',db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['event'],3,$row['visible'],$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,NULL,1,$submitter,0,$row['dateline']);
 			ocf_over_local();
 
 			import_id_remap_put('event',strval($row['eventid']),$id_new);
