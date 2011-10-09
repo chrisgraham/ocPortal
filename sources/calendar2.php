@@ -40,7 +40,7 @@
  * @param  ?integer			The day the event ends at (NULL: not a multi day event)
  * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
  * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
- * @param  ID_TEXT			The timezone for the event (NULL: current user's timezone)
+ * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
  * @param  BINARY				Whether the time should be presented in the viewer's own timezone
  * @param  BINARY				Whether the event has been validated
  * @param  BINARY				Whether the event may be rated
@@ -54,7 +54,7 @@
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
  * @return AUTO_LINK			The ID of the event
  */
-function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=true,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_date=NULL,$edit_date=NULL,$id=NULL)
+function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$submitter=NULL,$views=0,$add_date=NULL,$edit_date=NULL,$id=NULL)
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
@@ -147,7 +147,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  ?integer			The day the event ends at (NULL: not a multi day event)
  * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
  * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
- * @param  ID_TEXT			The timezone for the event (NULL: current user's timezone)
+ * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
  * @param  BINARY				Whether the time should be presented in the viewer's own timezone
  * @param  SHORT_TEXT		Meta keywords
  * @param  LONG_TEXT			Meta description

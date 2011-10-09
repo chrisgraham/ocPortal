@@ -220,6 +220,8 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 		$entries=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id'),array('c_name'=>$c_name),'',300,$start));
 		foreach ($entries as $entry)
 		{
+			$_default=mixed();
+			
 			list($raw_type,$_default,$_type)=$ob->get_field_value_row_bits($map+array('id'=>$cf_id),$required==1,$default);
 
 			if (strpos($raw_type,'trans')!==false) $_default=intval($_default);

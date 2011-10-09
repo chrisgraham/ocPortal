@@ -1261,7 +1261,7 @@ class Hook_smf
 			}
 
 			ocf_over_msn();
-			$id_new=add_calendar_event('','','',db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$description,3,1,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,NULL,1,1,1,1,1,'',$submitter);
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$description,3,1,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,NULL,1,1,1,1,1,'',$submitter);
 			ocf_over_local();
 
 			import_id_remap_put('event',strval($row['ID_EVENT']),$id_new);
@@ -1284,7 +1284,7 @@ class Hook_smf
 			list($end_year,$end_month,$end_day,$end_hour,$end_minute)=array_map('intval',explode('-',date('Y-m-d-h-i',strtotime($row['eventDate']))));
 
 			ocf_over_msn();
-			$id_new=add_calendar_event('','','',db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['title'],3,1,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,NULL,1,1,1,1,1,'',$submitter);
+			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['title'],3,1,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,NULL,1,1,1,1,1,'',$submitter);
 			ocf_over_local();
 
 			import_id_remap_put('event',strval($row['ID_HOLIDAY']),$id_new);

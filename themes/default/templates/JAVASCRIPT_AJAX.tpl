@@ -277,7 +277,7 @@ function handle_errors_in_result(result)
 
 function process_request_change(ajax_result_frame,i)
 {
-	if (!ajax_result_frame) return; // Needed for Opera
+	if (!ajax_result_frame) return null; // Needed for Opera
 	if ((typeof window.AJAX_REQUESTS=="undefined") || (!window.AJAX_REQUESTS)) return null; // Probably the page is in process of being navigated away so window object is gone
 
 	if (ajax_result_frame.getElementsByTagName("message")[0])
@@ -289,15 +289,15 @@ function process_request_change(ajax_result_frame,i)
 		{
 			//It's an error :|
 			window.alert("An error ("+ajax_result_frame.getElementsByTagName("error")[0].firstChild.data+") message was returned by the server: "+message);
-			return;
+			return null;
 		}
 
 		window.alert("An informational message was returned by the server: "+message);
-		return;
+		return null;
 	}
 
 	var ajax_result=ajax_result_frame.getElementsByTagName("result")[0];
-	if (!ajax_result) return;
+	if (!ajax_result) return null;
 
 	if ((ajax_result_frame.getElementsByTagName("method")[0]) || (AJAX_METHODS[i]))
 	{
@@ -306,6 +306,8 @@ function process_request_change(ajax_result_frame,i)
 		else method(ajax_result_frame,ajax_result);
 
 	}// else window.alert("Method required: as it is non-blocking");
+	
+	return null;
 }
 
 function create_xml_doc()

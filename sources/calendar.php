@@ -148,10 +148,12 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			break;
 	}
 
+	$b=mixed();
+
 	do
 	{
-		$a=cal_servertime_to_usertime(mktime(is_null($start_hour)?0:$start_hour,is_null($start_minute)?0:$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv);
-		$b=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?23:$end_hour,is_null($end_minute)?59:$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv);
+		$a=cal_servertime_to_usertime(mktime(is_null($start_hour)?0:$start_hour,is_null($start_minute)?0:$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
+		$b=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?23:$end_hour,is_null($end_minute)?59:$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
 
 		$starts_within=(($a>=$period_start) && ($a<$period_end));
 		$ends_within=(($b>$period_start) && ($b<$period_end));

@@ -60,14 +60,14 @@ function _get_simple_gps($exif)
 	if (!isset($exif['GPSLongitude'])) return array();
 	
 	// get the Hemisphere multiplier
-	$LatM = 1; $LongM = 1;
+	$lat_m = 1; $long_m = 1;
 	if($exif['GPSLatitudeRef'] == 'S')
 	{
-		$LatM = -1;
+		$lat_m = -1;
 	}
 	if($exif['GPSLongitudeRef'] == 'W')
 	{
-		$LongM = -1;
+		$long_m = -1;
 	}
 
 	// get the GPS data
@@ -97,8 +97,8 @@ function _get_simple_gps($exif)
 	}
 
 	// calculate the decimal degree
-	$result['Latitude'] = float_to_raw_string($LatM * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)));
-	$result['Longitude'] = float_to_raw_string($LongM * ($gps['LongDegree'] + ($gps['LongMinute'] / 60.0) + ($gps['LongSeconds'] / 3600.0)));
+	$result['Latitude'] = float_to_raw_string(floatval($lat_m) * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)));
+	$result['Longitude'] = float_to_raw_string(floatval($long_m) * ($gps['LongDegree'] + ($gps['LongMinute'] / 60.0) + ($gps['LongSeconds'] / 3600.0)));
 
 	return $result;
 }
@@ -161,8 +161,10 @@ function get_exif_image_caption($path,$filename)
 			{
 				preg_match('/<dc:title[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:title>/',$file_cap,$get_result); //Title
 				if (array_key_exists(1,$get_result))
+				{
 					$comments=$get_result[1];
-				else{
+				} else
+				{
 					preg_match('/<dc:description[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:description>/',$file_cap,$get_result); //Description
 					if (array_key_exists(1,$get_result))
 						$comments=$get_result[1];
@@ -172,7 +174,7 @@ function get_exif_image_caption($path,$filename)
 
 		fclose($file_pointer);
 	}
-	if (($comments=='') && (function_exists('exif_read_data'))) //If XMP fails, attempt EXIF
+	if ((function_exists('exif_read_data')) && ($comments=='')) //If XMP fails, attempt EXIF
 	{
 		$meta_data=@exif_read_data($path);
 
@@ -192,7 +194,7 @@ function get_exif_image_caption($path,$filename)
 	}
 	if ($comments=='') //IF XMP and EXIF fail, attempt IPTC binary
 	{
-		if (function_exists('getimagesize') && function_exists('iptcparse'))
+		if ((function_exists('iptcparse')) && (function_exists('getimagesize')))
 		{
 			$meta_data2=array();
 			getimagesize($path,$meta_data2);

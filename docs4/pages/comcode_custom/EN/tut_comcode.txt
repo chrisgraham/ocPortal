@@ -1439,7 +1439,7 @@ Section 3
 			downloaded under.</p><p><em>type</em>=auto|island|inline|download|code|hyperlink|mail &ndash; what type of
 			attachment display should be used (default is auto). For auto,
 			ocPortal detects what the file is from file extension, and uses
-			appropriate templates to tie to relevant XHTML tags or plugins. 'mail' only applies to Comcode included in an e-mail and takes the attachment out-of-context, running it into a real e-mail attachment.</p><p><em>width</em> &ndash; width, if appropriate</p><p><em>height</em> &ndash; height, if appropriate</p><p><em>align</em> &ndash; alignment</p><p><em>float</em>=left|right &ndash; Float the tag to the left/right. Normally this parameter would not be given.</p>
+			appropriate templates to tie to relevant XHTML tags or plugins. 'mail' only applies to Comcode included in an e-mail and takes the attachment out-of-context, running it into a real e-mail attachment.</p><p><em>width</em> &ndash; width, if appropriate.</p><p><em>height</em> &ndash; height, if appropriate</p><p><em>align</em> &ndash; alignment</p><p><em>float</em>=left|right &ndash; Float the tag to the left/right. Normally this parameter would not be given.</p>
 		</td>
 		<td>
 			<p>This can be many things, and determined how the attachment

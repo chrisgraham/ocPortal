@@ -82,6 +82,8 @@ class Hook_page_stats
 		// Get old data
 		do
 		{
+			$or_list='';
+
 			$data=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*$delete_older_than),500);
 			foreach ($data as $d)
 			{
@@ -94,7 +96,13 @@ class Hook_page_stats
 					if (!is_integer($value)) $list.="'".str_replace('\'','\\\'',$value)."'"; else $list.=strval($value);
 				}
 				fwrite($tmpfile,"	\$GLOBALS['SITE_DB']->query_insert('stats',array($list));\n");
+				
+				if ($or_list!='') $or_list.=' OR ';
+				$or_list.='id='.strval($d['id']);
 			}
+			
+			if ($or_list!='')
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE '.$or_list);
 		}
 		while ($data!=array());
 

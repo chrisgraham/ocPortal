@@ -39,7 +39,7 @@ class Hook_cron_calendar
 			$or_list='';
 			foreach ($jobs as $job)
 			{
-				$recurrences=find_periods_recurrence($job['e_timezone'],1,$job['e_start_year'],$job['e_start_month'],$job['e_start_day'],is_null($job['e_start_hour'])?0:$job['e_start_hour'],is_null($job['e_start_minute'])?0:$job['e_start_minute'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],is_null($job['e_end_hour'])?23:$job['e_end_hour'],is_null($job['e_end_minute']):59:$job['e_end_minute'],$job['e_recurrence'],min(1,$job['e_recurrences']));
+				$recurrences=find_periods_recurrence($job['e_timezone'],1,$job['e_start_year'],$job['e_start_month'],$job['e_start_day'],is_null($job['e_start_hour'])?0:$job['e_start_hour'],is_null($job['e_start_minute'])?0:$job['e_start_minute'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],is_null($job['e_end_hour'])?23:$job['e_end_hour'],is_null($job['e_end_minute'])?59:$job['e_end_minute'],$job['e_recurrence'],min(1,$job['e_recurrences']));
 	
 				// Dispatch
 				if (is_null($job['j_reminder_id'])) // It's code/URL

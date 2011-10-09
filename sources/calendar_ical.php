@@ -407,6 +407,8 @@ function get_event_data_ical($calendar_nodes)
 		$end_year=intval(date('Y',$end));
 		$end_month=intval(date('m',$end));
 		$end_day=intval(date('d',$end));
+		$end_hour=mixed();
+		$end_minute=mixed();
 		$end_hour=$all_day?NULL:intval(date('H',$end));
 		$end_minute=$all_day?NULL:intval(date('i',$end));
 		if ($all_day)

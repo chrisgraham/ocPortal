@@ -280,7 +280,7 @@ class Module_cms_calendar extends standard_aed_module
 	 * @param  ?integer			The day the event ends at (NULL: not a multi day event)
 	 * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
 	 * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
-	 * @param  ID_TEXT			The timezone for the event (NULL: current user's timezone)
+	 * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
 	 * @param  BINARY				Whether the time should be presented in the viewer's own timezone
 	 * @param  BINARY				Whether the event is validated
 	 * @param  BINARY				Whether rating is allowed

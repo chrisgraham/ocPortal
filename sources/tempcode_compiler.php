@@ -145,10 +145,10 @@ function compile_template($data,$template_name,$theme)
 				// Handle the level we just closed
 				if (function_exists('str_split'))
 				{
-					$_escaped=str_split(preg_replace('#[^:`%\*=\;\#\-~\^\|\'&/@]:?#','',$_first_param)); // :? is so that the ":" in lang strings does not get considered an escape
+					$_escaped=str_split(preg_replace('#[^:\.`%\*=\;\#\-~\^\|\'&/@]:?#','',$_first_param)); // :? is so that the ":" in lang strings does not get considered an escape
 				} else
 				{
-					$temp=preg_replace('#[^:`%\*=\;\#\-~\^\|\'&/@]:?#','',$_first_param);
+					$temp=preg_replace('#[^:\.`%\*=\;\#\-~\^\|\'&/@]:?#','',$_first_param);
 					$_escaped=array();
 					for ($j=0;$j<strlen($temp);$j++)
 					{

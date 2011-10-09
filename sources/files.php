@@ -165,7 +165,7 @@ function better_parse_ini_file($filename,$file=NULL)
  */
 function is_special_file($file,$include_controls=false)
 {
-	return (!(($file!='.') && ($file!='..') && ($file!='__MACOSX') && ($file!='.bash_history') && ($file!='Thumbs.db:encryptable') && ($file!='Thumbs.db') && (preg_match('#^\..*\.(png|gif|jpeg|jpg)$#i',$file)==0) && ($file!='.DS_Store') && (($file!='index.html') || ($include_controls)) && ($file!='.svn') && ($file!='.git') && ($file!='BingSiteAuth.xml') && ($file!='nbproject') && ($file!='web.config') && ($file!='manifest.xml') && ($file!='parameters.xml') && ($file!='WEB-INF') && (($file!='.htaccess') || ($include_controls)) && ($file!='CVS') && (substr($file,0,5)!='_vti_')));
+	return (!(($file!='.') && ($file!='..') && ($file!='__MACOSX') && (substr($file,-4)!='.lcd') && (substr($file,-4)!='.gcd') && ($file!='.bash_history') && ($file!='Thumbs.db:encryptable') && ($file!='Thumbs.db') && (preg_match('#^\..*\.(png|gif|jpeg|jpg)$#i',$file)==0) && ($file!='.DS_Store') && (($file!='index.html') || ($include_controls)) && ($file!='.svn') && ($file!='.git') && ($file!='BingSiteAuth.xml') && ($file!='nbproject') && ($file!='web.config') && ($file!='manifest.xml') && ($file!='parameters.xml') && ($file!='WEB-INF') && (($file!='.htaccess') || ($include_controls)) && ($file!='CVS') && (substr($file,0,5)!='_vti_')));
 }
 
 /**

@@ -521,7 +521,7 @@ class Module_forumview
 					{
 						$moderator_actions.='<optgroup label="'.do_lang('MULTI_MODERATIONS').'">';
 						foreach ($multi_moderations as $mm_id=>$mm_name)
-							$moderator_actions.='<option value="mm_'.strval($mm_id).'">'.$mm_name.'</option>';
+							$moderator_actions.='<option value="mmt_'.strval($mm_id).'">'.$mm_name.'</option>';
 						$moderator_actions.='</optgroup>';
 					}
 				}

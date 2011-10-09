@@ -721,7 +721,7 @@ function load_snippet(code,post)
 	var title=getInnerHTML(document.getElementsByTagName('title')[0]);
 	var metas=document.getElementsByTagName('link');
 	var i;
-	if (!window.location) return; // In middle of page navigation away
+	if (!window.location) return null; // In middle of page navigation away
 	var url=window.location.href;
 	for (i=0;i<metas.length;i++)
 	{

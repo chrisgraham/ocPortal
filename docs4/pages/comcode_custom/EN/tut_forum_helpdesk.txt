@@ -35,7 +35,7 @@ For topic view screens the actions are available in the 'Actions upon marked pos
 
 [title="3"]Adding a post template[/title]
 
-To add a post template, just open up the 'Add post template' screen in the Admin Zone (Go to the Setup section of the Admin Zone, then the Post Templates icon), and fill in the forms. ocPortal provides useful features such as limiting the use of the post template to certain forums, making the post template the default post in the specified forums, and limiting use of the template to members of a certain minimum status.
+To add a post template, just open up the 'Add post template' screen in the Admin Zone (Go to the Structure section of the Admin Zone, then Forums, then the Post Templates icon), and fill in the forms. ocPortal provides useful features such as limiting the use of the post template to certain forums, making the post template the default post in the specified forums, and limiting use of the template to members of a certain minimum status.
 
 [title="3"]Using a post template[/title]
 

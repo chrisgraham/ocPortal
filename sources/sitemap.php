@@ -364,23 +364,27 @@ function pagelink_to_sitemapsxml($pagelink,$parent_pagelink,$add_date,$edit_date
 	unset($title); // Title not used for Sitemaps
 
 	list($zone,$attributes,$hash)=page_link_decode($pagelink);
-	$url=_build_url($attributes,$zone,NULL,false,false,true,$hash);
-
-	$_lastmod_date=is_null($edit_date)?$add_date:$edit_date;
-	if (!is_null($_lastmod_date))
+	$langs=find_all_langs();
+	foreach (array_keys($langs) as $lang)
 	{
-		$lastmod_date='<lastmod>'.xmlentities(date('Y-m-d\TH:i:s',$_lastmod_date).substr_replace(date('O',$_lastmod_date),':',3,0)).'</lastmod>';
-	} else
-	{
-		$lastmod_date='<changefreq>yearly</changefreq>';
-	}
+		$url=_build_url($attributes+(($lang==get_site_default_lang())?array():array('keep_lang'=>$lang)),$zone,NULL,false,false,true,$hash);
 
-	$url_blob='
+		$_lastmod_date=is_null($edit_date)?$add_date:$edit_date;
+		if (!is_null($_lastmod_date))
+		{
+			$lastmod_date='<lastmod>'.xmlentities(date('Y-m-d\TH:i:s',$_lastmod_date).substr_replace(date('O',$_lastmod_date),':',3,0)).'</lastmod>';
+		} else
+		{
+			$lastmod_date='<changefreq>yearly</changefreq>';
+		}
+
+		$url_blob='
    <url>
       <loc>'.xmlentities($url).'</loc>
       '.$lastmod_date.'
       <priority>'.float_to_raw_string($priority).'</priority>
    </url>
-	';
-	fwrite($SITEMAPS_OUT_FILE,$url_blob);
+		';
+		fwrite($SITEMAPS_OUT_FILE,$url_blob);
+	}
 }

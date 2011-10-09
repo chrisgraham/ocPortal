@@ -280,7 +280,7 @@ class Module_calendar
 					if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['t_title']);
 
 					if (($row['id']!=db_get_first_id()) || (($GLOBALS['FORUM_DRIVER']->is_super_admin()) && (cron_installed()))) // Filters system commands
-						$tree[]=array('_SELF:_SELF:type=misc:'.strval($row['id']),'calendar',$row['id'],$row['text_original'],array());
+						$tree[]=array('_SELF:_SELF:type=misc:int_'.strval($row['id']).'=1','calendar',$row['id'],$row['text_original'],array());
 				}
 			}
 		}
@@ -320,7 +320,7 @@ class Module_calendar
 
 				if (is_null($row['title'])) $row['title']=get_translated_text($row['t_title']);
 
-				$pagelink=$pagelink_stub.'misc:'.strval($row['id']);
+				$pagelink=$pagelink_stub.'misc:int_'.strval($row['id']).'=1';
 				if (__CLASS__!='')
 				{
 					$this->get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data,$entry_data); // Recurse
@@ -340,7 +340,12 @@ class Module_calendar
 				$start=0;
 				do
 				{
-					$entry_data=$GLOBALS['SITE_DB']->query_select('calendar_events d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.e_title',array('d.e_title','d.id','t.text_original AS title','e_type AS category_id','e_add_date AS add_date','e_edit_date AS edit_date'),array('e_type'=>intval($parent_attributes['id'])),'',500,$start);
+					$parent_id=db_get_first_id();
+					foreach ($parent_attributes as $key=>$val)
+					{
+						if (substr($key,0,4)=='int_') $parent_id=intval(substr($key,4));
+					}
+					$entry_data=$GLOBALS['SITE_DB']->query_select('calendar_events d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.e_title',array('d.e_title','d.id','t.text_original AS title','e_type AS category_id','e_add_date AS add_date','e_edit_date AS edit_date'),array('e_type'=>intval($parent_id)),'',500,$start);
 
 					foreach ($entry_data as $row)
 					{
@@ -348,11 +353,8 @@ class Module_calendar
 
 						if (is_null($row['title'])) $row['title']=get_translated_text($row['e_title']);
 
-						if (strval($row['category_id'])==$parent_attributes['id'])
-						{
-							$pagelink=$pagelink_stub.'view:'.strval($row['id']);
-							call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
-						}
+						$pagelink=$pagelink_stub.'view:'.strval($row['id']);
+						call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
 					}
 
 					$start+=500;
@@ -1185,11 +1187,11 @@ class Module_calendar
 						if (!is_null($to))
 						{
 							$explode=explode('-',date('d-m',$to));
-							$continues=((intval($explode[0])!=$_day) || (intval($explode[1]!=$i)));
+							$continues=(intval($explode[0])!=$_day) || (intval($explode[1])!=$i);
 							if ($continues)
 							{
 								$_from=mktime(0,0,0,intval(date('m',$_from)),intval(date('d',$_from))+1,intval(date('Y',$_from)));
-								if (date('m',$_from)!=$i) $continues=false; // Don't let it roll to another month
+								if (intval(date('m',$_from))!=$i) $continues=false; // Don't let it roll to another month
 							}
 						} else $continues=false;
 					}

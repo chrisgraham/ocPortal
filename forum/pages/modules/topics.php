@@ -1931,7 +1931,7 @@ END;
 					$start_hour=post_param_integer('schedule_hour');
 					$start_minute=post_param_integer('schedule_minute');
 					require_code('calendar2');
-					$event_id=add_calendar_event('','','',db_get_first_id(),'',NULL,0,do_lang('ADD_POST'),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+					$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('ADD_POST'),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
 					regenerate_event_reminder_jobs($event_id);
 
 					$text=do_lang_tempcode('SUCCESS');

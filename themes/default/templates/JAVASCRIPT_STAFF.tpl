@@ -506,7 +506,7 @@ function load_ocpchat(event)
 			<br /> \
 			<p class="community_block_tagline">[ <a title="{!OCP_CHAT_STANDALONE}: {!LINK_NEW_WINDOW}" target="_blank" href="http://chat.zoho.com/guest.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;participants=true">{!OCP_CHAT_STANDALONE}</a> | <a href="#" onclick="return load_ocpchat(event);">{!HIDE}</a>]</p> \
 		</div> \
-		<iframe style="overflow:hidden;width:350px;height:90%;" frameborder="0" border="0" src="http://chat.zoho.com/shout.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;chaturl=ocPortal%20chat&amp;V=000000-70a9e1-eff4f9-70a9e1-ocPortal%20chat&amp;user={$SITE_NAME&*}'+((typeof window.ocp_username!='undefined')?window.encodeURIComponent('/'+window.ocp_username):'')+'&amp;participants=true"></iframe> \
+		<iframe style="overflow:hidden;width:450px;height:90%;" frameborder="0" border="0" src="http://chat.zoho.com/shout.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;chaturl=ocPortal%20chat&amp;V=000000-70a9e1-eff4f9-70a9e1-ocPortal%20chat&amp;user={$SITE_NAME&*}'+((typeof window.ocp_username!='undefined')?window.encodeURIComponent('/'+window.ocp_username):'')+'&amp;participants=true"></iframe> \
 	'.replace(/\\{1\\}/,escape_html((window.location+'').replace(get_base_url(),'http://baseurl')));
 	
 	var box=document.getElementById('ocpchat_box');
@@ -520,7 +520,7 @@ function load_ocpchat(event)
 		box=document.createElement('div');
 
 		box.id='ocpchat_box';
-		box.style.width='650px';
+		box.style.width='750px';
 		box.style.background='#EEE';
 		box.style.color='#000';
 		box.style.padding='5px';

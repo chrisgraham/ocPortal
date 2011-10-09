@@ -608,11 +608,18 @@ class Module_catalogues
 
 		// We read in all data for efficiency
 		if (is_null($category_data))
-			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.cc_title',array('c_name','d.id','t.text_original AS title','cc_parent_id AS parent_id','cc_add_date AS edit_date')));
+		{
+			$query='SELECT c_name,d.id,t.text_original AS title,cc_parent_id AS parent_id,cc_add_date AS edit_date FROM '.get_table_prefix().'catalogue_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.cc_title';
+			if (($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','COUNT(*)')>1000) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read)))
+				$query.=' WHERE EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.cc_id=d.id)';
+			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query($query));
+		}
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 		if (can_arbitrary_groupby())
-			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON d.id=e.cc_id GROUP BY d.id';
-		$query.=' AND c_name NOT LIKE \''.db_encode_like('\_%').'\'';
+			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON c.c_name=e.c_name';
+		$query.=' WHERE c.c_name NOT LIKE \''.db_encode_like('\_%').'\'';
+		if (can_arbitrary_groupby())
+			$query.=' GROUP BY e.cc_id';
 		$catalogues=list_to_map('c_name',$GLOBALS['SITE_DB']->query($query));
 
 		if (!is_null($parent_pagelink_orig))

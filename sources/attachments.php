@@ -332,14 +332,14 @@ function render_attachment($attributes,$attachment,$pass_id,$source_member,$as_a
 			if ($vid_details!==false)
 			{
 				list($_width,$_height,)=$vid_details;
-				$attachment['a_width']=strval($_width);
-				$attachment['a_height']=strval($_height);
+				if ($attachment['a_width']=='') $attachment['a_width']=strval($_width);
+				if ($attachment['a_height']=='') $attachment['a_height']=strval($_height);
 			}
 		}
 		if (($attachment['a_width']=='') || ($attachment['a_height']==''))
 		{
-			$attachment['a_width']='240';
-			$attachment['a_height']='216';
+			if ($attachment['a_width']=='') $attachment['a_width']='240';
+			if ($attachment['a_height']=='') $attachment['a_height']='216';
 		}
 	}
 	$attachment['a_align']=array_key_exists('align',$attributes)?$attributes['align']:'left';

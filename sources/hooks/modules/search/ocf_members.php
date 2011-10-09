@@ -349,7 +349,7 @@ class Hook_search_ocf_members
 		{
 			return array();
 		}
-		if (has_specific_permission(get_member(),'view_profiles'))
+		//if (has_specific_permission(get_member(),'view_profiles'))
 		{
 			if ((get_option('show_gallery_counts')=='1') && (addon_installed('galleries')))
 			{
