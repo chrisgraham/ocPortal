@@ -6,8 +6,9 @@
 	{+END}
 {+END}{+END}
 
-{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,forum,{ID}}}
-{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
+{+START,IF_PASSED,ID}
+	{+START,IF_NON_EMPTY,{$CATALOGUE_ENTRY_FOR,forum,{ID}}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$CATALOGUE_ENTRY_FOR,forum,{ID}}}{+END}
+{+END}
 
 <br />
 

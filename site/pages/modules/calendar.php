@@ -138,7 +138,6 @@ class Module_calendar
 				't_title'=>'SHORT_TRANS',
 				't_logo'=>'SHORT_TEXT',
 				't_external_feed'=>'URLPATH',
-				't_alert_notice_minutes'=>'INTEGER',
 			));
 			$default_types=array('system_command','general','birthday','public_holiday','vacation','appointment','commitment','anniversary');
 			foreach ($default_types as $type)
@@ -223,8 +222,7 @@ class Module_calendar
 			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_start_hour','?INTEGER');
 			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_start_minute','?INTEGER');
 
-			$GLOBALS['SITE_DB']->add_table_field('calendar_types','r_external_feed','URLPATH');
-			$GLOBALS['SITE_DB']->add_table_field('calendar_types','r_alert_notice_minutes','INTEGER',60);
+			$GLOBALS['SITE_DB']->add_table_field('calendar_types','t_external_feed','URLPATH');
 
 			$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);

@@ -105,8 +105,6 @@ class Module_catalogues
 			));
 			$GLOBALS['SITE_DB']->create_index('catalogue_cat_treecache','cc_ancestor_id',array('cc_ancestor_id'));
 
-			$GLOBALS['SITE_DB']->create_index('catalogue_categories','cc_parent_id',array('cc_parent_id'));
-
 			$GLOBALS['SITE_DB']->create_table('catalogue_efv_float',array(
 				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
 				'cf_id'=>'AUTO_LINK',
@@ -155,7 +153,15 @@ class Module_catalogues
 			));
 			$GLOBALS['SITE_DB']->create_index('catalogue_categories','catstoclean',array('cc_move_target'));
 			$GLOBALS['SITE_DB']->create_index('catalogue_categories','cataloguefind',array('c_name'));
+		}
 
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->create_index('catalogue_categories','cc_parent_id',array('cc_parent_id'));
+		}
+
+		if (is_null($upgrade_from))
+		{
 			$GLOBALS['SITE_DB']->create_table('catalogue_fields',array(
 				'id'=>'*AUTO',
 				'c_name'=>'ID_TEXT',
@@ -463,7 +469,7 @@ class Module_catalogues
 						foreach ($rows as $row)
 						{
 							if ($or_list!='') $or_list.=' OR ';
-							$or_list.='id='.strval($row['id']);
+							$or_list.='ce_id='.strval($row['ce_id']).' AND cf_id='.strval($row['cf_id']);
 
 							unset($row['id']);
 							if ($new_type=='float')

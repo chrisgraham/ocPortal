@@ -957,6 +957,7 @@ function is_video($name)
 
 	$ext=get_file_extension($name);
 	if ($ext=='swf') return true;
+	if ($ext=='pdf') return true; // Galleries can render it as a video
 	if (($ext=='rm') || ($ext=='ram')) return true; // These have audio mime types, but may be videos
 
 	require_code('mime_types');

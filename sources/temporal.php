@@ -950,7 +950,7 @@ function tz_localtime($time, $zone)
  */
 function tz_time($time, $zone)
 {
-	if ($zone!=get_users_timezone())
+	if (!isset($TZ_ZONE_DATA[$zone]))
 	{
 		initialise_timezone_data();
 	}

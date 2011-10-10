@@ -1052,6 +1052,7 @@ class Hook_addon_registry_core
 					'STATS'=>lorem_phrase(),
 					'IP_LIST'=>$group,
 					'IP_BANNED'=>lorem_phrase(),
+					'SUBMITTER_BANNED'=>lorem_phrase(),
 					'MEMBER_BANNED'=>lorem_phrase(),
 					'ID'=>placeholder_id(),
 					'IP'=>placeholder_ip(),

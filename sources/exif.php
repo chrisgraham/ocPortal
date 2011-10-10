@@ -34,7 +34,8 @@ function get_exif_data($path,$filename=NULL)
 
 	if (function_exists('exif_read_data'))
 	{
-		$out+=@exif_read_data($path,'ANY_TAG');
+		$exif=@exif_read_data($path,'ANY_TAG');
+		if ($exif!==false) $out+=$exif;
 	}
 
 	$caption=get_exif_image_caption($path,$filename);

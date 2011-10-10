@@ -628,7 +628,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'MEMBER_PROFILE_LINK':
-				$value=$GLOBALS['FORUM_DRIVER']->member_profile_link(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member(),false,false);
+				$value=$GLOBALS['FORUM_DRIVER']->member_profile_link(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member(),false,true);
 				if (is_null($value)) $value='';
 				break;
 

@@ -107,11 +107,11 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 		$query.='the_user='.strval((integer)$member).' OR ';
 	$query.=db_string_equal_to('ip',$ip);
 	$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE '.$query);
-	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,get,post FROM '.get_table_prefix().'stats WHERE '.$query.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,get,post,browser,operating_system FROM '.get_table_prefix().'stats WHERE '.$query.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 
 	$out=new ocp_tempcode();
 	require_code('templates_results_table');
-	$fields_title=results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('DATE'),do_lang_tempcode('PARAMETERS')),$sortables,'sort',$sortable.' '.$sort_order);
+	$fields_title=results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('DATE'),do_lang_tempcode('PARAMETERS'),do_lang_tempcode('USER_AGENT'),do_lang_tempcode('USER_OS')),$sortables,'sort',$sortable.' '.$sort_order);
 	foreach ($rows as $myrow)
 	{
 		$date=get_timezoned_date($myrow['date_and_time']);
@@ -123,7 +123,7 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 		{
 			$page_converted=substr($page_converted,0,strlen($page_converted)-4);
 		}
-		$page_converted=str_replace('/',':',$page_converted);
+		$page_converted=str_replace('/',': ',$page_converted);
 
 		if (!is_null($myrow['get']))
 		{
@@ -136,7 +136,7 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 			$parameters=symbol_truncator(array($data,35,'1','1'),'left');
 		} else $parameters='?';
 
-		$out->attach(results_entry(array(escape_html($page_converted),escape_html($date),$parameters),false));
+		$out->attach(results_entry(array(escape_html($page_converted),escape_html($date),$parameters,escape_html($myrow['browser']),escape_html($myrow['operating_system'])),false));
 	}
 	return results_table(do_lang_tempcode('_RESULTS'),$start,'start',$max,'max',$max_rows,$fields_title,$out,$sortables,$sortable,$sort_order,'sort');
 }

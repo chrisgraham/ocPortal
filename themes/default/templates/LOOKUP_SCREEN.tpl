@@ -16,13 +16,15 @@
 {+START,IF,{$NOT,{$IS_GUEST,{ID}}}}
 	<tr>
 		<th>{!MEMBER_ID}</th>
-		<td>#<strong>{ID*}</strong> &nbsp; <em>{!_BANNED}: {MEMBER_BANNED*}</em></td>
+		<td>
+			#<strong>{ID*}</strong> &nbsp;&nbsp;&nbsp;&nbsp; <em>{!MEMBER_BANNED}: {MEMBER_BANNED*}</em>{+START,IF_PASSED,MEMBER_BAN_LINK} {MEMBER_BAN_LINK}{+END} &nbsp;&nbsp;&nbsp;&nbsp; <em>{!SUBMITTER_BANNED}: {SUBMITTER_BANNED*}</em>{+START,IF_PASSED,SUBMITTER_BAN_LINK} {SUBMITTER_BAN_LINK}{+END}
+		</td>
 	</tr>
 {+END}
 {+START,IF_NON_EMPTY,{IP}}
 	<tr>
 		<th>{!IP_ADDRESS}</th>
-		<td><strong>{IP*}</strong> &nbsp; <em>{!_BANNED}: {IP_BANNED*}</em></td>
+		<td><strong>{IP*}</strong> &nbsp;&nbsp;&nbsp;&nbsp; <em>{!_BANNED}: {IP_BANNED*}</em>{+START,IF_PASSED,IP_BAN_LINK} {IP_BAN_LINK}{+END}</td>
 	</tr>
 {+END}
 	<tr>

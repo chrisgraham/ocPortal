@@ -90,7 +90,7 @@ class Module_admin_actionlog
 		$list=array();
 		if (get_forum_type()=='ocf')
 		{
-			if ($GLOBALS['FORUM_DB']->query_value('f_moderator_logs','COUNT(*)')<5000)
+			if ($GLOBALS['FORUM_DB']->query_value('f_moderator_logs','COUNT(DISTINCT l_by)')<5000)
 			{
 				$members=list_to_map('l_by',$GLOBALS['FORUM_DB']->query_select('f_moderator_logs',array('l_by','COUNT(*) AS cnt'),NULL,'GROUP BY l_by ORDER BY cnt DESC'));
 				foreach ($members as $member)
@@ -101,7 +101,7 @@ class Module_admin_actionlog
 				}
 			}
 		}
-		if ($GLOBALS['SITE_DB']->query_value('adminlogs','COUNT(*)')<5000)
+		if ($GLOBALS['SITE_DB']->query_value('adminlogs','COUNT(DISTINCT the_user)')<5000)
 		{
 			$_staff=list_to_map('the_user',$GLOBALS['SITE_DB']->query_select('adminlogs',array('the_user','COUNT(*) AS cnt'),NULL,'GROUP BY the_user ORDER BY cnt DESC'));
 			foreach ($_staff as $staff)
@@ -358,8 +358,15 @@ class Module_admin_actionlog
 		// Show it worked / Refresh
 		$mode=get_param('mode',NULL);
 		if (is_null($mode))
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
-		$url=build_url(array('page'=>'_SELF','type'=>'view','mode'=>$mode,'id'=>get_param_integer('action_id')),'_SELF');
+		{
+			$_url=get_param('redirect',NULL);
+			if (is_null($_url))
+				return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			$url=make_string_tempcode($_url);
+		} else
+		{
+			$url=build_url(array('page'=>'_SELF','type'=>'view','mode'=>$mode,'id'=>get_param_integer('action_id')),'_SELF');
+		}
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
@@ -410,8 +417,15 @@ class Module_admin_actionlog
 		// Show it worked / Refresh
 		$mode=get_param('mode',NULL);
 		if (is_null($mode))
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
-		$url=build_url(array('page'=>'_SELF','type'=>'view','mode'=>$mode,'id'=>get_param_integer('action_id')),'_SELF');
+		{
+			$_url=get_param('redirect',NULL);
+			if (is_null($_url))
+				return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			$url=make_string_tempcode($_url);
+		} else
+		{
+			$url=build_url(array('page'=>'_SELF','type'=>'view','mode'=>$mode,'id'=>get_param_integer('action_id')),'_SELF');
+		}
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
@@ -462,7 +476,14 @@ class Module_admin_actionlog
 		persistant_cache_delete('IP_BANS');
 
 		// Show it worked / Refresh
-		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+		$_url=get_param('redirect',NULL);
+		if (!is_null($_url))
+		{
+			$url=make_string_tempcode($_url);
+		} else
+		{
+			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+		}
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
 

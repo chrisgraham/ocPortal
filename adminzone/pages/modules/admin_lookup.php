@@ -205,11 +205,32 @@ class Module_admin_lookup
 			
 			$member_banned=$GLOBALS['FORUM_DRIVER']->is_banned($id);
 			$ip_banned=($ip!='') && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_ip','ip',array('ip'=>$ip))));
+			$banned_test_2=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$id));
+			$submitter_banned=!is_null($banned_test_2);
+
+			$member_ban_link=NULL;
+			$ip_ban_link=NULL;
+			$submitter_ban_link=NULL;
+			if (addon_installed('securitylogging'))
+			{
+				if (((get_forum_type()=='ocf') && (!is_guest($id))) && ($id!=get_member()))
+				{
+					$member_ban_link=do_template('ACTION_LOGS_TOGGLE_LINK',array('URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_member_ban','id'=>$id,'redirect'=>get_self_url(true)),get_module_zone('admin_actionlog'))));
+				}
+				if (($ip!='') && ($ip!=get_ip_address()))
+				{
+					$ip_ban_link=do_template('ACTION_LOGS_TOGGLE_LINK',array('URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_ip_ban','id'=>$ip),get_module_zone('admin_actionlog'))));
+				}
+				if ((!is_guest($id)) && ($id!=get_member()))
+				{
+					$submitter_ban_link=do_template('ACTION_LOGS_TOGGLE_LINK',array('URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_submitter_ban','id'=>$id,'redirect'=>get_self_url(true)),get_module_zone('admin_actionlog'))));
+				}
+			}
 
 			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('SEARCH'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
-			return do_template('LOOKUP_SCREEN',array('_GUID'=>'dc6effaa043949940b809f6aa5a1f944','TITLE'=>$title,'ALERTS'=>$alerts,'STATS'=>$stats,'IP_LIST'=>$ip_list,'IP_BANNED'=>$ip_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),'MEMBER_BANNED'=>$member_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),'ID'=>strval($id),'IP'=>$ip,'NAME'=>$name,'SEARCH_URL'=>$search_url,'AUTHOR_URL'=>$author_url,'POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'ACTION_LOG_URL'=>$action_log_url));
+			return do_template('LOOKUP_SCREEN',array('_GUID'=>'dc6effaa043949940b809f6aa5a1f944','TITLE'=>$title,'ALERTS'=>$alerts,'STATS'=>$stats,'IP_LIST'=>$ip_list,'IP_BANNED'=>$ip_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),'SUBMITTER_BANNED'=>$submitter_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),'MEMBER_BANNED'=>$member_banned?do_lang_tempcode('YES'):do_lang_tempcode('NO'),'MEMBER_BAN_LINK'=>$member_ban_link,'SUBMITTER_BAN_LINK'=>$submitter_ban_link,'IP_BAN_LINK'=>$ip_ban_link,'ID'=>strval($id),'IP'=>$ip,'NAME'=>$name,'SEARCH_URL'=>$search_url,'AUTHOR_URL'=>$author_url,'POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'ACTION_LOG_URL'=>$action_log_url));
 		}
 	}
 

@@ -718,56 +718,8 @@ class Module_galleries
 
 				// Video HTML
 				$thumb_url=$row['thumb_url'];
-				if (url_is_local($thumb_url)) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 				$url=$row['url'];
-				$full_url=url_is_local($url)?(get_custom_base_url().'/'.$url):$url;
-				$extension=get_file_extension($url);
-
-				if ($extension=='swf')
-				{
-					$mime_type='application/x-shockwave-flash';
-					$tpl='GALLERY_SWF';
-				}
-				else
-				{
-					require_code('mime_types');
-					$mime_type=get_mime_type($extension);
-					switch ($mime_type)
-					{
-						case 'video/quicktime':
-							$tpl='GALLERY_VIDEO_QT';
-							break;
-						case 'audio/x-pn-realaudio':
-							$tpl='GALLERY_VIDEO_RM';
-							break;
-						case 'video/x-flv':
-						case 'video/mp4':
-						case 'audio/x-mpeg':
-						case 'video/webm':
-							if (addon_installed('jwplayer'))
-							{
-								$tpl='GALLERY_VIDEO_FLV';
-								break;
-							}
-						default:
-							$matches=array();
-							$ve_hooks=find_all_hooks('systems','video_embed');
-							foreach (array_keys($ve_hooks) as $ve_hook)
-							{
-								require_code('hooks/systems/video_embed/'.$ve_hook);
-								$ve_ob=object_factory('Hook_video_embed_'.$ve_hook);
-								$ve_test=$ve_ob->get_template_name_and_id($url);
-								if (!is_null($ve_test))
-								{
-									list($tpl,$full_url)=$ve_test;
-									break 2;
-								}
-							}
-
-							$tpl='GALLERY_VIDEO_GENERAL';
-					}
-				}
-				$video_player=do_template($tpl,array('THUMB_URL'=>$thumb_url,'URL'=>$full_url,'LENGTH'=>strval($row['video_length']),'WIDTH'=>strval($row['video_width']),'HEIGHT'=>strval($row['video_height']),'MIME_TYPE'=>$mime_type));
+				$video_player=show_gallery_media($url,$thumb_url,$row['video_width'],$row['video_height'],$row['video_length']);
 				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'wide'=>1),'_SELF');
 
 				// Some extra variables relating to the currently selected entry
@@ -1192,52 +1144,11 @@ class Module_galleries
 		$edit_date=is_null($myrow['edit_date'])?'':get_timezoned_date($myrow['edit_date']);
 
 		// Video HTML
+		$video=show_gallery_media($url,$thumb_url,$myrow['video_width'],$myrow['video_height'],$myrow['video_length']);
+
 		$extension=get_file_extension($url);
 		require_code('mime_types');
 		$mime_type=get_mime_type($extension);
-		if ($extension=='swf')
-		{
-				$mime_type='application/x-shockwave-flash';
-				$tpl='GALLERY_SWF';
-		}
-		else
-		{
-			switch ($mime_type)
-			{
-				case 'video/quicktime':
-					$tpl='GALLERY_VIDEO_QT';
-					break;
-				case 'audio/x-pn-realaudio':
-					$tpl='GALLERY_VIDEO_RM';
-					break;
-				case 'video/x-flv':
-				case 'video/mp4':
-				case 'audio/x-mpeg':
-				case 'video/webm':
-					if (addon_installed('jwplayer'))
-					{
-						$tpl='GALLERY_VIDEO_FLV';
-						break;
-					}
-				default:
-					$matches=array();
-					$ve_hooks=find_all_hooks('systems','video_embed');
-					foreach (array_keys($ve_hooks) as $ve_hook)
-					{
-						require_code('hooks/systems/video_embed/'.$ve_hook);
-						$ve_ob=object_factory('Hook_video_embed_'.$ve_hook);
-						$ve_test=$ve_ob->get_template_name_and_id($url);
-						if (!is_null($ve_test))
-						{
-							list($tpl,$url)=$ve_test;
-							break 2;
-						}
-					}
-
-					$tpl='GALLERY_VIDEO_GENERAL';
-			}
-		}
-		$video=do_template($tpl,array('THUMB_URL'=>$thumb_url,'URL'=>$url,'LENGTH'=>strval($myrow['video_length']),'WIDTH'=>strval($myrow['video_width']),'HEIGHT'=>strval($myrow['video_height']),'MIME_TYPE'=>$mime_type));
 
 		$map=array('cat'=>$cat);
 		$sv=has_specific_permission(get_member(),'see_unvalidated');

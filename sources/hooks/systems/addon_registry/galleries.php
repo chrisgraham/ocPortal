@@ -120,6 +120,7 @@ class Hook_addon_registry_galleries
 			'GALLERY_VIDEO_GENERAL.tpl',
 			'GALLERY_VIDEO_QT.tpl',
 			'GALLERY_VIDEO_RM.tpl',
+			'GALLERY_PDF.tpl',
 			'GALLERY_SWF.tpl',
 			'GALLERY_ENTRY_SCREEN.tpl',
 			'GALLERY_FLOW_ENTRY.tpl',
@@ -239,6 +240,7 @@ class Hook_addon_registry_galleries
 				'GALLERY_VIDEO_QT.tpl'=>'gallery_video_qt',
 				'GALLERY_VIDEO_RM.tpl'=>'gallery_video_rm',
 				'GALLERY_SWF.tpl'=>'gallery_swf',
+				'GALLERY_PDF.tpl'=>'gallery_pdf',
 				);
 	}
 
@@ -254,6 +256,26 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_SWF',array(
+					'URL'=>placeholder_url(),
+					'WIDTH'=>placeholder_number(),
+					'HEIGHT'=>placeholder_number(),
+						)
+			),NULL,'',true),
+		);
+	}
+
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__gallery_pdf()
+	{
+		return array(
+			lorem_globalise(
+				do_lorem_template('GALLERY_PDF',array(
 					'URL'=>placeholder_url(),
 					'WIDTH'=>placeholder_number(),
 					'HEIGHT'=>placeholder_number(),
