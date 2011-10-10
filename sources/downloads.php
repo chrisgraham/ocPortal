@@ -449,6 +449,8 @@ function get_category_downloads($category_id,$root,$order=NULL)
 	if ((strtoupper($order)!=strtoupper('t.text_original ASC')) && (strtoupper($order)!=strtoupper('t.text_original DESC')) && (strtoupper($order)!=strtoupper('file_size ASC')) && (strtoupper($order)!=strtoupper('file_size DESC'))
 		&& (strtoupper($order)!=strtoupper('num_downloads DESC')) && (strtoupper($order)!=strtoupper('add_date ASC'))
 		&& (strtoupper($order)!=strtoupper('add_date DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
+	global $NON_CANONICAL_PARAMS;
+	$NON_CANONICAL_PARAMS[]='order';
 
 	// Fetch
 	$rows=$GLOBALS['SITE_DB']->query_select('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND d.name=t.id',array('d.*','text_original'),$map,'ORDER BY '.$order,$max,$start);

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>sources/failure.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -965,6 +967,20 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
+		<key>site/pages/modules/catalogues.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>906</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>899</integer>
+		</dict>
 		<key>site/pages/modules/cedi.php</key>
 		<dict>
 			<key>caret</key>
@@ -1008,6 +1024,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>sources/blocks/main_cc_embed.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>69</integer>
+				<key>line</key>
+				<integer>78</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>43</integer>
 		</dict>
 		<key>sources/blocks/main_contact_simple.php</key>
 		<dict>
@@ -1069,6 +1099,36 @@
 				<integer>58</integer>
 			</dict>
 		</dict>
+		<key>sources/catalogues.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>30</integer>
+				<key>line</key>
+				<integer>112</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>104</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>112</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>45</integer>
+				<key>line</key>
+				<integer>112</integer>
+			</dict>
+		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
 			<key>caret</key>
@@ -1127,6 +1187,36 @@
 			<key>firstVisibleLine</key>
 			<integer>255</integer>
 		</dict>
+		<key>sources/failure.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>86</integer>
+				<key>line</key>
+				<integer>902</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>889</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>122</integer>
+				<key>line</key>
+				<integer>902</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>86</integer>
+				<key>line</key>
+				<integer>902</integer>
+			</dict>
+		</dict>
 		<key>sources/forum/smf.php</key>
 		<dict>
 			<key>caret</key>
@@ -1146,14 +1236,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>35</integer>
+				<integer>55</integer>
 				<key>line</key>
-				<integer>223</integer>
+				<integer>514</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>199</integer>
+			<integer>503</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -2321,6 +2411,34 @@
 				<integer>1</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/CATALOGUE_links_TAB_ENTRY.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/CATALOGUE_links_TAB_FIELD.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>themes/default/templates/CATALOGUE_products_ENTRY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -3242,6 +3360,16 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>sources/catalogues.php</string>
+		<string>site/pages/modules/catalogues.php</string>
+		<string>sources/failure.php</string>
+		<string>sources/blocks/main_cc_embed.php</string>
+		<string>themes/default/templates/CATALOGUE_links_TAB_ENTRY.tpl</string>
+		<string>themes/default/templates/CATALOGUE_links_TAB_FIELD.tpl</string>
+		<string>sources/global2.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

@@ -299,6 +299,8 @@ class Module_admin_ocf_groups extends standard_aed_module
 			list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='sort';
 		}
 
 		$header_row=results_field_title(array(

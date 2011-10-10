@@ -161,6 +161,8 @@ class Module_admin_actionlog
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		require_code('templates_results_table');
 		$field_titles=array(do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTION'),do_lang_tempcode('PARAMETER_A'),do_lang_tempcode('PARAMETER_B'));

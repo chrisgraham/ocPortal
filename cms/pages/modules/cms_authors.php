@@ -114,6 +114,9 @@ class Module_cms_authors
 	 */
 	function _ad()
 	{
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='author';
+
 		$author=get_param('author',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		if (!has_edit_author_permission(get_member(),$author))
 		{

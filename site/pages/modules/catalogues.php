@@ -89,6 +89,42 @@ class Module_catalogues
 		require_code('catalogues');
 		require_code('catalogues2');
 
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->create_table('catalogue_entry_linkage',array(
+				'catalogue_entry_id'=>'*AUTO_LINK',
+				'content_type'=>'ID_TEXT',
+				'content_id'=>'ID_TEXT',
+			));
+			
+			// This caches ancestor relationships. It is redundant to doing tree traversals on catalogue_categories.cc_id, allowing normal efficient SQL joins to be done instead
+			// Note that self relationships (cc_id=cc_ancestor_id) are stored too, so that a single join covers that too.
+			$GLOBALS['SITE_DB']->create_table('catalogue_cat_treecache',array(
+				'cc_id'=>'*AUTO_LINK',
+				'cc_ancestor_id'=>'*AUTO_LINK',
+			));
+			$GLOBALS['SITE_DB']->create_index('catalogue_cat_treecache','cc_ancestor_id',array('cc_ancestor_id'));
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_categories','cc_parent_id',array('cc_parent_id'));
+
+			$GLOBALS['SITE_DB']->create_table('catalogue_efv_float',array(
+				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
+				'cf_id'=>'AUTO_LINK',
+				'ce_id'=>'AUTO_LINK',
+				'cv_value'=>'?REAL',
+			));
+
+			$GLOBALS['SITE_DB']->create_table('catalogue_efv_integer',array(
+				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
+				'cf_id'=>'AUTO_LINK',
+				'ce_id'=>'AUTO_LINK',
+				'cv_value'=>'?INTEGER',
+			));
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcv_value',array('cv_value'));
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','itv_value',array('cv_value'));
+		}
+
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('catalogues',array(
@@ -406,46 +442,11 @@ class Module_catalogues
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short_trans','stcv_value',array('cv_value'));
 		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
 		{
-			$GLOBALS['SITE_DB']->create_table('catalogue_entry_linkage',array(
-				'catalogue_entry_id'=>'*AUTO_LINK',
-				'content_type'=>'ID_TEXT',
-				'content_id'=>'ID_TEXT',
-			));
-			
-			// This caches ancestor relationships. It is redundant to doing tree traversals on catalogue_categories.cc_id, allowing normal efficient SQL joins to be done instead
-			// Note that self relationships (cc_id=cc_ancestor_id) are stored too, so that a single join covers that too.
-			$GLOBALS['SITE_DB']->create_table('catalogue_cat_treecache',array(
-				'cc_id'=>'*AUTO_LINK',
-				'cc_ancestor_id'=>'*AUTO_LINK',
-			));
-			$GLOBALS['SITE_DB']->create_index('catalogue_cat_treecache','cc_ancestor_id',array('cc_ancestor_id'));
 			require_code('catalogues2');
 			rebuild_catalogue_cat_treecache();
 
-			$GLOBALS['SITE_DB']->create_index('catalogue_categories','cc_parent_id',array('cc_parent_id'));
-
-			$GLOBALS['SITE_DB']->create_table('catalogue_efv_float',array(
-				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
-				'cf_id'=>'AUTO_LINK',
-				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'?REAL',
-			));
-
-			$GLOBALS['SITE_DB']->create_table('catalogue_efv_integer',array(
-				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
-				'cf_id'=>'AUTO_LINK',
-				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'?INTEGER',
-			));
-
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcv_value',array('cv_value'));
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','itv_value',array('cv_value'));
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
-		{
 			// Move floats and integers into their own new tables
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 			$sql_integer=db_string_equal_to('cf_type','integer').' OR '.db_string_equal_to('cf_type','auto_increment').' OR '.db_string_equal_to('cf_type','random').' OR '.db_string_equal_to('cf_type','user').' OR '.db_string_equal_to('cf_type','tick');

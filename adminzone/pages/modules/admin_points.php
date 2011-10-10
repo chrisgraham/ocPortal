@@ -91,7 +91,9 @@ class Module_admin_points
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-	
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
+
 		$max_rows=$GLOBALS['SITE_DB']->query_value('gifts','COUNT(*)');
 		$rows=$GLOBALS['SITE_DB']->query_select('gifts',array('*'),NULL,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)

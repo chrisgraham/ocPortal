@@ -83,6 +83,9 @@ class Module_cms_galleries extends standard_aed_module
 
 		$this->alt_aed_module->add_text=new ocp_tempcode();
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='cat';
+
 		$cat=get_param('cat','');
 		if ($cat!='')
 		{

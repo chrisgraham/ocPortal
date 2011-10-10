@@ -137,6 +137,8 @@ class Module_admin_security
 		list($_sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($_sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='failed_sort';
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('IP_ADDRESS')),$sortables,'failed_sort',$_sortable.' '.$sort_order);
 		$member_id=post_param_integer('member_id',NULL);

@@ -47,6 +47,9 @@ function init__templates_results_browser()
  */
 function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$max_rows,$root=NULL,$type=NULL,$keep_all=false,$keep_post=false,$max_page_links=7,$_selectors=NULL)
 {
+	global $NON_CANONICAL_PARAMS;
+	$NON_CANONICAL_PARAMS[]=$max_name;
+
 	$post_array=array();
 	if ($keep_post)
 	{

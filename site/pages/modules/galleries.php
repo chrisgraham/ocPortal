@@ -1014,6 +1014,9 @@ class Module_galleries
 		if (get_param_integer('slideshow',0)==1)
 		{
 			$title=get_page_title('VIEW_SLIDESHOW');
+
+			global $EXTRA_HEAD;
+			$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 		} else
 		{
 			$title=get_page_title('VIEW_IMAGE',true,NULL,NULL,$awards);

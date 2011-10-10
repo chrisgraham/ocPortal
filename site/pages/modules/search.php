@@ -285,6 +285,8 @@ class Module_search
 		list($sortable,$sort_order)=explode(' ',get_param('sort','s_time DESC'),2);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('DELETE'),do_lang_tempcode('RUN_SEARCH')),$sortables,'sort',$sortable.' '.$sort_order);
 		$max_rows=$GLOBALS['SITE_DB']->query_value('searches_saved','COUNT(*)',array('s_member_id'=>get_member()));
 		$rows=$GLOBALS['SITE_DB']->query_select('searches_saved',array('*'),array('s_member_id'=>get_member()),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
@@ -371,9 +373,6 @@ class Module_search
 
 		if (is_object($test_tpl))
 		{
-			global $EXTRA_HEAD;
-			$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
-
 			return $test_tpl;
 		}
 
@@ -505,6 +504,8 @@ class Module_search
 		$sort=get_param('sort','relevance');
 		$direction=get_param('direction','DESC');
 		if (!in_array(strtoupper($direction),array('ASC','DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 		$only_titles=get_param_integer('only_titles',0)==1;
 		$search_under=get_param('search_under','!',true);
 		if ($search_under=='') $search_under='!';
@@ -671,7 +672,7 @@ class Module_search
 		}
 
 		global $EXTRA_HEAD;
-		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		$EXTRA_HEAD->attach('<meta name="robots" content="noindex,nofollow" />'); // XHTMLXHTML
 
 		// Now glue our templates together
 		$out=build_search_results_interface($results,$start,$max,$direction,$id=='');

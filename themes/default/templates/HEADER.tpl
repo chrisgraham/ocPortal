@@ -21,7 +21,7 @@ Copyright ocProducts Limited
 
 	{$,Meta data for the page: standard meta data, Dublin Core meta data, and ocPortal meta data extensions}
 	<title>{+START,IF_NON_EMPTY,{HEADER_TEXT}}{HEADER_TEXT*} &ndash; {+END}{$SITE_NAME*}</title>
-	<meta name="description" content="{+START,IF,{$NEQ,{DESCRIPTION},{!NA}}}{DESCRIPTION*}{+END}" />
+	<meta name="description" content="{+START,IF,{$NEQ,{DESCRIPTION},{!NA},???}}{DESCRIPTION*}{+END}" />
 	<meta name="keywords" content="{KEYWORDS*}" />
 	<meta name="copyright" content="{$COPYRIGHT`}" />
 	<meta name="author" content="{$SITE_NAME*}" />

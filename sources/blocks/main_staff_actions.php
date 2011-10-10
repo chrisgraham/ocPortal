@@ -106,6 +106,8 @@ class Block_main_staff_actions
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sa_sort';
 
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('USERNAME'),/*do_lang_tempcode('IP_ADDRESS'),*/do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTION'),do_lang_tempcode('PARAMETER_A'),do_lang_tempcode('PARAMETER_B')),$sortables,'sa_sort',$sortable.' '.$sort_order);

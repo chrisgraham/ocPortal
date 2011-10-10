@@ -97,6 +97,8 @@ class Module_admin_banners
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$_sum=$GLOBALS['SITE_DB']->query_value('banners','SUM(views_from)');
 		$has_banner_network=$_sum!=0.0;

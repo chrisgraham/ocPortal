@@ -111,6 +111,14 @@ class Module_recommend
 	{
 		require_code('form_templates');
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='page_title';
+		$NON_CANONICAL_PARAMS[]='subject';
+		$NON_CANONICAL_PARAMS[]='s_message';
+		$NON_CANONICAL_PARAMS[]='from';
+		$NON_CANONICAL_PARAMS[]='title';
+		$NON_CANONICAL_PARAMS[]='ocp';
+
 		$page_title=get_param('page_title',NULL,true);
 
 		$submit_name=(!is_null($page_title))?make_string_tempcode($page_title):do_lang_tempcode('SEND');

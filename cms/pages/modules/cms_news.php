@@ -153,6 +153,8 @@ class Module_cms_news extends standard_aed_module
 			$sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('MAIN_CATEGORY'));
 		$fh[]=do_lang_tempcode('_ADDED');
@@ -244,6 +246,9 @@ class Module_cms_news extends standard_aed_module
 
 		if (is_null($main_news_category))
 		{
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='cat';
+
 			$param_cat=get_param('cat','');
 			if ($param_cat=='')
 			{
@@ -693,6 +698,8 @@ class Module_cms_news_cat extends standard_aed_module
 		}
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

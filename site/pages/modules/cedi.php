@@ -433,6 +433,9 @@ class Module_cedi
 
 		seo_meta_load_for('seedy_page',strval($id),$title_to_use_2);
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='te_all';
+
 		$expanded=get_param_integer('te_all',0);
 	
 		// Description
@@ -521,6 +524,7 @@ class Module_cedi
 			} else $extra=new ocp_tempcode();
 			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_link($poster,false,true);
 			$rate_url=get_self_url(true);
+			$NON_CANONICAL_PARAMS[]='te_'.strval($post_id);
 			$this_expand=get_param_integer('te_'.strval($post_id),0);
 			$anti_this_expand=(1-$this_expand);
 			$_expand_url=build_url(array('page'=>'_SELF','type'=>'misc','te_'.strval($post_id)=>$anti_this_expand),'_SELF',array('te_all'=>1),true);
@@ -637,6 +641,8 @@ class Module_cedi
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$max_rows=$GLOBALS['SITE_DB']->query_value('seedy_changes','COUNT(*)',array('the_action'=>'CEDI_MAKE_POST'));
 		$_id=get_param('id',NULL);

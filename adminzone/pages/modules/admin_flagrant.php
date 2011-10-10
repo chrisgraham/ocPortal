@@ -176,6 +176,8 @@ class Module_admin_flagrant extends standard_aed_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('MESSAGE'),

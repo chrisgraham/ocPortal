@@ -217,6 +217,10 @@ class Module_forumview
 		require_code('ocf_forumview');
 		require_css('ocf');
 
+		global $NON_CANONICAL_PARAMS;
+		foreach (array_keys($_GET) as $key)
+			if (substr($key,0,3)=='kfs') $NON_CANONICAL_PARAMS[]=$key;
+
 		$id=NULL;
 		$type=get_param('type','misc');
 	

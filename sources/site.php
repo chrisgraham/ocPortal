@@ -53,6 +53,9 @@ function init__site()
 	$FEED_URL=NULL;
 	$FEED_URL_2=NULL;
 
+	global $NON_CANONICAL_PARAMS;
+	$NON_CANONICAL_PARAMS=array('keep_has_js','keep_session','redirected','redirect_url','redirect','redirect_passon','keep_devtest','keep_su','wide_print','keep_cache','keep_markers','keep_print','keep_novalidate','keep_no_query_limit','keep_avoid_memory_limit','keep_no_swfupload','keep_no_xhtml','keep_no_minify','keep_no_frames','keep_su_online','keep_show_parse_errors','keep_firephp_queries','keep_firephp','keep_fatalistic','keep_currency','keep_country','keep_mobile','keep_textonly','keep_noiepng','keep_no_debug_mode');
+
 	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$FAILED_TO_ATTACH_ALL_ERRORS;
 	$ATTACHED_MESSAGES=new ocp_tempcode();
 	$ATTACHED_MESSAGES_RAW=array();
@@ -500,7 +503,19 @@ function do_header($skip_top=false)
 	}
 
 	// Some meta details
-	$description=((is_null($SEO_DESCRIPTION)) || ($SEO_DESCRIPTION==''))?get_option('description'):$SEO_DESCRIPTION;
+	if ((is_null($SEO_DESCRIPTION)) || ($SEO_DESCRIPTION==''))
+	{
+		if (isset($GLOBALS['META_DATA']['description']))
+		{
+			$description=$GLOBALS['META_DATA']['description'];
+		} else
+		{
+			$description=get_option('description');
+		}
+	} else
+	{
+		$description=$SEO_DESCRIPTION;
+	}
 	if (is_null($description)) $description=''; // Shouldn't happen
 	$keywords=get_option('keywords');
 	if (is_null($SEO_KEYWORDS)) $SEO_KEYWORDS=array();
@@ -537,7 +552,10 @@ function do_header($skip_top=false)
 	}
 
 	// Put it all together
-	$map=array('_GUID'=>'c2625aa7d8f0d5347552f6099a302930','SHOW_TOP'=>$show_top,'LOGOURL'=>$logourl,/*'LOGOMAP'=>$logomap,*/'SELF_URL'=>get_self_url(false,false,array('keep_has_js'=>NULL,'keep_session'=>NULL,'redirected'=>NULL,'redirect_url'=>NULL,'redirect'=>NULL,'redirect_passon'=>NULL)),'HEADER_TEXT'=>$header_text,'CHARSET'=>get_charset(),'REGISTERED_OR_NOT'=>$version_number/*legacy*/,'VERSION_NUMBER'=>$version_number,'REFRESH'=>$refresh,'header_text'=>$header_text,'DESCRIPTION'=>$description,'KEYWORDS'=>$keywords);
+	global $NON_CANONICAL_PARAMS;
+	$non_canonical=array();
+	foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
+	$map=array('_GUID'=>'c2625aa7d8f0d5347552f6099a302930','SHOW_TOP'=>$show_top,'LOGOURL'=>$logourl,/*'LOGOMAP'=>$logomap,*/'SELF_URL'=>get_self_url(false,false,$non_canonical),'HEADER_TEXT'=>$header_text,'CHARSET'=>get_charset(),'REGISTERED_OR_NOT'=>$version_number/*legacy*/,'VERSION_NUMBER'=>$version_number,'REFRESH'=>$refresh,'header_text'=>$header_text,'DESCRIPTION'=>$description,'KEYWORDS'=>$keywords);
 	$map['EXTRA_HEAD']=$GLOBALS['EXTRA_HEAD'];
 
 	$map['ZONE_HEADER_TEXT']=$ZONE['zone_header_text_trans'];

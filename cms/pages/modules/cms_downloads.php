@@ -459,6 +459,9 @@ class Module_cms_downloads extends standard_aed_module
 	{
 		if ((is_null($id)) && (is_null($category_id)))
 		{
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='cat';
+
 			$category_id=get_param_integer('cat',-1);
 			if ($category_id==-1) $category_id=NULL;
 		}
@@ -892,6 +895,9 @@ class Module_cms_downloads_cat extends standard_aed_module
 	{
 		if ((is_null($parent_id)) && ($category_id==-1))
 		{
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='parent_id';
+
 			$parent_id=get_param_integer('parent_id',-1);
 			if ($parent_id==-1) $parent_id=db_get_first_id();
 		}

@@ -406,6 +406,10 @@ class Module_calendar
 		{
 			$t=$type['id'];
 			$filter['int_'.strval($t)]=get_param_integer('int_'.strval($t),0);
+
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='int_'.strval($t);
+
 			if (post_param_integer('id',NULL)===$type['id']) $filter['int_'.strval($t)]=1;
 			if ($filter['int_'.strval($t)]==1) $some_pos=true;
 		}

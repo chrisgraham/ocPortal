@@ -199,6 +199,8 @@ class Module_cms_catalogues extends standard_aed_module
 			$sortables['ce_validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('TITLE');
@@ -1011,6 +1013,8 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('_ADDED'));
 		$fh[]=do_lang_tempcode('ACTIONS');
@@ -1079,7 +1083,13 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	{
 		if (is_null($catalogue_name)) $catalogue_name=get_param('catalogue_name',is_null($id)?false:$GLOBALS['SITE_DB']->query_value('catalogues_categories','c_name',array('id'=>$id)));
 
-		if ($parent_id==-1) $parent_id=get_param_integer('parent_id',-1);
+		if ($parent_id==-1)
+		{
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='parent_id';
+
+			$parent_id=get_param_integer('parent_id',-1);
+		}
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');

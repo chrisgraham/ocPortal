@@ -68,6 +68,10 @@ class Module_topicview
 		if ($max==0) $max=$default_max;
 		$first_unread_id=-1;
 
+		global $NON_CANONICAL_PARAMS;
+		foreach (array_keys($_GET) as $key)
+			if (substr($key,0,3)=='kfs') $NON_CANONICAL_PARAMS[]=$key;
+
 		$type=get_param('type','misc');
 
 		$id=get_param_integer('id',NULL);

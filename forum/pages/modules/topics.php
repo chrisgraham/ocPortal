@@ -74,6 +74,10 @@ class Module_topics
 
 		require_code('form_templates');
 
+		global $NON_CANONICAL_PARAMS;
+		foreach (array_keys($_GET) as $key)
+			if (substr($key,0,3)=='kfs') $NON_CANONICAL_PARAMS[]=$key;
+
 		$type=get_param('type','misc');
 
 		$valid_types=array(
@@ -1070,6 +1074,12 @@ class Module_topics
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'],$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('WHISPER'));
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='quote';
+
+		global $EXTRA_HEAD;
+		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 		return do_template('OCF_WHISPER_CHOICE_SCREEN',array('_GUID'=>'1ecaa02e7e87a4d73798d3085cc27229','URL'=>$url,'TITLE'=>$title,'USERNAME'=>$username));
 	}
 
@@ -1246,6 +1256,9 @@ class Module_topics
 
 		$hidden_fields=new ocp_tempcode();
 		$specialisation=new ocp_tempcode();
+
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='quote';
 
 		$map=array('page'=>'_SELF','type'=>'_add_reply');
 		$redirect=get_param('redirect','');
@@ -1458,6 +1471,10 @@ class Module_topics
 	{
 		require_code('ocf_posts2');
 		
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='quote';
+		$NON_CANONICAL_PARAMS[]='intended_solely_for';
+
 		$topic_id=get_param_integer('id');
 		$intended_solely_for=get_param_integer('intended_solely_for',-1);
 		$post=post_param('post',NULL); // Copy existing post into box (from quick reply 'more options' button)

@@ -118,6 +118,8 @@ class Module_cms_chat
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('ROOM_NAME'),do_lang_tempcode('ROOM_OWNER'),do_lang_tempcode('ROOM_LANG'),do_lang_tempcode('MESSAGES')),$sortables,'sort',$sortable.' '.$sort_order);
 
@@ -192,6 +194,8 @@ class Module_cms_chat
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 		$max_rows=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room_id));
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('*'),array('room_id'=>$room_id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$fields=new ocp_tempcode();

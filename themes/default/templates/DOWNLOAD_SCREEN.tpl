@@ -27,7 +27,7 @@
 						<div class="hide_tag hide_button_spacing" style="display: {$JS_ON,none,block}">
 						{+END}
 						<div class="download_now"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
-							<p class="download_link">[ <a href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}&amp;for_session={$SESSION_HASHED}"><strong>{!DOWNLOAD_NOW}</strong></a> ]</p>
+							<p class="download_link">[ <a rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}&amp;for_session={$SESSION_HASHED}"><strong>{!DOWNLOAD_NOW}</strong></a> ]</p>
 							<p class="download_filesize">({FILE_SIZE*})</p>
 						</div>
 						{+START,IF_PASSED,LICENCE_HYPERLINK}

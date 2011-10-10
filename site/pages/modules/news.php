@@ -326,6 +326,11 @@ class Module_news
 		require_code('feedback');
 		require_css('news');
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='filter';
+		$NON_CANONICAL_PARAMS[]='filter_and';
+		$NON_CANONICAL_PARAMS[]='blog';
+
 		$type=get_param('type','misc');
 
 		if ($type=='view') return $this->view_news();

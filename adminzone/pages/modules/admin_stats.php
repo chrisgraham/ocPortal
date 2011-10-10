@@ -324,6 +324,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$rows=$GLOBALS['SITE_DB']->query_select('usersonline_track',array('date_and_time','peak'),NULL,'ORDER BY '.$sortable.' '.$sort_order);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -396,6 +398,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('date_and_time','COUNT(*) AS cnt'),NULL,'GROUP BY date_and_time ORDER BY '.$sortable.' '.$sort_order,3000/*reasonable limit*/);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -496,6 +500,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		global $M_SORT_KEY;
 		$M_SORT_KEY=0;
@@ -598,6 +604,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		if ($sort_order=='ASC') asort($referrers);
 		else arsort($referrers);
@@ -696,6 +704,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT referer FROM '.get_table_prefix().'stats WHERE referer LIKE \''.db_encode_like('http://www.google.%q=%').'\' AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end).' ORDER BY '.$sortable.' '.$sort_order);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -850,6 +860,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		global $M_SORT_KEY;
 		$M_SORT_KEY=0;
@@ -922,6 +934,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=explode(' ',get_param('sort_views','date_and_time DESC'));
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort_views';
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1000,6 +1014,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort_keywords';
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1095,6 +1111,8 @@ class Module_admin_stats
 			list($sortable,$sort_order)=explode(' ',get_param('sort_regionalities','ip DESC'));
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='sort_regionalities';
 
 			$where=db_string_equal_to('the_page',$page);
 			if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1176,6 +1194,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort_views';
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1380,6 +1400,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1450,6 +1472,8 @@ class Module_admin_stats
 		list($sortable,$sort_order)=explode(' ',get_param('sort','date_and_time ASC'),2);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility

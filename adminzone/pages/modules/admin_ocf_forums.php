@@ -131,6 +131,9 @@ class Module_admin_ocf_forums extends standard_aed_module
 
 		if (is_null($parent_forum))
 		{
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='parent_forum';
+
 			$parent_forum=get_param_integer('parent_forum',NULL);
 		}
 

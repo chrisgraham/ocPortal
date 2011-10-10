@@ -340,6 +340,8 @@ class Module_points
 			list($sortable,$sort_order)=$test;
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='sort';
 	
 			$max_rows=$GLOBALS['SITE_DB']->query_value('chargelog','COUNT(*)',array('user_id'=>$member));
 			$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('user_id'=>$member),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
@@ -457,6 +459,8 @@ class Module_points
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='gift_sort';
 		$max_rows=$GLOBALS['SITE_DB']->query_value('gifts','COUNT(*)',$where);
 		$rows=$GLOBALS['SITE_DB']->query_select('gifts g LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=g.reason',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$out=new ocp_tempcode();
