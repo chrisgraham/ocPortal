@@ -32,7 +32,7 @@ class Hook_config_default_video_width_setting
 			'human_name'=>'VIDEO_WIDTH_SETTING',
 			'the_type'=>'integer',
 			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'section'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_video_width_setting',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

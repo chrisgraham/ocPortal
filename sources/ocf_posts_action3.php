@@ -76,7 +76,7 @@ function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$
  * @param  LONG_TEXT		The post.
  * @param  BINARY			Whether to skip showing the posters signature in the post.
  * @param  BINARY			Whether the post is marked emphasised.
- * @param  MEMBER			The member that this post is intended solely for.
+ * @param  ?MEMBER		The member that this post is intended solely for (NULL: none).
  * @param  boolean		Whether to show the post as edited.
  * @param  boolean		Whether to mark the topic as unread by those previous having read this post.
  * @param  LONG_TEXT		The reason for this action.
@@ -95,6 +95,8 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	$topic_id=$post_info[0]['p_topic_id'];
 	$update=array();
 
+	require_code('ocf_posts_action');
+	require_code('ocf_posts');
 	ocf_check_post($post);
 
 	if (!ocf_may_edit_post_by($post_owner,$forum_id)) access_denied('I_ERROR');

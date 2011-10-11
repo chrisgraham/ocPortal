@@ -32,7 +32,7 @@ class Hook_config_default_video_height_setting
 			'human_name'=>'VIDEO_HEIGHT_SETTING',
 			'the_type'=>'integer',
 			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'section'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_video_height_setting',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

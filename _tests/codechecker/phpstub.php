@@ -5685,10 +5685,12 @@ function gzdeflate($data,$level)
 /**
  * Create a gzip compressed string.
  *
- * @param  string	In.
- * @return string	Out.
+ * @param  string		In.
+ * @param  integer	How much compression.
+ * @range  1 9
+ * @return string		Out.
  */
-function gzencode($data)
+function gzencode($data,$level)
 {
 	return '';
 }

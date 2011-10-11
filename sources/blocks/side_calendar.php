@@ -224,8 +224,14 @@ class Block_side_calendar
 
 			$icon=$event['t_logo'];
 			$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
-			$map2=$filter+array('page'=>'calendar','type'=>'view','id'=>$event['e_id'],'day'=>$__day,'date'=>$view_id,'back'=>'month');
-			$view_url=build_url($map2,$zone);
+			if (is_numeric($e_id))
+			{
+				$map2=$filter+array('page'=>'calendar','type'=>'view','id'=>$event['e_id'],'day'=>$__day,'date'=>$view_id,'back'=>'month');
+				$view_url=build_url($map2,$zone);
+			} else
+			{
+				$view_url=$e_id;
+			}
 			$days[$day_start]['EVENTS'][]=array('DESCRIPTION'=>get_translated_tempcode($event['e_content']),'TIMESTAMP'=>strval($real_from),'TIME'=>($real_from!=$from)?do_lang('EVENT_CONTINUES'):get_timezoned_time($real_from),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','TITLE'=>$title,'VIEW_URL'=>$view_url,'ICON'=>$icon);
 
 			$test=date('d',$to);

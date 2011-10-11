@@ -32,7 +32,7 @@ class Hook_config_default_video_bitrate
 			'human_name'=>'VIDEO_BITRATE',
 			'the_type'=>'integer',
 			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'section'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_video_bitrate',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

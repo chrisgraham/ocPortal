@@ -644,7 +644,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				curl_setopt($ch,CURLOPT_TIMEOUT,intval($timeout));
 				curl_setopt($ch,CURLOPT_USERAGENT,$ua);
 				$headers=array();
-				if ($is_xml) $headers[]='Content-Type: text/xml';
+				if ($is_xml) $headers[]='Content-Type: application/xml';
 				if (!is_null($accept)) $headers[]='Accept: '.rawurlencode($accept);
 				if (!is_null($accept_charset)) $headers[]='Accept-Charset: '.rawurlencode($accept_charset);
 				if (!is_null($accept_language)) $headers[]='Accept-Language: '.rawurlencode($accept_language);
@@ -818,7 +818,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		{
 			if ($is_xml)
 			{
-				$out.="Content-Type: text/xml\r\n";
+				$out.="Content-Type: application/xml\r\n";
 				$out.='Content-length: '.strval(strlen($_postdetails_params))."\r\n";
 				$out.="\r\n".$_postdetails_params."\r\n\r\n";
 			} else

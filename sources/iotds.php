@@ -80,6 +80,8 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 	log_it('EDIT_IOTD',strval($id),get_translated_text($_caption));
 
 	decache('main_iotd');
+
+	update_spacer_post($allow_comments!=0,'videos',strval($id),build_url(array('page'=>'iotds','type'=>'view','id'=>$id),get_module_zone('iotds')),$title,get_value('comment_forum__iotds'));
 }
 
 /**

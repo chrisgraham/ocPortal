@@ -123,10 +123,10 @@ function init__validation()
 	if (!function_exists('http_download_file'))
 	{
 		/**
-		 * Return the file in the URL by downloading it over HTTP. (STUB)
+		 * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
 		 *
 		 * @param  URLPATH		The URL to download
-		 * @param  ?integer		The number of bytes to download (NULL: all bytes)
+		 * @param  ?integer		The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
 		 * @range  1 max
 		 * @param  boolean		Whether to throw an ocPortal error, on error
 		 * @param  boolean		Whether to block redirects (returns NULL when found)
@@ -140,15 +140,12 @@ function init__validation()
 		 * @param  ?string		The HTTP referer (NULL: none)
 		 * @param  ?array			A pair: authentication username and password (NULL: none)
 		 * @param  float			The timeout
+		 * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
+		 * @param  ?array			Files to send. Map between field to file path (NULL: none)
 		 * @return ?string		The data downloaded (NULL: error)
 		 */
-		function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0)
+		function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
 		{
-			unset($byte_limit);
-			unset($trigger_error);
-			unset($no_redirect);
-			unset($ua);
-
 			@ini_set('allow_url_fopen','1');
 			return @file_get_contents($url); // Assumes URL-wrappers is on, whilst ocPortal's is much more sophisticated
 		}

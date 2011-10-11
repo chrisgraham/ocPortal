@@ -32,7 +32,7 @@ class Hook_config_default_audio_bitrate
 			'human_name'=>'AUDIO_BITRATE',
 			'the_type'=>'integer',
 			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'section'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_audio_bitrate',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

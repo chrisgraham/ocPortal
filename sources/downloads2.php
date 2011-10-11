@@ -764,6 +764,8 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 	decache('main_top_downloads');
 	decache('main_download_category');
 	decache('main_download_tease');
+
+	update_spacer_post($allow_comments!=0,'downloads',strval($id),build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads')),$name,get_value('comment_forum__downloads'));
 }
 
 /**

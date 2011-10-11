@@ -32,7 +32,7 @@ class Hook_config_default_ffmpeg_path
 			'human_name'=>'FFMPEG_PATH',
 			'the_type'=>'line',
 			'the_page'=>'FEATURE',
-			'section'=>'GALLERIES',
+			'section'=>'TRANSCODING',
 			'explanation'=>'CONFIG_OPTION_ffmpeg_path',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

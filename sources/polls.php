@@ -351,6 +351,8 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
 
 	require_code('urls2');
 	suggest_new_idmoniker_for('polls','view',strval($id),$question);
+
+	update_spacer_post($allow_comments!=0,'polls',strval($id),build_url(array('page'=>'polls','type'=>'view','id'=>$id),get_module_zone('polls')),$question,get_value('comment_forum__polls'));
 }
 
 /**

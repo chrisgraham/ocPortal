@@ -249,10 +249,21 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 								} else $thumb_url='uploads/attachments/'.$_file;
 							}
 
+							$url='uploads/attachments/'.$_file;
+							if (addon_installed('galleries'))
+							{
+								require_code('images');
+								if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+								{
+									require_code('transcoding');
+									$url=transcode_video($url,'attachments','a_url','a_original_filename',NULL,NULL);
+								}
+							}
+
 							$attachment_id=$connection->query_insert('attachments',array(
 								'a_member_id'=>get_member(),
 								'a_file_size'=>$file_details['size'],
-								'a_url'=>'uploads/attachments/'.$_file,
+								'a_url'=>$url,
 								'a_thumb_url'=>$thumb_url,
 								'a_original_filename'=>basename($entry['path']),
 								'a_num_downloads'=>0,

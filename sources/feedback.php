@@ -311,6 +311,45 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 }
 
 /**
+ * Update the spacer post of a comment topic, after an edit.
+ *
+ * @param  boolean		Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
+ * @param  ID_TEXT		The type (download, etc) that this commenting is for
+ * @param  ID_TEXT		The ID of the type that this commenting is for
+ * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
+ * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
+ * @param  ?string		The name of the forum to use (NULL: default comment forum)
+ */
+function update_spacer_post($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL)
+{
+	if ((get_option('is_on_comments')=='0') || (!$allow_comments)) return;
+	if (get_forum_type()!='ocf') return;
+
+	$home_link=is_null($self_title)?new ocp_tempcode():hyperlink($self_url,escape_html($self_title));
+
+	if (is_null($forum)) $forum=get_option('comments_forum_name');
+	if (!is_integer($forum))
+	{
+		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum);
+		if (is_null($forum_id)) return;
+	}
+	else $forum_id=(integer)$forum;
+
+	$self_title=strip_comcode($self_title);
+
+	$topic_id=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum_id,$type.'_'.$id);
+	if (is_null($topic_id)) return;
+	$post_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','MIN(id)',array('p_topic_id'=>$topic_id));
+	if (is_null($post_id)) return;
+
+	$spacer_title=is_null($self_title)?($type.'_'.$id):($self_title.' (#'.$type.'_'.$id.')');
+	$spacer_post='[semihtml]'.do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()).'[/semihtml]';
+
+	require_code('ocf_posts_action3');
+	ocf_edit_post($post_id,1,$spacer_title,$spacer_post,0,0,NULL,false,false,'');
+}
+
+/**
  * Get the tempcode containing all the comments posted, and the comments posting form for the specified resource.
  *
  * @param  ID_TEXT		The type (download, etc) that this commenting is for

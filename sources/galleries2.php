@@ -442,6 +442,9 @@ function edit_image($id,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,
 
 	decache('main_download_category');
 	decache('main_image_fader');
+
+	require_lang('galleries');
+	update_spacer_post($allow_comments!=0,'images',strval($id),build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries')),do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
 }
 
 /**
@@ -588,82 +591,6 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 }
 
 /**
- * Transcode a video using mencoder.
- *
- * @param  URLPATH		Video to transcoded
- * @return URLPATH		Transcoded file (or original URL if no change was made)
- */
-function transcode_video($url)
-{
-	$transcoding_server=get_value('transcoding_server');
-	if (!is_null($transcoding_server)) // TODO: This will be improved a lot in the future (proper options, messages about what's happening, status updates, and zencoder API support), but for now is a simple tie-in to ocProduct's transcoder (available from the ocPortal subversion)
-	{
-		require_code('files');
-		http_download_file($transcoding_server.'/receive_script.php?file='.urlencode(get_custom_base_url().'/'.$url));
-		return $url;
-	}
-
-	//if there is a locally uploaded file, that is not inflv format go convert it to flv
-	if ((preg_match('#http\:\/\/#i',$url)==0) && (preg_match('#\.(flv|mp4|webm|mp3)$#i',$url)==0))
-	{
-		//mencoder path
-		$ffmpeg_path=get_option('ffmpeg_path');
-
-		//video width to be set
-		$video_width_setting=get_option('video_width_setting');
-
-		//video height to be set
-		$video_height_setting=get_option('video_height_setting');
-
-		//audio bitrate to be set
-		$audio_bitrate=get_option('audio_bitrate');
-
-		//video bitrate to be set
-		$video_bitrate=get_option('video_bitrate');
-
-		$file_path=get_file_base().'/'.rawurldecode($url);
-		$file_path=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$file_path);
-
-		// get_mime_type
-		require_code('mime_types');
-		$file_ext=get_file_extension($file_path);
-		$input_mime_type=get_mime_type($file_ext);
-
-		if ((preg_match('#video\/#i',$input_mime_type)!=0) && ($ffmpeg_path!=''))
-		{
-			//it is video
-			$output_path=preg_replace('#\.'.str_replace('#','\#',preg_quote($file_ext)).'$#','',$file_path).'.mp4';
-			$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.@escapeshellarg($file_path).' -y -f mp4 -vcodec libx264 -b '.@escapeshellarg($video_bitrate).'Kb -ab '.@escapeshellarg($audio_bitrate).'Kb -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -ar 22050 -ac 2 -aspect 16:9 -s '.@escapeshellarg($video_width_setting.':'.$video_height_setting).' '.@escapeshellarg($output_path);
-			$shell_commands=array($shell_command.' -map 0.1:0.0 -map 0.0:0.1',$shell_command.' -map 0.0:0.0 -map 0.1:0.1');
-			foreach ($shell_commands as $shell_command)
-			{
-				shell_exec($shell_command);
-				if (@filesize($output_path)) break;
-			}
-			if (@filesize($output_path))
-			{
-				shell_exec('"'.$ffmpeg_path.'MP4Box" -inter 500 '.' '.@escapeshellarg($output_path));
-				return preg_replace('#\.'.str_replace('#','\#',preg_quote($file_ext)).'$#','',$url).'.mp4';
-			}
-		}
-		elseif ((preg_match('#audio\/#i',$input_mime_type)!=0) && ($ffmpeg_path!=''))
-		{
-			//it is audio
-			$output_path=preg_replace('#\.'.str_replace('#','\#',preg_quote($file_ext)).'$#','',$file_path).'.mp3';
-			$shell_command='"'.$ffmpeg_path.'ffmpeg" -y -i '.@escapeshellarg($file_path).' -ab '.@escapeshellarg($audio_bitrate).'Kb '.@escapeshellarg($output_path);
-			shell_exec($shell_command);
-			if (@filesize($output_path))
-			{
-				return preg_replace('#\.'.str_replace('#','\#',preg_quote($file_ext)).'$#','',$url).'.mp3';
-			}
-		}
-	}
-	
-	// No success :(
-	return $url;
-}
-
-/**
  * Add a video to a specified gallery.
  *
  * @param  ID_TEXT		The gallery name
@@ -690,7 +617,8 @@ function add_video($cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allo
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
 
-	$url=transcode_video($url);
+	require_code('transcoding');
+	$url=transcode_video($url,'videos','url',NULL,'video_width','video_height');
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array('edit_date'=>$edit_date,'video_views'=>$views,'add_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>get_member(),'url'=>$url,'thumb_url'=>$thumb_url,'comments'=>insert_lang_comcode($comments,3),'cat'=>$cat,'validated'=>$validated,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height);
@@ -738,7 +666,8 @@ function edit_video($id,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,
 	delete_upload('uploads/galleries','videos','url','id',$id,$url);
 	delete_upload('uploads/galleries_thumbs','videos','thumb_url','id',$id,$thumb_url);
 
-	$url=transcode_video($url);
+	require_code('transcoding');
+	$url=transcode_video($url,'videos','url',NULL,'video_width','video_height');
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$GLOBALS['SITE_DB']->query_update('videos',array('edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'comments'=>lang_remap_comcode($_comments,$comments),'url'=>$url,'thumb_url'=>$thumb_url,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height),array('id'=>$id),'',1);
@@ -749,6 +678,9 @@ function edit_video($id,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,
 	seo_meta_set_for_explicit('video',strval($id),$meta_keywords,$meta_description);
 
 	decache('main_gallery_embed');
+
+	require_lang('galleries');
+	update_spacer_post($allow_comments!=0,'videos',strval($id),build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries')),do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
 }
 
 /**
@@ -1046,6 +978,8 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	decache('main_recent_galleries');
 	decache('main_root_galleries');
 	decache('side_root_galleries');
+
+	update_spacer_post($allow_comments!=0,'galleries',$name,build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries')),$fullname,get_value('comment_forum__galleries'));
 }
 
 /**

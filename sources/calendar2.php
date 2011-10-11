@@ -215,6 +215,8 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 
 		facebook_wall_event_update($id,$title,$message,$validated,$type,true);
 	}
+	
+	update_spacer_post($allow_comments!=0,'events',strval($id),build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar')),$title,get_value('comment_forum__calendar'));
 
 	log_it('EDIT_CALENDAR_EVENT',strval($id),$title);
 }

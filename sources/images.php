@@ -937,14 +937,15 @@ function is_image($name)
 }
 
 /**
- * Find whether the video specified is actually an video, based on file extension
+ * Find whether the video specified is actually a 'video', based on file extension
  *
  * @param  string			A URL or file path to the video
+ * @param  boolean		Whether it really must be an actual video/audio, not some other kind of rich media which we may render in a video spot
  * @return boolean		Whether the string pointed to a file appeared to be a video
  */
-function is_video($name)
+function is_video($name,$must_be_true_video=false)
 {
-	if (addon_installed('galleries'))
+	if ((addon_installed('galleries')) && (!$must_be_true_video))
 	{
 		$ve_hooks=find_all_hooks('systems','video_embed');
 		foreach (array_keys($ve_hooks) as $ve_hook)
@@ -956,8 +957,11 @@ function is_video($name)
 	}
 
 	$ext=get_file_extension($name);
-	if ($ext=='swf') return true;
-	if ($ext=='pdf') return true; // Galleries can render it as a video
+	if (!$must_be_true_video)
+	{
+		if ($ext=='swf') return true;
+		if ($ext=='pdf') return true; // Galleries can render it as a video
+	}
 	if (($ext=='rm') || ($ext=='ram')) return true; // These have audio mime types, but may be videos
 
 	require_code('mime_types');

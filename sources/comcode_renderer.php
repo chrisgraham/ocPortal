@@ -1130,6 +1130,16 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					} else $thumb_url=$url;
 				}
 
+				if (addon_installed('galleries'))
+				{
+					require_code('images');
+					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					{
+						require_code('transcoding');
+						$url=transcode_video($url,'attachments','a_url','a_original_filename',NULL,NULL);
+					}
+				}
+
 				$attachment=array(
 					'a_member_id'=>$on_behalf_of_member,
 					'a_file_size'=>$_size,
@@ -1213,6 +1223,16 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$last_downloaded_time=NULL;
 				$add_time=time();
 				$member_id=$on_behalf_of_member;
+
+				if (addon_installed('galleries'))
+				{
+					require_code('images');
+					if ((is_video($url)) && ($connection->connection_read==$GLOBALS['SITE_DB']->connection_read))
+					{
+						require_code('transcoding');
+						$url=transcode_video($url,'attachments','a_url','a_original_filename',NULL,NULL);
+					}
+				}
 
 				$attachment=array(
 					'a_member_id'=>$member_id,

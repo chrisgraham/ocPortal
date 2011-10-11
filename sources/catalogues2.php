@@ -747,8 +747,11 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	if (!addon_installed('unvalidated')) $validated=1;
 	$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_edit_date'=>time(),'cc_id'=>$category_id,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks),array('id'=>$id),'',1);
 	require_code('fields');
+	$title=NULL;
 	foreach ($map as $field_id=>$val)
 	{
+		if (is_null($title)) $title=$val;
+		
 		$type=$fields[$field_id];
 
 		$ob=get_fields_hook($type);
@@ -801,6 +804,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	decache('main_recent_cc_entries');
 
 	log_it('EDIT_CATALOGUE_ENTRY',strval($id));
+
+	update_spacer_post($allow_comments!=0,'catalogues',strval($id),build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues')),$title,get_value('comment_forum__catalogues__'.$catalogue_name));
 }
 
 /**

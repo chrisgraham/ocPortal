@@ -705,7 +705,7 @@ function get_gallery_content_tree($table,$submitter=NULL,$gallery=NULL,$tree=NUL
  * @param  integer		Width
  * @param  integer		Height
  * @param  integer		Length
- * @param  ID_TEXT		Original filename of media file (NULL: find from URL)
+ * @param  ?ID_TEXT		Original filename of media file (NULL: find from URL)
  * @return tempcode		Displayed media
  */
 function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filename=NULL)

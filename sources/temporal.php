@@ -950,6 +950,7 @@ function tz_localtime($time, $zone)
  */
 function tz_time($time, $zone)
 {
+	global $TZ_ZONE_DATA;
 	if (!isset($TZ_ZONE_DATA[$zone]))
 	{
 		initialise_timezone_data();

@@ -36,7 +36,7 @@ class Module_galleries
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL; 
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=7;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -50,6 +50,7 @@ class Module_galleries
 		$GLOBALS['SITE_DB']->drop_if_exists('galleries');
 		$GLOBALS['SITE_DB']->drop_if_exists('images');
 		$GLOBALS['SITE_DB']->drop_if_exists('videos');
+		$GLOBALS['SITE_DB']->drop_if_exists('video_transcoding');
 
 		delete_config_option('default_video_width');
 		delete_config_option('default_video_height');
@@ -71,6 +72,9 @@ class Module_galleries
 		delete_config_option('video_bitrate');
 		delete_config_option('audio_bitrate');
 		delete_config_option('ffmpeg_path');
+		delete_config_option('transcoding_server');
+		delete_config_option('transcoding_zencoder_api_key');
+		delete_config_option('transcoding_zencoder_ftp_path');
 		delete_config_option('video_width_setting');
 		delete_config_option('video_height_setting');
 
@@ -244,15 +248,42 @@ class Module_galleries
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
 		{
-			add_config_option('VIDEO_BITRATE','video_bitrate','integer','return \'1000\';','FEATURE','GALLERIES');
-			add_config_option('AUDIO_BITRATE','audio_bitrate','integer','return \'192\';','FEATURE','GALLERIES');
-			add_config_option('FFMPEG_PATH','ffmpeg_path','line','return \'\';','FEATURE','GALLERIES');
-			add_config_option('VIDEO_WIDTH_SETTING','video_width_setting','integer','return \'720\';','FEATURE','GALLERIES');
-			add_config_option('VIDEO_HEIGHT_SETTING','video_height_setting','integer','return \'480\';','FEATURE','GALLERIES');
+			add_config_option('VIDEO_BITRATE','video_bitrate','integer','return \'1000\';','FEATURE','TRANSCODING');
+			add_config_option('AUDIO_BITRATE','audio_bitrate','integer','return \'192\';','FEATURE','TRANSCODING');
+			add_config_option('VIDEO_WIDTH_SETTING','video_width_setting','integer','return \'720\';','FEATURE','TRANSCODING');
+			add_config_option('VIDEO_HEIGHT_SETTING','video_height_setting','integer','return \'480\';','FEATURE','TRANSCODING');
 			$GLOBALS['SITE_DB']->create_index('videos','ftjoin_vcomments',array('comments'));
 			$GLOBALS['SITE_DB']->create_index('images','ftjoin_icomments',array('comments'));
 			$GLOBALS['SITE_DB']->create_index('galleries','ftjoin_gfullname',array('fullname'));
 			$GLOBALS['SITE_DB']->create_index('galleries','ftjoin_gdescrip',array('description'));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<7))
+		{
+			if (is_null($upgrade_from))
+			{
+				$old_option='';
+			} else
+			{
+				$old_option=get_option('ffmpeg_path');
+			}
+			delete_config_option('ffmpeg_path');
+			add_config_option('TRANSCODING_ZENCODER_API_KEY','transcoding_zencoder_api_key','line','return \'\';','FEATURE','TRANSCODING');
+			add_config_option('TRANSCODING_ZENCODER_FTP_PATH','transcoding_zencoder_ftp_path','line','return \'\';','FEATURE','TRANSCODING');
+			add_config_option('TRANSCODING_SERVER','transcoding_server','line','return \'\';','FEATURE','TRANSCODING');
+			add_config_option('FFMPEG_PATH','ffmpeg_path','line','return \''.addslashes($old_option).'\';','FEATURE','TRANSCODING');
+
+			$GLOBALS['SITE_DB']->create_table('video_transcoding',array(
+				't_id'=>'*ID_TEXT',
+				't_error'=>'LONG_TEXT',
+				't_url'=>'URLPATH',
+				't_table'=>'ID_TEXT',
+				't_url_field'=>'ID_TEXT',
+				't_orig_filename_field'=>'ID_TEXT',
+				't_width_field'=>'ID_TEXT',
+				't_height_field'=>'ID_TEXT',
+				't_output_filename'=>'ID_TEXT',
+			));
 		}
 	}
 	
