@@ -2271,3 +2271,12 @@ sources_custom/locations/us.php
 data_custom/locations_install.php
 data_custom/locations_uninstall.php
 data_custom/geoposition.php
+
+plupload
+--------
+
+# # data_custom/plupload/index.html
+# # data_custom/plupload/plupload.flash.swf
+# # data_custom/plupload/plupload.silverlight.xap
+# # sources_custom/global2.php
+# # data_custom/picup.htm

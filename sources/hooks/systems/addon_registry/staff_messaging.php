@@ -124,6 +124,7 @@ class Hook_addon_registry_staff_messaging
 					'TITLE'=>lorem_title(),
 					'MESSAGE_TITLE'=>lorem_phrase(),
 					'MESSAGE'=>lorem_phrase(),
+					'BY'=>lorem_phrase(),
 					'WHOS_READ'=>placeholder_array(),
 					'COMMENT_DETAILS'=>$comment_details,
 					'TAKE_RESPONSIBILITY_URL'=>placeholder_url(),

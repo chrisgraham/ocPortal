@@ -62,4 +62,7 @@
 	{+END}
 {+END}
 
-{FORM}
+{$,If has commenting permission}
+{+START,IF_NON_EMPTY,{FORM}}
+	{FORM}
+{+END}

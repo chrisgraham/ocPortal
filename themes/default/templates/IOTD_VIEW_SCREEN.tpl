@@ -34,10 +34,6 @@
 					{RATING_DETAILS}
 				</div>
 			{+END}
-	
-			{+START,IF,{$JS_ON}}
-				<a href="#" onclick="history.back(); return false;"><img title="{!GO_BACK}" alt="{!GO_BACK}" src="{$IMG*,bigicons/back}" /></a>
-			{+END}
 		</div>
 
 		<div>

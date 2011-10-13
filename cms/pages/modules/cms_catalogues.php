@@ -322,15 +322,18 @@ class Module_cms_catalogues extends standard_aed_module
 	
 		if ((is_null($id)) && (is_null($category_id)))
 		{
-			$category_id=get_param_integer('category_id',-1);
-			if ($category_id==-1) $category_id=NULL;
+			$category_id=get_param_integer('category_id',NULL);
+
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='category_id';
+			$NON_CANONICAL_PARAMS[]='category_id_suggest';
 		}
 
 		// Standard fields
 		// ===============
 
 		// Category
-		if ((is_null($id)) && (is_null($category_id)))
+		if ((is_null($id)) && (is_null($category_id)) && (get_value('no_confirm_url_spec_cats')!=='1'))
 		{
 			$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
 		}
@@ -339,6 +342,11 @@ class Module_cms_catalogues extends standard_aed_module
 			$hidden->attach(form_input_hidden('category_id',strval($category_id)));
 		} else
 		{
+			if ((is_null($id)) && (is_null($category_id)))
+			{
+				$category_id=get_param_integer('category_id_suggest',NULL); // Less forceful than 'category_id', as may be changed even with 'no_confirm_url_spec_cats' on
+			}
+			
 			$fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',NULL,'choose_catalogue_category',array('catalogue_name'=>$catalogue_name,'addable_filter'=>true),true,is_null($category_id)?'':strval($category_id)));
 		}
 

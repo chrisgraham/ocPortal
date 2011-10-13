@@ -2048,9 +2048,10 @@ function setInnerHTML(element,tHTML,append) {
 			} else
 			{
 				window.js_runs_test=false;
-				tHTML+='<script type="text/javascript">window.js_runs_test=true;</script>';
-				element.innerHTML=tHTML;
 				var scripts=element.getElementsByTagName('script'),text;
+				if (scripts.length>0)
+					tHTML+='<script type="text/javascript">window.js_runs_test=true;</script>';
+				element.innerHTML=tHTML;
 				for (var i=0;i<scripts.length;i++)
 				{
 					text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));

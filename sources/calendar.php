@@ -19,6 +19,14 @@
  */
 
 /**
+ * Standard code module init function.
+ */
+function init__calendar()
+{
+	require_code('temporal2');
+}
+
+/**
  * Get the week number for a time.
  *
  * @param  TIME				The week number
@@ -152,8 +160,8 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 
 	do
 	{
-		$a=cal_servertime_to_usertime(mktime(is_null($start_hour)?0:$start_hour,is_null($start_minute)?0:$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
-		$b=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?23:$end_hour,is_null($end_minute)?59:$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
+		$a=cal_servertime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
+		$b=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
 
 		$starts_within=(($a>=$period_start) && ($a<$period_end));
 		$ends_within=(($b>$period_start) && ($b<$period_end));
@@ -278,7 +286,6 @@ function date_range($from,$to,$do_time=true)
 	{
 		// Duration between times
 		$_length=display_time_period($to-$from);
-
 		$pm_a=date('a',$from);
 		$pm_b=date('a',$to);
 		if ($pm_a==$pm_b)
@@ -465,7 +472,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	{
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
 
-		$their_times=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?23:$event['e_end_hour'],is_null($event['e_end_minute'])?59:$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
+		$their_times=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
 
 		// Now search every combination to see if we can get a hit
 		foreach ($their_times as $their)
@@ -583,7 +590,7 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	{
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
 
-		$their_times=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?23:$event['e_end_hour'],is_null($event['e_end_minute'])?59:$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
+		$their_times=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
 
 		// Now search every combination to see if we can get a hit
 		foreach ($our_times as $our)

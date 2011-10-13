@@ -11,7 +11,7 @@
 </div>
 
 <div class="message_main">
-	{+START,BOX,{!MESSAGE}: {MESSAGE_TITLE}}
+	{+START,BOX,{MESSAGE_TITLE} ({!BY_SIMPLE,{BY*}})}
 		{MESSAGE}
 	{+END}
 </div>

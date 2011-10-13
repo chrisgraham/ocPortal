@@ -142,11 +142,11 @@ class Hook_fields_float
 		$default=STRING_MAGIC_NULL;
 		if (get_translated_text($field['cf_name'])=='Latitude')
 		{
-			$default=post_param($tmp_name.'_latitude',STRING_MAGIC_NULL);
+			$default=post_param('latitude',STRING_MAGIC_NULL);
 		}
 		if (get_translated_text($field['cf_name'])=='Longitude')
 		{
-			$default=post_param($tmp_name.'_longitude',STRING_MAGIC_NULL);
+			$default=post_param('longitude',STRING_MAGIC_NULL);
 		}
 		return post_param($tmp_name,$default);
 	}

@@ -70,12 +70,15 @@ function scriptLoadStuffStaff()
 	];
 	var cells=document.getElementsByTagName('td');
 	var links=[];
-	for (var i=0;i<cells.length;i++)
+	if (window.location.href.indexOf('/cms/')!=-1)
 	{
-		var as=cells[i].getElementsByTagName('a');
-		for (var j=0;j<as.length;j++)
+		for (var i=0;i<cells.length;i++)
 		{
-			links.push(as[j]);
+			var as=cells[i].getElementsByTagName('a');
+			for (var j=0;j<as.length;j++)
+			{
+				links.push(as[j]);
+			}
 		}
 	}
 	{+START,IF,{$ADDON_INSTALLED,awards}}

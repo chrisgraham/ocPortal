@@ -57,24 +57,35 @@ function get_rating_simple_array($rating_for_type,$id,$tpl='RATING_INSIDE',$extr
 				}
 			}
 		} else $_rating=NULL;
-		if (has_specific_permission(get_member(),'rate',get_page_name()))
+		
+		// The possible rating criteria
+		$titles=array(array('TITLE'=>'','TYPE'=>''));
+		if (!is_null($extra_ratings))
 		{
-			if (!already_rated($rating_for_type,$id))
+			$titles=array(array('TITLE'=>do_lang('GENERAL'),'TYPE'=>''));
+			foreach ($extra_ratings as $type)
 			{
-				$rate_url=get_self_url();
-				$titles=array(array('TITLE'=>'','TYPE'=>''));
-				if (!is_null($extra_ratings))
-				{
-					$titles=array(array('TITLE'=>do_lang('GENERAL'),'TYPE'=>''));
-					foreach ($extra_ratings as $type)
-					{
-						$titles[]=array('TITLE'=>$type,'TYPE'=>$type);
-					}
-				}
-				$rating_inside=do_template($tpl,array('TYPE'=>'','ROOT_TYPE'=>$rating_for_type,'ID'=>$id,'URL'=>$rate_url,'TITLES'=>$titles,'SIMPLISTIC'=>count($titles)==1));
-			} else $rating_inside=do_lang_tempcode('NORATE');
-		} else $rating_inside=do_lang_tempcode('RATE_DENIED');
+				$titles[]=array('TITLE'=>$type,'TYPE'=>$type);
+			}
+		}
 
+		// Work out possible errors that mighr prevent rating being allowed
+		$error=NULL;
+		$rate_url='';
+		if (!has_specific_permission(get_member(),'rate',get_page_name()))
+		{
+			$error=do_lang_tempcode('RATE_DENIED');
+		}
+		elseif (already_rated($rating_for_type,$id))
+		{
+			$error=do_lang_tempcode('NORATE');
+		} else
+		{
+			$rate_url=get_self_url();
+		}
+
+		// Templating
+		$rating_inside=do_template($tpl,array('ERROR'=>$error,'TYPE'=>'','ROOT_TYPE'=>$rating_for_type,'ID'=>$id,'URL'=>$rate_url,'TITLES'=>$titles,'SIMPLISTIC'=>count($titles)==1));
 		return array('ROOT_TYPE'=>$rating_for_type,'ID'=>$id,'_RATING'=>$_rating,'NUM_RATINGS'=>integer_format($num_ratings),'RATING_INSIDE'=>$rating_inside);
 	}
 	return NULL;
@@ -319,8 +330,9 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
  * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
  * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
  * @param  ?string		The name of the forum to use (NULL: default comment forum)
+ * @param  ?AUTO_LINK	ID of spacer post (NULL: unknown)
  */
-function update_spacer_post($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL)
+function update_spacer_post($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL,$post_id=NULL)
 {
 	if ((get_option('is_on_comments')=='0') || (!$allow_comments)) return;
 	if (get_forum_type()!='ocf') return;
@@ -337,16 +349,24 @@ function update_spacer_post($allow_comments,$type,$id,$self_url,$self_title,$for
 
 	$self_title=strip_comcode($self_title);
 
-	$topic_id=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum_id,$type.'_'.$id);
-	if (is_null($topic_id)) return;
-	$post_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','MIN(id)',array('p_topic_id'=>$topic_id));
-	if (is_null($post_id)) return;
+	if (is_null($post_id))
+	{
+		$topic_id=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum_id,$type.'_'.$id);
+		if (is_null($topic_id)) return;
+		$post_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','MIN(id)',array('p_topic_id'=>$topic_id));
+		if (is_null($post_id)) return;
+	} else
+	{
+		$topic_id=$GLOBALS['FORUM_DB']->query_value('f_posts','p_topic_id',array('id'=>$post_id));
+	}
 
 	$spacer_title=is_null($self_title)?($type.'_'.$id):($self_title.' (#'.$type.'_'.$id.')');
 	$spacer_post='[semihtml]'.do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()).'[/semihtml]';
 
 	require_code('ocf_posts_action3');
-	ocf_edit_post($post_id,1,$spacer_title,$spacer_post,0,0,NULL,false,false,'');
+	ocf_edit_post($post_id,1,is_null($self_title)?$spacer_title:$self_title,$spacer_post,0,0,NULL,false,false,'');
+	require_code('ocf_topics_action2');
+	ocf_edit_topic($topic_id,do_lang('COMMENT').': #'.$type.'_'.$id);
 }
 
 /**

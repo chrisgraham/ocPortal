@@ -1188,8 +1188,8 @@ class Module_calendar
 						// Maybe spanning multiple days of month
 						if (!is_null($to))
 						{
-							$explode=explode('-',date('d-m',$to));
-							$continues=(intval($explode[0])!=$_day) || (intval($explode[1])!=$i);
+							$_explode=explode('-',date('d-m',$to));
+							$continues=(intval($_explode[0])!=$_day) || (intval($_explode[1])!=$i);
 							if ($continues)
 							{
 								$_from=mktime(0,0,0,intval(date('m',$_from)),intval(date('d',$_from))+1,intval(date('Y',$_from)));
@@ -1416,11 +1416,11 @@ class Module_calendar
 			}
 		}
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year'])));
-		$time_raw=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
+		$time_raw=mktime(is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
 		$from=cal_servertime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 		if (!is_null($event['e_end_year']))
 		{
-			$to=cal_servertime_to_usertime(mktime($event['e_end_hour'],$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			$to=cal_servertime_to_usertime(mktime(is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$time2=date_range($from,$to,!is_null($event['e_start_hour']));
 		} else $time2=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$from));
 

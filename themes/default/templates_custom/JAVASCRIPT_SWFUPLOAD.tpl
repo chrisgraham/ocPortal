@@ -1263,7 +1263,7 @@ function doSubmit(e,ob) {
 function fileDialogStart(ob) {
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
 	txtFileName.value = "";
-	var id = document.getElementById(ob.settings.txtFileDbID)
+	var id = document.getElementById(ob.settings.txtFileDbID);
 	id.value = "-1";
 	ob.customSettings.upload_successful = false;
 
@@ -1511,7 +1511,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
-	
+
 	// Mark so we don't do more than once
 	if (typeof rep.replaced_with_swfupload!='undefined') return;
 	rep.replaced_with_swfupload=true;
@@ -1544,7 +1544,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 				catch(e) {}
 				return '0,0,0';
 			};
-
+			
 			// ie
 			if (typeof window.ActiveXObject!='undefined')
 			{
@@ -1568,7 +1568,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 			}
 			return '0,0,0';
 		}
-
+ 
 		var version = getFlashVersion().split(',').shift();
 		if(version < 9)
 		{
@@ -1604,24 +1604,24 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 
 	if (!java_method)
 	{
-		var nextField=document.createElement('input');
-		nextField.setAttribute('size',24);
-		nextField.setAttribute('id','txtFileName_'+name);
-		nextField.setAttribute('type','text');
-		nextField.value='';
-		nextField.name='txtFileName_'+name;
-		nextField.disabled=true;
-		subdiv.appendChild(nextField);
+		var filenameField=document.createElement('input');
+		filenameField.setAttribute('size',24);
+		filenameField.setAttribute('id','txtFileName_'+name);
+		filenameField.setAttribute('type','text');
+		filenameField.value='';
+		filenameField.name='txtFileName_'+name;
+		filenameField.disabled=true;
+		subdiv.appendChild(filenameField);
 	}
 
 	var placeholder=document.createElement('span');
 	placeholder.id='spanButtonPlaceholder_'+name;
 	subdiv.appendChild(placeholder,rep);
 
-	var flashdiv=document.createElement('div');
-	flashdiv.id='fsUploadProgress_'+name;
-	flashdiv.className='flash';
-	maindiv.appendChild(flashdiv);
+	var progressDiv=document.createElement('div');
+	progressDiv.id='fsUploadProgress_'+name;
+	progressDiv.className='flash';
+	maindiv.appendChild(progressDiv);
 
 	var hidFileID=document.createElement('input');
 	hidFileID.setAttribute('id','hidFileID_'+name);
@@ -1639,6 +1639,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 	}
 	maindiv.appendChild(disable_link);
 
+	// Replace old upload field with text field that holds a "1" indicating upload has happened (and telling ocP to check the hidFileID value for more details)
 	rep.style.display='none';
 	rep.disabled=true;
 	rep.name=name+'_old';
@@ -1734,7 +1735,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 		out+='</object>';
 		/*out+='<applet mayscript="true" scriptable="true" code="Uploader.class" archive="{$BASE_URL}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL}/data/javaupload/Net.jar" width="430" height="29" id="uploader_'+name+'">';
 		out+='</applet>';*/
-		setInnerHTML(flashdiv,out);
+		setInnerHTML(progressDiv,out);
 
 		var old_onclick=btnSubmit.onclick;
 		btnSubmit.onclick=function() {
@@ -1762,7 +1763,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 
 	try
 	{
-		var mfs=nextField.form.elements['MAX_FILE_SIZE'];
+		var mfs=filenameField.form.elements['MAX_FILE_SIZE'];
 		if ((typeof mfs!='undefined') && (typeof mfs.value=='undefined')) mfs=mfs[0];
 
 		var ob=new SWFUpload({
@@ -1777,7 +1778,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 
 			// Backend settings
 			upload_url: "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true),
-			file_post_name: "Filedata",
+			file_post_name: "file",
 
 			// Flash file settings
 			file_size_limit : (typeof mfs=='undefined')?'2 GB':(mfs.value+' B'),
@@ -2066,7 +2067,7 @@ function gears_upload(event,field_name)
 		builder.append(crlf);
 
 		/* Generate headers. */
-		builder.append('Content-Disposition: form-data; name="Filedata"');
+		builder.append('Content-Disposition: form-data; name="file"');
 		if (file.name) {
 			builder.append('; filename="' + file.name + '"');
 		}
@@ -2221,7 +2222,7 @@ function html5_upload(event,field_name,files)
 		data+=(dashdash);
 		data+=(boundary);
 		data+=(crlf);
-		data+=('Content-Disposition: form-data; name="Filedata"');
+		data+=('Content-Disposition: form-data; name="file"');
 		if (file.name) {
 			data+=('; filename="' + file.name + '"');
 		}

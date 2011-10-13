@@ -178,6 +178,7 @@ class Module_admin_messaging
 		{
 			$message_title=$_comments[0]['title'];
 			$message=$_comments[0]['message'];
+			$by=$_comments[0]['username'];
 
 			foreach ($_comments as $i=>$comment)
 			{
@@ -215,7 +216,7 @@ class Module_admin_messaging
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
 		breadcrumb_set_self(do_lang_tempcode('VIEW'));
 
-		return do_template('MESSAGING_MESSAGE_SCREEN',array('_GUID'=>'61561f1a333b88370ceb66dbbcc0ea4c','TITLE'=>$title,'MESSAGE_TITLE'=>$message_title,'MESSAGE'=>$message,'WHOS_READ'=>$whos_read,'COMMENT_DETAILS'=>$comment_details,'TAKE_RESPONSIBILITY_URL'=>$take_responsibility_url,'RESPONSIBLE'=>$responsible));
+		return do_template('MESSAGING_MESSAGE_SCREEN',array('_GUID'=>'61561f1a333b88370ceb66dbbcc0ea4c','TITLE'=>$title,'MESSAGE_TITLE'=>$message_title,'MESSAGE'=>$message,'BY'=>$by,'WHOS_READ'=>$whos_read,'COMMENT_DETAILS'=>$comment_details,'TAKE_RESPONSIBILITY_URL'=>$take_responsibility_url,'RESPONSIBLE'=>$responsible));
 	}
 
 	/**

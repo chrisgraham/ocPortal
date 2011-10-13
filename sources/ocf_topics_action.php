@@ -46,6 +46,7 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 
 	if ($check_perms)
 	{
+		require_code('ocf_topics');
 		if (!ocf_may_post_topic($forum_id,get_member()))
 		{
 			access_denied('I_ERROR');
@@ -62,6 +63,7 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 			ocf_decache_ocp_blocks($forum_id);
 		}
 
+		require_code('ocf_forums');
 		if (!ocf_may_moderate_forum($forum_id))
 		{
 			$pinned=0;

@@ -17,7 +17,7 @@
 	{+START,IF,{$NOT,{$GET,included_java_upload}}}
 		{+START,INCLUDE,JAVA_DETECT}{+END}
 	{+END}
-	{$SET,included_java_upload}
+	{$SET,included_java_upload,_true}
 {+END}
 
 {+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}

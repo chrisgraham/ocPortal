@@ -466,7 +466,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
  * Get a map of the fields for the given entry.
  *
  * @param  array			A database row of the entry we are working with
- * @param  array			A database row of the catalogue we are working with
+ * @param  ?array			A database row of the catalogue we are working with (NULL: read it in here)
  * @param  ID_TEXT		The view type we're doing
  * @set    PAGE SEARCH CATEGORY
  * @param  ID_TEXT		The template set we are rendering this category using
@@ -481,6 +481,13 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NULL,$fields=NULL,$only_fields=NULL,$feedback_details=false,$tree_details=false,$order_by=NULL)
 {
 	$id=$entry['id'];
+
+	if (is_null($catalogue))
+	{
+		$catalogue_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$entry['c_name']),'',1);
+		if (!array_key_exists(0,$catalogue_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		$catalogue=$catalogue_rows[0];
+	}
 
 	// Views
 	if (get_db_type()!='xml')

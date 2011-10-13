@@ -57,6 +57,6 @@
 <div id="map_position_{NAME*}" style="width:100%; height:300px"></div>
 
 <div style="display:none">
-	<input type="text" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_latitude" name="{NAME*}_latitude" value="{LATITUDE*}" />
-	<input type="text" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_longitude" name="{NAME*}_longitude" value="{LONGITUDE*}" />
+	<input type="text" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_latitude" name="latitude" value="{LATITUDE*}" />
+	<input type="text" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_longitude" name="longitude" value="{LONGITUDE*}" />
 </div>

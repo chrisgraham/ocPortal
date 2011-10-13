@@ -41,6 +41,7 @@ class Module_cms_calendar extends standard_aed_module
 	var $menu_label='CALENDAR';
 	var $permissions_cat_require='calendar';
 	var $permissions_cat_name='type';
+	var $posting_field_required=false;
 
 	// These are state-set, for usage by the specialised donext manager
 	var $donext_type=NULL;
@@ -357,8 +358,8 @@ class Module_cms_calendar extends standard_aed_module
 
 		// Dates
 		$fields->attach(form_input_tick(do_lang_tempcode('ALL_DAY_EVENT'),do_lang_tempcode('DESCRIPTION_ALL_DAY_EVENT'),'all_day_event',is_null($start_hour)));
-		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array($start_minute,$start_hour,$start_month,$start_day,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
-		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array($end_minute,$end_hour,$end_month,$end_day,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
+		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute('Europe/London',$start_year,$start_month,$start_day):$start_minute,is_null($start_hour)?find_timezone_start_hour('Europe/London',$start_year,$start_month,$start_day):$start_hour,$start_month,$start_day,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,is_null($start_hour)?'Europe/London':$timezone));
+		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute('Europe/London',$end_year,$end_month,$end_day):$end_minute,is_null($end_hour)?find_timezone_end_hour('Europe/London',$end_year,$end_month,$end_day):$end_hour,$end_month,$end_day,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,is_null($end_hour)?'Europe/London':$timezone));
 
 		if ($validated==0) $validated=get_param_integer('validated',0);
 		if (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))

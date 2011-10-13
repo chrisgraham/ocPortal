@@ -1525,12 +1525,12 @@ function pparse__parser_next($all=false)
 function parser_error($message)
 {
 	global $tokens,$i;
-	foreach ($tokens as $key=>$token)
+	/*foreach ($tokens as $key=>$token)
 	{
 		if ($key == $i) echo '<strong>';
 		echo ' '.$token[0].' ';
 		if ($key == $i) echo '</strong>';
-	}
+	}*/
 	list($pos,$line,$full_line)=pos_to_line_details($i);
 	die_error('PARSER',$pos,$line,$message);
 }

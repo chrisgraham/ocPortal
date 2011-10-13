@@ -106,7 +106,7 @@ class Module_vforums
 	function unread_topics()
 	{
 		$title=do_lang('TOPICS_UNREAD');
-		$condition=array('l_time IS NOT NULL AND l_time<t_cache_last_time','l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))));
+		$condition=array('l_time IS NOT NULL AND l_time<=t_cache_last_time','l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))));
 
 		return array(get_page_title('TOPICS_UNREAD'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true));
 	}

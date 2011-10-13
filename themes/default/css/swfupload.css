@@ -15,7 +15,9 @@ div.fieldset span.legend {
 }
 
 div.flash {
-	width: 365px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 365px;
+	{+END}
 	margin: 10px 5px;
 	border-color: #D9E4FF;
 	-moz-border-radius-topleft : 5px;

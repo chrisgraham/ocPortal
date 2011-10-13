@@ -19,6 +19,74 @@
  */
 
 /**
+ * Find first hour in day for a timezone for someone observing in GMT.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @param  boolean			Invert reference point
+ * @return integer			Hour
+ */
+function find_timezone_start_hour($timezone,$year,$month,$day,$invert=true)
+{
+	$ret=intval(date('H',tz_time(mktime(0,0,0,$month,$day,$year),$timezone)));
+	if ($invert) $ret=-$ret;
+	return $ret;
+}
+
+/**
+ * Find first minute in day for a timezone for someone observing in GMT. Usually 0, but some timezones have 30 min offsets.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @param  boolean			Invert reference point
+ * @return integer			Hour
+ */
+function find_timezone_start_minute($timezone,$year,$month,$day,$invert=true)
+{
+	$ret=intval(date('i',tz_time(mktime(0,0,0,$month,$day,$year),$timezone)));
+	if ($invert) $ret=-$ret;
+	return $ret;
+}
+
+/**
+ * Find last hour in day for a timezone for someone observing in GMT.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @param  boolean			Invert reference point
+ * @return integer			Hour
+ */
+function find_timezone_end_hour($timezone,$year,$month,$day,$invert=true)
+{
+	$ret=intval(date('H',tz_time(mktime(23,59,0,$month,$day,$year),$timezone)));
+	if ($invert) $ret=23-$ret;
+	return $ret;
+}
+
+/**
+ * Find last minute in day for a timezone for someone observing in GMT. Usually 59, but some timezones have 30 min offsets.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @param  boolean			Invert reference point
+ * @return integer			Hour
+ */
+function find_timezone_end_minute($timezone,$year,$month,$day,$invert=true)
+{
+	$ret=intval(date('i',tz_time(mktime(23,59,0,$month,$day,$year),$timezone)));
+	if ($invert) $ret=59-$ret;
+	return $ret;
+}
+
+/**
  * Check a POST inputted date for validity, and get the Unix timestamp for the inputted date.
  *
  * @param  ID_TEXT		The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
@@ -27,6 +95,7 @@
  */
 function _get_input_date($stub,$get_also=false)
 {
+	$timezone=post_param('timezone',get_users_timezone());
 	if ($get_also)
 	{
 //		if (either_param_integer($stub,0)==0) return NULL; // NULL was chosen		Doesn't work like this now
@@ -37,8 +106,8 @@ function _get_input_date($stub,$get_also=false)
 		if (is_null($month)) return NULL;
 		$day=either_param_integer($stub.'_day',NULL);
 		if (is_null($day)) return NULL;
-		$hour=either_param_integer($stub.'_hour',0);
-		$minute=either_param_integer($stub.'_minute',0);
+		$hour=either_param_integer($stub.'_hour',NULL);
+		$minute=either_param_integer($stub.'_minute',NULL);
 	} else
 	{
 //		if (post_param_integer($stub,0)==0) return NULL; // NULL was chosen		Doesn't work like this now
@@ -49,19 +118,23 @@ function _get_input_date($stub,$get_also=false)
 		if (is_null($month)) return NULL;
 		$day=post_param_integer($stub.'_day',NULL);
 		if (is_null($day)) return NULL;
-		$hour=post_param_integer($stub.'_hour',0);
-		$minute=post_param_integer($stub.'_minute',0);
+		$hour=post_param_integer($stub.'_hour',NULL);
+		$minute=post_param_integer($stub.'_minute',NULL);
 	}	
 
 	if (!checkdate($month,$day,$year)) warn_exit(do_lang_tempcode('INVALID_DATE_GIVEN'));
 
-	$time=mktime($hour,$minute,0,$month,$day,$year);
-
-	if (($year>=1970) || (@strftime('%Y',@mktime(0,0,0,1,1,1963))=='1963')) // Only try and do timezone conversion if we can do proper maths this far back
+	if (!is_null($hour))
 	{
-		$timezone=post_param('timezone',get_users_timezone());
-		$amount_forward=tz_time($time,$timezone)-$time;
-		$time=$time-$amount_forward;
+		$time=mktime($hour,$minute,0,$month,$day,$year);
+		if (($year>=1970) || (@strftime('%Y',@mktime(0,0,0,1,1,1963))=='1963')) // Only try and do timezone conversion if we can do proper maths this far back
+		{
+			$amount_forward=tz_time($time,$timezone)-$time;
+			$time=$time-$amount_forward;
+		}
+	} else
+	{
+		$time=mktime(0,0,0,$month,$day,$year);
 	}
 
 	return $time;

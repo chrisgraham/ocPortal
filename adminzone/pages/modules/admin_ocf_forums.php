@@ -127,6 +127,9 @@ class Module_admin_ocf_forums extends standard_aed_module
 		if (is_null($category_id))
 		{
 			$category_id=get_param_integer('category_id',db_get_first_id());
+
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='category_id';
 		}
 
 		if (is_null($parent_forum))

@@ -328,6 +328,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval((integer)$to_forum_id).', p_topic_id='.strval((integer)$to_topic_id).' WHERE '.$or_list);
 
 	// Update cacheing
+	require_code('ocf_posts_action2');
 	ocf_force_update_topic_cacheing($from_topic_id,-$num_posts_counted,true,true);
 	ocf_force_update_topic_cacheing($to_topic_id,$num_posts_counted,true,true);
 	if ((!is_null($from_forum_id)) && (!is_null($to_topic_id)) && ($from_forum_id!=$to_topic_id))

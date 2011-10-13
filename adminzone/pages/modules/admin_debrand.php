@@ -103,7 +103,7 @@ class Module_admin_debrand
 		} else $start_page=do_lang('REBRAND_FRONT_PAGE');
 
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_line(do_lang_tempcode('REBRAND_NAME'),'','rebrand_name',$rebrand_name,true));
+		$fields->attach(form_input_line(do_lang_tempcode('REBRAND_NAME'),do_lang_tempcode('DESCRIPTION_REBRAND_NAME'),'rebrand_name',$rebrand_name,true));
 		$fields->attach(form_input_line(do_lang_tempcode('REBRAND_BASE_URL'),do_lang_tempcode('DESCRIPTION_BRAND_BASE_URL',escape_html('docs'.strval(ocp_version()))),'rebrand_base_url',$rebrand_base_url,true));
 		$fields->attach(form_input_line(do_lang_tempcode('COMPANY_NAME'),'','company_name',$company_name,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('ADMINGUIDE'),do_lang_tempcode('DESCRIPTION_ADMINGUIDE'),'adminguide',$adminguide,true));
@@ -111,10 +111,10 @@ class Module_admin_debrand
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('KEYBOARD_MAP'),'','keyboard_map',$keyboard_map,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE_UN_PC'),do_lang_tempcode('DESCRIPTION_DELETE_UN_PC'),'churchy',false));
 		$fields->attach(form_input_tick(do_lang_tempcode('SHOW_DOCS'),do_lang_tempcode('DESCRIPTION_SHOW_DOCS'),'show_docs',get_option('show_docs')=='1'));
-		$fields->attach(form_input_upload(do_lang_tempcode('FAVICON'),do_lang_tempcode('DESCRIPTION_FAVICON'),'favicon',true,find_theme_image('favicon')));
-		$fields->attach(form_input_upload(do_lang_tempcode('APPLEICON'),do_lang_tempcode('DESCRIPTION_APPLEICON'),'appleicon',true,find_theme_image('appleicon')));
+		$fields->attach(form_input_upload(do_lang_tempcode('FAVICON'),do_lang_tempcode('DESCRIPTION_FAVICON'),'favicon',false,find_theme_image('favicon')));
+		$fields->attach(form_input_upload(do_lang_tempcode('APPLEICON'),do_lang_tempcode('DESCRIPTION_APPLEICON'),'appleicon',false,find_theme_image('appleicon')));
 		if (addon_installed('ocf_avatars'))
-			$fields->attach(form_input_upload(do_lang_tempcode('SYSTEM_AVATAR'),do_lang_tempcode('DESCRIPTION_SYSTEM_AVATAR'),'system_avatar',true,find_theme_image('ocf_default_avatars/default_set/ocp_fanatic')));
+			$fields->attach(form_input_upload(do_lang_tempcode('SYSTEM_AVATAR'),do_lang_tempcode('DESCRIPTION_SYSTEM_AVATAR'),'system_avatar',false,find_theme_image('ocf_default_avatars/default_set/ocp_fanatic')));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$submit_name=do_lang_tempcode('SUPER_DEBRAND');

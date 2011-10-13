@@ -1270,7 +1270,7 @@ function escape_html($string)
 function brand_base_url()
 {
 	$value=get_value('rebrand_base_url');
-	if (is_null($value)) $value='http://ocportal.com';
+	if ((is_null($value)) || ($value=='')) $value='http://ocportal.com';
 	return $value;
 }
 

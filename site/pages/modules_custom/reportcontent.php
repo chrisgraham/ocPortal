@@ -178,15 +178,16 @@ class Module_reportcontent
 		
 		require_code('content');
 
+		$content_type=post_param('content_type'); // Equates to a content_meta_aware hook
+		$content_id=post_param('content_id');
+
 		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('reported_content','r_counts',array(
 			'r_session_id'=>get_session_id(),
 			'r_content_type'=>$content_type,
 			'r_content_id'=>$content_id,
 		))))
 			warn_exit(do_lang_tempcode('ALREADY_REPORTED_CONTENT'));
-		$content_type=post_param('content_type'); // Equates to a content_meta_aware hook
-		$content_id=post_param('content_id');
-		list($content_title,,$cma_info)=$this->content_get_details($content_type,$content_id);
+		list($content_title,,$cma_info)=content_get_details($content_type,$content_id);
 
 		// Create reported post...
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('reported_posts_forum'));

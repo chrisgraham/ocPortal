@@ -5407,6 +5407,16 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
 
+	if (typeof window.no_java=='undefined') window.no_java=false;
+	
+	var java_method=false;
+	{+START,IF,{$CONFIG_OPTION,java_upload}}
+		if (window.location.search.indexOf('keep_java=1')!=-1)
+		{
+			if ((!window.no_java) && (isValidJVM())) java_method=true;
+		}
+	{+END}
+
 	// Mark so we don't do more than once
 	if (typeof rep.replaced_with_swfupload!='undefined') return;
 	rep.replaced_with_swfupload=true;
@@ -5441,15 +5451,124 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 	progressDiv.className='flash';
 	maindiv.appendChild(progressDiv);
 
-	var filenameField=document.createElement('input');
-	filenameField.setAttribute('size',24);
-	filenameField.setAttribute('id','txtFileName_'+name);
-	filenameField.setAttribute('type','text');
-	filenameField.value='';
-	filenameField.className='inline_image';
-	filenameField.name='txtFileName_'+name;
-	filenameField.disabled=true;
-	subdiv.appendChild(filenameField);
+	if (!java_method)
+	{
+		var filenameField=document.createElement('input');
+		filenameField.setAttribute('size',24);
+		filenameField.setAttribute('id','txtFileName_'+name);
+		filenameField.setAttribute('type','text');
+		filenameField.value='';
+		filenameField.className='inline_image';
+		filenameField.name='txtFileName_'+name;
+		filenameField.disabled=true;
+		subdiv.appendChild(filenameField);
+	}
+
+	if (java_method)
+	{
+		var btnSubmit=document.getElementById(_btnSubmitID);
+
+		var hidFileName=document.createElement('input');
+		hidFileName.setAttribute('id','hidFileName_'+name);
+		hidFileName.name='hidFileName_'+name;
+		hidFileName.setAttribute('type','hidden');
+		hidFileName.value='';
+		maindiv.appendChild(hidFileName);
+
+		var random=Math.floor(Math.random()*100000);
+
+		var base="{$CONFIG_OPTION#*,java_ftp_path}";
+		if (base.substr(base.length-1,1)!='/') base+='/';
+		hidFileID.value=''+random+'.dat';
+		
+		var colorAt=rep.parentNode,backgroundColor;
+		do
+		{
+			backgroundColor=abstractGetComputedStyle(colorAt,'background-color');
+			colorAt=colorAt.parentNode;
+		}
+		while ((colorAt) && (backgroundColor) && (backgroundColor=='transparent'));
+		if ((!backgroundColor) || (backgroundColor=='transparent')) backgroundColor='#FFFFFF';
+		var foregroundColor=abstractGetComputedStyle(rep.parentNode,'color');
+		if (!foregroundColor) foregroundColor='#000000';
+		var matches;
+		function decToHex(number)
+		{
+			var hexbase="0123456789ABCDEF";
+			return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
+		}
+		matches=backgroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
+		if (matches) backgroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		matches=foregroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
+		if (matches) foregroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+
+		var out='';
+		var maxLength=(typeof btnSubmit.form.elements['MAX_FILE_SIZE']=='undefined')?'2000000000':(btnSubmit.form.elements['MAX_FILE_SIZE'].value);
+		out+='<object width="430" height="29" classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93">';
+		out+='	<param name="codebase" value="{$BASE_URL*;}/data/javaupload/" />';
+		out+='	<param name="code" value="Uploader.class" />';
+		out+='	<param name="archive" value="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" />';
+		out+='	<param name="scriptable" VALUE="true" />';
+		out+='	<param name="mayscript" VALUE="true" />';
+		out+='	<param name="address" value="{$CONFIG_OPTION*;,java_ftp_host}" />';
+		out+='	<param name="username" value="{$CONFIG_OPTION*;,java_username}" />';
+		out+='	<param name="password" value="{$CONFIG_OPTION*;,java_password}" />';
+		out+='	<param name="uploadedFileName" value="'+base+random+'.dat" />';
+		out+='	<param name="backgroundColor" value="'+backgroundColor+'" />';
+		out+='	<param name="foregroundColor" value="'+foregroundColor+'" />';
+		out+='	<param name="fileNameID" value="hidFileName_'+name+'" />';
+		out+='	<param name="nameID" value="'+name+'" />';
+		out+='	<param name="maxLength" value="'+maxLength+'" />';
+		out+='	<param name="page_type" value="'+page_type+'" />';
+		out+='	<param name="posting_field_name" value="'+posting_field_name+'" />';
+		out+='	<param name="_btnSubmitID" value="'+_btnSubmitID+'" />';
+		out+='	<param name="types" value="{$CONFIG_OPTION,valid_types}" />';
+		out+='	<param name="fail_message" value="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message^;}}" />';
+		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message^;*}" />';
+		out+='	<param name="reverting_title" value="{!JAVA_FTP_reverting_title^;*}" />';
+		out+='	<param name="valid_types_label" value="{!JAVA_FTP_valid_types_label^;*}" />';
+		out+='	<param name="refused_connection" value="{!JAVA_FTP_refused_connection^;*}" />';
+		out+='	<param name="output_complete" value="{!JAVA_FTP_output_complete^;*}" />';
+		out+='	<param name="transfer_error" value="{!JAVA_FTP_transfer_error^;*}" />';
+		out+='	<param name="file_name_label" value="{!JAVA_FTP_file_name_label^;*}" />';
+		out+='	<param name="browse_label" value="{!JAVA_FTP_browse_label^;*}" />';
+		out+='	<param name="upload_label" value="{!JAVA_FTP_upload_label^;*}" />';
+		out+='	<param name="please_choose_file" value="{!JAVA_FTP_please_choose_file^;*}" />';
+		out+='	<param name="wrong_path" value="{!JAVA_FTP_wrong_path^;*}" />';
+		out+='	<param name="max_size_label" value="{!JAVA_FTP_max_size_label^;*}" />';
+		out+='	<param name="too_large" value="{!JAVA_FTP_too_large^;*}" />';
+		out+='	<comment>';
+		out+='		<embed width="430" height="29" fail_message="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message^;}}" uploaded_message="{!JAVA_FTP_uploaded_message^;*}" reverting_title="{!JAVA_FTP_reverting_title^;*}" valid_types_label="{!JAVA_FTP_valid_types_label^;*}" refused_connection="{!JAVA_FTP_refused_connection^;*}" output_complete="{!JAVA_FTP_output_complete^;*}" transfer_error="{!JAVA_FTP_transfer_error^;*}" file_name_label="{!JAVA_FTP_file_name_label^;*}" browse_label="{!JAVA_FTP_browse_label^;*}" upload_label="{!JAVA_FTP_upload_label^;*}" please_choose_file="{!JAVA_FTP_please_choose_file^;*}" wrong_path="{!JAVA_FTP_wrong_path^;*}" max_size_label="{!JAVA_FTP_max_size_label^;*}" too_large="{!JAVA_FTP_too_large^;*}" _btnSubmitID="'+_btnSubmitID+'" page_type="'+page_type+'" nameID="'+name+'" types="{$CONFIG_OPTION,valid_types}" maxLength="'+maxLength+'" fileNameID="hidFileName_'+name+'" address="{$CONFIG_OPTION*;,java_ftp_host}" username="{$CONFIG_OPTION*;,java_username}" password="{$CONFIG_OPTION*;,java_password}" uploadedFileName="'+base+random+'.dat" backgroundColor="'+backgroundColor+'" foregroundColor="'+foregroundColor+'" scriptable="true" mayscript="true" codebase="{$BASE_URL*;}/data/javaupload/" code="Uploader.class" archive="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" type="application/x-java-applet" pluginspage="http://java.sun.com/products/plugin/index.html#download">';
+		out+='		</embed>';
+		out+='	</comment>';
+		out+='</object>';
+		/*out+='<applet mayscript="true" scriptable="true" code="Uploader.class" archive="{$BASE_URL}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL}/data/javaupload/Net.jar" width="430" height="29" id="uploader_'+name+'">';
+		out+='</applet>';*/
+		setInnerHTML(progressDiv,out);
+
+		var old_onclick=btnSubmit.onclick;
+		btnSubmit.onclick=function() {
+			if ((rep2.value=='1') || (rep.className.indexOf('required')==-1))
+			{
+				window.form_submitting=btnSubmit.form; // For IE
+				old_onclick();
+				return;
+			}
+			window.alert('{!UPLOAD_FIRST^;}');
+			btnSubmit.disabled=true;
+			var timer=window.setInterval(function() {
+				if (rep2.value=='1')
+				{
+					window.clearTimeout(timer);
+					btnSubmit.disabled=false;
+					window.form_submitting=btnSubmit.form; // For IE
+					old_onclick();
+				}
+			} , 500);
+		}
+
+		return;
+	}
 
 	var ios=navigator.userAgent.match(/iOS|iPhone|iPad|iPod/);
 
