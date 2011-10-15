@@ -136,7 +136,7 @@
 		})(marker, data_point[0])); {$,These are the args passed to the dynamic function above.}
 	}
 	
-	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=false"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
+	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=true"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
 //]]></script>
 
 {+START,BOX,{TITLE*}}

@@ -3,11 +3,12 @@
 	<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js"></script>
 {+END}
 <script type="text/javascript">// <![CDATA[
+	var data_map;
 	function google_map_users_initialize()
 	{
 		var bounds = new google.maps.LatLngBounds();
 		var center = new google.maps.LatLng({$?,{$IS_EMPTY,{LATITUDE}},0.0,{LATITUDE}},{$?,{$IS_EMPTY,{LONGITUDE}},0.0,{LONGITUDE}});
-		var map = new google.maps.Map(document.getElementById('{DIV_ID;}'),
+		data_map = new google.maps.Map(document.getElementById('{DIV_ID;}'),
 		{
 			zoom: {ZOOM},
 			{+START,IF,{$NEQ,{CENTER},1}}
@@ -24,7 +25,7 @@
 		var infoWindow = new google.maps.InfoWindow();
 
 		{$,Close InfoWindow when clicking anywhere on the map.}
-		google.maps.event.addListener(map, 'click', function ()
+		google.maps.event.addListener(data_map, 'click', function ()
 		{
 			infoWindow.close();
 		});
@@ -32,7 +33,7 @@
 		var data=[
 			{+START,LOOP,DATA}
 				{+START,IF,{$NEQ,{_loop_key},0}},{+END}
-				['{ENTRY_TITLE;}',{LATITUDE},{LONGITUDE},{CC_ID},{ID}]
+				['{ENTRY_TITLE^;}',{LATITUDE},{LONGITUDE},{CC_ID},{ID},'{ENTRY_CONTENT^;}']
 			{+END}
 		];
 
@@ -77,50 +78,50 @@
 				markers.push(marker);
 			{+END}
 			{+START,IF,{$NEQ,{CLUSTER},1}}
-				marker.setMap(map);
+				marker.setMap(data_map);
 			{+END}
 
-			google.maps.event.addListener(marker, 'click', (function (argMarker, entry_title, entry_id)
+			google.maps.event.addListener(marker, 'click', (function (argMarker, entry_title, entry_id, entry_content)
 			{
 				return function ()
 				{
 					{$,Dynamically load entry details only when their marker is clicked.}
-					var content = entry_title{+START,IF,{$EQ,{SHOW_LINKS},1}}+': <a href="'+'{ENTRIES_URL*}'.replace('%21',entry_id)+'">{!GO_TO_MAP_ENTRY}</a>'{+END};
+					var content = entry_content.replace(/<colgroup>(.|\n)*<\/colgroup>/,'').replace(/&nbsp;/g,' ');
 					if (content != "")
 					{
 						infoWindow.setContent(content);
-						infoWindow.open(map, argMarker);
+						infoWindow.open(data_map, argMarker);
 					}
 				};
-			})(marker, data[i][0], data[i][4])); {$,These are the args passed to the dynamic function above.}
+			})(marker, data[i][0], data[i][4], data[i][5])); {$,These are the args passed to the dynamic function above.}
 		}
 
 		{+START,IF,{$EQ,{CLUSTER},1}}
-			var markerCluster = new MarkerClusterer(map, markers);
+			var markerCluster = new MarkerClusterer(data_map, markers);
 		{+END}
 
 		{$,Fit the map around the markers, but only if we want the map centered.}
 		{+START,IF,{$EQ,{CENTER},1}}
 			if (bound_length==0) {$,We may have to auto-center after all}
 			{
-				map.setCenter(center);
+				data_map.setCenter(center);
 			} else
 			{
-				map.fitBounds(bounds);
+				data_map.fitBounds(bounds);
 			}
 		{+END}
 
 		{$,Sample code to grab clicked positions
 			var lastPoint;
-			google.maps.event.addListener(map, "mousemove", function(point) \{
+			google.maps.event.addListener(data_map, "mousemove", function(point) \{
 				lastPoint = point.latLng;
 			\});
-			google.maps.event.addListener(map, "click", function() \{
+			google.maps.event.addListener(data_map, "click", function() \{
 				console.log(lastPoint.lat() + ', ' + lastPoint.lng());
 			\});
 		}
 	}
-	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=false"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
+	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=true"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
 //]]></script>
 
 {+START,BOX,{TITLE*}}

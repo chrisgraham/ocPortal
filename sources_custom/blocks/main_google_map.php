@@ -76,7 +76,7 @@ class Block_main_google_map
 		if ($map['filter_category']!='')
 		{
 			require_code('ocfiltering');
-			$query.=' AND ('.ocfilter_to_sqlfragment($map['filter_category'],'id','catalogue_categories','cc_parent_id','id','cc_id').')';
+			$query.=' AND ('.ocfilter_to_sqlfragment($map['filter_category'],'id','catalogue_categories','cc_parent_id','cc_id','id').')';
 		}
 		if (!array_key_exists('filter_term',$map)) $map['filter_term']='';
 
@@ -102,7 +102,7 @@ class Block_main_google_map
 		$data=array();
 		foreach($entries_to_show as $i=>$entry_row)
 		{
-			$details=get_catalogue_entry_map($entry_row,$catalogue_row,'PAGE','DEFAULT',NULL);
+			$details=get_catalogue_entry_map($entry_row,$catalogue_row,'CATEGORY',$catalogue_name,NULL);
 
 			$two_d_list=$details['FIELDS_2D'];
 
@@ -121,13 +121,18 @@ class Block_main_google_map
 
 			if ((is_numeric($longitude)) && (is_numeric($latitude)))
 			{
-				if (($map['filter_term']=='') || (strpos($entry_title,$map['filter_term'])!==false))
+				if (($map['filter_term']=='') || (strpos(strtolower($entry_title),strtolower($map['filter_term']))!==false))
 				{
 					$details['LONGITUDE']=float_to_raw_string(floatval($longitude));
 					$details['LATITUDE']=float_to_raw_string(floatval($latitude));
+
 					$details['ENTRY_TITLE']=$entry_title;
+
+					$entry_content=do_template('CATALOGUE_googlemap_ENTRY_EMBED',$details,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');//put_in_standard_box(hyperlink($url,do_lang_tempcode('VIEW')),do_lang_tempcode('CATALOGUE_ENTRY').' ('.do_lang_tempcode('IN',get_translated_text($catalogue['c_title'])).')');
+					$details['ENTRY_CONTENT']=$entry_content;
+
 					$details['CC_ID']=strval($entry_row['cc_id']);
-					
+
 					$data[]=$details;
 				}
 			}

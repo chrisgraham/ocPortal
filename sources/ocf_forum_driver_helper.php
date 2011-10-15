@@ -336,9 +336,10 @@ function not_like_spacer_posts($field)
  * @param  integer		The comment count will be returned here by reference
  * @param  ?integer		Maximum comments to returned (NULL: no limit)
  * @param  integer		Comment to start at
+ * @param  boolean		Whether to mark the topic read
  * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
  */
-function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_description,&$count,$max,$start)
+function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_description,&$count,$max,$start,$mark_read=true)
 {
 	if (!is_integer($forum_name))
 	{
@@ -383,8 +384,11 @@ function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_
 		}
 	}
 
-	require_code('ocf_topics');
-	ocf_ping_topic_read($topic_id);
+	if ($mark_read)
+	{
+		require_code('ocf_topics');
+		ocf_ping_topic_read($topic_id);
+	}
 
 	return $out;
 }
