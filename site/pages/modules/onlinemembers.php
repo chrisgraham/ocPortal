@@ -102,8 +102,11 @@ class Module_onlinemembers
 			{
 				if (is_guest($member))
 				{
-					$test=$GLOBALS['SITE_DB']->query_value_null_ok('stats','ip',array('the_user'=>-$row['the_session']));
-					if (!is_null($test)) $ip=$test;
+					if (addon_installed('stats'))
+					{
+						$test=$GLOBALS['SITE_DB']->query_value_null_ok('stats','ip',array('the_user'=>-$row['the_session']));
+						if (!is_null($test)) $ip=$test;
+					}
 				} else
 				{
 					$test=$GLOBALS['FORUM_DRIVER']->get_member_ip($member);

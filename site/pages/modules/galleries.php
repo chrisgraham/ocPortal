@@ -446,6 +446,10 @@ class Module_galleries
 		require_code('feedback');
 		require_css('galleries');
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+		$NON_CANONICAL_PARAMS[]='start';
+
 		// What are we doing?
 		$type=get_param('type','misc');
 		if ($type=='image') return $this->show_image();
@@ -635,9 +639,26 @@ class Module_galleries
 			);
 		}
 
+		// Sorting
+		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
+		$_selectors=array(
+			'compound_rating DESC'=>'POPULARITY',
+			'url ASC'=>'FILENAME',
+			'add_date ASC'=>'OLDEST_FIRST',
+			'add_date DESC'=>'NEWEST_FIRST'
+		);
+		$selectors=new ocp_tempcode();
+		foreach ($_selectors as $selector_value=>$selector_name)
+		{
+			$selected=($sort==$selector_value);
+			$selectors->attach(do_template('RESULTS_BROWSER_SORTER',array('SELECTED'=>$selected,'NAME'=>do_lang_tempcode($selector_name),'VALUE'=>$selector_value)));
+		}
+		$sort_url=get_self_url(false,false,array('sort'=>NULL),false,true);
+		$sorting=do_template('RESULTS_BROWSER_SORT',array('SORT'=>'sort','RAND'=>uniqid(''),'URL'=>$sort_url,'SELECTORS'=>$selectors));
+
 		if ($myrow['flow_mode_interface']==1)
-			return $this->do_gallery_flow_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download_gallery,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$rep_image,$start,$max,$num_galleries,$fullname);
-		else return $this->do_gallery_regular_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download_gallery,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$rep_image,$fullname);
+			return $this->do_gallery_flow_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download_gallery,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$rep_image,$start,$max,$num_galleries,$fullname,$sorting);
+		else return $this->do_gallery_regular_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download_gallery,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$fullname,$sorting);
 	}
 
 	/**
@@ -660,14 +681,17 @@ class Module_galleries
 	 * @param  integer		The maximum number of child galleries we can display per page
 	 * @param  integer		The number of child galleries we have
 	 * @param  string			The gallery title
+	 * @param  tempcode		Sorting UI
 	 * @return tempcode		The UI
 	 */
-	function do_gallery_flow_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$rep_image,$start,$max,$num_galleries,$fullname)
+	function do_gallery_flow_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$rep_image,$start,$max,$num_galleries,$fullname,$sorting)
 	{
+		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
+		
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
 		$num_pages=intval(ceil(floatval($num_galleries)/floatval($max)));
-		$previous=($page_num==1)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>(max($start-$max,0)==0)?NULL:max($start-$max,0)),'_SELF',NULL,true);
-		$next=($page_num==$num_pages)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF',NULL,true);
+		$previous=($page_num==1)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>(max($start-$max,0)==0)?NULL:max($start-$max,0),'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF',NULL,true);
+		$next=($page_num==$num_pages)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF',NULL,true);
 		if ($num_pages<2)
 		{
 			$browse=new ocp_tempcode();
@@ -692,9 +716,9 @@ class Module_galleries
 		$probe_id=get_param_integer('probe_id',0);
 		if ($probe_type=='first')
 		{
-			$map=array('cat'=>$cat);
-			if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
-			$first_video=$GLOBALS['SITE_DB']->query_select('videos',array('*'),$map,'ORDER BY id DESC',1);
+			$where=db_string_equal_to('cat',$cat);
+			if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e '.$where.' ORDER BY '.$sort,1);
 			if (array_key_exists(0,$first_video))
 			{
 				$row=$first_video[0];
@@ -702,9 +726,9 @@ class Module_galleries
 				$probe_id=$row['id'];
 			} else
 			{
-				$map=array('cat'=>$cat);
-				if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
-				$first_image=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id DESC',1);
+				$where=db_string_equal_to('cat',$cat);
+				if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e '.$where.' ORDER BY '.$sort,1);
 				if (array_key_exists(0,$first_image))
 				{
 					$row=$first_image[0];
@@ -751,7 +775,7 @@ class Module_galleries
 				$thumb_url=$row['thumb_url'];
 				$url=$row['url'];
 				$video_player=show_gallery_media($url,$thumb_url,$row['video_width'],$row['video_height'],$row['video_length']);
-				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'wide'=>1),'_SELF');
+				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'wide'=>1,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 
 				// Some extra variables relating to the currently selected entry
 				$entry_rating_details=get_rating_text('videos',strval($row['id']),$row['allow_rating']==1);
@@ -794,7 +818,7 @@ class Module_galleries
 					$thumb_url=get_custom_base_url().'/'.$thumb_url;
 				} else $file_size='';
 				$full_url=$thumb_url;
-				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'wide'=>1),'_SELF');
+				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'wide'=>1,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 
 				// Some extra variables relatin to the currently selected entry
 				$entry_rating_details=get_rating_text('images',strval($row['id']),$row['allow_rating']==1);
@@ -814,10 +838,10 @@ class Module_galleries
 		$entries=new ocp_tempcode();
 
 		// Display entries
-		$map=array('cat'=>$cat);
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
-		$query_rows_videos=$GLOBALS['SITE_DB']->query_select('videos',array('*'),$map,'ORDER BY id',50);
-		$query_rows_images=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id',50);
+		$where=db_string_equal_to('cat',$cat);
+		if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,50);
+		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,50);
 
 		// See if there is a numbering system to sort by
 		$all_are=NULL;
@@ -847,8 +871,8 @@ class Module_galleries
 
 			$caption=get_translated_tempcode($row['comments']);
 
-			$probe_url=build_url(array('page'=>'_SELF','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$cat,'probe_type'=>$type,'probe_id'=>$row['id']),'_SELF');
-			$view_url_2=build_url(array('page'=>'_SELF','wide'=>1,'type'=>$type,'root'=>($root=='root')?NULL:$root,'id'=>$row['id']),'_SELF');
+			$probe_url=build_url(array('page'=>'_SELF','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$cat,'probe_type'=>$type,'probe_id'=>$row['id'],'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
+			$view_url_2=build_url(array('page'=>'_SELF','wide'=>1,'type'=>$type,'root'=>($root=='root')?NULL:$root,'id'=>$row['id'],'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 			if (array_key_exists('url',$row))
 			{
 				$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
@@ -878,7 +902,7 @@ class Module_galleries
 			$rep_image_url=get_custom_base_url().'/'.$rep_image;
 		} elseif ($rep_image!='') $rep_image_url=$rep_image;
 
-		return do_template('GALLERY_FLOW_MODE_SCREEN',array('_GUID'=>'73728cb94579f06ab487627101011d43','_TITLE'=>$fullname,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'VIEW_URL'=>$view_url,'FULL_URL'=>$full_url,'PROBE_TYPE'=>$probe_type,'ENTRY_VIEWS'=>$entry_views,'ENTRY_ADD_DATE_RAW'=>$entry_add_date_raw,'ENTRY_EDIT_DATE_RAW'=>$entry_edit_date_raw,'ENTRY_TRACKBACK_DETAILS'=>$entry_trackback_details,'ENTRY_RATING_DETAILS'=>$entry_rating_details,'ENTRY_COMMENT_DETAILS'=>$entry_comment_details,'ENTRY_EDIT_URL'=>$entry_edit_url,'WARNING_DETAILS'=>$warning_details,'TAGS'=>get_loaded_tags('galleries'),'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'BROWSE'=>$browse,'REP_IMAGE_URL'=>$rep_image_url,'TITLE'=>$title,'MEMBER_DETAILS'=>$member_details,'DESCRIPTION'=>$description,'CHILDREN'=>$children,'CURRENT_ENTRY'=>$current_entry,'ENTRIES'=>$entries,'ADD_GALLERY_URL'=>$add_gallery_url,'EDIT_URL'=>$edit_url,'IMAGE_URL'=>$submit_image_url,'VIDEO_URL'=>$submit_video_url,'MAY_DOWNLOAD'=>$may_download,'CAT'=>$cat));
+		return do_template('GALLERY_FLOW_MODE_SCREEN',array('_GUID'=>'73728cb94579f06ab487627101011d43','SORTING'=>$sorting,'_TITLE'=>$fullname,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'VIEW_URL'=>$view_url,'FULL_URL'=>$full_url,'PROBE_TYPE'=>$probe_type,'ENTRY_VIEWS'=>$entry_views,'ENTRY_ADD_DATE_RAW'=>$entry_add_date_raw,'ENTRY_EDIT_DATE_RAW'=>$entry_edit_date_raw,'ENTRY_TRACKBACK_DETAILS'=>$entry_trackback_details,'ENTRY_RATING_DETAILS'=>$entry_rating_details,'ENTRY_COMMENT_DETAILS'=>$entry_comment_details,'ENTRY_EDIT_URL'=>$entry_edit_url,'WARNING_DETAILS'=>$warning_details,'TAGS'=>get_loaded_tags('galleries'),'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'BROWSE'=>$browse,'REP_IMAGE_URL'=>$rep_image_url,'TITLE'=>$title,'MEMBER_DETAILS'=>$member_details,'DESCRIPTION'=>$description,'CHILDREN'=>$children,'CURRENT_ENTRY'=>$current_entry,'ENTRIES'=>$entries,'ADD_GALLERY_URL'=>$add_gallery_url,'EDIT_URL'=>$edit_url,'IMAGE_URL'=>$submit_image_url,'VIDEO_URL'=>$submit_video_url,'MAY_DOWNLOAD'=>$may_download,'CAT'=>$cat));
 	}
 
 	/**
@@ -897,9 +921,10 @@ class Module_galleries
 	 * @param  tempcode		The URL to "submit a video to this gallery"
 	 * @param  tempcode		The title of the page (our of get_page_title)
 	 * @param  string			The gallery title
+	 * @param  tempcode		Sorting UI
 	 * @return tempcode		The UI
 	 */
-	function do_gallery_regular_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$fullname)
+	function do_gallery_regular_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$fullname,$sorting)
 	{
 		$max=get_param_integer('max',get_default_gallery_max());
 		$start=get_param_integer('start',0);
@@ -913,14 +938,16 @@ class Module_galleries
 		$total_pages=($max==0)?1:intval(ceil(floatval($total_rows)/floatval($max)));
 		if ($total_pages==0) $total_pages=1;
 
-		$map=array('cat'=>$cat);
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
-		$rows=$GLOBALS['SITE_DB']->query_select('videos',array('*'),$map,'ORDER BY id DESC',$max,$start);
+		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
+
+		$where=db_string_equal_to('cat',$cat);
+		if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+		$rows=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,$max,$start);
 		if (count($rows)<$max)
 		{
-			$map=array('cat'=>$cat);
-			if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
-			$rows2=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id DESC',$max-count($rows),max(0,$start-$num_videos));
+			$where=db_string_equal_to('cat',$cat);
+			if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+			$rows2=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,$max-count($rows),max(0,$start-$num_videos));
 		} else $rows2=array();
 
 		$entries=new ocp_tempcode();
@@ -928,7 +955,7 @@ class Module_galleries
 		// Display videos
 		foreach ($rows as $row_videos)
 		{
-			$view_url=build_url(array('page'=>'_SELF','type'=>'video','root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$row_videos['id'],'start'=>($start==0)?NULL:$start,'max'=>($start==get_default_gallery_max())?NULL:$max),'_SELF');
+			$view_url=build_url(array('page'=>'_SELF','type'=>'video','root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$row_videos['id'],'start'=>($start==0)?NULL:$start,'max'=>($start==get_default_gallery_max())?NULL:$max,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 			$thumb_url=ensure_thumbnail($row_videos['url'],$row_videos['thumb_url'],'galleries','videos',$row_videos['id']);
 			if ($thumb_url=='') $thumb_url=find_theme_image('na');
 			$thumb=do_image_thumb($thumb_url,'',true);
@@ -945,7 +972,7 @@ class Module_galleries
 		// Display images
 		foreach ($rows2 as $row_images)
 		{
-			$view_url=build_url(array('page'=>'_SELF','type'=>'image','root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$row_images['id'],'start'=>($start==0)?NULL:$start,'max'=>($max==get_default_gallery_max())?NULL:$max),'_SELF');
+			$view_url=build_url(array('page'=>'_SELF','type'=>'image','root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$row_images['id'],'start'=>($start==0)?NULL:$start,'max'=>($max==get_default_gallery_max())?NULL:$max,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 			$thumb_url=ensure_thumbnail($row_images['url'],$row_images['thumb_url'],'galleries','images',$row_images['id']);
 			$thumb=do_image_thumb($thumb_url,'',true);
 			$this_full_url=$row_images['url'];
@@ -976,17 +1003,20 @@ class Module_galleries
 		$_selectors=array_map('intval',explode(',',get_option('gallery_selectors')));
 		$results_browser=results_browser(do_lang('ENTRY'),$cat,$start,'start',$max,'max',$total_rows,$root,'misc',true,false,10,$_selectors);
 
-		return do_template('GALLERY_REGULAR_MODE_SCREEN',array('_GUID'=>'cec405597f47f5079b7c7f581fa6b5c2','_TITLE'=>$fullname,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'RESULTS_BROWSER'=>$results_browser,'TAGS'=>get_loaded_tags('galleries'),'CAT'=>$cat,'MEMBER_DETAILS'=>$member_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'ADD_GALLERY_URL'=>$add_gallery_url,'EDIT_URL'=>$edit_url,'CHILDREN'=>$children,'TITLE'=>$title,'DESCRIPTION'=>$description,'IMAGE_URL'=>$submit_image_url,'VIDEO_URL'=>$submit_video_url,'MAY_DOWNLOAD'=>$may_download,'ENTRIES'=>$entries));
+		return do_template('GALLERY_REGULAR_MODE_SCREEN',array('_GUID'=>'cec405597f47f5079b7c7f581fa6b5c2','SORTING'=>$sorting,'_TITLE'=>$fullname,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'RESULTS_BROWSER'=>$results_browser,'TAGS'=>get_loaded_tags('galleries'),'CAT'=>$cat,'MEMBER_DETAILS'=>$member_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'ADD_GALLERY_URL'=>$add_gallery_url,'EDIT_URL'=>$edit_url,'CHILDREN'=>$children,'TITLE'=>$title,'DESCRIPTION'=>$description,'IMAGE_URL'=>$submit_image_url,'VIDEO_URL'=>$submit_video_url,'MAY_DOWNLOAD'=>$may_download,'ENTRIES'=>$entries));
 	}
 
 	/**
 	 * The UI to show an image.
 	 *
+	 * @return ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
 	 * @return tempcode		The UI
 	 */
-	function show_image()
+	function show_image($category_name=NULL)
 	{
 		$id=get_param_integer('id');
+
+		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
 		if (addon_installed('awards'))
 		{
@@ -994,21 +1024,6 @@ class Module_galleries
 			$awards=find_awards_for('image',strval($id));
 		} else $awards=array();
 
-		if (get_param_integer('slideshow',0)==1)
-		{
-			$title=get_page_title('VIEW_SLIDESHOW');
-
-			global $EXTRA_HEAD;
-			$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
-		} else
-		{
-			$title=get_page_title('VIEW_IMAGE',true,NULL,NULL,$awards);
-		}
-	
-		$root=get_param('root','root');
-	
-		seo_meta_load_for('image',strval($id));
-	
 		// Pic up some info
 		$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
@@ -1023,6 +1038,24 @@ class Module_galleries
 
 		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
+		if (is_null($category_name))
+			$category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
+
+		if (get_param_integer('slideshow',0)==1)
+		{
+			$title=get_page_title('VIEW_SLIDESHOW',true,array($category_name));
+
+			global $EXTRA_HEAD;
+			$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		} else
+		{
+			$title=get_page_title('VIEW_IMAGE',true,NULL,NULL,$awards);
+		}
+	
+		$root=get_param('root','root');
+	
+		seo_meta_load_for('image',strval($id));
+	
 		// Views
 		if (get_db_type()!='xml')
 		{
@@ -1032,13 +1065,11 @@ class Module_galleries
 
 		do_rating($myrow['allow_rating']==1,'images',strval($id));
 		if ((!is_null(post_param('title',NULL))) || ($myrow['validated']==1))
-			do_comments($myrow['allow_comments']>=1,'images',strval($id),build_url(array('page'=>'_SELF','type'=>'image','id'=>$id,'root'=>($root=='root')?NULL:$root),'_SELF'),do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
+			do_comments($myrow['allow_comments']>=1,'images',strval($id),build_url(array('page'=>'_SELF','type'=>'image','id'=>$id),'_SELF'),do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
 		//do_trackback($myrow['allow_trackbacks']==1,'images',$id);
 		$rating_details=get_rating_text('images',strval($id),$myrow['allow_rating']==1);
 		$comment_details=get_comment_details('images',$myrow['allow_comments']==1,strval($id),false,get_value('comment_forum__images'),NULL,NULL,false,false,$myrow['submitter'],$myrow['allow_comments']==2);
 		$trackback_details=get_trackback_details('images',strval($id),$myrow['allow_trackbacks']==1);
-
-		$category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
 
 		// Comments
 		$comments=get_translated_tempcode($myrow['comments']);
@@ -1060,18 +1091,7 @@ class Module_galleries
 		$add_date=get_timezoned_date($myrow['add_date']);
 		$edit_date=is_null($myrow['edit_date'])?'':get_timezoned_date($myrow['edit_date']);
 
-		$map=array('cat'=>$cat);
-		$sv=has_specific_permission(get_member(),'see_unvalidated');
-		if (!$sv) $map['validated']=1;
-		$num_images=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)',$map);
-		$num_videos=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)',$map);
-		$n=$num_images+$num_videos;
-		$x=$num_videos+$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images WHERE '.db_string_equal_to('cat',$cat).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND id<'.strval((integer)$id))+1;
-
-		// Browsing
-		$back_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'images WHERE id<'.strval((integer)$id).' AND '.db_string_equal_to('cat',$cat).($sv?'':' AND validated=1').' ORDER BY id DESC');
-		$forward_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'images WHERE id>'.strval((integer)$id).' AND '.db_string_equal_to('cat',$cat).($sv?'':' AND validated=1').' ORDER BY id');
-		$nav=$this->show_nav($category_name,$cat,$id,$back_id,$forward_id,$root,$n-$x+1,$n);
+		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'image',get_param_integer('slideshow',0),get_param_integer('wide_high',0),get_param_integer('start',0),get_param_integer('max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos);
 
 		$member_id=get_member_id_from_gallery_name($cat);
 		if (get_forum_type()=='ocf')
@@ -1096,17 +1116,20 @@ class Module_galleries
 			'image'=>$url,
 		);
 
-		return do_template('GALLERY_ENTRY_SCREEN',array('_GUID'=>'332a19b6a72505f8e1eb4d288df247ce','GALLERY_TITLE'=>$category_name,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'ID'=>strval($id),'TAGS'=>get_loaded_tags('images'),'TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'MEMBER_DETAILS'=>$member_details,'X'=>integer_format($x),'N'=>integer_format($n),'VIEWS'=>integer_format($myrow['image_views']),'ADD_DATE_RAW'=>strval($myrow['add_date']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'NAV'=>$nav,'COMMENTS'=>$comments,'URL'=>$url,'WARNING_DETAILS'=>$warning_details));
+		return do_template('GALLERY_ENTRY_SCREEN',array('_GUID'=>'332a19b6a72505f8e1eb4d288df247ce','SLIDESHOW'=>(get_param_integer('slideshow',0)==1),'GALLERY_TITLE'=>$category_name,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'ID'=>strval($id),'TAGS'=>get_loaded_tags('images'),'TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'MEMBER_DETAILS'=>$member_details,'X'=>integer_format($x),'N'=>integer_format($n),'VIEWS'=>integer_format($myrow['image_views']),'ADD_DATE_RAW'=>strval($myrow['add_date']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'NAV'=>$nav,'COMMENTS'=>$comments,'URL'=>$url,'WARNING_DETAILS'=>$warning_details));
 	}
 
 	/**
 	 * The UI to show a video.
 	 *
+	 * @return ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
 	 * @return tempcode		The UI
 	 */
-	function show_video()
+	function show_video($category_name=NULL)
 	{
 		$id=get_param_integer('id');
+
+		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
 		if (addon_installed('awards'))
 		{
@@ -1146,13 +1169,14 @@ class Module_galleries
 
 		do_rating($myrow['allow_rating']==1,'videos',strval($id));
 		if ((!is_null(post_param('title',NULL))) || ($myrow['validated']==1))
-			do_comments($myrow['allow_comments']>=1,'videos',strval($id),build_url(array('page'=>'_SELF','type'=>'video','id'=>$id,'root'=>$root),'_SELF'),do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
+			do_comments($myrow['allow_comments']>=1,'videos',strval($id),build_url(array('page'=>'_SELF','type'=>'video','id'=>$id),'_SELF'),do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
 		//do_trackback($myrow['allow_trackbacks']==1,'videos',$id);
 		$rating_details=get_rating_text('videos',strval($id),$myrow['allow_rating']==1);
 		$comment_details=get_comment_details('videos',$myrow['allow_comments']==1,strval($id),false,get_value('comment_forum__videos'),NULL,NULL,false,false,$myrow['submitter'],$myrow['allow_comments']==2);
 		$trackback_details=get_trackback_details('videos',strval($id),$myrow['allow_trackbacks']==1);
 
-		$category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
+		if (is_null($category_name))
+			$category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
 
 		// Validation
 		if ($myrow['validated']==0)
@@ -1181,18 +1205,7 @@ class Module_galleries
 		require_code('mime_types');
 		$mime_type=get_mime_type($extension);
 
-		$map=array('cat'=>$cat);
-		$sv=has_specific_permission(get_member(),'see_unvalidated');
-		if (!$sv) $map['validated']=1;
-		$num_images=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)',$map);
-		$num_videos=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)',$map);
-		$n=$num_images+$num_videos;
-		$x=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos WHERE '.db_string_equal_to('cat',$cat).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND id<'.strval((integer)$id))+1;
-
-		// Browsing
-		$back_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'videos WHERE id<'.strval((integer)$id).' AND '.db_string_equal_to('cat',$cat).($sv?'':' AND validated=1').' ORDER BY id DESC');
-		$forward_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'videos WHERE id>'.strval((integer)$id).' AND '.db_string_equal_to('cat',$cat).($sv?'':' AND validated=1').' ORDER BY id');
-		$nav=$this->show_nav($category_name,$cat,$id,$back_id,$forward_id,$root,$n-$x+1,$n);
+		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'video',0,get_param_integer('wide_high',0),get_param_integer('start',0),get_param_integer('max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos);
 
 		$member_id=get_member_id_from_gallery_name($cat);
 		if (get_forum_type()=='ocf')
@@ -1223,62 +1236,200 @@ class Module_galleries
 			'video:type'=>$mime_type,
 		);
 
-		return do_template('GALLERY_ENTRY_SCREEN',array('_GUID'=>'91e231906ed899513ec2db8a2974dddf','GALLERY_TITLE'=>$category_name,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'ID'=>strval($id),'TAGS'=>get_loaded_tags('videos'),'TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'URL'=>$url,'VIDEO_DETAILS'=>$video_details,'MEMBER_DETAILS'=>$member_details,'X'=>integer_format($x),'N'=>integer_format($n),'VIEWS'=>integer_format($myrow['video_views']),'ADD_DATE_RAW'=>strval($myrow['add_date']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'RATING_DETAILS'=>$rating_details,'TRACKBACK_DETAILS'=>$trackback_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'NAV'=>$nav,'COMMENTS'=>$comments,'VIDEO'=>$video,'WARNING_DETAILS'=>$warning_details));
+		return do_template('GALLERY_ENTRY_SCREEN',array('_GUID'=>'91e231906ed899513ec2db8a2974dddf','SLIDESHOW'=>false,'GALLERY_TITLE'=>$category_name,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'ID'=>strval($id),'TAGS'=>get_loaded_tags('videos'),'TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'URL'=>$url,'VIDEO_DETAILS'=>$video_details,'MEMBER_DETAILS'=>$member_details,'X'=>integer_format($x),'N'=>integer_format($n),'VIEWS'=>integer_format($myrow['video_views']),'ADD_DATE_RAW'=>strval($myrow['add_date']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'RATING_DETAILS'=>$rating_details,'TRACKBACK_DETAILS'=>$trackback_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'NAV'=>$nav,'COMMENTS'=>$comments,'VIDEO'=>$video,'WARNING_DETAILS'=>$warning_details));
+	}
+
+	/**
+	 * Sort out gallery back/next navigation.
+	 *
+	 * @param  string			Where clause for doing set query
+	 * @param  string			Join clause for doing set query
+	 * @param  tempcode		The actual title for the gallery we are using
+	 * @param  ?AUTO_LINK	The ID of the current entry of the type we are browsing in the gallery we are using (NULL: assume first)
+	 * @param  ID_TEXT		The root gallery (the gallery we are considering as an adhoc root, to allow gallery splitting-up)
+	 * @param  ?ID_TEXT		The current type being browsed (NULL: assume first)
+	 * @set image video
+	 * @param  BINARY			If in slideshow
+	 * @param  BINARY			If panels hidden
+	 * @param  integer		Start position when returning to category
+	 * @param  integer		Max to show when returning to category
+	 * @param  ID_TEXT		Category
+	 * @param  ID_TEXT		Sort order
+	 * @param  ID_TEXT		Sort order for reverse sorting
+	 * @param  string			Select clause query suffix for images
+	 * @param  string			Select clause query suffix for videos
+	 * @return array			A tuple of the navigation bits
+	 */
+	function build_set_navigation($where,$join,$category_name,$current_id,$root,$current_type,$slideshow,$wide_high,$start,$max,$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)
+	{
+		$our_table=$current_type.'s';
+
+		$sv=has_specific_permission(get_member(),'see_unvalidated');
+		if (!$sv) $where.=' AND validated=1';
+
+		$days=get_param_integer('days',NULL);
+		$where_sup='';
+		if (!is_null($days)) $where.=' AND add_date>='.strval(time()-$days*60*60*24);
+
+		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where);
+		$total_videos=($slideshow==1)?0:$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where);
+
+		// These will hopefully be replaced with proper values
+		$position=1;
+		$back_id=NULL;
+		$back_type=$current_type;
+		$next_id=NULL;
+		$next_type=$current_type;
+		$first_id=$current_id;
+		$first_type=$current_type;
+
+		$total=$total_videos+$total_images;
+		if ($total<500) // Not too many to navigate through
+		{
+			$rows_images=$GLOBALS['SITE_DB']->query('SELECT e.id,add_date,url'.$sql_suffix_images.' FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where.' ORDER BY '.$sort);
+			$rows_videos=($slideshow==1)?array():$GLOBALS['SITE_DB']->query('SELECT e.id,add_date,url'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where.' ORDER BY '.$sort);
+
+			list($_sort,$_dir)=explode(' ',$sort,2);
+
+			// Sort
+			$combined=array();
+			foreach ($rows_images as $row_image) $combined[]=array($row_image,'image',$row_image[$_sort]);
+			foreach ($rows_videos as $row_video) $combined[]=array($row_video,'video',$row_video[$_sort]);
+			global $M_SORT_KEY;
+			$M_SORT_KEY=2;
+			usort($combined,'multi_sort');
+			if ($_dir=='DESC')
+				$combined=array_reverse($combined);
+
+			// Find current position in navigation set, and neighbour positions
+			foreach ($combined as $position=>$c)
+			{
+				if ($position==0)
+				{
+					$first_id=$c[0]['id'];
+					$first_type=$c[1];
+				}
+				
+				if ((is_null($current_id)) || (($c[1]==$current_type) && ($c[0]['id']==$current_id)))
+				{
+					if ($position!=0)
+					{
+						$back_id=$combined[$position-1][0]['id'];
+						$back_type=$combined[$position-1][1];
+					}
+
+					if ($position!=count($combined)-1)
+					{
+						$next_id=$combined[$position+1][0]['id'];
+						$next_type=$combined[$position+1][1];
+					}
+
+					$position++; // We're not counting from zero
+
+					break;
+				}
+			}
+		}
+
+		// UI for navigating all this
+		$nav_ui=is_null($first_id)?new ocp_tempcode():$this->show_nav($category_name,$where,$join,$current_id,$first_id,$back_id,$next_id,$root,$position,$total,$current_type,$first_type,$back_type,$next_type,$slideshow,$wide_high,$start,$max,$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos);
+
+		return array($total/*aka $n*/,$position/*aka $x*/,$nav_ui,$first_id,$back_id,$next_id,$first_type,$back_type,$next_type);
 	}
 
 	/**
 	 * Show gallery navigation bits used when viewing images/videos.
 	 *
 	 * @param  tempcode		The actual title for the gallery we are using
-	 * @param  ID_TEXT		The gallery we are using
+	 * @param  string			Where clause for doing set query
+	 * @param  string			Join clause for doing set query
 	 * @param  AUTO_LINK		The ID of the current entry of the type we are browsing in the gallery we are using
 	 * @param  ?AUTO_LINK	The ID of the previous entry of the type we are browsing in the gallery we are using (NULL: no previous)
 	 * @param  ?AUTO_LINK	As above, except next entry (NULL: no next)
 	 * @param  ID_TEXT		The root gallery (the gallery we are considering as an adhoc root, to allow gallery splitting-up)
 	 * @param  integer		Position in collection
 	 * @param  integer		Total in collection
+	 * @param  ID_TEXT		The current type being browsed
+	 * @set image video
+	 * @param  ID_TEXT		The type for the back link
+	 * @set image video
+	 * @param  ID_TEXT		The type for the next link
+	 * @set image video
+	 * @param  BINARY			If in slideshow
+	 * @param  BINARY			If panels hidden
+	 * @param  integer		Start position when returning to category
+	 * @param  integer		Max to show when returning to category
+	 * @param  ?ID_TEXT		Category (NULL: not in a category)
+	 * @param  ID_TEXT		Sort order
+	 * @param  ID_TEXT		Sort order for reverse sorting
+	 * @param  string			Select clause query suffix for images
+	 * @param  string			Select clause query suffix for videos
 	 * @return tempcode		The navigation bits
 	 */
-	function show_nav($category_name,$cat,$current_id,$back_id,$forward_id,$root,$x,$n)
+	function show_nav($category_name,$where,$join,$current_id,$first_id,$back_id,$next_id,$root,$x,$n,$current_type,$first_type,$back_type,$next_type,$slideshow,$wide_high,$start,$max,$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)
 	{
-		/*
-		Note that this code is a bit confusing.
-		Going forward is going back in gallery history. So "$previous_url" actually advances, back in history. For slideshows we flip the terminology and refer to $slideshow_next_url which also advances, back in history.
-		*/
-		
-		if ((is_null($back_id)) && (get_param('type')=='image'))
-		{
-			$back_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT MAX(id) FROM '.get_table_prefix().'videos WHERE '.db_string_equal_to('cat',$cat).' AND validated=1 ORDER BY id DESC');
-			$type='video';
-		} else $type=get_param('type');
 		if (!is_null($back_id))
 		{
-			$previous_url=build_url(array('page'=>'_SELF','type'=>$type,'root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$back_id,'slideshow'=>get_param('slideshow',NULL),'wide_high'=>get_param('wide_high',NULL)),'_SELF');
-			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$back_id,'slideshow'=>1),'_SELF'); // Continues, but as slideshow
+			$back_url=build_url(array('page'=>'_SELF','type'=>$back_type,'root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$back_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF',NULL,true);
 		} else
 		{
-			$previous_url=new ocp_tempcode();
+			$back_url=new ocp_tempcode();
+		}
+		if (!is_null($next_id))
+		{
+			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$next_id,'slideshow'=>1,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF',NULL,true); // Continues, but as slideshow
+			$next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$next_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF',NULL,true);
+		} else
+		{
+			$next_url=new ocp_tempcode();
 			$slideshow_next_url=new ocp_tempcode();
 		}
 
-		$slideshow_url=build_url(array('page'=>'_SELF','type'=>get_param('type'),'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$current_id,'slideshow'=>1),'_SELF');
-
 		// Link to show more. Preserve info about where we were
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',get_default_gallery_max());
-		$more_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'root'=>($root=='root')?NULL:$root,'start'=>($start==0)?NULL:$start,'max'=>($max==get_default_gallery_max())?NULL:$max),'_SELF');
+		$slideshow_url=build_url(array('page'=>'_SELF','type'=>$first_type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$first_id,'slideshow'=>1,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
+		$more_url=is_null($cat)?NULL:build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'root'=>($root=='root')?NULL:$root,'start'=>($start==0)?NULL:$start,'max'=>($max==get_default_gallery_max())?NULL:$max,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 
-		if ((is_null($forward_id)) && (get_param('type')=='video'))
-		{
-			$forward_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT MIN(id) FROM '.get_table_prefix().'images WHERE '.db_string_equal_to('cat',$cat).' AND validated=1 ORDER BY id');
-			$type='image';
-		} else $type=get_param('type');
-		if (!is_null($forward_id))
-		{
-			$next_url=build_url(array('page'=>'_SELF','type'=>$type,'root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$forward_id,'slideshow'=>get_param('slideshow',NULL),'wide_high'=>get_param('wide_high',NULL)),'_SELF');
-		} else $next_url=new ocp_tempcode();
+		return do_template('GALLERY_NAV',array(
+			'_GUID'=>'efd58f97d9c6254bd727125dfabb5a95',
+			'X'=>integer_format($x),
+			'N'=>integer_format($n),
+			'_X'=>strval($x),
+			'_N'=>strval($n),
+			'SLIDESHOW_URL'=>$slideshow_url,
+			'SLIDESHOW_NEXT_URL'=>$slideshow_next_url,
+			'BACK_URL'=>$back_url,
+			'NEXT_URL'=>$next_url,
+			'MORE_URL'=>$more_url,
+			'CATEGORY_NAME'=>$category_name,
+			'SLIDESHOW'=>($slideshow==1),
+		));
+	}
 
-		return do_template('GALLERY_NAV',array('_GUID'=>'efd58f97d9c6254bd727125dfabb5a95','X'=>integer_format($x),'N'=>integer_format($n),'_X'=>strval($x),'_N'=>strval($n),'SLIDESHOW_LINK'=>$slideshow_url,'SLIDESHOW_NEXT_LINK'=>$slideshow_next_url,'PREVIOUS_LINK'=>$previous_url,'NEXT_LINK'=>$next_url,'MORE_URL'=>$more_url,'CATEGORY_NAME'=>$category_name));
+	/**
+	 * Read in the sort order currently active, and a suffix to the select statement to allow it to work. Apply security.
+	 *
+	 * @return array			A quarter: The sort order, The sort order (for backwards sorting), SQL suffix for select statement for images, SQL suffix for select statement for videos
+	 */
+	function get_sort_order()
+	{
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='sort';
+
+		$sort=get_param('sort','add_date DESC');
+		if (($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC'))
+			log_hack_attack_and_exit('ORDERBY_HACK');
+		list($_sort,$_dir)=explode(' ',$sort,2);
+		$sort_backwards=$_sort.' '.(($_dir=='ASC')?'DESC':'ASC');
+		if (($sort=='compound_rating ASC') || ($sort=='compound_rating DESC'))
+		{
+			$suffix_images=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=e.id) AS compound_rating';
+			$suffix_videos=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=e.id) AS compound_rating';
+		} else
+		{
+			$suffix_images='';
+			$suffix_videos='';
+		}
+		return array($sort,$sort_backwards,$suffix_images,$suffix_videos);
 	}
 
 }

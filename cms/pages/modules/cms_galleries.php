@@ -259,7 +259,7 @@ class Module_cms_galleries extends standard_aed_module
 		// Orphaned upload form
 		// To choose to batch import what already exists in gallery directory, but is orphaned
 		$orphaned_content=new ocp_tempcode();
-		if ($GLOBALS['SITE_DB']->query_value('images','COUNT(*)')+$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)')<4000)
+		if (($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) && ($GLOBALS['SITE_DB']->query_value('images','COUNT(*)')+$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)')<4000))
 		{
 			require_code('images');
 			$there=array();
@@ -322,7 +322,8 @@ class Module_cms_galleries extends standard_aed_module
 			} else $form2=new ocp_tempcode();
 		} else $form2=new ocp_tempcode();
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('GALLERY'))));
+		breadcrumb_set_self(do_lang_tempcode('UPLOAD'));
 
 		return do_template('GALLERY_IMPORT_SCREEN',array('_GUID'=>'607c819ff751268294e5e590a0d41533','TITLE'=>$title,'FORM2'=>$form2,'FORM'=>$form));
 	}
@@ -477,6 +478,8 @@ class Module_cms_galleries extends standard_aed_module
 		require_code('exif');
 
 		check_specific_permission('mass_import'/*,array('galleries',$cat)*/);
+
+		if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
 
 		make_member_gallery_if_needed($cat);
 

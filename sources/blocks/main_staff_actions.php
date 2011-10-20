@@ -97,6 +97,8 @@ class Block_main_staff_actions
 		require_all_lang();
 
 		require_css('adminzone');
+		
+		require_code('actionlog');
 
 		$start=get_param_integer('sa_start',0);
 		$max=get_param_integer('sa_max',10);
@@ -131,31 +133,8 @@ class Block_main_staff_actions
 			$type_str=do_lang($myrow['the_type'],$_a,$_b,NULL,NULL,false);
 			if (is_null($type_str)) $type_str=$myrow['the_type'];
 
-			// TODO: This will be replaced later with a more thorough system
-			if (($myrow['the_type']=='EDIT_TEMPLATES') && (strpos($a,',')===false))
-			{
-				if ($b=='') $b='default';
-				$_b=tpl_crop_text_mouse_over($b,15);
-				$tmp_url=build_url(array('page'=>'admin_themes','type'=>'_edit_templates','theme'=>$b,'f0file'=>$a),get_module_zone('admin_themes'));
-				$a=basename($a,'.tpl');
-				$_a=tpl_crop_text_mouse_over($a,14);
-				$_a=hyperlink($tmp_url,$_a,false,false,$type_str);
-			}
-			if ($myrow['the_type']=='EDIT_CSS')
-			{
-				if ($b=='') $b='global.css';
-				$_b=tpl_crop_text_mouse_over($b,15);
-				$tmp_url=build_url(array('page'=>'admin_themes','type'=>'edit_css','theme'=>$a,'file'=>$b),get_module_zone('admin_themes'));
-				$b=basename($b,'.css');
-				$_b=hyperlink($tmp_url,$_b,false,false,$type_str);
-			}
-			if ($myrow['the_type']=='COMCODE_PAGE_EDIT')
-			{
-				if ($b=='') $b='site';
-				$_b=tpl_crop_text_mouse_over($b,15);
-				$tmp_url=build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$b.':'.$a),get_module_zone('cms_comcode_pages'));
-				$_a=hyperlink($tmp_url,$_a,false,false,$type_str);
-			}
+			$test=actionlog_linkage($myrow['the_type'],$a,$b,$_a,$_b);
+			if (!is_null($test)) list($_a,$_b)=$test;
 
 			$ip=tpl_crop_text_mouse_over($myrow['ip'],12);
 

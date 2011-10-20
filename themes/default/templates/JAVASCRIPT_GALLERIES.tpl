@@ -39,8 +39,9 @@ function show_current_slideshow_time()
 
 function reset_slideshow_countdown()
 {
-	slideshow_time=5; /* Customise as needed */
-	
+	var slideshow_from=document.getElementById('slideshow_from');
+	slideshow_time=slideshow_from?window.parseInt(slideshow_from.value):5;
+
 	show_current_slideshow_time();
 
 	if (slideshow_current_position==slideshow_total_slides-1)
@@ -129,7 +130,11 @@ function slideshow_show_slide(slide)
 
 	if (slideshow_current_position!=slide) // If not already here
 	{
-		setInnerHTML(document.getElementsByTagName('body')[0],slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/g,''));
+		var slideshow_from=document.getElementById('slideshow_from');
+
+		setInnerHTML(document.getElementsByTagName('body')[0],slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/gi,''));
+
+		document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same
 
 		slideshow_current_position=slide;
 	}

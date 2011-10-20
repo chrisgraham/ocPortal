@@ -502,8 +502,13 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 				$out_join.=' JOIN '.$db->get_table_prefix().'catalogue_cat_treecache t'.strval($counter).' ON t'.strval($counter).'.cc_id='.$parent_field_name.' AND t'.strval($counter).'.cc_ancestor_id='.strval(intval($matches[1]));
 				$counter++;*/
 				// MySQL should be smart enough to not enumerate the 'IN' clause here, which would be bad - instead it can jump into the embedded WHERE clause on each test iteration
-				$out_or.=$parent_field_name.' IN (SELECT cc_id FROM '.$db->get_table_prefix().'catalogue_cat_treecache WHERE cc_ancestor_id='.strval(intval($matches[1])).')';
-				$out_or.=' OR (SELECT cc_parent_id FROM '.$db->get_table_prefix().'catalogue_categories WHERE id='.strval(intval($matches[1])).') IS NULL';
+				if (is_null($db->query_value('catalogue_categories','cc_parent_id',array('id'=>intval($matches[1])))))
+				{
+					$out_or.='1=1';
+				} else
+				{
+					$out_or.=$parent_field_name.' IN (SELECT cc_id FROM '.$db->get_table_prefix().'catalogue_cat_treecache WHERE cc_ancestor_id='.strval(intval($matches[1])).')';
+				}
 			} else
 			{
 				$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings);

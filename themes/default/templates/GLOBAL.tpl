@@ -22,16 +22,18 @@
 	{+END}
 
 	<div class="float_surrounder_precise" id="global_surround">
-		{+START,IF_NON_EMPTY,{$TRIM,{$GET,panel_top}}}
-			<div id="panel_top">
+		{+START,IF_NON_EMPTY,{$GET,panel_top}}
+			<div id="other_panel_top">
 				{$GET,panel_top}
 			</div>
 		{+END}
+
 		{+START,IF_PASSED,MESSAGE_TOP}{+START,IF_NON_EMPTY,{MESSAGE_TOP}}
 			<div class="global_message">
 				{MESSAGE_TOP}
 			</div>
 		{+END}{+END}
+
 		<div class="{$?,{$GET,fixed_middle_width},top_level_wrap_fixed ,}top_level_wrap">
 			{+START,IF,{$NEQ,{$GET,left_width},0,auto}}
 				<div id="panel_left" style="width: {$GET,left_width}" class="global_side">
@@ -90,6 +92,16 @@
 			{+END}
 			<{$?,{$VALUE_OPTION,html5},article,div} id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle dequirk" style="width: {$GET,middle_width}{+START,IF,{$NEQ,{$GET,left_width},0}}; padding-{!en_left}: 10px; margin-{!en_left}: {$GET,left_width}{+END}{+START,IF,{$NEQ,{$GET,right_width},0}}; padding-{!en_right}: 10px; margin-{!en_right}: {$GET,right_width}{+END}">
 				<div id="global_middle_ph">
+					{$,Out side Admin Zone we have the banner}
+					{+START,IF,{$NOT,{$_GET,wide_high}}}
+						{+START,IF,{$NOT,{$OR,{$EQ,{$ZONE},adminzone},{$EQ,{$ZONE},cms}}}}{+START,IF,{$NOT,{$MOBILE}}}
+							{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
+							{+START,IF_NON_EMPTY,{$GET,BANNER}}
+								<div class="global_banner" style="text-align: {!en_right}">{$GET,BANNER}</div>
+							{+END}
+						{+END}{+END}
+					{+END}
+
 					{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NOT,{$MATCH_KEY_MATCH,:start}}}
 						<div class="breadcrumbs breadcrumbs_always">
 							<img class="breadcrumbs_img" src="{$IMG*,treenav}" title="{!YOU_ARE_HERE}" alt="{!YOU_ARE_HERE}" />
@@ -125,11 +137,6 @@
 	{+START,IF,{$GET,fixed_middle_width}}{$SET,left_width,auto}{$SET,right_width,auto}{+END}
 
 	<div class="float_surrounder_precise" id="global_surround">
-		{+START,IF_NON_EMPTY,{$GET,panel_top}}
-			<div id="panel_top">
-				{$GET,panel_top}
-			</div>
-		{+END}
 		{+START,IF_PASSED,MESSAGE_TOP}{+START,IF_NON_EMPTY,{MESSAGE_TOP}}
 			<div class="global_message">
 				{MESSAGE_TOP}
@@ -138,12 +145,12 @@
 		<div class="top_level_wrap">
 			<div id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle dequirk">
 				<div id="global_middle_ph">
-					{+START,IF_NON_EMPTY,{BREADCRUMBS}}
+					{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NOT,{$MATCH_KEY_MATCH,:start}}}
 						<{$?,{$VALUE_OPTION,html5},nav,div} class="breadcrumbs breadcrumbs_always"{$?,{$VALUE_OPTION,html5}, itemprop="breadcrumb"}>
-							<img class="breadcrumbs_img" src="{$IMG*,treenav}" title="{!YOU_ARE_HERE}" alt="{!YOU_ARE_HERE}" />
 							{BREADCRUMBS}
 						</{$?,{$VALUE_OPTION,html5},nav,div}>
-					{+END}
+						<br />
+					{+END}{+END}
 
 					<a name="maincontent" id="maincontent"></a>
 					{MIDDLE}

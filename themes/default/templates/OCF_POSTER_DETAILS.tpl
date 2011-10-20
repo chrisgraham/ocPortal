@@ -1,5 +1,7 @@
-{+START,IF_NON_EMPTY,{AVATAR_URL}}
-	<img class="ocf_member_box_avatar" src="{AVATAR_URL*}" alt="{!AVATAR}" title="{!AVATAR}" />
+{+START,IF,{$NOT,{$MOBILE}}}
+	{+START,IF_NON_EMPTY,{AVATAR_URL}}
+		<img class="ocf_member_box_avatar" src="{AVATAR_URL*}" alt="{!AVATAR}" title="{!AVATAR}" />
+	{+END}
 {+END}
 
 <div{+START,IF_NON_EMPTY,{AVATAR_URL}} class="ocf_member_box_avatar"{+END}>

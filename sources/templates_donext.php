@@ -219,6 +219,16 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 				break;
 			case 'view_this_category':
 				$x=$url_view_this_category;
+				if (!is_null($x))
+				{
+					$keep_simplified_donext=get_param_integer('keep_simplified_donext',NULL);
+					if ((($keep_simplified_donext!==0) && (get_option('simplified_donext')=='1')) || ($keep_simplified_donext==1))
+					{
+						$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
+						require_code('templates_redirect_screen');
+						return redirect_screen($title,$_url_redirect,$text);
+					}
+				}
 				break;
 			case 'view_archive':
 				$x=$url_view_archive;

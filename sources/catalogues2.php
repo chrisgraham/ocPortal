@@ -299,6 +299,9 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 		}
 	}
 
+	decache('main_cc_embed');
+	decache('main_recent_cc_entries');
+
 	log_it('EDIT_CATALOGUE',$name);
 }
 
@@ -433,7 +436,9 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_categories',$map,true);
 
-	log_it('ADD_CATALOGUE_CATEGORY',strval($id));
+	calculate_category_child_count_cache($parent_id);
+
+	log_it('ADD_CATALOGUE_CATEGORY',strval($id),$title);
 
 	require_code('seo2');
 	if (!is_numeric($title)) seo_meta_set_for_implicit('catalogue_category',strval($id),array($title,$description),$title);
@@ -451,6 +456,7 @@ function rebuild_catalogue_cat_treecache()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	$GLOBALS['SITE_DB']->query_delete('catalogue_cat_treecache');
+	$GLOBALS['SITE_DB']->query_delete('catalogue_childcountcache');
 
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -463,6 +469,7 @@ function rebuild_catalogue_cat_treecache()
 		foreach ($rows as $row)
 		{
 			store_in_catalogue_cat_treecache($row['id'],$row['cc_parent_id'],false);
+			calculate_category_child_count_cache($row['id'],false);
 		}
 
 		$start+=$max;
@@ -498,6 +505,39 @@ function store_in_catalogue_cat_treecache($id,$parent_id,$cleanup_first=true)
 			'cc_ancestor_id'=>$parent_id,
 		));
 		$parent_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','cc_parent_id',array('id'=>$parent_id));
+	}
+}
+
+/**
+ * Update cache for a categories child counts.
+ *
+ * @param  ?AUTO_LINK	The ID of the category (NULL: skip, called by some code that didn't realise it didn't impact a tree parent)
+ * @param  boolean		Whether to recurse up the tree to force recalculations on other categories (recommended, unless you are doing a complete rebuild)
+ */
+function calculate_category_child_count_cache($cat_id,$recursive_updates=true)
+{
+	if (is_null($cat_id)) return;
+	
+	$GLOBALS['SITE_DB']->query_delete('catalogue_childcountcache',array(
+		'cc_id'=>$cat_id,
+	),'',1);
+
+	$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$cat_id));
+
+	$num_rec_children=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache','COUNT(*)',array('cc_ancestor_id'=>$cat_id))-1;
+	$num_rec_entries=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache t JOIN '.get_table_prefix().'catalogue_entries e ON e.cc_id=t.cc_id','COUNT(*)',array('t.cc_ancestor_id'=>$cat_id,'c_name'=>$catalogue_name/*important, else custom field cats could be included*/));
+
+	$GLOBALS['SITE_DB']->query_insert('catalogue_childcountcache',array(
+		'cc_id'=>$cat_id,
+		'c_num_rec_children'=>$num_rec_children,
+		'c_num_rec_entries'=>$num_rec_entries,
+	));
+
+	if ($recursive_updates)
+	{
+		$parent_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','cc_parent_id',array('id'=>$cat_id));
+		if (!is_null($parent_id))
+			calculate_category_child_count_cache($parent_id);
 	}
 }
 
@@ -545,6 +585,8 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 		delete_upload('uploads/grepimages','catalogue_categories','rep_image','id',$id,$rep_image);
 	}
 
+	$old_parent_id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_parent_id',array('id'=>$id));
+
 	$GLOBALS['SITE_DB']->query_update('catalogue_categories',$map,array('id'=>$id),'',1);
 
 	require_code('urls2');
@@ -552,8 +594,14 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('catalogue_category',strval($id),$meta_keywords,$meta_description);
+	
+	if ($old_parent_id!==$parent_id)
+	{
+		calculate_category_child_count_cache($old_parent_id);
+		calculate_category_child_count_cache($parent_id);
+	}
 
-	log_it('EDIT_CATALOGUE_CATEGORY',$title);
+	log_it('EDIT_CATALOGUE_CATEGORY',strval($id),$title);
 }
 
 /**
@@ -580,6 +628,7 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 	}
 
 	$GLOBALS['SITE_DB']->query_delete('catalogue_cat_treecache',array('cc_id'=>$id));
+	$GLOBALS['SITE_DB']->query_delete('catalogue_childcountcache',array('cc_id'=>$id));
 
 	require_code('files2');
 	delete_upload('uploads/grepimages','catalogue_categories','rep_image','id',$id);
@@ -629,9 +678,14 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 		actual_delete_catalogue_entry($entry);
 	}*/
 
+	$old_parent_id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_parent_id',array('id'=>$id));
+
 	$GLOBALS['SITE_DB']->query_delete('catalogue_categories',array('id'=>$id),'',1);
+
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($id)));
 	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'catalogues_category','category_name'=>strval($id)));
+
+	calculate_category_child_count_cache($old_parent_id);
 }
 
 /**
@@ -677,9 +731,12 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	}
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_entries',$imap,true);
 	require_code('fields');
+	$title=NULL;
 	foreach ($map as $field_id=>$val)
 	{
 		if ($val==STRING_MAGIC_NULL) $val='';
+
+		if (is_null($title)) $title=$val;
 
 		$type=$fields[$field_id];
 
@@ -712,13 +769,16 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 		$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$sup_table_name,$map);
 	}
 
-	decache('main_cc_embed');
-	decache('main_recent_cc_entries');
-
 	require_code('seo2');
 	seo_meta_set_for_implicit('catalogue_entry',strval($id),$map,'');
 
-	log_it('ADD_CATALOGUE_ENTRY',strval($id));
+	calculate_category_child_count_cache($category_id);
+
+	if ($catalogue_name[0]!='_')
+		log_it('ADD_CATALOGUE_ENTRY',strval($id),$title);
+
+	decache('main_cc_embed');
+	decache('main_recent_cc_entries');
 
 	return $id;
 }
@@ -743,6 +803,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	$fields=collapse_2d_complexity('id','cf_type',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
 
 	$original_submitter=$GLOBALS['SITE_DB']->query_value('catalogue_entries','ce_submitter',array('id'=>$id));
+
+	$old_category_id=$GLOBALS['SITE_DB']->query_value('catalogue_entries','cc_id',array('id'=>$id));
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_edit_date'=>time(),'cc_id'=>$category_id,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks),array('id'=>$id),'',1);
@@ -795,15 +857,22 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	}
 
 	require_code('urls2');
-	suggest_new_idmoniker_for('catalogues','entry',strval($id),strip_comcode(array_shift($map)));
+	suggest_new_idmoniker_for('catalogues','entry',strval($id),strip_comcode($title));
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('catalogue_entry',strval($id),$meta_keywords,$meta_description);
 
+	if ($category_id!=$old_category_id)
+	{
+		calculate_category_child_count_cache($category_id);
+		calculate_category_child_count_cache($old_category_id);
+	}
+
 	decache('main_cc_embed');
 	decache('main_recent_cc_entries');
 
-	log_it('EDIT_CATALOGUE_ENTRY',strval($id));
+	if ($catalogue_name[0]!='_')
+		log_it('EDIT_CATALOGUE_ENTRY',strval($id),$title);
 
 	update_spacer_post($allow_comments!=0,'catalogues',strval($id),build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues')),$title,get_value('comment_forum__catalogues__'.$catalogue_name));
 }
@@ -815,18 +884,32 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
  */
 function actual_delete_catalogue_entry($id)
 {
+	$old_category_id=$GLOBALS['SITE_DB']->query_value('catalogue_entries','cc_id',array('id'=>$id));
+
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$id));
 
 	require_code('fields');
 	require_code('catalogues');
 	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name));
+	$title=NULL;
 	foreach ($fields as $field)
 	{
 		$object=get_fields_hook($field['cf_type']);
+		list(,,$storage_type)=$object->get_field_value_row_bits($field);
+		$value=_get_catalogue_entry_field($field['id'],$id,$storage_type);
 		if (method_exists($object,'cleanup'))
 		{
-			list(,,$storage_type)=$object->get_field_value_row_bits($field);
-			$object->cleanup(_get_catalogue_entry_field($field['id'],$id,$storage_type));
+			$object->cleanup($value);
+		}
+		if (is_null($title))
+		{
+			if (($storage_type=='long_trans') || ($storage_type=='short_trans'))
+			{
+				$title=get_translated_text($value);
+			} else
+			{
+				$title=$value;
+			}
 		}
 	}
 
@@ -860,10 +943,13 @@ function actual_delete_catalogue_entry($id)
 	require_code('seo2');
 	seo_meta_erase_storage('catalogue_entry',strval($id));
 
+	calculate_category_child_count_cache($old_category_id);
+
 	decache('main_recent_cc_entries');
 	decache('main_cc_embed');
 
-	log_it('DELETE_CATALOGUE_ENTRY',strval($id));
+	if ($catalogue_name[0]!='_')
+		log_it('DELETE_CATALOGUE_ENTRY',strval($id),$title);
 }
 
 

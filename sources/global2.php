@@ -561,7 +561,6 @@ function init__global2()
 			if (is_null($ob)) continue;
 			$ob->run($MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,0);
 		}
-
 		if ((!is_null($CURRENT_SHARE_USER)) && (float_to_raw_string(ocp_version_number())!=get_value('version')))
 		{
 			require_code('upgrade');

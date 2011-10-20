@@ -33,7 +33,7 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 		if (array_key_exists(1,$param))
 		{
 			$map=NULL;
-			
+
 			$entry_id=intval($param[0]);
 			$field_id=$param[1];
 
@@ -64,6 +64,8 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 				elseif (isset($map['_FIELD_'.strval($field_id)]))
 					$value=$map['_FIELD_'.strval($field_id)];
 			}
+			
+			if (is_object($value)) $value=$value->evaluate();
 		}
 		return $value;
 	}

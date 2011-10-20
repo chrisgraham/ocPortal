@@ -388,6 +388,7 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint=true)
 function breadcrumb_add_segment($segment,$final_title=NULL)
 {
 	global $BREADCRUMB_EXTRA_SEGMENTS;
+
 	$BREADCRUMB_EXTRA_SEGMENTS->attach($segment);
 	if (!is_null($final_title))
 	{
@@ -633,7 +634,7 @@ function do_site()
 	// More SEO redirection (monikers)
 	// Does this URL arrangement support monikers?
 	$url_id=get_param('id',NULL,true);
-	if ((!is_null($url_id)) && ((url_monikers_enabled()) && (!is_numeric(str_replace(',','',$url_id)))))
+	if ((!is_null($url_id)) && ((url_monikers_enabled())/* && (!is_numeric(str_replace(',','',$url_id)))*/))
 	{
 		$type=get_param('type','misc');
 		$looking_for='_SEARCH:'.get_page_name().':'.$type.':_WILD';
@@ -652,7 +653,6 @@ function do_site()
 				if (is_numeric($url_id)) // Lookup and redirect to moniker
 				{
 					$correct_moniker=find_id_moniker(array('page'=>get_page_name(),'type'=>get_param('type','misc'),'id'=>$url_id));
-
 					if (($correct_moniker!=$url_id) && (count($_POST)==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
 					{
 						header('HTTP/1.0 301 Moved Permanently');

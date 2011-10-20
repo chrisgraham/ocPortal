@@ -296,6 +296,7 @@ ocdatamap
 # # themes/default/templates_custom/BLOCK_MAIN_GOOGLE_MAP.tpl
 # # sources_custom/hooks/systems/fields/float.php
 # # themes/default/templates_custom/FORM_SCREEN_INPUT_MAP_POSITION.tpl
+# # themes/default/images_custom/star-3.png
 
 ocusermap
 ---------
@@ -1881,8 +1882,6 @@ twitter_news_integration
 transcoder
 ----------
 
-NB: Not ready. ocP does not have the linking config option at the moment
-
 # # data_custom/receive_transcoded_file.php
 # # transcoder/go.bat
 # # transcoder/go.sh
@@ -2280,3 +2279,8 @@ plupload
 # # data_custom/plupload/plupload.silverlight.xap
 # # sources_custom/global2.php
 # # data_custom/picup.htm
+
+theme_debug
+-----------
+
+# # pages/minimodules_custom/EN/theme_debug.php

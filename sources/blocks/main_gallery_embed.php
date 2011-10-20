@@ -35,7 +35,7 @@ class Block_main_gallery_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','select','video_select','zone','max','title');
+		$info['parameters']=array('param','select','video_select','zone','max','title','sort','days');
 		return $info;
 	}
 	
@@ -47,7 +47,7 @@ class Block_main_gallery_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(get_param_integer(\'mge_start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],get_param_integer(\'mge_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
+		$info['cache_on']='array(array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],get_param_integer(\'mge_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -86,20 +86,77 @@ class Block_main_gallery_embed
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
 
-		$rows_images=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'images WHERE ('.$cat_select.') AND ('.$image_select.') ORDER BY id DESC',$max+$start);
-		$rows_videos=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'videos WHERE ('.$cat_select.') AND ('.$video_select.') ORDER BY id DESC',$max+$start);
+		$_days=array_key_exists('days',$map)?$map['days']:'';
+		$days=($_days=='')?NULL:intval($_days);
+		$where_sup='';
+		if (!is_null($days)) $where_sup.=' AND add_date>='.strval(time()-$days*60*60*24);
 
-		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images WHERE ('.$cat_select.') AND ('.$image_select.')');
-		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos WHERE ('.$cat_select.') AND ('.$video_select.')');
+		$sort=array_key_exists('sort',$map)?$map['sort']:'add_date DESC';
+		if (($sort!='random ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC')) $sort='add_date DESC';
+		list($_sort,$_dir)=explode(' ',$sort,2);
+
+		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup);
+
+		if ($_sort=='random')
+		{
+			$start=0;
+			$max=min($total_images+$total_videos,$max);
+			$done_images='1=1';
+			$done_videos='1=1';
+			$rows_images=array();
+			$rows_videos=array();
+			for ($i=0;$i<$max;$i++)
+			{
+				if ((mt_rand(0,1)==0) || ($total_videos-count($rows_videos)==0))
+				{
+					$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'images e WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup.' AND '.$done_images,1,mt_rand(0,$total_images-count($rows_images)-1));
+					$rows_images[]=$rows[0];
+					$done_images.=' AND ';
+					$done_images.='id<>'.strval($rows[0]['id']);
+				} else
+				{
+					$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'videos e WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup.' AND '.$done_videos,1,mt_rand(0,$total_videos-count($rows_videos)-1));
+					$rows_videos[]=$rows[0];
+					$done_videos.=' AND ';
+					$done_videos.='id<>'.strval($rows[0]['id']);
+				}
+			}
+		} else
+		{
+			if ($_sort=='compound_rating')
+			{
+				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=e.id) AS compound_rating';
+			} else
+			{
+				$rating_sort='';
+			}
+			$rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.' FROM '.get_table_prefix().'images e WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup.' ORDER BY '.$sort,$max+$start);
+			if ($_sort=='compound_rating')
+			{
+				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=e.id) AS compound_rating';
+			} else
+			{
+				$rating_sort='';
+			}
+			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.' FROM '.get_table_prefix().'videos e WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup.' ORDER BY '.$sort,$max+$start);
+		}
 
 		// Sort
 		$combined=array();
-		foreach ($rows_images as $row_image) $combined[]=array($row_image,'image',$row_image['add_date']);
-		foreach ($rows_videos as $row_video) $combined[]=array($row_video,'video',$row_video['add_date']);
-		global $M_SORT_KEY;
-		$M_SORT_KEY=2;
-		usort($combined,'multi_sort');
-		$combined=array_reverse($combined);
+		foreach ($rows_images as $row_image) $combined[]=array($row_image,'image',($_sort=='random')?NULL:$row_image[$_sort]);
+		foreach ($rows_videos as $row_video) $combined[]=array($row_video,'video',($_sort=='random')?NULL:$row_video[$_sort]);
+		if ($_sort=='random')
+		{
+			shuffle($combined);
+		} else
+		{
+			global $M_SORT_KEY;
+			$M_SORT_KEY=2;
+			usort($combined,'multi_sort');
+			if ($_dir=='DESC')
+				$combined=array_reverse($combined);
+		}
 
 		// Display
 		$entries=new ocp_tempcode();

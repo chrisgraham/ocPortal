@@ -9,6 +9,8 @@ do
 	then
 		if [[ $line = "themes/default/templates_custom/MAIL.tpl" ]]
 		then
+			echo
+		else
 			rm -rf ${line:4}
 		fi
 	fi

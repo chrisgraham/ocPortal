@@ -38,13 +38,21 @@
 						<td>{VIEWS*}</td>
 					</tr>
 				{+END}
+
+				{$SET,rating,{$RATING,images,{ID},1}}
+				{+START,IF_NON_EMPTY,{$TRIM,{$GET,rating}}}
+					<tr>
+						<th class="de_th meta_data_title">{!RATING}</th>
+						<td>{$GET,rating}</td>
+					</tr>
+				{+END}
 			</tbody>
 		</table>
 	</div>
 {+END}
 
 {+START,IF,{$EQ,{_GUID},043ac7d15ce02715ac02309f6e8340ff}}
-	<a onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);" href="{VIEW_URL*}"><img src="{$THUMBNAIL*,{THUMB_URL},140x140,website_specific,,,height}" /></a>
+	<a onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);" href="{VIEW_URL*}"><img height="140" src="{$THUMBNAIL*,{THUMB_URL},140x140,website_specific,,,height}" /></a>
 {+END}
 
 {+START,IF,{$NEQ,{_GUID},043ac7d15ce02715ac02309f6e8340ff}}

@@ -106,7 +106,7 @@ class Block_side_weather
 				elseif (preg_match('#-(\d+)/#',$GLOBALS['HTTP_DOWNLOAD_URL'],$matches)!=0)
 				{
 					$loc_code=$matches[1];
-				}
+				} else return new ocp_tempcode();
 			
 				if (is_numeric($loc_code))
 				{
@@ -166,7 +166,7 @@ class Block_side_weather
 			}
 		}
 		
-		return do_template('BLOCK_SIDE_WEATHER',array('TITLE'=>$title,'IMAGE'=>$image,'COND'=>$cur_conditions,'FORECAST'=>$forecast));
+		return do_template('BLOCK_SIDE_WEATHER',array('TITLE'=>$title,'LOC_CODE'=>strval($loc_code),'IMAGE'=>$image,'COND'=>$cur_conditions,'FORECAST'=>$forecast));
 	}
 }
 

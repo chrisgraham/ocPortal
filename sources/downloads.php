@@ -470,13 +470,13 @@ function get_category_downloads($category_id,$root,$order=NULL)
 }
 
 /**
- * Get a templated portayal of the subcategories directly under the specified category.
+ * Get a templated view of the subcategories directly under the specified category.
  *
  * @param  AUTO_LINK		The category the subcategories are being found for
  * @param  ?AUTO_LINK	The pretend root of our download system (NULL: true root). This system is provided for large sites to be able to do virtually seperated download systems
  * @param  ?ID_TEXT		The zone the download module we're using is in (NULL: find it)
  * @param  ?string		The order to show results in (NULL: default)
- * @return tempcode		The templated portayal
+ * @return tempcode		The templated view
  */
 function get_download_sub_categories($category_id,$root=NULL,$zone=NULL,$order=NULL)
 {

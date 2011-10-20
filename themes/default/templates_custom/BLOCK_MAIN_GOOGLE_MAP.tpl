@@ -33,7 +33,7 @@
 		var data=[
 			{+START,LOOP,DATA}
 				{+START,IF,{$NEQ,{_loop_key},0}},{+END}
-				['{ENTRY_TITLE^;}',{LATITUDE},{LONGITUDE},{CC_ID},{ID},'{ENTRY_CONTENT^;}']
+				['{ENTRY_TITLE^;}',{LATITUDE},{LONGITUDE},{CC_ID},{ID},'{ENTRY_CONTENT^;}',{STAR}]
 			{+END}
 		];
 
@@ -67,9 +67,13 @@
 			};
 
 			{$, Reenable if you have put appropriate images in place
-				var usergroupIcon = new GIcon(G_DEFAULT_ICON);
-				usergroupIcon.image = "{$BASE_URL#}/themes/default/images_custom/map_icons/catalogue_category_" + data[i][3] + ".png";
-				markerOptions.icon = usergroupIcon;
+				var categoryIcon = "{$BASE_URL#}/themes/default/images_custom/map_icons/catalogue_category_" + data[i][3] + ".png";
+				markerOptions.icon = categoryIcon;
+			}
+			if (data[i][6]==1)
+			{
+				var starIcon = "{$BASE_URL#}/themes/default/images_custom/star-3.png";
+				markerOptions.icon = starIcon;
 			}
 
 			marker = new google.maps.Marker(markerOptions);

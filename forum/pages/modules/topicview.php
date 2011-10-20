@@ -62,6 +62,10 @@ class Module_topicview
 		require_code('ocf_topicview');
 		require_css('ocf');
 	
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+		$NON_CANONICAL_PARAMS[]='start';
+
 		$start=get_param_integer('start',0);
 		$default_max=intval(get_option('forum_posts_per_page'));
 		$max=get_param_integer('max',$default_max);

@@ -45,6 +45,7 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 		suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$title);
 	}
 
+	require_code('ocf_forums');
 	if (!ocf_may_moderate_forum($forum_id))
 	{
 		$pinned=0;
@@ -55,6 +56,7 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 
 	if (!(($info[0]['t_cache_first_member_id']==get_member()) && (has_specific_permission(get_member(),'close_own_topics'))))
 	{
+		require_code('ocf_topics');
 		if ((!ocf_may_edit_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) || ((($info[0]['t_pt_from']!=get_member()) && ($info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')) && (is_null($forum_id))))
 			access_denied('I_ERROR');
 	}

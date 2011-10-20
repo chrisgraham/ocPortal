@@ -1751,6 +1751,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=(function_exists('pspell_check'))?'_true':'_false';
 				break;
 
+			case 'AWARD_ID':
+				if (array_key_exists(0,$param))
+				{
+					$value=$GLOBALS['SITE_DB']->query_value_null_ok('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
+					if (is_null($value)) $value='';
+				}
+				break;
+
 			case 'SELF_URL':
 				$extra_params=NULL;
 				if (isset($param[3]))
@@ -1812,7 +1820,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('feedback');
 					$rating=get_rating_simple_array($param[0],$param[1]);
-					$value=isset($rating['_RATING'][0]['RATING'])?$rating['_RATING'][0]['RATING']:'';
+					if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
+					{
+						$value=isset($rating['_RATING'][0]['RATING'])?$rating['_RATING'][0]['RATING']:'';
+					} else
+					{
+						$value=do_template('RATING_INLINE',$rating);
+					}
 					if (is_object($value)) $value=$value->evaluate();
 				}
 				break;

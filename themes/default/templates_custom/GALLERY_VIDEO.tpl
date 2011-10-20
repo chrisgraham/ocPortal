@@ -39,6 +39,14 @@
 					</tr>
 				{+END}
 
+				{$SET,rating,{$RATING,videos,{ID},1}}
+				{+START,IF_NON_EMPTY,{$TRIM,{$GET,rating}}}
+					<tr>
+						<th class="de_th meta_data_title">{!RATING}</th>
+						<td>{$GET,rating}</td>
+					</tr>
+				{+END}
+
 				{$PREG_REPLACE,</(table|div)>,,{$PREG_REPLACE,<(table|div)[^>]*>,,{VIDEO_DETAILS}}}
 			</tbody>
 		</table>

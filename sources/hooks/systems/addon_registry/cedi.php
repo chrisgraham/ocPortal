@@ -124,6 +124,7 @@ class Hook_addon_registry_cedi
 			'themes/default/images/EN/page/edit_tree.png',
 			'themes/default/images/EN/page/contract.png',
 			'themes/default/images/EN/page/expand.png',
+			'site/pages/html_custom/EN/cedi_tree_made.htm',
 		);
 	}
 

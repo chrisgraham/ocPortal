@@ -59,6 +59,7 @@ class Module_catalogues
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_integer');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_entry_linkage');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_cat_treecache');
+		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_childcountcache');
 	
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_category'));
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_catalogue'));
@@ -96,12 +97,18 @@ class Module_catalogues
 				'content_type'=>'ID_TEXT',
 				'content_id'=>'ID_TEXT',
 			));
+			$GLOBALS['SITE_DB']->create_index('catalogue_entry_linkage','custom_fields',array('content_type','content_id'));
 			
 			// This caches ancestor relationships. It is redundant to doing tree traversals on catalogue_categories.cc_id, allowing normal efficient SQL joins to be done instead
 			// Note that self relationships (cc_id=cc_ancestor_id) are stored too, so that a single join covers that too.
 			$GLOBALS['SITE_DB']->create_table('catalogue_cat_treecache',array(
 				'cc_id'=>'*AUTO_LINK',
 				'cc_ancestor_id'=>'*AUTO_LINK',
+			));
+			$GLOBALS['SITE_DB']->create_table('catalogue_childcountcache',array(
+				'cc_id'=>'*AUTO_LINK',
+				'c_num_rec_children'=>'INTEGER',
+				'c_num_rec_entries'=>'INTEGER',
 			));
 			$GLOBALS['SITE_DB']->create_index('catalogue_cat_treecache','cc_ancestor_id',array('cc_ancestor_id'));
 
@@ -121,6 +128,14 @@ class Module_catalogues
 
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcv_value',array('cv_value'));
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','itv_value',array('cv_value'));
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcf_id',array('cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','icf_id',array('cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fce_id',array('ce_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','ice_id',array('ce_id'),'id');
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_add_date',array('ce_add_date'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_c_name',array('c_name'),'id');
 		}
 
 		if (is_null($upgrade_from))
@@ -616,9 +631,21 @@ class Module_catalogues
 		// We read in all data for efficiency
 		if (is_null($category_data))
 		{
-			$query='SELECT c_name,d.id,t.text_original AS title,cc_parent_id AS parent_id,cc_add_date AS edit_date FROM '.get_table_prefix().'catalogue_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.cc_title';
-			if (($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','COUNT(*)')>1000) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read)))
-				$query.=' WHERE EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.cc_id=d.id)';
+			$query='SELECT c_name,d.id,t.text_original AS title,cc_add_date AS edit_date';
+			$lots=($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','COUNT(*)')>1000) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read));
+			if ($lots)
+			{
+				$query.=',NULL AS parent_id';
+			} else
+			{
+				$query.=',cc_parent_id AS parent_id';
+			}
+			$query.=' FROM '.get_table_prefix().'catalogue_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.cc_title';
+			$query.=' WHERE d.c_name NOT LIKE \''.db_encode_like('\_%').'\'';
+			if ($lots)
+			{
+				$query.=' AND EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.cc_id=d.id)';
+			}
 			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query($query));
 		}
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
@@ -647,7 +674,7 @@ class Module_catalogues
 				{
 					call_user_func_array(__FUNCTION__,array($callback,$member_id,$depth,$pagelink_stub,$pagelink,$recurse_level+1,$category_data,$entry_data)); // Recurse
 				}
-				if ((has_category_access($member_id,'catalogues_catalogue',$row['c_name'])) && (has_category_access($member_id,'catalogues_category',strval($row['id']))))
+				if ((has_category_access($member_id,'catalogues_catalogue',$row['c_name'])) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access($member_id,'catalogues_category',strval($row['id'])))))
 				{
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,NULL,$row['edit_date'],max(0.7-$recurse_level*0.1,0.3),$row['title'])); // Callback
 				} else // Not accessible: we need to copy the node through, but we will flag it 'Unknown' and say it's not accessible.
@@ -658,7 +685,7 @@ class Module_catalogues
 		}
 
 		// Entries
-		if (($depth>=DEPTH__ENTRIES) && (has_category_access($member_id,'catalogues_catalogue',$parent_attributes['c_name'])) && (has_category_access($member_id,'catalogues_category',$parent_attributes['id'])))
+		if (($depth>=DEPTH__ENTRIES) && (has_category_access($member_id,'catalogues_catalogue',$parent_attributes['c_name'])) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access($member_id,'catalogues_category',$parent_attributes['id']))))
 		{
 			require_code('catalogues');
 
@@ -786,7 +813,7 @@ class Module_catalogues
 		list($entry_buildup,$sorting,$entries,$max_rows)=get_catalogue_category_entry_buildup($id,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,NULL,$root);
 
 		// Build up subcategories
-		$rows_subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('cc_parent_id'=>$id),'',300);
+		$rows_subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('cc_parent_id'=>$id),'',600);
 		if (count($rows_subcategories)==300) $rows_subcategories=array(); // Performance issue, manual browsing will be needed
 		foreach ($rows_subcategories as $i=>$subcategory) // Dereference language
 		{
@@ -847,19 +874,19 @@ class Module_catalogues
 		}
 
 		// Links to add to catalogue category etc
-		if (has_actual_page_access(NULL,'cms_catalogues',NULL,array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'submit_midrange_content'))
+		if (has_actual_page_access(NULL,'cms_catalogues',NULL,(get_value('disable_cat_cat_perms')==='1')?array('catalogues_catalogue',$catalogue_name):array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'submit_midrange_content'))
 		{
 			$add_link=build_url(array('page'=>'cms_catalogues','type'=>'add_entry','catalogue_name'=>$catalogue_name,'category_id'=>$id),get_module_zone('cms_catalogues'));
 		} else $add_link=new ocp_tempcode();
-		if (has_actual_page_access(NULL,'cms_catalogues',NULL,array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'submit_cat_midrange_content'))
+		if (has_actual_page_access(NULL,'cms_catalogues',NULL,(get_value('disable_cat_cat_perms')==='1')?array('catalogues_catalogue',$catalogue_name):array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'submit_cat_midrange_content'))
 		{
 			$add_cat_url=build_url(array('page'=>'cms_catalogues','type'=>'add_category','catalogue_name'=>$catalogue_name,'parent_id'=>$id),get_module_zone('cms_catalogues'));
 		} else $add_cat_url=new ocp_tempcode();
-		if (has_actual_page_access(NULL,'cms_catalogues',NULL,array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'edit_cat_midrange_content'))
+		if (has_actual_page_access(NULL,'cms_catalogues',NULL,(get_value('disable_cat_cat_perms')==='1')?array('catalogues_catalogue',$catalogue_name):array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'edit_cat_midrange_content'))
 		{
 			$edit_cat_url=build_url(array('page'=>'cms_catalogues','type'=>'_edit_category','catalogue_name'=>$catalogue_name,'id'=>$id),get_module_zone('cms_catalogues'));
 		} else $edit_cat_url=new ocp_tempcode();
-		if (has_actual_page_access(NULL,'cms_catalogues',NULL,array('catalogues_catalogue',$catalogue_name),'edit_cat_highrange_content'))
+		if (has_actual_page_access(NULL,'cms_catalogues',NULL,(get_value('disable_cat_cat_perms')==='1')?array('catalogues_catalogue',$catalogue_name):array('catalogues_catalogue',$catalogue_name),'edit_cat_highrange_content'))
 		{
 			$edit_catalogue_url=build_url(array('page'=>'cms_catalogues','type'=>'_edit_catalogue','id'=>$catalogue_name),get_module_zone('cms_catalogues'));
 		} else $edit_catalogue_url=new ocp_tempcode();
@@ -975,7 +1002,7 @@ class Module_catalogues
 		foreach ($rows as $row)
 		{
 			$entry_map=get_catalogue_entry_map($row,$catalogue,'CATEGORY','DEFAULT',$root,NULL,array(0),false,false);
-			$letter=strtoupper(substr(is_object($entry_map['FIELD_0_PLAIN'])?$entry_map['FIELD_0_PLAIN']->evaluate():'',0,1));
+			$letter=strtoupper(substr(is_object($entry_map['FIELD_0_PLAIN'])?$entry_map['FIELD_0_PLAIN']->evaluate():$entry_map['FIELD_0_PLAIN'],0,1));
 
 			if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($row['id'])))) continue;
 

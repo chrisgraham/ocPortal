@@ -121,9 +121,10 @@ function get_attachments($posting_field_name)
  * @param  ?string		Javascript code to include (NULL: none)
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  boolean		Whether this is a required input field
+ * @param  boolean		Whether the form supports previewing
  * @return tempcode		The posting form
  */
-function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialisation,$post_comment=NULL,$extra='',$specialisation2=NULL,$default_parsed=NULL,$javascript=NULL,$tabindex=NULL,$required=true)
+function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialisation,$post_comment=NULL,$extra='',$specialisation2=NULL,$default_parsed=NULL,$javascript=NULL,$tabindex=NULL,$required=true,$has_preview=true)
 {
 	require_lang('javascript');
 	require_javascript('javascript_posting');
@@ -172,7 +173,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 	/*if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($post,NULL,false,60,NULL,NULL,true);
 	$LAX_COMCODE=$temp;
 
-	return do_template('POSTING_FORM',array('_GUID'=>'41259424ca13c437d5bc523ce18980fe','REQUIRED'=>$required,'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'JAVASCRIPT'=>$javascript,'PREVIEW'=>true,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EXTRA'=>$extra,'POST_COMMENT'=>$post_comment,'EMOTICON_CHOOSER'=>$emoticon_chooser,'SUBMIT_NAME'=>$submit_name,'HIDDEN_FIELDS'=>$hidden_fields,'COMCODE_HELP'=>$comcode_help,'URL'=>$post_url,'POST'=>$post,'DEFAULT_PARSED'=>$default_parsed,'CONTINUE_URL'=>$continue_url,'ATTACHMENTS'=>$attachments,'SPECIALISATION'=>$specialisation,'SPECIALISATION2'=>$specialisation2));
+	return do_template('POSTING_FORM',array('_GUID'=>'41259424ca13c437d5bc523ce18980fe','REQUIRED'=>$required,'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'JAVASCRIPT'=>$javascript,'PREVIEW'=>$has_preview?true:NULL,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EXTRA'=>$extra,'POST_COMMENT'=>$post_comment,'EMOTICON_CHOOSER'=>$emoticon_chooser,'SUBMIT_NAME'=>$submit_name,'HIDDEN_FIELDS'=>$hidden_fields,'COMCODE_HELP'=>$comcode_help,'URL'=>$post_url,'POST'=>$post,'DEFAULT_PARSED'=>$default_parsed,'CONTINUE_URL'=>$continue_url,'ATTACHMENTS'=>$attachments,'SPECIALISATION'=>$specialisation,'SPECIALISATION2'=>$specialisation2));
 }
 
 /**

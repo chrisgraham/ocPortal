@@ -70,35 +70,75 @@ if (!is_null($lstring)) // Forward geopositioning (textlocation to full details)
 	}
 } else // Reverse geopositioning (lat/long to full details)
 {
-	$bits=find_nearest_location(floatval(get_param('latitude')),floatval(get_param('longitude')),get_param_integer('latitude_search_field',NULL),get_param_integer('longitude_search_field',NULL));
-	if (!is_null($bits))
+	if (get_param_integer('use_google',0)==1)
 	{
-		// Give out different IDs, depending on what the search fields were in.
-	
-		echo '[';
-
-		if (isset($bits['cc_id'])) echo strval($bits['cc_id']); // Category
-		elseif (isset($bits['ce_id'])) echo strval($bits['ce_id']); // Entry
-		else echo strval($bits['id']); // Location
-
-		echo ',';
-
-		if (isset($bits['cc_title'])) echo '\''.addslashes(get_translated_text($bits['cc_title'])).'\'';
-		elseif (isset($bits['l_place']))
+		$url='http://maps.googleapis.com/maps/api/geocode/xml?latlng='.urlencode(get_param('latitude')).','.urlencode(get_param('longitude')).'&sensor=false';
+		$result=http_download_file($url);
+		$matches=array();
+		if (preg_match('#<formatted_address>([^<>]*)</formatted_address>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>#s',$result,$matches)!=0)
 		{
-			echo '\'';
-			echo addslashes($bits['l_place']);
-			if ($bits['l_parent_1']!='') echo ', '.addslashes($bits['l_parent_1']);
-			if ($bits['l_parent_2']!='') echo ', '.addslashes($bits['l_parent_2']);
-			if ($bits['l_parent_3']!='') echo ', '.addslashes($bits['l_parent_3']);
-			if ($bits['l_country']!='') echo ', '.addslashes($bits['l_country']);
-			echo '\'';
+			echo '[';
+
+			echo 'null';
+			echo ',\''.addslashes($matches[1]).'\'';
+			echo ','.float_to_raw_string(floatval($matches[2]));
+			echo ','.float_to_raw_string(floatval($matches[3]));
+
+			echo ']';
 		}
-		else echo '\'\'';
+	} else
+	{
+		$bits=find_nearest_location(floatval(get_param('latitude')),floatval(get_param('longitude')),get_param_integer('latitude_search_field',NULL),get_param_integer('longitude_search_field',NULL));
+		if (!is_null($bits))
+		{
+			// Give out different IDs, depending on what the search fields were in.
+	
+			echo '[';
 
-		echo ','.float_to_raw_string($bits['l_latitude']);
-		echo ','.float_to_raw_string($bits['l_longitude']);
+			if (isset($bits['id'])) echo strval($bits['id']); // Category or Location
+			elseif (isset($bits['ce_id'])) echo strval($bits['ce_id']); // Entry
+			else echo strval($bits['id']); // Location
 
-		echo ']';
+			echo ',';
+
+			if (isset($bits['cc_title']))
+			{
+				$done_one=false;
+				echo '\'';
+				$parent_id=$bits['id'];
+				do
+				{
+					if (!is_null($parent_id))
+					{
+						$row=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('cc_parent_id','cc_title'),array('id'=>$parent_id),'',1);
+						$parent_id=$row[0]['cc_parent_id'];
+						if (!is_null($parent_id)) // Top level skipped also
+						{
+							if ($done_one) echo ', ';
+							echo addslashes(get_translated_text($row[0]['cc_title']));
+							$done_one=true;
+						}
+					}
+				}
+				while (!is_null($parent_id));
+				echo '\'';
+			}
+			elseif (isset($bits['l_place']))
+			{
+				echo '\'';
+				echo addslashes($bits['l_place']);
+				if ($bits['l_parent_1']!='') echo ', '.addslashes($bits['l_parent_1']);
+				if ($bits['l_parent_2']!='') echo ', '.addslashes($bits['l_parent_2']);
+				if ($bits['l_parent_3']!='') echo ', '.addslashes($bits['l_parent_3']);
+				if ($bits['l_country']!='') echo ', '.addslashes($bits['l_country']);
+				echo '\'';
+			}
+			else echo '\'\'';
+
+			echo ','.float_to_raw_string($bits['l_latitude']);
+			echo ','.float_to_raw_string($bits['l_longitude']);
+
+			echo ']';
+		}
 	}
 }

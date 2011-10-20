@@ -67,7 +67,7 @@ function find_awards_for($content_type,$id)
 function get_award_content_row($content_id,$info)
 {
 	require_code('content');
-	list(,,,,$row)=content_get_row($content_id,$info);
+	$row=content_get_row($content_id,$info);
 	return $row;
 }
 

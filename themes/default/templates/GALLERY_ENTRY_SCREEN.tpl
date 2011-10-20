@@ -1,7 +1,7 @@
 <div{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/{+START,IF_PASSED,VIDEO}Video{+END}{+START,IF_NON_PASSED,VIDEO}Image{+END}Object"}>
 	{TITLE}
 
-	{+START,IF,{$NOT,{$_GET,slideshow}}}
+	{+START,IF,{$NOT,{SLIDESHOW}}}
 		{WARNING_DETAILS}
 	{+END}
 
@@ -18,7 +18,7 @@
 		{+END}
 	</div>
 
-	{+START,IF,{$NOT,{$_GET,slideshow}}}
+	{+START,IF,{$NOT,{SLIDESHOW}}}
 		<div class="float_surrounder lined_up_boxes">
 			<div class="gallery_entry_details right">
 				{+START,BOX,{!DETAILS},,med}

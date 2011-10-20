@@ -242,8 +242,9 @@ function get_exif_image_caption($path,$filename)
  * @param  ID_TEXT	The content type
  * @param  ID_TEXT	The content ID
  * @param  array		The EXIF data
+ * @param  ?array		Extra meta data to store, against explicit field IDs (NULL: none)
  */
-function store_exif($content_type,$content_id,$exif)
+function store_exif($content_type,$content_id,$exif,$map=NULL)
 {
 	require_code('fields');
 
@@ -251,7 +252,7 @@ function store_exif($content_type,$content_id,$exif)
 	
 	// Get field values
 	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name'),array('c_name'=>'_'.$content_type),'ORDER BY cf_order');
-	$map=array();
+	if (is_null($map)) $map=array();
 	foreach ($fields as $field)
 	{
 		$name=get_translated_text($field['cf_name'],NULL,'EN');
@@ -260,7 +261,7 @@ function store_exif($content_type,$content_id,$exif)
 			$map[$field['id']]=$exif[$name];
 		elseif (isset($exif[str_replace(' ','',$name)]))
 			$map[$field['id']]=$exif[str_replace(' ','',$name)];
-		else $map[$field['id']]='';
+		else if (!isset($map[$field['id']])) $map[$field['id']]='';
 	}
 	if (count($map)==0) return;
 

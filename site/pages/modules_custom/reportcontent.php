@@ -120,6 +120,7 @@ class Module_reportcontent
 			warn_exit(do_lang_tempcode('ALREADY_REPORTED_CONTENT'));
 
 		list($content_title,$poster_id,)=content_get_details($content_type,$content_id);
+		if ($content_title=='') $content_title=$content_type.' #'.$content_id;
 		$poster=$GLOBALS['FORUM_DRIVER']->get_username($poster_id);
 		
 		// Show form with input field and CAPTCHA, like forum's report post...
@@ -160,7 +161,7 @@ class Module_reportcontent
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 
 		$post=do_template('REPORTED_CONTENT_FCOMCODE',array('URL'=>$url,'CONTENT_ID'=>$content_id,'MEMBER'=>$member,'CONTENT_TITLE'=>$content_title,'POSTER'=>$poster));
-		$posting_form=get_posting_form(do_lang('REPORT_CONTENT'),$post->evaluate(),$post_url,$hidden_fields,$specialisation);
+		$posting_form=get_posting_form(do_lang('REPORT_CONTENT'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,NULL,'',NULL,NULL,NULL,NULL,true,false);
 
 		return do_template('POSTING_SCREEN',array('TITLE'=>$title,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}

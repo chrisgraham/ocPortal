@@ -82,6 +82,7 @@ class Hook_addon_registry_core
 			'sources/group_member_timeouts.php',
 			'sources/hooks/systems/cron/group_member_timeouts.php',
 			'sources/inst_special.php',
+			'sources/actionlog.php',
 			'sources/hooks/systems/config_default/advanced_admin_cache.php',
 			'sources/hooks/systems/config_default/fixed_width.php',
 			'sources/hooks/systems/config_default/collapse_user_zones.php',

@@ -26,6 +26,9 @@ function init__catalogues()
 	global $PT_PAIR_CACHE;
 	$PT_PAIR_CACHE=array();
 
+	global $CAT_FIELDS_CACHE;
+	$CAT_FIELDS_CACHE=array();
+
 	// We do not actually necessarily use these constants in the code (they're based on an extensive of an old BINARY field): but they're here for reference so as to understand the codes
 	if (!defined('C_DT_MAPS'))
 	{
@@ -84,10 +87,15 @@ function count_catalogue_category_children($category_id)
 	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)');
 	
 	$out=array();
+
 	$out['num_children']=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('cc_parent_id'=>$category_id));
 	$out['num_entries']=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',array('cc_id'=>$category_id,'ce_validated'=>1));
-	$out['num_children_children']=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache','COUNT(*)',array('cc_ancestor_id'=>$category_id))-1;
-	$out['num_entries_children']=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache t JOIN '.get_table_prefix().'catalogue_entries e ON e.cc_id=t.cc_id','COUNT(*)',array('t.cc_ancestor_id'=>$category_id));
+
+	$rec_record=$GLOBALS['SITE_DB']->query_select('catalogue_childcountcache',array('c_num_rec_children','c_num_rec_entries'),array('cc_id'=>$category_id),'',1);
+	if (!array_key_exists(0,$rec_record)) $rec_record[0]=array('c_num_rec_children'=>0,'c_num_rec_entries'=>0);
+
+	$out['num_children_children']=$rec_record[0]['c_num_rec_children'];
+	$out['num_entries_children']=$rec_record[0]['c_num_rec_entries'];
 
 	return $out;
 }
@@ -108,9 +116,11 @@ function count_catalogue_category_children($category_id)
  * @param  ?SHORT_INTEGER	The display type to use (NULL: lookup from $catalogue)
  * @param  boolean			Whether to perform sorting
  * @param  ?array				A list of entry rows (NULL: select them normally)
+ * @param  string				Search filter (blank: no filter)
+ * @param  ID_TEXT			Orderer (NULL: read from environment)
  * @return array				An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
-function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL)
+function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$search='',$_order_by=NULL)
 {
 	if (addon_installed('ecommerce'))
 	{
@@ -160,10 +170,19 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	}
 
 	// Find order field
-	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+	global $CAT_FIELDS_CACHE;
+	if (isset($CAT_FIELDS_CACHE[$catalogue_name]))
+	{
+		$fields=$CAT_FIELDS_CACHE[$catalogue_name];
+	} else
+	{
+		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+	}
+	$CAT_FIELDS_CACHE[$catalogue_name]=$fields;
 	if ($do_sorting)
 	{
-		$_order_by=get_param('order','');
+		if (is_null($_order_by))
+			$_order_by=get_param('order','');
 		if (($_order_by=='') || (strpos($_order_by,' ')===false/*probably some bot probing URLs -- sorting always has a space between sorter and direction*/))
 		{	
 			$order_by='0';
@@ -181,10 +200,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		} else
 		{	
 			list($order_by,$direction)=explode(' ',$_order_by);
-			if ($order_by=='rating')
-			{
-				$order_by='rating';
-			} else
+			if (($order_by!='rating') && ($order_by!='add_date'))
 			{
 				foreach ($fields as $i=>$field)
 				{
@@ -203,6 +219,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	}
 
 	// Get entries in this category
+	if ($select==='1=1') $select=NULL;
 	$map=array('cc_id'=>$category_id);
 	if (!has_specific_permission(get_member(),'see_unvalidated')) $map['ce_validated']=1;
 	$in_db_sorting=!is_null($order_by) && $do_sorting && is_null($select);
@@ -212,7 +229,11 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		if ($in_db_sorting)
 		{
 			$num_entries=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',$map);
-			if ($order_by=='rating')
+			if ($order_by=='add_date')
+			{
+				$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries e',array('e.*'),$map,'ORDER BY ce_add_date '.$direction,$max,$start);
+			}
+			elseif ($order_by=='rating')
 			{
 				$select_rating='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','catalogue_entry').' AND rating_for_id=id) AS compound_rating';
 				$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries e',array('e.*',$select_rating),$map,'ORDER BY compound_rating '.$direction,$max,$start);
@@ -280,6 +301,27 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		}
 	}
 
+	// Implement search filter
+	if ($search!='')
+	{
+		$new_entries=array();
+		for ($i=0;$i<$num_entries;$i++)
+		{
+			$two_d_list=$entries[$i]['map']['FIELDS_2D'];
+			$all_output='';
+			foreach ($two_d_list as $index=>$l)
+			{
+				$all_output.=(is_object($l['VALUE'])?$l['VALUE']->evaluate():$l['VALUE']).' ';
+			}
+
+			if (strpos(strtolower($all_output),strtolower($search))!==false)
+			{
+				$new_entries[]=$entries[$i];
+			}
+		}
+		$entries=$new_entries;
+	}
+
 	disable_php_memory_limit();
 
 	if ($do_sorting)
@@ -301,13 +343,16 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				}
 			}
 		}
-		foreach (array('ASC'=>'_ASCENDING','DESC'=>'_DESCENDING') as $dir_code=>$dir_lang)
+		foreach (array('add_date'=>'_ADDED','rating'=>'RATING') as $extra_sort_code=>$extra_sort_lang)
 		{
-			$sort_sel=(($order_by=='rating') && ($direction==$dir_code));
-			$_potential_sorter_name=new ocp_tempcode();
-			$_potential_sorter_name->attach(do_lang_tempcode('RATING'));
-			$_potential_sorter_name->attach(do_lang_tempcode($dir_lang));
-			$selectors->attach(do_template('RESULTS_BROWSER_SORTER',array('_GUID'=>'xfdsfdsusd0fsd0dsf','SELECTED'=>$sort_sel,'NAME'=>protect_from_escaping($_potential_sorter_name),'VALUE'=>'rating '.$dir_code)));
+			foreach (array('ASC'=>'_ASCENDING','DESC'=>'_DESCENDING') as $dir_code=>$dir_lang)
+			{
+				$sort_sel=(($order_by=='rating') && ($direction==$dir_code));
+				$_potential_sorter_name=new ocp_tempcode();
+				$_potential_sorter_name->attach(do_lang_tempcode($extra_sort_lang));
+				$_potential_sorter_name->attach(do_lang_tempcode($dir_lang));
+				$selectors->attach(do_template('RESULTS_BROWSER_SORTER',array('_GUID'=>'xfdsfdsusd0fsd0dsf','SELECTED'=>$sort_sel,'NAME'=>protect_from_escaping($_potential_sorter_name),'VALUE'=>$extra_sort_code.' '.$dir_code)));
+			}
 		}
 		$sort_url=get_self_url(false,false,array('order'=>NULL),false,true);
 		$sorting=do_template('RESULTS_BROWSER_SORT',array('_GUID'=>'9fgjfdklgjdfgkjlfdjgd90','SORT'=>'order','RAND'=>uniqid(''),'URL'=>$sort_url,'SELECTORS'=>$selectors));
@@ -315,8 +360,12 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		{
 			for ($i=0;$i<$num_entries;$i++)
 			{
+				if (!array_key_exists($i,$entries)) continue;
+				
 				for ($j=$i+1;$j<$num_entries;$j++)
 				{
+					if (!array_key_exists($j,$entries)) continue;
+					
 					$a=@$entries[$j]['map']['FIELD_'.strval($order_by)];
 					if (array_key_exists('FIELD_'.strval($order_by).'_PLAIN',@$entries[$j]['map']))
 					{
@@ -601,7 +650,10 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	// Feedback
 	//Set basic rating display of item to the map array
 	require_code('feedback');
-	$map['RATING']=($entry['allow_rating']==1)?display_rating('catalogues',strval($id)):new ocp_tempcode();
+	if (($feedback_details) || ($only_fields!==array(0)))
+	{
+		$map['RATING']=($entry['allow_rating']==1)?display_rating('catalogues',strval($id)):new ocp_tempcode();
+	}
 	if ($feedback_details)
 	{
 		do_rating($entry['allow_rating']==1,'catalogues',strval($id));
@@ -632,6 +684,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 		}
 	}
 	$map['CATALOGUE']=$catalogue_name;
+	$map['CAT']=strval($entry['cc_id']);
 
 	return $map;
 }
@@ -684,11 +737,21 @@ function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_subm
  */
 function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields=NULL,$fields=NULL,$natural_order=false)
 {
+	global $CAT_FIELDS_CACHE;
+
 	if (is_null($fields))
 	{
-		if (is_null($catalogue_name)) $catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$entry_id));
-		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY '.($natural_order?'id':'cf_order'));
+		if ((isset($CAT_FIELDS_CACHE[$catalogue_name])) && (!$natural_order))
+		{
+			$fields=$CAT_FIELDS_CACHE[$catalogue_name];
+		} else
+		{
+			if (is_null($catalogue_name)) $catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$entry_id));
+			$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY '.($natural_order?'id':'cf_order'));
+		}
 	}
+	if (!$natural_order)
+		$CAT_FIELDS_CACHE[$catalogue_name]=$fields;
 
 	require_code('fields');
 
@@ -835,6 +898,11 @@ function nice_get_catalogue_entries_tree($catalogue_name,$it=NULL,$submitter=NUL
  */
 function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id=NULL,$tree=NULL,$title=NULL,$levels=NULL,$editable_filter=false)
 {
+	if ((is_null($category_id)) && (is_null($levels)))
+	{
+		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return array(); // Too many!
+	}
+	
 	if (is_null($category_id))
 	{
 		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name),'',1);
@@ -940,6 +1008,8 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
  */
 function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filter=false,$use_compound_list=false)
 {
+	if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
+	
 	$tree=array();
 	$temp_rows=$GLOBALS['SITE_DB']->query('SELECT id,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND cc_parent_id IS NULL ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
 	if (count($temp_rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(number_format(300))),'warn');

@@ -378,7 +378,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 function has_category_access($member,$module,$category)
 {
 	if (running_script('upgrader')) return true;
-
+	
 	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR;
 	if ((isset($CATEGORY_ACCESS_CACHE[$member])) && (isset($CATEGORY_ACCESS_CACHE[$member][$module.'/'.$category])))
 	{

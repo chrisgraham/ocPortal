@@ -19,14 +19,14 @@
 				</div>
 			{+END}
 	
-			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{$AVATAR*,{SUBMITTER}}}
+			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{$AVATAR,{SUBMITTER}}}
 				<img src="{$AVATAR*,{SUBMITTER}}" title="{!AVATAR}" alt="{!AVATAR}" />
 			{+END}{+END}
 			
-			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$OCF}}
+			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$OCF}}{+START,IF_NON_EMPTY,{$OCF_RANK_IMAGE,{SUBMITTER}}}
 				<br /><br />
 				{$OCF_RANK_IMAGE,{SUBMITTER}}
-			{+END}{+END}
+			{+END}{+END}{+END}
 		</div>
 	{+END}
 

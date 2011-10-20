@@ -95,6 +95,12 @@
 	margin-top: 0.5em;
 }
 
+.slideshow_speed {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
 /* side_root galleries block */
 
 .side_galleries_block p {

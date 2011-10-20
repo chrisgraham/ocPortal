@@ -66,12 +66,11 @@ class Hook_search_catalogue_entries
 	}
 
 	/**
-	 * Get a list of entries for the content covered by this search hook. In hierarchical list selection format.
+	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
 	 *
-	 * @param  string			The default selected item
-	 * @return tempcode		Tree structure
+	 * @return array			A pair: the hook, and the options
 	 */
-	function get_tree($selected)
+	function ajax_tree()
 	{
 		$catalogue_name=get_param('catalogue_name','');
 		if ($catalogue_name=='')
@@ -97,8 +96,7 @@ class Hook_search_catalogue_entries
 			exit();
 		}
 
-		$tree=nice_get_catalogue_category_tree($catalogue_name,intval($selected),false,true);
-		return $tree;
+		return array('choose_catalogue_entry',array('catalogue_name'=>$catalogue_name));
 	}
 
 	/**

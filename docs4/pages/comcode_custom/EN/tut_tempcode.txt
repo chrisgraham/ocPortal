@@ -360,7 +360,7 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$CATALOGUE_ENTRY_BACKREFS,123}</td>
-		<td>Get a comma-separated list of IDs of catalogue entries that reference the given catalogue entry.</td>
+		<td>Get a comma-separated list of IDs of catalogue entries that reference the given catalogue entry. A second parameter may be given, which is a limit on how many to return. A third parameter may be set as the name of a content type if the backrefs should be resolved to linked content entries (for the case where the linkage is via custom fields rather than a pure catalogue).</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$CATALOGUE_ENTRY_FIELD_VALUE,123,0}</td>
@@ -590,6 +590,10 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 	<tr style="background: #FFDDDD">
 		<td>{$ADDON_INSTALLED,galleries}</td>
 		<td>Find whether an addon is installed (first parameter is the code-name of the addon)</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$AWARD_ID,2}</td>
+		<td>Find the content ID assigned to the given award</td>
 	</tr>
 </table>
 [/html]

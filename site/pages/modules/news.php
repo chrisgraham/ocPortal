@@ -330,6 +330,8 @@ class Module_news
 		$NON_CANONICAL_PARAMS[]='filter';
 		$NON_CANONICAL_PARAMS[]='filter_and';
 		$NON_CANONICAL_PARAMS[]='blog';
+		$NON_CANONICAL_PARAMS[]='max';
+		$NON_CANONICAL_PARAMS[]='start';
 
 		$type=get_param('type','misc');
 
@@ -568,7 +570,6 @@ class Module_news
 					$blogger=$myrow['nc_owner'];
 			}
 		}
-		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
 		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));

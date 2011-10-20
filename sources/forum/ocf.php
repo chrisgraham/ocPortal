@@ -1581,7 +1581,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($last>time()) $last=time()-$restrict_answer; // Weird clock problem
 		$wait_time=$restrict_answer-time()+$last;
 
-		if ($wait_time>0)
+		if (($wait_time>0) && (addon_installed('stats')))
 		{
 			require_code('site');
 			log_stats('/flood',0);

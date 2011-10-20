@@ -29,7 +29,7 @@ class Block_main_google_map
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('title','region','cluster','filter_term','filter_category','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude');
+		$info['parameters']=array('title','region','cluster','filter_term','filter_category','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude','star_entry');
 		return $info;
 	}
 	
@@ -67,9 +67,10 @@ class Block_main_google_map
 		$longitude_key=$map['longfield'];
 		$latitude_key=$map['latfield'];
 		$catalogue_name=$map['catalogue'];
+		$star_entry=array_key_exists('star_entry',$map)?$map['star_entry']:'';
 
 		// Data query
-		$query='SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries WHERE '.db_string_equal_to('c_name',$catalogue_name);
+		$query='SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND '.db_string_equal_to('c_name',$catalogue_name);
 
 		// Filtering
 		if (!array_key_exists('filter_category',$map)) $map['filter_category']='';
@@ -92,7 +93,13 @@ class Block_main_google_map
 		$catalogue_row=$catalogue_rows[0];
 
 		// Get results
-		$entries_to_show=$GLOBALS['SITE_DB']->query($query.' ORDER BY ce_add_date DESC',4000/*reasonable limit*/);
+		$entries_to_show=array();
+		if ($star_entry!='') // Ensure this entry loads
+		{
+			$entries_to_show=array_merge($entries_to_show,$GLOBALS['SITE_DB']->query($query.' AND id='.strval(intval($star_entry))));
+			$query.=' AND id<>'.strval(intval($star_entry));
+		}
+		$entries_to_show=array_merge($entries_to_show,$GLOBALS['SITE_DB']->query($query.' ORDER BY ce_add_date DESC',1000/*reasonable limit*/));
 		if ((count($entries_to_show)==0) && (($min_latitude=='') || ($max_latitude=='') || ($min_longitude=='') || ($max_longitude==''))) // If there's nothing to show and no given bounds
 		{
 			return paragraph(do_lang_tempcode('NO_ENTRIES'),'','nothing_here');
@@ -102,6 +109,8 @@ class Block_main_google_map
 		$data=array();
 		foreach($entries_to_show as $i=>$entry_row)
 		{
+			$entry_row['allow_rating']=0; // Performance: So rating is not loaded
+			
 			$details=get_catalogue_entry_map($entry_row,$catalogue_row,'CATEGORY',$catalogue_name,NULL);
 
 			$two_d_list=$details['FIELDS_2D'];
@@ -109,11 +118,13 @@ class Block_main_google_map
 			$longitude=NULL;
 			$latitude=NULL;
 			$entry_title='';
+			$all_output='';
 			foreach ($two_d_list as $index=>$l)
 			{
 				if ($l['NAME']==$longitude_key) $longitude=$l['VALUE'];
 				if ($l['NAME']==$latitude_key) $latitude=$l['VALUE'];
 				if ($index==0) $entry_title=$l['VALUE'];
+				$all_output.=(is_object($l['VALUE'])?$l['VALUE']->evaluate():$l['VALUE']).' ';
 			}
 			if (is_object($longitude)) $longitude=$longitude->evaluate();
 			if (is_object($latitude)) $latitude=$latitude->evaluate();
@@ -121,7 +132,7 @@ class Block_main_google_map
 
 			if ((is_numeric($longitude)) && (is_numeric($latitude)))
 			{
-				if (($map['filter_term']=='') || (strpos(strtolower($entry_title),strtolower($map['filter_term']))!==false))
+				if (($map['filter_term']=='') || (strpos(strtolower($all_output),strtolower($map['filter_term']))!==false))
 				{
 					$details['LONGITUDE']=float_to_raw_string(floatval($longitude));
 					$details['LATITUDE']=float_to_raw_string(floatval($latitude));
@@ -130,6 +141,13 @@ class Block_main_google_map
 
 					$entry_content=do_template('CATALOGUE_googlemap_ENTRY_EMBED',$details,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');//put_in_standard_box(hyperlink($url,do_lang_tempcode('VIEW')),do_lang_tempcode('CATALOGUE_ENTRY').' ('.do_lang_tempcode('IN',get_translated_text($catalogue['c_title'])).')');
 					$details['ENTRY_CONTENT']=$entry_content;
+					
+					$details['STAR']='0';
+					if ($star_entry!='')
+					{
+						if (($entry_row['id']==intval($star_entry)))
+							$details['STAR']='1';
+					}
 
 					$details['CC_ID']=strval($entry_row['cc_id']);
 

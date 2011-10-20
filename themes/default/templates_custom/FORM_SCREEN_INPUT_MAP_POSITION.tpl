@@ -1,12 +1,12 @@
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">// <![CDATA[
-	var marker;
+	var marker,map;
 	function google_map_users_initialize()
 	{
 		marker = new google.maps.Marker();
 		var bounds = new google.maps.LatLngBounds();
 		var center = new google.maps.LatLng({$?,{$IS_EMPTY,{LATITUDE}},0,{LATITUDE;}},{$?,{$IS_EMPTY,{LONGITUDE}},0,{LONGITUDE;}});
-		var map = new google.maps.Map(document.getElementById('map_position_{NAME;}'),
+		map = new google.maps.Map(document.getElementById('map_position_{NAME;}'),
 		{
 			zoom: {$?,{$IS_NON_EMPTY,{LATITUDE}},12,1},
 			center: center,
@@ -16,6 +16,11 @@
 			{
 				opened: true
 			},
+			styles: [{
+				featureType: "poi",
+				elementType: "labels",
+				stylers: [ { visibility: "off" } ]
+			}]
 		});
 		
 		var infoWindow = new google.maps.InfoWindow();
@@ -56,7 +61,22 @@
 
 <div id="map_position_{NAME*}" style="width:100%; height:300px"></div>
 
-<div style="display:none">
-	<input type="text" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_latitude" name="latitude" value="{LATITUDE*}" />
-	<input type="text" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_longitude" name="longitude" value="{LONGITUDE*}" />
-</div>
+<label for="{NAME*}_latitude">
+	Latitude
+	<input onchange="place_marker(this.form.elements['latitude'].value,this.form.elements['longitude'].value);" size="6" type="number" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_latitude" name="latitude" value="{LATITUDE*}" />
+</label>
+
+<label for="{NAME*}_longitude">
+	Longitude
+	<input onchange="place_marker(this.form.elements['latitude'].value,this.form.elements['longitude'].value);" size="6" type="number" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_longitude" name="longitude" value="{LONGITUDE*}" />
+</label>
+
+{$JAVASCRIPT_INCLUDE,javascript_ajax}
+<form action="{$SELF_URL*}" onsubmit="return false;">
+	<div>
+		<label for="location">Look at Location:</label>
+		<input onclick="return geoposition_user_input('location');" class="search_button" src="{$IMG*,you}" type="image" title="Find yourself" />
+		<input id="location" name="location" type="search" value="" />
+		<input class="search_button" onclick="return geoposition_map_goto('location',map);" src="{$IMG*,search}" type="image" title="Look around for Location" />
+	</div>
+</form>

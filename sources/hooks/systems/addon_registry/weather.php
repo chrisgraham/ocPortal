@@ -106,6 +106,7 @@ class Hook_addon_registry_weather
 			lorem_globalise(
 			do_lorem_template('BLOCK_SIDE_WEATHER',array(
 			'TITLE'=>lorem_phrase(),
+			'LOC_CODE'=>placeholder_id(),
 			'IMAGE'=>placeholder_image_url(),
 			'COND'=>lorem_sentence(),
 			'FORECAST'=>lorem_sentence()

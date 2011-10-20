@@ -355,8 +355,10 @@ form { /* For IE6 */
 
 .breadcrumbs {
 	padding: 5px 0 0 0;
-	float: {!en_right};
-	margin-left: 5px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		float: {!en_right};
+		margin-left: 5px;
+	{+END}
 	zoom: 1;
 }
 

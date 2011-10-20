@@ -261,9 +261,9 @@
 		 * Extends the specified object with another object.
 		 *
 		 * @method extend
-		 * @param {Object} target Object to extend.
-		 * @param {Object..} obj Multiple objects to extend with.
-		 * @return {Object} Same as target, the extended object.
+		 * @param Object target Object to extend.
+		 * @param Object.. obj Multiple objects to extend with.
+		 * @return Object Same as target, the extended object.
 		 */
 		extend : function(target) {
 			plupload.each(arguments, function(arg, i) {
@@ -281,8 +281,8 @@
 		 * Cleans the specified name from national characters (diacritics). The result will be a name with only a-z, 0-9 and _.
 		 *
 		 * @method cleanName
-		 * @param {String} s String to clean up.
-		 * @return {String} Cleaned string.
+		 * @param String s String to clean up.
+		 * @return String Cleaned string.
 		 */
 		cleanName : function(name) {
 			var i, lookup;
@@ -315,8 +315,8 @@
 		 * Adds a specific upload runtime like for example flash or gears.
 		 *
 		 * @method addRuntime
-		 * @param {String} name Runtime name for example flash.
-		 * @param {Object} obj Object containing init/destroy method.
+		 * @param String name Runtime name for example flash.
+		 * @param Object obj Object containing init/destroy method.
 		 */
 		addRuntime : function(name, runtime) {			
 			runtime.name = name;
@@ -334,7 +334,7 @@
 		 * to an user unique key.
 		 *
 		 * @method guid
-		 * @return {String} Virtually unique id.
+		 * @return String Virtually unique id.
 		 */
 		guid : function() {
 			var guid = new Date().getTime().toString(32), i;
@@ -349,9 +349,9 @@
 		/**
 		 * Builds a full url out of a base URL and an object with items to append as query string items.
 		 *
-		 * @param {String} url Base URL to append query string items to.
-		 * @param {Object} items Name/value object to serialize as a querystring.
-		 * @return {String} String with url + serialized query string items.
+		 * @param String url Base URL to append query string items to.
+		 * @param Object items Name/value object to serialize as a querystring.
+		 * @return String String with url + serialized query string items.
 		 */
 		buildUrl : function(url, items) {
 			var query = '';
@@ -371,8 +371,8 @@
 		 * Executes the callback function for each item in array/object. If you return false in the
 		 * callback it will break the loop.
 		 *
-		 * @param {Object} obj Object to iterate.
-		 * @param {function} callback Callback function to execute for each item.
+		 * @param Object obj Object to iterate.
+		 * @param function callback Callback function to execute for each item.
 		 */
 		each : function(obj, callback) {
 			var length, key, i;
@@ -404,8 +404,8 @@
 		 * Formats the specified number as a size string for example 1024 becomes 1 KB.
 		 *
 		 * @method formatSize
-		 * @param {Number} size Size to format as string.
-		 * @return {String} Formatted size string.
+		 * @param Number size Size to format as string.
+		 * @return String Formatted size string.
 		 */
 		formatSize : function(size) {
 			if (size === undef || /\D/.test(size)) {
@@ -434,9 +434,9 @@
 		 * Returns the absolute x, y position of an Element. The position will be returned in a object with x, y fields.
 		 *
 		 * @method getPos
-		 * @param {Element} node HTML element or element id to get x, y position from.
-		 * @param {Element} root Optional root element to stop calculations at.
-		 * @return {object} Absolute position of the specified element object with x, y fields.
+		 * @param Element node HTML element or element id to get x, y position from.
+		 * @param Element root Optional root element to stop calculations at.
+		 * @return Object Absolute position of the specified element object with x, y fields.
 		 */
 		 getPos : function(node, root) {
 			var x = 0, y = 0, parent, doc = document, nodeRect, rootRect;
@@ -495,8 +495,8 @@
 		/**
 		 * Returns the size of the specified node in pixels.
 		 *
-		 * @param {Node} node Node to get the size of.
-		 * @return {Object} Object with a w and h property.
+		 * @param Node node Node to get the size of.
+		 * @return Object Object with a w and h property.
 		 */
 		getSize : function(node) {
 			return {
@@ -509,8 +509,8 @@
 		 * Parses the specified size string into a byte value. For example 10kb becomes 10240.
 		 *
 		 * @method parseSize
-		 * @param {String/Number} size String to parse or number to just pass through.
-		 * @return {Number} Size in bytes.
+		 * @param String/Number size String to parse or number to just pass through.
+		 * @return Number Size in bytes.
 		 */
 		parseSize : function(size) {
 			var mul;
@@ -540,8 +540,8 @@
 		 * Encodes the specified string.
 		 *
 		 * @method xmlEncode
-		 * @param {String} s String to encode.
-		 * @return {String} Encoded string.
+		 * @param String s String to encode.
+		 * @return String Encoded string.
 		 */
 		xmlEncode : function(str) {
 			return str ? ('' + str).replace(xmlEncodeRegExp, function(chr) {
@@ -553,8 +553,8 @@
 		 * Forces anything into an array.
 		 *
 		 * @method toArray
-		 * @param {Object} obj Object with length field.
-		 * @return {Array} Array object containing all items.
+		 * @param Object obj Object with length field.
+		 * @return Array Array object containing all items.
 		 */
 		toArray : function(obj) {
 			var i, arr = [];
@@ -569,8 +569,8 @@
 		/**
 		 * Extends the language pack object with new items.
 		 *
-		 * @param {Object} pack Language pack items to add.
-		 * @return {Object} Extended language pack object.
+		 * @param Object pack Language pack items to add.
+		 * @return Object Extended language pack object.
 		 */
 		addI18n : function(pack) {
 			return plupload.extend(i18n, pack);
@@ -579,8 +579,8 @@
 		/**
 		 * Translates the specified string by checking for the english string in the language pack lookup.
 		 *
-		 * @param {String} str String to look for.
-		 * @return {String} Translated string or the input string if it wasn't found.
+		 * @param String str String to look for.
+		 * @return String Translated string or the input string if it wasn't found.
 		 */
 		translate : function(str) {
 			return i18n[str] || str;
@@ -589,8 +589,8 @@
 		/**
 		 * Checks if object is empty.
 		 *
-		 * @param {Object} obj Object to check.
-		 * @return {Boolean}
+		 * @param Object obj Object to check.
+		 * @return Boolean
 		 */
 		isEmptyObj : function(obj) {
 			if (obj === undef) return true;
@@ -604,8 +604,8 @@
 		/**
 		 * Checks if specified DOM element has specified class.
 		 *
-		 * @param {Object} obj DOM element like object to add handler to.
-		 * @param {String} name Class name
+		 * @param Object obj DOM element like object to add handler to.
+		 * @param String name Class name
 		 */
 		hasClass : function(obj, name) {
 			var regExp;
@@ -622,8 +622,8 @@
 		/**
 		 * Adds specified className to specified DOM element.
 		 *
-		 * @param {Object} obj DOM element like object to add handler to.
-		 * @param {String} name Class name
+		 * @param Object obj DOM element like object to add handler to.
+		 * @param String name Class name
 		 */
 		addClass : function(obj, name) {
 			if (!plupload.hasClass(obj, name)) {
@@ -634,8 +634,8 @@
 		/**
 		 * Removes specified className from specified DOM element.
 		 *
-		 * @param {Object} obj DOM element like object to add handler to.
-		 * @param {String} name Class name
+		 * @param Object obj DOM element like object to add handler to.
+		 * @param String name Class name
 		 */
 		removeClass : function(obj, name) {
 			var regExp = new RegExp("(^|\\s+)"+name+"(\\s+|$)");
@@ -648,8 +648,8 @@
 		/**
 		 * Returns a given computed style of a DOM element.
 		 *
-		 * @param {Object} obj DOM element like object.
-		 * @param {String} name Style you want to get from the DOM element
+		 * @param Object obj DOM element like object.
+		 * @param String name Style you want to get from the DOM element
 		 */
 		getStyle : function(obj, name) {
 			if (obj.currentStyle) {
@@ -663,10 +663,10 @@
 		 * Adds an event handler to the specified object and store reference to the handler
 		 * in objects internal Plupload registry (@see removeEvent).
 		 *
-		 * @param {Object} obj DOM element like object to add handler to.
-		 * @param {String} name Name to add event listener to.
-		 * @param {Function} callback Function to call when event occurs.
-		 * @param {String} (optional) key that might be used to add specifity to the event record.
+		 * @param Object obj DOM element like object to add handler to.
+		 * @param String name Name to add event listener to.
+		 * @param Function callback Function to call when event occurs.
+		 * @param String (optional) key that might be used to add specifity to the event record.
 		 */
 		addEvent : function(obj, name, callback) {
 			var func, events, types, key;
@@ -730,9 +730,9 @@
 		 * Remove event handler from the specified object. If third argument (callback)
 		 * is not specified remove all events with the specified name.
 		 *
-		 * @param {Object} obj DOM element to remove event listener(s) from.
-		 * @param {String} name Name of event listener to remove.
-		 * @param {Function|String} (optional) might be a callback or unique key to match.
+		 * @param Object obj DOM element to remove event listener(s) from.
+		 * @param String name Name of event listener to remove.
+		 * @param Function|String (optional) might be a callback or unique key to match.
 		 */
 		removeEvent: function(obj, name) {
 			var type, callback, key;
@@ -797,8 +797,8 @@
 		/**
 		 * Remove all kind of events from the specified object
 		 *
-		 * @param {Object} obj DOM element to remove event listeners from.
-		 * @param {String} (optional) unique key to match, when removing events.
+		 * @param Object obj DOM element to remove event listeners from.
+		 * @param String (optional) unique key to match, when removing events.
 		 */
 		removeAllEvents: function(obj) {
 			var key = arguments[1];
@@ -845,7 +845,7 @@
 	 *
 	 * @constructor
 	 * @method Uploader
-	 * @param {Object} settings Initialization settings, to be used by the uploader instance and runtimes.
+	 * @param Object settings Initialization settings, to be used by the uploader instance and runtimes.
 	 */
 	plupload.Uploader = function(settings) {
 		var events = {}, total, files = [], startTime;
@@ -1249,8 +1249,8 @@
 			 * Returns the specified file object by id.
 			 *
 			 * @method getFile
-			 * @param {String} id File id to look for.
-			 * @return {plupload.File} File object or undefined if it wasn't found;
+			 * @param String id File id to look for.
+			 * @return plupload.File File object or undefined if it wasn't found;
 			 */
 			getFile : function(id) {
 				var i;
@@ -1266,7 +1266,7 @@
 			 * Removes a specific file.
 			 *
 			 * @method removeFile
-			 * @param {plupload.File} file File to remove from queue.
+			 * @param plupload.File file File to remove from queue.
 			 */
 			removeFile : function(file) {
 				var i;
@@ -1282,9 +1282,9 @@
 			 * Removes part of the queue and returns the files removed. This will also trigger the FilesRemoved and QueueChanged events.
 			 *
 			 * @method splice
-			 * @param {Number} start (Optional) Start index to remove from.
-			 * @param {Number} length (Optional) Lengh of items to remove.
-			 * @return {Array} Array of files that was removed.
+			 * @param Number start (Optional) Start index to remove from.
+			 * @param Number length (Optional) Lengh of items to remove.
+			 * @return Array Array of files that was removed.
 			 */
 			splice : function(start, length) {
 				var removed;
@@ -1303,8 +1303,8 @@
 			 *
 			 *
 			 * @method trigger
-			 * @param {String} name Event name to fire.
-			 * @param {Object..} Multiple arguments to pass along to the listener functions.
+			 * @param String name Event name to fire.
+			 * @param Object.. Multiple arguments to pass along to the listener functions.
 			 */
 			trigger : function(name) {
 				var list = events[name.toLowerCase()], i, args;
@@ -1332,7 +1332,7 @@
 			 * Check whether uploader has any listeners to the specified event.
 			 *
 			 * @method hasEventListener
-			 * @param {String} name Event name to check for.
+			 * @param String name Event name to check for.
 			 */
 			hasEventListener : function(name) {
 				return !!events[name.toLowerCase()];
@@ -1342,9 +1342,9 @@
 			 * Adds an event listener by name.
 			 *
 			 * @method bind
-			 * @param {String} name Event name to listen for.
-			 * @param {function} func Function to call ones the event gets fired.
-			 * @param {Object} scope Optional scope to execute the specified function in.
+			 * @param String name Event name to listen for.
+			 * @param function func Function to call ones the event gets fired.
+			 * @param Object scope Optional scope to execute the specified function in.
 			 */
 			bind : function(name, func, scope) {
 				var list;
@@ -1359,8 +1359,8 @@
 			 * Removes the specified event listener.
 			 *
 			 * @method unbind
-			 * @param {String} name Name of event to remove.
-			 * @param {function} func Function to remove from listener.
+			 * @param String name Name of event to remove.
+			 * @param function func Function to remove from listener.
 			 */
 			unbind : function(name) {
 				name = name.toLowerCase();
@@ -1415,36 +1415,36 @@
 			 * Fires when the current RunTime has been initialized.
 			 *
 			 * @event Init
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
 			 */
 
 			/**
 			 * Fires after the init event incase you need to perform actions there.
 			 *
 			 * @event PostInit
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
 			 */
 
 			/**
 			 * Fires when the silverlight/flash or other shim needs to move.
 			 *
 			 * @event Refresh
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
 			 */
 	
 			/**
 			 * Fires when the overall state is being changed for the upload queue.
 			 *
 			 * @event StateChanged
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
 			 */
 
 			/**
 			 * Fires when a file is to be uploaded by the runtime.
 			 *
 			 * @event UploadFile
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {plupload.File} file File to be uploaded.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param plupload.File file File to be uploaded.
 			 */
 
 			/**
@@ -1452,80 +1452,80 @@
 			 * on the uploader instance before the file is uploaded.
 			 *
 			 * @event BeforeUpload
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {plupload.File} file File to be uploaded.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param plupload.File file File to be uploaded.
 			 */
 
 			/**
 			 * Fires when the file queue is changed. In other words when files are added/removed to the files array of the uploader instance.
 			 *
 			 * @event QueueChanged
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
 			 */
 	
 			/**
 			 * Fires while a file is being uploaded. Use this event to update the current file upload progress.
 			 *
 			 * @event UploadProgress
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {plupload.File} file File that is currently being uploaded.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param plupload.File file File that is currently being uploaded.
 			 */
 
 			/**
 			 * Fires while a file was removed from queue.
 			 *
 			 * @event FilesRemoved
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {Array} files Array of files that got removed.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param Array files Array of files that got removed.
 			 */
 
 			/**
 			 * Fires while when the user selects files to upload.
 			 *
 			 * @event FilesAdded
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {Array} files Array of file objects that was added to queue/selected by the user.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param Array files Array of file objects that was added to queue/selected by the user.
 			 */
 
 			/**
 			 * Fires when a file is successfully uploaded.
 			 *
 			 * @event FileUploaded
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {plupload.File} file File that was uploaded.
-			 * @param {Object} response Object with response properties.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param plupload.File file File that was uploaded.
+			 * @param Object response Object with response properties.
 			 */
 
 			/**
 			 * Fires when file chunk is uploaded.
 			 *
 			 * @event ChunkUploaded
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {plupload.File} file File that the chunk was uploaded for.
-			 * @param {Object} response Object with response properties.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param plupload.File file File that the chunk was uploaded for.
+			 * @param Object response Object with response properties.
 			 */
 
 			/**
 			 * Fires when all files in a queue are uploaded.
 			 *
 			 * @event UploadComplete
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {Array} files Array of file objects that was added to queue/selected by the user.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param Array files Array of file objects that was added to queue/selected by the user.
 			 */
 
 			/**
 			 * Fires when a error occurs.
 			 *
 			 * @event Error
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
-			 * @param {Object} error Contains code, message and sometimes file and other details.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
+			 * @param Object error Contains code, message and sometimes file and other details.
 			 */
 			 
 			 /**
 			 * Fires when destroy method is called.
 			 *
 			 * @event Destroy
-			 * @param {plupload.Uploader} uploader Uploader instance sending the event.
+			 * @param plupload.Uploader uploader Uploader instance sending the event.
 			 */
 		});
 	};
@@ -1534,8 +1534,8 @@
 	 * File instance.
 	 *
 	 * @class plupload.File
-	 * @param {String} name Name of the file.
-	 * @param {Number} size File size.
+	 * @param String name Name of the file.
+	 * @param Number size File size.
 	 */
 
 	/**
@@ -1543,9 +1543,9 @@
 	 *
 	 * @constructor
 	 * @method File
-	 * @param {String} id Unique file id.
-	 * @param {String} name File name.
-	 * @param {Number} size File size in bytes.
+	 * @param String id Unique file id.
+	 * @param String name File name.
+	 * @param Number size File size in bytes.
 	 */
 	plupload.File = function(id, name, size) {
 		var self = this; // Setup alias for self to reduce code size when it's compressed
@@ -1610,7 +1610,7 @@
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
-		 * @return {Object} Name/value object with supported features.
+		 * @return Object Name/value object with supported features.
 		 */
 		this.getFeatures = function() {
 		};
@@ -1619,8 +1619,8 @@
 		 * Initializes the upload runtime. This method should add necessary items to the DOM and register events needed for operation. 
 		 *
 		 * @method init
-		 * @param {plupload.Uploader} uploader Uploader instance that needs to be initialized.
-		 * @param {function} callback Callback function to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
+		 * @param plupload.Uploader uploader Uploader instance that needs to be initialized.
+		 * @param function callback Callback function to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		this.init = function(uploader, callback) {
 		};
@@ -1740,7 +1740,7 @@
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
-		 * @return {Object} Name/value object with supported features.
+		 * @return Object Name/value object with supported features.
 		 */
 		getFeatures : function() {
 			return {
@@ -1758,8 +1758,8 @@
 		 * Initializes the browserplus runtime.
 		 *
 		 * @method init
-		 * @param {plupload.Uploader} uploader Uploader instance that needs to be initialized.
-		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
+		 * @param plupload.Uploader uploader Uploader instance that needs to be initialized.
+		 * @param function callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		init : function(uploader, callback) {
 			var browserPlus = window.BrowserPlus, browserPlusFiles = {}, settings = uploader.settings, resize = settings.resize;
@@ -2099,9 +2099,9 @@
 		/**
 		 * Will be executed by the Flash runtime when it sends out events.
 		 *
-		 * @param {String} id If for the upload instance.
-		 * @param {String} name Event name to trigger.
-		 * @param {Object} obj Parameters to be passed with event.
+		 * @param String id If for the upload instance.
+		 * @param String name Event name to trigger.
+		 * @param Object obj Parameters to be passed with event.
 		 */
 		trigger : function(id, name, obj) {
 								
@@ -2128,7 +2128,7 @@
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
-		 * @return {Object} Name/value object with supported features.
+		 * @return Object Name/value object with supported features.
 		 */
 		getFeatures : function() {
 			return {
@@ -2147,8 +2147,8 @@
 		 * Initializes the upload runtime. This method should add necessary items to the DOM and register events needed for operation. 
 		 *
 		 * @method init
-		 * @param {plupload.Uploader} uploader Uploader instance that needs to be initialized.
-		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
+		 * @param plupload.Uploader uploader Uploader instance that needs to be initialized.
+		 * @param function callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		init : function(uploader, callback) {
 			var browseButton, flashContainer, waitCount = 0, container = document.body;
@@ -2626,7 +2626,7 @@
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
-		 * @return {Object} Name/value object with supported features.
+		 * @return Object Name/value object with supported features.
 		 */
 		getFeatures : function() {
 			return {
@@ -2644,8 +2644,8 @@
 		 * Initializes the upload runtime.
 		 *
 		 * @method init
-		 * @param {plupload.Uploader} uploader Uploader instance that needs to be initialized.
-		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
+		 * @param plupload.Uploader uploader Uploader instance that needs to be initialized.
+		 * @param function callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		init : function(uploader, callback) {
 			var desktop;
@@ -2938,7 +2938,7 @@
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
-		 * @return {Object} Name/value object with supported features.
+		 * @return Object Name/value object with supported features.
 		 */
 		getFeatures : function() {			
 			// Only multipart feature
@@ -2954,8 +2954,8 @@
 		 * Initializes the upload runtime.
 		 *
 		 * @method init
-		 * @param {plupload.Uploader} uploader Uploader instance that needs to be initialized.
-		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
+		 * @param plupload.Uploader uploader Uploader instance that needs to be initialized.
+		 * @param function callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		init : function(uploader, callback) {
 			uploader.bind("Init", function(up) {
@@ -3480,7 +3480,7 @@
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
-		 * @return {Object} Name/value object with supported features.
+		 * @return Object Name/value object with supported features.
 		 */
 		getFeatures : function() {
 			var xhr, hasXhrSupport, hasProgress, canSendBinary, dataAccessSupport, sliceSupport;
@@ -3531,8 +3531,8 @@
 		 * Initializes the upload runtime.
 		 *
 		 * @method init
-		 * @param {plupload.Uploader} uploader Uploader instance that needs to be initialized.
-		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
+		 * @param plupload.Uploader uploader Uploader instance that needs to be initialized.
+		 * @param function callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		init : function(uploader, callback) {
 			var features;
@@ -4887,7 +4887,7 @@
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
-		 * @return {Object} Name/value object with supported features.
+		 * @return Object Name/value object with supported features.
 		 */
 		getFeatures : function() {
 			return {
@@ -4904,8 +4904,8 @@
 		 * Initializes the upload runtime. This runtime supports these features: jpgresize, pngresize, chunks.
 		 *
 		 * @method init
-		 * @param {plupload.Uploader} uploader Uploader instance that needs to be initialized.
-		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
+		 * @param plupload.Uploader uploader Uploader instance that needs to be initialized.
+		 * @param function callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		init : function(uploader, callback) {
 			var silverlightContainer, filter = '', filters = uploader.settings.filters, i, container = document.body;

@@ -483,7 +483,7 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 					$comments.=$tpl_post->evaluate();
 				}
 
-				if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) // Will go to natural permissions if we merge OCF templates and features with this comment system
+				if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()) || ($forum==get_option('comments_forum_name')))
 				{
 					$tid=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum,$type.'_'.$id);
 					$url=$GLOBALS['FORUM_DRIVER']->topic_link($tid,$forum);
