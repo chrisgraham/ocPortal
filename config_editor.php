@@ -39,9 +39,9 @@ if (!is_file($FILE_BASE.'/sources/global.php'))
 }
 @chdir($FILE_BASE);
 
-if (file_exists($FILE_BASE.'/use_comp_name'))
+/*if (file_exists($FILE_BASE.'/use_comp_name'))
 	require_once($FILE_BASE.'/'.(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']).'.php');
-else require_once($FILE_BASE.'/info.php');
+else */require_once($FILE_BASE.'/info.php');
 
 if (!is_writable($FILE_BASE.'/info.php'))
 {

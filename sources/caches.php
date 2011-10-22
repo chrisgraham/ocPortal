@@ -233,7 +233,7 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false)
 		if ($tempcode)
 		{
 			$ob=new ocp_tempcode();
-			$ob->from_assembly($cache_rows[0]['the_value']);
+			if (!$ob->from_assembly($cache_rows[0]['the_value'],true)) return NULL;
 			$cache_rows[0]['the_value']=$ob;
 		} else
 		{

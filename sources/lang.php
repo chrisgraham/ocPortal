@@ -103,27 +103,17 @@ function init__lang()
 			$PAGE_CACHE_FILE=$cache_path;
 		} else
 		{
-			if (is_file($cache_path))
+			$contents=@file_get_contents($cache_path,FILE_TEXT);
+			if ($contents!==false)
 			{
-				$PAGE_CACHE_LANG_LOADED=@unserialize(file_get_contents($cache_path,FILE_TEXT));
+				$PAGE_CACHE_LANG_LOADED=@unserialize($contents);
 				if (is_array($PAGE_CACHE_LANG_LOADED))
 				{
 					$PAGE_CACHE_LAZY_LOAD=true;
 					$LANGUAGE=$PAGE_CACHE_LANG_LOADED;
 				}
 			}
-			$PAGE_CACHE_FILE=@fopen($cache_path,'at');
-			if ($PAGE_CACHE_FILE!==false)
-			{
-				if (!$PAGE_CACHE_LAZY_LOAD)
-				{
-					require_code('files');
-					fix_permissions($cache_path,0666);
-				}
-			} else
-			{
-				$PAGE_CACHE_FILE=NULL;
-			}
+			$PAGE_CACHE_FILE=$cache_path;
 		}
 	}
 	
@@ -156,6 +146,29 @@ function init__lang()
 // ====
 // CODE
 // ====
+
+/**
+ * Open up our language cache file for appending.
+ */
+function open_page_cache_file()
+{
+	global $PAGE_CACHE_FILE,$PAGE_CACHE_LAZY_LOAD;
+	if ($PAGE_CACHE_FILE===NULL) return;
+	if (!is_string($PAGE_CACHE_FILE)) return;
+	$cache_path=$PAGE_CACHE_FILE;
+	$PAGE_CACHE_FILE=@fopen($cache_path,'at');
+	if ($PAGE_CACHE_FILE!==false)
+	{
+		if (!$PAGE_CACHE_LAZY_LOAD)
+		{
+			require_code('files');
+			fix_permissions($cache_path,0666);
+		}
+	} else
+	{
+		$PAGE_CACHE_FILE=NULL;
+	}
+}
 
 /**
  * This function is called when no other language works, and it will return the original default language - 'EN'. You may change this to another language, but this is not advised, as ocPortal is being shipped with the EN language complete and unabridged as standard - hence you cannot go wrong if you leave it as EN.
@@ -412,22 +425,30 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 
 	if ($PAGE_CACHE_LAZY_LOAD)
 	{
-		$cache_path=$cfb.'/lang_cached/'.$lang.'/'.$codename.'.lcd';
-		$lang_file_default=$fb.'/lang/'.$lang.'/'.$codename.'.ini';
-		if (!is_file($lang_file_default))
+		global $SITE_INFO;
+		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+		if ($support_smart_decaching)
 		{
-			$lang_file_default=$fb.'/lang/'.fallback_lang().'/'.$codename.'.ini';
-		}
-		$lang_file=$fb.'/lang_custom/'.$lang.'/'.$codename.'.ini';
-		if (!is_file($lang_file))
-		{
-			$lang_file=$fb.'/lang_custom/'.$lang.'/'.$codename.'.po';
+			$cache_path=$cfb.'/lang_cached/'.$lang.'/'.$codename.'.lcd';
+			$lang_file_default=$fb.'/lang/'.$lang.'/'.$codename.'.ini';
+			if (!is_file($lang_file_default))
+			{
+				$lang_file_default=$fb.'/lang/'.fallback_lang().'/'.$codename.'.ini';
+			}
+			$lang_file=$fb.'/lang_custom/'.$lang.'/'.$codename.'.ini';
 			if (!is_file($lang_file))
 			{
-				$lang_file=$fb.'/lang_custom/'.$lang.'/'.filter_naughty($codename).'-'.strtolower($lang).'.po';
+				$lang_file=$fb.'/lang_custom/'.$lang.'/'.$codename.'.po';
 				if (!is_file($lang_file))
 				{
-					$lang_file=$lang_file_default;
+					$lang_file=$fb.'/lang_custom/'.$lang.'/'.filter_naughty($codename).'-'.strtolower($lang).'.po';
+					if (!is_file($lang_file))
+					{
+						$lang_file=$lang_file_default;
+					} else
+					{
+						if (!is_file($lang_file_default)) $lang_file_default=$lang_file;
+					}
 				} else
 				{
 					if (!is_file($lang_file_default)) $lang_file_default=$lang_file;
@@ -436,11 +457,8 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 			{
 				if (!is_file($lang_file_default)) $lang_file_default=$lang_file;
 			}
-		} else
-		{
-			if (!is_file($lang_file_default)) $lang_file_default=$lang_file;
 		}
-		if ((is_file($cache_path)) && (is_file($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file_default)))
+		if ((!$support_smart_decaching) || ((is_file($cache_path)) && (is_file($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file_default))))
 		{
 			if ($lang===NULL) $lang=user_lang();
 			$PAGE_CACHE_LANGS_REQUESTED[]=array($codename,$lang);
@@ -448,6 +466,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 		} else // Invalidate it, as our .lcd cache was dirty
 		{
 			global $PAGE_CACHE_FILE;
+			open_page_cache_file();
 			$LANGUAGE=array();
 			@rewind($PAGE_CACHE_FILE);
 			@ftruncate($PAGE_CACHE_FILE,0);
@@ -757,6 +776,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 						persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 					} else
 					{
+						open_page_cache_file();
 						@rewind($PAGE_CACHE_FILE);
 						@ftruncate($PAGE_CACHE_FILE,0);
 						@fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));
@@ -787,6 +807,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 						persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 					} else
 					{
+						open_page_cache_file();
 						@rewind($PAGE_CACHE_FILE);
 						@ftruncate($PAGE_CACHE_FILE,0);
 						@fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));
@@ -812,7 +833,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 
 	if ($PAGE_CACHE_FILE!==NULL)
 	{
-		if (!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename]))
+		if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename,$PAGE_CACHE_LANG_LOADED[$lang]))))
 		{
 			$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE[$lang][$codename];
 			if ($GLOBALS['MEM_CACHE']!==NULL)
@@ -820,6 +841,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				persistant_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
 			} else
 			{
+				open_page_cache_file();
 				@rewind($PAGE_CACHE_FILE);
 				@ftruncate($PAGE_CACHE_FILE,0);
 				@fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));

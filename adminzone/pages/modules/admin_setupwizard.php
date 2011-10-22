@@ -442,9 +442,13 @@ class Module_admin_setupwizard
 				if (is_null($ob)) continue;
 				if (method_exists($ob,'get_blocks'))
 				{
-					list($a,$b)=$ob->get_blocks();
-					$main_blocks=array_merge($main_blocks,$a);
-					$side_blocks=array_merge($side_blocks,$b);
+					$ret=$ob->get_blocks();
+					if (count($ret)!=0)
+					{
+						list($a,$b)=$ret;
+						$main_blocks=array_merge($main_blocks,$a);
+						$side_blocks=array_merge($side_blocks,$b);
+					}
 				}
 			}
 		}

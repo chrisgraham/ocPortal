@@ -35,23 +35,38 @@ function init__zones()
 
 	global $MODULES_ZONES,$MODULES_ZONES_DEFAULT;
 	$MODULES_ZONES=function_exists('persistant_cache_get')?persistant_cache_get('MODULES_ZONES'):NULL;
+	global $SITE_INFO;
+	$hardcoded=(isset($SITE_INFO['hardcode_common_module_zones'])) && ($SITE_INFO['hardcode_common_module_zones']=='1');
 	if (get_forum_type()=='ocf')
 	{
-		$MODULES_ZONES_DEFAULT=array(
-			/*'forumview'=>'forum',		Don't re-enable this, it breaks redirects
-			'topicview'=>'forum',
-			'topics'=>'forum',
-			'vforums'=>'forum',
-			'delete'=>'personalzone',
-			'editavatar'=>'personalzone',
-			'editphoto'=>'personalzone',
-			'editprofile'=>'personalzone',
-			'editsignature'=>'personalzone',
-			'edittitle'=>'personalzone',
-			'myhome'=>'personalzone',
-			'join'=>'',
-			'login'=>''*/
-		);
+		if ($hardcoded)
+		{
+			$MODULES_ZONES_DEFAULT=array( // Breaks redirects etc, but handy optimisation if you have a vanilla layout
+				'forumview'=>'forum',
+				'topicview'=>'forum',
+				'topics'=>'forum',
+				'vforums'=>'forum',
+				'delete'=>'personalzone',
+				'editavatar'=>'personalzone',
+				'editphoto'=>'personalzone',
+				'editprofile'=>'personalzone',
+				'editsignature'=>'personalzone',
+				'edittitle'=>'personalzone',
+				'myhome'=>'personalzone',
+				'points'=>'site',
+				'members'=>'site',
+				'catalogues'=>'site',
+				'join'=>'',
+				'login'=>'',
+				'recommend'=>'',
+			);
+		} else
+		{
+			$MODULES_ZONES_DEFAULT=array(
+				'join'=>'',
+				'login'=>'',
+			);
+		}
 	} else
 	{
 		$MODULES_ZONES_DEFAULT=array(
@@ -65,7 +80,7 @@ function init__zones()
 	{
 		foreach ($MODULES_ZONES_DEFAULT as $key=>$val)
 		{
-			if (!is_file(get_file_base().'/'.$val.'/pages/modules/'.$key.'.php'))
+			if ((!$hardcoded) && (!is_file(get_file_base().'/'.$val.'/pages/modules/'.$key.'.php')))
 			{
 				unset($MODULES_ZONES_DEFAULT[$key]);
 			}
@@ -97,7 +112,12 @@ function init__zones()
  */
 function zone_black_magic_filterer($path,$relative=false)
 {
-	if (get_option('collapse_user_zones',true)!=='1') return $path;
+	static $no_collapse_zones;
+	if ($no_collapse_zones===NULL) $no_collapse_zones=(get_option('collapse_user_zones',true)!=='1');
+	if ($no_collapse_zones) return $path;
+	
+	static $zbmf_cache=array();
+	if (isset($zbmf_cache[$path])) return $zbmf_cache[$path];
 
 	if ($relative)
 	{
@@ -115,20 +135,28 @@ function zone_black_magic_filterer($path,$relative=false)
 		}
 	}
 
-	if (substr($stripped,0,1)=='/') $stripped=substr($stripped,1);
-
-	if (substr($stripped,0,6)=='pages/') // Ah, need to do some checks as we are looking in the welcome zone
+	if ($stripped!='')
 	{
-		$full=$relative?(get_file_base().'/'.$path):$path;
-		if (!is_file($full))
-		{
-			$site_equiv=get_file_base().'/site/'.$stripped;
+		if ($stripped[0]=='/') $stripped=substr($stripped,1);
 
-			if (is_file($site_equiv))
-				return $relative?('site/'.$stripped):$site_equiv;
+		if (($stripped[0]=='p') && (substr($stripped,0,6)=='pages/')) // Ah, need to do some checks as we are looking in the welcome zone
+		{
+			$full=$relative?(get_file_base().'/'.$path):$path;
+			if (!is_file($full))
+			{
+				$site_equiv=get_file_base().'/site/'.$stripped;
+
+				if (is_file($site_equiv))
+				{
+					$ret=$relative?('site/'.$stripped):$site_equiv;
+					$zbmf_cache[$path]=$ret;
+					return $ret;
+				}
+			}
 		}
 	}
-	
+
+	$zbmf_cache[$path]=$path;
 	return $path;
 }
 
@@ -173,7 +201,7 @@ function get_zone_name()
 function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$error=true)
 {
 	global $MODULES_ZONES;
-	if (isset($MODULES_ZONES[$module_name]))
+	if ((isset($MODULES_ZONES[$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES))))
 	{
 		return $MODULES_ZONES[$module_name];
 	}
@@ -187,18 +215,23 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		return $zone;
 	}
 
-	if (($type=='modules') && (substr($module_name,6)=='admin_'))
+	if (($type=='modules') && (substr($module_name,0,6)=='admin_'))
 	{
 		$zone='adminzone';
 		$MODULES_ZONES[$module_name]=$zone;
 		return $zone;
 	}
+	if (($type=='modules') && (substr($module_name,0,4)=='cms_'))
+	{
+		$zone='cms';
+		$MODULES_ZONES[$module_name]=$zone;
+		return $zone;
+	}
 
 	global $REDIRECT_CACHE;
-
 	$first_zones=array((substr($module_name,6)=='admin_')?'adminzone':$zone);
 	if ($zone!='') $first_zones[]='';
-	if (($zone!='site') && (is_file(get_file_base().'/site/index.php'))) $first_zones[]='site';
+	if (($zone!='site')/* && (is_file(get_file_base().'/site/index.php'))*/) $first_zones[]='site';
 	foreach ($first_zones as $zone)
 	{
 		if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1)) // Only needs to actually look for redirections in first zones until end due to the way precedences work (we know the current zone will be in the first zones)
@@ -243,7 +276,11 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		}
 	}
 
-	if (!$error) return NULL;
+	if (!$error)
+	{
+		$MODULES_ZONES[$module_name]=NULL;
+		return NULL;
+	}
 	warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$module_name));
 }
 
@@ -419,7 +456,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		return $out;
 	}
 
-	global $ALL_ZONES,$ALL_ZONES_TITLED;
+	global $ALL_ZONES,$ALL_ZONES_TITLED,$SITE_INFO;
 
 	if ($get_titles)
 	{
@@ -445,7 +482,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		$zone['zone_title']=get_translated_text($zone['_zone_title']);
 
 		$folder=get_file_base().'/'.$zone['zone_name'].'/pages';
-		if (is_file(get_file_base().'/'.$zone['zone_name'].'/index.php'))
+		if (((isset($SITE_INFO['no_disk_sanity_checks'])) && ($SITE_INFO['no_disk_sanity_checks']=='1')) || (is_file(get_file_base().'/'.$zone['zone_name'].'/index.php')))
 		{
 			$zones[]=$zone['zone_name'];
 			$zones_titled[$zone['zone_name']]=array($zone['zone_name'],$zone['zone_title'],array_key_exists('zone_displayed_in_menu',$zone)?$zone['zone_displayed_in_menu']:1,$zone['zone_default_page'],$zone);
@@ -744,20 +781,22 @@ function do_block_hunt_file($codename,$map=NULL)
 {
 	$codename=filter_naughty_harsh($codename);
 
+	$file_base=get_file_base();
+
 	global $_REQUIRED_CODE;
-	if (is_file(get_file_base().'/sources_custom/blocks/'.$codename.'.php'))
+	if (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php'))
 	{
-		if (!array_key_exists('blocks/'.$codename,$_REQUIRED_CODE)) require_once(get_file_base().'/sources_custom/blocks/'.filter_naughty($codename).'.php');
+		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources_custom/blocks/'.$codename.'.php');
 		$_REQUIRED_CODE['blocks/'.$codename]=1;
 	}
-	elseif (is_file(get_file_base().'/sources/blocks/'.$codename.'.php'))
+	elseif (is_file($file_base.'/sources/blocks/'.$codename.'.php'))
 	{
-		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once(get_file_base().'/sources/blocks/'.filter_naughty($codename).'.php');
+		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources/blocks/'.$codename.'.php');
 		$_REQUIRED_CODE['blocks/'.$codename]=1;
 	}
 	else
 	{
-		if (is_file(get_file_base().'/sources_custom/miniblocks/'.$codename.'.php'))
+		if (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php'))
 		{
 			require_code('developer_tools');
 			destrictify();
@@ -767,13 +806,13 @@ function do_block_hunt_file($codename,$map=NULL)
 				require('sources_custom/miniblocks/'.$codename.'.php');
 			} else
 			{
-				require(get_file_base().'/sources_custom/miniblocks/'.filter_naughty($codename).'.php');
+				require($file_base.'/sources_custom/miniblocks/'.$codename.'.php');
 			}
 			$object=ob_get_contents();
 			ob_end_clean();
 			restrictify();
 		}
-		elseif (is_file(get_file_base().'/sources/miniblocks/'.$codename.'.php'))
+		elseif (is_file($file_base.'/sources/miniblocks/'.$codename.'.php'))
 		{
 			require_code('developer_tools');
 			destrictify();
@@ -783,7 +822,7 @@ function do_block_hunt_file($codename,$map=NULL)
 				require('sources/miniblocks/'.$codename.'.php');
 			} else
 			{
-				require(get_file_base().'/sources/miniblocks/'.filter_naughty($codename).'.php');
+				require($file_base.'/sources/miniblocks/'.$codename.'.php');
 			}
 			$object=ob_get_contents();
 			ob_end_clean();
@@ -796,7 +835,7 @@ function do_block_hunt_file($codename,$map=NULL)
 		return $object;
 	}
 
-	$_object=object_factory('Block_'.filter_naughty_harsh($codename));
+	$_object=object_factory('Block_'.$codename);
 	return $_object;
 }
 
@@ -931,7 +970,10 @@ function extract_module_functions($path,$functions,$params=NULL)
 {
 	if ($params===NULL) $params=array();
 
-	if ((defined('HIPHOP_PHP')) && (!function_exists('quercus_version')))
+	global $SITE_INFO;
+	$prefer_direct_code_call=(isset($SITE_INFO['prefer_direct_code_call'])) && ($SITE_INFO['prefer_direct_code_call']=='1');
+	$hphp=defined('HIPHOP_PHP');
+	if ((($hphp) && (!function_exists('quercus_version'))) || ($prefer_direct_code_call))
 	{
 		global $CLASS_CACHE;
 		if (array_key_exists($path,$CLASS_CACHE))
@@ -939,11 +981,11 @@ function extract_module_functions($path,$functions,$params=NULL)
 			$new_classes=$CLASS_CACHE[$path];
 		} else
 		{
-			//$classes_before=get_declared_classes();
+			if (!$hphp) $classes_before=get_declared_classes();
 			require_code(preg_replace('#^'.preg_quote(get_file_base()).'/#','',preg_replace('#^'.preg_quote(get_file_base()).'/((sources)|(sources\_custom))/(.*)\.php#','${4}',$path)));
-			//$classes_after=get_declared_classes();
-			$new_classes=array();//array_values(array_diff($classes_after,$classes_before));
-			if (count($new_classes)==0) // Ah, AllVolatile is probably not enabled 
+			if (!$hphp) $classes_after=get_declared_classes();
+			$new_classes=$hphp?array():array_values(array_diff($classes_after,$classes_before));
+			if (($hphp) && (count($new_classes)==0)) // Ah, AllVolatile is probably not enabled 
 			{
 				$matches=array();
 				if (preg_match('#^\s*class (\w+)#m',file_get_contents($path),$matches)!=0) 

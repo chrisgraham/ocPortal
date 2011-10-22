@@ -106,6 +106,7 @@ class Block_main_include_module
 		$GLOBALS['BREADCRUMBS']=NULL;
 		$temp_current_breadcrumb_set_parents=$GLOBALS['BREADCRUMB_SET_PARENTS'];
 		$temp_current_breadcrumb_set_self=$GLOBALS['BREADCRUMB_SET_SELF'];
+		$GLOBALS['SEO_TITLE']='DO_NOT_REPLACE';
 		$out=request_page($attributes['page'],false,$zone,NULL,true);
 		$ret=make_string_tempcode($out->evaluate());
 		$GLOBALS['DISPLAYED_TITLE']=$temp_displayed_title;

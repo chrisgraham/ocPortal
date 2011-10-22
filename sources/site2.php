@@ -29,7 +29,7 @@ function get_staff_actions_list()
 	$list=array(
 		'view'=>do_lang_tempcode('SCREEN_DEV_TOOLS'),
 	);
-	$list=array_merge($list,array(
+	$list+=array(
 		'spacer_1'=>do_lang_tempcode('THEME'),
 			'show_edit_links'=>do_lang_tempcode('TEMPLATES_WITH_EDIT_LINKS'),
 			'show_markers'=>do_lang_tempcode('TEMPLATES_WITH_HTML_COMMENT_MARKERS'),
@@ -38,18 +38,18 @@ function get_staff_actions_list()
 			'theme_images'=>do_lang_tempcode('THEME_IMAGE_EDITING'),
 			'code'=>do_lang_tempcode('VALIDATION'),
 			'site_tree'=>do_lang_tempcode('FIND_IN_SITE_TREE'),
-	));
+	);
 	require_code('lang2');
-	$list=array_merge($list,array(
+	$list+=array(
 		'spacer_2'=>do_lang_tempcode('LANGUAGE'),
-	));
+	);
 	$all_langs=multi_lang()?find_all_langs():array(user_lang()=>'lang_custom');
 	$tcode=do_lang('lang:TRANSLATE_CODE');
 	foreach (array_keys($all_langs) as $lang)
 	{
-		$list=array_merge($list,array(
-			'lang_'.$lang=>$tcode.': '.lookup_language_full_name($lang),
-		));
+		$list+=array(
+			'lang_'.$lang=>$tcode.((count($all_langs)==1)?'':(': '.lookup_language_full_name($lang))),
+		);
 	}
 	if (multi_lang())
 	{
@@ -59,11 +59,11 @@ function get_staff_actions_list()
 			$list['lang_content_'.$lang]=$tcontent.': '.lookup_language_full_name($lang);
 		}
 	}
-	$list=array_merge($list,array(
+	$list+=array(
 		'spacer_3'=>do_lang_tempcode('DEVELOPMENT_VIEWS'),
 			'query'=>do_lang_tempcode('VIEW_PAGE_QUERIES'),
 			'ide_linkage'=>do_lang_tempcode('IDE_LINKAGE'),
-	));
+	);
 	if (function_exists('xdebug_enable'))
 	{
 		$list['profile']=do_lang_tempcode('PROFILING');

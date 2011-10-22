@@ -26,12 +26,12 @@ function init__database()
 {
 	if (defined('DB_MAX_KEY_SIZE')) return;
 	
-	global $QUERY_LIST,$QUERY_COUNT,$NO_QUERY_LIMIT,$NO_DB_SCOPE_CHECK,$QUERY_FILE_LOG;
+	global $QUERY_LIST,$QUERY_COUNT,$NO_QUERY_LIMIT,$NO_DB_SCOPE_CHECK,$QUERY_FILE_LOG,$SITE_INFO;
 	$QUERY_LIST=array();
 	$QUERY_COUNT=0;
 	$NO_QUERY_LIMIT=false;
 	$NO_DB_SCOPE_CHECK=false;
-	if (is_file(get_custom_file_base().'/data_custom/queries.log'))
+	if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']=='0')) && (is_file(get_custom_file_base().'/data_custom/queries.log')))
 	{
 		$QUERY_FILE_LOG=fopen(get_custom_file_base().'/data_custom/queries.log','at');
 	} else
@@ -44,7 +44,6 @@ function init__database()
 	$GLOBALS['DB_STATIC_OBJECT']=object_factory('Database_Static_'.get_db_type());
 
 	// Create our main database objects
-	global $SITE_INFO;
 	global $TABLE_LANG_FIELDS;
 	$TABLE_LANG_FIELDS=array();
 	if ((array_key_exists('db_site',$SITE_INFO)) || (array_key_exists('db_site_user',$SITE_INFO)))

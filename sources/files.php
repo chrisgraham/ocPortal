@@ -173,11 +173,12 @@ function is_special_file($file,$include_controls=false)
  *
  * @param  PATH			The pathname to the directory to delete
  * @param  boolean		Whether to preserve files there by default
+ * @param  boolean		Whether to just delete files
  */
-function deldir_contents($dir,$default_preserve=false)
+function deldir_contents($dir,$default_preserve=false,$just_files=false)
 {
 	require_code('files2');
-	_deldir_contents($dir,$default_preserve);
+	_deldir_contents($dir,$default_preserve,$just_files);
 }
 
 /**

@@ -479,18 +479,15 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 	$prefix=($theme=='default')?$prefix_default:(get_custom_file_base().'/themes/');
 
 	// Is it structurally cached on disk yet?
-	$_data=false;
 	if (!isset($CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]))
 	{
-		$found=find_template_place($codename,$lang,$theme,$suffix,$type);
-		$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]=$found;
 		$loaded_this_once=false;
 	} else
 	{
-		$found=$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type];
 		$loaded_this_once=true;
 	}
-	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && (isset($found)) && ((!$POSSIBLY_IN_SAFE_MODE)/* || ($GLOBALS['SEMI_DEBUG_MODE'])*/ || (!in_safe_mode())))
+	$_data=false;
+	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && ((!$POSSIBLY_IN_SAFE_MODE)/* || ($GLOBALS['SEMI_DEBUG_MODE'])*/ || (!in_safe_mode())))
 	{
 		$tcp_path=$prefix.$theme.'/templates_cached/'.$lang.'/'.$codename.$suffix.'.tcp';
 		if ($loaded_this_once)
@@ -506,19 +503,33 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 			}
 		} else
 		{
-			if (isset($GLOBALS['CURRENT_SHARE_USER']))
+			global $SITE_INFO;
+			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+			if ($support_smart_decaching)
 			{
-				$file_path=get_custom_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
-				if (!is_file($file_path))
-					$file_path=get_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
-			} else
-			{
-				$file_path=((($theme=='default') && ($suffix!='.css'))?get_file_base():get_custom_file_base()).'/themes/'.$found[0].$found[1].$codename.$suffix;
+				if (!isset($CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]))
+				{
+					$found=find_template_place($codename,$lang,$theme,$suffix,$type);
+					$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]=$found;
+				} else
+				{
+					$found=$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type];
+				}
+
+				if (isset($GLOBALS['CURRENT_SHARE_USER']))
+				{
+					$file_path=get_custom_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
+					if (!is_file($file_path))
+						$file_path=get_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
+				} else
+				{
+					$file_path=((($theme=='default') && ($suffix!='.css'))?get_file_base():get_custom_file_base()).'/themes/'.$found[0].$found[1].$codename.$suffix;
+				}
+				$tcp_time=@filemtime($tcp_path);
 			}
-			$tcp_time=@filemtime($tcp_path);
-			if (($tcp_time!==false) && (is_file($file_path))/*if in install can be found yet no file at path due to data.ocp*/ && ($found!==NULL))
+			if ((!$support_smart_decaching) || (($tcp_time!==false) && (is_file($file_path)))/*if in install can be found yet no file at path due to running from data.ocp*/ && ($found!==NULL))
 			{
-				if (filemtime($file_path)<$tcp_time)
+				if ((!$support_smart_decaching) || (filemtime($file_path)<$tcp_time))
 				{
 					$_data=new ocp_tempcode();
 					$test=$_data->from_assembly_executed($tcp_path,array($codename,$codename,$lang,$theme,$suffix,$type,$fallback));
@@ -529,6 +540,15 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 	}
 	if ($_data===false) // No, it's not
 	{
+		if (!isset($CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]))
+		{
+			$found=find_template_place($codename,$lang,$theme,$suffix,$type);
+			$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]=$found;
+		} else
+		{
+			$found=$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type];
+		}
+
 		unset($CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]);
 		if (is_null($found))
 		{
@@ -1258,7 +1278,8 @@ class ocp_tempcode
 			else { eval($result[5]); unset($result); }';
 		}
 
-		if (@strpos(file_get_contents($file),'SHIFT_ENCODE')!==false)
+		global $SITE_INFO;
+		if (((!isset($SITE_INFO['disable_decaching_shift_encode'])) || ($SITE_INFO['disable_decaching_shift_encode']!='1')) && (@strpos(file_get_contents($file),'SHIFT_ENCODE')!==false))
 		{
 			$this->code_to_preexecute.='/*SHIFT_ENCODE*/';
 		}

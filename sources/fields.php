@@ -27,7 +27,7 @@
 function get_fields_hook($type)
 {
 	$path='hooks/systems/fields/'.filter_naughty($type);
-	if ((!is_file(get_file_base().'/sources/'.$path.'.php')) && (!is_file(get_file_base().'/sources_custom/'.$path.'.php')))
+	if ((!/*common ones we know have hooks*/in_array($type,array('author','auto_increment','codename','color','content_link','date','email','float','guid','integer','just_date','just_time','list','long_text','long_trans','page_link','password','picture','posting_field','radiolist','random','reference','short_text','short_trans','theme_image','tick','upload','url','user'))) && (!is_file(get_file_base().'/sources/'.$path.'.php')) && (!is_file(get_file_base().'/sources_custom/'.$path.'.php')))
 	{
 		$hooks=find_all_hooks('systems','fields');
 		foreach (array_keys($hooks) as $hook)

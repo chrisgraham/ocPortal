@@ -375,7 +375,11 @@ class forum_driver_base
 		$default_theme=((get_page_name()=='login') && (get_option('root_zone_login_theme')=='1'))?$GLOBALS['SITE_DB']->query_value('zones','zone_theme',array('zone_name'=>'')):$zone_theme;
 		if ((!is_null($default_theme)) && ($default_theme!='-1'))
 		{
-			if (!file_exists(get_custom_file_base().'/themes/'.$default_theme)) $default_theme='-1';
+			global $SITE_INFO;
+			if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
+			{
+				if (!is_dir(get_custom_file_base().'/themes/'.$default_theme)) $default_theme='-1';
+			}
 		}
 		if ($default_theme!='-1')
 		{

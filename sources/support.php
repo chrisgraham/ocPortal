@@ -93,7 +93,11 @@ function init__support()
 function find_template_place($codename,$lang,$theme,$suffix,$type)
 {
 	global $FILE_ARRAY,$CURRENT_SHARE_USER;
-	
+
+	static $tp_cache=array();
+	$sz=serialize(array($codename,$lang,$theme,$suffix,$type));
+	if (isset($tp_cache[$sz])) return $tp_cache[$sz];
+
 	$prefix_default=get_file_base().'/themes/';
 	$prefix=($theme=='default')?$prefix_default:(get_custom_file_base().'/themes/');
 
@@ -138,7 +142,8 @@ function find_template_place($codename,$lang,$theme,$suffix,$type)
 	{
 		$place=array('default','/'.$type.'/');
 	}
-	
+
+	$tp_cache[$sz]=$place;
 	return $place;
 }
 
@@ -1424,7 +1429,8 @@ function is_mobile($user_agent=NULL,$truth=false)
 		return false;
 	}
 
-	if ((isset($GLOBALS['FORUM_DRIVER'])) && (!$truth) && (($theme=$GLOBALS['FORUM_DRIVER']->get_theme())!='default'))
+	global $SITE_INFO;
+	if (((!isset($SITE_INFO['assume_full_mobile_support'])) || ($SITE_INFO['assume_full_mobile_support']=='0')) && (isset($GLOBALS['FORUM_DRIVER'])) && (!$truth) && (($theme=$GLOBALS['FORUM_DRIVER']->get_theme())!='default'))
 	{
 		$ini_path=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.$theme.'/theme.ini';
 		if (is_file($ini_path))
@@ -1510,7 +1516,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 						'iPad',
 						);
 
-	if (is_file(get_file_base().'/text_custom/pdas.txt'))
+	if (((!isset($SITE_INFO['no_extra_mobiles'])) || ($SITE_INFO['no_extra_mobiles']=='0')) && (is_file(get_file_base().'/text_custom/pdas.txt')))
 	{
 		require_code('files');
 		$pdas=better_parse_ini_file((get_file_base().'/text_custom/pdas.txt'));
@@ -1551,10 +1557,10 @@ function get_bot_type()
 	
 	$agent=strtolower(ocp_srv('HTTP_USER_AGENT'));
 
-	global $BOT_MAP;
+	global $BOT_MAP,$SITE_INFO;
 	if (is_null($BOT_MAP))
 	{
-		if (is_file(get_file_base().'/text_custom/bots.txt'))
+		if (((!isset($SITE_INFO['no_extra_bots'])) || ($SITE_INFO['no_extra_bots']=='0')) && (is_file(get_file_base().'/text_custom/bots.txt')))
 		{
 			require_code('files');
 			$BOT_MAP=better_parse_ini_file(get_file_base().'/text_custom/bots.txt');
@@ -1768,6 +1774,7 @@ function seo_meta_load_for($type,$id,$title=NULL)
 {
 	$result=seo_meta_get_for($type,$id);
 	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SEO_TITLE;
+	if ($SEO_TITLE=='DO_NOT_REPLACE') return; // main_include_module block set this
 	if ($result[0]!='') $SEO_KEYWORDS=array_map('trim',explode(',',$result[0]));
 	if ($result[1]!='') $SEO_DESCRIPTION=$result[1];
 	if (!is_null($title)) $SEO_TITLE=str_replace('&ndash;','-',str_replace('&copy;','(c)',str_replace('&#039;','\'',$title)));

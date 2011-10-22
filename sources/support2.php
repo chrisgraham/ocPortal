@@ -128,8 +128,9 @@ function ip_banned($ip) // This is the very first query called, so we will be a 
 	{
 		$ip_parts=explode(':',$ip);
 	}
-	
-	if (is_writable_wrap(get_file_base().'/.htaccess'))
+
+	global $SITE_INFO;
+	if (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (is_writable_wrap(get_file_base().'/.htaccess')))
 	{
 		$bans=array();
 		$ban_count=preg_match_all('#\ndeny from (.*)#',file_get_contents(get_file_base().'/.htaccess'),$bans);

@@ -86,7 +86,7 @@ class Module_galleries
 	
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'galleries'));
 
-		deldir_contents(get_custom_file_base().'/uploads/galleries',true);
+		deldir_contents(get_custom_file_base().'/uploads/galleries',true,true);
 
 		deldir_contents(get_custom_file_base().'/uploads/galleries_thumbs',true);
 

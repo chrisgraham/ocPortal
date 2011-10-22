@@ -74,7 +74,7 @@ function multi_lang()
 	$_langs=array();
 	while (false!==($file=readdir($_dir)))
 	{
-		if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_'))
+		if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && ($file!='index.html') && ($file!='langs.ini') && ($file!='map.ini'))
 		{
 			if (is_dir(get_file_base().'/lang/'.$file)) $_langs[$file]='lang';
 		}
@@ -87,7 +87,7 @@ function multi_lang()
 		{
 			while (false!==($file=readdir($_dir)))
 			{
-				if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && (!isset($_langs[$file])))
+				if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && ($file!='index.html') && ($file!='langs.ini') && ($file!='map.ini') && (!isset($_langs[$file])))
 				{
 					if (is_dir(get_custom_file_base().'/lang_custom/'.$file)) $_langs[$file]='lang_custom';
 				}
@@ -99,7 +99,7 @@ function multi_lang()
 			$_dir=opendir(get_file_base().'/lang_custom/');
 			while (false!==($file=readdir($_dir)))
 			{
-				if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && (!isset($_langs[$file])))
+				if (($file!=fallback_lang()) && ($file[0]!='.') && ($file[0]!='_') && ($file!='index.html') && ($file!='langs.ini') && ($file!='map.ini') && (!isset($_langs[$file])))
 				{
 					if (is_dir(get_file_base().'/lang_custom/'.$file)) $_langs[$file]='lang_custom';
 				}

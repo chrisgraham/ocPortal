@@ -133,9 +133,6 @@ class Module_catalogues
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','icf_id',array('cf_id'),'id');
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fce_id',array('ce_id'),'id');
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','ice_id',array('ce_id'),'id');
-
-			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_add_date',array('ce_add_date'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_c_name',array('c_name'),'id');
 		}
 
 		if (is_null($upgrade_from))
@@ -357,6 +354,12 @@ class Module_catalogues
 			add_menu_item_simple('collab_features',$projects,'ADD','_SEARCH:cms_catalogues:catalogue_name=projects:type=add_entry',0,0,true,do_lang('ZONE_BETWEEN'),1);
 		}
 
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_add_date',array('ce_add_date'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_c_name',array('c_name'),'id');
+		}
+		
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('catalogues','c_own_template');
@@ -892,7 +895,7 @@ class Module_catalogues
 		} else $edit_catalogue_url=new ocp_tempcode();
 
 		require_code('templates_results_browser');
-		$browser=results_browser(do_lang_tempcode('ENTRIES'),$id,$start,'start',$max,'max',$max_rows,$root,'category',$entries);
+		$browser=results_browser(do_lang_tempcode('ENTRIES'),$id,$start,'start',$max,'max',$max_rows,$root,'category',true);
 
 		if ($catalogue['c_is_tree']==1)
 		{

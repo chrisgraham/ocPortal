@@ -24,6 +24,7 @@ class Hook_checklist_ecommerce_orders
 	function run()
 	{
 		if (!addon_installed('ecommerce')) return array();
+		if (!addon_installed('shopping')) return array();
 
 		require_lang('shopping');
 

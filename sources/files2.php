@@ -63,8 +63,9 @@ function _sync_file_move($old,$new)
  *
  * @param  PATH			The pathname to the directory to delete
  * @param  boolean		Whether to preserve files there by default
+ * @param  boolean		Whether to just delete files
  */
-function _deldir_contents($dir,$default_preserve=false)
+function _deldir_contents($dir,$default_preserve=false,$just_files=false)
 {
 	$current_dir=@opendir($dir);
 	if ($current_dir!==false)
@@ -80,8 +81,9 @@ function _deldir_contents($dir,$default_preserve=false)
 			}
 			if ((is_dir($dir.'/'.$entryname)) && ($entryname!='.') && ($entryname!='..'))
 			{
-				deldir_contents($dir.'/'.$entryname,$default_preserve);
-				@rmdir($dir.'/'.$entryname) OR warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($dir.'/'.$entryname)));
+				deldir_contents($dir.'/'.$entryname,$default_preserve,$just_files);
+				if (!$just_files)
+					@rmdir($dir.'/'.$entryname) OR warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($dir.'/'.$entryname)));
 			}
 			elseif (($entryname!='.') && ($entryname!='..') /*&& ($entryname!='index.html') && ($entryname!='.htaccess')*/)
 			{
@@ -1052,7 +1054,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		return $input;
 	} else
 	{
-		if ((($errno!=10060) || (@ini_get('default_socket_timeout')=='1')) && (is_null($post_params)))
+		if (($errno!=110) && (($errno!=10060) || (@ini_get('default_socket_timeout')=='1')) && (is_null($post_params)))
 		{
 			// Perhaps fsockopen is restricted... try fread/file_get_contents
 			@ini_set('allow_url_fopen','1');

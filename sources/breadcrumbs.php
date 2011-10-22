@@ -75,7 +75,7 @@ class breadcrumb_substitution_loader
 
 		// Run the parser
 		$path=get_custom_file_base().'/data_custom/breadcrumbs.xml';
-		if (!file_exists($path))
+		if ((get_custom_file_base()!=get_file_base()) && (!file_exists($path)))
 			$path=get_file_base().'/data_custom/breadcrumbs.xml';
 		$data=file_get_contents($path,FILE_TEXT);
 		if (trim($data)=='') return;

@@ -57,7 +57,7 @@ function init__global2()
 	//@header('Cache-Control: no-cache, must-revalidate'); // DISABLED AS MAKES IE RELOAD ON 'BACK' AND LOSE FORM CONTENTS
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
-	if (strpos($_SERVER['PHP_SELF'],'upgrader.php')===false)
+	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
 	{
 		if (is_file('closed.html'))
 		{
@@ -205,7 +205,6 @@ function init__global2()
 	$CURRENTLY_HTTPS=NULL;
 
 	error_reporting(E_ALL);
-	@ini_set('track_errors','1'); // so $php_errormsg is available
 	@ini_set('html_errors','1');
 	@ini_set('docref_root','http://www.php.net/manual/en/');
 	@ini_set('docref_ext','.php');
@@ -219,8 +218,8 @@ function init__global2()
 
 	$XSS_DETECT=function_exists('ocp_mark_as_escaped');
 
-	$GLOBALS['DEBUG_MODE']=((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped'))) && ((!array_key_exists('keep_no_debug_mode',$_GET) || ($_GET['keep_no_debug_mode']=='0'))) && ((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')));
-	$GLOBALS['SEMI_DEBUG_MODE']=((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped'))) && ((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')));
+	$GLOBALS['DEBUG_MODE']=(((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')) && (is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped'))) && ((!array_key_exists('keep_no_debug_mode',$_GET) || ($_GET['keep_no_debug_mode']=='0'))));
+	$GLOBALS['SEMI_DEBUG_MODE']=(((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')) && (is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped'))));
 	if (function_exists('set_time_limit')) @set_time_limit(60);
 	if ($GLOBALS['DEBUG_MODE'])
 	{
@@ -304,7 +303,7 @@ function init__global2()
 	}
 	require_code('caches'); // Recently taken out of 'support' so makes sense to load it here
 	require_code('database'); // There's nothing without the database
-	if (!is_writable_wrap(get_file_base().'/.htaccess')) // If we have to run this in software
+	if (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (!is_writable_wrap(get_file_base().'/.htaccess'))) // If we have to run this in software
 	{
 		require_code('support2');
 		if (ip_banned(get_ip_address())) critical_error('BANNED');
@@ -417,7 +416,7 @@ function init__global2()
 		unset($locales);
 	}
 
-	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0))
+	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0) && ((!isset($SITE_INFO['no_installer_checks'])) || ($SITE_INFO['no_installer_checks']=='0')))
 	{
 		if ((is_file(get_file_base().'/install.php')) && (!is_file(get_file_base().'/install_ok')) && (running_script('index')))
 			warn_exit(do_lang_tempcode('MUST_DELETE_INSTALLER'));
@@ -671,6 +670,13 @@ function get_charset()
 {
 	global $CHARSET;
 	if (isset($CHARSET)) return $CHARSET;
+	
+	global $SITE_INFO;
+	if (isset($SITE_INFO['charset'])) // An optimisation, if you want to put it in here
+	{
+		$CHARSET=$SITE_INFO['charset'];
+		return $CHARSET;
+	}
 
 	if (function_exists('do_lang'))
 	{
@@ -1578,18 +1584,23 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 	if (is_null($minify))
 		$minify=(get_param_integer('keep_no_minify',0)==0);
 
+	global $SITE_INFO;
+
 	// Make sure the Javascript exists
 	if (is_null($theme))
 		$theme=filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme());
 	$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
-	if (!is_dir($dir))
+	if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
 	{
-		if (@mkdir($dir,0777)===false)
+		if (!is_dir($dir))
 		{
-			warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
+			if (@mkdir($dir,0777)===false)
+			{
+				warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
+			}
+			fix_permissions($dir,0777);
+			sync_file($dir);
 		}
-		fix_permissions($dir,0777);
-		sync_file($dir);
 	}
 	$js_cache_path=$dir.'/'.filter_naughty_harsh($j);
 	if (!$minify) $js_cache_path.='_non_minified';
@@ -1599,15 +1610,21 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 	$js_cache_path.='.js';
 
 	global $CACHE_TEMPLATES;
-	$found=find_template_place(strtoupper($j),'',$theme,'.tpl','templates');
-	if (is_null($found)) return '';
-	$theme=$found[0];
-	$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].strtoupper($j).'.tpl';
-	if (!is_file($fullpath))
-		$fullpath=get_file_base().'/themes/'.$theme.$found[1].strtoupper($j).'.tpl';
-	$globals_custom=str_replace('default/templates/JAVASCRIPT.tpl',filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme()).'/templates_custom/JAVASCRIPT_CUSTOM_GLOBALS.tpl',$fullpath);
+	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+	$is_cached=($CACHE_TEMPLATES) && (@filesize($js_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
 
-	if ((is_browser_decacheing()) || (!$CACHE_TEMPLATES) || (in_safe_mode()) || (@(filemtime($js_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time())) || (@filemtime(get_file_base().'/info.php')>@filemtime($js_cache_path)) || ((is_file($globals_custom)) && (@filemtime($globals_custom)>@filemtime($js_cache_path))) || (@filesize($js_cache_path)==0))
+	if (($support_smart_decaching) || (!$is_cached))
+	{
+		$found=find_template_place(strtoupper($j),'',$theme,'.tpl','templates');
+		if (is_null($found)) return '';
+		$theme=$found[0];
+		$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].strtoupper($j).'.tpl';
+		if (!is_file($fullpath))
+			$fullpath=get_file_base().'/themes/'.$theme.$found[1].strtoupper($j).'.tpl';
+		$globals_custom=str_replace('default/templates/JAVASCRIPT.tpl',filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme()).'/templates_custom/JAVASCRIPT_CUSTOM_GLOBALS.tpl',$fullpath);
+	}
+
+	if ((($support_smart_decaching) && ((@(filemtime($js_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time())) || (@filemtime(get_file_base().'/info.php')>@filemtime($js_cache_path)) || ((is_file($globals_custom)) && (@filemtime($globals_custom)>@filemtime($js_cache_path))))) || (!$is_cached))
 	{
 		require_code('css_and_js');
 		js_compile($j,$js_cache_path,$minify);
@@ -1755,18 +1772,23 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 	if ($minify===NULL)
 		$minify=(get_param_integer('keep_no_minify',0)==0);
 
+	global $SITE_INFO;
+
 	// Make sure the CSS file exists
 	if ($theme===NULL)
 		$theme=@method_exists($GLOBALS['FORUM_DRIVER'],'get_theme')?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
 	$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
-	if (!is_dir($dir))
+	if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
 	{
-		if (@mkdir($dir,0777)===false)
+		if (!is_dir($dir))
 		{
-			warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
+			if (@mkdir($dir,0777)===false)
+			{
+				warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
+			}
+			fix_permissions($dir,0777);
+			sync_file($dir);
 		}
-		fix_permissions($dir,0777);
-		sync_file($dir);
 	}
 	$css_cache_path=$dir.'/'.filter_naughty_harsh($c);
 	if (!$minify) $css_cache_path.='_non_minified';
@@ -1774,16 +1796,23 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 		$css_cache_path.='_ssl';
 	if (is_mobile()) $css_cache_path.='_mobile';
 	$css_cache_path.='.css';
-	global $CACHE_TEMPLATES;
-	$found=find_template_place($c,'',$theme,'.css','css');
-	if (is_null($found)) return '';
-	$theme=$found[0];
-	$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].$c.'.css';
-	if (!is_file($fullpath))
-		$fullpath=get_file_base().'/themes/'.$theme.$found[1].$c.'.css';
-	if (($text_only) && (!is_file($fullpath))) return '';
 
-	if ((is_browser_decacheing()) || (!$CACHE_TEMPLATES) || (in_safe_mode()) || (@(filemtime($css_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time())) || (@filesize($css_cache_path)==0))
+	global $CACHE_TEMPLATES;
+	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+	$is_cached=($CACHE_TEMPLATES) && (@filesize($css_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
+
+	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
+	{
+		$found=find_template_place($c,'',$theme,'.css','css');
+		if (is_null($found)) return '';
+		$theme=$found[0];
+		$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].$c.'.css';
+		if (!is_file($fullpath))
+			$fullpath=get_file_base().'/themes/'.$theme.$found[1].$c.'.css';
+		if (($text_only) && (!is_file($fullpath))) return '';
+	}
+
+	if ((($support_smart_decaching) && (@(filemtime($css_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time()))))
 	{
 		require_code('css_and_js');
 		css_compile($theme,$c,$fullpath,$css_cache_path,$minify);

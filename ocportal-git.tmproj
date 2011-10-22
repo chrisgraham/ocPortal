@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>data/force_sitemap_generation.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -244,7 +242,7 @@
 			<key>filename</key>
 			<string>recommended.htaccess</string>
 			<key>lastUsed</key>
-			<date>2011-10-07T12:06:20Z</date>
+			<date>2011-10-21T13:18:54Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -512,20 +510,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>3</integer>
-		</dict>
-		<key>data/force_sitemap_generation.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>24</integer>
-				<key>line</key>
-				<integer>44</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>data/occle.php</key>
 		<dict>
@@ -980,20 +964,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
-		</dict>
-		<key>site/pages/modules/catalogues.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1247</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>512</integer>
 		</dict>
 		<key>site/pages/modules/downloads.php</key>
 		<dict>
@@ -1678,20 +1648,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>32</integer>
-		</dict>
-		<key>sources/hooks/systems/addon_registry/cedi.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>30</integer>
-				<key>line</key>
-				<integer>126</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>114</integer>
 		</dict>
 		<key>sources/hooks/systems/addon_registry/debrand.php</key>
 		<dict>
@@ -3064,7 +3020,7 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>417</integer>
+				<integer>0</integer>
 				<key>line</key>
 				<integer>48</integer>
 			</dict>
@@ -3392,15 +3348,9 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>site/pages/modules/catalogues.php</string>
-		<string>sources/hooks/systems/addon_registry/cedi.php</string>
-		<string>data/force_sitemap_generation.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{853, 91}, {1041, 1058}}</string>
+	<string>{{645, 150}, {1213, 913}}</string>
 </dict>
 </plist>

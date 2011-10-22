@@ -535,7 +535,7 @@ class Module_tickets
 				$comment_box=new ocp_tempcode();
 			}
 
-			$post_url=build_url(array('page'=>'_SELF','id'=>$id,'type'=>'post'),'_SELF');
+			$post_url=build_url(array('page'=>'_SELF','id'=>$id,'type'=>'post','redirect'=>get_param('redirect',NULL)),'_SELF');
 
 			require_code('form_templates');
 			require_code('feedback');
@@ -707,6 +707,7 @@ class Module_tickets
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id),'_SELF');
 		if (is_guest()) $url=build_url(array('page'=>'_SELF'),'_SELF');
+		if (get_param('redirect','')!='') $url=make_string_tempcode(get_param('redirect'));
 		return redirect_screen($title,$url,do_lang_tempcode('TICKET_STARTED'));
 	}
 

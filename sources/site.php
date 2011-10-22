@@ -653,7 +653,7 @@ function do_site()
 				if (is_numeric($url_id)) // Lookup and redirect to moniker
 				{
 					$correct_moniker=find_id_moniker(array('page'=>get_page_name(),'type'=>get_param('type','misc'),'id'=>$url_id));
-					if (($correct_moniker!=$url_id) && (count($_POST)==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
+					if ((!is_null($correct_moniker)) && ($correct_moniker!=$url_id) && (count($_POST)==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
 					{
 						header('HTTP/1.0 301 Moved Permanently');
 						$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
@@ -989,7 +989,8 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 			$REQUEST_PAGE_NEST_LEVEL--;
 			return $ret;
 		case 'COMCODE_CUSTOM':
-			if (is_file(zone_black_magic_filterer(get_custom_file_base().'/'.$details[1].(($details[1]=='')?'':'/').'pages/comcode_custom/'.$details[3].'/'.$details[2].'.txt')))
+			global $SITE_INFO;
+			if (((isset($SITE_INFO['no_disk_sanity_checks'])) && ($SITE_INFO['no_disk_sanity_checks']=='1')) || (is_file(zone_black_magic_filterer(get_custom_file_base().'/'.$details[1].(($details[1]=='')?'':'/').'pages/comcode_custom/'.$details[3].'/'.$details[2].'.txt'))))
 			{
 				$ret=load_comcode_page(zone_black_magic_filterer($details[1].(($details[1]=='')?'':'/').'pages/comcode_custom/'.$details[3].'/'.$details[2].'.txt',true),$details[1],$details[2],get_custom_file_base(),$being_included);
 				$REQUEST_PAGE_NEST_LEVEL--;
@@ -1285,7 +1286,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		'p_parent_page'=>'',
 		'p_validated'=>1,
 		'p_edit_date'=>NULL,
-		'p_add_date'=>filectime($file_base.'/'.$string),
+		'p_add_date'=>NULL,
 		'p_submitter'=>NULL,
 		'p_show_as_edit'=>0
 	);
@@ -1302,21 +1303,33 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 			}
 		}
 		$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
-		$mtime=filemtime($file_base.'/'.$string);
-		if ($mtime>time()) $mtime=time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
-		$pcache=persistant_cache_get(array('COMCODE_PAGE',$codename,$zone,$theme,user_lang()),$mtime);
+		if (!is_null($GLOBALS['MEM_CACHE']))
+		{
+			$mtime=filemtime($file_base.'/'.$string);
+			if ($mtime>time()) $mtime=time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
+			$pcache=persistant_cache_get(array('COMCODE_PAGE',$codename,$zone,$theme,user_lang()),$mtime);
+		} else $pcache=NULL;
 		if (is_null($pcache))
 		{
 			$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('*'),array('a.the_page'=>$codename,'a.the_zone'=>$zone,'the_theme'=>$theme),'',1,NULL,false,array('string_index','cc_page_title'));
 			if (array_key_exists(0,$comcode_page))
 			{
-				if (((!is_null($comcode_page[0]['p_edit_date'])) && ($comcode_page[0]['p_edit_date']>=$mtime)) || ((is_null($comcode_page[0]['p_edit_date'])) && (!is_null($comcode_page[0]['p_add_date'])) && ($comcode_page[0]['p_add_date']>=$mtime))) // Make sure it has not been edited since last edited or created
+				global $SITE_INFO;
+				$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+				if ($support_smart_decaching)
+				{
+					$mtime=filemtime($file_base.'/'.$string);
+					if ($mtime>time()) $mtime=time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
+				}
+				if ((!$support_smart_decaching) || (((!is_null($comcode_page[0]['p_edit_date'])) && ($comcode_page[0]['p_edit_date']>=$mtime)) || ((is_null($comcode_page[0]['p_edit_date'])) && (!is_null($comcode_page[0]['p_add_date'])) && ($comcode_page[0]['p_add_date']>=$mtime)))) // Make sure it has not been edited since last edited or created
 				{
 					$comcode_page_row=$comcode_page[0];
 					$db_set=get_translated_tempcode($comcode_page[0]['string_index'],NULL,user_lang(),true,true,true);
 					unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);
 				} else
 				{
+					$mtime=filemtime($file_base.'/'.$string);
+					if ($mtime>time()) $mtime=time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
 					$GLOBALS['SITE_DB']->query_update('comcode_pages',array('p_edit_date'=>$mtime),array('the_page'=>$codename,'the_zone'=>$zone),'',1);
 					$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$codename));
 					delete_lang($comcode_page[0]['string_index']);
@@ -1345,6 +1358,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 				if (array_key_exists(0,$comcode_page)) $comcode_page_row=$comcode_page[0];
 
 				require_code('site2');
+				$new_comcode_page_row['p_add_date']=filectime($file_base.'/'.$string);
 				list($html,$title_to_use,$comcode_page_row)=_load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row,$being_included);
 			}
 
@@ -1356,6 +1370,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 	} else
 	{
 		require_code('site2');
+		$new_comcode_page_row['p_add_date']=filectime($file_base.'/'.$string);
 		list($html,$comcode_page_row,$title_to_use)=_load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included);
 	}
 	if ((substr($codename,0,6)!='panel_') && (!is_null($title_to_use)) && (!$being_included))

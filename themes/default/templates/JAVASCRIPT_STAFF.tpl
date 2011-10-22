@@ -407,7 +407,7 @@ function handleZoneClick(src,event,zone_name)
 	return true;
 }
 
-function load_management_menu(type)
+function load_management_menu(type,no_confirm_needed)
 {
 	if (!type) type='management';
 
@@ -447,7 +447,7 @@ function load_management_menu(type)
 	{
 		if (document.getElementById(type+'_menu_img_loader'))
 		{
-			window.setTimeout('load_management_menu(\''+type+'\');',200);
+			window.setTimeout(function() { load_management_menu(type,no_confirm_needed); },200);
 			return false;
 		}
 
@@ -465,13 +465,13 @@ function load_management_menu(type)
 
 		require_javascript("javascript_ajax");
 		require_javascript("javascript_menu_popup");
-		window.setTimeout('load_management_menu(\''+type+'\');',200);
+		window.setTimeout(function() { load_management_menu(type,no_confirm_needed); },200);
 
 		return false;
 	}
 	if ((window.ajax_supported) && (ajax_supported()))
 	{
-		if (!confirm_session()) return false;
+		if ((!no_confirm_needed) && (!confirm_session())) return false;
 
 		addEventListenerAbstract(document,'click',function (e) { if (!e) e=window.event; var el=e.target; if (!el) el=e.srcElement; if (el.id!=type+'_menu_img') { document.getElementById(type+'_menu_img').src=on_url; document.getElementById(type+'_menu_box').style.display='none'; } },false);
 

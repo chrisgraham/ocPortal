@@ -92,14 +92,14 @@ class Block_main_staff_website_monitoring
 
 		require_code('files');
 		$p=array();
-		$result=http_download_file('http://data.alexa.com/data?cli=10&dat=s&url=' . $url);
-		if (preg_match( '#<POPULARITY URL="(.*?)" TEXT="([0-9]+){1,}"/>#si', $result, $p )!=0)
+		$result=http_download_file('http://data.alexa.com/data?cli=10&dat=s&url='.$url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1.0);
+		if (preg_match('#<POPULARITY URL="(.*?)" TEXT="([0-9]+){1,}"/>#si',$result,$p)!=0)
 			$rank=integer_format(intval($p[2]));
 		else $rank='0';
-		if (preg_match( '#<LINKSIN NUM="([0-9]+){1,}"/>#si', $result, $p )!=0)
+		if (preg_match('#<LINKSIN NUM="([0-9]+){1,}"/>#si',$result,$p)!=0)
 			$links=integer_format(intval($p[1]));
 		else $links='0';
-		if (preg_match( '#<SPEED TEXT="[^"]*" PCT="([0-9]+){1,}"/>#si', $result, $p )!=0)
+		if (preg_match( '#<SPEED TEXT="[^"]*" PCT="([0-9]+){1,}"/>#si',$result,$p)!=0)
 			$speed='Top '.integer_format(100-intval($p[1])).'%';
 		else $speed='?';
 
@@ -209,7 +209,7 @@ class Block_main_staff_website_monitoring
 		$errno = '0';
 		$errstr = '';
 		require_code('files');
-		$data=http_download_file('http://toolbarqueries.google.com/search?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false);
+		$data=http_download_file('http://toolbarqueries.google.com/search?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1.0);
 		if (is_null($data)) return '';
 		$pos = strpos($data, "Rank_");
 		if($pos === false)
