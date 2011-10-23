@@ -711,7 +711,7 @@ class Hook_addon_registry_core_ocf
 					'USERNAME'=>lorem_word(),
 					'MEMBER_ID'=>placeholder_id(),
 					'SECONDARY_GROUPS'=>placeholder_array(),
-					'VIEW_PROFILES'=>'_true',
+					'VIEW_PROFILES'=>true,
 					'FRIENDS_A'=>placeholder_array(),
 					'FRIENDS_B'=>placeholder_array(),
 					'ON_PROBATION'=>lorem_phrase(),

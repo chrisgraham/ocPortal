@@ -4,4 +4,4 @@
 </li>
 {CHILDREN}
 
-{$SET,done_one_zone_item,_true}
+{$SET,done_one_zone_item,1}

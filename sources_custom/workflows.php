@@ -935,7 +935,7 @@ function get_workflow_form($workflow_content_id=NULL)
 	$workflow_hidden->attach(form_input_hidden('return_url',get_self_url(true)));
 
 	// Add all of these to the form
-	$workflow_form->attach(do_template('FORM',array('FIELDS'=>$workflow_fields,'HIDDEN'=>$workflow_hidden,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SUBMIT_WORKFLOW_CHANGES'),'SKIP_REQUIRED'=>'_true')));
+	$workflow_form->attach(do_template('FORM',array('FIELDS'=>$workflow_fields,'HIDDEN'=>$workflow_hidden,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SUBMIT_WORKFLOW_CHANGES'),'SKIP_REQUIRED'=>true)));
 	
 	// Then pass it to whoever wanted it
 	return put_in_standard_box($workflow_form,do_lang_tempcode('WORKFLOW_STATUS'));

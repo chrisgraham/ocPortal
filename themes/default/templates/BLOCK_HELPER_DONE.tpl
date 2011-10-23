@@ -1,7 +1,7 @@
 <script type="text/javascript">// <![CDATA[
 	var element;
 	element=opener.document.getElementById('{FIELD_NAME;}');
-	element=ensure_true_id(element,'{FIELD_NAME;}');
+	element=ensure1_id(element,'{FIELD_NAME;}');
 
 	var comcode;
 	

@@ -64,6 +64,8 @@ To add a custom tag, do as follows:
  - Click the 'Add custom Comcode tag' button
 Your tag will be shown in your local copy of the Comcode tutorial, with your title, description and usage example.
 
+Note that Comcode is cached, and if you edit a tag after adding Comcode using it, it won't be updated until you edit that content (or the Comcode field precalculation cache is emptied).
+
 [title="2"]Semi-HTML[/title]
 
 The \[semihtml] tag is a special tag that allows Comcode and HTML to be naturally mixed together. Primarily, the tag is used so that the WYSIWYG editor, which is an HTML editor, may have Comcode placed within it that is not visual, and thus could not be edited in a WYSIWYG fashion.

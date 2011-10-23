@@ -1439,6 +1439,11 @@ function step_5_write_config()
 	fwrite($info,"<"."?php\nglobal \$SITE_INFO;\n");
 	fwrite($info,"\n\$SITE_INFO['use_mem_cache']='0';\n");
 	fwrite($info,"\n\$SITE_INFO['fast_spider_cache']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['on_msn']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['disable_smart_decaching']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['no_disk_sanity_checks']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['hardcode_common_module_zones']='0';\n");
+	fwrite($info,"\n\$SITE_INFO['prefer_direct_code_call']='0';\n");
 	if ($info===false)
 		warn_exit(do_lang_tempcode('INSTALL_WRITE_ERROR',escape_html($info_file)));
 

@@ -16,10 +16,10 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{LINKS}}
-		{$SET,linkbar,_false}
+		{$SET,linkbar,0}
 		<div class="more">
 			{+START,LOOP,LINKS}
-				{+START,IF,{$GET,linkbar}} &middot; {+END}{_loop_var}{$SET,linkbar,_true}
+				{+START,IF,{$GET,linkbar}} &middot; {+END}{_loop_var}{$SET,linkbar,1}
 			{+END}
 		</div>
 	{+END}

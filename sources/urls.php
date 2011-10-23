@@ -303,20 +303,22 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 		$vars['page']=get_zone_default_page($zone_name);
 		if ($vars['page']===NULL) $vars['page']='start';
 	}
+	
+	$id=isset($vars['id'])?$vars['id']:NULL;
 
 	$page_link=$zone_name.':'./*urlencode not needed in reality, performance*/($vars['page']);
 	if ((isset($vars['type'])) || (array_key_exists('type',$vars)))
 	{
 		$page_link.=':'.(($vars['type']===NULL)?'<null>':urlencode($vars['type']));
 		unset($vars['type']);
-		if ((isset($vars['id'])) || (array_key_exists('id',$vars)))
+		if ((isset($id)) || (array_key_exists('id',$vars)))
 		{
-			if (is_integer($vars['id']))
+			if (is_integer($id))
 			{
-				$page_link.=':'.strval($vars['id']);
+				$page_link.=':'.strval($id);
 			} else
 			{
-				$page_link.=':'.(($vars['id']===NULL)?'<null>':urlencode($vars['id']));
+				$page_link.=':'.(($id===NULL)?'<null>':urlencode($id));
 			}
 			unset($vars['id']);
 		}
@@ -341,7 +343,13 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 	);
 	if ($skip!==NULL) $arr[]=implode(',',array_keys($skip));
 
-	return symbol_tempcode('PAGE_LINK',$arr);
+	$ret=symbol_tempcode('PAGE_LINK',$arr);
+	global $SITE_INFO;
+	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1') && (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/))
+	{
+		$ret=make_string_tempcode($ret->evaluate());
+	}
+	return $ret;
 }
 
 /**

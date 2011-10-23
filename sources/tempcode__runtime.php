@@ -1004,7 +1004,7 @@ class ocp_tempcode
 
 		foreach ($parameters as $key=>$val)
 		{
-			if (is_bool($val)) $parameters[$key]=$val?'_true':'_false';
+			if (is_bool($val)) $parameters[$key]=$val?'1':'0';
 		}
 
 		$out=new ocp_tempcode();
@@ -1067,7 +1067,7 @@ class ocp_tempcode
 							{
 								if (!$bit[3][$i]->is_empty())
 								{
-									$bit[3][$i]=make_string_tempcode('_true');
+									$bit[3][$i]=make_string_tempcode('1');
 								}
 							}
 						}

@@ -37,7 +37,7 @@
 				{CONTENT}
 			</div>
 			{+START,IF_NON_EMPTY,{LINKS}}
-				{$SET,linkbar,_false}
+				{$SET,linkbar,0}
 				<div class="standardbox_classic standardbox_links_classic community_block_tagline">
 					{+START,LOOP,LINKS}
 						{_loop_var}

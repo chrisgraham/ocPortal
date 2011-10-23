@@ -38,10 +38,10 @@
 					</div>
 		
 					{+START,IF_NON_EMPTY,{LINKS}}
-						{$SET,linkbar,_false}
+						{$SET,linkbar,0}
 						<div class="standardbox_iesucks_curved_rule standardbox_links_classic community_block_tagline"> 
 							{+START,LOOP,LINKS}
-								{+START,IF,{$GET,linkbar}} {+END}{_loop_var}{$SET,linkbar,_true}
+								{+START,IF,{$GET,linkbar}} {+END}{_loop_var}{$SET,linkbar,1}
 							{+END}
 						 </div>
 					{+END}
@@ -85,10 +85,10 @@
 		</div></div>
 
 		{+START,IF_NON_EMPTY,{LINKS}}
-			{$SET,linkbar,_false}
+			{$SET,linkbar,0}
 			<div class="standardbox_inner_curved standardbox_links_classic community_block_tagline"> [
 				{+START,LOOP,LINKS}
-					{+START,IF,{$GET,linkbar}} | {+END}{_loop_var}{$SET,linkbar,_true}
+					{+START,IF,{$GET,linkbar}} | {+END}{_loop_var}{$SET,linkbar,1}
 				{+END}
 			] </div>
 		{+END}

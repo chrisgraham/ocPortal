@@ -35,7 +35,7 @@
 		</div>
 	{+END}{+END}
 
-	{$SET,in_panel,_false}{+START,IF,{$_GET,in_panel}}{$SET,in_panel,_true}{+END}{+START,IF,{$_GET,interlock}}{$SET,interlock,_true}{+END}
+	{$SET,in_panel,0}{+START,IF,{$_GET,in_panel}}{$SET,in_panel,1}{+END}{+START,IF,{$_GET,interlock}}{$SET,interlock,1}{+END}
 
 	{CONTENT}
 

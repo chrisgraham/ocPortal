@@ -527,11 +527,11 @@ a.topleftlink:hover {
 	font-style: italic;
 }
 
-.template_edit_guid__true {
+.template_edit_guid_1 {
 	background-color: #f1f5f4; /* {$,wizard, 100% ocf_row2} */
 }
 
-.template_edit_guid__false {
+.template_edit_guid_0 {
 	background-color: #f1f5f4; /* {$,wizard, 100% ocf_row2 }*/
 }
 

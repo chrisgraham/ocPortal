@@ -66,7 +66,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		if (!is_null($test)) $html=post_param($test.'_new');
 	}
 
-	$result=template_to_tempcode($html,0,false,$codename,$theme);
+	$result=template_to_tempcode($html,0,false,$codename,$theme,$lang);
 	if (($CACHE_TEMPLATES) && (($suffix=='.tpl') || ($codename=='no_cache')))
 	{
 		if (!is_null($MEM_CACHE))
@@ -109,11 +109,12 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
  * @param  boolean		Whether this text is infact a directive, about to be put in the context of a wider template
  * @param  ID_TEXT		The codename of the template (e.g. foo)
  * @param  ?ID_TEXT		The theme it is for (NULL: current theme)
+ * @param  ?ID_TEXT		The language it is for (NULL: current language)
  * @return mixed			The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL)
+function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL,$lang=NULL)
 {
 	require_code('comcode_conversion');
-	return template_to_tempcode_static(/*&*/$text,$symbol_pos,$inside_directive,$codename,$theme);
+	return template_to_tempcode_static(/*&*/$text,$symbol_pos,$inside_directive,$codename,$theme,$lang);
 }
 

@@ -612,7 +612,7 @@ The third "..." is the box contents.
 {$GET,in_panel}
 [/code]
 
-This is a way of ocPortal keeping track of whether it is currently outputting a panel or part of the main website. Just before outputting panels it does [tt]{$SET,in_panel,_true}[/tt] in the default [tt]HEADER.tpl[/tt] template. This allows us to use the above code in our block templates to retrieve this setting so that we know whether to use panel styles or not.
+This is a way of ocPortal keeping track of whether it is currently outputting a panel or part of the main website. Just before outputting panels it does [tt]{$SET,in_panel,1}[/tt] in the default [tt]HEADER.tpl[/tt] template. This allows us to use the above code in our block templates to retrieve this setting so that we know whether to use panel styles or not.
 
 It outputs the value of [tt]in_panel[/tt].
 

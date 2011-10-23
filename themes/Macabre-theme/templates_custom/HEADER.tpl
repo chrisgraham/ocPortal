@@ -72,8 +72,8 @@ Copyright ocProducts Limited
 	{$,Preload all the panels so that the CSS and JS is known for them. Technically not needed (pre-processing would get it) but this also increases the efficiency.}
 	{$SET,panel_top,{$LOAD_PANEL,top}}
 	{$SET,panel_bottom,{$LOAD_PANEL,bottom}}
-	{$SET,panel_left,{$SET,in_panel,_true}{$SET,interlock,_false}{$LOAD_PANEL,left}{$SET,interlock,_false}{$SET,in_panel,_false}}
-	{$SET,panel_right,{$SET,in_panel,_true}{$SET,interlock,_false}{$LOAD_PANEL,right}{$SET,interlock,_false}{$SET,in_panel,_false}}
+	{$SET,panel_left,{$SET,in_panel,1}{$SET,interlock,0}{$LOAD_PANEL,left}{$SET,interlock,0}{$SET,in_panel,0}}
+	{$SET,panel_right,{$SET,in_panel,1}{$SET,interlock,0}{$LOAD_PANEL,right}{$SET,interlock,0}{$SET,in_panel,0}}
 
 	{$,Detecting of Timezones and Javascript support}
 	<script type="text/javascript">// <![CDATA[

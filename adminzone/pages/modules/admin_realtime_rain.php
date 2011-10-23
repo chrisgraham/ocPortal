@@ -94,7 +94,7 @@ class Module_admin_realtime_rain
 			return do_template('REDIRECT_SCREEN',array('URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_REALTIME')));
 		}
 
-		$GLOBALS['TEMPCODE_SETGET']['chrome_frame']=make_string_tempcode('_true');
+		$GLOBALS['TEMPCODE_SETGET']['chrome_frame']=make_string_tempcode('1');
 		if (browser_matches('ie6'))
 			attach_message(do_lang_tempcode('IE_OLD_PLEASE_UPGRADE'),'warn');
 

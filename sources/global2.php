@@ -23,7 +23,7 @@
  */
 function init__global2()
 {
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER;
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT;
 
 	if (ini_get('output_buffering')=='1') @ob_end_clean();
 
@@ -203,6 +203,7 @@ function init__global2()
 	$CHARSET=NULL;
 	$TEMP_CHARSET=NULL;
 	$CURRENTLY_HTTPS=NULL;
+	$CACHE_FIND_SCRIPT=array();
 
 	error_reporting(E_ALL);
 	@ini_set('html_errors','1');
@@ -218,8 +219,8 @@ function init__global2()
 
 	$XSS_DETECT=function_exists('ocp_mark_as_escaped');
 
-	$GLOBALS['DEBUG_MODE']=(((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')) && (is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped'))) && ((!array_key_exists('keep_no_debug_mode',$_GET) || ($_GET['keep_no_debug_mode']=='0'))));
-	$GLOBALS['SEMI_DEBUG_MODE']=(((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')) && (is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped'))));
+	$GLOBALS['DEBUG_MODE']=(((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))) && ((!array_key_exists('keep_no_debug_mode',$_GET) || ($_GET['keep_no_debug_mode']=='0'))));
+	$GLOBALS['SEMI_DEBUG_MODE']=(((!array_key_exists('debug_mode',$SITE_INFO) || ($SITE_INFO['debug_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))));
 	if (function_exists('set_time_limit')) @set_time_limit(60);
 	if ($GLOBALS['DEBUG_MODE'])
 	{
@@ -303,7 +304,7 @@ function init__global2()
 	}
 	require_code('caches'); // Recently taken out of 'support' so makes sense to load it here
 	require_code('database'); // There's nothing without the database
-	if (((isset($SITE_INFO['known_suexec'])) && ($SITE_INFO['known_suexec']=='1')) || (!is_writable_wrap(get_file_base().'/.htaccess'))) // If we have to run this in software
+	if (((!isset($SITE_INFO['known_suexec'])) || ($SITE_INFO['known_suexec']=='0')) && (!is_writable_wrap(get_file_base().'/.htaccess'))) // If we have to run this in software
 	{
 		require_code('support2');
 		if (ip_banned(get_ip_address())) critical_error('BANNED');
@@ -480,7 +481,7 @@ function init__global2()
 			} else $_GET['keep_devtest']='1';
 		}
 
-		if ((browser_matches('true_xhtml')) && (get_value('html5')!=='1') && (get_value('html5')!=='_true') && (get_param_integer('keep_no_xhtml',0)==0) && (!running_script('upgrader'))) // In theory this is supported (and mostly does work), but a lot of necessary Javascript is not standardised, and the browser's that support XHTML properly do not agree on how to implement this Javascript in a usable way when it is enabled. This leads to a lot of corner-cases. If you're seeing this code enabled, it was possible for us to resolve them, otherwise not yet.
+		if ((browser_matches('true_xhtml')) && (get_value('html5')!=='1') && (get_value('html5')!=='_true'/*TODO: deprecate old _true check*/) && (get_param_integer('keep_no_xhtml',0)==0) && (!running_script('upgrader'))) // In theory this is supported (and mostly does work), but a lot of necessary Javascript is not standardised, and the browser's that support XHTML properly do not agree on how to implement this Javascript in a usable way when it is enabled. This leads to a lot of corner-cases. If you're seeing this code enabled, it was possible for us to resolve them, otherwise not yet.
 		{
 			@header('Content-type: application/xhtml+xml; charset='.get_charset());
 		}
@@ -1152,14 +1153,20 @@ function in_safe_mode()
  */
 function find_script($name,$append_keep=false,$base_url_code=0)
 {
-	$name.='.php';
-
 	$append='';
 	if ($append_keep)
 	{
 		$keep=symbol_tempcode('KEEP',array('1'));
 		$append.=$keep->evaluate();
 	}
+
+	global $CACHE_FIND_SCRIPT;
+	if ($CACHE_FIND_SCRIPT===array())
+	{
+		if (function_exists('persistant_cache_get')) $CACHE_FIND_SCRIPT=persistant_cache_get('SCRIPT_PLACES');
+		if ($CACHE_FIND_SCRIPT===NULL) $CACHE_FIND_SCRIPT=array();
+	}
+	if (isset($CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code])) return $CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code].$append;
 
 	$zones=array(get_zone_name());
 	if (!in_safe_mode())
@@ -1172,10 +1179,19 @@ function find_script($name,$append_keep=false,$base_url_code=0)
 	{
 		if ($zone!='site') // If not found, we assume in here
 		{
-			if (is_file(get_file_base().'/'.$zone.'/'.$name)) return get_base_url().'/'.$zone.(($zone!='')?'/':'').$name.$append;
+			if (is_file(get_file_base().'/'.$zone.'/'.$name.'.php'))
+			{
+				$ret=get_base_url().'/'.$zone.(($zone!='')?'/':'').$name.'.php';
+				$CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code]=$ret;
+				if (function_exists('persistant_cache_set')) persistant_cache_set('SCRIPT_PLACES',$CACHE_FIND_SCRIPT,true);
+				return $ret.$append;
+			}
 		}
 	}
-	return get_base_url(($base_url_code==0)?NULL:($base_url_code==2)).'/site/'.$name.$append;
+	$ret=get_base_url(($base_url_code==0)?NULL:($base_url_code==2)).'/site/'.$name.'.php';
+	$CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code]=$ret;
+	if (function_exists('persistant_cache_set')) persistant_cache_set('SCRIPT_PLACES',$CACHE_FIND_SCRIPT,true);
+	return $ret.$append;
 }
 
 /**

@@ -1332,6 +1332,8 @@ function render_catalogue_entry_screen($id,$no_title=false)
 		$url=build_url(array('page'=>'_SELF','type'=>'category','id'=>$category['id']),'_SELF');
 		$map['TREE']->attach(hyperlink($url,escape_html(get_translated_text($category['cc_title'])),false,false,do_lang('GO_BACKWARDS_TO',get_translated_text($category['cc_title'])),NULL,NULL,'up'));
 	}
+	$map['CATEGORY_TITLE']=get_translated_text($category['cc_title']);
+	$map['CAT']=strval($entry['cc_id']);
 	
 	$map['TAGS']=get_loaded_tags('catalogue_entries');
 

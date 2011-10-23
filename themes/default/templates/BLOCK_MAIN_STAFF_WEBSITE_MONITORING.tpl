@@ -1,5 +1,5 @@
 <div class="form_ajax_target"><div class="no_stbox_padding">
-	{+START,BOX,{!SITE_WATCHLIST},,,tray_open,,,_true,<a title="{!EDIT}: {!SITE_WATCHLIST}" class="topleftlink" href="#" onclick="return intoeditmode();">{!EDIT}</a>}
+	{+START,BOX,{!SITE_WATCHLIST},,,tray_open,,,1,<a title="{!EDIT}: {!SITE_WATCHLIST}" class="topleftlink" href="#" onclick="return intoeditmode();">{!EDIT}</a>}
 		<div id="watchlistshow" class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="dottedborder wide_table">
 			<colgroup>
 				<col style="width: 25%" />

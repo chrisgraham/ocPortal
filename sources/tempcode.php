@@ -75,9 +75,6 @@ function init__tempcode()
 
 	global $TEMPLATE_PREVIEW_OP;
 	$TEMPLATE_PREVIEW_OP=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']=='1') && ((get_page_name()!='admin_themes') || (get_param('type','')=='view'));
-
-	global $TRUTH_PARAMETERS;
-	$TRUTH_PARAMETERS=array('1','_true');
 	
 	global $OB_GET_CLEAN;
 	$OB_GET_CLEAN=function_exists('ob_get_clean');
@@ -140,7 +137,7 @@ function output_tempcode_parameter($var,$parameter,$template_name)
 		case 'object':
 			return $var->evaluate();
 		case 'boolean':
-			return $var?'_true':'_false';
+			return $var?'1':'0';
 	}
 	// Assuming array
 	$cnt=count($var);
@@ -1441,7 +1438,7 @@ class ocp_tempcode
 			}
 			elseif ($p_type=='boolean')
 			{
-				$parameters[$key]=$parameter?'_true':'_false';
+				$parameters[$key]=$parameter?'1':'0';
 			}
 			elseif (($p_type!='array') && ($p_type!='NULL'))
 			{

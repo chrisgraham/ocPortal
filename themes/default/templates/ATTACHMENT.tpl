@@ -2,7 +2,7 @@
 	{+START,IF,{$NOT,{$GET,included_java_upload}}}
 		{+START,INCLUDE,JAVA_DETECT}{+END}
 	{+END}
-	{$SET,included_java_upload,_true}
+	{$SET,included_java_upload,1}
 {+END}
 
 <div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">

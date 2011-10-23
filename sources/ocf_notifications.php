@@ -42,7 +42,8 @@ function ocf_get_pp_rows($limit=5)
 
 //	return $GLOBALS['FORUM_DB']->query_select('f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.p_topic_id=t.id',array('*'),NULL,'',1); // For testing
 	$query='';
-	if (file_exists(get_file_base().'/mysql_old'))
+	global $SITE_INFO;
+	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 	{
 		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t

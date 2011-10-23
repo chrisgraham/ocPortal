@@ -1,9 +1,9 @@
 {$JAVASCRIPT_INCLUDE,javascript_dyn_comcode}
 
 {+START,SET,news_ticker_text}
-	{$SET,done_a_ticker,_false}
+	{$SET,done_a_ticker,0}
 	{+START,LOOP,POSTS}
-		{+START,IF,{$GET,done_a_ticker}} &middot; {+END}<a title="{NEWS_TITLE}: {DATE*}" class="nvn" href="{FULL_URL*}">{NEWS_TITLE}</a>{$SET,done_a_ticker,_true}
+		{+START,IF,{$GET,done_a_ticker}} &middot; {+END}<a title="{NEWS_TITLE}: {DATE*}" class="nvn" href="{FULL_URL*}">{NEWS_TITLE}</a>{$SET,done_a_ticker,1}
 	{+END}
 {+END}
 

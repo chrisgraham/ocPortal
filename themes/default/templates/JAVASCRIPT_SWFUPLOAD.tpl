@@ -1517,7 +1517,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 	rep.replaced_with_swfupload=true;
 
 	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
-	if ('{$MOBILE}'=='_true') return;
+	if ('{$MOBILE}'=='1') return;
 
 	if (typeof window.no_java=='undefined') window.no_java=false;
 	

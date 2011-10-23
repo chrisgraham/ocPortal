@@ -13,7 +13,7 @@ The main chat interface (comprising the chat lobby, and each chatroom) is what m
 
 A link to the chat lobby placed on the menus of your website, and when loaded, presents you with a list of all chatrooms you are eligible to enter (i.e. ones you don't have permission to access or you've been banned from don't appear). If you have the right permissions (the 'Edit mid-impact (medium visibility) content' privilege, and access to the [tt]cms_chat[/tt] module), appropriate links also appear to the moderation module.
 
-You will also see a buddy list, which you can use to start instant messaging conversations. Instant Messaging conversations are like conversations in chatrooms, except rooms do not need to be created -- they are run on purely a private invitation basis and very quick to get going.
+You will also see a friend list, which you can use to start instant messaging conversations. Instant Messaging conversations are like conversations in chatrooms, except rooms do not need to be created -- they are run on purely a private invitation basis and very quick to get going.
 
 [title="3"]Chatrooms[/title]
 
@@ -27,7 +27,7 @@ The options at the bottom of the chatroom page control how your messages appear 
 
 [title="3"]Instant Messaging[/title]
 
-Instant Messaging (IM) conversations can be started just by clicking on a name from the buddy list. To add a member to your buddy list, just visit the member's profile and click the appropriate link ([concept]OCF[/concept]-only) -- alternatively, you can type in usernames to add from the chat lobby. If you wish to start a conversation with multiple people, you may do so by ticking (checking) them and clicking the appropriate button. You can also tick (check) people and add them in to an existing conversation.
+Instant Messaging (IM) conversations can be started just by clicking on a name from the friend list. To add a member to your friend list, just visit the member's profile and click the appropriate link ([concept]OCF[/concept]-only) -- alternatively, you can type in usernames to add from the chat lobby. If you wish to start a conversation with multiple people, you may do so by ticking (checking) them and clicking the appropriate button. You can also tick (check) people and add them in to an existing conversation.
 There is also a configuration option that allows you to start IM conversations by clicking on usernames ("Clicking a username starts an IM"). Ordinarily this action would link to a member profile view screen, but for 'chat-based' websites, starting an IM may be more appropriate.
 
 You may have multiple simultaneous conversations, as conversations are separated using tabs.
@@ -37,7 +37,7 @@ It is recommended that members who make a lot of use of the IM system leave the 
 
 Conversations may be closed by clicking the 'Close' button. If you do not close a conversation then it will remain in the system unless you are the only member who has not closed it and you have since left the lobby.
 
-The buddy list shows online status indication for all your buddies, and similar statuses are shown for all conversants within active conversations. These statuses are dynamically updated as members come and go (there's no need to reload your browser window). Members may be:
+The friend list shows online status indication for all your friends, and similar statuses are shown for all conversants within active conversations. These statuses are dynamically updated as members come and go (there's no need to reload your browser window). Members may be:
  - online (using the website, but not in the lobby)
  - offline (not using the website at all)
  - active (in the lobby)

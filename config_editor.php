@@ -247,6 +247,18 @@ vb_version*/
 			case 'on_msn':
 				$notes='Whether this is a site on an OCF multi-site-network (set to 1 to trigger URLs to avatars and photos to be absolute).';
 				break;
+			case 'disable_smart_decaching':
+				$notes='Don\'t check file times to check caches aren\'t stale.';
+				break;
+			case 'no_disk_sanity_checks':
+				$notes='Assume that there are no missing language directories, or other configured directories; things may crash horribly if they are missing and this is enabled.';
+				break;
+			case 'hardcode_common_module_zones':
+				$notes='Don\'t search for common modules, assume they are in default positions.';
+				break;
+			case 'prefer_direct_code_call':
+				$notes='Assume a good opcode cache is present, so load up full code files via this rather than trying to save RAM by loading up small parts of files on occasion.';
+				break;
 		}
 		if (strpos($key,'_table_prefix')!==false)
 		{

@@ -155,7 +155,8 @@ class Module_vforums
 
 			if ($extra!='') $extra.=' AND ';
 			$or_list='';
-			if (file_exists(get_file_base().'/mysql_old'))
+			global $SITE_INFO;
+			if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 			{
 				$forum_access=$GLOBALS['FORUM_DB']->query('SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
 			} else

@@ -1,5 +1,5 @@
 {$,Make sure the system knows we haven't rendered our primary title for this output yet}
-{$SET,done_first_title,_false}
+{$SET,done_first_title,0}
 
 {$,Will the helper-panel be shown?}
 {$SET,HELPER_PANEL_TUTORIAL,{$?,{$HAS_SPECIFIC_PERMISSION,see_software_docs},{HELPER_PANEL_TUTORIAL}}}

@@ -22,15 +22,16 @@
  * Load all breadcrumb substitutions and return them.
  *
  * @param  string			The default breadcrumbs
+ * @param  string			The breadcrumb XML data
  * @return array			The breadcrumb substitutions
  */
-function load_breadcrumb_substitutions($current_breadcrumb)
+function load_breadcrumb_substitutions($current_breadcrumb,$data)
 {
 	global $BREADCRUMB_SUBSTITIONS;
 	if ($BREADCRUMB_SUBSTITIONS===NULL)
 	{
 		$temp=new breadcrumb_substitution_loader();
-		$temp->go($current_breadcrumb);
+		$temp->go($current_breadcrumb,$data);
 		$BREADCRUMB_SUBSTITIONS=$temp->substitutions;
 	}
 
@@ -48,8 +49,9 @@ class breadcrumb_substitution_loader
 	 * Run the loader, to load up field-restrictions from the XML file.
 	 *
 	 * @param  string			The default breadcrumbs
+	 * @param  string			The breadcrumb XML data
 	 */
-	function go($current_breadcrumbs)
+	function go($current_breadcrumbs,$data)
 	{
 		$this->tag_stack=array();
 		$this->attribute_stack=array();
@@ -74,11 +76,6 @@ class breadcrumb_substitution_loader
 		xml_set_character_data_handler($xml_parser,'startText');
 
 		// Run the parser
-		$path=get_custom_file_base().'/data_custom/breadcrumbs.xml';
-		if ((get_custom_file_base()!=get_file_base()) && (!file_exists($path)))
-			$path=get_file_base().'/data_custom/breadcrumbs.xml';
-		$data=file_get_contents($path,FILE_TEXT);
-		if (trim($data)=='') return;
 		if (@xml_parse($xml_parser,$data,true)==0)
 		{
 			attach_message('breadcrumbs.xml: '.xml_error_string(xml_get_error_code($xml_parser)),'warn');

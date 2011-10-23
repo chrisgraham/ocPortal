@@ -1,5 +1,5 @@
 <div class="form_ajax_target">
-	{+START,BOX,{!EXTERNAL_LINKS},,,tray_open,,,_true,<a title="{!EDIT}: {!EXTERNAL_LINKS}" href="#" class="topleftlink" id="editlinks" onclick="return switcheroo(linkslist\,editlinksform);">{!EDIT}</a>}
+	{+START,BOX,{!EXTERNAL_LINKS},,,tray_open,,,1,<a title="{!EDIT}: {!EXTERNAL_LINKS}" href="#" class="topleftlink" id="editlinks" onclick="return switcheroo(linkslist\,editlinksform);">{!EDIT}</a>}
 		<div class="wide_table_wrap">
 			{+START,IF,{$JS_ON}}
 				<ol id="stafflinkslist">

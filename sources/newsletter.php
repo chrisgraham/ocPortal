@@ -197,7 +197,8 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 			if ((substr($_id,0,1)=='g') && ($is_on==1))
 			{
 				$id=intval(substr($_id,1));
-				if (file_exists(get_file_base().'/mysql_old'))
+				global $SITE_INFO;
+				if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 				{
 					$query='SELECT xxxxx FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON m.id=g.gm_member_id AND g.gm_validated=1 WHERE '.db_string_not_equal_to('m_email_address','').' AND ('.db_string_equal_to('m_language',$lang).' OR '.db_string_equal_to('m_language','').') AND m_validated=1 AND (gm_group_id='.strval($id).' OR m_primary_group='.strval($id).')';
 					if (get_option('allow_email_disable')=='1') $query.=' AND m_allow_emails=1';

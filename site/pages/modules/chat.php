@@ -900,7 +900,9 @@ class Module_chat
 		}
 
 		// Can't befriend oneself (yes, this may happen!)
-		if ($member_id == get_member()) warn_exit(do_lang_tempcode('CANNOT_BEFRIEND_ONESELF'));
+		if ($member_id==get_member()) warn_exit(do_lang_tempcode('CANNOT_BEFRIEND_ONESELF'));
+		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$member_id))))
+			warn_exit(do_lang('ALREADY_FRIENDS',escape_html($username)));
 
 		$test=$this->handle_repost('ADD_BUDDY_ACTION_DESCRIPTION',$username);
 		if (!is_null($test)) return $test;
@@ -946,6 +948,9 @@ class Module_chat
 			$members=array($member_id);
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 		}
+
+		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$member_id))))
+			warn_exit(do_lang('NOT_CURRENTLY_FRIENDS',escape_html($username)));
 
 		$test=$this->handle_repost('DUMP_BUDDY',$username);
 		if (!is_null($test)) return $test;

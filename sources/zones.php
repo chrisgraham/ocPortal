@@ -96,11 +96,16 @@ function init__zones()
 	$MODULE_INSTALLED_CACHE=array();
 
 	global $HOOKS_CACHE;
-	$HOOKS_CACHE=array();
+	$HOOKS_CACHE=function_exists('persistant_cache_get')?persistant_cache_get('HOOKS'):array();
+	if ($HOOKS_CACHE===NULL) $HOOKS_CACHE=array();
 
 	define('FIND_ALL_PAGES__PERFORMANT',0);
 	define('FIND_ALL_PAGES__NEWEST',1);
 	define('FIND_ALL_PAGES__ALL',2);
+	
+	global $BLOCKS_AT_CACHE;
+	$BLOCKS_AT_CACHE=function_exists('persistant_cache_get')?persistant_cache_get('BLOCKS_AT'):array();
+	if ($BLOCKS_AT_CACHE===NULL) $BLOCKS_AT_CACHE=array();
 }
 
 /**
@@ -201,7 +206,7 @@ function get_zone_name()
 function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$error=true)
 {
 	global $MODULES_ZONES;
-	if ((isset($MODULES_ZONES[$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES))))
+	if ((isset($MODULES_ZONES[$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES)) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
 	{
 		return $MODULES_ZONES[$module_name];
 	}
@@ -229,7 +234,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	}
 
 	global $REDIRECT_CACHE;
-	$first_zones=array((substr($module_name,6)=='admin_')?'adminzone':$zone);
+	$first_zones=array((substr($module_name,0,6)=='admin_')?'adminzone':$zone);
 	if ($zone!='') $first_zones[]='';
 	if (($zone!='site')/* && (is_file(get_file_base().'/site/index.php'))*/) $first_zones[]='site';
 	foreach ($first_zones as $zone)
@@ -603,6 +608,8 @@ function find_all_hooks($type,$entry)
 
 	$HOOKS_CACHE[$type.'/'.$entry]=$out;
 
+	if (function_exists('persistant_cache_set')) persistant_cache_set('HOOKS',$HOOKS_CACHE,true);
+
 	return $out;
 }
 
@@ -779,24 +786,32 @@ function block_params_arr_to_str($map)
  */
 function do_block_hunt_file($codename,$map=NULL)
 {
+	global $BLOCKS_AT_CACHE;
+	
 	$codename=filter_naughty_harsh($codename);
 
 	$file_base=get_file_base();
 
 	global $_REQUIRED_CODE;
-	if (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php'))
+	if (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php'))))
 	{
 		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources_custom/blocks/'.$codename.'.php');
 		$_REQUIRED_CODE['blocks/'.$codename]=1;
+
+		$BLOCKS_AT_CACHE[$codename]='sources_custom/blocks';
+		if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 	}
-	elseif (is_file($file_base.'/sources/blocks/'.$codename.'.php'))
+	elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/blocks/'.$codename.'.php'))))
 	{
 		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources/blocks/'.$codename.'.php');
 		$_REQUIRED_CODE['blocks/'.$codename]=1;
+
+		$BLOCKS_AT_CACHE[$codename]='sources/blocks';
+		if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 	}
 	else
 	{
-		if (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php'))
+		if (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php'))))
 		{
 			require_code('developer_tools');
 			destrictify();
@@ -811,8 +826,11 @@ function do_block_hunt_file($codename,$map=NULL)
 			$object=ob_get_contents();
 			ob_end_clean();
 			restrictify();
+
+			$BLOCKS_AT_CACHE[$codename]='sources_custom/miniblocks';
+			if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 		}
-		elseif (is_file($file_base.'/sources/miniblocks/'.$codename.'.php'))
+		elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/miniblocks/'.$codename.'.php'))))
 		{
 			require_code('developer_tools');
 			destrictify();
@@ -827,6 +845,9 @@ function do_block_hunt_file($codename,$map=NULL)
 			$object=ob_get_contents();
 			ob_end_clean();
 			restrictify();
+
+			$BLOCKS_AT_CACHE[$codename]='sources/miniblocks';
+			if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 		} elseif ((is_null($map)) || (!array_key_exists('failsafe',$map)) || ($map['failsafe']!='1'))
 		{
 			$temp=paragraph(do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename)),'90dfdlksds8d7dyddssdds','error_marker');
@@ -869,8 +890,8 @@ function do_block_get_cache_identifier($cache_on,$map)
 	$_cache_identifier[]=get_users_timezone(get_member());
 	$_cache_identifier[]=(get_bot_type()===NULL);
 	global $TEMPCODE_SETGET;
-	$_cache_identifier[]=isset($TEMPCODE_SETGET['in_panel'])?$TEMPCODE_SETGET['in_panel']:'_false';
-	$_cache_identifier[]=isset($TEMPCODE_SETGET['interlock'])?$TEMPCODE_SETGET['interlock']:'_false';
+	$_cache_identifier[]=isset($TEMPCODE_SETGET['in_panel'])?$TEMPCODE_SETGET['in_panel']:'0';
+	$_cache_identifier[]=isset($TEMPCODE_SETGET['interlock'])?$TEMPCODE_SETGET['interlock']:'0';
 
 	$cache_identifier=serialize($_cache_identifier);
 

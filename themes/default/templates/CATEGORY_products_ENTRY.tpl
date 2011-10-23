@@ -7,7 +7,7 @@
 			{+START,IF_EMPTY,{REP_IMAGE}}
 				<div class="right"><a href="{URL*}">{REP_IMAGE}</a></div>
 			{+END}
-			&bull; <a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME_PLAIN},{NAME_FIELD},{AJAX_EDIT_URL},_true}{NAME*}{+END}</a> &ndash; {CHILDREN}
+			&bull; <a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME_PLAIN},{NAME_FIELD},{AJAX_EDIT_URL},1}{NAME*}{+END}</a> &ndash; {CHILDREN}
 			<br />
 			<p>{DESCRIPTION}</p>
 		</div>

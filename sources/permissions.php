@@ -60,13 +60,13 @@ function init__permissions()
  */
 function handle_permission_check_logging($member,$op,$params,$result)
 {
-	global $PERMISSION_CHECK_LOGGER,$PERMISSIONS_ALREADY_LOGGED;
+	global $PERMISSION_CHECK_LOGGER,$PERMISSIONS_ALREADY_LOGGED,$SITE_INFO;
 	$sz=serialize(array($member,$op,$params));
 	if (array_key_exists($sz,$PERMISSIONS_ALREADY_LOGGED)) return;
 	if (is_null($PERMISSION_CHECK_LOGGER))
 	{
 		$file_path=get_custom_file_base().'/data_custom/permissioncheckslog.php';
-		if ((is_file($file_path)) && (is_writable_wrap($file_path)))
+		if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']=='0')) && (is_file($file_path)) && (is_writable_wrap($file_path)))
 		{
 			$PERMISSION_CHECK_LOGGER=fopen($file_path,'at');
 			if (!function_exists('get_self_url')) require_code('urls');
@@ -125,7 +125,8 @@ function has_zone_access($member,$zone)
 	$groups=_get_where_clause_groups($member);
 	if ($groups===NULL) return true;
 
-	if (is_file(get_file_base().'/mysql_old'))
+	global $SITE_INFO;
+	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 	{
 		$rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT zone_name FROM '.get_table_prefix().'group_zone_access WHERE ('.$groups.')',NULL,NULL,false,true);
 	} else
@@ -343,7 +344,8 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 	}
 	$db=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB'];
 	if ($db->query_value_null_ok_full('SELECT COUNT(*) FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.')')>1000) return; // Performance issue
-	if (is_file(get_file_base().'/mysql_old'))
+	global $SITE_INFO;
+	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 	{
 		$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.')',NULL,NULL,false,true);
 	} else
@@ -397,7 +399,8 @@ function has_category_access($member,$module,$category)
 	$_category=db_string_equal_to('category_name',$category);
 
 	$db=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB'];
-	if ((is_file(get_file_base().'/mysql_old')) || ($member==$GLOBALS['FORUM_DRIVER']->get_guest_id()))
+	global $SITE_INFO;
+	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))) || ($member==$GLOBALS['FORUM_DRIVER']->get_guest_id()))
 	{
 		$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.')',1,NULL,false,true);
 	} else
@@ -552,7 +555,8 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 
 	$groups_list=$GLOBALS['FORUM_DRIVER']->get_members_groups($member,false);
 
-	if (is_file(get_file_base().'/mysql_old'))
+	global $SITE_INFO;
+	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 	{
 		$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE '.$groups,NULL,NULL,false,true);
 		if (($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))

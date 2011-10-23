@@ -754,6 +754,8 @@ function ocf_delete_member($member_id)
 	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$member_id));
 	$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>get_member()),array('g_group_leader'=>$member_id));
 
+	require_code('fields');
+
 	// Delete custom profile fields
 	$cpfs=$GLOBALS['FORUM_DB']->query_select('f_custom_fields');
 	$fields_row=$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id'=>$member_id),'',1);

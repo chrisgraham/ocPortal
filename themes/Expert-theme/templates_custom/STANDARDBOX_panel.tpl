@@ -36,15 +36,15 @@
 	</div>
 
 	{+START,IF_NON_EMPTY,{LINKS}}
-		{$SET,linkbar,_false}
+		{$SET,linkbar,0}
 		<div class="{$?,{$IS_EMPTY,{TITLE}},standardbox_nt_panel,standardbox_t_panel} standardbox_links_classic community_block_tagline"> 
 			{+START,LOOP,LINKS}
-				{+START,IF,{$GET,linkbar}} &middot; {+END}{_loop_var}{$SET,linkbar,_true}
+				{+START,IF,{$GET,linkbar}} &middot; {+END}{_loop_var}{$SET,linkbar,1}
 			{+END}
 		 </div>
 	{+END}
 </div>
-{$SET,interlock,_true}
+{$SET,interlock,1}
 
 {+START,IF,{$CONFIG_OPTION,tray_support}}{+START,IF,{$JS_ON}}
 	<script type="text/javascript">// <![CDATA[

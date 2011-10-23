@@ -1,4 +1,4 @@
-{+START,BOX,{!CHECK_LIST},,{$?,{$GET,in_panel},panel,classic},tray_open,,,_true,<a href="#" onclick="set_task_hiding(false); return false;" id="checklist_show_all_link" class="topleftlink" title="{!SHOW_ALL}: {!CHECK_LIST}">{!SHOW_ALL}</a><a href="#" onclick="set_task_hiding(true); return false;" id="checklist_hide_done_link" class="topleftlink">{!HIDE_DONE}</a>}
+{+START,BOX,{!CHECK_LIST},,{$?,{$GET,in_panel},panel,classic},tray_open,,,1,<a href="#" onclick="set_task_hiding(false); return false;" id="checklist_show_all_link" class="topleftlink" title="{!SHOW_ALL}: {!CHECK_LIST}">{!SHOW_ALL}</a><a href="#" onclick="set_task_hiding(true); return false;" id="checklist_hide_done_link" class="topleftlink">{!HIDE_DONE}</a>}
 	{+START,IF_NON_EMPTY,{DATES}}
 		<h4 class="checklistheader">{!REGULAR_TASKS}</h4>
 

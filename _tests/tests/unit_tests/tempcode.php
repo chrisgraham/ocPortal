@@ -60,11 +60,11 @@ class tempcode_test_set extends ocp_test_case
 <table summary="Tablewithheadersinleftcolumnandvaluesorsettingsinrightcolumn"><tbody> 
 	<tr> 
 		<td>$MOBILE</td> 
-		<td>_false</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$OCF</td> 
-		<td>_true</td> 
+		<td>0</td> 
 	</tr> 
 </tbody></table> 
 
@@ -89,19 +89,19 @@ class tempcode_test_set extends ocp_test_case
 	</tr> 
 	<tr> 
 		<td>$IS_NON_EMPTY,</td> 
-		<td>_false</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$IS_NON_EMPTY,a</td> 
-		<td>_true</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$IS_EMPTY,</td> 
-		<td>_true</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$IS_EMPTY,a</td> 
-		<td>_false</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$NEGATE,3</td> 
@@ -240,56 +240,56 @@ class tempcode_test_set extends ocp_test_case
 
 <table summary="Tablewithheadersinleftcolumnandvaluesorsettingsinrightcolumn"><tbody> 
 	<tr> 
-		<td>$NOT,_true</td> 
-		<td>_false</td> 
+		<td>$NOT,0</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
-		<td>$OR,_true,_false</td> 
-		<td>_true</td> 
+		<td>$OR,0,0</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
-		<td>$OR,_false,_false</td> 
-		<td>_false</td> 
+		<td>$OR,0,0</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
-		<td>$AND,_true,_false</td> 
-		<td>_false</td> 
+		<td>$AND,0,0</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
-		<td>$AND,_true,_true</td> 
-		<td>_true</td> 
+		<td>$AND,0,0</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$EQ,3,3</td> 
-		<td>_true</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$EQ,3,2</td> 
-		<td>_false</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$NEQ,3,3</td> 
-		<td>_false</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$NEQ,3,2</td> 
-		<td>_true</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$LT,1,2</td> 
-		<td>_true</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$LT,2,1</td> 
-		<td>_false</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$GT,1,2</td> 
-		<td>_false</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$GT,2,1</td> 
-		<td>_true</td> 
+		<td>0</td> 
 	</tr> 
 </tbody></table> 
 
@@ -298,7 +298,7 @@ class tempcode_test_set extends ocp_test_case
 <table summary="Tablewithheadersinleftcolumnandvaluesorsettingsinrightcolumn"><tbody> 
 	<tr> 
 		<td>$ISSET,test</td> 
-		<td>_false</td> 
+		<td>0</td> 
 	</tr> 
 	<tr> 
 		<td>$INIT,test,2</td> 
@@ -342,7 +342,7 @@ class tempcode_test_set extends ocp_test_case
 	</tr> 
 	<tr> 
 		<td>$ISSET,test</td> 
-		<td>_true</td> 
+		<td>0</td> 
 	</tr> 
 </tbody></table> 
 

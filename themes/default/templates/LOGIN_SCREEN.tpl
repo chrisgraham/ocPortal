@@ -1,6 +1,6 @@
 {TITLE}
 
-{$SET,login_screen,_true}
+{$SET,login_screen,1}
 
 <div class="login_page">
 	{+START,BOX,,,light}

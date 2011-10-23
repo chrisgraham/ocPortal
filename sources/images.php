@@ -19,12 +19,12 @@
  */
 
 /**
- * Render an 'IMAGE_WIDTH' symbol.
+ * Render an 'IMAGE_WIDTH'/'IMAGE_HEIGHT' symbol.
  *
  * @param  array			Symbol parameters
- * @return string			Rendered symbol
+ * @return array			A pair: Image dimensions
  */
-function _symbol_image_width($param)
+function _symbol_image_dims($param)
 {
 	if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return '';
 
@@ -37,7 +37,7 @@ function _symbol_image_width($param)
 			$details=@getimagesize(get_custom_file_base().'/'.urldecode(substr($param[0],strlen($base_url)+1)));
 			if ($details!==false)
 			{
-				$value=strval($details[0]);
+				$value=array(strval($details[0]),strval($details[1]));
 			}
 		} else
 		{
@@ -45,42 +45,7 @@ function _symbol_image_width($param)
 			$source=@imagecreatefromstring(http_download_file($param[0],1024*1024*20/*reasonable limit*/));
 			if ($source!==false)
 			{
-				$value=strval(imagesx($source));
-				imagedestroy($source);
-			}
-		}
-	}
-	return $value;
-}
-
-/**
- * Render an 'IMAGE_HEIGHT' symbol.
- *
- * @param  array			Symbol parameters
- * @return string			Rendered symbol
- */
-function _symbol_image_height($param)
-{
-	if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return '';
-	
-	$value='';
-	if (isset($param[0]))
-	{
-		$base_url=get_custom_base_url();
-		if ((function_exists('getimagesize')) && (substr($param[0],0,strlen($base_url))==$base_url))
-		{
-			$details=@getimagesize(get_custom_file_base().'/'.urldecode(substr($param[0],strlen($base_url)+1)));
-			if ($details!==false)
-			{
-				$value=strval($details[1]);
-			}
-		} else
-		{
-			require_code('files');
-			$source=@imagecreatefromstring(http_download_file($param[0],1024*1024*20/*reasonable limit*/));
-			if ($source!==false)
-			{
-				$value=strval(imagesy($source));
+				$value=array(strval(imagesx($source)),strval(imagesy($source)));
 				imagedestroy($source);
 			}
 		}

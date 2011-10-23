@@ -62,9 +62,10 @@ function _length_so_far($bits,$i)
  * @param  string			The template file contents
  * @param  ID_TEXT		The name of the template
  * @param  ID_TEXT		The name of the theme
+ * @param  ID_TEXT		The language it is for
  * @return array			A pair: array Compiled result structure, array preprocessable bits (special stuff needing attention that is referenced within the template)
  */
-function compile_template($data,$template_name,$theme)
+function compile_template($data,$template_name,$theme,$lang)
 {
 	if (strpos($data,'{$,Parser hint: pure}')!==false)
 	{
@@ -72,6 +73,14 @@ function compile_template($data,$template_name,$theme)
 	}
 	
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);
+
+	$compilable_symbols=array('"ADDON_INSTALLED"','"BASE_URL"','"COPYRIGHT"','"SITE_NAME"','"BRAND_BASE_URL"','"BRAND_NAME"','"IMG_WIDTH"','"IMG_HEIGHT"','"IMG"','"LANG"','"THEME"','"VALUE_OPTION"','"CONFIG_OPTION"');
+	global $SITE_INFO;
+	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1'))
+	{
+		$compilable_symbols[]='"PAGE_LINK"';
+		$compilable_symbols[]='"FIND_SCRIPT"';
+	}
 
 	require_code('lang');
 	$cl=fallback_lang();
@@ -231,7 +240,6 @@ function compile_template($data,$template_name,$theme)
 								case '"BLOCK"':
 								case '"LOAD_PAGE"':
 								case '"LOAD_PANEL"':
-								case '"TRIM"':
 									foreach ($stack as $level_test) // Make sure if it's a LOOP then we evaluate the parameters early, as these have extra bindings we don't know about
 									{
 										if (($level_test[3]==PARSE_DIRECTIVE) && (isset($level_test[5][1])) && (isset($level_test[5][1][0])) && ($level_test[5][1][0]=='"LOOP"')) // For a loop, we need to do full evaluation of symbol parameters as it may be bound to a loop variable
@@ -262,17 +270,31 @@ function compile_template($data,$template_name,$theme)
 									break;
 							}
 						}
-						
+
 						if (($first_param=='"IMG"') && (strpos($_opener_params,',')===false)) // Needed to ensure correct binding
 						{
 							$_opener_params.=',"0","'.php_addslashes($theme).'"';
 						}
 
 						if ($first_param!='""')
-							$current_level_data[]='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
+						{
+							$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
+							if ((in_array($first_param,$compilable_symbols)) && (preg_match('#^[\w\d:\-\_",/]*$#',$_opener_params)!=0)) // Can optimise out?
+							{
+								$new_line='"'.php_addslashes(eval('return '.$new_line.';')).'"';
+							}
+							$current_level_data[]=$new_line;
+						}
 						break;
 					case PARSE_LANGUAGE_REFERENCE:
-						$current_level_data[]='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_LANGUAGE_REFERENCE).','.$first_param.',array('.$_opener_params.'))';
+						$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_LANGUAGE_REFERENCE).','.$first_param.',array('.$_opener_params.'))';
+						if ($_opener_params=='') // Optimise it out for simple case?
+						{
+							$looked_up=do_lang(eval('return '.$first_param.';'),NULL,NULL,NULL,$lang);
+							if (escape_html($looked_up)==$looked_up)
+								$new_line='"'.php_addslashes($looked_up).'"';
+						}
+						$current_level_data[]=$new_line;
 						break;
 					case PARSE_PARAMETER:
 						$parameter=str_replace('"','',str_replace("'",'',$first_param));
@@ -361,21 +383,20 @@ function compile_template($data,$template_name,$theme)
 						switch ($directive_name)
 						{
 							case 'IF':
-								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\(ecv\(\$cl,array\(\),0,"ADDON_INSTALLED",array\("(\w+)"\)\)\)\).""$#',$first_directive_param)!=0)
-								{
-									if (eval('return '.$first_directive_param.';')=='_false') break;
-								}
-								if (preg_match('#^ecv\(\$cl,array\(\),0,"ADDON_INSTALLED",array\("(\w+)"\)\).""$#',$first_directive_param)!=0)
-								{
-									if (eval('return '.$first_directive_param.';')=='_false') break;
-								}
-								$current_level_data[]='(in_array('.$first_directive_param.',$GLOBALS[\'TRUTH_PARAMETERS\'])?('.implode('.',$past_level_data).'):\'\')';
+								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\("1"\)\).""$#',$first_directive_param)!=0)
+									$first_directive_param='"0".""';
+								if (preg_match('#^ecv\(\$cl,array\(\),0,"NOT",array\("0"\)\).""$#',$first_directive_param)!=0)
+									$first_directive_param='"1".""';
+								if ($first_directive_param=='"1".""')
+									$current_level_data[]='('.implode('.',$past_level_data).')';
+								elseif ($first_directive_param!='"0".""')
+									$current_level_data[]='(('.$first_directive_param.'=="1")?('.implode('.',$past_level_data).'):\'\')';
 								break;
 							case 'IF_EMPTY':
 								$current_level_data[]='(('.$first_directive_param.'==\'\')?('.implode('.',$past_level_data).'):\'\')';
 								break;
 							case 'WHILE':
-								$current_level_data[]='closure_while_loop(array($parameters,$cl,$last_attach),'.chr(10).'create_function(\'$parameters,$cl,$last_attach\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return in_array('.php_addslashes($first_directive_param).',\$GLOBALS[\'TRUTH_PARAMETERS\']);"),'.chr(10).'create_function(\'$parameters,$cl,$last_attach\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								$current_level_data[]='closure_while_loop(array($parameters,$cl,$last_attach),'.chr(10).'create_function(\'$parameters,$cl,$last_attach\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'.chr(10).'create_function(\'$parameters,$cl,$last_attach\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
 								break;
 							case 'PHP':
 								$current_level_data[]='closure_eval('.implode('.',$past_level_data).',$parameters)';
@@ -432,7 +453,7 @@ function compile_template($data,$template_name,$theme)
 										$fullpath=get_file_base().'/themes/'.$theme.$found[1].$eval.'.tpl';
 									$filecontents=@file_get_contents($fullpath,FILE_TEXT);
 									if ($filecontents===false) $filecontents='';
-									list($_current_level_data,$_preprocessable_bits)=compile_template($filecontents,$eval,$theme);
+									list($_current_level_data,$_preprocessable_bits)=compile_template($filecontents,$eval,$theme,$lang);
 									$current_level_data=array_merge($current_level_data,$_current_level_data);
 									$preprocessable_bits=array_merge($preprocessable_bits,$_preprocessable_bits);
 									break;
@@ -546,7 +567,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		if (!is_null($test)) $html=post_param($test.'_new');
 	}
 
-	$result=template_to_tempcode($html,0,false,($suffix!='.tpl')?'':$codename,$theme_orig);
+	$result=template_to_tempcode($html,0,false,($suffix!='.tpl')?'':$codename,$theme_orig,$lang);
 	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && (($suffix=='.tpl') || ($codename=='no_cache')))
 	{
 		$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang).'/';
@@ -594,13 +615,15 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
  * @param  boolean		Whether this text is infact a directive, about to be put in the context of a wider template
  * @param  ID_TEXT		The codename of the template (e.g. foo)
  * @param  ?ID_TEXT		The theme it is for (NULL: current theme)
+ * @param  ?ID_TEXT		The language it is for (NULL: current language)
  * @return mixed			The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL)
+function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL,$lang=NULL)
 {
 	if (is_null($theme)) $theme=isset($GLOBALS['FORUM_DRIVER'])?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
+	if (is_null($lang)) $lang=user_lang();
 	
-	list($parts,$preprocessable_bits)=compile_template(substr($text,$symbol_pos),$codename,$theme);
+	list($parts,$preprocessable_bits)=compile_template(substr($text,$symbol_pos),$codename,$theme,$lang);
 
 	if (count($parts)==0) return new ocp_tempcode();
 

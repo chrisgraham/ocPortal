@@ -212,24 +212,24 @@
 
 <table summary="{!MAP_TABLE}"><tbody>
 	<tr>
-		<td>$NOT,_true</td>
-		<td>{$NOT,_true}</td>
+		<td>$NOT,1</td>
+		<td>{$NOT,1}</td>
 	</tr>
 	<tr>
-		<td>$OR,_true,_false</td>
-		<td>{$OR,_true,_false}</td>
+		<td>$OR,1,0</td>
+		<td>{$OR,1,0}</td>
 	</tr>
 	<tr>
-		<td>$OR,_false,_false</td>
-		<td>{$OR,_false,_false}</td>
+		<td>$OR,0,0</td>
+		<td>{$OR,0,0}</td>
 	</tr>
 	<tr>
-		<td>$AND,_true,_false</td>
-		<td>{$AND,_true,_false}</td>
+		<td>$AND,1,0</td>
+		<td>{$AND,1,0}</td>
 	</tr>
 	<tr>
-		<td>$AND,_true,_true</td>
-		<td>{$AND,_true,_true}</td>
+		<td>$AND,1,1</td>
+		<td>{$AND,1,1}</td>
 	</tr>
 	<tr>
 		<td>$EQ,3,3</td>

@@ -48,7 +48,7 @@
 				var i;
 				for (i=0;i<form.elements.length;i++)
 				{
-					if ((form.elements[i].className.indexOf('required_true')!=-1) && (form.elements[i].value==''))
+					if ((form.elements[i].className.indexOf('required1')!=-1) && (form.elements[i].value==''))
 					{
 						window.alert('{!IMPROPERLY_FILLED_IN;}');
 						return false;

@@ -380,7 +380,7 @@ function update_list_handler()
 
 				$tempcode=do_lang_tempcode($row['a_language_string_code'],comcode_to_tempcode(escape_html($row['a_label_1']),$guest_id,false,NULL),comcode_to_tempcode(escape_html($row['a_label_2']),$guest_id,false,NULL),array(comcode_to_tempcode(escape_html($row['a_label_3']),$guest_id,false,NULL),escape_html($link_1->evaluate()),escape_html($link_2->evaluate()),escape_html($link_3->evaluate())));
 
-				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('BITS'=>(is_object($tempcode))?$tempcode->evaluate():$tempcode,'MEMPIC'=>$memberpic,'NAME'=>$member, 'DATETIME'=>$datetime, 'URL'=>$member_url->evaluate(), 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'_true':'_false'));
+				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('BITS'=>(is_object($tempcode))?$tempcode->evaluate():$tempcode,'MEMPIC'=>$memberpic,'NAME'=>$member, 'DATETIME'=>$datetime, 'URL'=>$member_url->evaluate(), 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
 				// We dump our response in CDATA, since that lets us work around the
 				// fact that our list elements aren't actually in a list, etc.
 				// However, we allow comcode but some tags make use of CDATA. Since

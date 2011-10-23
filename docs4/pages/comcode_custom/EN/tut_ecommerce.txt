@@ -225,6 +225,10 @@ Orders may be reviewed by the purchaser from their [tt]site:orders[/tt] module. 
 
 The ocPortal store has intentionally been kept lightweight. We're not trying to compete with the dedicated eCommerce systems on features, we're trying to provide something with fantastic ocPortal integration and extendibility that meets the majority of people's needs. This way we are able to compete by providing eCommerce as a part of the full ocPortal package, rather than a standalone eCommerce system that is bloated in it's own way but lacking the features needed for a wider website.
 
+[title="3"]Deleting shopping cart items[/title]
+
+You can delete any catalogue entry that is not present in an order. If an entry is in an order, you have to unvalidate it instead (unselect 'Validated'), and/or move it into an archive category and/or set the stock to zero. However, if the order was not purchased and the order times out, you may then delete the entry.
+
 [title="3"]Advanced tax and shipping[/title]
 
 Tax and shipping calculations have intentionally been kept very simple, but programmers may extend them. We intentionally have architected the calculations to go through some simple common functions that you can override to addon additional behaviour if you need to.

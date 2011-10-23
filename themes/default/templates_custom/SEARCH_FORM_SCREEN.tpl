@@ -235,9 +235,9 @@
 	
 	<br />
 
-	{$SET,done_search,_false}
+	{$SET,done_search,0}
 	{+START,IF_PASSED,RESULTS}
-		{$SET,done_search,_true}
+		{$SET,done_search,1}
 
 		{+START,IF_EMPTY,{RESULTS}}
 			<p class="nothing_here red_alert">{!NO_RESULTS_SEARCH}</p>

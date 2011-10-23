@@ -76,7 +76,7 @@ The advantage to using the ocPortal code instead of hand coding the image is two
 
 [title="2"]Numbers and logic[/title]
 
-Tempcode is an entirely string based language. It does, however, provide significant logic and number functionality, which is made possible by conversion from text as symbols require. Numbers are read directly, and should not contain any special formatting other than the British English decimal point (.) symbol. 'True' is encoded as '_true' and 'False' is encoded as '_false'.
+Tempcode is an entirely string based language. It does, however, provide significant logic and number functionality, which is made possible by conversion from text as symbols require. Numbers are read directly, and should not contain any special formatting other than the British English decimal point (.) symbol. 'True' is encoded as '1' and 'False' is encoded as '0'.
 
 [title="2"]Shift encoding[/title]
 
@@ -555,6 +555,14 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<td>{$IMG,bottom}</td>
 		<td>Find a named theme image code's URL (takes the theme image code)</td>
 	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$IMG_WIDTH,bottom}</td>
+		<td>Find the width of the theme image/URL (particularly useful for making web pages render faster). Uses the persistent cache to remember values, if possible.</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$IMG_HEIGHT,bottom}</td>
+		<td>Find the height of the theme image/URL (particularly useful for making web pages render faster). Uses the persistent cache to remember values, if possible.</td>
+	</tr>
 	<tr style="background: #FFDDDD">
 		<td>{$KEEP,0,1}</td>
 		<td>Stuff to append to an ocPortal URL for 'keep parameter' passing (ocPortal passes any parameters between screens if their names start 'keep_', and this symbol enables that). The first parameter should be '1' if you need to place this directly on the front of a URL. The second parameter should '1' if you need to always attach a session ID (i.e. if you are creating a link that might be used somewhere outside the current cookie context, e.g. to feed into a download manager)</td>
@@ -871,31 +879,31 @@ Understanding of these symbols requires an understanding of basic boolean operat
 		<th>Purpose</th>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$?,_true,shows if true,shows if not true}</td>
+		<td>{$?,1,shows if true,shows if not true}</td>
 		<td>Do an inline IF test, outputting the second parameter if the first evaluates to true and the third (optional parameter) if it does not</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$NOT,_true}</td>
+		<td>{$NOT,1}</td>
 		<td>Boolean NOT (pass in one Tempcode boolean to get the opposite boolean out)</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$OR,_true,_true}</td>
+		<td>{$OR,1,1}</td>
 		<td>Boolean OR (pass in any number of Tempcode booleans to check that one is true)</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$NOR,_true,_true}</td>
+		<td>{$NOR,1,1}</td>
 		<td>Boolean NOR (this is the same as [/html][tt]{$NOT,{$OR,...}}[/tt][html])</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$XOR,_true,_true}</td>
+		<td>{$XOR,1,1}</td>
 		<td>Boolean XOR (pass in two Tempcode booleans to check that just one of them is true but not both of them)</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$NAND,_true,_true}</td>
+		<td>{$NAND,1,1}</td>
 		<td>Boolean NAND (this is the same as [/html][tt]{$NOT,{$AND,...}}[/tt][html])</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$AND,_true,_true}</td>
+		<td>{$AND,1,1}</td>
 		<td>Boolean AND (pass in any number of Tempcode booleans to check they are all true)</td>
 	</tr>
 	<tr style="background: #DDFFDD">

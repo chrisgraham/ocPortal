@@ -72,8 +72,8 @@ Copyright ocProducts Limited
 	{$,Preload all the panels so that the CSS and JS is known for them. Technically not needed (pre-processing would get it) but this also increases the efficiency.}
 	{$SET,panel_top,{$LOAD_PANEL,top}}
 	{$SET,panel_bottom,{$LOAD_PANEL,bottom}}
-	{$SET,panel_left,{$SET,in_panel,_true}{$SET,interlock,_false}{$LOAD_PANEL,left}{$SET,interlock,_false}{$SET,in_panel,_false}}
-	{$SET,panel_right,{$SET,in_panel,_true}{$SET,interlock,_false}{$LOAD_PANEL,right}{$SET,interlock,_false}{$SET,in_panel,_false}}
+	{$SET,panel_left,{$SET,in_panel,1}{$SET,interlock,0}{$LOAD_PANEL,left}{$SET,interlock,0}{$SET,in_panel,0}}
+	{$SET,panel_right,{$SET,in_panel,1}{$SET,interlock,0}{$LOAD_PANEL,right}{$SET,interlock,0}{$SET,in_panel,0}}
 
 	{$,Detecting of Timezones and Javascript support}
 	<script type="text/javascript">// <![CDATA[
@@ -127,7 +127,7 @@ Copyright ocProducts Limited
 
 {+START,IF,{SHOW_TOP}}
 	<{$?,{$VALUE_OPTION,html5},header,div} class="global_top float_surrounder"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/WPHeader"}>
-		<h1><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$?,{$MOBILE},{$IMG*,logo/trimmed-logo},{LOGOURL*}}" title="{!FRONT_PAGE}" alt="{$SITE_NAME*}" /></a></h1>
+		<h1><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$?,{$MOBILE},{$IMG*,logo/trimmed-logo},{LOGOURL*}}" width="{$IMG_WIDTH*,{$?,{$MOBILE},{$IMG,logo/trimmed-logo},{LOGOURL}}}" height="{$IMG_HEIGHT*,{$?,{$MOBILE},{$IMG,logo/trimmed-logo},{LOGOURL}}}" title="{!FRONT_PAGE}" alt="{$SITE_NAME*}" /></a></h1>
 
 		<a accesskey="s" class="accessibility_hidden">{!SKIP_NAVIGATION}</a>
 

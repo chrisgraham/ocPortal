@@ -393,9 +393,14 @@ function has_no_forum()
 function addon_installed($addon)
 {
 	global $ADDON_INSTALLED_CACHE;
+	if ($ADDON_INSTALLED_CACHE==array())
+	{
+		if (function_exists('persistant_cache_get')) $ADDON_INSTALLED_CACHE=persistant_cache_get('ADDONS_INSTALLED');
+	}
 	if (isset($ADDON_INSTALLED_CACHE[$addon])) return $ADDON_INSTALLED_CACHE[$addon];
 	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/addon_registry/'.filter_naughty($addon).'.php');
 	$ADDON_INSTALLED_CACHE[$addon]=$answer;
+	if (function_exists('persistant_cache_set')) persistant_cache_set('ADDONS_INSTALLED',$ADDON_INSTALLED_CACHE,true);
 	return $answer;
 }
 

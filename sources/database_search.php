@@ -455,7 +455,8 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 
 		// Work out main query
-		if (file_exists(get_file_base().'/mysql_old'))
+		global $SITE_INFO;
+		if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 		{
 			$_query='';
 			foreach ($where_alternative_matches as $parts)
@@ -494,7 +495,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 		// Work out COUNT(*) query using one of a few possible methods. It's not efficient and stops us doing proper merge-sorting between content types (and possible not accurate - if we use an efficient but non-deduping COUNT strategy) if we have to use this, so we only do it if there are too many rows to fetch in one go.
 		$_query='';
-		if ((file_exists(get_file_base().'/mysql_old')) || (strpos(get_db_type(),'mysql')===false))
+		if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))) || (strpos(get_db_type(),'mysql')===false))
 		{
 			foreach ($where_alternative_matches as $parts)
 			{

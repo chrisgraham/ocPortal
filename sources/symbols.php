@@ -162,7 +162,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 							break;
 						}
 					}
-					$value=($count!=0)?'_true':'_false';
+					$value=($count!=0)?'1':'0';
 				}
 				break;
 
@@ -175,14 +175,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						if ($first==$test) $count++;
 					}
-					$value=($count==0)?'_true':'_false';
+					$value=($count==0)?'1':'0';
 				}
 				break;
 
 			case 'NOT':
 				if (isset($param[0]))
 				{
-					$value=(($param[0]=='_true') || ($param[0]=='1'))?'_false':'_true';
+					$value=(($param[0]=='1') || ($param[0]=='1'))?'0':'1';
 				}
 				break;
 
@@ -190,31 +190,31 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$count=0;
 				foreach ($param as $test)
 				{
-					if (($test=='_true') || ($test=='1')) $count++;
+					if (($test=='1') || ($test=='1')) $count++;
 				}
-				$value=($count>0)?'_true':'_false';
+				$value=($count>0)?'1':'0';
 				break;
 
 			case 'AND':
 				$count=0;
 				foreach ($param as $test)
 				{
-					if (($test=='_true') || ($test=='1')) $count++;
+					if (($test=='1') || ($test=='1')) $count++;
 				}
-				$value=($count==count($param))?'_true':'_false';
+				$value=($count==count($param))?'1':'0';
 				break;
 
 			case 'HAS_ACTUAL_PAGE_ACCESS':
 				if (isset($param[0]))
 				{
-					$value=has_actual_page_access(((($param!==NULL)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],isset($param[1])?$param[1]:NULL)?'_true':'_false';
+					$value=has_actual_page_access(((($param!==NULL)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],isset($param[1])?$param[1]:NULL)?'1':'0';
 				}
 				break;
 
 			case '?':
 				if (isset($param[1]))
 				{
-					$value=(($param[0]=='_true') || ($param[0]=='1'))?$param[1]:(isset($param[2])?$param[2]:$value);
+					$value=(($param[0]=='1') || ($param[0]=='1'))?$param[1]:(isset($param[2])?$param[2]:$value);
 				}
 				break;
 
@@ -414,14 +414,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IS_EMPTY':
 				if (isset($param[0]))
 				{
-					$value=($param[0]=='')?'_true':'_false';
+					$value=($param[0]=='')?'1':'0';
 				}
 				break;
 
 			case 'IS_NON_EMPTY':
 				if (isset($param[0]))
 				{
-					$value=($param[0]!='')?'_true':'_false';
+					$value=($param[0]!='')?'1':'0';
 				}
 				break;
 
@@ -452,7 +452,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$value=has_js()?$param[0]:$param[1];
-				} else $value=has_js()?'_true':'_false';
+				} else $value=has_js()?'1':'0';
 				break;
 
 			case 'BASE_URL_NOHTTP':
@@ -581,10 +581,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IS_GUEST':
 				if (isset($param[0]))
 				{
-					$value=(is_guest(intval($param[0])))?'_true':'_false';
+					$value=(is_guest(intval($param[0])))?'1':'0';
 				} else
 				{
-					$value=is_guest()?'_true':'_false';
+					$value=is_guest()?'1':'0';
 				}
 				break;
 
@@ -624,7 +624,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'IS_HTTPAUTH_LOGIN':
-				$value=is_httpauth_login()?'_true':'_false';
+				$value=is_httpauth_login()?'1':'0';
 				break;
 
 			case 'MEMBER_PROFILE_LINK':
@@ -665,12 +665,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'IMAGE_WIDTH':
 				require_code('images');
-				$value=_symbol_image_width($param);
+				list($value,)=_symbol_image_dims($param);
 				break;
 
 			case 'IMAGE_HEIGHT':
 				require_code('images');
-				$value=_symbol_image_height($param);
+				list(,$value)=_symbol_image_dims($param);
 				break;
 			
 			case 'IS_IN_GROUP':
@@ -716,18 +716,18 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$real_group_list=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
 					}
 					require_code('ocfiltering');
-					$value=(count(array_intersect(ocfilter_to_idlist_using_memory($new_param,$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$real_group_list))!=0)?'_true':'_false';
+					$value=(count(array_intersect(ocfilter_to_idlist_using_memory($new_param,$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$real_group_list))!=0)?'1':'0';
 				}
 				break;
 
 			case 'IS_STAFF':
 				if (isset($GLOBALS['FORUM_DRIVER']))
-					$value=$GLOBALS['FORUM_DRIVER']->is_staff(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member())?'_true':'_false';
+					$value=$GLOBALS['FORUM_DRIVER']->is_staff(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member())?'1':'0';
 				break;
 
 			case 'IS_SUPER_ADMIN':
 				if (isset($GLOBALS['FORUM_DRIVER']))
-					$value=$GLOBALS['FORUM_DRIVER']->is_super_admin(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member())?'_true':'_false';
+					$value=$GLOBALS['FORUM_DRIVER']->is_super_admin(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member())?'1':'0';
 				break;
 
 			case 'PHOTO':
@@ -853,6 +853,34 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=$_value->evaluate();
 				break;
 
+			case 'IMG_WIDTH':
+			case 'IMG_HEIGHT':
+				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0))
+				{
+					global $THEME_IMG_DIMS_CACHE;
+					if (!isset($THEME_IMG_DIMS_CACHE))
+					{
+						$THEME_IMG_DIMS_CACHE=function_exists('persistant_cache_get')?persistant_cache_get('THEME_IMG_DIMS'):array();
+					}
+					if (isset($THEME_IMG_DIMS_CACHE[$param[0]]))
+					{
+						list($width,$height)=$THEME_IMG_DIMS_CACHE[$param[0]];
+						$value=($name=='IMG_WIDTH')?$width:$height;
+					} else
+					{
+						if (strpos($param[0],'://')===false)
+						{
+							$img_url=find_theme_image($param[0],false,false,array_key_exists(2,$param)?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
+						} else $img_url=$param[0];
+						require_code('images');
+						list($width,$height)=_symbol_image_dims(array($img_url));
+						$value=($name=='IMG_WIDTH')?$width:$height;
+						$THEME_IMG_DIMS_CACHE[$param[0]]=array($width,$height);
+						if (function_exists('persistant_cache_set')) persistant_cache_set('THEME_IMG_DIMS',$THEME_IMG_DIMS_CACHE);
+					}
+				}
+				break;
+
 			case 'CLEAN_FILE_SIZE':
 				if (isset($param[0]))
 				{
@@ -896,16 +924,16 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'RUNNING_SCRIPT':
 				if (isset($param[0]))
 				{
-					$value=running_script($param[0])?'_true':'_false';
+					$value=running_script($param[0])?'1':'0';
 				}
 				break;
 
 			case 'MATCH_KEY_MATCH':
-				$value='_false';
+				$value='0';
 				foreach ($param as $match_key)
 				{
 					if (($match_key=='1') || ($match_key=='0') || ($match_key=='')) continue;
-					if (match_key_match($match_key,((isset($param[1])) && ($match_key=='1')))) $value='_true';
+					if (match_key_match($match_key,((isset($param[1])) && ($match_key=='1')))) $value='1';
 				}
 				break;
 
@@ -914,7 +942,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'PREVIEW_VALIDATION':
-				$value=(get_option('is_on_preview_validation')=='1')?'_true':'_false';
+				$value=(get_option('is_on_preview_validation')=='1')?'1':'0';
 				break;
 
 			case 'BLOCK':
@@ -954,7 +982,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'NO_SAFE_MODE':
-				$value=(ini_get('safe_mode')=='1')?'_false':'_true';
+				$value=(ini_get('safe_mode')=='1')?'0':'1';
 				break;
 
 			case 'FORCE_PREVIEWS':
@@ -964,18 +992,18 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						if ((is_guest()) && (get_option('default_preview_guests')=='0'))
 						{
-							$value='_false';
+							$value='0';
 						} else
 						{
-							$value=($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_preview_posts')==1)?'_true':'_false';
+							$value=($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_preview_posts')==1)?'1':'0';
 						}
 					} else
 					{
-						$value=(get_option('default_preview_guests')=='0')?'_false':'_true';
+						$value=(get_option('default_preview_guests')=='0')?'0':'1';
 					}
 				} else
 				{
-					$value='_false';
+					$value='0';
 				}
 				break;
 
@@ -988,7 +1016,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'ADDON_INSTALLED':
 				if (isset($param[0]))
 				{
-					$value=(addon_installed($param[0]))?'_true':'_false';
+					$value=(addon_installed($param[0]))?'1':'0';
 				}
 				break;
 
@@ -1024,7 +1052,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HIDE_HELP_PANEL':
-				$value=((array_key_exists('hide_help_panel',$_COOKIE)) && ($_COOKIE['hide_help_panel']=='1'))?'_true':'_false';
+				$value=((array_key_exists('hide_help_panel',$_COOKIE)) && ($_COOKIE['hide_help_panel']=='1'))?'1':'0';
 				break;
 
 			case 'URLISE_LANG':
@@ -1050,7 +1078,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'MOBILE':
-				$value=is_mobile(NULL,array_key_exists(0,$param)?($param[0]=='1'):false)?'_true':'_false';
+				$value=is_mobile(NULL,array_key_exists(0,$param)?($param[0]=='1'):false)?'1':'0';
 				break;
 				
 			case 'VALID_FILE_TYPES':
@@ -1167,7 +1195,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'SHOW_DOCS':
-				$value=(get_option('show_docs')==='0')?'_false':'_true';
+				$value=(get_option('show_docs')==='0')?'0':'1';
 				break;
 
 			case 'MEMBER_EMAIL':
@@ -1187,28 +1215,28 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'HAS_SPECIFIC_PERMISSION':
 				if (isset($param[0]))
 				{
-					$value=has_specific_permission(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'_true':'_false';
+					$value=has_specific_permission(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
 				}
 				break;
 	
 			case 'HAS_ZONE_ACCESS':
 				if (isset($param[0]))
 				{
-					$value=has_zone_access(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'_true':'_false';
+					$value=has_zone_access(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
 				}
 				break;
 
 			case 'HAS_PAGE_ACCESS':
 				if ((isset($param[0])) && (isset($param[1])))
 				{
-					$value=has_page_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1],((!is_null($param)) && (isset($param[3])))?($param[3]=='1'):false)?'_true':'_false';
+					$value=has_page_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1],((!is_null($param)) && (isset($param[3])))?($param[3]=='1'):false)?'1':'0';
 				}
 				break;
 
 			case 'HAS_CATEGORY_ACCESS':
 				if (isset($param[0]))
 				{
-					$value=has_category_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1])?'_true':'_false';
+					$value=has_category_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1])?'1':'0';
 				}
 				break;
 
@@ -1216,28 +1244,28 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					require_code('attachments');
-					$value=has_attachment_access(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'_true':'_false';
+					$value=has_attachment_access(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
 				}
 				break;
 
 			case 'HAS_SUBMIT_PERMISSION':
 				if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')))
 				{
-					$value=has_submit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),((!is_null($param)) && (isset($param[2])))?$param[2]:get_ip_address(),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'_true':'_false';
+					$value=has_submit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),((!is_null($param)) && (isset($param[2])))?$param[2]:get_ip_address(),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
 				}
 				break;
 
 			case 'HAS_DELETE_PERMISSION':
 				if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')) && (isset($param[1])))
 				{
-					$value=has_delete_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'_true':'_false';
+					$value=has_delete_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
 				}
 				break;
 	
 			case 'HAS_EDIT_PERMISSION':
 				if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')) && (isset($param[1])))
 				{
-					$value=has_edit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'_true':'_false';
+					$value=has_edit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
 				}
 				break;
 				
@@ -1288,11 +1316,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HAS_FORUM':
-				$value=has_no_forum()?'_false':'_true';
+				$value=has_no_forum()?'0':'1';
 				break;
 
 			case 'OCF':
-				$value=(get_forum_type()=='ocf')?'_true':'_false';
+				$value=(get_forum_type()=='ocf')?'1':'0';
 				break;
 
 			case 'BOARD_PREFIX':
@@ -1348,7 +1376,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1])) // Hard coding array
 				{
 					$array=array_slice($param,1);
-					$value=in_array($param[0],$array)?'_true':'_false';
+					$value=in_array($param[0],$array)?'1':'0';
 				}
 				break;
 
@@ -1367,20 +1395,20 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 				
 			case 'DEV_MODE':
-				$value=$GLOBALS['DEBUG_MODE']?'_true':'_false';
+				$value=$GLOBALS['DEBUG_MODE']?'1':'0';
 				break;
 
 			case 'BROWSER_MATCHES':
 				if (isset($param[0]))
 				{
-					$value=browser_matches($param[0])?'_true':'_false';
+					$value=browser_matches($param[0])?'1':'0';
 				}
 				break;
 
 			case 'ISSET':
 				if (isset($param[0]))
 				{
-					$value=(isset($TEMPCODE_SETGET[$param[0]]))?'_true':'_false';
+					$value=(isset($TEMPCODE_SETGET[$param[0]]))?'1':'0';
 				}
 				break;
 
@@ -1410,7 +1438,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'PREG_MATCH':
 				if (isset($param[1]))
 				{
-					$value=(preg_match('#'.str_replace('#','\#',$param[0]).'#'.(isset($param[2])?str_replace('e','',$param[2]):''),$param[1])!=0)?'_true':'_false';
+					$value=(preg_match('#'.str_replace('#','\#',$param[0]).'#'.(isset($param[2])?str_replace('e','',$param[2]):''),$param[1])!=0)?'1':'0';
 				}
 				break;
 
@@ -1523,7 +1551,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$t_value=strpos($param[0],$param[1]);
-					$value=($t_value===false)?'_false':strval($t_value);
+					$value=($t_value===false)?'0':strval($t_value);
 				}
 				break;
 
@@ -1532,17 +1560,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					if ($param[1]=='') // Would generate a PHP notice
 					{
-						$value='_false';
+						$value='0';
 					} else
 					{
-						$value='_false';
+						$value='0';
 						foreach ($param as $i=>$check)
 						{
 							if ((is_integer($i)) && ($i!=0) && ($check!=''))
 							{
 								if (strpos($param[0],$check)!==false)
 								{
-									$value='_true';
+									$value='1';
 									break;
 								}
 							}
@@ -1612,7 +1640,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'IS_A_COOKIE_LOGIN':
 				global $IS_A_COOKIE_LOGIN;
-				$value=($IS_A_COOKIE_LOGIN && (ini_get('suhosin.cookie.max_name_length')!=='64'))?'_true':'_false';
+				$value=($IS_A_COOKIE_LOGIN && (ini_get('suhosin.cookie.max_name_length')!=='64'))?'1':'0';
 				break;
 
 			case 'GROUP_ID':
@@ -1646,45 +1674,45 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$count=0;
 				foreach ($param as $test)
 				{
-					if (($test=='_true') || ($test=='1')) $count++;
+					if (($test=='1') || ($test=='1')) $count++;
 				}
-				$value=($count==1)?'_true':'_false';
+				$value=($count==1)?'1':'0';
 				break;
 
 			case 'NOR':
 				$count=0;
 				foreach ($param as $test)
 				{
-					if (($test=='_true') || ($test=='1')) $count++;
+					if (($test=='1') || ($test=='1')) $count++;
 				}
-				$value=($count>0)?'_false':'_true';
+				$value=($count>0)?'0':'1';
 				break;
 
 			case 'NAND':
 				$count=0;
 				foreach ($param as $test)
 				{
-					if (($test=='_true') || ($test=='1')) $count++;
+					if (($test=='1') || ($test=='1')) $count++;
 				}
-				$value=($count==count($param))?'_false':'_true';
+				$value=($count==count($param))?'0':'1';
 				break;
 
 			case 'LT':
 				if (isset($param[1]))
 				{
-					$value=(intval($param[0])<intval($param[1]))?'_true':'_false';
+					$value=(intval($param[0])<intval($param[1]))?'1':'0';
 				}
 				break;
 
 			case 'GT':
 				if (isset($param[1]))
 				{
-					$value=(intval($param[0])>intval($param[1]))?'_true':'_false';
+					$value=(intval($param[0])>intval($param[1]))?'1':'0';
 				}
 				break;
 
 			case 'COPPA_ON':
-				$value=(get_option('is_on_coppa')=='1')?'_true':'_false';
+				$value=(get_option('is_on_coppa')=='1')?'1':'0';
 				break;
 
 			case 'OBFUSCATE':
@@ -1710,7 +1738,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'INLINE_STATS':
-				$value=(get_option('show_inline_stats')=='1')?'_true':'_false';
+				$value=(get_option('show_inline_stats')=='1')?'1':'0';
 				break;
 
 			case 'ATTACHMENT_DOWNLOADS':
@@ -1748,7 +1776,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'CAN_SPELLCHECK':
-				$value=(function_exists('pspell_check'))?'_true':'_false';
+				$value=(function_exists('pspell_check'))?'1':'0';
 				break;
 
 			case 'AWARD_ID':
@@ -1800,19 +1828,19 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'CURRENTLY_INVISIBLE':
-				$value=is_invisible()?'_true':'_false';
+				$value=is_invisible()?'1':'0';
 				break;
 
 			case 'IS_FRIEND':
 				if (isset($param[0]))
 				{
 					$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
-					$value=is_null($test)?'_false':'_true';
+					$value=is_null($test)?'0':'1';
 				}
 				break;
 
 			case 'SSW':
-				$value=(get_option('ssw')=='1')?'_true':'_false';
+				$value=(get_option('ssw')=='1')?'1':'0';
 				break;
 
 			case 'RATING':
@@ -1934,7 +1962,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$edit_text=$param[0]->evaluate();
 					$edit_param_name=$param[1]->evaluate();
 					$edit_pagelink=$param[2]->evaluate();
-					$supports_comcode=(isset($param[4])?$param[3]->evaluate():'_false')=='_true';
+					$supports_comcode=(isset($param[4])?$param[3]->evaluate():'0')=='1';
 
 					list($zone,$attributes,)=page_link_decode($edit_pagelink);
 					if ($zone=='_SEARCH') $zone=get_module_zone($attributes['page']);
@@ -1970,7 +1998,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$key=$param[1]->evaluate();
 					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
-					$value=in_array($param[0]->evaluate(),$array)?'_true':'_false';
+					$value=in_array($param[0]->evaluate(),$array)?'1':'0';
 				}
 				break;
 
@@ -1979,7 +2007,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$key=$param[1]->evaluate();
 					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
-					$value=in_array($param[0]->evaluate(),$array)?'_false':'_true';
+					$value=in_array($param[0]->evaluate(),$array)?'0':'1';
 				}
 				break;
 
@@ -2039,7 +2067,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$options=isset($param[4])?$param[3]->evaluate():'';
 				$meta=isset($param[5])?$param[4]->evaluate():'';
 				$links=isset($param[6])?$param[5]->evaluate():'';
-				$expand=isset($param[7])?($param[6]->evaluate()=='_true'):false;
+				$expand=isset($param[7])?($param[6]->evaluate()=='1'):false;
 				$toplink=isset($param[8])?$param[7]->evaluate():'';
 				$tmp=put_in_standard_box(array_pop($param),$title,$dimensions,$box_type,$options,$meta,$links,$expand,$toplink);
 				$value=$tmp->evaluate();
@@ -2140,7 +2168,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$_p=$param[0]->evaluate();
-					if (($_p=='_true') || ($_p=='1'))
+					if (($_p=='1') || ($_p=='1'))
 					{
 						$value='';
 						$value.=$param[1]->evaluate();
@@ -2153,7 +2181,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$_p=$param[0]->evaluate();
-					if (($_p=='_true') || ($_p=='1'))
+					if (($_p=='1') || ($_p=='1'))
 					{
 						$value=$param[1]->evaluate();
 					}

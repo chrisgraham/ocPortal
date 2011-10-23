@@ -49,6 +49,8 @@ class Hook_sw_banners
 	{
 		if (!addon_installed('banners')) return;
 		
+		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+
 		if (post_param_integer('have_default_banners_hosting',0)==0)
 		{
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'hosting'));
@@ -56,6 +58,8 @@ class Hook_sw_banners
 			{
 				require_code('banners2');
 				delete_banner('hosting');
+				foreach (array_keys($usergroups) as $id)
+					$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'hosting-submit','zone_name'=>'site','group_id'=>$id));
 			}
 		}
 		if (post_param_integer('have_default_banners_donation',0)==0)
@@ -65,6 +69,8 @@ class Hook_sw_banners
 			{
 				require_code('banners2');
 				delete_banner('donate');
+				foreach (array_keys($usergroups) as $id)
+					$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'donate','zone_name'=>'site','group_id'=>$id));
 			}
 		}
 		if (post_param_integer('have_default_banners_advertising',0)==0)
@@ -74,6 +80,8 @@ class Hook_sw_banners
 			{
 				require_code('banners2');
 				delete_banner('advertise_here');
+				foreach (array_keys($usergroups) as $id)
+					$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'advertise','zone_name'=>'site','group_id'=>$id));
 			}
 		}
 		$test=$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)');

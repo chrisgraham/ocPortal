@@ -504,13 +504,22 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 	// Try lang_cached
 	if ($GLOBALS['MEM_CACHE']!==NULL)
 	{
-		$lang_file=$fb.'/lang/'.$lang.'/'.$codename.'.ini';
-		if (!is_file($lang_file))
+		$desire_cache=true;
+		global $SITE_INFO;
+		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+		if ($support_smart_decaching)
 		{
-			$lang_file=$fb.'/lang/'.$lang.'/'.$codename.'.po';
-			if (!is_file($lang_file)) $lang_file=$fb.'/lang/'.$lang.'/'.filter_naughty($codename).'-'.strtolower($lang).'.po';
+			$lang_file=$fb.'/lang/'.$lang.'/'.$codename.'.ini';
+			if (!is_file($lang_file))
+			{
+				$lang_file=$fb.'/lang/'.$lang.'/'.$codename.'.po';
+				if (!is_file($lang_file)) $lang_file=$fb.'/lang/'.$lang.'/'.filter_naughty($codename).'-'.strtolower($lang).'.po';
+			}
+			$pcache=persistant_cache_get(array('LANG',$lang,$codename),is_file($lang_file)?filemtime($lang_file):NULL);
+		} else
+		{
+			$pcache=persistant_cache_get(array('LANG',$lang,$codename));
 		}
-		$pcache=persistant_cache_get(array('LANG',$lang,$codename),is_file($lang_file)?filemtime($lang_file):NULL);
 		if (is_array($pcache))
 		{
 			$LANGUAGE[$lang]+=$pcache;
@@ -558,6 +567,12 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 	}
 	if (!$done)
 	{
+		if (($desire_cache) && (is_file($cache_path))) // Must have been dirty cache, so we need to kill compiled templates too (as lang is compiled into them)
+		{
+			require_code('view_modes');
+			erase_cached_templates();
+		}
+
 		require_code('lang_compile');
 		$bad=$bad || require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors);
 	}

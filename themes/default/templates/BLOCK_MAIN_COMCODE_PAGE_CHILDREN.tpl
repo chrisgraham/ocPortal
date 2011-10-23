@@ -11,4 +11,4 @@
 	{+END}
 {+END}
 
-{$SET,has_comcode_page_children_block,_true}
+{$SET,has_comcode_page_children_block,1}

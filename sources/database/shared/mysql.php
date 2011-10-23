@@ -199,7 +199,8 @@ class Database_super_mysql
 		$innodb=$this->using_innodb();
 		$table_type=($innodb?'INNODB':'MyISAM');
 		$type_key='engine';
-		if (file_exists(get_file_base().'/mysql_old'))
+		global $SITE_INFO;
+		if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 			$type_key='type';
 		if (substr($table_name,-8)=='sessions') $table_type='HEAP';
 
@@ -207,7 +208,7 @@ class Database_super_mysql
 '.$_fields.'
 			PRIMARY KEY ('.$keys.')
 		)';
-		if (!file_exists(get_file_base().'/mysql_old'))
+		if (!(((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old')))))
 		{
 			global $SITE_INFO;
 			if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';

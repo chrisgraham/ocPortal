@@ -347,7 +347,7 @@ class forum_driver_base
 		$CACHED_THEME=filter_naughty(get_param('keep_theme',get_param('utheme','-1')));
 		if ($CACHED_THEME!='-1')
 		{
-			if ((!file_exists(get_file_base().'/themes/'.$CACHED_THEME)) && (!file_exists(get_custom_file_base().'/themes/'.$CACHED_THEME)))
+			if ((!is_dir(get_file_base().'/themes/'.$CACHED_THEME)) && (!is_dir(get_custom_file_base().'/themes/'.$CACHED_THEME)))
 			{
 				$theme=$CACHED_THEME;
 				$CACHED_THEME='default';
@@ -391,7 +391,7 @@ class forum_driver_base
 
 		// Get from forums
 		$CACHED_THEME=filter_naughty($this->_get_theme());
-		if (($CACHED_THEME=='') || (!file_exists(get_custom_file_base().'/themes/'.$CACHED_THEME))) $CACHED_THEME='default';
+		if (($CACHED_THEME=='') || (($CACHED_THEME!='default') && (!is_dir(get_custom_file_base().'/themes/'.$CACHED_THEME)))) $CACHED_THEME='default';
 		if ($CACHED_THEME=='-1') $CACHED_THEME='default';
 		require_code('permissions');
 		if (($CACHED_THEME!='default') && (!has_category_access(get_member(),'theme',$CACHED_THEME)))

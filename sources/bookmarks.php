@@ -98,7 +98,7 @@ function add_bookmark_form($post_url)
 
 	breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_BOOKMARKS'))));
 
-	$javascript='standardAlternateFields(\'folder\',\'folder_new\'); var title=document.getElementById(\'title\'); if (((title.value==\'\') || (title.value==\'_false\')) && (window.opener)) title.value=getInnerHTML(window.opener.document.getElementsByTagName(\'title\')[0]); ';
+	$javascript='standardAlternateFields(\'folder\',\'folder_new\'); var title=document.getElementById(\'title\'); if (((title.value==\'\') || (title.value==\'0\')) && (window.opener)) title.value=getInnerHTML(window.opener.document.getElementsByTagName(\'title\')[0]); ';
 
 	return do_template('FORM_SCREEN',array('_GUID'=>'7e94bb97008de4fa0fffa2b5f91c95eb','TITLE'=>$title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$javascript));
 }

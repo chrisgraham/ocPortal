@@ -1,4 +1,4 @@
-{+START,BOX,Tips,,,tray_open,,,_true,}
+{+START,BOX,Tips,,,tray_open,,,1,}
 	<!--<div class="standardbox_wrap_classic tips_wrap">-->
 	<div class="standardbox_classic">
 		<div class="standardbox_main_classic">

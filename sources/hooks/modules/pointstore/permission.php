@@ -226,7 +226,11 @@ class Hook_pointstore_permission
 	 */
 	function info()
 	{
-		if (file_exists(get_file_base().'/mysql_old')) return array();
+		global $SITE_INFO;
+		if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
+		{
+			return array();
+		}
 
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 

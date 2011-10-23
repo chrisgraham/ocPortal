@@ -14,7 +14,7 @@
 
 			{+START,IF,{$NOT,{SIMPLE_STYLE}}}
 				<div class="input_compound_ticks float_surrounder">
-				{$SET,PREVIOUS_TICK,_false}
+				{$SET,PREVIOUS_TICK,0}
 				{+START,LOOP,OUT}
 					<div class="{$?,{$GET,PREVIOUS_TICK},input_compound_tick,input_compound_tick_first}">
 						{+START,IF,{$NOT,{CHECKED}}}
@@ -25,7 +25,7 @@
 						{+END}
 						<input type="hidden" name="label_for__{NAME*}" value="{PRETTY_NAME*}" />
 						<input name="tick_on_form__{NAME*}" value="0" type="hidden" />
-						{$SET,PREVIOUS_TICK,_true}
+						{$SET,PREVIOUS_TICK,1}
 					</div>
 				{+END}
 				</div>

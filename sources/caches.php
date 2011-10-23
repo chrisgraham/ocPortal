@@ -165,7 +165,7 @@ function decache($cached_for,$identifier=NULL)
 	if ($identifier!==NULL)
 	{
 		global $TEMPCODE_SETGET;
-		$identifier[]=array_key_exists('in_panel',$TEMPCODE_SETGET)?$TEMPCODE_SETGET['in_panel']:'_false';
+		$identifier[]=array_key_exists('in_panel',$TEMPCODE_SETGET)?$TEMPCODE_SETGET['in_panel']:'0';
 		$where['identifier']=md5(serialize($identifier));
 		$GLOBALS['SITE_DB']->query_delete('cache',$where);
 	}

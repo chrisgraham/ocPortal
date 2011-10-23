@@ -46,20 +46,24 @@ function ocf_get_personal_topics($start=0,$max=NULL,$member_id=NULL)
 	$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$where;
 	$max_rows=0;
 	$union='';
-	if ((!file_exists(get_file_base().'/mysql_old')) && ($filter==do_lang('INVITED_TO_PTS')))
+	if ($filter==do_lang('INVITED_TO_PTS'))
 	{
-		$or_list='';
-		$s_rows=$GLOBALS['FORUM_DB']->query_select('f_special_pt_access',array('s_topic_id'),array('s_member_id'=>get_member()));
-		foreach ($s_rows as $s_row)
+		global $SITE_INFO;
+		if (!(((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old')))))
 		{
-			if ($or_list!='') $or_list.=' OR ';
-			$or_list.='id='.strval($s_row['s_topic_id']);
-		}
-		if ($or_list!='')
-		{
-			$query2='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list;
-			$union=' UNION SELECT * '.$query2;
-			$max_rows+=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query2);
+			$or_list='';
+			$s_rows=$GLOBALS['FORUM_DB']->query_select('f_special_pt_access',array('s_topic_id'),array('s_member_id'=>get_member()));
+			foreach ($s_rows as $s_row)
+			{
+				if ($or_list!='') $or_list.=' OR ';
+				$or_list.='id='.strval($s_row['s_topic_id']);
+			}
+			if ($or_list!='')
+			{
+				$query2='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list;
+				$union=' UNION SELECT * '.$query2;
+				$max_rows+=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query2);
+			}
 		}
 	}
 	$order=get_param('order','last_time');

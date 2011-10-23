@@ -55,5 +55,5 @@
 			</td>
 		</tr>
 
-		{$SET,done_one_theme,_true}
+		{$SET,done_one_theme,1}
 

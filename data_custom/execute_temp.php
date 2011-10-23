@@ -67,8 +67,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('locations_install');
-	recalculate_continent_bounds();
+print_r(include('themes/default/templates_cached/EN/GLOBAL.tpl.tcp'));
+
 }
 
 

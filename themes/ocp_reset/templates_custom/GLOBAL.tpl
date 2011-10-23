@@ -1,5 +1,5 @@
 {$,Make sure the system knows we haven't rendered our primary title for this output yet}
-{$SET,done_first_title,_false}
+{$SET,done_first_title,0}
 
 
 {+START,IF,{$GET,show_top}}{+START,IF_NON_EMPTY,{$GET,panel_top}}
@@ -39,7 +39,7 @@
 
         <a accesskey="s" class="accessibility_hidden">{!SKIP_NAVIGATION}</a>
 
-        {MIDDLE}{$SET,interlock,_false}
+        {MIDDLE}{$SET,interlock,0}
 </div>
 
 {+START,IF_NON_EMPTY,{MESSAGE}}

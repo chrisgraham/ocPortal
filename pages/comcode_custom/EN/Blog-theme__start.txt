@@ -18,9 +18,9 @@
 		[surround="head"]
 			Recent Posts
 		[/surround]
-		{$SET,in_panel,_true}
+		{$SET,in_panel,1}
 		[block="0" fallback_full="10" fallback_archive="10" news="1"]main_news[/block]
-		{$SET,in_panel,_false}
+		{$SET,in_panel,0}
 	[/surround]
 [/surround]
 [/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

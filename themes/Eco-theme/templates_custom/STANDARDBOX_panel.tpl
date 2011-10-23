@@ -43,7 +43,7 @@
 		</div>
 	{+END}
 </div>
-{$SET,interlock,_true}
+{$SET,interlock,1}
 
 {+START,IF,{$CONFIG_OPTION,tray_support}}{+START,IF,{$JS_ON}}
 	<script type="text/javascript">// <![CDATA[

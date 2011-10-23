@@ -432,7 +432,7 @@ class Block_main_activities
 					$tempcode=do_lang_tempcode($row['a_language_string_code'],comcode_to_tempcode(escape_html($row['a_label_1']),$guest_id,false,NULL),comcode_to_tempcode(escape_html($row['a_label_2']),$guest_id,false,NULL),array(comcode_to_tempcode(escape_html($row['a_label_3']),$guest_id,false,NULL),escape_html($link_1->evaluate()),escape_html($link_2->evaluate()),escape_html($link_3->evaluate())));
 
 					$bits[]=$tempcode;
-					$content[] = array('BITS'=>$tempcode,'MEMPIC'=>$memberpic,'NAME'=>$member, 'DATETIME'=>strval($datetime), 'URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'_true':'_false');
+					$content[] = array('BITS'=>$tempcode,'MEMPIC'=>$memberpic,'NAME'=>$member, 'DATETIME'=>strval($datetime), 'URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
 
 				}
 				return do_template('BLOCK_MAIN_ACTIVITIES',array(
@@ -463,7 +463,7 @@ class Block_main_activities
 		      break;
 		}
 
-		$content[] = array('BITS'=>do_lang('NO_ACTIVITIES'),'MEMPIC'=>$memberpic, 'NAME'=>$member, 'DATETIME'=>strval(time()), 'URL'=>$donkey_url, 'LIID'=>'-1', 'ALLOW_REMOVE'=>'_false');
+		$content[] = array('BITS'=>do_lang('NO_ACTIVITIES'),'MEMPIC'=>$memberpic, 'NAME'=>$member, 'DATETIME'=>strval(time()), 'URL'=>$donkey_url, 'LIID'=>'-1', 'ALLOW_REMOVE'=>false);
 
 		return do_template('BLOCK_MAIN_ACTIVITIES',array(
 			'TITLE'=>$title,

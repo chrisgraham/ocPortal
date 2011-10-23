@@ -63,4 +63,4 @@
 		//]]></script>
 	{+END}{+END}
 </div>
-{$SET,interlock,_true}
+{$SET,interlock,1}

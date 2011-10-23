@@ -28,7 +28,7 @@ class Hook_symbol_IS_TRACKED
 		if (array_key_exists(0,$param))
 		{
 			require_code('tracking');
-			$value=is_tracked(array_key_exists(1,$param)?$param[1]:get_page_name(),$param[0])?'_true':'_false';
+			$value=is_tracked(array_key_exists(1,$param)?$param[1]:get_page_name(),$param[0])?'1':'0';
 		}
 		return $value;
 	}

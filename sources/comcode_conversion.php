@@ -1093,9 +1093,10 @@ function _convert_close_open_lists($list_indent)
  * @param  boolean		Whether this text is infact a directive, about to be put in the context of a wider template
  * @param  ID_TEXT		The codename of the template (e.g. foo)
  * @param  ?ID_TEXT		The theme it is for (NULL: current theme)
+ * @param  ?ID_TEXT		The language it is for (NULL: current language)
  * @return mixed			The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL)
+function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL,$lang=NULL)
 {
 	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 	

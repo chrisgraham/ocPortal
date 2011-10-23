@@ -294,10 +294,10 @@ class Module_admin_zones
 			global $TEMPCODE_SETGET;
 			if ($for==$default_page)
 			{
-				$TEMPCODE_SETGET['in_panel']='_false';
+				$TEMPCODE_SETGET['in_panel']='0';
 			} else
 			{
-				$TEMPCODE_SETGET['in_panel']='_true';
+				$TEMPCODE_SETGET['in_panel']='1';
 			}
 			$preview=(substr($page_info[0],0,6)=='MODULE')?NULL:request_page($for,false,$id,NULL,true);
 			if (!is_null($preview))

@@ -148,7 +148,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 		}
 		if (post_param_integer('include_ocp_advert',0)==1)
 		{
-			$comcode.='[center][url="http://ocportal.com/?from=logo"][img="Powered by ocPortal"]http://ocportal.com/uploads/website_specific/ocportal.com/logos/a.png[/img][/url][/center]{$SET,interlock,_false}';
+			$comcode.='[center][url="http://ocportal.com/?from=logo"][img="Powered by ocPortal"]http://ocportal.com/uploads/website_specific/ocportal.com/logos/a.png[/img][/url][/center]{$SET,interlock,0}';
 		}
 		$page_structure[$zone]['left']=$comcode;
 

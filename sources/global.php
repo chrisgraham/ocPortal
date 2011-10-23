@@ -94,7 +94,14 @@ function require_code($codename,$light_exit=false)
 	global $_REQUIRED_CODE,$FILE_BASE;
 	if (isset($_REQUIRED_CODE[$codename])) return;
 	$_REQUIRED_CODE[$codename]=1;
-	$_REQUIRED_CODE[str_replace('_custom','',$codename)]=1;
+
+	$shorthand=(strpos($codename,'.php')===false);
+	if (!$shorthand)
+	{
+		$non_custom_codename=str_replace('_custom','',$codename);
+		$_REQUIRED_CODE[$non_custom_codename]=1;
+	}
+
 	$codename=filter_naughty($codename);
 
 	static $mue=NULL;
@@ -109,15 +116,42 @@ function require_code($codename,$light_exit=false)
 
 	$worked=false;
 
-	$path_a=$FILE_BASE.'/'.((strpos($codename,'.php')===false)?('sources_custom/'.$codename.'.php'):$codename);
-	$path_b=$FILE_BASE.'/'.((strpos($codename,'.php')===false)?('sources/'.$codename.'.php'):str_replace('_custom','',$codename));
+	$path_a=$FILE_BASE.'/'.($shorthand?('sources_custom/'.$codename.'.php'):$codename);
+	$path_b=$FILE_BASE.'/'.($shorthand?('sources/'.$codename.'.php'):$non_custom_codename);
 
-	if ((is_file($path_a)) && ((!function_exists('in_safe_mode')) || (!in_safe_mode()) || (!is_file($path_b))))
+	$has_original=NULL;
+	if (isset($GLOBALS['MEM_CACHE']))
+	{
+		global $CODE_OVERRIDES;
+		if (!isset($CODE_OVERRIDES))
+		{
+			$CODE_OVERRIDES=persistant_cache_get('CODE_OVERRIDES');
+			if ($CODE_OVERRIDES===NULL) $CODE_OVERRIDES=array();
+		}
+		if (isset($CODE_OVERRIDES[$codename]))
+		{
+			$has_override=$CODE_OVERRIDES[$codename];
+			$has_original=$CODE_OVERRIDES['!'.$codename];
+		} else
+		{
+			$has_override=is_file($path_a);
+			$has_original=is_file($path_b);
+			$CODE_OVERRIDES[$codename]=$has_override;
+			$CODE_OVERRIDES['!'.$codename]=$has_original;
+			persistant_cache_set('CODE_OVERRIDES',$CODE_OVERRIDES,true);
+		}
+	} else
+	{
+		$has_override=is_file($path_a);
+	}
+
+	if (($has_override) && ((!function_exists('in_safe_mode')) || (!in_safe_mode()) || (!is_file($path_b))))
 	{
 		$done_init=false;
 		$init_func='init__'.str_replace('/','__',str_replace('.php','',$codename));
 
-		if (($path_a!=$path_b) && (is_file($path_b)))
+		if (!isset($has_original)) $has_original=is_file($path_b);
+		if (($path_a!=$path_b) && ($has_original))
 		{
 			$orig=str_replace(array('?'.'>','<?php'),array('',''),file_get_contents($path_b));
 			$a=file_get_contents($path_a);

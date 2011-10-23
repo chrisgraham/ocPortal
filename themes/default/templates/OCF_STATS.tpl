@@ -26,8 +26,8 @@
 								{+START,IF_NON_EMPTY,{GROUPS}}
 								<p>
 									{!USERGROUPS}:
-									{$SET,doing_first_group,_true}
-									{+START,LOOP,GROUPS}{+START,IF,{$NOT,{$GET,doing_first_group}}}, {+END}<a class="{GCOLOUR*}" href="{$PAGE_LINK*,_SEARCH:groups:view:{GID}}">{GTITLE*}</a>{$SET,doing_first_group,_false}{+END}
+									{$SET,doing_first_group,1}
+									{+START,LOOP,GROUPS}{+START,IF,{$NOT,{$GET,doing_first_group}}}, {+END}<a class="{GCOLOUR*}" href="{$PAGE_LINK*,_SEARCH:groups:view:{GID}}">{GTITLE*}</a>{$SET,doing_first_group,0}{+END}
 								</p>
 								{+END}
 							</td>

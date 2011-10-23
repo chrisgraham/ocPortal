@@ -273,10 +273,10 @@ function comcode_convert_script()
 		global $TEMPCODE_SETGET;
 		if ($panel==0)
 		{
-			$TEMPCODE_SETGET['in_panel']='_false';
+			$TEMPCODE_SETGET['in_panel']='0';
 		} else
 		{
-			$TEMPCODE_SETGET['in_panel']='_true';
+			$TEMPCODE_SETGET['in_panel']='1';
 		}
 	}
 	if (either_param_integer('to_comcode_xml',0)==1)
