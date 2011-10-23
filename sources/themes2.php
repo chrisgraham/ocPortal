@@ -548,6 +548,8 @@ function find_all_themes($full_details=false)
 {
 	if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return $full_details?array('default'=>array()):array('default'=>do_lang('DEFAULT'));
 
+	require_code('files');
+
 	$themes=array();
 	$_dir=opendir(get_file_base().'/themes/');
 	while (false!==($file=readdir($_dir)))

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>sources/support.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -160,7 +158,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2011-10-23T03:55:22Z</date>
+			<date>2011-10-23T17:51:37Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -1131,36 +1129,6 @@
 				<integer>452</integer>
 			</dict>
 		</dict>
-		<key>sources/forum/ocf.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>121</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>95</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>123</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>121</integer>
-			</dict>
-		</dict>
 		<key>sources/forum/smf.php</key>
 		<dict>
 			<key>caret</key>
@@ -1174,34 +1142,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>963</integer>
-		</dict>
-		<key>sources/forum_stub.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>288</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>288</integer>
-		</dict>
-		<key>sources/global2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>1532</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1430</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1979,48 +1919,6 @@
 			<key>firstVisibleLine</key>
 			<integer>81</integer>
 		</dict>
-		<key>sources/permissions.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>45</integer>
-				<key>line</key>
-				<integer>76</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>36</integer>
-		</dict>
-		<key>sources/support.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>1598</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1559</integer>
-		</dict>
-		<key>sources/symbols.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>1923</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1899</integer>
-		</dict>
 		<key>sources/templates_view_space.php</key>
 		<dict>
 			<key>caret</key>
@@ -2208,36 +2106,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>50</integer>
-		</dict>
-		<key>text/bots.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
 		</dict>
 		<key>themes/default/css_custom/index.html</key>
 		<dict>
@@ -3422,19 +3290,9 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>sources/symbols.php</string>
-		<string>sources/permissions.php</string>
-		<string>sources/global2.php</string>
-		<string>sources/support.php</string>
-		<string>text/bots.txt</string>
-		<string>sources/forum/ocf.php</string>
-		<string>sources/forum_stub.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{645, 150}, {1213, 913}}</string>
+	<string>{{645, 149}, {1213, 913}}</string>
 </dict>
 </plist>

@@ -83,6 +83,7 @@ function compile_template($data,$template_name,$theme,$lang)
 	}
 
 	require_code('lang');
+	require_code('urls');
 	$cl=fallback_lang();
 	$bits=array_values(preg_split('#(?<!\\\\)(\{(?=[\dA-Z\$\+\!\_]+[\.`%\*=\;\#\-~\^\|\'&/@]*))|((?<!\\\\)\,)|((?<!\\\\)\})#',$data,-1,PREG_SPLIT_DELIM_CAPTURE));  // One error mail showed on a server it had weird indexes, somehow. Hence the array_values call to reindex it
 	$count=count($bits);

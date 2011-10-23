@@ -842,6 +842,8 @@ class Module_catalogues
 		}
 		foreach ($rows_subcategories as $sc)
 		{
+			if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($sc['id'])))) continue;
+
 			$child_counts=count_catalogue_category_children($sc['id']);
 			$num_children=$child_counts['num_children'];
 			$num_entries=$child_counts['num_entries_children'];

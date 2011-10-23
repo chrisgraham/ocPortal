@@ -573,7 +573,9 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 		if (($desire_cache) && (is_file($cache_path))) // Must have been dirty cache, so we need to kill compiled templates too (as lang is compiled into them)
 		{
 			require_code('view_modes');
-			erase_cached_templates();
+			global $ERASED_TEMPLATES_ONCE;
+			if (!$ERASED_TEMPLATES_ONCE)
+				erase_cached_templates();
 		}
 
 		require_code('lang_compile');

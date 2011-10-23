@@ -19,6 +19,15 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__view_modes()
+{
+	global $ERASED_TEMPLATES_ONCE;
+	$ERASED_TEMPLATES_ONCE=false;
+}
+
+/**
  * Initialise state variables for the special page type being requested.
  *
  * @param  ID_TEXT		The special page type.
@@ -619,6 +628,9 @@ function erase_cached_language()
  */
 function erase_cached_templates($preserve_some=false)
 {
+	global $ERASED_TEMPLATES_ONCE;
+	$ERASED_TEMPLATES_ONCE=true;
+	
 	require_code('themes2');
 	$themes=find_all_themes();
 	$langs=find_all_langs(true);
@@ -655,8 +667,11 @@ function erase_cached_templates($preserve_some=false)
 	}
 
 	// Often the back button will be used to return to a form, so we need to ensure we have not broken the Javascript
-	javascript_enforce('javascript_validation');
-	javascript_enforce('javascript_editing');
+	if (function_exists('get_member'))
+	{
+		javascript_enforce('javascript_validation');
+		javascript_enforce('javascript_editing');
+	}
 }
 
 /**
