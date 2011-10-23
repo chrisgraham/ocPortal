@@ -74,12 +74,12 @@ function _general_db_init()
 	if (count($TABLE_LANG_FIELDS)>0) return;
 
 	$TABLE_LANG_FIELDS=function_exists('persistant_cache_get')?persistant_cache_get('TABLE_LANG_FIELDS'):NULL;
-	if (is_null($TABLE_LANG_FIELDS))
+	if ($TABLE_LANG_FIELDS===NULL)
 	{
 		$TABLE_LANG_FIELDS=array();
 
 		$_table_lang_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_type','SHORT_TRANS').' OR '.db_string_equal_to('m_type','LONG_TRANS').' OR '.db_string_equal_to('m_type','*SHORT_TRANS').' OR '.db_string_equal_to('m_type','*LONG_TRANS').' OR '.db_string_equal_to('m_type','?SHORT_TRANS').' OR '.db_string_equal_to('m_type','?LONG_TRANS'),NULL,NULL,true);
-		if (!is_null($_table_lang_fields))
+		if ($_table_lang_fields!==NULL)
 		{
 			foreach ($_table_lang_fields as $lang_field)
 			{
@@ -282,8 +282,8 @@ function get_db_site_host()
 function get_db_site()
 {
 	global $SITE_INFO;
-	if ((!array_key_exists('db_site',$SITE_INFO)) || (is_null($SITE_INFO['db_site']))) return basename(get_file_base());
-	return $SITE_INFO['db_site'].(is_null($GLOBALS['CURRENT_SHARE_USER'])?'':('_'.$GLOBALS['CURRENT_SHARE_USER']));
+	if ((!array_key_exists('db_site',$SITE_INFO)) || ($SITE_INFO['db_site']===NULL)) return basename(get_file_base());
+	return $SITE_INFO['db_site'].(($GLOBALS['CURRENT_SHARE_USER']===NULL)?'':('_'.$GLOBALS['CURRENT_SHARE_USER']));
 }
 
 /**
@@ -294,8 +294,8 @@ function get_db_site()
 function get_db_site_user()
 {
 	global $SITE_INFO;
-	if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) return substr(md5($SITE_INFO['db_forums_user'].'_'.$GLOBALS['CURRENT_SHARE_USER']),0,16);
-	return ((array_key_exists('db_site_user',$SITE_INFO)) && (!is_null($SITE_INFO['db_site_user'])))?$SITE_INFO['db_site_user']:'root';
+	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) return substr(md5($SITE_INFO['db_forums_user'].'_'.$GLOBALS['CURRENT_SHARE_USER']),0,16);
+	return ((array_key_exists('db_site_user',$SITE_INFO)) && ($SITE_INFO['db_site_user']!==NULL))?$SITE_INFO['db_site_user']:'root';
 }
 
 /**
@@ -329,7 +329,7 @@ function get_db_forums()
 {
 	global $SITE_INFO;
 	if (!array_key_exists('db_forums',$SITE_INFO)) return get_db_site();
-	return $SITE_INFO['db_forums'].(is_null($GLOBALS['CURRENT_SHARE_USER'])?'':('_'.$GLOBALS['CURRENT_SHARE_USER']));
+	return $SITE_INFO['db_forums'].(($GLOBALS['CURRENT_SHARE_USER']===NULL)?'':('_'.$GLOBALS['CURRENT_SHARE_USER']));
 }
 
 /**
@@ -341,7 +341,7 @@ function get_db_forums_user()
 {
 	global $SITE_INFO;
 	if (!array_key_exists('db_forums_user',$SITE_INFO)) return get_db_site_user();
-	if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) return substr(md5($SITE_INFO['db_forums_user'].'_'.$GLOBALS['CURRENT_SHARE_USER']),0,16);
+	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) return substr(md5($SITE_INFO['db_forums_user'].'_'.$GLOBALS['CURRENT_SHARE_USER']),0,16);
 	return $SITE_INFO['db_forums_user'];
 }
 
@@ -440,7 +440,7 @@ class database_driver
 		}
 		$this->table_prefix=$table_prefix;
 		
-		if (!is_null($static))
+		if ($static!==NULL)
 		{
 			$this->static_ob=$static;
 		} else

@@ -155,7 +155,7 @@ function find_template_place($codename,$lang,$theme,$suffix,$type)
 function is_wide_high()
 {
 	global $IS_WIDE_HIGH;
-	if (!is_null($IS_WIDE_HIGH)) return $IS_WIDE_HIGH;
+	if ($IS_WIDE_HIGH!==NULL) return $IS_WIDE_HIGH;
 
 	$IS_WIDE_HIGH=get_param_integer('wide_high',get_param_integer('keep_wide_high',get_param_integer('wide_print',0)));
 	return $IS_WIDE_HIGH;
@@ -169,8 +169,8 @@ function is_wide_high()
 function is_wide()
 {
 	global $IS_WIDE;
-	if (!is_null($IS_WIDE)) return $IS_WIDE;
-	
+	if ($IS_WIDE!==NULL) return $IS_WIDE;
+
 	global $ZONE;
 	$IS_WIDE=get_param_integer('wide',get_param_integer('keep_wide',(is_wide_high()==1)?1:$ZONE['zone_wide']));
 	if ($IS_WIDE==0) return 0;
@@ -188,7 +188,7 @@ function is_wide()
 			return $IS_WIDE;
 		}
 	}
-	
+
 	return $IS_WIDE;
 }
 
@@ -568,11 +568,11 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 	
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
-	if (is_null($GLOBALS['HELPER_PANEL_TUTORIAL'])) $GLOBALS['HELPER_PANEL_TUTORIAL']='';
-	if (is_null($GLOBALS['HELPER_PANEL_HTML'])) $GLOBALS['HELPER_PANEL_HTML']='';
-	if (is_null($GLOBALS['HELPER_PANEL_TEXT'])) $GLOBALS['HELPER_PANEL_TEXT']='';
-	if (is_null($GLOBALS['HELPER_PANEL_PIC'])) $GLOBALS['HELPER_PANEL_PIC']='';
-	$_message=(!is_null($message))?do_template('ADDITIONAL',array('_GUID'=>'b4c9f0a0bbfb9344d00c29db8ff5715d','TYPE'=>$type,'MESSAGE'=>$message)):new ocp_tempcode();
+	if ($GLOBALS['HELPER_PANEL_TUTORIAL']===NULL) $GLOBALS['HELPER_PANEL_TUTORIAL']='';
+	if ($GLOBALS['HELPER_PANEL_HTML']===NULL) $GLOBALS['HELPER_PANEL_HTML']='';
+	if ($GLOBALS['HELPER_PANEL_TEXT']===NULL) $GLOBALS['HELPER_PANEL_TEXT']='';
+	if ($GLOBALS['HELPER_PANEL_PIC']===NULL) $GLOBALS['HELPER_PANEL_PIC']='';
+	$_message=($message!==NULL)?do_template('ADDITIONAL',array('_GUID'=>'b4c9f0a0bbfb9344d00c29db8ff5715d','TYPE'=>$type,'MESSAGE'=>$message)):new ocp_tempcode();
 	if (get_option('show_docs')=='0') $GLOBALS['HELPER_PANEL_TUTORIAL']='';
 	$global=new ocp_tempcode();
 	$bail_out=(isset($DONE_HEADER) && $DONE_HEADER);
@@ -711,17 +711,17 @@ function get_page_name()
 	{
 		warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
-	if (($page=='') && (!is_null($ZONE)))
+	if (($page=='') && ($ZONE!==NULL))
 	{
 		$page=ocp_srv('QUERY_STRING');
 		if ((strpos($page,'=')!==false) || ($page==''))
 		{
 			$page=$ZONE['zone_default_page'];
-			if (is_null($page)) $page='';
+			if ($page===NULL) $page='';
 		}
 	}
 	$page=filter_naughty($page);
-	if (!is_null($ZONE)) $PAGE_NAME_CACHE=$page;
+	if ($ZONE!==NULL) $PAGE_NAME_CACHE=$page;
 	$GETTING_PAGE_NAME=false;
 	return $page;
 }
@@ -1027,10 +1027,10 @@ function get_flagrant()
 	if (!$system)
 	{
 		$_flagrant=persistant_cache_get('FLAGRANT');
-		if (is_null($_flagrant))
+		if ($_flagrant===NULL)
 		{
 			$flagrant=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24<'.strval(time()),true/*in case tablemissing*/);
-			if (is_null($flagrant))
+			if ($flagrant===NULL)
 			{
 				persistant_cache_set('FLAGRANT',false);
 			} else
@@ -1041,7 +1041,7 @@ function get_flagrant()
 		}
 		if ($_flagrant===false) $_flagrant=NULL;
 	}
-	if (is_null($_flagrant))
+	if ($_flagrant===NULL)
 	{
 		return make_string_tempcode(get_option('system_flagrant'));
 	} else
@@ -1137,16 +1137,16 @@ function get_members_viewing($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
 	member_tracking_update();
 
 	global $ZONE;
-	if (is_null($page)) $page=get_param('page',$ZONE['zone_default_page']);
-	if (is_null($type)) $type=get_param('type','/');
-	if (is_null($id)) $id=get_param('id','/',true);
+	if ($page===NULL) $page=get_param('page',$ZONE['zone_default_page']);
+	if ($type===NULL) $type=get_param('type','/');
+	if ($id===NULL) $id=get_param('id','/',true);
 	if ($type=='/') $type='';
 	if ($id=='/') $id='';
 
 	$map=array();
-	if ((!is_null($page)) && ($page!='')) $map['mt_page']=$page;
-	if ((!is_null($type)) && ($type!='')) $map['mt_type']=$type;
-	if ((!is_null($id)) && ($id!='')) $map['mt_id']=$id;
+	if (($page!==NULL) && ($page!='')) $map['mt_page']=$page;
+	if (($type!==NULL) && ($type!='')) $map['mt_type']=$type;
+	if (($id!==NULL) && ($id!='')) $map['mt_id']=$id;
 	$map['session_invisible']=0;
 	$db=($forum_layer?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 	$results=$db->query_select('member_tracking t LEFT JOIN '.$db->get_table_prefix().'sessions s ON t.mt_member_id=s.the_user',array('*'),$map,'ORDER BY mt_member_id',200);
@@ -1193,12 +1193,16 @@ function get_num_users_site()
 	global $NUM_USERS_SITE,$PEAK_USERS_EVER;
 	$users_online_time_seconds=60*intval(get_option('users_online_time'));
 	$NUM_USERS_SITE=get_value_newer_than('users_online',time()-$users_online_time_seconds/2);
-	if (is_null($NUM_USERS_SITE))
+	if ($NUM_USERS_SITE===NULL)
 	{
+		$NUM_USERS_SITE=get_value('users_online');
 		$count=0;
 		get_online_members(false,NULL,$count);
-		$NUM_USERS_SITE=strval($count);
-		set_value('users_online',$NUM_USERS_SITE);
+		if (strval($count)!=$NUM_USERS_SITE)
+		{
+			$NUM_USERS_SITE=strval($count);
+			set_value('users_online',$NUM_USERS_SITE);
+		}
 	}
 	if ((intval($NUM_USERS_SITE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_specific_permission(get_member(),'access_overrun_site')))
 	{
@@ -1210,10 +1214,10 @@ function get_num_users_site()
 	if (addon_installed('stats'))
 	{
 		$PEAK_USERS_EVER=get_value_newer_than('user_peak',time()-$users_online_time_seconds*10);
-		if ((is_null($PEAK_USERS_EVER)) || ($PEAK_USERS_EVER==''))
+		if (($PEAK_USERS_EVER===NULL) || ($PEAK_USERS_EVER==''))
 		{
 			$_peak_users_user=$GLOBALS['SITE_DB']->query_value_null_ok('usersonline_track','MAX(peak)',NULL,'',true);
-			$PEAK_USERS_EVER=is_null($_peak_users_user)?$NUM_USERS_SITE:strval($_peak_users_user);
+			$PEAK_USERS_EVER=($_peak_users_user===NULL)?$NUM_USERS_SITE:strval($_peak_users_user);
 			set_value('user_peak',$PEAK_USERS_EVER);
 		}
 		if ($NUM_USERS_SITE>$PEAK_USERS_EVER)
@@ -1280,7 +1284,7 @@ function escape_html($string)
 function brand_base_url()
 {
 	$value=get_value('rebrand_base_url');
-	if ((is_null($value)) || ($value=='')) $value='http://ocportal.com';
+	if (($value===NULL) || ($value=='')) $value='http://ocportal.com';
 	return $value;
 }
 
@@ -1563,7 +1567,7 @@ function get_bot_type()
 	$agent=strtolower(ocp_srv('HTTP_USER_AGENT'));
 
 	global $BOT_MAP,$SITE_INFO;
-	if (is_null($BOT_MAP))
+	if ($BOT_MAP===NULL)
 	{
 		if (((!isset($SITE_INFO['no_extra_bots'])) || ($SITE_INFO['no_extra_bots']=='0')) && (is_file(get_file_base().'/text_custom/bots.txt')))
 		{
@@ -1577,27 +1581,26 @@ function get_bot_type()
 				'teoma'=>'Teoma',
 				'scooter'=>'Altavista',
 				'jeeves'=>'Ask Jeeves',
-				'InfoSeek'=>'Infoseek',
-				'Ultraseek'=>'Infoseek',
+				'infoseek'=>'Infoseek',
+				'ultraseek'=>'Infoseek',
 				'ia_archiver'=>'Alexa/Archive.org',
 				'slurp'=>'Inktomi/Yahoo/Hot Bot',
-				'Yahoo'=>'Yahoo/Overture',
-				'MSNBOT'=>'MSN',
-				'ArchitextSpider'=>'Excite',
-				'Lycos'=>'Lycos',
+				'yahoo'=>'Yahoo/Overture',
+				'msnbot'=>'MSN',
+				'architextspider'=>'Excite',
+				'lycos'=>'Lycos',
 				'mercator'=>'Altavista',
-				'MantraAgent'=>'LookSmart',
+				'mantraagent'=>'LookSmart',
 				'wisenutbot'=>'Looksmart',
 				'paros'=>'Paros',
-				'Sqworm'=>'Aol.com',
+				'sqworm'=>'Aol.com',
 			);
 		}
 	}
 	foreach ($BOT_MAP as $id=>$name)
 	{
-		$name=trim($name);
 		if ($name=='') continue;
-		if (strpos($agent,strtolower($id))!==false)
+		if (strpos($agent,$id)!==false)
 		{
 			$CACHE_BOT_TYPE=$name;
 			return $name;
@@ -1753,7 +1756,7 @@ function mixed()
 function seo_meta_get_for($type,$id)
 {
 	$cache=persistant_cache_get(array('seo',$type,$id));
-	if (!is_null($cache)) return $cache;
+	if ($cache!==NULL) return $cache;
 
 	$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('*'),array('meta_for_type'=>$type,'meta_for_id'=>$id),'',1);
 	if (!array_key_exists(0,$rows))
@@ -1782,7 +1785,7 @@ function seo_meta_load_for($type,$id,$title=NULL)
 	if ($SEO_TITLE=='DO_NOT_REPLACE') return; // main_include_module block set this
 	if ($result[0]!='') $SEO_KEYWORDS=array_map('trim',explode(',',$result[0]));
 	if ($result[1]!='') $SEO_DESCRIPTION=$result[1];
-	if (!is_null($title)) $SEO_TITLE=str_replace('&ndash;','-',str_replace('&copy;','(c)',str_replace('&#039;','\'',$title)));
+	if ($title!==NULL) $SEO_TITLE=str_replace('&ndash;','-',str_replace('&copy;','(c)',str_replace('&#039;','\'',$title)));
 }
 
 /**
@@ -1796,19 +1799,19 @@ function get_loaded_tags($limit_to=NULL,$the_tags=NULL)
 {
 	if (!addon_installed('search')) return new ocp_tempcode();
 
-	if (is_null($the_tags))
+	if ($the_tags===NULL)
 	{
 		global $SEO_KEYWORDS;
 		$the_tags=$SEO_KEYWORDS;
 	}
 
 	$tags=array();
-	if (!is_null($the_tags))
+	if ($the_tags!==NULL)
 	{
 		$search_limiter_no=array('all_defaults'=>'1');
-		if (!is_null($limit_to)) $search_limiter_no['search_'.$limit_to]='1';
+		if ($limit_to!==NULL) $search_limiter_no['search_'.$limit_to]='1';
 
-		if (!is_null($limit_to))
+		if ($limit_to!==NULL)
 		{
 			$search_limiter_yes=array();
 			$search_limiter_yes['search_'.$limit_to]='1';
@@ -1830,7 +1833,7 @@ function get_loaded_tags($limit_to=NULL,$the_tags=NULL)
 		}
 	}
 	
-	return do_template('TAGS',array('TAGS'=>$tags,'TYPE'=>is_null($limit_to)?'':$limit_to));
+	return do_template('TAGS',array('TAGS'=>$tags,'TYPE'=>($limit_to===NULL)?'':$limit_to));
 }
 
 /**
@@ -1844,11 +1847,11 @@ function get_zone_default_page($zone_name)
 	if ($zone_name=='_SELF') $zone_name=get_zone_name();
 	
 	$p_test=persistant_cache_get(array('ZONE',$zone_name));
-	if (!is_null($p_test))
+	if ($p_test!==NULL)
 		return $p_test['zone_default_page'];
 
 	global $ZONE;
-	if (($ZONE['zone_name']==$zone_name) && (!is_null($ZONE['zone_default_page'])))
+	if (($ZONE['zone_name']==$zone_name) && ($ZONE['zone_default_page']!==NULL))
 	{
 		return $ZONE['zone_default_page'];
 	} else
@@ -1860,7 +1863,7 @@ function get_zone_default_page($zone_name)
 			if (function_exists('persistant_cache_set'))
 			{
 				$temp=persistant_cache_get('ALL_ZONES_TITLED');
-				if (!is_null($temp))
+				if ($temp!==NULL)
 				{
 					$_zone_default_page=array();
 					foreach ($temp as $_temp)
@@ -1870,7 +1873,7 @@ function get_zone_default_page($zone_name)
 					}
 				}
 			}
-			if (is_null($_zone_default_page))
+			if ($_zone_default_page===NULL)
 				$_zone_default_page=$GLOBALS['SITE_DB']->query_select('zones',array('zone_name','zone_default_page'),NULL/*array('zone_name'=>$zone_name)*/,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
 			$ZONE_DEFAULT_PAGES[$zone_name]='start';
 			$ZONE_DEFAULT_PAGES['collaboration']='start'; // Set this in case collaboration zone removed but still referenced. Performance tweak!

@@ -359,13 +359,13 @@ function get_member($quick_only=false)
 		$allow_unbound_guest=true; // Note: Guest sessions are not IP bound
 		$member_row=NULL;
 
-		if ((!is_null($SESSION_CACHE)) && (array_key_exists($session,$SESSION_CACHE)) && (!is_null($SESSION_CACHE[$session])) && (array_key_exists('the_user',$SESSION_CACHE[$session])) && ((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['the_user'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['the_user'])))) && ($SESSION_CACHE[$session]['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
+		if (($SESSION_CACHE!==NULL) && (array_key_exists($session,$SESSION_CACHE)) && ($SESSION_CACHE[$session]!==NULL) && (array_key_exists('the_user',$SESSION_CACHE[$session])) && ((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['the_user'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['the_user'])))) && ($SESSION_CACHE[$session]['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
 			$member_row=$SESSION_CACHE[$session];
-		if ((!is_null($member_row)) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['the_user']))))
+		if (($member_row!==NULL) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['the_user']))))
 		{
 			$member=$member_row['the_user'];
 
-			if ((!is_null($member)) && ((time()-$member_row['last_activity'])>10)) // Performance optimisation. Pointless re-storing the last_activity if less than 3 seconds have passed!
+			if (($member!==NULL) && ((time()-$member_row['last_activity'])>10)) // Performance optimisation. Pointless re-storing the last_activity if less than 3 seconds have passed!
 			{
 				//$GLOBALS['SITE_DB']->query_update('sessions',array('last_activity'=>time(),'the_zone'=>get_zone_name(),'the_page'=>get_page_name()),array('the_session'=>$session),'',1);  Done in get_page_title now
 				$SESSION_CACHE[$session]['last_activity']=time();
@@ -385,7 +385,7 @@ function get_member($quick_only=false)
 			}
 
 			// Test this member still exists
-			if (is_null($GLOBALS['FORUM_DRIVER']->get_username($member))) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+			if ($GLOBALS['FORUM_DRIVER']->get_username($member)===NULL) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 			if (array_key_exists($base,$_COOKIE))
 			{
@@ -400,7 +400,7 @@ function get_member($quick_only=false)
 		}
 	}
 
-	if (($session==-1) && (get_param_integer('keep_force_htaccess',0)==0) && (is_null($member)))
+	if (($session==-1) && (get_param_integer('keep_force_htaccess',0)==0) && ($member===NULL))
 	{
 		// Try by cookie
 		require_code('users_inactive_occasionals');
@@ -503,14 +503,14 @@ function get_member($quick_only=false)
 		}
 	}
 
-	if ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && ((is_null($member)) || (is_guest($member))) && ((get_option('httpauth_is_enabled',true)=='1') || (get_option('windows_auth_is_enabled',true)=='1')) && (get_forum_type()=='ocf'))
+	if ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (($member===NULL) || (is_guest($member))) && ((get_option('httpauth_is_enabled',true)=='1') || (get_option('windows_auth_is_enabled',true)=='1')) && (get_forum_type()=='ocf'))
 	{	
 		require_code('users_inactive_occasionals');
 		$member=httpauth_login();		
 	}
 
 	// Guest or banned
-	if (is_null($member))
+	if ($member===NULL)
 	{
 		$member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 		$is_guest=true;
@@ -549,7 +549,7 @@ function get_member($quick_only=false)
 		{
 			require_code('hooks/systems/upon_login/'.filter_naughty($hook));
 			$ob=object_factory('upon_login'.filter_naughty($hook),true);
-			if (is_null($ob)) continue;
+			if ($ob===NULL) continue;
 			$ob->run(false,NULL,$member); // false means "not a new login attempt"
 		}
 	}
@@ -590,7 +590,7 @@ function delete_expired_sessions($id=NULL)
 		// Get back to prior session if there was one
 		if (get_value('allowed_shared_usernames')!=='1')
 		{
-			if ((!is_null($id)) && ($row['the_user']==$id))
+			if (($id!==NULL) && ($row['the_user']==$id))
 			{
 				$new_session=$_session;
 			}

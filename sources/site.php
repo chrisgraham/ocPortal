@@ -93,7 +93,7 @@ function init__site()
 	$real_zone=(($RELATIVE_PATH=='_tests') || ($RELATIVE_PATH=='data') || ($RELATIVE_PATH=='data_custom'))?get_param('zone',''):$zone;
 	$ZONE=persistant_cache_get(array('ZONE',$real_zone));
 
-	if (is_null($ZONE))
+	if ($ZONE===NULL)
 	{
 		$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$real_zone),'',1);
 		if ((!array_key_exists(0,$zones)) && (is_dir(get_file_base().'/'.$real_zone.'/'.'pages')))
@@ -109,7 +109,7 @@ function init__site()
 			$ZONE['zone_header_text_trans']=get_translated_text($ZONE['zone_header_text']);
 			persistant_cache_set(array('ZONE',$real_zone),$ZONE);
 		}
-		if (is_null($ZONE))
+		if ($ZONE===NULL)
 		{
 			$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>''),'',1);
 			$ZONE=$zones[0];
@@ -118,7 +118,7 @@ function init__site()
 		}
 		unset($zones);
 	}
-	if ((!is_null($ZONE)) && (is_null($ZONE['zone_wide'])))
+	if (($ZONE!==NULL) && ($ZONE['zone_wide']===NULL))
 	{
 		$ZONE['zone_wide']=(get_forum_type()=='ocf')?$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_zone_wide'):1;
 	}
@@ -132,7 +132,7 @@ function init__site()
 	if (addon_installed('redirects_editor'))
 	{
 		$redirect=persistant_cache_get(array('REDIRECT',$_zone));
-		if (is_null($redirect))
+		if ($redirect===NULL)
 		{
 			$redirect=$GLOBALS['SITE_DB']->query_select('redirects',array('*')/*,array('r_from_zone'=>$_zone)*/);
 			persistant_cache_set(array('REDIRECT',$_zone),$redirect);
@@ -215,7 +215,7 @@ function attach_message($message,$type='inform')
 		require_code('failure');
 
 		$webservice_result=get_webservice_result($message);
-		if (!is_null($webservice_result))
+		if ($webservice_result!==NULL)
 		{
 			if ((is_object($message)) && ($message->pure_lang)) $message=$message->evaluate();
 			elseif (is_object($message)) $message=escape_html($message->evaluate());
@@ -251,7 +251,7 @@ function get_logo_url($zone_name=NULL)
 		return find_theme_image('logo/-logo');
 
 	global $ZONE;
-	if (is_null($zone_name)) $zone_name=$ZONE['zone_name'];
+	if ($zone_name===NULL) $zone_name=$ZONE['zone_name'];
 
 	$image=find_theme_image('logo/'.$zone_name.'-logo',true);
 	if ($image=='') // Fallback to welcome zone logo
@@ -272,7 +272,7 @@ function breadcrumbs()
 	$show_top=((get_param_integer('wide_high',get_param_integer('keep_wide_high',0))!=1));
 	if (!$show_top) return new ocp_tempcode();
 
-	if (is_null($BREADCRUMBS))
+	if ($BREADCRUMBS===NULL)
 	{
 		$BREADCRUMBS=breadcrumbs_get_default_stub($BREADCRUMB_EXTRA_SEGMENTS->is_empty());
 	}
@@ -287,7 +287,7 @@ function breadcrumbs()
 	// Substitutions (deprecated hardcoding example)
 	$segment_substitutions=array();
 	$root=get_param('keep_catalogue_root_page',NULL);
-	if (!is_null($root))
+	if ($root!==NULL)
 	{
 		$page_name=get_param('keep_catalogue_root_page_name');
 		$target_url=build_url(array('page'=>$root),'_SEARCH');
@@ -369,8 +369,8 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint=true)
 	if ($link_to_self_entrypoint)
 	{
 		if (!$stub->is_empty()) $stub->attach(do_template('BREADCRUMB_ESCAPED'));
-		$title=is_null($BREADCRUMB_SET_SELF)?$DISPLAYED_TITLE:$BREADCRUMB_SET_SELF;
-		if (!is_null($title))
+		$title=($BREADCRUMB_SET_SELF===NULL)?$DISPLAYED_TITLE:$BREADCRUMB_SET_SELF;
+		if ($title!==NULL)
 		{
 			$title=symbol_truncator(array(is_object($title)?$title:escape_html($title),(strlen(strip_tags($stub->evaluate()))<BREADCRUMB_CROP_LENGTH)?(BREADCRUMB_CROP_LENGTH*2):BREADCRUMB_CROP_LENGTH,'1','1'),'spread');
 			if (((is_object($title)) && (!$title->is_empty())) || ((is_string($title)) && ($title!='')))
@@ -396,7 +396,7 @@ function breadcrumb_add_segment($segment,$final_title=NULL)
 	global $BREADCRUMB_EXTRA_SEGMENTS;
 
 	$BREADCRUMB_EXTRA_SEGMENTS->attach($segment);
-	if (!is_null($final_title))
+	if ($final_title!==NULL)
 	{
 		if (is_array($final_title))
 		{
@@ -466,7 +466,7 @@ function do_header($skip_top=false)
 	$version_number=ocp_version_full();
 	global $ZONE,$DONE_HEADER;
 	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SEO_TITLE,$DISPLAYED_TITLE;
-	if (is_null($ZONE))
+	if ($ZONE===NULL)
 	{
 		warn_exit(do_lang_tempcode('ZONE_NOT_INSTALLED'));
 	}
@@ -482,9 +482,9 @@ function do_header($skip_top=false)
 	);
 
 	// Lots of work to get the perfect header text
-	if ((is_null($SEO_TITLE)) || ($SEO_TITLE=='')) // Take from either zone header or page title
+	if (($SEO_TITLE===NULL) || ($SEO_TITLE=='')) // Take from either zone header or page title
 	{
-		if ((!is_null($DISPLAYED_TITLE)) && (strip_tags($DISPLAYED_TITLE->evaluate())!=''))
+		if (($DISPLAYED_TITLE!==NULL) && (strip_tags($DISPLAYED_TITLE->evaluate())!=''))
 		{
 			$header_text=protect_from_escaping(strip_tags($DISPLAYED_TITLE->evaluate()));
 		} else
@@ -510,7 +510,7 @@ function do_header($skip_top=false)
 	}
 
 	// Some meta details
-	if ((is_null($SEO_DESCRIPTION)) || ($SEO_DESCRIPTION==''))
+	if (($SEO_DESCRIPTION===NULL) || ($SEO_DESCRIPTION==''))
 	{
 		if (isset($GLOBALS['META_DATA']['description']))
 		{
@@ -523,9 +523,9 @@ function do_header($skip_top=false)
 	{
 		$description=$SEO_DESCRIPTION;
 	}
-	if (is_null($description)) $description=''; // Shouldn't happen
+	if ($description===NULL) $description=''; // Shouldn't happen
 	$keywords=get_option('keywords');
-	if (is_null($SEO_KEYWORDS)) $SEO_KEYWORDS=array();
+	if ($SEO_KEYWORDS===NULL) $SEO_KEYWORDS=array();
 	$keywords_array=array_merge($SEO_KEYWORDS,explode(',',$keywords));
 	$keywords=implode(',',array_unique($keywords_array));
 
@@ -549,9 +549,9 @@ function do_header($skip_top=false)
 	{
 		if (get_option('is_on_rss',true)==='1')
 		{
-			if (!is_null($GLOBALS['FEED_URL']))
+			if ($GLOBALS['FEED_URL']!==NULL)
 				$refresh->attach(do_template('RSS_HEADER',array('FEED_URL'=>$GLOBALS['FEED_URL'])));
-			if (!is_null($GLOBALS['FEED_URL_2']))
+			if ($GLOBALS['FEED_URL_2']!==NULL)
 				$refresh->attach(do_template('RSS_HEADER',array('FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
 			if (addon_installed('news'))
 				$refresh->attach(do_template('RSS_HEADER',array('FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
@@ -629,7 +629,7 @@ function do_site()
 	}
 	
 	// Search engine having session in URL, we don't like this
-	if ((!is_null(get_bot_type())) && (count($_POST)==0) && (!is_null(get_param_integer('keep_session',NULL))))
+	if ((get_bot_type()!==NULL) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
 	{
 		$GLOBALS['HTTP_STATUS_CODE']='301';
 		header('HTTP/1.0 301 Moved Permanently');
@@ -640,7 +640,7 @@ function do_site()
 	// More SEO redirection (monikers)
 	// Does this URL arrangement support monikers?
 	$url_id=get_param('id',NULL,true);
-	if ((!is_null($url_id)) && ((url_monikers_enabled())/* && (!is_numeric(str_replace(',','',$url_id)))*/))
+	if (($url_id!==NULL) && ((url_monikers_enabled())/* && (!is_numeric(str_replace(',','',$url_id)))*/))
 	{
 		$type=get_param('type','misc');
 		$looking_for='_SEARCH:'.get_page_name().':'.$type.':_WILD';
@@ -650,7 +650,7 @@ function do_site()
 		{
 			require_code('hooks/systems/content_meta_aware/'.filter_naughty($hook));
 			$ob=object_factory('Hook_content_meta_aware_'.$hook,true);
-			if (is_null($ob)) continue;
+			if ($ob===NULL) continue;
 			$ob_info=$ob->info();
 			$ob_info['view_pagelink_pattern']=preg_replace('#:[^:]*$#',':_WILD',$ob_info['view_pagelink_pattern']);
 
@@ -659,7 +659,7 @@ function do_site()
 				if (is_numeric($url_id)) // Lookup and redirect to moniker
 				{
 					$correct_moniker=find_id_moniker(array('page'=>get_page_name(),'type'=>get_param('type','misc'),'id'=>$url_id));
-					if ((!is_null($correct_moniker)) && ($correct_moniker!=$url_id) && (count($_POST)==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
+					if (($correct_moniker!==NULL) && ($correct_moniker!=$url_id) && (count($_POST)==0)) // test is very unlikely to fail. Will only fail if the title of the resource was numeric - in which case the moniker was chosen to be the ID (NOT the number in the title, as that would have created ambiguity).
 					{
 						header('HTTP/1.0 301 Moved Permanently');
 						$_new_url=build_url(array('page'=>'_SELF','id'=>$correct_moniker),'_SELF',NULL,true);
@@ -776,7 +776,7 @@ function do_site()
 	// Load up our frames into strings. Note that the header and the footer are fixed already.
 	$middle=request_page($PAGE,true);
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
-	if ((is_null($middle)) || ($middle->is_definitely_empty()))
+	if (($middle===NULL) || ($middle->is_definitely_empty()))
 	{
 		$GLOBALS['HTTP_STATUS_CODE']='404';
 		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
@@ -834,17 +834,17 @@ function do_site()
 	{
 		require_code('view_modes');
 		$out_evaluated=$out->evaluate(NULL,false);
-		do_xhtml_validation($out_evaluated,($special_page_type=='code' && is_null(get_param_integer('preview_mode',NULL))),get_param_integer('preview_mode',0));
+		do_xhtml_validation($out_evaluated,($special_page_type=='code' && (get_param_integer('preview_mode',NULL)===NULL)),get_param_integer('preview_mode',0));
 	}
 
 	// Cacheing for spiders
 	if ((running_script('index')) && (count($_POST)==0) && (isset($GLOBALS['SITE_INFO']['fast_spider_cache'])) && (is_guest()))
 	{
 		$bot_type=get_bot_type();
-		if (((!is_null($bot_type)) || ((isset($GLOBALS['SITE_INFO']['any_guest_cached_too'])) && ($GLOBALS['SITE_INFO']['any_guest_cached_too']=='1'))) && (can_fast_spider_cache()))
+		if ((($bot_type!==NULL) || ((isset($GLOBALS['SITE_INFO']['any_guest_cached_too'])) && ($GLOBALS['SITE_INFO']['any_guest_cached_too']=='1'))) && (can_fast_spider_cache()))
 		{
 			$fast_cache_path=get_custom_file_base().'/persistant_cache/'.md5(serialize(get_self_url_easy()));
-			if (is_null($bot_type)) $fast_cache_path.='__non-bot';
+			if ($bot_type===NULL) $fast_cache_path.='__non-bot';
 			if (!array_key_exists('js_on',$_COOKIE)) $fast_cache_path.='__no-js';
 			$fast_cache_path.='.gcd';
 
@@ -887,7 +887,7 @@ function do_site()
 
 	if (!$GLOBALS['QUICK_REDIRECT'])
 	{
-		if (!is_null($out_evaluated))
+		if ($out_evaluated!==NULL)
 		{
 			echo $out_evaluated;
 		} else
@@ -898,7 +898,7 @@ function do_site()
 	}
 
 	// Finally, stats
-	if (!is_null($PAGE_STRING)) log_stats($PAGE_STRING,intval($page_generation_time));
+	if ($PAGE_STRING!==NULL) log_stats($PAGE_STRING,intval($page_generation_time));
 
 	// Track very basic details of what site's use ocPortal. You can remove if you like.
 	if ($ZONE['zone_name']=='adminzone')
@@ -908,14 +908,14 @@ function do_site()
 			global $EXPIRE,$KEY;
 			$timeout_before=@ini_get('default_socket_timeout');
 			@ini_set('default_socket_timeout','3');
-			http_download_file('http://ocportal.com/user.php?url='.urlencode(get_base_url()).'&name='.urlencode(get_site_name()).'&registered=2&key='.(is_null($KEY)?'':strval($KEY)).'&expire='.(is_null($EXPIRE)?'':strval($EXPIRE)).'&version='.urlencode(ocp_version_full()),NULL,false);
+			http_download_file('http://ocportal.com/user.php?url='.urlencode(get_base_url()).'&name='.urlencode(get_site_name()).'&registered=2&key='.(($KEY===NULL)?'':strval($KEY)).'&expire='.(($EXPIRE===NULL)?'':strval($EXPIRE)).'&version='.urlencode(ocp_version_full()),NULL,false);
 			@ini_set('default_socket_timeout',$timeout_before);
 		}
 	}
 
 	// Little disk space check
 	$last_space_check=get_value('last_space_check');
-	if ((is_null($last_space_check)) || (intval($last_space_check)<time()-60*60*3))
+	if (($last_space_check===NULL) || (intval($last_space_check)<time()-60*60*3))
 	{
 		set_value('last_space_check',strval(time()));
 
@@ -946,10 +946,10 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 {
 	global $SITE_INFO;
 
-	if (is_null($zone)) $zone=get_zone_name();
+	if ($zone===NULL) $zone=get_zone_name();
 
 	$details=persistant_cache_get(array('PAGE_INFO',$codename,$required,$zone));
-	if (is_null($details))
+	if ($details===NULL)
 	{
 		$details=_request_page($codename,$zone,$page_type,NULL,$no_redirect_check);
 		persistant_cache_set(array('PAGE_INFO',$codename,$required,$zone),$details);
@@ -969,7 +969,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 	{
 		require_code('hooks/systems/upon_page_load/'.filter_naughty($hook));
 		$ob=object_factory('upon_page_load'.filter_naughty($hook),true);
-		if (is_null($ob)) continue;
+		if ($ob===NULL) continue;
 		$ob->run($codename,$required,$zone,$page_type,$being_included,$details);
 	}
 
@@ -1101,7 +1101,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
  */
 function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_check=false)
 {
-	if (is_null($lang)) $lang=user_lang();
+	if ($lang===NULL) $lang=user_lang();
 
 	if ($codename=='login') // Special case
 	{
@@ -1132,7 +1132,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 	}
 
 	//If we know the page type
-	if (!is_null($page_type))
+	if ($page_type!==NULL)
 	{
 		switch ($page_type)
 		{
@@ -1164,7 +1164,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 					$path=zone_black_magic_filterer($zone.'/pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
 					if (is_file(get_custom_file_base().'/'.$path))
 						return array('COMCODE_CUSTOM',$zone,$codename,$lang,$path);
-					if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) // For multisite instals we also will search the root site's custom Comcode pages
+					if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's custom Comcode pages
 					{
 						$path=zone_black_magic_filterer($zone.'/pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
 						if (is_file(get_file_base().'/'.$path))
@@ -1232,7 +1232,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 		$path=zone_black_magic_filterer($zone.'/pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
 		if (is_file(get_custom_file_base().'/'.$path))
 			return array('COMCODE_CUSTOM',$zone,$codename,$lang,$path);
-		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) // For multisite instals we also will search the root site's custom Comcode pages
+		if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's custom Comcode pages
 		{
 			$path=zone_black_magic_filterer($zone.'/pages/comcode_custom/'.$lang.'/'.$codename.'.txt',true);
 			if (is_file(get_file_base().'/'.$path))
@@ -1274,7 +1274,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 			$path=zone_black_magic_filterer($zone.'/pages/comcode_custom/'.$fallback_lang.'/'.$codename.'.txt',true);
 			if (is_file(get_custom_file_base().'/'.$path))
 				return array('COMCODE_CUSTOM',$zone,$codename,$fallback_lang,$path);
-			if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) // For multisite instals we also will search the root site's custom Comcode pages
+			if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) // For multisite instals we also will search the root site's custom Comcode pages
 			{
 				$path=zone_black_magic_filterer($zone.'/pages/comcode_custom/'.$fallback_lang.'/'.$codename.'.txt',true);
 				if (is_file(get_file_base().'/'.$path))
@@ -1310,7 +1310,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
  */
 function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_included=false)
 {
-	if (is_null($file_base)) $file_base=get_file_base();
+	if ($file_base===NULL) $file_base=get_file_base();
 
 	if (!$being_included) $GLOBALS['TITLE_CALLED']=true;
 
@@ -1327,7 +1327,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	global $PAGE_STRING,$COMCODE_PARSE_TITLE,$LAST_COMCODE_PARSED_TITLE;
 	$COMCODE_PARSE_TITLE=NULL;
-	if (is_null($PAGE_STRING)) $PAGE_STRING=$string;
+	if ($PAGE_STRING===NULL) $PAGE_STRING=$string;
 
 	$new_comcode_page_row=array(
 		'the_zone'=>$zone,
@@ -1350,12 +1350,12 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 			$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index','cc_page_title'),array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()),'',1,0,false,array());
 			if (array_key_exists(0,$comcode_page))
 			{
-				if (!is_null($comcode_page[0]['string_index'])) delete_lang($comcode_page[0]['string_index']);
+				if ($comcode_page[0]['string_index']!==NULL) delete_lang($comcode_page[0]['string_index']);
 				$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_page'=>$codename,'the_zone'=>$zone));
 			}
 		}
 		$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
-		if (!is_null($GLOBALS['MEM_CACHE']))
+		if ($GLOBALS['MEM_CACHE']!==NULL)
 		{
 			if ($support_smart_decaching)
 			{
@@ -1367,7 +1367,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 				$pcache=persistant_cache_get(array('COMCODE_PAGE',$codename,$zone,$theme,user_lang()));
 			}
 		} else $pcache=NULL;
-		if (is_null($pcache))
+		if ($pcache===NULL)
 		{
 			$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('*'),array('a.the_page'=>$codename,'a.the_zone'=>$zone,'the_theme'=>$theme),'',1,NULL,false,array('string_index','cc_page_title'));
 			if (array_key_exists(0,$comcode_page))
@@ -1377,7 +1377,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 					$mtime=filemtime($file_base.'/'.$string);
 					if ($mtime>time()) $mtime=time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
 				}
-				if ((!$support_smart_decaching) || (((!is_null($comcode_page[0]['p_edit_date'])) && ($comcode_page[0]['p_edit_date']>=$mtime)) || ((is_null($comcode_page[0]['p_edit_date'])) && (!is_null($comcode_page[0]['p_add_date'])) && ($comcode_page[0]['p_add_date']>=$mtime)))) // Make sure it has not been edited since last edited or created
+				if ((!$support_smart_decaching) || ((($comcode_page[0]['p_edit_date']!==NULL) && ($comcode_page[0]['p_edit_date']>=$mtime)) || (($comcode_page[0]['p_edit_date']===NULL) && ($comcode_page[0]['p_add_date']!==NULL) && ($comcode_page[0]['p_add_date']>=$mtime)))) // Make sure it has not been edited since last edited or created
 				{
 					$comcode_page_row=$comcode_page[0];
 					$db_set=get_translated_tempcode($comcode_page[0]['string_index'],NULL,user_lang(),true,true,true);
@@ -1398,14 +1398,14 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 				$db_set=NULL;
 				$comcode_page_row=NULL;
 			}
-			if (!is_null($db_set))
+			if ($db_set!==NULL)
 			{
 				$index=$comcode_page[0]['string_index'];
 				$title_to_use=$comcode_page[0]['cc_page_title'];
-				if (!is_null($title_to_use))
+				if ($title_to_use!==NULL)
 				{
 					$title_to_use=get_translated_text($title_to_use,NULL,NULL,true);
-					if (is_null($title_to_use)) $title_to_use=$codename;
+					if ($title_to_use===NULL) $title_to_use=$codename;
 				}
 				$html=$db_set;
 			} else
@@ -1429,7 +1429,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		$new_comcode_page_row['p_add_date']=filectime($file_base.'/'.$string);
 		list($html,$comcode_page_row,$title_to_use)=_load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included);
 	}
-	if ((substr($codename,0,6)!='panel_') && (!is_null($title_to_use)) && (!$being_included))
+	if ((substr($codename,0,6)!='panel_') && ($title_to_use!==NULL) && (!$being_included))
 	{
 		if ($title_to_use!='')
 		{
@@ -1460,16 +1460,16 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 	}
 
 	$warning_details=new ocp_tempcode();
-	if ((!is_null($comcode_page_row['p_validated'])) && ($comcode_page_row['p_validated']==0))
+	if (($comcode_page_row['p_validated']!==NULL) && ($comcode_page_row['p_validated']==0))
 	{
 		require_code('site2');
 		$warning_details=get_page_warning_details($zone,$codename,$edit_url);
 	}
 
-	if ((substr($codename,0,6)!='panel_') && (!is_null($title_to_use)) && (!$being_included))
+	if ((substr($codename,0,6)!='panel_') && ($title_to_use!==NULL) && (!$being_included))
 	{
 		global $PT_PAIR_CACHE_CP;
-		$PT_PAIR_CACHE_CP[$codename]['cc_page_title']=is_null($title_to_use)?do_lang_tempcode('NA_EM'):make_string_tempcode($title_to_use);
+		$PT_PAIR_CACHE_CP[$codename]['cc_page_title']=($title_to_use===NULL)?do_lang_tempcode('NA_EM'):make_string_tempcode($title_to_use);
 		$PT_PAIR_CACHE_CP[$codename]['p_parent_page']=$comcode_page_row['p_parent_page'];
 		$comcode_breadcrumbs=comcode_breadcrumbs($codename,$zone,get_param('root',''),($comcode_page_row['p_parent_page']=='') || !has_specific_permission(get_member(),'open_virtual_roots'));
 		breadcrumb_add_segment($comcode_breadcrumbs);
@@ -1478,7 +1478,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 			'created'=>date('Y-m-d',$comcode_page_row['p_add_date']),
 			'creator'=>(is_guest($comcode_page_row['p_submitter']))?'':$GLOBALS['FORUM_DRIVER']->get_username($comcode_page_row['p_submitter']),
 			'publisher'=>'', // blank means same as creator
-			'modified'=>is_null($comcode_page_row['p_edit_date'])?'':date('Y-m-d',$comcode_page_row['p_edit_date']),
+			'modified'=>($comcode_page_row['p_edit_date']===NULL)?'':date('Y-m-d',$comcode_page_row['p_edit_date']),
 			'type'=>'Comcode page',
 			'title'=>$title_to_use,
 			'identifier'=>$zone.':'.$codename,
@@ -1491,7 +1491,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	global $SCREEN_TEMPLATE_CALLED;
 	$st=$SCREEN_TEMPLATE_CALLED;
-	$ret=do_template('COMCODE_PAGE_SCREEN',array('_GUID'=>'0fc4fe4f27e54aaaa2b7e4848c02bacb','SUBMITTER'=>strval($comcode_page_row['p_submitter']),'TAGS'=>get_loaded_tags('comcode_pages'),'WARNING_DETAILS'=>$warning_details,'EDIT_DATE_RAW'=>is_null($comcode_page_row['p_edit_date'])?'':strval($comcode_page_row['p_edit_date']),'SHOW_AS_EDIT'=>$comcode_page_row['p_show_as_edit']==1,'CONTENT'=>$html,'EDIT_URL'=>$edit_url,'ADD_CHILD_URL'=>$add_child_url,'NAME'=>$codename));
+	$ret=do_template('COMCODE_PAGE_SCREEN',array('_GUID'=>'0fc4fe4f27e54aaaa2b7e4848c02bacb','SUBMITTER'=>strval($comcode_page_row['p_submitter']),'TAGS'=>get_loaded_tags('comcode_pages'),'WARNING_DETAILS'=>$warning_details,'EDIT_DATE_RAW'=>($comcode_page_row['p_edit_date']===NULL)?'':strval($comcode_page_row['p_edit_date']),'SHOW_AS_EDIT'=>$comcode_page_row['p_show_as_edit']==1,'CONTENT'=>$html,'EDIT_URL'=>$edit_url,'ADD_CHILD_URL'=>$add_child_url,'NAME'=>$codename));
 	if (substr($codename,0,6)=='panel_')
 	{
 		$SCREEN_TEMPLATE_CALLED=$st;
@@ -1524,8 +1524,8 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 		if ($no_link_for_me_sir) return new ocp_tempcode();
 		$_title=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','cc_page_title',array('the_page'=>$the_page,'the_zone'=>$the_zone));
 		$title=NULL;
-		if (!is_null($_title)) $title=get_translated_text($_title,NULL,NULL,true);
-		if (is_null($_title)) $title=escape_html($the_page);
+		if ($_title!==NULL) $title=get_translated_text($_title,NULL,NULL,true);
+		if ($_title===NULL) $title=escape_html($the_page);
 		return hyperlink($url,$title,false,false,do_lang_tempcode('GO_BACKWARDS_TO',@html_entity_decode(strip_tags($title),ENT_QUOTES,get_charset())),NULL,NULL,'up');
 	}
 
@@ -1549,13 +1549,13 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 		{
 			$PT_PAIR_CACHE_CP[$the_page]=$page_rows[0];
 			$_title=get_translated_text($PT_PAIR_CACHE_CP[$the_page]['cc_page_title'],NULL,NULL,true);
-			if (is_null($_title)) $_title=$the_page;
+			if ($_title===NULL) $_title=$the_page;
 			$PT_PAIR_CACHE_CP[$the_page]['cc_page_title']=$_title;
 		}
 	}
 
 	$title=$PT_PAIR_CACHE_CP[$the_page]['cc_page_title'];
-	if (is_null($title)) $title=$the_page;
+	if ($title===NULL) $title=$the_page;
 	if (!$no_link_for_me_sir)
 	{
 		$tpl_url=($PT_PAIR_CACHE_CP[$the_page]['p_parent_page']=='')?new ocp_tempcode():do_template('BREADCRUMB_ESCAPED');
@@ -1595,7 +1595,7 @@ function log_stats($string,$pg_time)
 
 	if ((get_option('site_closed')=='1') && (get_option('no_stats_when_closed',true)==='1')) return;
 
-	if ((get_option('super_logging')=='1') || (!is_null(get_param('track',NULL))))
+	if ((get_option('super_logging')=='1') || (get_param('track',NULL)!==NULL))
 	{
 		$get=substr(flatten_slashed_array($_GET),0,255);
 		$post2=$_POST;
@@ -1616,9 +1616,9 @@ function log_stats($string,$pg_time)
 	$referer=substr(ocp_srv('HTTP_REFERER'),0,255);
 	$browser=substr(get_browser_string(),0,255);
 	$os=substr(get_os_string(),0,255);
-	if (is_null($os)) $os='';
+	if ($os===NULL) $os='';
 
-	if ((get_option('no_bot_stats',true)==='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (!is_null(get_bot_type())))) return;
+	if ((get_option('no_bot_stats',true)==='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (get_bot_type()!==NULL))) return;
 
 	$GLOBALS['SITE_DB']->query_insert('stats',array('access_denied_counter'=>0,'browser'=>$browser,'operating_system'=>$os,'the_page'=>$page,'ip'=>$ip,'the_user'=>$member,'date_and_time'=>$time,'referer'=>$referer,'get'=>$get,'post'=>$post,'milliseconds'=>intval($pg_time*1000)));
 	if (mt_rand(0,1000)==1) $GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*intval(get_option('stats_store_time'))));

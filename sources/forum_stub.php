@@ -252,7 +252,7 @@ class forum_driver_base
 	function get_super_admin_groups()
 	{
 		global $ADMIN_GROUP_CACHE;
-		if (!is_null($ADMIN_GROUP_CACHE)) return $ADMIN_GROUP_CACHE;
+		if ($ADMIN_GROUP_CACHE!==NULL) return $ADMIN_GROUP_CACHE;
 
 		$ret=$this->_get_super_admin_groups();
 		$ADMIN_GROUP_CACHE=$ret;
@@ -312,7 +312,12 @@ class forum_driver_base
 	 */
 	function get_members_groups($id,$skip_secret=false,$handle_probation=true)
 	{
-		if ((is_guest($id)) && (get_forum_type()=='ocf')) return array(db_get_first_id());
+		if ((is_guest($id)) && (get_forum_type()=='ocf'))
+		{
+			static $ret=NULL;
+			if ($ret===NULL) $ret=array(db_get_first_id());
+			return $ret;
+		}
 	
 		global $USERS_GROUPS_CACHE;
 		if (isset($USERS_GROUPS_CACHE[$id][$skip_secret][$handle_probation])) return $USERS_GROUPS_CACHE[$id][$skip_secret][$handle_probation];
@@ -371,9 +376,9 @@ class forum_driver_base
 
 		// Try hardcoded in ocPortal
 		global $ZONE;
-		$zone_theme=is_null($ZONE)?$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
+		$zone_theme=($ZONE===NULL)?$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
 		$default_theme=((get_page_name()=='login') && (get_option('root_zone_login_theme')=='1'))?$GLOBALS['SITE_DB']->query_value('zones','zone_theme',array('zone_name'=>'')):$zone_theme;
-		if ((!is_null($default_theme)) && ($default_theme!='-1'))
+		if (($default_theme!==NULL) && ($default_theme!='-1'))
 		{
 			global $SITE_INFO;
 			if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))

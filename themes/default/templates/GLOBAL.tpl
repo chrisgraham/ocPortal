@@ -92,17 +92,7 @@
 			{+END}
 			<{$?,{$VALUE_OPTION,html5},article,div} id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle dequirk" style="width: {$GET,middle_width}{+START,IF,{$NEQ,{$GET,left_width},0}}; padding-{!en_left}: 10px; margin-{!en_left}: {$GET,left_width}{+END}{+START,IF,{$NEQ,{$GET,right_width},0}}; padding-{!en_right}: 10px; margin-{!en_right}: {$GET,right_width}{+END}">
 				<div id="global_middle_ph">
-					{$,Out side Admin Zone we have the banner}
-					{+START,IF,{$NOT,{$_GET,wide_high}}}
-						{+START,IF,{$NOT,{$OR,{$EQ,{$ZONE},adminzone},{$EQ,{$ZONE},cms}}}}{+START,IF,{$NOT,{$MOBILE}}}
-							{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
-							{+START,IF_NON_EMPTY,{$GET,BANNER}}
-								<div class="global_banner" style="text-align: {!en_right}">{$GET,BANNER}</div>
-							{+END}
-						{+END}{+END}
-					{+END}
-
-					{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NOT,{$MATCH_KEY_MATCH,:start}}}
+					{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}
 						<div class="breadcrumbs breadcrumbs_always">
 							<img class="breadcrumbs_img" src="{$IMG*,treenav}" title="{!YOU_ARE_HERE}" alt="{!YOU_ARE_HERE}" />
 							{BREADCRUMBS}
@@ -145,7 +135,7 @@
 		<div class="top_level_wrap">
 			<div id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle dequirk">
 				<div id="global_middle_ph">
-					{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NOT,{$MATCH_KEY_MATCH,:start}}}
+					{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}
 						<{$?,{$VALUE_OPTION,html5},nav,div} class="breadcrumbs breadcrumbs_always"{$?,{$VALUE_OPTION,html5}, itemprop="breadcrumb"}>
 							{BREADCRUMBS}
 						</{$?,{$VALUE_OPTION,html5},nav,div}>

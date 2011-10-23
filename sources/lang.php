@@ -152,21 +152,24 @@ function init__lang()
  */
 function open_page_cache_file()
 {
-	global $PAGE_CACHE_FILE,$PAGE_CACHE_LAZY_LOAD;
-	if ($PAGE_CACHE_FILE===NULL) return;
-	if (!is_string($PAGE_CACHE_FILE)) return;
-	$cache_path=$PAGE_CACHE_FILE;
-	$PAGE_CACHE_FILE=@fopen($cache_path,'at');
-	if ($PAGE_CACHE_FILE!==false)
+	if ($GLOBALS['MEM_CACHE']===NULL)
 	{
-		if (!$PAGE_CACHE_LAZY_LOAD)
+		global $PAGE_CACHE_FILE,$PAGE_CACHE_LAZY_LOAD;
+		if ($PAGE_CACHE_FILE===NULL) return;
+		if (!is_string($PAGE_CACHE_FILE)) return;
+		$cache_path=$PAGE_CACHE_FILE;
+		$PAGE_CACHE_FILE=@fopen($cache_path,'at');
+		if ($PAGE_CACHE_FILE!==false)
 		{
-			require_code('files');
-			fix_permissions($cache_path,0666);
+			if (!$PAGE_CACHE_LAZY_LOAD)
+			{
+				require_code('files');
+				fix_permissions($cache_path,0666);
+			}
+		} else
+		{
+			$PAGE_CACHE_FILE=NULL;
 		}
-	} else
-	{
-		$PAGE_CACHE_FILE=NULL;
 	}
 }
 

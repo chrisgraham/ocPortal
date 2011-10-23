@@ -798,16 +798,22 @@ function do_block_hunt_file($codename,$map=NULL)
 		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources_custom/blocks/'.$codename.'.php');
 		$_REQUIRED_CODE['blocks/'.$codename]=1;
 
-		$BLOCKS_AT_CACHE[$codename]='sources_custom/blocks';
-		if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+		if (!isset($BLOCKS_AT_CACHE[$codename]))
+		{
+			$BLOCKS_AT_CACHE[$codename]='sources_custom/blocks';
+			if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+		}
 	}
 	elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/blocks/'.$codename.'.php'))))
 	{
 		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources/blocks/'.$codename.'.php');
 		$_REQUIRED_CODE['blocks/'.$codename]=1;
 
-		$BLOCKS_AT_CACHE[$codename]='sources/blocks';
-		if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+		if (!isset($BLOCKS_AT_CACHE[$codename]))
+		{
+			$BLOCKS_AT_CACHE[$codename]='sources/blocks';
+			if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+		}
 	}
 	else
 	{
@@ -827,8 +833,11 @@ function do_block_hunt_file($codename,$map=NULL)
 			ob_end_clean();
 			restrictify();
 
-			$BLOCKS_AT_CACHE[$codename]='sources_custom/miniblocks';
-			if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+			if (!isset($BLOCKS_AT_CACHE[$codename]))
+			{
+				$BLOCKS_AT_CACHE[$codename]='sources_custom/miniblocks';
+				if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+			}
 		}
 		elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/miniblocks/'.$codename.'.php'))))
 		{
@@ -846,8 +855,11 @@ function do_block_hunt_file($codename,$map=NULL)
 			ob_end_clean();
 			restrictify();
 
-			$BLOCKS_AT_CACHE[$codename]='sources/miniblocks';
-			if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+			if (!isset($BLOCKS_AT_CACHE[$codename]))
+			{
+				$BLOCKS_AT_CACHE[$codename]='sources/miniblocks';
+				if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+			}
 		} elseif ((is_null($map)) || (!array_key_exists('failsafe',$map)) || ($map['failsafe']!='1'))
 		{
 			$temp=paragraph(do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename)),'90dfdlksds8d7dyddssdds','error_marker');

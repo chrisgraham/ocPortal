@@ -48,7 +48,7 @@ class apccache
 	function set($key,$data,$flags,$expire_secs)
 	{
 		unset($flags);
-		
+
 		// Update list of e-objects
 		global $ECACHE_OBJECTS;
 		if (!isset($ECACHE_OBJECTS[$key]))

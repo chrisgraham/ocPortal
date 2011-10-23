@@ -2,12 +2,12 @@
 	<p class="nothing_here">{!NO_PAGE_OUTPUT}</p>
 {+END}{+END}
 
-{+START,IF,{$OR,{$NOR,{$EQ,{NAME},panel_top},{$EQ,{NAME},panel_left},{$EQ,{NAME},panel_right}},{$IS_NON_EMPTY,{$TRIM,{CONTENT}}}}}
+{+START,IF,{$OR,{$NEQ,{NAME},panel_top,panel_left,panel_right},{$IS_NON_EMPTY,{$TRIM,{CONTENT}}}}}
 	{WARNING_DETAILS}
 
 	{$TRIM,{CONTENT}}
 
-	{+START,IF,{$AND,{SHOW_AS_EDIT},{$IS_NON_EMPTY,{EDIT_DATE_RAW}}}}
+	{+START,IF,{SHOW_AS_EDIT}}{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
 		<div class="edited edited_block">
 			<img alt="" title="" src="{$IMG*,edited}" />
 			{!EDITED}
@@ -18,18 +18,18 @@
 				{$DATE*,{EDIT_DATE_RAW}}
 			{+END}
 		</div>
-	{+END}
+	{+END}{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF,{$NEQ,{$SUBSTR,{NAME},0,6},rules,start,panel_}}{$BLOCK,failsafe=1,block=main_screen_actions}{+END}{+END}
 
 	{+START,IF_NON_EMPTY,{EDIT_URL}}
-		{+START,IF,{$OR,{$EQ,{NAME},panel_left},{$EQ,{NAME},panel_right}}}
+		{+START,IF,{$EQ,{NAME},panel_left,panel_right}}
 			<p class="mini_edit_me">
 				[ <a href="{EDIT_URL*}" title="{!EDIT_ZONE_EDITOR}: {NAME*} ({!IN,&quot;{$?,{$IS_EMPTY,{$ZONE}},{!_WELCOME},{$ZONE*}}&quot;})">{!EDIT_ZONE_EDITOR}</a>
 				<img class="comcode_button" title="{!_COMCODE}" alt="{!_COMCODE}" src="{$IMG*,comcode}" /> ]
 			</p>
 		{+END}
-		{+START,IF,{$OR,{$EQ,{NAME},panel_top},{$EQ,{NAME},panel_bottom}}}
+		{+START,IF,{$EQ,{NAME},panel_top,panel_bottom}}
 			<a class="edit_menu_link_inline" href="{EDIT_URL*}"><img class="comcode_button" title="{!EDIT_PAGE}" alt="{!EDIT_PAGE}" src="{$IMG*,comcode}" /></a>
 		{+END}
 	{+END}

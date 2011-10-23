@@ -74,6 +74,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 {
 	global $TEMPCODE_SETGET,$CYCLES,$PREPROCESSABLE_SYMBOLS;
 
+	//echo '<!--'.$name.'-->'."\n";
+
 	if ($type==TC_SYMBOL)
 	{
 		$escaped_codes=$name.(($escaped==array())?'':serialize($escaped));
@@ -511,9 +513,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'TRIM':
 				if (isset($param[0]))
 				{
-					$value=$param[0];
-					$value=preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$value);
-					$value=preg_replace('#((\s)|(<br\s*/?'.'>)|(&nbsp;))*$#','',$value);
+					$value=preg_replace(array('#^\s+#','#^(<br\s*/?'.'>)+#','#^(&nbsp;)+#','#\s+$#','#(<br\s*/?'.'>)+$#','#(&nbsp;)+$#'),array('','','','','',''),$param[0]);
 				}
 				break;
 

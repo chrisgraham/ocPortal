@@ -26,7 +26,7 @@ $SITE_INFO['db_forums_user']='root';
 $SITE_INFO['db_forums_password']='';
 $SITE_INFO['ocf_table_prefix']='ocp_';
 
-$SITE_INFO['disable_smart_decaching']='0'; // Don't check file times to check caches aren't stale
+$SITE_INFO['disable_smart_decaching']='1'; // Don't check file times to check caches aren't stale
 $SITE_INFO['no_disk_sanity_checks']='1'; // Assume that there are no missing language directories, or other configured directories; things may crash horribly if they are missing and this is enabled
 $SITE_INFO['hardcode_common_module_zones']='1'; // Don't search for common modules, assume they are in default positions
 $SITE_INFO['prefer_direct_code_call']='1'; // Assume a good opcode cache is present, so load up full code files via this rather than trying to save RAM by loading up small parts of files on occasion

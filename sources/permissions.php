@@ -61,9 +61,7 @@ function init__permissions()
 function handle_permission_check_logging($member,$op,$params,$result)
 {
 	global $PERMISSION_CHECK_LOGGER,$PERMISSIONS_ALREADY_LOGGED,$SITE_INFO;
-	$sz=serialize(array($member,$op,$params));
-	if (array_key_exists($sz,$PERMISSIONS_ALREADY_LOGGED)) return;
-	if (is_null($PERMISSION_CHECK_LOGGER))
+	if ($PERMISSION_CHECK_LOGGER===NULL)
 	{
 		$file_path=get_custom_file_base().'/data_custom/permissioncheckslog.php';
 		if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']=='0')) && (is_file($file_path)) && (is_writable_wrap($file_path)))
@@ -75,7 +73,11 @@ function handle_permission_check_logging($member,$op,$params,$result)
 			fwrite($PERMISSION_CHECK_LOGGER,chr(10).chr(10).date('Y/m/d h:m:i').' -- '.$self_url.' -- '.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).chr(10));
 		} else $PERMISSION_CHECK_LOGGER=false;
 	}
-	if (($PERMISSION_CHECK_LOGGER===false) && ((!function_exists('fb')) || (get_param_integer('keep_firephp',0)==0))) return;
+	static $fbe=NULL;
+	if ($fbe===NULL) $fbe=function_exists('fb');
+	if (($PERMISSION_CHECK_LOGGER===false) && ((!$fbe) || (get_param_integer('keep_firephp',0)==0))) return;
+	$sz=serialize(array($member,$op,$params));
+	if (array_key_exists($sz,$PERMISSIONS_ALREADY_LOGGED)) return;
 	$PERMISSIONS_ALREADY_LOGGED[$sz]=1;
 	if ($result) return;
 	require_code('permissions2');
@@ -549,7 +551,7 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 		}
 		$result=false;
 
-		handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+		handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),($cats===NULL)?array():$cats),$result);
 		return $result;
 	}
 

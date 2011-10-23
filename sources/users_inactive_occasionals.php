@@ -126,10 +126,11 @@ function create_session($member)
 	global $SESSION_CACHE;
 	
 	// Get back to prior session if there was one
+	$new_session=NULL;
+	$new_session_row=NULL;
 	if (!is_guest($member))
 	{
 		$ip=get_ip_address(3);
-		$new_session=NULL;
 		if (get_value('allowed_shared_usernames')!=='1')
 		{
 			foreach ($SESSION_CACHE as $_session=>$row)
@@ -139,6 +140,7 @@ function create_session($member)
 				if (($row['the_user']==$member) && ((get_option('ip_strict_for_sessions')=='0') || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
 				{
 					$new_session=$_session;
+					$new_session_row=$row;
 					break;
 				}
 			}
@@ -146,7 +148,6 @@ function create_session($member)
 	} else
 	{
 		// If it is refusing to store even a guest session, then we will try and force the issue by binding to a guest session with a similar IP
-		$new_session=NULL;
 		$ip3part=get_ip_address(3);
 		foreach ($SESSION_CACHE as $_session=>$row)
 		{
@@ -155,6 +156,7 @@ function create_session($member)
 			if ((is_guest($row['the_user'])) && ($row['ip']==$ip3part))
 			{
 				$new_session=$_session;
+				$new_session_row=$row;
 				break;
 			}
 		}
@@ -170,16 +172,24 @@ function create_session($member)
 		$GLOBALS['SITE_DB']->query_insert('sessions',$row);
 
 		$SESSION_CACHE[$new_session]=$row;
+		$new_session_row=$row;
+
+		$big_change=true;
 	} else
 	{
+		$big_change=false;
+
 		$row=array('last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>0);
-		$GLOBALS['SITE_DB']->query_update('sessions',$row,array('the_session'=>$new_session,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>get_param('type','',true),'the_id'=>either_param('id','',true)),'',1);
+		$big_change=($new_session_row['last_activity']<time()-10) || ($new_session_row['session_confirmed']!=0) || ($new_session_row['ip']!=$row['ip']);
+		if ($big_change)
+			$GLOBALS['SITE_DB']->query_update('sessions',$row,array('the_session'=>$new_session,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>get_param('type','',true),'the_id'=>either_param('id','',true)),'',1);
 
 		$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$row);
 	}
 	if (get_value('session_prudence')!=='1')
 	{
-		persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+		if ($big_change)
+			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}
 
 	set_session_id($new_session/*,true*/); // We won't set it true here, but something that really needs it to persist might come back and re-set it

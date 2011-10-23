@@ -234,7 +234,7 @@ function init__global2()
 	}
 
 	$JAVASCRIPTS=array('javascript'=>1,'javascript_thumbnails'=>1);
-	if ((!is_null($GLOBALS['CURRENT_SHARE_USER'])) || (get_domain()=='myocp.com')) $JAVASCRIPTS['javascript_ajax']=1;
+	if (($GLOBALS['CURRENT_SHARE_USER']!==NULL) || (get_domain()=='myocp.com')) $JAVASCRIPTS['javascript_ajax']=1;
 	$CSSS=array('no_cache'=>1,'global'=>1);
 
 	// Try and make the PHP environment as we need it
@@ -296,7 +296,7 @@ function init__global2()
 		if ((running_script('index')) && (count($_POST)==0))
 		{
 			$bot_type=get_bot_type();
-			if ((!is_null($bot_type)) && (isset($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='0'))
+			if (($bot_type!==NULL) && (isset($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='0'))
 			{
 				fast_spider_cache(true);
 			}
@@ -558,10 +558,10 @@ function init__global2()
 		{
 			require_code('hooks/systems/startup/'.filter_naughty_harsh($hook));
 			$ob=object_factory('Hook_startup_'.filter_naughty_harsh($hook),true);
-			if (is_null($ob)) continue;
+			if ($ob===NULL) continue;
 			$ob->run($MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,0);
 		}
-		if ((!is_null($CURRENT_SHARE_USER)) && (float_to_raw_string(ocp_version_number())!=get_value('version')))
+		if (($CURRENT_SHARE_USER!==NULL) && (float_to_raw_string(ocp_version_number())!=get_value('version')))
 		{
 			require_code('upgrade');
 			clear_caches_2();
@@ -682,7 +682,7 @@ function get_charset()
 	if (function_exists('do_lang'))
 	{
 		$attempt=do_lang('charset',NULL,NULL,NULL,NULL,false);
-		if (!is_null($attempt))
+		if ($attempt!==NULL)
 		{
 			$CHARSET=$attempt;
 			return $attempt;
@@ -733,7 +733,7 @@ function get_charset()
  */
 function load_user_stuff()
 {
-	if ((!array_key_exists('FORUM_DRIVER',$GLOBALS)) || (is_null($GLOBALS['FORUM_DRIVER']))) // Second clause is for Quercus, as it pre-NULLs referenced variables
+	if ((!array_key_exists('FORUM_DRIVER',$GLOBALS)) || ($GLOBALS['FORUM_DRIVER']===NULL)) // Second clause is for Quercus, as it pre-NULLs referenced variables
 	{
 		global $SITE_INFO;
 		require_code('forum_stub');
@@ -1137,7 +1137,7 @@ function in_safe_mode()
 	global $CHECKING_SAFEMODE;
 	if ($CHECKING_SAFEMODE) return false; // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
 	$CHECKING_SAFEMODE=true;
-	$ret=((get_param_integer('keep_safe_mode',0)==1) && ((isset($GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['IS_ACTUALLY_ADMIN'])) || (!array_key_exists('FORUM_DRIVER',$GLOBALS)) || (is_null($GLOBALS['FORUM_DRIVER'])) || (!function_exists('get_member')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))));
+	$ret=((get_param_integer('keep_safe_mode',0)==1) && ((isset($GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['IS_ACTUALLY_ADMIN'])) || (!array_key_exists('FORUM_DRIVER',$GLOBALS)) || ($GLOBALS['FORUM_DRIVER']===NULL) || (!function_exists('get_member')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))));
 	$CHECKING_SAFEMODE=false;
 	return $ret;
 }
@@ -1228,8 +1228,8 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		get_zone_name();
 	}
 
-	if (($BASE_URL_HTTP!==NULL) && (!$https) && ((!$VIRTUALISED_ZONES) || (is_null($zone_for)))) return $BASE_URL_HTTP.(($zone_for=='')?'':('/'.$zone_for));
-	if (($BASE_URL_HTTPS!==NULL) && ($https) && ((!$VIRTUALISED_ZONES) || (is_null($zone_for)))) return $BASE_URL_HTTPS.(($zone_for=='')?'':('/'.$zone_for));
+	if (($BASE_URL_HTTP!==NULL) && (!$https) && ((!$VIRTUALISED_ZONES) || ($zone_for===NULL))) return $BASE_URL_HTTP.(($zone_for=='')?'':('/'.$zone_for));
+	if (($BASE_URL_HTTPS!==NULL) && ($https) && ((!$VIRTUALISED_ZONES) || ($zone_for===NULL))) return $BASE_URL_HTTPS.(($zone_for=='')?'':('/'.$zone_for));
 
 	global $SITE_INFO;
 	if ((!isset($SITE_INFO)) || (!array_key_exists('base_url',$SITE_INFO)) || ($SITE_INFO['base_url']=='')) // Try and autodetect the base URL if it's not configured
@@ -1244,14 +1244,14 @@ function get_base_url($https=NULL,$zone_for=NULL)
 
 	$base_url=$SITE_INFO['base_url'];
 	global $CURRENT_SHARE_USER;
-	if (!is_null($CURRENT_SHARE_USER))
+	if ($CURRENT_SHARE_USER!==NULL)
 	{
 		$base_url=preg_replace('#^http://([\w]+\.)?'.str_replace('#','\#',preg_quote($SITE_INFO['custom_share_domain'])).'#','http://'.ocp_srv('HTTP_HOST'),$base_url);
 	}
 	$found_mapping=false;
 	if ($VIRTUALISED_ZONES)
 	{
-		$zone_doing=(is_null($zone_for))?'':str_replace('/','',$zone_for);
+		$zone_doing=($zone_for===NULL)?'':str_replace('/','',$zone_for);
 
 		if (array_key_exists('ZONE_MAPPING_'.$zone_doing,$SITE_INFO))
 		{
@@ -1267,8 +1267,8 @@ function get_base_url($https=NULL,$zone_for=NULL)
 	{
 		$base_url='https://'.preg_replace('#^\w*://#','',$base_url);
 		substr($base_url,strlen('http://'));
-		if ((!$VIRTUALISED_ZONES) || (is_null($zone_for))) $BASE_URL_HTTPS=$base_url;
-	} elseif ((!$VIRTUALISED_ZONES) || (is_null($zone_for))) $BASE_URL_HTTP=$base_url;
+		if ((!$VIRTUALISED_ZONES) || ($zone_for===NULL)) $BASE_URL_HTTPS=$base_url;
+	} elseif ((!$VIRTUALISED_ZONES) || ($zone_for===NULL)) $BASE_URL_HTTP=$base_url;
 
 	if (!$found_mapping)
 	{
@@ -1291,7 +1291,7 @@ function get_custom_base_url($https=NULL)
 	
 	// Note that HTTPS is not supported for shared installs
 	$u=current_share_user();
-	if (is_null($u)) return get_base_url($https);
+	if ($u===NULL) return get_base_url($https);
 	return $SITE_INFO['custom_base_url_stub'].'/'.$u;
 }
 
@@ -1469,7 +1469,7 @@ function simulated_wildcard_match($context,$word,$full_cover=false)
 function either_param_integer($name,$default=false)
 {
 	$ret=__param(array_merge($_POST,$_GET),$name,($default===false)?$default:(($default===NULL)?'':strval($default)),true,NULL); // $_REQUEST contains cookies too, so can't use
-	if ((is_null($default)) && ($ret==='')) return NULL;
+	if (($default===NULL) && ($ret==='')) return NULL;
 	$ret=trim($ret);
 	if (!is_numeric($ret))
 	{
@@ -1528,8 +1528,9 @@ function post_param_integer($name,$default=false)
 function get_param_integer($name,$default=false,$not_string_ok=false)
 {
 	$m_default=($default===false)?false:(isset($default)?(($default==0)?'0':strval($default)):'');
-	$ret=trim(__param($_GET,$name,$m_default,true)); // do not set $ret to mixed(), breaks bootstrapping
+	$ret=__param($_GET,$name,$m_default,true); // do not set $ret to mixed(), breaks bootstrapping
 	if ((!isset($default)) && ($ret==='')) return NULL;
+	$ret=trim($ret);
 	if (!is_numeric($ret))
 	{
 		if (substr($ret,-1)=='/') $ret=substr($ret,0,strlen($ret)-1);
@@ -1597,13 +1598,13 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 {
 	if (get_param_integer('keep_textonly',0)==1) return '';
 
-	if (is_null($minify))
+	if ($minify===NULL)
 		$minify=(get_param_integer('keep_no_minify',0)==0);
 
 	global $SITE_INFO;
 
 	// Make sure the Javascript exists
-	if (is_null($theme))
+	if ($theme===NULL)
 		$theme=filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme());
 	$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
 	if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
@@ -1632,7 +1633,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 	if (($support_smart_decaching) || (!$is_cached))
 	{
 		$found=find_template_place(strtoupper($j),'',$theme,'.tpl','templates');
-		if (is_null($found)) return '';
+		if ($found===NULL) return '';
 		$theme=$found[0];
 		$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].strtoupper($j).'.tpl';
 		if (!is_file($fullpath))
@@ -1820,7 +1821,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
 	{
 		$found=find_template_place($c,'',$theme,'.css','css');
-		if (is_null($found)) return '';
+		if ($found===NULL) return '';
 		$theme=$found[0];
 		$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].$c.'.css';
 		if (!is_file($fullpath))
@@ -1828,7 +1829,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 		if (($text_only) && (!is_file($fullpath))) return '';
 	}
 
-	if ((($support_smart_decaching) && (@(filemtime($css_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time()))))
+	if (((!$is_cached) || (($support_smart_decaching) && (@(filemtime($css_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time())))))
 	{
 		require_code('css_and_js');
 		css_compile($theme,$c,$fullpath,$css_cache_path,$minify);
@@ -1878,7 +1879,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 			{
 				$_css=do_template($c,NULL,user_lang(),false,NULL,'.css','css',$theme);
 				$__css=$_css->evaluate();
-				if (!is_null($context))
+				if ($context!==NULL)
 				{
 					$__css=filter_css($__css,$context);
 				} else

@@ -29,7 +29,7 @@ function init__config()
 		load_options();
 
 		$VALUES=persistant_cache_get('VALUES');
-		if (is_null($VALUES))
+		if ($VALUES===NULL)
 		{
 			$VALUES=$GLOBALS['SITE_DB']->query_select('values',array('*'));
 			$VALUES=list_to_map('the_name',$VALUES);
@@ -140,7 +140,7 @@ function load_options()
 {
 	global $OPTIONS;
 	$OPTIONS=function_exists('persistant_cache_get')?persistant_cache_get('OPTIONS'):NULL;
-	if (!is_null($OPTIONS)) return;
+	if ($OPTIONS!==NULL) return;
 	if (strpos(get_db_type(),'mysql')!==false)
 	{
 		global $SITE_INFO;
@@ -150,7 +150,7 @@ function load_options()
 		$OPTIONS=$GLOBALS['SITE_DB']->query_select('config',array('the_name','config_value','the_type','c_set'),NULL,'',NULL,NULL,true);
 	}
 
-	if (is_null($OPTIONS)) critical_error('DATABASE_FAIL');
+	if ($OPTIONS===NULL) critical_error('DATABASE_FAIL');
 	$OPTIONS=list_to_map('the_name',$OPTIONS);
 	if (function_exists('persistant_cache_set')) persistant_cache_set('OPTIONS',$OPTIONS);
 }
@@ -315,7 +315,7 @@ function get_option($name,$missing_ok=false)
 
 	// Redundant, quick exit points
 	$type=$option['the_type'];
-	if (!isset($option['c_set'])) $option['c_set']=is_null($option['config_value'])?0:1; // for compatibility during upgrades
+	if (!isset($option['c_set'])) $option['c_set']=($option['config_value']===NULL)?0:1; // for compatibility during upgrades
 	if (($option['c_set']==1) && ($type!='transline') && ($type!='transtext'))
 	{
 		//@print_r($OPTIONS);	exit($name.'='.gettype($option['config_value_translated']));
@@ -354,7 +354,7 @@ function get_option($name,$missing_ok=false)
 				if (get_value('setup_wizard_completed')==='1')
 				{
 					require_code('config2');
-					set_option($name,is_null($option['config_value_translated'])?'<null>':$option['config_value_translated']);
+					set_option($name,($option['config_value_translated']===NULL)?'<null>':$option['config_value_translated']);
 				}
 			}
 			if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
@@ -381,7 +381,7 @@ function get_option($name,$missing_ok=false)
 			if (get_value('setup_wizard_completed')==='1')
 			{
 				require_code('config2');
-				set_option($name,is_null($option['config_value'])?'<null>':$option['config_value']);
+				set_option($name,($option['config_value']===NULL)?'<null>':$option['config_value']);
 			}
 		}
 		if (is_object($option['config_value'])) $option['config_value']=$option['config_value']->evaluate(); elseif (is_integer($option['config_value'])) $option['config_value']=strval($option['config_value']);

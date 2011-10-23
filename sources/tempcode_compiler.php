@@ -275,11 +275,27 @@ function compile_template($data,$template_name,$theme,$lang)
 						{
 							$_opener_params.=',"0","'.php_addslashes($theme).'"';
 						}
+						
+						if ($first_param=='"?"')
+						{
+							if (implode('.',$opener_params[0])=='"1".""')
+							{
+								if (isset($opener_params[1]))
+									$current_level_data[]=implode('.',$opener_params[1]);
+								break;
+							}
+							if ((implode('.',$opener_params[0])=='"0".""') || (implode('.',$opener_params[0])=='""'))
+							{
+								if (isset($opener_params[2]))
+									$current_level_data[]=implode('.',$opener_params[2]);
+								break;
+							}
+						}
 
 						if ($first_param!='""')
 						{
 							$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_SYMBOL).','.$first_param.',array('.$_opener_params.'))';
-							if ((in_array($first_param,$compilable_symbols)) && (preg_match('#^[\w\d:\-\_",/]*$#',$_opener_params)!=0)) // Can optimise out?
+							if ((in_array($first_param,$compilable_symbols)) && (preg_match('#^[^\(\)]*$#',$_opener_params)!=0)) // Can optimise out?
 							{
 								$new_line='"'.php_addslashes(eval('return '.$new_line.';')).'"';
 							}

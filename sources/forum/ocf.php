@@ -119,7 +119,9 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_guest_id()
 	{
-		return db_get_first_id();
+		static $ret=NULL;
+		if ($ret===NULL) $ret=db_get_first_id();
+		return $ret;
 	}
 	
 	/**
@@ -1227,7 +1229,7 @@ class forum_driver_ocf extends forum_driver_base
 	
 		$skip_auth=false;
 
-		if (is_null($userid))
+		if ($userid===NULL)
 		{
 			/*if ((strpos($username,'.')!==false) && (strpos($username,'@')!==false))
 			{
@@ -1351,7 +1353,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		// LDAP to the rescue if we couldn't get a row
 		global $LDAP_CONNECTION;
-		if ((!array_key_exists(0,$rows)) && (!is_null($LDAP_CONNECTION)) && (is_null($userid)))
+		if ((!array_key_exists(0,$rows)) && ($LDAP_CONNECTION!==NULL) && ($userid===NULL))
 		{
 			// See if LDAP has it -- if so, we can add
 			$test=ocf_is_on_ldap($username);
@@ -1388,7 +1390,7 @@ class forum_driver_ocf extends forum_driver_base
 			}
 		}
 
-		if ((!array_key_exists(0,$rows)) || (is_null($rows[0]))) // All hands to lifeboats
+		if ((!array_key_exists(0,$rows)) || ($rows[0]===NULL)) // All hands to lifeboats
 		{
 			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
 			return $out;

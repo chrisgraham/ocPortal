@@ -327,9 +327,10 @@ function closure_loop($param,$args,$main_function)
  */
 function make_string_tempcode($string)
 {
-	$tempcode=new ocp_tempcode();
-	$tempcode->attach($string);
-	return $tempcode;
+	$myfunc='string_attach_'.uniqid('',true)/*fast_uniqid()*/;
+	$code_to_preexecute="\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($string)."\\\";\";\n";
+	$seq_parts=array(array($myfunc,array(),TC_KNOWN,'',''));
+	return new ocp_tempcode(array($code_to_preexecute,$seq_parts));
 }
 
 /**

@@ -142,7 +142,7 @@ Copyright ocProducts Limited
 		</div>
 		
 		{$,Admin Zone options}
-		{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$OR,{$EQ,{$ZONE},adminzone},{$EQ,{$ZONE},cms}}}}
+		{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}
 			<div class="adminzone_search">
 				<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,adminzone:admin:search}}" method="get" class="inline">
 					{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,adminzone:admin:search}}
@@ -172,7 +172,7 @@ Copyright ocProducts Limited
 		{+END}
 		
 		{$,Out side Admin Zone we have the banner}
-		{+START,IF,{$NOT,{$OR,{$EQ,{$ZONE},adminzone},{$AND,{$HAS_ZONE_ACCESS,adminzone},{$EQ,{$ZONE},cms}}}}}{+START,IF,{$NOT,{$MOBILE}}}
+		{+START,IF,{$NAND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}{+START,IF,{$NOT,{$MOBILE}}}
 			{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
 			{+START,IF_NON_EMPTY,{$GET,BANNER}}
 				<div class="global_banner" style="text-align: {!en_right}">{$GET,BANNER}</div>
