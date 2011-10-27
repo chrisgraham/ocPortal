@@ -1018,7 +1018,7 @@ function extract_module_functions($path,$functions,$params=NULL)
 			require_code(preg_replace('#^'.preg_quote(get_file_base()).'/#','',preg_replace('#^'.preg_quote(get_file_base()).'/((sources)|(sources\_custom))/(.*)\.php#','${4}',$path)));
 			if (!$hphp) $classes_after=get_declared_classes();
 			$new_classes=$hphp?array():array_values(array_diff($classes_after,$classes_before));
-			if (($hphp) && (count($new_classes)==0)) // Ah, AllVolatile is probably not enabled 
+			if (count($new_classes)==0) // Ah, AllVolatile is probably not enabled 
 			{
 				$matches=array();
 				if (preg_match('#^\s*class (\w+)#m',file_get_contents($path),$matches)!=0) 

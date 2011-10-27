@@ -691,7 +691,7 @@ class Module_cms_banners_cat extends standard_aed_module
 					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 					/*	 page	 params				  zone	  */
 					array('_SELF',array('type'=>'ad','b_type'=>$type),'_SELF',do_lang_tempcode('ADD_BANNER')),											// Add one
-					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_lowrange_content','cms_banners')))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
+					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_lowrange_content','cms_banners')))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER')),							 // Edit this
 					has_specific_permission(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):NULL,											// Edit one
 					is_null($id)?NULL:array('banners',array('type'=>'view','source'=>$id),get_module_zone('banners')),						  // View this
 					array('admin_banners',array('type'=>'misc'),get_module_zone('admin_banners')),				// View archive

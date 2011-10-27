@@ -2297,7 +2297,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					$params.=' '.$key.'="'.comcode_escape($val).'"';
 				}
-				$temp_tpl=make_string_tempcode('<input class="ocp_keep_real_block" title="[block'.escape_html($params).']'.escape_html(comcode_escape($embed->evaluate())).'[/block]" type="button" value="'.do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())).'" />');
+				$temp_tpl=make_string_tempcode('<input class="ocp_keep_real_block" title="[block'.escape_html($params).']'.escape_html($embed->evaluate()).'[/block]" type="button" value="'.do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())).'" />');
 				break;
 			}
 		

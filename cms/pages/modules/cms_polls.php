@@ -53,6 +53,10 @@ class Module_cms_polls extends standard_aed_module
 		require_lang('polls');
 		require_css('polls');
 
+		$this->add_one_label=do_lang_tempcode('ADD_POLL');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_POLL');
+		$this->edit_one_label=do_lang_tempcode('EDIT_POLL');
+
 		if ($type=='misc') return $this->misc();
 
 		return new ocp_tempcode();

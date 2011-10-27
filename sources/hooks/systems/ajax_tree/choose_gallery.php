@@ -74,6 +74,9 @@ class Hook_choose_gallery
 			$has_children=($t['child_count']!=0);
 			$selectable=(($addable_filter!==true) || $t['addable']) && ((($t['accept_videos']==1) && ($t['is_member_synched']==0)) || (!$must_accept_videos)) && ((($t['accept_images']==1) && ($t['is_member_synched']==0)) || (!$must_accept_images));
 
+			$tag='category'; // category
+			$out.='<'.$tag.' id="'.xmlentities($_id).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
+
 			// Mark parent cats for pre-expansion
 			if ((!is_null($default)) && ($default!=''))
 			{
@@ -84,9 +87,6 @@ class Hook_choose_gallery
 					$cat=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','parent_id',array('name'=>$cat));
 				}
 			}
-
-			$tag='category'; // category
-			$out.='<'.$tag.' id="'.xmlentities($_id).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
 		}
 
 		$tag='result'; // result

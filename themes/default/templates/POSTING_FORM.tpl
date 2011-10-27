@@ -159,7 +159,7 @@
 {+END}
 
 {+START,IF_PASSED,EXTRA}
-{EXTRA}
+	{EXTRA}
 {+END}
 
 <script type="text/javascript">// <![CDATA[

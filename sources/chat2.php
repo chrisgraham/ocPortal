@@ -133,13 +133,13 @@ function get_chatroom_fields($is_made_by_me=false,$room_name='',$welcome='',$use
 	$fields=new ocp_tempcode();
 
 	$fields->attach(form_input_line(do_lang_tempcode('ROOM_NAME'),do_lang_tempcode('DESCRIPTION_ROOM_NAME'),'room_name',$room_name,true));
-	$fields->attach(form_input_text_comcode(do_lang_tempcode('WELCOME_MESSAGE'),do_lang_tempcode('DESCRIPTION_WELCOME_MESSAGE'),'c_welcome',$welcome,false));
+	$fields->attach(form_input_line_comcode(do_lang_tempcode('WELCOME_MESSAGE'),do_lang_tempcode('DESCRIPTION_WELCOME_MESSAGE'),'c_welcome',$welcome,false));
 	if (!$is_made_by_me) $fields->attach(form_input_username(do_lang_tempcode('ROOM_OWNER'),do_lang_tempcode('DESCRIPTION_ROOM_OWNER'),'room_owner',$username,false));
 	$langs=find_all_langs();
 	if (count($langs)>1)
 		$fields->attach(form_input_list(do_lang_tempcode('ROOM_LANG'),do_lang_tempcode('DESCRIPTION_ROOM_LANG'),'room_lang',nice_get_langs()));
 	require_lang('permissions');
-	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$allow2=='' && $allow2_groups=='' && $disallow2=='' && $disallow2_groups=='' && !$is_made_by_me,'TITLE'=>do_lang_tempcode($is_made_by_me?'PERMISSIONS':'LOWLEVEL_PERMISSIONS'))));
+	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$allow2=='' && $allow2_groups=='' && !$is_made_by_me,'TITLE'=>do_lang_tempcode($is_made_by_me?'PERMISSIONS':'LOWLEVEL_PERMISSIONS'))));
 	$fields->attach(form_input_username_multi(do_lang_tempcode('ALLOW_LIST'),do_lang_tempcode('DESCRIPTION_ALLOW_LIST'),'allow_list',array_map(array($GLOBALS['FORUM_DRIVER'],'get_username'),($allow2=='')?array():array_map('intval',explode(',',$allow2))),0,true));
 	if ((!$is_made_by_me) || (get_option('group_private_chatrooms')=='1'))
 	{
@@ -174,6 +174,7 @@ function get_chatroom_fields($is_made_by_me=false,$room_name='',$welcome='',$use
 
 		$fields->attach(form_input_multi_list(do_lang_tempcode('ALLOW_LIST_GROUPS'),do_lang_tempcode($is_made_by_me?'DESCRIPTION_ALLOW_LIST_GROUPS_SIMPLE':'DESCRIPTION_ALLOW_LIST_GROUPS'),'allow_list_groups',$usergroup_list));
 	}
+	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$disallow2=='' && $disallow2_groups=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 	$fields->attach(form_input_username_multi(do_lang_tempcode('DISALLOW_LIST'),do_lang_tempcode('DESCRIPTION_DISALLOW_LIST'),'disallow_list',array_map(array($GLOBALS['FORUM_DRIVER'],'get_username'),($disallow2=='')?array():array_map('intval',explode(',',$disallow2))),0,true));
 	if ((!$is_made_by_me) || (get_option('group_private_chatrooms')=='1'))
 	{

@@ -60,6 +60,10 @@ class Module_admin_ocf_forums extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/forums';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_forums';
 
+		$this->add_one_label=do_lang_tempcode('ADD_FORUM');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_FORUM');
+		$this->edit_one_label=do_lang_tempcode('EDIT_FORUM');
+
 		global $C_TITLE;
 		$C_TITLE=NULL;
 

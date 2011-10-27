@@ -61,6 +61,10 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		require_lang('fields');
 		require_lang('ocf');
 
+		$this->add_one_label=do_lang_tempcode('ADD_CUSTOM_PROFILE_FIELD');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_CUSTOM_PROFILE_FIELD');
+		$this->edit_one_label=do_lang_tempcode('EDIT_CUSTOM_PROFILE_FIELD');
+
 		if ($type=='misc') return $this->misc();
 		if ($type=='stats') return $this->stats();
 		if ($type=='_stats') return $this->_stats();
@@ -162,7 +166,10 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			$groups=new ocp_tempcode();
 			//$groups=form_input_list_entry('-1',false,do_lang_tempcode('_ALL'));
 			foreach ($rows as $group)
-				$groups->attach(form_input_list_entry(strval($group['id']),count(array_intersect(array($group['id']),explode(',',$only_group)))!=0,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
+			{
+				if ($group['id']!=db_get_first_id())
+					$groups->attach(form_input_list_entry(strval($group['id']),count(array_intersect(array($group['id']),explode(',',$only_group)))!=0,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
+			}
 			$fields->attach(form_input_multi_list(do_lang_tempcode('GROUP'),do_lang_tempcode('DESCRIPTION_FIELD_ONLY_GROUP'),'only_group',$groups));
 		} else
 		{

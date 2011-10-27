@@ -285,8 +285,6 @@ class Module_cms_news extends standard_aed_module
 
 		$posting_form_tabindex=get_form_field_tabindex(NULL);
 
-		$fields2->attach(form_input_text_comcode(do_lang_tempcode('NEWS_SUMMARY'),do_lang_tempcode('DESCRIPTION_NEWS_SUMMARY'),'news',$news,false));
-
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
@@ -296,7 +294,8 @@ class Module_cms_news extends standard_aed_module
 			if (addon_installed('unvalidated'))
 				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$image=='' && (is_null($scheduled)) && (is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$news=='' && $image=='' && (is_null($scheduled)) && (is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2->attach(form_input_text_comcode(do_lang_tempcode('NEWS_SUMMARY'),do_lang_tempcode('DESCRIPTION_NEWS_SUMMARY'),'news',$news,false));
 		$fields2->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_CATEGORIES'),do_lang_tempcode('DESCRIPTION_SECONDARY_CATEGORIES'),'news_category',$cats2));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
@@ -768,6 +767,7 @@ class Module_cms_news_cat extends standard_aed_module
 			$fields->attach(form_input_line(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$owner_username,true));
 		}
 
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 		$fields->attach($this->get_permission_fields(is_null($category_id)?'':strval($category_id),NULL,($title=='')));

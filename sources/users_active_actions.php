@@ -191,7 +191,7 @@ function handle_active_login($username)
 				$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$row);
 			}
 
-			if (get_value('session_prudence')!=='1')
+			//if (get_value('session_prudence')!=='1')
 			{
 				persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 			}

@@ -290,7 +290,7 @@ class Module_cms_calendar extends standard_aed_module
 	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
 	 * @param  BINARY				Whether trackbacks are allowed
 	 * @param  LONG_TEXT			Notes
-	 * @return array				A pair: fields, hidden fields
+	 * @return array				A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields)
 	 */
 	function get_form_fields($type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
 	{
@@ -366,7 +366,9 @@ class Module_cms_calendar extends standard_aed_module
 			if (addon_installed('unvalidated'))
 				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2=new ocp_tempcode();
+
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 
 		// More date stuff
 		$list='';
@@ -374,12 +376,12 @@ class Module_cms_calendar extends standard_aed_module
 		{
 			$list.=static_evaluate_tempcode(form_input_list_entry($_timezone,$_timezone==$timezone,$timezone_nice));
 		}
-		$fields->attach(form_input_list(do_lang_tempcode('EVENT_TIMEZONE'),do_lang_tempcode('DESCRIPTION_EVENT_TIMEZONE'),'timezone',make_string_tempcode($list)));
-		$fields->attach(form_input_tick(do_lang_tempcode('DO_TIMEZONE_CONV'),do_lang_tempcode('DESCRIPTION_DO_TIMEZONE_CONV'),'do_timezone_conv',$do_timezone_conv==1));
+		$fields2->attach(form_input_list(do_lang_tempcode('EVENT_TIMEZONE'),do_lang_tempcode('DESCRIPTION_EVENT_TIMEZONE'),'timezone',make_string_tempcode($list)));
+		$fields2->attach(form_input_tick(do_lang_tempcode('DO_TIMEZONE_CONV'),do_lang_tempcode('DESCRIPTION_DO_TIMEZONE_CONV'),'do_timezone_conv',$do_timezone_conv==1));
 
 		if (has_specific_permission(get_member(),'add_public_events'))
 		{
-			$fields->attach(form_input_tick(do_lang_tempcode('IS_PUBLIC'),do_lang_tempcode('DESCRIPTION_IS_PUBLIC'),'is_public',$is_public==1));
+			$fields2->attach(form_input_tick(do_lang_tempcode('IS_PUBLIC'),do_lang_tempcode('DESCRIPTION_IS_PUBLIC'),'is_public',$is_public==1));
 		}
 
 		// Priority
@@ -389,10 +391,10 @@ class Module_cms_calendar extends standard_aed_module
 		$priority_list->attach(form_input_list_entry('3',$priority==3,do_lang_tempcode('PRIORITY_3')));
 		$priority_list->attach(form_input_list_entry('4',$priority==4,do_lang_tempcode('PRIORITY_4')));
 		$priority_list->attach(form_input_list_entry('5',$priority==5,do_lang_tempcode('PRIORITY_5')));
-		$fields->attach(form_input_list(do_lang_tempcode('PRIORITY'),'','priority',$priority_list));
+		$fields2->attach(form_input_list(do_lang_tempcode('PRIORITY'),'','priority',$priority_list));
 
 		// Recurrence
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RECURRENCE'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RECURRENCE'))));
 		if (strpos($recurrence,' ')===false)
 		{
 			$recurrence_main=$recurrence;
@@ -406,16 +408,16 @@ class Module_cms_calendar extends standard_aed_module
 		$radios->attach(form_input_radio_entry('recurrence','weekly',$recurrence_main=='weekly',do_lang_tempcode('WEEKLY')));
 		$radios->attach(form_input_radio_entry('recurrence','monthly',$recurrence_main=='monthly',do_lang_tempcode('MONTHLY')));
 		$radios->attach(form_input_radio_entry('recurrence','yearly',$recurrence_main=='yearly',do_lang_tempcode('YEARLY')));
-		$fields->attach(form_input_radio(do_lang_tempcode('RECURRENCE'),do_lang_tempcode('DESCRIPTION_RECURRENCE'),$radios)); // xth_dotw_of_monthly
-		$fields->attach(form_input_line(do_lang_tempcode('RECURRENCE_PATTERN'),do_lang_tempcode('DESCRIPTION_RECURRENCE_PATTERN'),'recurrence_pattern',$recurrence_pattern,false));
-		$fields->attach(form_input_integer(do_lang_tempcode('RECURRENCES'),do_lang_tempcode('DESCRIPTION_RECURRENCES'),'recurrences',$recurrences,false));
-		$fields->attach(form_input_tick(do_lang_tempcode('SEG_RECURRENCES'),do_lang_tempcode('DESCRIPTION_SEG_RECURRENCES'),'seg_recurrences',$seg_recurrences==1));
+		$fields2->attach(form_input_radio(do_lang_tempcode('RECURRENCE'),do_lang_tempcode('DESCRIPTION_RECURRENCE'),$radios)); // xth_dotw_of_monthly
+		$fields2->attach(form_input_line(do_lang_tempcode('RECURRENCE_PATTERN'),do_lang_tempcode('DESCRIPTION_RECURRENCE_PATTERN'),'recurrence_pattern',$recurrence_pattern,false));
+		$fields2->attach(form_input_integer(do_lang_tempcode('RECURRENCES'),do_lang_tempcode('DESCRIPTION_RECURRENCES'),'recurrences',$recurrences,false));
+		$fields2->attach(form_input_tick(do_lang_tempcode('SEG_RECURRENCES'),do_lang_tempcode('DESCRIPTION_SEG_RECURRENCES'),'seg_recurrences',$seg_recurrences==1));
 
 		if (($adding) && (cron_installed())) // Some more stuff only when adding
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('REMINDERS'))));
+			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('REMINDERS'))));
 
-			$fields->attach(form_input_tick(do_lang_tempcode('SIGN_UP_REMINDER'),do_lang_tempcode('DESCRIPTION_SIGN_UP_REMINDER'),'sign_up_reminder',true));
+			$fields2->attach(form_input_tick(do_lang_tempcode('SIGN_UP_REMINDER'),do_lang_tempcode('DESCRIPTION_SIGN_UP_REMINDER'),'sign_up_reminder',true));
 			if (has_specific_permission(get_member(),'add_public_events'))
 			{
 				$usergroup_list=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
@@ -424,15 +426,15 @@ class Module_cms_calendar extends standard_aed_module
 				{
 					$t_usergroup_list->attach(form_input_list_entry(strval($id),false,$name));
 				}
-				$fields->attach(form_input_all_and_not(do_lang_tempcode('SIGN_UP_REMINDER_GROUPS'),do_lang_tempcode('DESCRIPTION_SIGN_UP_REMINDER_GROUPS'),'sign_up_reminder_groups',$t_usergroup_list));
+				$fields2->attach(form_input_all_and_not(do_lang_tempcode('SIGN_UP_REMINDER_GROUPS'),do_lang_tempcode('DESCRIPTION_SIGN_UP_REMINDER_GROUPS'),'sign_up_reminder_groups',$t_usergroup_list));
 			}
-			$fields->attach(form_input_float(do_lang_tempcode('REMINDER_TIME'),do_lang_tempcode('DESCRIPTION_REMINDER_TIME'),'hours_before',1.0,true));
+			$fields2->attach(form_input_float(do_lang_tempcode('REMINDER_TIME'),do_lang_tempcode('DESCRIPTION_REMINDER_TIME'),'hours_before',1.0,true));
 		}
 
 		require_code('feedback2');
-		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
+		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
-		return array($fields,$hidden);
+		return array($fields,$hidden,NULL,NULL,true,NULL,$fields2);
 	}
 
 	/**
@@ -552,7 +554,7 @@ class Module_cms_calendar extends standard_aed_module
 	 * Standard aed_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified)
+	 * @return array			A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields, parsed WYSIWYG editable text)
 	 */
 	function fill_in_edit_form($id)
 	{
@@ -572,12 +574,12 @@ class Module_cms_calendar extends standard_aed_module
 		if (has_delete_permission('low',get_member(),$myrow['e_submitter'],'cms_calendar'))
 		{
 			$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('EDIT'));
-			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE')));
 			$radios->attach(form_input_radio_entry('delete','3',false,do_lang_tempcode('FIX_PAST_RECURRENCES')));
+			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE')));
 			$delete_fields=form_input_radio(do_lang_tempcode('ACTION'),do_lang_tempcode('DESCRIPTION_FIX_PAST_RECURRENCES'),$radios);
 		} else $delete_fields=new ocp_tempcode();
 
-		return array($fields[0],$fields[1],$delete_fields,'',true,$content,NULL,$parsed);
+		return array($fields[0],$fields[1],$delete_fields,'',true,$content,$fields[2],$parsed);
 	}
 
 	/**
@@ -1127,14 +1129,14 @@ class Module_cms_calendar_cat extends standard_aed_module
 						NULL,
 						/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 						/*	 page	 params				  zone	  */
-						array('_SELF',array('type'=>'ad'),'_SELF'),							// Add one
+						array('_SELF',array('type'=>'ad'),'_SELF',do_lang_tempcode('ADD_CALENDAR_EVENT')),							// Add one
 						NULL,							 // Edit this
-						has_specific_permission(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+						has_specific_permission(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_CALENDAR_EVENT')):NULL,											// Edit one
 						NULL,							// View this
 						array('calendar',$archive_map,get_module_zone('calendar'),do_lang('CALENDAR')),				// View archive
 						NULL,	  // Add to category
-						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang_tempcode('ADD_EVENT_TYPE')):NULL,					  // Add one category
+						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang_tempcode('EDIT_EVENT_TYPE')):NULL,					  // Edit one category
 						NULL,			 // Edit this category
 						NULL,																						 // View this category
 						NULL,
@@ -1152,15 +1154,15 @@ class Module_cms_calendar_cat extends standard_aed_module
 					NULL,
 					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 					/*	 page	 params				  zone	  */
-					array('_SELF',array('type'=>'ad','e_type'=>$type),'_SELF'),											// Add one
-					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_lowrange_content','cms_calendar',array('calendar','type'))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
-					has_specific_permission(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+					array('_SELF',array('type'=>'ad','e_type'=>$type),'_SELF',do_lang_tempcode('ADD_CALENDAR_EVENT')),											// Add one
+					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_lowrange_content','cms_calendar',array('calendar','type'))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF',do_lang_tempcode('EDIT_THIS_CALENDAR_EVENT')),							 // Edit this
+					has_specific_permission(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_CALENDAR_EVENT')):NULL,											// Edit one
 					is_null($id)?NULL:array('calendar',array('type'=>'view','id'=>$id),get_module_zone('calendar')),						  // View this
 					array('calendar',$archive_map,get_module_zone('calendar'),do_lang('CALENDAR')),				// View archive
 					NULL,																						// Add to category
-					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,				// Add one category
-					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,				// Edit one category
-					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_calendar',array('calendar','type'))?array('_SELF',array('type'=>'_ec','id'=>$type),'_SELF'):NULL,			  // Edit this category
+					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang_tempcode('ADD_EVENT_TYPE')):NULL,				// Add one category
+					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_calendar')?array('_SELF',array('type'=>'ec'),'_SELF',do_lang_tempcode('EDIT_EVENT_TYPE')):NULL,				// Edit one category
+					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_calendar',array('calendar','type'))?array('_SELF',array('type'=>'_ec','id'=>$type),'_SELF',do_lang_tempcode('EDIT_THIS_EVENT_TYPE')):NULL,			  // Edit this category
 					NULL,																						// View this category
 					NULL,
 					NULL,

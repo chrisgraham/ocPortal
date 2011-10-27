@@ -874,7 +874,7 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	if ($catalogue_name[0]!='_')
 		log_it('EDIT_CATALOGUE_ENTRY',strval($id),$title);
 
-	update_spacer_post($allow_comments!=0,'catalogues',strval($id),build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues')),$title,get_value('comment_forum__catalogues__'.$catalogue_name));
+	update_spacer_post($allow_comments!=0,'catalogues',strval($id),build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues'),NULL,false,false,true),$title,get_value('comment_forum__catalogues__'.$catalogue_name));
 }
 
 /**

@@ -357,7 +357,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 		}
 	}
 
-	update_spacer_post($allow_comments!=0,'news',strval($id),build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news')),$title,get_value('comment_forum__news'));
+	update_spacer_post($allow_comments!=0,'news',strval($id),build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news'),NULL,false,false,true),$title,get_value('comment_forum__news'));
 }
 
 /**

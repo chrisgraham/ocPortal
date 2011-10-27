@@ -527,27 +527,25 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
 
 	$codename=$menu['special'];
 
-	$num=count($menu['children']);
 	// A bit of a hack to calculate the true number of rendered items... 
 	$new_children=array();
-	foreach ($menu['children'] as $i=>$child)
+	foreach ($menu['children'] as $child)
 	{
-		$branch=render_menu_branch($child,$codename,$source_member,0,$type,$as_admin,$num,$i,$menu['children'],1);
+		$branch=render_menu_branch($child,$codename,$source_member,0,$type,$as_admin,$menu['children'],1);
 
-		if ((is_string($branch[0])) && ($branch[0]==''))
+		if ($branch[0]!=='')
 		{
-		} else
-		{
-			$new_children[]=$child;
+			$new_children[]=$branch[0];
 		}
 	}
-
 	$num=count($new_children);
 	foreach ($new_children as $i=>$child)
 	{
-		$branch=render_menu_branch($child,$codename,$source_member,0,$type,$as_admin,$num,$i,$menu['children'],1);
-
-		$content->attach($branch[0]);
+		$content->attach(do_template('MENU_BRANCH_'.filter_naughty_harsh($type),$child+array(
+			'POSITION'=>strval($i),
+			'LAST'=>$i==$num-1,
+			'BRETHREN_COUNT'=>strval($num),
+		)));
 	}
 
 	return do_template('MENU_'.filter_naughty_harsh($type),array('CONTENT'=>$content,'MENU'=>$menu['special']));
@@ -562,13 +560,11 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
  * @param  integer		The depth into the menu that this branch resides at
  * @param  ID_TEXT		The menu type (determines what templates get used)
  * @param  boolean		Whether to generate Comcode with admin privilege
- * @param  integer		The number of entries on this level (doesn't take filtering into account)
- * @param  integer		The position in the entries on this level
  * @param  array			Array of all other branches
  * @param  integer		The level
  * @return array			A pair: the generated string/tempcode of the menu branch, and whether it is expanded
  */
-function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_admin,$num_entries,$position,$all_branches,$the_level=1)
+function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_admin,$all_branches,$the_level=1)
 {
 	global $REDIRECTED_TO;
 
@@ -777,11 +773,24 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 	$display='block';
 	if ($branch['type']=='drawer')
 	{
+		$new_children=array();
 		foreach ($branch['children'] as $i=>$child)
 		{
-			list($children2,$_expand_this)=render_menu_branch($child,$codename,$source_member,$level+1,$type,$as_admin,count($branch['children']),$i,$all_branches,$the_level+1);
+			list($children2,$_expand_this)=render_menu_branch($child,$codename,$source_member,$level+1,$type,$as_admin,$all_branches,$the_level+1);
 			if ($_expand_this) $expand_this=true;
-			if ($children2!=='') $children->attach($children2);
+			if ($children2!=='')
+			{
+				$new_children[]=$children2;
+			}
+		}
+		$num=count($new_children);
+		foreach ($new_children as $i=>$child)
+		{
+			$children->attach(do_template('MENU_BRANCH_'.filter_naughty_harsh($type),$child+array(
+				'POSITION'=>strval($i),
+				'LAST'=>$i==$num-1,
+				'BRETHREN_COUNT'=>strval($num),
+			)));
 		}
 		if ($children->is_empty()) return array('',false); // Nothing here!
 		if ((!array_key_exists('expanded',$branch['modifiers'])) && (!$expand_this))
@@ -812,7 +821,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 	$new_window=array_key_exists('new_window',$branch['modifiers']);
 
 	// Render!
-	$rendered_branch=do_template('MENU_BRANCH_'.filter_naughty_harsh($type),array(
+	$rendered_branch=array(
 		// Useful
 		'RANDOM'=>substr(md5(uniqid('')),0,7),
 
@@ -837,14 +846,11 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 		'MENU'=>$codename,
 		'TOP_LEVEL'=>$the_level==1,
 		'THE_LEVEL'=>strval($the_level),
-		'POSITION'=>strval($position),
-		'LAST'=>$position==$num_entries-1,
-		'BRETHREN_COUNT'=>strval($num_entries),
 
 		// Hints for current-page rendering
 		'CURRENT'=>$current_page,
 		'CURRENT_ZONE'=>$current_zone,
-	));
+	);
 
 	return array($rendered_branch,$current_page || $expand_this);
 }

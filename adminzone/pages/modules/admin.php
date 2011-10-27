@@ -189,6 +189,7 @@ class Module_admin
 			array('shopping','ecommerce','payment','purchase'),
 			array('module','addon','system'),
 			array('cache','decache','cleanup'),
+			array('ssl','https'),
 		);
 	}
 	

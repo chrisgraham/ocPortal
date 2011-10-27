@@ -33,7 +33,7 @@ class Module_cms_quiz extends standard_aed_module
 	var $award_type='quiz';
 	var $view_entry_point='_SEARCH:quiz:type=do:id=_ID';
 	var $archive_entry_point='_SEARCH:quiz:type=misc';
-	var $javascript='var hide_func=function () { var ob=document.getElementById(\'type\'); if (ob.value==\'TEST\') { document.getElementById(\'percentage\').disabled=false; document.getElementById(\'num_winners\').disabled=true; }  if (ob.value==\'COMPETITION\') { document.getElementById(\'num_winners\').disabled=false; document.getElementById(\'percentage\').disabled=true; }  if (ob.value==\'SURVEY\') { document.getElementById(\'num_winners\').disabled=true; document.getElementById(\'percentage\').disabled=true; } }; document.getElementById(\'type\').onchange=hide_func; hide_func();';
+	var $javascript='var hide_func=function () { var ob=document.getElementById(\'type\'); if (ob.value==\'TEST\') { document.getElementById(\'percentage\').disabled=false; document.getElementById(\'num_winners\').disabled=true; }  if (ob.value==\'COMPETITION\') { document.getElementById(\'num_winners\').disabled=false; document.getElementById(\'percentage\').disabled=true; }  if (ob.value==\'SURVEY\') { document.getElementById(\'text\').value=document.getElementById(\'text\').value.replace(/ \[\*\]/g,\'\'); document.getElementById(\'num_winners\').disabled=true; document.getElementById(\'percentage\').disabled=true; } }; document.getElementById(\'type\').onchange=hide_func; hide_func();';
 	var $menu_label='QUIZZES';
 	var $table='quizzes';
 	var $orderer='q_add_date';
@@ -73,6 +73,12 @@ class Module_cms_quiz extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_quizzes';
 
 		require_code('quiz');
+
+		$this->add_one_label=do_lang_tempcode('ADD_QUIZ');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_QUIZ');
+		$this->edit_one_label=do_lang_tempcode('EDIT_QUIZ');
+		$this->archive_label='VIEW_ALL_QUIZZES';
+		$this->view_label=do_lang_tempcode('TRY_QUIZ');
 
 		if ($type=='misc') return $this->misc();
 
@@ -206,11 +212,8 @@ class Module_cms_quiz extends standard_aed_module
 		$list->attach(form_input_list_entry('SURVEY',$type=='SURVEY',do_lang_tempcode('SURVEY')));
 		$list->attach(form_input_list_entry('TEST',$type=='TEST',do_lang_tempcode('TEST')));
 		$list->attach(form_input_list_entry('COMPETITION',$type=='COMPETITION',do_lang_tempcode('COMPETITION')));
-		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_QUIZ_TYPE'),'type',$list));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_START_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_START_TEXT'),'start_text',$start_text,true));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT'),'end_text',$end_text,false));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT_FAIL'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT_FAIL'),'end_text_fail',$end_text_fail,false));
-		$fields->attach(form_input_huge(do_lang_tempcode('TEXT'),do_lang_tempcode('IMPORT_QUESTIONS_TEXT'),'text',$text,true));
+		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_QUIZ_TYPE'),'type',$list,NULL,true));
+		$fields->attach(form_input_huge(do_lang_tempcode('QUESTIONS'),do_lang_tempcode('IMPORT_QUESTIONS_TEXT'),'text',$text,true));
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
@@ -222,10 +225,15 @@ class Module_cms_quiz extends standard_aed_module
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('TEST'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('COMPLETION_PERCENTAGE'),do_lang_tempcode('DESCRIPTION_COMPLETION_PERCENTAGE'),'percentage',$percentage,true));
 
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('TEXT'),'SECTION_HIDDEN'=>true)));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_START_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_START_TEXT'),'start_text',$start_text,false));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT'),'end_text',$end_text,false));
+
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('COMPETITION'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('NUM_WINNERS'),do_lang_tempcode('DESCRIPTION_NUM_WINNERS'),'num_winners',$num_winners,true));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT_FAIL'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT_FAIL'),'end_text_fail',$end_text_fail,false));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>is_null($timeout) && ((is_null($open_time)) || ($open_time<time())) && is_null($close_time) && $points_for_passing==0 && is_null($tied_newsletter),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>is_null($redo_time) && is_null($timeout) && ((is_null($open_time)) || ($open_time<=time())) && is_null($close_time) && $points_for_passing==0 && is_null($tied_newsletter) && $notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('REDO_TIME'),do_lang_tempcode('DESCRIPTION_REDO_TIME'),'redo_time',$redo_time,false));
 		$fields->attach(form_input_integer(do_lang_tempcode('TIMEOUT'),do_lang_tempcode('DESCRIPTION_QUIZ_TIMEOUT'),'timeout',$timeout,false));
 		$fields->attach(form_input_date(do_lang_tempcode('OPEN_TIME'),do_lang_tempcode('DESCRIPTION_OPEN_TIME'),'open_time',false,false,true,$open_time,2));

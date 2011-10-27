@@ -439,6 +439,7 @@ class Module_tickets
 				if ((!is_array($_comments)) || (!array_key_exists(0,$_comments))) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 				$ticket_title=$_comments[0]['title'];
+				if ($ticket_title=='') $ticket_title=do_lang('UNKNOWN');
 
 				$title=get_page_title('_VIEW_SUPPORT_TICKET',true,array(escape_html($ticket_title),escape_html($ticket_type_text)));
 				breadcrumb_set_self($ticket_title);
@@ -644,7 +645,7 @@ class Module_tickets
 		$staff_only=post_param_integer('staff_only',0)==1;
 
 		// Update
-		$_home_url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id),'_SELF',NULL,false,true);
+		$_home_url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id,'redirect'=>NULL),'_SELF',NULL,false,true,true);
 		$home_url=$_home_url->evaluate();
 		$home_link=hyperlink($home_url,escape_html($_title));
 		$email='';

@@ -332,7 +332,7 @@ function init__global2()
 	}
 	require_code('zones'); // Zone is needed because zones are where all ocPortal pages reside
 	require_code('config'); // Config is needed for much active stuff
-	if ((get_option('collapse_user_zones',true)==='1') && ($RELATIVE_PATH=='site')) $RELATIVE_PATH='';
+	if ((get_option('collapse_user_zones',true)==='1') && ($RELATIVE_PATH=='site')) {get_base_url();/*force calculation first*/$RELATIVE_PATH='';}
 	require_code('users'); // Users are important due to permissions
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for Guests
 	{

@@ -64,6 +64,8 @@ class Block_main_code_documentor
 		require_lang('phpdoc');
 		require_code('php');
 		require_css('adminzone');
+		
+		disable_php_memory_limit();
 
 		$filename=(array_key_exists('param',$map)?$map['param']:'sources/global2').'.php';
 		if (substr($filename,-8)=='.php.php') $filename=substr($filename,0,strlen($filename)-4);

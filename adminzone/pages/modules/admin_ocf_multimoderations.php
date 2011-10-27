@@ -60,6 +60,10 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 		require_code('ocf_moderation_action2');
 		require_code('ocf_general_action2');
 
+		$this->add_one_label=do_lang_tempcode('ADD_MULTI_MODERATION');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_MULTI_MODERATION');
+		$this->edit_one_label=do_lang_tempcode('EDIT_MULTI_MODERATION');
+
 		if ($type=='misc') return $this->misc();
 		return new ocp_tempcode();
 	}

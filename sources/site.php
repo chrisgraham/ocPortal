@@ -949,7 +949,7 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 	if ($zone===NULL) $zone=get_zone_name();
 
 	$details=persistant_cache_get(array('PAGE_INFO',$codename,$required,$zone));
-	if ($details===NULL)
+	if (($details===NULL) || ($details===false))
 	{
 		$details=_request_page($codename,$zone,$page_type,NULL,$no_redirect_check);
 		persistant_cache_set(array('PAGE_INFO',$codename,$required,$zone),$details);
@@ -1106,10 +1106,10 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 	if ($codename=='login') // Special case
 	{
 		$login_zone=get_module_zone('login');
-		$path=zone_black_magic_filterer(get_file_base().'/'.$login_zone.(($login_zone=='')?'':'/').'pages/modules_custom/'.$codename.'.php',true);
+		$path=zone_black_magic_filterer($login_zone.(($login_zone=='')?'':'/').'pages/modules_custom/'.$codename.'.php',true);
 		if (is_file(get_file_base().'/'.$path))
 			return array('MODULES_CUSTOM',$login_zone,$codename,$path);
-		$path=zone_black_magic_filterer(get_file_base().'/'.$login_zone.(($login_zone=='')?'':'/').'pages/modules/'.$codename.'.php',true);
+		$path=zone_black_magic_filterer($login_zone.(($login_zone=='')?'':'/').'pages/modules/'.$codename.'.php',true);
 		if (is_file(get_file_base().'/'.$path))
 			return array('MODULES',$login_zone,$codename,$path);
 	}

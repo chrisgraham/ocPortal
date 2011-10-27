@@ -56,6 +56,10 @@ class Module_admin_ocf_post_templates extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/posttemplates';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_forum_helpdesk';
 
+		$this->add_one_label=do_lang_tempcode('ADD_POST_TEMPLATE');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_POST_TEMPLATE');
+		$this->edit_one_label=do_lang_tempcode('EDIT_POST_TEMPLATE');
+
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_general_action');
 		require_code('ocf_general_action2');

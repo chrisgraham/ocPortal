@@ -26,9 +26,9 @@
  */
 function _symbol_image_dims($param)
 {
-	if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return '';
+	if ((get_option('is_on_gd')=='0') || (!function_exists('imagecreatefromstring'))) return array('','');
 
-	$value='';
+	$value=array('','');
 	if (isset($param[0]))
 	{
 		$base_url=get_custom_base_url();

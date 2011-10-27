@@ -110,6 +110,10 @@ class Module_admin_flagrant extends standard_aed_module
 		require_lang('flagrant');
 		require_code('flagrant');
 
+		$this->add_one_label=do_lang_tempcode('ADD_FLAGRANT');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_FLAGRANT');
+		$this->edit_one_label=do_lang_tempcode('EDIT_FLAGRANT');
+
 		if ($type=='misc') return $this->misc();
 
 		return new ocp_tempcode();

@@ -48,7 +48,7 @@ class Hook_addon_registry_staff
 	 */
 	function get_description()
 	{
-		return 'Choose and display a selection of staff from the super-administator/super-moderator usergroups. This is useful for multi-site networks, where members will privileges may not be considered staff on all websites on the network.';
+		return 'Choose and display a selection of staff from the super-administator/super-moderator usergroups. This is useful for multi-site networks, where members with privileges may not be considered staff on all websites on the network.';
 	}
 
 	/**

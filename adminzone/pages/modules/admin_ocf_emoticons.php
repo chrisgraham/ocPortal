@@ -57,6 +57,10 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/emoticons';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_emoticons';
 
+		$this->add_one_label=do_lang_tempcode('ADD_EMOTICON');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_EMOTICON');
+		$this->edit_one_label=do_lang_tempcode('EDIT_EMOTICON');
+
 		require_lang('dearchive');
 		require_code('images');
 

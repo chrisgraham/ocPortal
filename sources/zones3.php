@@ -27,7 +27,7 @@ function erase_comcode_page_cache()
 
 	do
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),NULL,'',50,NULL,true);
+		$rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),NULL,'',50,NULL,true,array());
 		if (is_null($rows)) $rows=array();
 		foreach ($rows as $row)
 		{

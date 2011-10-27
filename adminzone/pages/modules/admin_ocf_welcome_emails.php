@@ -129,6 +129,10 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 
 		ocf_require_all_forum_stuff();
 
+		$this->add_one_label=do_lang_tempcode('ADD_WELCOME_EMAIL');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_WELCOME_EMAIL');
+		$this->edit_one_label=do_lang_tempcode('EDIT_WELCOME_EMAIL');
+
 		if ($type=='misc') return $this->misc();
 		return new ocp_tempcode();
 	}

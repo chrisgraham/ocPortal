@@ -94,16 +94,16 @@ function do_next_manager_hooked($title,$text,$type)
  * @param  tempcode		The 'text' (actually, a full XHTML lump) to show on the page
  * @param  ?array			An array of entry types, with each array entry being -- an array consisting of the type codename and a URL array as per following parameters (NULL: none)
  * @param  ?string		The title to use for the main links (NULL: none)
- * @param  ?array			The URL used to 'add-one' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'edit-this' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'edit-one' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'view-this' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'view-archive' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'add-to-category' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'add-one-category' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'edit-one-category' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'edit-this-category' (NULL: impossible)  [format: array of page, param, zone]
- * @param  ?array			The URL used to 'view-this-category' (NULL: impossible)  [format: array of page, param, zone]
+ * @param  ?array			The URL used to 'add-one' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'edit-this' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'edit-one' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'view-this' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'view-archive' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'add-to-category' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'add-one-category' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'edit-one-category' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'edit-this-category' (NULL: impossible)  (format: array of page, param, zone[, custom label])
+ * @param  ?array			The URL used to 'view-this-category' (NULL: impossible)  (format: array of page, param, zone[, custom label])
  * @param  ?array			An array of additional entry types, with each array entry being -- an array of type codename and a URL array as before (NULL: none)
  * @param  ?array			As before, but with category types (NULL: none)
  * @param  ?array			As before, but for an 'extra types' box of do next actions (NULL: none)

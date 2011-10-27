@@ -258,7 +258,7 @@ class Module_admin_config
 			//  General
 				add_config_option('SITE_NAME','site_name','line','return do_lang(\'UNNAMED\');','SITE','GENERAL');
 				add_config_option('SITE_SCOPE','site_scope','transline','return \'???\';','SITE','GENERAL');
-				add_config_option('DESCRIPTION','description','transline','return \'???\';','SITE','GENERAL');
+				add_config_option('DESCRIPTION','description','transline','return \'\';','SITE','GENERAL');
 				add_config_option('COPYRIGHT','copyright','transline','return \'Copyright &copy; \'.get_site_name().\' \'.date(\'Y\').\'\';','SITE','GENERAL');
 				add_config_option('WELCOME_MESSAGE','welcome_message','transtext','return \'\';','SITE','GENERAL');
 				add_config_option('MAIN_FORUM_NAME','main_forum_name','forum','return has_no_forum()?NULL:do_lang(\'DEFAULT_FORUM_TITLE\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','USER_INTERACTION');

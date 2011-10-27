@@ -72,6 +72,10 @@ class Module_admin_newsletter extends standard_aed_module
 			array('import_subscribers',array('_SELF',array('type'=>'import_subscribers'),'_SELF'),do_lang('IMPORT_NEWSLETTER_SUBSCRIBERS')),
 		);
 
+		$this->add_one_label=do_lang_tempcode('ADD_NEWSLETTER');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_NEWSLETTER');
+		$this->edit_one_label=do_lang_tempcode('EDIT_NEWSLETTER');
+
 		if ($type=='misc') return $this->misc();
 		if ($type=='import_subscribers') return $this->import_subscribers();
 		if ($type=='subscribers') return $this->view_subscribers();
@@ -1072,7 +1076,7 @@ class Module_admin_newsletter extends standard_aed_module
 		} else
 		{
 			$comcode_version=comcode_to_tempcode($message,get_member(),true);
-			$_preview=do_template('MAIL',array('TITLE'=>$subject,'CSS'=>css_tempcode(true,true,$comcode_version->evaluate()),'LANG'=>get_site_default_lang(),'LOGOURL'=>get_logo_url(''),'CONTENT'=>$comcode_version));
+			$_preview=do_template('MAIL',array('TITLE'=>$subject,'CSS'=>css_tempcode(true,true,$comcode_version->evaluate()),'LANG'=>get_site_default_lang(),'LOGOURL'=>get_logo_url(''),'CONTENT'=>$comcode_version),NULL,false,NULL,'.tpl','templates',$GLOBALS['FORUM_DRIVER']->get_theme(''));
 			$in_html=($html_only==1);
 		}
 		$text_preview=($html_only==1)?'':comcode_to_clean_text(static_evaluate_tempcode(template_to_tempcode($message)));

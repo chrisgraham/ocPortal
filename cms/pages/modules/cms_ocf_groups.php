@@ -62,6 +62,10 @@ class Module_cms_ocf_groups extends standard_aed_module
 		require_code('ocf_groups_action2');
 		require_code('ocf_forums_action2');
 
+		$this->add_one_label=do_lang_tempcode('ADD_CLUB');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_CLUB');
+		$this->edit_one_label=do_lang_tempcode('EDIT_CLUB');
+
 		if ($type=='misc') return $this->misc();
 		return new ocp_tempcode();
 	}

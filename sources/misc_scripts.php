@@ -379,7 +379,6 @@ function block_helper_script()
 	check_specific_permission('comcode_dangerous');
 
 	$title=get_page_title('BLOCK_HELPER');
-	$submit_name=do_lang_tempcode('SAVE');
 
 	require_code('form_templates');
 	require_all_lang();
@@ -537,7 +536,9 @@ function block_helper_script()
 	}
 	elseif ($type=='step2') // Ask for block fields
 	{
-		$_defaults=preg_replace('#^\[block\s*#','',preg_replace('#\].*\[/block\]#U','',get_param('parse_defaults','',true)));
+		$defaults=get_param('parse_defaults','',true);
+		
+		$_defaults=preg_replace('#^\[block\s*#','',preg_replace('#\][^\[\]]*\[/block\]#Us','',$defaults));
 		if ($_defaults!='')
 		{
 			if (substr($_defaults,0,1)=='=') $_defaults='param'.$_defaults;
@@ -565,7 +566,7 @@ function block_helper_script()
 					{
 						$in_tag=false;
 						if (($i!=strlen($_defaults)-1) && ($_defaults[$i+1]==' ')) $i++; // Skip space
-						$defaults[$current_tag]=$current_value;
+						$defaults[$current_tag]=str_replace(array('\\[','\\]','\\{','\\}','\\\''),array('[',']','{','}','\''),$current_value);
 						$current_tag='';
 					} else
 					{
@@ -857,7 +858,18 @@ function block_helper_script()
 		$post_url=find_script('block_helper').'?type=step3&field_name='.get_param('field_name').$keep->evaluate();
 		if (get_param('utheme','')!='') $post_url.='&utheme='.get_param('utheme');
 		$post_url.='&block_type='.$type_wanted;
-		if (get_param('save_to_id','')!='') $post_url.='&save_to_id='.urlencode(get_param('save_to_id'));
+		if (get_param('save_to_id','')!='')
+		{
+			$post_url.='&save_to_id='.urlencode(get_param('save_to_id'));
+			$submit_name=do_lang_tempcode('SAVE');
+
+			// Allow remove option
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ACTIONS'),'HELP'=>'')));
+			$fields->attach(form_input_tick(do_lang_tempcode('REMOVE'),'','_delete',false));
+		} else
+		{
+			$submit_name=do_lang_tempcode('USE');
+		}
 		$text=do_lang_tempcode('BLOCK_HELPER_2',escape_html(cleanup_block_name($block)),escape_html(do_lang('BLOCK_'.$block.'_DESCRIPTION')),escape_html(do_lang('BLOCK_'.$block.'_USE')));
 		$hidden=form_input_hidden('block',$block);
 		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'BACK'=>true,'SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>true,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));

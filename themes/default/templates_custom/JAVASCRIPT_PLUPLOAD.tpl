@@ -2539,13 +2539,19 @@
     factory = new GearsFactory();
   } else {
     // IE
+    var done=false;
     try {
-      factory = new ActiveXObject('Gears.Factory');
-      // privateSetGlobalObject is only required and supported on WinCE.
-      if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
-        factory.privateSetGlobalObject(this);
+      if (typeof ActiveXObject!='undefined') {
+        factory = new ActiveXObject('Gears.Factory');
+        // privateSetGlobalObject is only required and supported on WinCE.
+        if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
+          factory.privateSetGlobalObject(this);
+        }
+        done=true;
       }
     } catch (e) {
+    }
+    if (!done) {
       // Safari
       if ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"]) {
         factory = document.createElement("object");

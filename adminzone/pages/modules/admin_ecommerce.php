@@ -98,6 +98,10 @@ class Module_admin_ecommerce extends standard_aed_module
 
 		$type=get_param('type','misc');
 
+		$this->add_one_label=do_lang_tempcode('ADD_USERGROUP_SUBSCRIPTION');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_USERGROUP_SUBSCRIPTION');
+		$this->edit_one_label=do_lang_tempcode('EDIT_USERGROUP_SUBSCRIPTION');
+
 		if ($type=='misc') return $this->misc();
 		if ($type=='logs') return $this->logs();
 		if ($type=='ecom_usage') return $this->usage();

@@ -142,6 +142,10 @@ class Module_admin_awards extends standard_aed_module
 
 		$this->add_text=do_lang_tempcode('AWARD_ALLOCATEHELP');
 
+		$this->add_one_label=do_lang_tempcode('ADD_AWARD_TYPE');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_AWARD_TYPE');
+		$this->edit_one_label=do_lang_tempcode('EDIT_AWARD_TYPE');
+
 		if ($type=='misc') return $this->misc();
 		return new ocp_tempcode();
 	}

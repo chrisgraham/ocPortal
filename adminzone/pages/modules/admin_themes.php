@@ -1888,7 +1888,6 @@ class Module_admin_themes
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),$theme,$lang,'image',$id);
 	}
 
-
 	/**
 	 * Shows the list of templates
 	 *

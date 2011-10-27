@@ -114,6 +114,10 @@ class Module_admin_custom_comcode extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/customcomcode';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_comcode';
 
+		$this->add_one_label=do_lang_tempcode('ADD_CUSTOM_COMCODE_TAG');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_CUSTOM_COMCODE_TAG');
+		$this->edit_one_label=do_lang_tempcode('EDIT_CUSTOM_COMCODE_TAG');
+
 		if ($type=='ad')
 		{
 			require_javascript('javascript_ajax');

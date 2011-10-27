@@ -18,6 +18,13 @@
 		var ob=opener.areaedit_editors[element.id].document.$.getElementById('{$_GET%,save_to_id}');
 		ob.orig_title=comcode.replace(/^\s*/,'');
 		ob.title=comcode.replace(/^\s*/,'');
+
+		if ('{$_POST%,_delete}'=='1')
+		{
+			ob.parentNode.removeChild(ob);
+		}
+		
+		opener.areaedit_editors[element.id].updateElement();
 	} else
 	{
 		insertTextboxOpener(element,comcode);

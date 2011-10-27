@@ -53,6 +53,7 @@ class Module_cms_iotds extends standard_aed_module
 		
 		$this->add_one_label=do_lang_tempcode('ADD_IOTD');
 		$this->edit_one_label=do_lang_tempcode('EDIT_OR_CHOOSE_IOTD');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_IOTD');
 
 		if ($type=='misc') return $this->misc();
 		if ($type=='_choose') return $this->set_iotd();

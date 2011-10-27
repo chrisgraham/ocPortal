@@ -228,10 +228,10 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 			$display_cpf=false;
 			
 			// Negative ones
-			if($cpf_permissions[0]['guest_view']==1) $display_cpf=true;
+			if ($cpf_permissions[0]['guest_view']==1) $display_cpf=true;
 			if (!is_guest())
 			{
-				if($cpf_permissions[0]['member_view']==1) $display_cpf=true;
+				if ($cpf_permissions[0]['member_view']==1) $display_cpf=true;
 			}
 
 			if (!$display_cpf) // Guard this, as the code will take some time to run

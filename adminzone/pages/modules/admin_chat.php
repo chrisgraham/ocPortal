@@ -78,6 +78,10 @@ class Module_admin_chat extends standard_aed_module
 		$also_url=build_url(array('page'=>'cms_chat'),get_module_zone('cms_chat'));
 		attach_message(do_lang_tempcode('ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
 
+		$this->add_one_label=do_lang_tempcode('ADD_CHATROOM');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_CHATROOM');
+		$this->edit_one_label=do_lang_tempcode('EDIT_CHATROOM');
+
 		require_code('templates_donext');
 		return do_next_manager(get_page_title('MANAGE_CHATROOMS'),comcode_lang_string('DOC_CHAT'),
 					array(

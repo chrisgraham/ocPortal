@@ -66,6 +66,10 @@ class Module_admin_ocf_categories extends standard_aed_module
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_forums:misc',do_lang_tempcode('SECTION_FORUMS'))));
 
+		$this->add_one_label=do_lang_tempcode('ADD_FORUM_CATEGORY');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_FORUM_CATEGORY');
+		$this->edit_one_label=do_lang_tempcode('EDIT_FORUM_CATEGORY');
+
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_forums_action');
 		require_code('ocf_forums_action2');

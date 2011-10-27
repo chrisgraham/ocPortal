@@ -718,7 +718,7 @@ class Module_galleries
 		{
 			$where=db_string_equal_to('cat',$cat);
 			if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
-			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e '.$where.' ORDER BY '.$sort,1);
+			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,1);
 			if (array_key_exists(0,$first_video))
 			{
 				$row=$first_video[0];
@@ -728,7 +728,7 @@ class Module_galleries
 			{
 				$where=db_string_equal_to('cat',$cat);
 				if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
-				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e '.$where.' ORDER BY '.$sort,1);
+				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,1);
 				if (array_key_exists(0,$first_image))
 				{
 					$row=$first_image[0];

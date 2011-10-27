@@ -391,7 +391,7 @@ function findTagsInEditor(editor,element)
 				comcodes[i].onmouseup=function(event) {
 					var field_name=editor.name;
 					if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
-					var block_name=this.title.replace(/\[\/block\]$/,'').replace(/^.*\]/,'');
+					var block_name=this.title.replace(/\[\/block\]$/,'').replace(/^(.|\s)*\]/,'');
 					if (this.id=='') this.id='block_'+Math.round(Math.random()*10000000);
 					var url='{$FIND_SCRIPT;,block_helper}?type=step2&block='+window.encodeURIComponent(block_name)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
 					url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');

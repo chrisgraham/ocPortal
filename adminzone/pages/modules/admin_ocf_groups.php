@@ -27,7 +27,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 {
 	var $lang_type='GROUP';
 	var $select_name='NAME';
-	var $javascript='standardAlternateFields(\'file\',\'theme_img_code*\',null,true); if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { if (form.elements[\'new_usergroup\']) form.elements[\'new_usergroup\'].disabled=(form.elements[\'delete\'] && !form.elements[\'delete\'].checked); }; crf(); form.elements[\'delete\'].onchange=crf; } if (document.getElementById(\'is_presented_at_install\')) { var form=document.getElementById(\'is_presented_at_install\').form; var crf2=function() { if (form.elements[\'is_default\']) form.elements[\'is_default\'].disabled=(form.elements[\'is_presented_at_install\'].checked); if (form.elements[\'is_presented_at_install\'].checked) form.elements[\'is_default\'].checked=false; }; crf2(); form.elements[\'is_presented_at_install\'].onchange=crf2; var crf3=function() { if (form.elements[\'absorb\']) form.elements[\'absorb\'].disabled=(form.elements[\'is_private_club\'] && form.elements[\'is_private_club\'].checked); }; crf3(); form.elements[\'is_private_club\'].onchange=crf3; }';
+	var $javascript='standardAlternateFields(\'file\',\'theme_img_code*\',null,true); if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { if (form.elements[\'new_usergroup\']) form.elements[\'new_usergroup\'].disabled=(form.elements[\'delete\'] && !form.elements[\'delete\'].checked); }; crf(); if (form.elements[\'delete\']) form.elements[\'delete\'].onchange=crf; } if (document.getElementById(\'is_presented_at_install\')) { var form=document.getElementById(\'is_presented_at_install\').form; var crf2=function() { if (form.elements[\'is_default\']) form.elements[\'is_default\'].disabled=(form.elements[\'is_presented_at_install\'].checked); if (form.elements[\'is_presented_at_install\'].checked) form.elements[\'is_default\'].checked=false; }; crf2(); form.elements[\'is_presented_at_install\'].onchange=crf2; var crf3=function() { if (form.elements[\'absorb\']) form.elements[\'absorb\'].disabled=(form.elements[\'is_private_club\'] && form.elements[\'is_private_club\'].checked); }; crf3(); if (form.elements[\'is_private_club\']) form.elements[\'is_private_club\'].onchange=crf3; }';
 	var $award_type='group';
 	var $possibly_some_kind_of_upload=true;
 	var $output_of_action_is_confirmation=true;
@@ -89,6 +89,10 @@ class Module_admin_ocf_groups extends standard_aed_module
 					};
 			";
 		}
+
+		$this->add_one_label=do_lang_tempcode('ADD_GROUP');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_GROUP');
+		$this->edit_one_label=do_lang_tempcode('EDIT_GROUP');
 
 		if ($type=='misc') return $this->misc();
 		return new ocp_tempcode();
@@ -154,10 +158,14 @@ class Module_admin_ocf_groups extends standard_aed_module
 		
 		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_USERGROUP_TITLE'),'name',$name,true));
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_GROUP_TITLE'),'title',$title,false));
-		$fields->attach(form_input_username(do_lang_tempcode('GROUP_LEADER'),do_lang_tempcode('DESCRIPTION_GROUP_LEADER'),'group_leader',$group_leader,false));
+
 		if ((addon_installed('ocf_clubs')) && (!is_null($id)))
 			$fields->attach(form_input_tick(do_lang_tempcode('IS_PRIVATE_CLUB'),do_lang_tempcode('IS_PRIVATE_CLUB_DESCRIPTION'),'is_private_club',$is_private_club==1));
+
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$title=='' && $group_leader=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
+
+		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_GROUP_TITLE'),'title',$title,false));
+		$fields->attach(form_input_username(do_lang_tempcode('GROUP_LEADER'),do_lang_tempcode('DESCRIPTION_GROUP_LEADER'),'group_leader',$group_leader,false));
 
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_is_super_admin'),array('g_is_private_club'=>0));
 		$orderlist=new ocp_tempcode();

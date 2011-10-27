@@ -31,8 +31,9 @@
  * @param  ?BINARY		Whether the topic is cascading (NULL: do not change).
  * @param  LONG_TEXT		The reason for this action.
  * @param  ?string		New title for the topic (NULL: do not change).
+ * @param  ?SHORT_TEXT	Link related to the topic (e.g. link to view a ticket) (NULL: do not change).
  */
-function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NULL,$open=NULL,$pinned=NULL,$sunk=NULL,$cascading=NULL,$reason='',$title=NULL)
+function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NULL,$open=NULL,$pinned=NULL,$sunk=NULL,$cascading=NULL,$reason='',$title=NULL,$description_link=NULL)
 {
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_from','t_pt_to','t_cache_first_member_id','t_cache_first_title','t_forum_id','t_cache_first_post_id'),array('id'=>$topic_id),'',1);
 	if (!array_key_exists(0,$info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -66,6 +67,7 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 	if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) $validated=NULL;
 
 	if (!is_null($description)) $update['t_description']=$description;
+	if (!is_null($description_link)) $update['t_description_link']=$description_link;
 	if (!is_null($emoticon)) $update['t_emoticon']=$emoticon;
 	if (!is_null($validated)) $update['t_validated']=$validated;
 	if (!is_null($pinned)) $update['t_pinned']=$pinned;

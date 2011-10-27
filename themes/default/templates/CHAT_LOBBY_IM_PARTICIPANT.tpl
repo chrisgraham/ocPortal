@@ -1,5 +1,7 @@
 <div class="float_surrounder">
-	<img class="chat_participant_avatar" style="display: block" id="avatar__{ID*}" src="{AVATAR_URL*}" alt="{!AVATAR}" title="" />
+	{+START,IF_NON_EMPTY,{AVATAR_URL}}
+		<img class="chat_participant_avatar" style="display: block" id="avatar__{ID*}" src="{AVATAR_URL*}" alt="{!AVATAR}" title="" />
+	{+END}
 	<a target="_blank" title="{USERNAME*}: {$STRIP_TAGS,{!MEMBER_PROFILE,{USERNAME*}}} {!LINK_NEW_WINDOW}" href="{PROFILE_URL*}">{USERNAME*}</a><br />
 	<span id="participant_online__{ROOM_ID*}__{ID*}"><em>{ONLINE*}</em></span>
 </div>

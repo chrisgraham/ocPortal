@@ -1522,13 +1522,13 @@ class Module_cms_galleries_cat extends standard_aed_module
 		if ($name!='root')
 			$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_CODENAME'),'name',$name,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE_GALLERY'),'rep_image',false,$rep_image));
 		if ($parent_id=='') $parent_id=get_param('cat','');
 		if ($name!='root')
 			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','purity'=>true),true,$parent_id));
 		$fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'),'accept_images',$accept_images==1,do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')),array(do_lang_tempcode('ACCEPT_VIDEOS'),'accept_videos',$accept_videos==1,do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))),new ocp_tempcode(),NULL,do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
 		$fields->attach(form_input_tick(do_lang_tempcode('FLOW_MODE_INTERFACE'),do_lang_tempcode('DESCRIPTION_FLOW_MODE_INTERFACE'),'flow_mode_interface',$flow_mode_interface==1));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>($teaser=='') && ($is_member_synched==0),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>($rep_image=='') && ($teaser=='') && ($is_member_synched==0),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE_GALLERY'),'rep_image',false,$rep_image));
 
 		// Only show tease option if tease block being used
 		$teaser_shows=false;

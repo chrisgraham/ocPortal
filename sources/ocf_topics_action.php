@@ -87,7 +87,7 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 		't_pt_from'=>$pt_from,
 		't_pt_to'=>$pt_to,
 		't_description'=>$description,
-		't_description_link'=>rtrim(preg_replace('#(&|\?)redirect=.*($|&)#U','${1}',$description_link),'&'),
+		't_description_link'=>$description_link,
 		't_emoticon'=>$emoticon,
 		't_num_views'=>$num_views,
 		't_validated'=>$validated,
