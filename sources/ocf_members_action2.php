@@ -867,13 +867,13 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 
 	if ($only_group=='-1') $only_group='';
 
-	$info=$GLOBALS['SITE_DB']->query_select('f_custom_fields',array('cf_name','cf_description'),array('id'=>$id),'',1);
+	$info=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('cf_name','cf_description'),array('id'=>$id),'',1);
 	$_name=$info[0]['cf_name'];
 	$_description=$info[0]['cf_description'];
 
 	$map=array(
-		'cf_name'=>lang_remap($_name,$name,$GLOBALS['SITE_DB']),
-		'cf_description'=>lang_remap($_description,$description,$GLOBALS['SITE_DB']),
+		'cf_name'=>lang_remap($_name,$name,$GLOBALS['FORUM_DB']),
+		'cf_description'=>lang_remap($_description,$description,$GLOBALS['FORUM_DB']),
 		'cf_default'=>$default,
 		'cf_public_view'=>$public_view,
 		'cf_owner_view'=>$owner_view,
@@ -891,18 +891,18 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 		$map['cf_show_on_join_form']=$show_on_join_form;
 	}
 
-	$GLOBALS['SITE_DB']->query_update('f_custom_fields',$map,array('id'=>$id),'',1);
+	$GLOBALS['FORUM_DB']->query_update('f_custom_fields',$map,array('id'=>$id),'',1);
 
 	list(,$index)=get_cpf_storage_for($type);
 
 	require_code('database_action');
-	$GLOBALS['SITE_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
+	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
 	if ($index)
 	{
-		$indices_count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'f_custom_fields WHERE '.db_string_not_equal_to('cf_type','integer').' AND '.db_string_not_equal_to('cf_type','tick').' AND '.db_string_not_equal_to('cf_type','long_trans').' AND '.db_string_not_equal_to('cf_type','short_trans'));
+		$indices_count=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'f_custom_fields WHERE '.db_string_not_equal_to('cf_type','integer').' AND '.db_string_not_equal_to('cf_type','tick').' AND '.db_string_not_equal_to('cf_type','long_trans').' AND '.db_string_not_equal_to('cf_type','short_trans'));
 		if ($indices_count<60) // Could be 64 but trying to be careful here...
 		{
-			$GLOBALS['SITE_DB']->create_index('f_member_custom_fields','#mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
+			$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
 		}
 	}
 
@@ -921,18 +921,18 @@ function ocf_delete_custom_field($id)
 	$dbs_back=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-	$info=$GLOBALS['SITE_DB']->query_select('f_custom_fields',array('cf_name','cf_description'),array('id'=>$id),'',1);
+	$info=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('cf_name','cf_description'),array('id'=>$id),'',1);
 	$_name=$info[0]['cf_name'];
 	$_description=$info[0]['cf_description'];
 
-	log_it('DELETE_CUSTOM_PROFILE_FIELD',strval($id),get_translated_text($_name,$GLOBALS['SITE_DB']));
+	log_it('DELETE_CUSTOM_PROFILE_FIELD',strval($id),get_translated_text($_name,$GLOBALS['FORUM_DB']));
 
 	require_code('database_action');
-	delete_lang($_name,$GLOBALS['SITE_DB']);
-	delete_lang($_description,$GLOBALS['SITE_DB']);
-	$GLOBALS['SITE_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
-	$GLOBALS['SITE_DB']->delete_table_field('f_member_custom_fields','field_'.strval($id));
-	$GLOBALS['SITE_DB']->query_delete('f_custom_fields',array('id'=>$id),'',1);
+	delete_lang($_name,$GLOBALS['FORUM_DB']);
+	delete_lang($_description,$GLOBALS['FORUM_DB']);
+	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
+	$GLOBALS['FORUM_DB']->delete_table_field('f_member_custom_fields','field_'.strval($id));
+	$GLOBALS['FORUM_DB']->query_delete('f_custom_fields',array('id'=>$id),'',1);
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
 }

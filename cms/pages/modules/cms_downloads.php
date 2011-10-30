@@ -493,7 +493,7 @@ class Module_cms_downloads extends standard_aed_module
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
 		if ((is_null($id)) && (addon_installed('galleries')))
 		{
-			$fields->attach(form_input_upload(do_lang_tempcode('IMAGE'),'','img_file',false));
+			$fields->attach(form_input_upload(do_lang_tempcode('IMAGE'),'','img_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		}
 		if ($validated==0)
 		{
@@ -913,7 +913,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
-		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image));
+		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
 		// Permissions
 		$fields->attach($this->get_permission_fields(($category_id==-1)?NULL:strval($category_id),NULL,($category=='')));

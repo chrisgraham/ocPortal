@@ -490,7 +490,7 @@ class Module_admin_zones
 			{
 				$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('THEME_LOGO',escape_html($theme_name)))));
 
-				$fields.=static_evaluate_tempcode(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'logo_upload_'.$theme,false));
+				$fields.=static_evaluate_tempcode(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'logo_upload_'.$theme,false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 				require_code('themes2');
 				$ids=get_all_image_ids_type('logo',false,NULL,$theme);
 				$current_logo='logo/'.$zone.'-logo';

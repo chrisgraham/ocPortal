@@ -75,7 +75,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	}
 
 	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SOURCE_MEDIA'))));
-	$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_BANNER'),'file',false));
+	$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_BANNER'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 	$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('IMAGE_URL')),do_lang_tempcode('DESCRIPTION_URL_BANNER'),'image_url',$image_url,false));
 	$fields->attach(form_input_line_comcode(do_lang_tempcode('BANNER_TITLE_TEXT'),do_lang_tempcode('DESCRIPTION_BANNER_TITLE_TEXT'),'title_text',$title_text,false));
 	$fields->attach(form_input_line_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_BANNER_DESCRIPTION'),'caption',$caption,false));

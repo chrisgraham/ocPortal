@@ -24,7 +24,7 @@
 	<script type="text/javascript">
 	// <![CDATA[
 		addEventListenerAbstract(window,'load',function () {
-			preinitFileInput('upload','{NAME}');
+			preinitFileInput('upload','{NAME;}',null,null,'{FILTER;}');
 		} );
 	//]]>
 	</script>

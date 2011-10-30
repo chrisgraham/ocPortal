@@ -233,7 +233,7 @@ class Module_cms_galleries extends standard_aed_module
 		$fields=new ocp_tempcode();
 		$supported='tar';
 		if ((function_exists('zip_open')) || (get_option('unzip_cmd')!='')) $supported.=', zip';
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE',escape_html($supported)),'file',true));
+		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images').','.$this->_get_allowed_video_file_types()))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
 		if (get_option('is_on_gd')=='1')
@@ -365,97 +365,124 @@ class Module_cms_galleries extends standard_aed_module
 			}
 		}
 
-		$tmp_name=$_FILES['file']['tmp_name'];
-		$file=$_FILES['file']['name'];
-		switch (get_file_extension($file))
+		foreach ($_FILES as $attach_name=>$__file)
 		{
-			case 'zip':
-				if ((!function_exists('zip_open')) && (get_option('unzip_cmd')=='')) warn_exit(do_lang_tempcode('ZIP_NOT_ENABLED'));
-				if (!function_exists('zip_open'))
-				{
-					require_code('m_zip');
-					$mzip=true;
-				} else $mzip=false;
-				$myfile=zip_open($tmp_name);
-				if (!is_integer($myfile))
-				{
-					while (false!==($entry=zip_read($myfile)))
+			$tmp_name=$__file['tmp_name'];
+			$file=$__file['name'];
+
+			switch (get_file_extension($file))
+			{
+				case 'zip':
+					if ((!function_exists('zip_open')) && (get_option('unzip_cmd')=='')) warn_exit(do_lang_tempcode('ZIP_NOT_ENABLED'));
+					if (!function_exists('zip_open'))
 					{
-						// Load in file
-						zip_entry_open($myfile,$entry);
-						$in='';
-						$more=mixed();
-						do
+						require_code('m_zip');
+						$mzip=true;
+					} else $mzip=false;
+					$myfile=zip_open($tmp_name);
+					if (!is_integer($myfile))
+					{
+						while (false!==($entry=zip_read($myfile)))
 						{
-							$more=zip_entry_read($entry);
-							if ($more!==false) $in.=$more;
+							// Load in file
+							zip_entry_open($myfile,$entry);
+							$tmp_name_2=ocp_tempnam('bi');
+							$myfile=fopen($tmp_name_2,'wb') OR intelligent_write_error($tmp_name_2);
+							$more=mixed();
+							do
+							{
+								$more=zip_entry_read($entry);
+								if ($more!==false)
+								{
+									if (fwrite($myfile,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+								}
+							}
+							while (($more!==false) && ($more!=''));
+							fclose($myfile);
+
+							// Strip off our slash to gimp right
+							$_file=zip_entry_name($entry);
+							$slash=strrpos($_file,'/');
+							if ($slash===false) $slash=strrpos($_file,"\\");
+							if ($slash!==false) $_file=substr($_file,$slash+1);
+	
+							if ((is_image($_file)) || (is_video($_file))) $this->store_from_archive($_file,$tmp_name_2,$cat);
+	
+							zip_entry_close($entry);
 						}
-						while (($more!==false) && ($more!=''));
 
-						// Strip off our slash to gimp right
-						$_file=zip_entry_name($entry);
-						$slash=strrpos($_file,'/');
-						if ($slash===false) $slash=strrpos($_file,"\\");
-						if ($slash!==false) $_file=substr($_file,$slash+1);
-	
-						if ((is_image($_file)) || (is_video($_file))) $this->store_from_archive($_file,$in,$cat);
-	
-						zip_entry_close($entry);
-					}
-
-					zip_close($myfile);
-				} else
-				{
-					require_code('failure');
-					warn_exit(zip_error($myfile,$mzip));
-				}
-				break;
-			case 'tar':
-				require_code('tar');
-				$myfile=tar_open($tmp_name,'rb');
-				if ($myfile!==false)
-				{
-					$directory=tar_get_directory($myfile);
-
-					// See if there is a numbering system to sort by
-					$all_are=NULL;
-					foreach ($directory as $entry)
+						zip_close($myfile);
+					} else
 					{
-						$this_are=strtolower(preg_replace('#\d#','',$entry['path']));
-						if (is_null($all_are)) $all_are=$this_are;
-						if ($all_are!=$this_are)
+						require_code('failure');
+						warn_exit(zip_error($myfile,$mzip));
+					}
+					break;
+				case 'tar':
+					require_code('tar');
+					$myfile=tar_open($tmp_name,'rb');
+					if ($myfile!==false)
+					{
+						$directory=tar_get_directory($myfile);
+
+						// See if there is a numbering system to sort by
+						$all_are=NULL;
+						foreach ($directory as $entry)
 						{
-							$all_are=NULL;
-							break;
+							$this_are=strtolower(preg_replace('#\d#','',$entry['path']));
+							if (is_null($all_are)) $all_are=$this_are;
+							if ($all_are!=$this_are)
+							{
+								$all_are=NULL;
+								break;
+							}
 						}
+						if (!is_null($all_are))
+						{
+							global $M_SORT_KEY;
+							$M_SORT_KEY='path';
+							usort($directory,'multi_sort');
+						}
+
+						foreach ($directory as $entry)
+						{
+							$tmp_name_2=ocp_tempnam('bi');
+
+							// Load in file
+							$_in=tar_get_file($myfile,$entry['path'],false,$tmp_name_2);
+
+							// Strip off our slash to gimp right
+							$_file=$entry['path'];
+							$slash=strrpos($_file,'/');
+							if ($slash===false) $slash=strrpos($_file,"\\");
+							if ($slash!==false) $_file=substr($_file,$slash+1);
+
+							if ((is_image($_file)) || (is_video($_file))) $this->store_from_archive($_file,$tmp_name_2,$cat);
+							unset($_in);
+						}
+
+						tar_close($myfile);
 					}
-					if (!is_null($all_are))
+					break;
+				default:
+					if ((is_image($file)) || (is_video($file)))
 					{
-						global $M_SORT_KEY;
-						$M_SORT_KEY='path';
-						usort($directory,'multi_sort');
-					}
+						$tmp_name_2=ocp_tempnam('bi');
 
-					foreach ($directory as $entry)
+						if ($__file['type']!='swfupload')
+						{
+							$test=@move_uploaded_file($tmp_name,$tmp_name_2);
+						} else
+						{
+							$test=@copy($tmp_name,$tmp_name_2); // We could rename, but it would hurt integrity of refreshes
+						}
+
+						$this->store_from_archive($file,$tmp_name_2,$cat);
+					} else
 					{
-						// Load in file
-						$_in=tar_get_file($myfile,$entry['path']);
-
-						// Strip off our slash to gimp right
-						$_file=$entry['path'];
-						$slash=strrpos($_file,'/');
-						if ($slash===false) $slash=strrpos($_file,"\\");
-						if ($slash!==false) $_file=substr($_file,$slash+1);
-
-						if ((is_image($_file)) || (is_video($_file))) $this->store_from_archive($_file,$_in['data'],$cat);
-						unset($_in);
+						attach_message(do_lang_tempcode('BAD_ARCHIVE_FORMAT'),'warn');
 					}
-
-					tar_close($myfile);
-				}
-				break;
-			default:
-				warn_exit(do_lang_tempcode('BAD_ARCHIVE_FORMAT'));
+			}
 		}
 
 		$title=get_page_title('GALLERY_IMPORT');
@@ -463,6 +490,26 @@ class Module_cms_galleries extends standard_aed_module
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
 
 		return $this->cat_aed_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
+	}
+
+	/**
+	 * Get a comma-separated list of allowed file types for video upload.
+	 *
+	 * @return string			Allowed file types
+	 */
+	function _get_allowed_video_file_types()
+	{
+		$supported='3gp,asf,avi,flv,m4v,mov,mp4,mpe,mpeg,mpg,ogg,ogv,qt,ra,ram,rm,webm,wmv';
+		if (get_option('allow_audio_videos')=='1')
+		{
+			$supported.=',mid,mp3,wav,wma';
+		}
+		$supported.=',pdf';
+		if (has_specific_permission(get_member(),'use_very_dangerous_comcode'))
+		{
+			$supported.=',swf';
+		}
+		return $supported;
 	}
 
 	/**
@@ -538,7 +585,7 @@ class Module_cms_galleries extends standard_aed_module
 	 * Take some data and write it to be a file in the gallery uploads directory, and add it to a gallery.
 	 *
 	 * @param  string		The filename
-	 * @param  string		The data
+	 * @param  PATH		Path to data file (will be copied from)
 	 * @param  ID_TEXT	The gallery to add to
 	 */
 	function store_from_archive($file,&$in,$cat)
@@ -565,13 +612,9 @@ class Module_cms_galleries extends standard_aed_module
 		}
 
 		// Store on server
-		$save=@fopen($place,'wb');
-		if ($save===false) intelligent_write_error($place);
-		if (fwrite($save,$in)<strlen($in)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		fclose($save);
+		if (rename($in,$place)===false) intelligent_write_error($place);
 		fix_permissions($place);
 		sync_file($place);
-		unset($save); // clear memory
 
 		$aurl='uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.rawurlencode($_file);
 		$thumb_url='uploads/galleries_thumbs'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.rawurlencode($_file_thumb);
@@ -840,12 +883,12 @@ class Module_cms_galleries extends standard_aed_module
 		$filters=array('must_accept_images'=>true,'addable_filter'=>true);
 		if (substr($cat,0,9)!='download_') $filters['filter']='only_conventional_galleries';
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat));
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false));
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$url,false));
 		if (get_option('is_on_gd')=='0')
 		{
 			$thumb_width=get_option('thumb_width');
-			$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),'file2',false));
+			$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),'file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 			$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'thumb_url',$thumb_url,false));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_ACCESSIBILITY'),'comments',$comments,false));
@@ -1216,7 +1259,8 @@ class Module_cms_galleries_alt extends standard_aed_module
 		handle_max_file_size($hidden);
 		if (strpos($cat,'?')!==false) $cat=str_replace('?',strval(get_member()),$cat);
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','must_accept_videos'=>true,'addable_filter'=>true),true,$cat));
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false));
+		$supported=$this->_get_allowed_video_file_types();
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,$supported));
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$url,false));
 		if ($validated==0)
 		{
@@ -1236,7 +1280,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 			$temp=do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADVANCED'),'SECTION_HIDDEN'=>true));
 			$fields->attach($temp);
 		}
-		$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('_DESCRIPTION_THUMBNAIL',integer_format($thumb_width)),'file2',false));
+		$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('_DESCRIPTION_THUMBNAIL',integer_format($thumb_width)),'file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'thumb_url',$thumb_url,false));
 		if (!$no_thumb_needed)
 		{
@@ -1528,7 +1572,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 		$fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'),'accept_images',$accept_images==1,do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')),array(do_lang_tempcode('ACCEPT_VIDEOS'),'accept_videos',$accept_videos==1,do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))),new ocp_tempcode(),NULL,do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
 		$fields->attach(form_input_tick(do_lang_tempcode('FLOW_MODE_INTERFACE'),do_lang_tempcode('DESCRIPTION_FLOW_MODE_INTERFACE'),'flow_mode_interface',$flow_mode_interface==1));
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>($rep_image=='') && ($teaser=='') && ($is_member_synched==0),'TITLE'=>do_lang_tempcode('ADVANCED'))));
-		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE_GALLERY'),'rep_image',false,$rep_image));
+		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE_GALLERY'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
 		// Only show tease option if tease block being used
 		$teaser_shows=false;
@@ -1561,10 +1605,10 @@ class Module_cms_galleries_cat extends standard_aed_module
 		$fields->attach(form_input_tick(do_lang_tempcode('IS_MEMBER_SYNCHED'),do_lang_tempcode('DESCRIPTION_IS_MEMBER_SYNCHED_GALLERY'),'is_member_synched',$is_member_synched==1));
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>is_null($watermark_top_left) && is_null($watermark_top_right) && is_null($watermark_bottom_left) && is_null($watermark_bottom_right),'TITLE'=>do_lang_tempcode('WATERMARKING'))));
-		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_LEFT')),'watermark_top_left',false,$watermark_top_left));
-		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_RIGHT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_RIGHT')),'watermark_top_right',false,$watermark_top_right));
-		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('BOTTOM_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('BOTTOM_LEFT')),'watermark_bottom_left',false,$watermark_bottom_left));
-		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('BOTTOM_RIGHT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('BOTTOM_RIGHT')),'watermark_bottom_right',false,$watermark_bottom_right));
+		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_LEFT')),'watermark_top_left',false,$watermark_top_left,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('TOP_RIGHT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('TOP_RIGHT')),'watermark_top_right',false,$watermark_top_right,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('BOTTOM_LEFT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('BOTTOM_LEFT')),'watermark_bottom_left',false,$watermark_bottom_left,NULL,true,str_replace(' ','',get_option('valid_images'))));
+		$fields->attach(form_input_upload(do_lang_tempcode('_WATERMARK',do_lang_tempcode('BOTTOM_RIGHT')),do_lang_tempcode('_DESCRIPTION_WATERMARK',do_lang_tempcode('BOTTOM_RIGHT')),'watermark_bottom_right',false,$watermark_bottom_right,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
 

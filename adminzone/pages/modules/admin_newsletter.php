@@ -344,7 +344,7 @@ class Module_admin_newsletter extends standard_aed_module
 				$newsletters->attach(form_input_list_entry(strval($newsletter['id']),false,get_translated_text($newsletter['title'])));
 			if ($newsletters->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 			$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters));
-			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV_2'),'file',true));
+			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV_2'),'file',true,NULL,NULL,true,'csv,txt'));
 			// Choose level
 			$l=form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0'));
 			$l->attach(form_input_list_entry('1',$level==1,do_lang_tempcode('NEWSLETTER_1')));
@@ -713,7 +713,7 @@ class Module_admin_newsletter extends standard_aed_module
 			$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters));
 
 			// CSV option
-			$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_AS_CSV'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_AS_CSV'),'csv',false));
+			$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_AS_CSV'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_AS_CSV'),'csv,txt',false));
 
 			$submit_name=do_lang_tempcode('VIEW_SUBSCRIBERS');
 			$post_url=get_self_url();
@@ -1013,7 +1013,7 @@ class Module_admin_newsletter extends standard_aed_module
 				}
 			}
 		}
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV'),'file',false));
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV'),'file',false,NULL,NULL,true,'csv,txt'));
 		//if ($fields->is_empty()) inform_exit(do_lang_tempcode('NOBODY_TO_SEND_TO'));
 
 		$hidden=new ocp_tempcode();

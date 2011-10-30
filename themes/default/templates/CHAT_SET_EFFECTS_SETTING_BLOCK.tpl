@@ -66,7 +66,7 @@
 							<script type="text/javascript">
 							// <![CDATA[
 								addEventListenerAbstract(window,'load',function () {
-									preinitFileInput('chat_effect_settings',"upload_{KEY}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID}{+END}");
+									preinitFileInput('chat_effect_settings',"upload_{KEY}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID}{+END}",null,null,'mp3');
 								} );
 							//]]>
 							</script>

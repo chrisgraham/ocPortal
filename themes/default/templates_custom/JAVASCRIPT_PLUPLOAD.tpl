@@ -488,7 +488,7 @@
 
 			return {
 				x : x,
-				y : y
+				y : y-8
 			};
 		},
 
@@ -1847,7 +1847,7 @@
 									top : dropElmPos.y + 'px',
 									left : dropElmPos.x + 'px',
 									width : dropElm.offsetWidth + 'px',
-									height : dropElm.offsetHeight + 'px'
+									height : (dropElm.offsetHeight+16) + 'px'
 								});
 							});
 
@@ -2453,7 +2453,7 @@
 							top : browsePos.y + 'px',
 							left : browsePos.x + 'px',
 							width : browseSize.w + 'px',
-							height : browseSize.h + 'px'
+							height : (browseSize.h+16) + 'px'
 						});
 					}
 				});
@@ -2539,19 +2539,13 @@
     factory = new GearsFactory();
   } else {
     // IE
-    var done=false;
     try {
-      if (typeof ActiveXObject!='undefined') {
-        factory = new ActiveXObject('Gears.Factory');
-        // privateSetGlobalObject is only required and supported on WinCE.
-        if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
-          factory.privateSetGlobalObject(this);
-        }
-        done=true;
+      factory = new ActiveXObject('Gears.Factory');
+      // privateSetGlobalObject is only required and supported on WinCE.
+      if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
+        factory.privateSetGlobalObject(this);
       }
     } catch (e) {
-    }
-    if (!done) {
       // Safari
       if ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"]) {
         factory = document.createElement("object");
@@ -3223,7 +3217,7 @@
 							top : browsePos.y + 'px',
 							left : browsePos.x + 'px',
 							width : browseSize.w + 'px',
-							height : browseSize.h + 'px'
+							height : (browseSize.h+16) + 'px'
 						});
 						
 						// for IE and WebKit place input element underneath the browse button and route onclick event 
@@ -3741,7 +3735,7 @@
 								top : 0,
 								left : 0,
 								width : dropSize.w + 'px',
-								height : dropSize.h + 'px',
+								height : (dropSize.h+16) + 'px',
 								opacity : 0
 							});							
 						}, uploader.id);
@@ -3781,7 +3775,7 @@
 						top : browsePos.y + 'px',
 						left : browsePos.x + 'px',
 						width : browseSize.w + 'px',
-						height : browseSize.h + 'px'
+						height : (browseSize.h+16) + 'px'
 					});
 					
 					// for WebKit place input element underneath the browse button and route onclick event 
@@ -5033,7 +5027,7 @@
 							top : browsePos.y + 'px',
 							left : browsePos.x + 'px',
 							width : browseSize.w + 'px',
-							height : browseSize.h + 'px'
+							height : (browseSize.h+16) + 'px'
 						});
 					}
 				});
@@ -5273,34 +5267,6 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 		setAttachment(posting_field_name,current_num,file_name);
 		document.getElementById(name).onchange=null;
 	}
-	if (page_type=="upload_multi")
-	{
-		document.getElementById(name).onchange=null;
-
-		var mid=name.lastIndexOf('_');
-		var nameStub=name.substring(0,mid+1);
-		var thisNum=name.substring(mid+1,name.length)-0;
-		var nextNum=thisNum+1;
-		var txtFileName=document.getElementById('txtFileName_multi_1');
-		var nextField=document.getElementById('txtFileName_multi_'+nextNum);
-		var name=nameStub+nextNum;
-		var thisId=name;
-
-		if (!nextField)
-		{
-			nextNum=thisNum+1;
-			var nextField=document.createElement('input');
-			nextField.className='input_upload';
-			nextField.setAttribute('id','multi_'+nextNum);
-			nextField.onchange=_ensureNextFieldUpload;
-			nextField.setAttribute('type','file');
-			nextField.name=nameStub+nextNum;
-			var br=document.createElement('br');
-			txtFileName.parentNode.parentNode.parentNode.appendChild(br);
-			txtFileName.parentNode.parentNode.parentNode.appendChild(nextField);
-			replaceFileInput('upload_multi',nextField.name,null,posting_field_name);
-		}
-	}
 }
 
 function fireFakeChangeFor(name,value)
@@ -5318,7 +5284,7 @@ function fireFakeChangeFor(name,value)
 	}
 
 	var ob=rep.plUploadOb;
-	if (ob.settings.immediate_submit)
+	if (ob.settings.immediate_submit{+START,IF,{$VALUE_OPTION,aviary}} || true{+END})
 	{
 		var txtID = document.getElementById(ob.settings.txtFileDbID);
 		var txtFileName = document.getElementById(ob.settings.txtFileNameID);
@@ -5333,13 +5299,21 @@ function fireFakeChangeFor(name,value)
 function fileDialogComplete(ob,files) {
 	document.getElementById(ob.settings.btnSubmitID).disabled = false;
 
-	var file=files[files.length-1];
+	var name,file;
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
-	txtFileName.value = file.name;
 	var id = document.getElementById(ob.settings.txtFileDbID);
 	id.value = "-1";
-	var name=ob.settings.txtName;
-	dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name);
+	for (var i=0;i<files.length;i++)
+	{
+		file=files[i];
+		if (txtFileName.value!='') txtFileName.value+=':';
+		txtFileName.value+=file.name.replace(/:/g,',');
+		name=ob.settings.txtName;
+		dispatch_for_page_type(ob.settings.page_type,name,file.name,ob.settings.posting_field_name);
+
+		if (ob.page_type!='upload_multi') break;
+	}
+
 	window.setTimeout(function() {
 		fireFakeChangeFor(name,'1');
 	},0 );
@@ -5361,7 +5335,13 @@ function uploadSuccess(ob,file,data) {
 	
 	var decodedData = eval('(' + data.response + ')');
 
-	document.getElementById(ob.settings.txtFileDbID).value = decodedData['upload_id'];
+	var id=document.getElementById(ob.settings.txtFileDbID);
+	if (id.value=='-1') id.value='';
+	if (id.value!='') id.value+=':';
+	id.value += decodedData['upload_id'];
+	{+START,IF,{$VALUE_OPTION,aviary}}
+		if (id.indexOf(':')==-1) implement_aviary(decodedData['upload_savename'],decodedData['upload_name'],id);
+	{+END}
 	if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
@@ -5398,18 +5378,30 @@ function uploadError(ob,error) {
 	document.getElementById(ob.settings.btnSubmitID).disabled = false;
 }
 
-function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name)
+function queueChanged(ob)
+{
+	if (ob.settings.page_type!='upload_multi')
+		ob.splice(1,ob.files.length-1);
+}
+
+function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
 	if (!posting_field_name) posting_field_name='post';
 	
 	var rep=document.getElementById(name);
 	rep.originally_disabled=rep.disabled;
 	rep.disabled=true;
-	replaceFileInput(page_type,name,_btnSubmitID,posting_field_name);
+	replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter);
 }
 
-function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
+function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
+	if (!filter) filter='{$CONFIG_OPTION#,valid_types}';
+
+	{+START,IF,{$VALUE_OPTION,aviary}}
+		if (typeof window.done_aviary=='undefined') do_aviary();
+	{+END}
+	
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
 
@@ -5528,8 +5520,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 		out+='	<param name="page_type" value="'+page_type+'" />';
 		out+='	<param name="posting_field_name" value="'+posting_field_name+'" />';
 		out+='	<param name="_btnSubmitID" value="'+_btnSubmitID+'" />';
-		out+='	<param name="types" value="{$CONFIG_OPTION,valid_types}" />';
-		out+='	<param name="fail_message" value="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message^;}}" />';
+		out+='	<param name="types" value="'+escape_html(filter)+'" />';
+		out+='	<param name="fail_message" value="{$REPLACE*, />,\\n,{!JAVA_FTP_fail_message^;}}" />';
 		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message^;*}" />';
 		out+='	<param name="reverting_title" value="{!JAVA_FTP_reverting_title^;*}" />';
 		out+='	<param name="valid_types_label" value="{!JAVA_FTP_valid_types_label^;*}" />';
@@ -5647,16 +5639,16 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 		progress_target : "fsUploadProgress_"+name,
 
 		// General settings
-		runtimes : 'html5,gears,flash,silverlight,browserplus',
+		runtimes : 'flash,gears,silverlight,browserplus,html5',
 		url : "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true),
 		max_file_size : (typeof mfs=='undefined')?'2000mb':(mfs.value+'b'),
 
 		// Specify what files to browse for
-		filters : (name.indexOf('file_novalidate')==-1)
+		filters : (name.indexOf('file_novalidate')!=-1)
 			?
 			[{title : "*.*", extensions : "*"}]
 			:
-			[{title : "{!ALLOWED_FILES^#}", extensions : "{$CONFIG_OPTION,valid_types}"}]
+			[{title : "{!ALLOWED_FILES^#}", extensions : filter}]
 		,
 
 		// Flash settings
@@ -5664,7 +5656,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 
 		// Silverlight settings
 		silverlight_xap_url : '{$BASE_URL;}/data_custom/plupload/plupload.silverlight.xap',
-	
+
 		// IDs
 		browse_button : 'uploadButton_'+name,
 		drop_element : 'txtFileName_'+name,
@@ -5682,9 +5674,12 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 		ob.bind('FileUploaded',uploadSuccess);
 		ob.bind('Error',uploadError);
 		ob.bind('UploadProgress',uploadProgress);
+		ob.bind('QueueChanged',queueChanged);
 		ob.init();
 
 		rep2.plUploadOb=ob;
+
+		window.setTimeout(function() { ob.refresh(); },1000);
 	} else // Special iOS handler
 	{
 		var ob={settings: settings};
@@ -5739,7 +5734,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 	newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
 	newClearBtn.style.marginLeft='8px';
 	newClearBtn.style.verticalAlign='top';
-	newClearBtn.value='{!CLEAR^;}';
+	newClearBtn.value='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD^;} {+END}{!CLEAR^;}';
 	subdiv.appendChild(newClearBtn);
 
 	newClearBtn.onclick=function() {
@@ -5925,3 +5920,75 @@ FileProgress.prototype.disappear = function () {
 	}
 };
 
+{+START,IF,{$VALUE_OPTION,aviary}}
+/* Add in Aviary to image URLs */
+
+function do_aviary()
+{
+	{+START,IF,{$NOT,{$DEV_MODE}}}
+		if (running_locally()) return;
+	{+END}
+
+	var fields=document.getElementsByTagName('input');
+	for (var i=0;i<fields.length;i++)
+	{
+		var url=fields[i].value;
+		var filename=url.replace(/^.*\//,'');
+		implement_aviary(url,filename,fields[i],true);
+	}
+	window.done_aviary=true;
+}
+
+function running_locally()
+{
+	return (('{$DOMAIN;}'=='localhost') || ('{$DOMAIN;}'=='127.0.0.1') || ('{$DOMAIN;}'.substr(0,4)=='192.') || ('{$DOMAIN;}'.substr(0,3)=='10.') || ('{$DOMAIN;}'.indexOf('.')==-1));
+}
+
+function implement_aviary(url,filename,field,recalculate_url_on_click)
+{
+	if (filename.substr(-4).match(/\.(jpg|jpeg|png|gif)$/i))
+	{
+		var old_link=document.getElementById('edit_for_'+field.id);
+		if (old_link) old_link.parentNode.removeChild(old_link);
+
+		var url_raw=url;
+		if (url.indexOf('://')==-1) url='{$CUSTOM_BASE_URL;}/'+url;
+		{+START,IF,{$DEV_MODE}}
+			if (running_locally()) url='http://ocportal.com/themes/ocproducts/images//newlogo-top.gif';
+		{+END}
+		{+START,IF,{$NOT,{$DEV_MODE}}}
+			if (running_locally()) return;
+		{+END}
+
+		var edit_link=document.createElement('a');
+		setInnerHTML(edit_link,'({!EDIT;})');
+		edit_link.className='associated_details';
+		edit_link.id='edit_for_'+field.id;
+		edit_link.target='_blank';
+		edit_link.title='{!LINK_NEW_WINDOW;}';
+		edit_link.onmousedown=function() {
+			if (recalculate_url_on_click)
+			{
+				url=field.value;
+				url_raw=url;
+				if (url.indexOf('://')==-1) url='{$CUSTOM_BASE_URL;}/'+url;
+				{+START,IF,{$DEV_MODE}}
+					if (running_locally()) url='http://ocportal.com/themes/ocproducts/images//newlogo-top.gif';
+				{+END}
+				{+START,IF,{$NOT,{$DEV_MODE}}}
+					if (running_locally()) return;
+				{+END}
+				filename=url.replace(/^.*\//,'');
+			}
+
+			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash={$USER.;}&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
+		};
+		edit_link.onclick=function() {
+			return window.confirm('You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.');
+		};
+		edit_link.onmousedown();
+		//field.parentNode.appendChild(document.createElement('br'));
+		field.parentNode.appendChild(edit_link);
+	}
+}
+{+END}

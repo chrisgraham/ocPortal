@@ -131,7 +131,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 		$fields=new ocp_tempcode();
 		$supported='tar';
 		if ((function_exists('zip_open')) || (get_option('unzip_cmd')!='')) $supported.=', zip';
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE',escape_html($supported)),'file',true));
+		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_IMAGES',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images')))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
 
 		$text=paragraph(do_lang_tempcode('IMPORT_EMOTICONS_WARNING'));
 		require_code('images');
@@ -162,144 +162,119 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 		post_param('test'); // To pick up on max file size exceeded errors
 
 		require_code('uploads');
-		if ((!is_swf_upload(true)) && ((!array_key_exists('file',$_FILES)) || (!is_uploaded_file($_FILES['file']['tmp_name']))))
-			warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','file'));
+		require_code('images');
+		is_swf_upload(true);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_EMOTICONS'))));
 
-		$tmp_name=$_FILES['file']['tmp_name'];
-		$file=$_FILES['file']['name'];
-		switch (get_file_extension($file))
+		foreach ($_FILES as $attach_name=>$__file)
 		{
-			case 'zip':
-				if ((!function_exists('zip_open')) && (get_option('unzip_cmd')=='')) warn_exit(do_lang_tempcode('ZIP_NOT_ENABLED'));
-				if (!function_exists('zip_open'))
-				{
-					require_code('m_zip');
-					$mzip=true;
-				} else $mzip=false;
-				$myfile=zip_open($tmp_name);
-				if (!is_integer($myfile))
-				{
-					while (false!==($entry=zip_read($myfile)))
+			$tmp_name=$__file['tmp_name'];
+			$file=$__file['name'];
+			switch (get_file_extension($file))
+			{
+				case 'zip':
+					if ((!function_exists('zip_open')) && (get_option('unzip_cmd')=='')) warn_exit(do_lang_tempcode('ZIP_NOT_ENABLED'));
+					if (!function_exists('zip_open'))
 					{
-						// Load in file
-						zip_entry_open($myfile,$entry);
-
-						$_file=zip_entry_name($entry);
-
-						if (is_image($_file))
+						require_code('m_zip');
+						$mzip=true;
+					} else $mzip=false;
+					$myfile=zip_open($tmp_name);
+					if (!is_integer($myfile))
+					{
+						while (false!==($entry=zip_read($myfile)))
 						{
-							$emoticon_code=basename($_file,'.'.get_file_extension($_file));
-							if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
-							{
-								$path=get_custom_file_base().'/themes/default/images_custom/emoticons__'.basename($_file);
-							} else
-							{
-								$path=get_custom_file_base().'/themes/default/images_custom/ocf_emoticons__'.basename($_file);
-							}
-							$outfile=@fopen($path,'wb') OR intelligent_write_error($path);
+							// Load in file
+							zip_entry_open($myfile,$entry);
 
-							$more=mixed();
-							do
+							$_file=zip_entry_name($entry);
+
+							if (is_image($_file))
 							{
-								$more=zip_entry_read($entry);
-								if (fwrite($outfile,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-							}
-							while (($more!==false) && ($more!=''));
+								if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
+								{
+									$path=get_custom_file_base().'/themes/default/images_custom/emoticons__'.basename($_file);
+								} else
+								{
+									$path=get_custom_file_base().'/themes/default/images_custom/ocf_emoticons__'.basename($_file);
+								}
+								$outfile=@fopen($path,'wb') OR intelligent_write_error($path);
+
+								$more=mixed();
+								do
+								{
+									$more=zip_entry_read($entry);
+									if (fwrite($outfile,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+								}
+								while (($more!==false) && ($more!=''));
 	
-							fclose($outfile);
-							fix_permissions($path);
-							sync_file($path);
+								fclose($outfile);
+								fix_permissions($path);
+								sync_file($path);
 							
-							if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
-							{
-								$image_code='emoticons/'.$emoticon_code;
-								$url_path='themes/default/images_custom/emoticons__'.rawurlencode(basename($_file));
-							} else
-							{
-								$image_code='ocf_emoticons/'.$emoticon_code;
-								$url_path='themes/default/images_custom/ocf_emoticons__'.rawurlencode(basename($_file));
+								$this->_import_emoticon($path);
 							}
-
-							$GLOBALS['SITE_DB']->query_delete('theme_images',array('id'=>$image_code));
-							$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$image_code,'theme'=>'default','path'=>$url_path,'lang'=>get_site_default_lang()));
-							$GLOBALS['FORUM_DB']->query_delete('f_emoticons',array('e_code'=>':'.$emoticon_code.':'),'',1);
-							$GLOBALS['FORUM_DB']->query_insert('f_emoticons',array(
-								'e_code'=>':'.$emoticon_code.':',
-								'e_theme_img_code'=>$image_code,
-								'e_relevance_level'=>2,
-								'e_use_topics'=>0,
-								'e_is_special'=>0
-							));
-						}
 	
-						zip_entry_close($entry);
-					}
-
-					zip_close($myfile);
-				} else
-				{
-					require_code('failure');
-					warn_exit(zip_error($myfile,$mzip));
-				}
-				break;
-			case 'tar':
-				require_code('tar');
-				$myfile=tar_open($tmp_name,'rb');
-				if ($myfile!==false)
-				{
-					$directory=tar_get_directory($myfile);
-					foreach ($directory as $entry)
-					{
-						// Load in file
-						$_in=tar_get_file($myfile,$entry['path']);
-						$_file=$entry['path'];
-
-						if (is_image($_file))
-						{
-							$emoticon_code=basename($_file,'.'.get_file_extension($_file));
-							if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
-							{
-								$path=get_custom_file_base().'/themes/default/images_custom/emoticons__'.basename($_file);
-							} else
-							{
-								$path=get_custom_file_base().'/themes/default/images_custom/ocf_emoticons__'.basename($_file);
-							}
-							$outfile=fopen($path,'wb');
-							if (fwrite($outfile,$_in['data'])<strlen($_in['data'])) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-							fclose($outfile);
-							fix_permissions($path);
-							sync_file($path);
-
-							if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
-							{
-								$image_code='emoticons/'.$emoticon_code;
-								$url_path='themes/default/images_custom/emoticons__'.rawurlencode(basename($_file));
-							} else
-							{
-								$image_code='ocf_emoticons/'.$emoticon_code;
-								$url_path='themes/default/images_custom/ocf_emoticons__'.rawurlencode(basename($_file));
-							}
-
-							$GLOBALS['SITE_DB']->query_delete('theme_images',array('id'=>$image_code));
-							$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$image_code,'theme'=>'default','path'=>$url_path,'lang'=>get_site_default_lang()));
-							$GLOBALS['FORUM_DB']->query_delete('f_emoticons',array('e_code'=>':'.$emoticon_code.':'),'',1);
-							$GLOBALS['FORUM_DB']->query_insert('f_emoticons',array(
-								'e_code'=>':'.$emoticon_code.':',
-								'e_theme_img_code'=>$image_code,
-								'e_relevance_level'=>2,
-								'e_use_topics'=>0,
-								'e_is_special'=>0
-							));
+							zip_entry_close($entry);
 						}
-					}
 
-					tar_close($myfile);
-				}
-				break;
-			default:
-				warn_exit(do_lang_tempcode('BAD_ARCHIVE_FORMAT'));
+						zip_close($myfile);
+					} else
+					{
+						require_code('failure');
+						warn_exit(zip_error($myfile,$mzip));
+					}
+					break;
+				case 'tar':
+					require_code('tar');
+					$myfile=tar_open($tmp_name,'rb');
+					if ($myfile!==false)
+					{
+						$directory=tar_get_directory($myfile);
+						foreach ($directory as $entry)
+						{
+							// Load in file
+							$_file=$entry['path'];
+
+							if (is_image($_file))
+							{
+								if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
+								{
+									$path=get_custom_file_base().'/themes/default/images_custom/emoticons__'.basename($_file);
+								} else
+								{
+									$path=get_custom_file_base().'/themes/default/images_custom/ocf_emoticons__'.basename($_file);
+								}
+
+								$_in=tar_get_file($myfile,$entry['path'],false,$path);
+
+								$this->_import_emoticon($path);
+							}
+						}
+
+						tar_close($myfile);
+					}
+					break;
+				default:
+					if (is_image($file))
+					{
+						if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
+						{
+							$path=get_custom_file_base().'/themes/default/images_custom/emoticons__'.basename($file);
+						} else
+						{
+							$path=get_custom_file_base().'/themes/default/images_custom/ocf_emoticons__'.basename($file);
+						}
+
+						$urls=get_url('',$attach_name,'themes/default/images_custom');
+						$path=$urls[0];
+						$this->_import_emoticon($path);
+					} else
+					{
+						attach_message(do_lang_tempcode('BAD_ARCHIVE_FORMAT'),'warn');
+					}
+			}
 		}
 
 		$title=get_page_title('IMPORT_EMOTICONS');
@@ -307,6 +282,38 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 		log_it('IMPORT_EMOTICONS');
 
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),NULL);
+	}
+
+	/**
+	 * Import an emoticon.
+	 *
+	 * @param  PATH			Path to the emoticon file, on disk (must be in theme images folder).
+	 */
+	function _import_emoticon($path)
+	{
+		$emoticon_code=basename($path,'.'.get_file_extension($path));
+
+		if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
+		{
+			$image_code='emoticons/'.$emoticon_code;
+		} else
+		{
+			$image_code='ocf_emoticons/'.$emoticon_code;
+		}
+		$url_path='themes/default/images_custom/'.rawurlencode(basename($path));
+
+		$GLOBALS['SITE_DB']->query_delete('theme_images',array('id'=>$image_code));
+		$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$image_code,'theme'=>'default','path'=>$url_path,'lang'=>get_site_default_lang()));
+		$GLOBALS['FORUM_DB']->query_delete('f_emoticons',array('e_code'=>':'.$emoticon_code.':'),'',1);
+		$GLOBALS['FORUM_DB']->query_insert('f_emoticons',array(
+			'e_code'=>':'.$emoticon_code.':',
+			'e_theme_img_code'=>$image_code,
+			'e_relevance_level'=>2,
+			'e_use_topics'=>0,
+			'e_is_special'=>0
+		));
+
+		persistant_cache_delete('THEME_IMAGES');
 	}
 
 	/**
@@ -329,7 +336,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 
 		if (get_base_url()==get_forum_base_url())
 		{
-			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false));
+			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 			handle_max_file_size($hidden,'image');
 		}
 		require_code('themes2');

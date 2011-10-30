@@ -662,10 +662,10 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 		if ($entry['path']=='mod.php') continue;
 		if (substr($entry['path'],-1)=='/') continue;
 
-		$data=tar_get_file($tar,$entry['path'],true);
+		$data=(strtolower(substr($entry['path'],-4,4))=='.tpl')?tar_get_file($tar,$entry['path'],true):NULL;
 
 		// .php?
-		if ((strtolower(substr($entry['path'],-4,4))=='.php') && ((!is_null($data)) && (strpos($data['data'],'{+START,PHP')!==false) || (strpos($data['data'],'<'.'?php')!==false)))
+		if ((strtolower(substr($entry['path'],-4,4))=='.php') || ((!is_null($data)) && ((strpos($data['data'],'{+START,PHP')!==false) || (strpos($data['data'],'<'.'?php')!==false))))
 		{
 			$php=true;
 			$this_php=true;

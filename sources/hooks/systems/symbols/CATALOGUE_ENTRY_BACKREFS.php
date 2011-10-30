@@ -33,27 +33,36 @@ class Hook_symbol_CATALOGUE_ENTRY_BACKREFS
 		if (array_key_exists(0,$param))
 		{
 			$limit=array_key_exists(1,$param)?intval($param[1]):NULL;
-			$resolve=array_key_exists(2,$param)?$param[2]:'';
+			$resolve=array_key_exists(2,$param)?$param[2]:''; // Content-type to associate back to, and fetch the ID for
+			$rating_type=array_key_exists(3,$param)?$param[3]:''; // If non empty, it will get the highest rated first
 
 			$done=0;
-			$results=$GLOBALS['SITE_DB']->query_select('catalogue_fields f JOIN '.get_table_prefix().'catalogue_efv_short s ON f.id=s.cf_id AND '.db_string_equal_to('cf_type','reference').' OR cf_type LIKE \''.db_encode_like('ck_%').'\'',array('ce_id'),array('cv_value'=>$param[0]));
+			$table='catalogue_fields f JOIN '.get_table_prefix().'catalogue_efv_short s ON f.id=s.cf_id AND '.db_string_equal_to('cf_type','reference').' OR cf_type LIKE \''.db_encode_like('ck_%').'\'';
+			$select=array('ce_id');
+			$order_by='';
+			if ($resolve!='')
+			{
+				$table.=' JOIN '.get_table_prefix().'catalogue_entry_linkage ON '.db_string_equal_to('content_type',$param[2]).' AND catalogue_entry_id=ce_id';
+				$select[]='content_id';
+
+				if ($rating_type!='')
+				{
+					$select[]='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$rating_type).' AND rating_for_id=content_id) AS compound_rating';
+					$order_by='ORDER BY compound_rating DESC';
+				}
+			}
+			$results=$GLOBALS['SITE_DB']->query_select($table,$select,array('cv_value'=>$param[0]),$order_by);
 			foreach ($results as $result)
 			{
+				if ($value!='') $value.=',';
 				if ($resolve!='')
 				{
-					$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entry_linkage','content_id',array('content_type'=>$param[2],'catalogue_entry_id'=>$result['ce_id']));
-					if (!is_null($test))
-					{
-						if ($value!='') $value.=',';
-						$value.=$test;
-						$done++;
-					}
+					$value.=$result['content_id'];
 				} else
 				{
-					if ($value!='') $value.=',';
 					$value.=strval($result['ce_id']);
-					$done++;
 				}
+				$done++;
 				
 				if ((!is_null($limit)) && ($done==$limit)) break;
 			}

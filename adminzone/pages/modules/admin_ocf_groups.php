@@ -200,7 +200,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 		if (get_base_url()==get_forum_base_url())
 		{
 			handle_max_file_size($hidden,'image');
-			$fields->attach(form_input_upload(do_lang_tempcode('RANK_IMAGE'),do_lang_tempcode('DESCRIPTION_RANK_IMAGE'),'file',false));
+			$fields->attach(form_input_upload(do_lang_tempcode('RANK_IMAGE'),do_lang_tempcode('DESCRIPTION_RANK_IMAGE'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		}
 		require_code('themes2');
 		$ids=get_all_image_ids_type('ocf_rank_images',false,$GLOBALS['FORUM_DB']);

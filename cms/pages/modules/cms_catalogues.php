@@ -693,7 +693,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 		require_code('form_templates');
 	
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('UPLOAD_DESC'),'file_novalidate',true));
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('UPLOAD_DESC'),'file_novalidate',true,NULL,NULL,true,'csv,txt'));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
 
@@ -1107,7 +1107,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		handle_max_file_size($hidden,'image');
-		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image));
+		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
 		// Is the catalogue a tree?
 		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name));

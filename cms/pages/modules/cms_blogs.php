@@ -246,7 +246,7 @@ class Module_cms_blogs extends standard_aed_module
 		}
 		if (get_value('disable_secondary_news')!=='1')
 			$fields2->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_CATEGORIES'),do_lang_tempcode('DESCRIPTION_SECONDARY_CATEGORIES'),'news_category',$cats2));
-		$fields2->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_NEWS_IMAGE_OVERRIDE'),'file',false,$image));
+		$fields2->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_NEWS_IMAGE_OVERRIDE'),'file',false,$image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		handle_max_file_size($hidden,'image');
 		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
 			$fields2->attach(form_input_date__scheduler(do_lang_tempcode('PUBLICATION_TIME'),do_lang_tempcode('DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true));
@@ -524,7 +524,7 @@ class Module_cms_blogs extends standard_aed_module
 		// Build up form
 		$fields_xml=new ocp_tempcode();		
 
-		$fields_xml->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_WP_XML'),'file_novalidate',false));
+		$fields_xml->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_WP_XML'),'file_novalidate',false,NULL,NULL,true,'xml'));
 
 		$fields_xml->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'xml_url','',false));
 

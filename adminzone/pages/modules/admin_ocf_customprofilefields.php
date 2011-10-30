@@ -144,7 +144,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			$fields->attach(form_input_tick(do_lang_tempcode('SHOW_ON_JOIN_FORM'),do_lang_tempcode('DESCRIPTION_SHOW_ON_JOIN_FORM'),'show_on_join_form',$show_on_join_form==1));
 		}
 		$orderlist=new ocp_tempcode();
-		$num_cpfs=$GLOBALS['SITE_DB']->query_value('f_custom_fields','COUNT(*)');
+		$num_cpfs=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','COUNT(*)');
 		if ($name=='') $num_cpfs++;
 		$selected_one=false;
 		for ($i=0;$i<(is_null($order)?$num_cpfs:max($num_cpfs,$order));$i++)
@@ -233,14 +233,14 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		}
 
 		$fields=new ocp_tempcode();
-		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,NULL,true);
+		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,NULL);
 		$changed=false;
 		foreach ($rows as $row)
 		{
 			$order=post_param_integer('order_'.strval($row['id']),NULL);
 			if (!is_null($order)) // Ah, it's been set, better save that
 			{
-				$GLOBALS['SITE_DB']->query_update('f_custom_fields',array('cf_order'=>$order),array('id'=>$row['id']),'',1);
+				$GLOBALS['FORUM_DB']->query_update('f_custom_fields',array('cf_order'=>$order),array('id'=>$row['id']),'',1);
 				$changed=true;
 			}
 		}
@@ -251,7 +251,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		require_code('form_templates');
 		foreach ($rows as $row)
 		{
-			$trans=get_translated_text($row['cf_name'],$GLOBALS['SITE_DB']);
+			$trans=get_translated_text($row['cf_name'],$GLOBALS['FORUM_DB']);
 
 			if (substr($trans,0,4)=='ocp_')
 			{
@@ -265,7 +265,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$orderlist=new ocp_tempcode();
-			$num_cpfs=$GLOBALS['SITE_DB']->query_value('f_custom_fields','COUNT(*)');
+			$num_cpfs=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','COUNT(*)');
 			$selected_one=false;
 			$order=$row['cf_order'];
 			for ($i=0;$i<max($num_cpfs,$order);$i++)
@@ -308,7 +308,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 	function may_delete_this($_id)
 	{
 		$id=intval($_id);
-		$locked=$GLOBALS['SITE_DB']->query_value('f_custom_fields','cf_locked',array('id'=>$id));
+		$locked=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','cf_locked',array('id'=>$id));
 		return ($locked==0);
 	}
 
@@ -320,15 +320,15 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 	 */
 	function fill_in_edit_form($id)
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('f_custom_fields',array('*'),array('id'=>intval($id)));
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('*'),array('id'=>intval($id)));
 		if (!array_key_exists(0,$rows))
 		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
 	
-		$name=get_translated_text($myrow['cf_name'],$GLOBALS['SITE_DB']);
-		$description=get_translated_text($myrow['cf_description'],$GLOBALS['SITE_DB']);
+		$name=get_translated_text($myrow['cf_name'],$GLOBALS['FORUM_DB']);
+		$description=get_translated_text($myrow['cf_description'],$GLOBALS['FORUM_DB']);
 		$default=$myrow['cf_default'];
 		require_code('encryption');
 		$encrypted=(($myrow['cf_encrypted']==1) && (is_encryption_enabled()));
@@ -345,9 +345,9 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		{
 			if (!array_key_exists('cf_show_on_join_form',$myrow))
 			{
-				$GLOBALS['SITE_DB']->add_table_field('f_custom_fields','cf_show_on_join_form','BINARY',0);
-				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'f_custom_fields SET cf_show_on_join_form=cf_required');
-				$rows=$GLOBALS['SITE_DB']->query_select('f_custom_fields',array('*'),array('id'=>intval($id)));
+				$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_show_on_join_form','BINARY',0);
+				$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields SET cf_show_on_join_form=cf_required');
+				$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('*'),array('id'=>intval($id)));
 				$myrow=$rows[0];
 			}
 			$show_on_join_form=$myrow['cf_show_on_join_form'];
@@ -408,12 +408,12 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		breadcrumb_set_parents(array());
 
 		$fields=new ocp_tempcode();
-		$rows=$GLOBALS['SITE_DB']->query_select('f_custom_fields',array('id','cf_name'));
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_name'));
 		require_code('form_templates');
 		$list=new ocp_tempcode();
 		foreach ($rows as $row)
 		{
-			$list->attach(form_input_list_entry(strval($row['id']),false,get_translated_text($row['cf_name'],$GLOBALS['SITE_DB'])));
+			$list->attach(form_input_list_entry(strval($row['id']),false,get_translated_text($row['cf_name'],$GLOBALS['FORUM_DB'])));
 		}
 		if ($list->is_empty())
 		{
@@ -446,7 +446,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		$a=is_null($_a)?'1=1':('m_join_time>'.strval((integer)$_a));
 		$_b=get_input_date('end');
 		$b=is_null($_b)?'1=1':('m_join_time<'.strval((integer)$_b));
-		$members_in_range=$GLOBALS['SITE_DB']->query('SELECT '.$f_name.',COUNT('.$f_name.') AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'f_member_custom_fields f ON m.id=f.mf_member_id WHERE '.$a.' AND '.$b.' GROUP BY '.$f_name.' ORDER BY cnt',300/*reasonable limit*/);
+		$members_in_range=$GLOBALS['FORUM_DB']->query('SELECT '.$f_name.',COUNT('.$f_name.') AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f ON m.id=f.mf_member_id WHERE '.$a.' AND '.$b.' GROUP BY '.$f_name.' ORDER BY cnt',300/*reasonable limit*/);
 		if (count($members_in_range)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__TOP_ONLY',escape_html(integer_format(300))),'warn');
 		$lines=new ocp_tempcode();
 		foreach ($members_in_range as $row)

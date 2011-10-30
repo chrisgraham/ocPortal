@@ -87,7 +87,6 @@ function get_mime_type($extension)
 		'mp4'=>'video/mp4',
 		'm4v'=>'video/mp4',
 		'mpeg'=>'video/mpeg',
-		'flv'=>'video/x-flv',
 		'ogv'=>'video/ogg',
 		'webm'=>'video/webm',
 

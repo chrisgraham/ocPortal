@@ -201,7 +201,7 @@ class Module_admin_addons
 		$javascript=/*'';//*/'standardAlternateFields(\'file\',\'url\');';
 
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',$required));
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',$required,NULL,NULL,true,'tar'));
 		$fields->attach(form_input_tree_list(do_lang_tempcode('DOWNLOAD'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_OCPORTALCOM'),'url',NULL,'choose_ocportalcom_addon',array(),$required));
 
 		$hidden=new ocp_tempcode();

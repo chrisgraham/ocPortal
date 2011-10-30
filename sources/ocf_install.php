@@ -26,6 +26,8 @@ OCF is designed to run under a number of different situations, via the object or
  - Multi site network linking / Importing a non-forum (FORUM_DB!=SITE_DB)
  - Importing a forum (import.php functions used to to and from OCF and normal-forum-driver [which might not be OCF])
 
+Exception: Welcome Mails are per-site, so run through SITE_DB. They have their own install code in the admin module though.
+
 SITE_DB - The site database, always
 FORUM_DB - The forum database. If not using OCF, will not be the OCF db. Switched around by installer/forum-importers according for need for locality/OCFality.
 FORUM_DRIVER - The forum driver. May not be OCF, depending on which forum driver is used.

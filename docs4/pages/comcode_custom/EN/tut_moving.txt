@@ -54,6 +54,8 @@ Lastly, you should clear the block cache from Admin Zone > Tools > Cleanup Tools
 [title="2"]Database contents[/title]
 
 It is crucial that database contents is backed up and transferred to the new server, as this is where most data is stored. If the database settings are different, you will need to use the [tt]config_editor.php[/tt] script to update your ocPortal settings (or edit [tt]info.php[/tt] by hand).
+You may need to update the following settings:
+[tt]db_site[/tt], [tt]db_site_host[/tt], [tt]db_site_user[/tt], [tt]db_site_password[/tt], [tt]db_forums[/tt], [tt]db_forums_host[/tt], [tt]db_forums_user[/tt], [tt]db_forums_password[/tt]
 
 [title="2"]See also[/title]
 

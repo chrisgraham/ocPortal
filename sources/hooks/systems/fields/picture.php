@@ -125,7 +125,7 @@ class Hook_fields_picture
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		$say_required=($field['cf_required']==1) && (($actual_value=='') || (is_null($actual_value)));
-		$ffield=form_input_upload($_cf_name,$_cf_description,'field_'.strval($field['id']),$say_required,($field['cf_required']==1)?NULL/*so unlink option not shown*/:$actual_value);
+		$ffield=form_input_upload($_cf_name,$_cf_description,'field_'.strval($field['id']),$say_required,($field['cf_required']==1)?NULL/*so unlink option not shown*/:$actual_value,true,str_replace(' ','',get_option('valid_images')));
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');

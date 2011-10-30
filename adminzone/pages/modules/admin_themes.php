@@ -1637,7 +1637,7 @@ class Module_admin_themes
 			$list->attach(combo_get_image_paths($path,get_base_url().'/themes/default/images_custom/',get_file_base().'/themes/default/images_custom/'));
 		}*/
 		handle_max_file_size($hidden,'image');
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false));
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 	//	$fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),$list));
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'path',$path,false));
 		return array($fields,$hidden);

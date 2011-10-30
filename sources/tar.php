@@ -371,9 +371,10 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
  * @param  array			The TAR file handle
  * @param  PATH			The full path to the file we want to get
  * @param  boolean		Whether to tolerate errors (returns NULL if error)
+ * @param  PATH			Write data to here (NULL: return within array)
  * @return ?array			A map, containing 'data' (the file), 'size' (the filesize), 'mtime' (the modification timestamp), and 'mode' (the permissions) (NULL: not found / TAR possibly corrupt if we turned tolerate errors on)
  */
-function tar_get_file(&$resource,$path,$tolerate_errors=false)
+function tar_get_file(&$resource,$path,$tolerate_errors=false,$write_data_to=NULL)
 {
 	if (!array_key_exists('directory',$resource))
 	{
@@ -387,6 +388,11 @@ function tar_get_file(&$resource,$path,$tolerate_errors=false)
 	{
 		if ($stuff['path']==$path)
 		{
+			if (!is_null($write_data_to))
+			{
+				$outfile=fopen($write_data_to,'wb');
+			}
+
 			if ($stuff['size']==0)
 			{
 				$data='';
@@ -399,8 +405,23 @@ function tar_get_file(&$resource,$path,$tolerate_errors=false)
 				{
 					$read_amount=min(4096,$stuff['size']-strlen($data));
 					$data.=fread($resource['myfile'],$read_amount);
+					
+					if (!is_null($write_data_to))
+					{
+						if (fwrite($outfile,$data)<strlen($data)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+
+						$data='';
+					}
 				}
 			}
+
+			if (!is_null($write_data_to))
+			{
+				fclose($outfile);
+				fix_permissions($path);
+				sync_file($path);
+			}
+
 			return array('data'=>&$data,'size'=>$stuff['size'],'mode'=>$stuff['mode'],'mtime'=>$stuff['mtime']);
 		}
 	}

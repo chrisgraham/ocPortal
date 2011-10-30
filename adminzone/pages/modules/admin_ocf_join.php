@@ -774,7 +774,7 @@ class Module_admin_ocf_join
 
 		$fields=new ocp_tempcode();
 		handle_max_file_size($hidden);
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_IMPORT_CSV'),'file',true));
+		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_IMPORT_CSV'),'file',true,NULL,NULL,true,'csv,txt'));
 		$fields->attach(form_input_line(do_lang_tempcode('DEFAULT_PASSWORD'),do_lang_tempcode('DESCRIPTION_DEFAULT_PASSWORD'),'default_password','',false));
 
 		$submit_name=do_lang_tempcode('IMPORT_MEMBER_CSV');

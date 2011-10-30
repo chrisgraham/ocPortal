@@ -699,7 +699,7 @@ class standard_aed_module
 		foreach ($rows as $row)
 		{
 			$key=$row[$this->array_key];
-			$readable=$this->title_is_multi_lang?get_translated_text($row[$select_field]):$row[$select_field];
+			$readable=$this->title_is_multi_lang?get_translated_text($row[$select_field],$db):$row[$select_field];
 			if (is_integer($readable)) $readable='#'.strval($readable);
 			if ($readable=='') $readable=do_lang('_DEFAULT');
 			$row['_readable']=$readable;

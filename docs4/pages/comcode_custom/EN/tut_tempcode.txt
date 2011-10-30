@@ -360,7 +360,7 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$CATALOGUE_ENTRY_BACKREFS,123}</td>
-		<td>Get a comma-separated list of IDs of catalogue entries that reference the given catalogue entry. A second parameter may be given, which is a limit on how many to return. A third parameter may be set as the name of a content type if the backrefs should be resolved to linked content entries (for the case where the linkage is via custom fields rather than a pure catalogue).</td>
+		<td>Get a comma-separated list of IDs of catalogue entries that reference the given catalogue entry. A second parameter may be given, which is a limit on how many to return. A third parameter may be set as the name of a content type if the backrefs should be resolved to linked content entries (for the case where the linkage is via custom fields rather than a pure catalogue). A fourth parameter of the rating type code may be given if sort-by-rating is needed (highest rated first).</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$CATALOGUE_ENTRY_FIELD_VALUE,123,0}</td>

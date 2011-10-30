@@ -898,13 +898,17 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
  * @param  ?string		The default value for the field (NULL: none) (blank: none)
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  boolean		Whether swf-upload-style is preferred
+ * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)
  * @return tempcode		The input field
  */
-function form_input_upload($pretty_name,$description,$name,$required,$default=NULL,$tabindex=NULL,$swfupload=true)
+function form_input_upload($pretty_name,$description,$name,$required,$default=NULL,$tabindex=NULL,$swfupload=true,$filter='')
 {
 	require_lang('javascript');
-	require_javascript('javascript_swfupload');
-	require_css('swfupload');
+	if ($swfupload)
+	{
+		require_javascript('javascript_swfupload');
+		require_css('swfupload');
+	}
 	
 	if ($default==='') $default=NULL;
 
@@ -920,7 +924,7 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
 		$existing_url=$default;
 		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
 	}
-	$input=do_template('FORM_SCREEN_INPUT_UPLOAD',array('PRETTY_NAME'=>$pretty_name,'EXISTING_URL'=>$existing_url,'IS_IMAGE'=>$is_image,'SWFUPLOAD'=>$swfupload,'EDIT'=>((!is_null($default)) && (!$required)),'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name));
+	$input=do_template('FORM_SCREEN_INPUT_UPLOAD',array('FILTER'=>$filter,'PRETTY_NAME'=>$pretty_name,'EXISTING_URL'=>$existing_url,'IS_IMAGE'=>$is_image,'SWFUPLOAD'=>$swfupload,'EDIT'=>((!is_null($default)) && (!$required)),'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -933,13 +937,18 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?array			The default value for the field (NULL: none)
+ * @param  boolean		Whether swf-upload-style is preferred
+ * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)
  * @return tempcode		The input field
  */
-function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL,$default=NULL)
+function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL,$default=NULL,$swfupload=true,$filter='')
 {
 	require_lang('javascript');
-	require_javascript('javascript_swfupload');
-	require_css('swfupload');
+	if ($swfupload)
+	{
+		require_javascript('javascript_swfupload');
+		require_css('swfupload');
+	}
 	require_javascript('javascript_multi');
 
 	$tabindex=get_form_field_tabindex($tabindex);
@@ -954,7 +963,7 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 		$existing_url=$default[0];
 		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
 	}
-	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'I'=>'1','NAME_STUB'=>$name));
+	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('TABINDEX'=>strval($tabindex),'FILTER'=>$filter,'REQUIRED'=>$_required,'SWFUPLOAD'=>$swfupload,'NAME'=>$name,'I'=>'1','NAME_STUB'=>$name));
 	return _form_input('',$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 

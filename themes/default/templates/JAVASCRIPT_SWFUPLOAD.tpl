@@ -1497,18 +1497,20 @@ function uploadError(file, errorCode, message, ob) {
 	}
 }
 
-function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name)
+function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
 	if (!posting_field_name) posting_field_name='post';
 	
 	var rep=document.getElementById(name);
 	rep.originally_disabled=rep.disabled;
 	rep.disabled=true;
-	replaceFileInput(page_type,name,_btnSubmitID,posting_field_name);
+	replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter);
 }
 
-function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
+function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
+	if (!filter) filter="{$CONFIG_OPTION#,valid_types}";
+	
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
 
@@ -1713,7 +1715,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 		out+='	<param name="page_type" value="'+page_type+'" />';
 		out+='	<param name="posting_field_name" value="'+posting_field_name+'" />';
 		out+='	<param name="_btnSubmitID" value="'+_btnSubmitID+'" />';
-		out+='	<param name="types" value="{$CONFIG_OPTION,valid_types}" />';
+		out+='	<param name="types" value="'+escape_html(filter)+'" />';
 		out+='	<param name="fail_message" value="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message^;}}" />';
 		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message^;*}" />';
 		out+='	<param name="reverting_title" value="{!JAVA_FTP_reverting_title^;*}" />';
@@ -1765,6 +1767,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 	{
 		var mfs=filenameField.form.elements['MAX_FILE_SIZE'];
 		if ((typeof mfs!='undefined') && (typeof mfs.value=='undefined')) mfs=mfs[0];
+		
+		filter='*.'+filter.replace(/,/g,';*.');
 
 		var ob=new SWFUpload({
 			// ocPortal binding settings
@@ -1783,11 +1787,11 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name)
 			// Flash file settings
 			file_size_limit : (typeof mfs=='undefined')?'2 GB':(mfs.value+' B'),
 			{+START,IF,{$LT,{$LENGTH,{$CONFIG_OPTION,valid_types}},30}}
-			file_types : (name.indexOf('file_novalidate')==-1)?"*.{$REPLACE,\,,;*.,{$CONFIG_OPTION,valid_types}}":"*.*",
+			file_types : (name.indexOf('file_novalidate')==-1)?filter:"*.*",
 			file_types_description : "{!ALLOWED_FILES^#}",
 			{+END}
 			{+START,IF,{$NOT,{$LT,{$LENGTH,{$CONFIG_OPTION,valid_types}},30}}}
-			file_types : (name.indexOf('file_novalidate')==-1)?"*.{$REPLACE,\,,;*.,{$CONFIG_OPTION,valid_types}}":"*.*",
+			file_types : (name.indexOf('file_novalidate')==-1)?filter:"*.*",
 			file_types_description : "{!ALLOWED_FILES^#}                                                                                                    ",
 			{+END}
 			file_upload_limit : "0",

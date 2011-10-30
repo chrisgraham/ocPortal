@@ -583,11 +583,11 @@ class Hook_addon_registry_core_form_interfaces
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD',array('EXISTING_URL'=>placeholder_url(),'IS_IMAGE'=>'','SWFUPLOAD'=>false,'EDIT'=>'','TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name));
+		$input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD',array('FILTER'=>'','EXISTING_URL'=>placeholder_url(),'IS_IMAGE'=>'','SWFUPLOAD'=>false,'EDIT'=>'','TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'I'=>$name,'NAME_STUB'=>lorem_word()));
+		$input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array('TABINDEX'=>placeholder_number(),'FILTER'=>'','SWFUPLOAD'=>false,'REQUIRED'=>'','NAME'=>$name,'I'=>$name,'NAME_STUB'=>lorem_word()));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>true,'BORING_NAME'=>$name,'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name = placeholder_random_id();

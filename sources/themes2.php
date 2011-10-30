@@ -173,6 +173,8 @@ function actual_add_theme_image($theme,$lang,$id,$path,$fail_ok=false)
 	$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$id,'theme'=>$theme,'path'=>$path,'lang'=>$lang));
 
 	log_it('ADD_THEME_IMAGE',$id,$theme);
+
+	persistant_cache_delete('THEME_IMAGES');
 }
 
 /**

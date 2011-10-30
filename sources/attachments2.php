@@ -188,19 +188,6 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 								if ((is_special_file($path_part)) || (substr($path_part,0,1)=='.')) continue 2;
 							}
 
-							if ($arcext=='tar')
-							{
-								$file_details=tar_get_file($myfile,$entry['path']);
-							} elseif ($arcext=='zip')
-							{
-								zip_entry_open($myfile,$entry['zip_entry']);
-								$file_details=array(
-									'size'=>$entry['size'],
-									'data'=>zip_entry_read($entry['zip_entry'],$entry['size']),
-								);
-								zip_entry_close($entry['zip_entry']);
-							}
-
 							$place=get_custom_file_base().'/uploads/attachments/'.$_file;
 							$i=2;
 							// Hunt with sensible names until we don't get a conflict
@@ -222,9 +209,31 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 								$i++;
 							}
 
-							$out_file=@fopen($place,'wb') OR intelligent_write_error($place);
-							fwrite($out_file,$file_details['data']);
-							fclose($out_file);
+							if ($arcext=='tar')
+							{
+								$file_details=tar_get_file($myfile,$entry['path'],false,$place);
+							} elseif ($arcext=='zip')
+							{
+								zip_entry_open($myfile,$entry['zip_entry']);
+								$file_details=array(
+									'size'=>$entry['size'],
+								);
+
+								$out_file=@fopen($place,'wb') OR intelligent_write_error($place);
+								$more=mixed();
+								do
+								{
+									$more=zip_entry_read($entry['zip_entry']);
+									if ($more!==false)
+									{
+										if (fwrite($out_file,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+									}
+								}
+								while (($more!==false) && ($more!=''));
+								fclose($out_file);
+
+								zip_entry_close($entry['zip_entry']);
+							}
 
 							$description=do_lang('EXTRACTED_FILE');
 							if (count($path_parts)>1)
