@@ -172,7 +172,8 @@ class Module_warnings extends standard_aed_module
 		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
 		$probation=$GLOBALS['FORUM_DB']->query_value('f_warnings','p_probation',array('id'=>$id));
 		$on_probation_until=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_on_probation_until');
-		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_on_probation_until'=>$on_probation_until-$probation*60*60*24),array('id'=>$member_id),'',1);
+		if (!is_null($on_probation_until))
+			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_on_probation_until'=>$on_probation_until-$probation*60*60*24),array('id'=>$member_id),'',1);
 		$GLOBALS['FORUM_DB']->query_update('f_warnings',array('p_probation'=>0),array('id'=>$id),'',1);
 
 		log_it('UNDO_PROBATION',strval($id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
@@ -650,7 +651,7 @@ class Module_warnings extends standard_aed_module
 			if ($probation!=0)
 			{
 				$on_probation_until=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_on_probation_until');
-				if ($on_probation_until<time()) $on_probation_until=time();
+				if ((is_null($on_probation_until)) || ($on_probation_until<time())) $on_probation_until=time();
 				$on_probation_until+=$probation*60*60*24;
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_on_probation_until'=>$on_probation_until),array('id'=>$member_id),'',1);
 			}

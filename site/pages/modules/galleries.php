@@ -1009,10 +1009,11 @@ class Module_galleries
 	/**
 	 * The UI to show an image.
 	 *
-	 * @return ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
+	 * @param  ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
+	 * @param  tempcode		Breadcrumbs.
 	 * @return tempcode		The UI
 	 */
-	function show_image($category_name=NULL)
+	function show_image($category_name=NULL,$tree=NULL)
 	{
 		$id=get_param_integer('id');
 
@@ -1038,8 +1039,9 @@ class Module_galleries
 
 		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
+		$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
 		if (is_null($category_name))
-			$category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
+			$category_name=$true_category_name;
 
 		if (get_param_integer('slideshow',0)==1)
 		{
@@ -1101,7 +1103,7 @@ class Module_galleries
 		}
 		$member_details=((is_null($member_id)) || (get_forum_type()!='ocf'))?new ocp_tempcode():ocf_show_member_box($member_id);
 
-		$tree=gallery_breadcrumbs($cat,$root,false,get_module_zone('galleries'));
+		if (is_null($tree)) $tree=gallery_breadcrumbs($cat,$root,false,get_module_zone('galleries'));
 		breadcrumb_add_segment($tree,do_lang_tempcode('VIEW_IMAGE'));
 
 		$GLOBALS['META_DATA']+=array(
@@ -1116,16 +1118,17 @@ class Module_galleries
 			'image'=>$url,
 		);
 
-		return do_template('GALLERY_ENTRY_SCREEN',array('_GUID'=>'332a19b6a72505f8e1eb4d288df247ce','SLIDESHOW'=>(get_param_integer('slideshow',0)==1),'GALLERY_TITLE'=>$category_name,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'ID'=>strval($id),'TAGS'=>get_loaded_tags('images'),'TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'MEMBER_DETAILS'=>$member_details,'X'=>integer_format($x),'N'=>integer_format($n),'VIEWS'=>integer_format($myrow['image_views']),'ADD_DATE_RAW'=>strval($myrow['add_date']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'NAV'=>$nav,'COMMENTS'=>$comments,'URL'=>$url,'WARNING_DETAILS'=>$warning_details));
+		return do_template('GALLERY_ENTRY_SCREEN',array('_GUID'=>'332a19b6a72505f8e1eb4d288df247ce','CAT'=>$cat,'SLIDESHOW'=>(get_param_integer('slideshow',0)==1),'TRUE_GALLERY_TITLE'=>$true_category_name,'GALLERY_TITLE'=>$category_name,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'ID'=>strval($id),'TAGS'=>get_loaded_tags('images'),'TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'MEMBER_DETAILS'=>$member_details,'X'=>integer_format($x),'N'=>integer_format($n),'VIEWS'=>integer_format($myrow['image_views']),'ADD_DATE_RAW'=>strval($myrow['add_date']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'NAV'=>$nav,'COMMENTS'=>$comments,'URL'=>$url,'WARNING_DETAILS'=>$warning_details));
 	}
 
 	/**
 	 * The UI to show a video.
 	 *
-	 * @return ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
+	 * @param  ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
+	 * @param  tempcode		Breadcrumbs.
 	 * @return tempcode		The UI
 	 */
-	function show_video($category_name=NULL)
+	function show_video($category_name=NULL,$tree=NULL)
 	{
 		$id=get_param_integer('id');
 
@@ -1140,9 +1143,9 @@ class Module_galleries
 		$title=get_page_title('VIEW_VIDEO',true,NULL,NULL,$awards);
 
 		$root=get_param('root','root');
-	
+
 		seo_meta_load_for('video',strval($id));
-	
+
 		// Pic up some info
 		$rows=$GLOBALS['SITE_DB']->query_select('videos',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
@@ -1175,8 +1178,9 @@ class Module_galleries
 		$comment_details=get_comment_details('videos',$myrow['allow_comments']==1,strval($id),false,get_value('comment_forum__videos'),NULL,NULL,false,false,$myrow['submitter'],$myrow['allow_comments']==2);
 		$trackback_details=get_trackback_details('videos',strval($id),$myrow['allow_trackbacks']==1);
 
+		$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
 		if (is_null($category_name))
-			$category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
+			$category_name=$true_category_name;
 
 		// Validation
 		if ($myrow['validated']==0)
@@ -1217,7 +1221,7 @@ class Module_galleries
 
 		$video_details=show_video_details($myrow);
 
-		$tree=gallery_breadcrumbs($cat,$root,false,get_module_zone('galleries'));
+		if (is_null($tree)) $tree=gallery_breadcrumbs($cat,$root,false,get_module_zone('galleries'));
 		breadcrumb_add_segment($tree,do_lang_tempcode('VIEW_VIDEO'));
 
 		$GLOBALS['META_DATA']+=array(
@@ -1236,7 +1240,7 @@ class Module_galleries
 			'video:type'=>$mime_type,
 		);
 
-		return do_template('GALLERY_ENTRY_SCREEN',array('_GUID'=>'91e231906ed899513ec2db8a2974dddf','SLIDESHOW'=>false,'GALLERY_TITLE'=>$category_name,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'ID'=>strval($id),'TAGS'=>get_loaded_tags('videos'),'TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'URL'=>$url,'VIDEO_DETAILS'=>$video_details,'MEMBER_DETAILS'=>$member_details,'X'=>integer_format($x),'N'=>integer_format($n),'VIEWS'=>integer_format($myrow['video_views']),'ADD_DATE_RAW'=>strval($myrow['add_date']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'RATING_DETAILS'=>$rating_details,'TRACKBACK_DETAILS'=>$trackback_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'NAV'=>$nav,'COMMENTS'=>$comments,'VIDEO'=>$video,'WARNING_DETAILS'=>$warning_details));
+		return do_template('GALLERY_ENTRY_SCREEN',array('_GUID'=>'91e231906ed899513ec2db8a2974dddf','CAT'=>$cat,'SLIDESHOW'=>false,'TRUE_GALLERY_TITLE'=>$true_category_name,'GALLERY_TITLE'=>$category_name,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'ID'=>strval($id),'TAGS'=>get_loaded_tags('videos'),'TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'URL'=>$url,'VIDEO_DETAILS'=>$video_details,'MEMBER_DETAILS'=>$member_details,'X'=>integer_format($x),'N'=>integer_format($n),'VIEWS'=>integer_format($myrow['video_views']),'ADD_DATE_RAW'=>strval($myrow['add_date']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'RATING_DETAILS'=>$rating_details,'TRACKBACK_DETAILS'=>$trackback_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'NAV'=>$nav,'COMMENTS'=>$comments,'VIDEO'=>$video,'WARNING_DETAILS'=>$warning_details));
 	}
 
 	/**
@@ -1386,7 +1390,7 @@ class Module_galleries
 		}
 
 		// Link to show more. Preserve info about where we were
-		$slideshow_url=build_url(array('page'=>'_SELF','type'=>$first_type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$first_id,'slideshow'=>1,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
+		$slideshow_url=build_url(array('page'=>'_SELF','type'=>$first_type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$first_id,'slideshow'=>1,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF',NULL,true);
 		$more_url=is_null($cat)?NULL:build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'root'=>($root=='root')?NULL:$root,'start'=>($start==0)?NULL:$start,'max'=>($max==get_default_gallery_max())?NULL:$max,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 
 		return do_template('GALLERY_NAV',array(

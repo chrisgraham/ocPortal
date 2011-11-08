@@ -1,4 +1,4 @@
-<form title="{!COUNT_PAGES}" class="inline" action="{$URL_FOR_GET_FORM*,{URL}}" method="get">
+<form title="{!COUNT_PAGES}" class="inline" action="{$URL_FOR_GET_FORM*,{URL}}" method="get" target="_self">
 	<div class="results_browser_pages">
 		{HIDDEN}
 		<div class="accessibility_hidden"><label for="blp_start{RAND*}">{!COUNT_PAGES}: {$GET*,TEXT_ID}</label></div>

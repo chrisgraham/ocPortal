@@ -133,6 +133,13 @@ class Module_catalogues
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','icf_id',array('cf_id'),'id');
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fce_id',array('ce_id'),'id');
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','ice_id',array('ce_id'),'id');
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','cefv_f_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','cefv_i_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long','cefv_l_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short','cefv_s_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long_trans','cefv_lt_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short_trans','cefv_st_combo',array('ce_id','cf_id'),'id');
 		}
 
 		if (is_null($upgrade_from))

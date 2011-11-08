@@ -125,6 +125,11 @@ class Module_admin_newsletter extends standard_aed_module
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;
 
+		if (post_param('message','')!='')
+		{
+			return $this->send_gui(post_param('message'));
+		}
+
 		$_hooks=find_all_hooks('modules','admin_newsletter');
 
 		$chosen_content=post_param_integer('chosen_content',0);
@@ -447,7 +452,7 @@ class Module_admin_newsletter extends standard_aed_module
 						if ($jointime===false) $jointime=time();
 
 						$test=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter','id',array('email'=>$email));
-						if (!is_null($test))
+						if (is_null($test))
 						{
 							$GLOBALS['SITE_DB']->query_insert('newsletter',array(
 								'email'=>$email,
@@ -933,6 +938,7 @@ class Module_admin_newsletter extends standard_aed_module
 		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'confirm','old_type'=>get_param('type','')),'_SELF');
+
 		$submit_name=do_lang_tempcode('PREVIEW');
 
 		// Build up form
@@ -1090,7 +1096,7 @@ class Module_admin_newsletter extends standard_aed_module
 		breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
 
 		require_code('templates_confirm_screen');
-		return form_confirm_screen($title,$preview,'send','new',$extra_post_data);
+		return form_confirm_screen($title,$preview,'send',get_param('old_type','new'),$extra_post_data);
 	}
 
 	/**

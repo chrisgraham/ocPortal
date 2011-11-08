@@ -64,7 +64,7 @@
 			//]]></script>
 
 			{+START,IF,{SLIDESHOW}}
-				{!VIEWING_SLIDE,{X*},{N*}}<br />
+				{!VIEWING_SLIDE,{X*},{N*}}
 
 				{+START,IF_NON_EMPTY,{SLIDESHOW_NEXT_URL}}
 					<span id="changer_wrap">{!CHANGING_IN,xxx}</span>

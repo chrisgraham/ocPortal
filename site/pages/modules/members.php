@@ -694,7 +694,7 @@ class Module_members
 		} else */$remote=NULL;
 
 		$_on_probation=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_on_probation_until');
-		if ($_on_probation<=time()) $on_probation=NULL; else $on_probation=strval($_on_probation);
+		if ((is_null($_on_probation)) || ($_on_probation<=time())) $on_probation=NULL; else $on_probation=strval($_on_probation);
 
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$join_time),

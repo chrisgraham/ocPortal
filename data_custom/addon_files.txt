@@ -2284,3 +2284,9 @@ theme_debug
 -----------
 
 # # pages/minimodules_custom/EN/theme_debug.php
+
+nobox_gallery_entries
+---------------------
+
+# # sources_custom/hooks/systems/awards/video.php
+# # sources_custom/hooks/systems/awards/image.php

@@ -692,6 +692,7 @@ class Module_admin_config
 					$out.=static_evaluate_tempcode(form_input_date($name_tempcode,$explanation,$myrow['the_name'],false,false,false,intval(get_option($myrow['the_name'])),40,intval(date('Y'))-20,NULL,false));
 					break;
 				case 'forum':
+				case '?forum':
 					if ((get_forum_type()=='ocf') && (addon_installed('ocf_forum')))
 					{
 						$current_setting=get_option($myrow['the_name']);
@@ -700,8 +701,14 @@ class Module_admin_config
 							$_current_setting=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array('f_name'=>$current_setting));
 							if (is_null($_current_setting))
 							{
-								$current_setting=strval(db_get_first_id());
-								attach_message(do_lang_tempcode('FORUM_CURRENTLY_UNSET',$name_tempcode),'warn');
+								if ($myrow['the_type']=='?forum')
+								{
+									$current_setting=NULL;
+								} else
+								{
+									$current_setting=strval(db_get_first_id());
+									attach_message(do_lang_tempcode('FORUM_CURRENTLY_UNSET',$name_tempcode),'warn');
+								}
 							} else
 							{
 								$current_setting=strval($_current_setting);
@@ -850,7 +857,7 @@ class Module_admin_config
 				$date_value=get_input_date($myrow['the_name']);
 				$value=is_null($date_value)?'':strval($date_value);
 			}
-			elseif (($myrow['the_type']=='forum') && (get_forum_type()=='ocf'))
+			elseif ((($myrow['the_type']=='forum') || ($myrow['the_type']=='?forum')) && (get_forum_type()=='ocf'))
 			{
 				$value=post_param($myrow['the_name']);
 				if (is_numeric($value))

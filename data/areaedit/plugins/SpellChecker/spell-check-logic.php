@@ -271,12 +271,15 @@ function aspell_init()
 	{
 		list($lang_stub,)=explode('_',$lang);
 
+		$charset=str_replace('ISO-','iso',str_replace('iso-','iso',do_lang('charset')));
 		if (DIRECTORY_SEPARATOR=='\\') // Windows pSpell is buggy, so we can't use the replacement-pairs feature. Also need to replace data dir with special one.
 		{
-			$aspellcommand=pspell_new_personal($p_dict_path.'/'.$lang_stub.'.pws',$lang,$spelling,'',str_replace('ISO-','iso',str_replace('iso-','iso',do_lang('charset'))));
+			$aspellcommand=@pspell_new_personal($p_dict_path.'/'.$lang_stub.'.pws',$lang,$spelling,'',$charset);
+			if ($aspellconfig===false) $aspellcommand=pspell_new_personal($p_dict_path.'/'.$lang_stub.'.pws',$lang,$spelling,'',$charset);
 		} else
 		{
-			$aspellconfig=pspell_config_create($lang,$spelling,'',str_replace('ISO-','iso',str_replace('iso-','iso',do_lang('charset'))));
+			$aspellconfig=@pspell_config_create($lang,$spelling,'',$charset);
+			if ($aspellconfig===false) $aspellconfig=pspell_config_create('en',$spelling,'',$charset);
 			pspell_config_personal($aspellconfig,$p_dict_path.'/'.$lang_stub.'.pws');
 			pspell_config_repl($aspellconfig,$p_dict_path.'/'.$lang_stub.'.prepl');
 			$aspellcommand=pspell_new_config($aspellconfig);

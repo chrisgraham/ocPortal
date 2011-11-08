@@ -163,6 +163,12 @@ function do_form_submit(form)
 	disable_buttons_just_clicked(document.getElementsByTagName('input'));
 	disable_buttons_just_clicked(document.getElementsByTagName('button'));
 
+	if (typeof window.detect_interval!='undefined')
+	{
+		window.clearInterval(window.detect_interval);
+		window.detect_interval=null;
+	}
+
 	return true;
 }
 

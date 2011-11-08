@@ -308,7 +308,7 @@ function compile_template($data,$template_name,$theme,$lang)
 						if ($_opener_params=='') // Optimise it out for simple case?
 						{
 							$looked_up=do_lang(eval('return '.$first_param.';'),NULL,NULL,NULL,$lang);
-							if (escape_html($looked_up)==$looked_up)
+							if (apply_tempcode_escaping($escaped,$looked_up)==$looked_up)
 								$new_line='"'.php_addslashes($looked_up).'"';
 						}
 						$current_level_data[]=$new_line;

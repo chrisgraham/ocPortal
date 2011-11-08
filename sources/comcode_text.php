@@ -1115,7 +1115,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 													{
 														$link_captions_title='';
 														$downloaded_at_link=http_download_file($auto_link,3000,false);
-														if ((is_string($downloaded_at_link)) && (strpos($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'],'html')!==false))
+														if ((is_string($downloaded_at_link)) && (strpos($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'],'html')!==false) && ($GLOBALS['HTTP_MESSAGE']=='200'))
 														{
 															$matches=array();
 															if (preg_match('#\s*<title[^>]*\s*>\s*(.*)\s*\s*<\s*/title\s*>#miU',$downloaded_at_link,$matches)!=0)

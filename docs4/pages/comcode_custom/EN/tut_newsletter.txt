@@ -48,6 +48,8 @@ There is a newsletter archive available, so that you may browse through past new
 
 In a similar vein, you may create newsletters from news. To do this, just visit the view page for the news that you wish to use and click the appropriate link. You will then be given the choice to refine the newsletter before it is sent.
 
+For each content type supported, it shows only if there are less than 300 items that would be covered. If there are 300 or more, then it considers the content type too common to include and no items are shown.
+
 [title="2"]Customised targeting[/title]
 
 You may export the newsletter subscribers to a [acronym="Comma-separated Values"]CSV[/acronym] file, change it somehow (using whatever strategy you like) and then choose to send out newsletters to your altered copy of the CSV file.

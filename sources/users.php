@@ -312,7 +312,7 @@ function handle_logins()
  */
 function get_member($quick_only=false)
 {
-	global $SESSION_CACHE,$MEMBER_CACHED,$GETTING_MEMBER;
+	global $SESSION_CACHE,$MEMBER_CACHED,$GETTING_MEMBER,$SITE_INFO;
 
 	if ($MEMBER_CACHED!==NULL)
 	{
@@ -325,6 +325,7 @@ function get_member($quick_only=false)
 		delete_expired_sessions();
 
 	$backdoor_ip_address=mixed(); // Enable to a real IP address to force login from FTP access (if lost admin password)
+	if (array_key_exists('backdoor_ip',$SITE_INFO)) $backdoor_ip_address=$SITE_INFO['backdoor_ip'];
 	if ((is_string($backdoor_ip_address)) && (get_ip_address()==$backdoor_ip_address))
 	{
 		require_code('users_active_actions');

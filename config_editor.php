@@ -259,6 +259,9 @@ vb_version*/
 			case 'prefer_direct_code_call':
 				$notes='Assume a good opcode cache is present, so load up full code files via this rather than trying to save RAM by loading up small parts of files on occasion.';
 				break;
+			case 'backdoor_ip':
+				$notes='Always allow users accessing from this IP address in, automatically logged in as the oldest admin of the site.';
+				break;
 		}
 		if (strpos($key,'_table_prefix')!==false)
 		{

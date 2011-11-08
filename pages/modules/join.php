@@ -164,6 +164,14 @@ class Module_join
 		list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups);
 		$hidden->attach($_hidden);
 
+		$forum_id=get_option('intro_forum_id');
+		if ($forum_id!='')
+		{
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('INTRODUCE_YOURSELF'))));
+			$fields->attach(form_input_line(do_lang_tempcode('TITLE'),'','intro_title',do_lang('INTRO_POST_DEFAULT','___'),false));
+			$fields->attach(form_input_text_comcode(do_lang_tempcode('POST_COMMENT'),do_lang_tempcode('DESCRIPTION_INTRO_POST'),'intro_post','',false));
+		}
+
 		$text=do_lang_tempcode('ENTER_PROFILE_DETAILS');
 
 		if (addon_installed('captcha'))
@@ -191,6 +199,11 @@ class Module_join
 		$script=find_script('username_check');
 		$javascript="
 			var form=document.getElementById('username').form;
+			form.elements['username'].onchange=function()
+			{
+				if (form.elements['intro_title'])
+					form.elements['intro_title'].value='".addslashes(do_lang('INTRO_POST_DEFAULT'))."'.replace(/\{1\}/g,form.elements['username'].value);
+			}
 			form.old_submit=form.onsubmit;
 			form.onsubmit=function()
 				{
@@ -405,6 +418,24 @@ class Module_join
 		}
 
 		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>$email_address,'i_taken'=>0),'',1);
+
+		// Intro post
+		$forum_id=get_option('intro_forum_id');
+		if ($forum_id!='')
+		{
+			if (!is_numeric($forum_id)) $forum_id=strval($GLOBALS['FORUM_DB']->query_value('f_forums','id',array('f_name'=>$forum_id)));
+
+			$intro_title=post_param('intro_title','');
+			$intro_post=post_param('intro_post','');
+			if ($intro_post!='')
+			{
+				require_code('ocf_topics_action');
+				if ($intro_title=='') $intro_title=do_lang('INTRO_POST_DEFAULT',$username);
+				$topic_id=ocf_make_topic(intval($forum_id));
+				require_code('ocf_posts_action');
+				ocf_make_post($topic_id,$intro_title,$intro_post,0,true,NULL,0,NULL,NULL,NULL,$member_id);
+			}
+		}
 
 		// Alert user to situation
 		$message=new ocp_tempcode();

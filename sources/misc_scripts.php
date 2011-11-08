@@ -204,6 +204,8 @@ function cron_bridge_script($caller)
 		}
 	}
 
+	decache('main_staff_checklist');
+
 	set_value('last_cron',strval(time()));
 	$cron_hooks=find_all_hooks('systems','cron');
 	foreach (array_keys($cron_hooks) as $hook)

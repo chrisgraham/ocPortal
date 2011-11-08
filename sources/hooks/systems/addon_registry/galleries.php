@@ -862,8 +862,10 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_ENTRY_SCREEN',array(
+					'CAT'=>placeholder_id(),
 					'ID'=>placeholder_id(),
 					'SLIDESHOW'=>false,
+					'TRUE_GALLERY_TITLE'=>lorem_phrase(),
 					'GALLERY_TITLE'=>lorem_phrase(),
 					'MEMBER_ID'=>placeholder_id(),
 					'TAGS'=>lorem_word_html(),

@@ -484,7 +484,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 
    		if (has_specific_permission(get_member(),'probate_members'))
    		{
-   			$fields->attach(form_input_date(do_lang_tempcode('ON_PROBATION_UNTIL'),do_lang_tempcode('DESCRIPTION_ON_PROBATION_UNTIL'),'on_probation_until',true,$on_probation_until<=time(),true,$on_probation_until,2));
+   			$fields->attach(form_input_date(do_lang_tempcode('ON_PROBATION_UNTIL'),do_lang_tempcode('DESCRIPTION_ON_PROBATION_UNTIL'),'on_probation_until',true,is_null($on_probation_until) || $on_probation_until<=time(),true,$on_probation_until,2));
    		}
 			if ($special_type!='ldap')
 			{
@@ -644,7 +644,8 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($zone_wide)) $update['m_zone_wide']=$zone_wide;
 	if (!is_null($pt_allow)) $update['m_pt_allow']=$pt_allow;
 	if (!is_null($pt_rules_text)) $update['m_pt_rules_text']=lang_remap_comcode($_pt_rules_text,$pt_rules_text,$GLOBALS['FORUM_DB']);
-	if (!is_null($on_probation_until)) $update['m_on_probation_until']=$on_probation_until;
+	if (($skip_checks) || (has_specific_permission(get_member(),'probate_members')))
+		$update['m_on_probation_until']=$on_probation_until;
 	if (!is_null($join_time)) $update['m_join_time']=$join_time;
 	if (!is_null($avatar_url)) $update['m_avatar_url']=$avatar_url;
 	if (!is_null($signature)) $update['m_signature']=lang_remap_comcode($_signature,$signature,$GLOBALS['FORUM_DB']);

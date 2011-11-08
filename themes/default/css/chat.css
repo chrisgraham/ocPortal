@@ -106,6 +106,8 @@
 }
 
 .chat_lobby_convos_area {
+	overflow: hidden;
+	width: 100%;
 }
 
 .chat_lobby_convos_area_main {

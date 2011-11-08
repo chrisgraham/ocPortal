@@ -1,3 +1,3 @@
 [title="2"]{TITLE@}[/title]
 
-{CONTENT}
+[surround]{CONTENT}[/surround]

@@ -347,7 +347,7 @@ class Module_calendar
 
 					foreach ($entry_data as $row)
 					{
-						if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($row['e_type']))) continue;
+						if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($row['category_id']))) continue;
 
 						if (is_null($row['title'])) $row['title']=get_translated_text($row['e_title']);
 

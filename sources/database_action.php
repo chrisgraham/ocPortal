@@ -237,7 +237,7 @@ function permission_exists($name)
  */
 function add_config_option($human_name,$name,$type,$eval,$category,$group,$shared_hosting_restricted=0,$data='')
 {
-	if (!in_array($type,array('float','integer','tick','line','text','transline','transtext','list','date','forum','category','usergroup','colour')))
+	if (!in_array($type,array('float','integer','tick','line','text','transline','transtext','list','date','?forum','forum','category','usergroup','colour')))
 		fatal_exit('Invalid config option type');
 	
 	$map=array('c_set'=>0,'config_value'=>'','the_name'=>$name,'human_name'=>$human_name,'the_type'=>$type,'eval'=>$eval,'the_page'=>$category,'section'=>$group,'explanation'=>'CONFIG_OPTION_'.$name,'shared_hosting_restricted'=>$shared_hosting_restricted,'c_data'=>$data);

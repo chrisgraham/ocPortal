@@ -5679,7 +5679,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 		rep2.plUploadOb=ob;
 
-		window.setTimeout(function() { ob.refresh(); },1000);
+		window.setInterval(function() { ob.refresh(); },1000);
 	} else // Special iOS handler
 	{
 		var ob={settings: settings};

@@ -68,7 +68,7 @@ class Hook_awards_catalogue_entry
 		$catalogue_name=$row['c_name'];
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		$tpl_set=$catalogue_name;
-		$display=get_catalogue_entry_map($row,$catalogues[0],'SEARCH',$tpl_set,-1);
+		$display=get_catalogue_entry_map($row,$catalogues[0],'SEARCH',$tpl_set,-1,NULL,NULL,false,true);
 		return do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');//put_in_standard_box(hyperlink($url,do_lang_tempcode('VIEW')),do_lang_tempcode('CATALOGUE_ENTRY').' ('.do_lang_tempcode('IN',get_translated_text($catalogue['c_title'])).')');
 	}
 

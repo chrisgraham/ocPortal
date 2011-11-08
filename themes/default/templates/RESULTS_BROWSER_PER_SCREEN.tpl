@@ -1,4 +1,4 @@
-<form title="{!PER_PAGE}" action="{$URL_FOR_GET_FORM*,{URL}}" method="get" class="inline">
+<form title="{!PER_PAGE}" action="{$URL_FOR_GET_FORM*,{URL}}" method="get" class="inline" target="_self">
 	{HIDDEN}
 	<div class="results_browser_per_page">
 		<div class="accessibility_hidden"><label for="r_{RAND*}">{!PER_PAGE}: {$GET*,TEXT_ID}</label></div>

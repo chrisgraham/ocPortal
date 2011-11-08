@@ -206,7 +206,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		'm_allow_emails'=>$allow_emails,
 		'm_password_change_code'=>'',
 		'm_password_compat_scheme'=>$password_compatibility_scheme,
-		'm_on_probation_until'=>time()
+		'm_on_probation_until'=>NULL
 	);
 	if (!is_null($id)) $map['id']=$id;
 	$member_id=$GLOBALS['FORUM_DB']->query_insert('f_members',$map,true);

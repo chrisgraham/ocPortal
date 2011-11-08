@@ -235,34 +235,13 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 			}
 			elseif ($order_by=='rating')
 			{
-				$select_rating='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','catalogue_entry').' AND rating_for_id=id) AS compound_rating';
+				$select_rating='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','catalogues').' AND rating_for_id=id) AS compound_rating';
 				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query_select('catalogue_entries e',array('e.*',$select_rating),$map,'ORDER BY compound_rating '.$direction,$max,$start);
 			} else
 			{
 				$ob=get_fields_hook($fields[intval($order_by)]['cf_type']);
-				list($raw_type,,)=$ob->get_field_value_row_bits($fields[$order_by]);
-				if (is_null($raw_type)) $raw_type=$fields[$order_by]['cf_type'];
-	
-				switch ($raw_type)
-				{
-					case 'short_trans':
-						$table='short_trans';
-						break;
-					case 'long_trans':
-						$table='long_trans';
-						break;
-					case 'long_unescaped':
-					case 'long_text':
-						$table='long';
-						break;
-					case 'short_unescaped':
-					case 'short_text':
-						$table='short';
-						break;
-					default:
-						warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-				}
-	
+				list(,,$table)=$ob->get_field_value_row_bits($fields[$order_by]);
+
 				if (strpos($table,'_trans')!==false)
 				{
 					$join='catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']).' LEFT JOIN '.get_table_prefix().'translate t ON f.cv_value=t.id';
@@ -347,7 +326,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		{
 			foreach (array('ASC'=>'_ASCENDING','DESC'=>'_DESCENDING') as $dir_code=>$dir_lang)
 			{
-				$sort_sel=(($order_by=='rating') && ($direction==$dir_code));
+				$sort_sel=(($order_by==$extra_sort_code) && ($direction==$dir_code));
 				$_potential_sorter_name=new ocp_tempcode();
 				$_potential_sorter_name->attach(do_lang_tempcode($extra_sort_lang));
 				$_potential_sorter_name->attach(do_lang_tempcode($dir_lang));
@@ -366,15 +345,15 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				{
 					if (!array_key_exists($j,$entries)) continue;
 					
-					$a=@$entries[$j]['map']['FIELD_'.strval($order_by)];
-					if (array_key_exists('FIELD_'.strval($order_by).'_PLAIN',@$entries[$j]['map']))
+					$a=@$entries[$j]['map']['FIELD_'.$order_by];
+					if (array_key_exists('FIELD_'.$order_by.'_PLAIN',@$entries[$j]['map']))
 					{
-						$a=@$entries[$j]['map']['FIELD_'.strval($order_by).'_PLAIN'];
+						$a=@$entries[$j]['map']['FIELD_'.$order_by.'_PLAIN'];
 					}
-					$b=@$entries[$i]['map']['FIELD_'.strval($order_by)];
-					if (array_key_exists('FIELD_'.strval($order_by).'_PLAIN',@$entries[$i]['map']))
+					$b=@$entries[$i]['map']['FIELD_'.$order_by];
+					if (array_key_exists('FIELD_'.$order_by.'_PLAIN',@$entries[$i]['map']))
 					{
-						$b=@$entries[$i]['map']['FIELD_'.strval($order_by).'_PLAIN'];
+						$b=@$entries[$i]['map']['FIELD_'.$order_by.'_PLAIN'];
 					}
 					if (is_object($a)) $a=$a->evaluate();
 					if (is_object($b)) $b=$b->evaluate();

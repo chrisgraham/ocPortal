@@ -118,7 +118,7 @@ JavaScript script tags, onX handlers and URLs will all be filtered/blocked. Don'
 	</colgroup>
 	<tr class="row1"><td>[url="This is a link"][/html]{$BASE_URL}[html][/url]</td><td>[/html][url="This is a link"]{$BASE_URL}[/url][html]</td></tr>
 	<tr class="row1"><td>[email="My E-Mail"]fake_address@example.com[/email]</td><td>[/html][email="My E-Mail"]fake_address@example.com[/email][html]</td></tr>
-	<tr class="row1"><td>[page="cms" caption="Content Management"]cms[/page]</td><td>[/html][page="cms" caption="Content Management"]cms[/page][html]</td></tr>
+	<tr class="row1"><td>[page="cms:cms"]Content Management[/page]</td><td>[/html][page="cms:cms"]Content Management[/page][html]</td></tr>
 </table>
 [/html]
 

@@ -629,6 +629,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			foreach ($events as $event)
 			{
 				if ($event['e_member_id']==get_member()) continue;
+				if (is_guest($event['e_member_id'])) continue;
 
 				$send_out=false;
 				switch ($event['e_type_code'])
@@ -960,7 +961,7 @@ function get_chatters_in_room($room_id)
 	{
 		$extra2='room_id='.strval($room_id);
 	}
-	$active=$GLOBALS['SITE_DB']->query('SELECT DISTINCT member_id FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.the_user=a.member_id WHERE (session_invisible=0 OR session_invisible IS NULL) AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' AND '.$extra2);
+	$active=$GLOBALS['SITE_DB']->query('SELECT DISTINCT member_id FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.the_user=a.member_id WHERE (session_invisible=0 OR session_invisible IS NULL) AND date_and_time>='.strval((integer)time()-60*10).' AND '.$extra2);
 
 	$found_users=array();
 	foreach ($active as $values)

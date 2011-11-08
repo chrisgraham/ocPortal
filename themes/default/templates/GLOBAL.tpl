@@ -142,7 +142,7 @@
 						<br />
 					{+END}{+END}
 
-					<a name="maincontent" id="maincontent"></a>
+					<a name="maincontent" id="maincontent"> </a>
 					{MIDDLE}
 				</div>
 			</div>

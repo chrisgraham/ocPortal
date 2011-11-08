@@ -29,6 +29,9 @@ function start_slideshow_timer()
 			}
 		} ,1000);
 	}
+
+	if (slideshow_current_position!=slideshow_total_slides-1)
+		document.getElementsByTagName('body')[0].style.cursor='progress';
 }
 
 function show_current_slideshow_time()
@@ -66,6 +69,7 @@ function stop_slideshow_timer(message)
 	if (changer) setInnerHTML(changer,message);
 	window.clearInterval(slideshow_timer);
 	slideshow_timer=null;
+	document.getElementsByTagName('body')[0].style.cursor='';
 }
 
 function slideshow_backward()
@@ -139,8 +143,11 @@ function slideshow_show_slide(slide)
 		slideshow_current_position=slide;
 	}
 	
+	start_slideshow_timer();
 	reset_slideshow_countdown();
 
 	if (slideshow_current_position!=slideshow_total_slides-1)
 		slideshow_ensure_loaded(slide+1,false);
+	else
+		document.getElementsByTagName('body')[0].style.cursor='';
 }

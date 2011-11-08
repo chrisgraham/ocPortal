@@ -980,7 +980,7 @@ class Module_admin_themes
 		{
 			if ((substr($file,0,strlen($find_for)+1)==$find_for.'.') && (substr($file,-9)!='.editfrom'))
 			{
-				$temp=explode('.',$file);
+				$temp=explode('.',$file,2);
 				$filesarray[$file]=$temp[2];
 			}
 		}
@@ -1045,7 +1045,7 @@ class Module_admin_themes
 					if ((substr($file,0,strlen($find_for)+1)==$find_for.'.') && (substr($file,-9)!='.editfrom'))
 					//if (substr($current,0,strlen($find_for)+1)==$find_for.'.')
 					{
-						$temp=explode('.',$file);
+						$temp=explode('.',$file,2);
 						if (is_numeric($temp[2])) $filesarray[$file]=intval($temp[2]);
 					}
 				}

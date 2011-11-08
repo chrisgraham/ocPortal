@@ -747,7 +747,7 @@ form { /* For IE6 */
 }
 
 .standardbox_wrap_panel img {
-	max-width: 100%;
+	max-width: 98%;
 }
 
 {+START,IF,{$MOBILE}}

@@ -138,7 +138,7 @@ Of course this is only a partial detailing of the directory structure, but the i
 For instance, if your account on the server was associated with a domain name, 'mywebsite.com', then [tt]http://www.mywebsite.com/index.php[/tt] would be tied to the file system file, '/home/your-account-name/httpdocs/index.php' (often the 'www.' is removable, but not on all servers).
 In addition, from your main FTP account, the same file would likely be '/httpdocs/index.php'.
 
-In other words, three views of the file system exit, according to context:
+In other words, three views of the file system exist, according to context:
 [list="1"]
 [*]The full file system view, which is usually completely hidden from you, but which is what ocPortal actually itself uses
 [*]The FTP view, which branches off from the base of your account directory in the full file system view

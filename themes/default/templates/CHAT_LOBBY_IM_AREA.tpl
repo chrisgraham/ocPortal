@@ -7,7 +7,7 @@
 				<em>{!NONE}</em>
 			</div>
 			<div class="im_close_button">
-				<input id="close_button_{ROOM_ID*}" class="button_micro" type="button" value="{!CLOSE}" onclick="var logs=generate_question_ui('{!WANT_TO_DOWNLOAD_LOGS^;*}',{cancel: '{!INPUTSYSTEM_CANCEL^;*}',ok: '{!YES^;*}',no: '{!NO^;*}'},'{!CHAT_DOWNLOAD_LOGS^;*}'); if (logs.toLowerCase()=='{!INPUTSYSTEM_CANCEL^;*}'.toLowerCase()) return; if (logs.toLowerCase()=='{!YES^;*}'.toLowerCase()) window.open('{$FIND_SCRIPT*;,dllogs}?room={ROOM_ID*;}{$KEEP^;*}'); deinvolve_im({ROOM_ID*},logs=='{!YES^;*}',true);" />
+				<input id="close_button_{ROOM_ID*}" class="button_micro" type="button" value="{!CLOSE}" onclick="var logs=generate_question_ui('{!WANT_TO_DOWNLOAD_LOGS^;*}',{cancel: '{!INPUTSYSTEM_CANCEL^;*}',ok: '{!YES^;*}',no: '{!NO^;*}'},'{!CHAT_DOWNLOAD_LOGS^;*}'); if (logs.toLowerCase()=='{!INPUTSYSTEM_CANCEL^;*}'.toLowerCase()) return; if (logs.toLowerCase()=='{!YES^;*}'.toLowerCase()) window.open('{$FIND_SCRIPT*;,dllogs}?room={ROOM_ID*;}{$KEEP^;*}'); deinvolve_im({ROOM_ID*},logs=='{!YES^;*}',true); window.setTimeout(function() { if (document.body.className.indexOf('sitewide_im_popup_body')!=-1) window.close(); } ,1000);" />
 			</div>
 		</div>
 

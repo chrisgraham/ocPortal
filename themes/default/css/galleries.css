@@ -101,6 +101,16 @@
 	top: 0;
 }
 
+.slideshow_speed input {
+	width: 3em;
+}
+
+#changer {
+	font-weight: bold;
+	font-family: courier;
+	font-size: 1.2em;
+}
+
 /* side_root galleries block */
 
 .side_galleries_block p {

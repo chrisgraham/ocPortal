@@ -214,22 +214,21 @@ class Module_editprofile
 			if (has_specific_permission(get_member(),'probate_members'))
 			{
    			$on_probation_until=get_input_date('on_probation_until');
-   			if (is_null($on_probation_until)) $on_probation_until=time();
 
    			$current__on_probation_until=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_on_probation_until');
-   			if (($on_probation_until<=time()) && ($current__on_probation_until>time()))
+   			if (((is_null($on_probation_until)) || ($on_probation_until<=time())) && ($current__on_probation_until>time()))
    			{
    				log_it('STOP_PROBATION',strval($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
    			}
-   			elseif (($on_probation_until>time()) && ($current__on_probation_until<=time()))
+   			elseif ((!is_null($on_probation_until)) && ($on_probation_until>time()) && ($current__on_probation_until<=time()))
    			{
    				log_it('START_PROBATION',strval($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
    			}
-   			elseif (($current__on_probation_until>$on_probation_until) && ($on_probation_until>time()) && ($current__on_probation_until>time()))
+   			elseif ((!is_null($on_probation_until)) && ($current__on_probation_until>$on_probation_until) && ($on_probation_until>time()) && ($current__on_probation_until>time()))
    			{
    				log_it('REDUCE_PROBATION',strval($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
    			}
-   			elseif (($current__on_probation_until<$on_probation_until) && ($on_probation_until>time()) && ($current__on_probation_until>time()))
+   			elseif ((!is_null($on_probation_until)) && ($current__on_probation_until<$on_probation_until) && ($on_probation_until>time()) && ($current__on_probation_until>time()))
    			{
    				log_it('EXTEND_PROBATION',strval($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
    			}

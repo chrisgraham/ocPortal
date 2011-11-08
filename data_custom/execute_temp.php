@@ -67,8 +67,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-print_r(include('themes/default/templates_cached/EN/GLOBAL.tpl.tcp'));
-
 }
 
 

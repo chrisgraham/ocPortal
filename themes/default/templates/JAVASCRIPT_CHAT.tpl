@@ -656,7 +656,7 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 	a4.className='im_event_lobby_link';
 	div.appendChild(a4);
 	div.style.left=(getWindowWidth()/2-140)+'px';
-	div.style.top=(getWindowHeight()/2-50+getWindowScrollY()+(topZIndex-800)*200)+'px';
+	div.style.top=(getWindowHeight()+getWindowScrollY()-(topZIndex-800)*100)+'px';
 
 	document.body.appendChild(div);
 }

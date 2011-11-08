@@ -1341,8 +1341,11 @@ function post_param($name,$default=false,$html=false)
 
 	if (($a!='') && (addon_installed('wordfilter')))
 	{
-		require_code('word_filter');
-		$a=check_word_filter($a,$name);
+		if ($name!='password')
+		{
+			require_code('word_filter');
+			$a=check_word_filter($a,$name);
+		}
 	}
 	if ($a!==NULL) $a=unixify_line_format($a,NULL,$html);
 
