@@ -26,17 +26,20 @@ class Hook_cron_sitemap
 	 */
 	function run()
 	{
-		if (get_value('sitemap_building_in_progress')=='1') return;
-		set_value('sitemap_building_in_progress','1');
-
 		$time=time();
 		$last_time=intval(get_value('last_sitemap_time_calc'));
+
+		if (get_value('sitemap_building_in_progress')=='1' && intval(get_value('last_sitemap_time_calc'))>time()-60*60*24*3/*in case it stalled a few days back - force a re-try*/) return;
+
 		if ($last_time>time()-60*60*24) return; // Every day
+
+		set_value('sitemap_building_in_progress','1');
+
+		set_value('last_sitemap_time_calc',strval($time));
 
 		require_code('sitemap');
 		sitemaps_build();
 
-		set_value('last_sitemap_time_calc',strval($time));
 		set_value('sitemap_building_in_progress','0');
 	}
 

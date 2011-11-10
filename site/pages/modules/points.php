@@ -359,7 +359,8 @@ class Module_points
 				if ((get_page_name()!='search') && (array_key_exists('text_parsed',$myrow)) && (!is_null($myrow['text_parsed'])) && ($myrow['text_parsed']!='') && ($myrow['reason']!=0))
 				{
 					$reason=new ocp_tempcode();
-					$reason->from_assembly($myrow['text_parsed']);
+					if (!$reason->from_assembly($myrow['text_parsed'],true))
+						$reason=get_translated_tempcode($myrow['reason']);
 				} else
 				{
 					$reason=get_translated_tempcode($myrow['reason']);
@@ -497,7 +498,8 @@ class Module_points
 			if ((get_page_name()!='search') && (array_key_exists('text_parsed',$myrow)) && (!is_null($myrow['text_parsed'])) && ($myrow['text_parsed']!='') && ($myrow['reason']!=0))
 			{
 				$reason=new ocp_tempcode();
-				$reason->from_assembly($myrow['text_parsed']);
+				if (!$reason->from_assembly($myrow['text_parsed'],true))
+					$reason=get_translated_tempcode($myrow['reason']);
 			} else
 			{
 				$reason=get_translated_tempcode($myrow['reason']);

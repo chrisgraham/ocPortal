@@ -366,7 +366,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 			if ((get_page_name()!='search') && (!is_null($row['signature'])) && ($row['signature']!='') && ($row['m_signature']!=0))
 			{
 				$SIGNATURES_CACHE[$row['id']]=new ocp_tempcode();
-				$SIGNATURES_CACHE[$row['id']]->from_assembly($row['signature']);
+				if (!$SIGNATURES_CACHE[$row['id']]->from_assembly($row['signature'],true))
+					unset($SIGNATURES_CACHE[$row['id']]);
 			}
 		}
 		foreach ($member_rows_2 as $row)
@@ -392,7 +393,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		} else
 		{
 			$_postdetails['trans_post']=new ocp_tempcode();
-			$_postdetails['trans_post']->from_assembly($_postdetails['_trans_post']);
+			if (!$_postdetails['trans_post']->from_assembly($_postdetails['_trans_post'],true))
+				$_postdetails['trans_post']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
 		}
 
 		$posts[]=ocf_get_details_to_show_post($_postdetails,($start==0) && (count($_postdetailss)==1));

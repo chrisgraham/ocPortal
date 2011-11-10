@@ -108,7 +108,8 @@ function ocf_show_isolated_post($row,$use_post_title=false)
 	if ((get_page_name()!='search') && (array_key_exists('text_parsed',$row)) && (!is_null($row['text_parsed'])) && ($row['text_parsed']!='') && ($row['p_post']!=0))
 	{
 		$post=new ocp_tempcode();
-		$post->from_assembly($row['text_parsed']);
+		if (!$post->from_assembly($row['text_parsed'],true))
+			$post=get_translated_tempcode($row['p_post'],$GLOBALS['FORUM_DB']);
 	} else
 	{
 		$post=get_translated_tempcode($row['p_post'],$GLOBALS['FORUM_DB']);

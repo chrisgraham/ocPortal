@@ -202,7 +202,11 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 		{
 			list($__notifications,$num_unread_pps)=$_notifications;
 			$notifications=new ocp_tempcode();
-			$notifications->from_assembly($__notifications);
+			if (!$notifications->from_assembly($__notifications,true))
+			{
+				require_code('ocf_notifications');
+				list($notifications,$num_unread_pps)=generate_notifications($cache_identifier);
+			}
 			if (!$notifications->is_empty())
 			{
 				require_javascript('javascript_ajax');

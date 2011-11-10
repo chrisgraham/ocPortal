@@ -1144,7 +1144,11 @@ function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false
 	}
 
 	$parsed=new ocp_tempcode();
-	$parsed->from_assembly($result);
+	if (!$parsed->from_assembly($result,true))
+	{
+		require_code('lang3');
+		return parse_translated_text($entry,$connection,$lang,$force,$as_admin);
+	}
 
 	if ($lang==user_lang())
 	{

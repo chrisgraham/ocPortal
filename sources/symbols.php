@@ -1390,7 +1390,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'ROUND':
 				if (isset($param[0]))
 				{
-					$value=strval(intval(round(floatval($param[0]),isset($param[1])?intval($param[1]):0)));
+					$amount=isset($param[1])?intval($param[1]):0;
+					if ($amount>0)
+					{
+						$value=float_format(floatval($param[0]),$amount);
+					} else
+					{
+						$value=strval(intval(round(floatval($param[0]),$amount)));
+					}
 				}
 				break;
 				

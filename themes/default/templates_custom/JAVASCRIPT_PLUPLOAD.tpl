@@ -5321,7 +5321,7 @@ function fileDialogComplete(ob,files) {
 
 function uploadProgress(ob,file) {
 	var percent = ob.total.percent;
-	if (percent = 100) return;
+	if (percent == 100) return;
 
 	var progress = new FileProgress(file, ob.settings.progress_target);
 	progress.setProgress(percent);
@@ -5340,7 +5340,7 @@ function uploadSuccess(ob,file,data) {
 	if (id.value!='') id.value+=':';
 	id.value += decodedData['upload_id'];
 	{+START,IF,{$VALUE_OPTION,aviary}}
-		if (id.indexOf(':')==-1) implement_aviary(decodedData['upload_savename'],decodedData['upload_name'],id);
+		if (id.value.indexOf(':')==-1) implement_aviary(decodedData['upload_savename'],decodedData['upload_name'],id);
 	{+END}
 	if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 
@@ -5380,7 +5380,7 @@ function uploadError(ob,error) {
 
 function queueChanged(ob)
 {
-	if (ob.settings.page_type!='upload_multi')
+	if ((ob.settings.page_type!='upload_multi') && (ob.files.length!=1))
 		ob.splice(1,ob.files.length-1);
 }
 
@@ -5639,7 +5639,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		progress_target : "fsUploadProgress_"+name,
 
 		// General settings
-		runtimes : 'flash,gears,silverlight,browserplus,html5',
+		runtimes : 'flash,silverlight,gears,browserplus,html5',
 		url : "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true),
 		max_file_size : (typeof mfs=='undefined')?'2000mb':(mfs.value+'b'),
 

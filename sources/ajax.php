@@ -260,7 +260,9 @@ function comcode_convert_script()
 		require_code('form_templates');
 		$fields->attach(form_input_huge(do_lang_tempcode('TEXT'),'','data','',true));
 		$fields->attach(form_input_tick('Convert HTML to Comcode','','from_html',false));
+		$fields->attach(form_input_tick('Convert to semihtml','','semihtml',false));
 		$fields->attach(form_input_tick('Comes from WYSIWYG','','data__is_wysiwyg',false));
+		$fields->attach(form_input_tick('Lax mode (less parse rules)','','lax',false));
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('to_comcode_xml',strval(either_param_integer('to_comcode_xml',0))));
 		$out2=globalise(do_template('FORM_SCREEN',array('_GUID'=>'dd82970fa1196132e07049871c51aab7','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('VIEW'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('comcode_convert',true),'FIELDS'=>$fields)),NULL,'',true);
@@ -290,6 +292,7 @@ function comcode_convert_script()
 		$out=trim(semihtml_to_comcode($data));
 	} else
 	{
+		if (either_param_integer('lax',0)==1) $GLOBALS['LAX_COMCODE']=true;
 		$tpl=comcode_to_tempcode($data,get_member(),false,60,NULL,NULL,either_param_integer('semihtml',0)==1/*true*/,false,get_param_integer('is_semihtml',0)==1,false);
 		$evaluated=$tpl->evaluate();
 		$out='';

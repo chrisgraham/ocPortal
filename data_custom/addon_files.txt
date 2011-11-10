@@ -2290,3 +2290,9 @@ nobox_gallery_entries
 
 # # sources_custom/hooks/systems/awards/video.php
 # # sources_custom/hooks/systems/awards/image.php
+
+cleanup_repository
+------------------
+
+# # find_files_in_uninstall_addons.php
+# # remove_junk.sh

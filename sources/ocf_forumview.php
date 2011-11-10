@@ -36,14 +36,19 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 		$topic['first_post']=new ocp_tempcode();
 	} else
 	{
+		if ((!is_null($topic_row['_trans_post'])) && ($topic_row['_trans_post']!=''))
+		{
+			$topic['first_post']=new ocp_tempcode();
+			if (!$topic['first_post']->from_assembly($topic_row['_trans_post']))
+				$topic_row['_trans_post']=NULL;
+		}
+
 		if ((is_null($topic_row['_trans_post'])) || ($topic_row['_trans_post']==''))
 		{
 			if (!is_null($topic_row['t_cache_first_post'])) $topic['first_post']=get_translated_tempcode($topic_row['t_cache_first_post'],$GLOBALS['FORUM_DB']);
 			else $topic['first_post']=new ocp_tempcode();
 		} else
 		{
-			$topic['first_post']=new ocp_tempcode();
-			$topic['first_post']->from_assembly($topic_row['_trans_post']);
 			$topic['first_post']->singular_bind('ATTACHMENT_DOWNLOADS',make_string_tempcode('?'));
 		}
 	}

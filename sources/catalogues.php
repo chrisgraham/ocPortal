@@ -1148,7 +1148,7 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
    {
 	   $title=get_translated_text($PT_PAIR_CACHE[$category_id]['cc_title']);
       if (!$below->is_empty()) $tpl_url=do_template('BREADCRUMB_ESCAPED'); else $tpl_url=new ocp_tempcode();
-      $tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO'),NULL,NULL,'up'));
+      $tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
    } else $tpl_url=new ocp_tempcode();
 
    $below->attach($tpl_url);

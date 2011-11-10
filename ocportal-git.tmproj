@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/hooks/systems/awards/catalogue_entry.php</string>
+	<string>cms/pages/modules/cms_galleries.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -476,30 +476,46 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>54</integer>
+				<integer>25</integer>
 				<key>line</key>
-				<integer>451</integer>
+				<integer>554</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>423</integer>
+			<integer>535</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>554</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>554</integer>
+			</dict>
 		</dict>
-		<key>collaboration/index.php</key>
+		<key>cms/pages/modules_custom/cms_galleries.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>63</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>data/cron_bridge.php</key>
+		<key>collaboration/index.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -972,14 +988,44 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>60</integer>
 				<key>line</key>
-				<integer>142</integer>
+				<integer>916</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>107</integer>
+			<integer>890</integer>
+		</dict>
+		<key>site/pages/modules/chat.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>910</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>543</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>910</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>11</integer>
+				<key>line</key>
+				<integer>910</integer>
+			</dict>
 		</dict>
 		<key>site/pages/modules/downloads.php</key>
 		<dict>
@@ -1010,6 +1056,48 @@
 				<key>line</key>
 				<integer>376</integer>
 			</dict>
+		</dict>
+		<key>site/pages/modules/galleries.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>61</integer>
+				<key>line</key>
+				<integer>560</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>534</integer>
+		</dict>
+		<key>site/pages/modules/members.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>636</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>628</integer>
+		</dict>
+		<key>site/pages/modules/onlinemembers.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>91</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>76</integer>
 		</dict>
 		<key>site/pages/modules/pointstore.php</key>
 		<dict>
@@ -1090,14 +1178,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>44</integer>
+				<integer>111</integer>
 				<key>line</key>
-				<integer>1284</integer>
+				<integer>1150</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1268</integer>
+			<integer>1124</integer>
 		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
@@ -1113,35 +1201,79 @@
 			<key>firstVisibleLine</key>
 			<integer>8</integer>
 		</dict>
-		<key>sources/comcode.php</key>
+		<key>sources/chat.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>32</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>36</integer>
+				<integer>210</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>12</integer>
+			<integer>171</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>36</integer>
+				<integer>209</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>32</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>36</integer>
+				<integer>210</integer>
 			</dict>
+		</dict>
+		<key>sources/comcode_renderer.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>496</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>470</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>496</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>496</integer>
+			</dict>
+		</dict>
+		<key>sources/comcode_text.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>74</integer>
+				<key>line</key>
+				<integer>1284</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1267</integer>
 		</dict>
 		<key>sources/downloads.php</key>
 		<dict>
@@ -1693,20 +1825,6 @@
 			<key>firstVisibleLine</key>
 			<integer>51</integer>
 		</dict>
-		<key>sources/hooks/systems/awards/catalogue_entry.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>70</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>26</integer>
-		</dict>
 		<key>sources/hooks/systems/config_default/chat_default_post_colour.php</key>
 		<dict>
 			<key>caret</key>
@@ -1757,6 +1875,20 @@
 				<integer>28</integer>
 				<key>line</key>
 				<integer>30</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>sources/hooks/systems/cron/sitemap.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>4</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -1833,50 +1965,6 @@
 			<key>firstVisibleLine</key>
 			<integer>31</integer>
 		</dict>
-		<key>sources/integrator.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>209</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>171</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>6</integer>
-				<key>line</key>
-				<integer>209</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>209</integer>
-			</dict>
-		</dict>
-		<key>sources/lang.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>31</integer>
-				<key>line</key>
-				<integer>576</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>548</integer>
-		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -1890,6 +1978,34 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>81</integer>
+		</dict>
+		<key>sources/symbols.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1396</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1363</integer>
+		</dict>
+		<key>sources/tar.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>373</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>350</integer>
 		</dict>
 		<key>sources/templates_results_table.php</key>
 		<dict>
@@ -3075,6 +3191,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>26</integer>
+				<key>line</key>
+				<integer>5641</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>5615</integer>
+		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_SCRIPTACULOUS_EFFECTS.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -3206,13 +3336,25 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
+		<string>site/pages/modules/chat.php</string>
+		<string>site/pages/modules/members.php</string>
+		<string>sources/chat.php</string>
+		<string>sources/tar.php</string>
+		<string>sources/comcode_text.php</string>
+		<string>site/pages/modules/onlinemembers.php</string>
+		<string>sources/hooks/systems/cron/sitemap.php</string>
 		<string>site/pages/modules/catalogues.php</string>
 		<string>sources/catalogues.php</string>
-		<string>sources/hooks/systems/awards/catalogue_entry.php</string>
+		<string>sources/symbols.php</string>
+		<string>themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl</string>
+		<string>cms/pages/modules_custom/cms_galleries.php</string>
+		<string>cms/pages/modules/cms_galleries.php</string>
+		<string>site/pages/modules/galleries.php</string>
+		<string>sources/comcode_renderer.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{898, -25}, {1009, 966}}</string>
+	<string>{{624, 58}, {1009, 966}}</string>
 </dict>
 </plist>

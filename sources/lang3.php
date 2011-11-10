@@ -326,6 +326,13 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 		$result=$connection->query_value_null_ok('translate','text_parsed',array('id'=>$entry,'language'=>get_site_default_lang()));
 		if (is_null($result)) $result=$connection->query_value_null_ok('translate','text_parsed',array('id'=>$entry));
 
+		if ((!is_null($result)) && ($result!=''))
+		{
+			$connection->text_lookup_cache[$entry]=new ocp_tempcode();
+			if (!$connection->text_lookup_cache[$entry]->from_assembly($result,true))
+				$result=NULL;
+		}
+
 		if ((is_null($result)) || ($result==''))
 		{
 			load_user_stuff();
@@ -354,9 +361,6 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 			return $ret;
 		}
-
-		$connection->text_lookup_cache[$entry]=new ocp_tempcode();
-		$connection->text_lookup_cache[$entry]->from_assembly($result);
 
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 		return $connection->text_lookup_cache[$entry];
@@ -401,7 +405,11 @@ function _comcode_lang_string($lang_code)
 		if ((!is_null($comcode_page[0]['text_parsed'])) && ($comcode_page[0]['text_parsed']!=''))
 		{
 			$parsed=new ocp_tempcode();
-			$parsed->from_assembly($comcode_page[0]['text_parsed']);
+			if (!$parsed->from_assembly($comcode_page[0]['text_parsed'],true))
+			{
+				$ret=get_translated_tempcode($comcode_page[0]['string_index']);
+				unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);
+			}
 		} else
 		{
 			$ret=get_translated_tempcode($comcode_page[0]['string_index']);

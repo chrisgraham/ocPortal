@@ -1316,8 +1316,10 @@ class ocp_tempcode
 	 * The opposite of to_assembly - it decodes a tempcode storage representation and turns it into a proper tempcode object.
 	 *
 	 * @param  string			The assembled tempcode
+	 * @param  boolean		Return error code on failure, rather than exiting
+	 * @return boolean		Success status (it can fail, if the compiled cache file is corrupt)
 	 */
-	function from_assembly(&$raw_data)
+	function from_assembly(&$raw_data,$allow_failure=false)
 	{
 		if ($GLOBALS['RECORD_TEMPLATES_TREE'])
 		{
@@ -1328,6 +1330,7 @@ class ocp_tempcode
 		$result=eval($raw_data);
 		if ($result===false)
 		{
+			if ($allow_failure) return false;
 			//inspect_plain($raw_data);
 			fatal_exit(@strval($php_errormsg));
 		}
@@ -1345,6 +1348,8 @@ class ocp_tempcode
 			$this->code_to_preexecute.='/*SHIFT_ENCODE*/';
 			$this->evaluate();
 		}
+		
+		return true;
 	}
 
 	/**

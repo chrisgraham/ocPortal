@@ -1265,20 +1265,46 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							}
 							return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE',$current_tag),strrpos(substr($comcode,0,$pos),'['),$comcode,$check_only);
 						}
-						$_last=array_pop($tag_stack);
-						if ($_last[0]!=$current_tag)
+						$has_it=false;
+						foreach ($tag_stack as $t)
+						{
+							if ($t[0]==$current_tag)
+							{
+								$has_it=true;
+								break;
+							}
+						}
+						if ($has_it)
+						{
+							$_last=array_pop($tag_stack);
+							if ($_last[0]!=$current_tag)
+							{
+								if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
+								do
+								{
+									$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
+									$in_code_tag=false;
+									$white_space_area=$_last[3];
+									$in_separate_parse_section=$_last[4];
+									$formatting_allowed=$_last[5];
+									$textual_area=$_last[6];
+									$tag_output=$_last[2];
+									$tag_output->attach($embed_output);
+									$mindless_mode=$_last[7];
+
+									if (count($tag_stack)==0) // Hmm, it was never open. So let's pretend this tag close never happened
+									{
+										$status=CCP_NO_MANS_LAND;
+										break 2;
+									}
+									$_last=array_pop($tag_stack);
+								}
+								while ($_last[0]!=$current_tag);
+							}
+						} else
 						{
 							if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
-							do
-							{
-								if (count($tag_stack)==0)
-								{
-									$status=CCP_NO_MANS_LAND;
-									break 2;
-								}
-								$_last=array_pop($tag_stack);
-							}
-							while ($_last[0]!=$current_tag);
+							break;
 						}
 
 						// Do the comcode for this tag
@@ -1441,7 +1467,22 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 				{
 					$status=CCP_NO_MANS_LAND;
 					$pos--;
-					return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
+					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
+
+					if ($current_tag=='title')
+					{
+						$just_new_line=false;
+						list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
+						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
+						$tag_output->attach($close_list);
+					}
+
+					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
+
+					list ($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					if ($in_code_tag) $code_nest_stack=0;
+
+					$tag_output->attach($tag_raw);
 				}
 				elseif ($next==']')
 				{

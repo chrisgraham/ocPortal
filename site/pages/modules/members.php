@@ -471,7 +471,7 @@ class Module_members
 		}
 		$post_count=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_cache_num_posts');
 		$best_post_fraction=($post_count==0)?do_lang_tempcode('NA_EM'):make_string_tempcode(integer_format(100*$best_yet_forum/$post_count));
-		$most_active_forum=is_null($best_yet_forum)?new ocp_tempcode():do_lang_tempcode('_MOST_ACTIVE_FORUM',make_string_tempcode(escape_html($most_active_forum)),make_string_tempcode(integer_format($best_yet_forum)),array($best_post_fraction));
+		$most_active_forum=is_null($best_yet_forum)?new ocp_tempcode():do_lang_tempcode('_MOST_ACTIVE_FORUM',$most_active_forum,make_string_tempcode(integer_format($best_yet_forum)),array($best_post_fraction));
 		$time_for_them_raw=tz_time(time(),get_users_timezone($member_id));
 		$time_for_them=get_timezoned_time(time(),true,$member_id);
 

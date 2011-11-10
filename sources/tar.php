@@ -371,7 +371,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
  * @param  array			The TAR file handle
  * @param  PATH			The full path to the file we want to get
  * @param  boolean		Whether to tolerate errors (returns NULL if error)
- * @param  PATH			Write data to here (NULL: return within array)
+ * @param  ?PATH			Write data to here (NULL: return within array)
  * @return ?array			A map, containing 'data' (the file), 'size' (the filesize), 'mtime' (the modification timestamp), and 'mode' (the permissions) (NULL: not found / TAR possibly corrupt if we turned tolerate errors on)
  */
 function tar_get_file(&$resource,$path,$tolerate_errors=false,$write_data_to=NULL)

@@ -300,7 +300,8 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 			$message=new ocp_tempcode();
 			if ((get_page_name()!='search') && (!is_null($fp_rows[0]['text_parsed'])) && ($fp_rows[0]['text_parsed']!='') && ($fp_rows[0]['id']!=0))
 			{
-				$message->from_assembly($fp_rows[0]['text_parsed']);
+				if (!$message->from_assembly($fp_rows[0]['text_parsed'],true))
+					$message=get_translated_tempcode($fp_rows[0]['id'],$GLOBALS['FORUM_DB']);
 			} else $message=get_translated_tempcode($fp_rows[0]['id'],$GLOBALS['FORUM_DB']);
 			$out[$i]['firstpost']=$message;
 		}
@@ -373,7 +374,8 @@ function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_
 				$message=get_translated_tempcode($myrow['p_post'],$GLOBALS['FORUM_DB']);
 			} else
 			{
-				$message->from_assembly($myrow['text_parsed']);
+				if (!$message->from_assembly($myrow['text_parsed'],true))
+					$message=get_translated_tempcode($myrow['p_post'],$GLOBALS['FORUM_DB']);
 			}
 			$temp['message']=$message;
 			$temp['user']=$myrow['p_poster'];
