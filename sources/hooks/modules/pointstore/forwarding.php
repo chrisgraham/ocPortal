@@ -251,7 +251,7 @@ class Hook_pointstore_forwarding
 		$message_raw=do_template('POINTSTORE_FORWARDER_MAIL',array('_GUID'=>'a09dba8b440baa5cd48d462ebfafd15f','ENCODED_REASON'=>$encoded_reason,'EMAIL'=>$email,'PREFIX'=>$prefix,'SUFFIX'=>$_suffix,'FORW_URL'=>$forw_url,'SUFFIX_PRICE'=>integer_format($suffix_price)));
 		require_code('mail');
 
-		mail_wrap(do_lang('MAIL_REQUEST_FORWARDING',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false));
+		mail_wrap(do_lang('MAIL_REQUEST_FORWARDING',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 
 		$text=do_lang_tempcode('ORDER_FORWARDER_DONE',$email,escape_html($prefix.'@'.$_suffix));
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

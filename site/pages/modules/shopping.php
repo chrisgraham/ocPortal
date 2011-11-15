@@ -552,7 +552,7 @@ class Module_shopping
 				require_code('mail');
 				$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 				$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
-				mail_wrap(do_lang('PAYMENT_RECEIVED_SUBJECT'),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($amount)),get_option('currency'),get_site_name()),array($email),$to_name);
+				mail_wrap(do_lang('PAYMENT_RECEIVED_SUBJECT',$trans_id),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($amount)),get_option('currency'),get_site_name()),array($email),$to_name);
 			}
 		}
 

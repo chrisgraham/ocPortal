@@ -4,7 +4,14 @@
 		<a{+START,INCLUDE,MENU_LINK_PROPERTIES}{+END}>{CAPTION}</a>
 	{+END}
 	{+START,IF_NON_EMPTY,{CHILDREN}}
-		<a href="#" class="drawer" onclick="event.returnValue=false; toggleSectionInline('{MENU|*;}_{RANDOM*;}','block'); return false;">{CAPTION}</a>
+		{+START,IF_NON_EMPTY,{URL}}
+			<a class="drawer"{+START,INCLUDE,MENU_LINK_PROPERTIES}{+END}>{CAPTION}</a>
+		{+END}
+		{+START,IF_EMPTY,{URL}}
+			<a href="#" class="drawer" onclick="event.returnValue=false; toggleSectionInline('{MENU|*;}_{RANDOM*;}','block'); return false;">{CAPTION}</a>
+		{+END}
+	{+END}
+	{+START,IF_NON_EMPTY,{CHILDREN}}
 		<ul id="{MENU|*;}_{RANDOM*}" style="display: {DISPLAY*}">
 			{CHILDREN}
 		</ul>

@@ -461,7 +461,7 @@ function ocf_invite_to_pt($member_id,$topic_id)
 	if ((get_value('ocf_optional_pt_tracking')!=='1') || ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_track_contributed_topics')==1))
 	{
 		require_code('mail');
-		$subject=do_lang('INVITED_TO_TOPIC_SUBJECT',get_site_name(),NULL,get_lang($member_id));
+		$subject=do_lang('INVITED_TO_TOPIC_SUBJECT',get_site_name(),$topic_name,get_lang($member_id));
 		$mail=do_lang('INVITED_TO_TOPIC_BODY',get_site_name(),$topic_name,array($current_username,$topic_link),get_lang($member_id));
 
 		mail_wrap($subject,$mail,array($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address')),$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username'),'','',3,NULL,true);
@@ -490,7 +490,7 @@ function sent_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($to_id);
 	if (is_null($username)) $username=get_site_name();
 	$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_id);
-	mail_wrap(do_lang('NEW_PERSONAL_TOPIC',NULL,NULL,NULL,get_lang($to_id)),$message,array($GLOBALS['FORUM_DRIVER']->get_member_email_address($to_id)),$username,$from_email,$GLOBALS['FORUM_DRIVER']->get_username($from_id),3,NULL,true,$from_id);
+	mail_wrap(do_lang('NEW_PERSONAL_TOPIC_SUBJECT',$subject,NULL,NULL,get_lang($to_id)),$message,array($GLOBALS['FORUM_DRIVER']->get_member_email_address($to_id)),$username,$from_email,$GLOBALS['FORUM_DRIVER']->get_username($from_id),3,NULL,true,$from_id);
 
 	if ($mark_unread)
 	{

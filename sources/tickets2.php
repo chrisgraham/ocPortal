@@ -313,7 +313,7 @@ function send_ticket_email($ticket_id,$title,$post,$home_url,$email,$ticket_type
 		$ticket_type_text=$GLOBALS['SITE_DB']->query_value_null_ok('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($uid);
 		$their_lang=get_lang($uid);
-		$subject=do_lang('TICKET_REPLY',$ticket_type_text,comcode_escape($ticket_type_text),comcode_escape($title),$their_lang);
+		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,$title,$their_lang);
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
@@ -382,12 +382,12 @@ function send_ticket_email($ticket_id,$title,$post,$home_url,$email,$ticket_type
 			$ticket_type_text=($ticket_type_if_new==-1)?'':get_translated_text($ticket_type_if_new);
 		}
 
-		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',comcode_escape($ticket_type_text),comcode_escape($title),NULL,get_site_default_lang());
+		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',$ticket_type_text,$title,NULL,get_site_default_lang());
 		mail_wrap($subject,do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape($title),comcode_escape($home_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang()),$email_addresses,NULL,$email,$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 
 		if ($email!='')
 		{
-			mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT'),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email),NULL,'','',3,NULL,false,get_member());
+			mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email),NULL,'','',3,NULL,false,get_member());
 		}
 	}
 }

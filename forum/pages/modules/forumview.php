@@ -451,8 +451,11 @@ class Module_forumview
 			$untrack_forum_url=build_url(array('page'=>'topics','type'=>'untrack_forum','id'=>$id),get_module_zone('topics'));
 			$button_array[]=array('immediate'=>true,'rel'=>'untrack','title'=>do_lang_tempcode('UNTRACK_FORUM'),'url'=>$untrack_forum_url,'img'=>'untrack_forum');
 		}
-		$read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>$id),get_module_zone('topics'));
-		$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_READ'),'url'=>$read_url,'img'=>'mark_read');
+		if (!is_guest())
+		{
+			$read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>$id),get_module_zone('topics'));
+			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_READ'),'url'=>$read_url,'img'=>'mark_read');
+		}
 		if ($type!='pt')
 		{
 			if (addon_installed('search'))

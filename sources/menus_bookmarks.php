@@ -33,14 +33,14 @@ function build_bookmarks_menu()
 	// For managing existing bookmarks
 	if (count($rows)!=0)
 	{
-		$rand_id=mt_rand(0,10000);
+		$rand_id=mt_rand(0,1000000);
 		$_url=build_url(array('page'=>'bookmarks','type'=>'misc'),get_module_zone('bookmarks'));
 		$items[]=array('id'=>$rand_id,'i_parent'=>NULL,'cap'=>do_lang('MANAGE_BOOKMARKS'),'i_url'=>$_url,'i_check_permissions'=>0,'i_expanded'=>0,'i_new_window'=>1,'i_page_only'=>'');
 	}
 	// For adding a new bookmark
 	$self_url=get_param('url','');
 	if ($self_url=='') $self_url=get_self_url(true);
-	$rand_id=mt_rand(0,10000);
+	$rand_id=mt_rand(0,1000000);
 	//$url=build_url(array('page'=>'bookmarks','type'=>'ad','url'=>$self_url,'title'=>get_param('title','',true)),get_module_zone('bookmarks'));
 	$keep=symbol_tempcode('KEEP');
 	$url=find_script('bookmarks').'?no_redirect=1&type=ad&url='.urlencode(base64_encode($self_url)).'&title='.urlencode(get_param('title','',true)).$keep->evaluate();
@@ -58,7 +58,7 @@ function build_bookmarks_menu()
 		{
 			if (!array_key_exists($row['b_folder'],$parents))
 			{
-				$rand_id=mt_rand(0,10000);
+				$rand_id=mt_rand(0,1000000);
 				$parents[$row['b_folder']]=$rand_id;
 				$items[]=array('id'=>$rand_id,'i_parent'=>NULL,'cap'=>$row['b_folder'],'i_url'=>'','i_check_permissions'=>0,'i_expanded'=>0,'i_new_window'=>0,'i_page_only'=>'');
 			}

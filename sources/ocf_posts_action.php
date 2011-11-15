@@ -236,7 +236,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		if ((get_option('send_staff_message_post_validation')=='1') && ($check_permissions))
 		{
 			// send_validation_mail is used for other content - but forum is special
-			$subject=do_lang('POST_REQUIRING_VALIDATION_MAIL_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
+			$subject=do_lang('POST_REQUIRING_VALIDATION_MAIL_SUBJECT',$topic_title,NULL,NULL,get_site_default_lang());
 			$post_text=get_translated_text($lang_id,$GLOBALS['FORUM_DB'],get_site_default_lang());
 			$mail=do_lang('POST_REQUIRING_VALIDATION_MAIL',comcode_escape($url),comcode_escape($poster_name_if_guest),$post_text);
 			require_code('mail');

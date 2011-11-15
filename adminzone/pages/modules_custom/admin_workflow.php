@@ -564,7 +564,7 @@ class Module_admin_workflow extends standard_aed_module
 				{
 					$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',NULL,false,false,true);
 					if (addon_installed('unvalidated'))
-						send_validation_request($doing,$id,$edit_url);
+						send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
 				}
 
 				$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
@@ -751,7 +751,7 @@ class Module_admin_workflow extends standard_aed_module
 					{
 						$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',NULL,false,false,true);
 						if (addon_installed('unvalidated'))
-							send_validation_request($doing,$id,$edit_url);
+							send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
 					}
 
 					$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));

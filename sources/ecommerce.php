@@ -221,16 +221,17 @@ function make_cancel_button($purchase_id,$via)
 /**
  * Send an invoice notification to a member.
  *
- * @param  MEMBER	The member to send to.
+ * @param  MEMBER		The member to send to.
+ * @param  AUTO_LINK	The invoice ID.
  */
-function send_invoice_mail($member_id)
+function send_invoice_mail($member_id,$id)
 {
 	// Send out mail
 	require_code('mail');
 	$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
 	$_url=build_url(array('page'=>'invoices','type'=>'misc'),get_module_zone('invoices'),NULL,false,false,true);
 	$url=$_url->evaluate();
-	mail_wrap(do_lang('INVOICE_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),do_lang('INVOICE_MESSAGE',$url,get_site_name(),NULL,get_lang($member_id)),array($email));
+	mail_wrap(do_lang('INVOICE_SUBJECT',strval($id),NULL,NULL,get_lang($member_id)),do_lang('INVOICE_MESSAGE',$url,get_site_name(),NULL,get_lang($member_id)),array($email));
 }
 
 /**
@@ -556,7 +557,7 @@ function notify_service_paid_for($id,$details,$product,$termination=false)
 
 	require_code('mail');
 	$type=$termination?'CANCELLED':'PAID_FOR';
-	mail_wrap(do_lang('SERVICE_'.$type,NULL,NULL,NULL,get_lang($member_id)),do_lang('SERVICE_'.$type.'_TEXT',$details[4],get_site_name(),NULL,get_lang($member_id)),array($email,get_option('staff_address')),$username);
+	mail_wrap(do_lang('SERVICE_'.$type,NULL,NULL,NULL,get_lang($member_id)),do_lang('SERVICE_'.$type.'_TEXT',$details[4],get_site_name(),NULL,get_lang($member_id)),array($email,get_option('staff_address')),$username,$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
 }
 
 /**

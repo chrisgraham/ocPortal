@@ -2296,3 +2296,25 @@ cleanup_repository
 
 # # find_files_in_uninstall_addons.php
 # # remove_junk.sh
+
+booking
+-------
+
+# # cms/pages/modules_custom/cms_booking.php
+# # sources_custom/booking.php
+# # sources_custom/booking2.php
+# # sources_custom/bookings_ical.php
+# # site/pages/modules_custom/booking.php
+# # sources_custom/blocks/side_book_date_range.php
+# # sources_custom/blocks/side_choose_showing.php
+# # sources_custom/blocks/main_choose_to_book.php
+# # themes/default/templates_custom/BLOCK_SIDE_BOOK_DATE_RANGE.tpl
+# # themes/default/templates_custom/BLOCK_SIDE_CHOOSE_SHOWING.tpl
+# # themes/default/templates_custom/BLOCK_MAIN_CHOOSE_TO_BOOK.tpl
+# # data_custom/bookings_ical.php
+# # data_custom/bookables_ical.php
+# # lang_custom/EN/booking.ini
+# # data_custom/bookiing_price_ajax.php
+# # themes/default/templates_custom/BOOKING_CONFIRM_FCOMCODE.tpl
+# # themes/default/templates_custom/BOOKING_NOTICE_FCOMCODE.tpl
+# # themes/default/templates_custom/BOOKING_DISPLAY.tpl

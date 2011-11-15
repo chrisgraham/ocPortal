@@ -243,7 +243,7 @@ class Hook_worldpay
 		{
 			require_code('mail');
 			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-			mail_wrap(do_lang('PAYMENT_RECEIVED_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($mc_gross)),$mc_currency,get_site_name(),get_lang($member_id)),array($email),$to_name);
+			mail_wrap(do_lang('PAYMENT_RECEIVED_SUBJECT',$txn_id,NULL,NULL,get_lang($member_id)),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($mc_gross)),$mc_currency,get_site_name(),get_lang($member_id)),array($email),$to_name);
 		}
 
 		if ($success) $_url=build_url(array('page'=>'purchase','type'=>'finish','product'=>get_param('product',NULL),'message'=>'<WPDISPLAY ITEM=banner>'),get_module_zone('purchase'));

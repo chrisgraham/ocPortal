@@ -533,7 +533,7 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
 	{
 		$branch=render_menu_branch($child,$codename,$source_member,0,$type,$as_admin,$menu['children'],1);
 
-		if ($branch[0]!=='')
+		if (!is_null($branch[0]))
 		{
 			$new_children[]=$branch[0];
 		}
@@ -541,11 +541,17 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
 	$num=count($new_children);
 	foreach ($new_children as $i=>$child)
 	{
-		$content->attach(do_template('MENU_BRANCH_'.filter_naughty_harsh($type),$child+array(
-			'POSITION'=>strval($i),
-			'LAST'=>$i==$num-1,
-			'BRETHREN_COUNT'=>strval($num),
-		)));
+		if (is_object($child))
+		{
+			$content->attach($child);
+		} else
+		{
+			$content->attach(do_template('MENU_BRANCH_'.filter_naughty_harsh($type),$child+array(
+				'POSITION'=>strval($i),
+				'LAST'=>$i==$num-1,
+				'BRETHREN_COUNT'=>strval($num),
+			)));
+		}
 	}
 
 	return do_template('MENU_'.filter_naughty_harsh($type),array('CONTENT'=>$content,'MENU'=>$menu['special']));
@@ -562,7 +568,7 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
  * @param  boolean		Whether to generate Comcode with admin privilege
  * @param  array			Array of all other branches
  * @param  integer		The level
- * @return array			A pair: the generated string/tempcode of the menu branch, and whether it is expanded
+ * @return array			A pair: array of parameters of the menu branch (or NULL if unrenderable, or Tempcode of something to attach), and whether it is expanded
  */
 function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_admin,$all_branches,$the_level=1)
 {
@@ -577,7 +583,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 	if ((!is_null($branch['only_on_page'])) && ($branch['only_on_page']!=''))
 	{
 		if (!match_key_match($branch['only_on_page']))
-			return array('',false); // We are not allowed to render this on this page
+			return array(NULL,false); // We are not allowed to render this on this page
 	}
 
 	$current_zone=false;
@@ -639,17 +645,17 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 						require_code('site');
 						attach_message(do_lang_tempcode('MISSING_MODULE_REFERENCED',escape_html($parts[2])),'warn');
 					}
-					return array('',false); // Not found
+					return array(NULL,false); // Not found
 				}
 			} elseif ($parts[1]=='_SELF') $parts[1]=$users_current_zone;
 
-			if ((($parts[1]=='forum') || ($parts[1]=='personalzone')) && (get_forum_type()!='ocf')) return array('',false);
+			if ((($parts[1]=='forum') || ($parts[1]=='personalzone')) && (get_forum_type()!='ocf')) return array(NULL,false);
 
 			// If we need to check access
 			if (array_key_exists('check_perms',$branch['modifiers']))
 			{
-				if (!has_zone_access(get_member(),$parts[1])) return array('',false);
-				if (!has_page_access(get_member(),$parts[2],$parts[1])) return array('',false);
+				if (!has_zone_access(get_member(),$parts[1])) return array(NULL,false);
+				if (!has_page_access(get_member(),$parts[2],$parts[1])) return array(NULL,false);
 			}
 
 			$map=array('page'=>$parts[2]);
@@ -792,8 +798,8 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 				'BRETHREN_COUNT'=>strval($num),
 			)));
 		}
-		if ($children->is_empty()) return array('',false); // Nothing here!
-		if ((!array_key_exists('expanded',$branch['modifiers'])) && (!$expand_this))
+		if ($children->is_empty()) return array(NULL,false); // Nothing here!
+		if ((!array_key_exists('expanded',$branch['modifiers'])) && (!$expand_this) && (!$current_page))
 		{
 			$display=has_js()?'none':'block'; // We remap to 'none' using JS. If no JS, it remains visible. Once we have learn't we have JS, we don't need to do it again
 		} else $display='block';

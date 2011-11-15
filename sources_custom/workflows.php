@@ -1247,7 +1247,7 @@ function workflow_update_handler()
 	}
 	//require_code('developer_tools');
 	//inspect($emails);
-	mail_wrap(do_lang('APPROVAL_EMAIL_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),do_lang('APPROVAL_EMAIL_BODY',post_param('http_referer',ocp_srv('HTTP_REFERER')),$status_list,$workflow_notes,get_site_default_lang()),$emails,$names);
+	mail_wrap(do_lang('APPROVAL_EMAIL_SUBJECT',/*TODO: Should pass title in, for unique email subject line*/NULL,NULL,NULL,get_site_default_lang()),do_lang('APPROVAL_EMAIL_BODY',post_param('http_referer',ocp_srv('HTTP_REFERER')),$status_list,$workflow_notes,get_site_default_lang()),$emails,$names);
 	
 	// Finally return a success message
 	$return_url = strip_tags(post_param('return_url'));

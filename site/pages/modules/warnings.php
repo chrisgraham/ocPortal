@@ -570,7 +570,7 @@ class Module_warnings extends standard_aed_module
 			if ((get_value('ocf_optional_pt_tracking')!=='1') || ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_track_contributed_topics')==1))
 			{
 				$mmessage=do_lang('NEW_PERSONAL_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),comcode_escape($_title),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_link($pt_topic_id)),$message),get_lang($member_id));
-				mail_wrap(do_lang('NEW_PERSONAL_TOPIC',NULL,NULL,NULL,get_lang($member_id)),$mmessage,array($GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id)),$username,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,true);
+				mail_wrap(do_lang('NEW_PERSONAL_TOPIC_SUBJECT',$_title,NULL,NULL,get_lang($member_id)),$mmessage,array($GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id)),$username,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,true);
 			}
 
 			ocf_make_post($pt_topic_id,$_title,$message,0,true,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,false);

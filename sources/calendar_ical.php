@@ -165,7 +165,7 @@ function output_ical()
 						if ($parts[1][$i]!='0')
 						{
 							echo "DTSTART:".date('Ymd',$time)."T".date('His',$time)."\n";
-							if (!is_null($time2)) echo "DTEND:".date('Ymd',$time2)."T".date('His',$time2)."\n";
+							if (!is_null($time2)) echo "DTEND:".date('Ymd',$time2).(is_null($event['e_start_hour'])?"":"T".date('His',$time2))."\n";
 							$recurrence_code='FREQ='.strtoupper($parts[0]);
 							echo "RRULE:".$recurrence_code.";INTERVAL=".strval(strlen($parts[1])).";COUNT=1\n";
 						}
@@ -174,7 +174,7 @@ function output_ical()
 			} else
 			{
 				echo "DTSTART:".date('Ymd',$time)."T".date('His',$time)."\n";
-				if (!is_null($time2)) echo "DTEND:".date('Ymd',$time2)."T".date('His',$time2)."\n";
+				if (!is_null($time2)) echo "DTEND:".date('Ymd',$time2).(is_null($event['e_start_hour'])?"":"T".date('His',$time2))."\n";
 			}
 
 			$attendees=$GLOBALS['SITE_DB']->query_select('calendar_reminders',array('*'),array('e_id'=>$event['id']),'',5000/*reasonable limit*/);

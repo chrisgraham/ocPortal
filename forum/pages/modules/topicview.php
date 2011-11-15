@@ -382,11 +382,14 @@ class Module_topicview
 		}
 		if (!is_null($id))
 		{
-			$map=array('page'=>'topics','type'=>'mark_unread_topic','id'=>$id);
-			$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
-			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
-			$mark_unread_url=build_url($map,get_module_zone('topics'));
-			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_UNREAD'),'url'=>$mark_unread_url,'img'=>'mark_unread');
+			if (!is_guest())
+			{
+				$map=array('page'=>'topics','type'=>'mark_unread_topic','id'=>$id);
+				$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
+				if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
+				$mark_unread_url=build_url($map,get_module_zone('topics'));
+				$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_UNREAD'),'url'=>$mark_unread_url,'img'=>'mark_unread');
+			}
 
 			if (($may_reply) && (is_null(get_bot_type())))
 			{

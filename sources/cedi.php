@@ -128,7 +128,7 @@ function cedi_add_post($id,$message,$validated=1,$member=NULL,$send_mail=true)
 		$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$message_raw=do_lang('CEDI_POST_TAG_LINE',comcode_escape($their_username),comcode_escape($page_name),array(comcode_escape($view_url),$_the_message),get_site_default_lang());
 		require_code('mail');
-		mail_wrap(do_lang('NEW_CEDI_POST',NULL,NULL,NULL,get_site_default_lang()),$message_raw,NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+		mail_wrap(do_lang('NEW_CEDI_POST',$page_name,NULL,NULL,get_site_default_lang()),$message_raw,NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 	}
 
 	if (get_option('show_post_validation')=='1') decache('main_staff_checklist');

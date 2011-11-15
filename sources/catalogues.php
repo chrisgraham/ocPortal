@@ -117,7 +117,7 @@ function count_catalogue_category_children($category_id)
  * @param  boolean			Whether to perform sorting
  * @param  ?array				A list of entry rows (NULL: select them normally)
  * @param  string				Search filter (blank: no filter)
- * @param  ID_TEXT			Orderer (NULL: read from environment)
+ * @param  ?ID_TEXT			Orderer (NULL: read from environment)
  * @return array				An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
 function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$search='',$_order_by=NULL)

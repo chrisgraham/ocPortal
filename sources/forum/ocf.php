@@ -1618,7 +1618,7 @@ class forum_driver_ocf extends forum_driver_base
 				require_code('failure');
 				add_ip_ban($ip);
 				require_code('mail');
-				mail_wrap(do_lang('AUTO_BAN_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),do_lang('AUTO_BAN_DOS_MESSAGE',$ip,integer_format($count_threshold),integer_format($time_threshold),get_site_default_lang()));
+				mail_wrap(do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),do_lang('AUTO_BAN_DOS_MESSAGE',$ip,integer_format($count_threshold),integer_format($time_threshold),get_site_default_lang()));
 			}
 			if (!function_exists('require_lang')) require_code('lang');
 			require_lang('ocf');

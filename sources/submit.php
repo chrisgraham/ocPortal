@@ -22,23 +22,61 @@
  * Send (by e-mail) a validation request for a submitted item to the admin.
  *
  * @param  ID_TEXT		The validation request will say one of this type has been submitted. By convention it is the language code of what was done, e.g. ADD_DOWNLOAD
+ * @param  ?ID_TEXT		The table saved into (NULL: unknown)
+ * @param  boolean		Whether the ID field is not an integer
  * @param  ID_TEXT		The validation request will say this ID has been submitted
  * @param  tempcode		The validation request will link to this URL
  * @param  ?MEMBER		Member doing the submitting (NULL: current member)
  */
-function send_validation_request($type,$id,$url,$member_id=NULL)
+function send_validation_request($type,$table,$non_integer_id,$id,$url,$member_id=NULL)
 {
+	$good=NULL;
+	if (!is_null($table))
+	{
+		$_hooks=find_all_hooks('modules','admin_unvalidated');
+		foreach (array_keys($_hooks) as $hook)
+		{
+			require_code('hooks/modules/admin_unvalidated/'.filter_naughty_harsh($hook));
+			$object=object_factory('Hook_unvalidated_'.filter_naughty_harsh($hook),true);
+			if (is_null($object)) continue;
+			$info=$object->info();
+			if (is_null($info)) continue;
+			if ($info['db_table']==$table)
+			{
+				$good=$info;
+				break;
+			}
+		}
+	}
+
+	$title='';
+	if ((!is_null($good)) && (!is_array($good['db_identifier'])))
+	{
+		$db=array_key_exists('db',$good)?$good['db']:$GLOBALS['SITE_DB'];
+		$where=$good['db_identifier'].'='.$id;
+		if ($non_integer_id)
+			$where=db_string_equal_to($good['db_identifier'],$id);
+		$rows=$db->query('SELECT '.$identifier_select.(array_key_exists('db_title',$good)?(','.$good['db_title']):'').' FROM '.$db->get_table_prefix().$good['db_table'].' WHERE '.$where,100);
+
+		if (array_key_exists('db_title',$good))
+		{
+			$title=$row[$good['db_title']];
+			if ($good['db_title_dereference']) $title=get_translated_text($title,$db); // May actually be comcode (can't be certain), but in which case it will be shown as source
+		} else $title='#'.(is_integer($id)?strval($id):$id);
+	}
+	if ($title=='') $title='#'.strval($id);
+
 	if (is_null($member_id)) $member_id=get_member();
-	
+
 	require_lang('unvalidated');
-	
+
 	$_type=do_lang($type,NULL,NULL,NULL,NULL,false);
 	if (!is_null($_type)) $type=$_type;
 
 	$comcode=do_template('VALIDATION_REQUEST',array('_GUID'=>'1885be371b2ff7810287715ef2f7b948','USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'TYPE'=>$type,'ID'=>$id,'URL'=>$url),get_site_default_lang());
 
 	require_code('mail');
-	mail_wrap(do_lang('UNVALIDATED_TITLE','','','',get_site_default_lang()),$comcode->evaluate(get_site_default_lang(),false));
+	mail_wrap(do_lang('UNVALIDATED_TITLE',$title,'','',get_site_default_lang()),$comcode->evaluate(get_site_default_lang(),false));
 }
 
 /**

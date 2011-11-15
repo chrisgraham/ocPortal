@@ -414,7 +414,7 @@ class Module_join
 			$_validation_url=build_url(array('page'=>'editprofile','id'=>$member_id),get_module_zone('editprofile'),NULL,false,false,true);
 			$validation_url=$_validation_url->evaluate();
 			$message=do_lang('VALIDATE_NEW_MEMBER_MAIL',comcode_escape($username),comcode_escape($validation_url),comcode_escape(strval($member_id)),get_site_default_lang());
-			mail_wrap(do_lang('VALIDATE_NEW_MEMBER_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),$message,is_null(get_value('member_validator'))?NULL:array(get_value('member_validator')));
+			mail_wrap(do_lang('VALIDATE_NEW_MEMBER_SUBJECT',$username,NULL,NULL,get_site_default_lang()),$message,is_null(get_value('member_validator'))?NULL:array(get_value('member_validator')));
 		}
 
 		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>$email_address,'i_taken'=>0),'',1);

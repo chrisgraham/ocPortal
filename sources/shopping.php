@@ -183,7 +183,7 @@ function purchase_done_staff_mail($order_id)
 
 	require_code('mail');
 
-	mail_wrap(do_lang('ORDER_PLACED_MAIL_SUBJECT',get_site_name(),NULL,get_site_default_lang()),$message,$email_address,$member_name,'','',3,NULL,false,NULL,false,false);
+	mail_wrap(do_lang('ORDER_PLACED_MAIL_SUBJECT',get_site_name(),strval($order_id),get_site_default_lang()),$message,$email_address,$member_name,'','',3,NULL,false,NULL,false,false);
 }
 
 /**
@@ -218,7 +218,7 @@ function stock_maintain_warn_mail($product_name,$product_id)
 
 	require_code('mail');
 
-	mail_wrap(do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),NULL,NULL,get_site_default_lang()),$message,$email_address,$member_name,'','',3,NULL,false,NULL,false,false);
+	mail_wrap(do_lang('STOCK_LEVEL_MAIL_SUBJECT',get_site_name(),$product_name,NULL,get_site_default_lang()),$message,$email_address,$member_name,'','',3,NULL,false,NULL,false,false);
 }	
 
 /**

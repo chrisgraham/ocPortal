@@ -622,9 +622,9 @@ class standard_aed_module
 			{
 				if ($this->send_validation_request)
 				{
-					$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',NULL,false,false,true);
+					$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id,'validated'=>1),'_SELF',NULL,false,false,true);
 					if (addon_installed('unvalidated'))
-						send_validation_request($doing,$id,$edit_url);
+						send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
 				}
 
 				$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
@@ -1227,9 +1227,9 @@ class standard_aed_module
 					require_code('submit');
 					if ($this->send_validation_request)
 					{
-						$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',NULL,false,false,true);
+						$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id,'validated'=>1),'_SELF',NULL,false,false,true);
 						if (addon_installed('unvalidated'))
-							send_validation_request($doing,$id,$edit_url);
+							send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
 					}
 	
 					$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));

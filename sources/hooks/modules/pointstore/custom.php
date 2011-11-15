@@ -224,7 +224,7 @@ class Hook_pointstore_custom
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$message_raw=do_lang('MAIL_REQUEST_CUSTOM_BODY',comcode_escape($c_title),$username,NULL,get_site_default_lang());
 
-		mail_wrap(do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),NULL,NULL,get_site_default_lang()),$message_raw);
+		mail_wrap(do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),NULL,NULL,get_site_default_lang()),$message_raw,NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 
 		// Show message
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

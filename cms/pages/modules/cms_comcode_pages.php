@@ -895,7 +895,7 @@ class Module_cms_comcode_pages
 			require_code('submit');
 			$edit_url=build_url(array('page'=>'_SELF','type'=>'_ed','page_link'=>$zone.':'.$new_file),'_SELF',NULL,false,false,true);
 			if (addon_installed('unvalidated'))
-				send_validation_request('COMCODE_PAGE_EDIT',$zone.':'.$new_file,$edit_url);
+				send_validation_request('COMCODE_PAGE_EDIT','comcode_pages',true,$zone.':'.$new_file,$edit_url);
 		}
 
 		$new=post_param('post');

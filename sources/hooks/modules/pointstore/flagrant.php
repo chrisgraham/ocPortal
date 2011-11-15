@@ -167,7 +167,7 @@ class Hook_pointstore_flagrant
 		require_code('mail');
 		$_url=build_url(array('page'=>'admin_flagrant'),'adminzone',NULL,false,false,true);
 		$manage_url=$_url->evaluate();
-		mail_wrap(do_lang('TITLE_NEWTEXT',NULL,NULL,NULL,get_site_default_lang()),do_lang('MAIL_FLAGRANT_TEXT',$message,comcode_escape($manage_url),NULL,get_site_default_lang()));
+		mail_wrap(do_lang('TITLE_NEWTEXT',NULL,NULL,NULL,get_site_default_lang()),do_lang('MAIL_FLAGRANT_TEXT',$message,comcode_escape($manage_url),NULL,get_site_default_lang()),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 
 		//Now, deduct the points from our user's account.
 		require_code('points2');

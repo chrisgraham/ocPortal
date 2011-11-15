@@ -90,15 +90,16 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 	{
 		$_url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$recipient_id),'_SELF',NULL,false,false,true);
 		$url=$_url->evaluate();
+		require_code('mail');
 		if ($anonymous)
 		{
 			$message_raw=do_lang('GIVEN_POINTS_FOR_ANON',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url)),get_lang($recipient_id));
+			mail_wrap(do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($mail),$their_username);
 		} else
 		{
 			$message_raw=do_lang('GIVEN_POINTS_FOR',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_username)),get_lang($recipient_id));
+			mail_wrap(do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($mail),$their_username,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		}
-		require_code('mail');
-		mail_wrap(do_lang('YOU_GIVEN_POINTS',NULL,NULL,NULL,get_lang($recipient_id)),$message_raw,array($mail),$their_username);
 	}
 	
 	if (get_forum_type()=='ocf')

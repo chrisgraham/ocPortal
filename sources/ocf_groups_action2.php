@@ -234,12 +234,12 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 			$leader_email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($leader_id,'m_email_address');
 			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',$their_username,$group_name,array($url),get_lang($leader_id));
 			$subject=do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($leader_id));
-			mail_wrap($subject,$mail,array($leader_email_address),$leader_name);
+			mail_wrap($subject,$mail,array($leader_email_address),$leader_name,$GLOBALS['OCF_DRIVER']->get_member_email_address(get_member()),$GLOBALS['OCF_DRIVER']->get_username(get_member()));
 		} else
 		{
 			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',$their_username,$group_name,array($url),get_site_default_lang());
 			$subject=do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
-			mail_wrap($subject,$mail);
+			mail_wrap($subject,$mail,NULL,NULL,$GLOBALS['OCF_DRIVER']->get_member_email_address(get_member()),$GLOBALS['OCF_DRIVER']->get_username(get_member()));
 		}
 	}
 }

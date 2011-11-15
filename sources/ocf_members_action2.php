@@ -657,8 +657,8 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if ((!is_null($username)) && ($username!=$old_username) && (($skip_checks) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self'))))
 	{
 		$update['m_username']=$username;
-		$mail=do_lang('USERNAME_CHANGED_MAIL',get_site_name(),$username,NULL,get_lang($member_id));
-		mail_wrap(do_lang('USERNAME_CHANGED_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2);
+		$mail=do_lang('USERNAME_CHANGED_MAIL',get_site_name(),$username,$old_username,get_lang($member_id));
+		mail_wrap(do_lang('USERNAME_CHANGED_MAIL_SUBJECT',$username,$old_username,NULL,get_lang($member_id)),$mail,array($email_address),$username,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),2);
 
 		// Fix cacheing for usernames
 		$to_fix=array('f_forums/f_cache_last_username','f_posts/p_poster_name_if_guest','f_topics/t_cache_first_username','f_topics/t_cache_last_username');
@@ -1168,7 +1168,7 @@ function ocf_member_choose_signature($new_signature,$member_id=NULL)
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_signature'=>update_lang_comcode_attachments($_signature,$new_signature,'ocf_signature',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id)),array('id'=>$member_id),'',1);
 
 	require_code('mail');
-	mail_wrap(do_lang('CHOOSE_SIGNATURE_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_SIGNATURE_BODY',$new_signature,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)),NULL,'','','',3,NULL,false,get_member());
+	mail_wrap(do_lang('CHOOSE_SIGNATURE_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_SIGNATURE_BODY',$new_signature,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)),NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 }
 
 /**
@@ -1234,7 +1234,7 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 		if ((substr($avatar_url,0,7)!='themes/') && (addon_installed('ocf_avatars')))
 		{
 			require_code('mail');
-			mail_wrap(do_lang('CHOOSE_AVATAR_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_AVATAR_BODY',$stub.$avatar_url,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)),NULL,'','','',3,NULL,false,get_member());
+			mail_wrap(do_lang('CHOOSE_AVATAR_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_AVATAR_BODY',$stub.$avatar_url,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)),NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 		}
 	}
 
@@ -1298,7 +1298,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_photo_url'=>$urls[0],'m_photo_thumb_url'=>$urls[1]),array('id'=>$member_id),'',1);
 
 	require_code('mail');
-	mail_wrap(do_lang('CHOOSE_PHOTO_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)),NULL,'','','',3,NULL,false,get_member());
+	mail_wrap(do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)),NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 
 	// If no avatar, or default avatar, or avatars not installed, use photo for it
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);

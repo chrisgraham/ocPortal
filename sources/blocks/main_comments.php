@@ -114,7 +114,7 @@ class Block_main_comments
 				$validate_url=$_validate_url->evaluate();
 				$message_raw=do_lang('NEW_MESSAGE_BODY',$validate_url,post_param('post'),NULL,get_site_default_lang());
 
-				mail_wrap(do_lang('NEW_MESSAGE_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),$message_raw,NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+				mail_wrap(do_lang('NEW_MESSAGE_SUBJECT',post_param('title'),NULL,NULL,get_site_default_lang()),$message_raw,NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 			}
 		}
 
@@ -122,7 +122,7 @@ class Block_main_comments
 		$reverse=((array_key_exists('reverse',$map)) && ($map['reverse']=='1'));
 		$allow_reviews=((!array_key_exists('reviews',$map)) || ($map['reviews']=='1'));
 
-		$out->attach(get_comment_details('block_main_comments',true,$map['page'].'_'.$map['param'].$extra,$invisible_if_no_comments,array_key_exists('forum',$map)?$map['forum']:NULL,NULL,NULL,false,$reverse,NULL,$allow_reviews));
+		$out->attach(get_comment_details('block_main_comments',true,$map['page'].'_'.$map['param'].$extra,$invisible_if_no_comments,array_key_exists('forum',$map)?$map['forum']:NULL,NULL,NULL,get_page_name()=='guestbook',$reverse,NULL,$allow_reviews));
 		return $out;
 	}
 

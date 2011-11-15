@@ -96,8 +96,6 @@ class Hook_cron_ocdeadpeople
  
 					if(!$has_immunization)
 					{
-
-
 						if($insert)
 						{
 							$GLOBALS['SITE_DB']->query_insert('members_diseases',array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0));
@@ -107,11 +105,11 @@ class Hook_cron_ocdeadpeople
 							$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
 							$cure_url=$cure_url->evaluate();
 
-							$message=do_lang('MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
+							$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
 							$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($friends_healthy[$to_infect]);
 							$member_name=$GLOBALS['FORUM_DRIVER']->get_username($friends_healthy[$to_infect]);
 
-							mail_wrap(do_lang('MAIL_SUBJECT',get_site_name(),NULL,NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
+							mail_wrap(do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
 						}
 						else
 						{
@@ -120,11 +118,11 @@ class Hook_cron_ocdeadpeople
 							$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
 							$cure_url=$cure_url->evaluate();
 
-							$message=do_lang('MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
+							$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
 							$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($friends_healthy[$to_infect]);
 							$member_name=$GLOBALS['FORUM_DRIVER']->get_username($friends_healthy[$to_infect]);
 
-							mail_wrap(do_lang('MAIL_SUBJECT',get_site_name(),NULL,NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
+							mail_wrap(do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
 
 							//infect again the member
 							$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']),'',1);
@@ -179,11 +177,11 @@ class Hook_cron_ocdeadpeople
 					$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
 					$cure_url=$cure_url->evaluate();
 
-					$message=do_lang('MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
+					$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
 					$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($random_member[0]['id']);
 					$member_name=$GLOBALS['FORUM_DRIVER']->get_username($random_member[0]['id']);
 
-					mail_wrap(do_lang('MAIL_SUBJECT',get_site_name(),NULL,NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
+					mail_wrap(do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
 				}
 				else
 				{
@@ -195,11 +193,11 @@ class Hook_cron_ocdeadpeople
 					$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
 					$cure_url=$cure_url->evaluate();
 
-					$message=do_lang('MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
+					$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
 					$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($random_member[0]['id']);
 					$member_name=$GLOBALS['FORUM_DRIVER']->get_username($random_member[0]['id']);
 
-					mail_wrap(do_lang('MAIL_SUBJECT',get_site_name(),NULL,NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
+					mail_wrap(do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
 				}
 			}
 

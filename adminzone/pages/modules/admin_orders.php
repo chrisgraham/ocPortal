@@ -501,7 +501,7 @@ class Module_admin_orders
 		
 		require_code('mail');
 
-		mail_wrap(do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),NULL,NULL,get_lang($order_det['c_member'])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
+		mail_wrap(do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),strval($order_id),NULL,get_lang($order_det['c_member'])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
 	}
 
 	/**

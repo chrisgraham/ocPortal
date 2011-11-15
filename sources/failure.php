@@ -434,11 +434,11 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		$message=do_template('HACK_ATTEMPT_MAIL',array('_GUID'=>'6253b3c42c5e6c70d20afa9d1f5b40bd','STACK_TRACE'=>$stack_trace,'USER_AGENT'=>get_browser_string(),'REFERER'=>ocp_srv('HTTP_REFERER'),'USER_OS'=>get_os_string(),'REASON'=>$reason_full,'IP'=>$ip,'ID'=>strval($id),'USERNAME'=>$username,'TIME_RAW'=>strval(time()),'TIME'=>$time,'URL'=>$url,'POST'=>$post),get_site_default_lang());
 
 		require_code('mail');
-		mail_wrap(do_lang('HACK_ATTACK',NULL,NULL,NULL,get_site_default_lang()),$message->evaluate(get_site_default_lang(),false),array(get_option('staff_address')),get_site_name());
+		mail_wrap(do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),$message->evaluate(get_site_default_lang(),false),array(get_option('staff_address')),get_site_name());
 
 		if (!is_null($ip_ban_todo))
 		{
-			mail_wrap(do_lang('AUTO_BAN_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),$ip_ban_todo);
+			mail_wrap(do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),$ip_ban_todo);
 		}
 	}
 
@@ -726,15 +726,15 @@ function relay_error_mail($text,$ocproducts=true)
 	require_code('comcode');
 	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),$text,NULL,get_site_default_lang());
 	if (get_option('send_error_emails',true)=='1')
-		mail_wrap(do_lang('ERROR_OCCURED',NULL,NULL,NULL,get_site_default_lang()),$mail,NULL,'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,'','','',3,NULL,true,NULL,true);
 	if (($ocproducts) && (get_option('send_error_emails_ocproducts',true)=='1') && (!running_script('cron_bridge')) && (strpos($text,'_custom/')===false) && (strpos($text,'data/occle.php')===false) && (strpos($text,'/mini')===false) && (strpos($text,'&#')===false/*charset encoding issue*/) && (strpos($text,'has been disabled for security reasons')===false) && (strpos($text,'max_questions')/*mysql limit*/===false) && (strpos($text,'Error at offset')===false) && (strpos($text,'Unable to allocate memory for pool')===false) && (strpos($text,'Out of memory')===false) && (strpos($text,'Disk is full writing')===false) && (strpos($text,'Disk quota exceeded')===false) && (strpos($text,'from storage engine')===false) && (strpos($text,'Lost connection to MySQL server')===false) && (strpos($text,'Unable to save result set')===false) && (strpos($text,'.MYI')===false) && (strpos($text,'MySQL server has gone away')===false) && (strpos($text,'Incorrect key file')===false) && (strpos($text,'Too many connections')===false) && (strpos($text,'marked as crashed and should be repaired')===false) && (strpos($text,'connect to')===false) && (strpos($text,'Access denied for')===false) && (strpos($text,'Unknown database')===false) && (strpos($text,'headers already sent')===false) && (preg_match('#Maximum execution time of \d+ seconds#',$text)==0) && (strpos($text,'File(/tmp/) is not within the allowed path')===false))
 	{
-		mail_wrap(do_lang('ERROR_OCCURED',NULL,NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
 	}
 	if (($ocproducts) && (!is_null(get_value('agency_email_address'))))
 	{
 		$agency_email_address=get_value('agency_email_address');
-		mail_wrap(do_lang('ERROR_OCCURED',NULL,NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
 	}
 }
 

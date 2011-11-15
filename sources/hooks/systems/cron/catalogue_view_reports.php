@@ -119,7 +119,7 @@ class Hook_cron_catalogue_view_reports
 					}
 					$mail=do_lang($catalogue['c_name'].'__CATALOGUE_VIEW_REPORT',$buildup,comcode_escape($catalogue_title),$regularity,get_lang($member_id),false);
 					if (is_null($mail)) $mail=do_lang('DEFAULT__CATALOGUE_VIEW_REPORT',$buildup,comcode_escape($catalogue_title),array($regularity,get_site_name()),get_lang($member_id));
-					$subject_tag=do_lang($catalogue['c_name'].'__CATALOGUE_VIEW_REPORT_SUBJECT',comcode_escape($catalogue_title),comcode_escape(get_site_name()),NULL,get_lang($member_id),false);
+					$subject_tag=do_lang($catalogue['c_name'].'__CATALOGUE_VIEW_REPORT_SUBJECT',$catalogue_title,get_site_name(),NULL,get_lang($member_id),false);
 					if (is_null($subject_tag)) $subject_tag=do_lang('DEFAULT__CATALOGUE_VIEW_REPORT_SUBJECT',comcode_escape($catalogue_title),comcode_escape(get_site_name()),NULL,get_lang($member_id));
 
 					// Send actual mail

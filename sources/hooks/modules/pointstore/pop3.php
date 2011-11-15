@@ -295,8 +295,8 @@ class Hook_pointstore_pop3
 		$encoded_reason=do_lang('TITLE_NEWPOP3');
 		$message_raw=do_template('POINTSTORE_POP3_MAIL',array('_GUID'=>'19022c49d0bdde39735245850d04fca7','EMAIL'=>$email,'ENCODED_REASON'=>$encoded_reason,'LOGIN'=>$login,'QUOTA'=>integer_format($initial_quota),'MAIL_SERVER'=>$mail_server,'PASSWORD'=>$password,'PREFIX'=>$prefix,'SUFFIX'=>$_suffix,'POP3_URL'=>$pop3_url,'SUFFIX_PRICE'=>integer_format($suffix_price)));
 		require_code('mail');
-		mail_wrap(do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false));
-	
+		mail_wrap(do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+
 		$text=do_lang_tempcode('ORDER_POP3_DONE',escape_html($prefix.'@'.$_suffix));
 		return inform_screen($title,$text);
 	}
@@ -376,7 +376,7 @@ class Hook_pointstore_pop3
 		$encoded_reason=do_lang('TITLE_QUOTA');
 		$message_raw=do_template('POINTSTORE_QUOTA_MAIL',array('_GUID'=>'5a4e0bb5e53e6ccf8e57581c377557f4','ENCODED_REASON'=>$encoded_reason,'QUOTA'=>integer_format($quota),'EMAIL'=>$prefix.$suffix,'QUOTA_URL'=>$quota_url,'PRICE'=>integer_format($_price)));
 		require_code('mail');
-		mail_wrap(do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false));
+		mail_wrap(do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('ORDER_QUOTA_DONE'));

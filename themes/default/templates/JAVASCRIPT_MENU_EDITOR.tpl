@@ -308,9 +308,9 @@ function magicCopier(object,caption,url,error_message,confirm_message)
 function menuEditorBranchTypeChange(id)
 {
 	var disabled=(document.getElementById('branch_type_'+id).value!='page');
-	document.getElementById('new_window_'+id).disabled=disabled;
+	/*document.getElementById('new_window_'+id).disabled=disabled;
 	document.getElementById('check_perms_'+id).disabled=disabled;
-	document.getElementById('url_'+id).disabled=disabled;
+	document.getElementById('url_'+id).disabled=disabled;*/
 	var sub=document.getElementById('branch_'+id+'_follow_1');
 	if (sub)
 	{

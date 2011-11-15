@@ -863,17 +863,19 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 							sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
 
 							$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($allow);
+							$to_name=$GLOBALS['FORUM_DRIVER']->get_username($allow);
 							if ($to_email!='')
 							{
 								require_lang('chat');
 								require_code('mail');
 								$username=$GLOBALS['FORUM_DRIVER']->get_username($room_check[0]['room_owner']);
 								$username2=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+								$email2=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 								$zone=get_module_zone('chat');
 								$_lobby_url=build_url(array('page'=>'chat'),$zone,NULL,false,false,true);
 								$lobby_url=$_lobby_url->evaluate();
 								$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message),get_lang($allow));
-								mail_wrap(do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow)),$message,array($to_email),'','','',1);
+								mail_wrap(do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow)),$message,array($to_email),$to_name,$email2,$username2,1);
 							}
 						}
 					}
