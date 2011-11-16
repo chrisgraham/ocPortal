@@ -41,7 +41,6 @@ The following template sets exist:
  - [b]top[/b] (a very simple single-layered type for top-placed menus that provides the same look as the Admin Zone uses for navigation between sections; does not support multiple-levels)
  - [b]select[/b] (select menu items via a dropdown list; does not support multiple-levels)
 
-Some menu types make no distinction between page-link/contracted-branch, such as popup ones (because a popup point can also itself be a link). Other ones, such as tree ones, can not have children if a page-link is defined (because the click event is used to open up a tray).
 The menus themselves aren't saved against how the data is to be used, but for usability reasons ocPortal will adapt the menu interface a bit depending on the context you're editing for (i.e. the edit menu button will open up the menu editor in with an interface optimised for how the menu was displayed for that instance).
 
 [title="2"]Panel pages[/title]
