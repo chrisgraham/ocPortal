@@ -1,14 +1,5 @@
-{+START,IF,{$NOT,{$MOBILE}}}
-	<p>
-		{!ATTACHMENT_HELP}
-	</p>
-	<p>
-		{!ATTACHMENT_HELP_3}
-	</p>
-{+END}
-<p>
-	{!ATTACHMENT_HELP_2,{IMAGE_TYPES*}}
-</p>
+{$SET,IMAGE_TYPES,{IMAGE_TYPES}}
+
 <script type="text/javascript">// <![CDATA[
 	var attachment_template='{ATTACHMENT_TEMPLATE/^;}';
 //]]></script>

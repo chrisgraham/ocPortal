@@ -728,24 +728,27 @@ function choose_picture(id,ob,name)
 	var r=document.getElementById(id);
 	if (!r) return;
 	var e=r.form.elements[name];
-	for (var i=0;i<e.length;i++)
+	if (e.length<100)
 	{
-		var img=e[i].parentNode.parentNode.getElementsByTagName('img')[0];
-		if ((img) && (img!=ob))
+		for (var i=0;i<e.length;i++)
 		{
-			img.style.outline='0';
-			if (!browser_matches('ie8+')) img.style.background='none';
-			if (!browser_matches('no_alpha_ie_with_opacity'))
+			var img=e[i].parentNode.parentNode.getElementsByTagName('img')[0];
+			if ((img) && (img!=ob))
 			{
-				setOpacity(img.parentNode,0.5);
-				img.parentNode.onmouseover=function(img) { return function()
-				{
-					setOpacity(img.parentNode,1.0);
-				} } (img);
-				img.parentNode.onmouseout=function(img) { return function()
+				img.style.outline='0';
+				if (!browser_matches('ie8+')) img.style.background='none';
+				if (!browser_matches('no_alpha_ie_with_opacity'))
 				{
 					setOpacity(img.parentNode,0.5);
-				} } (img);
+					img.parentNode.onmouseover=function(img) { return function()
+					{
+						setOpacity(img.parentNode,1.0);
+					} } (img);
+					img.parentNode.onmouseout=function(img) { return function()
+					{
+						setOpacity(img.parentNode,0.5);
+					} } (img);
+				}
 			}
 		}
 	}
@@ -755,9 +758,12 @@ function choose_picture(id,ob,name)
 	ob.parentNode.onmouseover=function() {};
 	ob.parentNode.onmouseout=function() {};
 	if (typeof r.fakeonchange!='undefined' && r.fakeonchange) r.fakeonchange();
-	if (!browser_matches('no_alpha_ie_with_opacity')) setOpacity(ob.parentNode,1.0);
-	ob.style.outline='1px dotted';
-	if (!browser_matches('ie8+')) ob.style.background='green';
+	if (e.length<100)
+	{
+		if (!browser_matches('no_alpha_ie_with_opacity')) setOpacity(ob.parentNode,1.0);
+		ob.style.outline='1px dotted';
+		if (!browser_matches('ie8+')) ob.style.background='green';
+	}
 }
 
 function disable_preview_scripts(under)
@@ -790,6 +796,7 @@ function setUpChangeMonitor(container,input,container2)
 	{
 		elements=getAllFormElements(container);
 	}
+	if (elements.length>300) return;
 	for (var i=0;i<elements.length;i++)
 	{
 		if (!elements[i]) continue;

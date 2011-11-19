@@ -27,10 +27,26 @@
 <div id="cal{STUB#}Container" class="inline">&nbsp;</div>
 
 <script type="text/javascript">// <![CDATA[
+	var mindate=null,maxdate=null;
+
+	{+START,IF_PASSED,MIN_DATE_DAY}{+START,IF_PASSED,MIN_DATE_MONTH}{+START,IF_PASSED,MIN_DATE_YEAR}
+		minDate = new Date();
+		minDate.setDate(MIN_DATE_DAY);
+		minDate.setMonth(MIN_DATE_MONTH-1);
+		minDate.setFullYear(MIN_DATE_YEAR);
+	{+END}{+END}{+END}
+
+	{+START,IF_PASSED,MAX_DATE_DAY}{+START,IF_PASSED,MAX_DATE_MONTH}{+START,IF_PASSED,MAX_DATE_YEAR}
+		maxDate = new Date();
+		maxDate.setDate(MAX_DATE_DAY);
+		maxDate.setMonth(MAX_DATE_MONTH-1);
+		maxDate.setFullYear(MAX_DATE_YEAR);
+	{+END}{+END}{+END}
+
 	var cal{STUB%}=null;
 	var link{STUB%}=document.getElementById('cal{STUB;}Button');
-	if (link{STUB%}) link{STUB%}.onclick=function() { initialise_date_field('{STUB%}','cal{STUB%}','link{STUB%}', {$?,{UNLIMITED},true,false}); };
-	
+	if (link{STUB%}) link{STUB%}.onclick=function() { initialise_date_field('{STUB%}','cal{STUB%}','link{STUB%}', {$?,{UNLIMITED},true,false}, mindate, maxdate); };
+
 	{+START,IF,{UNLIMITED}}
 		var year_field=document.getElementById('{STUB%}_year');
 		var special_option=document.createElement('option');

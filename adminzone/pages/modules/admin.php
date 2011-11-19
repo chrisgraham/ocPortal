@@ -944,17 +944,20 @@ class Module_admin
 				$lang_file='global';
 				foreach (array('lang','lang_custom') as $lang_dir)
 				{
-					$dh=opendir(get_file_base().'/'.$lang_dir.'/'.fallback_lang().'/');
-					while (($file=readdir($dh))!==false)
+					$dh=@opendir(get_file_base().'/'.$lang_dir.'/'.fallback_lang().'/');
+					if ($dh!==false)
 					{
-						if (substr(strtolower($file),-4)=='.ini')
+						while (($file=readdir($dh))!==false)
 						{
-							if (!array_key_exists($file,$lang_file_contents))
-								$lang_file_contents[$file]=file_get_contents(get_file_base().'/'.$lang_dir.'/'.fallback_lang().'/'.$file);
-							if ((preg_match('#^'.str_replace('#','\#',preg_quote($n)).'=#m',$lang_file_contents[$file])!=0) || ((file_exists(get_custom_file_base().'/lang_custom/'.user_lang().'/'.$file)) && (preg_match('#^'.str_replace('#','\#',preg_quote($n)).'=#m',file_get_contents(get_custom_file_base().'/lang_custom/'.user_lang().'/'.$file))!=0)))
+							if (substr(strtolower($file),-4)=='.ini')
 							{
-								$lang_file=basename($file,'.ini');
-								break;
+								if (!array_key_exists($file,$lang_file_contents))
+									$lang_file_contents[$file]=file_get_contents(get_file_base().'/'.$lang_dir.'/'.fallback_lang().'/'.$file);
+								if ((preg_match('#^'.str_replace('#','\#',preg_quote($n)).'=#m',$lang_file_contents[$file])!=0) || ((file_exists(get_custom_file_base().'/lang_custom/'.user_lang().'/'.$file)) && (preg_match('#^'.str_replace('#','\#',preg_quote($n)).'=#m',file_get_contents(get_custom_file_base().'/lang_custom/'.user_lang().'/'.$file))!=0)))
+								{
+									$lang_file=basename($file,'.ini');
+									break;
+								}
 							}
 						}
 					}

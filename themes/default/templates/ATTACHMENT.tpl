@@ -23,6 +23,7 @@
 		<tr>
 			<th class="de_th dottedborder_barrier_a_nonrequired">
 				{!UPLOAD}
+				<img onclick="this.onmouseover();" class="right" title="{!ATTACHMENT_HELP_2#,{$GET*,IMAGE_TYPES}}" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,this.ttitle,'auto');" alt="{!HELP}" src="{$IMG*,help}" />
 			</th>
 			<td class="dottedborder_barrier_b_nonrequired">
 				<div class="accessibility_hidden"><label for="file{I*}">{!UPLOAD}</label></div>
@@ -60,6 +61,7 @@
 		<tr>
 			<th class="de_th dottedborder_barrier_a_nonrequired">
 				{!CAPTION}
+				<img onclick="this.onmouseover();" class="right" title="{!ATTACHMENT_HELP_3#}" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,this.ttitle,'auto');" alt="{!HELP}" src="{$IMG*,help}" />
 			</th>
 			<td class="dottedborder_barrier_b_nonrequired">
 				<div class="accessibility_hidden"><label for="caption{I*}">{!CAPTION}</label></div>

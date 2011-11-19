@@ -2,6 +2,10 @@
 
 <h2>{!EDIT}</h2>
 
+<script type="text/javascript">// <![CDATA[
+	window.main_form_very_simple=true;
+//]]></script>
+
 {FORM}
 
 <h2>{!ADD} ({!ADVANCED})</h2>

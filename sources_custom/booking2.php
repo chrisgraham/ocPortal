@@ -34,6 +34,148 @@ function supplement_form()
 }
 
 /**
+ * For a list of booking IDs (assumed to be from same member), reconstitute/simplify as much as possible, and return the booking details structure.
+ *
+ * @param  array		List of booking IDs.
+ * @return array		Reconstituted booking details structure to check.
+ */
+function get_booking_request_from_db($booking_ids)
+{
+	$request=array();
+
+	foreach ($booking_ids as $booking_id)
+	{
+		$booking=$GLOBALS['SITE_DB']->query_select('booking',array('day','month','year'),array('id'=>$booking_id),'',1);
+		if (!array_key_exists(0,$booking)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+		$supplements=$GLOBALS['SITE_DB']->query_select('booking_supplement',array('supplement_id','quantity','notes'),array('booking_id'=>$booking_id));
+
+		$request[]=array(
+			'bookable_id'=>$booking[0]['bookable_id'],
+			'start_day'=>$booking[0]['day'],
+			'start_month'=>$booking[0]['month'],
+			'start_year'=>$booking[0]['year'],
+			'end_day'=>$booking[0]['day'],
+			'end_month'=>$booking[0]['month'],
+			'end_year'=>$booking[0]['year'],
+			'supplements'=>list_to_map('supplement_id',$supplements),
+			'quantity'=>1,
+		);
+	}
+
+	reconstitute_booking_requests($request);
+
+	return $request;
+}
+
+/**
+ * From single booking details, convert it into a reconstituted structure.
+ *
+ * @param  array		Booking details structure to check.
+ * @return boolean	Whether any changes happened.
+ */
+function reconstitute_booking_requests(&$request)
+{
+	$changes=false;
+
+	// Sort, so that we know we only merge when things are consecutive
+	global $M_SORT_KEY;
+	$M_SORT_KEY='bookable_id,start_year,start_month,start_day';
+	usort($request,'multi_sort');
+
+	$all_supplements=collapse_2d_complexity('id','price_is_per_period',$GLOBALS['SITE_DB']->query_select('bookable_supplement',array('id','price_is_per_period')));
+
+	// Scan through, merging same things together and updating quantity
+	for ($i=0;$i<count($request);$i++)
+	{
+		asort($request[$i]['supplements']);
+
+		if ($i!=0)
+		{
+			$a=&$request[$i-1];
+			$b=&$request[$i];
+
+			if (($a['bookable_id']==$b['bookable_id']) && ($a['start_day']==$b['start_day']) && ($a['start_month']==$b['start_month']) && ($a['start_year']==$b['start_year']) && ($a['end_day']==$b['end_day']) && ($a['end_month']==$b['end_month']) && ($a['end_year']==$b['end_year']) && ($a['supplements']==$b['supplements']))
+			{
+				$a['quantity']+=$b['quantity'];
+				unset($request[$i]);
+				$i--;
+				
+				$changes=true;
+			}
+		}
+	}
+
+	// Scan through, merging consequtive days on same bookable into sequences
+	for ($i=0;$i<count($request);$i++)
+	{
+		if ($i!=0)
+		{
+			$a=&$request[$i-1];
+			$b=&$request[$i];
+
+			// List just those supplements which are per-period, so we can assure that the same ones are taken for both $a and $b (hence mergeable). If so we merge all, knowing the one-offs should be merged also.
+			$a_filtered_supplements=$a['supplements'];
+			foreach (array_keys($a_filtered_supplements) as $supplement_id)
+			{
+				if ($all_supplements[$supplement_id]==0) unset($a_filtered_supplements[$supplement_id]);
+			}
+			$b_filtered_supplements=$a['supplements'];
+			foreach (array_keys($b_filtered_supplements) as $supplement_id)
+			{
+				if ($all_supplements[$supplement_id]==0) unset($b_filtered_supplements[$supplement_id]);
+			}
+
+			$a_end_timestamp=mktime(0,0,0,$a['end_month'],$a['end_day'],$a['end_year']);
+			$b_start_timestamp=mktime(0,0,0,$b['start_month'],$b['start_day'],$b['start_year']);
+
+			if (($a['bookable_id']==$b['bookable_id']) && ($a['quantity']==$b['quantity']) && (strtotime('+1 day',$a_end_timestamp)==$b_start_timestamp) && ($a_filtered_supplements==$b_filtered_supplements))
+			{
+				$a['end_day']+=$b['end_day'];
+				$a['end_month']+=$b['end_month'];
+				$a['end_year']+=$b['end_year'];
+				$a['supplements']+=$b['supplements'];
+				unset($request[$i]);
+				$i--;
+
+				$changes=true;
+			}
+		}
+	}
+
+	return $changes;
+}
+
+/**
+ * Find the future booking(s) IDs owned by a member.
+ *
+ * @param  ?MEMBER	Member ID (NULL: current user).
+ * @return array		Booking IDs.
+ */
+function get_future_member_booking_ids($member=NULL)
+{
+	if (is_null($member)) $member=get_member();
+
+	$day=intval(date('d'));
+	$month=intval(date('m'));
+	$year=intval(date('Y'));
+
+	$booking_ids=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'booking WHERE member_id='.strval($member).' AND (year>'.strval($year).' OR year='.strval($year).' AND month>'.strval($month).' OR year='.strval($year).' AND month='.strval($month).' AND day>='.strval($day).')');
+	return $booking_ids;
+}
+
+/**
+ * Delete a specific booking. To edit a booking you need to delete then re-add.
+ *
+ * @param  AUTO_LINK	Booking ID.
+ */
+function delete_booking($id)
+{
+	$GLOBALS['SITE_DB']->query_delete('booking',array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_delete('booking_supplement',array('booking_id'=>$id));
+}
+
+/**
  * Read bookable details from POST environment.
  *
  * @param  boolean	Whether it's an edit (if so we need to look at dependency IDs).
@@ -43,7 +185,7 @@ function get_bookable_details_from_form($edit=false)
 {
 	$active_from=get_input_date('active_from');
 	$active_to=get_input_date('active_to');
-	
+
 	$bookable_details=array(
 		'title'=>post_param('title'),
 		'description'=>post_param('description'),

@@ -1329,7 +1329,7 @@ function activateTooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lig
 	ac.tooltip_on=false;
 	ac.initial_width=width;
 	
-	var children=document.getElementsByTagName('img');
+	var children=ac.getElementsByTagName('img');
 	for (var i=0;i<children.length;i++) children[i].setAttribute('title','');
 
 	var tooltipElement;
