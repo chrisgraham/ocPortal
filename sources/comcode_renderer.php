@@ -594,7 +594,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$style='height: auto';
 				} else $style='';
 				$temp_tpl=do_template($tpl,array('_GUID'=>'c5d46d0927272fcacbbabcfab0ef6b0c','STYLE'=>$style,'TYPE'=>$attributes['param'],'CONTENT'=>$_embed,'TITLE'=>$title));
-			}
+			} else $_embed=new ocp_tempcode();
 			if ($temp_tpl->is_empty())
 			{
 				if (($in_semihtml) || ($is_all_semihtml)) // Yuck. We've double converted. Ideally we would have parsed a direct stream of HTML. But we could not do that for security reasons.

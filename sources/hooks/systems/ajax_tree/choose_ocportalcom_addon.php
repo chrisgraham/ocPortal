@@ -39,7 +39,7 @@ class Hook_choose_ocportalcom_addon
 
 		require_code('character_sets');
 		$contents=convert_to_internal_encoding(http_download_file($url));
-		$contents=str_replace('<'.'?xml version="1.0" encoding="ISO-8859-1"?'.'><request>','',$contents);
+		$contents=preg_replace('#<'.'\?xml version="1.0" encoding="[^"]*"\?'.'><request>#','',$contents);
 		$contents=str_replace('</request>','',$contents);
 		$contents=preg_replace('#<category [^>]*has_children="false"[^>]*>[^>]*</category>#','',$contents);
 		$contents=preg_replace('#<category [^>]*title="Manual install required"[^>]*>[^>]*</category>#','',$contents);

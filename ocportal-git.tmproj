@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/database_search.php</string>
+	<string>sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -503,6 +503,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>data/ajax_tree.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>data/edit_ping.php</key>
 		<dict>
 			<key>caret</key>
@@ -887,6 +901,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>lang/EN/global.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>7</integer>
+				<key>line</key>
+				<integer>18</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>18</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>7</integer>
+				<key>line</key>
+				<integer>18</integer>
+			</dict>
+		</dict>
 		<key>lang/EN/ocf_privacy.ini</key>
 		<dict>
 			<key>caret</key>
@@ -1073,6 +1117,50 @@
 			<key>firstVisibleLine</key>
 			<integer>130</integer>
 		</dict>
+		<key>sources/ajax.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>481</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>479</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>481</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>481</integer>
+			</dict>
+		</dict>
+		<key>sources/blocks/main_comments.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>14</integer>
+				<key>line</key>
+				<integer>116</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
 			<key>caret</key>
@@ -1116,20 +1204,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>8</integer>
-		</dict>
-		<key>sources/database_search.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>339</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>307</integer>
 		</dict>
 		<key>sources/downloads.php</key>
 		<dict>
@@ -1681,6 +1755,20 @@
 			<key>firstVisibleLine</key>
 			<integer>51</integer>
 		</dict>
+		<key>sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>42</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>14</integer>
+		</dict>
 		<key>sources/hooks/systems/config_default/chat_default_post_colour.php</key>
 		<dict>
 			<key>caret</key>
@@ -1820,6 +1908,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>31</integer>
+		</dict>
+		<key>sources/misc_scripts.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>178</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>360</integer>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -3192,7 +3294,12 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/database_search.php</string>
+		<string>sources/blocks/main_comments.php</string>
+		<string>sources/misc_scripts.php</string>
+		<string>sources/ajax.php</string>
+		<string>sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php</string>
+		<string>lang/EN/global.ini</string>
+		<string>data/ajax_tree.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

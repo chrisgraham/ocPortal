@@ -433,6 +433,7 @@ class Module_admin
 							$entry_points['!!themes']='EDIT_TEMPLATES';
 							$entry_points['!!!themes']='MANAGE_THEME_IMAGES';
 						}
+						if (is_null($entry_points)) $entry_points=array();
 						foreach ($entry_points as $type=>$lang)
 						{
 							$type=str_replace('!','',$type); // The ! was a hackerish thing just to multiply-up possibilities for the single entry-point
