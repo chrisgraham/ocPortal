@@ -953,7 +953,7 @@ class Module_admin_themes
 		{
 			return inform_screen($title,protect_from_escaping('
 				<script type="text/javascript">// <![CDATA[
-					window.alert(\''.addslashes(do_lang('SUCCESS')).'\');
+					if (window.hasFocus) window.alert(\''.addslashes(do_lang('SUCCESS')).'\');
 				//]]></script>
 			'));
 		}
@@ -1045,7 +1045,7 @@ class Module_admin_themes
 					if ((substr($file,0,strlen($find_for)+1)==$find_for.'.') && (substr($file,-9)!='.editfrom'))
 					//if (substr($current,0,strlen($find_for)+1)==$find_for.'.')
 					{
-						$temp=explode('.',$file,2);
+						$temp=explode('.',$file,3);
 						if (is_numeric($temp[2])) $filesarray[$file]=intval($temp[2]);
 					}
 				}
@@ -1091,7 +1091,7 @@ class Module_admin_themes
 				$stub=$new_stub;
 			}
 			$_file=substr($file,strrpos($file,'/')+1);
-			$temp=form_input_list_entry($_file,false,'- '.basename($file));
+			$temp=form_input_list_entry($_file,false,/*'- '.*/basename($file));
 			$files.=$temp->evaluate(); // XHTMLXHTML
 		}
 		$fields=new ocp_tempcode();
@@ -1603,7 +1603,7 @@ class Module_admin_themes
 		{
 			return inform_screen($title,protect_from_escaping('
 				<script type="text/javascript">// <![CDATA[
-					window.alert(\''.addslashes(do_lang('SUCCESS')).'\');
+					if (window.hasFocus) window.alert(\''.addslashes(do_lang('SUCCESS')).'\');
 				//]]></script>
 			'));
 		}
@@ -1744,17 +1744,20 @@ class Module_admin_themes
 		if ($theme!='default') regen_theme_images('default',NULL,$theme);
 
 		// Choose image to edit
-		$where_map=array('theme'=>$theme);
+		require_code('form_templates');
+		/*$where_map=array('theme'=>$theme);
 		if ($lang!='') $where_map['lang']=$lang;
 		$images=$GLOBALS['SITE_DB']->query_select('theme_images',array('DISTINCT id'),$where_map);
 		$list='';
-		require_code('form_templates');
 		foreach ($images as $row)
 		{
 			$temp=form_input_list_entry($row['id'],false);
 			$list.=$temp->evaluate(); // XHTMLXHTML
 		}
-		$fields=form_input_huge_list(do_lang_tempcode('CODENAME'),'','id',make_string_tempcode($list),NULL,true,true,725);
+		$fields=form_input_huge_list(do_lang_tempcode('CODENAME'),'','id',make_string_tempcode($list),NULL,true,true,725);*/
+		require_code('themes2');
+		$ids=get_all_image_ids_type('',false,$GLOBALS['SITE_DB'],$theme);
+		$fields=form_input_picture_choose_specific(do_lang_tempcode('CODENAME'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang);
 		$hidden=form_input_hidden('theme',$theme);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');
 		$edit_form=do_template('FORM',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));

@@ -37,6 +37,16 @@ One user booking becomes a lot of separate bookings for separate things when it 
 */
 
 /**
+ * Standard code module init function.
+ */
+function init_booking()
+{
+	// TODO: Make these into options
+	define('SHOW_WARNINGS_UNTIL',time()+60*60*24*31*6); // 6 months
+	define('MAX_AHEAD_BOOKING_DATE',time()+60*60*24*365*3); // 3 years
+}
+
+/**
  * Generate a new set of booking codes.
  *
  * @param  integer	How many codes to generate.
@@ -117,13 +127,13 @@ function get_booking_request_from_form()
 		$quantity=post_param_integer('booking_quantity_'.strval($bookable_id),0);
 		if ($quantity>0)
 		{
-			$start=get_input_date('booking_start_'.strval($bookable_id));
+			$start=get_input_date('booking_'.strval($bookable_id).'_date_from');
 			$start_day=intval('d',$start);
 			$start_month=intval('m',$start);
 			$start_year=intval('Y',$start);
 			if ($bookable['dates_are_ranges']==1)
 			{
-				$end=get_input_date('booking_end_'.strval($bookable_id));
+				$end=get_input_date('booking_'.strval($bookable_id).'_date_to');
 				$end_day=intval('d',$end);
 				$end_month=intval('m',$end);
 				$end_year=intval('Y',$end);
@@ -134,15 +144,15 @@ function get_booking_request_from_form()
 				$end_year=$start_year;
 			}
 
-			$notes=read_booking_notes_from_form('booking_notes_'.strval($bookable_id));
+			$notes=read_booking_notes_from_form('booking_'.strval($bookable_id).'_notes');
 
 			$supplements=array();
 			foreach ($all_supplements as $supplement)
 			{
-				$quantity=post_param_integer('supplement_quantity_'.strval($supplement['id']),0);
+				$quantity=post_param_integer('supplement_'.strval($supplement['id']).'_quantity',0);
 				if ($quantity>0)
 				{
-					$notes=read_booking_notes_from_form('supplement_notes_'.strval($bookable_id).'_'.strval($supplement['id']));
+					$notes=read_booking_notes_from_form('supplement_'.strval($bookable_id).'_'.strval($supplement['id']).'_notes');
 
 					$supplements[$supplement['id']]=array(
 						'quantity'=>$quantity,
@@ -154,23 +164,22 @@ function get_booking_request_from_form()
 			$request[]=array('bookable_id'=>$bookable_id,'start_day'=>$start_day,'start_month'=>$start_month,'start_year'=>$start_year,'end_day'=>$end_day,'end_month'=>$end_month,'end_year'=>$end_year,'quantity'=>$quantity,'notes'=>$notes,'supplements'=>$supplements);
 		}
 	}
-	
+
 	return $request;
 }
 
 /**
  * Take details posted about a booking, and save to the database.
  *
+ * @param  array		Booking details structure.
  * @param  ?MEMBER	The member ID we are saving as (NULL: current user).
  * @return ?array		Booking details structure (NULL: error -- reshow form).
  */
-function save_booking_form_to_db($member_id=NULL)
+function save_booking_form_to_db($request,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
 	if (is_guest($member_id)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-
-	$request=get_booking_request_from_form();
 
 	$test=check_booking_dates_available($request);
 	if (!is_null($test))
@@ -180,7 +189,7 @@ function save_booking_form_to_db($member_id=NULL)
 	}
 
 	add_booking($request);
-	
+
 	return $request;
 }
 
@@ -218,7 +227,7 @@ function add_booking($request)
 					'paid_at'=>NULL,
 					'paid_trans_id'=>NULL,
 				),true);
-				
+
 				// Supplements
 				foreach ($req['supplements'] as $supplement)
 				{
@@ -232,17 +241,6 @@ function add_booking($request)
 			}
 		}
 	}
-}
-
-/**
- * Delete a specific booking. To edit a booking you need to delete then re-add.
- *
- * @param  AUTO_LINK	Booking ID.
- */
-function delete_booking($id)
-{
-	$GLOBALS['SITE_DB']->query_delete('booking',array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_delete('booking_supplement',array('booking_id'=>$id));
 }
 
 /**
@@ -262,137 +260,6 @@ function find_free_bookable_code($bookable_id,$day,$month,$year,$preferred_code)
 	if (in_array($preferred_code,$available)) return $preferred_code;
 	if (!array_key_exists(0,$available)) return NULL;
 	return $available[0];
-}
-
-/**
- * Find the future booking(s) IDs owned by a member.
- *
- * @param  ?MEMBER	Member ID (NULL: current user).
- * @return array		Booking IDs.
- */
-function get_future_member_booking_ids($member=NULL)
-{
-	if (is_null($member)) $member=get_member();
-	
-	$day=intval(date('d'));
-	$month=intval(date('m'));
-	$year=intval(date('Y'));
-	
-	$booking_ids=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'booking WHERE member_id='.strval($member).' AND (year>'.strval($year).' OR year='.strval($year).' AND month>'.strval($month).' OR year='.strval($year).' AND month='.strval($month).' AND day>='.strval($day).')');
-	return $booking_ids;
-}
-
-/**
- * For a list of booking IDs (assumed to be from same member), reconstitute/simplify as much as possible, and return the booking details structure.
- *
- * @param  array		List of booking IDs.
- * @return array		Reconstituted booking details structure to check.
- */
-function get_booking_request_from_db($booking_ids)
-{
-	$request=array();
-
-	foreach ($booking_ids as $booking_id)
-	{
-		$booking=$GLOBALS['SITE_DB']->query_select('booking',array('day','month','year'),array('id'=>$booking_id),'',1);
-		if (!array_key_exists(0,$booking)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-
-		$supplements=$GLOBALS['SITE_DB']->query_select('booking_supplement',array('supplement_id','quantity','notes'),array('booking_id'=>$booking_id));
-
-		$request[]=array(
-			'bookable_id'=>$booking[0]['bookable_id'],
-			'start_day'=>$booking[0]['day'],
-			'start_month'=>$booking[0]['month'],
-			'start_year'=>$booking[0]['year'],
-			'end_day'=>$booking[0]['day'],
-			'end_month'=>$booking[0]['month'],
-			'end_year'=>$booking[0]['year'],
-			'supplements'=>list_to_map('supplement_id',$supplements),
-			'quantity'=>1,
-		);
-	}
-
-	reconstitute_booking_requests($request);
-
-	return $request;
-}
-
-/**
- * From single booking details, convert it into a reconstituted structure.
- *
- * @param  array		Booking details structure to check.
- * @return boolean	Whether any changes happened.
- */
-function reconstitute_booking_requests(&$request)
-{
-	$changes=false;
-
-	// Sort, so that we know we only merge when things are consecutive
-	global $M_SORT_KEY;
-	$M_SORT_KEY='bookable_id,start_year,start_month,start_day';
-	usort($request,'multi_sort');
-
-	$all_supplements=collapse_2d_complexity('id','price_is_per_period',$GLOBALS['SITE_DB']->query_select('bookable_supplement',array('id','price_is_per_period')));
-
-	// Scan through, merging same things together and updating quantity
-	for ($i=0;$i<count($request);$i++)
-	{
-		asort($request[$i]['supplements']);
-
-		if ($i!=0)
-		{
-			$a=&$request[$i-1];
-			$b=&$request[$i];
-
-			if (($a['bookable_id']==$b['bookable_id']) && ($a['start_day']==$b['start_day']) && ($a['start_month']==$b['start_month']) && ($a['start_year']==$b['start_year']) && ($a['end_day']==$b['end_day']) && ($a['end_month']==$b['end_month']) && ($a['end_year']==$b['end_year']) && ($a['supplements']==$b['supplements']))
-			{
-				$a['quantity']+=$b['quantity'];
-				unset($request[$i]);
-				$i--;
-				
-				$changes=true;
-			}
-		}
-	}
-
-	// Scan through, merging consequtive days on same bookable into sequences
-	for ($i=0;$i<count($request);$i++)
-	{
-		if ($i!=0)
-		{
-			$a=&$request[$i-1];
-			$b=&$request[$i];
-
-			// List just those supplements which are per-period, so we can assure that the same ones are taken for both $a and $b (hence mergeable). If so we merge all, knowing the one-offs should be merged also.
-			$a_filtered_supplements=$a['supplements'];
-			foreach (array_keys($a_filtered_supplements) as $supplement_id)
-			{
-				if ($all_supplements[$supplement_id]==0) unset($a_filtered_supplements[$supplement_id]);
-			}
-			$b_filtered_supplements=$a['supplements'];
-			foreach (array_keys($b_filtered_supplements) as $supplement_id)
-			{
-				if ($all_supplements[$supplement_id]==0) unset($b_filtered_supplements[$supplement_id]);
-			}
-
-			$a_end_timestamp=mktime(0,0,0,$a['end_month'],$a['end_day'],$a['end_year']);
-			$b_start_timestamp=mktime(0,0,0,$b['start_month'],$b['start_day'],$b['start_year']);
-
-			if (($a['bookable_id']==$b['bookable_id']) && ($a['quantity']==$b['quantity']) && (strtotime('+1 day',$a_end_timestamp)==$b_start_timestamp) && ($a_filtered_supplements==$b_filtered_supplements))
-			{
-				$a['end_day']+=$b['end_day'];
-				$a['end_month']+=$b['end_month'];
-				$a['end_year']+=$b['end_year'];
-				$a['supplements']+=$b['supplements'];
-				unset($request[$i]);
-				$i--;
-				
-				$changes=true;
-			}
-		}
-	}
-	
-	return $changes;
 }
 
 /**
@@ -416,12 +283,12 @@ function find_booking_price($request)
 		foreach ($part['supplements'] as $supplement_id=>$supplement_part)
 		{
 			$supplement_quantity=$supplement_part['quantity'];
-			
+
 			$_supplement=$GLOBALS['SITE_DB']->query_select('bookable_supplement',array('*'),array('id'=>$supplement_id),'',1);
 			if (array_key_exists(0,$_supplement))
 			{
 				$price+=$_supplement[0]['price']*$supplement_quantity*(($_supplement[0]['price_is_per_period']==1)?count($days):1);
-				
+
 				if (($supplement_quantity!=0) && ($_supplement[0]['supports_quantities']==0)) fatal_exit('INTERNAL_ERROR');
 			}
 		}
@@ -552,9 +419,4 @@ function send_booking_emails($request)
 	// Send notice to staff
 	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('REQUEST'=>$request,'MEMBER_ID'=>strval(get_member())));
 	mail_wrap(do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),get_site_name()),static_evaluate_tempcode($notice),NULL,NULL,'','',2);
-}
-
-function booking_form()
-{
-	// TODO
 }

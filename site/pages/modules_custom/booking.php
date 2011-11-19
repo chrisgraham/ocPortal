@@ -40,7 +40,7 @@ class Module_booking
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -152,38 +152,8 @@ class Module_booking
 	 */
 	function get_entry_points()
 	{
-		// TODO
-	}
-
-	/**
-	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
-	 *
-	 * @param  ?integer  The number of tree levels to computer (NULL: no limit)
-	 * @param  boolean	Whether to not return stuff that does not support permissions (unless it is underneath something that does).
-	 * @param  ?string	Position to start at in the tree. Does not need to be respected. (NULL: from root)
-	 * @param  boolean	Whether to avoid returning categories.
-	 * @return ?array	 	A tuple: 1) full tree structure [made up of (pagelink, permission-module, permissions-id, title, children, ?entry point for the children, ?children permission module, ?whether there are children) OR a list of maps from a get_* function] 2) permissions-page 3) optional base entry-point for the tree 4) optional permission-module 5) optional permissions-id (NULL: disabled).
-	 */
-	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
-	{
-		// TODO
-	}
-
-	/**
-	 * Standard modular new-style deep page-link finder function (does not return the main entry-points).
-	 *
-	 * @param  string  	Callback function to send discovered page-links to.
-	 * @param  MEMBER		The member we are finding stuff for (we only find what the member can view).
-	 * @param  integer	Code for how deep we are tunnelling down, in terms of whether we are getting entries as well as categories.
-	 * @param  string		Stub used to create page-links. This is passed in because we don't want to assume a zone or page name within this function.
-	 * @param  ?string	Where we're looking under (NULL: root of tree). We typically will NOT show a root node as there's often already an entry-point representing it.
-	 * @param  integer	Our recursion depth (used to calculate importance of page-link, used for instance by Google sitemap). Deeper is typically less important.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 * @param  ?array		Non-standard for API [extra parameter tacked on] (NULL: yet unknown). Contents of database table for performance.
-	 */
-	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$parent_pagelink=NULL,$recurse_level=0,$category_data=NULL,$entry_data=NULL)
-	{
-		// TODO
+		require_lang('booking');
+		return array('misc'=>'CREATE_BOOKING');
 	}
 
 	/**
@@ -194,20 +164,288 @@ class Module_booking
 	function run()
 	{
 		require_lang('booking');
+		require_code('booking');
 
 		$type=get_param('type','misc');
 
 		// Decide what to do
-		if ($type=='misc') return $this->choose_bookables_and_dates(); // This may be skipped, if blocks were used to access // TODO // TODO Make sure date selectors user friendly (yahoo widget, and sensible end date defaults when start date changed) // TODO: only pick available ones! // TODO: Filter for defining what is shown // Show notes about closed times // UI must be courteous if dates not available
-		if ($type=='account') return $this->create_account_or_login(); // TODO (redirects to next if logged in)
-		if ($type=='done') return $this->thanks(); // TODO (emails staff and receipt notice to user, and saves everything)
+		if ($type=='misc') return $this->choose_bookables_and_dates(); // NB: This may be skipped, if blocks were used to access
+		if ($type=='flesh_out') return $this->flesh_out(); // Finish full details for the booking
+		if ($type=='account') return $this->join_or_login(); // NB: This may be skipped if user already logged in
+		if ($type=='done') return $this->thanks();
 
 		return new ocp_tempcode();
+	}
+
+	/**
+	 * Allow the user to choose what to book, on a high level - what bookables, what dates.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function choose_bookables_and_dates()
+	{
+		global $M_SORT_KEY;
+
+		$title=get_page_title('CREATE_BOOKING');
+
+		$query='SELECT * FROM '.get_table_prefix().'bookable WHERE enabled=1';
+		$filter=get_param('filter','*');
+		require_code('ocfiltering');
+		$query.=' AND '.ocfilter_to_sqlfragment($filter,'id');
+		$bookables=$GLOBALS['SITE_DB']->query($query);
+
+		$has_date_ranges=false;
+		$has_single_dates=false;
+
+		$min_min_date=time();
+		$max_max_date=NULL;
+
+		$categories=array();
+		foreach ($bookables as $bookable)
+		{
+			$active_from=mktime(0,0,0,$bookable['active_from_month'],$bookable['active_from_day'],$bookable['active_from_year']);
+			$active_to=is_null($bookable['active_to_year'])?NULL:mktime(0,0,0,$bookable['active_to_month'],$bookable['active_to_day'],$bookable['active_to_year']);
+			$min_date=$active_from;
+			$max_date=$active_to;
+
+			if ($min_date<$min_min_date) $min_min_date=$min_date;
+			if ((is_null($max_max_date)) || (!is_null($active_to)))
+			{
+				if ($max_date>$max_max_date) $max_max_date=$max_date;
+			}
+
+			if ($bookable['dates_are_ranges']==1) $has_date_ranges=true;
+			elseif ($bookable['dates_are_ranges']==0) $has_single_ranges=true;
+
+			$messages=array();
+
+			// Message if not currently active
+			if ($active_from>time())
+			{
+				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED',get_timezoned_date($active_from,false));
+			}
+
+			// Message if becomes inactive within next 6 months
+			if ((!is_null($active_to)) && ($active_to<SHOW_WARNINGS_UNTIL))
+			{
+				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED',get_timezoned_date($active_to,false));
+			}
+
+			// Message about any black-outs within next 6 months
+			$blacked=$GLOBALS['SITE_DB']->query_select(
+				'bookable_blacked',
+				array('blacked_from_day','blacked_from_month','blacked_from_year','blacked_to_day','blacked_to_month','blacked_to_year','blacked_explanation'),
+				array(
+					'bookable_id'=>$bookable['id'],
+				),
+				'ORDER BY id'
+			);
+			foreach ($blacked as $black)
+			{
+				$black_from=mktime(0,0,0,$black['blacked_from_month'],$black['blacked_from_day'],$black['blacked_from_year']);
+				$black_to=is_null($black['blacked_to_year'])?NULL:mktime(0,0,0,$black['blacked_to_month'],$black['blacked_to_day'],$black['blacked_to_year']);
+				if (($black_from>time()) && ($black_to<SHOW_WARNINGS_UNTIL))
+				{
+					$messages[]=do_lang_tempcode(
+						($black_from==$black_to)?'NOTE_BOOKING_IMPOSSIBLE_BLACKED_ONEOFF':'NOTE_BOOKING_IMPOSSIBLE_BLACKED_PERIOD',
+						get_timezoned_date($black_from,false),
+						get_timezoned_date($black_to,false)
+					);
+				}
+			}
+
+			$category=get_translated_text($bookable['categorisation']);
+
+			if (!array_key_exists($category,$categories))
+	         $categories[$category]=array();
+
+	      $quantity_available=$GLOBALS['SITE_DB']->query_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable['id']));
+
+			list($quantity,$date_from,$date_to)=_read_chosen_bookable_settings($bookable);
+
+			if (is_null($max_max_date)) $max_max_date=MAX_AHEAD_BOOKING_DATE;
+
+			$categories[$category][]=array(
+				'ID'=>strval($bookable['id']),
+				'QUANTITY_AVAILABLE'=>strval($quantity_available),
+				'MESSAGES'=>$messages,
+				'TITLE'=>get_translated_tempcode($bookable['title']),
+				'DESCRIPTION'=>get_translated_tempcode($bookable['description']),
+				'PRICE'=>float_format($bookable['price']),
+				'PRICE_RAW'=>float_to_raw_string($bookable['price']),
+
+				'SELECT_DATE_RANGE'=>$bookable['dates_are_ranges']==1,
+				'MIN_DATE_DAY'=>date('d',$min_date),
+				'MIN_DATE_MONTH'=>date('m',$min_date),
+				'MIN_DATE_YEAR'=>date('Y',$min_date),
+				'MAX_DATE_DAY'=>date('d',$max_date),
+				'MAX_DATE_MONTH'=>date('m',$max_date),
+				'MAX_DATE_YEAR'=>date('Y',$max_date),
+
+				// For re-entrancy
+				'QUANTITY'=>$quantity,
+				'DATE_FROM_DAY'=>date('d',$date_from),
+				'DATE_FROM_MONTH'=>date('m',$date_from),
+				'DATE_FROM_YEAR'=>date('Y',$date_from),
+				'DATE_TO_DAY'=>date('d',$date_to),
+				'DATE_TO_MONTH'=>date('m',$date_to),
+				'DATE_TO_YEAR'=>date('Y',$date_to),
+			);
+
+			$M_SORT_KEY='TITLE';
+			usort($categories[$category],'multi_sort');
+		}
+
+		ksort($categories);
+
+		// Messages shared by all bookables will be transferred so as to avoid repetition
+		$shared_messages=array();
+		$done_one=false;
+		foreach ($categories as $category_title=>$bookables)
+		{
+			foreach ($bookables as $i=>$bookable)
+			{
+				foreach ($bookable['MESSAGES'] as $j=>$message)
+				{
+					if (!$done_one) // Ah, may be in all
+					{
+						$in_all=true;
+						foreach ($categories as $_category_title=>$_bookables)
+						{
+							foreach ($bookables as $_i=>$_bookable)
+							{
+								if (!in_array($message,$_bookable['MESSAGES']))
+								{
+									$in_all=false;
+									break 2;
+								}
+							}
+						}
+						if ($in_all)
+						{
+							$shared_messages[]=$message;
+						}
+						$done_one=true;
+					}
+					elseif (in_array($message,$shared_messages)) // Known to be in all
+					{
+						unset($categories[$category_title][$i]['MESSAGES'][$j]);
+					}
+				}
+			}
+		}
+
+		return do_template('BOOKING_START_SCREEN',array(
+			'TITLE'=>$title,
+			'CATEGORIES'=>$categories,
+			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'flesh_out','usergroup'=>get_param_integer('usergroup'=>NULL)),'_SELF'),
+			'SHARED_MESSAGES'=>$shared_messages,
+			'HAS_DATE_RANGES'=>$has_date_ranges,
+			'HAS_SINGLE_DATES'=>$has_single_dates,
+			'HAS_MIXED_DATE_TYPES'=>$has_single_dates && $has_date_ranges,
+			'MIN_DATE_DAY'=>date('d',$min_min_date),
+			'MIN_DATE_MONTH'=>date('m',$min_min_date),
+			'MIN_DATE_YEAR'=>date('Y',$min_min_date),
+			'MAX_DATE_DAY'=>date('d',$max_max_date),
+			'MAX_DATE_MONTH'=>date('m',$max_max_date),
+			'MAX_DATE_YEAR'=>date('Y',$max_max_date),
+		));
+	}
+
+	/**
+	 * Read settings the user has chosen, from the POST environment.
+	 *
+	 * @param  array		Details of the particular bookable.
+	 * @return array		Tuple of details: number wanted, date from, date to).
+	 */
+	function _read_chosen_bookable_settings($bookable)
+	{
+		$quantity=post_param_integer('bookable_'.strval($bookable['id']).'_quantity',0);
+		$date_from=get_input_date('bookable_'.strval($bookable['id']).'_date_from');
+		if (is_null($date_from)) $date_from=get_input_date('bookable_date_from'); // allow to be specified for whole form (the norm actually)
+		if (is_null($date_from)) $date_from=time();
+		$date_to=get_input_date('bookable_'.strval($bookable['id']).'_date_to');
+		if (is_null($date_to)) $date_to=get_input_date('bookable_date_to'); // allow to be specified for whole form (the norm actually); may still be null, if ranges not being used
+      if (is_null($date_to)) $date_to=$date_from;
+
+		return array($quantity,$date_from,$date_to);
+	}
+
+	/**
+	 * Flesh out the details of a booking.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function flesh_out()
+	{
+		$title=get_page_title('CREATE_BOOKING');
+
+		// Check booking: redirect to last step as re-entrant if not valid
+		$request=get_booking_request_from_form();
+		$test=check_booking_dates_available($request);
+		if (!is_null($test))
+		{
+			attach_message($test,'warn');
+			return $this->choose_bookables_and_dates();
+		}
+
+		// TODO: Skip forward if nothing to flesh out
+
+		return do_template('BOOKING_FLESH_OUT_SCREEN',array(
+			'TITLE'=>$title,
+			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'account','usergroup'=>get_param_integer('usergroup'=>NULL)),'_SELF'),
+			'HIDDEN'=>build_keep_post_fields();
+		));
+	}
+
+	/**
+	 * Let the user login / do an inline join.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function join_or_login()
+	{
+		$title=get_page_title('CREATE_BOOKING');
+
+		// Check login: skip to thanks if logged in
+		if (!is_guest())
+		{
+			return $this->thanks();
+		}
+
+		// TODO
+	}
+
+	/**
+	 * E-mails staff and receipt notice to user, and saves everything.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function thanks()
+	{
+		$title=get_page_title('CREATE_BOOKING');
+
+		// Finish join operation, if applicable
+		// TODO
+
+		// Read request
+		$request=get_booking_request_from_form();
+
+		// Save
+		save_booking_form_to_db($request);
+
+		// Send emails
+		send_booking_emails($request);
+
+		// Show success
+		return inform_screen($title,do_lang_tempcode('BOOKING_SUCCESS'));
 	}
 
 }
 
 /*
+
+TODO: Blackouts must be available on multiple bookables
 
 TODO (for future expansion, not critical base functionality)...
 

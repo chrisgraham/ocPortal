@@ -2318,3 +2318,7 @@ booking
 # # themes/default/templates_custom/BOOKING_CONFIRM_FCOMCODE.tpl
 # # themes/default/templates_custom/BOOKING_NOTICE_FCOMCODE.tpl
 # # themes/default/templates_custom/BOOKING_DISPLAY.tpl
+# # themes/default/templates_custom/BOOKING_START_SCREEN.tpl
+# # themes/default/templates_custom/BOOKING_FLESH_OUT_SCREEN.tpl
+# # themes/default/templates_custom/BOOKING_JOIN_OR_LOGIN_SCREEN.tpl
+# # themes/default/templates_custom/BOOK_DATE_CHOOSE.tpl

@@ -1149,9 +1149,10 @@ function form_input_radio($pretty_name,$description,$content,$required=false,$pi
  * @param  boolean		Whether to allow the selection of 'no' picture
  * @param  ?object		The database connection to the OCF install we are choosing images from (NULL: site db)
  * @param  ?ID_TEXT		Theme to use (NULL: current theme)
+ * @param  ?ID_TEXT		Language to use (NULL: current language)
  * @return tempcode		The input field
  */
-function form_input_picture_choose_specific($pretty_name,$description,$name,$ids,$selected_url=NULL,$selected_code=NULL,$tabindex=NULL,$allow_none=false,$db=NULL,$theme=NULL)
+function form_input_picture_choose_specific($pretty_name,$description,$name,$ids,$selected_url=NULL,$selected_code=NULL,$tabindex=NULL,$allow_none=false,$db=NULL,$theme=NULL,$lang=NULL)
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
 
@@ -1187,17 +1188,18 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 		if (!array_key_exists($current_path,$categories)) $categories[$current_path]=array();
 		$categories[$current_path]=array_merge($categories[$current_path],$category);
 	}
-	
+
 	// Sorting but fudge it so 'ocf_default_avatars/default_set' always comes first
 	ksort($categories);
-	if (array_key_exists('ocf_default_avatars/default_set',$categories))
+	$avatars=(substr($category[0],0,20)=='ocf_default_avatars/');
+	if ((array_key_exists('ocf_default_avatars/default_set',$categories)) && ($avatars))
 	{
 		$def=$categories['ocf_default_avatars/default_set'];
 		unset($categories['ocf_default_avatars/default_set']);
 		$categories=array_merge(array('ocf_default_avatars/default_set'=>$def),$categories);
 	}
 	// Add in the 'N/A' option
-	if ($allow_none)
+	if (($allow_none) && (!array_key_exists('',$categories)))
 	{
 		if (count($categories)==0)
 		{
@@ -1212,10 +1214,16 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 	$content=new ocp_tempcode();
 	foreach ($categories as $cat=>$ids)
 	{
-		$cut_pos=strpos($cat,'/');
-		$cut_pos=($cut_pos===false)?strlen($cat):($cut_pos+1);
 		$cat=str_replace('_',' ',$cat);
-		$cat=ucwords(substr($cat,$cut_pos)); // Make the category name a bit nicer
+
+		if ($avatars)
+		{
+			$cut_pos=strpos($cat,'/');
+			$cut_pos=($cut_pos===false)?($avatars?strlen($cat):0):($cut_pos+1);
+			$cat=ucwords(substr($cat,$cut_pos)); // Make the category name a bit nicer
+		}
+		
+		if ((!$avatars) && ($cat=='')) $cat=do_lang('GENERAL');
 
 		$cells=new ocp_tempcode();
 		$i=0;
@@ -1235,14 +1243,14 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 			if ($id=='')
 			{
 				if (is_null($selected_code)) $selected=true;
-				$url=find_theme_image('na',false,false,$theme,NULL,$db);
+				$url=find_theme_image('na',false,false,$theme,$lang,$db);
 				$pretty=do_lang_tempcode('NA_EM');
 			} else
 			{
-				$url=find_theme_image($id,$theme!='default',false,$theme,NULL,$db);
+				$url=find_theme_image($id,$theme!='default',false,$theme,$lang,$db);
 				if ($url=='')
-					$url=find_theme_image($id,false,false,'default',NULL,$db);
-				$pretty=make_string_tempcode(ucfirst(substr($id,strrpos($id,'/')+1)));
+					$url=find_theme_image($id,false,false,'default',$lang,$db);
+				$pretty=make_string_tempcode(ucfirst((strrpos($id,'/')===false)?$id:substr($id,strrpos($id,'/')+1)));
 			}
 			if ($url=='') continue;
 			$temp=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_2',array('_GUID'=>'10005e2f08b44bfe17fce68685b4c884','CHECKED'=>$selected,'PRETTY'=>$pretty,'NAME'=>$name,'CODE'=>$id,'URL'=>$url));

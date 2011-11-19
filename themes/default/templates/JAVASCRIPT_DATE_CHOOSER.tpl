@@ -1,18 +1,18 @@
-if (typeof window.YAHOO != 'undefined') 
+if (typeof window.YAHOO != 'undefined')
 {
-	function initialise_date_field(stub, calob, linkob, unlimited) 
+	function initialise_date_field(stub, calob, linkob, unlimited, mindate, maxdate)
 	{
 		var container = document.getElementById('cal' + stub + 'Container');
-		if (window.a_date_field_is_on) 
+		if (window.a_date_field_is_on)
 		{
 			container.style.display = 'none';
-			if (window[calob] != null) 
+			if (window[calob] != null)
 			{
 				window[calob] = null;
 				setInnerHTML(container, '');
 			}
 			window.a_date_field_is_on = false;
-		} else 
+		} else
 		{
 			var date = new Date();
 			var thisMonth = document.getElementById(stub + '_month').options[document.getElementById(stub + '_month').selectedIndex].value;
@@ -29,12 +29,22 @@ if (typeof window.YAHOO != 'undefined')
 			window[calob] = new YAHOO.widget.Calendar('cal' + stub, 'cal' + stub + 'Container', monthDate, date);
 			if (!unlimited)
 			{
-				window[calob].minDate = new Date();
-				window[calob].minDate.setDate(1);
-				window[calob].minDate.setMonth(0);
-				window[calob].minDate.setFullYear(document.getElementById(stub + '_year').options[1].value);
+				if (mindate)
+				{
+					window[calob].minDate = mindate;
+				} else
+				{
+					window[calob].minDate = new Date();
+					window[calob].minDate.setDate(1);
+					window[calob].minDate.setMonth(0);
+					window[calob].minDate.setFullYear(document.getElementById(stub + '_year').options[1].value);
+				}
+				if (maxdate)
+				{
+					window[calob].minDate = maxdate;
+				}
 			}
-			window[calob].onSelect = function() 
+			window[calob].onSelect = function()
 			{
 				var dates = window[calob].getSelectedDates();
 				var date = dates[0];
@@ -54,6 +64,20 @@ if (typeof window.YAHOO != 'undefined')
 				document.getElementById(stub + '_month').selectedIndex = date.getMonth() + 1;
 				document.getElementById(stub + '_day').selectedIndex = date.getDate();
 				window[linkob].onclick();
+
+				if (stub.matches(/\_(from|start)$/)) // If we are a 'from' date and we have a matching 'to' date that is earlier than it, copy the 'from' date across to the 'to' date to make it a bit quicker to set an accurate 'to' date
+				{
+					var to_stub=stub.replace(/\_from$/,'_to').replace(/\_start$/,'_end');
+					var to_day=document.getElementById(to_stub+'_day');
+					var to_month=document.getElementById(to_stub+'_month');
+					var to_year=document.getElementById(to_stub+'_year');
+					if ((to_day) && (to_month) && (to_year) && (!((to_year.selectedIndex>year.selectedIndex) || ((to_year.selectedIndex==year.selectedIndex) && ((to_month.selectedIndex>month.selectedIndex) || ((to_month.selectedIndex==month.selectedIndex) && (to_day.selectedIndex>=day.selectedIndex)))))))
+					{
+						to_day.selectedIndex=from_day.selectedIndex;
+						to_month.selectedIndex=from_month.selectedIndex;
+						to_year.selectedIndex=from_year.selectedIndex;
+					}
+				}
 			};
 			container.style.top = (findPosY(window[linkob]) + findHeight(window[linkob])) + "px";
 			container.style.left = findPosX(window[linkob]) + "px";

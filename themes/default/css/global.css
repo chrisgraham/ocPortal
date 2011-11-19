@@ -2355,6 +2355,16 @@ th.meta_data_title {
 	min-height: 40px;
 }
 
+#page_running_admin_themes .radio_list_picture {
+	float: none;
+	margin: 15px;
+	border: 1px solid #c1cee3; /* {$,wizard, 100% lightborder} */
+}
+
+.radio_list_picture img {
+	max-width: 100px;
+}
+
 .results_table {
 	font-size: 0.85em;
 	margin: 8px 0;
