@@ -48,13 +48,15 @@ global $TO_USE;
 //$files=array($OCPORTAL_PATH.'/sources/global2.php'); For debugging
 foreach ($files as $filename)
 {
-	if (strpos($filename,'_custom')!==false) continue;
+	if (!isset($_GET['debug']))
+	{
+		if (strpos($filename,'_custom')!==false) continue;
+	}
+
 	if (basename($filename,'.php')=='tempcode__runtime') continue;
 	if (basename($filename,'.php')=='tempcode_compiler__runtime') continue;
 	
 	$TO_USE=$filename;
-
-//	if (strpos($filename,'_custom')!==false) continue;
 
 	if ($filename=='phpstub.php')
 	{
@@ -73,6 +75,9 @@ foreach ($files as $filename)
 	{
 		$result=get_php_file_api($_filename,false);
 	}
+
+	if (strpos($filename,'_custom')!==false) continue;
+
 	foreach ($result as $i=>$r)
 	{
 		if ($r['name']=='__global')

@@ -527,8 +527,8 @@ function add_bookable_supplement($details,$bookables=NULL)
  * Edit a bookable supplement.
  *
  * @param  AUTO_LINK	Supplement ID.
- * @param  ?array		List of bookables to associate to (NULL: no change).
  * @param  array		Supplement details.
+ * @param  ?array		List of bookables to associate to (NULL: no change).
  */
 function edit_bookable_supplement($supplement_id,$details,$bookables=NULL)
 {
@@ -613,8 +613,8 @@ function add_bookable_blacked($details,$bookables=NULL)
  * Edit a bookable blacked.
  *
  * @param  AUTO_LINK	Blacked ID.
- * @param  ?array		List of bookables to associate to (NULL: no change).
  * @param  array		Blacked details.
+ * @param  ?array		List of bookables to associate to (NULL: no change).
  */
 function edit_bookable_blacked($blacked_id,$details,$bookables=NULL)
 {

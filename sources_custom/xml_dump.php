@@ -311,7 +311,7 @@ function db_get_type_remap()
  *
  * @param  ID_TEXT		The table name
  * @param  array			A map of field names to ocPortal field types (with *#? encodings)
- * @param  string			The SQL for it
+ * @return string			The SQL for it
  */
 function db_create_table($table_name,$fields)
 {

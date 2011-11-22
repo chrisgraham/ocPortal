@@ -202,15 +202,6 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 
 	}
 
-	/**
-	 * Get tempcode for a adding/editing form.
-	 *
-	 * @param  ?GROUP			The usergroup being edited (NULL: adding, not editing, and let's choose the current member)
-	 * @param  SHORT_TEXT	The usergroup name
-	 * @param  ?ID_TEXT		The username of the usergroup leader (NULL: none picked yet)
-	 * @param  BINARY			Whether members may join this usergroup without requiring any special permission
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
 	function get_form_fields($id=NULL,$name='',$image='',$cure='',$cure_price=10,$immunization='',$immunization_price=5,$spread_rate=12,$points_per_spread=10,$enabled=0)
 	{
 		$fields=new ocp_tempcode();

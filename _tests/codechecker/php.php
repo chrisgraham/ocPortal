@@ -296,7 +296,10 @@ function get_php_file_api($filename,$include_code=true)
 		$line=ltrim($lines[$i]);
 		if ((substr($line,0,9)=='function ') && ((trim($lines[$i-1])=='') || (trim($lines[$i-1])=='{')))
 		{
-			fatal_exit(do_lang_tempcode('MISSING_FUNCTION_COMMENT',rtrim($line)));
+			if (strpos($filename,'_custom')===false)
+			{
+				fatal_exit(do_lang_tempcode('MISSING_FUNCTION_COMMENT',rtrim($line)));
+			}
 		}
 	}
 

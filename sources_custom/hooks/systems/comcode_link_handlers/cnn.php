@@ -19,8 +19,8 @@ class Hook_comcode_link_handler_cnn
 	/**
 	 * Standard modular bind function for comcode link handler hooks. They see if they can bind a pasted URL to a lump of handler Tempcode.
 	 *
-	 * @return URLPATH		Link to use or reject
-	 * @return string			Title for what is at the other end of the link (was found by downloading and looking for <title>)
+	 * @param  URLPATH		Link to use or reject
+	 * @param  string			Title for what is at the other end of the link (was found by downloading and looking for <title>)
 	 * @param  boolean		Whether we are allowed to proceed even if this tag is marked as 'dangerous'
 	 * @param  string			A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
 	 * @param  integer		The position this tag occurred at in the Comcode
@@ -32,9 +32,6 @@ class Hook_comcode_link_handler_cnn
 	 * @param  boolean		Whether this is only a structure sweep
 	 * @param  boolean		Whether we are in semi-parse-mode (some tags might convert differently)
 	 * @param  ?array			A list of words to highlight (NULL: none)
-	 * @param  ?MEMBER		The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
-	 * @param  boolean		Whether what we have came from inside a semihtml tag
-	 * @param  boolean		Whether what we have came from semihtml mode
 	 * @return ?tempcode		Handled link (NULL: reject due to inappropriate link pattern)
 	 */
 	function bind($link,$link_captions_title,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits)

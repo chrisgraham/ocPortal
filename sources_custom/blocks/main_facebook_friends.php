@@ -48,6 +48,7 @@ class Block_main_facebook_friends
 	/**
 	 * Standard modular run function.
 	 *
+	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
 	function run($map)

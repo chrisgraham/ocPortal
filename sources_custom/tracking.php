@@ -18,7 +18,7 @@
  *
  * @param  SHORT_TEXT		The category type
  * @param  SHORT_TEXT		The category id
- * @return BOOLEAN
+ * @return boolean
  */
 function is_tracked($c_type,$c_id)
 {
@@ -138,6 +138,7 @@ function make_tree($track_type,$ar,$select_root=false)
  *
  * @param  array		The array containing all the categories (it's a flat array)
  * @param  integer	The index of the array we are descending from
+ * @param  array		The array containing all the current tracking settings
  * @return string		The string contain HTML code
  */
 function recursive_tree($arr,&$index,$current_tracking_setting)

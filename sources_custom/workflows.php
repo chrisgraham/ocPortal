@@ -24,9 +24,9 @@
  * 
  * @param  SHORT_TEXT		The content-meta-aware name that applies to this content.
  * @param  SHORT_TEXT		The ID of this content. Must be a string. Integers will be extracted from the string if needed.
- * @param  ?AUTO_LINK		The translation table ID of the desired workflow. -1 is none, defaults to NULL (system default)
+ * @param  ?AUTO_LINK		The translation table ID of the desired workflow. -1 is none, defaults to NULL (NULL: system default)
  * @param  boolean			Whether to remove any existing workflows from this content beforehand (current permissions must allow this)
- * @return ?AUTO_LINK		The content's ID in the workflow_content table. NULL if not added (eg. told to use default when there isn't one)
+ * @return ?AUTO_LINK		The content's ID in the workflow_content table. (NULL: if not added (eg. told to use default when there isn't one))
  */
 function add_content_to_workflow($content_type='', $content_id='', $workflow_id=NULL, $remove_existing=false)
 {
@@ -177,11 +177,12 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
  * when adding requirements at defined positions of course, since
  * position 4 will appear at the start of the former list but at the end
  * of the latter)
+ *
  * @param  AUTO_LINK		The ID of the requirement
  * @param  AUTO_LINK		The ID of the workflow to add this requirement to
- * @param  ?integer		The position in the workflow that this requirement will have. NULL adds it to the end (default: NULL)
+ * @param  ?integer		The position in the workflow that this requirement will have. NULL adds it to the end (NULL: default)
  */
-function add_requirement_to_workflow($requirement_id=NULL,$workflow_id=NULL,$position=NULL)
+function add_requirement_to_workflow($requirement_id,$workflow_id,$position=NULL)
 {
 	// Check we've not been given garbage. If so then bail out.
 	if (is_null($requirement_id))
@@ -232,7 +233,7 @@ function add_requirement_to_workflow($requirement_id=NULL,$workflow_id=NULL,$pos
  * 
  * @param  AUTO_LINK		The *workflow content* ID (NOT the gallery, category, etc. ID!)
  * @param  AUTO_LINK		The approval point name (translation table ID)
- * @param  ?MEMBER		The user ID to use as the approver, NULL for current user (default: NULL)
+ * @param  ?MEMBER		The user ID to use as the approver, (NULL: for current user)
  */
 function approve_content_for_point($content_id,$approval_name,$user=NULL)
 {
@@ -267,7 +268,7 @@ function approve_content_for_point($content_id,$approval_name,$user=NULL)
  * @param  ?AUTO_LINK	The ID of this workflow, if you've already inserted the language string. (NULL: If not already inserted).
  * @param  string			The string to use as this requirement's name in the current language
  * @param  array			A mapping from workflow position to workflow requirement (language string lookup integer)
- * @param  ?boolean		Whether to make this workflow the default workflow (default value is false)
+ * @param  boolean		Whether to make this workflow the default workflow (default value is false)
  * @return AUTO_LINK		The workflow's ID (language string lookup integer)
  */
 function build_new_workflow($id, $name, $requirements, $default=false)
@@ -483,7 +484,7 @@ function get_default_workflow()
  * @param  string		The ID of the specific piece of content (if numeric, pass as a string anyway)
  * @return AUTO_LINK	The workflow_content_id
  */
-function get_workflow_content_id($source_type=NULL,$source_id=NULL)
+function get_workflow_content_id($source_type,$source_id)
 {
 	// Grab the specified content's ID
 	$content = $GLOBALS['SITE_DB']->query_select('workflow_content',array('id'),array('source_type'=>$source_type,'source_id'=>$source_id),'',1);
@@ -501,7 +502,7 @@ function get_workflow_content_id($source_type=NULL,$source_id=NULL)
  * @param  AUTO_LINK		The ID of the workflow
  * @return array			The IDs of the approval points for the workflow, in workflow order
  */
-function get_requirements_for_workflow($workflow_id=NULL)
+function get_requirements_for_workflow($workflow_id)
 {
 	// Make sure we have something to work with
 	if (is_null($workflow_id))
@@ -524,7 +525,7 @@ function get_requirements_for_workflow($workflow_id=NULL)
  * 
  * @param  AUTO_LINK		The ID of the approval point
  * @param  AUTO_LINK		The ID of the workflow
- * @return ?integer		The position of the approval point in this case (NULL if not found)
+ * @return ?integer		The position of the approval point in this case (NULL: if not found)
  */
 function get_requirement_position($requirement_id, $workflow_id)
 {
@@ -543,10 +544,10 @@ function get_requirement_position($requirement_id, $workflow_id)
  * Gets an array of the group IDs allowed to approve the given point
  * 
  * @param  AUTO_LINK		The ID of the approval point
- * @param  ?boolean		Should we only return groups which are validated? (default: true)
+ * @param  boolean		Should we only return groups which are validated? (default: true)
  * @return array			The IDs of the groups allowed to signoff on it
  */
-function get_groups_for_point($approval_id=NULL,$only_validated=true)
+function get_groups_for_point($approval_id,$only_validated=true)
 {
 	if (is_null($approval_id))
 	{
@@ -565,9 +566,9 @@ function get_groups_for_point($approval_id=NULL,$only_validated=true)
  * Find out who submitted a piece of content from a workflow.
  * 
  * @param  AUTO_LINK		The workflow content ID
- * @return ?MEMBER		The submitter (NULL if unknown)
+ * @return ?MEMBER		The submitter (NULL: if unknown)
  */
-function get_submitter_of_workflow_content($content_id=NULL)
+function get_submitter_of_workflow_content($content_id)
 {
 	// Exit on misuse
 	if (is_null($content_id))
@@ -591,7 +592,7 @@ function get_submitter_of_workflow_content($content_id=NULL)
  * @param  AUTO_LINK	The ID of this content in the workflow_content table
  * @return tempcode	The form for this content
  */
-function get_workflow_form($workflow_content_id=NULL)
+function get_workflow_form($workflow_content_id)
 {
 	// Load our prerequisites
 	require_lang('workflows');
@@ -1259,6 +1260,8 @@ function workflow_update_handler()
  * Returns a form field to choose the desired workflow (if there is more than
  * one in the system).
  *
+ * @param  boolean		Whether to include an option for inheriting
+ * @param  boolean		Whether to include an option for leaving it alone
  * @return tempcode		The UI for choosing a workflow (if needed)
  */
 function workflow_choose_ui($include_inherit=false,$include_current=false)
@@ -1329,7 +1332,7 @@ function get_workflow_of_content($type,$id)
  * Returns whether the given user (default: current member) can choose the
  * workflow to apply to some content they're submitting/editing.
  *
- * @param  ?USER			Member, NULL for current member (default: NULL)
+ * @param  ?MEMBER		Member (NULL: current member)
  * @return boolean		Whether the user has permission or not
  */
 function can_choose_workflow($user=NULL)

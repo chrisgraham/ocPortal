@@ -1010,7 +1010,7 @@ class Module_galleries
 	 * The UI to show an image.
 	 *
 	 * @param  ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
-	 * @param  tempcode		Breadcrumbs.
+	 * @param  ?tempcode		Breadcrumbs (NULL: derive in this function).
 	 * @return tempcode		The UI
 	 */
 	function show_image($category_name=NULL,$tree=NULL)
@@ -1125,7 +1125,7 @@ class Module_galleries
 	 * The UI to show a video.
 	 *
 	 * @param  ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
-	 * @param  tempcode		Breadcrumbs.
+	 * @param  ?tempcode		Breadcrumbs (NULL: derive in this function).
 	 * @return tempcode		The UI
 	 */
 	function show_video($category_name=NULL,$tree=NULL)
@@ -1348,11 +1348,14 @@ class Module_galleries
 	 * @param  string			Where clause for doing set query
 	 * @param  string			Join clause for doing set query
 	 * @param  AUTO_LINK		The ID of the current entry of the type we are browsing in the gallery we are using
+	 * @param  AUTO_LINK		The ID of the first entry of the type we are browsing in the gallery we are using (NULL: no previous)
 	 * @param  ?AUTO_LINK	The ID of the previous entry of the type we are browsing in the gallery we are using (NULL: no previous)
 	 * @param  ?AUTO_LINK	As above, except next entry (NULL: no next)
 	 * @param  ID_TEXT		The root gallery (the gallery we are considering as an adhoc root, to allow gallery splitting-up)
 	 * @param  integer		Position in collection
 	 * @param  integer		Total in collection
+	 * @param  ID_TEXT		The first type being browsed
+	 * @set image video
 	 * @param  ID_TEXT		The current type being browsed
 	 * @set image video
 	 * @param  ID_TEXT		The type for the back link

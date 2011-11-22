@@ -59,7 +59,7 @@ class Hook_implicit_usergroups_under18s
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds whether the member is within the implicit usergroup.
 	 * 
-	 * @param  USER		The member ID.
+	 * @param  MEMBER		The member ID.
 	 * @return boolean	Whether they are.
 	 */
 	function is_member_within($member_id)

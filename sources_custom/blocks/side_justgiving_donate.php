@@ -48,6 +48,7 @@ class Block_side_justgiving_donate
 	/**
 	 * Standard modular run function.
 	 *
+	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
 	function run($map)

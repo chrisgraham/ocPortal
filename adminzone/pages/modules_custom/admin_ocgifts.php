@@ -217,11 +217,6 @@ class Module_admin_ocgifts extends standard_aed_module
 
 	}
 
-	/**
-	 * Get tempcode for a adding/editing form.
-    *
-	 * API Docs: TODO
-	 */
 	function get_form_fields($id=NULL,$name='',$category='',$image='',$price=10,$enabled=1)
 	{
 		$fields=new ocp_tempcode();

@@ -172,7 +172,7 @@ class Module_admin_workflow extends standard_aed_module
 	/**
 	 * Get tempcode for a adding/editing form.
 	 *
-	 * @param  INT			The workflow being edited (NULL: adding, not editing)
+	 * @param  ?integer		The workflow being edited (NULL: adding, not editing)
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
 	function get_form_fields($id=NULL)
