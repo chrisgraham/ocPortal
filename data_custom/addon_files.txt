@@ -2072,7 +2072,7 @@ signup_referrals
 
 # # data_custom/signup_refer.ini
 # # lang_custom/EN/signup_refer.ini
-# # pages/modules_custom/join.php
+# # sources_custom/ocf_join.php
 # # sources_custom/hooks/systems/ecommerce/usergroup.php
 
 better_mail
@@ -2308,13 +2308,14 @@ booking
 # # sources_custom/blocks/side_book_date_range.php
 # # sources_custom/blocks/side_choose_showing.php
 # # sources_custom/blocks/main_choose_to_book.php
+# # sources_custom/hooks/modules/members/booking.php
 # # themes/default/templates_custom/BLOCK_SIDE_BOOK_DATE_RANGE.tpl
 # # themes/default/templates_custom/BLOCK_SIDE_CHOOSE_SHOWING.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_CHOOSE_TO_BOOK.tpl
 # # data_custom/bookings_ical.php
 # # data_custom/bookables_ical.php
 # # lang_custom/EN/booking.ini
-# # data_custom/bookiing_price_ajax.php
+# # data_custom/booking_price_ajax.php
 # # themes/default/templates_custom/BOOKING_CONFIRM_FCOMCODE.tpl
 # # themes/default/templates_custom/BOOKING_NOTICE_FCOMCODE.tpl
 # # themes/default/templates_custom/BOOKING_DISPLAY.tpl

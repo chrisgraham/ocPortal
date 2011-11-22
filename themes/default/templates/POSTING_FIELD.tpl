@@ -80,7 +80,13 @@
 			<a id="fesAttachments" onclick="toggleSubordinateFields(this.getElementsByTagName('img')[0]); return false;" href="#"><img class="inline_image_2" style="float: {!en_right}" alt="{!EXPAND}: {!ATTACHMENTS}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 		{+END}
 
-		<h2{+START,IF,{$JS_ON}} onclick="toggleSubordinateFields(this.parentNode.getElementsByTagName('img')[0],'fesAttachments_help'); return false;"{+END}>{!ATTACHMENTS}</h2>
+		<h2{+START,IF,{$JS_ON}} onclick="toggleSubordinateFields(this.parentNode.getElementsByTagName('img')[0],'fesAttachments_help'); return false;"{+END}>
+			{!ATTACHMENTS}
+
+			{+START,IF,{$NOT,{$MOBILE}}}
+				<img onclick="this.onmouseover();" title="{!ATTACHMENT_HELP#}" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof this.ttitle=='undefined') this.ttitle=this.title; if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,this.ttitle,'auto',null,null,false,true);" alt="{!HELP}" src="{$IMG*,help}" />
+			{+END}
+		</h2>
 
 		{+START,IF_PASSED,HELP}
 			<p style="display: none" id="fesAttachments_help">

@@ -274,13 +274,19 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self')))
 		{
-			$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);
-			if ($prohibit_username_whitespace=='1')
+			if (get_option('signup_fullname')=='1')
 			{
-				$fields->attach(form_input_codename(do_lang_tempcode('USERNAME'),do_lang_tempcode('DESCRIPTION_USERNAME'),is_null($member_id)?'username':'edit_username',$username,true));
+				$fields->attach(form_input_line(do_lang_tempcode('NAME'),'',is_null($member_id)?'username':'edit_username',$username,true));
 			} else
 			{
-				$fields->attach(form_input_line(do_lang_tempcode('USERNAME'),do_lang_tempcode('DESCRIPTION_USERNAME'),is_null($member_id)?'username':'edit_username',$username,true));
+				$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);
+				if ($prohibit_username_whitespace=='1')
+				{
+					$fields->attach(form_input_codename(do_lang_tempcode('USERNAME'),do_lang_tempcode('DESCRIPTION_USERNAME'),is_null($member_id)?'username':'edit_username',$username,true));
+				} else
+				{
+					$fields->attach(form_input_line(do_lang_tempcode('USERNAME'),do_lang_tempcode('DESCRIPTION_USERNAME'),is_null($member_id)?'username':'edit_username',$username,true));
+				}
 			}
 		}
 	}
@@ -1017,13 +1023,13 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 /**
  * Check a username is valid for adding, and possibly also the password.
  *
- * @param  SHORT_TEXT	The username.
+ * @param  SHORT_TEXT	The username (may get altered).
  * @param  ?MEMBER		The member (NULL: member not actually added yet; this ID is only given for the duplication check, to make sure it doesn't think we are duplicating with ourself).
  * @param  ?SHORT_TEXT	The password (NULL: nothing to check).
  * @param  boolean		Whether to return errors instead of dieing on them.
  * @return ?tempcode		Error (NULL: none).
  */
-function ocf_check_name_valid($username,$member_id=NULL,$password=NULL,$return_errors=false)
+function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_errors=false)
 {
 	/*	$striped_username=$username;				This would be an internationalisation mistake
 	$allowed_characters=array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
@@ -1040,8 +1046,22 @@ function ocf_check_name_valid($username,$member_id=NULL,$password=NULL,$return_e
 	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
 	if ((!is_null($test)) && ($test!=$member_id))
 	{
-		if ($return_errors) return do_lang_tempcode('USERNAME_ALREADY_EXISTS');
-		warn_exit(do_lang_tempcode('USERNAME_ALREADY_EXISTS'));
+		if (get_option('signup_fullname')=='0')
+		{
+			if ($return_errors) return do_lang_tempcode('USERNAME_ALREADY_EXISTS');
+			warn_exit(do_lang_tempcode('USERNAME_ALREADY_EXISTS'));
+		} else // Adjust username as required
+		{
+			$_username=preg_replace('# \(\d+\)$#','',$username);
+			$i=1;
+			do
+			{
+				$test=$GLOBALS['FORUM_DB']->query_value_null_ok_full('f_members','id',array('m_username'=>$username));
+				$i++;
+				$username=$_username.' ('.strval($i).')';
+			}
+			while (!is_null($test));
+		}
 	}
 	$username_changed=is_null($test);
 
@@ -1098,11 +1118,14 @@ function ocf_check_name_valid($username,$member_id=NULL,$password=NULL,$return_e
 	}
 
 	// Check for whitespace
-	$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);
-	if (($prohibit_username_whitespace==='1') && (preg_match('#\s#',$username)!=0) && ($username_changed))
+	if (get_option('signup_fullname')=='0')
 	{
-		if ($return_errors) return do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE');
-		warn_exit(do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE'));
+		$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);
+		if (($prohibit_username_whitespace==='1') && (preg_match('#\s#',$username)!=0) && ($username_changed))
+		{
+			if ($return_errors) return do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE');
+			warn_exit(do_lang_tempcode('USERNAME_PASSWORD_WHITESPACE'));
+		}
 	}
 	$prohibit_password_whitespace=get_option('prohibit_password_whitespace',true);
 	if (($prohibit_password_whitespace==='1') && (preg_match('#\s#',$password)!=0) && ($username_changed))

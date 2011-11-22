@@ -41,34 +41,27 @@ One user booking becomes a lot of separate bookings for separate things when it 
  */
 function init_booking()
 {
-	// TODO: Make these into options
-	define('SHOW_WARNINGS_UNTIL',time()+60*60*24*31*6); // 6 months
-	define('MAX_AHEAD_BOOKING_DATE',time()+60*60*24*365*3); // 3 years
+	define('SHOW_WARNINGS_UNTIL',time()+60*60*24*31*intval(get_option('bookings_show_warnings_for_months')));
+	define('MAX_AHEAD_BOOKING_DATE',time()+60*60*24*31*intval(get_option('bookings_max_ahead_months')));
 }
 
 /**
- * Generate a new set of booking codes.
- *
- * @param  integer	How many codes to generate.
- * @return array		The generated codes.
+ * AJAX script to work out the price of a booking.
  */
-function generate_random_booking_codes($num)
+function booking_price_ajax_script()
 {
-	$codes=array();
-	while (count($codes)<$num)
-	{
-		$codes[substr(md5(uniqid('ocp_booking_',true)),0,5)]=1;
-	}
-	return array_keys($codes);
+	header('Content-type: text/plain');
+	echo get_booking_request_from_form(find_booking_price());
 }
 
 /**
  * See if a booking is possible.
  *
  * @param  array		Booking details structure to check, passed by reference as statuses get added.
+ * @param  array		Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
  * @return ?tempcode	Error message (NULL: no issue).
  */
-function check_booking_dates_available(&$request)
+function check_booking_dates_available(&$request,$ignore_bookings)
 {
 	$success=mixed();
 	foreach ($request as $i=>$part)
@@ -76,7 +69,7 @@ function check_booking_dates_available(&$request)
 		foreach (days_in_range($part['start_day'],$part['start_month'],$part['start_year'],$part['end_day'],$part['end_month'],$part['end_year']) as $_date)
 		{
 			list($day,$month,$year)=$_date;
-			$status_error=booking_date_available($part['bookable_id'],$day,$month,$year,$part['quantity']);
+			$status_error=booking_date_available($part['bookable_id'],$day,$month,$year,$part['quantity'],$ignore_bookings);
 			$part['status_error']=$status_error;
 			if ((!is_null($available)) && (is_null($success)))
 			{
@@ -127,13 +120,13 @@ function get_booking_request_from_form()
 		$quantity=post_param_integer('booking_quantity_'.strval($bookable_id),0);
 		if ($quantity>0)
 		{
-			$start=get_input_date('booking_'.strval($bookable_id).'_date_from');
+			$start=get_input_date('bookable_'.strval($bookable_id).'_date_from');
 			$start_day=intval('d',$start);
 			$start_month=intval('m',$start);
 			$start_year=intval('Y',$start);
 			if ($bookable['dates_are_ranges']==1)
 			{
-				$end=get_input_date('booking_'.strval($bookable_id).'_date_to');
+				$end=get_input_date('bookable_'.strval($bookable_id).'_date_to');
 				$end_day=intval('d',$end);
 				$end_month=intval('m',$end);
 				$end_year=intval('Y',$end);
@@ -144,15 +137,15 @@ function get_booking_request_from_form()
 				$end_year=$start_year;
 			}
 
-			$notes=read_booking_notes_from_form('booking_'.strval($bookable_id).'_notes');
+			$notes=read_booking_notes_from_form('bookable_'.strval($bookable_id).'_notes');
 
 			$supplements=array();
 			foreach ($all_supplements as $supplement)
 			{
-				$quantity=post_param_integer('supplement_'.strval($supplement['id']).'_quantity',0);
+				$quantity=post_param_integer('bookable_'.strval($bookable_id).'_supplement_'.strval($supplement['id']).'_quantity',0);
 				if ($quantity>0)
 				{
-					$notes=read_booking_notes_from_form('supplement_'.strval($bookable_id).'_'.strval($supplement['id']).'_notes');
+					$notes=read_booking_notes_from_form('bookable_'.strval($bookable_id).'_supplement_'.strval($bookable_id).'_'.strval($supplement['id']).'_notes');
 
 					$supplements[$supplement['id']]=array(
 						'quantity'=>$quantity,
@@ -172,23 +165,24 @@ function get_booking_request_from_form()
  * Take details posted about a booking, and save to the database.
  *
  * @param  array		Booking details structure.
+ * @param  array		Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
  * @param  ?MEMBER	The member ID we are saving as (NULL: current user).
  * @return ?array		Booking details structure (NULL: error -- reshow form).
  */
-function save_booking_form_to_db($request,$member_id=NULL)
+function save_booking_form_to_db($request,$ignore_bookings,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
 	if (is_guest($member_id)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-	$test=check_booking_dates_available($request);
+	$test=check_booking_dates_available($request,$ignore_bookings);
 	if (!is_null($test))
 	{
 		attach_message($test,'warn');
 		return NULL;
 	}
 
-	add_booking($request);
+	$request=add_booking($request,$member_id);
 
 	return $request;
 }
@@ -196,9 +190,11 @@ function save_booking_form_to_db($request,$member_id=NULL)
 /**
  * Add a new booking to the database.
  *
- * @param  ?array		Booking details structure.
+ * @param  array		Booking details structure.
+ * @param  MEMBER		Member ID being added against.
+ * @return array		Booking details structure.
  */
-function add_booking($request)
+function add_booking($request,$member_id)
 {
 	foreach ($request as $rid=>$req)
 	{
@@ -216,7 +212,7 @@ function add_booking($request)
 				$code=find_free_bookable_code($req['bookable_id'],$day,$month,$year,$code); // Hopefully $code will stay the same, but it might not
 				if (is_null($code)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR')); // Should not be possible, as we already checked availability
 
-				$booking_id=$GLOBALS['SITE_DB']->query_insert('booking',array(
+				$row=array(
 					'member_id'=>$member_id,
 					'day'=>$day,
 					'month'=>$month,
@@ -226,7 +222,11 @@ function add_booking($request)
 					'booked_at'=>time(),
 					'paid_at'=>NULL,
 					'paid_trans_id'=>NULL,
-				),true);
+				);
+				$booking_id=$GLOBALS['SITE_DB']->query_insert('booking',$row,true);
+
+				if (!array_key_exists('_rows',$_request[$rid])) $request[$rid]['_rows']=array();
+				$request[$rid]['_rows'][]=$row;
 
 				// Supplements
 				foreach ($req['supplements'] as $supplement)
@@ -241,6 +241,8 @@ function add_booking($request)
 			}
 		}
 	}
+	
+	return $request;
 }
 
 /**
@@ -345,9 +347,10 @@ function days_in_range($start_day,$start_month,$start_year,$end_day,$end_month,$
  * @param  integer	Month.
  * @param  integer	Year.
  * @param  integer	Quantity needed.
+ * @param  array		Existing bookings to ignore (presumably the booking we're trying to make - if this is an edit).
  * @return ?tempcode	Error message (NULL: no issue).
  */
-function booking_date_available($bookable_id,$day,$month,$year,$quantity)
+function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore_bookings)
 {
 	$asked=mktime(0,0,0,$month,$day,$year);
 
@@ -370,7 +373,7 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity)
 	}
 
 	// Check bookable is not blacked for time
-	$blacks=$GLOBALS['SITE_DB']->query_select('bookable_blacked',array('*'),array('bookable_id'=>$bookable_id));
+	$blacks=$GLOBALS['SITE_DB']->query_select('bookable_blacked b JOIN '.get_table_prefix().'bookable_blacked_for f ON f.blackable_id=b.id',array('*'),array('f.bookable_id'=>$bookable_id));
 	foreach ($blacks as $black)
 	{
 		$from=mktime(0,0,0,$bookable_row['blacked_from_month'],$bookable_row['blacked_from_day'],$bookable_row['blacked_from_year']);
@@ -388,13 +391,10 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity)
 	}
 
 	// Check no overlap
-	$map=array(
-		'day'=>$day,
-		'month'=>$month,
-		'year'=>$year,
-	);
-	$codes_taken_already=$GLOBALS['SITE_DB']->query_value_null_ok('booking','COUNT(*)',array('day','month','year'),$map);
-	if (count($codes_taken_already)+$quantity>$codes_in_total) return do_lang_tempcode('BOOKING_IMPOSSIBLE_FULL');
+	$query='SELECT COUNT(*) FROM '.get_table_prefix().'booking WHERE day='.strval($day).' AND month='.strval($month).' AND year='.strval($year);
+	foreach ($ignore_bookings as $b) $query.=' AND id<>'.strval($b);
+	$codes_taken_already=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
+	if ($codes_taken_already+$quantity>$codes_in_total) return do_lang_tempcode('BOOKING_IMPOSSIBLE_FULL');
 
 	// Good!
 	return NULL;
@@ -413,10 +413,60 @@ function send_booking_emails($request)
 	$customer_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 
 	// Send receipt to customer
-	$receipt=do_template('BOOKING_CONFIRM_FCOMCODE',array('REQUEST'=>$request));
+	$receipt=do_template('BOOKING_CONFIRM_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'REQUEST'=>make_booking_request_printable($request)));
 	mail_wrap(do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name()),static_evaluate_tempcode($receipt),$customer_email,$customer_name);
 
 	// Send notice to staff
-	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('REQUEST'=>$request,'MEMBER_ID'=>strval(get_member())));
+	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'REQUEST'=>make_booking_request_printable($request),'MEMBER_ID'=>strval(get_member())));
 	mail_wrap(do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),get_site_name()),static_evaluate_tempcode($notice),NULL,NULL,'','',2);
+}
+
+/**
+ * Convert an internal booking details structure to a 'printable' version of the same.
+ *
+ * @param  array		Booking details structure.
+ * @return array		Printable booking details structure.
+ */
+function make_booking_request_printable($request)
+{
+	$out=array();
+	
+	foreach ($request as $_part)
+	{
+		$start=mktime(0,0,0,$_part['start_month'],$_part['start_day'],$_part['start_year']);
+		$end=mktime(0,0,0,$_part['end_month'],$_part['end_day'],$_part['end_year']);
+
+		$bookable_row=$GLOBALS['SITE_DB']->query_select('bookables',array('*'),array('id'=>$_part['bookable_id']),'',1);
+
+		$part=array(
+			'BOOKABLE_TITLE'=>get_translated_tempcode($bookable_row[0]['title']),
+			'PRICE'=>float_format($bookable_row[0]['price']),
+			'CATEGORISATION'=>get_translated_text($bookable_row[0]['categorisation']),
+			'DESCRIPTION'=>get_translated_tempcode($bookable_row[0]['description']),
+			'QUANTITY'=>integer_format($_part['quantity']),
+			'_QUANTITY'=>strval($_part['quantity']),
+			'START'=>get_timezoned_date($start),
+			'END'=>($start==$end)?'':get_timezoned_date($end),
+			'_START'=>strval($start),
+			'_END'=>strval($end),
+			'NOTES'=>$_part['notes'],
+			'SUPPLEMENTS'=>array(),
+		);
+		foreach ($_part['supplements'] as $supplement)
+		{
+			$supplement_row=$GLOBALS['SITE_DB']->query_select('supplements',array('*'),array('id'=>$_part['supplement_id']),'',1);
+
+			$part['SUPPLEMENTS'][]=array(
+				'SUPPLEMENT_TITLE'=>get_translated_tempcode($supplement_row[0]['title']),
+				'SUPPLEMENT_PRICE'=>float_format($supplement_row[0]['price']),
+				'SUPPLEMENT_PRICE_IS_PER_PERIOD'=>$supplement_row[0]['price_is_per_period']==1,
+				'QUANTITY'=>integer_format($supplement['quantity']),
+				'_QUANTITY'=>strval($supplement['quantity']),
+				'SUPPLEMENT_NOTES'=>$supplement['notes'],
+			);
+		}
+
+		$out[]=$part;
+	}
+	return $out;
 }

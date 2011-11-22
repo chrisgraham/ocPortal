@@ -604,6 +604,7 @@ function run_integrity_check($basic=false,$allow_merging=true)
 	}
 	if (!$basic)
 	{
+		$master_data=array();
 		foreach ($files_to_check as $file)
 		{
 			if ((substr($file,-4)=='.tpl') && (strpos($file,'/')===false))

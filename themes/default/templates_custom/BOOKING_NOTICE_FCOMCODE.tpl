@@ -1,7 +1,7 @@
 Thanks for making your booking on {$SITE_NAME}.
 
 To re-cap, here are your booking details...
-{+START,INCLUDE,BOOKING_DISPLAY}{+END}
+[semihtml]{+START,INCLUDE,BOOKING_DISPLAY}{+END}[/semihtml]
 
 If there are any issues with your booking we will let you know, otherwise we look forward to meeting you!
 

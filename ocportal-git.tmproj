@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php</string>
+	<string>site/pages/modules_custom/booking.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -162,7 +162,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2011-11-15T00:10:53Z</date>
+			<date>2011-11-20T13:07:05Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -174,7 +174,7 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2011-10-22T18:34:09Z</date>
+			<date>2011-11-20T18:37:47Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -336,7 +336,7 @@
 			<key>filename</key>
 			<string>upgrader.php</string>
 			<key>lastUsed</key>
-			<date>2011-05-24T13:54:54Z</date>
+			<date>2011-11-20T13:47:14Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -475,6 +475,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>cms/pages/modules_custom/cms_booking.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>813</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>856</integer>
+		</dict>
 		<key>cms/pages/modules_custom/cms_galleries.php</key>
 		<dict>
 			<key>caret</key>
@@ -503,14 +517,14 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>data/ajax_tree.php</key>
+		<key>data/cron_bridge.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>3</integer>
+				<integer>13</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>48</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -614,6 +628,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>5</integer>
+		</dict>
+		<key>data_custom/addon_files.txt</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>2311</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>2273</integer>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -843,36 +871,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>lang/EN/comcode.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>292</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>262</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>292</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>292</integer>
-			</dict>
-		</dict>
 		<key>lang/EN/fields.ini</key>
 		<dict>
 			<key>caret</key>
@@ -901,36 +899,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>lang/EN/global.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>18</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>18</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>18</integer>
-			</dict>
-		</dict>
 		<key>lang/EN/ocf_privacy.ini</key>
 		<dict>
 			<key>caret</key>
@@ -958,6 +926,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>lang_custom/EN/booking.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>89</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>40</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>89</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>11</integer>
+				<key>line</key>
+				<integer>89</integer>
+			</dict>
 		</dict>
 		<key>pages/comcode/EN/privacy.txt</key>
 		<dict>
@@ -1108,43 +1106,43 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>83</integer>
 				<key>line</key>
-				<integer>209</integer>
+				<integer>417</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>130</integer>
+			<integer>398</integer>
 		</dict>
-		<key>sources/ajax.php</key>
+		<key>sources/aed_module.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>25</integer>
+				<integer>36</integer>
 				<key>line</key>
-				<integer>481</integer>
+				<integer>1200</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>479</integer>
+			<integer>1173</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>9</integer>
+				<integer>49</integer>
 				<key>line</key>
-				<integer>481</integer>
+				<integer>1200</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>25</integer>
+				<integer>36</integer>
 				<key>line</key>
-				<integer>481</integer>
+				<integer>1200</integer>
 			</dict>
 		</dict>
 		<key>sources/blocks/main_comments.php</key>
@@ -1233,6 +1231,36 @@
 				<integer>32</integer>
 				<key>line</key>
 				<integer>452</integer>
+			</dict>
+		</dict>
+		<key>sources/form_templates.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>350</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>324</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>350</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>350</integer>
 			</dict>
 		</dict>
 		<key>sources/forum/smf.php</key>
@@ -1755,20 +1783,6 @@
 			<key>firstVisibleLine</key>
 			<integer>51</integer>
 		</dict>
-		<key>sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>42</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>14</integer>
-		</dict>
 		<key>sources/hooks/systems/config_default/chat_default_post_colour.php</key>
 		<dict>
 			<key>caret</key>
@@ -1830,14 +1844,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>10</integer>
 				<key>line</key>
-				<integer>4</integer>
+				<integer>40</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>40</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>40</integer>
+			</dict>
 		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
@@ -1847,20 +1877,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>8</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>sources/hooks/systems/ocf_cpf_filter/ecommerce.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>15</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -1923,6 +1939,36 @@
 			<key>firstVisibleLine</key>
 			<integer>360</integer>
 		</dict>
+		<key>sources/ocf_members_action.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>504</integer>
+				<key>line</key>
+				<integer>63</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>37</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>112</integer>
+				<key>line</key>
+				<integer>63</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>504</integer>
+				<key>line</key>
+				<integer>63</integer>
+			</dict>
+		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -1936,6 +1982,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>81</integer>
+		</dict>
+		<key>sources/sitemap.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>303</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>34</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>303</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>303</integer>
+			</dict>
 		</dict>
 		<key>sources/tar.php</key>
 		<dict>
@@ -1978,20 +2054,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>sources/users.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>32</integer>
-				<key>line</key>
-				<integer>310</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>298</integer>
 		</dict>
 		<key>sources_custom/blocks/main_facebook_comments.php</key>
 		<dict>
@@ -2067,34 +2129,6 @@
 				<integer>62</integer>
 			</dict>
 		</dict>
-		<key>sources_custom/blocks/side_book_date_range.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>94</integer>
-				<key>line</key>
-				<integer>20</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>sources_custom/booking2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>154</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>133</integer>
-		</dict>
 		<key>sources_custom/bookings_ical.php</key>
 		<dict>
 			<key>caret</key>
@@ -2102,12 +2136,26 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>191</integer>
+				<integer>217</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>162</integer>
+			<integer>203</integer>
+		</dict>
+		<key>sources_custom/hooks/modules/members/booking.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>11</integer>
+				<key>line</key>
+				<integer>39</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>6</integer>
 		</dict>
 		<key>sources_custom/hooks/modules/members/octhanks.php</key>
 		<dict>
@@ -3294,16 +3342,19 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/blocks/main_comments.php</string>
-		<string>sources/misc_scripts.php</string>
-		<string>sources/ajax.php</string>
-		<string>sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php</string>
-		<string>lang/EN/global.ini</string>
-		<string>data/ajax_tree.php</string>
+		<string>cms/pages/modules_custom/cms_booking.php</string>
+		<string>sources/ocf_members_action.php</string>
+		<string>sources/form_templates.php</string>
+		<string>sources/aed_module.php</string>
+		<string>sources_custom/hooks/modules/members/booking.php</string>
+		<string>site/pages/modules_custom/booking.php</string>
+		<string>sources_custom/bookings_ical.php</string>
+		<string>lang_custom/EN/booking.ini</string>
+		<string>data_custom/addon_files.txt</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{670, 212}, {1009, 966}}</string>
+	<string>{{802, 212}, {1009, 966}}</string>
 </dict>
 </plist>

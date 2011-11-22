@@ -76,7 +76,9 @@ class Hook_addon_registry_core_fields
 
 			'lang/EN/fields.ini',
 			'sources/fields.php',
+			'sources/hooks/systems/addon_registry/core_fields.php',
 			'sources/hooks/systems/fields/.htaccess',
+			'sources/hooks/systems/fields/guid.php',
 			'sources/hooks/systems/fields/auto_increment.php',
 			'sources/hooks/systems/fields/page_link.php',
 			'sources/hooks/systems/fields/date.php',

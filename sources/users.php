@@ -96,6 +96,11 @@ function get_ocp_cpf($cpf,$member=NULL)
 {
 	if (is_null($member)) $member=get_member();
 
+	if (($cpf=='fullname') && (get_option('signup_fullname')=='1'))
+	{
+		return preg_replace('# \(\d+\)$#','',$GLOBALS['FORUM_DRIVER']->get_username($member));
+	}
+
 	$values=$GLOBALS['FORUM_DRIVER']->get_custom_fields($member);
 	if (is_null($values)) return '';
 	if (array_key_exists($cpf,$values)) return $values[$cpf];

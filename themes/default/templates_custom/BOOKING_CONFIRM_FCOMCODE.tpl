@@ -1,6 +1,6 @@
 The following booking(s) have been made...
 
-{+START,INCLUDE,BOOKING_DISPLAY}{+END}
+[semihtml]{+START,INCLUDE,BOOKING_DISPLAY}{+END}[/semihtml]
 
 You can [url="edit the bookings for {$USERNAME@,{MEMBER_ID}}"]{$PAGE_LINK@,_SEARCH:cms_bookings:_ed:{MEMBER_ID}}[/url].
 

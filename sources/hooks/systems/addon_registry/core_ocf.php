@@ -306,6 +306,7 @@ class Hook_addon_registry_core_ocf
 			'themes/default/images/pagepics/emoticons.png',
 			'themes/default/images/pagepics/mergemembers.png',
 			'pages/modules/join.php',
+			'sources/ocf_join.php',
 			'pages/modules/lostpassword.php',
 			'OCF_AUTO_TIME_ZONE_ENTRY.tpl',
 			'OCF_DELURK_CONFIRM.tpl',

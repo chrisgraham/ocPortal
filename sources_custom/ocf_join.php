@@ -1,6 +1,6 @@
 <?php
 
-function init__pages__modules_custom__join($in=NULL)
+function init__ocf_join($in=NULL)
 {
 	$in=str_replace("\$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>\$email_address,'i_taken'=>0),'',1);",'set_from_referer_field();',$in);
 	$in=str_replace('list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups);','list($fields,$_hidden)=ocf_get_member_fields(true,NULL,$groups); $fields->attach(get_referer_field());',$in);

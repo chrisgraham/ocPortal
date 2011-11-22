@@ -152,17 +152,12 @@ function bookings_ical_script()
 
 	$id=get_param_integer('id');
 	$where='bookable_id='.strval($id).' AND (year>'.date('Y',$time).' OR (date='.date('Y',$time).' AND month>'.date('m',$time).') OR (date='.date('Y',$time).' AND month='.date('m',$time).' AND day='.date('d',$time).'))';
-	$bookings=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'booking WHERE '.$where.' ORDER BY booked_at DESC',10000/*reasonable limit*/);
+	$members_with_bookings=$GLOBALS['SITE_DB']->query('SELECT DISTINCT member_id FROM '.get_table_prefix().'booking WHERE '.$where.' ORDER BY booked_at DESC',10000/*reasonable limit*/);
 	echo "BEGIN:VCALENDAR\n";
 	echo "VERSION:2.0\n";
 	echo "PRODID:-//ocProducts/ocPortal//NONSGML v1.0//EN\n";
 	echo "CALSCALE:GREGORIAN\n";
-	$categories=array();
-	$_categories=$GLOBALS['SITE_DB']->query_select('bookable',array('*'));
-	foreach ($_categories as $category)
-	{
-		$categories[$category['id']]=get_translated_text($category['title']);
-	}
+	$bookable_category=$GLOBALS['SITE_DB']->query_value('bookable','categorisation',array('id'=>$id));
 	if ((is_null($filter)) || (!array_key_exists($filter,$categories)))
 	{
 		echo "X-WR-CALNAME:".ical_escape(get_site_name().': '.do_lang('BOOKINGS'))."\n";
@@ -171,43 +166,89 @@ function bookings_ical_script()
 		echo "X-WR-CALNAME:".ical_escape(get_site_name().': '.do_lang('BOOKINGS').': '.$categories[$filter])."\n";
 	}
 
-	foreach ($bookings as $booking)
+	require_code('booking2');
+	require_lang('booking');
+	
+	$max_time=time();
+
+	foreach ($members_with_bookings as $member_with_booking)
 	{
-		echo "BEGIN:VEVENT\n";
+		$bookings=$GLOBALS['SITE_DB']->query('SELECT id FROM '.get_table_prefix().'booking WHERE '.$where.' AND member_id='.strval($member_with_booking['member_id']).' ORDER BY booked_at DESC',10000/*reasonable limit*/);
 
-		echo "DTSTAMP:".date('Ymd',time())."T".date('His',$booking['booked_at'])."\n";
-		echo "CREATED:".date('Ymd',time())."T".date('His',$booking['booked_at'])."\n";
+		$request=get_booking_request_from_db(collapse_1d_complexity('id',$bookings));
 
-		echo "SUMMARY:".ical_escape($booking['code_allocation'])."\n";
-		$description=$booking['notes'];
-		$supplements=$GLOBALS['SITE_DB']->query_select('booking_supplement a JOIN bookable_supplement b ON a.supplement_id=b.id',array('quantity','notes','title'),array(
-			'booking_id'=>$booking['id'],
-		));
-		foreach ($supplements as $supplement)
+		foreach ($request as $i=>$r)
 		{
-			$description.="\n\n+ ".get_translated_text($supplement['title']).'x'.integer_format($supplement['quantity']);
-			if ($supplement['notes']!='') $description.=' ('.$supplement['notes'].')';
+			$booking=$r['_rows'][0];
+
+			echo "BEGIN:VEVENT\n";
+
+			echo "DTSTAMP:".date('Ymd',time())."T".date('His',$booking['booked_at'])."\n";
+			echo "CREATED:".date('Ymd',time())."T".date('His',$booking['booked_at'])."\n";
+
+			echo "SUMMARY:".ical_escape(do_lang('TAKEN',$booking['code_allocation']))."\n";
+			$description=$booking['notes'];
+			$supplements=$GLOBALS['SITE_DB']->query_select('booking_supplement a JOIN bookable_supplement b ON a.supplement_id=b.id',array('quantity','notes','title'),array(
+				'booking_id'=>$booking['id'],
+			));
+			foreach ($supplements as $supplement)
+			{
+				$description.="\n\n+ ".get_translated_text($supplement['title']).'x'.integer_format($supplement['quantity']);
+				if ($supplement['notes']!='') $description.=' ('.$supplement['notes'].')';
+			}
+			echo "DESCRIPTION:".ical_escape($description)."\n";
+
+			if (!is_guest($booking['member_id']))
+				echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($booking['member_id'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_link($booking['member_id'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($booking['member_id']))."\n";
+			echo "CATEGORIES:".ical_escape($bookable_category."\n";
+			echo "CLASS:PRIVATE\n";
+			echo "STATUS:".(($booking['paid_at']!==NULL)?'CONFIRMED':'TENTATIVE')."\n";
+			echo "UID:".ical_escape(strval($booking['id']).'-booking@'.get_base_url())."\n";
+			$_url=build_url(array('page'=>'cms_booking','type'=>'_eb','id'=>strval($booking['member_id']).'_'.strval($i)),get_module_zone('cms_booking'),NULL,false,false,true);
+			$url=$_url->evaluate();
+			echo "URL:".ical_escape($url)."\n";
+
+			$time=mktime(0,0,0,$booking['month'],$booking['day'],$booking['year']);
+			if ($time>$max_time) $max_time=$time;
+			echo "DTSTART:".date('Ymd',$time)."\n";
+
+			echo "END:VEVENT\n";
 		}
-		echo "DESCRIPTION:".ical_escape($description)."\n";
-
-		if (!is_guest($booking['member_id']))
-			echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($booking['member_id'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_link($booking['member_id'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($booking['member_id']))."\n";
-		echo "CATEGORIES:".ical_escape($categories[$booking['e_type']])."\n";
-		echo "CLASS:PRIVATE\n";
-		echo "STATUS:".(($booking['paid_at']!==NULL)?'CONFIRMED':'TENTATIVE')."\n";
-		echo "UID:".ical_escape(strval($booking['id']).'-booking@'.get_base_url())."\n";
-		$_url=build_url(array('page'=>'cms_booking','type'=>'_ed','id'=>$booking['id']),get_module_zone('cms_booking'),NULL,false,false,true);
-		$url=$_url->evaluate();
-		echo "URL:".ical_escape($url)."\n";
-		$_url=build_url(array('page'=>'cms_booking','type'=>'_edit_for_member','id'=>$booking['submitter']),get_module_zone('cms_booking'),NULL,false,false,true);
-		$url=$_url->evaluate();
-		echo "URL:".ical_escape($url)."\n";
-
-		$time=mktime(0,0,0,$booking['month'],$booking['day'],$booking['year']);
-		echo "DTSTART:".date('Ymd',$time)."\n";
-
-		echo "END:VEVENT\n";
 	}
+
+	// Show free slots
+	$codes_in_total=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_value('bookable_codes','code',array('bookable_id'=>$bookable_id)));
+	for ($i=time();$i<=$max_time;$i+=strtotime('+1 day',$i))
+	{
+		$day=intval(date('d',$i));
+		$month=intval(date('m',$i));
+		$year=intval(date('Y',$i));
+		$codes_taken_already=collapse_1d_complexity('code_allocation',$GLOBALS['SITE_DB']->query_value('booking','code_allocation',array('day'=>$day,'month'=>$month,'year'=>$year)));
+		foreach (array_diff($codes_in_total,$codes_taken_already) as $code)
+		{
+			echo "BEGIN:VEVENT\n";
+
+			echo "DTSTAMP:".date('Ymd',time())."T".date('His',time())."\n";
+			echo "CREATED:".date('Ymd',time())."T".date('His',time())."\n";
+
+			echo "SUMMARY:".ical_escape(do_lang('NOT_TAKEN',$code))."\n";
+
+			echo "CATEGORIES:".ical_escape($bookable_category)."\n";
+			echo "CLASS:PUBLIC\n";
+			echo "STATUS:TENTATIVE\n";
+			echo "UID:".ical_escape(strval($day).'/'.strval($month).'/'.strval($year).'-'.$code.'-booking@'.get_base_url())."\n";
+			$_url=build_url(array('page'=>'cms_booking','type'=>'_ab','day'=>$day,'month'=>$month,'year'=>$year,'code'=>$code),get_module_zone('cms_booking'),NULL,false,false,true);
+			$url=$_url->evaluate();
+			echo "URL:".ical_escape($url)."\n";
+
+			$time=mktime(0,0,0,$month,$day,$year);
+			if ($time>$max_time) $max_time=$time;
+			echo "DTSTART:".date('Ymd',$time)."\n";
+
+			echo "END:VEVENT\n";
+		}
+	}
+
 	echo "END:VCALENDAR\n";
 	exit();
 }

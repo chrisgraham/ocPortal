@@ -16,6 +16,8 @@
 {+START,IF_NON_EMPTY,{CATEGORIES}}
 	<form action="{POST_URL*}" method="post">
 		<div>
+			{HIDDEN}
+
 			{+START,IF,{$NOT,{HAS_MIXED_DATE_TYPES}}}
 				<span>{!FROM}</span>
 				{+START,INCLUDE,BOOK_DATE_CHOOSE}

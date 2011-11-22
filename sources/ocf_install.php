@@ -382,6 +382,7 @@ function install_ocf($upgrade_from=NULL)
 	if ((is_null($upgrade_from)) || ($upgrade_from<8.0))
 	{
 		add_config_option('INTRO_FORUM_ID','intro_forum_id','?forum','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('SIGNUP_FULLNAME','signup_fullname','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<4.2))
 	{

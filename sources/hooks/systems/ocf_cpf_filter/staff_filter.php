@@ -33,7 +33,7 @@ class Hook_ocf_cpf_filter_staff_filter
 		if (($SITE_INFO['forum_type']!='ocf') || (get_db_forums()!=get_db_site()) || ($GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix()!=get_table_prefix()))
 		{
 			$cpf['role']=1;
-			$cpf['fullname']=1;
+			if (get_option('signup_fullname')=='0') $cpf['fullname']=1;
 			$cpf['sites']=1;
 		}
 		return $cpf;

@@ -48,11 +48,15 @@ class Module_booking
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('bookable');
 		$GLOBALS['SITE_DB']->drop_if_exists('bookable_blacked');
+		$GLOBALS['SITE_DB']->drop_if_exists('bookable_blacked_for');
 		$GLOBALS['SITE_DB']->drop_if_exists('bookable_codes');
 		$GLOBALS['SITE_DB']->drop_if_exists('booking');
 		$GLOBALS['SITE_DB']->drop_if_exists('bookable_supplement');
 		$GLOBALS['SITE_DB']->drop_if_exists('bookable_supplement_for');
 		$GLOBALS['SITE_DB']->drop_if_exists('booking_supplement');
+
+		delete_config_option('bookings_show_warnings_for_months');
+		delete_config_option('bookings_max_ahead_months');
 	}
 
 	/**
@@ -79,6 +83,7 @@ class Module_booking
 			'add_date'=>'TIME',
 			'edit_date'=>'?TIME',
 			'submitter'=>'USER',
+			'sort_order'=>'INTEGER',
 
 			'enabled'=>'BINARY',
 
@@ -93,7 +98,6 @@ class Module_booking
 
 		$GLOBALS['SITE_DB']->create_table('bookable_blacked',array(
 			'id'=>'*AUTO',
-			'bookable_id'=>'AUTO_LINK',
 			'blacked_from_day'=>'SHORT_INTEGER',
 			'blacked_from_month'=>'SHORT_INTEGER',
 			'blacked_from_year'=>'SHORT_INTEGER',
@@ -101,6 +105,11 @@ class Module_booking
 			'blacked_to_month'=>'SHORT_INTEGER',
 			'blacked_to_year'=>'SHORT_INTEGER',
 			'blacked_explanation'=>'LONG_TRANS',
+		));
+
+		$GLOBALS['SITE_DB']->create_table('bookable_blacked_for',array(
+			'bookable_id'=>'*AUTO_LINK',
+			'blacked_id'=>'*AUTO_LINK',
 		));
 
 		$GLOBALS['SITE_DB']->create_table('bookable_codes',array(
@@ -116,6 +125,7 @@ class Module_booking
 			'title'=>'SHORT_TRANS',
 			'promo_code'=>'ID_TEXT', // If non-blank, the user must enter this promo-code to purchase this
 			'supports_notes'=>'BINARY',
+			'sort_order'=>'INTEGER',
 		));
 
 		$GLOBALS['SITE_DB']->create_table('bookable_supplement_for',array(
@@ -143,6 +153,9 @@ class Module_booking
 			'quantity'=>'INTEGER',
 			'notes'=>'LONG_TEXT',
 		));
+
+		add_config_option('BOOKINGS_SHOW_WARNINGS_FOR_MONTHS','bookings_show_warnings_for_months','integer','return \'6\';','FEATURES','BOOKINGS');
+		add_config_option('BOOKINGS_MAX_AHEAD_MONTHS','bookings_max_ahead_months','integer','return \'36\';','FEATURES','BOOKINGS');
 	}
 
 	/**
@@ -165,8 +178,15 @@ class Module_booking
 	{
 		require_lang('booking');
 		require_code('booking');
+		require_code('ocf_join');
 
 		$type=get_param('type','misc');
+
+		if ((is_guest()) && (get_forum_type()!='ocf'))
+		{
+			access_denied('NOT_AS_GUEST');
+		}
+		elseif (is_guest()) check_joining_allowed();
 
 		// Decide what to do
 		if ($type=='misc') return $this->choose_bookables_and_dates(); // NB: This may be skipped, if blocks were used to access
@@ -192,7 +212,7 @@ class Module_booking
 		$filter=get_param('filter','*');
 		require_code('ocfiltering');
 		$query.=' AND '.ocfilter_to_sqlfragment($filter,'id');
-		$bookables=$GLOBALS['SITE_DB']->query($query);
+		$bookables=$GLOBALS['SITE_DB']->query($query.' ORDER BY sort_order');
 
 		$has_date_ranges=false;
 		$has_single_dates=false;
@@ -349,6 +369,7 @@ class Module_booking
 			'MAX_DATE_DAY'=>date('d',$max_max_date),
 			'MAX_DATE_MONTH'=>date('m',$max_max_date),
 			'MAX_DATE_YEAR'=>date('Y',$max_max_date),
+			'HIDDEN'=>build_keep_post_fields(),
 		));
 	}
 
@@ -389,12 +410,49 @@ class Module_booking
 			return $this->choose_bookables_and_dates();
 		}
 
-		// TODO: Skip forward if nothing to flesh out
+		$bookables=array();
+
+		$bookable_rows=$GLOBALS['SITE_DB']->query_select('bookables',array('*'),NULL,'ORDER BY sort_order');
+		foreach ($bookable_rows as $bookable_row)
+		{
+			if (post_param_integer('bookable_'.strval($bookable_row['id']).'_quantity',0)>0)
+			{
+				$supplements=array();
+				$supplement_rows=$GLOBALS['SITE_DB']->query_select('bookable_supplements a JOIN '.get_table_prefix().'bookable_supplements_for b ON a.id=b.supplement_id',array('a.*'),array('bookable_id'=>$bookable_row['id']),'ORDER BY sort_order');
+				foreach ($supplement_rows as $supplement_row)
+				{
+					$supplements[]=array(
+						'SUPPLEMENT_ID'=>strval($supplement_row['id']),
+						'SUPPLEMENT_TITLE'=>get_translated_tempcode($supplement_row['title']),
+						'SUPPLEMENT_SUPPORTS_QUANTITY'=>$supplement_row['supports_quantity']==1,
+						'SUPPLEMENT_QUANTITY'=>post_param_integer('bookable_'.strval($bookable_row['id']).'_supplement_'.strval($supplement_row['id']).'_quantity',0),
+						'SUPPLEMENT_SUPPORTS_NOTES'=>$supplement_row['supports_notes']==1,
+						'SUPPLEMENT_NOTES'=>post_param('bookable_'.strval($bookable_row['id']).'_supplement_'.strval($supplement_row['id']).'_notes',''),
+					);
+				}
+
+				$bookables[]=array(
+					'BOOKABLE_ID'=>strval($bookable_row['id']),
+					'BOOKABLE_TITLE'=>get_translated_tempcode($bookable_row['title']),
+					'BOOKABLE_SUPPORTS_NOTES'=>$bookable_row['supports_notes']==1,
+					'BOOKABLE_NOTES'=>post_param('bookable_'.strval($bookable_row['id']).'_notes',''),
+					'BOOKABLE_SUPPLEMENTS'=>$supplements,
+
+					'BOOKABLE_QUANTITY'=>post_param_integer('bookable_'.strval($bookable_row['id']).'_quantity'), // Can select up to this many supplements
+				);
+			}
+		}
+
+		require_javascript('javascript_ajax');
+		require_javascript('javascript_validation');
 
 		return do_template('BOOKING_FLESH_OUT_SCREEN',array(
 			'TITLE'=>$title,
+			'BOOKABLES'=>$bookables,
+			'PRICE'=>float_format(find_booking_price($request)),
 			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'account','usergroup'=>get_param_integer('usergroup'=>NULL)),'_SELF'),
-			'HIDDEN'=>build_keep_post_fields();
+			'BACK_URL'=>build_url(array('page'=>'_SELF','type'=>'misc','usergroup'=>get_param_integer('usergroup'=>NULL)),'_SELF'),
+			'HIDDEN'=>build_keep_post_fields(),
 		));
 	}
 
@@ -412,8 +470,13 @@ class Module_booking
 		{
 			return $this->thanks();
 		}
+		
+		$url=build_url(array('page'=>'_SELF','type'=>'thanks'),'_SELF');
 
-		// TODO
+		list($javascript,$form)=ocf_join_form($url,true,false,false,false);
+
+		$hidden=build_keep_post_fields();
+		return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('TITLE'=>$title,'JAVASCRIPT'=>$javascript,'FORM'=>$form,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -426,13 +489,16 @@ class Module_booking
 		$title=get_page_title('CREATE_BOOKING');
 
 		// Finish join operation, if applicable
-		// TODO
+		if (is_guest())
+		{
+			list($messages)=ocf_join_actual(true,false,false,true,false,false,false);
+		}
 
 		// Read request
 		$request=get_booking_request_from_form();
 
 		// Save
-		save_booking_form_to_db($request);
+		save_booking_form_to_db($request,array());
 
 		// Send emails
 		send_booking_emails($request);
@@ -445,11 +511,11 @@ class Module_booking
 
 /*
 
-TODO: Blackouts must be available on multiple bookables
-
-TODO (for future expansion, not critical base functionality)...
+NOTE (for future expansion, not critical base functionality)...
 
 Implement online payment support; will need nice way to remove unpaid bookings in future too
+
+Promo codes
 
 Implement permissions for bookables
 
@@ -458,5 +524,7 @@ Manual choice of codes (seats or whatever)
 Implement support for the defined cycle patterns (currently just daily or none)
 
 What if we want to run on a reduced capacity for a period?
+
+Implement blocks
 
 */

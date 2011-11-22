@@ -6,7 +6,7 @@
 			<div class="ocf_guest_column ocf_guest_column_a">
 				<form onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete inline">
 					<div>
-						<div class="accessibility_hidden"><label for="login_username">{!USERNAME}</label></div>
+						<div class="accessibility_hidden"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
 						<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
 						<input size="15" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
 						<input size="15" type="password" value="password" name="password" id="s_password" />
