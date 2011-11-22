@@ -87,6 +87,7 @@ class Block_main_gallery_embed
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
 
 		$_days=array_key_exists('days',$map)?$map['days']:'';
+		$days=mixed();
 		$days=($_days=='')?NULL:intval($_days);
 		$where_sup='';
 		if (!is_null($days)) $where_sup.=' AND add_date>='.strval(time()-$days*60*60*24);

@@ -275,7 +275,7 @@ function aspell_init()
 		if (DIRECTORY_SEPARATOR=='\\') // Windows pSpell is buggy, so we can't use the replacement-pairs feature. Also need to replace data dir with special one.
 		{
 			$aspellcommand=@pspell_new_personal($p_dict_path.'/'.$lang_stub.'.pws',$lang,$spelling,'',$charset);
-			if ($aspellconfig===false) $aspellcommand=pspell_new_personal($p_dict_path.'/'.$lang_stub.'.pws',$lang,$spelling,'',$charset);
+			if ($aspellcommand===false) $aspellcommand=pspell_new_personal($p_dict_path.'/'.$lang_stub.'.pws',$lang,$spelling,'',$charset);
 		} else
 		{
 			$aspellconfig=@pspell_config_create($lang,$spelling,'',$charset);

@@ -32,9 +32,9 @@ function install_location_data()
 
 	// Open WorldGazetteer.csv
 	$myfile=fopen(get_file_base().'/data_custom/locations/WorldGazetteer.csv','rb');
-	$header=fgetcsv($myfile);
+	$header=fgetcsv($myfile,4096);
 	$locations=array();
-	while (($line=fgetcsv($myfile))!==false)
+	while (($line=fgetcsv($myfile,4096))!==false)
 	{
 		$newline=array();
 		foreach ($header as $i=>$h)
@@ -57,9 +57,9 @@ function install_location_data()
 	// Load US locations using CivicSpace-zipcodes.csv
 	require_code('locations/us');
 	$myfile=fopen(get_file_base().'/data_custom/locations/CivicSpace-zipcodes.csv','rb');
-	$header=fgetcsv($myfile);
+	$header=fgetcsv($myfile,4096);
 	$us_locations=array();
-	while (($line=fgetcsv($myfile))!==false)
+	while (($line=fgetcsv($myfile,4096))!==false)
 	{
 		$newline=array();
 		foreach ($header as $i=>$h)
@@ -72,9 +72,9 @@ function install_location_data()
 	// Load World locations using World_Cities_Location_table.csv
 	require_code('locations/us');
 	$myfile=fopen(get_file_base().'/data_custom/locations/World_Cities_Location_table.csv','rb');
-	$header=fgetcsv($myfile);
+	$header=fgetcsv($myfile,4096);
 	$world_locations=array();
-	while (($line=fgetcsv($myfile))!==false)
+	while (($line=fgetcsv($myfile,4096))!==false)
 	{
 		$newline=array();
 		foreach ($header as $i=>$h)
@@ -140,7 +140,8 @@ function install_location_data()
  * @param string $string Text that might have accent characters
  * @return string Filtered string with replaced "nice" characters.
  */
-function remove_accents($string) {
+function remove_accents($string)
+{
 	if ( !preg_match('/[\x80-\xff]/',$string))
 		return $string;
 
@@ -255,9 +256,9 @@ function _worldcities_remaining_locations()
 	
 	// Load US locations using worldcitiespop.csv
 	$myfile=fopen(get_file_base().'/data_custom/locations/worldcitiespop.csv','rb');
-	$header=fgetcsv($myfile);
+	$header=fgetcsv($myfile,4096);
 	$many_locations=array();
-	while (($line=fgetcsv($myfile))!==false)
+	while (($line=fgetcsv($myfile,4096))!==false)
 	{
 		$country_name=find_country_name_from_iso(strtoupper($line[0]));
 		$many_locations[$country_name][$line[1]]=$line[5].','.$line[6];
@@ -560,10 +561,10 @@ function recalculate_bounding_long_lat($category)
 	static $fields=NULL;
 	if (is_null($fields)) $fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_catalogue_category'),'ORDER BY cf_order');
 
-	$min_latitude=NULL;
-	$max_latitude=NULL;
-	$min_longitude=NULL;
-	$max_longitude=NULL;
+	$min_latitude=mixed();
+	$max_latitude=mixed();
+	$min_longitude=mixed();
+	$max_longitude=mixed();
 
 	$subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id'),array('cc_parent_id'=>$category));
 	require_code('fields');

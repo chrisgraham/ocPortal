@@ -18,4 +18,4 @@
  * @package		booking
  */
 
-TODO (takes an ID of a bookable) - for choosing a recurrence of a specific bookable
+// TODO (takes an ID of a bookable) - for choosing a recurrence of a specific bookable

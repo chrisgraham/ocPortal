@@ -32,7 +32,7 @@ function booking_do_next()
 	require_code('templates_donext');
 	require_code('fields');
 	return do_next_manager(get_page_title('BOOKINGS'),comcode_lang_string('DOC_BOOKING'),
-				array_merge(array(
+				array(
 					/*	 type							  page	 params													 zone	  */
 					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_booking')?array('bookable',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_BOOKABLE')):NULL,
 					has_specific_permission(get_member(),'edit_cat_highrange_content','cms_booking')?array('bookable',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_BOOKABLE')):NULL,
@@ -42,7 +42,7 @@ function booking_do_next()
 					has_specific_permission(get_member(),'edit_cat_highrange_content','cms_booking')?array('blacked',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_BOOKABLE_BLACKED')):NULL,
 					has_specific_permission(get_member(),'submit_highrange_content','cms_booking')?array('booking',array('_SELF',array('type'=>'ab'),'_SELF'),do_lang('ADD_BOOKING')):NULL,
 					has_specific_permission(get_member(),'edit_highrange_content','cms_booking')?array('booking',array('_SELF',array('type'=>'eb'),'_SELF'),do_lang('EDIT_BOOKING')):NULL,
-				)),
+				),
 				do_lang('BOOKINGS')
 	);
 }
@@ -355,7 +355,7 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 	$bookable_id=$GLOBALS['SITE_DB']->query_insert('bookables',$bookable_details,true);
 
 	require_code('calendar2');
-	$bookable_details['calendar_type']=add_event_type($title,$logo,find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']));
+	$bookable_details['calendar_type']=add_event_type($title,'',find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']));
 
 	$GLOBALS['SITE_DB']->query_update('bookables',array('calendar_type'=>$bookable_details['calendar_type']),array('id'=>$bookable_id),'',1);
 
@@ -378,7 +378,7 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 	foreach ($supplements as $supplement_id)
 	{
 		$GLOBALS['SITE_DB']->query_insert('bookable_supplement_for',array(
-			'supplement_id'=>$supplement,
+			'supplement_id'=>$supplement_id,
 			'bookable_id'=>$bookable_id,
 		));
 	}
@@ -414,9 +414,8 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 	if ((is_null($bookable_details['calendar_type'])) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok('calendar_types','id',array('id'=>$bookable_details['calendar_type'])))))
 	{
 		require_code('calendar2');
-		$bookable_details['calendar_type']=add_event_type($title,$logo,find_script('bookings_ical').'?id='.strval($bookable_id));
+		$bookable_details['calendar_type']=add_event_type($title,'',find_script('bookings_ical').'?id='.strval($bookable_id));
 	}
-	$bookable_details['add_date']=$add_date;
 
 	$GLOBALS['SITE_DB']->query_update('bookables',$bookable_details,array('id'=>$bookable_id),'',1);
 
@@ -447,7 +446,7 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 		foreach ($supplements as $supplement_id)
 		{
 			$GLOBALS['SITE_DB']->query_insert('bookable_supplement_for',array(
-				'supplement_id'=>$supplement,
+				'supplement_id'=>$supplement_id,
 				'bookable_id'=>$bookable_id,
 			));
 		}
@@ -463,7 +462,7 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
  */
 function delete_bookable($bookable_id)
 {
-	if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('booking','id',array('bookable_id'=>$bookable_id)))
+	if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('booking','id',array('bookable_id'=>$bookable_id))))
 		warn_exit(do_lang_tempcode('CANNOT_DELETE_BOOKINGS_EXIST'));
 	
 	$_old_bookable=$GLOBALS['SITE_DB']->query_select('bookables',array('*'),array('id'=>$bookable_id),'',1);
@@ -471,15 +470,15 @@ function delete_bookable($bookable_id)
 
 	$title=get_translated_text($_old_bookable[0]['title']);
 
-	lang_delete($_old_bookable[0]['title']);
-	lang_remap($_old_bookable[0]['description']);
-	lang_remap($_old_bookable[0]['categorisation']);
+	delete_lang($_old_bookable[0]['title']);
+	delete_lang($_old_bookable[0]['description']);
+	delete_lang($_old_bookable[0]['categorisation']);
 
 	$calendar_type=$_old_bookable[0]['calendar_type'];
 	if ((is_null($calendar_type)) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok('calendar_types','id',array('id'=>$calendar_type)))) && ($GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)',array('e_type'=>$calendar_type))==0))
 	{
 		require_code('calendar2');
-		delete_event_type($calendar_type));
+		delete_event_type($calendar_type);
 	}
 
 	$GLOBALS['SITE_DB']->query_delete('bookables',array('id'=>$bookable_id),'',1);
@@ -539,7 +538,8 @@ function edit_bookable_supplement($supplement_id,$details,$bookables=NULL)
 	$_old_supplement=$GLOBALS['SITE_DB']->query_select('bookable_supplements',array('*'),array('id'=>$supplement_id),'',1);
 	if (!array_key_exists(0,$_old_supplement)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	$details['title']=update_lang($_old_supplement[0]['title'],$details['title']);
+	lang_remap($_old_supplement[0]['title'],$details['title']);
+	unset($details['title']);
 
 	$GLOBALS['SITE_DB']->query_update('bookable_supplements',$details,array('id'=>$supplement_id),'',1);
 
@@ -623,7 +623,8 @@ function edit_bookable_blacked($blacked_id,$details,$bookables=NULL)
 	$_old_blacked=$GLOBALS['SITE_DB']->query_select('bookable_blacked',array('*'),array('id'=>$blacked_id),'',1);
 	if (!array_key_exists(0,$_old_blacked)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	$details['black_explanation']=update_lang($_old_blacked[0]['black_explanation'],$details['black_explanation']);
+	lang_remap($_old_blacked[0]['black_explanation'],$details['black_explanation']);
+	unset($details['black_explanation']);
 
 	$GLOBALS['SITE_DB']->query_update('bookable_blacked',$details,array('id'=>$blacked_id),'',1);
 
@@ -639,7 +640,7 @@ function edit_bookable_blacked($blacked_id,$details,$bookables=NULL)
 		}
 	}
 
-	log_it('EDIT_BOOKABLE_BLACKED',strval($supplement_id),$black_explanation);
+	log_it('EDIT_BOOKABLE_BLACKED',strval($blacked_id),$black_explanation);
 }
 
 /**

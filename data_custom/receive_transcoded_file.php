@@ -61,7 +61,8 @@ if (!headers_sent())
 }
 
 
-function run() {
+function run()
+{
 	$file=basename(rawurldecode($_GET['url']));
 
 	//get old media file data
@@ -88,7 +89,7 @@ function run() {
 	if(isset($get_old_file[0]['url']) && is_string($get_old_file[0]['url']) && $get_old_file[0]['url']!=$new_url && strlen($get_old_file[0]['url'])>0)
 	{
 		$movedir=dirname(str_replace('/uploads/'.$type.'/','/uploads/'.$type.'_archive_addon/',str_replace('\\','/',get_custom_file_base()).'/'.rawurldecode($get_old_file[0]['url'])));
-		@mkdir($movedir);
+		@mkdir($movedir,0777);
 		require_code('files');
 		fix_permissions($movedir,0777);
 		rename(str_replace('\\','/',get_custom_file_base()).'/'.rawurldecode($get_old_file[0]['url']),str_replace('/uploads/'.$type.'/','/uploads/'.$type.'_archive_addon/',str_replace('\\','/',get_custom_file_base()).'/'.rawurldecode($get_old_file[0]['url'])));
@@ -110,7 +111,8 @@ function run() {
 	}
 
 	$transcoding_server=get_option('transcoding_server', true);
-	if(is_null($transcoding_server)) {
+	if(is_null($transcoding_server))
+	{
 		//add option and default value
 		add_config_option('TRANSCODING_SERVER','transcoding_server','line','return \'http://localhost/convertor\';','FEATURE','GALLERIES');
 		$transcoding_server=get_option('transcoding_server', true);

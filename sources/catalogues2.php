@@ -905,7 +905,7 @@ function actual_delete_catalogue_entry($id)
 		{
 			if (($storage_type=='long_trans') || ($storage_type=='short_trans'))
 			{
-				$title=get_translated_text($value);
+				$title=get_translated_text(intval($value));
 			} else
 			{
 				$title=$value;

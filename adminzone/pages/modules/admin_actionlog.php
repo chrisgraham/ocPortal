@@ -187,7 +187,7 @@ class Module_admin_actionlog
 				$where.=' AND '.db_string_equal_to('l_param_a',$filter_param_a);
 			if ($filter_param_b!='')
 				$where.=' AND '.db_string_equal_to('l_param_b',$filter_param_b);
-			if ($id!=-1) $where.' AND l_by='.strval($id);
+			if ($id!=-1) $where.=' AND l_by='.strval($id);
 
 			// Fetch
 			$rows1=$GLOBALS['FORUM_DB']->query('SELECT l_reason,id,l_by AS the_user,l_date_and_time AS date_and_time,l_the_type AS the_type,l_param_a AS param_a,l_param_b AS param_b FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_moderator_logs WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max+$start);
@@ -204,7 +204,7 @@ class Module_admin_actionlog
 				$where.=' AND '.db_string_equal_to('param_a',$filter_param_a);
 			if ($filter_param_b!='')
 				$where.=' AND '.db_string_equal_to('param_b',$filter_param_b);
-			if ($id!=-1) $where.' AND the_user='.strval($id);
+			if ($id!=-1) $where.=' AND the_user='.strval($id);
 
 			// Fetch
 			$rows2=$GLOBALS['SITE_DB']->query('SELECT id,the_user,date_and_time,the_type,param_a,param_b,ip FROM '.get_table_prefix().'adminlogs WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max+$start);

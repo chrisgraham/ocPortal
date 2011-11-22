@@ -154,7 +154,7 @@ function ocf_get_group_link($id)
 	
 	if ($row['id']==db_get_first_id()) return make_string_tempcode(escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])));
 	
-	$name=ocf_get_group_name($row['id'],$GLOBALS['FORUM_DB']);
+	$name=ocf_get_group_name($row['id']);
 
 	$see_hidden=has_specific_permission(get_member(),'see_hidden_groups');
 	if ((!$see_hidden) && ($row['g_hidden']==1))

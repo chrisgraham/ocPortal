@@ -218,12 +218,13 @@ class Module_booking
 		$has_single_dates=false;
 
 		$min_min_date=time();
-		$max_max_date=NULL;
+		$max_max_date=mixed();
 
 		$categories=array();
 		foreach ($bookables as $bookable)
 		{
 			$active_from=mktime(0,0,0,$bookable['active_from_month'],$bookable['active_from_day'],$bookable['active_from_year']);
+			$active_to=mixed();
 			$active_to=is_null($bookable['active_to_year'])?NULL:mktime(0,0,0,$bookable['active_to_month'],$bookable['active_to_day'],$bookable['active_to_year']);
 			$min_date=$active_from;
 			$max_date=$active_to;
@@ -263,6 +264,7 @@ class Module_booking
 			foreach ($blacked as $black)
 			{
 				$black_from=mktime(0,0,0,$black['blacked_from_month'],$black['blacked_from_day'],$black['blacked_from_year']);
+				$black_to=mixed();
 				$black_to=is_null($black['blacked_to_year'])?NULL:mktime(0,0,0,$black['blacked_to_month'],$black['blacked_to_day'],$black['blacked_to_year']);
 				if (($black_from>time()) && ($black_to<SHOW_WARNINGS_UNTIL))
 				{
@@ -358,7 +360,7 @@ class Module_booking
 		return do_template('BOOKING_START_SCREEN',array(
 			'TITLE'=>$title,
 			'CATEGORIES'=>$categories,
-			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'flesh_out','usergroup'=>get_param_integer('usergroup'=>NULL)),'_SELF'),
+			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'flesh_out','usergroup'=>get_param_integer('usergroup',NULL)),'_SELF'),
 			'SHARED_MESSAGES'=>$shared_messages,
 			'HAS_DATE_RANGES'=>$has_date_ranges,
 			'HAS_SINGLE_DATES'=>$has_single_dates,
@@ -450,8 +452,8 @@ class Module_booking
 			'TITLE'=>$title,
 			'BOOKABLES'=>$bookables,
 			'PRICE'=>float_format(find_booking_price($request)),
-			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'account','usergroup'=>get_param_integer('usergroup'=>NULL)),'_SELF'),
-			'BACK_URL'=>build_url(array('page'=>'_SELF','type'=>'misc','usergroup'=>get_param_integer('usergroup'=>NULL)),'_SELF'),
+			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'account','usergroup'=>get_param_integer('usergroup',NULL)),'_SELF'),
+			'BACK_URL'=>build_url(array('page'=>'_SELF','type'=>'misc','usergroup'=>get_param_integer('usergroup',NULL)),'_SELF'),
 			'HIDDEN'=>build_keep_post_fields(),
 		));
 	}

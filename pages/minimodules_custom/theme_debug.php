@@ -73,9 +73,9 @@ foreach (array_keys($themes) as $theme)
 					if (substr($f,-4)=='.css')
 					{
 						if (substr_count($contents,'{')!=substr_count($contents,'}'))
-							echo '<br />Mismatched braces in '.escape_html($file);
+							echo '<br />Mismatched braces in '.escape_html($f);
 						if (substr_count($contents,'/*')!=substr_count($contents,'*/'))
-							echo '<br />Mismatched comments in '.escape_html($file);
+							echo '<br />Mismatched comments in '.escape_html($f);
 					}
 
 					// Find missing images

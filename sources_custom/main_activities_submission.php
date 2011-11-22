@@ -26,9 +26,10 @@ function submit_handler()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	$response ='<?xml version="1.0" encoding="'.get_charset().'" ?>';
+	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 	$response.='<response><content>';
 
+	$map=array();
 
 	if (!is_guest(get_member()))
 	{
@@ -55,7 +56,7 @@ function submit_handler()
 
 				if (strlen($map['STATUS'])>255)
 				{
-					$response.='<success>0</success><feedback>Message is '.(strlen($map['STATUS'])-255).' characters too long</feedback>';
+					$response.='<success>0</success><feedback>Message is '.strval(strlen($map['STATUS'])-255).' characters too long</feedback>';
 				}
 				else
 				{
@@ -92,6 +93,8 @@ function submit_handler()
 
 function update_list_handler()
 {
+	$map=array();
+	
 	$map['max']=$GLOBALS['SITE_DB']->query_value_null_ok('values', 'the_value', array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
 
 	if (is_null($map['max']))
@@ -179,7 +182,7 @@ function update_list_handler()
 	switch ($mode)
 	{
 		case 'own': //This is used when viewing a profile
-			$whereville='a_member_id='.intval($member_id);
+			$whereville='a_member_id='.strval($member_id);
 
 			// If the chat addon is installed then there may be friends-only posts
 			if (addon_installed('chat') && ($member_id!=$viewer_id))
@@ -188,9 +191,9 @@ function update_list_handler()
 				if (($is_guest===false))
 				{
 					if (strlen($blocked_by)>0) //On the basis that you've sought this view out, your blocking them doesn't hide their messages.
-						$short_where=' WHERE (member_likes='.$member_id.' AND member_liked='.$viewer_id.' AND member_likes NOT IN('.$blocked_by.'))';
+						$short_where=' WHERE (member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).' AND member_likes NOT IN('.$blocked_by.'))';
 					else
-						$short_where=' WHERE (member_likes='.$member_id.' AND member_liked='.$viewer_id.')';
+						$short_where=' WHERE (member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).')';
 
 					$view_private=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies', 'member_likes',NULL, $short_where);
 				}
@@ -212,7 +215,7 @@ function update_list_handler()
 				//Select mutual likes you haven't blocked.
 				$tables_and_joins ='chat_buddies a JOIN '.get_table_prefix().'chat_buddies b';
 				$tables_and_joins.=' ON (a.member_liked=b.member_likes AND a.member_likes=b.member_liked AND a.member_likes=';
-				$tables_and_joins.=$viewer_id;
+				$tables_and_joins.=strval($viewer_id);
 
 				$extra_not='';
 				if (strlen($blocking)>0) //Also setting who gets discarded from outgoing like selection
@@ -242,7 +245,7 @@ function update_list_handler()
 
 					$lm_ids=substr($lm_ids, 1);
 
-					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE member_likes='.$viewer_id.' AND member_liked NOT IN('.$lm_ids.');'.$extra_not);
+					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE member_likes='.strval($viewer_id).' AND member_liked NOT IN('.$lm_ids.');'.$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one non-mutual friend
 					{
@@ -258,7 +261,7 @@ function update_list_handler()
 					}
 					elseif (count($like_outgoing)>0) //Likes one non-mutual friend
 					{
-						$whereville='(a_member_id IN('.$lm_ids.') OR (a_member_id='.intval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
+						$whereville='(a_member_id IN('.$lm_ids.') OR (a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
 					}
 					else //Only has mutual friends
 					{
@@ -267,7 +270,7 @@ function update_list_handler()
 				}
 				elseif (count($like_mutual)>0) //Has one mutual friend
 				{
-					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.$viewer_id.' AND member_liked!='.intval($like_mutual[0]['liked']).$extra_not);
+					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked!='.strval($like_mutual[0]['liked']).$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one non-mutual friend
 					{
@@ -279,21 +282,21 @@ function update_list_handler()
 
 						$lo_ids=substr($lo_ids, 1);
 
-						$whereville='(a_member_id='.intval($like_mutual[0]['liked']).' OR (a_member_id IN('.$lo_ids.') AND a_is_public=1))';
+						$whereville='(a_member_id='.strval($like_mutual[0]['liked']).' OR (a_member_id IN('.$lo_ids.') AND a_is_public=1))';
 					}
 					elseif (count($like_outgoing)>0) //Likes one non-mutual friend
 					{
-						$whereville='(a_member_id='.intval($like_mutual[0]['liked']).' OR (a_member_id='.intval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
+						$whereville='(a_member_id='.strval($like_mutual[0]['liked']).' OR (a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
 					}
 					else
 					{
-						$whereville='a_member_id='.intval($like_mutual[0]['liked']); //Has one mutual friend and no others
+						$whereville='a_member_id='.strval($like_mutual[0]['liked']); //Has one mutual friend and no others
 					}
 				}
 				else //Has no mutual friends
 				{
 					if ($is_guest===false)
-						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.$viewer_id.$extra_not);
+						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one person
 					{
@@ -308,7 +311,7 @@ function update_list_handler()
 						$whereville='(a_member_id IN('.$lo_ids.') AND a_is_public=1)';
 					}
 					elseif (count($like_outgoing)>0) //Likes one person
-						$whereville='(a_member_id='.intval($like_outgoing[0]['member_liked']).' AND a_is_public=1)';
+						$whereville='(a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1)';
 					else //Has no friends, the case with _all_ new members.
 						$proceed_selection=false;
 				}
@@ -321,7 +324,7 @@ function update_list_handler()
 			$view_private=array();
 			if (addon_installed('chat') && $is_guest===false)
 			{
-				$short_where='member_liked='.$viewer_id;
+				$short_where='member_liked='.strval($viewer_id);
 				if (strlen($blocked_by)>0)
 					$short_where='('.$short_where.' AND member_likes NOT IN ('.$blocked_by.'))';
 					
@@ -358,7 +361,7 @@ function update_list_handler()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	$response ='<?xml version="1.0" encoding="'.get_charset().'" ?>';
+	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 
 	if ($proceed_selection===true)
 	{
@@ -422,7 +425,7 @@ function removal_handler()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	$response ='<?xml version="1.0" encoding="'.get_charset().'" ?>';
+	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 	$response.='<response>';
 
 	$stat_id=post_param_integer('removal_id',-1);
@@ -433,13 +436,13 @@ function removal_handler()
 		if (($stat_owner!=$viewer_id) && ($can_remove_others!==true))
 		{
 			$response.='<success>0</success><err>perms</err>';
-			$response.='<feedback>You do not have permission to remove this status message.</feedback><status_id>'.$stat_id.'</status_id>';
+			$response.='<feedback>You do not have permission to remove this status message.</feedback><status_id>'.strval($stat_id).'</status_id>';
 		}
 		else //I suppose we can proceed now.
 		{
 			$GLOBALS['SITE_DB']->query_delete('main_activities', array('id'=>$stat_id),'',1);
 
-			$response.='<success>1</success><feedback>Message deleted.</feedback><status_id>'.$stat_id.'</status_id>';
+			$response.='<success>1</success><feedback>Message deleted.</feedback><status_id>'.strval($stat_id).'</status_id>';
 		}
 	}
 	elseif (is_null($stat_owner))
@@ -478,7 +481,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 	if ($fp)
 	{
 		// Grab our current time in milliseconds
-		$startTime = microtime();
+		$start_time = microtime();
 
 		$sleep_multiplier = $timeout / 10;
 
@@ -486,16 +489,17 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 		do
 		{
 			// Try to lock the file
-			$canWrite = flock($fp, LOCK_EX);
+			$can_write = flock($fp, LOCK_EX);
 
 			// If lock is not obtained sleep for 0 <-> $timeout/10 milliseconds,
 			// to avoid collision and CPU load
-			if(!$canWrite) usleep(round(rand(0, $sleep_multiplier)*1000));		// *1000 as usleep uses microseconds
+			if(!$can_write) usleep(intval(mt_rand(0, intval($sleep_multiplier))*1000));		// *1000 as usleep uses microseconds
 		}
-		while ((!$canWrite) && ((microtime()-$startTime) < $timeout));
+		while ((!$can_write) && ((microtime()-$start_time) < $timeout));
 
 		// File was locked so now we can store information
-		if ($canWrite) {
+		if ($can_write)
+		{
 			// Read the current value
 			rewind($fp);
 			$old_id = intval(fgets($fp,1024));

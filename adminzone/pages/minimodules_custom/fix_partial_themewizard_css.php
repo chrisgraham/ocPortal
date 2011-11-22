@@ -126,7 +126,7 @@ if (function_exists('imagecolorallocatealpha'))
 	{
 		if (!in_array($image_code,$THEME_WIZARD_IMAGES_NO_WILD))
 		{
-			if (($extending_existing) && (array_key_exists($image_code,$temp_all_ids)) && (strpos($temp_all_ids[$image_code],$theme.'/images_custom/')!==false) && ((!url_is_local($temp_all_ids[$image_code])) || (file_exists(get_custom_file_base().'/'.$temp_all_ids[$image_code])))) continue;
+			if ((array_key_exists($image_code,$temp_all_ids)) && (strpos($temp_all_ids[$image_code],$theme.'/images_custom/')!==false) && ((!url_is_local($temp_all_ids[$image_code])) || (file_exists(get_custom_file_base().'/'.$temp_all_ids[$image_code])))) continue;
 
 			$orig_path=find_theme_image($image_code,true,true,'default','EN');
 			if ($orig_path=='') continue; // Theme has specified non-existent image as themewizard-compatible

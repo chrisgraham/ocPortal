@@ -729,12 +729,12 @@ function relay_error_mail($text,$ocproducts=true)
 		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,'','','',3,NULL,true,NULL,true);
 	if (($ocproducts) && (get_option('send_error_emails_ocproducts',true)=='1') && (!running_script('cron_bridge')) && (strpos($text,'_custom/')===false) && (strpos($text,'data/occle.php')===false) && (strpos($text,'/mini')===false) && (strpos($text,'&#')===false/*charset encoding issue*/) && (strpos($text,'has been disabled for security reasons')===false) && (strpos($text,'max_questions')/*mysql limit*/===false) && (strpos($text,'Error at offset')===false) && (strpos($text,'Unable to allocate memory for pool')===false) && (strpos($text,'Out of memory')===false) && (strpos($text,'Disk is full writing')===false) && (strpos($text,'Disk quota exceeded')===false) && (strpos($text,'from storage engine')===false) && (strpos($text,'Lost connection to MySQL server')===false) && (strpos($text,'Unable to save result set')===false) && (strpos($text,'.MYI')===false) && (strpos($text,'MySQL server has gone away')===false) && (strpos($text,'Incorrect key file')===false) && (strpos($text,'Too many connections')===false) && (strpos($text,'marked as crashed and should be repaired')===false) && (strpos($text,'connect to')===false) && (strpos($text,'Access denied for')===false) && (strpos($text,'Unknown database')===false) && (strpos($text,'headers already sent')===false) && (preg_match('#Maximum execution time of \d+ seconds#',$text)==0) && (strpos($text,'File(/tmp/) is not within the allowed path')===false))
 	{
-		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
 	}
 	if (($ocproducts) && (!is_null(get_value('agency_email_address'))))
 	{
 		$agency_email_address=get_value('agency_email_address');
-		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
 	}
 }
 

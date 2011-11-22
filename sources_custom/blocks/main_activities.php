@@ -135,7 +135,7 @@ class Block_main_activities
 			// See if that worked
 			if (is_null($username))
 			{
-				// If not then we can try treatign it as a username, if the forum
+				// If not then we can try treating it as a username, if the forum
 				// supports it
 				if (method_exists($GLOBALS['FORUM_DRIVER'],'get_member_from_username'))
 				{
@@ -173,8 +173,8 @@ class Block_main_activities
 		$mode=(array_key_exists('mode',$map))?$map['mode']:'all';
 
 		$is_guest=false; //Can't be doing with overcomplicated SQL breakages. Weed it out.
-		$guest_id=intval($GLOBALS['FORUM_DRIVER']->get_guest_id());
-		$viewer_id=intval(get_member()); //We'll need this later anyway.
+		$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+		$viewer_id=get_member(); //We'll need this later anyway.
 		if ($guest_id==$viewer_id)
 			$is_guest=true;
 
@@ -233,7 +233,7 @@ class Block_main_activities
 		{
 			case 'own': //This is used to view one's own activity (eg. on a profile)
 
-				$whereville='a_member_id='.intval($member_id);
+				$whereville='a_member_id='.strval($member_id);
 
 				// If the chat addon is installed then there may be 'friends-only'
 				// posts, which we may need to filter out. Otherwise we don't need
@@ -244,9 +244,9 @@ class Block_main_activities
 					if (($is_guest===false))
 					{
 						if (strlen($blocked_by)>0) //On the basis that you've sought this view out, your blocking them doesn't hide their messages.
-							$short_where=' WHERE (member_likes='.$member_id.' AND member_liked='.$viewer_id.' AND member_likes NOT IN('.$blocked_by.'))';
+							$short_where=' WHERE (member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).' AND member_likes NOT IN('.$blocked_by.'))';
 						else
-							$short_where=' WHERE (member_likes='.$member_id.' AND member_liked='.$viewer_id.')';
+							$short_where=' WHERE (member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).')';
 
 						$view_private=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies', 'member_likes',NULL, $short_where);
 					}
@@ -267,7 +267,7 @@ class Block_main_activities
 					//Select mutual likes you haven't blocked.
 					$tables_and_joins ='chat_buddies a JOIN '.get_table_prefix().'chat_buddies b';
 					$tables_and_joins.=' ON (a.member_liked=b.member_likes AND a.member_likes=b.member_liked AND a.member_likes=';
-					$tables_and_joins.=$viewer_id;
+					$tables_and_joins.=strval($viewer_id);
 
 					$extra_not='';
 					if (strlen($blocking)>0) //Also setting who gets discarded from outgoing like selection
@@ -292,19 +292,19 @@ class Block_main_activities
 
 						foreach ($like_mutual as $l_m)
 						{
-							$lm_ids.=','.$l_m['liked'];
+							$lm_ids.=','.strval($l_m['liked']);
 						}
 
 						$lm_ids=substr($lm_ids, 1);
 
-						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.$viewer_id.' AND member_liked NOT IN('.$lm_ids.')'.$extra_not);
+						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked NOT IN('.$lm_ids.')'.$extra_not);
 
 						if (count($like_outgoing)>1) //Likes more than one non-mutual friend
 						{
 							$lo_ids='';
 							foreach ($like_outgoing as $l_o)
 							{
-								$lo_ids.=','.$l_o['member_liked'];
+								$lo_ids.=','.strval($l_o['member_liked']);
 							}
 
 							$lo_ids=substr($lo_ids, 1);
@@ -313,7 +313,7 @@ class Block_main_activities
 						}
 						elseif (count($like_outgoing)>0) //Likes one non-mutual friend
 						{
-							$whereville='(a_member_id IN('.$lm_ids.') OR (a_member_id='.intval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
+							$whereville='(a_member_id IN('.$lm_ids.') OR (a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
 						}
 						else //Only has mutual friends
 						{
@@ -322,32 +322,32 @@ class Block_main_activities
 					}
 					elseif (count($like_mutual)>0) //Has one mutual friend
 					{
-						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.$viewer_id.' AND member_liked!='.intval($like_mutual[0]['liked']).$extra_not);
+						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked!='.strval($like_mutual[0]['liked']).$extra_not);
 
 						if (count($like_outgoing)>1) //Likes more than one non-mutual friend
 						{
 							$lo_ids='';
 							foreach ($like_outgoing as $l_o)
 							{
-								$lo_ids.=','.$l_o['member_liked'];
+								$lo_ids.=','.strval($l_o['member_liked']);
 							}
 
 							$lo_ids=substr($lo_ids, 1);
 
-							$whereville='(a_member_id='.intval($like_mutual[0]['liked']).' OR (a_member_id IN('.$lo_ids.') AND a_is_public=1))';
+							$whereville='(a_member_id='.strval($like_mutual[0]['liked']).' OR (a_member_id IN('.$lo_ids.') AND a_is_public=1))';
 						}
 						elseif (count($like_outgoing)>0) //Likes one non-mutual friend
 						{
-							$whereville='(a_member_id='.intval($like_mutual[0]['liked']).' OR (a_member_id='.intval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
+							$whereville='(a_member_id='.strval($like_mutual[0]['liked']).' OR (a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1))';
 						}
 						else
 						{
-							$whereville='a_member_id='.intval($like_mutual[0]['liked']); //Has one mutual friend and no others
+							$whereville='a_member_id='.strval($like_mutual[0]['liked']); //Has one mutual friend and no others
 						}
 					}
 					else //Has no mutual friends
 					{
-						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.$viewer_id.$extra_not);
+						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).$extra_not);
 
 						if (count($like_outgoing)>1) //Likes more than one person
 						{
@@ -362,7 +362,7 @@ class Block_main_activities
 							$whereville='(a_member_id IN('.$lo_ids.') AND a_is_public=1)';
 						}
 						elseif (count($like_outgoing)>0) //Likes one person
-							$whereville='(a_member_id='.intval($like_outgoing[0]['member_liked']).' AND a_is_public=1)';
+							$whereville='(a_member_id='.strval($like_outgoing[0]['member_liked']).' AND a_is_public=1)';
 						else //Has no friends, the case with _all_ new members.
 							$proceed_selection=false;
 					}
@@ -375,7 +375,7 @@ class Block_main_activities
 				$view_private=array();
 				if (addon_installed('chat') && $is_guest===false)
 				{
-					$short_where='member_liked='.$viewer_id;
+					$short_where='member_liked='.strval($viewer_id);
 					if (strlen($blocked_by)>0)
 						$short_where='('.$short_where.' AND member_likes NOT IN ('.$blocked_by.'))';
 					
@@ -399,7 +399,7 @@ class Block_main_activities
 				elseif (count($view_private)>0)
 				{
 					$view_private=current($view_private);
-					$whereville='(a_member_id='.$view_private['member_likes'].' OR (a_is_public=1 AND a_member_id!='.$guest_id.'))';
+					$whereville='(a_member_id='.strval($view_private['member_likes']).' OR (a_is_public=1 AND a_member_id<>'.strval($guest_id).'))';
 				}
 				else
 				{

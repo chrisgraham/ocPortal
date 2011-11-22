@@ -164,7 +164,7 @@ class Stemmer_EN
         }
 
         foreach ( $words as $word ) {
-            if ( $result = $this->stem($word) ) {
+            if ( ($result = $this->stem($word))!==false ) {
                 $results[] = $result;
             }
         }

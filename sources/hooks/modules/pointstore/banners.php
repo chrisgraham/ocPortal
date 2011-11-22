@@ -207,7 +207,7 @@ class Hook_pointstore_banners
 		require_code('submit');
 		$edit_url=build_url(array('page'=>'cms_banners','type'=>'_ed','name'=>$name),get_module_zone('cms_banners'),NULL,false,false,true);
 		if (addon_installed('unvalidated'))
-			send_validation_request('ADD_BANNER','banners',$name,true,$edit_url);
+			send_validation_request('ADD_BANNER','banners',true,$name,$edit_url);
 
 		$title=get_page_title('ADD_BANNER');
 		$stats_url=build_url(array('page'=>'banners','type'=>'misc'),get_module_zone('banners'));

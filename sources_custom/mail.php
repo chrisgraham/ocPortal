@@ -246,8 +246,8 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 
 	// Create the Transport
 	$transport=Swift_SmtpTransport::newInstance($host,$port)
-	  ->setUsername($username)
-	  ->setPassword($password);
+		->setUsername($username)
+		->setPassword($password);
 	if (($port==419) || ($port==465) || ($port==587))
 		$transport->setEncryption('tls');
 

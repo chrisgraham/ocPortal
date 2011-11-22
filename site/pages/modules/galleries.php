@@ -858,6 +858,7 @@ class Module_galleries
 		if (!is_null($all_are))
 		{
 			global $M_SORT_KEY;
+			$M_SORT_KEY=mixed();
 			$M_SORT_KEY='url';
 			usort($query_rows_images,'multi_sort');
 		}

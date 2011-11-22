@@ -33,12 +33,13 @@ class Hook_cron_bank
 
 		foreach ($to_be_restored as $deposit)
 		{
-		   if(isset($deposit['amount']) && ($deposit['amount']>0)) {
-			   $restore_amount=round($deposit['amount'] + $deposit['amount']*($bank_divident/100));
-			   system_gift_transfer(do_lang('RESTORED_DEPOSIT'),$restore_amount,$deposit['user_id']);
+			if(isset($deposit['amount']) && ($deposit['amount']>0))
+			{
+				$restore_amount=round($deposit['amount'] + $deposit['amount']*($bank_divident/100));
+				system_gift_transfer(do_lang('RESTORED_DEPOSIT'),intval($restore_amount),$deposit['user_id']);
 
 				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'bank WHERE id='.strval($deposit['id']));
-		   }
+			}
 		}
 
 	}

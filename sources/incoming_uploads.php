@@ -144,19 +144,19 @@ function incoming_uploads_script()
 
 		// File is valid, and was successfully uploaded. Now see if there is any metadata to surface from the file.
 		require_code('images');
-		$out=array();
+		$outa=array();
 		if (is_image($name))
 		{
 			require_code('exif');
-			$out+=get_exif_data(get_custom_file_base().'/'.$savename);
+			$outa+=get_exif_data(get_custom_file_base().'/'.$savename);
 		}
-		$out['upload_id']=strval($file_db_id);
-		$out['upload_name']=$name;
-		$out['upload_savename']=$savename;
+		$outa['upload_id']=strval($file_db_id);
+		$outa['upload_name']=$name;
+		$outa['upload_savename']=$savename;
 		@ini_set('ocproducts.xss_detect','0');
 		$outstr='{';
 		$done=0;
-		foreach ($out as $key=>$val) // Put out data as JSON
+		foreach ($outa as $key=>$val) // Put out data as JSON
 		{
 			$val=str_replace(chr(0),'',$val);
 			

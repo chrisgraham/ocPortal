@@ -36,7 +36,7 @@ function get_file_list_of_addons($FILE_BASE)
 			}
 			elseif (@$text[$i+1][0]=='-') // New block of files
 			{
-				if (count($files))
+				if (count($files)!=0)
 				{
 					$file_list[$key] = $files;
 					$files = array();
@@ -46,7 +46,7 @@ function get_file_list_of_addons($FILE_BASE)
 			}
 		}
 	}
-	if (count($files))
+	if (count($files)!=0)
 	{
 		$file_list[$key] = $files;
 	}

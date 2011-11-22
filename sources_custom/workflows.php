@@ -277,7 +277,7 @@ function build_new_workflow($id, $name, $requirements, $default=false)
 	if (is_null($id))
 	{
 		// HACKHACK We should use a normalised table with an ID field
-		$id = insert_lang($name);
+		$id = insert_lang($name,3);
 	}
 	// Remove any existing requirements just in case this workflow already exists
 	$GLOBALS['SITE_DB']->query_delete('workflow_requirements',array('workflow_name'=>$id));
@@ -467,7 +467,7 @@ function get_default_workflow()
 		return current(current($defaults));
 	}
 	// Otherwise just give back what we've found (singleton or empty)
-	else if (count($workflows) == 1)
+	elseif (count($workflows) == 1)
 	{
 		return current(array_keys($workflows));
 	}
@@ -972,7 +972,7 @@ function workflow_update_handler()
 		}
 		// Unticked boxes don't seem to appear in $_POST, so get the
 		// raw tickbox value instead
-		else if (array_key_exists('tick_on_form__approval_'.strval($approval_id),$_POST))
+		elseif (array_key_exists('tick_on_form__approval_'.strval($approval_id),$_POST))
 		{
 			$approvals[$approval_id] = post_param_integer('tick_on_form__approval_'.strval($approval_id));
 		}
@@ -1201,7 +1201,9 @@ function workflow_update_handler()
 	// Make sure we've actually found something
 	if ($content_is_validated==array())
 	{
-		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',$content_table.'->'.$content_field.'->'.$content_details[0]['source_id']->$content_validated_field));
+		$source_id=$content_details[0]['source_id'];
+		$validated_field=$source_id->content_validated_field;
+		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',$content_table.'->'.$content_field.'->'.$validated_field));
 	}
 	// In order for content to go live all points must be approved
 	// See if all points have been approved. If so, none will have
@@ -1252,7 +1254,7 @@ function workflow_update_handler()
 	
 	// Finally return a success message
 	$return_url = strip_tags(post_param('return_url'));
-	return redirect_screen('',$return_url,$success_message);
+	return redirect_screen(new ocp_tempcode(),$return_url,$success_message);
 
 }
 
@@ -1304,7 +1306,7 @@ function workflow_choose_ui($include_inherit=false,$include_current=false)
 		$help .= $include_current? do_lang('CURRENT_WORKFLOW_HELP') : '';
 		return form_input_list(do_lang_tempcode('USE_WORKFLOW'),do_lang_tempcode('USE_WORKFLOW_DESCRIPTION', $help),'workflow',$workflows,NULL,false);
 	}
-	else if (count($all_workflows) == 1)
+	elseif (count($all_workflows) == 1)
 	{
 		return form_input_hidden('workflow','wf_'.current(array_keys($all_workflows)));
 	}

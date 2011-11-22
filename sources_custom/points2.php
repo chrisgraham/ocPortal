@@ -42,25 +42,21 @@ if (!function_exists('system_gift_transfer'))
 			$POINT_INFO_CACHE[$member_id]['points_gained_given']+=$amount;
 
 		//start add to mentor points if needed
-		 //$mentor_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'u_mentor');
-		 $mentor_id=$GLOBALS['SITE_DB']->query_value_null_ok('members_mentors','mentor_id',array('member_id'=>$member_id),'',true);
+		//$mentor_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'u_mentor');
+		$mentor_id=$GLOBALS['SITE_DB']->query_value_null_ok('members_mentors','mentor_id',array('member_id'=>$member_id),'',true);
 
-		if(isset($mentor_id) && !is_null($mentor_id) && (intval($mentor_id) <> 0))
+		if(isset($mentor_id) && !is_null($mentor_id) && (intval($mentor_id) != 0))
 		{
-			$member_since=time() - $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
-			if($member_since < 7*24*3600 || 1)
-			{
-				//give points to mentor too
-				$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>time(),'amount'=>$amount,'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'gift_to'=>$mentor_id,'reason'=>insert_lang_comcode($reason,4),'anonymous'=>1));
-				$_before=point_info($mentor_id);
-				$before=array_key_exists('points_gained_given',$_before)?$_before['points_gained_given']:0;
-				$new=strval($before+$amount);
-				$GLOBALS['FORUM_DRIVER']->set_custom_field($mentor_id,'points_gained_given',$new);
+			//give points to mentor too
+			$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>time(),'amount'=>$amount,'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'gift_to'=>$mentor_id,'reason'=>insert_lang_comcode($reason,4),'anonymous'=>1));
+			$_before=point_info($mentor_id);
+			$before=array_key_exists('points_gained_given',$_before)?$_before['points_gained_given']:0;
+			$new=strval($before+$amount);
+			$GLOBALS['FORUM_DRIVER']->set_custom_field($mentor_id,'points_gained_given',$new);
 
-				if (array_key_exists($mentor_id,$TOTAL_POINTS_CACHE)) $TOTAL_POINTS_CACHE[$mentor_id]+=$amount;
-				if ((array_key_exists($mentor_id,$POINT_INFO_CACHE)) && (array_key_exists('points_gained_given',$POINT_INFO_CACHE[$mentor_id])))
-					$POINT_INFO_CACHE[$mentor_id]['points_gained_given']+=$amount;
-			}
+			if (array_key_exists($mentor_id,$TOTAL_POINTS_CACHE)) $TOTAL_POINTS_CACHE[$mentor_id]+=$amount;
+			if ((array_key_exists($mentor_id,$POINT_INFO_CACHE)) && (array_key_exists('points_gained_given',$POINT_INFO_CACHE[$mentor_id])))
+				$POINT_INFO_CACHE[$mentor_id]['points_gained_given']+=$amount;
 
 		}
 

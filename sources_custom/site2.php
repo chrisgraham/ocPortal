@@ -68,7 +68,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 		$text2=$_text2->to_assembly();
 		if (get_site_default_lang()!=$lang)
 		{
-			$non_trans__text2=comcode_to_tempcode($non_trans_result,$page_submitter,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,60,NULL,($being_included || (strpos($codename,'panel_')!==false))?'panel':NULL);
+			$non_trans__text2=comcode_to_tempcode($non_trans_result,$page_submitter,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,60,($being_included || (strpos($codename,'panel_')!==false))?'panel':NULL);
 			$non_trans_text2=$non_trans__text2->to_assembly();
 		}
 		$LAX_COMCODE=$temp;

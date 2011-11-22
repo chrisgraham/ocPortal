@@ -1146,7 +1146,7 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=
 			{
 				if ($continuation!='') $out->attach($continuation);
 				$continuation='';
-				$ret=read_single_uncompiled_variable($text,$symbol_pos,$symbol_len);
+				$ret=read_single_uncompiled_variable($text,$symbol_pos,$symbol_len,$theme);
 				if ($ret[1]==TC_DIRECTIVE)
 				{
 					if ($ret[2]=='START')
@@ -1201,10 +1201,13 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=
  * @param  string				The full text that is being parsed (we only look into this - the whole thing will be passed into PHP by reference, hence avoiding us a memory block copy)
  * @param  integer			The position we are looking at in the text
  * @param  integer			The length of our variable
+ * @param  ?ID_TEXT			The theme it is for (NULL: current theme)
  * @return array				The tempcode variable array that our variable gets represented of
  */
-function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len)
+function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=NULL)
 {
+	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
+	
 	$type=TC_PARAMETER;
 	$escaped=array();
 	$mode=SYMBOL_PARSE_NAME;
@@ -1267,7 +1270,7 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len)
 							$param[$params-1]=$t;
 							$dirty_param=true;
 						}
-						$ret=read_single_uncompiled_variable($text,$symbol_pos,$symbol_len);
+						$ret=read_single_uncompiled_variable($text,$symbol_pos,$symbol_len,$theme);
 						$param[$params-1]->bits[]=$ret;
 						break;
 

@@ -36,6 +36,7 @@ class Hook_comcode_link_handler_cnn
 	 */
 	function bind($link,$link_captions_title,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits)
 	{
+		$matches=array();
 		if (preg_match('#^http://(edition\.)?cnn\.com/video/[\#\?]/(video/)?([\w/\.]+)#',$link,$matches)!=0)
 		{
 			global $IMPORTED_CUSTOM_COMCODE;

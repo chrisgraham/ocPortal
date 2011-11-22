@@ -54,7 +54,7 @@ class Module_cms_booking extends standard_aed_module
 	function get_sp_overrides()
 	{
 		require_lang('booking');
-		return array('submit_cat_highrange_content'=>array(0,'ADD_BOOKABLE'),'edit_cat_highrange_content'=>array(0,'EDIT_BOOKABLE'),'delete_cat_highrange_content'=>array(0,'DELETE_BOOKABLE')));
+		return array('submit_cat_highrange_content'=>array(0,'ADD_BOOKABLE'),'edit_cat_highrange_content'=>array(0,'EDIT_BOOKABLE'),'delete_cat_highrange_content'=>array(0,'DELETE_BOOKABLE'));
 	}
 
 	/**
@@ -226,8 +226,8 @@ class Module_cms_booking extends standard_aed_module
 		}
 		$fields->attach(form_input_multi_list(do_lang_tempcode('BOOKABLE_BLACKS'),do_lang_tempcode('DESCRIPTION_BOOKABLE_BLACKS'),'blacks',$_blacks));
 
-		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_FROM'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_FROM'),'active_from',false,false,array(0,0,$details['active_from_month'],$details['active_from_day'],$details['active_from_year'])),10,NULL,NULL,NULL,true,get_server_timezone()));
-		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_TO'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_TO'),'active_to',true,true,is_null($details['active_to_month'])?NULL:array(0,0,$details['active_to_month'],$details['active_to_day'],$details['active_to_year'])),10,NULL,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_FROM'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_FROM'),'active_from',false,false,false,array(0,0,$details['active_from_month'],$details['active_from_day'],$details['active_from_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_TO'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_TO'),'active_to',true,true,false,is_null($details['active_to_month'])?NULL:array(0,0,$details['active_to_month'],$details['active_to_day'],$details['active_to_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
 
 		$fields->attach(form_input_integer(do_lang_tempcode('SORT_ORDER'),do_lang_tempcode('DESCRIPTION_SORT_ORDER'),'sort_order',$details['sort_order'],true));
 
@@ -414,7 +414,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',is_null($details['title'])?'':get_translated_text($details['title']),true));
 		$fields->attach(form_input_line(do_lang_tempcode('PRICE'),do_lang_tempcode('DESCRIPTION_SUPPLEMENT_PRICE'),'price',float_to_raw_string($details['price']),true));
 		$fields->attach(form_input_tick(do_lang_tempcode('PRICE_IS_PER_PERIOD'),do_lang_tempcode('DESCRIPTION_PRICE_IS_PER_PERIOD'),'price_is_per_period',$details['price_is_per_period']==1));
-		$fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_QUANTITIES'),do_lang_tempcode('DESCRIPTION_SUPPORTS_QUANTITIES'),'supports_quantities',$details['supports_quantities']==));
+		$fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_QUANTITIES'),do_lang_tempcode('DESCRIPTION_SUPPORTS_QUANTITIES'),'supports_quantities',$details['supports_quantities']==1));
 		//$fields->attach(form_input_line(do_lang_tempcode('PROMO_CODE'),do_lang_tempcode('DESCRIPTION_PROMO_CODE'),'promo_code',$details['promo_code'],true));
 		$fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_NOTES'),do_lang_tempcode('DESCRIPTION_SUPPORTS_NOTES'),'supports_notes',$details['supports_notes']==1));
 		$fields->attach(form_input_integer(do_lang_tempcode('SORT_ORDER'),do_lang_tempcode('DESCRIPTION_SORT_ORDER'),'sort_order',$details['sort_order'],true));
@@ -599,8 +599,8 @@ class Module_cms_booking_blacks extends standard_aed_module
 		$hidden->attach(form_input_hidden('timezone',get_server_timezone()));
 
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_date(do_lang_tempcode('BLACKED_FROM'),do_lang_tempcode('DESCRIPTION_BLACKED_FROM'),'blacked_from',false,false,array(0,0,$details['blacked_from_month'],$details['blacked_from_day'],$details['blacked_from_year'])),10,NULL,NULL,NULL,true,get_server_timezone()));
-		$fields->attach(form_input_date(do_lang_tempcode('BLACKED_TO'),do_lang_tempcode('DESCRIPTION_BLACKED_TO'),'blacked_to',false,false,array(0,0,$details['blacked_to_month'],$details['blacked_to_day'],$details['blacked_to_year'])),10,NULL,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('BLACKED_FROM'),do_lang_tempcode('DESCRIPTION_BLACKED_FROM'),'blacked_from',false,false,false,array(0,0,$details['blacked_from_month'],$details['blacked_from_day'],$details['blacked_from_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('BLACKED_TO'),do_lang_tempcode('DESCRIPTION_BLACKED_TO'),'blacked_to',false,false,false,array(0,0,$details['blacked_to_month'],$details['blacked_to_day'],$details['blacked_to_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
 		$fields->attach(form_input_text(do_lang_tempcode('BLACKED_EXPLANATION'),do_lang_tempcode('DESCRIPTION_BLACKED_EXPLANATION'),'blacked_explanation',is_null($details['blacked_explanation'])?'':get_translated_text($details['blacked_explanation']),true));
 
 		$_bookables=new ocp_tempcode();
@@ -826,9 +826,9 @@ class Module_cms_booking_bookings extends standard_aed_module
 		if (!array_key_exists(0,$_bookable)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$bookable=$_bookable[0];
 
-		$fields->attach(form_input_date(do_lang_tempcode('FROM'),'','bookable_'.strval($details['bookable_id']).'_date_from',false.false,array(0,0,$details['start_month'],$details['start_day'],$details['start_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('FROM'),'','bookable_'.strval($details['bookable_id']).'_date_from',false,false,false,array(0,0,$details['start_month'],$details['start_day'],$details['start_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
 		if ($bookable[0]['dates_as_ranges']==1)
-			$fields->attach(form_input_date(do_lang_tempcode('TO'),'','bookable_'.strval($details['bookable_id']).'_date_to',false.false,array(0,0,$details['end_month'],$details['end_day'],$details['end_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
+			$fields->attach(form_input_date(do_lang_tempcode('TO'),'','bookable_'.strval($details['bookable_id']).'_date_to',false,false,false,array(0,0,$details['end_month'],$details['end_day'],$details['end_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
 		$fields->attach(form_input_integer(do_lang_tempcode('QUANTITY'),'','bookable_'.strval($details['bookable_id']).'_quantity',$details['quantity'],true));
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),'','bookable_'.strval($details['bookable_id']).'_notes',$details['notes'],false));
 
@@ -839,10 +839,10 @@ class Module_cms_booking_bookings extends standard_aed_module
 		{
 			$quantity=0;
 			$notes='';
-			if (array_key_exists($supplement_row['id'],$supplements))
+			if (array_key_exists($supplement_row['id'],$details['supplements']))
 			{
-				$quantity=$supplements[$supplement_row['id']]['quantity'];
-				$notes=$supplements[$supplement_row['id']]['notes'];
+				$quantity=$details['supplements'][$supplement_row['id']]['quantity'];
+				$notes=$details['supplements'][$supplement_row['id']]['notes'];
 			}
 			
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SUPPLEMENT',get_translated_tempcode($supplement_row['title'])))));
@@ -852,7 +852,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 				$fields->attach(form_input_integer(do_lang_tempcode('QUANTITY'),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity,true));
 			} else
 			{
-				$fields->attach(form_input_tick(get_translated_tempcode($supplement_row['title']),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity==1,true));
+				$fields->attach(form_input_tick(get_translated_tempcode($supplement_row['title']),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity==1));
 			}
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_notes',$notes,false));
 		}

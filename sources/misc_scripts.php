@@ -538,13 +538,14 @@ function block_helper_script()
 	}
 	elseif ($type=='step2') // Ask for block fields
 	{
-		$defaults=get_param('parse_defaults','',true);
+		$defaults=array();
+
+		$__defaults=get_param('parse_defaults','',true);
 		
-		$_defaults=preg_replace('#^\[block\s*#','',preg_replace('#\][^\[\]]*\[/block\]#Us','',$defaults));
+		$_defaults=preg_replace('#^\[block\s*#','',preg_replace('#\][^\[\]]*\[/block\]#Us','',$__defaults));
 		if ($_defaults!='')
 		{
 			if (substr($_defaults,0,1)=='=') $_defaults='param'.$_defaults;
-			$defaults=array();
 			$current_tag='';
 			$current_value='';
 			$in_tag=false;

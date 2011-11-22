@@ -169,7 +169,6 @@ function init__validation()
 			if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
 			
 			unset($lang);
-			unset($allow_fail);
 
 			switch ($a)
 			{

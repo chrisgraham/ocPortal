@@ -67,8 +67,8 @@ function xml_dump_script()
 		{
 			$default_selected=
 				(((!is_null($from)) && ($table_name>=$from)) ||
-				((!is_null($only)) && (in_array($table_name,$only)))) &&
-				((!is_null($skip)) || (!in_array($table_name,$skip)))
+				((!is_null($only)) && (in_array($table_name,explode(',',$only))))) &&
+				((!is_null($skip)) || (!in_array($table_name,explode(',',$skip))))
 			;
 
 			$missing=!in_array(get_table_prefix().$table_name,$mysql_tables);

@@ -68,7 +68,7 @@ function bookables_ical_script()
 		echo "URL:".ical_escape($url)."\n";
 
 		$time=mktime(0,0,0,$event['month'],$event['day'],$event['year']);
-		$time2=NULL;
+		$time2=mixed();
 		if ($event['cycle_type']!='none')
 		{
 			$parts=explode(' ',$event['cycle_type']);
@@ -158,13 +158,7 @@ function bookings_ical_script()
 	echo "PRODID:-//ocProducts/ocPortal//NONSGML v1.0//EN\n";
 	echo "CALSCALE:GREGORIAN\n";
 	$bookable_category=$GLOBALS['SITE_DB']->query_value('bookable','categorisation',array('id'=>$id));
-	if ((is_null($filter)) || (!array_key_exists($filter,$categories)))
-	{
-		echo "X-WR-CALNAME:".ical_escape(get_site_name().': '.do_lang('BOOKINGS'))."\n";
-	} else
-	{
-		echo "X-WR-CALNAME:".ical_escape(get_site_name().': '.do_lang('BOOKINGS').': '.$categories[$filter])."\n";
-	}
+	echo "X-WR-CALNAME:".ical_escape(get_site_name().': '.do_lang('BOOKINGS').': '.$bookable_category)."\n";
 
 	require_code('booking2');
 	require_lang('booking');
@@ -200,7 +194,7 @@ function bookings_ical_script()
 
 			if (!is_guest($booking['member_id']))
 				echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($booking['member_id'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_link($booking['member_id'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($booking['member_id']))."\n";
-			echo "CATEGORIES:".ical_escape($bookable_category."\n";
+			echo "CATEGORIES:".ical_escape($bookable_category)."\n";
 			echo "CLASS:PRIVATE\n";
 			echo "STATUS:".(($booking['paid_at']!==NULL)?'CONFIRMED':'TENTATIVE')."\n";
 			echo "UID:".ical_escape(strval($booking['id']).'-booking@'.get_base_url())."\n";
@@ -217,7 +211,7 @@ function bookings_ical_script()
 	}
 
 	// Show free slots
-	$codes_in_total=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_value('bookable_codes','code',array('bookable_id'=>$bookable_id)));
+	$codes_in_total=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_value('bookable_codes','code',array('bookable_id'=>$id)));
 	for ($i=time();$i<=$max_time;$i+=strtotime('+1 day',$i))
 	{
 		$day=intval(date('d',$i));

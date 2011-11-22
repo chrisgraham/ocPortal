@@ -1159,7 +1159,7 @@ function check_method($c,$c_pos,$function_guard='')
 			return actual_check_method($class,$method,$params,$c_pos,$function_guard);
 		}
 
-		if (($c[1][2][0]=='DEREFERENCE') && (count($c[1][2][2])==0))
+		if ((isset($c[1][2][0])) && ($c[1][2][0]=='DEREFERENCE') && (count($c[1][2][2])==0))
 		{
 			$object=$c[1][1];
 			$method=$c[1][2][1][1];
@@ -1850,11 +1850,7 @@ function check_expression($e,$assignment=false,$equate_false=false,$function_gua
 function check_variable($variable,$reference=false)
 {
 	$identifier=$variable[1];
-	if (is_array($identifier))
-	{
-		var_dump($variable);
-		exit();
-	}
+	if (is_array($identifier)) return;
 
 	global $LOCAL_VARIABLES;
 	if ((!isset($LOCAL_VARIABLES[$identifier])) && ($identifier!='this') && !((is_array($identifier) && (in_array($identifier[0],array('CALL_METHOD'/*TODO: Add more here*/))))))
@@ -1919,6 +1915,9 @@ function check_variable($variable,$reference=false)
 
 function scan_extractive_expressions($variable)
 {
+	if (!is_array($variable)) return;
+	if ($variable==array()) return;
+	
 	if (($variable[0]=='ARRAY_AT') || ($variable[0]=='CHAR_OF_STRING'))
 	{
 		check_expression($variable[1]);

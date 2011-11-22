@@ -72,17 +72,21 @@ class Block_side_amazon_wishlist
 		require_css('amazon_wishlist');
 
 		$i = 0;
-		do {
+		do
+		{
 			$i++;
 
-			$url = $this->createSignature("http://webservices.amazon.".$domain."/onca/xml?AWSAccessKeyId=".$access_key."&ListId=".$wishlist_id."&ListType=WishList&Operation=ListLookup&ProductPage=".$i."&ResponseGroup=Request,ListFull&Service=AWSECommerceService&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2008-09-17");//2");
+			$url = $this->createSignature("http://webservices.amazon.".$domain."/onca/xml?AWSAccessKeyId=".$access_key."&ListId=".strval($wishlist_id)."&ListType=WishList&Operation=ListLookup&ProductPage=".$i."&ResponseGroup=Request,ListFull&Service=AWSECommerceService&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2008-09-17");//2");
 
 			$xml_url = http_download_file($url);
 			$items = simplexml_load_string($xml_url);
 
 			if(!empty($items->Lists->List->ListItem))
-				foreach($items->Lists->List->ListItem as $item) {
-					if($item->QuantityReceived=="0") {
+			{
+				foreach($items->Lists->List->ListItem as $item)
+				{
+					if($item->QuantityReceived=="0")
+					{
 						$url = $this->createSignature("http://webservices.amazon.".$domain."/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=".$access_key."&Operation=ItemLookup&IdType=ASIN&ItemId=".$item->Item->ASIN."&MerchantId=All&ResponseGroup=Medium&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2007-07-16");//2");
 
 						$xml_url = http_download_file($url);
@@ -91,7 +95,9 @@ class Block_side_amazon_wishlist
 						$out.='<div class="amazon_wishlist"><img src="' . $itemDetails->Items->Item->SmallImage->URL . '" width="22"  /> <a href="' . $itemDetails->Items->Item->DetailPageURL . '" title="' . htmlspecialchars($item->Item->ItemAttributes->Title) . '">' . $item->Item->ItemAttributes->Title . '</a></div><br />';
 					}
 				}
-		} while($items->Lists->List->TotalPages>$i);
+			}
+		}
+		while($items->Lists->List->TotalPages>$i);
 
 
 		return do_template('BLOCK_SIDE_AMAZON_WISHLIST',array('TITLE'=>$title,'CONTENT'=>$out));
@@ -104,12 +110,15 @@ class Block_side_amazon_wishlist
 	 * @param  LONG_TEXT additional url params
 	 * @return SHORT_TEXT Amazon web service URL with signature
 	 */
-	function createSignature($url,$params = '') {
+	function createSignature($url,$params = '')
+	{
 		global $secret_key;
 		$url_parts = parse_url($url);
+		$query=array();
 		parse_str($url_parts['query'],$query);
 		uksort($query,"strcasecmp");
-		foreach($query as $key => $value) {
+		foreach($query as $key => $value)
+		{
 			$params .= $key."=".str_replace(array(":",","),array("%3A","%2C"),$value)."&";
 		}
 		$signature = base64_encode(hash_hmac('sha256',"GET\n".$url_parts['host']."\n".$url_parts['path']."\n".substr($params,0,-1),$secret_key,true));

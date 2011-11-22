@@ -314,7 +314,6 @@ function get_relation_map()
 		'review_supplement.r_post_id'=>'f_posts.id',
 		'review_supplement.r_topic_id'=>'f_topics.id',
 		'award_archive.a_type_id'=>'award_types.id',
-		'import_id_remap.id_new'=>'anything.id',
 		'calendar_events.e_type'=>'calendar_types.id',
 		'calendar_reminders.e_id'=>'calendar_events.id',
 		'calendar_interests.t_type'=>'calendar_types.id',

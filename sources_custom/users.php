@@ -130,7 +130,7 @@ function check_openid_login($member)
 					elseif (array_key_exists('namePerson',$attributes)) $username=$attributes['namePerson'];
 					elseif ($email!='') $username=substr($email,0,strpos($email,'@'));
 
-					if (($username!='') && ($type!='ldap'))
+					if ($username!='')
 					{
 						$_username=$username;
 						$i=1;

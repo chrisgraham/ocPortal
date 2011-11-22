@@ -117,7 +117,7 @@ function init__zones()
  */
 function zone_black_magic_filterer($path,$relative=false)
 {
-	static $no_collapse_zones;
+	static $no_collapse_zones=NULL;
 	if ($no_collapse_zones===NULL) $no_collapse_zones=(get_option('collapse_user_zones',true)!=='1');
 	if ($no_collapse_zones) return $path;
 	

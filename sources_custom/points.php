@@ -20,6 +20,7 @@ function total_points($member)
 		$totalised_group_points+=isset($group_points[$group]['p_points_one_off'])?$group_points[$group]['p_points_one_off']:0;
 	}
 
+	global $TOTAL_POINTS_CACHE;
 	$TOTAL_POINTS_CACHE[$member]=$points+$totalised_group_points;
 	return $points+$totalised_group_points;
 }

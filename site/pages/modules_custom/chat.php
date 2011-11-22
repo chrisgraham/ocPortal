@@ -149,7 +149,7 @@ class Mx_chat extends Module_chat
 
 		$messages_php=find_script('messages');
 		$password_hash=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
-		return do_template('CHAT_SCREEN',array('_GUID'=>'867a0b050c050c81d33482d131783eb0','MESSAGES_PHP'=>$messages_php,'PASSWORD_HASH'=>$password_hash,'ROOM_ID'=>$room_id,'CHAT_SOUND'=>get_chat_sound_tpl(),'ROOM_ID'=>$room_id,'DEBUG'=>$debug,'OPTIONS_URL'=>$cs_post_url,'ROOM_NAME'=>$id,'YOUR_NAME'=>$yourname,'SUBMIT_VALUE'=>$posting_name,'INTRODUCTION'=>'','TITLE'=>$title,'LINKS'=>$links));
+		return do_template('CHAT_SCREEN',array('_GUID'=>'867a0b050c050c81d33482d131783eb0','MESSAGES_PHP'=>$messages_php,'PASSWORD_HASH'=>$password_hash,'CHAT_SOUND'=>get_chat_sound_tpl(),'ROOM_ID'=>$room_id,'DEBUG'=>$debug,'OPTIONS_URL'=>$cs_post_url,'ROOM_NAME'=>'','YOUR_NAME'=>$yourname,'SUBMIT_VALUE'=>$posting_name,'INTRODUCTION'=>'','TITLE'=>$title,'LINKS'=>$links));
 	}
 
 	/**

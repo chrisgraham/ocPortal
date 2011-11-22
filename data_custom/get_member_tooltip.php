@@ -51,9 +51,10 @@ require_code('ocf_members2');
 $member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username(get_param('member',''));
 
 header('Content-Type: text/xml');
-echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
+echo '<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>';
 echo '<request><result>';
 echo '<![CDATA[';
-ocf_show_member_box($member_id)->evaluate_echo();	// '' will be returned if member id is invalid.
+$box=ocf_show_member_box($member_id);
+$box->evaluate_echo();	// '' will be returned if member id is invalid.
 echo ']]>';
 echo '</result></request>';

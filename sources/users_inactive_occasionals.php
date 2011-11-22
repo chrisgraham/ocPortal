@@ -168,7 +168,7 @@ function create_session($member)
 
 		// Store session
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		$row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>0,'session_invisible'=>0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id','',true),0,80));
+		$row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>0,'session_invisible'=>0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
 		$GLOBALS['SITE_DB']->query_insert('sessions',$row);
 
 		$SESSION_CACHE[$new_session]=$row;
@@ -182,7 +182,7 @@ function create_session($member)
 		$row=array('last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>0);
 		$big_change=($new_session_row['last_activity']<time()-10) || ($new_session_row['session_confirmed']!=0) || ($new_session_row['ip']!=$row['ip']);
 		if ($big_change)
-			$GLOBALS['SITE_DB']->query_update('sessions',$row,array('the_session'=>$new_session,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>get_param('type','',true),'the_id'=>either_param('id','',true)),'',1);
+			$GLOBALS['SITE_DB']->query_update('sessions',$row,array('the_session'=>$new_session,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>get_param('type','',true),'the_id'=>either_param('id','')),'',1);
 
 		$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$row);
 	}

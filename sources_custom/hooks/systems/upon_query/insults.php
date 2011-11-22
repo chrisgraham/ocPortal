@@ -40,16 +40,17 @@ class upon_query_insults
 
 			$first_post=get_translated_text($first_post);
 
-			$insult=explode('[b]',$first_post);
-			$insult=(isset($insult[1]) && strlen($insult[1])>0)?$insult[1]:'';
-			$insult=explode('[/b]',$insult);
-			$insult=(isset($insult[0]) && strlen($insult[0])>0)?$insult[0]:'';
+			$_insult=explode('[b]',$first_post);
+			$insult=(isset($_insult[1]) && strlen($_insult[1])>0)?$_insult[1]:'';
+			$_insult=explode('[/b]',$insult);
+			$insult=(isset($_insult[0]) && strlen($_insult[0])>0)?$_insult[0]:'';
 
 			//old code that uses quotes
 			//$insult=explode('"',$first_post);
 			//$insult=(isset($insult[1]) && strlen($insult[1])>0)?$insult[1]:'';
 
-			if($insult<>'') {
+			if($insult!='')
+			{
 				$get_reply='';
 				if (is_file(get_file_base().'/text_custom/'.user_lang().'/insults.txt'))
 				{		
@@ -67,7 +68,7 @@ class upon_query_insults
 
 
 
-				if($get_reply<>'')
+				if($get_reply!='')
 				{
 					//get PT
 					$pt=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE id= '.strval($topic_id).' ',1, NULL,true);
@@ -79,8 +80,8 @@ class upon_query_insults
 						//start comparing insult reply and the post
 						if (levenshtein(trim(strtolower($post)),trim(strtolower($get_reply)))<intval(0.1*strlen($get_reply)))
 						{ 
-							$insult_points=get_option('insult_points', true);
-							$insult_points=(isset($insult_points) && $insult_points>0)?$insult_points:10;
+							$_insult_points=get_option('insult_points', true);
+							$insult_points=(isset($_insult_points) && intval($_insult_points)>0)?intval($_insult_points):10;
 
 							// give points
 							require_code('points2');

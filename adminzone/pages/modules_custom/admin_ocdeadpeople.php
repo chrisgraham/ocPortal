@@ -156,11 +156,6 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 		);
 	}
 
-	/**
-	 * The UI to view a past newsletter.
-	 *
-	 * @return tempcode		The UI
-	 */
 	function view()
 	{
 		$id=NULL;
@@ -174,7 +169,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 		$points_per_spread=10;
 		$enabled=do_lang_tempcode('DISEASE_DISABLED');
 
-		$id=get_param('id',0);
+		$id=get_param_integer('id',0);
 		if($id>0)
 		{
 			$rows=$GLOBALS['FORUM_DB']->query_select('diseases',array('*'),array('id'=>$id));

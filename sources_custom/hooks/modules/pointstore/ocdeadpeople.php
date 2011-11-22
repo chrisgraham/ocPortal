@@ -144,8 +144,8 @@ class Hook_pointstore_ocdeadpeople
 		//default values
 		$sick=0;
 
-		$get_cure=get_param('cure',0);
-		$get_immunization=get_param('immunization',0);
+		$get_cure=get_param_integer('cure',0);
+		$get_immunization=get_param_integer('immunization',0);
 
 		$cure=($get_cure==1)?1:0;
 		$immunization=($get_immunization==1)?1:0;

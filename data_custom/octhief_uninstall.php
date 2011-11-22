@@ -55,22 +55,26 @@ require_code('database_action');
 destrictify();
 
 $octhief_type=get_option('octhief_type', true);
-if(is_null($octhief_type)) {
+if(is_null($octhief_type))
+{
 	delete_config_option('octhief_type');
 }
 
 $octhief_number=get_option('octhief_number', true);
-if(!is_null($octhief_number)) {
+if(!is_null($octhief_number))
+{
 	delete_config_option('octhief_number');
 }
 
 $octhief_points=get_option('octhief_points', true);
-if(!is_null($octhief_points)) {
+if(!is_null($octhief_points))
+{
 	delete_config_option('octhief_points');
 }
 
 $octhief_group=get_option('octhief_group', true);
-if(!is_null($octhief_group)) {
+if(!is_null($octhief_group))
+{
 	delete_config_option('octhief_group');
 }
 

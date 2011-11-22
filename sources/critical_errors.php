@@ -130,7 +130,8 @@ if (!function_exists('critical_error'))
 						} else
 						{
 							@ob_start();
-							/*var_dump*/var_export($value);
+							if (function_exists('var_export'))
+								/*var_dump*/var_export($value);
 							$_value=ob_get_contents();
 							ob_end_clean();
 						}

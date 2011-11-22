@@ -67,8 +67,8 @@ function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$lon
 		return find_nearest_location($latitude,$longitude,$latitude_field_id,$longitude_field_id,$error_tolerance*1.3);
 	}
 
-	$best=NULL;
-	$best_at=NULL;
+	$best=mixed();
+	$best_at=mixed();
 	foreach ($locations as $l)
 	{
 		$dist=sqrt($l['l_latitude']*$l['l_latitude']+$l['l_longitude']*$l['l_longitude']);

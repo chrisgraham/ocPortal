@@ -45,13 +45,14 @@ class upon_query_add_mentor
 			$mentor_usergroup_id=0; //0 ?
 
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-			foreach($groups as $group_id => $group) {
+			foreach($groups as $group_id => $group)
+			{
 				if($group == $mentor_usergroup) $mentor_usergroup_id = $group_id;
 			}
 
 			$random_mentor=$GLOBALS['FORUM_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON (g.gm_member_id=m.id AND gm_validated=1) WHERE gm_group_id='.strval($mentor_usergroup_id).' OR m_primary_group='.strval($mentor_usergroup_id).' ORDER BY RAND( ) LIMIT 1',NULL, NULL,true);
 
-			$mentor_id=(isset($random_mentor[0]['id']) && intval($random_mentor[0]['id']))?$random_mentor[0]['id']:0;
+			$mentor_id=(isset($random_mentor[0]['id']) && !is_null($random_mentor[0]['id']))?$random_mentor[0]['id']:0;
 			if ($mentor_id==0) return;
 			$member_id=$ret;
 			$time=time();

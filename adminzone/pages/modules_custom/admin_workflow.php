@@ -251,7 +251,6 @@ class Module_admin_workflow extends standard_aed_module
 		// doesn't require Javascript.
 		$all_points = get_all_approval_points();		// We need to display which points are available
 		$points_text = array_values($all_points);		// An array of approval point names (strings)
-		$points_IDs = array_map('strval',array_keys($all_points));		// An array of approval point IDs (strval(integers))
 		
 		if ($points_text==array())
 		{
@@ -266,7 +265,7 @@ class Module_admin_workflow extends standard_aed_module
 		$fields->attach(form_input_text(do_lang_tempcode('WORKFLOW_APPROVAL_POINTS'),do_lang_tempcode('APPROVAL_POINTS_DESCRIPTION',$points_list),'points',implode("\n",$approval_points),true,NULL,true));
 
 		// Add an option to make this default
-		$fields->attach(form_input_tick(do_lang('DEFAULT_WORKFLOW'),do_lang('DEFAULT_WORKFLOW_DESCRIPTION'),'is_default',$default,NULL,'1',false));
+		$fields->attach(form_input_tick(do_lang('DEFAULT_WORKFLOW'),do_lang('DEFAULT_WORKFLOW_DESCRIPTION'),'is_default',$default));
 		
 		// Actions
 		$fields2 = new ocp_tempcode();
@@ -355,7 +354,7 @@ class Module_admin_workflow extends standard_aed_module
 			// Found one, use it
 			$workflow_id = current(array_keys($workflows,$name));
 		}
-		else if ($insert_if_needed)
+		elseif ($insert_if_needed)
 		{
 			// Couldn't find any. Let's make one, with a dummy approval point.
 			// HACKHACK We should use a normalised table with an ID column
@@ -411,13 +410,13 @@ class Module_admin_workflow extends standard_aed_module
 			
 			// Make sure that there are groups allowed to approve this point
 			$this_key = NULL;
-			foreach (array_keys($_POST,$p,true) as $post_key)
+			foreach (array_keys($_POST) as $post_key)
 			{
 				if (strpos($post_key,'code_')===0)
 				{
 					$this_key = intval(str_replace('code_','',$post_key));
 				}
-				else if (strpos($post_key,'redef_')===0)
+				elseif (strpos($post_key,'redef_')===0)
 				{
 					$this_key = intval(str_replace('redef_','',$post_key));
 				}
@@ -931,7 +930,7 @@ class Module_admin_workflow extends standard_aed_module
 				// Found an undefined point. We need more information.
 				$clarify_points[] = $p;
 			}
-			else if ($redefining)
+			elseif ($redefining)
 			{
 				$redefine_points[] = $p;
 			}
@@ -1015,6 +1014,8 @@ class Module_admin_workflow extends standard_aed_module
 			}
 		}
 
+		$self_url=get_self_url();
+
 		return do_template('FORM_SCREEN',array(
 			'TITLE'=>do_template('SCREEN_TITLE',array(
 				'TITLE'=>do_lang('DEFINE_WORKFLOW_POINTS'),
@@ -1023,7 +1024,7 @@ class Module_admin_workflow extends standard_aed_module
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
 			'HIDDEN'=>$hidden,
-			'URL'=>is_object(get_self_url())? get_self_url()->evaluate() : get_self_url(),
+			'URL'=>is_object($self_url)?$self_url->evaluate():$self_url,
 			'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),
 		));
 	}

@@ -39,14 +39,14 @@ class Hook_cron_insults
 		if ($last_time>time()-24*60*60) return; //run it once a day
 		set_value('last_insult_time',strval($time));
 	
-		$insult_points=get_option('insult_points', true);
-		if(is_null($insult_points))
+		$_insult_points=get_option('insult_points', true);
+		if(is_null($_insult_points))
 		{
 			//add option and default value
 			require_code('database_action');
 			add_config_option('INSULT_POINTS','insult_points','integer','return \'10\';','POINTS','INSULT_TITLE');
 		}
-		$insult_points=(isset($insult_points) && $insult_points>0)?intval($insult_points):10;
+		$insult_points=(isset($_insult_points) && is_numeric($_insult_points))?intval($_insult_points):10;
 
 		$selected_members=$GLOBALS['FORUM_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE  id <> '.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' ORDER BY RAND( ) ',2, NULL,true);
 

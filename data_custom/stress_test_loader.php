@@ -162,7 +162,7 @@ function do_work()
 	require_code('calendar2');
 	for ($i=$GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_calendar_event('','','',db_get_first_id(),'',NULL,0,random_line(),random_text(),1,1,intval(date('Y')),intval(date('m')),intval(date('d')),0,0);
+		add_calendar_event(db_get_first_id(),'',NULL,0,random_line(),random_text(),1,1,intval(date('Y')),intval(date('m')),intval(date('d')),0,0);
 	}
 	echo 'done event stuff'.chr(10);
 
@@ -200,7 +200,7 @@ function do_work()
 	for ($i=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$content_id=add_download(db_get_first_id(),random_line(),get_logo_url(),random_text(),'admin',random_text(),NULL,1,1,1,1,'',uniqid('').'.jpg',100,110,1);
-		give_award(db_get_first_id(),$content_id,$time-$i);
+		give_award(db_get_first_id(),strval($content_id),$time-$i);
 	}
 	$content_id=db_get_first_id();
 	$home_link=build_url(array('page'=>'downloads','type'=>'entry','id'=>$content_id),'site');
@@ -277,11 +277,11 @@ function do_work()
 
 	// galleries under a subcategory
 	require_code('galleries2');
-	$subcat_id=uniqid('');
-	add_gallery($subcat_id,random_line(),random_text(),'','','root');
+	$xsubcat_id=uniqid('');
+	add_gallery($xsubcat_id,random_line(),random_text(),'','','root');
 	for ($i=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_gallery(uniqid(''),random_line(),random_text(),'','',$subcat_id);
+		add_gallery(uniqid(''),random_line(),random_text(),'','',$xsubcat_id);
 	}
 	// images
 	require_code('galleries2');

@@ -58,8 +58,6 @@ class Block_side_similar_sites
 		$criteria=array_key_exists('criteria',$map)?$map['criteria']:get_option('site_scope');
 		$max=(isset($map['max']) && intval($map['max'])>0)?intval($map['max']):3;
 
-		$out = new ocp_tempcode();
-
 		$setSearchTerms = "";
 		$setSearchURL = "related:".$criteria;
 		
@@ -67,7 +65,8 @@ class Block_side_similar_sites
 
 		$out = '<ul>';
 		$links_count=0;
-		foreach($searchResultsArray as $result) {
+		foreach($searchResultsArray as $result)
+		{
 			//more details in output - page content and short url - if we need more details, i.e. for the main block we could use this
 			//$out .= '<li><strong><a href="'.$result["url"].'">'.$result["title"].'</a></strong> '.  $result["content"].' <em>'.$result["visibleUrl"].'</em></li>';
 			$links_count++;
@@ -80,7 +79,8 @@ class Block_side_similar_sites
 		return do_template('BLOCK_SIDE_SIMILAR_SITES',array('TITLE'=>do_lang_tempcode('BLOCK_SIMILAR_SITES_TITLE'),'CONTENT'=>$out,'CRITERIA'=>$criteria));
 	}
 
-	function retrieveGoogleSearch($searchTerms="ocportal",$searchURL="related:ocportal.com") {
+	function retrieveGoogleSearch($searchTerms="ocportal",$searchURL="related:ocportal.com")
+	{
 		require_code('files');
 		$googleBaseUrl = "http://ajax.googleapis.com/ajax/services/search/web";
 		$googleBaseQuery = "?v=1.0&rsz=large&q=";

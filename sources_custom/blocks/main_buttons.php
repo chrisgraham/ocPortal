@@ -140,12 +140,10 @@ class Block_main_buttons
 		$height=(!empty($map['height']))?$map['height']:'100%';//default: 100%
 
 		$set_height = '';
-		if($height<>'100%')
+		if($height!='100%')
 		{
 			$set_height = ' style="overflow: auto; width: 100%!important; height: '.$height.'!important;" ';
 		}
-
-
 
 
 		require_code('banners');

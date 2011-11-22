@@ -970,6 +970,7 @@ class ocp_tempcode
 	 * The opposite of to_assembly - it decodes a tempcode storage representation and turns it into a proper tempcode object.
 	 *
 	 * @param  string			The assembled tempcode
+	 * @return boolean		Success status
 	 */
 	function from_assembly(&$raw_data)
 	{
@@ -988,6 +989,8 @@ class ocp_tempcode
 //				handle_symbol_preprocessing($bit);
 
 		$this->codename='';
+		
+		return true;
 	}
 
 	/**

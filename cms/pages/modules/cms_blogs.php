@@ -381,7 +381,7 @@ class Module_cms_blogs extends standard_aed_module
 			$start_hour=post_param_integer('schedule_hour');
 			$start_minute=post_param_integer('schedule_minute');
 			require_code('calendar2');
-			add_calendar_event('','','',db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+			add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
 		}
 
 		return strval($id);

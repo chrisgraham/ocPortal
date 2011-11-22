@@ -53,24 +53,28 @@ class Hook_pointstore_bank
 
 		$tablename_exists=$GLOBALS['SITE_DB']->table_exists('bank');
 
-		if(!$tablename_exists) {
-		  $GLOBALS['SITE_DB']->create_table('bank',array(
-			'id'=>'*AUTO',
-			'user_id'=>'INTEGER',
-			'amount'=>'INTEGER',
-			'divident'=>'INTEGER',
-			'add_time'=>'?TIME',
+		if(!$tablename_exists)
+		{
+			$GLOBALS['SITE_DB']->create_table('bank',array(
+				'id'=>'*AUTO',
+				'user_id'=>'INTEGER',
+				'amount'=>'INTEGER',
+				'divident'=>'INTEGER',
+				'add_time'=>'?TIME',
 		   ));
 		}
 
 
-		$bank_divident=get_option('bank_divident', true);
-		if(is_null($bank_divident)) {
+		$_bank_divident=get_option('bank_divident', true);
+		if(is_null($_bank_divident))
+		{
 			//add option and default value
 			add_config_option('BANK_DIVIDENT','bank_divident','integer','return \'40\';','POINTSTORE','BANKING');
 			$bank_divident=4;
+		} else
+		{
+			$bank_divident=intval($_bank_divident);
 		}
-		$bank_divident=intval($bank_divident);
 
 		$title=get_page_title('BANKING');
 

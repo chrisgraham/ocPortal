@@ -18,4 +18,4 @@
  * @package		booking
  */
 
-TODO (can optionally take a filter of what bookables to allow choosing from) - for date ranges
+// TODO (can optionally take a filter of what bookables to allow choosing from) - for date ranges

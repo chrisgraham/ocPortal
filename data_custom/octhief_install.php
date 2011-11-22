@@ -55,25 +55,29 @@ require_code('database_action');
 destrictify();
 
 $octhief_type=get_option('octhief_type', true);
-if(is_null($octhief_type)) {
+if(is_null($octhief_type))
+{
 	//add option and default value
 	add_config_option('OCTHIEF_TYPE','octhief_type','list','return \'Members that are inactive, but has lots points\';','POINTSTORE','OCTHIEF_TITLE',0,'Members that are inactive, but has lots points|Members that are rich|Members that are random|Members that are in a certain usergroup');
 }
 
 $octhief_number=get_option('octhief_number', true);
-if(is_null($octhief_number)) {
+if(is_null($octhief_number))
+{
 	//add option and default value
 	add_config_option('OCTHIEF_NUMBER','octhief_number','integer','return \'1\';','POINTSTORE','OCTHIEF_TITLE');
 }
 
 $octhief_points=get_option('octhief_points', true);
-if(is_null($octhief_points)) {
+if(is_null($octhief_points))
+{
 	//add option and default value
 	add_config_option('OCTHIEF_POINTS','octhief_points','integer','return \'10\';','POINTSTORE','OCTHIEF_TITLE');
 }
 
 $octhief_group=get_option('octhief_group', true);
-if(is_null($octhief_group)) {
+if(is_null($octhief_group))
+{
 	add_config_option('OCTHIEF_GROUP','octhief_group','usergroup','return do_lang(\'MEMBER\');','POINTSTORE','OCTHIEF_TITLE');
 }
 
