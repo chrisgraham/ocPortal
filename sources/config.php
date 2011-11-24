@@ -140,7 +140,7 @@ function load_options()
 {
 	global $OPTIONS;
 	$OPTIONS=function_exists('persistant_cache_get')?persistant_cache_get('OPTIONS'):NULL;
-	if ($OPTIONS!==NULL) return;
+	if (is_array($OPTIONS)) return;
 	if (strpos(get_db_type(),'mysql')!==false)
 	{
 		global $SITE_INFO;

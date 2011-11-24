@@ -6,9 +6,9 @@
 	NULL_OK=0
 	TIME=
 	UNLIMITED=0
-	DAYS={+START,LOOP,31}<option value="{_loop_var*}"{+START,IF,{$EQ,{_loop_var},{CURRENT_DAY}}} selected="selected"{+END}>{$INTEGER_FORMAT*,{_loop_var}}</option>{+END}
-	MONTHS={+START,LOOP,12}<option value="{_loop_var*}"{+START,IF,{$EQ,{_loop_var},{CURRENT_MONTH}}} selected="selected"{+END}>{$INTEGER_FORMAT*,{_loop_var}}</option>{+END}
-	YEARS={$SET,year,{$FROM_TIMESTAMP,%Y}}{+START,WHILE,{$LT,{$GET,year},{$ADD,{MAX_DATE_YEAR},3}}}<option value="{_loop_var*}"{+START,IF,{$EQ,{_loop_var},{CURRENT_YEAR}}} selected="selected"{+END}>{$INTEGER_FORMAT*,{_loop_var}}</option>{+END}
+	DAYS={$SET,day,1}{+START,WHILE,{$LT,{$GET,day},32}}<option value="{$GET*,day}"{+START,IF,{$EQ,{$GET,day},{CURRENT_DAY}}} selected="selected"{+END}>{$GET*,day}</option>{$INC,day}{+END}
+	MONTHS={$SET,month,1}{+START,WHILE,{$LT,{$GET,month},13}}<option value="{$GET*,month}"{+START,IF,{$EQ,{$GET,month},{CURRENT_MONTH}}} selected="selected"{+END}>{$GET*,month}</option>{$INC,month}{+END}
+	YEARS={$SET,year,{$FROM_TIMESTAMP,%Y}}{+START,WHILE,{$LT,{$GET,year},{$ADD,{MAX_DATE_YEAR},4}}}<option value="{$GET*,year}"{+START,IF,{$EQ,{$GET,year},{CURRENT_YEAR}}} selected="selected"{+END}>{$GET*,year}</option>{$INC,year}{+END}
 	MIN_DATE_DAY={MIN_DATE_DAY}
 	MIN_DATE_MONTH={MIN_DATE_MONTH}
 	MIN_DATE_YEAR={MIN_DATE_YEAR}

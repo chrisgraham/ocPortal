@@ -493,6 +493,10 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<td>The user-agent string of the current user</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>{$TIMEZONE}</td>
+		<td>The server timezone</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>{$HTTP_STATUS_CODE}</td>
 		<td>Find the HTTP status code (e.g. 404) for the current request, usually 200</td>
 	</tr>

@@ -25,7 +25,7 @@
 					{+START,LOOP,SUPPLEMENTS}
 						{SUPPLEMENT_TITLE*} &times; {SUPPLEMENT_QUANTITY*}
 						{+START,IF_NON_EMPTY,{SUPPLEMENT_NOTES}}
-						({SUPPLEMENT_NOTES*})
+							({SUPPLEMENT_NOTES*})
 						{+END}
 						<br />
 					{+END}
@@ -39,7 +39,7 @@
 
 <div class="wide_table_wrap"><table class="wide_table solidborder"><tbody>
 	<tr>
-		<th>{!TOTAL}</th>
+		<th>{!TOTAL_PRICE}</th>
 		<td>{PRICE*}</td>
 	</tr>
 	<tr>

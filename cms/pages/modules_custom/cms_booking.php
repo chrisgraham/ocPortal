@@ -762,6 +762,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		}
 		$request=array();
+		if (get_param_integer('id',NULL)!==NULL) $where=array('member_id'=>get_param_integer('id'));
 		$_rows=$db->query_select($table.' r '.$join,array('DISTINCT member_id'),$where,'ORDER BY '.$orderer);
 		foreach ($_rows as $row)
 		{

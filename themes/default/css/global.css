@@ -2002,19 +2002,19 @@ button.wide_button:disabled, button.button_micro:disabled, button.button_page:di
 }
 
 .inline_image {
-	vertical-align: top;
+	vertical-align: top !important;
 }
 
 .inline_image_2 {
-	vertical-align: middle;
+	vertical-align: middle !important;
 }
 
 .inline_image_3 {
-	vertical-align: baseline;
+	vertical-align: baseline !important;
 }
 
 .inline_image_4 {
-	margin-top: -4px;
+	margin-top: -4px !important;
 }
 
 .proceed_button {

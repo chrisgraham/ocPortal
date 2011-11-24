@@ -910,6 +910,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'TIMEZONE':
+				$value=make_nice_timezone_name(get_site_timezone());
+				break;
+
 			case 'LOAD_PAGE':
 				foreach ($param as $i=>$p)
 					if (is_object($p)) $param[$i]=$p->evaluate();

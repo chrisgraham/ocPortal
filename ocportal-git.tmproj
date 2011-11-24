@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>site/pages/modules_custom/booking.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -1027,6 +1029,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>site/pages/modules_custom/booking.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>262</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>236</integer>
+		</dict>
 		<key>sources/blocks/main_comments.php</key>
 		<dict>
 			<key>caret</key>
@@ -1978,36 +1994,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
-		</dict>
-		<key>themes/default/css/global.css</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>50</integer>
-				<key>line</key>
-				<integer>3446</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>3418</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>3446</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>50</integer>
-				<key>line</key>
-				<integer>3446</integer>
-			</dict>
 		</dict>
 		<key>themes/default/css_custom/index.html</key>
 		<dict>
@@ -3076,6 +3062,10 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>site/pages/modules_custom/booking.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

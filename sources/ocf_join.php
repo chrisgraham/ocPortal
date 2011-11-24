@@ -42,6 +42,8 @@ function check_joining_allowed()
  */
 function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=true,$invites_if_enabled=true,$one_per_email_address_if_enabled=true)
 {
+	ocf_require_all_forum_stuff();
+
 	require_css('ocf');
 	require_code('ocf_members_action');
 	require_code('ocf_members_action2');
@@ -195,10 +197,13 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
  * @param  boolean		Whether to require staff confirmation (if enabled at all)
  * @param  boolean		Whether to force email address validation (if enabled at all)
  * @param  boolean		Whether to do COPPA checks (if enabled at all)
+ * @param  boolean		Whether to instantly log the user in
  * @return array			A tuple: Messages to show (currently nothing else in tuple)
  */
-function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true,$invites_if_enabled=true,$one_per_email_address_if_enabled=true,$confirm_if_enabled=true,$validate_if_enabled=true,$coppa_if_enabled=true)
+function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true,$invites_if_enabled=true,$one_per_email_address_if_enabled=true,$confirm_if_enabled=true,$validate_if_enabled=true,$coppa_if_enabled=true,$instant_login=false)
 {
+	ocf_require_all_forum_stuff();
+
 	require_css('ocf');
 	require_code('ocf_members_action');
 	require_code('ocf_members_action2');
@@ -390,9 +395,16 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	}
 	elseif ($skip_confirm)
 	{
-		$_login_url=build_url(array('page'=>'login','redirect'=>get_param('redirect',NULL)),get_module_zone('login'));
-		$login_url=$_login_url->evaluate();
-		$message->attach(do_lang_tempcode('OCF_LOGIN_INSTANT',escape_html($login_url)));
+		if ($instant_login) // Automatic instant log in
+		{
+			require_code('users_active_actions');
+			handle_active_login($username);
+		} else // Invite them to explicitly instant log in
+		{
+			$_login_url=build_url(array('page'=>'login','redirect'=>get_param('redirect',NULL)),get_module_zone('login'));
+			$login_url=$_login_url->evaluate();
+			$message->attach(do_lang_tempcode('OCF_LOGIN_INSTANT',escape_html($login_url)));
+		}
 	} else
 	{
 		if (!$skip_confirm) $message->attach(do_lang_tempcode('OCF_WAITING_CONFIRM_MAIL'));

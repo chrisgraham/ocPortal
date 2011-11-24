@@ -5,15 +5,15 @@
 	<input type="hidden" name="{STUB%}" value="1" />
 {+END}
 
-<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" tabindex="{TABINDEX*}" id="{STUB%}_day" name="{STUB%}_day"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
+<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_day" name="{STUB%}_day"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
 	<option value="">---</option>
 	{DAYS}
 </select>
-<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" tabindex="{TABINDEX*}" id="{STUB%}_month" name="{STUB%}_month"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
+<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_month" name="{STUB%}_month"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
 	<option value="">---</option>
 	{MONTHS}
 </select>
-<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" tabindex="{TABINDEX*}" id="{STUB%}_year" name="{STUB%}_year"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
+<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_year" name="{STUB%}_year"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
 	<option value="">---</option>
 	{YEARS}
 </select>
@@ -31,16 +31,16 @@
 
 	{+START,IF_PASSED,MIN_DATE_DAY}{+START,IF_PASSED,MIN_DATE_MONTH}{+START,IF_PASSED,MIN_DATE_YEAR}
 		minDate = new Date();
-		minDate.setDate(MIN_DATE_DAY);
-		minDate.setMonth(MIN_DATE_MONTH-1);
-		minDate.setFullYear(MIN_DATE_YEAR);
+		minDate.setDate({MIN_DATE_DAY%});
+		minDate.setMonth({MIN_DATE_MONTH%}-1);
+		minDate.setFullYear({MIN_DATE_YEAR%});
 	{+END}{+END}{+END}
 
 	{+START,IF_PASSED,MAX_DATE_DAY}{+START,IF_PASSED,MAX_DATE_MONTH}{+START,IF_PASSED,MAX_DATE_YEAR}
 		maxDate = new Date();
-		maxDate.setDate(MAX_DATE_DAY);
-		maxDate.setMonth(MAX_DATE_MONTH-1);
-		maxDate.setFullYear(MAX_DATE_YEAR);
+		maxDate.setDate({MAX_DATE_DAY%});
+		maxDate.setMonth({MAX_DATE_MONTH%}-1);
+		maxDate.setFullYear({MAX_DATE_YEAR%});
 	{+END}{+END}{+END}
 
 	var cal{STUB%}=null;

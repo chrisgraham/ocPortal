@@ -1,7 +1,7 @@
 {TITLE}
 
 <p>
-	{!ALREADY_MEMBER_LOGIN,{$PAGE_LINK*,:login:redirect_url={$SELF_URL&}},{HIDDEN}}
+	{!ALREADY_MEMBER_LOGIN,{$PAGE_LINK*,:login:redirect={$SELF_URL&}},{HIDDEN}}
 </p>
 
 <hr />

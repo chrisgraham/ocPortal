@@ -39,7 +39,7 @@ One user booking becomes a lot of separate bookings for separate things when it 
 /**
  * Standard code module init function.
  */
-function init_booking()
+function init__booking()
 {
 	define('SHOW_WARNINGS_UNTIL',time()+60*60*24*31*intval(get_option('bookings_show_warnings_for_months')));
 	define('MAX_AHEAD_BOOKING_DATE',time()+60*60*24*31*intval(get_option('bookings_max_ahead_months')));
@@ -51,7 +51,8 @@ function init_booking()
 function booking_price_ajax_script()
 {
 	header('Content-type: text/plain');
-	echo get_booking_request_from_form(find_booking_price());
+	$request=get_booking_request_from_form();
+	echo float_format(find_booking_price($request),2);
 }
 
 /**
@@ -122,12 +123,16 @@ function get_booking_request_from_form()
 		if ($quantity>0)
 		{
 			$start=get_input_date('bookable_'.strval($bookable_id).'_date_from');
+			if (is_null($start))
+				$start=get_input_date('bookable_date_from');
 			$start_day=intval(date('d',$start));
 			$start_month=intval(date('m',$start));
 			$start_year=intval(date('Y',$start));
 			if ($bookable['dates_are_ranges']==1)
 			{
 				$end=get_input_date('bookable_'.strval($bookable_id).'_date_to');
+				if (is_null($end))
+					$end=get_input_date('bookable_date_to');
 				$end_day=intval(date('d',$end));
 				$end_month=intval(date('m',$end));
 				$end_year=intval(date('Y',$end));
@@ -415,11 +420,11 @@ function send_booking_emails($request)
 	$customer_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 
 	// Send receipt to customer
-	$receipt=do_template('BOOKING_CONFIRM_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'REQUEST'=>make_booking_request_printable($request)));
-	mail_wrap(do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name()),static_evaluate_tempcode($receipt),$customer_email,$customer_name);
+	$receipt=do_template('BOOKING_CONFIRM_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'DETAILS'=>make_booking_request_printable($request)));
+	mail_wrap(do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name()),static_evaluate_tempcode($receipt),array($customer_email),$customer_name);
 
 	// Send notice to staff
-	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'REQUEST'=>make_booking_request_printable($request)));
+	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'DETAILS'=>make_booking_request_printable($request)));
 	mail_wrap(do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),get_site_name()),static_evaluate_tempcode($notice),NULL,NULL,'','',2);
 }
 
@@ -454,16 +459,16 @@ function make_booking_request_printable($request)
 			'NOTES'=>$_part['notes'],
 			'SUPPLEMENTS'=>array(),
 		);
-		foreach ($_part['supplements'] as $supplement)
+		foreach ($_part['supplements'] as $supplement_id=>$supplement)
 		{
-			$supplement_row=$GLOBALS['SITE_DB']->query_select('supplements',array('*'),array('id'=>$_part['supplement_id']),'',1);
+			$supplement_row=$GLOBALS['SITE_DB']->query_select('bookable_supplement',array('*'),array('id'=>$supplement_id),'',1);
 
 			$part['SUPPLEMENTS'][]=array(
 				'SUPPLEMENT_TITLE'=>get_translated_tempcode($supplement_row[0]['title']),
 				'SUPPLEMENT_PRICE'=>float_format($supplement_row[0]['price']),
 				'SUPPLEMENT_PRICE_IS_PER_PERIOD'=>$supplement_row[0]['price_is_per_period']==1,
-				'QUANTITY'=>integer_format($supplement['quantity']),
-				'_QUANTITY'=>strval($supplement['quantity']),
+				'SUPPLEMENT_QUANTITY'=>integer_format($supplement['quantity']),
+				'_SUPPLEMENT_QUANTITY'=>strval($supplement['quantity']),
 				'SUPPLEMENT_NOTES'=>$supplement['notes'],
 			);
 		}
