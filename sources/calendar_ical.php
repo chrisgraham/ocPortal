@@ -411,6 +411,7 @@ function get_event_data_ical($calendar_nodes)
 		$end_minute=mixed();
 		$end_hour=$all_day?NULL:intval(date('H',$end));
 		$end_minute=$all_day?NULL:intval(date('i',$end));
+
 		if ($all_day)
 		{
 			$timestamp=mktime(0,0,0,$end_month,$end_day,$end_year);

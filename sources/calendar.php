@@ -387,20 +387,22 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 
 					foreach ($nodes as $childs)
 					{
-						$child=explode(':',$childs);
+						if (preg_match('#^[^"]*:#',$childs)!=0)
+							$child=explode(':',$childs,2);
+						else $child=array($childs);
 
-						$matches=array();
-						if (preg_match('#;TZID=(.*)#',$child[0],$matches))
-							$calendar_nodes[$key]['TZID']=$matches[1];
+						$matches2=array();
+						if (preg_match('#;TZID=(.*)#',$child[0],$matches2))
+							$calendar_nodes[$key]['TZID']=$matches2[1];
 						$child[0]=preg_replace('#;.*#','',$child[0]);
 
 						if (array_key_exists("1",$child) && $child[0]!=='PRODID' &&  $child[0]!=='VERSION' && $child[0]!=='END')
-							$calendar_nodes[$key][$child[0]]=trim($child[1]);
+							$calendar_nodes[$key][$child[0]]=str_replace(array('\n','\,'),array("\n",','),trim($child[1]," \t\""));
 					}
-
 					if ($key!=0)
 					{
 						list($full_url,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
+						$is_public=1;
 
 						$event=array('e_recurrence'=>$recurrence,'e_content'=>$content,'e_title'=>$title,'e_id'=>$feed_url,'e_priority'=>$priority,'t_logo'=>'calendar/rss','e_recurrences'=>$recurrences,'e_seg_recurrences'=>$seg_recurrences,'e_is_public'=>$is_public,'e_start_year'=>$start_year,'e_start_month'=>$start_month,'e_start_day'=>$start_day,'e_start_hour'=>$start_hour,'e_start_minute'=>$start_minute,'e_end_year'=>$end_year,'e_end_month'=>$end_month,'e_end_day'=>$end_day,'e_end_hour'=>$end_hour,'e_end_minute'=>$end_minute,'e_timezone'=>$timezone);
 						if (!is_null($event_type)) $event['t_logo']=$_event_types[$event_type]['t_logo'];

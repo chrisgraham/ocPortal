@@ -154,6 +154,9 @@ function bookings_ical_script()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	$time=get_param_integer('from',time());
+	if ($time<0) $time=time()+60*60*24*$time;
+
+	require_lang('booking');
 
 	$id=get_param_integer('id');
 	$where='bookable_id='.strval($id).' AND (b_year>'.date('Y',$time).' OR (b_year='.date('Y',$time).' AND b_month>'.date('m',$time).') OR (b_year='.date('Y',$time).' AND b_month='.date('m',$time).' AND b_day='.date('d',$time).'))';
@@ -162,7 +165,7 @@ function bookings_ical_script()
 	echo "VERSION:2.0\n";
 	echo "PRODID:-//ocProducts/ocPortal//NONSGML v1.0//EN\n";
 	echo "CALSCALE:GREGORIAN\n";
-	$bookable_category=$GLOBALS['SITE_DB']->query_value('bookable','categorisation',array('id'=>$id));
+	$bookable_category=get_translated_text($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$id)));
 	echo "X-WR-CALNAME:".ical_escape(get_site_name().': '.do_lang('BOOKINGS').': '.$bookable_category)."\n";
 
 	require_code('booking2');
@@ -172,20 +175,26 @@ function bookings_ical_script()
 
 	foreach ($members_with_bookings as $member_with_booking)
 	{
-		$bookings=$GLOBALS['SITE_DB']->query('SELECT id FROM '.get_table_prefix().'booking WHERE '.$where.' AND member_id='.strval($member_with_booking['member_id']).' ORDER BY booked_at DESC',10000/*reasonable limit*/);
+		$bookings=$GLOBALS['SITE_DB']->query('SELECT id FROM '.get_table_prefix().'booking WHERE ('.$where.') AND member_id='.strval($member_with_booking['member_id']).' ORDER BY booked_at DESC',10000/*reasonable limit*/);
 
 		$request=get_booking_request_from_db(collapse_1d_complexity('id',$bookings));
 
 		foreach ($request as $i=>$r)
 		{
 			$booking=$r['_rows'][0];
+			$codes='';
+			foreach ($r['_rows'] as $row)
+			{
+				if ($codes!='') $codes.=', ';
+				$codes.=$row['code_allocation'];
+			}
 
 			echo "BEGIN:VEVENT\n";
 
 			echo "DTSTAMP:".date('Ymd',time())."T".date('His',$booking['booked_at'])."\n";
 			echo "CREATED:".date('Ymd',time())."T".date('His',$booking['booked_at'])."\n";
 
-			echo "SUMMARY:".ical_escape(do_lang('TAKEN',$booking['code_allocation']))."\n";
+			echo "SUMMARY:".ical_escape(do_lang('TAKEN',$codes))."\n";
 			$description=$booking['notes'];
 			$supplements=$GLOBALS['SITE_DB']->query_select('booking_supplement a JOIN '.get_table_prefix().'bookable_supplement b ON a.supplement_id=b.id',array('quantity','notes','title'),array(
 				'booking_id'=>$booking['id'],
@@ -207,52 +216,57 @@ function bookings_ical_script()
 			$url=$_url->evaluate();
 			echo "URL:".ical_escape($url)."\n";
 
-			$timex=mktime(0,0,0,$booking['b_month'],$booking['b_day'],$booking['b_year']);
-			if ($timex>$max_time) $max_time=$timex;
-			echo "DTSTART:".date('Ymd',$time)."\n";
+			$time_start=mktime(0,0,0,$r['start_month'],$r['start_day'],$r['start_year']);
+			$time_end=mktime(0,0,0,$r['end_month'],$r['end_day'],$r['end_year']);
+			if ($time_end>$max_time) $max_time=$time_end;
+			echo "DTSTART:".date('Ymd',$time_start)."\n";
+			echo "DTEND:".date('Ymd',$time_end)."\n";
 
 			echo "END:VEVENT\n";
 		}
 	}
 
 	// Show free slots
-	$codes_in_total=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_select('bookable_codes',array('code'),array('bookable_id'=>$id)));
-	$i=$time;
-	$up_to=strtotime('+2 days',$max_time);
-	do
+	if (get_param_integer('free',0)==1)
 	{
-		$day=intval(date('d',$i));
-		$month=intval(date('m',$i));
-		$year=intval(date('Y',$i));
-		$codes_taken_already=collapse_1d_complexity('code_allocation',$GLOBALS['SITE_DB']->query_select('booking',array('code_allocation'),array('b_day'=>$day,'b_month'=>$month,'b_year'=>$year)));
-
-		foreach (array_diff($codes_in_total,$codes_taken_already) as $code)
+		$codes_in_total=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_select('bookable_codes',array('code'),array('bookable_id'=>$id)));
+		$i=$time;
+		$up_to=strtotime('+2 days',$max_time);
+		do
 		{
-			echo "BEGIN:VEVENT\n";
+			$day=intval(date('d',$i));
+			$month=intval(date('m',$i));
+			$year=intval(date('Y',$i));
+			$codes_taken_already=collapse_1d_complexity('code_allocation',$GLOBALS['SITE_DB']->query_select('booking',array('code_allocation'),array('b_day'=>$day,'b_month'=>$month,'b_year'=>$year)));
 
-			echo "DTSTAMP:".date('Ymd',time())."T".date('His',time())."\n";
-			echo "CREATED:".date('Ymd',time())."T".date('His',time())."\n";
+			foreach (array_diff($codes_in_total,$codes_taken_already) as $code)
+			{
+				echo "BEGIN:VEVENT\n";
 
-			echo "SUMMARY:".ical_escape(do_lang('NOT_TAKEN',$code))."\n";
+				echo "DTSTAMP:".date('Ymd',time())."T".date('His',time())."\n";
+				echo "CREATED:".date('Ymd',time())."T".date('His',time())."\n";
 
-			echo "CATEGORIES:".ical_escape($bookable_category)."\n";
-			echo "CLASS:PUBLIC\n";
-			echo "STATUS:TENTATIVE\n";
-			echo "UID:".ical_escape(strval($day).'/'.strval($month).'/'.strval($year).'-'.$code.'-booking@'.get_base_url())."\n";
-			$_url=build_url(array('page'=>'cms_booking','type'=>'ab','bookable_id'=>$id,'day'=>$day,'month'=>$month,'year'=>$year,'code'=>$code),get_module_zone('cms_booking'),NULL,false,false,true);
-			$url=$_url->evaluate();
-			echo "URL:".ical_escape($url)."\n";
+				echo "SUMMARY:".ical_escape(do_lang('NOT_TAKEN',$code))."\n";
 
-			$time=mktime(0,0,0,$month,$day,$year);
-			if ($time>$max_time) $max_time=$time;
-			echo "DTSTART:".date('Ymd',$time)."\n";
+				echo "CATEGORIES:".ical_escape($bookable_category)."\n";
+				echo "CLASS:PUBLIC\n";
+				echo "STATUS:TENTATIVE\n";
+				echo "UID:".ical_escape(strval($day).'/'.strval($month).'/'.strval($year).'-'.$code.'-booking@'.get_base_url())."\n";
+				$_url=build_url(array('page'=>'cms_booking','type'=>'ab','bookable_id'=>$id,'day'=>$day,'month'=>$month,'year'=>$year,'code'=>$code),get_module_zone('cms_booking'),NULL,false,false,true);
+				$url=$_url->evaluate();
+				echo "URL:".ical_escape($url)."\n";
 
-			echo "END:VEVENT\n";
+				$time=mktime(0,0,0,$month,$day,$year);
+				if ($time>$max_time) $max_time=$time;
+				echo "DTSTART:".date('Ymd',$time)."\n";
+
+				echo "END:VEVENT\n";
+			}
+
+			$i=strtotime('+1 day',$i);
 		}
-
-		$i=strtotime('+1 day',$i);
+		while ($i<=$up_to);
 	}
-	while ($i<=$up_to);
 
 	echo "END:VCALENDAR\n";
 	exit();

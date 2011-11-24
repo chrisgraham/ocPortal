@@ -370,7 +370,7 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 	$bookable_id=$GLOBALS['SITE_DB']->query_insert('bookable',$bookable_details,true);
 
 	require_code('calendar2');
-	$bookable_details['calendar_type']=add_event_type($title,'',find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']));
+	$bookable_details['calendar_type']=add_event_type($title,'calendar/booking',find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']));
 
 	$GLOBALS['SITE_DB']->query_update('bookable',array('calendar_type'=>$bookable_details['calendar_type']),array('id'=>$bookable_id),'',1);
 
@@ -426,10 +426,14 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 	$bookable_details['edit_date']=time();
 
 	$bookable_details['calendar_type']=$_old_bookable[0]['calendar_type'];
+	require_code('calendar2');
+	$external_feed=find_script('bookings_ical').'?id='.strval($bookable_id);
 	if ((is_null($bookable_details['calendar_type'])) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok('calendar_types','id',array('id'=>$bookable_details['calendar_type'])))))
 	{
-		require_code('calendar2');
-		$bookable_details['calendar_type']=add_event_type($title,'',find_script('bookings_ical').'?id='.strval($bookable_id));
+		$bookable_details['calendar_type']=add_event_type($title,'calendar/booking',$external_feed);
+	} else
+	{
+		edit_event_type($bookable_details['calendar_type'],$title,'calendar/booking',$external_feed);
 	}
 
 	$GLOBALS['SITE_DB']->query_update('bookable',$bookable_details,array('id'=>$bookable_id),'',1);
