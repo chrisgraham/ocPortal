@@ -156,7 +156,7 @@ function bookings_ical_script()
 	$time=get_param_integer('from',time());
 
 	$id=get_param_integer('id');
-	$where='bookable_id='.strval($id).' AND (b_year>'.date('Y',$time).' OR (b_day='.date('Y',$time).' AND b_month>'.date('m',$time).') OR (b_year='.date('Y',$time).' AND b_month='.date('m',$time).' AND b_day='.date('d',$time).'))';
+	$where='bookable_id='.strval($id).' AND (b_year>'.date('Y',$time).' OR (b_year='.date('Y',$time).' AND b_month>'.date('m',$time).') OR (b_year='.date('Y',$time).' AND b_month='.date('m',$time).' AND b_day='.date('d',$time).'))';
 	$members_with_bookings=$GLOBALS['SITE_DB']->query('SELECT DISTINCT member_id FROM '.get_table_prefix().'booking WHERE '.$where.' ORDER BY booked_at DESC',10000/*reasonable limit*/);
 	echo "BEGIN:VCALENDAR\n";
 	echo "VERSION:2.0\n";
@@ -187,7 +187,7 @@ function bookings_ical_script()
 
 			echo "SUMMARY:".ical_escape(do_lang('TAKEN',$booking['code_allocation']))."\n";
 			$description=$booking['notes'];
-			$supplements=$GLOBALS['SITE_DB']->query_select('booking_supplement a JOIN bookable_supplement b ON a.supplement_id=b.id',array('quantity','notes','title'),array(
+			$supplements=$GLOBALS['SITE_DB']->query_select('booking_supplement a JOIN '.get_table_prefix().'bookable_supplement b ON a.supplement_id=b.id',array('quantity','notes','title'),array(
 				'booking_id'=>$booking['id'],
 			));
 			foreach ($supplements as $supplement)
@@ -207,8 +207,8 @@ function bookings_ical_script()
 			$url=$_url->evaluate();
 			echo "URL:".ical_escape($url)."\n";
 
-			$time=mktime(0,0,0,$booking['b_month'],$booking['b_day'],$booking['b_year']);
-			if ($time>$max_time) $max_time=$time;
+			$timex=mktime(0,0,0,$booking['b_month'],$booking['b_day'],$booking['b_year']);
+			if ($timex>$max_time) $max_time=$timex;
 			echo "DTSTART:".date('Ymd',$time)."\n";
 
 			echo "END:VEVENT\n";
@@ -217,12 +217,15 @@ function bookings_ical_script()
 
 	// Show free slots
 	$codes_in_total=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_select('bookable_codes',array('code'),array('bookable_id'=>$id)));
-	for ($i=time();$i<=$max_time;$i+=strtotime('+1 day',$i))
+	$i=$time;
+	$up_to=strtotime('+2 days',$max_time);
+	do
 	{
 		$day=intval(date('d',$i));
 		$month=intval(date('m',$i));
 		$year=intval(date('Y',$i));
 		$codes_taken_already=collapse_1d_complexity('code_allocation',$GLOBALS['SITE_DB']->query_select('booking',array('code_allocation'),array('b_day'=>$day,'b_month'=>$month,'b_year'=>$year)));
+
 		foreach (array_diff($codes_in_total,$codes_taken_already) as $code)
 		{
 			echo "BEGIN:VEVENT\n";
@@ -236,7 +239,7 @@ function bookings_ical_script()
 			echo "CLASS:PUBLIC\n";
 			echo "STATUS:TENTATIVE\n";
 			echo "UID:".ical_escape(strval($day).'/'.strval($month).'/'.strval($year).'-'.$code.'-booking@'.get_base_url())."\n";
-			$_url=build_url(array('page'=>'cms_booking','type'=>'_ab','day'=>$day,'month'=>$month,'year'=>$year,'code'=>$code),get_module_zone('cms_booking'),NULL,false,false,true);
+			$_url=build_url(array('page'=>'cms_booking','type'=>'ab','bookable_id'=>$id,'day'=>$day,'month'=>$month,'year'=>$year,'code'=>$code),get_module_zone('cms_booking'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			echo "URL:".ical_escape($url)."\n";
 
@@ -246,7 +249,10 @@ function bookings_ical_script()
 
 			echo "END:VEVENT\n";
 		}
+
+		$i=strtotime('+1 day',$i);
 	}
+	while ($i<=$up_to);
 
 	echo "END:VCALENDAR\n";
 	exit();

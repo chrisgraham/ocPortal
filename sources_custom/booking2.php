@@ -55,7 +55,7 @@ function booking_do_next()
  */
 function get_member_booking_request($member_id)
 {
-	$booking_ids=$GLOBALS['SITE_DB']->query_select('booking',array('id'),array('member_id'=>$member_id),'ORDER BY id');
+	$booking_ids=$GLOBALS['SITE_DB']->query_select('booking',array('id'),array('member_id'=>$member_id),'ORDER BY booked_at DESC');
 	return get_booking_request_from_db(collapse_1d_complexity('id',$booking_ids));
 }
 
@@ -84,6 +84,7 @@ function get_booking_request_from_db($booking_ids)
 			'end_day'=>$booking[0]['b_day'],
 			'end_month'=>$booking[0]['b_month'],
 			'end_year'=>$booking[0]['b_year'],
+			'notes'=>$booking[0]['notes'],
 			'supplements'=>list_to_map('supplement_id',$supplements),
 			'quantity'=>1,
 			'_rows'=>array($booking[0]), // Used by code that wants exact details, not standard part of booking details structure
@@ -149,7 +150,7 @@ function reconstitute_booking_requests(&$request)
 			{
 				if ($all_supplements[$supplement_id]==0) unset($a_filtered_supplements[$supplement_id]);
 			}
-			$b_filtered_supplements=$a['supplements'];
+			$b_filtered_supplements=$b['supplements'];
 			foreach (array_keys($b_filtered_supplements) as $supplement_id)
 			{
 				if ($all_supplements[$supplement_id]==0) unset($b_filtered_supplements[$supplement_id]);
@@ -160,11 +161,14 @@ function reconstitute_booking_requests(&$request)
 
 			if (($a['bookable_id']==$b['bookable_id']) && ($a['quantity']==$b['quantity']) && (strtotime('+1 day',$a_end_timestamp)==$b_start_timestamp) && ($a_filtered_supplements==$b_filtered_supplements))
 			{
-				$a['end_day']+=$b['end_day'];
-				$a['end_month']+=$b['end_month'];
-				$a['end_year']+=$b['end_year'];
+				$a['end_day']=$b['end_day'];
+				$a['end_month']=$b['end_month'];
+				$a['end_year']=$b['end_year'];
 				$a['supplements']+=$b['supplements'];
+				$a['_rows']=array_merge($a['_rows'],$b['_rows']);
+				if (strpos($a['notes'],$b['notes'])===false) $a['notes']+="\n\n".$b['notes'];
 				unset($request[$i]);
+				$request=array_values($request);
 				$i--;
 
 				$changes=true;

@@ -146,7 +146,7 @@ function get_booking_request_from_form()
 				$s_quantity=post_param_integer('bookable_'.strval($bookable_id).'_supplement_'.strval($supplement['id']).'_quantity',0);
 				if ($s_quantity>0)
 				{
-					$s_notes=read_booking_notes_from_form('bookable_'.strval($bookable_id).'_supplement_'.strval($bookable_id).'_'.strval($supplement['id']).'_notes');
+					$s_notes=read_booking_notes_from_form('bookable_'.strval($bookable_id).'_supplement_'.strval($supplement['id']).'_notes');
 
 					$supplements[$supplement['id']]=array(
 						'quantity'=>$s_quantity,
@@ -384,10 +384,10 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 		{
 			if ($from==$to)
 			{
-				do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_ONEOFF',escape_html(get_timezoned_date($from,false,true,true)),escape_html(get_translated_text($black['blacked_explanation'])));
+				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_ONEOFF',escape_html(get_timezoned_date($from,false,true,true)),escape_html(get_translated_text($black['blacked_explanation'])));
 			} else
 			{
-				do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_PERIOD',escape_html(get_timezoned_date($from,false,true,true)),escape_html(get_timezoned_date($to,false,true,true)),escape_html(get_translated_text($black['blacked_explanation'])));
+				return do_lang_tempcode('BOOKING_IMPOSSIBLE_BLACKED_PERIOD',escape_html(get_timezoned_date($from,false,true,true)),escape_html(get_timezoned_date($to,false,true,true)),escape_html(get_translated_text($black['blacked_explanation'])));
 			}
 		}
 	}

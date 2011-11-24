@@ -8,6 +8,10 @@
 	border-bottom: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
+.rss_summary nobr { /* Stops naughty Google news from breaking layout */
+	white-space: normal;
+}
+
 .newscat_img_author, .newscat_img_member {
 	padding: 7px 7px 7px 12px;
 	float: {!en_right};

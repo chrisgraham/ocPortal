@@ -570,6 +570,8 @@ class Module_cms_booking_blacks extends standard_aed_module
 
 		$fields=new ocp_tempcode();
 
+		$request=get_booking_request_from_db(collapse_1d_complexity('id',$bookings));
+
 		require_code('form_templates');
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
 		foreach ($rows as $row)
@@ -722,8 +724,80 @@ class Module_cms_booking_bookings extends standard_aed_module
 	var $title_is_multi_lang=true;
 	var $table='booking';
 	var $type_code='b';
+	var $non_integer_id=true;
 	
 	var $donext_type=NULL;
+
+	/**
+	 * Standard modular entry function to get rows for selection from.
+	 *
+	 * @param  boolean		Whether to force a recache
+	 * @param  ?ID_TEXT		Order to use (NULL: automatic)
+	 * @param  ?array			Extra where clauses (NULL: none)
+	 * @param  boolean		Whether to always access using the site database
+	 * @param  string			Extra join clause for our query (blank: none)
+	 * @return array			A pair: Rows for selection from, Total results
+	 */
+	function get_entry_rows($recache=false,$orderer=NULL,$where=NULL,$force_site_db=false,$join='')
+	{
+		if ((!$recache) && (!is_null($orderer)) && (!is_null($where)))
+		{
+			if (isset($this->cached_entry_rows))
+			{
+				return array($this->cached_entry_rows,$this->cached_max_rows);
+			}
+		}
+
+		$select_field=!is_null($this->orderer)?$this->orderer:($this->table_prefix.strtolower($this->select_name));
+
+		if (is_null($orderer))
+		{
+			$orderer=$select_field;
+		}
+		$table=is_null($this->table)?$this->module_type:$this->table;
+		$db=((substr($table,0,2)=='f_') && (!$force_site_db) && (get_forum_type()!='none'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+		if ($force_site_db)
+		{
+			$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
+			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+		}
+		$request=array();
+		$_rows=$db->query_select($table.' r '.$join,array('DISTINCT member_id'),$where,'ORDER BY '.$orderer);
+		foreach ($_rows as $row)
+		{
+			$member_request=get_member_booking_request($row['member_id']);
+
+			foreach ($member_request as $i=>$r)
+			{
+				$r['_id']=strval($row['member_id']).'_'.strval($i);
+				$request[]=$r;
+			}
+		}
+		
+		$max=get_param_integer('max',300);
+		$start=get_param_integer('start',0);
+
+		if ($force_site_db)
+		{
+			$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
+		}
+		$_entries=array();
+		foreach ($request as $i=>$row)
+		{
+			if ($i<$start) continue;
+			if (count($_entries)>$max) break;
+
+			$_entries[]=$row;
+		}
+		
+		if ((!is_null($orderer)) && (!is_null($where)))
+		{
+			$this->cached_entry_rows=$_entries;
+			$this->cached_max_rows=count($request);
+		}
+		
+		return array($_entries,count($request));
+	}
 
 	/**
 	 * Standard aed_module table function.
@@ -752,9 +826,11 @@ class Module_cms_booking_bookings extends standard_aed_module
 		$NON_CANONICAL_PARAMS[]='sort';
 
 		$fh=array();
-		$fh[]=do_lang_tempcode('DATE');
-		$fh[]=do_lang_tempcode('NAME');
 		$fh[]=do_lang_tempcode('BOOKABLE');
+		$fh[]=do_lang_tempcode('FROM');
+		$fh[]=do_lang_tempcode('TO');
+		$fh[]=do_lang_tempcode('NAME');
+		$fh[]=do_lang_tempcode('QUANTITY');
 		$fh[]=do_lang_tempcode('BOOKING_DATE');
 		$fh[]=do_lang_tempcode('ACTIONS');
 		// FUTURE: Show paid at, transaction IDs, and codes, and allow sorting of those
@@ -766,13 +842,15 @@ class Module_cms_booking_bookings extends standard_aed_module
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
 		foreach ($rows as $row)
 		{
-			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
+			$edit_link=build_url($url_map+array('id'=>$row['_id']),'_SELF');
 
 			$fr=array();
-			$fr[]=get_timezoned_date(mktime(0,0,0,$row['b_month'],$row['b_day'],$row['b_year']),false,true,true);
-			$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
 			$fr[]=get_translated_text($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$row['bookable_id'])));
-			$fr[]=get_timezoned_date($row['booked_at']);
+			$fr[]=get_timezoned_date(mktime(0,0,0,$row['start_month'],$row['start_day'],$row['start_year']),false,true,true);
+			$fr[]=get_timezoned_date(mktime(0,0,0,$row['end_month'],$row['end_day'],$row['end_year']),false,true,true);
+			$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['_rows'][0]['member_id']);
+			$fr[]=number_format($row['quantity']);
+			$fr[]=get_timezoned_date($row['_rows'][0]['booked_at']);
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
 			$fields->attach(results_entry($fr,true));
@@ -890,7 +968,6 @@ class Module_cms_booking_bookings extends standard_aed_module
 	{
 		list($member_id,$i)=array_map('intval',explode('_',$_id,2));
 		$request=get_member_booking_request($member_id);
-
 		return $this->get_form_fields($request[$i],$member_id);
 	}
 
@@ -932,6 +1009,18 @@ class Module_cms_booking_bookings extends standard_aed_module
 	 */
 	function edit_actualisation($_id)
 	{
+		list($member_id,$i)=array_map('intval',explode('_',$_id,2));
+		$old_request=get_member_booking_request($member_id);
+		$ignore_bookings=array();
+		foreach ($old_request[$i]['_rows'] as $row)
+		{
+			$ignore_bookings[]=$row['id'];
+		}
+
+		$request=get_booking_request_from_form();
+		$test=check_booking_dates_available($request,$ignore_bookings);
+		if (!is_null($test)) warn_exit($test);
+
 		// Delete then re-add
 		$this->delete_actualisation($_id);
 		$this->new_id=$this->add_actualisation();
