@@ -18,7 +18,7 @@ function htmlentities(string)
 	return string;
 }
 
-var tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_nodes_selectable)
+var tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_nodes_selectable,use_server_id)
 {
 	if (typeof window.load_XML_doc=='undefined') return;
 
@@ -30,6 +30,7 @@ var tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_no
 	this.multi_selection=multi_selection;
 	this.tabindex=tabindex;
 	this.all_nodes_selectable=all_nodes_selectable;
+	this.use_server_id=use_server_id;
 
 	var element=document.getElementById('tree_list__root_'+name);
 	setInnerHTML(element,'<div class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> {!LOADING^;}</div>');
@@ -270,7 +271,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			new_html.id=this.name+'tree_list_c_'+node.getAttribute('id');
 			new_html.style.display=((!initially_expanded) || (node.getAttribute('has_children')!='true'))?'none':'block';
 			new_html.style.padding{$WCASE,{!en_left}}='15px';
-			var selected=((window.use_server_id?node.getAttribute('serverid'):node.getAttribute('id'))==element.value) || node.getAttribute('selected')=='yes';
+			var selected=((this.use_server_id?node.getAttribute('serverid'):node.getAttribute('id'))==element.value) || node.getAttribute('selected')=='yes';
 			if (selectable)
 			{
 				this.make_element_look_selected(document.getElementById(this.name+'tsel_c_'+node.getAttribute('id')),selected);
@@ -324,7 +325,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
 			}
 			html.appendChild(node_self_wrap);
-			var selected=((window.use_server_id?node.getAttribute('serverid'):node.getAttribute('id'))==element.value) || node.getAttribute('selected')=='yes';
+			var selected=((this.use_server_id?node.getAttribute('serverid'):node.getAttribute('id'))==element.value) || node.getAttribute('selected')=='yes';
 			this.make_element_look_selected(document.getElementById(this.name+'tsel_e_'+node.getAttribute('id')),selected);
 		}
 
@@ -564,7 +565,8 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 			that_type=this.getAttribute('id').charAt(5+this.object.name.length);
 			if (that_type=='r') that_type='c';
 			if (that_type=='s') that_type='e';
-			that_selected_id=(window.use_server_id)?all_a[i].getAttribute('serverid'):all_a[i].getAttribute('id').substr(7+this.object.name.length);
+
+			that_selected_id=(this.object.use_server_id)?all_a[i].getAttribute('serverid'):all_a[i].getAttribute('id').substr(7+this.object.name.length);
 			that_xml_node=this.object.getElementByIdHack(that_selected_id,that_type);
 			if (that_xml_node.getAttribute('selectable')=='true' || this.object.all_nodes_selectable)
 			{
@@ -587,7 +589,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 	if (type=='s') type='e';
 	var real_selected_id=this.getAttribute('id').substr(7+this.object.name.length);
 	var xml_node=this.object.getElementByIdHack(real_selected_id,type);
-	var selected_id=(window.use_server_id)?xml_node.getAttribute('serverid'):real_selected_id;
+	var selected_id=(this.object.use_server_id)?xml_node.getAttribute('serverid'):real_selected_id;
 
 	if (xml_node.getAttribute('selectable')=='true' || this.object.all_nodes_selectable)
 	{
@@ -621,6 +623,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 		{
 			this.object.make_element_look_selected(document.getElementById(this.object.name+'tsel_'+type+'_'+selected_end[i]),true);
 		}
+
 		element.value=selected_end.join(',');
 		element.selected_title=xml_node.getAttribute('title');
 		element.selected_editlink=xml_node.getAttribute('edit');

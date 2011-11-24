@@ -102,7 +102,9 @@ It is the view of ocProducts that, where possible, content should be able to be 
 
 Where HTML cannot be fully eliminated, ocPortal will encapsulate it with Comcode 'semihtml' tags, within the wider Comcode.
 
-If you do not want Comcode conversion, you can disable the "Convert XHTML to Comcode" option or include this hint in your code:
+Sometimes the Comcode conversion is imperfect. For example, line breaks can be introduced, or some custom formatting can be lost.
+
+If you do not want Comcode conversion, you can disable the ocPortal "Convert XHTML to Comcode" configuration option or include this hint in your content:
 [codebox]
 {$,page hint: no_smart_conversion}
 [/codebox]

@@ -253,7 +253,7 @@ function comcode_convert_script()
 	require_lang('comcode');
 
 	convert_data_encodings(true);
-	$data=post_param('data',NULL);
+	$data=post_param('data',NULL,false,false);
 	if (is_null($data))
 	{
 		$title=get_page_title('_COMCODE');

@@ -157,16 +157,20 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 	}
 	if ($captcha_if_enabled)
 	{
-		if ((addon_installed('captcha')) && (get_option('use_security_images')=='1'))
+		if (addon_installed('captcha'))
 		{
-			$javascript.="
-					url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['security_image'].value);
-					if (!do_ajax_field_test(url))
-					{
-						document.getElementById('submit_button').disabled=false;
-						return false;
-					}
-			";
+			require_code('captcha');
+			if (use_captcha())
+			{
+				$javascript.="
+						url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['security_image'].value);
+						if (!do_ajax_field_test(url))
+						{
+							document.getElementById('submit_button').disabled=false;
+							return false;
+						}
+				";
+			}
 		}
 	}
 	$javascript.="

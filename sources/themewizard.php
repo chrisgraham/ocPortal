@@ -101,6 +101,15 @@ function load_themewizard_params_from_theme($theme,$guess_images_if_needed=false
 	$THEME_WIZARD_IMAGES_NO_WILD=explode(',',$map['theme_wizard_images_no_wild']);
 	if (!function_exists('imagecreatefromgif'))
 	{
+		global $IMG_CODES;
+
+		$temporary_default=isset($_GET['keep_theme_seed']);
+		if ($temporary_default) // To stop an infinite loop, with find_theme_image trying to load up the theme wizard subsystem
+		{
+			$tseed=$_GET['keep_theme_seed'];
+			unset($_GET['keep_theme_seed']);
+			$img_codes_bak=$IMG_CODES;
+		}
 		$new=array();
 		foreach ($THEME_WIZARD_IMAGES as $theme_image)
 		{
@@ -110,6 +119,11 @@ function load_themewizard_params_from_theme($theme,$guess_images_if_needed=false
 			}
 		}
 		$THEME_WIZARD_IMAGES=$new;
+		if ($temporary_default)
+		{
+			$_GET['keep_theme_seed']=$tseed;
+			$IMG_CODES=$img_codes_bak;
+		}
 	}
 	
 	$THEME_WIZARD_IMAGES_CACHE[$theme]=$THEME_WIZARD_IMAGES;

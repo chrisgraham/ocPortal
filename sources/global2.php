@@ -1330,9 +1330,10 @@ function either_param($name,$default=false)
  * @param  ID_TEXT		The name of the parameter to get
  * @param  ?mixed			The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
  * @param  boolean		Whether we are cleaning for HTML rather than Comcode/plain-text
+ * @param  boolean		Whether to convert WYSIWYG contents to Comcode automatically
  * @return ?string		The parameter value (NULL: missing)
  */
-function post_param($name,$default=false,$html=false)
+function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 {
 	$a=__param($_POST,$name,$default,false,true);
 
@@ -1353,7 +1354,7 @@ function post_param($name,$default=false,$html=false)
 	}
 	if ($a!==NULL) $a=unixify_line_format($a,NULL,$html);
 
-	if ((isset($_POST[$name.'__is_wysiwyg'])) && ($_POST[$name.'__is_wysiwyg']=='1'))
+	if ((isset($_POST[$name.'__is_wysiwyg'])) && ($_POST[$name.'__is_wysiwyg']=='1') && ($conv_from_wysiwyg))
 	{
 		if (trim($a)=='')
 		{

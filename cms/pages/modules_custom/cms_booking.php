@@ -33,6 +33,7 @@ class Module_cms_booking extends standard_aed_module
 	var $menu_label='BOOKINGS';
 	var $orderer='sort_order';
 	var $title_is_multi_lang=true;
+	var $table='bookable';
 	
 	var $donext_type=NULL;
 
@@ -139,8 +140,10 @@ class Module_cms_booking extends standard_aed_module
 			$fr[]=protect_from_escaping(get_translated_tempcode($row['title']));
 			$fr[]=protect_from_escaping(get_translated_tempcode($row['categorisation']));
 			$fr[]=float_format($row['price']);
+			$fr[]=get_timezoned_date(mktime($row['active_from_month'],$row['active_from_day'],$row['active_from_year']),false,true,true);
+			$fr[]=get_timezoned_date(mktime($row['active_to_month'],$row['active_to_day'],$row['active_to_year']),false,true,true);
 			$fr[]=($row['enabled']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
-			$fr[]=protect_from_escaping(hyperlink(do_lang_tempcode('EDIT'),$edit_link));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
 			$fields->attach(results_entry($fr,true));
 		}
@@ -165,7 +168,7 @@ class Module_cms_booking extends standard_aed_module
 
 		if (is_null($details))
 		{
-			$max_sort_order=$GLOBALS['SITE_DB']->query_value('bookables','MAX(sort_order)');
+			$max_sort_order=$GLOBALS['SITE_DB']->query_value('bookable','MAX(sort_order)');
 			if (is_null($max_sort_order)) $max_sort_order=0;
 
 			$details=array(
@@ -200,8 +203,17 @@ class Module_cms_booking extends standard_aed_module
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',is_null($details['title'])?'':get_translated_text($details['title']),true));
 		$fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',is_null($details['description'])?'':get_translated_text($details['description']),false));
-		$fields->attach(form_input_line(do_lang_tempcode('PRICE'),do_lang_tempcode('DESCRIPTION_BOOKABLE_PRICE'),'price',float_to_raw_string($details['price']),true));
-		$fields->attach(form_input_line(do_lang_tempcode('BOOKABLE_CATEGORISATION'),do_lang_tempcode('DESCRIPTION_BOOKABLE_CATEGORISATION'),'categorisation',is_null($details['categorisation'])?'':get_translated_text($details['categorisation']),true));
+		$fields->attach(form_input_line(do_lang_tempcode('PRICE'),do_lang_tempcode('DESCRIPTION_BOOKABLE_PRICE'),'price',float_to_raw_string($details['price'],2),true));
+		$categorisation=is_null($details['categorisation'])?'':get_translated_text($details['categorisation']);
+		if ($categorisation=='')
+		{
+			$_categorisation=$GLOBALS['SITE_DB']->query_value_null_ok('bookable','categorisation',NULL,'GROUP BY categorisation ORDER BY COUNT(*) DESC');
+			if (is_null($_categorisation))
+				$categorisation=do_lang('GENERAL');
+			else
+				$categorisation=get_translated_text($_categorisation);
+		}
+		$fields->attach(form_input_line(do_lang_tempcode('BOOKABLE_CATEGORISATION'),do_lang_tempcode('DESCRIPTION_BOOKABLE_CATEGORISATION'),'categorisation',$categorisation,true));
 		//$fields->attach(form_input_select(do_lang_tempcode('CYCLE_TYPE'),do_lang_tempcode('DESCRIPTION_CYCLE_TYPE'),'cycle_type',$details['cycle_type'],false));
 		//$fields->attach(form_input_line(do_lang_tempcode('CYCLE_PATTERN'),do_lang_tempcode('DESCRIPTION_CYCLE_PATTERN'),'cycle_pattern',$details['cycle_pattern'],false));
 		//$fields->attach(form_input_tick(do_lang_tempcode('USER_MAY_CHOOSE_CODE'),do_lang_tempcode('DESCRIPTION_USER_MAY_CHOOSE_CODE'),'user_may_choose_code',$details['user_may_choose_code']==1));
@@ -216,15 +228,17 @@ class Module_cms_booking extends standard_aed_module
 		{
 			$_supplements->attach(form_input_list_entry(strval($s['id']),in_array($s['id'],$supplements),get_translated_text($s['title'])));
 		}
-		$fields->attach(form_input_multi_list(do_lang_tempcode('BOOKABLE_SUPPLEMENTS'),do_lang_tempcode('DESCRIPTION_BOOKABLE_SUPPLEMENTS'),'supplements',$_supplements));
+		if (!$_supplements->is_empty())
+			$fields->attach(form_input_multi_list(do_lang_tempcode('SUPPLEMENTS'),do_lang_tempcode('DESCRIPTION_BOOKABLE_SUPPLEMENTS'),'supplements',$_supplements));
 
 		$_blacks=new ocp_tempcode();
-		$all_blacks=$GLOBALS['SITE_DB']->query_select('bookable_blacked',array('id','title'),NULL,'ORDER BY blacked_from_year,blacked_from_month,blacked_from_day');
+		$all_blacks=$GLOBALS['SITE_DB']->query_select('bookable_blacked',array('id','blacked_explanation'),NULL,'ORDER BY blacked_from_year,blacked_from_month,blacked_from_day');
 		foreach ($all_blacks as $s)
 		{
-			$_blacks->attach(form_input_list_entry(strval($s['id']),in_array($s['id'],$blacks),get_translated_text($s['title'])));
+			$_blacks->attach(form_input_list_entry(strval($s['id']),in_array($s['id'],$blacks),get_translated_text($s['blacked_explanation'])));
 		}
-		$fields->attach(form_input_multi_list(do_lang_tempcode('BOOKABLE_BLACKS'),do_lang_tempcode('DESCRIPTION_BOOKABLE_BLACKS'),'blacks',$_blacks));
+		if (!$_blacks->is_empty())
+			$fields->attach(form_input_multi_list(do_lang_tempcode('BLACKOUTS'),do_lang_tempcode('DESCRIPTION_BOOKABLE_BLACKS'),'blacks',$_blacks));
 
 		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_FROM'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_FROM'),'active_from',false,false,false,array(0,0,$details['active_from_month'],$details['active_from_day'],$details['active_from_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
 		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_TO'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_TO'),'active_to',true,true,false,is_null($details['active_to_month'])?NULL:array(0,0,$details['active_to_month'],$details['active_to_day'],$details['active_to_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
@@ -254,7 +268,7 @@ class Module_cms_booking extends standard_aed_module
 		$myrow=$rows[0];
 
 		$supplements=collapse_1d_complexity('supplement_id',$GLOBALS['SITE_DB']->query_select('bookable_supplement_for',array('supplement_id'),array('bookable_id'=>$id)));
-		$blacks=collapse_1d_complexity('blacked_id',$GLOBALS['SITE_DB']->query_select('bookable_blacked_for',array('supplement_id'),array('bookable_id'=>$id)));
+		$blacks=collapse_1d_complexity('blacked_id',$GLOBALS['SITE_DB']->query_select('bookable_blacked_for',array('blacked_id'),array('bookable_id'=>$id)));
 		$codes=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_select('bookable_codes',array('code'),array('bookable_id'=>$id)));
 
 		return $this->get_form_fields($myrow,$supplements,$blacks,$codes);
@@ -327,7 +341,8 @@ class Module_cms_booking_supplements extends standard_aed_module
 	var $menu_label='BOOKINGS';
 	var $orderer='sort_order';
 	var $title_is_multi_lang=true;
-	
+	var $table='bookable_supplement';
+
 	var $donext_type=NULL;
 
 	/**
@@ -371,7 +386,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 			$fr=array();
 			$fr[]=protect_from_escaping(get_translated_tempcode($row['title']));
 			$fr[]=float_format($row['price']);
-			$fr[]=protect_from_escaping(hyperlink(do_lang_tempcode('EDIT'),$edit_link));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
 			$fields->attach(results_entry($fr,true));
 		}
@@ -412,7 +427,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',is_null($details['title'])?'':get_translated_text($details['title']),true));
-		$fields->attach(form_input_line(do_lang_tempcode('PRICE'),do_lang_tempcode('DESCRIPTION_SUPPLEMENT_PRICE'),'price',float_to_raw_string($details['price']),true));
+		$fields->attach(form_input_line(do_lang_tempcode('PRICE'),do_lang_tempcode('DESCRIPTION_SUPPLEMENT_PRICE'),'price',float_to_raw_string($details['price'],2),true));
 		$fields->attach(form_input_tick(do_lang_tempcode('PRICE_IS_PER_PERIOD'),do_lang_tempcode('DESCRIPTION_PRICE_IS_PER_PERIOD'),'price_is_per_period',$details['price_is_per_period']==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_QUANTITIES'),do_lang_tempcode('DESCRIPTION_SUPPORTS_QUANTITIES'),'supports_quantities',$details['supports_quantities']==1));
 		//$fields->attach(form_input_line(do_lang_tempcode('PROMO_CODE'),do_lang_tempcode('DESCRIPTION_PROMO_CODE'),'promo_code',$details['promo_code'],true));
@@ -425,7 +440,8 @@ class Module_cms_booking_supplements extends standard_aed_module
 		{
 			$_bookables->attach(form_input_list_entry(strval($s['id']),in_array($s['id'],$bookables),get_translated_text($s['title'])));
 		}
-		$fields->attach(form_input_multi_list(do_lang_tempcode('BOOKABLES'),do_lang_tempcode('DESCRIPTION_SUPPLEMENT_BOOKABLES'),'bookables',$_bookables));
+		if (!$_bookables->is_empty())
+			$fields->attach(form_input_multi_list(do_lang_tempcode('BOOKABLES'),do_lang_tempcode('DESCRIPTION_SUPPLEMENT_BOOKABLES'),'bookables',$_bookables));
 
 		return array($fields,$hidden);
 	}
@@ -519,7 +535,8 @@ class Module_cms_booking_blacks extends standard_aed_module
 	var $menu_label='BOOKINGS';
 	var $orderer='id';
 	var $title_is_multi_lang=true;
-	
+	var $table='bookable_blacked';
+
 	var $donext_type=NULL;
 
 	/**
@@ -547,7 +564,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 		$fh=array();
 		$fh[]=do_lang_tempcode('FROM');
 		$fh[]=do_lang_tempcode('TO');
-		$fh[]=do_lang_tempcode('EXPLANATION');
+		$fh[]=do_lang_tempcode('BLACKED_EXPLANATION');
 		$fh[]=do_lang_tempcode('ACTIONS');
 		$header_row=results_field_title($fh,$sortables,'sort',$sortable.' '.$sort_order);
 
@@ -563,7 +580,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 			$fr[]=get_timezoned_date(mktime(0,0,0,$row['blacked_from_month'],$row['blacked_from_day'],$row['blacked_from_year']),false);
 			$fr[]=get_timezoned_date(mktime(0,0,0,$row['blacked_to_month'],$row['blacked_to_day'],$row['blacked_to_year']),false);
 			$fr[]=protect_from_escaping(get_translated_tempcode($row['blacked_explanation']));
-			$fr[]=protect_from_escaping(hyperlink(do_lang_tempcode('EDIT'),$edit_link));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
 			$fields->attach(results_entry($fr,true));
 		}
@@ -703,6 +720,8 @@ class Module_cms_booking_bookings extends standard_aed_module
 	var $menu_label='BOOKINGS';
 	var $orderer='id';
 	var $title_is_multi_lang=true;
+	var $table='booking';
+	var $type_code='b';
 	
 	var $donext_type=NULL;
 
@@ -720,10 +739,10 @@ class Module_cms_booking_bookings extends standard_aed_module
 		
 		require_code('templates_results_table');
 		
-		$current_ordering=get_param('sort','year,month,day DESC');
-		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
+		$current_ordering=get_param('sort','b_year DESC,b_month DESC,b_day DESC');
+		list(,$sortable,$sort_order)=preg_split('#(.*) (ASC|DESC)#',$current_ordering,2,PREG_SPLIT_DELIM_CAPTURE);
 		$sortables=array(
-			'year,month,day'=>do_lang_tempcode('DATE'),
+			'b_year DESC,b_month DESC,b_day'=>do_lang_tempcode('DATE'),
 			'bookable_id'=>do_lang_tempcode('BOOKABLE'),
 			'booked_at'=>do_lang_tempcode('BOOKING_DATE'),
 		);
@@ -750,11 +769,11 @@ class Module_cms_booking_bookings extends standard_aed_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$fr=array();
-			$fr[]=get_timezoned_date(mktime(0,0,0,$row['month'],$row['day'],$row['year']),false);
+			$fr[]=get_timezoned_date(mktime(0,0,0,$row['b_month'],$row['b_day'],$row['b_year']),false,true,true);
 			$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
-			$fr[]=$GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$row['bookable_id']));
+			$fr[]=get_translated_text($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$row['bookable_id'])));
 			$fr[]=get_timezoned_date($row['booked_at']);
-			$fr[]=protect_from_escaping(hyperlink(do_lang_tempcode('EDIT'),$edit_link));
+			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
 			$fields->attach(results_entry($fr,true));
 		}
@@ -783,7 +802,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 				// Form to choose bookable
 				@ob_end_clean();
 
-				$bookables=$GLOBALS['SITE_DB']->query_select('bookables',array('*'),NULL,'ORDER BY sort_order');
+				$bookables=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),NULL,'ORDER BY sort_order');
 				if (count($bookables)==0)
 				{
 					inform_exit(do_lang_tempcode('NO_CATEGORIES'));
@@ -800,7 +819,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 				$submit_name=do_lang_tempcode('PROCEED');
 				$hidden=build_keep_post_fields();
 
-				$title=get_page_title('SEARCH');
+				$title=get_page_title('ADD_BOOKING');
 				$tpl=do_template('FORM_SCREEN',array('TARGET'=>'_self','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 				$echo=globalise($tpl,NULL,'',true);
 				$echo->evaluate_echo();
@@ -827,14 +846,15 @@ class Module_cms_booking_bookings extends standard_aed_module
 		$bookable=$_bookable[0];
 
 		$fields->attach(form_input_date(do_lang_tempcode('FROM'),'','bookable_'.strval($details['bookable_id']).'_date_from',false,false,false,array(0,0,$details['start_month'],$details['start_day'],$details['start_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
-		if ($bookable[0]['dates_as_ranges']==1)
+		if ($bookable['dates_are_ranges']==1)
 			$fields->attach(form_input_date(do_lang_tempcode('TO'),'','bookable_'.strval($details['bookable_id']).'_date_to',false,false,false,array(0,0,$details['end_month'],$details['end_day'],$details['end_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
 		$fields->attach(form_input_integer(do_lang_tempcode('QUANTITY'),'','bookable_'.strval($details['bookable_id']).'_quantity',$details['quantity'],true));
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),'','bookable_'.strval($details['bookable_id']).'_notes',$details['notes'],false));
 
-		$fields->attach(form_input_username(do_lang_tempcode('BOOKING_FOR'),do_lang_tempcode('DESCRIPTION_USERNAME'),'username',$GLOBALS['FORUM_DRIVER']->get_username($member_id),true,false));
+		$member_directory_url=build_url(array('page'=>'members'),get_module_zone('members'));
+		$fields->attach(form_input_username(do_lang_tempcode('BOOKING_FOR'),do_lang_tempcode('DESCRIPTION_BOOKING_FOR',escape_html($member_directory_url->evaluate())),'username',$GLOBALS['FORUM_DRIVER']->get_username($member_id),true,false));
 
-		$supplement_rows=$GLOBALS['SITE_DB']->query_select('bookable_supplements a JOIN '.get_table_prefix().'bookable_supplements_for b ON a.id=b.supplement_id',array('a.*'),array('bookable_id'=>$details['bookable_id']),'ORDER BY sort_order');
+		$supplement_rows=$GLOBALS['SITE_DB']->query_select('bookable_supplement a JOIN '.get_table_prefix().'bookable_supplement_for b ON a.id=b.supplement_id',array('a.*'),array('bookable_id'=>$details['bookable_id']),'ORDER BY sort_order');
 		foreach ($supplement_rows as $supplement_row)
 		{
 			$quantity=0;
@@ -898,7 +918,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 		{
 			foreach ($r['_rows'] as $row)
 			{
-				if ($row['id']==$request[0]['_rows']['id']) break 2;
+				if ($row['id']==$request[0]['_rows'][0]['id']) break 2;
 			}
 		}
 

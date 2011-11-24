@@ -132,5 +132,6 @@ ocPortal supports syntax highlighting via [url="GeSHi"]http://qbnz.com/highlight
 [title="2"]See also[/title]
 
  - [page caption="Comcode and the attachment system"]tut_comcode[/page]
+ - [page caption="WYSIWYG editing"]tut_wysiwyg[/page]
  - [page caption="Helping improve site accessibility for disabled users"]tut_accessibility[/page]
 

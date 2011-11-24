@@ -462,9 +462,19 @@ class Module_tickets
 				$comments=new ocp_tempcode();
 				foreach ($_comments as $i=>$comment)
 				{
+					$_comments_forum=get_option('comments_forum_name');
+					if (is_numeric($_comments_forum))
+					{
+						$comments_forum=$_comments_forum;
+					} else
+					{
+						$comments_forum=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($_comments_forum);
+					}
+
 					$edit_post_url=new ocp_tempcode();
 					require_code('ocf_posts');
-					if ((get_forum_type()=='ocf') && (ocf_may_edit_post_by($comment['user'],$forum)))
+					require_code('ocf_forums');
+					if ((get_forum_type()=='ocf') && ((has_category_access(get_member(),'forums',strval($forum))) || ($forum==$comments_forum)) && (ocf_may_edit_post_by($comment['user'],$forum)))
 					{
 						$edit_post_url=build_url(array('page'=>'topics','type'=>'edit_post','id'=>$comment['id'],'redirect'=>get_self_url(true)),get_module_zone('topics'));
 					}

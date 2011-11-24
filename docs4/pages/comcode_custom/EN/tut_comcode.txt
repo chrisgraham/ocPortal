@@ -1773,6 +1773,7 @@ If you go back to edit the content with your attachment, you will see that it ha
  - [page caption="Advanced Custom pages of information (via Comcode)"]tut_adv_comcode_pages[/page]
  - [page caption="The ocPortal emoticon system"]tut_emoticons[/page]
  - [page caption="Advanced Comcode"]tut_adv_comcode[/page]
+ - [page caption="WYSIWYG editing"]tut_wysiwyg[/page]
  - [page caption="Tempcode Programming"]tut_tempcode[/page]
  - [page caption="Security"]tut_security[/page]
  - [page caption="Filtering using ocFilter syntax"]tut_filter[/page]

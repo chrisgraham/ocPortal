@@ -708,7 +708,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		}
 		$imgcode[1]=str_replace(get_base_url(),'',$imgcode[1]);
 
-		$semihtml2=preg_replace('#<img [^>]*src="[^"]*'.str_replace('#','\#',preg_quote(escape_html($imgcode[1]))).'"[^>]*>#siU',$code,$semihtml2);
+		$semihtml2=preg_replace('#<img [^>]*src="[^"]*'.str_replace('#','\#',preg_quote(escape_html($imgcode[1]))).'"[^>]*>\s*#si',$code,$semihtml2);
 	}
 
 	$semihtml2=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*) />#siU','_img_tag_fixup',$semihtml2);

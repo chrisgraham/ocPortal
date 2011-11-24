@@ -42,9 +42,8 @@
 					<!-- List put in here -->
 				</div>
 				<script type="text/javascript">// <![CDATA[
-					var use_server_id=true;
 					var current_selection='';
-					var site_tree=new tree_list('tree_list','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1','','');
+					var site_tree=new tree_list('tree_list','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1','','',false,null,false,true);
 				//]]></script>
 			
 				<p class="associated_caption">

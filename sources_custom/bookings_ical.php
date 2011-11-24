@@ -29,8 +29,8 @@ function bookables_ical_script()
 
 	@ini_set('ocproducts.xss_detect','0');
 
-	header('Content-Type: text/calendar');
-	header('Content-Disposition: filename="bookables_export.ics"');
+//	header('Content-Type: text/calendar');
+//	header('Content-Disposition: filename="bookables_export.ics"');
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -51,7 +51,7 @@ function bookables_ical_script()
 
 		echo "DTSTAMP:".date('Ymd',time())."T".date('His',$event['add_date'])."\n";
 		echo "CREATED:".date('Ymd',time())."T".date('His',$event['add_date'])."\n";
-		if (!is_null($event['e_edit_date'])) echo "LAST-MODIFIED:".date('Ymd',time())."T".date('His',$event['edit_date'])."\n";
+		if (!is_null($event['edit_date'])) echo "LAST-MODIFIED:".date('Ymd',time())."T".date('His',$event['edit_date'])."\n";
 
 		echo "SUMMARY:".ical_escape(get_translated_text($event['title']))."\n";
 		$description=get_translated_text($event['description']);
@@ -67,7 +67,7 @@ function bookables_ical_script()
 		$url=$_url->evaluate();
 		echo "URL:".ical_escape($url)."\n";
 
-		$time=mktime(0,0,0,$event['month'],$event['day'],$event['year']);
+		$time=mktime(0,0,0,$event['active_from_month'],$event['active_from_day'],$event['active_from_year']);
 		$time2=mixed();
 		if ($event['cycle_type']!='none')
 		{
@@ -137,21 +137,26 @@ function bookables_ical_script()
  */
 function bookings_ical_script()
 {
-	if (get_param('pass')!=md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password'])) access_denied('I_ERROR');
-	
+	$pass_ok=get_param('pass','')==md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']);
+	if ((!$pass_ok) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
+		access_denied('I_ERROR');
+
 	require_code('calendar_ical');
 
 	@ini_set('ocproducts.xss_detect','0');
 
-	header('Content-Type: text/calendar');
-	header('Content-Disposition: filename="bookings_export.ics"');
+	if ($pass_ok)
+	{
+		header('Content-Type: text/calendar');
+		header('Content-Disposition: filename="bookings_export.ics"');
+	} // If not, it's an admin testing, so just display contents
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	$time=get_param_integer('from',time());
 
 	$id=get_param_integer('id');
-	$where='bookable_id='.strval($id).' AND (year>'.date('Y',$time).' OR (date='.date('Y',$time).' AND month>'.date('m',$time).') OR (date='.date('Y',$time).' AND month='.date('m',$time).' AND day='.date('d',$time).'))';
+	$where='bookable_id='.strval($id).' AND (b_year>'.date('Y',$time).' OR (b_day='.date('Y',$time).' AND b_month>'.date('m',$time).') OR (b_year='.date('Y',$time).' AND b_month='.date('m',$time).' AND b_day='.date('d',$time).'))';
 	$members_with_bookings=$GLOBALS['SITE_DB']->query('SELECT DISTINCT member_id FROM '.get_table_prefix().'booking WHERE '.$where.' ORDER BY booked_at DESC',10000/*reasonable limit*/);
 	echo "BEGIN:VCALENDAR\n";
 	echo "VERSION:2.0\n";
@@ -202,7 +207,7 @@ function bookings_ical_script()
 			$url=$_url->evaluate();
 			echo "URL:".ical_escape($url)."\n";
 
-			$time=mktime(0,0,0,$booking['month'],$booking['day'],$booking['year']);
+			$time=mktime(0,0,0,$booking['b_month'],$booking['b_day'],$booking['b_year']);
 			if ($time>$max_time) $max_time=$time;
 			echo "DTSTART:".date('Ymd',$time)."\n";
 
@@ -211,13 +216,13 @@ function bookings_ical_script()
 	}
 
 	// Show free slots
-	$codes_in_total=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_value('bookable_codes','code',array('bookable_id'=>$id)));
+	$codes_in_total=collapse_1d_complexity('code',$GLOBALS['SITE_DB']->query_select('bookable_codes',array('code'),array('bookable_id'=>$id)));
 	for ($i=time();$i<=$max_time;$i+=strtotime('+1 day',$i))
 	{
 		$day=intval(date('d',$i));
 		$month=intval(date('m',$i));
 		$year=intval(date('Y',$i));
-		$codes_taken_already=collapse_1d_complexity('code_allocation',$GLOBALS['SITE_DB']->query_value('booking','code_allocation',array('day'=>$day,'month'=>$month,'year'=>$year)));
+		$codes_taken_already=collapse_1d_complexity('code_allocation',$GLOBALS['SITE_DB']->query_select('booking',array('code_allocation'),array('b_day'=>$day,'b_month'=>$month,'b_year'=>$year)));
 		foreach (array_diff($codes_in_total,$codes_taken_already) as $code)
 		{
 			echo "BEGIN:VEVENT\n";

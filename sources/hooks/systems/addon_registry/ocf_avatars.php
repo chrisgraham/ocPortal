@@ -79,7 +79,6 @@ class Hook_addon_registry_ocf_avatars
 			'themes/default/images/ocf_default_avatars/default_set/bird.png',
 			'themes/default/images/ocf_default_avatars/default_set/bonfire.png',
 			'themes/default/images/ocf_default_avatars/default_set/cool_flare.png',
-			'themes/default/images/ocf_default_avatars/default_set/cross.png',
 			'themes/default/images/ocf_default_avatars/default_set/dog.png',
 			'themes/default/images/ocf_default_avatars/default_set/eagle.png',
 			'themes/default/images/ocf_default_avatars/default_set/forks.png',

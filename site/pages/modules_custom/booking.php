@@ -90,20 +90,20 @@ class Module_booking
 			// (useful for defining seasonable bookables- e.g. summer bookable costing more, or with more rooms)
 			'active_from_day'=>'SHORT_INTEGER',
 			'active_from_month'=>'SHORT_INTEGER',
-			'active_from_year'=>'SHORT_INTEGER',
+			'active_from_year'=>'INTEGER',
 			'active_to_day'=>'?SHORT_INTEGER',
 			'active_to_month'=>'?SHORT_INTEGER',
-			'active_to_year'=>'?SHORT_INTEGER',
+			'active_to_year'=>'?INTEGER',
 		));
 
 		$GLOBALS['SITE_DB']->create_table('bookable_blacked',array(
 			'id'=>'*AUTO',
 			'blacked_from_day'=>'SHORT_INTEGER',
 			'blacked_from_month'=>'SHORT_INTEGER',
-			'blacked_from_year'=>'SHORT_INTEGER',
+			'blacked_from_year'=>'INTEGER',
 			'blacked_to_day'=>'SHORT_INTEGER',
 			'blacked_to_month'=>'SHORT_INTEGER',
-			'blacked_to_year'=>'SHORT_INTEGER',
+			'blacked_to_year'=>'INTEGER',
 			'blacked_explanation'=>'LONG_TRANS',
 		));
 
@@ -137,9 +137,9 @@ class Module_booking
 			'id'=>'*AUTO',
 			'bookable_id'=>'AUTO_LINK',
 			'member_id'=>'USER',
-			'day'=>'SHORT_INTEGER',
-			'month'=>'SHORT_INTEGER',
-			'year'=>'SHORT_INTEGER',
+			'b_day'=>'SHORT_INTEGER',
+			'b_month'=>'SHORT_INTEGER',
+			'b_year'=>'INTEGER',
 			'code_allocation'=>'ID_TEXT', // These code allocations will be given out arbitrarily, which means later on if things get busy, things could be suboptimal (e.g. people's 'stay' split across different codes on different dates, whilst reorganising could solve that). So a human would probably reorganise this manually in some cases, and it should not be considered a real-world guarantee, or a necessary thing to make sure people get a full run-length on a single code
 			'notes'=>'LONG_TEXT',
 			'booked_at'=>'TIME', // time booking was made
@@ -243,13 +243,13 @@ class Module_booking
 			// Message if not currently active
 			if ($active_from>time())
 			{
-				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED',get_timezoned_date($active_from,false));
+				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED',get_timezoned_date($active_from,false,true,true));
 			}
 
 			// Message if becomes inactive within next 6 months
 			if ((!is_null($active_to)) && ($active_to<SHOW_WARNINGS_UNTIL))
 			{
-				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED',get_timezoned_date($active_to,false));
+				$messages[]=do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED',get_timezoned_date($active_to,false,true,true));
 			}
 
 			// Message about any black-outs within next 6 months
@@ -270,8 +270,8 @@ class Module_booking
 				{
 					$messages[]=do_lang_tempcode(
 						($black_from==$black_to)?'NOTE_BOOKING_IMPOSSIBLE_BLACKED_ONEOFF':'NOTE_BOOKING_IMPOSSIBLE_BLACKED_PERIOD',
-						get_timezoned_date($black_from,false),
-						get_timezoned_date($black_to,false)
+						get_timezoned_date($black_from,false,true,true),
+						get_timezoned_date($black_to,false,true,true)
 					);
 				}
 			}
@@ -414,7 +414,7 @@ class Module_booking
 
 		$bookables=array();
 
-		$bookable_rows=$GLOBALS['SITE_DB']->query_select('bookables',array('*'),NULL,'ORDER BY sort_order');
+		$bookable_rows=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),NULL,'ORDER BY sort_order');
 		foreach ($bookable_rows as $bookable_row)
 		{
 			if (post_param_integer('bookable_'.strval($bookable_row['id']).'_quantity',0)>0)

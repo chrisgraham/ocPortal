@@ -4,10 +4,7 @@
 </div>
 <script type="text/javascript">// <![CDATA[
 addEventListenerAbstract(window,'load',function () {
-	{+START,IF,{USE_SERVER_ID}}
-	window.use_server_id=true;
-	{+END}
-	new tree_list('{NAME*;}','data/ajax_tree.php?hook={HOOK&;}{$KEEP;}','{ROOT_ID&;}','{OPTIONS&;}',false,{TABINDEX%});
+	new tree_list('{NAME*;}','data/ajax_tree.php?hook={HOOK&;}{$KEEP;}','{ROOT_ID&;}','{OPTIONS&;}',false,{TABINDEX%},false{+START,IF,{USE_SERVER_ID}},true{+END});
 } );
 //]]></script>
 

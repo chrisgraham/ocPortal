@@ -1215,7 +1215,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 										}
 									} else
 									{
-										$continuation.=$semiparse_mode?$next:escape_html($next);
+										$continuation.=($semiparse_mode && !($mindless_mode && $in_code_tag))?$next:escape_html($next);
 									}
 								} else
 								{

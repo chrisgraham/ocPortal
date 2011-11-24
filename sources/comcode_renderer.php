@@ -946,7 +946,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if ($level==0) $level=1; // Stop crazy Comcode causing stack errors with the toc
 
 			$uniq_id=strval(count($STRUCTURE_LIST));
-			$STRUCTURE_LIST[]=array($level,$embed,$uniq_id);
+			if ($structure_sweep)
+				$STRUCTURE_LIST[]=array($level,$embed,$uniq_id);
 			if ($level==1) $template='SCREEN_TITLE';
 			elseif ($level==2) $template='COMCODE_SECTION_TITLE';
 			elseif ($level==3) $template='COMCODE_MINOR_TITLE';

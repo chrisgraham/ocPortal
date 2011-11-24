@@ -69,15 +69,16 @@ class Hook_fields_page_link
 	/**
 	 * Convert a field value to something renderable.
 	 *
+	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($ev)
+	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
 
 		if ($ev=='') return '';
-		
+
 		$_ev=explode(' ',$ev,2);
 		if (!array_key_exists(1,$_ev)) $_ev[1]=$_ev[0];
 
@@ -126,7 +127,6 @@ class Hook_fields_page_link
 		$tmp_name='field_'.strval($id);
 
 		$value=post_param($tmp_name,STRING_MAGIC_NULL);
-
 		return $value;
 	}
 

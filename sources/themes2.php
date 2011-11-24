@@ -141,13 +141,19 @@ function actual_add_theme($name)
 	closedir($_dir);*/
 
 	// Copy image references from default
-	$theme_images=$GLOBALS['SITE_DB']->query_select('theme_images',array('*'),array('theme'=>'default'));
-	foreach ($theme_images as $theme_image)
+	$start=0;
+	do
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','id',array('theme'=>$name,'id'=>$theme_image['id'],'lang'=>$theme_image['lang']));
-		if (is_null($test))
-			$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$theme_image['id'],'theme'=>$name,'path'=>$theme_image['path'],'lang'=>$theme_image['lang']));
+		$theme_images=$GLOBALS['SITE_DB']->query_select('theme_images',array('*'),array('theme'=>'default'),'',100,$start);
+		foreach ($theme_images as $theme_image)
+		{
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','id',array('theme'=>$name,'id'=>$theme_image['id'],'lang'=>$theme_image['lang']));
+			if (is_null($test))
+				$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$theme_image['id'],'theme'=>$name,'path'=>$theme_image['path'],'lang'=>$theme_image['lang']));
+		}
+		$start+=100;
 	}
+	while (count($theme_images)==100);
 
 	log_it('ADD_THEME',$name);
 }
@@ -304,7 +310,7 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL)
 		}
 	}
 
-	$rows=$db->query('SELECT id,path FROM '.$db->get_table_prefix().'theme_images WHERE '.db_string_not_equal_to('path','themes/default/images/blank.gif').' AND ('.db_string_equal_to('theme',$theme).' OR '.db_string_equal_to('theme','default').') AND id LIKE \''.db_encode_like($type.'%').'\' ORDER BY path');
+	$rows=$db->query('SELECT DISTINCT id,path FROM '.$db->get_table_prefix().'theme_images WHERE path NOT LIKE \''.db_encode_like('themes/default/images/%').'\' AND '.db_string_not_equal_to('path','themes/default/images/blank.gif').' AND ('.db_string_equal_to('theme',$theme).' OR '.db_string_equal_to('theme','default').') AND id LIKE \''.db_encode_like($type.'%').'\' ORDER BY path');
 	foreach ($rows as $row)
 	{
 		if ($row['path']=='') continue;
@@ -320,6 +326,7 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL)
 		}
 	}
 	sort($ids);
+
 	$ids=array_unique($ids);
 	return $ids;
 }

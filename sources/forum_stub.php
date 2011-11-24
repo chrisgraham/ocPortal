@@ -335,10 +335,20 @@ class forum_driver_base
 	 */
 	function get_theme($zone_for=NULL)
 	{
+		global $SITE_INFO;
+
 		if ($zone_for!==NULL)
 		{
 			$zone_theme=$GLOBALS['SITE_DB']->query_value('zones','zone_theme',array('zone_name'=>$zone_for));
-			if ($zone_theme!='-1') return $zone_theme;
+			if ($zone_theme!='-1')
+			{
+				if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
+				{
+					if (!is_dir(get_custom_file_base().'/themes/'.$zone_theme)) return $this->get_theme();
+				}
+
+				return $zone_theme;
+			}
 			return $this->get_theme();
 		}
 
@@ -348,7 +358,7 @@ class forum_driver_base
 		global $IN_MINIKERNEL_VERSION;
 		if (($IN_MINIKERNEL_VERSION==1) || (in_safe_mode())) return 'default';
 
-		// Try hardcoded in url
+		// Try hardcoded in URL
 		$CACHED_THEME=filter_naughty(get_param('keep_theme',get_param('utheme','-1')));
 		if ($CACHED_THEME!='-1')
 		{
@@ -380,7 +390,6 @@ class forum_driver_base
 		$default_theme=((get_page_name()=='login') && (get_option('root_zone_login_theme')=='1'))?$GLOBALS['SITE_DB']->query_value('zones','zone_theme',array('zone_name'=>'')):$zone_theme;
 		if (($default_theme!==NULL) && ($default_theme!='-1'))
 		{
-			global $SITE_INFO;
 			if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
 			{
 				if (!is_dir(get_custom_file_base().'/themes/'.$default_theme)) $default_theme='-1';

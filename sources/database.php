@@ -1016,7 +1016,7 @@ class database_driver
 					$_where_pos=0;
 					do
 					{
-						$_where_pos=strpos($_query,' ORDER BY ',$_where_pos+1);
+						$_where_pos=strpos($_query,' GROUP BY ',$_where_pos+1);
 						if ($_where_pos!==false) $where_pos=$_where_pos;
 					}
 					while ($_where_pos!==false);
@@ -1026,7 +1026,7 @@ class database_driver
 					$_where_pos=0;
 					do
 					{
-						$_where_pos=strpos($_query,' GROUP BY ',$_where_pos+1);
+						$_where_pos=strpos($_query,' ORDER BY ',$_where_pos+1);
 						if ($_where_pos!==false) $where_pos=$_where_pos;
 					}
 					while ($_where_pos!==false);

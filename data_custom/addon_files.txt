@@ -2323,3 +2323,4 @@ booking
 # # themes/default/templates_custom/BOOKING_FLESH_OUT_SCREEN.tpl
 # # themes/default/templates_custom/BOOKING_JOIN_OR_LOGIN_SCREEN.tpl
 # # themes/default/templates_custom/BOOK_DATE_CHOOSE.tpl
+# # sources_custom/hooks/systems/do_next_menus/booking.php
