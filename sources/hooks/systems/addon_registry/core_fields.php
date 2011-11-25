@@ -114,7 +114,6 @@ class Hook_addon_registry_core_fields
 			'sources/hooks/systems/fields/user_multi.php',
 			'sources/hooks/systems/fields/multilist.php',
 			'sources/hooks/systems/fields/tick_multi.php',
-			'sources/hooks/systems/fields/location.php',
 			'CATALOGUE_DEFAULT_MULTILIST.tpl',
 			'CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE.tpl',
 		);

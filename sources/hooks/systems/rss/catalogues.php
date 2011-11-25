@@ -77,6 +77,8 @@ class Hook_rss_catalogues
 			$_category=$categories[$row['cc_id']];
 			if ((has_category_access(get_member(),'catalogues_catalogue',$_category['c_name'])) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_member(),'catalogues_category',strval($row['cc_id'])))))
 			{
+				if (!isset($catalogues[$_category['c_name']])) continue;
+				
 				$id=strval($row['id']);
 				$author=$GLOBALS['FORUM_DRIVER']->get_username($row['ce_submitter']);
 				if (is_null($author)) $author='';

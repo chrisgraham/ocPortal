@@ -210,6 +210,8 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 function save_form_custom_fields($content_type,$id)
 {
 	$existing=get_bound_content_entry($content_type,$id);
+	
+	require_code('catalogues');
 
 	// Get field values
 	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_'.$content_type),'ORDER BY cf_order');

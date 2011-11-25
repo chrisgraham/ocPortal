@@ -2272,7 +2272,7 @@
 				uploader.bind("Flash:UploadProcess", function(up, flash_file) {
 					var file = up.getFile(lookup[flash_file.id]);
 
-					if (file.status != plupload.FAILED) {
+					if (file && file.status != plupload.FAILED) {
 						file.loaded = flash_file.loaded;
 						file.size = flash_file.size;
 
@@ -2282,6 +2282,7 @@
 
 				uploader.bind("Flash:UploadChunkComplete", function(up, info) {
 					var chunkArgs, file = up.getFile(lookup[info.id]);
+					if (!file) return;
 
 					chunkArgs = {
 						chunk : info.chunk,
@@ -5303,6 +5304,7 @@ function fileDialogComplete(ob,files) {
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
 	var id = document.getElementById(ob.settings.txtFileDbID);
 	id.value = "-1";
+	txtFileName.value = "";
 	for (var i=0;i<files.length;i++)
 	{
 		file=files[i];
@@ -5380,8 +5382,8 @@ function uploadError(ob,error) {
 
 function queueChanged(ob)
 {
-	if ((ob.settings.page_type!='upload_multi') && (ob.files.length!=1))
-		ob.splice(1,ob.files.length-1);
+	if ((ob.settings.page_type!='upload_multi') && (ob.files.length>1))
+		ob.splice(0,ob.files.length-1);
 }
 
 function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)

@@ -74,7 +74,7 @@ function compile_template($data,$template_name,$theme,$lang)
 	
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);
 
-	$compilable_symbols=array('"ADDON_INSTALLED"','"BASE_URL"','"COPYRIGHT"','"SITE_NAME"','"BRAND_BASE_URL"','"BRAND_NAME"','"IMG_WIDTH"','"IMG_HEIGHT"','"IMG"','"LANG"','"THEME"','"VALUE_OPTION"','"CONFIG_OPTION"');
+	$compilable_symbols=array('"ADDON_INSTALLED"','"BASE_URL"','"COPYRIGHT"','"SITE_NAME"','"BRAND_BASE_URL"','"BRAND_NAME"','"IMG_WIDTH"','"IMG_HEIGHT"',/*bad if theme image missing'"IMG"',*/'"LANG"','"THEME"','"VALUE_OPTION"','"CONFIG_OPTION"');
 	global $SITE_INFO;
 	if ((isset($SITE_INFO['no_keep_params'])) && ($SITE_INFO['no_keep_params']=='1'))
 	{
@@ -307,9 +307,12 @@ function compile_template($data,$template_name,$theme,$lang)
 						$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_LANGUAGE_REFERENCE).','.$first_param.',array('.$_opener_params.'))';
 						if ($_opener_params=='') // Optimise it out for simple case?
 						{
-							$looked_up=do_lang(eval('return '.$first_param.';'),NULL,NULL,NULL,$lang);
-							if (apply_tempcode_escaping($escaped,$looked_up)==$looked_up)
-								$new_line='"'.php_addslashes($looked_up).'"';
+							$looked_up=do_lang(eval('return '.$first_param.';'),NULL,NULL,NULL,$lang,false);
+							if (!is_null($looked_up))
+							{
+								if (apply_tempcode_escaping($escaped,$looked_up)==$looked_up)
+									$new_line='"'.php_addslashes($looked_up).'"';
+							}
 						}
 						$current_level_data[]=$new_line;
 						break;

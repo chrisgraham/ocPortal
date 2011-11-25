@@ -709,19 +709,6 @@ class Module_cms_galleries extends standard_aed_module
 	{
 		require_code('exif');
 		
-		if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
-		{
-			// See if we need to resize the image
-			constrain_gallery_image_to_max_size(get_custom_file_base().'/'.rawurldecode($url),$file,intval(get_option('maximum_image_size')));
-
-			// See if we need to do watermarking
-			$watermark=post_param_integer('watermark',0);
-			if ($watermark==1)
-			{
-				watermark_gallery_image($cat,rawurldecode($url),$file);
-			}
-		}
-
 		if (substr($thumb_url,-4,4)=='.gif') $thumb_url=substr($thumb_url,0,strlen($thumb_url)-4).'.png';
 		if (is_video($url))
 		{
@@ -747,6 +734,20 @@ class Module_cms_galleries extends standard_aed_module
 			if ($ok)
 			{
 				$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
+
+				if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+				{
+					// See if we need to resize the image
+					constrain_gallery_image_to_max_size(get_custom_file_base().'/'.rawurldecode($url),$file,intval(get_option('maximum_image_size')));
+
+					// See if we need to do watermarking
+					$watermark=post_param_integer('watermark',0);
+					if ($watermark==1)
+					{
+						watermark_gallery_image($cat,rawurldecode($url),$file);
+					}
+				}
+
 				$id=add_image($cat,$exif['UserComment'],$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''));
 				store_exif('image',strval($id),$exif);
 			}

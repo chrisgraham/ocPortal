@@ -761,7 +761,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			$pos=strpos($codename,':');
 			if ($pos!==false)
 			{
-				require_lang(substr($codename,0,$pos));
+				require_lang(substr($codename,0,$pos),NULL,NULL,!$require_result);
 				$codename=substr($codename,$pos+1);
 			}
 
@@ -785,7 +785,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				{
 					list($that_codename,$that_lang)=$request;
 					unset($LANG_REQUESTED_LANG[$that_lang][$that_codename]);
-					require_lang($that_codename,$that_lang);
+					require_lang($that_codename,$that_lang,NULL,!$require_result);
 				}
 				$ret=_do_lang($codename,$token1,$token2,$token3,$lang,$require_result);
 				if ($ret===NULL)
