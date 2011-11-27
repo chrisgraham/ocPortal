@@ -274,7 +274,12 @@ function _get_lang_file_map($b,&$entries,$descriptions=NULL,$given_whole_file=fa
 				} else
 				{
 					$processing=false;
-					if ((!is_null($doing)) && ($value!='')) $entries[$doing]=$value;
+					if ((!is_null($doing)) && ($value!=''))
+					{
+						if (($doing=='en_left') && ($value!='left') && ($value!='right')) $value='left';
+						if (($doing=='en_right') && ($value!='left') && ($value!='right')) $value='right';
+						$entries[$doing]=$value;
+					}
 				}
 			}
 			if (!$processing)

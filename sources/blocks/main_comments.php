@@ -98,7 +98,7 @@ class Block_main_comments
 		{
 			decache('main_comments');
 		}
-		$hidden=$submitted?do_comments(true,'block_main_comments',$map['page'].'_'.$map['param'].$extra,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL):false;
+		$hidden=$submitted?do_comments(true,'block_main_comments',$map['page'].'_'.$map['param'].$extra,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,false,NULL,get_page_name()=='guestbook'):false;
 
 		$out=new ocp_tempcode();
 

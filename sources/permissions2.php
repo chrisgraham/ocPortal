@@ -273,7 +273,6 @@ function get_permissions_matrix($server_id,$access,$overridables,$specific_permi
 			$permission_rows->attach(do_template('FORM_SCREEN_INPUT_PERMISSION_ADMIN',array('FORCE_PRESETS'=>$no_outer,'OVERRIDES'=>$overridables_filtered,'GROUP_NAME'=>$group_name,'GROUP_ID'=>strval($id),'PINTERFACE_VIEW'=>$pinterface_view)));
 		}
 	}
-	
 	if ((count($overridables)==0) && (!$no_outer))
 		return $permission_rows;
 

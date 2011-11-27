@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @package		core_fields
  */
 
 class Hook_symbol_CATALOGUE_ENTRY_FOR
@@ -30,7 +30,7 @@ class Hook_symbol_CATALOGUE_ENTRY_FOR
 	function run($param)
 	{
 		$value='';
-		if (array_key_exists(1,$param))
+		if ((array_key_exists(1,$param)) && (addon_installed('catalogues')))
 		{
 			static $cache=array();
 			if (isset($cache[$param[0]][$param[1]])) return $cache[$param[0]][$param[1]];

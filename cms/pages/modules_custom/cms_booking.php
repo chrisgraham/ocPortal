@@ -419,6 +419,8 @@ class Module_cms_booking_supplements extends standard_aed_module
 				'supports_notes'=>'BINARY',
 				'sort_order'=>'INTEGER',
 			);
+			
+			$bookables=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('bookable',array('id')));
 		}
 
 		$hidden=new ocp_tempcode();
@@ -612,6 +614,8 @@ class Module_cms_booking_blacks extends standard_aed_module
 				'blacked_to_year'=>intval(date('Y')),
 				'blacked_explanation'=>NULL,
 			);
+
+			$bookables=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('bookable',array('id')));
 		}
 
 		$hidden=new ocp_tempcode();

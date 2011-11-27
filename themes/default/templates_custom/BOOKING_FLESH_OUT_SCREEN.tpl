@@ -1,5 +1,7 @@
 {TITLE}
 
+<p>{!BOOKING_FLESH_OUT}</p>
+
 <script type="text/javascript">// <![CDATA[
 	function recalculate_price(form)
 	{
@@ -45,53 +47,57 @@
 				{+END}
 
 				{+START,LOOP,BOOKABLE_SUPPLEMENTS}
-					<p>
-						<label for="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity">
-							<h2>{SUPPLEMENT_TITLE*} ({!OPTIONAL_SUPPLEMENT})</h2>
-						
-							{+START,IF,{SUPPLEMENT_SUPPORTS_QUANTITY}}
-								{!QUANTITY}
-
-								<select onchange="recalculate_price(this.form);" id="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity" name="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity">
-									{$SET,quantity,0}
-									{+START,WHILE,{$LT,{$GET,quantity},{$ADD,{BOOKABLE_QUANTITY},1}}}
-										<option {+START,IF,{$EQ,{SUPPLEMENT_QUANTITY},{$GET,quantity}}}selected="selected" {+END}value="{$GET*,quantity}">{$NUMBER_FORMAT*,{$GET,quantity}}</option>
-										{$INC,quantity}
-									{+END}
-								</select>
-							{+END}
-
-							{+START,IF,{$NOT,{SUPPLEMENT_SUPPORTS_QUANTITY}}}
-								{!I_WANT_THIS}
-
-								<input{+START,IF,{$GT,{SUPPLEMENT_QUANTITY},0}} checked="checked"{+END} onchange="recalculate_price(this.form);" type="checkbox" id="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity" name="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity" value="1" />
-							{+END}
-						</label>
-					</p>
-
-					{+START,IF,{SUPPLEMENT_SUPPORTS_NOTES}}
+					<div style="padding-left: 50px">
 						<p>
-							<label for="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes">
-								{!NOTES_FOR_US}<br />
-								<textarea cols="50" rows="1" id="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes" name="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes">{SUPPLEMENT_NOTES*}</textarea>
+							<label for="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity">
+								<h3>{SUPPLEMENT_TITLE*} ({!OPTIONAL_SUPPLEMENT})</h3>
+						
+								{+START,IF,{SUPPLEMENT_SUPPORTS_QUANTITY}}
+									{!QUANTITY}
+
+									<select onchange="recalculate_price(this.form);" id="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity" name="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity">
+										{$SET,quantity,0}
+										{+START,WHILE,{$LT,{$GET,quantity},51}}
+											<option {+START,IF,{$EQ,{SUPPLEMENT_QUANTITY},{$GET,quantity}}}selected="selected" {+END}value="{$GET*,quantity}">{$NUMBER_FORMAT*,{$GET,quantity}}</option>
+											{$INC,quantity}
+										{+END}
+									</select>
+								{+END}
+
+								{+START,IF,{$NOT,{SUPPLEMENT_SUPPORTS_QUANTITY}}}
+									{!I_WANT_THIS}
+
+									<input{+START,IF,{$GT,{SUPPLEMENT_QUANTITY},0}} checked="checked"{+END} onchange="recalculate_price(this.form);" type="checkbox" id="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity" name="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity" value="1" />
+								{+END}
 							</label>
 						</p>
-					{+END}
+
+						{+START,IF,{SUPPLEMENT_SUPPORTS_NOTES}}
+							<p>
+								<label for="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes">
+									{!NOTES_FOR_US}<br />
+									<textarea cols="50" rows="1" id="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes" name="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_notes">{SUPPLEMENT_NOTES*}</textarea>
+								</label>
+							</p>
+						{+END}
+					</div>
 				{+END}
 			{+END}
 		{+END}
 	</div>
+
+	<hr class="spaced_rule" />
+
+	{+START,IF,{$JS_ON}}
+		{+START,BOX,,,curved}
+			<strong>{!PRICE_AUTO_CALC}:</strong> {$CURRENCY_SYMBOL} <span id="price">{PRICE*}</span>
+		{+END}
+	{+END}
 		
 	<p class="proceed_button">
-		<input class="button_page" type="submit" value="{!PROCEED}" />
+		<input class="button_page" type="submit" value="{$?,{$IS_GUEST},{!PROCEED},{!BOOK}}" />
 	</p>
 </form>
-
-{+START,IF,{$JS_ON}}
-	<p>
-		<strong>{!PRICE}</strong> {$CURRENCY_SYMBOL}<span id="price">{PRICE*}</span>
-	</p>
-{+END}
 
 {+START,IF,{$JS_ON}}
 	<form action="{BACK_URL*}" method="post">

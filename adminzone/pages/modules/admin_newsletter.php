@@ -718,7 +718,7 @@ class Module_admin_newsletter extends standard_aed_module
 			$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters));
 
 			// CSV option
-			$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_AS_CSV'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_AS_CSV'),'csv,txt',false));
+			$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_AS_CSV'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_AS_CSV'),'csv',false));
 
 			$submit_name=do_lang_tempcode('VIEW_SUBSCRIBERS');
 			$post_url=get_self_url();
@@ -783,8 +783,11 @@ class Module_admin_newsletter extends standard_aed_module
 
 				if ($csv==1)
 				{
-					if (!is_null($level)) echo '"LEVEL '.strval($level).'"'.chr(10);
-					echo '"'.str_replace('"','""',do_lang('EMAIL_ADDRESS')).'",'.'"'.str_replace('"','""',do_lang('FORENAME')).'",'.'"'.str_replace('"','""',do_lang('SURNAME')).'",'.'"'.str_replace('"','""',do_lang('NAME')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_SEND_ID')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_HASH')).'",'.'"'.str_replace('"','""',do_lang('PASSWORD_HASH')).'",'.'"'.str_replace('"','""',do_lang('SALT')).'",'.'"'.str_replace('"','""',do_lang('LANGUAGE')).'",'.'"'.str_replace('"','""',do_lang('CONFIRM_CODE')).'",'.'"'.str_replace('"','""',do_lang('JOIN_DATE')).'"'.chr(10);
+					if ($start2==0)
+					{
+						if (!is_null($level)) echo '"LEVEL '.do_lang('NEWSLETTER_'.$level).'"'.chr(10);
+						echo '"'.str_replace('"','""',do_lang('EMAIL_ADDRESS')).'",'.'"'.str_replace('"','""',do_lang('FORENAME')).'",'.'"'.str_replace('"','""',do_lang('SURNAME')).'",'.'"'.str_replace('"','""',do_lang('NAME')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_SEND_ID')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_HASH')).'",'.'"'.str_replace('"','""',do_lang('PASSWORD_HASH')).'",'.'"'.str_replace('"','""',do_lang('SALT')).'",'.'"'.str_replace('"','""',do_lang('LANGUAGE')).'",'.'"'.str_replace('"','""',do_lang('CONFIRM_CODE')).'",'.'"'.str_replace('"','""',do_lang('JOIN_DATE')).'"'.chr(10);
+					}
 				} else
 				{
 					$out='';
@@ -830,7 +833,7 @@ class Module_admin_newsletter extends standard_aed_module
 				}
 			}
 			
-			$text=do_lang_tempcode('NEWSLETTER_PEOPLE_ON_LEVEL',is_numeric($level)?make_string_tempcode(escape_html(integer_format(intval($level)))):do_lang_tempcode('NA_EM'));
+			$text=do_lang_tempcode('NEWSLETTER_PEOPLE_ON_LEVEL',((is_numeric($level)) && (intval($level)>0))?make_string_tempcode(escape_html(do_lang('NEWSLETTER_'.$level))):do_lang_tempcode('NA_EM'));
 
 			if ($csv==1)
 			{

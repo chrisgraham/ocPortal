@@ -294,7 +294,7 @@ class Module_topics
 		$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
 		breadcrumb_add_segment($tree,do_lang_tempcode('TRACK_FORUM'));
 
-		return $this->redirect_to_forum('TRACK_FORUM',$forum_id);
+		return $this->redirect_to_forum('TRACK_FORUM',$forum_id,do_lang_tempcode('NOW_TRACKING_FORUM'));
 	}
 
 	/**
@@ -312,7 +312,7 @@ class Module_topics
 		$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
 		breadcrumb_add_segment($tree,do_lang_tempcode('UNTRACK_FORUM'));
 
-		return $this->redirect_to_forum('UNTRACK_FORUM',$forum_id);
+		return $this->redirect_to_forum('UNTRACK_FORUM',$forum_id,do_lang_tempcode('NOW_NOT_TRACKING_FORUM'));
 	}
 
 	// =================
@@ -2053,7 +2053,7 @@ END;
 		$topic_id=get_param_integer('id');
 		ocf_track_topic($topic_id,NULL,false);
 	
-		return $this->redirect_to('TRACK_TOPIC',$topic_id);
+		return $this->redirect_to('TRACK_TOPIC',$topic_id,do_lang_tempcode('NOW_TRACKING_TOPIC'));
 	}
 
 	/**
@@ -2066,7 +2066,7 @@ END;
 		$topic_id=get_param_integer('id');
 		ocf_track_topic($topic_id,NULL,true);
 
-		return $this->redirect_to('UNTRACK_TOPIC',$topic_id);
+		return $this->redirect_to('UNTRACK_TOPIC',$topic_id,do_lang_tempcode('NOW_NOT_TRACKING_TOPIC'));
 	}
 
 	/**
@@ -2112,7 +2112,7 @@ END;
 
 		$this->ocf_ping_topic_unread($topic_id);
 
-		return $this->redirect_to_forum('MARK_UNREAD',$forum_id);
+		return $this->redirect_to_forum('MARK_UNREAD',$forum_id,do_lang_tempcode('TOPIC_MARKED_UNREAD'));
 	}
 
 	/**

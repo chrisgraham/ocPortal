@@ -2326,3 +2326,7 @@ booking
 # # sources_custom/hooks/systems/do_next_menus/booking.php
 # # themes/default/images_custom/calendar/booking.png
 # # themes/default/images_custom/calendar/index.html
+# # themes/default/images_custom/bigicons/blacked.png
+# # themes/default/images_custom/bigicons/bookable.png
+# # themes/default/images_custom/bigicons/booking.png
+# # themes/default/images_custom/bigicons/supplement.png

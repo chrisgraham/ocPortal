@@ -283,7 +283,7 @@ class standard_aed_module
 			list($zone,$attributes,)=page_link_decode($this->archive_entry_point);
 			$page=$attributes['page'];
 			unset($attributes['page']);
-			$archive_url=array($page,$attributes,$zone,is_null($this->archive_label)?NULL:do_lang_tempcode($this->archive_label));
+			$archive_url=array($page,$attributes,$zone,(!isset($this->archive_label))?NULL:do_lang_tempcode($this->archive_label));
 		}
 		$view_url=NULL;
 		if (!is_null($this->view_entry_point))
@@ -291,7 +291,7 @@ class standard_aed_module
 			list($zone,$attributes,)=page_link_decode(str_replace('_ID',$id,$this->view_entry_point));
 			$page=$attributes['page'];
 			unset($attributes['page']);
-			$view_url=array($page,$attributes,$zone,is_null($this->view_label)?NULL:$this->view_label);
+			$view_url=array($page,$attributes,$zone,(!isset($this->view_label))?NULL:$this->view_label);
 		}
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));

@@ -4,6 +4,10 @@
 	<p class="nothing_here">{!NO_CATEGORIES}</p>
 {+END}
 
+{+START,IF_NON_EMPTY,{CATEGORIES}}
+	<p>{!BOOKING_START}</p>
+{+END}
+
 {+START,IF_NON_EMPTY,{SHARED_MESSAGES}}
 	{!NOTICES}:
 	<ul>
@@ -19,6 +23,8 @@
 			{HIDDEN}
 
 			{+START,IF,{$NOT,{HAS_MIXED_DATE_TYPES}}}
+				<h2>{!DATES}</h2>
+			
 				<span><strong>{!FROM}</strong></span>
 				{+START,INCLUDE,BOOK_DATE_CHOOSE}
 					NAME=bookable_date_from
@@ -60,12 +66,15 @@
 						<thead>
 							<tr>
 								<th>{!ITEM}</th>
-								<th>{!QUANTITY}</th>
+								<th>{!QUANTITY_WANTED}</th>
 								{+START,IF,{HAS_MIXED_DATE_TYPES}}
 									<th>{!FROM}</th>
 									<th>{!TO}</th>
 								{+END}
-								<th>{!DETAILS}</th>
+								{+START,IF,{HAS_DETAILS}}
+									<th>{!DETAILS}</th>
+								{+END}
+								<th>{!PRICE}</th>
 							</tr>
 						</thead>
 		
@@ -74,8 +83,6 @@
 								<tr>
 									<th class="de_th inline_image_2">
 										<strong>{BOOKABLE_TITLE*}</strong>
-		
-										{$,To show price use {BOOKABLE_PRICE}}
 									</th>
 		
 									<td class="inline_image_2">
@@ -83,7 +90,7 @@
 										<select name="bookable_{BOOKABLE_ID*}_quantity" id="bookable_{BOOKABLE_ID*}_quantity">
 											{$SET,quantity,0}
 											{+START,WHILE,{$LT,{$GET,quantity},{$ADD,{BOOKABLE_QUANTITY_AVAILABLE},1}}}
-												<option {+START,IF,{$EQ,{BOOKABLE_QUANTITY},{$GET,quantity}}}selected="selected" {+END}value="{$GET*,quantity}">{$NUMBER_FORMAT*,{$GET,quantity}}</option>
+												<option {+START,IF,{$EQ,{BOOKABLE_QUANTITY},{$GET,quantity}}}selected="selected" {+END}value="{$GET*,quantity}">{!UNIT_TYPE,{$NUMBER_FORMAT*,{$GET,quantity}}}</option>
 												{$INC,quantity}
 											{+END}
 										</select>
@@ -123,16 +130,25 @@
 										</td>
 									{+END}
 		
-									<td class="inline_image_2">
-										{BOOKABLE_DESCRIPTION}
+									{+START,IF,{HAS_DETAILS}}
+										<td class="inline_image_2">
+											{BOOKABLE_DESCRIPTION}
 		
-										{+START,IF_NON_EMPTY,{BOOKABLE_MESSAGES}}
-											<ul>
-												{+START,LOOP,BOOKABLE_MESSAGES}
-													<li>{_loop_var}</li>
-												{+END}
-											</ul>
-										{+END}
+											{+START,IF_NON_EMPTY,{BOOKABLE_MESSAGES}}
+												<ul>
+													{+START,LOOP,BOOKABLE_MESSAGES}
+														<li>{_loop_var}</li>
+													{+END}
+												</ul>
+											{+END}
+										</td>
+									{+END}
+									
+									<td class="inline_image_2">
+										{$CURRENCY_SYMBOL} {$PREG_REPLACE*,\.00$,,{BOOKABLE_PRICE}}
+										(<a title="{!CURRENCY_CONVERT} {!LINK_NEW_WINDOW}" target="_blank" href="http://coinmill.com/SOS_calculator.html#{$CONFIG_OPTION,currency}={BOOKABLE_PRICE_RAW*}">{!CURRENCY_CONVERT}</a>)
+										{$,{$COMCODE,[currency bracket="1"]{BOOKABLE_PRICE_RAW}[/currency]}}
+										<span class="associated_details">{!BOOKING_PER}</span>
 									</td>
 								</tr>
 							{+END}

@@ -384,13 +384,13 @@ function get_event_data_ical($calendar_nodes)
 		{
 			$timestamp=mktime(0,0,0,$start_month,$start_day,$start_year);
 			$amount_forward=tz_time($timestamp,$timezone)-$timestamp;
-			$timestamp=$timestamp-$amount_forward;
+			$timestamp=$timestamp+$amount_forward;
 			list($start_year,$start_month,$start_day)=array_map('intval',explode('-',date('Y-m-d',$timestamp)));
 		} else
 		{
 			$timestamp=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
 			$amount_forward=tz_time($timestamp,$timezone)-$timestamp;
-			$timestamp=$timestamp-$amount_forward;
+			$timestamp=$timestamp+$amount_forward;
 			list($start_hour,$start_minute,$start_year,$start_month,$start_day,$start_hour,$start_minute)=array_map('intval',explode('-',date('Y-m-d',$timestamp)));
 		}
 	}

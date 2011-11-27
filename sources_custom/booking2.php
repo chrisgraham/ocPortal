@@ -29,6 +29,7 @@ This file deals specifically with maintaining the bookables, not specific bookin
  */
 function booking_do_next()
 {
+	require_lang('calendar');
 	require_code('templates_donext');
 	require_code('fields');
 	return do_next_manager(get_page_title('BOOKINGS'),comcode_lang_string('DOC_BOOKING'),
@@ -42,6 +43,7 @@ function booking_do_next()
 					has_specific_permission(get_member(),'edit_cat_highrange_content','cms_booking')?array('blacked',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_BOOKABLE_BLACKED')):NULL,
 					has_specific_permission(get_member(),'submit_highrange_content','cms_booking')?array('booking',array('_SELF',array('type'=>'ab'),'_SELF'),do_lang('ADD_BOOKING')):NULL,
 					has_specific_permission(get_member(),'edit_highrange_content','cms_booking')?array('booking',array('_SELF',array('type'=>'eb'),'_SELF'),do_lang('EDIT_BOOKING')):NULL,
+					has_actual_page_access(get_member(),'calendar')?array('calendar',array('calendar',array('type'=>'misc','view'=>'month'),'_SEARCH'),do_lang('CALENDAR')):NULL,
 				),
 				do_lang('BOOKINGS')
 	);
@@ -166,7 +168,7 @@ function reconstitute_booking_requests(&$request)
 				$a['end_year']=$b['end_year'];
 				$a['supplements']+=$b['supplements'];
 				$a['_rows']=array_merge($a['_rows'],$b['_rows']);
-				if (strpos($a['notes'],$b['notes'])===false) $a['notes']+="\n\n".$b['notes'];
+				if (($b['notes']!='') && (strpos($a['notes'],$b['notes'])===false)) $a['notes']+="\n\n".$b['notes'];
 				unset($request[$i]);
 				$request=array_values($request);
 				$i--;
@@ -370,7 +372,8 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 	$bookable_id=$GLOBALS['SITE_DB']->query_insert('bookable',$bookable_details,true);
 
 	require_code('calendar2');
-	$bookable_details['calendar_type']=add_event_type($title,'calendar/booking',find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']));
+	$external_feed=find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']);
+	$bookable_details['calendar_type']=add_event_type($title,'calendar/booking',$external_feed);
 
 	$GLOBALS['SITE_DB']->query_update('bookable',array('calendar_type'=>$bookable_details['calendar_type']),array('id'=>$bookable_id),'',1);
 
@@ -427,7 +430,7 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 
 	$bookable_details['calendar_type']=$_old_bookable[0]['calendar_type'];
 	require_code('calendar2');
-	$external_feed=find_script('bookings_ical').'?id='.strval($bookable_id);
+	$external_feed=find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']);
 	if ((is_null($bookable_details['calendar_type'])) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok('calendar_types','id',array('id'=>$bookable_details['calendar_type'])))))
 	{
 		$bookable_details['calendar_type']=add_event_type($title,'calendar/booking',$external_feed);

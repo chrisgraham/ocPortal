@@ -73,7 +73,19 @@ class Block_main_image_fader
 
 		$gallery_url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$cat),$zone);
 
-		return do_template('BLOCK_MAIN_IMAGE_FADER',array('GALLERY_URL'=>$gallery_url,'RAND'=>uniqid(''),'FIRST_URL'=>$images[0],'FIRST_URL_FULL'=>$images_full[0],'IMAGES'=>$images,'IMAGES_FULL'=>$images_full,'MILL'=>strval($mill)));
+		return do_template('BLOCK_MAIN_IMAGE_FADER',array(
+			'GALLERY_URL'=>$gallery_url,
+			'RAND'=>uniqid(''),
+			'PREVIOUS_URL'=>$images[count($images)-1],
+			'PREVIOUS_URL_FULL'=>$images[count($images_full)-1],
+			'FIRST_URL'=>$images[0],
+			'FIRST_URL_FULL'=>$images_full[0],
+			'NEXT_URL'=>isset($images[1])?$images[1]:'',
+			'NEXT_URL_FULL'=>isset($images_full[1])?$images_full[1]:'',
+			'IMAGES'=>$images,
+			'IMAGES_FULL'=>$images_full,
+			'MILL'=>strval($mill),
+		));
 	}
 
 }

@@ -312,7 +312,7 @@ if (typeof window.YAHOO != 'undefined')
 		this.Style = this.Config.Style;
 		this.Config.Locale = { MONTHS_SHORT: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],MONTHS_LONG: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],WEEKDAYS_1CHAR: ["S", "M", "T", "W", "T", "F", "S"],WEEKDAYS_SHORT: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],WEEKDAYS_MEDIUM: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],WEEKDAYS_LONG: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],DATE_DELIMITER: ",",DATE_FIELD_DELIMITER: "/",DATE_RANGE_DELIMITER: "-",MY_MONTH_POSITION: 1,MY_YEAR_POSITION: 2,MD_MONTH_POSITION: 1,MD_DAY_POSITION: 2,MDY_MONTH_POSITION: 1,MDY_DAY_POSITION: 2,MDY_YEAR_POSITION: 3 };
 		this.Locale = this.Config.Locale;
-		this.Config.Options = { MULTI_SELECT: false,SHOW_WEEKDAYS: true,START_WEEKDAY: 1,SHOW_WEEK_HEADER: false,SHOW_WEEK_FOOTER: false,HIDE_BLANK_WEEKS: false,NAV_ARROW_LEFT: "http://localhost/git/themes/default/images/date_chooser/callt.gif".replace(/^http:/, window.location.protocol),NAV_ARROW_RIGHT: "http://localhost/git/themes/default/images/date_chooser/calrt.gif".replace(/^http:/, window.location.protocol) };
+		this.Config.Options = { MULTI_SELECT: false,SHOW_WEEKDAYS: true,START_WEEKDAY: 1,SHOW_WEEK_HEADER: false,SHOW_WEEK_FOOTER: false,HIDE_BLANK_WEEKS: false,NAV_ARROW_LEFT: "{$IMG;,date_chooser/callt}".replace(/^http:/, window.location.protocol),NAV_ARROW_RIGHT: "{$IMG;,date_chooser/calrt}".replace(/^http:/, window.location.protocol) };
 		this.Options = this.Config.Options;
 		this.customConfig();
 		if (!this.Options.LOCALE_MONTHS) {
@@ -1424,7 +1424,7 @@ if (typeof window.YAHOO != 'undefined')
 			linkClose.href = "javascript:void(null)";
 			YAHOO.util.Event.addListener(linkClose, "click", this.hide, this);
 			var imgClose = document.createElement("img");
-			imgClose.src = "http://localhost/git/themes/default/images/date_chooser/calx.gif".replace(/^http:/, window.location.protocol);
+			imgClose.src = "{$IMG;,date_chooser/calx}".replace(/^http:/, window.location.protocol);
 			imgClose.className = "close-icon";
 			linkClose.appendChild(imgClose);
 			this.linkClose = linkClose;

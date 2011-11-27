@@ -638,6 +638,10 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			{
 				$displacement = 0;
 			}
+			elseif (($thumb_options['where'] == 'end') || (($thumb_options['where'] == 'end_if_vertical') && ($crop_direction == 'y')) || (($thumb_options['where'] == 'end_if_horizontal') && ($crop_direction == 'x')))
+			{
+				$displacement = intval(floatval($crop_off));
+			}
 			else
 			{
 				$displacement = intval(floatval($crop_off) / 2.0);

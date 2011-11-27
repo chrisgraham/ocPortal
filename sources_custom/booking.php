@@ -272,6 +272,27 @@ function find_free_bookable_code($bookable_id,$day,$month,$year,$preferred_code)
 }
 
 /**
+ * Find the re-constituted booking ID a specific booking row ID is in.
+ *
+ * @param  MEMBER		Member ID is for.
+ * @param  AUTO_LINK	Booking row ID.
+ * @return ID_TEXT	Re-constituted booking ID.
+ */
+function find_booking_under($member_id,$id)
+{
+	$all=get_member_booking_request($member_id);
+	foreach ($all as $i=>$r)
+	{
+		foreach ($r['_rows'] as $row)
+		{
+			if ($row['id']==$id) break;
+		}
+	}
+
+	return strval($member_id).'_'.strval($i);
+}
+
+/**
  * Find the price for a booking. This may involve multiple bookables, as at this point we don't care about that or not (once in the DB, it will actually be considered many separate bookings)
  *
  * @param  array		Booking details structure to check.

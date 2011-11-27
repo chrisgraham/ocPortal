@@ -964,10 +964,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'CURRENCY':
 				if (addon_installed('ecommerce'))
 				{
-					if (isset($param[1]))
+					if (isset($param[0]))
 					{
 						require_code('currency');
-						$value=currency_convert(floatval(str_replace(',','',$param[0])),$param[1],((isset($param[2])) && ($param[2]!=''))?$param[2]:NULL,((isset($param[3])) && ($param[3]=='1')));
+						$value=currency_convert(floatval(str_replace(',','',$param[0])),((isset($param[1])) && ($param[1]!=''))?$param[1]:get_option('currency'),((isset($param[2])) && ($param[2]!=''))?$param[2]:NULL,((isset($param[3])) && ($param[3]=='1')));
 						if (is_null($value)) $value=do_lang('INTERNAL_ERROR');
 					} else $value=get_option('currency');
 				}
@@ -2158,6 +2158,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
 					$x2=is_numeric($x)?intval($x):$x;
+					if (is_integer($x2))
+					{
+						if ($x2<0) $x2=count($array)-1;
+						elseif ($x2>=count($array)) $x2-=count($array);
+					}
 					$value=array_key_exists($x2,$array)?$array[$x2]:'';
 				}
 				break;

@@ -312,12 +312,16 @@ function update_permission_box(setting)
 			if ((node.getAttribute('serverid').indexOf(':cms_')!=-1) && (is_cms!==false)) is_cms=true; else is_cms=false;
 
 			// Set view access
+			var done_group=false;
 			for (j=0;j<node.attributes.length;j++)
 			{
 				if (node.attributes[j].name.substr(0,7)=='g_view_')
 				{
 					group=node.attributes[j].name.substr(7);
 					element=document.getElementById('access_'+group);
+					{+START,IF,{$OCF}}
+						element.disabled=(node.getAttribute('serverid')==':') && (!done_group);
+					{+END}
 					element.style.display=((values.length==1) && (node.getAttribute('serverid')=='_root'))?'none':'inline';
 					if (!element.checked)
 					{
@@ -325,6 +329,7 @@ function update_permission_box(setting)
 					}
 					element=document.getElementById('access_'+group);
 					element.style.disabled=((values.length==1) && (node.getAttribute('serverid')=='_root'));
+					done_group=true;
 				}
 			}
 			
