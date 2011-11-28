@@ -276,7 +276,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 		{
 			if (get_option('signup_fullname')=='1')
 			{
-				$fields->attach(form_input_line(do_lang_tempcode('NAME'),'',is_null($member_id)?'username':'edit_username',$username,true));
+				$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('_DESCRIPTION_NAME'),is_null($member_id)?'username':'edit_username',$username,true));
 			} else
 			{
 				$prohibit_username_whitespace=get_option('prohibit_username_whitespace',true);

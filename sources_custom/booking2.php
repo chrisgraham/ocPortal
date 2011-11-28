@@ -223,11 +223,13 @@ function get_bookable_details_from_form()
 	{
 		if ($active_to<$active_from) warn_exit(do_lang_tempcode('DATE_AROUND'));
 	}
+	
+	require_code('ecommerce');
 
 	$bookable_details=array(
 		'title'=>post_param('title'),
 		'description'=>post_param('description'),
-		'price'=>floatval(post_param('price')),
+		'price'=>floatval(str_replace(ecommerce_get_currency_symbol(),'',post_param('price'))),
 		'categorisation'=>post_param('categorisation'),
 		'cycle_type'=>post_param('cycle_type'),
 		'cycle_pattern'=>post_param('cycle_pattern'),

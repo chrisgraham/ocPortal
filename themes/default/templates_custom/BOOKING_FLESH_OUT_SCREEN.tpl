@@ -38,12 +38,7 @@
 				<h2>{BOOKABLE_TITLE*}</h2>
 
 				{+START,IF,{BOOKABLE_SUPPORTS_NOTES}}
-					<p>
-						<label for="bookable_{BOOKABLE_ID*}_notes">
-							<p>{!NOTES_FOR_US}</p>
-							<textarea cols="50" rows="3" id="bookable_{BOOKABLE_ID*}_notes" name="bookable_{BOOKABLE_ID*}_notes">{BOOKABLE_NOTES*}</textarea>
-						</label>
-					</p>
+					{+START,INCLUDE,BOOKABLE_NOTES}{+END}
 				{+END}
 
 				{+START,LOOP,BOOKABLE_SUPPLEMENTS}
@@ -51,7 +46,7 @@
 						<p>
 							<label for="bookable_{BOOKABLE_ID*}_supplement_{SUPPLEMENT_ID*}_quantity">
 								<h3>{SUPPLEMENT_TITLE*} ({!OPTIONAL_SUPPLEMENT})</h3>
-						
+
 								{+START,IF,{SUPPLEMENT_SUPPORTS_QUANTITY}}
 									{!QUANTITY}
 

@@ -2323,6 +2323,7 @@ booking
 # # themes/default/templates_custom/BOOKING_FLESH_OUT_SCREEN.tpl
 # # themes/default/templates_custom/BOOKING_JOIN_OR_LOGIN_SCREEN.tpl
 # # themes/default/templates_custom/BOOK_DATE_CHOOSE.tpl
+# # themes/default/templates_custom/BOOKABLE_NOTES.tpl
 # # sources_custom/hooks/systems/do_next_menus/booking.php
 # # themes/default/images_custom/calendar/booking.png
 # # themes/default/images_custom/calendar/index.html

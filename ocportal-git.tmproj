@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>site/pages/comcode/EN/guestbook.txt</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -985,6 +987,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>pages/comcode_custom/EN/feedback.txt</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>pages/comcode_custom/EN/panel_top.txt</key>
 		<dict>
 			<key>caret</key>
@@ -1012,6 +1028,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
+		</dict>
+		<key>site/pages/comcode/EN/guestbook.txt</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
 		</dict>
 		<key>site/pages/modules/chat.php</key>
 		<dict>
@@ -1655,6 +1701,34 @@
 			<key>firstVisibleLine</key>
 			<integer>32</integer>
 		</dict>
+		<key>sources/hooks/systems/addon_registry/catalogues.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>47</integer>
+				<key>line</key>
+				<integer>144</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>125</integer>
+		</dict>
+		<key>sources/hooks/systems/addon_registry/core_fields.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>119</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>90</integer>
+		</dict>
 		<key>sources/hooks/systems/addon_registry/debrand.php</key>
 		<dict>
 			<key>caret</key>
@@ -1880,6 +1954,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>sources/hooks/systems/symbols/CATALOGUE_ENTRY_FOR.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>66</integer>
+				<key>line</key>
+				<integer>32</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>47</integer>
+			</dict>
 		</dict>
 		<key>sources/hooks/systems/video_embed/youtube.php</key>
 		<dict>
@@ -3206,9 +3310,17 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>sources/hooks/systems/symbols/CATALOGUE_ENTRY_FOR.php</string>
+		<string>sources/hooks/systems/addon_registry/core_fields.php</string>
+		<string>pages/comcode_custom/EN/feedback.txt</string>
+		<string>site/pages/comcode/EN/guestbook.txt</string>
+		<string>sources/hooks/systems/addon_registry/catalogues.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{911, 137}, {1009, 966}}</string>
+	<string>{{880, 116}, {1009, 966}}</string>
 </dict>
 </plist>

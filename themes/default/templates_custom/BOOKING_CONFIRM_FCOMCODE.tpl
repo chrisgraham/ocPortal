@@ -5,4 +5,4 @@ To re-cap, here are your booking details...
 
 If there are any issues with your booking we will let you know, otherwise we look forward to meeting you!
 
-You should bring a copy of this receipt with you, so that we can ensure we charge the price you have been quoted.
+You should bring a copy of this receipt email with you, so that we can ensure we charge the price you have been quoted.

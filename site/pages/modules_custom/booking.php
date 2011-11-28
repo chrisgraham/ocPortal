@@ -216,6 +216,7 @@ class Module_booking
 
 		$has_date_ranges=false;
 		$has_single_dates=false;
+		$has_details=false;
 
 		$min_min_date=time();
 		$max_max_date=mixed();
@@ -290,13 +291,17 @@ class Module_booking
 			list($quantity,$date_from,$date_to)=$this->_read_chosen_bookable_settings($bookable);
 
 			if (is_null($max_max_date)) $max_max_date=MAX_AHEAD_BOOKING_DATE;
+			
+			$description=get_translated_tempcode($bookable['description']);
+			
+			if ((!$description->is_empty()) || (count($messages)>0)) $has_details=true;
 
 			$categories[$category]['BOOKABLES'][]=array(
 				'BOOKABLE_ID'=>strval($bookable['id']),
 				'BOOKABLE_QUANTITY_AVAILABLE'=>strval($quantity_available),
 				'BOOKABLE_MESSAGES'=>$messages,
 				'BOOKABLE_TITLE'=>get_translated_tempcode($bookable['title']),
-				'BOOKABLE_DESCRIPTION'=>get_translated_tempcode($bookable['description']),
+				'BOOKABLE_DESCRIPTION'=>$description,
 				'BOOKABLE_PRICE'=>float_format($bookable['price']),
 				'BOOKABLE_PRICE_RAW'=>float_to_raw_string($bookable['price']),
 
@@ -318,8 +323,8 @@ class Module_booking
 				'BOOKABLE_DATE_TO_YEAR'=>date('Y',$date_to),
 			);
 
-			$M_SORT_KEY='TITLE';
-			usort($categories[$category]['BOOKABLES'],'multi_sort');
+			/*$M_SORT_KEY='BOOKABLE_TITLE';	Wrong - we're sorting by sort_order
+			usort($categories[$category]['BOOKABLES'],'multi_sort');*/
 		}
 
 		ksort($categories);
@@ -368,6 +373,7 @@ class Module_booking
 			'SHARED_MESSAGES'=>$shared_messages,
 			'HAS_DATE_RANGES'=>$has_date_ranges,
 			'HAS_SINGLE_DATES'=>$has_single_dates,
+			'HAS_DETAILS'=>$has_details,
 			'HAS_MIXED_DATE_TYPES'=>$has_single_dates && $has_date_ranges,
 			'MIN_DATE_DAY'=>date('d',$min_min_date),
 			'MIN_DATE_MONTH'=>date('m',$min_min_date),
@@ -525,7 +531,7 @@ class Module_booking
 		send_booking_emails($request);
 
 		// Show success
-		return inform_screen($title,do_lang_tempcode('BOOKING_SUCCESS'));
+		return inform_screen($title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
 	}
 
 }
