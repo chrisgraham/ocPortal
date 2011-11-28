@@ -220,7 +220,7 @@ class Block_main_rss
 				$__title=do_template('BLOCK_MAIN_RSS_FROM_TITLE',array('_GUID'=>'ba9d262682d2e7d74c393508c8d49dd6','FEED_URL'=>$url,'NEWS_TITLE'=>$_title,'DATE'=>$item['add_date']));
 			} else $__title=$_title;
 	
-			$content->attach(do_template('BLOCK_MAIN_RSS_SUMMARY',array('_GUID'=>'9ca64090348263449ea1fcea75c8ed5f','FEED_URL'=>$url,'NEWS_FULL'=>$news_full,'DATE'=>array_key_exists('add_date',$item)?$item['add_date']:'','DATE_RAW'=>array_key_exists('clean_add_date',$item)?strval($item['clean_add_date']):'','TAILS'=>$tails,'AUTHOR'=>$author,'CATEGORY'=>$category,'FULL_URL'=>$full_url,'NEWS_TITLE'=>$__title,'NEWS'=>$news)));
+			$content->attach(do_template('BLOCK_MAIN_RSS_SUMMARY',array('_GUID'=>'9ca64090348263449ea1fcea75c8ed5f','FEED_URL'=>$url,'NEWS_FULL'=>$news_full,'DATE'=>array_key_exists('add_date',$item)?$item['add_date']:'','DATE_RAW'=>array_key_exists('clean_add_date',$item)?strval($item['clean_add_date']):'','TAILS'=>$tails,'AUTHOR'=>$author,'CATEGORY'=>$category,'FULL_URL'=>$full_url,'FULL_URL_RAW'=>$_full_url,'NEWS_TITLE'=>$__title,'NEWS'=>$news)));
 		}
 	
 		if (array_key_exists('author',$rss->gleamed_feed))

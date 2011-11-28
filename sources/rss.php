@@ -440,6 +440,8 @@ class rss
 									$current_item['news']=@html_entity_decode($current_item['news'],ENT_QUOTES);
 								elseif ((preg_match('#&(?!amp;)#',$current_item['news'])==0) && (preg_match('#&#',html_entity_decode($current_item['news'],ENT_QUOTES))!=0)) // Double escaped HTML
 									$current_item['news']=@html_entity_decode($current_item['news'],ENT_QUOTES);
+								elseif (strpos($current_item['news'],'>')===false)
+									$current_item['news']=nl2br(escape_html($current_item['news']));
 								if (preg_match('#^http://ocportal.com/#',$this->feed_url)==0)
 								{
 									require_code('xhtml');

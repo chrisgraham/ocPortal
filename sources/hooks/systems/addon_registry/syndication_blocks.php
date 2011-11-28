@@ -164,16 +164,16 @@ class Hook_addon_registry_syndication_blocks
 			$news_full = do_lorem_template('BLOCK_MAIN_RSS_FULL',array('RAND'=>placeholder_number(),'NEWS_FULL'=>lorem_paragraph()));
 
 			$tails = do_lorem_template('BLOCK_MAIN_RSS_LIST_FIRST',array('X'=>lorem_phrase()));
-		$tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_MIDDLE',array('X'=>placeholder_url())));
-		$tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_LAST',array('X'=>placeholder_url())));
+			$tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_MIDDLE',array('X'=>placeholder_url())));
+			$tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_LAST',array('X'=>placeholder_url())));
 
-		$category = do_lorem_template('BLOCK_MAIN_RSS_CATEGORY',array('IMG'=>placeholder_image_url(),'CATEGORY'=>lorem_phrase()));
-		$category->attach(do_lorem_template('BLOCK_MAIN_RSS_CATEGORY_NO_IMG',array('CATEGORY'=>lorem_phrase())));
+			$category = do_lorem_template('BLOCK_MAIN_RSS_CATEGORY',array('IMG'=>placeholder_image_url(),'CATEGORY'=>lorem_phrase()));
+			$category->attach(do_lorem_template('BLOCK_MAIN_RSS_CATEGORY_NO_IMG',array('CATEGORY'=>lorem_phrase())));
 
-		$_title = do_lorem_template('BLOCK_MAIN_RSS_TITLE',array('CATEGORY'=>lorem_phrase(),'TITLE'=>lorem_phrase()));
-		$__title = do_lorem_template('BLOCK_MAIN_RSS_FROM_TITLE',array('FEED_URL'=>placeholder_url(),'NEWS_TITLE'=>lorem_phrase(),'DATE'=>placeholder_time()));
+			$_title = do_lorem_template('BLOCK_MAIN_RSS_TITLE',array('CATEGORY'=>lorem_phrase(),'TITLE'=>lorem_phrase()));
+			$__title = do_lorem_template('BLOCK_MAIN_RSS_FROM_TITLE',array('FEED_URL'=>placeholder_url(),'NEWS_TITLE'=>lorem_phrase(),'DATE'=>placeholder_time()));
 
-			$content->attach(do_lorem_template('BLOCK_MAIN_RSS_SUMMARY',array('FEED_URL'=>placeholder_url(),'NEWS_FULL'=>$news_full,'DATE'=>placeholder_time(),'TAILS'=>$tails,'AUTHOR'=>lorem_phrase(),'CATEGORY'=>$category,'FULL_URL'=>placeholder_link(),'NEWS_TITLE'=>$__title,'NEWS'=>lorem_paragraph())));
+			$content->attach(do_lorem_template('BLOCK_MAIN_RSS_SUMMARY',array('FEED_URL'=>placeholder_url(),'NEWS_FULL'=>$news_full,'DATE'=>placeholder_time(),'TAILS'=>$tails,'AUTHOR'=>lorem_phrase(),'CATEGORY'=>$category,'FULL_URL'=>placeholder_link(),'FULL_URL_RAW'=>placeholder_url(),'NEWS_TITLE'=>$__title,'NEWS'=>lorem_paragraph())));
 		}
 
 	   return array(lorem_globalise(do_lorem_template('BLOCK_MAIN_RSS',array(

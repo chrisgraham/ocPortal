@@ -5,7 +5,7 @@
 		{+END}
 	</div>
 
-	<h3>{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}</h3>
+	<h3><a href="{FULL_URL_RAW*}">{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}</a></h3>
 
 	{+START,IF_NON_EMPTY,{DATE}}
 		<div class="page_subtitle_tagline">
