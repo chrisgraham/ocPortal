@@ -226,7 +226,8 @@ class Module_admin_flagrant extends standard_aed_module
 		require_code('form_templates');
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_MESSAGE'),'message',$message,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('NUMBER_DAYS'),do_lang_tempcode('NUMBER_DAYS_DESCRIPTION'),'days',$days,true));
-		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+		if (get_value('disable_staff_notes')!=='1')
+			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$validated==1));
 		return $fields;
 	}
@@ -282,7 +283,7 @@ class Module_admin_flagrant extends standard_aed_module
 	function add_actualisation()
 	{
 		$message=post_param('message');
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$validated=post_param_integer('validated',0);
 	
 		return strval(add_flagrant($message,post_param_integer('days'),$notes,$validated));
@@ -296,7 +297,7 @@ class Module_admin_flagrant extends standard_aed_module
 	function edit_actualisation($id)
 	{
 		$message=post_param('message');
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$validated=post_param_integer('validated',0);
 		edit_flagrant(intval($id),$message,$notes,$validated);
 	}

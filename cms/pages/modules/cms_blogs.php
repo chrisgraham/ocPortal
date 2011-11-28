@@ -346,7 +346,7 @@ class Module_cms_blogs extends standard_aed_module
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		require_code('feedback2');
 		send_trackbacks(post_param('send_trackbacks',''),$title,$news);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 
 		$urls=get_url('','file','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$url=$urls[0];

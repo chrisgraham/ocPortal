@@ -61,7 +61,8 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	{
 		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_SUBMITTER'),'submitter',is_null($submitter)?$GLOBALS['FORUM_DRIVER']->get_username(get_member()):$submitter,false));
 	}
-	$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+	if (get_value('disable_staff_notes')!=='1')
+		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 	if (has_specific_permission(get_member(),'bypass_validation_midrange_content','cms_banners'))
 	{

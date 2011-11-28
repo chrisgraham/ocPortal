@@ -594,7 +594,7 @@ class Module_cms_calendar extends standard_aed_module
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$validated=post_param_integer('validated',0);
 		$seg_recurrences=post_param_integer('seg_recurrences',0);
 

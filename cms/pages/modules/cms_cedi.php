@@ -130,7 +130,8 @@ class Module_cms_cedi
 		$fields->attach(form_input_line(do_lang_tempcode('SCREEN_TITLE'),do_lang_tempcode('SCREEN_TITLE_DESC'),'title',$title,true));
 		$fields2->attach(form_input_tick(do_lang_tempcode('HIDE_POSTS'),do_lang_tempcode('DESCRIPTION_HIDE_POSTS'),'hide_posts',$hide_posts==1));
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
-		$fields2->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+		if (get_value('disable_staff_notes')!=='1')
+			$fields2->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 		require_code('fields');
 		if (has_tied_catalogue('seedy_page'))
@@ -184,7 +185,7 @@ class Module_cms_cedi
 
 		check_submit_permission('cat_low');
 
-		$id=cedi_add_page(post_param('title'),post_param('post'),post_param('notes'),post_param_integer('hide_posts',0));
+		$id=cedi_add_page(post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0));
 		require_code('permissions2');
 		set_category_permissions_from_environment('seedy_page',strval($id),'cms_cedi');
 
@@ -373,7 +374,7 @@ class Module_cms_cedi
 
 			require_code('permissions2');
 			set_category_permissions_from_environment('seedy_page',strval($id),'cms_cedi');
-			cedi_edit_page($id,post_param('title'),post_param('post'),post_param('notes'),post_param_integer('hide_posts',0),post_param('meta_keywords'),post_param('meta_description'));
+			cedi_edit_page($id,post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),post_param('meta_keywords'),post_param('meta_description'));
 
 			require_code('fields');
 			if (has_tied_catalogue('seedy_page'))

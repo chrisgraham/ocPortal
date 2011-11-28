@@ -284,7 +284,7 @@ class Module_cms_iotds extends standard_aed_module
 		$caption=post_param('caption');
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 	
 		$id=add_iotd($url,$title,$caption,$thumb_url,post_param_integer('validated',0),$allow_rating,$allow_comments,$allow_trackbacks,$notes);
@@ -332,7 +332,7 @@ class Module_cms_iotds extends standard_aed_module
 
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 
 		edit_iotd(intval($id),post_param('title'),post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);

@@ -334,7 +334,7 @@ class Module_topicview
 						'ID'=>strval($_postdetails['id']),
 						'TOPIC_FIRST_POST_ID'=>is_null($topic_info['first_post_id'])?'':strval($topic_info['first_post_id']),
 						'TOPIC_FIRST_POSTER'=>is_null($topic_info['first_poster'])?'':strval($topic_info['first_poster']),
-						'POST_ID'=>strval($_postdetails['id']),
+						'POST_ID'=>(get_value('seq_post_ids')==='1')?strval($start+$array_id+1):strval($_postdetails['id']),
 						'URL'=>$post_url,
 						'CLASS'=>$_postdetails['is_emphasised']?'ocf_post_emphasis':(array_key_exists('intended_solely_for',$_postdetails)?'ocf_post_personal':''),
 						'EMPHASIS'=>$emphasis,

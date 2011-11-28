@@ -293,7 +293,7 @@ class Module_cms_polls extends standard_aed_module
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$num_options=10;
 		if ($option10=='') $num_options=9;
 		if ($option9=='') $num_options=8;

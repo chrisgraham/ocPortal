@@ -254,7 +254,8 @@ class Module_cms_quiz extends standard_aed_module
 			if (!$newsletters->is_empty())
 				$fields->attach(form_input_list(do_lang_tempcode('TIED_TO_NEWSLETTER'),do_lang_tempcode('DESCRIPTION_TIED_TO_NEWSLETTER'),'tied_newsletter',$newsletters,NULL,false,false));
 		}
-		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+		if (get_value('disable_staff_notes')!=='1')
+			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
 		return $fields;
 	}
@@ -322,7 +323,7 @@ class Module_cms_quiz extends standard_aed_module
 
 		$_tied_newsletter=post_param('tied_newsletter','');
 		$tied_newsletter=($_tied_newsletter=='')?NULL:intval($_tied_newsletter);
-		$id=add_quiz(post_param('name'),post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes'),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),post_param_integer('validated',0),post_param('text'),NULL,post_param_integer('points_for_passing',0),$tied_newsletter);
+		$id=add_quiz(post_param('name'),post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),post_param_integer('validated',0),post_param('text'),NULL,post_param_integer('points_for_passing',0),$tied_newsletter);
 
 		return strval($id);
 	}
@@ -342,7 +343,7 @@ class Module_cms_quiz extends standard_aed_module
 		$_tied_newsletter=post_param('tied_newsletter','');
 		$tied_newsletter=($_tied_newsletter=='')?NULL:intval($_tied_newsletter);
 
-		edit_quiz($id,post_param('name'),post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes'),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),post_param_integer('validated',0),post_param('text'),post_param('meta_keywords'),post_param('meta_description'),post_param_integer('points_for_passing',0),$tied_newsletter);
+		edit_quiz($id,post_param('name'),post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),post_param_integer('validated',0),post_param('text'),post_param('meta_keywords'),post_param('meta_description'),post_param_integer('points_for_passing',0),$tied_newsletter);
 	}
 
 	/**

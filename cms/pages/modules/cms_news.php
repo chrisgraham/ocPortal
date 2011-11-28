@@ -405,7 +405,7 @@ class Module_cms_news extends standard_aed_module
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		require_code('feedback2');
 		send_trackbacks(post_param('send_trackbacks',''),$title,$news);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 
 		$urls=get_url('','file','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$url=$urls[0];
@@ -767,8 +767,11 @@ class Module_cms_news_cat extends standard_aed_module
 			$fields->attach(form_input_line(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$owner_username,true));
 		}
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
-		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+		if (get_value('disable_staff_notes')!=='1')
+		{
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
+			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+		}
 
 		$fields->attach($this->get_permission_fields(is_null($category_id)?'':strval($category_id),NULL,($title=='')));
 
@@ -806,7 +809,7 @@ class Module_cms_news_cat extends standard_aed_module
 		
 		$title=post_param('title');
 		$img=get_theme_img_code('newscats');
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 	
 		$id=add_news_category($title,$img,$notes);
 		$this->set_permissions($id);

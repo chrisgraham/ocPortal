@@ -143,7 +143,7 @@ class Hook_pointstore_banners
 		$image_url=$urls[0];
 		$site_url=post_param('site_url');
 		$caption=post_param('caption');
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 	
 		$this->check_afford_banner();
 
@@ -190,7 +190,7 @@ class Hook_pointstore_banners
 		$image_url=post_param('image_url');
 		$site_url=post_param('site_url');
 		$caption=post_param('caption');
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$name=post_param('name');
 	
 		$cost=intval(get_option('banner_setup'));

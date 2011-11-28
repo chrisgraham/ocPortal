@@ -366,7 +366,7 @@ class Module_cms_banners extends standard_aed_module
 		$campaignremaining=post_param_integer('campaignremaining',0);
 		$siteurl=fixup_protocolless_urls(post_param('site_url',''));
 		$importancemodulus=post_param_integer('importancemodulus',3);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$the_type=post_param_integer('the_type',1);
 		$expiry_date=get_input_date('expiry_date');
 		$_submitter=post_param('submitter',strval(get_member()));
@@ -421,7 +421,7 @@ class Module_cms_banners extends standard_aed_module
 		$_submitter=post_param('submitter',strval(get_member()));
 		$submitter=!is_numeric($_submitter)?$GLOBALS['FORUM_DRIVER']->get_member_from_username($_submitter):intval($_submitter);
 
-		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes'),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type);
+		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type);
 
 		$this->new_id=post_param('name');
 

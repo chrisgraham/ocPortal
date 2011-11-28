@@ -535,7 +535,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 		$category_id=post_param_integer('category_id');
 		$validated=post_param_integer('validated',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
@@ -1105,7 +1105,8 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		$hidden->attach(form_input_hidden('catalogue_name',$catalogue_name));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+		if (get_value('disable_staff_notes')!=='1')
+			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		handle_max_file_size($hidden,'image');
 		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 
@@ -1190,7 +1191,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 
 		$title=post_param('title');
 		$description=post_param('description');
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$parent_id=post_param_integer('parent_id',-1);
 		if ($parent_id==-1) $parent_id=NULL;
 		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
@@ -1404,7 +1405,8 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='' && $submit_points==0 && $send_view_reports=='never','TITLE'=>do_lang_tempcode('ADVANCED'))));
 	
-			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+			if (get_value('disable_staff_notes')!=='1')
+				$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 			if (addon_installed('points'))
 			{
 				$fields->attach(form_input_integer(do_lang_tempcode('SUBMIT_POINTS'),do_lang_tempcode('DESCRIPTION_SUBMIT_POINTS'),'submit_points',$submit_points,false));
@@ -1530,7 +1532,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		$display_type=post_param_integer('display_type');
 		$is_tree=post_param_integer('is_tree',0);
 		$this->is_tree_catalogue=($is_tree==1);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$submit_points=post_param_integer('submit_points',0);
 		$cat_tab=post_param_integer('cat_tab',0);
 		$ecommerce=post_param_integer('ecommerce',0);

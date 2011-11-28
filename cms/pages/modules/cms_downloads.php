@@ -611,7 +611,7 @@ class Module_cms_downloads extends standard_aed_module
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$file_size=post_param_integer('file_size',0);
 		$cost=post_param_integer('cost',0);
 		$submitter_gets_points=post_param_integer('submitter_gets_points',0);
@@ -910,7 +910,8 @@ class Module_cms_downloads_cat extends standard_aed_module
 			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_download_category',array(),true,strval($parent_id)));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+		if (get_value('disable_staff_notes')!=='1')
+			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
 		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
@@ -951,7 +952,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 		$category=post_param('category');
 		$parent_id=post_param_integer('parent_id');
 		$description=post_param('description');
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$rep_image=$urls[0];
 	

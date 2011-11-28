@@ -997,7 +997,7 @@ class Module_cms_galleries extends standard_aed_module
 		$validated=post_param_integer('validated',0);
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		$this->handle_resizing_and_watermarking();
 
@@ -1060,7 +1060,7 @@ class Module_cms_galleries extends standard_aed_module
 		$comments=post_param('comments');
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 
 		$this->donext_type=$cat;
@@ -1381,7 +1381,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 		$validated=post_param_integer('validated',0);
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 
 		list($video_width,$video_height,$video_length)=$this->get_special_video_info();
@@ -1458,7 +1458,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 		$comments=post_param('comments');
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		list($video_width,$video_height,$video_length)=$this->get_special_video_info();
 
@@ -1670,7 +1670,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 		$fullname=post_param('fullname');
 		$description=post_param('description');
 		$teaser=post_param('teaser','');
-		$notes=post_param('notes');
+		$notes=post_param('notes','');
 		$parent_id=post_param('parent_id');
 		$accept_images=post_param_integer('accept_images',0);
 		$accept_videos=post_param_integer('accept_videos',0);

@@ -31,8 +31,8 @@
 		{+END}
 		{+START,IF_NON_EMPTY,{URL}}
 			<div class="ocf_post_details_grapple">
-				<a href="{URL*}">#{ID*}</a>
-				{+START,IF,{$EQ,{TOPIC_FIRST_POST_ID},{POST_ID}}}{+START,IF_NON_EMPTY,{TOPIC_ID}}
+				<a href="{URL*}">#{POST_ID*}</a>
+				{+START,IF,{$EQ,{TOPIC_FIRST_POST_ID},{ID}}}{+START,IF_NON_EMPTY,{TOPIC_ID}}
 					({!IN,{!FORUM_TOPIC_NUMBERED,{TOPIC_ID*}}})
 				{+END}{+END}
 			</div>
