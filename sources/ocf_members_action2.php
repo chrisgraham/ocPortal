@@ -460,6 +460,9 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 				{
 					if (addon_installed('ocf_signatures'))
 						$fields->attach(form_input_tick(do_lang_tempcode('VIEWS_SIGNATURES'),do_lang_tempcode('DESCRIPTION_VIEWS_SIGNATURES'),'views_signatures',$views_signatures==1));
+				} else
+				{
+					$hidden->attach(form_input_hidden('views_signatures','1'));
 				}
 				$fields->attach(form_input_tick(do_lang_tempcode('TRACK_CONTRIBUTED_TOPICS'),do_lang_tempcode('DESCRIPTION_TRACK_CONTRIBUTED_TOPICS'),'track_contributed_topics',$track_contributed_topics==1));
 				$usergroup_list=new ocp_tempcode();

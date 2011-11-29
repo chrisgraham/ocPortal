@@ -1233,7 +1233,8 @@ class Module_topics
 		{
 			$forum_id=NULL;
 		}
-		
+
+		// Breadcrumbs etc
 		if ($personal_topic)
 		{
 			check_specific_permission('use_pt');
@@ -1264,13 +1265,16 @@ class Module_topics
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='quote';
 
+		// Where to post to
 		$map=array('page'=>'_SELF','type'=>'_add_reply');
 		$redirect=get_param('redirect','');
 		if ($redirect!='') $map['redirect']=$redirect;
 		$post_url=build_url($map,'_SELF');
 
-		// Certain aspects relating to the posting system
+		// Title
 		$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',''),true,1));
+
+		// Where it goes to
 		if ($personal_topic)
 		{
 			if ($member_id==get_member())
@@ -1285,8 +1289,12 @@ class Module_topics
 		{
 			$hidden_fields->attach(form_input_hidden('forum_id',strval($forum_id)));
 		}
+		
+		// Description
 		if (get_option('is_on_topic_descriptions')=='1')
 			$specialisation->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),'','description',post_param('description',''),false,2));
+
+		// Set up some post details
 		$post=post_param('post','');
 		$quote=get_param_integer('quote',-1);
 		if ($quote!=-1)
@@ -1308,7 +1316,7 @@ class Module_topics
 			$specialisation->attach(form_input_line(do_lang_tempcode('GUEST_NAME'),new ocp_tempcode(),'poster_name_if_guest',do_lang('GUEST'),true));
 		}
 
-		/*if (has_specific_permission(get_member(),'decide_comment_type'))
+		/*if (has_specific_permission(get_member(),'decide_comment_type'))	Threaded topics not implemented (yet?)
 		{
 			$topic_types=new ocp_tempcode();
 			$topic_types->attach(form_input_list_entry('0',get_option('threaded_topics_default')=='0',do_lang_tempcode('LINEAR_TOPIC')));
@@ -1319,6 +1327,7 @@ class Module_topics
 			$hidden_fields->attach(form_input_hidden('topic_type',get_option('threaded_topics_default')));
 		}*/
 
+		// Various kinds of tick options
 		if ((!$personal_topic) && (ocf_may_moderate_forum($forum_id,get_member())))
 		{
 			$moderation_options=array(
@@ -1350,9 +1359,20 @@ class Module_topics
 				$options[]=array(do_lang_tempcode('_MAKE_ANONYMOUS_POST'),'anonymous',false,do_lang_tempcode('MAKE_ANONYMOUS_POST_DESCRIPTION'));
 		}
 		$options[]=array(do_lang_tempcode('ADD_TOPIC_POLL'),'add_poll',false,do_lang_tempcode('DESCRIPTION_ADD_TOPIC_POLL'));
-		$specialisation2=form_input_various_ticks($options,'');
-		if (count($moderation_options)!=0) $specialisation2->attach(form_input_various_ticks($moderation_options,'',NULL,do_lang_tempcode('MODERATION_OPTIONS')));
+		$specialisation2=new ocp_tempcode();
+		if (count($options)==1) // Oh, actually we know this was just the option to add a poll, so show simply
+		{
+			$specialisation->attach(form_input_tick(do_lang_tempcode('ADD_TOPIC_POLL'),do_lang_tempcode('DESCRIPTION_ADD_TOPIC_POLL'),'add_poll',false));
+		} else
+		{
+			$specialisation2->attach(form_input_various_ticks($options,''));
+		}
+		if (count($moderation_options)!=0)
+		{
+			$specialisation2->attach(form_input_various_ticks($moderation_options,'',NULL,do_lang_tempcode('MODERATION_OPTIONS')));
+		}
 
+		// Custom fields?
 		require_code('fields');
 		if (has_tied_catalogue('topic'))
 		{
@@ -1366,6 +1386,7 @@ class Module_topics
 		if (is_null($text))
 			$text=new ocp_tempcode();
 
+		// CAPTCHA?
 		if (addon_installed('captcha'))
 		{
 			require_code('captcha');
@@ -1376,6 +1397,7 @@ class Module_topics
 			}
 		}
 
+		// Note about points?
 		if (addon_installed('points'))
 		{
 			$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>get_self_url(true,true)),get_module_zone('login'));
@@ -1383,6 +1405,7 @@ class Module_topics
 			if ((is_guest()) && ((get_forum_type()!='ocf') || (has_actual_page_access(get_member(),'join')))) $text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT',$_login_url)));
 		}
 
+		// Needs validating?
 		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id))))
 		{
 			$text->attach(paragraph(do_lang_tempcode('WILL_NEED_VALIDATING')));
@@ -1395,8 +1418,10 @@ class Module_topics
 			$specialisation->attach(get_award_fields('seedy_page'));
 		}
 
+		// Render form
 		$posting_form=get_posting_form(do_lang($personal_topic?'ADD_PERSONAL_TOPIC':'ADD_TOPIC'),$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''));
 
+		// Work out title to show
 		if (!$personal_topic)
 		{
 			$forum_name=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>$forum_id));
