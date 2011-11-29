@@ -456,8 +456,11 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 			{
 				if (get_option('forced_preview_option')=='1')
 					$fields->attach(form_input_tick(do_lang_tempcode('PREVIEW_POSTS'),do_lang_tempcode('DESCRIPTION_PREVIEW_POSTS'),'preview_posts',$preview_posts==1));
-				if (addon_installed('ocf_signatures'))
-					$fields->attach(form_input_tick(do_lang_tempcode('VIEWS_SIGNATURES'),do_lang_tempcode('DESCRIPTION_VIEWS_SIGNATURES'),'views_signatures',$views_signatures==1));
+				if (get_value('disable_views_sigs_option')!=='1')
+				{
+					if (addon_installed('ocf_signatures'))
+						$fields->attach(form_input_tick(do_lang_tempcode('VIEWS_SIGNATURES'),do_lang_tempcode('DESCRIPTION_VIEWS_SIGNATURES'),'views_signatures',$views_signatures==1));
+				}
 				$fields->attach(form_input_tick(do_lang_tempcode('TRACK_CONTRIBUTED_TOPICS'),do_lang_tempcode('DESCRIPTION_TRACK_CONTRIBUTED_TOPICS'),'track_contributed_topics',$track_contributed_topics==1));
 				$usergroup_list=new ocp_tempcode();
 				$groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);

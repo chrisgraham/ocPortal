@@ -156,7 +156,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		$post['poster_highlighted_name']=$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['p_poster'],'m_highlighted_name');
 
 		// Signature
-		if (($GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(),'m_views_signatures')==1) && ($_postdetails['p_skip_sig']==0) && (addon_installed('ocf_signatures')))
+		if ((($GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(),'m_views_signatures')==1) || (get_value('disable_views_sigs_option')==='1')) && ($_postdetails['p_skip_sig']==0) && (addon_installed('ocf_signatures')))
 		{
 			global $SIGNATURES_CACHE;
 			if (array_key_exists($_postdetails['p_poster'],$SIGNATURES_CACHE))
@@ -245,7 +245,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 			if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS_LEVEL');
 		} else
 		{
-			// It must be a Private Topic. Do we have access?
+			// It must be a personal topic. Do we have access?
 			$from=$topic_info['t_pt_from'];
 			$to=$topic_info['t_pt_to'];
 
