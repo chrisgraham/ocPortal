@@ -54,8 +54,7 @@
 
 {+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={TITLE}}{+END}{+END}
 
-{$SET,has_control_functions,{$OR,{$IS_NON_EMPTY,{MODERATOR_ACTIONS}},{$AND,{$NOT,{$MOBILE}},{$IS_NON_EMPTY,{MARKED_POST_ACTIONS}}},{MAY_CHANGE_MAX}}}
-{+START,IF,{$GET,has_control_functions}}
+{+START,IF,{$OR,{$IS_NON_EMPTY,{MODERATOR_ACTIONS}},{$AND,{$NOT,{$MOBILE}},{$IS_NON_EMPTY,{MARKED_POST_ACTIONS}}},{MAY_CHANGE_MAX}}}
 	<div class="medborder medborder_box ocf_topic_control_functions">
 		<span class="control_functions">{!CONTROL_FUNCTIONS}</span>:
 		{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
@@ -121,10 +120,6 @@
 {+END}
 
 <div class="float_surrounder results_browser_spacing">
-	{+START,IF,{$NOT,{$GET,has_control_functions}}}
-		<br />
-	{+END}
-
 	{SCREEN_BUTTONS}
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}

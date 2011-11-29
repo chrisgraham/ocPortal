@@ -649,8 +649,11 @@ class Module_topicview
 				$marked_post_actions.='<option value="delete_posts">'.do_lang('DELETE_POSTS').'</option>';
 			if (array_key_exists('may_validate_posts',$topic_info))
 				$marked_post_actions.='<option value="validate_posts">'.do_lang('VALIDATE_POSTS').'</option>';
-			if ($may_reply)
-				$marked_post_actions.='<option value="new_post">'.do_lang('QUOTE_POSTS').'</option>';
+			if (get_value('disable_multi_quote')!=='1')
+			{
+				if ($may_reply)
+					$marked_post_actions.='<option value="new_post">'.do_lang('QUOTE_POSTS').'</option>';
+			}
 
 			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($marked_post_actions);
 		} else
