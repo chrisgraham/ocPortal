@@ -830,7 +830,8 @@ class Module_topics
 			if (addon_installed('ocf_signatures'))
 				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
 		}
-		$options[]=array(do_lang_tempcode('EMPHASISED'),'is_emphasised',true,do_lang_tempcode('DESCRIPTION_EMPHASISED'));
+		if (get_value('disable_post_emphasis')!=='1')
+			$options[]=array(do_lang_tempcode('EMPHASISED'),'is_emphasised',true,do_lang_tempcode('DESCRIPTION_EMPHASISED'));
 		$fields->attach(form_input_various_ticks($options,''));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('OPTIONAL_REASON'),'reason','',false));
 
@@ -3245,7 +3246,8 @@ END;
 			if (addon_installed('ocf_signatures'))
 				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
 		}
-		$options[]=array(do_lang_tempcode('EMPHASISED'),'is_emphasised',true,do_lang_tempcode('DESCRIPTION_EMPHASISED'));
+		if (get_value('disable_post_emphasis')!=='1')
+			$options[]=array(do_lang_tempcode('EMPHASISED'),'is_emphasised',true,do_lang_tempcode('DESCRIPTION_EMPHASISED'));
 		$fields->attach(form_input_various_ticks($options,''));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('OPTIONAL_REASON'),'reason','',false));
 
