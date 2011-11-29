@@ -433,6 +433,7 @@ hr.ocf_sig_barrier {
 	border-collapse: collapse;
 	white-space: nowrap;
 	width: 100%;
+	padding: 0;
 }
 
 .ocf_member_column, .ocf_guest_column {

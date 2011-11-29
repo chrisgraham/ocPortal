@@ -227,7 +227,7 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
  * @param  ?ID_TEXT		The members default theme (NULL: not known).
  * @param  BINARY			Whether the members age may be shown.
  * @param  BINARY			Whether the member sees signatures in posts.
- * @param  BINARY			Whether the member tracks topics they post in automatically.
+ * @param  ?BINARY		Whether the member tracks topics they post in automatically (NULL: get default from config).
  * @param  ?LANGUAGE_NAME The members language (NULL: auto detect).
  * @param  BINARY			Whether the member allows e-mails via the site.
  * @param  BINARY			Whether the profile has been validated.
@@ -242,8 +242,13 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
  * @param  ?TIME			When the member is on probation until (NULL: just finished probation / or effectively was never on it)
  * @return array			A pair: The form fields, Hidden fields (both Tempcode).
  */
-function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$custom_fields=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$track_contributed_topics=1,$language=NULL,$allow_emails=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$custom_fields=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$track_contributed_topics=NULL,$language=NULL,$allow_emails=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
+	if (is_null($track_contributed_topics))
+	{
+		$track_contributed_topics=(get_value('no_auto_track')==='1')?0:1;
+	}
+
 	$hidden=new ocp_tempcode();
 
 	if (has_actual_page_access(get_member(),'admin_ocf_join'))

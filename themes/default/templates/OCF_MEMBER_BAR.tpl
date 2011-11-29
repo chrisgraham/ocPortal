@@ -1,6 +1,6 @@
-<div class="standardbox_wrap_classic ocf_information_bar_outer">
+<div class="standardbox_wrap_light ocf_information_bar_outer">
 	<div class="standardbox_classic">
-		<h2 class="standardbox_title_classic">{!MEMBER_INFORMATION}</h2>
+		<h2 class="standardbox_title_light">{!MEMBER_INFORMATION,{$USERNAME*}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}} / {!SEARCH}{+END}</h2>
 
 		<div class="ocf_information_bar float_surrounder">
 			{+START,IF_NON_EMPTY,{AVATAR}}
