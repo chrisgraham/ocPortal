@@ -1572,7 +1572,10 @@ class Module_topics
 			if (is_null($_intended_solely_for)) $_intended_solely_for='';
 		}
 		if (ocf_may_make_personal_topic())
-			$specialisation->attach(form_input_username(do_lang_tempcode('WHISPER'),do_lang_tempcode('DESCRIPTION_WHISPER'),'intended_solely_for',$_intended_solely_for,false));
+		{
+			if (($_intended_solely_for!='') || (get_value('no_inline_pp_advertise')!=='1'))
+				$specialisation->attach(form_input_username(do_lang_tempcode('WHISPER'),do_lang_tempcode('DESCRIPTION_WHISPER'),'intended_solely_for',$_intended_solely_for,false));
+		}
 
 		if (is_guest())
 		{
