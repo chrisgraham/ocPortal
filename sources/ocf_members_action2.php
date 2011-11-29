@@ -503,7 +503,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 		if ($special_type!='ldap')
 		{
 			$_groups2=new ocp_tempcode();
-			$members_groups=is_null($member_id)?array():$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
+			$members_groups=is_null($member_id)?array():$GLOBALS['OCF_DRIVER']->get_members_groups($member_id,false,false);
 			foreach ($rows as $group)
 			{
 				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_specific_permission(get_member(),'see_hidden_groups'))) continue;
