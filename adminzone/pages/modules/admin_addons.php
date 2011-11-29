@@ -197,8 +197,8 @@ class Module_admin_addons
 
 		require_code('form_templates');
 
-		$required=/*false;//*/true;
-		$javascript=/*'';//*/'standardAlternateFields(\'file\',\'url\');';
+		$required=false;
+		$javascript='standardAlternateFields(\'file\',\'url\');';
 
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',$required,NULL,NULL,true,'tar'));
@@ -412,18 +412,32 @@ class Module_admin_addons
 
 		$file=filter_naughty(post_param('file'));
 
+		$theme=mixed();
+
 		$files=array();
 		foreach (array_keys($_POST) as $key)
 		{
 			if (substr($key,0,5)=='file_')
 			{
-				$files[]=post_param($key);
+				$value=post_param($key);
+				$files[]=$value;
+
+				$matches=array();
+				if (preg_match('#^themes/([^/]+)/#',$value,$matches)!=0)
+				{
+					$theme=$matches[1];
+				}
 			}
 		}
 
 		install_addon($file,$files);
-	
+
 		// Show it worked / Refresh
+		if (!is_null($theme))
+		{
+			$url=build_url(array('page'=>'admin_themes','type'=>'edit_theme','theme'=>$theme),'adminzone');
+			return redirect_screen($title,$url,do_lang_tempcode('INSTALL_THEME_SUCCESS'));
+		}
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}

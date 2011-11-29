@@ -60,6 +60,8 @@ class Hook_choose_download
 		$tree=get_downloads_tree($only_owned,is_null($id)?NULL:intval($id),NULL,NULL,$shun,is_null($id)?0:1,false,$editable_filter,$tar_filter);
 		if (!has_actual_page_access(NULL,'downloads')) $tree=array();
 
+		$file_type=get_param('file_type','');
+
 		$out='';
 		foreach ($tree as $t)
 		{
@@ -70,7 +72,14 @@ class Hook_choose_download
 			
 				foreach ($t['entries'] as $eid=>$etitle)
 				{
-					$lang_id=$GLOBALS['SITE_DB']->query_value('download_downloads','description',array('id'=>$eid));
+					$row=$GLOBALS['SITE_DB']->query_select('download_downloads',array('description','original_filename'),array('id'=>$eid),'',1);
+
+					if ($file_type!='')
+					{
+						if (substr($row[0]['original_filename'],-strlen($file_type)-1)!='.'.$file_type) continue;
+					}
+
+					$lang_id=$row[0]['description'];
 					$description=get_translated_text($lang_id);
 					$description_html=get_translated_tempcode($lang_id);
 					
