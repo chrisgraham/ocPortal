@@ -83,7 +83,7 @@ Links include:
  - Personal galleries the member has
  - E-mailing them, if they allow it
  - Points profile
- - Starting a personal topic
+ - Starting a Private Topic
  - Author profile
  - Authored/submitted search
  - Warning creation

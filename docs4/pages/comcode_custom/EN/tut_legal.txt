@@ -33,7 +33,7 @@ ocPortal holds the following data:
  - logs of user interactivity with the site. This is mostly not publicly visible, except for submitted and edited content
  - point transactions. The point 'giver' may define whether they are anonymous from the public, but they will not be from the staff
  - security logs for suspected hack-attempts. This is not publicly visible
- - personal topics. These are only visible between sender and receiver, and staff (when intentionally viewed)
+ - Private Topics. These are only visible between sender and receiver, and staff (when intentionally viewed)
  - personal posts. These are only visible between sender and receiver, and staff (may be viewed unintentionally)
 
 It is not necessary to state that submitted-for-publication content will be visible as the user will know this is not personal data at the point of submitting it.
@@ -119,7 +119,7 @@ Young members (or even older members) are often nieve, as they have less experie
  - inappropriate exposure of materials by other members (such as pornography or other sexual content)
  - stalkers
  - paedophiles
-The personal topic (PT) system (of [concept]OCF[/concept]) can be a particular hot spot. You need to develop a policy of whether you should moderate the PTs of (certain?) members to avoid issues such as online stalking, and you need to make this available in your privacy policy -- usually this would only be undertaken at the request of the other (unwilling?) participant of the PT.
+The Private Topic (PT) system (of [concept]OCF[/concept]) can be a particular hot spot. You need to develop a policy of whether you should moderate the PTs of (certain?) members to avoid issues such as online stalking, and you need to make this available in your privacy policy -- usually this would only be undertaken at the request of the other (unwilling?) participant of the PT.
 
 [title="3"]Freedom of discussion vs 'off-topic'[/title]
 

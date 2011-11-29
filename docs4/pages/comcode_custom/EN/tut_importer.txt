@@ -108,7 +108,7 @@ Compatibility notes:
 [title="2"]Discussion Forum importing[/title]
 
 Compatibility notes in general:
- - personal/private message will be glued together to form personal topics. This is a very useful feature, and really cleans up an inbox.
+ - personal/private message will be glued together to form Private Topics. This is a very useful feature, and really cleans up an inbox.
 
 [title="3"]PhpBB[/title]
 

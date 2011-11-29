@@ -228,6 +228,7 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/EN/page/untrack_topic.png',
 			'themes/default/images/EN/pageitem/quote.png',
 			'themes/default/images/EN/pageitem/whisper.png',
+			'themes/default/images/EN/pageitem/send_message.png',
 			'themes/default/images/menu_items/forum_navigation/forums.png',
 			'themes/default/images/menu_items/forum_navigation/groups.png',
 			'themes/default/images/menu_items/forum_navigation/index.html',

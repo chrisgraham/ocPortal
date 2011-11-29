@@ -21,7 +21,7 @@
 /**
  * Edit a topic.
  *
- * @param  ?AUTO_LINK	The ID of the topic to edit (NULL: personal topic).
+ * @param  ?AUTO_LINK	The ID of the topic to edit (NULL: Private Topic).
  * @param  ?SHORT_TEXT	Description of the topic (NULL: do not change).
  * @param  ?SHORT_TEXT	The image code of the emoticon for the topic (NULL: do not change).
  * @param  ?BINARY		Whether the topic is validated (NULL: do not change).

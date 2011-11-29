@@ -123,7 +123,7 @@ The [tt]MENU_[/tt] prefixed templates define the markup for ocPortal menus. Each
 
 [title="3"][tt]OCF_FORUM[/tt][/title]
 [tt]OCF_FORUM[/tt] wraps around a forum or virtual forum display in OCF. It accepts the following parameters:
- - [tt]FILTERS[/tt]: a list of applicable filters, used in virtual forums (e.g. personal topics)
+ - [tt]FILTERS[/tt]: a list of applicable filters, used in virtual forums (e.g. Private Topics)
  - [tt]CATEGORIES[/tt]: the categories to display in this forum
  - [tt]BUTTONS[/tt]: the buttons to display below the categories
  - [tt]TOPIC_WRAPPER[/tt]: the topics to display in this forum
@@ -157,7 +157,7 @@ The [tt]MENU_[/tt] prefixed templates define the markup for ocPortal menus. Each
  - [tt]FULL_LINK*[/tt]: the URL for the full login page (will be HTML-escaped)
 
 [title="3"][tt]OCF_MEMBER_BAR[/tt][/title]
-[tt]OCF_MEMBER_BAR[/tt] is used to display the "personal bar" in OCF, if the member has it configured in wide mode (i.e. no side panels). The personal bar displays all their pertinent information and links (point count, post count, personal topics, etc.) in one bar at the top. It accepts the following parameters:
+[tt]OCF_MEMBER_BAR[/tt] is used to display the "personal bar" in OCF, if the member has it configured in wide mode (i.e. no side panels). The personal bar displays all their pertinent information and links (point count, post count, Private Topics, etc.) in one bar at the top. It accepts the following parameters:
  - [tt]AVATAR*[/tt]: the URL of the member's avatar, if applicable (will be HTML-escaped)
  - [tt]PROFILE_URL*[/tt]: the URL of the member's profile (will be HTML-escaped)
  - [tt]USERNAME[/tt]: the member's username
@@ -171,8 +171,8 @@ The [tt]MENU_[/tt] prefixed templates define the markup for ocPortal menus. Each
  - [tt]NEW_POSTS*[/tt]: a link to the new posts since the member last visited (will be HTML-escaped)
  - [tt]PERSONAL_ZONE_URL*[/tt]: the URL of the member's Account (will be HTML-escaped)
  - [tt]MEMBER_LINKS[/tt]: a list of links for the member
- - [tt]PERSONAL_TOPIC_URL*[/tt]: the URL of the member's personal topic virtual forum (will be HTML-escaped)
- - [tt]PT_EXTRA[/tt]: lists personal topic activity, if applicable
+ - [tt]PERSONAL_TOPIC_URL*[/tt]: the URL of the member's Private Topic virtual forum (will be HTML-escaped)
+ - [tt]PT_EXTRA[/tt]: lists Private Topic activity, if applicable
  - [tt]NEW_POSTS_URL*[/tt]: the URL for the new posts since the member last visited (will be HTML-escaped)
  - [tt]UNREAD_TOPICS_URL*[/tt]: the URL for the member's unread topics (will be HTML-escaped)
 
@@ -214,7 +214,7 @@ The [tt]MENU_[/tt] prefixed templates define the markup for ocPortal menus. Each
 [tt]OCF_WRAPPER[/tt] is used to wrap [b]all[/b] pages in OCF. It accepts the following parameters:
  - [tt]TITLE[/tt]: the page title
  - [tt]HEAD[/tt]: the page header (usually the personal bar, if the user has it configured in wide mode)
- - [tt]NOTIFICATIONS[/tt]: any notifications to be displayed (personal topic replies, etc.)
+ - [tt]NOTIFICATIONS[/tt]: any notifications to be displayed (Private Topic replies, etc.)
  - [tt]CONTENT[/tt]: the page content
  - [tt]FOOT[/tt]: the page footer (OCF statistics)
 

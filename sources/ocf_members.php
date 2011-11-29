@@ -34,7 +34,7 @@ function init__ocf_members()
 }
 
 /**
- * Find all the personal topic filter categories employed by the current member.
+ * Find all the Private Topic filter categories employed by the current member.
  *
  * @return array	List of filter categories
  */

@@ -228,11 +228,11 @@ class Module_topicview
 			require_code('ocf_members2');
 			if ((array_key_exists('may_pt_members',$topic_info)) && ($may_reply) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (ocf_may_whisper($_postdetails['poster'])) && (get_option('overt_whisper_suggestion')=='1'))
 			{
-				$whisper_type=(get_value('no_inline_pp_advertise')=='1')?'new_pt':'whisper';
+				$whisper_type=(get_value('no_inline_pp_advertise')==='1')?'new_pt':'whisper';
 				$action_url=build_url(array('page'=>'topics','type'=>$whisper_type,'id'=>$_postdetails['topic_id'],'quote'=>$_postdetails['id'],'intended_solely_for'=>$_postdetails['poster']),get_module_zone('topics'));
 				$_title=do_lang_tempcode('WHISPER');
 				$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'whisper','TITLE'=>$_title,'URL'=>$action_url)));
+				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>(get_value('no_inline_pp_advertise')==='1')?'send_message':'whisper','TITLE'=>$_title,'URL'=>$action_url)));
 			}
 			if ((has_specific_permission(get_member(),'view_content_history')) && ($_postdetails['has_history']))
 			{

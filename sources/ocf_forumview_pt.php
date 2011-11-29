@@ -19,11 +19,11 @@
  */
 
 /**
- * Get a map of details relating to the personal topics of a certain member.
+ * Get a map of details relating to the Private Topics of a certain member.
  *
- * @param  integer	The start row for getting details of topics in the personal topic forum (i.e. 0 is newest, higher is starting further back in time).
+ * @param  integer	The start row for getting details of topics in the Private Topic forum (i.e. 0 is newest, higher is starting further back in time).
  * @param  ?integer	The maximum number of topics to get detail of (NULL: default).
- * @param  ?MEMBER	The member to get personal topics of (NULL: current member).
+ * @param  ?MEMBER	The member to get Private Topics of (NULL: current member).
  * @return array		The details.
  */
 function ocf_get_personal_topics($start=0,$max=NULL,$member_id=NULL)

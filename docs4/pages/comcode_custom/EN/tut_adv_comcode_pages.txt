@@ -1922,11 +1922,11 @@ It is advisable that you use the "block construction assistant" (linked to via t
 
 	<tr>
 		<th>Description</th>
-		<td>Shows a list of all personal topics for the currently-logged-in member which have unread posts. If there are no such topics, or the user is a guest, then nothing is shown.</td>
+		<td>Shows a list of all Private Topics for the currently-logged-in member which have unread posts. If there are no such topics, or the user is a guest, then nothing is shown.</td>
 	</tr>
 	<tr>
 		<th>Use</th>
-		<td>Used in the forum zone to alert new personal topics.</td>
+		<td>Used in the forum zone to alert new Private Topics.</td>
 
 	</tr>
 	

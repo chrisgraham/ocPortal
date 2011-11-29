@@ -99,7 +99,7 @@ function ocf_member_handle_promotion($member_id=NULL)
  * @param  LONG_TEXT		The post, in Comcode format.
  * @param  SHORT_TEXT	The topic title.
  * @param  ?MEMBER		Only send the notification to this member (NULL: no such limit).
- * @param  boolean		Whether this is for a personal topic.
+ * @param  boolean		Whether this is for a Private Topic.
  */
 function ocf_send_tracker_about($url,$topic_id,$forum_id,$sender_member_id,$is_starter,$post,$topic_title,$limit_to=NULL,$is_pt=false)
 {

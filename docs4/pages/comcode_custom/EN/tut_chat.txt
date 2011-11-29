@@ -62,7 +62,7 @@ Chatroom users may set sound effects for different chat actions (from the link p
 [title="3"]Creating a private room[/title]
 [html]<div class="float_surrounder">[/html]
 [exp_thumb="The private room creation interface" float="left"]chat_Create-private-room[/exp_thumb]
-Private chatrooms are the chat equivalent of an [concept]OCF[/concept] personal topic. Anybody can create them, but only certain specified people can view them and use them. If a private chatroom is unvisited and unused for (by default) more than 24 hours, it will be automatically deleted.
+Private chatrooms are the chat equivalent of an [concept]OCF[/concept] Private Topic. Anybody can create them, but only certain specified people can view them and use them. If a private chatroom is unvisited and unused for (by default) more than 24 hours, it will be automatically deleted.
 
 When creating a private chatroom, bear in mind what sort of purpose you're creating the room to fulfil, and try to outline this in the room entry message. Make sure you add some members or usergroups to the allow/disallow lists as well, or the room you create won't be private at all (unless you define access, access is public)!
 

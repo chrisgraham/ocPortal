@@ -79,7 +79,7 @@ class Mx_chat extends Module_chat
 
 			$you=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 			$them=$GLOBALS['FORUM_DRIVER']->get_username($enter_im);
-			attach_message('Instant messaging has been disabled on this site, but you can arrange with members to connect via XMPP software (create a personal topic, asking them to use XMPP, and tell them your username is '.escape_html($you).' &ndash; we have auto-added '.escape_html($them).' as an contact in your XMPP software).','warn');
+			attach_message('Instant messaging has been disabled on this site, but you can arrange with members to connect via XMPP software (create a Private Topic, asking them to use XMPP, and tell them your username is '.escape_html($you).' &ndash; we have auto-added '.escape_html($them).' as an contact in your XMPP software).','warn');
 		}
 
 		// Generic stuff: Title, feed URL

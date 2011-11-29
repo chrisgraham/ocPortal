@@ -36,7 +36,7 @@ function ocf_get_topic_where($topic_id)
 }
 
 /**
- * Find whether a member may make a personal topic.
+ * Find whether a member may make a Private Topic.
  *
  * @param  ?MEMBER	The member (NULL: current member).
  * @return boolean	The answer.

@@ -245,7 +245,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 			if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS_LEVEL');
 		} else
 		{
-			// It must be a personal topic. Do we have access?
+			// It must be a Private Topic. Do we have access?
 			$from=$topic_info['t_pt_from'];
 			$to=$topic_info['t_pt_to'];
 

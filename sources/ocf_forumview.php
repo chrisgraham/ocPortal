@@ -108,7 +108,7 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
  *
  * @param  array		The details (array containing: last_post_id, id, modifiers, emoticon, first_member_id, first_username, first_post, num_posts, num_views).
  * @param  boolean	Whether the viewing member is allowed to mass moderate.
- * @param  boolean	Whether the topic is a personal topic.
+ * @param  boolean	Whether the topic is a Private Topic.
  * @param  ?string	The forum name (NULL: do not show the forum name).
  * @return tempcode	The topic row.
  */

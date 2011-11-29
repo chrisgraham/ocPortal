@@ -605,7 +605,7 @@ class Module_forumview
 
 		$title=get_page_title(do_lang_tempcode('NAMED_FORUM',escape_html($details['name'])),false,NULL,NULL,$awards);
 
-		$ret=ocf_wrapper($title,$content,true,true,$id);
+		$ret=ocf_wrapper($title,$content,true,($type!='pt'),$id);
 
 		return $ret;
 	}

@@ -1214,7 +1214,7 @@ class Module_topics
 	/**
 	 * The UI to create a new topic.
 	 *
-	 * @param  boolean		Whether a new personal topic is being created
+	 * @param  boolean		Whether a new Private Topic is being created
 	 * @param  ?MEMBER		The member ID being whispered too (NULL: N/A)
 	 * @param  string			Theme image code
 	 * @param  ?tempcode		Text of screen (NULL: none)
@@ -1501,7 +1501,7 @@ class Module_topics
          if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
 		} else
 		{
-			// It must be a personal topic. Do we have access?
+			// It must be a Private Topic. Do we have access?
 			$from=$topic_info[0]['t_pt_from'];
 			$to=$topic_info[0]['t_pt_to'];
 
@@ -1765,7 +1765,7 @@ class Module_topics
 
 		$topic_id=either_param_integer('topic_id',-1); // Posting into an existing topic?
 		$forum_id=post_param_integer('forum_id',-1); // New topic in existing forum? (NB: -2 represents reported posts forum)
-		$member_id=post_param_integer('member_id',-1); // Send TOPIC to specific member? Could be personal topic (topic_id==-1, forum_id==-1), or personal post (topic_id!=-1, forum_id==-1)
+		$member_id=post_param_integer('member_id',-1); // Send TOPIC to specific member? Could be Private Topic (topic_id==-1, forum_id==-1), or personal post (topic_id!=-1, forum_id==-1)
 		if ($member_id==-1)
 		{
 			$member_username=post_param('to_member_id_0','');
@@ -1853,7 +1853,7 @@ class Module_topics
 			$sunk=post_param_integer('sunk',0);
 			$topic_title=$title;
 
-			if ($forum_id==-1) // New personal topic
+			if ($forum_id==-1) // New Private Topic
 			{
 				require_code('ocf_members2');
 				if (!ocf_may_whisper($member_id)) warn_exit(do_lang_tempcode('NO_PT_FROM_ALLOW'));
@@ -3309,7 +3309,7 @@ END;
 	}
 
 	/**
-	 * The UI to make a normal topic a personal topic.
+	 * The UI to make a normal topic a Private Topic.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -3338,7 +3338,7 @@ END;
 	}
 
 	/**
-	 * The actualiser to make a normal topic a personal topic.
+	 * The actualiser to make a normal topic a Private Topic.
 	 *
 	 * @return tempcode		The UI
 	 */

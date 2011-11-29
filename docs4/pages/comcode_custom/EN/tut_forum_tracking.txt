@@ -6,7 +6,7 @@ Once you've got a community set up and running, and it has attracted lots of mem
 
 [title="2"]Virtual forums[/title]
 
-Virtual forums are basically special types of forum that list topics in a distinctive and hard-coded way. An example of this would be the 'personal topics' virtual forum, which instead of listing normal topics, lists all the personal topics the current member has access to.
+Virtual forums are basically special types of forum that list topics in a distinctive and hard-coded way. An example of this would be the 'Private Topics' virtual forum, which instead of listing normal topics, lists all the Private Topics the current member has access to.
 
 [title="3"]Posts since last visit[/title]
 [html]<div class="float_surrounder">[/html]
@@ -64,7 +64,7 @@ As well as tracking topics and forums, you can easily mark them to not be tracke
 [html]</div>[/html]
 
 [concepts
- 1_key="Virtual forum"   1_value="A special, separate forum view that lists special types of topic, such as personal topics."
+ 1_key="Virtual forum"   1_value="A special, separate forum view that lists special types of topic, such as Private Topics."
  2_key="Tracking"        2_value="By tracking a topic, you get e-mail notifications when there are new posts to that topic. Also known as subscribing in some forum systems."
  3_key="Forum view"      3_value="The screen where you view a forum on. From it you see a list of the topics in the forum you are in any any subforums."
  4_key="Topic view"      4_value="The screen where you view a topic on. From it you can read the posts in the topic."

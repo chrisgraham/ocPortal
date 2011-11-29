@@ -7,7 +7,7 @@ ocPortal draws upon the forum for features such as:
  - member management (aka user management, profile management)
  - (user)group management (the same as ranks, on some forums)
  - topic storage (aka thread [storage])
- - personal messaging (aka private messaging), or personal topics
+ - personal messaging (aka private messaging), or Private Topics
 
 Once you have installed ocPortal, you cannot easily switch forums, as the member and usergroup IDs referenced by ocPortal would lose their association. Please see the 'Importing from other software' tutorial for more information on this.
 
@@ -198,7 +198,7 @@ There are many advantages to use OCF, such as:
  - links will flow seamlessly from ocPortal to the forum
  - the forum will use the same theme and basic templates as ocPortal
  - there is no need to learn concepts from two pieces of software: OCF has perfect integration on all levels
- - OCF is full of innovative features that other forum systems do not have (such as personal topics and in-post whispers), regardless of its association to ocPortal
+ - OCF is full of innovative features that other forum systems do not have (such as Private Topics and in-post whispers), regardless of its association to ocPortal
 
 [concepts
  1_key="OCF"   1_value="The powerful forum and member system that comes with ocPortal. OCF is only used if a third-party forum isn't."

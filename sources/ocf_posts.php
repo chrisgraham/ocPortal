@@ -57,7 +57,7 @@ function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$member_
  * Find whether a member may edit the detailed post.
  *
  * @param  MEMBER			The owner of the post.
- * @param  ?AUTO_LINK 	The forum the post is in (NULL: is a personal topic).
+ * @param  ?AUTO_LINK 	The forum the post is in (NULL: is a Private Topic).
  * @param  ?MEMBER		The member (NULL: current member).
  * @return boolean		The answer.
  */
@@ -77,7 +77,7 @@ function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL)
  * Find whether a member may delete the detailed post.
  *
  * @param  MEMBER			The owner of the post.
- * @param  ?AUTO_LINK 	The forum the post is in (NULL: is a personal topic).
+ * @param  ?AUTO_LINK 	The forum the post is in (NULL: is a Private Topic).
  * @param  ?MEMBER		The member (NULL: current member).
  * @return boolean		The answer.
  */

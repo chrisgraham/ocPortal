@@ -13,7 +13,7 @@ We may occasionally send bulk emails about {$SITE_NAME}, or matters relating to 
 
 We will not share private details other than what can be seen in the forum profile and public postings unless legally required to do so.
 
-The staff reserve the right to read any personal topics and posts placed on this website. Any form of conversation made through this website should be considered viewable by staff. All private-posts and posts, whether 'deleted' or not, are stored on the server and may be reviewed if we feel we have cause for an investigation. If you do want to keep something private, do not use our services for transmitting it. Situations involving investigations can be anything at our discretion, for example, to investigate specific incidents of our services being used for racism or harassment.
+The staff reserve the right to read any Private Topics and posts placed on this website. Any form of conversation made through this website should be considered viewable by staff. All private-posts and posts, whether 'deleted' or not, are stored on the server and may be reviewed if we feel we have cause for an investigation. If you do want to keep something private, do not use our services for transmitting it. Situations involving investigations can be anything at our discretion, for example, to investigate specific incidents of our services being used for racism or harassment.
 {+START,IF,{$ADDON_INSTALLED,shopping}}
 Use of the shopping cart may cause a non-logged-in-user's session to stick around for a longer than normal period of time, using a cookie, in order to keep the cart from being lost.
 {+END}
