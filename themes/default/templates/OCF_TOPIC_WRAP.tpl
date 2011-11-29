@@ -1,20 +1,26 @@
 {WARNING_DETAILS}
 
-<div class="float_surrounder results_browser_spacing">
-	{SCREEN_BUTTONS}
-</div>
+{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+	<div class="non_accessibility_redundancy">
+		<div class="float_surrounder results_browser_spacing">
+			{SCREEN_BUTTONS}
+		</div>
+	</div>
+{+END}
 
 {POLL}
 
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,topic,{$_GET,id}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}<br />{+END}
 
-{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
-	<div class="non_accessibility_redundancy">
-		<div class="results_browser_spacing float_surrounder">
-			{$REPLACE, id="blp_, id="blp2_,{$REPLACE, for="blp_, for="blp2_,{$REPLACE, id="r_, id="r2_,{$REPLACE, for="r_, for="r2_,{RESULTS_BROWSER}}}}}
+{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+	{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
+		<div class="non_accessibility_redundancy">
+			<div class="results_browser_spacing float_surrounder">
+				{$REPLACE, id="blp_, id="blp2_,{$REPLACE, for="blp_, for="blp2_,{$REPLACE, id="r_, id="r2_,{$REPLACE, for="r_, for="r2_,{RESULTS_BROWSER}}}}}
+			</div>
 		</div>
-	</div>
+	{+END}
 {+END}
 
 {+START,IF_NON_EMPTY,{POSTS}}
@@ -113,12 +119,17 @@
 	</div>
 {+END}
 
-<div class="float_surrounder results_browser_spacing non_accessibility_redundancy">
+<div class="float_surrounder results_browser_spacing">
 	{SCREEN_BUTTONS}
-	<div class="breadcrumbs_always">
-		<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
-		{TREE}
-	</div>
+
+	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+		<div class="non_accessibility_redundancy">
+			<div class="breadcrumbs_always">
+				<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
+				{TREE}
+			</div>
+		</div>
+	{+END}
 </div>
 
 <div class="ocf_quick_reply">

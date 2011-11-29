@@ -61,6 +61,6 @@
 <hr class="spaced_rule" />
 
 <p class="button_panel">
-	<a rel="add" href="{ADD_TICKET_URL*}"><img class="button_page" src="{$IMG*,page/new}" title="{!ADD_TICKET}" alt="{!ADD_TICKET}" /></a>
+	<a rel="add" href="{ADD_TICKET_URL*}"><img class="button_page" src="{$IMG*,page/add_ticket}" title="{!ADD_TICKET}" alt="{!ADD_TICKET}" /></a>
 </p>
 

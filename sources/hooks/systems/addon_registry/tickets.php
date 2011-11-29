@@ -101,6 +101,7 @@ class Hook_addon_registry_tickets
 			'sources/hooks/systems/preview/ticket.php',
 			'themes/default/images/EN/page/staff_only_reply.png',
 			'sources/hooks/blocks/main_staff_checklist/tickets.php',
+			'themes/default/images/EN/page/add_ticket.png',
 		);
 	}
 

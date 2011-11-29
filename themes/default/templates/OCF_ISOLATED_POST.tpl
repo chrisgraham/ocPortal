@@ -15,7 +15,7 @@
 	<a href="{URL*}"><img class="button_pageitem page_icon" src="{$IMG*,pageitem/goto}" title="" alt="{!FORUM_POST} #{ID*}" /></a>
 </p>
 
-<p class="breadcrumbs_always non_accessibility_redundancy">
+<p class="breadcrumbs_always">
 	<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
 	{TREE}
 </p>

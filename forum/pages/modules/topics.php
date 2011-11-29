@@ -997,7 +997,7 @@ class Module_topics
 			$list->attach(form_input_list_entry($filter_cat,$filter_cat=='',$filter_cat_text));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY'),'category_a',$list,NULL,true));
-		$fields->attach(form_input_line(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_ALTERNATE',protect_from_escaping(strtolower(do_lang('CATEGORY')))),'category_b','',false));
+		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('NEW')),do_lang_tempcode('DESCRIPTION_ALTERNATE',protect_from_escaping(strtolower(do_lang('CATEGORY')))),'category_b','',false));
 		$hidden=$this->keep_markers();
 
 		breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PERSONAL_TOPICS'))));

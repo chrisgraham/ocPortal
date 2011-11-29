@@ -42,7 +42,9 @@ function ocf_get_filter_cats()
 {
 	$filter_rows_a=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT t_pt_from_category FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_from='.strval((integer)get_member()));
 	$filter_rows_b=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT t_pt_to_category FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_to='.strval((integer)get_member()));
-	$filter_cats=array(''=>1,do_lang('TRASH')=>1,do_lang('INVITED_TO_PTS')=>1);
+	$filter_cats=array(''=>1,do_lang('TRASH')=>1);
+	if ($GLOBALS['FORUM_DB']->query_value('f_special_pt_access','COUNT(*)',array('s_member_id'=>get_member()))>0)
+	$filter_cats[do_lang('INVITED_TO_PTS')]=1;
 	foreach ($filter_rows_a as $filter_row)
 		$filter_cats[$filter_row['t_pt_from_category']]=1;
 	foreach ($filter_rows_b as $filter_row)

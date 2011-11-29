@@ -13,16 +13,21 @@
 <br />
 
 {+START,IF_NON_EMPTY,{FILTERS}}
-	<p>
+	{+START,BOX,,,light}
 		<span class="ocf_pt_category_filters">{!CATEGORIES}</span>: {FILTERS}
-	</p>
+	{+END}
+	<br />
 {+END}
 
 {CATEGORIES}
 
-<div class="float_surrounder">
-	{BUTTONS}
-</div>
+{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+	<div class="non_accessibility_redundancy">
+		<div class="float_surrounder">
+			{BUTTONS}
+		</div>
+	</div>
+{+END}
 
 <br />
 
@@ -32,6 +37,14 @@
 	<p class="nothing_here">
 		{!NO_ENTRIES}
 	</p>
+{+END}
+
+{+START,IF_EMPTY,{TOPIC_WRAPPER}}
+	{+START,IF,{$VALUE_OPTION,disable_forum_dupe_buttons}}
+		<div class="float_surrounder">
+			{BUTTONS}
+		</div>
+	{+END}
 {+END}
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}

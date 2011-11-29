@@ -115,12 +115,17 @@
 	{+END}
 {+END}
 {+START,IF_NON_EMPTY,{BUTTONS}}
-	<div class="float_surrounder non_accessibility_redundancy">
+	<div class="float_surrounder">
 		{BUTTONS}
-		<div class="breadcrumbs_always">
-			<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
-			{TREE}
-		</div>
+
+		{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+			<div class="non_accessibility_redundancy">
+				<div class="breadcrumbs_always">
+					<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
+					{TREE}
+				</div>
+			</div>
+		{+END}
 	</div>
 {+END}
 
