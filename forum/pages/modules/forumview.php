@@ -495,6 +495,47 @@ class Module_forumview
 			}
 		}
 		$buttons=ocf_screen_button_wrap($button_array);
+		
+		// Work out what moderator actions can be performed (also includes marking read/unread)
+		$moderator_actions='';
+		if (($type=='pt') && ($of_member_id==get_member()) && (get_value('disable_pt_filtering')!=='1'))
+		{
+			$moderator_actions.='<option value="categorise_pts">'.do_lang('CATEGORISE_PTS').'</option>';
+		}
+		if (get_value('disable_mark_forum_read')!=='1')
+		{
+			$moderator_actions.='<option value="mark_topics_read">'.do_lang('MARK_READ').'</option>';
+			$moderator_actions.='<option value="mark_topics_unread">'.do_lang('MARK_UNREAD').'</option>';
+		}
+
+		// Mass moderation
+		if ($may_mass_moderate)
+		{
+			$moderator_actions.='<option value="move_topics">'.do_lang('MOVE_TOPICS').'</option>';
+			if (has_specific_permission(get_member(),'delete_midrange_content','topics',array('forums',$id)))
+			{
+				$moderator_actions.='<option value="delete_topics">'.do_lang('DELETE_TOPICS').'</option>';
+			}
+			$moderator_actions.='<option value="pin_topics">'.do_lang('PIN_TOPIC').'</option>';
+			$moderator_actions.='<option value="unpin_topics">'.do_lang('UNPIN_TOPIC').'</option>';
+			$moderator_actions.='<option value="sink_topics">'.do_lang('SINK_TOPIC').'</option>';
+			$moderator_actions.='<option value="unsink_topics">'.do_lang('UNSINK_TOPIC').'</option>';
+			$moderator_actions.='<option value="cascade_topics">'.do_lang('CASCADE_TOPIC').'</option>';
+			$moderator_actions.='<option value="uncascade_topics">'.do_lang('UNCASCADE_TOPIC').'</option>';
+			$moderator_actions.='<option value="open_topics">'.do_lang('OPEN_TOPIC').'</option>';
+			$moderator_actions.='<option value="close_topics">'.do_lang('CLOSE_TOPIC').'</option>';
+			if (!is_null($id))
+			{
+				$multi_moderations=ocf_list_multi_moderations($id);
+				if (count($multi_moderations)!=0)
+				{
+					$moderator_actions.='<optgroup label="'.do_lang('MULTI_MODERATIONS').'">';
+					foreach ($multi_moderations as $mm_id=>$mm_name)
+						$moderator_actions.='<option value="mmt_'.strval($mm_id).'">'.$mm_name.'</option>';
+					$moderator_actions.='</optgroup>';
+				}
+			}
+		}
 
 		// Find topics
 		$topics=new ocp_tempcode();
@@ -506,51 +547,15 @@ class Module_forumview
 				$topics->attach(do_template('OCF_PINNED_DIVIDER'));
 			}
 			$pinned=in_array('pinned',$topic['modifiers']);
-			$topics->attach(ocf_render_topic($topic,/*$may_mass_moderate*/true,$type=='pt',NULL));
+			$topics->attach(ocf_render_topic($topic,$moderator_actions!='',$type=='pt',NULL));
 		}
 
 		$starter_title=($type=='pt')?do_lang_tempcode('WITH_TITLING'):new ocp_tempcode();
 
+		// Wrap it all up
 		$action_url=build_url(array('page'=>'topics'),get_module_zone('topics'),NULL,false,true);
 		if (!$topics->is_empty())
 		{
-			$moderator_actions='';
-			if (($type=='pt') && ($of_member_id==get_member()) && (get_value('disable_pt_filtering')!=='1'))
-			{
-				$moderator_actions.='<option value="categorise_pts">'.do_lang('CATEGORISE_PTS').'</option>';
-			}
-			$moderator_actions.='<option value="mark_topics_read">'.do_lang('MARK_READ').'</option>';
-			$moderator_actions.='<option value="mark_topics_unread">'.do_lang('MARK_UNREAD').'</option>';
-
-			// Mass moderation
-			if ($may_mass_moderate)
-			{
-				$moderator_actions.='<option value="move_topics">'.do_lang('MOVE_TOPICS').'</option>';
-				if (has_specific_permission(get_member(),'delete_midrange_content','topics',array('forums',$id)))
-				{
-					$moderator_actions.='<option value="delete_topics">'.do_lang('DELETE_TOPICS').'</option>';
-				}
-				$moderator_actions.='<option value="pin_topics">'.do_lang('PIN_TOPIC').'</option>';
-				$moderator_actions.='<option value="unpin_topics">'.do_lang('UNPIN_TOPIC').'</option>';
-				$moderator_actions.='<option value="sink_topics">'.do_lang('SINK_TOPIC').'</option>';
-				$moderator_actions.='<option value="unsink_topics">'.do_lang('UNSINK_TOPIC').'</option>';
-				$moderator_actions.='<option value="cascade_topics">'.do_lang('CASCADE_TOPIC').'</option>';
-				$moderator_actions.='<option value="uncascade_topics">'.do_lang('UNCASCADE_TOPIC').'</option>';
-				$moderator_actions.='<option value="open_topics">'.do_lang('OPEN_TOPIC').'</option>';
-				$moderator_actions.='<option value="close_topics">'.do_lang('CLOSE_TOPIC').'</option>';
-				if (!is_null($id))
-				{
-					$multi_moderations=ocf_list_multi_moderations($id);
-					if (count($multi_moderations)!=0)
-					{
-						$moderator_actions.='<optgroup label="'.do_lang('MULTI_MODERATIONS').'">';
-						foreach ($multi_moderations as $mm_id=>$mm_name)
-							$moderator_actions.='<option value="mmt_'.strval($mm_id).'">'.$mm_name.'</option>';
-						$moderator_actions.='</optgroup>';
-					}
-				}
-			}
-
 			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($moderator_actions);
 
 			require_code('templates_results_browser');
@@ -558,8 +563,11 @@ class Module_forumview
 
 			$order=array_key_exists('order',$details)?$details['order']:'last_post';
 			$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'e452b81001e5c6b7adb4d82e627bf983','MAX'=>strval($max),'ORDER'=>$order,'MAY_CHANGE_MAX'=>array_key_exists('may_change_max',$details),'ACTION_URL'=>$action_url,'BUTTONS'=>$buttons,'STARTER_TITLE'=>$starter_title,'TREE'=>$tree,'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>$moderator_actions,'TOPICS'=>$topics,'FORUM_NAME'=>$forum_name));
+		} else
+		{
+			$topic_wrapper=new ocp_tempcode();
+			$moderator_actions='';
 		}
-		else $topic_wrapper=new ocp_tempcode();
 
 		// Filters
 		$filters=new ocp_tempcode();

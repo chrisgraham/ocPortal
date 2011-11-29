@@ -116,6 +116,10 @@
 {+END}
 {+START,IF_NON_EMPTY,{BUTTONS}}
 	<div class="float_surrounder">
+		{+START,IF_EMPTY,{MODERATOR_ACTIONS}}
+			<br />
+		{+END}
+
 		{BUTTONS}
 
 		{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
