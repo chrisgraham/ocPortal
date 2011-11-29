@@ -6,7 +6,7 @@
 		{+END}
 
 		<div class="comcode_supported posting_form_main_comcode_button">
-			{+START,IF,{$SHOW_DOCS}}{+START,IF_PASSED,COMCODE_URL}
+			<!--{+START,IF,{$SHOW_DOCS}}{+START,IF_PASSED,COMCODE_URL}
 			[
 				<a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{COMCODE_URL*}"><img class="comcode_button" alt="{!COMCODE_MESSAGE,Comcode}" src="{$IMG*,comcode}" title="{!COMCODE_MESSAGE,Comcode}" /></a> {!COMCODE_MESSAGE,<a class="link_exempt" title="Comcode: {!LINK_NEW_WINDOW}" target="_blank" href="{COMCODE_URL*}">Comcode</a>}
 				{+START,IF,{$MATCH_KEY_MATCH,_WILD:cms_comcode_pages}}
@@ -14,7 +14,7 @@
 					&middot; <a class="link_exempt" title="{!FULL_BLOCK_TUTORIAL}: {!LINK_NEW_WINDOW}" target="_blank" href="{$BRAND_BASE_URL*}/docs/tut_adv_comcode_pages.htm">{!FULL_BLOCK_TUTORIAL}</a>
 				{+END}
 			]
-			{+END}{+END}
+			{+END}{+END}-->
 
 			{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 				{+START,IF,{$JS_ON}}
@@ -60,9 +60,8 @@
 				<div class="emoticon_chooser lightborder"><div class="float_surrounder">
 					{+START,IF,{$AND,{$OCF},{$JS_ON}}}
 						<div class="right">
-							<a target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}" onclick="window.open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}'),'site_emoticon_chooser','width=180,height=500,status=no,resizable=yes,scrollbars=no'); return false;" class="posting_form_sup_link">{!EMOTICONS_POPUP}</a><br />
-							<a target="_blank" href="{$FIND_SCRIPT*,attachment_popup}?field_name={NAME*}{$KEEP*;,0,1}" onclick="window.open(maintain_theme_in_link('{$FIND_SCRIPT*,attachment_popup}?field_name={NAME*}{$KEEP*;,0,1}'),'site_attachment_chooser','width=550,height=600,status=no,resizable=yes,scrollbars=yes'); return false;" class="posting_form_sup_link">{!ATTACHMENT_POPUP}</a><br />
-							<a href="#" onclick="if (document.getElementById('{NAME*}').value.substr(0,8)=='&lt;comcode') { window.alert('{!ALREADY_COMCODE_XML;}'); return false; } return convert_xml('{NAME*}');" class="posting_form_sup_link"><abbr title="{!CONVERT_TO_XML_2}">{!CONVERT_TO_XML}</abbr></a>
+							[ <a target="_blank" href="{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}" onclick="window.open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name={NAME*}{$KEEP*;,0,1}'),'site_emoticon_chooser','width=180,height=500,status=no,resizable=yes,scrollbars=no'); return false;" class="posting_form_sup_link">{!EMOTICONS_POPUP}</a><br /> ]
+							<!--<br />[ <a href="#" onclick="if (document.getElementById('{NAME*}').value.substr(0,8)=='&lt;comcode') { window.alert('{!ALREADY_COMCODE_XML;}'); return false; } return convert_xml('{NAME*}');" class="posting_form_sup_link"><abbr title="{!CONVERT_TO_XML_2}">{!CONVERT_TO_XML}</abbr></a> ]-->
 						</div>
 					{+END}
 
@@ -98,6 +97,8 @@
 <tr style="display: none">
 	<td class="dottedborder_divider_continue"{+START,IF,{$NOT,{$MOBILE}}} colspan="2"{+END}>
 		{ATTACHMENTS}
+
+		<p>[ <a target="_blank" href="{$FIND_SCRIPT*,attachment_popup}?field_name=post{$KEEP*;,0,1}" onclick="window.open(maintain_theme_in_link('{$FIND_SCRIPT*,attachment_popup}?field_name=post{$KEEP*;,0,1}'),'site_attachment_chooser','width=550,height=600,status=no,resizable=yes,scrollbars=yes'); return false;" class="posting_form_sup_link">{!ATTACHMENT_POPUP}</a> ]</p>
 
 		<input type="hidden" name="comcode__{NAME*}" value="1" />
 		<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />

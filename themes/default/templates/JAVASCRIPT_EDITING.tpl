@@ -233,11 +233,39 @@ function areaedit_init(element)
 	var wysiwyg_color=abstractGetComputedStyle(test_div,'color');
 	test_div.parentNode.removeChild(test_div);
 
+	// Carefully work out toolbar
+	var precision_editing=(typeof get_elements_by_class_name(document.body,'comcode_button_box')[0]!='undefined'); // Look to see if this Comcode button is here as a hint whether we are doing an advanced editor. Unfortunately we cannot put contextual Tempcode inside a Javascript file, so this trick is needed.
+	var toolbar=[];
+	if (precision_editing)
+		toolbar.push(['Source','-']);
+	toolbar.push(['Cut','Copy','Paste',precision_editing?'PasteText':null,precision_editing?'PasteFromWord':null{+START,IF,{$VALUE_OPTION,commercial_spellchecker}},'-','SpellChecker', 'Scayt'{+END}]);
+	toolbar.push(['Undo','Redo',precision_editing?'-':null,precision_editing?'Find':null,precision_editing?'Replace':null,'-',precision_editing?'SelectAll':null,'RemoveFormat']);
+	toolbar.push(['Link','Unlink']);
+	toolbar.push(precision_editing?'/':'-');
+	var formatting=['Bold','Italic','Strike','-','Subscript','Superscript'];
+	toolbar.push(formatting);
+	toolbar.push(['NumberedList','BulletedList',precision_editing?'-':null,precision_editing?'Outdent':null,precision_editing?'Indent':null]);
+	if (precision_editing)
+		toolbar.push(['JustifyLeft','JustifyCenter','JustifyRight',precision_editing?'JustifyBlock':null]);
+	toolbar.push([precision_editing?'Image':null,'Table']);
+	if (precision_editing)
+		toolbar.push('/');
+	toolbar.push(['Format','Font','FontSize']);
+	toolbar.push(['TextColor']);
+	if (precision_editing)
+		toolbar.push(['Maximize', 'ShowBlocks']);
+	if (precision_editing)
+		toolbar.push(['HorizontalRule','SpecialChar']);
+	var use_ocportal_toolbar=true;
+	if (use_ocportal_toolbar)
+		toolbar.push(['ocportal_block','ocportal_comcode','ocportal_page','ocportal_quote','ocportal_box','ocportal_code']);
+
 	var editor=CKEDITOR.replace(element.id, {
 		enterMode : CKEDITOR.ENTER_BR,
 		uiColor : wysiwyg_color,
 		fontSize_sizes : '0.6em;0.85em;1em;1.1em;1.2em;1.3em;1.4em;1.5em;1.6em;1.7em;1.8em;2em',
 		removePlugins: 'smiley,uicolor,contextmenu',
+		extraPlugins: use_ocportal_toolbar?'ocportal':'',
 		customConfig : '',
 		bodyId : 'htmlarea',
 		baseHref : get_base_url(),
@@ -255,22 +283,7 @@ function areaedit_init(element)
 		{+START,IF,{$NOT,{$VALUE_OPTION,commercial_spellchecker}}}
 			disableNativeSpellChecker : false,
 		{+END}
-		toolbar : [
-			['Source','-'],
-			['Cut','Copy','Paste','PasteText','PasteFromWord'{+START,IF,{$VALUE_OPTION,commercial_spellchecker}},'-','SpellChecker', 'Scayt'{+END}],
-			['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-			['Link','Unlink'],
-			'/',
-			['Bold','Italic','Strike','-','Subscript','Superscript'],
-			['NumberedList','BulletedList','-','Outdent','Indent'],
-			['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-			['Image','Table'],
-			'/',
-			['Format','Font','FontSize'],
-			['TextColor'],
-			['Maximize', 'ShowBlocks'],
-			['HorizontalRule','SpecialChar']
-		]
+		toolbar : toolbar
 	} );
 
 	linked_sheets=document.getElementsByTagName('style');

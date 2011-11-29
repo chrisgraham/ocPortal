@@ -209,7 +209,8 @@ function get_comcode_editor($field_name='post',$cut_down=false)
 
 	// Wrappers
 	$_buttons[]='quote';
-	$_buttons[]='box';
+	if ((get_value('simplify_wysiwyg_by_permissions')!=='1') || (has_specific_permission(get_member(),'allow_html')))
+		$_buttons[]='box';
 	$_buttons[]='code';
 	//$_buttons[]='hide';
 	if (has_specific_permission(get_member(),'allow_html'))
