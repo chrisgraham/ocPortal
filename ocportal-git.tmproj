@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>site/pages/comcode/EN/guestbook.txt</string>
+	<string>site/pages/modules/shopping.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -494,30 +494,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>48</integer>
+				<integer>0</integer>
 				<key>line</key>
 				<integer>886</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>860</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>886</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>48</integer>
-				<key>line</key>
-				<integer>886</integer>
-			</dict>
 		</dict>
 		<key>cms/pages/modules_custom/cms_galleries.php</key>
 		<dict>
@@ -873,6 +857,64 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
+		<key>forum/pages/modules/forumview.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>495</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>477</integer>
+		</dict>
+		<key>forum/pages/modules/topics.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>84</integer>
+				<key>line</key>
+				<integer>999</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>969</integer>
+		</dict>
+		<key>forum/pages/modules/vforums.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>231</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>192</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>235</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>231</integer>
+			</dict>
+		</dict>
 		<key>hphp_debug.sh</key>
 		<dict>
 			<key>caret</key>
@@ -906,29 +948,29 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>6</integer>
 				<key>line</key>
-				<integer>23</integer>
+				<integer>77</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>51</integer>
 			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>23</integer>
-			</dict>
-			<key>selectTo</key>
 			<dict>
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>23</integer>
+				<integer>77</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>77</integer>
 			</dict>
 		</dict>
 		<key>lang/EN/newsletter.ini</key>
@@ -944,6 +986,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>27</integer>
+		</dict>
+		<key>lang/EN/ocf.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>26</integer>
+				<key>line</key>
+				<integer>224</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>198</integer>
 		</dict>
 		<key>lang/EN/ocf_privacy.ini</key>
 		<dict>
@@ -987,12 +1043,12 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>pages/comcode_custom/EN/feedback.txt</key>
+		<key>pages/comcode_custom/EN/panel_right.txt</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>44</integer>
 				<key>line</key>
 				<integer>0</integer>
 			</dict>
@@ -1028,36 +1084,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
-		</dict>
-		<key>site/pages/comcode/EN/guestbook.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>6</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>6</integer>
-			</dict>
 		</dict>
 		<key>site/pages/modules/chat.php</key>
 		<dict>
@@ -1160,6 +1186,34 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>site/pages/modules/shopping.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>560</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>483</integer>
+		</dict>
+		<key>site/pages/modules/tickets.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>477</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>451</integer>
 		</dict>
 		<key>sources/blocks/main_comments.php</key>
 		<dict>
@@ -1701,34 +1755,6 @@
 			<key>firstVisibleLine</key>
 			<integer>32</integer>
 		</dict>
-		<key>sources/hooks/systems/addon_registry/catalogues.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>47</integer>
-				<key>line</key>
-				<integer>144</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>125</integer>
-		</dict>
-		<key>sources/hooks/systems/addon_registry/core_fields.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>119</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>90</integer>
-		</dict>
 		<key>sources/hooks/systems/addon_registry/debrand.php</key>
 		<dict>
 			<key>caret</key>
@@ -1757,6 +1783,20 @@
 			<key>firstVisibleLine</key>
 			<integer>32</integer>
 		</dict>
+		<key>sources/hooks/systems/addon_registry/ocf_forum.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>807</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>782</integer>
+		</dict>
 		<key>sources/hooks/systems/addon_registry/phpinfo.php</key>
 		<dict>
 			<key>caret</key>
@@ -1770,6 +1810,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>36</integer>
+		</dict>
+		<key>sources/hooks/systems/addon_registry/tickets.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>44</integer>
+				<key>line</key>
+				<integer>103</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>86</integer>
 		</dict>
 		<key>sources/hooks/systems/addon_registry/wordfilter.php</key>
 		<dict>
@@ -1913,6 +1967,36 @@
 				<integer>40</integer>
 			</dict>
 		</dict>
+		<key>sources/hooks/systems/ecommerce_via/paypal.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>255</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>222</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>22</integer>
+				<key>line</key>
+				<integer>255</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>49</integer>
+				<key>line</key>
+				<integer>255</integer>
+			</dict>
+		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
 			<key>caret</key>
@@ -1955,36 +2039,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>sources/hooks/systems/symbols/CATALOGUE_ENTRY_FOR.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>66</integer>
-				<key>line</key>
-				<integer>32</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>47</integer>
-			</dict>
-		</dict>
 		<key>sources/hooks/systems/video_embed/youtube.php</key>
 		<dict>
 			<key>caret</key>
@@ -2012,6 +2066,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
+		</dict>
+		<key>sources/ocf_members.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>19</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>14</integer>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -2519,6 +2587,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/default/templates/ECOM_CART_BUTTON_VIA_PAYPAL.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>88</integer>
+				<key>line</key>
+				<integer>7</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>87</integer>
+				<key>line</key>
+				<integer>7</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>93</integer>
+				<key>line</key>
+				<integer>7</integer>
+			</dict>
+		</dict>
 		<key>themes/default/templates/ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2839,6 +2937,50 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/default/templates/OCF_FORUM.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>42</integer>
+				<key>line</key>
+				<integer>16</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/OCF_FORUM_TOPIC_WRAPPER.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>121</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>79</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>120</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>121</integer>
+			</dict>
+		</dict>
 		<key>themes/default/templates/OCF_GROUP_DIRECTORY_SCREEN.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2852,6 +2994,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/OCF_MEMBER_BAR.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>14</integer>
+				<key>line</key>
+				<integer>57</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>40</integer>
 		</dict>
 		<key>themes/default/templates/OCF_POSTER_GUEST.tpl</key>
 		<dict>
@@ -2883,6 +3039,20 @@
 				<integer>5</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/OCF_PT_FILTERS.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>7</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>themes/default/templates/OCF_SCREEN_BUTTON_WRAP.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2891,6 +3061,20 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/OCF_VFORUM.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -3312,15 +3496,27 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/hooks/systems/symbols/CATALOGUE_ENTRY_FOR.php</string>
-		<string>sources/hooks/systems/addon_registry/core_fields.php</string>
-		<string>pages/comcode_custom/EN/feedback.txt</string>
-		<string>site/pages/comcode/EN/guestbook.txt</string>
-		<string>sources/hooks/systems/addon_registry/catalogues.php</string>
+		<string>themes/default/templates/OCF_FORUM_TOPIC_WRAPPER.tpl</string>
+		<string>lang/EN/ocf.ini</string>
+		<string>themes/default/templates/OCF_MEMBER_BAR.tpl</string>
+		<string>forum/pages/modules/forumview.php</string>
+		<string>sources/hooks/systems/ecommerce_via/paypal.php</string>
+		<string>themes/default/templates/ECOM_CART_BUTTON_VIA_PAYPAL.tpl</string>
+		<string>site/pages/modules/shopping.php</string>
+		<string>sources/ocf_members.php</string>
+		<string>themes/default/templates/OCF_PT_FILTERS.tpl</string>
+		<string>forum/pages/modules/topics.php</string>
+		<string>lang/EN/global.ini</string>
+		<string>sources/hooks/systems/addon_registry/ocf_forum.php</string>
+		<string>site/pages/modules/tickets.php</string>
+		<string>sources/hooks/systems/addon_registry/tickets.php</string>
+		<string>themes/default/templates/OCF_VFORUM.tpl</string>
+		<string>forum/pages/modules/vforums.php</string>
+		<string>themes/default/templates/OCF_FORUM.tpl</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{880, 116}, {1009, 966}}</string>
+	<string>{{627, 102}, {1009, 966}}</string>
 </dict>
 </plist>

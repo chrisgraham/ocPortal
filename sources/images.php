@@ -508,7 +508,8 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		return false;
 	}
 	$source=@imagecreatefromstring($from_file);
-	unset($from_file);
+	if ((!is_null($thumb_options)) || (!$only_make_smaller))
+		unset($from_file);
 	if ($source===false)
 	{
 		if ($exit_on_error) warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($from)));
