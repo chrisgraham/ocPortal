@@ -442,10 +442,13 @@ class Module_topicview
 
 			if (!is_null($topic_info['forum_id']))
 			{
-				if (ocf_may_post_topic($topic_info['forum_id'],get_member()))
+				if (get_value('disable_add_topic_btn_in_topic')!=='1')
 				{
-					$new_topic_url=build_url(array('page'=>'topics','type'=>'new_topic','id'=>$topic_info['forum_id']),get_module_zone('topics'));
-					$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_TOPIC'),'url'=>$new_topic_url,'img'=>'new_topic');
+					if (ocf_may_post_topic($topic_info['forum_id'],get_member()))
+					{
+						$new_topic_url=build_url(array('page'=>'topics','type'=>'new_topic','id'=>$topic_info['forum_id']),get_module_zone('topics'));
+						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_TOPIC'),'url'=>$new_topic_url,'img'=>'new_topic');
+					}
 				}
 			} else
 			{
