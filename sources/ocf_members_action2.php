@@ -466,8 +466,11 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 					if ($key!=db_get_first_id())
 						$usergroup_list->attach(form_input_list_entry(strval($key),($pt_allow=='*') || count(array_intersect(array(strval($key)),explode(',',$pt_allow)))!=0,$val));
 				}
-				$fields->attach(form_input_multi_list(do_lang_tempcode('PT_ALLOW'),addon_installed('chat')?do_lang_tempcode('PT_ALLOW_DESCRIPTION_CHAT'):do_lang_tempcode('PT_ALLOW_DESCRIPTION'),'pt_allow',$usergroup_list));
-				$fields->attach(form_input_text_comcode(do_lang_tempcode('PT_RULES_TEXT'),do_lang_tempcode('PT_RULES_TEXT_DESCRIPTION'),'pt_rules_text',$pt_rules_text,false));
+				if (get_value('disable_pt_restrict')!=='1')
+				{
+					$fields->attach(form_input_multi_list(do_lang_tempcode('PT_ALLOW'),addon_installed('chat')?do_lang_tempcode('PT_ALLOW_DESCRIPTION_CHAT'):do_lang_tempcode('PT_ALLOW_DESCRIPTION'),'pt_allow',$usergroup_list));
+					$fields->attach(form_input_text_comcode(do_lang_tempcode('PT_RULES_TEXT'),do_lang_tempcode('PT_RULES_TEXT_DESCRIPTION'),'pt_rules_text',$pt_rules_text,false));
+				}
 			}
 		}
 		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
