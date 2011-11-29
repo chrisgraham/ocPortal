@@ -497,67 +497,67 @@ class Module_shopping
 
 		$message=get_param('message',NULL,true);
 
-		//Empty cart.
-		$GLOBALS['SITE_DB']->query_delete('shopping_cart', array('session_id'=>get_session_id()));
-
-		log_cart_actions('Completed payment');
-
-		if (perform_local_payment())
-		{
-			$trans_id=post_param('trans_id');
-
-			$transaction_rows=$GLOBALS['SITE_DB']->query_select('trans_expecting',array('*'),array('id'=>$trans_id),'',1);
-
-			if (!array_key_exists(0,$transaction_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-
-			$transaction_row	=	$transaction_rows[0];
-
-			$amount			=	$transaction_row['e_amount'];
-
-			$length			=	$transaction_row['e_length'];
-
-			$length_units		=	$transaction_row['e_length_units'];
-
-			$via			=	get_option('payment_gateway');
-
-			require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
-
-			$object			=	object_factory('Hook_'.$via);
-
-			$name			=	post_param('name');
-
-			$card_number		=	post_param('card_number');
-
-			$expiry_date		=	str_replace('/','',post_param('expiry_date'));
-
-			$issue_number		=	post_param_integer('issue_number',NULL);
-
-			$start_date		=	str_replace('/','',post_param('start_date'));
-
-			$card_type		=	post_param('card_type');
-
-			$cv2			=	post_param('cv2');
-
-			list($success,,$message,$message_raw)	=	$object->do_transaction($trans_id,$name,$card_number,$amount,$expiry_date,$issue_number,$start_date,$card_type,$cv2,$length,$length_units);
-
-			if (($success) || (!is_null($length)))
-			{
-				$status=((!is_null($length)) && (!$success))?'SCancelled':'Completed';
-				handle_confirmed_transaction($transaction_row['e_purchase_id'],$transaction_row['e_item_name'],$status,$message_raw,'','',$amount,get_option('currency'),$trans_id,'',$via,is_null($length)?'':strtolower(strval($length).' '.$length_units));
-			}
-
-			if ($success)
-			{
-				$member_id=$transaction_row['e_member_id'];
-				require_code('mail');
-				$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-				$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
-				mail_wrap(do_lang('PAYMENT_RECEIVED_SUBJECT',$trans_id),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($amount)),get_option('currency'),get_site_name()),array($email),$to_name);
-			}
-		}
-
 		if (get_param_integer('cancel',0)==0)
 		{
+			//Empty cart.
+			$GLOBALS['SITE_DB']->query_delete('shopping_cart', array('session_id'=>get_session_id()));
+
+			log_cart_actions('Completed payment');
+
+			if (perform_local_payment())
+			{
+				$trans_id=post_param('trans_id');
+
+				$transaction_rows=$GLOBALS['SITE_DB']->query_select('trans_expecting',array('*'),array('id'=>$trans_id),'',1);
+
+				if (!array_key_exists(0,$transaction_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+				$transaction_row	=	$transaction_rows[0];
+
+				$amount			=	$transaction_row['e_amount'];
+
+				$length			=	$transaction_row['e_length'];
+
+				$length_units		=	$transaction_row['e_length_units'];
+
+				$via			=	get_option('payment_gateway');
+
+				require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
+
+				$object			=	object_factory('Hook_'.$via);
+
+				$name			=	post_param('name');
+
+				$card_number		=	post_param('card_number');
+
+				$expiry_date		=	str_replace('/','',post_param('expiry_date'));
+
+				$issue_number		=	post_param_integer('issue_number',NULL);
+
+				$start_date		=	str_replace('/','',post_param('start_date'));
+
+				$card_type		=	post_param('card_type');
+
+				$cv2			=	post_param('cv2');
+
+				list($success,,$message,$message_raw)	=	$object->do_transaction($trans_id,$name,$card_number,$amount,$expiry_date,$issue_number,$start_date,$card_type,$cv2,$length,$length_units);
+
+				if (($success) || (!is_null($length)))
+				{
+					$status=((!is_null($length)) && (!$success))?'SCancelled':'Completed';
+					handle_confirmed_transaction($transaction_row['e_purchase_id'],$transaction_row['e_item_name'],$status,$message_raw,'','',$amount,get_option('currency'),$trans_id,'',$via,is_null($length)?'':strtolower(strval($length).' '.$length_units));
+				}
+
+				if ($success)
+				{
+					$member_id=$transaction_row['e_member_id'];
+					require_code('mail');
+					$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+					$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
+					mail_wrap(do_lang('PAYMENT_RECEIVED_SUBJECT',$trans_id),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($amount)),get_option('currency'),get_site_name()),array($email),$to_name);
+				}
+			}
+
 			$order_id	=	post_param('custom','-1');
 
 			handle_transaction_script();

@@ -244,13 +244,13 @@ class Hook_paypal
 
 		if(!is_guest())
 		{
-				$user_details['first_name']	=	get_ocp_cpf('firstname');
-				$user_details['last_name']		=	get_ocp_cpf('lastname');
-				$user_details['address1']		=	get_ocp_cpf('building_name_or_number');
-				$user_details['city']			=	get_ocp_cpf('city');
-				$user_details['state']			=	get_ocp_cpf('state');
-				$user_details['zip']				=	get_ocp_cpf('post_code');
-				$user_details['country']		=	get_ocp_cpf('country');
+			$user_details['first_name']	=	get_ocp_cpf('firstname');
+			$user_details['last_name']		=	get_ocp_cpf('lastname');
+			$user_details['address1']		=	get_ocp_cpf('building_name_or_number');
+			$user_details['city']			=	get_ocp_cpf('city');
+			$user_details['state']			=	get_ocp_cpf('state');
+			$user_details['zip']				=	get_ocp_cpf('post_code');
+			$user_details['country']		=	get_ocp_cpf('country');
 		}
 		
 		return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array('ITEMS'=>$items,'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'ORDER_ID'=>strval($order_id),'NOTIFICATION_TEXT'=>$notification_text,'MEMBER_ADDRESS'=>$user_details));
