@@ -925,6 +925,10 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 	font-size: 1em;
 }
 
+h3.standardbox_title_classic {
+	border-bottom: 0;
+}
+
 .standardbox_title_classic a, .tabletitle_internal a, .standardbox_title_med a, .standardbox_title_curved a, .standardbox_title_curved_iesucks a {
 	color: #ffffff !important; /* {$,wizard, 100% W/B} */
 }
