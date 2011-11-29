@@ -320,6 +320,12 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 				$groups_seen[$pgid]=1;
 				$col=get_group_colour($pgid);
 				$usergroup=ocf_get_group_name($pgid);
+				if (get_value('disable_user_online_groups')==='1')
+				{
+					$usergroup=NULL;
+					$col=NULL;
+					$groups_seen=array();
+				}
 				$users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'a9cb1af2a04b14edd70749c944495bff','COLOUR'=>$col,'PROFILE_URL'=>$url,'USERNAME'=>$username,'USERGROUP'=>$usergroup)));
 			}
 			if ($guests!=0)
