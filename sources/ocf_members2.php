@@ -198,6 +198,11 @@ function ocf_may_whisper($target,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
+	if (get_value('disable_pt_restrict')==='1')
+	{
+		return true;
+	}
+
 	if (has_specific_permission($member_id,'pt_anyone')) return true;
 	$pt_allow=$GLOBALS['OCF_DRIVER']->get_member_row_field($target,'m_pt_allow');
 	if ($pt_allow=='*') return true;

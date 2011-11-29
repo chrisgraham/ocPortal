@@ -1435,13 +1435,16 @@ class Module_topics
 		require_code('ocf_members2');
 		if (!ocf_may_whisper($member_id)) warn_exit(do_lang_tempcode('NO_PT_FROM_ALLOW'));
 
-		$agreed=get_param_integer('agreed',0);
-		$rules=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_pt_rules_text'),$GLOBALS['FORUM_DB']);
-		if (($agreed==0) && (!$rules->is_empty()))
+		if (get_value('disable_pt_restrict')!=='1')
 		{
-			$url=get_self_url(false,false,array('agreed'=>'1'));
-			$title=get_page_title('NEW_PERSONAL_TOPIC');
-			return do_template('OCF_MEMBER_PT_RULES_SCREEN',array('_GUID'=>'0c39906d4aeb728cc386cd9a79a338c7','TITLE'=>$title,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'MEMBER_ID'=>strval($member_id),'URL'=>$url,'RULES'=>$rules));
+			$agreed=get_param_integer('agreed',0);
+			$rules=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_pt_rules_text'),$GLOBALS['FORUM_DB']);
+			if (($agreed==0) && (!$rules->is_empty()))
+			{
+				$url=get_self_url(false,false,array('agreed'=>'1'));
+				$title=get_page_title('NEW_PERSONAL_TOPIC');
+				return do_template('OCF_MEMBER_PT_RULES_SCREEN',array('_GUID'=>'0c39906d4aeb728cc386cd9a79a338c7','TITLE'=>$title,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'MEMBER_ID'=>strval($member_id),'URL'=>$url,'RULES'=>$rules));
+			}
 		}
 
 		$text=do_lang_tempcode('PERSONAL_TOPIC_DOC');
