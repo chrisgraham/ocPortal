@@ -825,8 +825,11 @@ class Module_topics
 		$hidden->attach(build_keep_form_fields());
 		$fields->attach(form_input_text(do_lang_tempcode('MM_POST_TEXT'),do_lang_tempcode('DESCRIPTION_MM_POST_TEXT'),'post_text',$post_text,false));
 		$options=array();
-		if (addon_installed('ocf_signatures'))
-			$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
+		if (get_value('disable_skip_sig')!=='1')
+		{
+			if (addon_installed('ocf_signatures'))
+				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
+		}
 		$options[]=array(do_lang_tempcode('EMPHASISED'),'is_emphasised',true,do_lang_tempcode('DESCRIPTION_EMPHASISED'));
 		$fields->attach(form_input_various_ticks($options,''));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('OPTIONAL_REASON'),'reason','',false));
@@ -1337,8 +1340,11 @@ class Module_topics
 		$options=array();
 		if (!is_guest())
 		{
-			if (addon_installed('ocf_signatures'))
-				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
+			if (get_value('disable_skip_sig')!=='1')
+			{
+				if (addon_installed('ocf_signatures'))
+					$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
+			}
 			if (get_option('is_on_anonymous_posts')=='1')
 				$options[]=array(do_lang_tempcode('_MAKE_ANONYMOUS_POST'),'anonymous',false,do_lang_tempcode('MAKE_ANONYMOUS_POST_DESCRIPTION'));
 		}
@@ -1550,8 +1556,11 @@ class Module_topics
 		$options=array();
 		if (!is_guest())
 		{
-			if (addon_installed('ocf_signatures'))
-				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
+			if (get_value('disable_skip_sig')!=='1')
+			{
+				if (addon_installed('ocf_signatures'))
+					$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
+			}
 			if (get_option('is_on_anonymous_posts')=='1')
 				$options[]=array(do_lang_tempcode('_MAKE_ANONYMOUS_POST'),'anonymous',false,do_lang_tempcode('MAKE_ANONYMOUS_POST_DESCRIPTION'));
 		}
@@ -3231,8 +3240,11 @@ END;
 		$hidden->attach(build_keep_form_fields());
 		$fields->attach(form_input_text(do_lang_tempcode('MM_POST_TEXT'),do_lang_tempcode('DESCRIPTION_MM_POST_TEXT'),'post_text',$post_text,false));
 		$options=array();
-		if (addon_installed('ocf_signatures'))
-			$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
+		if (get_value('disable_skip_sig')!=='1')
+		{
+			if (addon_installed('ocf_signatures'))
+				$options[]=array(do_lang_tempcode('SKIP_SIGNATURE'),'skip_sig',false,do_lang_tempcode('DESCRIPTION_SKIP_SIGNATURE'));
+		}
 		$options[]=array(do_lang_tempcode('EMPHASISED'),'is_emphasised',true,do_lang_tempcode('DESCRIPTION_EMPHASISED'));
 		$fields->attach(form_input_various_ticks($options,''));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('OPTIONAL_REASON'),'reason','',false));
