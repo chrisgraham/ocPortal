@@ -952,7 +952,7 @@ class Module_cms_catalogues extends standard_aed_module
 					foreach (array_keys($better_results) as $k)
 					{
 						echo ',';
-						echo str_replace('"','""',$k);
+						echo '"'.str_replace('"','""',$k).'"';
 					}
 					echo chr(10);
 				}
@@ -961,11 +961,11 @@ class Module_cms_catalogues extends standard_aed_module
 					if (!array_key_exists($entry_row['cc_id'],$category_names))
 						$category_names[$entry_row['cc_id']]=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_title',array('id'=>$entry_row['cc_id'])));
 				}
-				echo $category_names[$entry_row['cc_id']];
+				echo '"'.str_replace('"','""',$category_names[$entry_row['cc_id']]).'"';
 				foreach ($better_results as $v)
 				{
 					echo ',';
-					echo str_replace('"','""',$v);
+					echo '"'.str_replace('"','""',$v).'"';
 				}
 				echo chr(10);
 			}
