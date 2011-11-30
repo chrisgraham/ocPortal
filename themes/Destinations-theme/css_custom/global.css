@@ -1238,7 +1238,10 @@ a.poster_member:hover {
 .proceed_button {
 	text-align: center;
 	padding: 0 0 0 0px; /* Can't be margin, as in Firefox it can collapse below the body */
-	float:left;
+}
+
+#search .proceed_button {
+	float: left;
 }
 
 .global_side .proceed_button {
