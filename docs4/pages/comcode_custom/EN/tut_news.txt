@@ -41,6 +41,9 @@ News entries may be in multiple news categories, but a user needs access to the 
 
 See the [page="_SELF:tut_configuration"]basic configuration[/page] tutorial for information on setting up the scheduler.
 
+You will see an advance scheduling option once the scheduler is enabled (requires the ocPortal 'calendar' addon to be installed also).
+You may choose dates in the past also, if you wish to back-date your posts.
+
 [title="3"]Enabling member blogs[/title]
 
 Blog posts are just news posts that exist in a category that is owned by a member. Assuming you don't apply a filter, they'll show up everywhere news can be seen (in the news block, and the news archive). There is also a link in each member's profile to see that member's blog.
