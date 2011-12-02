@@ -288,8 +288,9 @@ END;
  * @param  SHORT_TEXT		Meta keywords
  * @param  LONG_TEXT			Meta description
  * @param  ?URLPATH			URL to the image for the news entry (blank: use cat image) (NULL: don't delete existing)
+ * @param  ?TIME				Recorded add time (NULL: leave alone)
  */
-function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image)
+function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image,$time=NULL)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('news',array('title','news','news_article','submitter'),array('id'=>$id),'',1);
 	$_title=$rows[0]['title'];
@@ -310,6 +311,8 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	require_code('attachments3');
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array('news_category'=>$main_news_category,'news_article'=>update_lang_comcode_attachments($_news_article,$news_article,'news',strval($id),NULL,false,$rows[0]['submitter']),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'title'=>lang_remap_comcode($_title,$title),'news'=>lang_remap_comcode($_news,$news),'author'=>$author);
+
+	if (!is_null($time)) $map['date_and_time']=$time;
 
 	if (!is_null($image))
 	{

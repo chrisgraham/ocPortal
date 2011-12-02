@@ -492,10 +492,12 @@ class Module_cms_news extends standard_aed_module
 		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
 		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
 
+		$schedule=get_input_date('schedule');
+		$add_time=is_null($schedule)?time():$schedule;
+
 		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
 		{
 			require_code('calendar2');
-			$schedule=get_input_date('schedule');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
 			$past_event=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id','e.id',array('text_original'=>$schedule_code));
 			require_code('calendar');
@@ -518,7 +520,7 @@ class Module_cms_news extends standard_aed_module
 			}
 		}
 
-		edit_news(intval($id),post_param('title',STRING_MAGIC_NULL),post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url);
+		edit_news(intval($id),post_param('title',STRING_MAGIC_NULL),post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);
 	}
 
 	/**
