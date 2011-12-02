@@ -21,8 +21,8 @@
 addEventListenerAbstract(window,'load',function () {
 	jwplayer("flv_container_{$GET%,rand_id}").setup({
 		autostart: false,
-		width: {$MIN*,{A_WIDTH},600},
-		{+START,IF,{$EQ,{A_WIDTH},{$MIN,{A_WIDTH},600}}}height: {A_HEIGHT*},{+END}
+		width: {A_WIDTH*},
+		height: {A_HEIGHT*},
 		players: [
 			{ type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf?rand={$RAND*}" },
 			{ type: "html5" }
