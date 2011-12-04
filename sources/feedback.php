@@ -404,7 +404,7 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 		{
 			$max_comments=get_param_integer('max_comments',200);
 			$start_comments=get_param_integer('start_comments',0);
-			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$full_title,$full_title,$count,$max_comments,$start_comments);
+			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$full_title,$full_title,$count,$max_comments,$start_comments,false,$reverse);
 			if ($count>$max_comments)
 			{
 				require_code('templates_results_browser');
@@ -439,7 +439,6 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 					'numcomments'=>strval(count($_comments)),
 				);
 
-				if ($reverse) $_comments=array_reverse($_comments);
 				if ((get_forum_type()=='ocf') && ($allow_reviews))
 				{
 					$all_individual_review_ratings=$GLOBALS['SITE_DB']->query_select('review_supplement',array('*'),array('r_topic_id'=>$topic_id));

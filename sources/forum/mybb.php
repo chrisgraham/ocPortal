@@ -522,6 +522,8 @@ class forum_driver_mybb extends forum_driver_base
 	 * @param  integer		The comment count will be returned here by reference
 	 * @param  integer		Maximum comments to returned
 	 * @param  integer		Comment to start at
+	 * @param  boolean		Whether to mark the topic read (ignored for this forum driver)
+	 * @param  boolean		Whether to show in reverse
 	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
 	 */
 	function get_forum_topic_posts($forum_name,$topic_name,$topic_description,&$count,$max=100,$start=0)
@@ -535,7 +537,8 @@ class forum_driver_mybb extends forum_driver_base
 		$topic_id=$this->get_tid_from_topic($topic_name,$cf);
 		if (is_null($topic_id)) return (-2);
 
-		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE tid='.(string)intval($topic_id).' AND message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY dateline',$max,$start);
+		$order=$reverse?'dateline DESC':'dateline';
+		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE tid='.(string)intval($topic_id).' AND message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
 		$count=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE tid='.(string)intval($topic_id).' AND message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
 
 		$out=array();

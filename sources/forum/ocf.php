@@ -250,12 +250,13 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  integer		Maximum comments to returned
 	 * @param  integer		Comment to start at
 	 * @param  boolean		Whether to mark the topic read
+	 * @param  boolean		Whether to show in reverse
 	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
 	 */
-	function get_forum_topic_posts($forum_name,$topic_name,$topic_description,&$count,$max=100,$start=0,$mark_read=true)
+	function get_forum_topic_posts($forum_name,$topic_name,$topic_description,&$count,$max=100,$start=0,$mark_read=true,$reverse=false)
 	{
 		require_code('ocf_forum_driver_helper');
-		return _helper_get_forum_topic_posts($this,$forum_name,$topic_name,$topic_description,$count,$max,$start,$mark_read);
+		return _helper_get_forum_topic_posts($this,$forum_name,$topic_name,$topic_description,$count,$max,$start,$mark_read,$reverse);
 	}
 
 	/**
