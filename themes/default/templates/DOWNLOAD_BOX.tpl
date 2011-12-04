@@ -21,7 +21,13 @@
 	{+START,SET,BOX_TITLE}
 		<a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a> {!BY_SIMPLE_LOWER,{AUTHOR*}}
 	{+END}
-	{+START,BOX,{$GET,BOX_TITLE},,med,,{$GET,META},<a href="{URL*}">{!MORE_INFO}</a>|<a href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*}&amp;for_session={$SESSION_HASHED}">{!DOWNLOAD_NOW}</a> ({FILE_SIZE*})}
+	{+START,IF_PASSED,LICENCE}
+		{$SET,dbox_title,<a href="{URL*}">{!VIEW}</a>}
+	{+END}
+	{+START,IF_NON_PASSED,LICENCE}
+		{$SET,dbox_title,<a href="{URL*}">{!MORE_INFO}</a>|<a href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*}&amp;for_session={$SESSION_HASHED}">{!DOWNLOAD_NOW}</a> ({FILE_SIZE*})}
+	{+END}
+	{+START,BOX,{$GET,BOX_TITLE},,med,,{$GET,META},{$GET,dbox_title}}
 		{+START,IF_NON_EMPTY,{IMGCODE}}
 			<div class="download_box_pic"><a href="{URL*}">{IMGCODE}</a></div>
 		{+END}

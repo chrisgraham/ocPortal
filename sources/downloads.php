@@ -90,8 +90,26 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL)
 	if (!is_null($rating))
 		if (trim($rating->evaluate())=='') $rating=NULL;
 
+	$licence_title=NULL;
+	$licence_url=NULL;
+	$licence_hyperlink=NULL;
+	$licence=$row['download_licence'];
+	if (!is_null($licence))
+	{
+		$licence_title=$GLOBALS['SITE_DB']->query_value_null_ok('download_licences','l_title',array('id'=>$licence));
+		if (!is_null($licence_title))
+		{
+			$keep=symbol_tempcode('KEEP');
+			$licence_url=find_script('download_licence').'?id='.strval($licence).$keep->evaluate();
+			$licence_hyperlink=do_template('HYPERLINK_POPUP_WINDOW',array('_GUID'=>'10582f28c37ee7e9e462fdbd6a2cb8dd','TITLE'=>'','CAPTION'=>$licence_title,'URL'=>$licence_url,'WIDTH'=>'600','HEIGHT'=>'500','REL'=>'license'));
+		} else
+		{
+			$licence=NULL; // Orphaned
+		}
+	}
+
 	// Final template
-	return do_template('DOWNLOAD_BOX',array('AUTHOR'=>$row['author'],'ID'=>strval($row['id']),'RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>get_translated_text($row['name']),'TREE'=>$tree,'IMGCODE'=>$imgcode));
+	return do_template('DOWNLOAD_BOX',array('AUTHOR'=>$row['author'],'ID'=>strval($row['id']),'RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>get_translated_text($row['name']),'TREE'=>$tree,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
 }
 
 /**
