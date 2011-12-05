@@ -737,7 +737,7 @@ function do_site()
 	$show_edit_links=get_param_integer('show_edit_links',0);
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
 	$KEEP_MARKERS=($keep_markers==1) || ($special_page_type=='show_markers');
-	if (($KEEP_MARKERS) && (!headers_sent())) header('Content-Type: text/html');
+	if (($KEEP_MARKERS) && (!headers_sent())) header('Content-type: text/html; charset='.get_charset());
 	$SHOW_EDIT_LINKS=($show_edit_links==1) || ($special_page_type=='show_edit_links');
 	$out_evaluated=NULL;
 

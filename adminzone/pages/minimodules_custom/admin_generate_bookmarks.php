@@ -12,7 +12,7 @@
 
 */
 
-header('Content-Type: text/html');
+header('Content-type: text/html; charset='.get_charset());
 header('Content-Disposition: attachment; filename="bookmarks.html"');
 
 $site_name=escape_html(get_site_name());

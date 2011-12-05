@@ -127,14 +127,14 @@ function _inspect($args,$force_plain=false)
 		
 		if (!headers_sent())
 		{
-			header('Content-Type: text/plain');
+			header('Content-type: text/plain; charset='.get_charset());
 			header('Content-Disposition: inline'); // Override what might have been set
 		}
 		
 		echo 'DEBUGGING. INSPECTING VARIABLES...'.chr(10);
 	} else
 	{
-		header('Content-Type: text/html');
+		header('Content-type: text/html; charset='.get_charset());
 		header('Content-Disposition: inline'); // Override what might have been set
 	}
 	
@@ -192,7 +192,7 @@ function memory_trace_point($name=NULL)
  */
 function show_memory_points()
 {
-	@header('Content-type: text/plain');
+	@header('Content-type: text/plain; charset='.get_charset());
 	
 	@ini_set('ocproducts.xss_detect','0');
 	
