@@ -861,6 +861,9 @@ class Module_cedi
 
 		if ($mode=='edit')
 		{
+			$_id=get_param_cedi_chain('id',strval($GLOBALS['SITE_DB']->query_value('seedy_posts','page_id',array('id'=>$post_id))));
+			$id=$_id[0];
+
 			$rows=$GLOBALS['SITE_DB']->query_select('seedy_posts',array('*'),array('id'=>$post_id),'',1);
 			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$myrow=$rows[0];
@@ -895,7 +898,7 @@ class Module_cedi
 			$_id=get_param_cedi_chain('id');
 			$id=$_id[0];
 
-			if ($GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('id'=>$id))>=300)
+			if ($GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('page_id'=>$id))>=300)
 			{
 				warn_exit(do_lang_tempcode('TOO_MANY_CEDI_POSTS'));
 			}
@@ -958,7 +961,7 @@ class Module_cedi
 
 		$tree=cedi_breadcrumbs($chain,NULL,true,true);
 
-		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>(get_param('id',false,true)==strval(db_get_first_id()))?NULL:get_param('id',false,true)),'_SELF');
+		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>(get_param('id',strval($id),true)==strval(db_get_first_id()))?NULL:get_param('id',strval($id),true)),'_SELF');
 		$redir_url=$_redir_url->evaluate();
 		$post_url=build_url(array('page'=>'_SELF','id'=>get_param('id',strval(db_get_first_id()),false),'redirect'=>$redir_url,'type'=>'_post'),'_SELF');
 
