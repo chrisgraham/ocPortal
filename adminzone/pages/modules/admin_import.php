@@ -515,7 +515,7 @@ class Module_admin_import
 		$refresh_url=get_self_url(true,false,array('type'=>'import'),true);
 		$refresh_time=either_param_integer('refresh_time',15); // Shouldn't default, but reported on some systems to do so
 		if (function_exists('set_time_limit')) @set_time_limit($refresh_time);
-		header('Content-type: text/html');
+		header('Content-type: text/html; charset='.get_charset());
 		global $I_REFRESH_URL;
 		$I_REFRESH_URL=$refresh_url;
 
@@ -725,12 +725,9 @@ class Module_admin_import
 
 		$LANG=get_site_default_lang();
 		$trans5=insert_lang(do_lang('FORUM'),1,NULL,false,NULL,$LANG);
-		$trans7=insert_lang(do_lang('PERSONAL_ZONE'),1,NULL,false,NULL,$LANG);
 		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'forum','zone_title'=>insert_lang(do_lang('SECTION_FORUMS'),1),'zone_default_page'=>'forumview','zone_header_text'=>$trans5,'zone_theme'=>'-1','zone_wide'=>NULL,'zone_require_session'=>0,'zone_displayed_in_menu'=>1));
-		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'personalzone','zone_title'=>insert_lang(do_lang('PERSONAL_ZONE'),1),'zone_default_page'=>'myhome','zone_header_text'=>$trans7,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>1,'zone_displayed_in_menu'=>1));
 		require_code('menus2');
 		add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS','forum'.':forumview',0,1);
-		add_menu_item_simple('zone_menu',NULL,'PERSONAL_ZONE','personalzone'.':myhome',0,1);
 
 		return $out;
 	}
