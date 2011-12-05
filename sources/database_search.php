@@ -43,7 +43,7 @@ function opensearch_script()
 	{
 		// Make a search suggestion (like Google Suggest)
 		case 'suggest':
-			header('Content-Type: text/plain');
+			header('Content-type: text/plain; charset='.get_charset());
 			$request=get_param('request',false,true);
 			if (strlen($request)<3) return;
 			
@@ -560,7 +560,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		if (get_param_integer('keep_just_show_query',0)==1)
 		{
 			@ini_set('ocproducts.xss_detect','0');
-			header('Content-type: text/plain');
+			header('Content-type: text/plain; charset='.get_charset());
 			exit($query);
 		}
 

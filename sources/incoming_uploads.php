@@ -123,7 +123,7 @@ function incoming_uploads_script()
 		if ($field_type_test == 'ID_TEXT') $max_length = 80; // Legacy
 		$name = substr($name,max(0,strlen($name)-$max_length));
 
-		header('Content-type: text/plain');
+		header('Content-type: text/plain; charset='.get_charset());
 
 		require_code('files');
 

@@ -162,7 +162,7 @@ function fractional_edit_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/plain');
+	header('Content-type: text/plain; charset='.get_charset());
 
 	$_POST['fractional_edit']='1';
 
@@ -200,7 +200,7 @@ function change_detection_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/plain');
+	header('Content-type: text/plain; charset='.get_charset());
 
 	$page=get_param('page');
 
@@ -220,7 +220,7 @@ function edit_ping_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/plain');
+	header('Content-type: text/plain; charset='.get_charset());
 
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'edit_pings WHERE the_time<'.strval(time()-200));
 
@@ -362,7 +362,7 @@ function username_exists_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-	header('Content-Type: text/plain');
+	header('Content-type: text/plain; charset='.get_charset());
 	convert_data_encodings(true);
 	$username=trim(get_param('username',false,true));
 	$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
