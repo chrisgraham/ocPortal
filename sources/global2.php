@@ -387,6 +387,8 @@ function init__global2()
 	}
 	require_code('urls'); // URL building is crucial
 
+	@header('Content-type: text/html; charset='.get_charset());
+
 	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0))
 	{
 		// Before anything gets outputted
@@ -465,8 +467,6 @@ function init__global2()
 	}
 
 	$BOOTSTRAPPING=0;
-
-	@header('Content-type: text/html; charset='.get_charset());
 
 	if (($GLOBALS['SEMI_DEBUG_MODE']) && ($MICRO_AJAX_BOOTUP==0)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
 	{
@@ -723,7 +723,7 @@ function get_charset()
 	$contents=str_replace(chr(13),chr(10),fread($file,3000));
 	fclose($file);
 	$matches=array();
-	if (preg_match('#charset=([\w\-]+)\n#',$contents,$matches)!=0)
+	if (preg_match('#\[strings\].*charset=([\w\-]+)\n#s',$contents,$matches)!=0)
 	{
 		$TEMP_CHARSET=$matches[1];
 		return $TEMP_CHARSET;
