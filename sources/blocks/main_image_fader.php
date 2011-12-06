@@ -111,7 +111,7 @@ class Block_main_image_fader
 		if (count($images)==0) return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('NO_ENTRIES')));
 
 		$nice_cat=str_replace('*','',$cat);
-		if (preg_match('#^[\w\_]+$#',$nice_cat)!=0) $nice_cat='root';
+		if (preg_match('#^[\w\_]+$#',$nice_cat)==0) $nice_cat='root';
 		$gallery_url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$nice_cat),$zone);
 
 		return do_template('BLOCK_MAIN_IMAGE_FADER',array(
