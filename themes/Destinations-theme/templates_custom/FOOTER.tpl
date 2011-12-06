@@ -1,5 +1,3 @@
-	</div>
-
 	{+START,IF,{SHOW_BOTTOM}}
 		<div id="footer">
 			<div class="footer-in">
