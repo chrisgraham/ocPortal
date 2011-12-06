@@ -33,7 +33,7 @@ function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false
 		}
 		
 		// Wrong zones
-		if ((file_exists($OCPORTAL_PATH.$dir.$file.'/index.php')) && (file_exists($OCPORTAL_PATH.$dir.$file.'/pages')) && (!in_array($file,array('adminzone','collaboration','cms','forum','site','personalzone'))))
+		if ((file_exists($OCPORTAL_PATH.$dir.$file.'/index.php')) && (file_exists($OCPORTAL_PATH.$dir.$file.'/pages')) && (!in_array($file,array('adminzone','collaboration','cms','forum','site'))))
 		{
 			return true;
 		}
@@ -87,7 +87,7 @@ function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false
 			&& (($file!='download_tree_made.htm') || ($upgrading))
 			&& (($file!='seedy_tree_made.htm') || ($upgrading))
 		)
-		 return true;
+			return true;
 		if ($dir=='data/areaedit/plugins/SpellChecker/aspell/') return true;
 		if ((($dir=='themes/default/templates_cached/EN/') || ($dir=='lang_cached/EN/') || ($dir=='persistant_cache/')) && ($file!='index.html') && ($file!='.htaccess')) return true;
 		if ((($dir=='themes/default/templates_cached/') || ($dir=='lang_cached/')) && ($file!='index.html') && ($file!='.htaccess') && ($file!='EN')) return true;
