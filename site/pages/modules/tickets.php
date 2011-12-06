@@ -138,7 +138,6 @@ class Module_tickets
 			add_specific_permission('SUPPORT_TICKETS','view_others_tickets',false);
 
 			add_menu_item_simple('main_website',NULL,'SUPPORT_TICKETS','_SEARCH:tickets:type=misc');
-			add_menu_item_simple('pc_features',NULL,'SUPPORT_TICKETS','_SEARCH:tickets:type=misc');
 		}
 	}
 
@@ -465,7 +464,7 @@ class Module_tickets
 					$_comments_forum=get_option('comments_forum_name');
 					if (is_numeric($_comments_forum))
 					{
-						$comments_forum=$_comments_forum;
+						$comments_forum=intval($_comments_forum);
 					} else
 					{
 						$comments_forum=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($_comments_forum);
