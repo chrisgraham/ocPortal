@@ -43,8 +43,8 @@ class Hook_members_booking
 
 		foreach ($request as $i=>$r)
 		{
-			$from=get_timezoned_date(mktime(0,0,0,$r['start_date_month'],$r['start_date_day'],$r['start_date_year']),false);
-			$to=get_timezoned_date(mktime(0,0,0,$r['end_date_month'],$r['end_date_day'],$r['end_date_year']),false);
+			$from=get_timezoned_date(mktime(0,0,0,$r['start_month'],$r['start_day'],$r['start_year']),false);
+			$to=get_timezoned_date(mktime(0,0,0,$r['end_month'],$r['end_day'],$r['end_year']),false);
 			$links[]=array(
 				'content',
 				do_lang_tempcode('BOOKING_EDIT',$from,$to,get_translated_tempcode($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$r['bookable_id'])))),
