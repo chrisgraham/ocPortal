@@ -79,7 +79,7 @@ function update_ajax_member_list_response(result,list_contents)
 		list.setAttribute('multiple','multiple');
 	} else
 	{
-		list.setAttribute('size',list_contents.childNodes.length);
+		list.setAttribute('size',list_contents.childNodes.length+1);
 	}
 	list.setAttribute('id','ajax_list');
 	list.style.position='absolute';
@@ -98,6 +98,11 @@ function update_ajax_member_list_response(result,list_contents)
 		item.innerText=list_contents.childNodes[i].getAttribute('value');
 		list.appendChild(item);
 	}
+	item=document.createElement('option');
+	item.disabled=true;
+	item.text='{!SUGGESTIONS_ONLY;}'.toUpperCase();
+	item.innerText='{!SUGGESTIONS_ONLY;}'.toUpperCase();
+	list.appendChild(item);
 	current_list_for.parentNode.appendChild(list);
 	if (typeof window.nereidFade!='undefined')
 	{
