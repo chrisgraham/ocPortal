@@ -257,7 +257,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	}
 	if (!is_guest())
 	{
-		if (get_value('disable_mark_forum_read')!=='1')
+		if ((get_value('disable_mark_forum_read')!=='1') && (count($details['topics'])!=0))
 		{
 			$read_url=build_url(array('page'=>'topics','type'=>'mark_read','id'=>$id),get_module_zone('topics'));
 			$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_READ'),'url'=>$read_url,'img'=>'mark_read');
@@ -376,7 +376,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	{
 		if ($type=='pt')
 		{
-			$filter_cats=ocf_get_filter_cats();
+			$filter_cats=ocf_get_filter_cats(true);
 		
 			$filters_arr=array();
 

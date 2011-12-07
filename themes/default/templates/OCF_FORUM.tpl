@@ -4,15 +4,15 @@
 			{DESCRIPTION}
 		</div>
 	{+END}
+
+	<br />
 {+END}{+END}
 
 {+START,IF_PASSED,ID}
 	{+START,IF_NON_EMPTY,{$CATALOGUE_ENTRY_FOR,forum,{ID}}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$CATALOGUE_ENTRY_FOR,forum,{ID}}}{+END}
 {+END}
 
-<br />
-
-{+START,IF_NON_EMPTY,{FILTERS}}
+{+START,IF_NON_EMPTY,{$TRIM,{FILTERS}}}
 	{+START,BOX,,,light}
 		<span class="ocf_pt_category_filters">{!CATEGORIES}</span>: {FILTERS}
 	{+END}
@@ -21,12 +21,20 @@
 
 {CATEGORIES}
 
-{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
-	<div class="non_accessibility_redundancy">
-		<div class="float_surrounder">
-			{BUTTONS}
+{+START,IF_EMPTY,{TOPIC_WRAPPER}{CATEGORIES}}
+	<p class="nothing_here">
+		{!NO_ENTRIES}
+	</p>
+{+END}
+
+{+START,IF_PASSED,ID}
+	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+		<div class="non_accessibility_redundancy">
+			<div class="float_surrounder">
+				{BUTTONS}
+			</div>
 		</div>
-	</div>
+	{+END}
 {+END}
 
 {+START,IF,{$OR,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}},{$IS_NON_EMPTY,{CATEGORIES}}}}
@@ -34,12 +42,6 @@
 {+END}
 
 {TOPIC_WRAPPER}
-
-{+START,IF_EMPTY,{TOPIC_WRAPPER}{CATEGORIES}}
-	<p class="nothing_here">
-		{!NO_ENTRIES}
-	</p>
-{+END}
 
 {+START,IF_EMPTY,{TOPIC_WRAPPER}}
 	{+START,IF,{$VALUE_OPTION,disable_forum_dupe_buttons}}
