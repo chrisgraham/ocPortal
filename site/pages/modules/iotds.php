@@ -246,13 +246,18 @@ class Module_iotds
 		}
 		$myrow=$rows[0];
 
-		do_rating($myrow['allow_rating']==1,get_page_name(),strval($id));
-		if ((!is_null(post_param('title',NULL))) || (!is_null($myrow['date_and_time'])) || ($myrow['used']==1))
-			do_comments($myrow['allow_comments']>=1,get_page_name(),strval($id),build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF'),get_translated_text($myrow['i_title']),get_value('comment_forum__iotds'));
-		//do_trackback($myrow['allow_trackbacks']==1,get_page_name(),$id);
-		$rating_details=get_rating_text(get_page_name(),strval($id),$myrow['allow_rating']==1);
-		$comment_details=get_comment_details(get_page_name(),$myrow['allow_comments']==1,strval($id),false,get_value('comment_forum__iotds'),NULL,NULL,false,false,$myrow['submitter'],$myrow['allow_comments']==2);
-		$trackback_details=get_trackback_details(get_page_name(),strval($id),$myrow['allow_trackbacks']==1);
+		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
+			get_page_name(),
+			strval($id),
+			$myrow['allow_rating'],
+			$myrow['allow_comments'],
+			$myrow['allow_trackbacks'],
+			((is_null($myrow['date_and_time'])) && ($myrow['used']==0))?0:1,
+			$myrow['submitter'],
+			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF'),
+			get_translated_text($myrow['i_title']),
+			get_value('comment_forum__iotds')
+		);
 
 		$date_raw=strval($myrow['date_and_time']);
 		$add_date_raw=strval($myrow['add_date']);

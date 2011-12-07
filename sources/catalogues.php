@@ -635,15 +635,20 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	}
 	if ($feedback_details)
 	{
-		do_rating($entry['allow_rating']==1,'catalogues',strval($id));
 		$c_value=array_key_exists('FIELD_0_PLAIN_PURE',$map)?$map['FIELD_0_PLAIN_PURE']:$map['FIELD_0_PLAIN'];
 		if (is_object($c_value)) $c_value=$c_value->evaluate();
-		if ((!is_null(post_param('title',NULL))) || ($entry['ce_validated']==1))
-			do_comments($entry['allow_comments']>=1,'catalogues',strval($id),build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues')),$c_value,get_value('comment_forum__catalogues__'.$catalogue_name));
-		//do_trackback($myrow['allow_trackbacks'],'catalogues',$id);
-		$map['COMMENT_DETAILS']=get_comment_details('catalogues',$entry['allow_comments']==1,strval($id),false,get_value('comment_forum__catalogues__'.$catalogue_name),NULL,NULL,false,false,$entry['ce_submitter'],$entry['allow_comments']==2);
-		$map['RATING_DETAILS']=get_rating_text('catalogues',strval($id),$entry['allow_rating']==1);
-		$map['TRACKBACK_DETAILS']=get_trackback_details('catalogues',strval($id),$entry['allow_trackbacks']==1);
+		list($map['RATING_DETAILS'],$map['COMMENT_DETAILS'],$map['TRACKBACK_DETAILS'])=embed_feedback_systems(
+			get_page_name(),
+			strval($id),
+			$entry['allow_rating'],
+			$entry['allow_comments'],
+			$entry['allow_trackbacks'],
+			$entry['validated'],
+			$entry['ce_submitter'],
+			build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues')),
+			$c_value,
+			get_value('comment_forum__catalogues__'.$catalogue_name)
+		);
 	}
 
 	if ((get_option('is_on_comments')=='1') && ($entry['allow_comments']>=1) || (get_option('is_on_rating')=='1') && ($entry['allow_rating']==1) || (get_option('is_on_trackbacks')=='1') && ($entry['allow_trackbacks']==1) || (!$all_visible))

@@ -668,18 +668,23 @@ class Module_news
 		seo_meta_load_for('news',strval($id),do_lang(($blog===1)?'BLOG__NEWS':'_NEWS',get_translated_text($myrow['title'])));
 
 		// Rating and comments
-		do_rating($myrow['allow_rating']==1,get_page_name(),strval($id));
 		$self_url_map=array('page'=>'_SELF','type'=>'view','id'=>$id);
 		if ($filter!='*') $self_url_map['filter']=$filter;
 		if (($filter_and!='*') && ($filter_and!='')) $self_url_map['filter_and']=$filter_and;
 		if (!is_null($blog)) $self_url_map['blog']=$blog;
-		if ((!is_null(post_param('title',NULL))) || ($myrow['validated']==1))
-			do_comments($myrow['allow_comments']>=1,get_page_name(),strval($id),build_url($self_url_map,'_SELF'),get_translated_text($myrow['title']),get_value('comment_forum__news'));
-		//do_trackback($myrow['allow_trackbacks']==1,get_page_name(),$id);
-		$rating_details=get_rating_text(get_page_name(),strval($id),$myrow['allow_rating']==1);
-		$comment_details=get_comment_details(get_page_name(),$myrow['allow_comments']==1,strval($id),false,get_value('comment_forum__news'),NULL,NULL,false,false,$myrow['submitter'],$myrow['allow_comments']==2);
-		$trackback_details=get_trackback_details(get_page_name(),strval($id),$myrow['allow_trackbacks']==1);
-	
+		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
+			get_page_name(),
+			strval($id),
+			$myrow['allow_rating'],
+			$myrow['allow_comments'],
+			$myrow['allow_trackbacks'],
+			$myrow['validated'],
+			$myrow['submitter'],
+			build_url($self_url_map,'_SELF'),
+			get_translated_text($myrow['title']),
+			get_value('comment_forum__news')
+		);
+
 		$date=get_timezoned_date($myrow['date_and_time']);
 		$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$myrow['author']),get_module_zone('authors')):new ocp_tempcode();
 		$author=$myrow['author'];

@@ -19,6 +19,74 @@
  */
 
 /**
+ * Main wrapper function to embed miscellaneous feedback systems into a module output.
+ *
+ * @param  ID_TEXT		The page name
+ * @param  AUTO_LINK		Content ID
+ * @param  BINARY			Whether rating is allowed
+ * @param  integer		Whether comments/reviews is allowed (reviews allowed=2)
+ * @set 0 1 2
+ * @param  BINARY			Whether the content is validated
+ * @param  ?MEMBER		Content owner (NULL: none)
+ * @param  tempcode		URL to view the content
+ * @param  SHORT_TEXT	Content title
+ * @param  ?string		Forum to post comments in (NULL: site-wide default)
+ * @return array			Tuple: Rating details, Comment details, Trackback details
+ */
+function embed_feedback_systems($page_name,$id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$self_url,$self_title,$forum)
+{
+	do_rating($allow_rating==1,$page_name,$id);
+	if ((!is_null(post_param('title',NULL))) || ($validated==1))
+		do_comments($allow_comments>=1,$page_name,$id,$self_url,$self_title,$forum);
+	//do_trackback($allow_trackbacks==1,$page_name,$id);
+	$rating_details=get_rating_details($page_name,$id,$allow_rating==1);
+	$comment_details=get_comment_details($page_name,$allow_comments==1,$id,false,$forum,NULL,NULL,false,false,$submitter,$allow_comments==2);
+	$trackback_details=get_trackback_details($page_name,$id,$allow_trackbacks==1);
+
+	//$comment_details->attach(TODO); // AJAX support
+
+	return array($rating_details,$comment_details,$trackback_details);
+}
+
+/**
+ * Get tempcode for doing ratings (sits above get_rating_simple_array)
+ *
+ * @param  ID_TEXT		The type (download, etc) that this rating is for
+ * @param  ID_TEXT		The ID of the type that this rating is for
+ * @param  boolean		Whether this resource allows rating (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
+ * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
+ * @return tempcode		Tempcode for complete rating box
+ */
+function get_rating_details($rating_for_type,$id,$allow_rating,$extra_ratings=NULL)
+{	
+	if ($allow_rating)
+	{
+		return display_rating($rating_for_type,$id,'RATING_INLINE',$extra_ratings);
+	}
+
+	return new ocp_tempcode();
+}
+
+/**
+ * Display rating using images
+ *	
+ * @param  ID_TEXT		The type (download, etc) that this rating is for
+ * @param  ID_TEXT		The ID of the type that this rating is for
+ * @param  ID_TEXT		The template to use to display the rating box
+ * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
+ * @return tempcode		Tempcode for complete trackback box
+ */
+function display_rating($rating_for_type,$id,$tpl='RATING_INLINE',$extra_ratings=NULL)
+{
+	$rating_data=get_rating_simple_array($rating_for_type,$id,'RATING_INSIDE',$extra_ratings);
+
+	if (is_null($rating_data)) 
+		return new ocp_tempcode();
+	else
+		return do_template($tpl,$rating_data);
+}
+
+/**
  * Get rating information for the specified resource.
  *
  * @param  ID_TEXT		The type (download, etc) that this rating is for
@@ -92,28 +160,6 @@ function get_rating_simple_array($rating_for_type,$id,$tpl='RATING_INSIDE',$extr
 }
 
 /**
- * Get tempcode for doing ratings (sits above get_rating_simple_array)
- *
- * @param  ID_TEXT		The type (download, etc) that this rating is for
- * @param  ID_TEXT		The ID of the type that this rating is for
- * @param  boolean		Whether this resource allows rating (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
- * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
- * @return tempcode		Tempcode for complete rating box
- */
-function get_rating_text($rating_for_type,$id,$allow_rating,$extra_ratings=NULL)
-{	
-	if ($allow_rating)
-	{
-		$array=get_rating_simple_array($rating_for_type,$id,'RATING_INSIDE',$extra_ratings);
-		if (is_null($array)) return new ocp_tempcode();
-
-		return do_template('RATING',$array);
-	}
-
-	return new ocp_tempcode();
-}
-
-/**
  * Find whether you have rated the specified resource before.
  *
  * @param  ID_TEXT		The type (download, etc) that this rating is for
@@ -165,6 +211,193 @@ function do_rating($allow_rating,$rating_for_type,$id,$extra_ratings=NULL)
 		$count=array_key_exists('points_gained_rating',$_count)?$_count['points_gained_rating']:0;
 		$GLOBALS['FORUM_DRIVER']->set_custom_field(get_member(),'points_gained_rating',$count+1);
 	}
+}
+
+/**
+ * Get the tempcode containing all the comments posted, and the comments posting form for the specified resource.
+ *
+ * @param  ID_TEXT		The type (download, etc) that this commenting is for
+ * @param  boolean		Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
+ * @param  ID_TEXT		The ID of the type that this commenting is for
+ * @param  boolean		Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
+ * @param  ?string		The name of the forum to use (NULL: default comment forum)
+ * @param  ?string		The default post to use (NULL: standard courtesy warning)
+ * @param  ?mixed			The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
+ * @param  boolean		Whether to skip permission checks
+ * @param  boolean		Whether to reverse the posts
+ * @param  ?MEMBER		User to highlight the posts of (NULL: none)
+ * @param  boolean		Whether to allow ratings along with the comment (like reviews)
+ * @return tempcode		The tempcode for the comment box
+ */
+function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments=false,$forum=NULL,$post_warning=NULL,$_comments=NULL,$explicit_allow=false,$reverse=false,$highlight_by_user=NULL,$allow_reviews=false)
+{
+	if ($allow_reviews) $allow_comments=true; // These options are meant to be conflated/tied
+	
+	$comment_details=new ocp_tempcode();
+
+	if (((get_option('is_on_comments')=='1') && (get_forum_type()!='none') && ($allow_comments)) || ($explicit_allow))
+	{
+		require_lang('comcode');
+
+		// Comment posts
+		if (is_null($forum)) $forum=get_option('comments_forum_name');
+		$full_title=$type.'_'.$id; // Actual full title not required for lookup
+		$count=0;
+		$results_browser=NULL;
+		if (is_null($_comments))
+		{
+			$max_comments=get_param_integer('max_comments',200);
+			$start_comments=get_param_integer('start_comments',0);
+			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$full_title,$full_title,$count,$max_comments,$start_comments,false,$reverse);
+			if ($count>$max_comments)
+			{
+				require_code('templates_results_browser');
+				$results_browser=results_browser(do_lang_tempcode('COMMENTS'),NULL,$start_comments,'start_comments',$max_comments,'max_comments',$count,NULL,NULL,true);
+			}
+		}
+
+		$GLOBALS['FEED_URL_2']=find_script('backend').'?mode=comments&forum='.urlencode($forum).'&filter='.urlencode($full_title); // Advertise RSS
+
+		if (get_forum_type()=='ocf')
+		{
+			if (!is_integer($forum))
+			{
+				$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum);
+				if (is_null($forum_id)) return new ocp_tempcode();
+			}
+			else $forum_id=(integer)$forum;
+
+			$topic_id=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum_id,$type.'_'.$id);
+		}
+
+		if ($_comments!==-1)
+		{
+			$comments='';
+			$staff_forum_link='';
+			$form=new ocp_tempcode();
+
+			// Show existing comments
+			if ($_comments!==-2)
+			{
+				$GLOBALS['META_DATA']+=array(
+					'numcomments'=>strval(count($_comments)),
+				);
+
+				if ((get_forum_type()=='ocf') && ($allow_reviews))
+				{
+					$all_individual_review_ratings=$GLOBALS['SITE_DB']->query_select('review_supplement',array('*'),array('r_topic_id'=>$topic_id));
+				} else
+				{
+					$all_individual_review_ratings=array();
+				}
+
+				foreach ($_comments as $comment)
+				{
+					if (is_null($comment)) continue;
+
+					$datetime_raw=$comment['date'];
+					$datetime=get_timezoned_date($comment['date']);
+					$poster_link=is_guest($comment['user'])?new ocp_tempcode():$GLOBALS['FORUM_DRIVER']->member_profile_link($comment['user'],false,true);
+					$poster_name=array_key_exists('username',$comment)?$comment['username']:$GLOBALS['FORUM_DRIVER']->get_username($comment['user']);
+					if (is_null($poster_name)) $poster_name=do_lang('UNKNOWN');
+					$highlight=($highlight_by_user===$comment['user']);
+					
+					// Find review, if there is one
+					$individual_review_ratings=array();
+					foreach ($all_individual_review_ratings as $potential_individual_review_rating)
+					{
+						if ($potential_individual_review_rating['r_post_id']==$comment['id'])
+						{
+							$individual_review_ratings[$potential_individual_review_rating['r_rating_type']]=array(
+								'REVIEW_TITLE'=>$potential_individual_review_rating['r_rating_type'],
+								'REVIEW_RATING'=>float_to_raw_string($potential_individual_review_rating['r_rating']),
+							);
+						}
+					}
+
+					$edit_post_url=new ocp_tempcode();
+					require_code('ocf_posts');
+					if ((get_forum_type()=='ocf') && (ocf_may_edit_post_by($comment['user'],$forum_id)))
+					{
+						$edit_post_url=build_url(array('page'=>'topics','type'=>'edit_post','id'=>$comment['id'],'redirect'=>get_self_url(true)),get_module_zone('topics'));
+					}
+
+					$tpl_post=do_template('POST',array('_GUID'=>'eb7df038959885414e32f58e9f0f9f39','POSTER_ID'=>strval($comment['user']),'EDIT_URL'=>$edit_post_url,'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,'HIGHLIGHT'=>$highlight,'TITLE'=>$comment['title'],'TIME_RAW'=>strval($datetime_raw),'TIME'=>$datetime,'POSTER_LINK'=>$poster_link,'POSTER_NAME'=>$poster_name,'POST'=>$comment['message']));
+					$comments.=$tpl_post->evaluate();
+				}
+
+				if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()) || ($forum==get_option('comments_forum_name')))
+				{
+					$tid=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum,$type.'_'.$id);
+					$url=$GLOBALS['FORUM_DRIVER']->topic_link($tid,$forum);
+					$staff_forum_link=$url;
+				}
+			} else
+			{
+				if ($invisible_if_no_comments) return new ocp_tempcode();
+			}
+
+			// Existing review ratings
+			$review_titles=array();
+			if ((get_forum_type()=='ocf') && ($allow_reviews))
+			{
+				$_rating=$GLOBALS['SITE_DB']->query_value('review_supplement','AVG(r_rating)',array('r_rating_type'=>'','r_topic_id'=>$topic_id));
+				$rating=mixed();
+				$rating=is_null($_rating)?NULL:$_rating;
+				$review_titles[]=array('REVIEW_TITLE'=>'','REVIEW_RATING'=>make_string_tempcode(is_null($rating)?'':float_format($rating)));
+				if (!is_null($rating))
+				{
+					$GLOBALS['META_DATA']+=array(
+						'rating'=>float_to_raw_string($rating),
+					);
+				}
+			} else $review_titles=NULL;
+
+			// Make-a-comment form
+			if (has_specific_permission(get_member(),'comment',get_page_name()))
+			{
+				$em=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
+				require_javascript('javascript_editing');
+				$comcode_help=build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false));
+				$comment_text=get_option('comment_text');
+				if (is_null($comment_text)) $comment_text=''; // Weird fix for problem people seem to get
+				if (is_null($post_warning)) $post_warning=do_lang('POST_WARNING');
+				require_javascript('javascript_validation');
+				$comment_url=get_self_url();
+
+				if (addon_installed('captcha'))
+				{
+					require_code('captcha');
+					$use_captcha=use_captcha();
+					if ($use_captcha)
+					{
+						generate_captcha();
+					}
+				} else $use_captcha=false;
+				$title=do_lang_tempcode($allow_reviews?'POST_REVIEW':'MAKE_COMMENT');
+
+				$join_bits=new ocp_tempcode();
+				if (is_guest())
+				{
+					$redirect=get_self_url(true);
+					$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
+					$join_link=hyperlink($GLOBALS['FORUM_DRIVER']->join_link(),do_lang_tempcode('JOIN'));
+					$login_link=hyperlink($login_url,do_lang_tempcode('LOGIN'));
+					$join_bits=do_lang_tempcode('A_OR_B',$join_link,$login_link);
+				}
+
+				$form=do_template('COMMENTS',array('_GUID'=>'c87025f81ee64c885f0ac545efa5f16c','FIRST_POST_URL'=>'','FIRST_POST'=>'','JOIN_BITS'=>$join_bits,'REVIEWS'=>$allow_reviews,'COMMENTS'=>$comments,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>$review_titles,'USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>$post_warning,'COMMENT_TEXT'=>$comment_text,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$title));
+			}
+
+			// Show comments/form
+			$comment_details=do_template('COMMENTS_WRAPPER',array('_GUID'=>'a89cacb546157d34vv0994ef91b2e707','RESULTS_BROWSER'=>$results_browser,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>is_null($review_titles)?array():$review_titles,'STAFF_FORUM_LINK'=>$staff_forum_link,'FORM'=>$form,'COMMENTS'=>$comments));
+		} else
+		{
+			attach_message(do_lang_tempcode('MISSING_FORUM',escape_html($forum)),'warn');
+		}
+	}
+
+	return $comment_details;
 }
 
 /**
@@ -370,216 +603,6 @@ function update_spacer_post($allow_comments,$type,$id,$self_url,$self_title,$for
 }
 
 /**
- * Get the tempcode containing all the comments posted, and the comments posting form for the specified resource.
- *
- * @param  ID_TEXT		The type (download, etc) that this commenting is for
- * @param  boolean		Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
- * @param  ID_TEXT		The ID of the type that this commenting is for
- * @param  boolean		Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
- * @param  ?string		The name of the forum to use (NULL: default comment forum)
- * @param  ?string		The default post to use (NULL: standard courtesy warning)
- * @param  ?mixed			The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
- * @param  boolean		Whether to skip permission checks
- * @param  boolean		Whether to reverse the posts
- * @param  ?MEMBER		User to highlight the posts of (NULL: none)
- * @param  boolean		Whether to allow ratings along with the comment (like reviews)
- * @return tempcode		The tempcode for the comment box
- */
-function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments=false,$forum=NULL,$post_warning=NULL,$_comments=NULL,$explicit_allow=false,$reverse=false,$highlight_by_user=NULL,$allow_reviews=false)
-{
-	if ($allow_reviews) $allow_comments=true; // These options are meant to be conflated/tied
-	
-	$comment_details=new ocp_tempcode();
-
-	if (((get_option('is_on_comments')=='1') && (get_forum_type()!='none') && ($allow_comments)) || ($explicit_allow))
-	{
-		require_lang('comcode');
-
-		// Comment posts
-		if (is_null($forum)) $forum=get_option('comments_forum_name');
-		$full_title=$type.'_'.$id; // Actual full title not required for lookup
-		$count=0;
-		$results_browser=NULL;
-		if (is_null($_comments))
-		{
-			$max_comments=get_param_integer('max_comments',200);
-			$start_comments=get_param_integer('start_comments',0);
-			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$full_title,$full_title,$count,$max_comments,$start_comments,false,$reverse);
-			if ($count>$max_comments)
-			{
-				require_code('templates_results_browser');
-				$results_browser=results_browser(do_lang_tempcode('COMMENTS'),NULL,$start_comments,'start_comments',$max_comments,'max_comments',$count,NULL,NULL,true);
-			}
-		}
-
-		$GLOBALS['FEED_URL_2']=find_script('backend').'?mode=comments&forum='.urlencode($forum).'&filter='.urlencode($full_title); // Advertise RSS
-
-		if (get_forum_type()=='ocf')
-		{
-			if (!is_integer($forum))
-			{
-				$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum);
-				if (is_null($forum_id)) return new ocp_tempcode();
-			}
-			else $forum_id=(integer)$forum;
-
-			$topic_id=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum_id,$type.'_'.$id);
-		}
-
-		if ($_comments!==-1)
-		{
-			$comments='';
-			$staff_forum_link='';
-			$form=new ocp_tempcode();
-
-			// Show existing comments
-			if ($_comments!==-2)
-			{
-				$GLOBALS['META_DATA']+=array(
-					'numcomments'=>strval(count($_comments)),
-				);
-
-				if ((get_forum_type()=='ocf') && ($allow_reviews))
-				{
-					$all_individual_review_ratings=$GLOBALS['SITE_DB']->query_select('review_supplement',array('*'),array('r_topic_id'=>$topic_id));
-				} else
-				{
-					$all_individual_review_ratings=array();
-				}
-
-				foreach ($_comments as $comment)
-				{
-					if (is_null($comment)) continue;
-
-					$datetime_raw=$comment['date'];
-					$datetime=get_timezoned_date($comment['date']);
-					$poster_link=is_guest($comment['user'])?new ocp_tempcode():$GLOBALS['FORUM_DRIVER']->member_profile_link($comment['user'],false,true);
-					$poster_name=array_key_exists('username',$comment)?$comment['username']:$GLOBALS['FORUM_DRIVER']->get_username($comment['user']);
-					if (is_null($poster_name)) $poster_name=do_lang('UNKNOWN');
-					$highlight=($highlight_by_user===$comment['user']);
-					
-					// Find review, if there is one
-					$individual_review_ratings=array();
-					foreach ($all_individual_review_ratings as $potential_individual_review_rating)
-					{
-						if ($potential_individual_review_rating['r_post_id']==$comment['id'])
-						{
-							$individual_review_ratings[$potential_individual_review_rating['r_rating_type']]=array(
-								'REVIEW_TITLE'=>$potential_individual_review_rating['r_rating_type'],
-								'REVIEW_RATING'=>float_to_raw_string($potential_individual_review_rating['r_rating']),
-							);
-						}
-					}
-
-					$edit_post_url=new ocp_tempcode();
-					require_code('ocf_posts');
-					if ((get_forum_type()=='ocf') && (ocf_may_edit_post_by($comment['user'],$forum_id)))
-					{
-						$edit_post_url=build_url(array('page'=>'topics','type'=>'edit_post','id'=>$comment['id'],'redirect'=>get_self_url(true)),get_module_zone('topics'));
-					}
-
-					$tpl_post=do_template('POST',array('_GUID'=>'eb7df038959885414e32f58e9f0f9f39','POSTER_ID'=>strval($comment['user']),'EDIT_URL'=>$edit_post_url,'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,'HIGHLIGHT'=>$highlight,'TITLE'=>$comment['title'],'TIME_RAW'=>strval($datetime_raw),'TIME'=>$datetime,'POSTER_LINK'=>$poster_link,'POSTER_NAME'=>$poster_name,'POST'=>$comment['message']));
-					$comments.=$tpl_post->evaluate();
-				}
-
-				if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()) || ($forum==get_option('comments_forum_name')))
-				{
-					$tid=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum,$type.'_'.$id);
-					$url=$GLOBALS['FORUM_DRIVER']->topic_link($tid,$forum);
-					$staff_forum_link=$url;
-				}
-			} else
-			{
-				if ($invisible_if_no_comments) return new ocp_tempcode();
-			}
-
-			// Existing review ratings
-			$review_titles=array();
-			if ((get_forum_type()=='ocf') && ($allow_reviews))
-			{
-				$_rating=$GLOBALS['SITE_DB']->query_value('review_supplement','AVG(r_rating)',array('r_rating_type'=>'','r_topic_id'=>$topic_id));
-				$rating=mixed();
-				$rating=is_null($_rating)?NULL:$_rating;
-				$review_titles[]=array('REVIEW_TITLE'=>'','REVIEW_RATING'=>make_string_tempcode(is_null($rating)?'':float_format($rating)));
-				if (!is_null($rating))
-				{
-					$GLOBALS['META_DATA']+=array(
-						'rating'=>float_to_raw_string($rating),
-					);
-				}
-			} else $review_titles=NULL;
-
-			// Make-a-comment form
-			if (has_specific_permission(get_member(),'comment',get_page_name()))
-			{
-				$em=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
-				require_javascript('javascript_editing');
-				$comcode_help=build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false));
-				$comment_text=get_option('comment_text');
-				if (is_null($comment_text)) $comment_text=''; // Weird fix for problem people seem to get
-				if (is_null($post_warning)) $post_warning=do_lang('POST_WARNING');
-				require_javascript('javascript_validation');
-				$comment_url=get_self_url();
-
-				if (addon_installed('captcha'))
-				{
-					require_code('captcha');
-					$use_captcha=use_captcha();
-					if ($use_captcha)
-					{
-						generate_captcha();
-					}
-				} else $use_captcha=false;
-				$title=do_lang_tempcode($allow_reviews?'POST_REVIEW':'MAKE_COMMENT');
-
-				$join_bits=new ocp_tempcode();
-				if (is_guest())
-				{
-					$redirect=get_self_url(true);
-					$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
-					$join_link=hyperlink($GLOBALS['FORUM_DRIVER']->join_link(),do_lang_tempcode('JOIN'));
-					$login_link=hyperlink($login_url,do_lang_tempcode('LOGIN'));
-					$join_bits=do_lang_tempcode('A_OR_B',$join_link,$login_link);
-				}
-
-				$form=do_template('COMMENTS',array('_GUID'=>'c87025f81ee64c885f0ac545efa5f16c','FIRST_POST_URL'=>'','FIRST_POST'=>'','JOIN_BITS'=>$join_bits,'REVIEWS'=>$allow_reviews,'COMMENTS'=>$comments,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>$review_titles,'USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>$post_warning,'COMMENT_TEXT'=>$comment_text,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$title));
-			}
-
-			// Show comments/form
-			$comment_details=do_template('COMMENTS_WRAPPER',array('_GUID'=>'a89cacb546157d34vv0994ef91b2e707','RESULTS_BROWSER'=>$results_browser,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>is_null($review_titles)?array():$review_titles,'STAFF_FORUM_LINK'=>$staff_forum_link,'FORM'=>$form,'COMMENTS'=>$comments));
-		} else
-		{
-			attach_message(do_lang_tempcode('MISSING_FORUM',escape_html($forum)),'warn');
-		}
-	}
-
-	return $comment_details;
-}
-
-/**
- * Add trackbacks to the specified resource.
- *
- * @param  boolean		Whether this resource allows trackback (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
- * @param  ID_TEXT		The type (download, etc) that this trackback is for
- * @param  ID_TEXT		The ID of the type that this trackback is for
- * @return boolean		Whether trackbacks are on
- */
-function do_trackback($allow_trackbacks,$trackback_for_type,$id)
-{
-	if ((get_option('is_on_trackbacks')=='0') || (!$allow_trackbacks)) return false;
-
-	$url=either_param('url',NULL);
-	if (is_null($url)) return false;
-	$title=either_param('title',$url);
-	$excerpt=either_param('excerpt','');
-	$name=either_param('blog_name',$url);
-
-	$GLOBALS['SITE_DB']->query_insert('trackbacks',array('trackback_for_type'=>$trackback_for_type,'trackback_for_id'=>$id,'trackback_ip'=>get_ip_address(),'trackback_time'=>time(),'trackback_url'=>$url,'trackback_title'=>$title,'trackback_excerpt'=>$excerpt,'trackback_name'=>$name));
-
-	return true;
-}
-
-/**
  * Get the tempcode containing all the trackbacks received, and the trackback posting form for the specified resource.
  *
  * @param  ID_TEXT		The type (download, etc) that this trackback is for
@@ -628,21 +651,24 @@ function get_trackback_details($trackback_for_type,$id,$allow_trackback,$type=''
 }
 
 /**
- * Display rating using images
- *	
- * @param  ID_TEXT		The type (download, etc) that this rating is for
- * @param  ID_TEXT		The ID of the type that this rating is for
- * @param  ID_TEXT		The template to use to display the rating box
- * @return tempcode		Tempcode for complete trackback box
+ * Add trackbacks to the specified resource.
+ *
+ * @param  boolean		Whether this resource allows trackback (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
+ * @param  ID_TEXT		The type (download, etc) that this trackback is for
+ * @param  ID_TEXT		The ID of the type that this trackback is for
+ * @return boolean		Whether trackbacks are on
  */
-function display_rating($rating_for_type,$id,$tpl='RATING_INLINE')
+function do_trackback($allow_trackbacks,$trackback_for_type,$id)
 {
-	$rating_data	=	get_rating_simple_array($rating_for_type,$id);
+	if ((get_option('is_on_trackbacks')=='0') || (!$allow_trackbacks)) return false;
 
-	if (is_null($rating_data)) 
-		return new ocp_tempcode();
-	else
-		return do_template($tpl,$rating_data);
+	$url=either_param('url',NULL);
+	if (is_null($url)) return false;
+	$title=either_param('title',$url);
+	$excerpt=either_param('excerpt','');
+	$name=either_param('blog_name',$url);
+
+	$GLOBALS['SITE_DB']->query_insert('trackbacks',array('trackback_for_type'=>$trackback_for_type,'trackback_for_id'=>$id,'trackback_ip'=>get_ip_address(),'trackback_time'=>time(),'trackback_url'=>$url,'trackback_title'=>$title,'trackback_excerpt'=>$excerpt,'trackback_name'=>$name));
+
+	return true;
 }
-
-

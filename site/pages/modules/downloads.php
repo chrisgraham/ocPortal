@@ -567,13 +567,18 @@ class Module_downloads
 
 		$name=get_translated_text($myrow['name']);
 
-		do_rating($myrow['allow_rating']==1,get_page_name(),strval($id));
-		if ((!is_null(post_param('title',NULL))) || ($myrow['validated']==1))
-			do_comments($myrow['allow_comments']>=1,get_page_name(),strval($id),build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF'),$name,get_value('comment_forum__downloads'));
-		//do_trackback($myrow['allow_trackbacks']==1,get_page_name(),$id);
-		$rating_details=get_rating_text('downloads',strval($id),$myrow['allow_rating']==1);
-		$comment_details=get_comment_details('downloads',$myrow['allow_comments']==1,strval($id),false,get_value('comment_forum__downloads'),NULL,NULL,false,false,$myrow['submitter'],$myrow['allow_comments']==2);
-		$trackback_details=get_trackback_details(get_page_name(),strval($id),$myrow['allow_trackbacks']==1);
+		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
+			get_page_name(),
+			strval($id),
+			$myrow['allow_rating'],
+			$myrow['allow_comments'],
+			$myrow['allow_trackbacks'],
+			$myrow['validated'],
+			$myrow['submitter'],
+			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF'),
+			get_translated_text($myrow['title']),
+			get_value('comment_forum__downloads')
+		);
 
 		// Views
 		if (get_db_type()!='xml')

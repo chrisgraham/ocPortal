@@ -80,7 +80,7 @@ class Block_main_rating
 		}
 		do_rating(true,'block_main_rating',$id);
 	
-		return get_rating_text('block_main_rating',$id,true);
+		return get_rating_details('block_main_rating',$id,true);
 	}
 
 }

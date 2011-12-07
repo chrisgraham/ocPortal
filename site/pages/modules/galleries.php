@@ -615,10 +615,19 @@ class Module_galleries
 		$rep_image=$myrow['rep_image'];
 
 		if (post_param_integer('rating_'.$cat,-1)!=-1) decache('main_top_galleries');
-		do_rating($myrow['allow_rating']==1,get_page_name(),$cat);
-		do_comments($myrow['allow_comments']>=1,get_page_name(),$cat,get_self_url(),$title_to_use_2,get_value('comment_forum__galleries'));
-		$rating_details=get_rating_text(get_page_name(),$cat,$myrow['allow_rating']==1);
-		$comment_details=get_comment_details(get_page_name(),$myrow['allow_comments']==1,$cat,false,get_value('comment_forum__galleries'),NULL,NULL,false,false,NULL,$myrow['allow_comments']==2);
+
+		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
+			get_page_name(),
+			$cat,
+			$myrow['allow_rating'],
+			$myrow['allow_comments'],
+			$myrow['allow_trackbacks'],
+			1,
+			NULL,
+			get_self_url(),
+			$title_to_use_2,
+			get_value('comment_forum__galleries')
+		);
 
 		breadcrumb_add_segment($tree);
 
@@ -778,7 +787,7 @@ class Module_galleries
 				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'wide'=>1,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 
 				// Some extra variables relating to the currently selected entry
-				$entry_rating_details=get_rating_text('videos',strval($row['id']),$row['allow_rating']==1);
+				$entry_rating_details=get_rating_details('videos',strval($row['id']),$row['allow_rating']==1);
 				$entry_comment_details=get_comment_details('videos',$row['allow_comments']==1,strval($row['id']),false,get_value('comment_forum__videos'),NULL,NULL,false,false,$row['submitter'],$row['allow_comments']==2);
 				$entry_trackback_details=get_trackback_details('videos',strval($row['id']),$row['allow_trackbacks']==1);
 				$entry_add_date_raw=is_null($row['add_date'])?'':strval($row['add_date']);
@@ -821,7 +830,7 @@ class Module_galleries
 				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'wide'=>1,'sort'=>($sort=='add_date DESC')?NULL:$sort),'_SELF');
 
 				// Some extra variables relatin to the currently selected entry
-				$entry_rating_details=get_rating_text('images',strval($row['id']),$row['allow_rating']==1);
+				$entry_rating_details=get_rating_details('images',strval($row['id']),$row['allow_rating']==1);
 				$entry_comment_details=get_comment_details('images',$row['allow_comments']==1,strval($row['id']),false,get_value('comment_forum__images'),NULL,NULL,false,false,$row['submitter'],$row['allow_comments']==2);
 				$entry_trackback_details=get_trackback_details('images',strval($row['id']),$row['allow_trackbacks']==1);
 				$entry_add_date_raw=is_null($row['add_date'])?'':strval($row['add_date']);
@@ -1066,13 +1075,18 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->query_update('images',array('image_views'=>$myrow['image_views']),array('id'=>$id),'',1);
 		}
 
-		do_rating($myrow['allow_rating']==1,'images',strval($id));
-		if ((!is_null(post_param('title',NULL))) || ($myrow['validated']==1))
-			do_comments($myrow['allow_comments']>=1,'images',strval($id),build_url(array('page'=>'_SELF','type'=>'image','id'=>$id),'_SELF'),do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
-		//do_trackback($myrow['allow_trackbacks']==1,'images',$id);
-		$rating_details=get_rating_text('images',strval($id),$myrow['allow_rating']==1);
-		$comment_details=get_comment_details('images',$myrow['allow_comments']==1,strval($id),false,get_value('comment_forum__images'),NULL,NULL,false,false,$myrow['submitter'],$myrow['allow_comments']==2);
-		$trackback_details=get_trackback_details('images',strval($id),$myrow['allow_trackbacks']==1);
+		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
+			'images',
+			strval($id),
+			$myrow['allow_rating'],
+			$myrow['allow_comments'],
+			$myrow['allow_trackbacks'],
+			$myrow['validated'],
+			$myrow['submitter'],
+			build_url(array('page'=>'_SELF','type'=>'image','id'=>$id),'_SELF'),
+			do_lang('VIEW_IMAGE','','','',get_site_default_lang()),
+			get_value('comment_forum__images')
+		);
 
 		// Comments
 		$comments=get_translated_tempcode($myrow['comments']);
@@ -1171,13 +1185,18 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->query_update('videos',array('video_views'=>$myrow['video_views']),array('id'=>$id),'',1);
 		}
 
-		do_rating($myrow['allow_rating']==1,'videos',strval($id));
-		if ((!is_null(post_param('title',NULL))) || ($myrow['validated']==1))
-			do_comments($myrow['allow_comments']>=1,'videos',strval($id),build_url(array('page'=>'_SELF','type'=>'video','id'=>$id),'_SELF'),do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
-		//do_trackback($myrow['allow_trackbacks']==1,'videos',$id);
-		$rating_details=get_rating_text('videos',strval($id),$myrow['allow_rating']==1);
-		$comment_details=get_comment_details('videos',$myrow['allow_comments']==1,strval($id),false,get_value('comment_forum__videos'),NULL,NULL,false,false,$myrow['submitter'],$myrow['allow_comments']==2);
-		$trackback_details=get_trackback_details('videos',strval($id),$myrow['allow_trackbacks']==1);
+		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
+			'videos',
+			strval($id),
+			$myrow['allow_rating'],
+			$myrow['allow_comments'],
+			$myrow['allow_trackbacks'],
+			$myrow['validated'],
+			$myrow['submitter'],
+			build_url(array('page'=>'_SELF','type'=>'video','id'=>$id),'_SELF'),
+			do_lang('VIEW_IMAGE','','','',get_site_default_lang()),
+			get_value('comment_forum__videos')
+		);
 
 		$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
 		if (is_null($category_name))

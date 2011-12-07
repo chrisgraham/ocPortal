@@ -1360,16 +1360,18 @@ class Module_calendar
 		if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
 		$back_url=build_url($map,'_SELF');
 
-		do_rating($event['allow_rating']==1,'events',strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''));
-		if ((!is_null(post_param('title',NULL))) || ($event['validated']==1))
-		{
-			if ((!is_null(post_param('title',NULL))) || (get_option('is_on_strong_forum_tie')=='0') || ($event['e_is_public']==1))
-				do_comments($event['allow_comments']>=1,'events',strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''),get_self_url(),$_title,get_value('comment_forum__calendar'));
-		}
-		//do_trackback($event['allow_trackbacks']==1,'events',strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''));
-		$rating_details=get_rating_text('events',strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''),$event['allow_rating']==1);
-		$comment_details=get_comment_details('events',$event['allow_comments']==1,strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''),false,get_value('comment_forum__calendar'),NULL,NULL,false,false,$event['e_submitter'],$event['allow_comments']==2);
-		$trackback_details=get_trackback_details('events',strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''),$event['allow_trackbacks']==1);
+		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
+			'events',
+			strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''),
+			$event['allow_rating'],
+			$event['allow_comments'],
+			$event['allow_trackbacks'],
+			((get_option('is_on_strong_forum_tie')=='0') || ($event['e_is_public']==1))?1:0,
+			$event['e_submitter'],
+			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF'),
+			$_title,
+			get_value('comment_forum__calendar')
+		);
 
 		$_subscriptions=new ocp_tempcode();
 		if ((is_guest()) || (!cron_installed()))
