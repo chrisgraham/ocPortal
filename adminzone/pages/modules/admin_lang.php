@@ -759,7 +759,6 @@ msgstr ""
 		foreach (array_unique(array_merge(array_keys($for_base_lang),array_keys($for_base_lang_2))) as $key)
 		{
 			$val=post_param($key);
-			break;
 		}
 
 		$path=get_custom_file_base().'/lang_custom/'.filter_naughty($lang).'/'.filter_naughty($lang_file).'.ini';
