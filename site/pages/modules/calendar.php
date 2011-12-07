@@ -156,9 +156,6 @@ class Module_calendar
 				'i_member_id'=>'*USER',
 				't_type'=>'*AUTO_LINK'
 			));
-
-			require_lang('calendar');
-			add_menu_item_simple('pc_features',NULL,'CALENDAR','_SEARCH:calendar:type=misc:member_id={$USER_OVERIDE}',0,0,true,do_lang('ZONE_BETWEEN'));
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
@@ -521,7 +518,7 @@ class Module_calendar
 				if (count($explode)!=1) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 				$main=$this->view_calendar_view_year($id,$date,$explode,$member_id,$filter);
 				$timestamp=mktime(0,0,0,1,1,intval($id));
-				$back_url=$GLOBALS['FORUM_DRIVER']->member_home_link($member_id);
+				$back_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id);
 				$previous_timestamp=mktime(0,0,0,1,1,intval($explode[0])-1);
 				$previous=date('Y',$previous_timestamp);
 				$next_timestamp=mktime(0,0,0,1,1,intval($explode[0])+1);

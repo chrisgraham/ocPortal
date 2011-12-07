@@ -40,8 +40,8 @@ class Hook_unvalidated_ocf_members
 		$info['db_title_dereference']=false;
 		$info['db_add_date']='m_join_time';
 		$info['db_edit_date']='m_join_time';
-		$info['edit_module']='editprofile';
-		$info['edit_type']='misc';
+		$info['edit_module']='members';
+		$info['edit_type']='view';
 		$info['edit_identifier']='id';
 		$info['title']=do_lang_tempcode('MEMBERS');
 		$info['db']=$GLOBALS['FORUM_DB'];

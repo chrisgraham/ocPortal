@@ -1683,9 +1683,7 @@ function step_5_core_2()
 	if ($forum_type=='ocf')
 	{
 		$trans5=insert_lang(do_lang('FORUM'),1,NULL,false,NULL,$LANG);
-		$trans7=insert_lang(do_lang('PERSONAL_ZONE'),1,NULL,false,NULL,$LANG);
 		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'forum','zone_title'=>insert_lang(do_lang('SECTION_FORUMS'),1),'zone_default_page'=>'forumview','zone_header_text'=>$trans5,'zone_theme'=>'-1','zone_wide'=>NULL,'zone_require_session'=>0));
-		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'personalzone','zone_title'=>insert_lang(do_lang('PERSONAL_ZONE'),1),'zone_default_page'=>'myhome','zone_header_text'=>$trans7,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>1));
 	}
 
 	$GLOBALS['SITE_DB']->drop_if_exists('modules');
@@ -1889,12 +1887,6 @@ function step_9()
 		if (($type=='modules') && (reinstall_module('forum',$module)))
 			$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'c1d95b9713006acb491b44ff6c79099c','SOMETHING'=>do_lang_tempcode('INSTALL_MODULE',escape_html($module)))));
 	}
-	$modules=find_all_modules('personalzone');
-	foreach ($modules as $module=>$type)
-	{
-		if (($type=='modules') && (reinstall_module('personalzone',$module)))
-			$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'2803032275b9dc6a28c0898a5ca6bb6f','SOMETHING'=>do_lang_tempcode('INSTALL_MODULE',escape_html($module)))));
-	}
 	$modules=find_all_modules('cms');
 	foreach ($modules as $module=>$type)
 	{
@@ -1969,7 +1961,7 @@ function step_10_populate_database()
 	$zones=find_all_zones();
 	foreach ($zones as $zone)
 	{
-		if (($zone!='site') && ($zone!='adminzone') && ($zone!='forum') && ($zone!='personalzone') && ($zone!='cms'))
+		if (($zone!='site') && ($zone!='adminzone') && ($zone!='forum') && ($zone!='cms'))
 		{
 			$modules=find_all_modules($zone);
 			foreach (array_keys($modules) as $module)

@@ -1234,7 +1234,8 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 			if (!is_null($selected_url))
 			{
 				$pos=strpos($selected_url,'/'.$id);
-				$selected=($pos!==false);
+				$selected=($pos!==false) && ($id!='');
+				if ($selected) $selected_code=$id;
 			} else
 			{
 				$selected=($selected_code==$id);
@@ -1254,6 +1255,7 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 				$pretty=make_string_tempcode(ucfirst((strrpos($id,'/')===false)?$id:substr($id,strrpos($id,'/')+1)));
 			}
 			if ($url=='') continue;
+
 			$temp=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_2',array('_GUID'=>'10005e2f08b44bfe17fce68685b4c884','CHECKED'=>$selected,'PRETTY'=>$pretty,'NAME'=>$name,'CODE'=>$id,'URL'=>$url));
 			$cells->attach($temp);
 

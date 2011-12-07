@@ -126,8 +126,6 @@ class Module_purchase
 				$GLOBALS['FORUM_DRIVER']->install_create_custom_field($f,$l[0],1,0,1,0,'',$l[1],1,$l[2]);
 
 			require_lang('ecommerce');
-			add_menu_item_simple('pc_features',NULL,'INVOICES','_SELF:invoices:type=misc',0,0,true,do_lang('ZONE_BETWEEN'));
-			add_menu_item_simple('pc_features',NULL,'MODULE_TRANS_NAME_subscriptions','_SELF:subscriptions:type=misc',0,0,true,do_lang('ZONE_BETWEEN'));
 			add_menu_item_simple('ecommerce_features',NULL,'PURCHASING','_SEARCH:purchase:type=misc');
 			add_menu_item_simple('ecommerce_features',NULL,'INVOICES','_SEARCH:invoices:type=misc');
 			add_menu_item_simple('ecommerce_features',NULL,'MODULE_TRANS_NAME_subscriptions','_SEARCH:subscriptions:type=misc');

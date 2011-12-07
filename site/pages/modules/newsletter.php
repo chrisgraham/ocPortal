@@ -63,11 +63,6 @@ class Module_newsletter
 		delete_specific_permission('change_newsletter_subscriptions');
 
 		delete_menu_item_simple('_SEARCH:newsletter:type=misc');
-
-		if (addon_installed('redirects_editor'))
-		{
-			$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'newsletter','r_from_zone'=>'personalzone','r_to_page'=>'newsletter','r_to_zone'=>'site','r_is_transparent'=>1));
-		}
 	}
 	
 	/**
@@ -110,11 +105,6 @@ class Module_newsletter
 
 			require_lang('newsletter');
 			//add_menu_item_simple('main_website',NULL,'NEWSLETTER','_SEARCH:newsletter:type=misc');
-			if (addon_installed('redirects_editor'))
-			{
-				$GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'newsletter','r_from_zone'=>'personalzone','r_to_page'=>'newsletter','r_to_zone'=>'site','r_is_transparent'=>1));
-				add_menu_item_simple('pc_edit',NULL,'NEWSLETTER','_SEARCH:newsletter:type=misc');
-			}
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{

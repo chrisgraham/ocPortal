@@ -170,7 +170,6 @@ class Module_admin_permissions
 				$GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>'forum','group_id'=>$id));
 				if ($id!=$guest_groups[0]) $GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>'site','group_id'=>$id));
 				if ($id!=$guest_groups[0]) $GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>'cms','group_id'=>$id));
-				if ($id!=$guest_groups[0]) $GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>'personalzone','group_id'=>$id));
 				if ((($name==do_lang('SUPER_MEMBERS')) || (in_array($id,$admin_groups)))/* && (ocp_enterprise())*/)
 					$GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>'collaboration','group_id'=>$id));
 			}

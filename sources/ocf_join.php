@@ -354,7 +354,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	if ($require_new_member_validation)
 	{
 		require_code('mail');
-		$_validation_url=build_url(array('page'=>'editprofile','id'=>$member_id),get_module_zone('editprofile'),NULL,false,false,true);
+		$_validation_url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'),NULL,false,false,true,'tab__edit');
 		$validation_url=$_validation_url->evaluate();
 		$message=do_lang('VALIDATE_NEW_MEMBER_MAIL',comcode_escape($username),comcode_escape($validation_url),comcode_escape(strval($member_id)),get_site_default_lang());
 		mail_wrap(do_lang('VALIDATE_NEW_MEMBER_SUBJECT',$username,NULL,NULL,get_site_default_lang()),$message,is_null(get_value('member_validator'))?NULL:array(get_value('member_validator')));

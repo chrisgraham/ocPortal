@@ -3,9 +3,9 @@
  Copyright (c) ocProducts, 2004-2011
 */
 
-.standardbox_wrap_classic .news_piece_summary h3, .rss_summary h3 {
-	margin-{!en_right}: 130px;
-	border-bottom: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+.news_piece_summary h3, .rss_summary h3 {
+	margin-{!en_right}: 130px !important;
+	border-bottom: 1px solid #6b81a1 !important; /* {$,wizard, 100% medborder.border} */
 }
 
 .rss_summary nobr { /* Stops naughty Google news from breaking layout */

@@ -193,11 +193,6 @@ class Hook_phpbb3
 			set_specific_permission($id,'own_avatars',$INFO['allow_avatar_upload']=='1');
 			set_specific_permission($id,'rename_self',$INFO['allow_namechange']=='1');
 			set_specific_permission($id,'bypass_word_filter',$INFO['allow_namechange']=='1');
-			
-			if ($INFO['allow_sig']=='0')
-			{
-				$GLOBALS['FORUM_DB']->query_insert('group_page_access',array('page_name'=>'editsignature','zone_name'=>'personalzone','group_id'=>$id));
-			}
 		}
 	}
 

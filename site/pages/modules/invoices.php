@@ -47,11 +47,6 @@ class Module_invoices
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('invoices');
-
-		if (addon_installed('redirects_editor'))
-		{
-			$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'invoices','r_from_zone'=>'personalzone','r_to_page'=>'invoices','r_to_zone'=>'site','r_is_transparent'=>1));
-		}
 	}
 
 	/**
@@ -72,11 +67,6 @@ class Module_invoices
 			'i_time'=>'TIME',
 			'i_note'=>'LONG_TEXT'
 		));
-
-		if (addon_installed('redirects_editor'))
-		{
-			$GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'invoices','r_from_zone'=>'personalzone','r_to_page'=>'invoices','r_to_zone'=>'site','r_is_transparent'=>1));
-		}
 	}
 	
 	/**

@@ -43,7 +43,7 @@ class Hook_awards_member
 		$info['validated_field']='m_validated';
 		$info['category_is_string']=false;
 		$info['archive_url']=build_url(array('page'=>'members'),get_module_zone('members'));
-		$info['cms_page']='editprofile';
+		$info['cms_page']='admin_ocf_join';
 
 		return $info;
 	}

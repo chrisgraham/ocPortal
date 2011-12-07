@@ -467,7 +467,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function member_home_link($id)
 	{
-		$_url=build_url(array('page'=>'myhome','id'=>$id),get_module_zone('myhome'));
+		$_url=build_url(array('page'=>'members','type'=>'view','id'=>$id),get_module_zone('members'),NULL,false,false,false,'tab__edit');
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
 		return $url;

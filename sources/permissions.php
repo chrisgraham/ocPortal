@@ -443,16 +443,19 @@ function _get_where_clause_groups($member)
 /**
  * Only allow members here that are either the give member, admins, or have a privilege. All other members come up to an error message wall.
  *
- * @param  MEMBER	The member who typically (i.e. when it's not an administrative override) we want the current member to be.
+ * @param  MEMBER		The member who typically (i.e. when it's not an administrative override) we want the current member to be.
  * @param  ?ID_TEXT  The override permission the current member must have (NULL: no general override).
  * @param  ?ID_TEXT  An alternative permission to the 'assume_any_member' permission (NULL: no override).
+ * @param  ?MEMBER	The member who is doing the viewing (NULL: current member).
  */
-function enforce_personal_access($member_id,$permission=NULL,$permission2=NULL)
+function enforce_personal_access($member_id,$permission=NULL,$permission2=NULL,$member_viewing=NULL)
 {
+	if (is_null($member_viewing)) $member_viewing=get_member();
+
 	if (is_guest($member_id)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	if ((!has_specific_permission(get_member(),'assume_any_member')) && ((is_null($permission2)) || (!has_specific_permission(get_member(),$permission2))))
+	if ((!has_specific_permission($member_viewing,'assume_any_member')) && ((is_null($permission2)) || (!has_specific_permission($member_viewing,$permission2))))
 	{
-		if (($member_id!=get_member()) || ((!is_null($permission)) && (!has_specific_permission(get_member(),$permission))))
+		if (($member_id!=$member_viewing) || ((!is_null($permission)) && (!has_specific_permission($member_viewing,$permission))))
 		{
 			if (!is_null($permission)) access_denied('SPECIFIC_PERMISSION',$permission);
 			else access_denied('SPECIFIC_PERMISSION',is_null($permission2)?'assume_any_member':$permission2);

@@ -91,6 +91,8 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/modules/admin_themewizard/ocf_forum.php',
 			'sources/hooks/modules/admin_setupwizard/ocf_forum.php',
 			'sources/hooks/modules/admin_import_types/ocf_forum.php',
+			'sources/hooks/systems/profiles_tabs/posts.php',
+			'sources/hooks/systems/profiles_tabs/pts.php',
 			'OCF_EDIT_FORUM_SCREEN.tpl',
 			'OCF_EDIT_FORUM_SCREEN_CATEGORY.tpl',
 			'OCF_EDIT_FORUM_SCREEN_FORUM.tpl',
@@ -247,6 +249,7 @@ class Hook_addon_registry_ocf_forum
 			'OCF_MEMBER_LINK.tpl',
 			'TOPIC_LIST.tpl',
 			'OCF_PT_FILTERS.tpl',
+			'OCF_MEMBER_PROFILE_POSTS.tpl',
 		);
 	}
 
@@ -320,6 +323,7 @@ class Hook_addon_registry_ocf_forum
 				'OCF_TOPIC_POLL_VIEW_RESULTS.tpl'=>'ocf_topic_voted_wrap',
 				'TOPIC_LIST.tpl'=>'topic_list',
 				'OCF_PT_FILTERS.tpl'=>'ocf_forum',
+				'OCF_MEMBER_PROFILE_POSTS.tpl'=>'ocf_member_profile_posts',
 				);
 	}
 
@@ -647,7 +651,7 @@ class Hook_addon_registry_ocf_forum
 		$notifications = do_lorem_template('OCF_NOTIFICATION',array('ADDITIONAL_POSTS'=>placeholder_number(),'_ADDITIONAL_POSTS'=>lorem_phrase(),'ID'=>placeholder_id(),'U_TITLE'=>lorem_phrase(),'IGNORE_URL'=>placeholder_url(),'IGNORE_URL_2'=>placeholder_url(),'REPLY_URL'=>placeholder_url(),'TOPIC_URL'=>placeholder_url(),'POST'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph_html(),'TIME'=>placeholder_date(),'TIME_RAW'=>placeholder_date_raw(),'BY'=>lorem_phrase(),'PROFILE_LINK'=>placeholder_url(),'TYPE'=>lorem_phrase()));
 
 		$head = new ocp_tempcode();
-		$head->attach(do_lorem_template('OCF_MEMBER_BAR',array('INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),'AVATAR'=>placeholder_image_url(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'LOGOUT_URL'=>placeholder_url(),'NUM_POINTS_ADVANCE'=>placeholder_number(),'NUM_POINTS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'PRIMARY_GROUP'=>lorem_phrase(),'LAST_VISIT_DATE_RAW'=>placeholder_date_raw(),'LAST_VISIT_DATE'=>placeholder_date(),'PERSONAL_ZONE_URL'=>placeholder_url(),'MEMBER_LINKS'=>lorem_phrase(),'PERSONAL_TOPIC_URL'=>placeholder_url(),'NEW_POSTS_URL'=>placeholder_url(),'UNREAD_TOPICS_URL'=>placeholder_url(),'RECENTLY_READ_URL'=>placeholder_url(),'PT_EXTRA'=>lorem_phrase(),'NEW_TOPICS'=>lorem_phrase(),'NEW_POSTS'=>lorem_phrase(),'MAX_AVATAR_HEIGHT'=>placeholder_number())));
+		$head->attach(do_lorem_template('OCF_MEMBER_BAR',array('INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),'AVATAR'=>placeholder_image_url(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'LOGOUT_URL'=>placeholder_url(),'NUM_POINTS_ADVANCE'=>placeholder_number(),'NUM_POINTS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'PRIMARY_GROUP'=>lorem_phrase(),'LAST_VISIT_DATE_RAW'=>placeholder_date_raw(),'LAST_VISIT_DATE'=>placeholder_date(),'MEMBER_LINKS'=>lorem_phrase(),'PERSONAL_TOPIC_URL'=>placeholder_url(),'NEW_POSTS_URL'=>placeholder_url(),'UNREAD_TOPICS_URL'=>placeholder_url(),'RECENTLY_READ_URL'=>placeholder_url(),'PT_EXTRA'=>lorem_phrase(),'NEW_TOPICS'=>lorem_phrase(),'NEW_POSTS'=>lorem_phrase(),'MAX_AVATAR_HEIGHT'=>placeholder_number())));
 		$head->attach(do_lorem_template('OCF_GUEST_BAR',array('NAVIGATION'=>lorem_phrase(),'LOGIN_URL'=>placeholder_url(),'JOIN_LINK'=>placeholder_url(),'FULL_LINK'=>placeholder_url(),'INLINE_PERSONAL_POSTS_URL'=>placeholder_url())));
 
 		$birthdays = new ocp_tempcode();
@@ -790,7 +794,7 @@ class Hook_addon_registry_ocf_forum
 		$notifications = do_lorem_template('OCF_NOTIFICATION',array('ADDITIONAL_POSTS'=>placeholder_number(),'_ADDITIONAL_POSTS'=>lorem_phrase(),'ID'=>placeholder_random(),'U_TITLE'=>lorem_phrase(),'IGNORE_URL'=>placeholder_url(),'IGNORE_URL_2'=>placeholder_url(),'REPLY_URL'=>placeholder_url(),'TOPIC_URL'=>placeholder_url(),'POST'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph_html(),'TIME'=>placeholder_date(),'TIME_RAW'=>placeholder_date_raw(),'BY'=>lorem_phrase(),'PROFILE_LINK'=>placeholder_url(),'TYPE'=>lorem_phrase()));
 
 		$head = new ocp_tempcode();
-		$head->attach(do_lorem_template('OCF_MEMBER_BAR',array('AVATAR'=>placeholder_image_url(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'LOGOUT_URL'=>placeholder_url(),'NUM_POINTS_ADVANCE'=>placeholder_number(),'NUM_POINTS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'PRIMARY_GROUP'=>lorem_phrase(),'LAST_VISIT_DATE_RAW'=>placeholder_date_raw(),'LAST_VISIT_DATE'=>placeholder_date(),'PERSONAL_ZONE_URL'=>placeholder_url(),'MEMBER_LINKS'=>lorem_phrase(),'PERSONAL_TOPIC_URL'=>placeholder_url(),'NEW_POSTS_URL'=>placeholder_url(),'UNREAD_TOPICS_URL'=>placeholder_url(),'RECENTLY_READ_URL'=>placeholder_url(),'PT_EXTRA'=>lorem_phrase(),'NEW_TOPICS'=>lorem_phrase(),'NEW_POSTS'=>lorem_phrase(),'INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),'MAX_AVATAR_HEIGHT'=>placeholder_number())));
+		$head->attach(do_lorem_template('OCF_MEMBER_BAR',array('AVATAR'=>placeholder_image_url(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'LOGOUT_URL'=>placeholder_url(),'NUM_POINTS_ADVANCE'=>placeholder_number(),'NUM_POINTS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'PRIMARY_GROUP'=>lorem_phrase(),'LAST_VISIT_DATE_RAW'=>placeholder_date_raw(),'LAST_VISIT_DATE'=>placeholder_date(),'MEMBER_LINKS'=>lorem_phrase(),'PERSONAL_TOPIC_URL'=>placeholder_url(),'NEW_POSTS_URL'=>placeholder_url(),'UNREAD_TOPICS_URL'=>placeholder_url(),'RECENTLY_READ_URL'=>placeholder_url(),'PT_EXTRA'=>lorem_phrase(),'NEW_TOPICS'=>lorem_phrase(),'NEW_POSTS'=>lorem_phrase(),'INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),'MAX_AVATAR_HEIGHT'=>placeholder_number())));
 		$head->attach(do_lorem_template('OCF_GUEST_BAR',array('NAVIGATION'=>lorem_phrase(),'LOGIN_URL'=>placeholder_url(),'JOIN_LINK'=>placeholder_url(),'FULL_LINK'=>placeholder_url())));
 
 		$birthdays = new ocp_tempcode();
@@ -805,7 +809,7 @@ class Hook_addon_registry_ocf_forum
 
 		$foot = do_lorem_template('OCF_STATS',array('NEWEST_MEMBER_PROFILE_URL'=>placeholder_url(),'NEWEST_MEMBER_USERNAME'=>lorem_word(),'NUM_MEMBERS'=>placeholder_number(),'NUM_TOPICS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'BIRTHDAYS'=>$birthdays,'USERS_ONLINE'=>lorem_phrase(),'USERS_ONLINE_URL'=>placeholder_url(),'page'=>lorem_phrase(),'GCOLOUR'=>'wheat','GID'=>placeholder_id(),'GTITLE'=>lorem_phrase(),'GROUPS'=>placeholder_array()));
 
-		$filters=do_lorem_template('OCF_PT_FILTERS',array('FILTERS'=>array(),'RESET_URL'=>$placeholder_url));
+		$filters=do_lorem_template('OCF_PT_FILTERS',array('FILTERS'=>array(),'RESET_URL'=>placeholder_url()));
 
 		$results_browser = placeholder_result_browser();
 		$topic_wrapper = do_lorem_template('OCF_FORUM_TOPIC_WRAPPER',array('MAX'=>lorem_phrase(),'ORDER'=>lorem_phrase(),'MAY_CHANGE_MAX'=>lorem_phrase(),'TREE'=>lorem_phrase(),'BUTTONS'=>$buttons,'STARTER_TITLE'=>lorem_phrase(),'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>placeholder_options(),'ACTION_URL'=>placeholder_url(),'TOPICS'=>$topics,'FORUM_NAME'=>lorem_word()));
@@ -841,7 +845,7 @@ class Hook_addon_registry_ocf_forum
 		$notifications = do_lorem_template('OCF_NOTIFICATION',array('ADDITIONAL_POSTS'=>placeholder_number(),'_ADDITIONAL_POSTS'=>lorem_phrase(),'ID'=>placeholder_id(),'U_TITLE'=>lorem_phrase(),'IGNORE_URL'=>placeholder_url(),'IGNORE_URL_2'=>placeholder_url(),'REPLY_URL'=>placeholder_url(),'TOPIC_URL'=>placeholder_url(),'POST'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph_html(),'TIME'=>placeholder_date(),'TIME_RAW'=>placeholder_date_raw(),'BY'=>lorem_phrase(),'PROFILE_LINK'=>placeholder_url(),'TYPE'=>lorem_phrase()));
 
 		$head = new ocp_tempcode();
-		$head->attach(do_lorem_template('OCF_MEMBER_BAR',array('AVATAR'=>placeholder_image_url(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'LOGOUT_URL'=>placeholder_url(),'NUM_POINTS_ADVANCE'=>placeholder_number(),'NUM_POINTS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'PRIMARY_GROUP'=>lorem_phrase(),'LAST_VISIT_DATE_RAW'=>placeholder_date_raw(),'LAST_VISIT_DATE'=>placeholder_date(),'PERSONAL_ZONE_URL'=>placeholder_url(),'MEMBER_LINKS'=>lorem_phrase(),'PERSONAL_TOPIC_URL'=>placeholder_url(),'NEW_POSTS_URL'=>placeholder_url(),'UNREAD_TOPICS_URL'=>placeholder_url(),'RECENTLY_READ_URL'=>placeholder_url(),'PT_EXTRA'=>lorem_phrase(),'NEW_TOPICS'=>lorem_phrase(),'NEW_POSTS'=>lorem_phrase(),'INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),'MAX_AVATAR_HEIGHT'=>placeholder_number())));
+		$head->attach(do_lorem_template('OCF_MEMBER_BAR',array('AVATAR'=>placeholder_image_url(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'LOGOUT_URL'=>placeholder_url(),'NUM_POINTS_ADVANCE'=>placeholder_number(),'NUM_POINTS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'PRIMARY_GROUP'=>lorem_phrase(),'LAST_VISIT_DATE_RAW'=>placeholder_date_raw(),'LAST_VISIT_DATE'=>placeholder_date(),'MEMBER_LINKS'=>lorem_phrase(),'PERSONAL_TOPIC_URL'=>placeholder_url(),'NEW_POSTS_URL'=>placeholder_url(),'UNREAD_TOPICS_URL'=>placeholder_url(),'RECENTLY_READ_URL'=>placeholder_url(),'PT_EXTRA'=>lorem_phrase(),'NEW_TOPICS'=>lorem_phrase(),'NEW_POSTS'=>lorem_phrase(),'INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),'MAX_AVATAR_HEIGHT'=>placeholder_number())));
 		$head->attach(do_lorem_template('OCF_GUEST_BAR',array('NAVIGATION'=>lorem_phrase(),'LOGIN_URL'=>placeholder_url(),'JOIN_LINK'=>placeholder_url(),'FULL_LINK'=>placeholder_url(),'INLINE_PERSONAL_POSTS_URL'=>placeholder_url())));
 
 		$birthdays = new ocp_tempcode();
@@ -935,7 +939,6 @@ class Hook_addon_registry_ocf_forum
 			),NULL,'',true),
 		);
 	}
-
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
@@ -963,7 +966,23 @@ class Hook_addon_registry_ocf_forum
 			),NULL,'',true),
 		);
 	}
-
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__ocf_member_profile_warnings()
+	{
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_WARNINGS',array(
+			'MEMBER_ID'=>placeholder_id(),
+			'WARNINGS'=>lorem_phrase(),
+		));
+		return array(
+			lorem_globalise($tab_content,NULL,'',true),
+		);
+	}
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
@@ -1125,7 +1144,7 @@ class Hook_addon_registry_ocf_forum
 		}
 
 		$head = new ocp_tempcode();
-		$head->attach(do_lorem_template('OCF_MEMBER_BAR',array('AVATAR'=>placeholder_image_url(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'LOGOUT_URL'=>placeholder_url(),'NUM_POINTS_ADVANCE'=>placeholder_number(),'NUM_POINTS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'PRIMARY_GROUP'=>lorem_phrase(),'LAST_VISIT_DATE_RAW'=>placeholder_date_raw(),'LAST_VISIT_DATE'=>placeholder_time(),'PERSONAL_ZONE_URL'=>placeholder_url(),'MEMBER_LINKS'=>$mem_link,'PERSONAL_TOPIC_URL'=>placeholder_url(),'NEW_POSTS_URL'=>placeholder_url(),'UNREAD_TOPICS_URL'=>placeholder_url(),'RECENTLY_READ_URL'=>placeholder_url(),'PT_EXTRA'=>lorem_phrase(),'NEW_TOPICS'=>lorem_phrase(),'NEW_POSTS'=>lorem_phrase(),'INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),'MAX_AVATAR_HEIGHT'=>placeholder_number())));
+		$head->attach(do_lorem_template('OCF_MEMBER_BAR',array('AVATAR'=>placeholder_image_url(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'LOGOUT_URL'=>placeholder_url(),'NUM_POINTS_ADVANCE'=>placeholder_number(),'NUM_POINTS'=>placeholder_number(),'NUM_POSTS'=>placeholder_number(),'PRIMARY_GROUP'=>lorem_phrase(),'LAST_VISIT_DATE_RAW'=>placeholder_date_raw(),'LAST_VISIT_DATE'=>placeholder_time(),'MEMBER_LINKS'=>$mem_link,'PERSONAL_TOPIC_URL'=>placeholder_url(),'NEW_POSTS_URL'=>placeholder_url(),'UNREAD_TOPICS_URL'=>placeholder_url(),'RECENTLY_READ_URL'=>placeholder_url(),'PT_EXTRA'=>lorem_phrase(),'NEW_TOPICS'=>lorem_phrase(),'NEW_POSTS'=>lorem_phrase(),'INLINE_PERSONAL_POSTS_URL'=>placeholder_url(),'MAX_AVATAR_HEIGHT'=>placeholder_number())));
 		//$head->attach(do_lorem_template('OCF_GUEST_BAR',array('NAVIGATION'=>lorem_phrase(),'LOGIN_URL'=>placeholder_url(),'JOIN_LINK'=>placeholder_url(),'FULL_LINK'=>placeholder_url())));
 
 		$birthdays = new ocp_tempcode();

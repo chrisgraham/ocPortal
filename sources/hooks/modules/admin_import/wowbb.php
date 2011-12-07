@@ -156,8 +156,7 @@ class Hook_wowbb
 
 		set_value('timezone',constant('SERVER_TIME_ZONE'));
 
-		$page_remap=array('NEW_REGISTRATIONS'=>'join',
-								'SIGNATURES'=>'editsignature');
+		$page_remap=array('NEW_REGISTRATIONS'=>'join');
 		foreach ($page_remap as $to)
 		{
 			$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>$to,'zone_name'=>get_module_zone($to)));
@@ -217,7 +216,6 @@ class Hook_wowbb
 			set_specific_permission($id_new,'view_calendar',$row['view_public_events']);
 
 			$denies=array();
-			if (constant('SIGNATURES')==0) $denies[]=array('editsignature',get_module_zone('editsignature'));
 			if ($row['view_board']==0) $denies[]=array('forumview',get_module_zone('forumview'));
 			if ($row['search']==0) $denies[]=array('search',get_module_zone('search'));
 			foreach ($denies as $deny)

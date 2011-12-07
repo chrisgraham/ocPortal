@@ -704,7 +704,8 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	{
 		if ($imgcode[0]=='EMOTICON_IMG_CODE_THEMED')
 		{
-			$imgcode[1]=find_theme_image($imgcode[1]);
+			$imgcode[1]=find_theme_image($imgcode[1],true);
+			if ($imgcode[1]=='') continue; // Theme image gone missing
 		}
 		$imgcode[1]=str_replace(get_base_url(),'',$imgcode[1]);
 

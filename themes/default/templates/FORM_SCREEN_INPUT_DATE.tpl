@@ -6,15 +6,15 @@
 {+END}
 
 <select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_day" name="{STUB%}_day"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-	<option value="">---</option>
+	<option value="">-</option>
 	{DAYS}
 </select>
 <select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_month" name="{STUB%}_month"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-	<option value="">---</option>
+	<option value="">-</option>
 	{MONTHS}
 </select>
 <select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_year" name="{STUB%}_year"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-	<option value="">---</option>
+	<option value="">-</option>
 	{YEARS}
 </select>
 

@@ -79,15 +79,6 @@ class Block_side_personal_stats
 					$content->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('KEY'=>do_lang_tempcode('COUNT_TOPICSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_topic_count($member)))));
 				}
 
-				// Personal Zone link
-				if (get_option('ocf_show_personal_myhome_link')=='1')
-				{
-					$url=$GLOBALS['FORUM_DRIVER']->member_home_link($member);
-					$_username=new ocp_tempcode();
-					$_username=do_lang_tempcode('MYHOME_PERSONAL_STATS_LINK',escape_html($username),escape_html(get_ip_address()));
-					$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'2c930ed112d96e8a67927a38a32daad1','NAME'=>do_lang_tempcode('MY_HOME'),'DESCRIPTION'=>$_username,'URL'=>$url)));
-				}
-
 				// Member profile view link
 				if (get_option('ocf_show_profile_link')=='1')
 				{
@@ -106,11 +97,6 @@ class Block_side_personal_stats
 				if (get_option('points_show_personal_stats_total_points')=='1') $content->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'3e6183abf9054574c0cd292d25a4fe5c','KEY'=>do_lang_tempcode('COUNT_POINTS_EVER'),'VALUE'=>integer_format(total_points($member)))));
 				if (get_option('points_show_personal_stats_gift_points_left')=='1') $content->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e5ssd45ddsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('COUNT_GIFT_POINTS_LEFT'),'VALUE'=>integer_format(get_gift_points_to_give($member)))));
 				if (get_option('points_show_personal_stats_gift_points_used')=='1') $content->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241eddsd4sdddssdsa2618fd7fff','KEY'=>do_lang_tempcode('COUNT_GIFT_POINTS_USED'),'VALUE'=>integer_format(get_gift_points_used($member)))));
-				if (get_option('points_show_personal_profile_link')=='1')
-				{
-					$url=build_url(array('page'=>'points','type'=>'member','id'=>get_member()),get_module_zone('points'));
-					$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'840eb51b2204d8f406ef5aefaa6b3014','NAME'=>do_lang_tempcode('MY_POINTS'),'URL'=>$url)));
-				}
 			}
 
 			if (get_option('ocp_show_personal_usergroup')=='1')

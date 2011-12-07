@@ -79,7 +79,43 @@ class Hook_addon_registry_ocf_member_photos
 			'uploads/ocf_photos_thumbs/index.html',
 			'uploads/ocf_photos/.htaccess',
 			'uploads/ocf_photos_thumbs/.htaccess',
-			'personalzone/pages/modules/editphoto.php',
+			'sources/hooks/systems/profiles_tabs_edit/photo.php',
+			'OCF_EDIT_PHOTO_TAB.tpl',
+		);
+	}
+
+	/**
+	* Get mapping between template names and the method of this class that can render a preview of them
+	*
+	* @return array			The mapping
+	*/
+	function tpl_previews()
+	{
+		return array(
+				'OCF_EDIT_PHOTO_TAB.tpl'=>'ocf_edit_photo_tab',
+				);
+	}
+
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__ocf_edit_photo_tab()
+	{
+		require_lang('ocf');
+		require_css('ocf');
+
+		return array(
+			lorem_globalise(
+				do_lorem_template('OCF_EDIT_PHOTO_TAB',array(
+					'USERNAME'=>lorem_word(),
+					'PHOTO'=>placeholder_image_url(),
+					'TEXT'=>'',
+						)
+			),NULL,'',true),
 		);
 	}
 

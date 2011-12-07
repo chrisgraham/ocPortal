@@ -75,10 +75,10 @@ class Hook_addon_registry_ocf_signatures
 		return array(
 
 			'sources/hooks/systems/addon_registry/ocf_signatures.php',
-			'OCF_EDIT_SIGNATURE_SCREEN.tpl',
-			'personalzone/pages/modules/editsignature.php',
+			'OCF_EDIT_SIGNATURE_TAB.tpl',
 			'sources/hooks/systems/attachments/ocf_signature.php',
 			'sources/hooks/systems/preview/ocf_signature.php',
+			'sources/hooks/systems/profiles_tabs_edit/signature.php',
 		);
 	}
 
@@ -90,7 +90,7 @@ class Hook_addon_registry_ocf_signatures
 	function tpl_previews()
 	{
 		return array(
-				'OCF_EDIT_SIGNATURE_SCREEN.tpl'=>'ocf_edit_signature_screen',
+				'OCF_EDIT_SIGNATURE_TAB.tpl'=>'ocf_edit_signature_tab',
 				);
 	}
 
@@ -101,7 +101,7 @@ class Hook_addon_registry_ocf_signatures
 	*
 	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	*/
-	function tpl_preview__ocf_edit_signature_screen()
+	function tpl_preview__ocf_edit_signature_tab()
 	{
 		require_javascript('javascript_swfupload');
 		require_javascript('javascript_validation');
@@ -134,11 +134,9 @@ class Hook_addon_registry_ocf_signatures
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('OCF_EDIT_SIGNATURE_SCREEN',array(
+				do_lorem_template('OCF_EDIT_SIGNATURE_TAB',array(
 					'SIZE'=>placeholder_filesize(),
 					'SIGNATURE'=>lorem_phrase(),
-					'TITLE'=>lorem_title(),
-					'POSTING_FORM'=>$posting_form,
 						)
 			),NULL,'',true),
 		);

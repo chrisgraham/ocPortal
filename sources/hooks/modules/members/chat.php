@@ -60,11 +60,6 @@ class Hook_members_chat
 					$modules[]=array('contact',do_lang_tempcode('DUMP_BUDDY'),build_url(array('page'=>'chat','type'=>'buddy_remove','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')));
 				}
 			}
-			if (has_specific_permission(get_member(),'assume_any_member'))
-			{
-				require_lang('chat');
-				$modules[]=array('views',do_lang_tempcode('BUDDY_LIST'),build_url(array('page'=>'chat','type'=>'misc','member_id'=>$member_id),get_module_zone('chat')));
-			}
 		}
 		return $modules;
 	}

@@ -1183,6 +1183,9 @@ function ocf_member_choose_title($new_title,$member_id=NULL)
 	if (ocp_mb_strlen($new_title)>intval(get_option('max_member_title_length'))) warn_exit(do_lang_tempcode('USER_TITLE_TOO_BIG'));
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_title'=>$new_title),array('id'=>$member_id),'',1);
+
+	// Decache from run-time cache
+	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 }
 
 /**
@@ -1206,6 +1209,9 @@ function ocf_member_choose_signature($new_signature,$member_id=NULL)
 
 	require_code('mail');
 	mail_wrap(do_lang('CHOOSE_SIGNATURE_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_SIGNATURE_BODY',$new_signature,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)),NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+
+	// Decache from run-time cache
+	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 }
 
 /**
@@ -1281,6 +1287,9 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 		@unlink(get_custom_file_base().'/'.rawurldecode($old));
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url'=>$avatar_url),array('id'=>$member_id),'',1);
+
+	// Decache from run-time cache
+	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 }
 
 /**
@@ -1337,10 +1346,10 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	require_code('mail');
 	mail_wrap(do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)),NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
 
-	// If no avatar, or default avatar, or avatars not installed, use photo for it
+	// If [s]no avatar, or default avatar, or [/s]avatars not installed, use photo for it
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$default_avatar_url=find_theme_image('ocf_default_avatars/default',true,true);
-	if (($avatar_url=='') || ($avatar_url==$default_avatar_url) || (!addon_installed('ocf_avatars')))
+	if (/*($avatar_url=='') || ($avatar_url==$default_avatar_url) || */(!addon_installed('ocf_avatars')))
 	{
 		$avatar_url=$urls[0];
 		if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))
@@ -1362,5 +1371,8 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 		ocf_member_choose_avatar($avatar_url,$member_id);
 	}
+
+	// Decache from run-time cache
+	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 }
 

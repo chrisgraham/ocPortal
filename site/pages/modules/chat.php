@@ -133,7 +133,6 @@ class Module_chat
 
 			require_lang('chat');
 			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc');
-			add_menu_item_simple('pc_features',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc:member_id={$USER_OVERIDE}',0,0,true,do_lang('ZONE_BETWEEN'));
 		}
 		if (($upgrade_from<3) || (is_null($upgrade_from)))
 		{

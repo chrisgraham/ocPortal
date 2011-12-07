@@ -151,7 +151,6 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/mod_rewrite.php',
 			'sources/hooks/systems/config_default/no_bot_stats.php',
 			'sources/hooks/systems/config_default/no_stats_when_closed.php',
-			'sources/hooks/systems/config_default/ocf_show_personal_myhome_link.php',
 			'sources/hooks/systems/config_default/ocf_show_profile_link.php',
 			'sources/hooks/systems/config_default/ocp_show_avatar.php',
 			'sources/hooks/systems/config_default/ocp_show_conceded_mode_link.php',

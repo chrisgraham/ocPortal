@@ -80,6 +80,8 @@ class Hook_addon_registry_ocf_warnings
 			'OCF_WARNING_HISTORY_SCREEN.tpl',
 			'lang/EN/ocf_warnings.ini',
 			'site/warnings.php',
+			'sources/hooks/systems/profiles_tabs/warnings.php',
+			'OCF_MEMBER_PROFILE_WARNINGS.tpl',
 		);
 	}
 
@@ -93,6 +95,7 @@ class Hook_addon_registry_ocf_warnings
 		return array(
 				'OCF_SAVED_WARNING.tpl'=>'ocf_saved_warning',
 				'OCF_WARNING_HISTORY_SCREEN.tpl'=>'administrative__ocf_warning_history_screen',
+				'OCF_MEMBER_PROFILE_WARNINGS.tpl'=>'ocf_member_profile_warnings',
 				);
 	}
 
@@ -139,6 +142,53 @@ class Hook_addon_registry_ocf_warnings
 					'RESULTS_TABLE'=>placeholder_table(),
 						)
 			),NULL,'',true),
+		);
+	}
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__ocf_member_profile_posts()
+	{
+		//topics
+		$topics = new ocp_tempcode();
+		if (addon_installed('ocf_forum'))
+		{
+			foreach (placeholder_array() as $k=>$v)
+			{
+				$marker = do_lorem_template('OCF_TOPIC_MARKER',array('ID'=>placeholder_id()));
+
+				$topic_row_links = do_lorem_template('OCF_TOPIC_ROW_LINK',array('URL'=>placeholder_url(),'IMG'=>placeholder_img_code('ocf_topic_modifiers'),'ALT'=>lorem_phrase()));
+
+				$topic_row_modifiers = do_lorem_template('OCF_TOPIC_ROW_MODIFIER',array('IMG'=>placeholder_img_code('ocf_topic_modifiers'),'ALT'=>lorem_phrase()));
+
+				$emoticon = do_lorem_template('OCF_TOPIC_EMOTICON',array('EMOTICON'=>'ocf_emoticons/depressed'));
+
+				$b = do_lorem_template('OCF_USER_MEMBER',array('COLOUR'=>lorem_word(),'PROFILE_URL'=>placeholder_url(),'USERNAME'=>lorem_word(),'AT'=>lorem_phrase()));
+
+				$post = do_lorem_template('OCF_PT_BETWEEN',array('A'=>lorem_phrase(),'B'=>$b));
+
+				$last_post = do_lorem_template('OCF_FORUM_TOPIC_ROW_LAST_POST',array('ID'=>placeholder_id(),'DATE_RAW'=>placeholder_date_raw(),'DATE'=>placeholder_time(),'POSTER'=>lorem_phrase(),'LAST_URL'=>placeholder_url()));
+
+				$topics->attach(do_lorem_template('OCF_FORUM_TOPIC_ROW',array('BREADCRUMBS'=>placeholder_breadcrumbs(),'RAW_TIME'=>placeholder_date_raw(),'UNREAD'=>lorem_phrase(),'ID'=>placeholder_id(),'HOVER'=>lorem_phrase(),'PAGES'=>lorem_phrase(),'MARKER'=>$marker,'TOPIC_ROW_LINKS'=>$topic_row_links,'TOPIC_ROW_MODIFIERS'=>$topic_row_modifiers,'POST'=>lorem_phrase(),'EMOTICON'=>$emoticon,'DESCRIPTION'=>lorem_paragraph(),'URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'POSTER'=>$post,'NUM_POSTS'=>placeholder_number(),'NUM_VIEWS'=>placeholder_number(),'LAST_POST'=>$last_post)));
+			}
+		}
+
+		$results_browser = placeholder_result_browser();
+
+		$buttons=lorem_phrase();
+
+		$topic_wrapper = do_lorem_template('OCF_FORUM_TOPIC_WRAPPER',array('MAX'=>lorem_phrase(),'ORDER'=>lorem_phrase(),'MAY_CHANGE_MAX'=>lorem_phrase(),'TREE'=>lorem_phrase(),'BUTTONS'=>$buttons,'STARTER_TITLE'=>lorem_phrase(),'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>placeholder_options(),'ACTION_URL'=>placeholder_url(),'TOPICS'=>$topics,'FORUM_NAME'=>lorem_word()));
+
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_POSTS',array(
+			'MEMBER_ID'=>placeholder_id(),
+			'TOPICS'=>$topic_wrapper,
+		));
+		return array(
+			lorem_globalise($tab_content,NULL,'',true),
 		);
 	}
 

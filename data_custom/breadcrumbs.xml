@@ -7,10 +7,7 @@
 	<substitution match_key="site:_WILD_NOT_START">
 		<link label="{!HOME}">:</link>
 	</substitution>
-	<substitution match_key="personalzone:_WILD_NOT_START">
-		<link label="{!MY_HOME}">personalzone:</link>
-	</substitution>
-	<substitution match_key="personalzone:myhome">
+	<substitution match_key="personalzone:_WILD">
 		<link label="{!HOME}">:</link>
 	</substitution>
 	<substitution match_key="collaboration:_WILD_NOT_START">

@@ -98,37 +98,15 @@ class Module_admin_menus
 		add_menu_item_simple('collab_website',NULL,'FRONT_PAGE','collaboration:');
 		add_menu_item_simple('collab_website',NULL,'ABOUT','collaboration:about');
 
-		// pc_features
-//		add_menu_item_simple('pc_features',NULL,'ROOT_FORUM','_SEARCH:forumview:type=misc');
-		add_menu_item_simple('pc_features',NULL,'MY_HOME','_SEARCH:myhome:id={$USER_OVERIDE}');
-		add_menu_item_simple('pc_features',NULL,'VIEW_PROFILE','_SEARCH:members:type=view:id={$USER_OVERIDE}',0,0,true,do_lang('ZONE_BETWEEN'));
-
-		// pc_edit
-		add_menu_item_simple('pc_edit',NULL,'EDIT_PROFILE','_SEARCH:editprofile:type=misc:id={$USER_OVERIDE}');
-		add_menu_item_simple('pc_edit',NULL,'EDIT_AVATAR','_SEARCH:editavatar:type=misc:id={$USER_OVERIDE}');
-		add_menu_item_simple('pc_edit',NULL,'EDIT_PHOTO','_SEARCH:editphoto:type=misc:id={$USER_OVERIDE}');
-		add_menu_item_simple('pc_edit',NULL,'EDIT_SIGNATURE','_SEARCH:editsignature:type=misc:id={$USER_OVERIDE}');
-		add_menu_item_simple('pc_edit',NULL,'EDIT_TITLE','_SEARCH:edittitle:type=misc:id={$USER_OVERIDE}');
-		add_menu_item_simple('pc_edit',NULL,'DELETE_ACCOUNT','_SEARCH:delete:type=misc:id={$USER_OVERIDE}');
-
 		// forum_features
 		add_menu_item_simple('forum_features',NULL,'RULES','_SEARCH:rules');
 		add_menu_item_simple('forum_features',NULL,'MEMBERS','_SEARCH:members:type=misc');
-
-		// forum_personal
-		add_menu_item_simple('forum_personal',NULL,'VIEW_PROFILE','_SEARCH:members:type=view',0,0,true,do_lang('ZONE_BETWEEN'));
-		add_menu_item_simple('forum_personal',NULL,'EDIT_PROFILE','_SEARCH:editprofile:type=misc',0,0,true,do_lang('ZONE_BETWEEN'));
-		add_menu_item_simple('forum_personal',NULL,'EDIT_AVATAR','_SEARCH:editavatar:type=misc',0,0,true,do_lang('ZONE_BETWEEN'));
-		add_menu_item_simple('forum_personal',NULL,'EDIT_PHOTO','_SEARCH:editphoto:type=misc',0,0,true,do_lang('ZONE_BETWEEN'));
-		add_menu_item_simple('forum_personal',NULL,'EDIT_SIGNATURE','_SEARCH:editsignature:type=misc',0,0,true,do_lang('ZONE_BETWEEN'));
-		add_menu_item_simple('forum_personal',NULL,'EDIT_TITLE','_SEARCH:edittitle:type=misc',0,0,true,do_lang('ZONE_BETWEEN'));
 
 		// Zones
 		add_menu_item_simple('zone_menu',NULL,'SITE','site'.':',0,1);
 		if (get_forum_type()=='ocf')
 		{
 			add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS','forum'.':',0,1);
-			add_menu_item_simple('zone_menu',NULL,'PERSONAL_ZONE','personalzone'.':',0,1);
 		} else
 		{
 			add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS',get_forum_base_url(),0,1);

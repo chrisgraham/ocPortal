@@ -130,8 +130,6 @@ Members may choose a photo of themselves (or staff can) for display in their pro
 
 There is a permission to specify whether members may view the photos of other members, as there is an obvious 'stalking'/'paedophile' issue that must be considered for forums with young members.
 
-You may wish to deny members access to this page (by removing page access permissions to the 'editphoto' page in the 'personalzone' zone), in order to protect yourself and your members from these issues.
-
 [title="2"]Edit signature[/title]
 
 [exp_thumb="Editing your/a member signature" float="right"]members_edit_signature[/exp_thumb]

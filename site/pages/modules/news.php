@@ -135,9 +135,6 @@ class Module_news
 			add_config_option('ADD_NEWS','points_ADD_NEWS','integer','return addon_installed(\'points\')?\'225\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('NEWS_REGULARITY','news_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
 			add_config_option('BLOG_REGULARITY','blog_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
-
-			require_lang('news');
-			add_menu_item_simple('pc_features',NULL,'BLOG','_SEARCH:cms_blogs:type=ad',0,0,true,do_lang('ZONE_BETWEEN'));
 		}
 		
 		if (($upgrade_from<3) || (is_null($upgrade_from)))

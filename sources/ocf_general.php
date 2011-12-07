@@ -226,16 +226,6 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 
 			$profile_url=$GLOBALS['OCF_DRIVER']->member_profile_link(get_member(),true,true);
 
-			$links=array();
-			if (addon_installed('ocf_member_avatars')) $links['EDIT_AVATAR']='editavatar';
-			if (addon_installed('ocf_member_photos')) $links['EDIT_PHOTO']='editphoto';
-			$links['EDIT_PROFILE']='editprofile';
-			if (addon_installed('ocf_signatures')) $links['EDIT_SIGNATURE']='editsignature';
-			if (addon_installed('ocf_member_titles')) $links['EDIT_TITLE']='edittitle';
-			$member_links=new ocp_tempcode();
-			foreach ($links as $lang=>$page)
-				$member_links->attach(do_template('OCF_MEMBER_LINK',array('_GUID'=>'db4a4c230d199f66bf7c9a04f2801fb6','URL'=>build_url(array('page'=>$page,'id'=>get_member()),get_module_zone($page)),'LANG'=>do_lang_tempcode($lang))));
-
 			$_new_topics=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE NOT t_forum_id IS NULL AND t_cache_first_time>'.strval((integer)$member_info['last_visit_time']));
 			$new_topics=$_new_topics[0]['mycnt'];
 			$_new_posts=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE NOT p_cache_forum_id IS NULL AND p_time>'.strval((integer)$member_info['last_visit_time']));
@@ -245,6 +235,8 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 
 			// Any unread PT-PPs?
 			$pt_extra=($num_unread_pps==0)?new ocp_tempcode():do_lang_tempcode('NUM_UNREAD',integer_format($num_unread_pps));
+
+			$personal_topic_url=build_url(array('page'=>'members','type'=>'view','id'=>get_member()),get_module_zone('members'),NULL,true,false,false,'tab__pts');
 
 			$head=do_template('OCF_MEMBER_BAR',array(
 					'_GUID'=>'s3kdsadf0p3wsjlcfksdj',
@@ -258,9 +250,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 					'PRIMARY_GROUP'=>$member_info['primary_group_name'],
 					'LAST_VISIT_DATE_RAW'=>strval($member_info['last_visit_time']),
 					'LAST_VISIT_DATE'=>$member_info['last_visit_time_string'],
-					'PERSONAL_ZONE_URL'=>build_url(array('page'=>'myhome'),get_module_zone('myhome')),
-					'MEMBER_LINKS'=>$member_links,
-					'PERSONAL_TOPIC_URL'=>build_url(array('page'=>'forumview','type'=>'pt'),get_module_zone('forumview')),
+					'PERSONAL_TOPIC_URL'=>$personal_topic_url,
 					'NEW_POSTS_URL'=>build_url(array('page'=>'vforums','type'=>'misc'),get_module_zone('vforums')),
 					'UNREAD_TOPICS_URL'=>build_url(array('page'=>'vforums','type'=>'unread'),get_module_zone('vforums')),
 					'RECENTLY_READ_URL'=>build_url(array('page'=>'vforums','type'=>'recently_read'),get_module_zone('vforums')),

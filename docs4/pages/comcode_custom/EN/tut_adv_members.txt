@@ -27,7 +27,7 @@ There are a number of custom profile field options that you may set that allow C
  - Forcing members to specify certain additional details (for example, on a forum for staff of a company, you could make members enter their job role, so as to reduce the chance of a non employee from joining and remaining an active member)
  - Allowing members of a certain sub-communities (via their usergroup) to specify details appropriate to that sub-community (for example, those in the 'Football' usergroup of a school discussion forum could specify the position they play, whilst those in the 'Music' usergroup could specify the instrument they play).
 
-There is a 'Privacy' module in the account that allows members to limit access beyond this. If there are more than 15 CPFs it will only give them options for the CPFs they have filled in.
+There is a 'Privacy' sub-tab in the account settings that allows members to limit access beyond this. If there are more than 15 CPFs it will only give them options for the CPFs they have filled in.
 
 [html]<div class="float_surrounder">[/html]
 [exp_thumb="Custom profile fields are optionally shown where members post" float="right"]adv_members_cpf_space_1[/exp_thumb]

@@ -114,6 +114,7 @@ class Hook_addon_registry_galleries
 			'sources/hooks/blocks/side_stats/stats_galleries.php',
 			'sources/hooks/systems/addon_registry/galleries.php',
 			'sources/hooks/modules/admin_import_types/galleries.php',
+			'sources/hooks/systems/profiles_tabs/galleries.php',
 			'GALLERY_ENTRY_WRAP.tpl',
 			'BLOCK_MAIN_GALLERY_EMBED.tpl',
 			'GALLERY_SUBGALLERY.tpl',
@@ -203,6 +204,7 @@ class Hook_addon_registry_galleries
 			'uploads/watermarks/.htaccess',
 			'themes/default/images/audio_thumb.png',
 			'JAVASCRIPT_GALLERIES.tpl',
+			'OCF_MEMBER_PROFILE_GALLERIES.tpl',
 		);
 	}
 
@@ -247,9 +249,27 @@ class Hook_addon_registry_galleries
 				'GALLERY_VIDEO_RM.tpl'=>'gallery_video_rm',
 				'GALLERY_SWF.tpl'=>'gallery_swf',
 				'GALLERY_PDF.tpl'=>'gallery_pdf',
+				'OCF_MEMBER_PROFILE_GALLERIES.tpl'=>'ocf_member_profile_galleries',
 				);
 	}
 
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__ocf_member_profile_galleries()
+	{
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_GALLERIES',array(
+			'MEMBER_ID'=>placeholder_id(),
+			'GALLERIES'=>lorem_phrase(),
+		));
+		return array(
+			lorem_globalise($tab_content,NULL,'',true),
+		);
+	}
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.

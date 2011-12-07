@@ -36,7 +36,7 @@ class Module_admin_config
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=11;
+		$info['version']=12;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -58,7 +58,7 @@ class Module_admin_config
 										'is_on_strong_forum_tie','is_on_preview_validation','show_inline_stats',
 										'is_on_sms','sms_username','sms_password','sms_api_id','sms_low_limit','sms_high_limit','sms_low_trigger_limit','sms_high_trigger_limit','max_download_size',
 										'bottom_show_admin_menu','bottom_show_top_button','bottom_show_feedback_link','bottom_show_privacy_link',
-										'bottom_show_sitemap_button','forum_show_personal_stats_posts','forum_show_personal_stats_topics','ocf_show_personal_myhome_link',
+										'bottom_show_sitemap_button','forum_show_personal_stats_posts','forum_show_personal_stats_topics',
 										'ocp_show_personal_sub_links','ocp_show_personal_adminzone_link','ocp_show_conceded_mode_link','ocp_show_su','ocp_show_staff_page_actions','ocf_show_profile_link',
 										'ocp_show_personal_usergroup','ocp_show_personal_last_visit','ocp_show_avatar',
 										'panel_width','panel_width_spaced','debug_mode','main_forum_name','allowed_post_submitters','ssw',
@@ -168,7 +168,6 @@ class Module_admin_config
 			add_config_option('SITEMAP_LINK','bottom_show_sitemap_button','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
 			add_config_option('COUNT_POSTSCOUNT','forum_show_personal_stats_posts','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('COUNT_TOPICSCOUNT','forum_show_personal_stats_topics','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('MY_HOME_LINK','ocf_show_personal_myhome_link','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('ADMIN_ZONE_LINK','ocp_show_personal_adminzone_link','tick','return \'1\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('CONCEDED_MODE_LINK','ocp_show_conceded_mode_link','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('SU','ocp_show_su','tick','return has_no_forum()?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
@@ -241,6 +240,10 @@ class Module_admin_config
 			add_config_option('REMEMBER_ME_BY_DEFAULT','remember_me_by_default','tick','return \'0\';','SITE','GENERAL');
 			add_config_option('DETECT_JAVASCRIPT','detect_javascript','tick','return \'0\';','SITE','ADVANCED');
 			add_config_option('MOBILE_SUPPORT','mobile_support','tick','return \'1\';','SITE','GENERAL');
+		}
+		if ((is_null($upgrade_from)) || ($upgrade_from<12))
+		{
+			delete_config_option('ocf_show_personal_myhome_link');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))

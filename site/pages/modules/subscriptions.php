@@ -53,11 +53,6 @@ class Module_subscriptions
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		$GLOBALS['SITE_DB']->drop_if_exists('f_usergroup_subs');
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
-
-		if (addon_installed('redirects_editor'))
-		{
-			$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'subscriptions','r_from_zone'=>'personalzone','r_to_page'=>'subscriptions','r_to_zone'=>'site','r_is_transparent'=>1));
-		}
 	}
 
 	/**
@@ -85,11 +80,6 @@ class Module_subscriptions
 				's_auto_fund_key'=>'SHORT_TEXT', // Ditto as above: we can serialize cc numbers etc into here
 				's_via'=>'ID_TEXT',
 			));
-
-			if (addon_installed('redirects_editor'))
-			{
-				$GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'subscriptions','r_from_zone'=>'personalzone','r_to_page'=>'subscriptions','r_to_zone'=>'site','r_is_transparent'=>1));
-			}
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))

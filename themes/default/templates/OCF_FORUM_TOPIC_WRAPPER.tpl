@@ -16,9 +16,11 @@
 	{+END}
 
 	<thead>
-		<tr>
-			<td colspan="{$?,{$CONFIG_OPTION,is_on_topic_emoticons},7,6}" class="tabletitle_internal">{FORUM_NAME*}</td>
-		</tr>
+		{+START,IF_PASSED,ID}
+			<tr>
+				<td colspan="{$?,{$CONFIG_OPTION,is_on_topic_emoticons},7,6}" class="tabletitle_internal">{FORUM_NAME*}</td>
+			</tr>
+		{+END}
 		<tr>
 			{+START,IF,{$NOT,{$MOBILE}}}
 				{+START,IF,{$CONFIG_OPTION,is_on_topic_emoticons}}

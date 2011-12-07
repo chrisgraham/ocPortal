@@ -223,7 +223,7 @@ class Module_admin_ocf_join
 						/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 						/*	 page	 params				  zone	  */
 						array('_SELF',array('type'=>'misc'),'_SELF'),								 // Add one
-						array('editprofile',array('id'=>$id),get_module_zone('editprofile')),// Edit this
+						NULL,// Edit this
 						NULL,																						// Edit one
 						array('members',array('type'=>'view','id'=>$id),get_module_zone('members')),		 // View this
 						array('members',array('type'=>'misc'),get_module_zone('members'),do_lang_tempcode('MEMBERS')),				// View archive

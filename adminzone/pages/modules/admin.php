@@ -851,7 +851,7 @@ class Module_admin
 					{
 						$n=do_lang_tempcode($array[0]);
 						$descrip=array_key_exists(1,$array)?do_lang_tempcode($array[1]):new ocp_tempcode();
-						$_url=build_url(array('page'=>'editprofile'),get_module_zone('editprofile'));
+						$_url=build_url(array('page'=>'members','type'=>'view'),get_module_zone('members'),NULL,false,false,false,'tab__edit');
 						$url=$_url->evaluate();
 						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>$descrip)));
 						continue 2;

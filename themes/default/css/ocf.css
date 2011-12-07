@@ -494,21 +494,11 @@ hr.ocf_sig_barrier {
 }
 
 .ocf_member_column_d {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 11.3em;
-	{+END}
-	{+START,IF,{$MOBILE}}
-		float: left;
-	{+END}
 	white-space: nowrap;
 }
 
 .ocf_member_column_d .actions_list {
 	margin: 5px 0 0 0;
-}
-
-.ocf_member_column_e {
-	white-space: nowrap;
 }
 
 .ocf_member_column_title {
@@ -1044,7 +1034,7 @@ ul.ocf_profile_friends li:hover {
 
 .ocf_sig_details {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 30%;
+		width: 60%;
 		margin: 0 auto;
 	{+END}
 	text-align: center;

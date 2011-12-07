@@ -236,9 +236,6 @@ class Module_admin_version
 					case 'adminzone':
 						$_zone=do_lang('ADMIN_ZONE');
 						break;
-					case 'personalzone':
-						$_zone=do_lang('PERSONAL_ZONE');
-						break;
 				}
 				$_lang2=do_lang('ZONE_'.$zone,NULL,NULL,NULL,NULL,false);
 				if (!is_null($_lang2)) $_zone=$_lang2;

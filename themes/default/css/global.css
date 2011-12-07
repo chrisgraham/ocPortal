@@ -3326,7 +3326,7 @@ blockquote.quotes_block {
 	border-right: 1px solid;
 	border-bottom: 1px solid;
 	border-color: #b5b5b5; /* {$,wizard, 100% b5b5b5} */
-	padding: 2px;
+	padding: 8px;
 	margin-left: 1px;
 }
 
@@ -3346,14 +3346,18 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 .tab {
 	float: left;
 	background: url('{$IMG,tab}') !important;
-	padding: 3px 5px 0 5px !important;
+	padding: 3px 10px 0 10px !important;
 	height: 20px;
 	text-align: center;
 	cursor: pointer;
 }
 
-.tab_active, .tab:hover {
+.tab_active {
 	font-weight: bold;
+}
+
+.tab:hover {
+	text-decoration: underline !important;
 }
 
 .tab strong {
@@ -3367,6 +3371,12 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 .tab_last {
 	border-right: 1px solid;
 	border-color: #b5b5b5; /* {$,wizard, 100% b5b5b5} */
+}
+
+.tab_surround .tab { /* subtabs */
+	padding-top: 5px !important;
+	height: 18px;
+	font-size: 0.88em;
 }
 
 /*

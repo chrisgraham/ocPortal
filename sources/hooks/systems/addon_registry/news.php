@@ -83,6 +83,7 @@ class Hook_addon_registry_news
 			'sources/hooks/systems/config_default/news_update_time.php',
 			'sources/hooks/systems/config_default/ping_url.php',
 			'sources/hooks/systems/config_default/points_ADD_NEWS.php',
+			'sources/hooks/systems/profiles_tabs/blog.php',
 			'NEWS_ARCHIVE_SCREEN.tpl',
 			'NEWS_FULL_SCREEN.tpl',
 			'BLOCK_BOTTOM_NEWS.tpl',
@@ -129,6 +130,7 @@ class Hook_addon_registry_news
 			'sources/hooks/modules/admin_import/rss.php',
 			'sources/hooks/modules/admin_newsletter/news.php',
 			'sources/hooks/blocks/main_staff_checklist/blog.php',
+			'OCF_MEMBER_PROFILE_BLOG.tpl',
 		);
 	}
 
@@ -153,10 +155,30 @@ class Hook_addon_registry_news
 			'NEWS_ARCHIVE_SCREEN.tpl'=>'news_archive_screen',
 			'NEWS_WORDPRESS_IMPORT_SCREEN.tpl'=>'administrative__news_wordpress_import_screen',
 			'NEWS_BRIEF.tpl'=>'news_archive_screen',
-			'NEWS_PIECE_SUMMARY.tpl'=>'block_main_news'
+			'NEWS_PIECE_SUMMARY.tpl'=>'block_main_news',
+			'OCF_MEMBER_PROFILE_BLOG.tpl'=>'ocf_member_profile_blog',
 	);
 	}
 
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__ocf_member_profile_blog()
+	{
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_BLOG',array(
+			'MEMBER_ID'=>placeholder_id(),
+			'RECENT_BLOG_POSTS'=>lorem_paragraph_html(),
+			'RSS_URL'=>placeholder_url(),
+			'ADD_BLOG_POST_URL'=>placeholder_url(),
+		));
+		return array(
+			lorem_globalise($tab_content,NULL,'',true),
+		);
+	}
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.

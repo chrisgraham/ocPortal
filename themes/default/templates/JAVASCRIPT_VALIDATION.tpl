@@ -732,7 +732,7 @@ function choose_picture(id,ob,name)
 	{
 		for (var i=0;i<e.length;i++)
 		{
-			var img=e[i].parentNode.parentNode.getElementsByTagName('img')[0];
+			var img=e[i].parentNode.parentNode.parentNode.getElementsByTagName('img')[0];
 			if ((img) && (img!=ob))
 			{
 				img.style.outline='0';

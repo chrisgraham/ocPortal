@@ -432,7 +432,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_intro_answer','SHORT_TEXT');
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_max_email_attach_size_mb','INTEGER',3);
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_zone_wide','BINARY',1);
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_notes','LONG_TEXT');
+		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_notes','LONG_TEXT'); // TODO: remove
 		$GLOBALS['FORUM_DB']->add_table_field('f_emoticons','e_use_topics','BINARY',1);
 		$GLOBALS['FORUM_DB']->add_table_field('f_topics','t_pt_from_category','SHORT_TEXT');
 		$GLOBALS['FORUM_DB']->add_table_field('f_topics','t_pt_to_category','SHORT_TEXT');
@@ -559,7 +559,7 @@ function install_ocf($upgrade_from=NULL)
 			'm_language'=>'ID_TEXT',
 			'm_ip_address'=>'IP',
 			'm_allow_emails'=>'BINARY',
-			'm_notes'=>'LONG_TEXT',
+			'm_notes'=>'LONG_TEXT', // TODO: Remove
 			'm_zone_wide'=>'BINARY',
 			'm_highlighted_name'=>'BINARY',
 			'm_pt_allow'=>'SHORT_TEXT',

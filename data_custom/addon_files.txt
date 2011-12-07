@@ -255,9 +255,9 @@ facebook_support
 # # themes/default/templates_custom/BLOCK_SIDE_PERSONAL_STATS_NO.tpl
 # # themes/default/templates_custom/BLOCK_SIDE_PERSONAL_STATS.tpl
 # # themes/default/templates_custom/FACEBOOK_FOOTER.tpl
+# # themes/default/templates_custom/MEMBER_FACEBOOK.tpl
 # # themes/default/templates_custom/LOGIN_SCREEN.tpl
 # # themes/default/templates_custom/OCF_GUEST_BAR.tpl
-# # themes/default/templates_custom/OCF_MEMBER_PROFILE_SCREEN.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_SCREEN_ACTIONS.tpl
 # # sources_custom/users_active_actions.php
 
@@ -2244,7 +2244,7 @@ group_points
 # # sources_custom/points.php
 # # sources_custom/hooks/systems/do_next_menus/group_points.php
 # # adminzone/pages/minimodules_custom/group_points.php
-# # themes/default/templates_custom/POINTS_SCREEN.tpl
+# # themes/default/templates_custom/POINTS_PROFILE.tpl
 # # sources_custom/hooks/systems/symbols/POINTS_FROM_USERGROUPS.php
 # # sources_custom/hooks/systems/cron/group_points.php
 # # pages/comcode_custom/EN/group_points.txt
@@ -2255,7 +2255,8 @@ member_filedumps
 
 # # sources_custom/hooks/modules/members/filedump.php
 # # sources_custom/miniblocks/myfiles.php
-# # themes/default/templates_custom/OCF_MEMBER_HOME_SCREEN.tpl
+# # sources_custom/hooks/systems/profiles_tabs/filedump.php
+# # themes/default/templates_custom/OCF_MEMBER_PROFILE_FILEDUMP.tpl
 
 locations
 ---------

@@ -248,7 +248,7 @@ class Module_admin_sitetree
 				}
 			}
 			
-			$selected=(($zone=='forum') && ($row['i_menu']=='forum_features')) || (($zone=='personalzone') && ($row['i_menu']=='pc_features')) || (($zone=='collaboration') && ($row['i_menu']=='collab_website')) || ((($zone=='site') || (($zone=='') && (get_option('collapse_user_zones')=='1'))) && (($row['i_menu']=='site') || ($row['i_menu']=='main_website'))) || (($zone=='') && ($row['i_menu']=='root_website'));
+			$selected=(($zone=='forum') && ($row['i_menu']=='forum_features')) || (($zone=='collaboration') && ($row['i_menu']=='collab_website')) || ((($zone=='site') || (($zone=='') && (get_option('collapse_user_zones')=='1'))) && (($row['i_menu']=='site') || ($row['i_menu']=='main_website'))) || (($zone=='') && ($row['i_menu']=='root_website'));
 
 			if ($found)
 			{

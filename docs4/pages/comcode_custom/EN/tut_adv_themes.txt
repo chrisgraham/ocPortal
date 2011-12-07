@@ -169,7 +169,6 @@ The [tt]MENU_[/tt] prefixed templates define the markup for ocPortal menus. Each
  - [tt]LAST_VISIT_DATE*[/tt]: the last date on which the member visited (will be HTML-escaped)
  - [tt]NEW_TOPICS*[/tt]: a link to the new topics since the member last visited (will be HTML-escaped)
  - [tt]NEW_POSTS*[/tt]: a link to the new posts since the member last visited (will be HTML-escaped)
- - [tt]PERSONAL_ZONE_URL*[/tt]: the URL of the member's Account (will be HTML-escaped)
  - [tt]MEMBER_LINKS[/tt]: a list of links for the member
  - [tt]PERSONAL_TOPIC_URL*[/tt]: the URL of the member's Private Topic virtual forum (will be HTML-escaped)
  - [tt]PT_EXTRA[/tt]: lists Private Topic activity, if applicable

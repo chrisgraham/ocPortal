@@ -530,8 +530,8 @@ class Module_topicview
 			$tree=ocf_forum_breadcrumbs($topic_info['forum_id'],NULL,NULL,false);
 		} else
 		{
-			$root_forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>get_param_integer('keep_forum_root',db_get_first_id())));
-			$tree=hyperlink(build_url(array('page'=>'forumview','id'=>get_param_integer('keep_forum_root',NULL)),get_module_zone('forumview')),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$root_forum_name),NULL,NULL,'up');
+			$tree=new ocp_tempcode();
+			$tree->attach(hyperlink(build_url(array('page'=>'members'),get_module_zone('members')),do_lang_tempcode('MEMBERS'),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
 			$tree->attach(do_template('BREADCRUMB_ESCAPED'));
 			if (has_specific_permission(get_member(),'view_other_pt'))
 			{
@@ -539,8 +539,8 @@ class Module_topicview
 			} else $of_member=get_member();
 			$of_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member);
 			if (is_null($of_username)) $of_username=do_lang('UNKNOWN');
-			$forum_of_name=do_lang('PERSONAL_TOPICS_OF',$of_username);
-			$tree->attach(hyperlink(build_url(array('page'=>'forumview','type'=>'pt','id'=>$of_member),get_module_zone('forumview')),escape_html($forum_of_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$forum_of_name),NULL,NULL,'up'));
+			$personal_topic_url=build_url(array('page'=>'members','type'=>'view','id'=>$of_member),get_module_zone('members'),NULL,true,false,false,'tab__pts');
+			$tree->attach(hyperlink($personal_topic_url,do_lang_tempcode('MEMBER_PROFILE',escape_html($of_username)),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
 		}
 
 		// Quick reply
@@ -706,7 +706,7 @@ class Module_topicview
 		}
 
 		if (!is_null($id))
-			breadcrumb_add_segment($tree,do_lang_tempcode('VIEW_TOPIC'));
+			breadcrumb_add_segment($tree,do_lang_tempcode(is_null($topic_info['forum_id'])?'VIEW_PERSONAL_TOPIC':'VIEW_TOPIC'));
 
 		if (is_null($id)) // Just inline personal posts
 		{

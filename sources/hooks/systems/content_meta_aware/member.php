@@ -43,7 +43,7 @@ class Hook_content_meta_aware_member
 			'feedback_type_code'=>NULL,
 			'permissions_type_code'=>NULL, // NULL if has no permissions
 			'view_pagelink_pattern'=>'_SEARCH:members:view:_WILD',
-			'edit_pagelink_pattern'=>'_SEARCH:editprofile:misc:_WILD',
+			'edit_pagelink_pattern'=>'_SEARCH:members:view:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
 			'support_url_monikers'=>(get_value('username_profile_links')!=='1'),
 			'search_hook'=>'ocf_members',

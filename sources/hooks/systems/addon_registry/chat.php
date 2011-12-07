@@ -87,6 +87,7 @@ class Hook_addon_registry_chat
 			'sources/hooks/systems/config_default/username_click_im.php',
 			'sources/hooks/systems/realtime_rain/chat.php',
 			'sources/hooks/systems/symbols/CHAT_IM.php',
+			'sources/hooks/systems/profiles_tabs/friends.php',
 			'uploads/personal_sound_effects/index.html',
 			'uploads/personal_sound_effects/.htaccess',
 			'data/sounds/contact_off.mp3',
@@ -159,6 +160,7 @@ class Hook_addon_registry_chat
 			'data/shoutbox.php',
 			'site/messages.php',
 			'sources/blocks/side_shoutbox.php',
+			'OCF_MEMBER_PROFILE_FRIENDS.tpl',
 		);
 	}
 
@@ -194,9 +196,31 @@ class Hook_addon_registry_chat
 				'CHAT_SET_EFFECTS_SETTING_BLOCK.tpl'=>'chat_set_effects_screen',
 				'CHAT_SET_EFFECTS_SCREEN.tpl'=>'chat_set_effects_screen',
 				'CHAT_BUDDIES_LIST_SCREEN.tpl'=>'chat_buddies_list_screen',
+				'OCF_MEMBER_PROFILE_FRIENDS.tpl'=>'ocf_member_profile_friends',
 				);
 	}
 
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__ocf_member_profile_friends()
+	{
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS',array(
+			'MEMBER_ID'=>placeholder_id(),
+			'FRIENDS_A'=>placeholder_array(),
+			'FRIENDS_B'=>placeholder_array(),
+			'ADD_FRIEND_URL'=>placeholder_url(),
+			'REMOVE_FRIEND_URL'=>placeholder_url(),
+			'ALL_BUDDIES_LINK'=>placeholder_url(),
+		));
+		return array(
+			lorem_globalise($tab_content,NULL,'',true),
+		);
+	}
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.

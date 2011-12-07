@@ -59,7 +59,7 @@ class Module_admin_zones
 		/*		$zones=find_all_zones(true);
 		foreach ($zones as $zone)
 		{
-			//if (!in_array($zone,array('','docs','adminzone','collaboration','personalzone','forum','cms','site'))) deldir_contents(get_file_base().'/'.$zone,true);
+			//if (!in_array($zone,array('','docs','adminzone','collaboration','forum','cms','site'))) deldir_contents(get_file_base().'/'.$zone,true);
 			$langs=find_all_langs(true);
 			foreach (array_keys($langs) as $lang)
 			{
@@ -708,8 +708,8 @@ class Module_admin_zones
 		$header_text=get_translated_text($row['zone_header_text']);
 		list($fields,$hidden,$javascript)=$this->get_form_fields(false,get_translated_text($row['zone_title']),$row['zone_default_page'],$header_text,$row['zone_theme'],$row['zone_wide'],$row['zone_require_session'],$row['zone_displayed_in_menu'],$zone);
 		$hidden->attach(form_input_hidden('zone',$zone));
-		$no_delete_zones=(get_forum_type()=='ocf')?array('','adminzone','personalzone','forum'):array('','adminzone');
-		$no_rename_zones=array('','adminzone','personalzone','forum');
+		$no_delete_zones=(get_forum_type()=='ocf')?array('','adminzone','forum'):array('','adminzone');
+		$no_rename_zones=array('','adminzone','forum');
 		$no_rename=(in_array($zone,$no_rename_zones)) || (get_file_base()!=get_custom_file_base());
 		if ($no_rename)
 		{

@@ -131,7 +131,7 @@ class Module_warnings extends standard_aed_module
 
 		$add_warning_url=build_url(array('page'=>'_SELF','type'=>'ad','id'=>$member_id,'redirect'=>get_self_url(true)),'_SELF');
 		$view_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id,false,true);
-		$edit_profile_url=build_url(array('page'=>'editprofile','type'=>'misc','id'=>$member_id),get_module_zone('editprofile'));
+		$edit_profile_url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'),NULL,false,false,false,'tab__edit');
 
 		return do_template('OCF_WARNING_HISTORY_SCREEN',array('_GUID'=>'4444beed9305f0460a6c00e6c87d4208','TITLE'=>$title,'MEMBER_ID'=>strval($member_id),'EDIT_PROFILE_URL'=>$edit_profile_url,'VIEW_PROFILE_URL'=>$view_profile_url,'ADD_WARNING_URL'=>$add_warning_url,'RESULTS_TABLE'=>$results_table));
 	}

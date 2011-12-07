@@ -30,8 +30,7 @@ insert into `ocp7_zones` values('','7','start','1','-1','0','0','0'),
  ('site','9','start','4','-1','0','0','1'),
  ('collaboration','10','start','3','-1','0','0','1'),
  ('cms','11','cms','5','default','0','1','1'),
- ('forum','14','forumview','12','-1',null,'0','1'),
- ('personalzone','15','myhome','13','-1','0','1','1');
+ ('forum','14','forumview','12','-1',null,'0','1');
 
 DROP TABLE IF EXISTS `ocp7_addons`;
 
@@ -1354,15 +1353,6 @@ insert into `ocp7_group_zone_access` values('','1'),
  ('forum','8'),
  ('forum','9'),
  ('forum','10'),
- ('personalzone','2'),
- ('personalzone','3'),
- ('personalzone','4'),
- ('personalzone','5'),
- ('personalzone','6'),
- ('personalzone','7'),
- ('personalzone','8'),
- ('personalzone','9'),
- ('personalzone','10'),
  ('site','2'),
  ('site','3'),
  ('site','4'),

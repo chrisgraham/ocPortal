@@ -339,7 +339,7 @@ function newsletter_variable_substitution($message,$subject,$forename,$surname,$
 {
 	if ($hash=='')
 	{
-		$unsub_url=build_url(array('page'=>'editprofile'),get_module_zone('editprofile'),NULL,false,false,true);
+		$unsub_url=build_url(array('page'=>'members','type'=>'view'),get_module_zone('members'),NULL,false,false,true,'tab__edit');
 	} else
 	{
 		$unsub_url=build_url(array('page'=>'newsletter','type'=>'unsub','id'=>substr($sendid,1),'hash'=>$hash),get_module_zone('newsletter'),NULL,false,false,true);

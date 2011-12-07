@@ -75,10 +75,10 @@ class Hook_addon_registry_ocf_member_avatars
 		return array(
 
 			'sources/hooks/systems/addon_registry/ocf_member_avatars.php',
-			'OCF_EDIT_AVATAR_SCREEN.tpl',
+			'OCF_EDIT_AVATAR_TAB.tpl',
 			'uploads/ocf_avatars/index.html',
 			'uploads/ocf_avatars/.htaccess',
-			'personalzone/pages/modules/editavatar.php',
+			'sources/hooks/systems/profiles_tabs_edit/avatar.php',
 			'themes/default/images/ocf_default_avatars/index.html',
 		);
 	}
@@ -91,7 +91,7 @@ class Hook_addon_registry_ocf_member_avatars
 	function tpl_previews()
 	{
 		return array(
-				'OCF_EDIT_AVATAR_SCREEN.tpl'=>'ocf_edit_avatar_screen',
+				'OCF_EDIT_AVATAR_TAB.tpl'=>'ocf_edit_avatar_tab',
 				);
 	}
 
@@ -102,28 +102,22 @@ class Hook_addon_registry_ocf_member_avatars
 	*
 	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	*/
-	function tpl_preview__ocf_edit_avatar_screen()
+	function tpl_preview__ocf_edit_avatar_tab()
 	{
 		require_lang('ocf');
 		require_css('ocf');
-		$avathar	=	do_lorem_template('OCF_TOPIC_POST_AVATAR',array(
+		$avatar	=	do_lorem_template('OCF_TOPIC_POST_AVATAR',array(
 							'AVATAR'=>placeholder_image_url(),
 							)
 						);
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('OCF_EDIT_AVATAR_SCREEN',array(
-					'TITLE'=>lorem_title(),
+				do_lorem_template('OCF_EDIT_AVATAR_TAB',array(
 					'USERNAME'=>lorem_word(),
-					'HIDDEN'=>'',
-					'AVATAR'=>$avathar,
+					'AVATAR'=>$avatar,
 					'WIDTH'=>placeholder_number(),
 					'HEIGHT'=>placeholder_number(),
-					'FIELDS'=>placeholder_fields(),
-					'SUBMIT_NAME'=>lorem_word(),
-					'URL'=>placeholder_url(),
-					'JAVASCRIPT'=>'',
 						)
 			),NULL,'',true),
 		);

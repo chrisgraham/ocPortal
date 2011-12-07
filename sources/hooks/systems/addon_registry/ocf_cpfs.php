@@ -79,9 +79,9 @@ class Hook_addon_registry_ocf_cpfs
 			'OCF_CPF_STATS_SCREEN.tpl',
 			'uploads/ocf_cpf_upload/index.html',
 			'uploads/ocf_cpf_upload/.htaccess',
-			'OCF_CPF_PERMISSIONS_SCREEN.tpl',
+			'OCF_CPF_PERMISSIONS_TAB.tpl',
 			'lang/EN/ocf_privacy.ini',
-			'personalzone/pages/modules/privacy.php',
+			'sources/hooks/systems/profiles_tabs_edit/privacy.php',
 			'sources/hooks/systems/addon_registry/ocf_cpfs.php',
 		);
 	}
@@ -94,7 +94,7 @@ class Hook_addon_registry_ocf_cpfs
 	function tpl_previews()
 	{
 		return array(
-				'OCF_CPF_PERMISSIONS_SCREEN.tpl'=>'ocf_cpf_permissions_screen',
+				'OCF_CPF_PERMISSIONS_TAB.tpl'=>'ocf_cpf_permissions_tab',
 				'OCF_CPF_STATS_LINE.tpl'=>'administrative__ocf_cpf_stats_screen',
 				'OCF_CPF_STATS_SCREEN.tpl'=>'administrative__ocf_cpf_stats_screen',
 				);
@@ -107,16 +107,12 @@ class Hook_addon_registry_ocf_cpfs
 	*
 	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	*/
-	function tpl_preview__ocf_cpf_permissions_screen()
+	function tpl_preview__ocf_cpf_permissions_tab()
 	{
 		return array(
 			lorem_globalise(
-				do_lorem_template('OCF_CPF_PERMISSIONS_SCREEN',array(
-					'TITLE'=>lorem_title(),
+				do_lorem_template('OCF_CPF_PERMISSIONS_TAB',array(
 					'FIELDS'=>placeholder_fields(),
-					'SUBMIT_NAME'=>lorem_word(),
-					'URL'=>placeholder_url(),
-					'HIDDEN_FIELDS'=>'',
 						)
 			),NULL,'',true),
 		);

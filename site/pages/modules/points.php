@@ -56,7 +56,6 @@ class Module_points
 		delete_config_option('points_voting');
 		delete_config_option('points_per_day');
 		delete_config_option('points_per_daily_visit');
-		delete_config_option('points_show_personal_profile_link');
 		delete_config_option('points_show_personal_stats_points_left');
 		delete_config_option('points_show_personal_stats_points_used');
 		delete_config_option('points_show_personal_stats_gift_points_left');
@@ -118,10 +117,6 @@ class Module_points
 			add_specific_permission('POINTS','have_negative_gift_points',false);
 			add_specific_permission('POINTS','give_negative_points',false);
 			add_specific_permission('POINTS','view_charge_log',false);
-
-			require_lang('points');
-			add_menu_item_simple('pc_features',NULL,'POINTS','_SEARCH:points:type=member:id={$USER_OVERIDE}',0,0,true,do_lang('ZONE_BETWEEN'));
-			add_menu_item_simple('forum_personal',NULL,'POINTS','_SEARCH:points:type=member',0,0,true,do_lang('ZONE_BETWEEN'));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
@@ -131,7 +126,6 @@ class Module_points
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<5))
 		{
-			add_config_option('MY_POINTS_LINK','points_show_personal_profile_link','tick','return \'1\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('COUNT_POINTS_LEFT','points_show_personal_stats_points_left','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('COUNT_POINTS_USED','points_show_personal_stats_points_used','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('COUNT_GIFT_POINTS_LEFT','points_show_personal_stats_gift_points_left','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
@@ -265,254 +259,43 @@ class Module_points
 	 * @param  ?MEMBER		The member the points profile of which is being viewed (NULL: read from GET parameter 'id')
 	 * @return tempcode		The UI
 	 */
-	function points_profile($member=NULL)
+	function points_profile($member_id_of=NULL)
 	{
-		require_javascript('javascript_validation');
+		if (is_null($member_id_of)) $member_id_of=get_param_integer('id',get_member());
 
-		if (is_null($member)) $member=get_param_integer('id',get_member());
-
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter='.strval($member);
-
-		// Get info about viewing/giving user
-		$viewer_member=get_member();
-		if (!is_guest($viewer_member))
-		{
-			$viewer_gift_points_available=get_gift_points_to_give($viewer_member);
-		}
-	
-		// Get info about viewed user
-		$name=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		if ((is_null($name)) || (is_guest($member))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+		$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
+		if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
 		$title=get_page_title('_POINTS',true,array(escape_html($name)));
+		
+		if (get_forum_type()=='ocf')
+		{
+			$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id_of,true,true);
+			if (is_object($url)) $url=$url->evaluate();
+			return redirect_screen($title,$url.'#tab__points',do_lang_tempcode('REDIRECTING'));
+		}
 
-		$max_rows=$GLOBALS['FORUM_DRIVER']->get_members();
-		$page_num=intval(floor(floatval($member-1)/1.0))+1;
-		$num_pages=intval(ceil(floatval($max_rows)/1.0));
+		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter='.strval($member_id_of);
+
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND'))));
 
 		// Previous/Next links
-		$tempid=$GLOBALS['FORUM_DRIVER']->get_previous_member($member);
+		$max_rows=$GLOBALS['FORUM_DRIVER']->get_members();
+		$page_num=intval(floor(floatval($member_id_of-1)/1.0))+1;
+		$num_pages=intval(ceil(floatval($max_rows)/1.0));
+		$tempid=$GLOBALS['FORUM_DRIVER']->get_previous_member($member_id_of);
 		if (is_null($tempid)) $previous_link=new ocp_tempcode();
 			else $previous_link=build_url(array('page'=>'_SELF','type'=>'member','id'=>$tempid),'_SELF');
-		$tempid=$GLOBALS['FORUM_DRIVER']->get_next_member($member);
+		$tempid=$GLOBALS['FORUM_DRIVER']->get_next_member($member_id_of);
 		if (is_null($tempid)) $next_link=new ocp_tempcode();
 			else $next_link=build_url(array('page'=>'_SELF','type'=>'member','id'=>$tempid),'_SELF');
 		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'188c059239b39ca8ee70f85b38019490','PREVIOUS_LINK'=>$previous_link,'NEXT_LINK'=>$next_link,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
-		$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_link($member,false,true);
+		require_code('points3');
+		$content=points_profile($member_id_of);
 
-		// Show stats about $member
-		$post_count=$GLOBALS['FORUM_DRIVER']->get_post_count($member);
-		$_point_info=point_info($member);
-		$points_gained_given=array_key_exists('points_gained_given',$_point_info)?$_point_info['points_gained_given']:0;
-		$points_gained_rating=array_key_exists('points_gained_rating',$_point_info)?$_point_info['points_gained_rating']:0;
-		$points_gained_voting=array_key_exists('points_gained_voting',$_point_info)?$_point_info['points_gained_voting']:0;
-		$cedi_post_count=array_key_exists('points_gained_seedy',$_point_info)?$_point_info['points_gained_seedy']:0;
-		$chat_post_count=array_key_exists('points_gained_chat',$_point_info)?$_point_info['points_gained_chat']:0;
-		$points_used=points_used($member);
-		$remaining=available_points($member);
-		$gift_points_used=get_gift_points_used($member); //$_point_info['gift_points_used'];
-		$gift_points_available=get_gift_points_to_give($member);
-
-		$points_posting=intval(get_option('points_posting'));
-		$points_rating=intval(get_option('points_rating'));
-		$points_voting=intval(get_option('points_voting'));
-		$points_joining=intval(get_option('points_joining'));
-		$points_cedi_posting=intval(get_option('points_cedi',true));
-		$points_chat_posting=intval(get_option('points_chat',true));
-		$points_per_day=intval(get_option('points_per_day',true));
-		$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));
-
-		$days_joined=intval(floor(floatval(time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member))/(60.0*60.0*24.0)));
-		$points_gained_auto=$points_per_day*$days_joined;
-
-		$to=$this->get_transactions('to',$member);
-		$from=$this->get_transactions('from',$member);
-	
-		// If we're staff, we can show the charge log too
-		$chargelog_details=new ocp_tempcode();
-		if (has_specific_permission($viewer_member,'view_charge_log'))
-		{
-			$start=get_param_integer('start',0);
-			$max=get_param_integer('max',50);
-			$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
-			$test=explode(' ',get_param('sort','date_and_time DESC'),2);
-			if (count($test)==1) $test[1]='DESC';
-			list($sortable,$sort_order)=$test;
-			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
-				log_hack_attack_and_exit('ORDERBY_HACK');
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='sort';
-	
-			$max_rows=$GLOBALS['SITE_DB']->query_value('chargelog','COUNT(*)',array('user_id'=>$member));
-			$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('user_id'=>$member),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
-			$charges=new ocp_tempcode();
-			$fromname=get_site_name();
-			$toname=$GLOBALS['FORUM_DRIVER']->get_username($member);
-			if (is_null($toname)) $toname=do_lang('UNKNOWN');
-			require_code('templates_results_table');
-			$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'sort',$sortable.' '.$sort_order);
-			foreach ($rows as $myrow)
-			{
-				$date=get_timezoned_date($myrow['date_and_time']);
-				$amount=$myrow['amount'];
-
-				if ((get_page_name()!='search') && (array_key_exists('text_parsed',$myrow)) && (!is_null($myrow['text_parsed'])) && ($myrow['text_parsed']!='') && ($myrow['reason']!=0))
-				{
-					$reason=new ocp_tempcode();
-					if (!$reason->from_assembly($myrow['text_parsed'],true))
-						$reason=get_translated_tempcode($myrow['reason']);
-				} else
-				{
-					$reason=get_translated_tempcode($myrow['reason']);
-				}
-	
-				$charges->attach(results_entry(array(escape_html($date),escape_html($amount),escape_html($fromname),escape_html($toname),$reason)));
-			}
-			$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'start',$max,'max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort');
-
-			$chargelog_details->attach(do_template('POINTS_CHARGE',array('_GUID'=>'f1e2d45a7d920ab91553a5fd0728a5ad','URL'=>build_url(array('page'=>'admin_points','type'=>'charge','redirect'=>get_self_url(true)),get_module_zone('admin_points')),'USER'=>strval($member))));
-		}
-
-		// Show giving form
-		if (is_guest($viewer_member)) $give_template=do_lang_tempcode('POINTS_MUST_LOGIN');
-		else
-		{
-			$have_negative_gift_points=has_specific_permission($viewer_member,'have_negative_gift_points');
-			$enough_ok=(($viewer_gift_points_available>0) || ($have_negative_gift_points));
-			$give_ok=(($viewer_member!=$member) || (has_specific_permission($viewer_member,'give_points_self')));
-			if (($enough_ok) && ($give_ok))
-			{
-				// Show how many points are available also
-				$give_url=build_url(array('page'=>'_SELF','type'=>'give','id'=>$member),'_SELF');
-				$give_template=do_template('POINTS_GIVE',array('_GUID'=>'fa1749d5a803d86b1efbcfde2ad81702','GIVE_URL'=>$give_url,'USER'=>strval($member),'VIEWER_GIFT_POINTS_AVAILABLE'=>$have_negative_gift_points?'':integer_format($viewer_gift_points_available)));
-			}
-			else $give_template=do_lang_tempcode('PE_LACKING_GIFT_POINTS');
-			if (!$give_ok) $give_template=new ocp_tempcode();
-		}
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND'))));
-
-		return do_template('POINTS_SCREEN',array(
-			'_GUID'=>'f91208ef0f9a1e1a8633ce307a778a8d',
-			'TITLE'=>$title,
-			'MEMBER'=>strval($member),
-			'PROFILE_LINK'=>$profile_link,
-			'BROWSE'=>$browse,
-			'NAME'=>$name,
-
-			'POINTS_JOINING'=>integer_format($points_joining),
-
-			'POST_COUNT'=>integer_format($post_count),
-			'POINTS_POSTING'=>integer_format($points_posting),
-			'MULT_POINTS_POSTING'=>integer_format($points_posting*$post_count),
-
-			'POINTS_PER_DAY'=>integer_format($points_per_day),
-			'DAYS_JOINED'=>integer_format($days_joined),
-			'MULT_POINTS_PER_DAY'=>integer_format($points_per_day*$days_joined),
-			'POINTS_GAINED_AUTO'=>integer_format($points_gained_auto), // This isn't needed now, it is same as MULT_POINTS_PER_DAY
-
-			'CEDI_POST_COUNT'=>integer_format($cedi_post_count),
-			'POINTS_CEDI_POSTING'=>integer_format($points_cedi_posting),
-			'MULT_POINTS_CEDI_POSTING'=>integer_format($cedi_post_count*$points_cedi_posting),
-
-			'CHAT_POST_COUNT'=>integer_format($chat_post_count),
-			'POINTS_CHAT_POSTING'=>integer_format($points_chat_posting),
-			'MULT_POINTS_CHAT_POSTING'=>integer_format($chat_post_count*$points_chat_posting),
-
-			'POINTS_RATING'=>integer_format($points_rating),
-			'POINTS_GAINED_RATING'=>integer_format($points_gained_rating),
-			'MULT_POINTS_RATING'=>integer_format($points_rating*$points_gained_rating),
-
-			'POINTS_VOTING'=>integer_format($points_voting),
-			'POINTS_GAINED_VOTING'=>integer_format($points_gained_voting),
-			'MULT_POINTS_VOTING'=>integer_format($points_voting*$points_gained_voting),
-
-			'POINTS_PER_DAILY_VISIT'=>integer_format($points_per_daily_visit),
-			'POINTS_GAINED_GIVEN'=>integer_format($points_gained_given),
-			'POINTS_USED'=>integer_format($points_used),
-			'REMAINING'=>integer_format($remaining),
-			'GIFT_POINTS_USED'=>integer_format($gift_points_used),
-			'GIFT_POINTS_AVAILABLE'=>integer_format($gift_points_available),
-			'TO'=>$to,
-			'FROM'=>$from,
-			'CHARGELOG_DETAILS'=>$chargelog_details,
-			'GIVE'=>$give_template,
-		));
+		return do_template('POINTS_SCREEN',array('TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
 	}
 
-	/**
-	 * Show the point transactions a member has had.
-	 *
-	 * @param  ID_TEXT			The type of transactions we are looking for
-	 * @set    from to
-	 * @param  MEMBER			Who we are looking at transactions for
-	 * @return tempcode		The UI
-	 */
-	function get_transactions($type,$member)
-	{
-		$where=array('gift_'.$type=>$member);
-		if ($type=='from') $where['anonymous']=0;
-		$start=get_param_integer('gift_start',0);
-		$max=get_param_integer('gift_max',50);
-		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
-		$test=explode(' ',get_param('gift_sort','date_and_time DESC'));
-		if (count($test)==1) $test[1]='DESC';
-		list($sortable,$sort_order)=$test;
-		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
-			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='gift_sort';
-		$max_rows=$GLOBALS['SITE_DB']->query_value('gifts','COUNT(*)',$where);
-		$rows=$GLOBALS['SITE_DB']->query_select('gifts g LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=g.reason',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
-		$out=new ocp_tempcode();
-		$viewing_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		if (is_null($viewing_name)) $viewing_name=do_lang('UNKNOWN');
-		require_code('templates_results_table');
-		$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'gift_sort',$sortable.' '.$sort_order);
-		foreach ($rows as $myrow)
-		{
-			if (($myrow['anonymous']==1) && ($type=='from')) continue;
-
-			// Their name
-			$fromname=(is_guest($myrow['gift_from']))?get_site_name():$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_from']);
-			$toname=$GLOBALS['FORUM_DRIVER']->get_username($myrow['gift_to']);
-			if (is_null($fromname)) $fromname=do_lang('UNKNOWN');
-			if (($myrow['anonymous']==1) && (!is_guest($myrow['gift_from'])))
-			{
-				if (!has_specific_permission(get_member(),'trace_anonymous_gifts'))
-				{
-					$_fromname=do_lang_tempcode('ANON');
-				} else
-				{
-					$_fromname=hyperlink(build_url(array('page'=>'_SELF','type'=>'member','id'=>$myrow['gift_from']),'_SELF'),do_lang_tempcode('ANON'),false,false,escape_html($fromname));
-				}
-			} else
-			{
-				$_fromname=(is_guest($myrow['gift_from']))?make_string_tempcode(escape_html($fromname)):hyperlink(build_url(array('page'=>'_SELF','type'=>'member','id'=>$myrow['gift_from']),'_SELF'),escape_html($fromname),false,false,do_lang_tempcode('VIEW_POINTS'));
-			}
-			$_toname=hyperlink(build_url(array('page'=>'_SELF','type'=>'member','id'=>$myrow['gift_to']),'_SELF'),escape_html($toname),false,false,do_lang_tempcode('VIEW_POINTS'));
-
-			$date=get_timezoned_date($myrow['date_and_time']);
-			$amount=$myrow['amount'];
-
-			if ((get_page_name()!='search') && (array_key_exists('text_parsed',$myrow)) && (!is_null($myrow['text_parsed'])) && ($myrow['text_parsed']!='') && ($myrow['reason']!=0))
-			{
-				$reason=new ocp_tempcode();
-				if (!$reason->from_assembly($myrow['text_parsed'],true))
-					$reason=get_translated_tempcode($myrow['reason']);
-			} else
-			{
-				$reason=get_translated_tempcode($myrow['reason']);
-			}
-
-			$out->attach(results_entry(array(escape_html($date),escape_html($amount),$_fromname,$_toname,$reason)));
-		}
-		$out=results_table(do_lang_tempcode('_POINTS',escape_html($viewing_name)),$start,'gift_start',$max,'gift_max',$max_rows,$fields_title,$out,$sortables,$sortable,$sort_order,'gift_sort');
-
-		if ($type=='to') $title=do_lang_tempcode('POINTS_TO'); else $title=do_lang_tempcode('POINTS_FROM');
-		return do_template('POINTS_TRANSACTIONS_WRAP',array('_GUID'=>'f19e3eedeb0b8bf398251b24e8389723','CONTENT'=>$out,'TITLE'=>$title));
-	}
-	
 	/**
 	 * The actualiser for a gift point transaction.
 	 *
@@ -520,23 +303,25 @@ class Module_points
 	 */
 	function do_give()
 	{
+		$member_id_of=get_param_integer('id');
+
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND')),array('_SELF:_SELF:member:id='.strval($member_id_of),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of))))));
+
 		$title=get_page_title('POINTS');
 
 		$trans_type=post_param('trans_type','gift');
 
-		$viewer_member=get_member();
-		$member=get_param_integer('id');
-	
 		$amount=post_param_integer('amount');
 		$reason=post_param('reason');
-		
+
 		$worked=false;
-	
-		if (($member==$viewer_member) && (!has_specific_permission($viewer_member,'give_points_self'))) // No cheating
+
+		$member_id_viewing=get_member();
+		if (($member_id_of==$member_id_viewing) && (!has_specific_permission($member_id_viewing,'give_points_self'))) // No cheating
 		{
 			$message=do_lang_tempcode('PE_SELF');
 		}
-		elseif (is_guest($viewer_member)) // No cheating
+		elseif (is_guest($member_id_viewing)) // No cheating
 		{
 			$message=do_lang_tempcode('MUST_LOGIN');
 		} else
@@ -544,14 +329,14 @@ class Module_points
 			if ($trans_type=='gift')
 			{
 				$anonymous=post_param_integer('anonymous',0);
-				$viewer_gift_points_available=get_gift_points_to_give($viewer_member);
-				//$viewer_gift_points_used=get_gift_points_used($viewer_member);
+				$viewer_gift_points_available=get_gift_points_to_give($member_id_viewing);
+				//$viewer_gift_points_used=get_gift_points_used($member_id_viewing);
 
-				if (($viewer_gift_points_available<$amount) && (!has_specific_permission($viewer_member,'have_negative_gift_points'))) // Validate we have enough for this, and add to usage
+				if (($viewer_gift_points_available<$amount) && (!has_specific_permission($member_id_viewing,'have_negative_gift_points'))) // Validate we have enough for this, and add to usage
 				{
 					$message=do_lang_tempcode('PE_LACKING_GIFT_POINTS');
 				}
-				elseif (($amount<0) && (!has_specific_permission($viewer_member,'give_negative_points'))) // Trying to be negative
+				elseif (($amount<0) && (!has_specific_permission($member_id_viewing,'give_negative_points'))) // Trying to be negative
 				{
 					$message=do_lang_tempcode('PE_NEGATIVE_GIFT');
 				}
@@ -562,15 +347,15 @@ class Module_points
 				{
 					// Write transfer
 					require_code('points2');
-					give_points($amount,$member,$viewer_member,$reason,$anonymous==1);
+					give_points($amount,$member_id_of,$member_id_viewing,$reason,$anonymous==1);
 
 					// Randomised gifts
 					if (mt_rand(0,4)==1)
 					{
 						$message=do_lang_tempcode('PR_LUCKY');
-						$_current_gift=point_info($viewer_member);
+						$_current_gift=point_info($member_id_viewing);
 						$current_gift=array_key_exists('points_gained_given',$_current_gift)?$_current_gift['points_gained_given']:0;
-						$GLOBALS['FORUM_DRIVER']->set_custom_field($viewer_member,'points_gained_given',$current_gift+25);
+						$GLOBALS['FORUM_DRIVER']->set_custom_field($member_id_viewing,'points_gained_given',$current_gift+25);
 					} else $message=do_lang_tempcode('PR_NORMAL');
 
 					$worked=true;
@@ -584,13 +369,13 @@ class Module_points
 			}
 			if ($trans_type=='charge')
 			{
-				if (has_actual_page_access($viewer_member,'adminzone'))
+				if (has_actual_page_access($member_id_viewing,'adminzone'))
 				{
 					require_code('points2');
-					charge_member($member,$amount,$reason);
-					$left=available_points($member);
+					charge_member($member_id_of,$amount,$reason);
+					$left=available_points($member_id_of);
 
-					$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+					$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 					if (is_null($username)) $username=do_lang('UNKNOWN');
 					$message=do_lang_tempcode('USER_HAS_BEEN_CHARGED',escape_html($username),escape_html(integer_format($amount)),escape_html(integer_format($left)));
 
@@ -601,17 +386,15 @@ class Module_points
 				}
 			}
 		}
-	
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND')),array('_SELF:_SELF:member:id='.strval($member),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member))))));
 
 		if ($worked)
 		{
 			// Show it worked / Refresh
-			$url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$member),'_SELF');
+			$url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$member_id_of),'_SELF');
 			return redirect_screen($title,$url,$message);
 		} else return warn_screen($title,$message);
 	}
-
+	
 }
 
 

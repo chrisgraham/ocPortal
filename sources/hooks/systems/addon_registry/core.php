@@ -1320,9 +1320,7 @@ class Hook_addon_registry_core
 
 		$content->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('KEY'=>lorem_word(),'VALUE'=>placeholder_number())));
 
-		$_username=do_lang_tempcode('MYHOME_PERSONAL_STATS_LINK',escape_html(lorem_word()),escape_html(get_ip_address()));
-
-		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>lorem_word_2(),'DESCRIPTION'=>$_username,'URL'=>placeholder_url())));
+		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>lorem_word_2(),'DESCRIPTION'=>lorem_phrase(),'URL'=>placeholder_url())));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('NAME'=>lorem_word(),'URL'=>placeholder_url(),'REL'=>'me')));
 

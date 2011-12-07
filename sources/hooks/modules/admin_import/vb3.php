@@ -174,8 +174,6 @@ class Hook_vb3
 			'allowregistration'=>'join',
 			'enablesearches'=>'search',
 			'enablememberlist'=>'members',
-			'profilepicenabled'=>'editphoto',
-			'avatarenabled'=>'editavatar'
 		);
 		foreach ($page_remap as $to)
 		{
@@ -253,11 +251,6 @@ class Hook_vb3
 			if (($row['forumpermissions']&4)==0) $denies[]=array('search',get_module_zone('search'));
 			if (($row['forumpermissions']&8)==0) $denies[]=array('contactmember',get_module_zone('contactmember'));
 			if (($row['genericpermissions']&1)==0) $denies[]=array('members',get_module_zone('members'));
-			if (($row['genericpermissions']&2)==0) $denies[]=array('editprofile',get_module_zone('editprofile'));
-			if (($row['genericpermissions']&128)==0) $denies[]=array('editphoto',get_module_zone('editphoto'));
-			if (($row['genericpermissions']&512)==0) $denies[]=array('editavatar',get_module_zone('editavatar'));
-			if (($row['genericpermissions']&1024)==0) $denies[]=array('editsignature',get_module_zone('editsignature'));
-			if (($row['genericpermissions']&512)==0) $denies[]=array('editavatar',get_module_zone('editavatar'));
 			foreach ($denies as $deny)
 			{
 				list($page,$zone)=$deny;

@@ -29,7 +29,9 @@
 	</div>
 {+END}
 
-<br />
+{+START,IF,{$OR,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}},{$IS_NON_EMPTY,{CATEGORIES}}}}
+	<br />
+{+END}
 
 {TOPIC_WRAPPER}
 

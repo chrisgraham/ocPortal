@@ -93,7 +93,7 @@ class Block_side_ocf_personal_topics
 		}
 		$send_url=build_url(array('page'=>'topics','type'=>'new_pt','redirect'=>SELF_REDIRECT),get_module_zone('topics'));
 		if (!ocf_may_make_personal_topic()) $send_url=new ocp_tempcode();
-		$view_url=build_url(array('page'=>'forumview','type'=>'pt'),get_module_zone('forumview'));
+		$view_url=build_url(array('page'=>'members','type'=>'view','id'=>get_member()),get_module_zone('members'),NULL,true,false,false,'tab__pts');
 		return do_template('BLOCK_SIDE_OCF_PERSONAL_TOPICS',array('_GUID'=>'9376cd47884a78f3d1914c176b67ee28','SEND_URL'=>$send_url,'VIEW_URL'=>$view_url,'CONTENT'=>$out,'FORUM_NAME'=>do_lang_tempcode('PERSONAL_TOPICS')));
 	}
 

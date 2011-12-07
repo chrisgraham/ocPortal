@@ -240,7 +240,7 @@ function build_zone_menu()
 	$zones=array();
 	$zones2=array();
 	// Some adhoc reordering
-	$zone_reorder_list=array('welcome','site','forum','personalzone','collaboration','cms','adminzone','docs');
+	$zone_reorder_list=array('welcome','site','forum','collaboration','cms','adminzone','docs');
 	foreach ($zone_reorder_list as $zone_reorder)
 	{
 		foreach ($_zones as $i=>$_zone)
@@ -649,7 +649,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 				}
 			} elseif ($parts[1]=='_SELF') $parts[1]=$users_current_zone;
 
-			if ((($parts[1]=='forum') || ($parts[1]=='personalzone')) && (get_forum_type()!='ocf')) return array(NULL,false);
+			if (($parts[1]=='forum') && (get_forum_type()!='ocf')) return array(NULL,false);
 
 			// If we need to check access
 			if (array_key_exists('check_perms',$branch['modifiers']))

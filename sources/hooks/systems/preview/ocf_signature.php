@@ -32,7 +32,7 @@ class Hook_Preview_ocf_signature
 		
 		$member_id=get_param_integer('id',get_member());
 		
-		$applies=(get_param('page','')=='editsignature');
+		$applies=(get_param('page','')=='members') && (post_param('signature',NULL)!==NULL);
 		if ($applies)
 		{
 			require_code('ocf_groups');

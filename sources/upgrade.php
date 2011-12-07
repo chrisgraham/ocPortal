@@ -1343,7 +1343,6 @@ function version_specific()
 			fu_rename_zone('admincentre','adminzone');
 			if (file_exists(get_file_base().'/collaboration')) fu_rename_zone('supermembercentre','collaboration');
 			fu_rename_zone('membercentre','site',true); // Merged into 'site' (formerly membersonly)
-			fu_rename_zone('personalcentre','personalzone');
 			actual_delete_zone_lite('seedy');
 			$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'cms','zone_title'=>insert_lang(do_lang('CMS'),1),'zone_default_page'=>'cms','zone_header_text'=>insert_lang(do_lang('CMS'),1),'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>1));
 

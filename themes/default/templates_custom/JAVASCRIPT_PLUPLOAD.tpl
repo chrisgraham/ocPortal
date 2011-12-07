@@ -1,3 +1,5 @@
+{$,Parser hint: .innerHTML okay}
+
 /**
  * plupload.js
  *
@@ -2536,17 +2538,11 @@
   var factory = null;
 
   // Firefox
-  if (typeof GearsFactory != 'undefined') {
+  if (typeof window.GearsFactory != 'undefined') {
     factory = new GearsFactory();
   } else {
-    // IE
-    try {
-      factory = new ActiveXObject('Gears.Factory');
-      // privateSetGlobalObject is only required and supported on WinCE.
-      if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
-        factory.privateSetGlobalObject(this);
-      }
-    } catch (e) {
+    function safariMethod()
+    {
       // Safari
       if ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"]) {
         factory = document.createElement("object");
@@ -2556,6 +2552,23 @@
         factory.type = "application/x-googlegears";
         document.documentElement.appendChild(factory);
       }
+    }
+
+    if (typeof window.ActiveXObject!='undefined')
+    {
+      // IE
+      try {
+        factory = new ActiveXObject('Gears.Factory');
+        // privateSetGlobalObject is only required and supported on WinCE.
+        if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
+          factory.privateSetGlobalObject(this);
+        }
+      } catch (e) {
+        safariMethod();
+      }
+    } else
+    {
+      safariMethod();
     }
   }
 
