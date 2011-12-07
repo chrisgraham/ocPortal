@@ -321,6 +321,7 @@ class Module_warnings extends standard_aed_module
 			$this->add_text=do_lang_tempcode('HAS_ALREADY_X_WARNINGS',escape_html($username),integer_format($num_warnings),array(escape_html(get_site_name()),escape_html($rules_url),escape_html($history_url),escape_html($profile_url)));
 		}
 
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MODULE_TRANS_NAME_warnings'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('WHETHER_MAKE_WARNING'),do_lang_tempcode('DESCRIPTION_WHETHER_MAKE_WARNING'),'is_warning',$is_warning==1));
 
 		// Punitive actions
@@ -401,7 +402,7 @@ class Module_warnings extends standard_aed_module
 		$keep=symbol_tempcode('KEEP');
 		$load_url=find_script('warnings').'?type=load'.$keep->evaluate();
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('EXPLANATORY_TEXT'),'HELP'=>do_lang_tempcode('LOAD_SAVED_WARNING',escape_html($load_url)))));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('EXPLANATION'),do_lang_tempcode('DESCRIPTION_EXPLANATION'),'explanation',$explanation,true));
+		$fields->attach(form_input_line_comcode(do_lang_tempcode('EXPLANATION'),do_lang_tempcode('DESCRIPTION_EXPLANATION'),'explanation',$explanation,true));
 		if ($new)
 		{
 			$message='';
@@ -414,6 +415,8 @@ class Module_warnings extends standard_aed_module
 				}
 			}
 			$fields->attach(form_input_text_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_PP_MESSAGE'),'message',$message,false));
+
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_line(do_lang_tempcode('SAVE_WARNING_DETAILS'),do_lang_tempcode('DESCRIPTION_SAVE_WARNING_DETAILS'),'save','',false));
 		}
 
