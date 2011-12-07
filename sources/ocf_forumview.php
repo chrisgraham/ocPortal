@@ -360,7 +360,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($moderator_actions);
 
 		require_code('templates_results_browser');
-		$results_browser=results_browser(do_lang_tempcode('FORUM_TOPICS'),($type=='pt')?$of_member_id:$id,$start,'start',$max,'max',$details['max_rows'],NULL,$type,true);
+		$results_browser=results_browser(do_lang_tempcode('FORUM_TOPICS'),($type=='pt')?$of_member_id:$id,$start,'start',$max,'max',$details['max_rows'],NULL,($type=='pt')?'view':$type,true,false,7,NULL,($type=='pt')?'tab__pts':'');
 
 		$order=array_key_exists('order',$details)?$details['order']:'last_post';
 		$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'e452b81001e5c6b7adb4d82e627bf983','ID'=>is_null($id)?NULL:strval($id),'MAX'=>strval($max),'ORDER'=>$order,'MAY_CHANGE_MAX'=>array_key_exists('may_change_max',$details),'ACTION_URL'=>$action_url,'BUTTONS'=>$buttons,'STARTER_TITLE'=>$starter_title,'TREE'=>$tree,'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>$moderator_actions,'TOPICS'=>$topics,'FORUM_NAME'=>$forum_name));

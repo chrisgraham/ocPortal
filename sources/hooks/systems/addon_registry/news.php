@@ -174,6 +174,7 @@ class Hook_addon_registry_news
 			'RECENT_BLOG_POSTS'=>lorem_paragraph_html(),
 			'RSS_URL'=>placeholder_url(),
 			'ADD_BLOG_POST_URL'=>placeholder_url(),
+ 			'RESULTS_BROWSER'=>placeholder_result_browser(),
 		));
 		return array(
 			lorem_globalise($tab_content,NULL,'',true),

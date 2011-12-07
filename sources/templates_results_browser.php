@@ -43,9 +43,10 @@ function init__templates_results_browser()
  * @param  boolean		Whether to keep post data when browsing through
  * @param  integer		The maximum number of quick-jump page links to show
  * @param  ?array			List of per-page selectors to show (NULL: show hard-coded ones)
+ * @param  ID_TEXT		Hash component to URL
  * @return tempcode		The results browser
  */
-function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$max_rows,$root=NULL,$type=NULL,$keep_all=false,$keep_post=false,$max_page_links=7,$_selectors=NULL)
+function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$max_rows,$root=NULL,$type=NULL,$keep_all=false,$keep_post=false,$max_page_links=7,$_selectors=NULL,$hash='')
 {
 	global $NON_CANONICAL_PARAMS;
 	$NON_CANONICAL_PARAMS[]=$max_name;
@@ -90,7 +91,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 		if ($start>0)
 		{
 			$url_array=array('page'=>'_SELF','start'=>NULL);
-			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all);
+			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
 			$part->attach(do_template('RESULTS_BROWSER_CONTINUE_FIRST',array('TITLE'=>$title,'P'=>strval(1),'FIRST_URL'=>$cat_url)));
 		}
 		
@@ -98,7 +99,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 		if ($start>0)
 		{
 			$url_array=array('page'=>'_SELF',$start_name=>strval(max($start-$max,0)));
-			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all);
+			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
 			$part->attach(do_template('RESULTS_BROWSER_PREVIOUS_LINK',array('_GUID'=>'ec4d4da9677b5b9c8cea08676337c6eb','TITLE'=>$title,'P'=>integer_format(intval($start/$max)),'URL'=>$cat_url)));
 		} else $part->attach(do_template('RESULTS_BROWSER_PREVIOUS'));
 
@@ -128,7 +129,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 		for ($x=$from;$x<$to;$x++)
 		{
 			$url_array=array('page'=>'_SELF',$start_name=>($x==0)?NULL:strval($x*$max));
-			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all);
+			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
 			if ($x*$max==$start)
 			{
 				$part->attach(do_template('RESULTS_BROWSER_PAGE_NUMBER',array('_GUID'=>'13cdaf548d5486fb8d8ae0d23b6a08ec','P'=>strval($x+1))));
@@ -147,7 +148,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 		if (($start+$max)<$max_rows)
 		{
 			$url_array=array('page'=>'_SELF',$start_name=>strval($start+$max));
-			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all);
+			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
 			$p=($max==0)?1.0:($start/$max+2);
 			$rel=NULL;
 			if (($start+$max*2)>$max_rows) $rel='last';
@@ -158,7 +159,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 		if ($start+$max<$max_rows)
 		{
 			$url_array=array('page'=>'_SELF',($num_pages-1==0)?NULL:$start_name=>strval(($num_pages-1)*$max));
-			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all);
+			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
 			$part->attach(do_template('RESULTS_BROWSER_CONTINUE_LAST',array('_GUID'=>'2934936df4ba90989e949a8ebe905522','TITLE'=>$title,'P'=>strval($num_pages),'LAST_URL'=>$cat_url)));
 		}
 
@@ -217,9 +218,10 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
  * @param  ?mixed			The virtual root category this browser uses (NULL: no such concept for our results browser)
  * @param  ?mixed			The category ID we are browsing in (NULL: not applicable)
  * @param  boolean		Whether to keep get data when browsing through
+ * @param  ID_TEXT		Hash component to URL
  * @return mixed			The URL
  */
-function _build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all)
+function _build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash)
 {
 	if (!is_null($category_id))
 		if (!is_string($category_id)) $category_id=strval($category_id);
@@ -247,7 +249,7 @@ function _build_results_browser_cat_url($url_array,$post_array,$type,$root,$cate
 		}
 	} else
 	{
-		$cat_url=build_url($url_array,'_SELF',NULL,$keep_all);
+		$cat_url=build_url($url_array,'_SELF',NULL,$keep_all,false,false,$hash);
 	}
 	return $cat_url;
 }

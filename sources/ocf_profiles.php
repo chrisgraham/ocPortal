@@ -46,13 +46,13 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
 		if ($ob->is_active($member_id_of,$member_id_viewing))
 		{
-			$tabs[]=$ob->render_tab($member_id_of,$member_id_viewing);
+			$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing);
 		}
 	}
 
 	global $M_SORT_KEY;
 	$M_SORT_KEY=2;
-	usort($tabs,'multi_sort');
+	uasort($tabs,'multi_sort');
 
 	require_javascript('javascript_profile');
 
@@ -67,9 +67,11 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 	$title=get_page_title('MEMBER_PROFILE',true,array(escape_html($username)),NULL,$awards);
 
 	$_tabs=array();
-	foreach ($tabs as $i=>$tab)
+	$i=0;
+	foreach ($tabs as $hook=>$tab)
 	{
-		$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_CONTENT'=>$tab[1],'TAB_FIRST'=>$i==0,'TAB_LAST'=>!array_key_exists($i+1,$tabs));
+		$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_CODE'=>$hook,'TAB_CONTENT'=>$tab[1],'TAB_FIRST'=>$i==0,'TAB_LAST'=>!array_key_exists($i+1,$tabs));
+		$i++;
 	}
 
 	return do_template('OCF_MEMBER_PROFILE_SCREEN',array('TITLE'=>$title,'TABS'=>$_tabs,'MEMBER_ID'=>strval($member_id_of)));

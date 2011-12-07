@@ -121,13 +121,6 @@ function scriptLoadStuff()
 		window.setTimeout(init_form_saving,4000);
 	}
 
-	{$,Expand the correct tab}
-	if (window.location.hash.replace(/^#/,'')!='')
-	{
-		if (document.getElementById(window.location.hash.replace(/^#/,'')))
-			select_tab('g',window.location.hash.replace(/^#/,'').replace(/^tab\_\_/,''));
-	}
-
 	if (typeof window.scriptLoadStuffB!='undefined') window.scriptLoadStuffB();
 
 	pageLoaded=true;

@@ -89,7 +89,7 @@ class Hook_Profiles_Tabs_posts
 					$marker='';
 					$tree=new ocp_tempcode();
 					require_code('templates_results_browser');
-					$results_browser=results_browser(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'start',$n,'max',$max_rows,NULL,'misc',true);
+					$results_browser=results_browser(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'start',$n,'max',$max_rows,NULL,'view',true,false,7,NULL,'tab__posts');
 					$topics=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'8723270b128b4eea47ab3c756b342e14','ORDER'=>'','MAX'=>'15','MAY_CHANGE_MAX'=>false,'TREE'=>$tree,'ACTION_URL'=>get_self_url(),'BUTTONS'=>'','STARTER_TITLE'=>'','MARKER'=>$marker,'FORUM_NAME'=>$forum_name,'TOPICS'=>$topics,'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>''));
 				}
 			}
@@ -97,8 +97,6 @@ class Hook_Profiles_Tabs_posts
 
 		$content=do_template('OCF_MEMBER_PROFILE_POSTS',array('MEMBER_ID'=>strval($member_id_of),'TOPICS'=>$topics));
 		
-		// TODO: Note, we want pagination
-
 		return array($title,$content,$order);
 	}
 

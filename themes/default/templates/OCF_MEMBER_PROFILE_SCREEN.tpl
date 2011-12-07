@@ -4,15 +4,15 @@
 	<div>
 		<div class="float_surrounder"><div class="tabs">
 			{+START,LOOP,TABS}
-				<a href="#" id="t_{$LCASE,{TAB_TITLE|*}}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="select_tab('g','{$LCASE,{TAB_TITLE|*}}'); return false;">
+				<a href="#" id="t_{TAB_CODE*}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="select_tab('g','{TAB_CODE*}'); return false;">
 					{TAB_TITLE*}
 				</a>
 			{+END}
 		</div></div>
 		<div class="tab_surround">
 			{+START,LOOP,TABS}
-				<div id="g_{$LCASE,{TAB_TITLE|*}}" style="display: {$?,{$OR,{TAB_FIRST},{$NOT,{$JS_ON}}},block,none}">
-					<a name="tab__{$LCASE,{TAB_TITLE|*}}" id="tab__{$LCASE,{TAB_TITLE|*}}"></a>
+				<div id="g_{TAB_CODE*}" style="display: {$?,{$OR,{TAB_FIRST},{$NOT,{$JS_ON}}},block,none}">
+					<a name="tab__{TAB_CODE*}" id="tab__{TAB_CODE*}"></a>
 
 					{TAB_CONTENT}
 				</div>
@@ -20,3 +20,14 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">// <![CDATA[
+	addEventListenerAbstract(window,'load',function () {
+		{$,Expand the correct tab}
+		if (window.location.hash.replace(/^#/,'')!='')
+		{
+			if (document.getElementById('g_'+window.location.hash.replace(/^#/,'').replace(/^tab\_\_/,'')))
+				select_tab('g',window.location.hash.replace(/^#/,'').replace(/^tab\_\_/,''));
+		}
+	} );
+//]]></script>
