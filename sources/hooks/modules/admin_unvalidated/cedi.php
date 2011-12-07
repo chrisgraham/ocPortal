@@ -42,7 +42,7 @@ class Hook_unvalidated_cedi
 		$info['db_edit_date']='edit_date';
 		$info['edit_module']='cedi';
 		$info['edit_type']='post';
-		$info['edit_identifier']='id';
+		$info['edit_identifier']='post_id';
 		$info['title']=do_lang_tempcode('CEDI');
 		$info['is_minor']=true;
 

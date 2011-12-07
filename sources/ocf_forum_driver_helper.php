@@ -339,9 +339,10 @@ function not_like_spacer_posts($field)
  * @param  ?integer		Maximum comments to returned (NULL: no limit)
  * @param  integer		Comment to start at
  * @param  boolean		Whether to mark the topic read
+ * @param  boolean		Whether to show in reverse
  * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
  */
-function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_description,&$count,$max,$start,$mark_read=true)
+function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_description,&$count,$max,$start,$mark_read=true,$reverse=false)
 {
 	if (!is_integer($forum_name))
 	{
@@ -357,7 +358,8 @@ function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_
 
 	$where=ocf_get_topic_where($topic_id);
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_value_null_ok('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
-	$rows=$this_ref->connection->query('SELECT p.id,p_title,text_parsed,p_post,p_poster,p_time,p_intended_solely_for,p_poster_name_if_guest FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE ('.$where.')'.not_like_spacer_posts('t.text_original').' ORDER BY p_time,p.id',$max,$start);
+	$order=$reverse?'p_time DESC,p.id DESC':'p_time,p.id';
+	$rows=$this_ref->connection->query('SELECT p.id,p_title,text_parsed,p_post,p_poster,p_time,p_intended_solely_for,p_poster_name_if_guest FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE ('.$where.')'.not_like_spacer_posts('t.text_original').' ORDER BY '.$order,$max,$start);
 	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE ('.$where.')'.not_like_spacer_posts('t.text_original'));
 
 	$out=array();

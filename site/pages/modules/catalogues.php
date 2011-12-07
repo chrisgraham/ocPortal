@@ -90,58 +90,6 @@ class Module_catalogues
 		require_code('catalogues');
 		require_code('catalogues2');
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			$GLOBALS['SITE_DB']->create_table('catalogue_entry_linkage',array(
-				'catalogue_entry_id'=>'*AUTO_LINK',
-				'content_type'=>'ID_TEXT',
-				'content_id'=>'ID_TEXT',
-			));
-			$GLOBALS['SITE_DB']->create_index('catalogue_entry_linkage','custom_fields',array('content_type','content_id'));
-			
-			// This caches ancestor relationships. It is redundant to doing tree traversals on catalogue_categories.cc_id, allowing normal efficient SQL joins to be done instead
-			// Note that self relationships (cc_id=cc_ancestor_id) are stored too, so that a single join covers that too.
-			$GLOBALS['SITE_DB']->create_table('catalogue_cat_treecache',array(
-				'cc_id'=>'*AUTO_LINK',
-				'cc_ancestor_id'=>'*AUTO_LINK',
-			));
-			$GLOBALS['SITE_DB']->create_table('catalogue_childcountcache',array(
-				'cc_id'=>'*AUTO_LINK',
-				'c_num_rec_children'=>'INTEGER',
-				'c_num_rec_entries'=>'INTEGER',
-			));
-			$GLOBALS['SITE_DB']->create_index('catalogue_cat_treecache','cc_ancestor_id',array('cc_ancestor_id'));
-
-			$GLOBALS['SITE_DB']->create_table('catalogue_efv_float',array(
-				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
-				'cf_id'=>'AUTO_LINK',
-				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'?REAL',
-			));
-
-			$GLOBALS['SITE_DB']->create_table('catalogue_efv_integer',array(
-				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
-				'cf_id'=>'AUTO_LINK',
-				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'?INTEGER',
-			));
-
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcv_value',array('cv_value'));
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','itv_value',array('cv_value'));
-
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcf_id',array('cf_id'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','icf_id',array('cf_id'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fce_id',array('ce_id'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','ice_id',array('ce_id'),'id');
-
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','cefv_f_combo',array('ce_id','cf_id'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','cefv_i_combo',array('ce_id','cf_id'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long','cefv_l_combo',array('ce_id','cf_id'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short','cefv_s_combo',array('ce_id','cf_id'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long_trans','cefv_lt_combo',array('ce_id','cf_id'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short_trans','cefv_st_combo',array('ce_id','cf_id'),'id');
-		}
-
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('catalogues',array(
@@ -244,7 +192,62 @@ class Module_catalogues
 				'ce_id'=>'AUTO_LINK',
 				'cv_value'=>'SHORT_TEXT',
 			));
+		}
 
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->create_table('catalogue_entry_linkage',array(
+				'catalogue_entry_id'=>'*AUTO_LINK',
+				'content_type'=>'ID_TEXT',
+				'content_id'=>'ID_TEXT',
+			));
+			$GLOBALS['SITE_DB']->create_index('catalogue_entry_linkage','custom_fields',array('content_type','content_id'));
+			
+			// This caches ancestor relationships. It is redundant to doing tree traversals on catalogue_categories.cc_id, allowing normal efficient SQL joins to be done instead
+			// Note that self relationships (cc_id=cc_ancestor_id) are stored too, so that a single join covers that too.
+			$GLOBALS['SITE_DB']->create_table('catalogue_cat_treecache',array(
+				'cc_id'=>'*AUTO_LINK',
+				'cc_ancestor_id'=>'*AUTO_LINK',
+			));
+			$GLOBALS['SITE_DB']->create_table('catalogue_childcountcache',array(
+				'cc_id'=>'*AUTO_LINK',
+				'c_num_rec_children'=>'INTEGER',
+				'c_num_rec_entries'=>'INTEGER',
+			));
+			$GLOBALS['SITE_DB']->create_index('catalogue_cat_treecache','cc_ancestor_id',array('cc_ancestor_id'));
+
+			$GLOBALS['SITE_DB']->create_table('catalogue_efv_float',array(
+				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
+				'cf_id'=>'AUTO_LINK',
+				'ce_id'=>'AUTO_LINK',
+				'cv_value'=>'?REAL',
+			));
+
+			$GLOBALS['SITE_DB']->create_table('catalogue_efv_integer',array(
+				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
+				'cf_id'=>'AUTO_LINK',
+				'ce_id'=>'AUTO_LINK',
+				'cv_value'=>'?INTEGER',
+			));
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcv_value',array('cv_value'));
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','itv_value',array('cv_value'));
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fcf_id',array('cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','icf_id',array('cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','fce_id',array('ce_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','ice_id',array('ce_id'),'id');
+
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_float','cefv_f_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_integer','cefv_i_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long','cefv_l_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short','cefv_s_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long_trans','cefv_lt_combo',array('ce_id','cf_id'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short_trans','cefv_st_combo',array('ce_id','cf_id'),'id');
+		}
+
+		if (is_null($upgrade_from))
+		{
 			// Add the default catalogues
 			// ==========================
 		

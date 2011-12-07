@@ -341,6 +341,8 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 {
 	if (function_exists('set_time_limit')) @set_time_limit(300);
 
+	if (get_value('no_dload_search_index')==='1') return '';
+
 	if (running_script('stress_test_loader')) return '';
 
 	if ((function_exists('memory_get_usage')) && (ini_get('memory_usage')=='8M'))
@@ -605,6 +607,10 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 			}
 			break;
 	}
+
+	if (strlen($mash)>1024*1024*3) $mash=substr($mash,0,1024*1024*3);
+	$mash=preg_replace('# +#',' ',preg_replace('#[^\w\d-\-\']#',' ',$mash));
+	if (strlen($mash)>1024*1024*1*0.4) $mash=substr($mash,0,1024*1024*0.4);
 
 	return $mash;
 }

@@ -173,8 +173,10 @@
 		1_TITLE={!EDIT}
 		1_ACCESSKEY=q
 		1_REL=edit
+		{+START,IF,{$ADDON_INSTALLED,galleries}}
 		2_URL={ADD_IMG_URL*}
 		2_TITLE={!ADD_IMAGE}
+		{+END}
 	{+END}
 
 	{COMMENTS_DETAILS}
