@@ -2976,6 +2976,10 @@ ul.sitemap li li {
 	white-space: nowrap;
 }
 
+.rating_inner img {
+	cursor: pointer;
+}
+
 .addtocart {
 	width: 100px;
 	height:34px;

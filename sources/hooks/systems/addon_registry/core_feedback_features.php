@@ -86,6 +86,8 @@ class Hook_addon_registry_core_feedback_features
 			'sources/hooks/systems/addon_registry/core_feedback_features.php',
 			'sources/hooks/systems/snippets/rating.php',
 			'sources/hooks/systems/preview/comments.php',
+			'themes/default/images/like.png',
+			'themes/default/images/dislike.png',
 			'sources/hooks/systems/rss/comments.php',
 			'COMMENTS.tpl',
 			'COMMENTS_WRAPPER.tpl',

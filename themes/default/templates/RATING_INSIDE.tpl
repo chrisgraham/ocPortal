@@ -10,11 +10,23 @@
 			<div class="rating_inner">
 				{+START,IF,{$JS_ON}}
 					{$JAVASCRIPT_INCLUDE,javascript_ajax}
-					<img id="rating_bar_1__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_2__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_3__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_4__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_5__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" />
+
+					{$,Like/dislike}
+					{+START,IF,{$VALUE_OPTION,likes}}
+						<img id="rating_bar_1__{TYPE*}__{ID*}" alt="" src="{$IMG*,dislike}" /><img id="rating_bar_10__{TYPE*}__{ID*}" alt="" src="{$IMG*,like}" />
+					{+END}
+
+					{$,Star ratings}
+					{+START,IF,{$NOT,{$VALUE_OPTION,likes}}}
+						<img id="rating_bar_2__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_4__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_6__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_8__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_10__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" />
+					{+END}
+
 					<script type="text/javascript">// <![CDATA[
 						apply_rating_highlight_and_ajax_code('{TYPE%}','{ID%}','{ROOT_TYPE%}',0,true);
 					//]]></script>
 				{+END}
+
+				{$,Choose from list (non-JS fallback)}
 				{+START,IF,{$NOT,{$JS_ON}}}
 					<select id="rating__{TYPE*}__{ID*}" name="rating__{TYPE*}__{ID*}">
 						<option value="">&mdash;</option>
