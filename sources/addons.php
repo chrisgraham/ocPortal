@@ -773,8 +773,9 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 		{
 			$post_fields=build_keep_post_fields();
 			foreach ($dependencies as $in)
-				$post_fields->attach(form_input_hidden('install_'.$in,$in.'.tar'));
-			warn_exit(do_lang_tempcode('_ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str,escape_html(get_self_url(true)),array($post_fields,basename($file,'.tar'))));
+				$post_fields->attach(form_input_hidden('uninstall_'.$in,$in));
+			$post_fields->attach(form_input_hidden('uninstall_'.$name,$name));
+			warn_exit(do_lang_tempcode('_ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($name),array(escape_html(get_self_url(true,false,array('type'=>'multi_action','name'=>NULL))),$post_fields)));
 		} else
 		{
 			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str))));
