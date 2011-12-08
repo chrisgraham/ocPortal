@@ -621,7 +621,7 @@ class Module_galleries
 			$cat,
 			$myrow['allow_rating'],
 			$myrow['allow_comments'],
-			$myrow['allow_trackbacks'],
+			0,
 			1,
 			NULL,
 			get_self_url(),
