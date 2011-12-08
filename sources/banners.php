@@ -176,7 +176,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 		{
 			$myrow=$rows[$counter];
 
-			if ($myrow['the_type']==1) $show_defaults=false;
+			if ($myrow['the_type']==BANNER_CAMPAIGN) $show_defaults=false;
 			$counter++;
 		}
 
