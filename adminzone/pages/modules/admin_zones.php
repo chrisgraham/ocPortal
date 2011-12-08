@@ -472,13 +472,15 @@ class Module_admin_zones
 		$list.=static_evaluate_tempcode(form_input_list_entry('1',($wide==1),do_lang_tempcode('YES')));
 		$list.=static_evaluate_tempcode(form_input_list_entry('-1',is_null($wide),do_lang_tempcode('RELY_FORUMS')));
 		$fields.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('WIDE'),do_lang_tempcode('DESCRIPTION_WIDE'),'wide',make_string_tempcode($list)));
-		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('REQUIRE_SESSION'),do_lang_tempcode('DESCRIPTION_REQUIRE_SESSION'),'require_session',($require_session==1)));
 		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('DISPLAYED_IN_MENU'),do_lang_tempcode('DESCRIPTION_DISPLAYED_IN_MENU'),'displayed_in_menu',($displayed_in_menu==1)));
 
 		// Theme
 		require_code('themes2');
 		$entries=nice_get_themes($theme,false,true);
 		$fields.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode((get_forum_type()=='ocf')?'_DESCRIPTION_THEME_OCF':'_DESCRIPTION_THEME',substr(preg_replace('#[^A-Za-z\d]#','_',get_site_name()),0,80)),'theme',$entries));
+
+		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('REQUIRE_SESSION'),do_lang_tempcode('DESCRIPTION_REQUIRE_SESSION'),'require_session',($require_session==1)));
 
 		if ((!$in_zone_editor) && (!is_null($zone)) && (addon_installed('zone_logos')))
 		{
