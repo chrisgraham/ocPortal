@@ -291,7 +291,7 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 		$results_browser=NULL;
 		if (is_null($_comments))
 		{
-			$max_comments=get_param_integer('max_comments',200);
+			$max_comments=get_param_integer('max_comments',40);
 			$start_comments=get_param_integer('start_comments',0);
 			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$full_title,$full_title,$count,$max_comments,$start_comments,false,$reverse);
 			if ($count>$max_comments)
