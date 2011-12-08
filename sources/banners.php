@@ -144,7 +144,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 			$myquery='SELECT * FROM '.get_table_prefix().'banners WHERE '.db_string_equal_to('name',$dest);
 		} else
 		{
-			$myquery='SELECT * FROM '.get_table_prefix().'banners WHERE ((((the_type<>1) OR ((campaign_remaining>0) AND ((expiry_date IS NULL) OR (expiry_date>'.strval(time()).')))) AND '.db_string_not_equal_to('name',$source).')) AND validated=1 AND '.db_string_equal_to('b_type',$b_type);
+			$myquery='SELECT * FROM '.get_table_prefix().'banners WHERE ((the_type<>'.strval(BANNER_CAMPAIGN).') OR (campaign_remaining>0)) AND ((expiry_date IS NULL) OR (expiry_date>'.strval(time()).')) AND '.db_string_not_equal_to('name',$source).' AND validated=1 AND '.db_string_equal_to('b_type',$b_type);
 		}
 
 		// Run Query
