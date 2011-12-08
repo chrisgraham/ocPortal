@@ -900,7 +900,7 @@ function do_site()
 	// Finally, stats
 	if ($PAGE_STRING!==NULL) log_stats($PAGE_STRING,intval($page_generation_time));
 
-	// Track very basic details of what site's use ocPortal. You can remove if you like.
+	// Track very basic details of what sites use ocPortal. You can remove if you like.
 	if ($ZONE['zone_name']=='adminzone')
 	{
 		if ((preg_match('#^localhost[\.\:$]?#',ocp_srv('HTTP_HOST'))==0) && (get_page_name()=='start'))
