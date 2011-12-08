@@ -53,11 +53,28 @@ class Hook_Profiles_Tabs_galleries
 		foreach ($rows as $i=>$row)
 		{
 			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>show_gallery_box($row,'root',false,get_module_zone('galleries')))));
+			$this->attach_gallery_subgalleries($row['name'],$galleries);
 		}
 
 		$content=do_template('OCF_MEMBER_PROFILE_GALLERIES',array('MEMBER_ID'=>strval($member_id_of),'GALLERIES'=>$galleries));
 
 		return array($title,$content,$order);
+	}
+	
+	/**
+	 * Show subgalleries belonging to member.
+	 *
+	 * @param  ID_TEXT		Gallery name
+	 * @param  tempcode		The output goes in here (passed by reference)
+	 */
+	function attach_gallery_subgalleries($gallery_name,&$galleries)
+	{
+		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$gallery_name),'ORDER BY add_date DESC');
+		foreach ($rows as $i=>$row)
+		{
+			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>show_gallery_box($row,'root',false,get_module_zone('galleries')))));
+			$this->attach_gallery_subgalleries($row['name'],$galleries);
+		}
 	}
 
 }
