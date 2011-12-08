@@ -28,7 +28,7 @@
  * @set 0 1 2
  * @param  BINARY			Whether the content is validated
  * @param  ?MEMBER		Content owner (NULL: none)
- * @param  tempcode		URL to view the content
+ * @param  mixed			URL to view the content
  * @param  SHORT_TEXT	Content title
  * @param  ?string		Forum to post comments in (NULL: site-wide default)
  * @return array			Tuple: Rating details, Comment details, Trackback details
@@ -43,9 +43,54 @@ function embed_feedback_systems($page_name,$id,$allow_rating,$allow_comments,$al
 	$comment_details=get_comment_details($page_name,$allow_comments==1,$id,false,$forum,NULL,NULL,false,false,$submitter,$allow_comments==2);
 	$trackback_details=get_trackback_details($page_name,$id,$allow_trackbacks==1);
 
-	//$comment_details->attach(TODO); // AJAX support
+	if (is_object($self_url)) $self_url=$self_url->evaluate();
+
+	$serialized_options=serialize(array($page_name,$id,$allow_comments,$submitter,$self_url,$self_title,$forum));
+	global $SITE_INFO;
+	$hash=md5($serialized_options.$SITE_INFO['admin_password']); // A little security, to ensure $serialized_options is not tampered with
+
+	// AJAX support
+	require_javascript('javascript_ajax');
+	require_javascript('javascript_more');
+	require_javascript('javascript_thumbnails');
+	$comment_details->attach(do_template('COMMENT_AJAX_HANDLER',array(
+		'OPTIONS'=>$serialized_options,
+		'HASH'=>$hash,
+	)));
 
 	return array($rating_details,$comment_details,$trackback_details);
+}
+
+/**
+ * Do an AJAX comment post
+ */
+function post_comment_script()
+{
+	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+
+	// Read in context of what we're doing
+	$options=post_param('options');
+	list($page_name,$id,$allow_comments,$submitter,$self_url,$self_title,$forum)=unserialize($options);
+
+	// Check security
+	$hash=post_param('hash');
+	global $SITE_INFO;
+	if (md5($options.$SITE_INFO['admin_password'])!=$hash)
+	{
+		header('Content-Type: text/plain; charset='.get_charset());
+		exit();
+	}
+
+	// Post comment
+	do_comments($allow_comments>=1,$page_name,$id,$self_url,$self_title,$forum);
+
+	// Get new comments state
+	$comment_details=get_comment_details($page_name,$allow_comments==1,$id,false,$forum,NULL,NULL,false,false,$submitter,$allow_comments==2);
+
+	// And output as text
+	header('Content-Type: text/plain; charset='.get_charset());
+	$comment_details->evaluate_echo();
 }
 
 /**

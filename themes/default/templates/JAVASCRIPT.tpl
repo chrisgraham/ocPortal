@@ -2100,5 +2100,69 @@ function carefulImportNode(node)
 	return imported;
 }
 
+function replace_comments_form_with_ajax(options,hash)
+{
+	var comments_form=document.getElementById('comments_form');
+	if (comments_form)
+	{
+		comments_form.old_onsubmit=comments_form.onsubmit;
+
+		comments_form.onsubmit=function(event) {
+			// Cancel the event from running
+			if (!event) event=window.event;
+			event.returnValue=false;
+			if (typeof event.preventDefault=='undefined') preventDefault();
+
+			if (!comments_form.old_onsubmit(event)) return false;
+
+			var comments_wrapper=document.getElementById('comments_wrapper');
+
+			// Note what posts are shown now
+			var known_posts=get_elements_by_class_name(comments_wrapper,'post');
+			var known_times=[];
+			for (var i=0;i<known_posts.length;i++)
+			{
+				known_times.push(known_posts[i].className.replace(/^post /,''));
+			}
+
+			// Fire off AJAX request
+			var post='options='+window.encodeURIComponent(options)+'&hash='+window.encodeURIComponent(hash);
+			for (var i=0;i<comments_form.elements.length;i++)
+			{
+				if (comments_form.elements[i].name)
+					post+='&'+comments_form.elements[i].name+'='+window.encodeURIComponent(cleverFindValue(comments_form,comments_form.elements[i]));
+			}
+
+			var ajax_result=load_XML_doc('{$FIND_SCRIPT;,post_comment}'+keep_stub(true),null,post);
+
+			if (ajax_result.responseText!='')
+			{
+				// Display
+				setInnerHTML(comments_wrapper,ajax_result.responseText);
+
+				// Set fade for posts not shown before
+				var known_posts=get_elements_by_class_name(comments_wrapper,'post');
+				for (var i=0;i<known_posts.length;i++)
+				{
+					if (!known_times.inArray(known_posts[i].className.replace(/^post /,'')))
+					{
+						setOpacity(known_posts[i],0.0);
+						nereidFade(known_posts[i],100,20,5);
+					}
+				}
+
+				// And re-attach this code (got killed by setInnerHTML)
+				replace_comments_form_with_ajax(options,hash);
+			} else // Error: do a normal post so error can be seen
+			{
+				comments_form.submit();
+				return true;
+			}
+
+			return false;
+		};
+	}
+}
+
 {$,Put your extra custom code in an overrided version of the template below + it will take function precedence also}
 {+START,INCLUDE,JAVASCRIPT_CUSTOM_GLOBALS}{+END}

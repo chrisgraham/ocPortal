@@ -107,6 +107,8 @@ class Hook_addon_registry_core_feedback_features
 			'sources/blocks/main_feedback.php',
 			'sources/blocks/main_trackback.php',
 			'sources/blocks/main_rating.php',
+			'COMMENT_AJAX_HANDLER.tpl',
+			'data/post_comment.php',
 		);
 	}
 
@@ -133,7 +135,8 @@ class Hook_addon_registry_core_feedback_features
 				'TRACKBACK_XML_LISTING.tpl'=>'trackback_xml_listing',
 				'RATING_INSIDE.tpl'=>'rating_inside',
 				'RATING_INLINE.tpl'=>'rating_inline',
-				'EMOTICON_CLICK_CODE'=>'comments'
+				'EMOTICON_CLICK_CODE.tpl'=>'comments',
+				'COMMENT_AJAX_HANDLER.tpl'=>'comments',
 			);
 	}
 
@@ -330,16 +333,20 @@ class Hook_addon_registry_core_feedback_features
 		}
 		$form=do_lorem_template('COMMENTS',array('FIRST_POST_URL'=>'','JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST'=>lorem_paragraph_html(),'TYPE'=>'downloads','ID'=>placeholder_id(),'REVIEW_TITLES'=>$review_titles,'USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>do_lang('POST_WARNING'),'COMMENT_TEXT'=>get_option('comment_text'),'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_word(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
 
+		$out=do_lorem_template('COMMENTS_WRAPPER',array(
+			'TYPE'=>lorem_phrase(),
+			'ID'=>placeholder_id(),
+			'REVIEW_TITLES'=>$review_titles,
+			'STAFF_FORUM_LINK'=>placeholder_url(),
+			'FORM'=>$form,
+			'COMMENTS'=>$comments,
+		);
+		
+		$out->attach(do_lorem_template('COMMENT_AJAX_HANDLER',array('OPTIONS'=>lorem_phrase(),'HASH'=>lorem_phrase())));
+
 		return array(
 			lorem_globalise(
-				do_lorem_template('COMMENTS_WRAPPER',array(
-					'TYPE'=>lorem_phrase(),
-					'ID'=>placeholder_id(),
-					'REVIEW_TITLES'=>$review_titles,
-					'STAFF_FORUM_LINK'=>placeholder_url(),
-					'FORM'=>$form,
-					'COMMENTS'=>$comments,
-						)
+				$out
 			),NULL,'',true),
 		);
 	}
