@@ -106,7 +106,7 @@ function get_rating_details($rating_for_type,$id,$allow_rating,$extra_ratings=NU
 {	
 	if ($allow_rating)
 	{
-		return display_rating($rating_for_type,$id,'RATING_INLINE',$extra_ratings);
+		return display_rating($rating_for_type,$id,'RATING',$extra_ratings);
 	}
 
 	return new ocp_tempcode();
@@ -127,8 +127,8 @@ function display_rating($rating_for_type,$id,$tpl='RATING_INLINE',$extra_ratings
 
 	if (is_null($rating_data)) 
 		return new ocp_tempcode();
-	else
-		return do_template($tpl,$rating_data);
+
+	return do_template($tpl,$rating_data);
 }
 
 /**
