@@ -85,9 +85,9 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	if (has_specific_permission(get_member(),'full_banner_setup'))
 	{
 		$radios=new ocp_tempcode();
-		$radios->attach(form_input_radio_entry('the_type','0',($the_type==0),do_lang_tempcode('BANNER_PERMANENT')));
-		$radios->attach(form_input_radio_entry('the_type','1',($the_type==1),do_lang_tempcode('BANNER_CAMPAIGN')));
-		$radios->attach(form_input_radio_entry('the_type','2',($the_type==2),do_lang_tempcode('BANNER_DEFAULT')));
+		$radios->attach(form_input_radio_entry('the_type',strval(BANNER_PERMANENT),($the_type==BANNER_PERMANENT),do_lang_tempcode('BANNER_PERMANENT')));
+		$radios->attach(form_input_radio_entry('the_type',strval(BANNER_CAMPAIGN),($the_type==BANNER_CAMPAIGN),do_lang_tempcode('BANNER_CAMPAIGN')));
+		$radios->attach(form_input_radio_entry('the_type',strval(BANNER_DEFAULT),($the_type==BANNER_DEFAULT),do_lang_tempcode('BANNER_DEFAULT')));
 		$fields->attach(form_input_radio(do_lang_tempcode('DEPLOYMENT_AGREEMENT'),do_lang_tempcode('DESCRIPTION_BANNER_TYPE'),$radios));
 		$fields->attach(form_input_integer(do_lang_tempcode('HITS_ALLOCATED'),do_lang_tempcode('DESCRIPTION_HITS_ALLOCATED'),'campaignremaining',$campaignremaining,false));
 		$fields->attach(form_input_integer(do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('DESCRIPTION_IMPORTANCE_MODULUS',strval($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT SUM(importance_modulus) FROM '.get_table_prefix().'banners WHERE '.db_string_not_equal_to('name',$name))),strval($importancemodulus)),'importancemodulus',$importancemodulus,true));

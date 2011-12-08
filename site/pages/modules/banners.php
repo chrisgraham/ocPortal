@@ -305,13 +305,13 @@ class Module_banners
 			$deployment_agreement=new ocp_tempcode();
 			switch ($row['the_type'])
 			{
-				case 0:
+				case BANNER_PERMANENT:
 					$deployment_agreement=do_lang_tempcode('BANNER_PERMANENT');
 					break;
-				case 1:
+				case BANNER_CAMPAIGN:
 					$deployment_agreement=do_lang_tempcode('BANNER_CAMPAIGN');
 					break;
-				case 2:
+				case BANNER_DEFAULT:
 					$deployment_agreement=do_lang_tempcode('BANNER_DEFAULT');
 					break;
 			}

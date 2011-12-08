@@ -19,6 +19,16 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__banners()
+{
+	define('BANNER_PERMANENT',0);
+	define('BANNER_CAMPAIGN',1);
+	define('BANNER_DEFAULT',2);
+}
+
+/**
  * Show a banner according to GET parameter specification.
  *
  * @param  boolean		Whether to return a result rather than outputting
