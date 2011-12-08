@@ -229,6 +229,8 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
  */
 function _generic_exit($text,$template)
 {
+	@ob_end_clean(); // Incase in minimodule
+
 	if (get_param_integer('keep_fatalistic',0)==1) fatal_exit($text);
 
 	@header('Content-type: text/html; charset='.get_charset());
@@ -578,6 +580,8 @@ function get_webservice_result($error_message)
  */
 function _fatal_exit($text,$return=false)
 {
+	@ob_end_clean(); // Incase in minimodule
+
 	if (!headers_sent())
 	{
 		require_code('firephp');
