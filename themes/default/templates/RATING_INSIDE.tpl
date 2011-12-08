@@ -12,25 +12,7 @@
 					{$JAVASCRIPT_INCLUDE,javascript_ajax}
 					<img id="rating_bar_1__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_2__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_3__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_4__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_5__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" />
 					<script type="text/javascript">// <![CDATA[
-						function rating_highlight__{TYPE%}__{ID%}(rating,first_time)
-						{
-							var i,bit;
-							for (i=1;i<=5;i++)
-							{
-								bit=document.getElementById('rating_bar_'+i+'__{TYPE%}__{ID%}');
-								setOpacity(bit,(rating/2>=i)?1.0:0.2);
-								if (first_time) bit.onmouseover=function(i) { return function()
-								{
-									rating_highlight__{TYPE%}__{ID%}(i*2,false);
-								} }(i);
-								if (first_time) bit.onclick=function(i) { return function()
-								{
-									var message=load_snippet('rating&type={TYPE%}&id={ID%}&root_type={ROOT_TYPE%}','rating='+(i*2));
-									setInnerHTML(bit.parentNode.parentNode.parentNode.parentNode,'<strong>'+message+'<\/strong>');
-								} }(i);
-							}
-						}
-						rating_highlight__{TYPE%}__{ID%}(0,true);
+						apply_rating_highlight_and_ajax_code('{TYPE%}','{ID%}','{ROOT_TYPE%}',0,true);
 					//]]></script>
 				{+END}
 				{+START,IF,{$NOT,{$JS_ON}}}

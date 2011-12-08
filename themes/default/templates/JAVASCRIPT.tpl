@@ -1893,7 +1893,7 @@ function getInnerHTML(element,outerToo) {
 }
 
 {$, Originally written by Optimal Works, http://www.optimalworks.net/ }
-{$,Remove common XHTML entities so they can be placed into an XML parser that won't support non-recognised ones}
+{$,Remove common XHTML entities so they can be placed into an XML parser that will not support non-recognised ones}
 function EntitiesToUnicode(din)
 {
 	if ((!din.replace) || (din.indexOf('&')==-1)) return din;
@@ -2164,6 +2164,47 @@ function replace_comments_form_with_ajax(options,hash)
 
 			return false;
 		};
+	}
+}
+
+function apply_rating_highlight_and_ajax_code(type,id,root_type,rating,first_time)
+{
+	var i,bit;
+	for (i=1;i<=5;i++)
+	{
+		bit=document.getElementById('rating_bar_'+i+'__'+type+'__'+id);
+
+		setOpacity(bit,(rating/2>=i)?1.0:0.2);
+
+		if (first_time) bit.onmouseover=function(i) { return function()
+		{
+			apply_rating_highlight_and_ajax_code(type,id,root_type,i*2,false);
+		} }(i);
+
+		if (first_time)
+		{
+			bit.onclick=function(i) {
+				return function()	{
+					var template='';
+					var replace_spot=bit;
+					while (replace_spot)
+					{
+						replace_spot=replace_spot.parentNode;
+						if (replace_spot.className.match(/^RATING_BOX( |$)/))
+						{
+							template='RATING_BOX';
+							break;
+						}
+						if (replace_spot.className.match(/^RATING_INLINE( |$)/))
+						{
+							template='RATING_INLINE';
+							break;
+						}
+					}
+					var message=load_snippet('rating&type='+type+'&id='+id+'&root_type='+root_type+'&template='+template,'rating='+(i*2));
+					setInnerHTML((template=='')?bit.parentNode.parentNode.parentNode.parentNode:replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
+				} }(i);
+		}
 	}
 }
 

@@ -53,6 +53,12 @@ class Hook_rating
 			$GLOBALS['FORUM_DRIVER']->set_custom_field(get_member(),'points_gained_rating',$count+1);
 		}
 
+		$template=get_param('template');
+		if (($type2=='') && ($template!=''))
+		{
+			return display_rating($type,$id,$template);
+		}
+
 		return do_lang_tempcode('THANKYOU_FOR_RATING_SHORT');
 	}
 

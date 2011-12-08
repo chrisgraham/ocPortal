@@ -90,7 +90,7 @@ class Hook_addon_registry_core_feedback_features
 			'COMMENTS.tpl',
 			'COMMENTS_WRAPPER.tpl',
 			'COMMENTS_DEFAULT_TEXT.tpl',
-			'RATING.tpl',
+			'RATING_BOX.tpl',
 			'RATING_INSIDE.tpl',
 			'RATING_INLINE.tpl',
 			'TRACKBACK.tpl',
@@ -128,7 +128,7 @@ class Hook_addon_registry_core_feedback_features
 				'TRACKBACK_XML_ERROR.tpl'=>'trackback_xml_error',
 				'TRACKBACK_XML_WRAPPER.tpl'=>'trackback_xml_wrapper',
 				'COMMENTS.tpl'=>'comments',
-				'RATING.tpl'=>'rating',
+				'RATING_BOX.tpl'=>'rating',
 				'COMMENTS_WRAPPER.tpl'=>'comments_wrapper',
 				'TRACKBACK_XML.tpl'=>'trackback_xml_wrapper',
 				'TRACKBACK_WRAPPER.tpl'=>'trackback_wrapper',
@@ -299,7 +299,7 @@ class Hook_addon_registry_core_feedback_features
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('RATING',array('ROOT_TYPE'=>'downloads','ID'=>placeholder_id(),'_RATING'=>$_rating,'NUM_RATINGS'=>"10",'RATING_INSIDE'=>$rating_inside
+				do_lorem_template('RATING_BOX',array('ROOT_TYPE'=>'downloads','ID'=>placeholder_id(),'_RATING'=>$_rating,'NUM_RATINGS'=>"10",'RATING_INSIDE'=>$rating_inside
 						)
 			),NULL,'',true),
 		);

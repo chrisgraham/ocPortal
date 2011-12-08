@@ -106,7 +106,7 @@ function get_rating_details($rating_for_type,$id,$allow_rating,$extra_ratings=NU
 {	
 	if ($allow_rating)
 	{
-		return display_rating($rating_for_type,$id,'RATING',$extra_ratings);
+		return display_rating($rating_for_type,$id,'RATING_BOX',$extra_ratings);
 	}
 
 	return new ocp_tempcode();
