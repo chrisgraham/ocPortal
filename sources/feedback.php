@@ -431,7 +431,7 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 					$join_bits=do_lang_tempcode('A_OR_B',$join_link,$login_link);
 				}
 
-				$form=do_template('COMMENTS',array('_GUID'=>'c87025f81ee64c885f0ac545efa5f16c','FIRST_POST_URL'=>'','FIRST_POST'=>'','JOIN_BITS'=>$join_bits,'REVIEWS'=>$allow_reviews,'COMMENTS'=>$comments,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>$review_titles,'USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>$post_warning,'COMMENT_TEXT'=>$comment_text,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$title));
+				$form=do_template('COMMENTS',array('_GUID'=>'c87025f81ee64c885f0ac545efa5f16c','EXPAND_TYPE'=>'contract','FIRST_POST_URL'=>'','FIRST_POST'=>'','JOIN_BITS'=>$join_bits,'REVIEWS'=>$allow_reviews,'COMMENTS'=>$comments,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>$review_titles,'USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>$post_warning,'COMMENT_TEXT'=>$comment_text,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$title));
 			}
 
 			// Show comments/form

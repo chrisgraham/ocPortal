@@ -2140,6 +2140,9 @@ function replace_comments_form_with_ajax(options,hash)
 				// Display
 				setInnerHTML(comments_wrapper,ajax_result.responseText);
 
+				// Collapse, so user can see what happening
+				toggleSectionInline('comments_outer','block');
+
 				// Set fade for posts not shown before
 				var known_posts=get_elements_by_class_name(comments_wrapper,'post');
 				for (var i=0;i<known_posts.length;i++)
