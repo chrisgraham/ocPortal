@@ -643,7 +643,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			$entry['allow_rating'],
 			$entry['allow_comments'],
 			$entry['allow_trackbacks'],
-			$entry['validated'],
+			$entry['ce_validated'],
 			$entry['ce_submitter'],
 			build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues')),
 			$c_value,
