@@ -1679,6 +1679,8 @@ hr.long_break {
 	padding: 6px 0;
 	margin: 6px 0;
 	clear: both;
+	overflow: hidden;
+	width: 100%;
 }
 
 .category_entry a img {
