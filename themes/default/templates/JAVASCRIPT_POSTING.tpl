@@ -1,3 +1,5 @@
+"use strict";
+
 /* Form editing code (mostly stuff only used on posting forms) */
 
 // ===========

@@ -1,3 +1,5 @@
+"use strict";
+
 function fractional_edit(event,object,url,edit_text,edit_param_name)
 {
 	if (magicKeypress(event))

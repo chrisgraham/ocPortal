@@ -1,3 +1,5 @@
+"use strict";
+
 var last_message_id=0;
 var last_timestamp=0;
 var last_event_id=0;

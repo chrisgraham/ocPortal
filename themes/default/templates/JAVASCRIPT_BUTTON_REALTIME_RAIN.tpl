@@ -1,3 +1,5 @@
+"use strict";
+
 function load_realtime_rain()
 {
 	if ((typeof window.realtime_rain_button_load_handler=='undefined') || (!window.ajax_supported))

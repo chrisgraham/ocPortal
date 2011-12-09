@@ -1,3 +1,5 @@
+"use strict";
+
 function detect_change(change_detection_url,refresh_if_changed)
 {
 	var response=load_XML_doc(change_detection_url,false,'refresh_if_changed='+window.encodeURIComponent(refresh_if_changed)).responseText;

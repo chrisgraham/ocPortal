@@ -1,3 +1,5 @@
+"use strict";
+
 var menuHoldTime=500;
 
 var cleanMenusTimeout=null;

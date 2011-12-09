@@ -1,3 +1,5 @@
+"use strict";
+
 function permissions_toggle(cell)
 {
 	var index=cell.cellIndex;

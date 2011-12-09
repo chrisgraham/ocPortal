@@ -1,3 +1,5 @@
+"use strict";
+
 /* Form editing code (general, may be used on many different kinds of form) */
 
 // ===========
@@ -220,7 +222,7 @@ function areaedit_init(element)
 {
 	var pageStyleSheets=[];
 	var linked_sheets=document.getElementsByTagName('link');
-	for (counter=0;counter<linked_sheets.length;counter++)
+	for (var counter=0;counter<linked_sheets.length;counter++)
 	{
 		if (linked_sheets[counter].getAttribute('rel')=='stylesheet')
 			pageStyleSheets.push(linked_sheets[counter].getAttribute('href'));

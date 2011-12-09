@@ -1,5 +1,7 @@
 {$,Ideally this template should not be edited. See the note at the bottom of how JAVASCRIPT_CUSTOM_GLOBALS.tpl is appended to this template}
 
+"use strict";
+
 var _editor_url="{$BASE_URL#,0}".replace(/^http:/,window.location.protocol)+"/data/areaedit/";
 var _editor_backend=null;
 var _editor_lang=(window.ocp_lang)?ocp_lang.toLowerCase():'en';

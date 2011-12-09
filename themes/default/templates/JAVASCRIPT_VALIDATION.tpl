@@ -1,5 +1,7 @@
 /* Validation code and other general code relating to forms */
 
+"use strict";
+
 new Image().src='{$IMG,bottom/loading}'.replace(/^http:/,window.location.protocol);
 
 function fix_form_enter_key(form)

@@ -1,3 +1,5 @@
+"use strict";
+
 function accordion(e)
 {
 	var i,nodes=get_elements_by_class_name(e.parentNode.parentNode,'hide_tag');

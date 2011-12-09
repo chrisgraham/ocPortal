@@ -1,3 +1,5 @@
+"use strict";
+
 function decrypt_data(encrypted_data)
 {
 	var container=document.createElement('div');

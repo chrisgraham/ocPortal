@@ -1,3 +1,5 @@
+"use strict";
+
 function htmlentities(string)
 {
 	var chars=new Array ('&','\"','<','>');

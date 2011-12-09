@@ -1,3 +1,5 @@
+"use strict";
+
 var AJAX_REQUESTS=[];
 var AJAX_METHODS=[];
 var AJAX_TIMEOUTS=[];

@@ -1,3 +1,5 @@
+"use strict";
+
 // Handle the realtime_rain button on the bottom bar
 function realtime_rain_button_load_handler()
 {

@@ -1,3 +1,5 @@
+"use strict";
+
 var slideshow_timer=null;
 
 var slideshow_slides={};

@@ -1,3 +1,5 @@
+"use strict";
+
 var previous_commands=[];
 var current_command=null;
 

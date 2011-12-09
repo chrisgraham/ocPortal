@@ -1,3 +1,5 @@
+"use strict";
+
 function find_text_nodes(e)
 {
 	var found=[];

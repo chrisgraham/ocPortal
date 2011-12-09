@@ -1,3 +1,5 @@
+"use strict";
+
 function catalogue_field_change_watching()
 {
 	// Find all our ordering fields

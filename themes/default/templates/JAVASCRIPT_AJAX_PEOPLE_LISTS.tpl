@@ -1,3 +1,5 @@
+"use strict";
+
 var current_list_for;
 
 function update_ajax_admin_search_list(target,e)

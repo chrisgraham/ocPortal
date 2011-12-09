@@ -1,3 +1,5 @@
+"use strict";
+
 function chooseURLJump(ob,max,url_stub,message,num_pages)
 {
 	var res=window.prompt(message,num_pages);

@@ -1,3 +1,5 @@
+"use strict";
+
 function make_tooltip_func(op)
 {
 	return function(event) {

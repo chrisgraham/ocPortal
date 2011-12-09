@@ -1,3 +1,5 @@
+"use strict";
+
 function update_details_box(element)
 {
 	if (typeof window.site_tree=='undefined') return;

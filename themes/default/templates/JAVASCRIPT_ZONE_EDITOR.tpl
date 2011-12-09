@@ -1,3 +1,5 @@
+"use strict";
+
 function set_edited_panel(object_ignore /* No longer used */,id)
 {
 	var store;

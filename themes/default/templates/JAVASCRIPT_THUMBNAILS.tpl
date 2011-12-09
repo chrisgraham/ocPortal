@@ -1,3 +1,5 @@
+"use strict";
+
 var thumbFadeTimers=[];
 
 /* Originally based on a Dynamic Drive Script [with this function name], but no original code remaining */

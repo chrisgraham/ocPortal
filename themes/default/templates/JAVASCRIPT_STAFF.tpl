@@ -1,3 +1,5 @@
+"use strict";
+
 function scriptLoadStuffStaff()
 {
 	var map,elements,i,j;

@@ -1,3 +1,5 @@
+"use strict";
+
 function update_cart(pro_ids)
 {	
 	var pro_ids_array	=	pro_ids.split(",");
