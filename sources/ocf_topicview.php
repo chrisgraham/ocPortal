@@ -269,6 +269,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 						'validated'=>$topic_info['t_validated'],
 						'title'=>$topic_info['t_cache_first_title'],
 						'description'=>$topic_info['t_description'],
+						'description_link'=>$topic_info['t_description_link'],
 						'emoticon'=>$topic_info['t_emoticon'],
 						'forum_id'=>$topic_info['t_forum_id'],
 						'first_post'=>$topic_info['t_cache_first_post'],
@@ -310,6 +311,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 						'validated'=>1,
 						'title'=>do_lang('INLINE_PERSONAL_POSTS'),
 						'description'=>'',
+						'description_link'=>'',
 						'emoticon'=>'',
 						'forum_id'=>NULL,
 						'first_post'=>NULL,
@@ -385,8 +387,28 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 
 		ocf_ensure_groups_cached(array_keys($found_groups));
 	}
-	foreach ($_postdetailss as $_postdetails)
+	foreach ($_postdetailss as $i=>$_postdetails)
 	{
+		if (is_null($_postdetails['post_original'])) $_postdetails['post_original']=get_translated_text($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
+
+		$linked_type='';
+		$linked_id='';
+		$linked_url='';
+
+		// If it's a spacer post, see if we can detect it better
+		$is_spacer_post=(($i==0) && (substr($_postdetails['post_original'],0,strlen('[semihtml]'.do_lang('SPACER_POST_MATCHER')))=='[semihtml]'.do_lang('SPACER_POST_MATCHER')));
+		if ($is_spacer_post)
+		{
+			$c_prefix=do_lang('COMMENT').': #';
+			if ((substr($out['description'],0,strlen($c_prefix))==$c_prefix) && ($out['description_link']!=''))
+			{
+				list($linked_type,$linked_id)=explode('_',substr($out['description'],strlen($c_prefix)),2);
+				$linked_url=$out['description_link'];
+				$out['description']='';
+			}
+		}
+
+		// Load post
 		if ((get_page_name()=='search') || (is_null($_postdetails['_trans_post'])) || ($_postdetails['_trans_post']=='') || ($_postdetails['p_post']==0))
 		{
 			$_postdetails['trans_post']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
@@ -397,7 +419,41 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 				$_postdetails['trans_post']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
 		}
 
-		$posts[]=ocf_get_details_to_show_post($_postdetails,($start==0) && (count($_postdetailss)==1));
+		// Spacer posts may have a better first post put in place
+		if ($is_spacer_post)
+		{
+			$award_hooks=find_all_hooks('systems','awards');
+			if (!array_key_exists($linked_type,$award_hooks)) // Ah, no easy match for award hook, we need to search via cma hooks
+			{
+				$cma_hooks=find_all_hooks('systems','content_meta_aware');
+				foreach (array_keys($cma_hooks) as $cma_hook)
+				{
+					require_code('hooks/systems/content_meta_aware/'.$cma_hook);
+					$cms_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
+					$cma_info=$cms_ob->info();
+					if ((isset($cma_info['feedback_type_code'])) && ($cma_info['feedback_type_code']==$linked_type))
+					{
+						$linked_type=$cma_hook;
+						break;
+					}
+				}
+			}
+			if (array_key_exists($linked_type,$award_hooks))
+			{
+				require_code('hooks/systems/awards/'.$linked_type);
+				$award_ob=object_factory('Hook_awards_'.$linked_type);
+				$award_info=$award_ob->info();
+				$linked_rows=$GLOBALS['SITE_DB']->query_select($award_info['table'],array('*'),array($award_info['id_field']=>$award_info['id_is_string']?$linked_id:intval($linked_id)),'',1);
+				if (array_key_exists(0,$linked_rows))
+					$_postdetails['trans_post']=$award_ob->run($linked_rows[0],'_SEARCH');
+				$out['description']=do_lang('THIS_IS_COMMENT_TOPIC',get_site_name());
+			}
+		}
+
+		// Put together
+		$collated_post_details=ocf_get_details_to_show_post($_postdetails,($start==0) && (count($_postdetailss)==1));
+		$collated_post_details['is_spacer_post']=$is_spacer_post;
+		$posts[]=$collated_post_details;
 	}
 
 	$out['posts']=$posts;
