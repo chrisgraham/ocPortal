@@ -64,6 +64,7 @@ class Hook_Profiles_Tabs_Edit_delete
 		$text=do_lang_tempcode('_DELETE_MEMBER'.(($member_id_of==get_member())?'_SUICIDAL':''),$username);
 
 		$fields=new ocp_tempcode();
+		require_code('form_templates');
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 
 		$javascript='';
