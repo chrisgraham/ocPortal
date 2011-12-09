@@ -1,21 +1,27 @@
-<object width="{WIDTH*}" height="{HEIGHT*}" type="audio/x-pn-realaudio" classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA">
-	<param name="src" value="{URL*}" />
-	<param name="autostart" value="false" />
-	<param name="controls" value="ImageWindow,ControlPanel" />
-	<param name="pluginspage" value="http://www.real.com" />
-	<param name="width" value="{WIDTH*}" />
-	<param name="height" value="{HEIGHT*}" />
+{$SET,player_id,player_{$RAND}}
 
-	<!--[if !IE]> -->
-		<object width="{WIDTH*}" height="{HEIGHT*}" type="audio/x-pn-realaudio" data="{URL*}">
-			<param name="src" value="{URL*}" />
-			<param name="autostart" value="false" />
-			<param name="controls" value="ImageWindow,ControlPanel" />
-			<param name="pluginspage" value="http://www.real.com" />
-			<param name="width" value="{WIDTH*}" />
-			<param name="height" value="{HEIGHT*}" />
-		</object>
-	<!-- <![endif]-->
+<div class="xhtml_validator_off">
+	<embed id="{$GET*,player_id}" name="{$GET*,player_id}" type="audio/x-pn-realaudio"
+		src="{URL*}"
+		autostart="false"
+		controls="ImageWindow,ControlPanel"
+		pluginspage="http://www.real.com"
+		width="{WIDTH*}"
+		height="{HEIGHT*}"
+	/>
+</div>
 
-</object>
-
+{$,Tie into callback event to see when finished, for our slideshows}
+{$,API: http://service.real.com/help/library/guides/realone/ScriptingGuide/PDF/ScriptingGuide.pdf}
+<script type="text/javascript">// <![CDATA[
+	addEventListenerAbstract(window,'real_load',function () {
+		if (document.getElementById('next_slide'))
+		{
+			stop_slideshow_timer('{!STOPPED;}');
+			window.setTimeout(function() {
+				addEventListenerAbstract(document.getElementById('{$GET*,player_id}'),'stateChange',function(newState) { if (newState==0) { playerStopped(); } } );
+				document.getElementById('{$GET*,player_id}').DoPlay();
+			}, 1000);
+		}
+	} );
+//]]></script>

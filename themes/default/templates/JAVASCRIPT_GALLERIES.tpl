@@ -81,6 +81,11 @@ function slideshow_backward()
 	return false;
 }
 
+function playerStopped()
+{
+	slideshow_forward();
+}
+
 function slideshow_forward()
 {
 	if (slideshow_current_position==slideshow_total_slides-1)

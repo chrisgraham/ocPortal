@@ -1,3 +1,5 @@
+{$SET,player_id,player_{$RAND}}
+
 {$SET,flv_url,{URL}}
 {$JAVASCRIPT_INCLUDE,javascript_jwplayer}
 {$SET,rand_id,{$RAND}}
@@ -15,6 +17,8 @@
 	</video>
 </div>
 
+{$,API: http://www.longtailvideo.com/support/jw-player/jw-player-for-flash-v5/12540/javascript-api-reference}
+
 <script type="text/javascript">// <![CDATA[
 {$,Carefully tuned to avoid this problem: http://www.longtailvideo.com/support/forums/jw-player/setup-issues-and-embedding/8439/sound-but-no-video}
 addEventListenerAbstract(window,'load',function () {
@@ -27,7 +31,11 @@ addEventListenerAbstract(window,'load',function () {
 			{ type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf?rand={$RAND*}" },
 			{ type: "html5" }
 		],
-		provider: '{$?,{$EQ,{$SUBSTR,{URL},-4},.mp3},sound,video}'
+		provider: '{$?,{$EQ,{$SUBSTR,{URL},-4},.mp3},sound,video}',
+		events: {
+			onComplete: function() { if (document.getElementById('next_slide')) playerStopped(); },
+			onReady: function() { if (document.getElementById('next_slide')) { stop_slideshow_timer('{!STOPPED;}'); jwplayer("flv_container_{$GET%,rand_id}").play(true); } }
+		}
 	});
 } );
 //]]></script>

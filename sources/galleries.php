@@ -753,7 +753,7 @@ function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filenam
 					if (!is_null($ve_test))
 					{
 						list($tpl,$full_url)=$ve_test;
-						break;
+						break 2;
 					}
 				}
 

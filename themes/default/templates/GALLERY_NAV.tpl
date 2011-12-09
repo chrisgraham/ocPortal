@@ -2,7 +2,7 @@
 	{+START,IF,{SLIDESHOW}}
 		<label for="slideshow_from" class="slideshow_speed">
 			{!SPEED_IN_SECS}
-			<input size="4" onchange="reset_slideshow_countdown();" onmousedown="stop_slideshow_timer('{!STOPPED;}');" onkeypress="cancelBubbling(event);" type="{+START,IF,{$VALUE_OPTION,html5}}number{+END}{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}text{+END}" name="slideshow_from" id="slideshow_from" value="5" />
+			<input size="4" onchange="reset_slideshow_countdown();" onmousedown="stop_slideshow_timer('{!STOPPED;*}');" onkeypress="cancelBubbling(event);" type="{+START,IF,{$VALUE_OPTION,html5}}number{+END}{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}text{+END}" name="slideshow_from" id="slideshow_from" value="5" />
 		</label>
 		<input type="hidden" id="next_slide" name="next_slide" value="{SLIDESHOW_NEXT_URL*}" />
 	{+END}
