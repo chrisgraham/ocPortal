@@ -142,7 +142,7 @@ class Module_calendar
 			$default_types=array('system_command','general','birthday','public_holiday','vacation','appointment','commitment','anniversary');
 			foreach ($default_types as $type)
 			{
-				$GLOBALS['SITE_DB']->query_insert('calendar_types',array('t_title'=>lang_code_to_default_content('DEFAULT_CALENDAR_TYPE__'.$type),'t_logo'=>'calendar/'.$type));
+				$GLOBALS['SITE_DB']->query_insert('calendar_types',array('t_external_feed'=>'','t_title'=>lang_code_to_default_content('DEFAULT_CALENDAR_TYPE__'.$type),'t_logo'=>'calendar/'.$type));
 			}
 	
 			$GLOBALS['SITE_DB']->create_table('calendar_reminders',array(
