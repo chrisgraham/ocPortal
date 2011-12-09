@@ -342,14 +342,14 @@ class Hook_addon_registry_core_feedback_features
 			'STAFF_FORUM_LINK'=>placeholder_url(),
 			'FORM'=>$form,
 			'COMMENTS'=>$comments,
-		);
+		));
 		
 		$out->attach(do_lorem_template('COMMENT_AJAX_HANDLER',array('OPTIONS'=>lorem_phrase(),'HASH'=>lorem_phrase())));
 
 		return array(
 			lorem_globalise(
 				$out
-			),NULL,'',true),
+			,NULL,'',true),
 		);
 	}
 
