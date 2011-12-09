@@ -2135,6 +2135,7 @@ th.meta_data_title {
 	-moz-box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
 	box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
 	max-width: 100%;
+	box-sizing: border-box;
 }
 
 /*
