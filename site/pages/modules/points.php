@@ -36,7 +36,7 @@ class Module_points
 		$info['organisation']='ocProducts'; 
 		$info['hacked_by']=NULL; 
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -61,6 +61,7 @@ class Module_points
 		delete_config_option('points_show_personal_stats_gift_points_left');
 		delete_config_option('points_show_personal_stats_gift_points_used');
 		delete_config_option('points_show_personal_stats_total_points');
+		delete_config_option('points_show_personal_profile_link');
 
 		delete_specific_permission('give_points_self');
 		delete_specific_permission('have_negative_gift_points');
@@ -122,6 +123,11 @@ class Module_points
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
 			delete_config_option('is_on_points');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
+		{
+			delete_config_option('points_show_personal_profile_link');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<5))
