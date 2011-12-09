@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>sources/feedback.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -162,7 +160,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2011-11-30T11:08:11Z</date>
+			<date>2011-12-08T20:33:34Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -903,36 +901,6 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
-		<key>site/pages/modules/news.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>82</integer>
-				<key>line</key>
-				<integer>674</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>653</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>60</integer>
-				<key>line</key>
-				<integer>674</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>82</integer>
-				<key>line</key>
-				<integer>674</integer>
-			</dict>
-		</dict>
 		<key>site/pages/modules/onlinemembers.php</key>
 		<dict>
 			<key>caret</key>
@@ -1010,44 +978,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>32</integer>
+				<integer>21</integer>
 				<key>line</key>
 				<integer>452</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>408</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>452</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>32</integer>
-				<key>line</key>
-				<integer>452</integer>
-			</dict>
-		</dict>
-		<key>sources/feedback.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>126</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>90</integer>
 		</dict>
 		<key>sources/forum/smf.php</key>
 		<dict>
@@ -3024,14 +2962,9 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>sources/feedback.php</string>
-		<string>site/pages/modules/news.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{643, 151}, {1009, 966}}</string>
+	<string>{{811, 114}, {1009, 966}}</string>
 </dict>
 </plist>

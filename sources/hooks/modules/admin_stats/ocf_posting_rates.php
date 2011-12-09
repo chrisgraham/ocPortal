@@ -68,6 +68,7 @@ class Hook_admin_stats_ocf_posting_rates
 		}
 		$time_start=get_input_date('time_start',true);
 		$time_end=get_input_date('time_end',true);
+		if (!is_null($time_end)) $time_end+=60*60*24-1; // So it is end of day not start
 
 		if (is_null($time_start)) $time_start=0;
 		if (is_null($time_end)) $time_end=time();
