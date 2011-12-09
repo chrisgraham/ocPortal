@@ -730,6 +730,7 @@ class Hook_addon_registry_galleries
 					'VIDEO_URL'=>placeholder_url(),
 					'MAY_DOWNLOAD'=>lorem_phrase(),
 					'CAT'=>lorem_phrase(),
+					'FIRST_ENTRY_ID'=>placeholder_id(),
 				)
 			),NULL,'',true),
 		);

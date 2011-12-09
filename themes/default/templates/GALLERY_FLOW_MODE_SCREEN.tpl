@@ -55,7 +55,7 @@
 				} );
 			//]]></script>
 
-			<p class="gallery_start_slideshow">&laquo; <a target="_blank" title="{!_SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,_SELF:galleries:{$GET*,FIRST_ENTRY_ID}:slideshow=1:wide_high=1}">{!_SLIDESHOW}</a> &raquo;</p>
+			<p class="gallery_start_slideshow">&laquo; <a target="_blank" title="{!_SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,_SELF:galleries:{FIRST_ENTRY_ID*}:slideshow=1:wide_high=1}">{!_SLIDESHOW}</a> &raquo;</p>
 
 			{SORTING}
 		{+END}

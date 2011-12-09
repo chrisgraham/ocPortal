@@ -1,5 +1,3 @@
-{$SET,FIRST_ENTRY_ID,type=image:id={ID}}
-
 <div{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/ImageObject"}>
 	<div class="gallery_media_full_expose">
 		<img src="{THUMB_URL*}" alt="{!IMAGE}" title=""{$?,{$VALUE_OPTION,html5}, itemprop="contentURL"} />

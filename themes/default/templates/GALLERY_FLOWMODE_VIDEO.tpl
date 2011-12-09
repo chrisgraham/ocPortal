@@ -1,5 +1,3 @@
-{$SET,FIRST_ENTRY_ID,type=video:id={ID}}
-
 <div class="float_surrounder"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/VideoObject"}>
 	<div class="flowmode_video left float_separation">
 		{VIDEO_PLAYER}
