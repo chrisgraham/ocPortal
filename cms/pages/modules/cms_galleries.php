@@ -233,7 +233,7 @@ class Module_cms_galleries extends standard_aed_module
 		$fields=new ocp_tempcode();
 		$supported='tar';
 		if ((function_exists('zip_open')) || (get_option('unzip_cmd')!='')) $supported.=', zip';
-		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images').','.$this->_get_allowed_video_file_types()))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
+		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images').','.$this->alt_aed_module->_get_allowed_video_file_types()))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
 		if (get_option('is_on_gd')=='1')
@@ -496,26 +496,6 @@ class Module_cms_galleries extends standard_aed_module
 		}
 
 		return $this->cat_aed_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
-	}
-
-	/**
-	 * Get a comma-separated list of allowed file types for video upload.
-	 *
-	 * @return string			Allowed file types
-	 */
-	function _get_allowed_video_file_types()
-	{
-		$supported='3gp,asf,avi,flv,m4v,mov,mp4,mpe,mpeg,mpg,ogg,ogv,qt,ra,ram,rm,webm,wmv';
-		if (get_option('allow_audio_videos')=='1')
-		{
-			$supported.=',mid,mp3,wav,wma';
-		}
-		$supported.=',pdf';
-		if (has_specific_permission(get_member(),'use_very_dangerous_comcode'))
-		{
-			$supported.=',swf';
-		}
-		return $supported;
 	}
 
 	/**
@@ -1228,6 +1208,26 @@ class Module_cms_galleries_alt extends standard_aed_module
 		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_galleries')?NULL:get_member();
 		$tree=form_input_tree_list(do_lang_tempcode('VIDEO'),'','id',NULL,'choose_video',array('only_owned'=>$only_owned,'editable_filter'=>true),true);
 		return array($tree,$search_url,$archive_url);
+	}
+
+	/**
+	 * Get a comma-separated list of allowed file types for video upload.
+	 *
+	 * @return string			Allowed file types
+	 */
+	function _get_allowed_video_file_types()
+	{
+		$supported='3gp,asf,avi,flv,m4v,mov,mp4,mpe,mpeg,mpg,ogg,ogv,qt,ra,ram,rm,webm,wmv';
+		if (get_option('allow_audio_videos')=='1')
+		{
+			$supported.=',mid,mp3,wav,wma';
+		}
+		$supported.=',pdf';
+		if (has_specific_permission(get_member(),'use_very_dangerous_comcode'))
+		{
+			$supported.=',swf';
+		}
+		return $supported;
 	}
 
 	/**
