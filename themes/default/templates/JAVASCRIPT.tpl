@@ -2118,6 +2118,11 @@ function replace_comments_form_with_ajax(options,hash)
 			if (!comments_form.old_onsubmit(event)) return false;
 
 			var comments_wrapper=document.getElementById('comments_wrapper');
+			if (!comments_wrapper) // No AJAX, as stuff missing from template
+			{
+				comments_form.submit();
+				return true;
+			}
 
 			// Note what posts are shown now
 			var known_posts=get_elements_by_class_name(comments_wrapper,'post');
