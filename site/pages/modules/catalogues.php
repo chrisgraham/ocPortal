@@ -917,7 +917,7 @@ class Module_catalogues
 			{
 				$url=get_self_url(false,false,(is_null(get_param('root',NULL)))?array('root'=>$id):array('root'=>($id==-1)?NULL:$id));
 				$tree->attach(hyperlink($url,escape_html($_title),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
-			} else $tree->attach(escape_html('<span>'.$_title.'</span>'));
+			} else $tree->attach('<span>'.escape_html($_title).'</span>');
 		} else
 		{
 			$tree=new ocp_tempcode();
