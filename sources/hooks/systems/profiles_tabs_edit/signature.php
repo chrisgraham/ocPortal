@@ -87,7 +87,7 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		require_code('form_templates');
 
-		$required=true;
+		$required=false;
 		$has_preview=true;
 
 		require_lang('javascript');

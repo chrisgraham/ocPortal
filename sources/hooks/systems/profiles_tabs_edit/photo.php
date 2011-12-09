@@ -85,7 +85,7 @@ class Hook_Profiles_Tabs_Edit_photo
 
 		$text=do_template('OCF_EDIT_PHOTO_TAB',array('TEXT'=>$text,'MEMBER_ID'=>strval($member_id_of),'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id_of),'PHOTO'=>$GLOBALS['FORUM_DRIVER']->get_member_photo_url($member_id_of)));
 
-		$javascript='standardAlternateFields(\'photo_file\',\'photo_url\'); standardAlternateFields(\'photo_file2\',\'photo_thumb_url\');';
+		$javascript='';
 
 		return array($title,$fields,$text,$javascript,$order);
 	}
