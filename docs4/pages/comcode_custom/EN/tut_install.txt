@@ -142,6 +142,7 @@ Set the following to [b]777[/b]: (full directory permissions)
  - uploads/galleries
  - uploads/galleries_thumbs
  - uploads/grepimages
+ - uploads/incoming
  - uploads/iotds
  - uploads/iotds_thumbs
  - uploads/ocf_avatars
@@ -154,9 +155,13 @@ Set the following to [b]777[/b]: (full directory permissions)
 Set the following to [b]666[/b]: (full read/write permissions)
  - data_custom/errorlog.php (if it exists)
  - data_custom/fields.xml (if it exists)
+ - data_custom/breadcrumbs.xml (if it exists)
  - data_custom/functions.dat (if it exists)
  - data_custom/spelling/output.log (if it exists)
  - data_custom/spelling/write.log (if it exists)
+ - data_custom/modules/chat/chat_last_msg.dat (if it exists)
+ - data_custom/modules/chat/chat_last_event.dat (if it exists)
+ - data_custom/permissioncheckslog.php (if it exists)
  - info.php
  - ocp_sitemap.xml (if it exists)
 
