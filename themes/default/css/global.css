@@ -1450,6 +1450,7 @@ body .accessibility_hidden { /* {$,Contents should be made visible (or interpret
 
 .scale_down { /* {$,Membership of this class is used as a tag to turn on image scaling} */
 	max-width: 100%;
+	box-sizing: border-box;
 }
 
 /*

@@ -10,9 +10,23 @@ function initialise_slideshow()
 {
 	reset_slideshow_countdown();
 	start_slideshow_timer();
-	
+
 	addEventListenerAbstract(window,'keypress',toggle_slideshow_timer);
-	addEventListenerAbstract(window,'click',toggle_slideshow_timer);
+
+	addEventListenerAbstract(window,'click',function(event) {
+		if (!event) event=window.event;
+
+		if (event.altKey || event.metaKey)
+		{
+			var b=document.getElementById('gallery_entry_screen');
+			if (typeof b.webkitRequestFullScreen!='undefined') b.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+			if (typeof b.mozRequestFullScreenWithKeys!='undefined') b.mozRequestFullScreenWithKeys();
+			if (typeof b.requestFullScreenWithKeys!='undefined') b.requestFullScreenWithKeys();
+		} else
+		{
+			toggle_slideshow_timer();
+		}
+	});
 
 	slideshow_show_slide(slideshow_current_position); // To ensure next is preloaded
 }
@@ -33,7 +47,7 @@ function start_slideshow_timer()
 	}
 
 	if (slideshow_current_position!=slideshow_total_slides-1)
-		document.getElementsByTagName('body')[0].style.cursor='progress';
+		document.getElementById('gallery_entry_screen').style.cursor='progress';
 }
 
 function show_current_slideshow_time()
@@ -71,7 +85,7 @@ function stop_slideshow_timer(message)
 	if (changer) setInnerHTML(changer,message);
 	window.clearInterval(slideshow_timer);
 	slideshow_timer=null;
-	document.getElementsByTagName('body')[0].style.cursor='';
+	document.getElementById('gallery_entry_screen').style.cursor='';
 }
 
 function slideshow_backward()
@@ -107,7 +121,7 @@ function slideshow_ensure_loaded(slide,immediate)
 	
 	if (slideshow_current_position==slide) // Ah, it's where we are, so save that in
 	{
-		slideshow_slides[slide]=getInnerHTML(document.getElementsByTagName('body')[0]);
+		slideshow_slides[slide]=getInnerHTML(document.getElementById('gallery_entry_screen'));
 		return;
 	}
 	
@@ -132,7 +146,7 @@ function slideshow_ensure_loaded(slide,immediate)
 
 function _slideshow_read_in_slide(ajax_result_raw,slide)
 {
-	slideshow_slides[slide]=ajax_result_raw.responseText.replace(/(.|\n)*<body[^>]*>/i,'').replace(/<\/body>(.|\n)*/i,'');
+	slideshow_slides[slide]=ajax_result_raw.responseText.replace(/(.|\n)*<div id="gallery_entry_screen"[^<>]*>/i,'').replace(/<!--DO_NOT_REMOVE_THIS_COMMENT-->\s*<\/div>(.|\n)*/i,'');
 }
 
 function slideshow_show_slide(slide)
@@ -143,7 +157,7 @@ function slideshow_show_slide(slide)
 	{
 		var slideshow_from=document.getElementById('slideshow_from');
 
-		setInnerHTML(document.getElementsByTagName('body')[0],slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/gi,''));
+		setInnerHTML(document.getElementById('gallery_entry_screen'),slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/gi,''));
 
 		document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same
 
@@ -156,5 +170,5 @@ function slideshow_show_slide(slide)
 	if (slideshow_current_position!=slideshow_total_slides-1)
 		slideshow_ensure_loaded(slide+1,false);
 	else
-		document.getElementsByTagName('body')[0].style.cursor='';
+		document.getElementById('gallery_entry_screen').style.cursor='';
 }

@@ -1305,7 +1305,7 @@ class Module_galleries
 		if (!is_null($days)) $where.=' AND add_date>='.strval(time()-$days*60*60*24);
 
 		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where);
-		$total_videos=($slideshow==1)?0:$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where);
 
 		// These will hopefully be replaced with proper values
 		$position=1;

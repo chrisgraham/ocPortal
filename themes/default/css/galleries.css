@@ -91,6 +91,11 @@
 
 /* Viewing entries */
 
+#gallery_entry_screen {
+	width: 100%;
+	min-height: 100%;
+}
+
 .nav_mid {
 	margin-top: 0.5em;
 }
