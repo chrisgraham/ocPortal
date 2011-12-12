@@ -558,7 +558,7 @@ class Module_galleries
 		{
 			$url=get_self_url(false,false,array('root'=>$cat));
 			$tree->attach(hyperlink($url,escape_html($fullname),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
-		} else $tree->attach(escape_html('<span>'.$fullname.'</span>'));
+		} else $tree->attach('<span>'.escape_html($fullname).'</span>');
 
 		// Flow mode puts emphasis on subgalleries, rather than entries; it is subgalleries that there are a lot of, rather than entries
 		if ($myrow['flow_mode_interface']==1)
