@@ -1781,7 +1781,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if (get_option('is_on_comments')=='1')
 					{
 						$count=0;
-						$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts(get_option('comments_forum_name'),$param[0].'_'.$param[1],$param[0].'_'.$param[1],$count,0,0);
+						$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts(get_option('comments_forum_name'),$param[0].'_'.$param[1],$param[0].'_'.$param[1],$count,0,0,false);
 						$_value=do_lang_tempcode('_COMMENTS',integer_format(0));
 						if (is_array($_comments)) $_value=do_lang_tempcode('_COMMENTS',escape_html(integer_format($count)));
 						$value=$_value->evaluate();
