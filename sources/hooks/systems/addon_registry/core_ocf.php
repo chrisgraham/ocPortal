@@ -153,7 +153,6 @@ class Hook_addon_registry_core_ocf
 			'OCF_MEMBER_PROFILE_SCREEN.tpl',
 			'OCF_MEMBER_PROFILE_ABOUT.tpl',
 			'OCF_MEMBER_PROFILE_EDIT.tpl',
-			'OCF_MEMBER_PROFILE_SCREEN.tpl',
 			'JAVASCRIPT_PROFILE.tpl',
 			'OCF_USER_MEMBER.tpl',
 			'OCF_VIEW_GROUP_SCREEN.tpl',

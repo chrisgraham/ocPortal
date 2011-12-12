@@ -61,6 +61,34 @@ if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
 
 @set_time_limit(0);
 
+if (get_param_integer('export_bundled_addons',1)==1)
+{
+	$addons=find_all_hooks('systems','addon_registry');
+	foreach (array_keys($addons) as $name)
+	{
+		$addon_row=read_addon_info($name);
+
+		// Archive it off to exports/mods
+		if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
+		{
+			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
+		} else // Traditional ocPortal style
+		{
+			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).date('-dmY-Hm',time()).'.tar';
+		}
+		
+		$new_addon_files=array();
+		foreach ($addon_row['addon_files'] as $_file)
+		{
+			if (substr($_file,-9)!='.editfrom') // This would have been added back in automatically
+				$new_addon_files[]=$_file;
+		}
+
+		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'exports/mods');
+	}
+	echo "All bundled addons have been exported to 'export/mods/'\n";
+}
+
 if (get_param_integer('export_addons',1)==1)
 {
 	$file_list=get_file_list_of_addons($FILE_BASE);
@@ -108,7 +136,7 @@ if (get_param_integer('export_addons',1)==1)
 	
 	  	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
 	}
-	echo "All addons have been exported to 'export/mods/'\n";
+	echo "All non-bundled addons have been exported to 'export/mods/'\n";
 }
 
 if (get_param_integer('export_themes',1)==1)
