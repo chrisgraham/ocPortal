@@ -4,7 +4,7 @@
 
 {+START,IF_NON_PASSED,ERROR}
 	<a name="rating__{TYPE*}__{ID*}_jump" id="rating__{TYPE*}__{ID*}_jump" rel="dorating"></a>
-	<form title="{!RATE}" onsubmit="if (this.elements[0].selectedIndex==0) { window.alert('{!IMPROPERLY_FILLED_IN*;}'); return false; } else return true;" action="{URL*}" method="post">
+	<form title="{!RATE}" onsubmit="if (this.elements[0].selectedIndex==0) { window.alert('{!IMPROPERLY_FILLED_IN=;}'); return false; } else return true;" action="{URL*}" method="post">
 		{+START,LOOP,TITLES}
 			{+START,IF,{$NOT,{$JS_ON}}}{+START,IF_EMPTY,{TITLE}}<div class="accessibility_hidden">{+END}<label accesskey="r" for="rating__{TYPE*}__{ID*}"><strong>{+START,IF_EMPTY,{TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}:{+END}</strong></label>{+START,IF_EMPTY,{TITLE}}</div>{+END}{+END}
 			<div class="rating_inner">

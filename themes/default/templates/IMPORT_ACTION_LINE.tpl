@@ -13,7 +13,7 @@
 	</td>
 	<!--{+START,IF_NON_EMPTY,{ADVANCED_URL}}
 	<td class="dottedborder_barrier import_line_more">
-		<a href="{ADVANCED_URL*}" title="{!ADVANCED_IMPORT}: {!DESCRIPTION_ADVANCED_IMPORT*}">{!ADVANCED_IMPORT}</a>
+		<a href="{ADVANCED_URL*}" title="{!ADVANCED_IMPORT}: {!DESCRIPTION_ADVANCED_IMPORT=}">{!ADVANCED_IMPORT}</a>
 	</td>
 	{+END}-->
 </tr>

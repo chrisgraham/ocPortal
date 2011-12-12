@@ -36,7 +36,7 @@
 		<tr>
 			<td class="manage_theme_export" colspan="2">
 				{+START,IF,{$NEQ,{NAME},default}}
-					<a onclick="return window.confirm('{!SWITCH_MODULE_WARNING*;}');" href="{$PAGE_LINK*,adminzone:admin_addons:_addon_export:exp=theme:theme={NAME}}">{!EXPORT_THEME_AS_ADDON}</a>
+					<a onclick="return window.confirm('{!SWITCH_MODULE_WARNING=;}');" href="{$PAGE_LINK*,adminzone:admin_addons:_addon_export:exp=theme:theme={NAME}}">{!EXPORT_THEME_AS_ADDON}</a>
 					&middot;
 				{+END}
 				<a id="theme_preview__{NAME*}" target="_blank" title="{!PREVIEW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,::keep_theme={NAME}}">{!PREVIEW}</a>

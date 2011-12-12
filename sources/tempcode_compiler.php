@@ -305,7 +305,7 @@ function compile_template($data,$template_name,$theme,$lang)
 						break;
 					case PARSE_LANGUAGE_REFERENCE:
 						$new_line='ecv($cl,array('.implode(',',$escaped).'),'.strval(TC_LANGUAGE_REFERENCE).','.$first_param.',array('.$_opener_params.'))';
-						if ($_opener_params=='') // Optimise it out for simple case?
+						if (($_opener_params=='') && (count($escaped)==0)) // Optimise it out for simple case?
 						{
 							$looked_up=do_lang(eval('return '.$first_param.';'),NULL,NULL,NULL,$lang,false);
 							if (!is_null($looked_up))

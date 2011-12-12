@@ -20,7 +20,7 @@
 	<div style="margin-right: {$CONFIG_OPTION,thumb_width}px" class="button_panel_left">
 		{+START,IF,{$NOT,{IS_CURRENT}}}<form title="{!ACTIONS}: #{ID*}" class="inline" action="{CHOOSE_URL*}" method="post"><input type="hidden" name="id" value="{ID*}" /><input type="image" class="button_pageitem page_icon" src="{$IMG*,pageitem/choose}" title="{!CHOOSE} #{ID*}" alt="{!CHOOSE} #{ID*}" /></form>{+END}
 		<a rel="edit" href="{EDIT_URL*}" title="{!EDIT}: {!IOTD} #{ID*}"><img class="button_pageitem page_icon" src="{$IMG*,pageitem/edit}" title="{!EDIT}" alt="{!EDIT}" /></a>
-		<form title="{!DELETE} #{ID*}" onsubmit="return window.confirm('{!ARE_YOU_SURE_DELETE*;}');" class="inline" action="{DELETE_URL*}" method="post"><input type="hidden" name="id" value="{ID*}" /><input type="image" class="button_pageitem page_icon" src="{$IMG*,pageitem/delete}" title="{!DELETE} #{ID*}" alt="{!DELETE} #{ID*}" /></form>
+		<form title="{!DELETE} #{ID*}" onsubmit="return window.confirm('{!ARE_YOU_SURE_DELETE=;}');" class="inline" action="{DELETE_URL*}" method="post"><input type="hidden" name="id" value="{ID*}" /><input type="image" class="button_pageitem page_icon" src="{$IMG*,pageitem/delete}" title="{!DELETE} #{ID*}" alt="{!DELETE} #{ID*}" /></form>
 	</div>
 {+END}
 

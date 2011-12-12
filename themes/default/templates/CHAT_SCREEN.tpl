@@ -36,7 +36,7 @@
 
 <div style="display: {$JS_ON,none,block}" id="chat_comcode_panel">
 	{BUTTONS}<br />
-	[ <a href="{COMCODE_HELP*}" title="{!COMCODE_HELP*}: {!LINK_NEW_WINDOW}" target="_blank">{!COMCODE_HELP*}</a> | <a href="{CHATCODE_HELP*}" title="{!CHATCODE_HELP*}: {!LINK_NEW_WINDOW}" target="_blank">{!CHATCODE_HELP*}</a> ]
+	[ <a href="{COMCODE_HELP*}" title="{!COMCODE_HELP=}: {!LINK_NEW_WINDOW}" target="_blank">{!COMCODE_HELP=}</a> | <a href="{CHATCODE_HELP*}" title="{!CHATCODE_HELP=}: {!LINK_NEW_WINDOW}" target="_blank">{!CHATCODE_HELP=}</a> ]
 
 	<br />
 	<form title="{!SOUND_EFFECTS}" action="{OPTIONS_URL*}" method="post" class="inline">
@@ -56,27 +56,27 @@
 	{+START,BOX,,,light}
 		<div class="float_surrounder">
 			<div class="chat_options_title">
-				{!CHAT_OPTIONS_DESCRIPTION*}
+				{!CHAT_OPTIONS_DESCRIPTION}
 			</div>
 
 			<div class="chat_colour_option">
 				<div>
-					{!CHAT_OPTIONS_COLOUR_NAME*}<br />
-					<span class="associated_details">{!CHAT_OPTIONS_COLOUR_DESCRIPTION*}</span>
+					{!CHAT_OPTIONS_COLOUR_NAME}<br />
+					<span class="associated_details">{!CHAT_OPTIONS_COLOUR_DESCRIPTION}</span>
 				</div>
 				<div>
-					<p class="accessibility_hidden"><label for="text_colour">{!CHAT_OPTIONS_COLOUR_NAME*}</label></p>
+					<p class="accessibility_hidden"><label for="text_colour">{!CHAT_OPTIONS_COLOUR_NAME}</label></p>
 					<input size="10" maxlength="7" class="input_line_required" type="text" id="text_colour" name="text_colour" value="{TEXT_COLOUR_DEFAULT*}" onfocus="updatePickerColour(); if (picker_node.style.visibility=='visible') { picker_node.style.visibility='hidden'; this.blur(); } else picker_node.style.visibility='visible';" onkeyup="if (this.form.elements['text_colour'].value.match(/^#[0-9A-F][0-9A-F][0-9A-F]([0-9A-F][0-9A-F][0-9A-F])?$/)) { this.style.color=this.value; document.getElementById('colour').value=this.value; updatePickerColour(); }" />
 				</div>
 			</div>
 
 			<div class="chat_font_option">
 				<div>
-					{!CHAT_OPTIONS_TEXT_NAME*}<br />
-					<span class="associated_details">{!CHAT_OPTIONS_TEXT_DESCRIPTION*}</span>
+					{!CHAT_OPTIONS_TEXT_NAME}<br />
+					<span class="associated_details">{!CHAT_OPTIONS_TEXT_DESCRIPTION}</span>
 				</div>
 				<div>
-					<p class="accessibility_hidden"><label for="font_name">{!CHAT_OPTIONS_TEXT_NAME*}</label></p>
+					<p class="accessibility_hidden"><label for="font_name">{!CHAT_OPTIONS_TEXT_NAME}</label></p>
 					<select onclick="this.onchange();" onchange="onFontChange(this);" id="font_name" name="font_name">
 						<option {$?,{$EQ,{FONT_NAME_DEFAULT*},Arial},selected="selected" ,}value="Arial" style="font-family: 'Arial'">Arial</option>
 						<option {$?,{$EQ,{FONT_NAME_DEFAULT*},Courier},selected="selected" ,}value="Courier" style="font-family: 'Courier'">Courier</option>
@@ -93,7 +93,7 @@
 			</div>
 
 			<div class="chat_options">
-				<input class="button_pageitem" onclick="return window.confirm('{!SAVE_COMPUTER_USING_COOKIE;}');" type="submit" value="{!CHAT_CHANGE_OPTIONS*}" />
+				<input class="button_pageitem" onclick="return window.confirm('{!SAVE_COMPUTER_USING_COOKIE;}');" type="submit" value="{!CHAT_CHANGE_OPTIONS=}" />
 			</div>
 		</div>
 	{+END}
