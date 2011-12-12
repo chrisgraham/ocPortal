@@ -129,6 +129,7 @@ class Hook_addon_registry_counting_blocks
 		return array(
 			lorem_globalise(
 				do_lorem_template('MAIN_COUNT',array(
+					'NAME'=>lorem_word(),
 					'VALUE'=>placeholder_random(),
 						)
 			),NULL,'',true),
