@@ -201,7 +201,7 @@ function get_comcode_editor($field_name='post',$cut_down=false)
 
 	// Links
 	if (!$cut_down) $_buttons[]='url';
-	if (has_zone_access(get_member(),'admin_zone'))
+	if (has_zone_access(get_member(),'adminzone'))
 	{
 		$_buttons[]='page';
 	}
