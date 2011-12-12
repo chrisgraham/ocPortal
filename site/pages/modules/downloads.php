@@ -576,7 +576,7 @@ class Module_downloads
 			$myrow['validated'],
 			$myrow['submitter'],
 			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF'),
-			get_translated_text($myrow['title']),
+			$name,
 			get_value('comment_forum__downloads')
 		);
 

@@ -29,6 +29,158 @@ function init__database_search()
 }
 
 /**
+ * Highlight keywords in an extracted portion of a piece of text.
+ *
+ * @param  string			What was searched
+ * @param  array			List of words searched
+ * @return string			Highlighted portion
+ */
+function generate_text_summary($_temp_summary,$words_searched)
+{
+	require_code('xhtml');
+
+	$summary='';
+	
+	global $SEARCH__CONTENT_BITS;
+
+	$_temp_summary_lower=strtolower($_temp_summary);
+
+	// Add in some highlighting direct to XHTML
+	$all_occurrences=array();
+	foreach (is_null($SEARCH__CONTENT_BITS)?array():$SEARCH__CONTENT_BITS as $content_bit)
+	{
+		if ($content_bit=='') continue;
+
+		$last_pos=0;
+		$content_bit_pos=0;
+		do
+		{
+			$content_bit_matched=$content_bit;
+			if (strtoupper($content_bit)==$content_bit) // all upper case so don't want case sensitive
+			{
+				$content_bit_pos=strpos($_temp_summary,$content_bit,$last_pos);
+			} else
+			{
+				$content_bit_pos=strpos($_temp_summary_lower,strtolower($content_bit),$last_pos);
+				if (strpos($content_bit,'-')!==false)
+				{
+					$content_bit_pos_2=strpos($_temp_summary_lower,strtolower(str_replace('-','',$content_bit)),$last_pos);
+					if (($content_bit_pos_2!==false) && (($content_bit_pos===false) || ($content_bit_pos_2<$content_bit_pos)))
+					{
+						$content_bit_pos=$content_bit_pos_2;
+						$content_bit_matched=str_replace('-','',$content_bit);
+					}
+				}
+			}
+
+			if ($content_bit_pos!==false)
+			{
+				$last_gt=strrpos(substr($_temp_summary,0,$content_bit_pos),'>');
+				$last_lt=strrpos(substr($_temp_summary,0,$content_bit_pos),'<');
+
+				if (($last_gt!==false) && ($last_gt>$last_lt))
+				{
+					$extra_pre='<span class="comcode_highlight">';
+					$extra_post='</span>';
+					$_temp_summary=substr($_temp_summary,0,$content_bit_pos).
+										$extra_pre.
+										substr($_temp_summary,$content_bit_pos,strlen($content_bit_matched)).
+										$extra_post.
+										substr($_temp_summary,$content_bit_pos+strlen($content_bit_matched));
+					$_temp_summary_lower=strtolower($_temp_summary);
+					$last_pos=$content_bit_pos+strlen($extra_pre)+strlen($content_bit_matched)+strlen($extra_post);
+
+					// Adjust all stores occurrence offsets
+					foreach ($all_occurrences as $i=>$occ)
+					{
+						if ($occ[0]>$last_pos)
+						{
+							$all_occurrences[$i][0]+=strlen($extra_pre)+strlen($extra_post);
+							$all_occurrences[$i][1]+=strlen($extra_pre)+strlen($extra_post);
+						}
+						elseif ($occ[0]>$content_bit_pos)
+						{
+							$all_occurrences[$i][0]+=strlen($extra_pre);
+							$all_occurrences[$i][1]+=strlen($extra_pre);
+						}
+					}
+
+					$all_occurrences[]=array($content_bit_pos,$last_pos);
+				} else
+				{
+					$last_pos=$content_bit_pos+strlen($content_bit_matched);
+				}
+			}
+		}
+		while ($content_bit_pos!==false);
+	}
+
+	if (strlen($_temp_summary)<500)
+	{
+		$summary=$_temp_summary;
+	} else
+	{
+		// Find optimal position
+		$len=strlen($_temp_summary);
+		$best_yet=0;
+		$best_pos_min=250;
+		$best_pos_max=250;
+		if (count($all_occurrences)<60) // Only bother doing this if we need to dig for the keyword
+		{
+			for ($i=250;$i<$len-250;$i++) // Move window along all possible positions
+			{
+				$count=0;
+				$i_pre=$i-250;
+				$i_post=$i+250;
+				foreach ($all_occurrences as $occ)
+				{
+					$occ_pre=$occ[0];
+					$occ_post=$occ[1];
+					if (($occ_pre>=$i_pre) && ($occ_pre<=$i_post) && ($occ_post>=$i_pre) && ($occ_post<=$i_post))
+					{
+						$count++;
+
+						if ($count>5) break; // Good enough
+					}
+				}
+				if (($count>$best_yet) || (($best_yet==$count) && ($i-500<$best_pos_min)))
+				{
+					if ($best_yet==$count)
+					{
+						$best_pos_max=$i;
+					} else
+					{
+						$best_yet=$count;
+						$best_pos_min=$i;
+						$best_pos_max=$i;
+					}
+
+					if ($count>5) break; // Good enough
+				}
+			}
+			$best_pos=intval(floatval($best_pos_min+$best_pos_max)/2.0)-250; // Move it from center pos, to where we want to start from
+		} else
+		{
+			$best_pos=0;
+		}
+
+		// Render (with ellipses if required)
+		if (false)
+		{ // Far far too slow
+			$summary=xhtml_substr($_temp_summary,$best_pos,min(500,$len-$best_pos),true,true);
+		} else
+		{
+			$summary=substr($_temp_summary,$best_pos,min(500,$len-$best_pos));
+			$summary=xhtmlise_html($summary,true);
+			if ($best_pos>0) $summary='&hellip;'.$summary;
+			if ($best_pos+500<strlen($_temp_summary)) $summary.='&hellip;';
+		}
+	}
+	
+	return $summary;
+}
+
+/**
  * Server opensearch requests.
  */
 function opensearch_script()

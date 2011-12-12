@@ -52,9 +52,10 @@ function download_licence_script()
  * @param  boolean		Whether to show a picture
  * @param  boolean		Whether to show breadcrumbs
  * @param  ?ID_TEXT		The zone the download module we're using is in (NULL: find it)
+ * @param  tempcode		Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
  * @return tempcode		A box for this download, linking to the full download page
  */
-function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL)
+function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_summary=NULL)
 {
 	require_css('downloads');
 
@@ -72,6 +73,8 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL)
 	$tree=((get_option('show_dload_trees')=='1') && ($breadcrumbs))?download_breadcrumbs($row['category_id'],NULL,false,$zone):new ocp_tempcode();
 
 	$pic_suffix='';
+	$thumb_url='';
+	$full_img_url='';
 	if ((addon_installed('galleries')) && ($pic))
 	{
 		// Images
@@ -80,6 +83,7 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL)
 		{
 			$pic_suffix='_pic';
 			require_code('images');
+			$full_img_url=$rows[0]['url'];
 			$thumb_url=ensure_thumbnail($rows[0]['url'],$rows[0]['thumb_url'],'galleries','images',$rows[0]['id']);
 			$imgcode=do_image_thumb($thumb_url,/*'['.*/do_lang('DOWNLOAD_THUMBNAIL')/*.'] '.get_translated_text($row['description'])*/);
 		} else $imgcode=new ocp_tempcode();
@@ -109,7 +113,8 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL)
 	}
 
 	// Final template
-	return do_template('DOWNLOAD_BOX',array('AUTHOR'=>$row['author'],'ID'=>strval($row['id']),'RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>get_translated_text($row['name']),'TREE'=>$tree,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
+	if (($full_img_url!='') && (url_is_local($full_img_url))) $full_img_url=get_custom_base_url().'/'.$full_img_url;
+	return do_template('DOWNLOAD_BOX',array('TEXT_SUMMARY'=>$text_summary,'AUTHOR'=>$row['author'],'ID'=>strval($row['id']),'RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>get_translated_text($row['name']),'TREE'=>$tree,'IMG_URL'=>$thumb_url,'FULL_IMG_URL'=>$full_img_url,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
 }
 
 /**
