@@ -649,7 +649,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			if ($cache_identifier!==NULL)
 			{
 				if ($ttl===NULL) $ttl=$row['cache_ttl'];
-				$cache=get_cache_entry($codename,$cache_identifier,$ttl,true);
+				$cache=get_cache_entry($codename,$cache_identifier,$ttl,true,(array_key_exists('cache',$map)) && ($map['cache']=='2'),$map);
 				if ($cache===NULL)
 				{
 					$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];

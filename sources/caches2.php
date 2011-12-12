@@ -21,17 +21,22 @@
 /**
  * Put a result into the cache.
  *
- * @param  ID_TEXT		The codename to check for cacheing
- * @param  integer		The TTL of what is being cached in minutes
- * @param  LONG_TEXT		The requisite situational information (a serialized map) [-> further restraints when reading]
- * @param  mixed			The result we are cacheing
- * @param  ?array			A list of the language files that need loading to use tempcode embedded in the cache (NULL: none required)
- * @param  ?array			A list of the javascript files that need loading to use tempcode embedded in the cache (NULL: none required)
- * @param  ?array			A list of the css files that need loading to use tempcode embedded in the cache (NULL: none required)
- * @param  boolean		Whether we are cacheing Tempcode (needs special care)
+ * @param  ID_TEXT			The codename to check for cacheing
+ * @param  integer			The TTL of what is being cached in minutes
+ * @param  LONG_TEXT			The requisite situational information (a serialized map) [-> further restraints when reading]
+ * @param  mixed				The result we are cacheing
+ * @param  ?array				A list of the language files that need loading to use tempcode embedded in the cache (NULL: none required)
+ * @param  ?array				A list of the javascript files that need loading to use tempcode embedded in the cache (NULL: none required)
+ * @param  ?array				A list of the css files that need loading to use tempcode embedded in the cache (NULL: none required)
+ * @param  boolean			Whether we are cacheing Tempcode (needs special care)
+ * @param  ?ID_TEXT			The theme this is being cached for (NULL: current theme)
+ * @param  ?LANGUAGE_NAME	The language this is being cached for (NULL: current language)
  */
-function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required=NULL,$_javascripts_required=NULL,$_csss_required=NULL,$tempcode=false)
+function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required=NULL,$_javascripts_required=NULL,$_csss_required=NULL,$tempcode=false,$theme=NULL,$lang=NULL)
 {
+	if ($theme===NULL) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
+	if ($lang===NULL) $lang=user_lang();
+
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
 	if ($KEEP_MARKERS || $SHOW_EDIT_LINKS) return;
 
@@ -41,17 +46,16 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 	$langs_required.='!';
 	$langs_required.=(is_null($_csss_required))?'':implode(':',$_csss_required);
 
-	$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 	if (!is_null($GLOBALS['MEM_CACHE']))
 	{
 		$pcache=persistant_cache_get(array('CACHE',$codename));
 		if (is_null($pcache)) $pcache=array();
-		$pcache[$cache_identifier][user_lang()][$theme]=array('langs_required'=>$langs_required,'date_and_time'=>time(),'the_value'=>$cache);
+		$pcache[$cache_identifier][$lang][$theme]=array('langs_required'=>$langs_required,'date_and_time'=>time(),'the_value'=>$cache);
 		persistant_cache_set(array('CACHE',$codename),$pcache,false,$ttl*60);
 	} else
 	{
-		$GLOBALS['SITE_DB']->query_delete('cache',array('lang'=>user_lang(),'the_theme'=>$theme,'cached_for'=>$codename,'identifier'=>md5($cache_identifier)),'',1);
-		$GLOBALS['SITE_DB']->query_insert('cache',array('langs_required'=>$langs_required,'lang'=>user_lang(),'cached_for'=>$codename,'the_value'=>$tempcode?$cache->to_assembly(user_lang()):serialize($cache),'date_and_time'=>time(),'the_theme'=>$theme,'identifier'=>md5($cache_identifier)),false,true);
+		$GLOBALS['SITE_DB']->query_delete('cache',array('lang'=>$lang,'the_theme'=>$theme,'cached_for'=>$codename,'identifier'=>md5($cache_identifier)),'',1);
+		$GLOBALS['SITE_DB']->query_insert('cache',array('langs_required'=>$langs_required,'lang'=>$lang,'cached_for'=>$codename,'the_value'=>$tempcode?$cache->to_assembly($lang):serialize($cache),'date_and_time'=>time(),'the_theme'=>$theme,'identifier'=>md5($cache_identifier)),false,true);
 	}
 }
 

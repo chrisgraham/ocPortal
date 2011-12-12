@@ -209,9 +209,11 @@ function find_cache_on($codename)
  * @param  LONG_TEXT		The further restraints (a serialized map)
  * @param  integer		The TTL for the cache entry
  * @param  boolean		Whether we are cacheing Tempcode (needs special care)
+ * @param  boolean		Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone, bot-type, in-panel and interlock are automatically considered)
+ * @param  ?array			Parameters to call up block with if we have to defer caching (NULL: none)
  * @return ?mixed			The cached result (NULL: no cached result)
  */
-function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false) // Default to a very big ttl
+function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false,$caching_via_cron=false,$map=NULL) // Default to a very big ttl
 {
 	if ($GLOBALS['MEM_CACHE']!==NULL)
 	{
@@ -220,13 +222,26 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false)
 		$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 		$lang=user_lang();
 		$pcache=isset($pcache[$cache_identifier][$lang][$theme])?$pcache[$cache_identifier][$lang][$theme]:NULL;
-		if ($pcache===NULL) return NULL;
+		if ($pcache===NULL)
+		{
+			if ($caching_via_cron)
+			{
+				request_via_cron($codename,$map,$tempcode);
+				return paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'),'','nothing_here');
+			}
+			return NULL;
+		}
 		$cache_rows=array($pcache);
 	} else
 	{
 		$cache_rows=$GLOBALS['SITE_DB']->query_select('cache',array('*'),array('lang'=>user_lang(),'cached_for'=>$codename,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'identifier'=>md5($cache_identifier)),'',1);
 		if (!isset($cache_rows[0])) // No
 		{
+			if ($caching_via_cron)
+			{
+				request_via_cron($codename,$map,$tempcode);
+				return paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'),'','nothing_here');
+			}
 			return NULL;
 		}
 
@@ -241,11 +256,16 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false)
 		}
 	}
 
-	if (($ttl!=-1) && (time()>($cache_rows[0]['date_and_time']+$ttl*60))) // Out of date
+	$stale=(($ttl!=-1) && (time()>($cache_rows[0]['date_and_time']+$ttl*60)));
+
+	if ((!$caching_via_cron) && ($stale)) // Out of date
 	{
 		return NULL;
 	} else // We can use directly
 	{
+		if ($stale)
+			request_via_cron($codename,$map,$tempcode);
+		
 		$cache=$cache_rows[0]['the_value'];
 		if ($cache_rows[0]['langs_required']!='')
 		{
@@ -270,3 +290,28 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false)
 	}
 }
 
+/**
+ * Request that CRON loads up a block's caching in the background.
+ *
+ * @param  ID_TEXT		The codename of the block
+ * @param  ?array			Parameters to call up block with if we have to defer caching (NULL: none)
+ * @param  boolean		Whether we are cacheing Tempcode (needs special care)
+ * @return ?mixed			The cached result (NULL: no cached result)
+ */
+function request_via_cron($codename,$map,$tempcode)
+{
+	global $TEMPCODE_SETGET;
+	$map=array(
+		'c_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),
+		'c_lang'=>user_lang(),
+		'c_codename'=>$codename,
+		'c_map'=>serialize($map),
+		'c_timezone'=>get_users_timezone(get_member()),
+		'c_is_bot'=>is_null(get_bot_type())?0:1,
+		'c_in_panel'=>((array_key_exists('in_panel',$TEMPCODE_SETGET)?$TEMPCODE_SETGET['in_panel']:'_false')=='_true')?1:0,
+		'c_interlock'=>((array_key_exists('interlock',$TEMPCODE_SETGET)?$TEMPCODE_SETGET['interlock']:'_false')=='_true')?1:0,
+		'c_store_as_tempcode'=>$tempcode?1:0,
+	);
+	if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('cron_caching_requests','id',$map)))
+		$GLOBALS['SITE_DB']->query_insert('cron_caching_requests',$map);
+}

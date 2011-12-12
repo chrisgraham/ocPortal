@@ -77,6 +77,7 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_if_exists('incoming_uploads');
 		$GLOBALS['SITE_DB']->drop_if_exists('f_group_member_timeouts');
 		$GLOBALS['SITE_DB']->drop_if_exists('temp_block_permissions');
+		$GLOBALS['SITE_DB']->drop_if_exists('cron_caching_requests');
 		delete_specific_permission('reuse_others_attachments');
 		delete_specific_permission('use_sms');
 		delete_specific_permission('sms_higher_limit');
@@ -555,6 +556,24 @@ class Module_admin_version
 				'p_block_constraints'=>'LONG_TEXT',
 				'p_time'=>'TIME',
 			));
+
+			$GLOBALS['SITE_DB']->create_table('cron_caching_requests',array(
+				'id'=>'*AUTO',
+				'c_codename'=>'ID_TEXT',
+				'c_map'=>'LONG_TEXT',
+				'c_timezone'=>'ID_TEXT',
+				'c_is_bot'=>'BINARY',
+				'c_in_panel'=>'BINARY',
+				'c_interlock'=>'BINARY',
+				'c_store_as_tempcode'=>'BINARY',
+				'c_lang'=>'LANGUAGE_NAME',
+				'c_theme'=>'ID_TEXT',
+			));
+			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_compound',array('c_codename','c_theme','c_lang','c_timezone'));
+			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_is_bot',array('c_is_bot'));
+			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_in_panel',array('c_in_panel'));
+			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_interlock',array('c_interlock'));
+			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_store_as_tempcode',array('c_store_as_tempcode'));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs
