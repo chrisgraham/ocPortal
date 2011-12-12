@@ -153,8 +153,20 @@ class Block_main_forum_topics
 				usort($topics,'multi_sort');
 				$topics=array_reverse($topics,false);
 
+				if ((count($topics)<$limit) && ($hot==1))
+				{
+					$more_topics=$GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids,$limit,0,$max_rows,'',false,$date_key);
+					if (is_null($more_topics)) $more_topics=array();
+					$topics=array_merge($topics,$more_topics);
+				}
+
+				$done=0;
+				$seen=array();
 				foreach ($topics as $topic)
 				{
+					if (array_key_exists($topic['id'],$seen)) continue;
+					$seen[$topic['id']]=1;
+
 					$topic_link=$GLOBALS['FORUM_DRIVER']->topic_link($topic['id'],$forum_name);
 					$title=$topic['title'];
 					$date=get_timezoned_date($topic[$date_key]);
@@ -164,6 +176,10 @@ class Block_main_forum_topics
 					$forum_name=is_null($forum_names_map)?NULL:$forum_names_map[$topic['forum_id']];
 					
 					$out->attach(do_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array('_GUID'=>'ae4e351b3fa5422bf8ecdfb7e49076d1','FORUM_ID'=>is_null($forum_names_map)?NULL:strval($topic['forum_id']),'FORUM_NAME'=>$forum_name,'TOPIC_LINK'=>$topic_link,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic[$date_key]),'USERNAME'=>$username,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'NUM_POSTS'=>integer_format($topic['num']))));
+					
+					$done++;
+					
+					if ($done==$limit) break;
 				}
 			}
 			if ($out->is_empty())
