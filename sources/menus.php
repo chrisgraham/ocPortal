@@ -178,9 +178,12 @@ function build_management_menu()
 		{
 			$items2=array();
 		}
-		$items[]=array('id'=>-$i,'i_parent'=>NULL,'cap'=>$section['CAPTION'],'i_caption_long'=>$section['TOOLTIP'],'i_url'=>$section['URL'],'i_theme_img_code'=>$section['IMG'],'i_check_permissions'=>1,'i_expanded'=>0,'i_new_window'=>0,'i_page_only'=>'');
-		$items=array_merge($items,$items2);
-		$i++;
+		if (count($items2)!=0)
+		{
+			$items[]=array('id'=>-$i,'i_parent'=>NULL,'cap'=>$section['CAPTION'],'i_caption_long'=>$section['TOOLTIP'],'i_url'=>$section['URL'],'i_theme_img_code'=>$section['IMG'],'i_check_permissions'=>1,'i_expanded'=>0,'i_new_window'=>0,'i_page_only'=>'');
+			$items=array_merge($items,$items2);
+			$i++;
+		}
 	}
 
 	return $items;
