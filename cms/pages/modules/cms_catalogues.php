@@ -845,7 +845,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 				$value=trim($csv_data[$csv_field_titles[$field_name]]);
 
-				if ($field['cf_type']=='picture')
+				if (($field['cf_type']=='picture') || ($field['cf_type']=='video'))
 				{
 					if (preg_replace('#\..*$#','',$value)=='Noimage') $value='';
 

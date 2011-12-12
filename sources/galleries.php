@@ -710,6 +710,8 @@ function get_gallery_content_tree($table,$submitter=NULL,$gallery=NULL,$tree=NUL
  */
 function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filename=NULL)
 {
+	require_lang('galleries');
+
 	if (url_is_local($thumb_url)) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 	$full_url=url_is_local($url)?(get_custom_base_url().'/'.$url):$url;
 	$extension=get_file_extension(is_null($orig_filename)?$url:$orig_filename);
@@ -761,4 +763,24 @@ function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filenam
 		}
 	}
 	return do_template($tpl,array('THUMB_URL'=>$thumb_url,'URL'=>$full_url,'LENGTH'=>strval($length),'WIDTH'=>strval($width),'HEIGHT'=>strval($height),'MIME_TYPE'=>$mime_type));
+}
+
+/**
+ * Get a comma-separated list of allowed file types for video upload.
+ *
+ * @return string			Allowed file types
+ */
+function get_allowed_video_file_types()
+{
+	$supported='3gp,asf,avi,flv,m4v,mov,mp4,mpe,mpeg,mpg,ogg,ogv,qt,ra,ram,rm,webm,wmv';
+	if (get_option('allow_audio_videos')=='1')
+	{
+		$supported.=',mid,mp3,wav,wma';
+	}
+	$supported.=',pdf';
+	if (has_specific_permission(get_member(),'use_very_dangerous_comcode'))
+	{
+		$supported.=',swf';
+	}
+	return $supported;
 }

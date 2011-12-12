@@ -233,7 +233,7 @@ class Module_cms_galleries extends standard_aed_module
 		$fields=new ocp_tempcode();
 		$supported='tar';
 		if ((function_exists('zip_open')) || (get_option('unzip_cmd')!='')) $supported.=', zip';
-		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images').','.$this->alt_aed_module->_get_allowed_video_file_types()))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
+		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images').','.get_allowed_video_file_types()))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
 		if (get_option('is_on_gd')=='1')
@@ -1211,26 +1211,6 @@ class Module_cms_galleries_alt extends standard_aed_module
 	}
 
 	/**
-	 * Get a comma-separated list of allowed file types for video upload.
-	 *
-	 * @return string			Allowed file types
-	 */
-	function _get_allowed_video_file_types()
-	{
-		$supported='3gp,asf,avi,flv,m4v,mov,mp4,mpe,mpeg,mpg,ogg,ogv,qt,ra,ram,rm,webm,wmv';
-		if (get_option('allow_audio_videos')=='1')
-		{
-			$supported.=',mid,mp3,wav,wma';
-		}
-		$supported.=',pdf';
-		if (has_specific_permission(get_member(),'use_very_dangerous_comcode'))
-		{
-			$supported.=',swf';
-		}
-		return $supported;
-	}
-
-	/**
 	 * Get tempcode for a video adding/editing form.
 	 *
 	 * @param  ID_TEXT			The gallery
@@ -1266,7 +1246,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 		handle_max_file_size($hidden);
 		if (strpos($cat,'?')!==false) $cat=str_replace('?',strval(get_member()),$cat);
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','must_accept_videos'=>true,'addable_filter'=>true),true,$cat));
-		$supported=$this->_get_allowed_video_file_types();
+		$supported=get_allowed_video_file_types();
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,$supported));
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$url,false));
 		if ($validated==0)

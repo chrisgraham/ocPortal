@@ -27,7 +27,7 @@
 function get_fields_hook($type)
 {
 	$path='hooks/systems/fields/'.filter_naughty($type);
-	if ((!/*common ones we know have hooks*/in_array($type,array('author','auto_increment','codename','color','content_link','date','email','float','guid','integer','just_date','just_time','list','long_text','long_trans','page_link','password','picture','posting_field','radiolist','random','reference','short_text','short_trans','theme_image','tick','upload','url','user'))) && (!is_file(get_file_base().'/sources/'.$path.'.php')) && (!is_file(get_file_base().'/sources_custom/'.$path.'.php')))
+	if ((!/*common ones we know have hooks*/in_array($type,array('author','auto_increment','codename','color','content_link','date','email','float','guid','integer','just_date','just_time','list','long_text','long_trans','page_link','password','picture','video','posting_field','radiolist','random','reference','short_text','short_trans','theme_image','tick','upload','url','user'))) && (!is_file(get_file_base().'/sources/'.$path.'.php')) && (!is_file(get_file_base().'/sources_custom/'.$path.'.php')))
 	{
 		$hooks=find_all_hooks('systems','fields');
 		foreach (array_keys($hooks) as $hook)
@@ -298,7 +298,7 @@ function nice_get_field_type($type='',$limit_to_storage_set=false)
 		do_lang_tempcode('FIELD_TYPES__TEXT'),'short_trans','short_trans_multi','short_text','short_text_multi','long_trans','long_text','posting_field','codename','password','email',
 		do_lang_tempcode('FIELD_TYPES__NUMBERS'),'integer','float',
 		do_lang_tempcode('FIELD_TYPES__CHOICES'),'list','radiolist','tick','multilist','tick_multi',
-		do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','picture','url','page_link','theme_image','theme_image_multi',
+		do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','picture','video','url','page_link','theme_image','theme_image_multi',
 		do_lang_tempcode('FIELD_TYPES__MAGIC'),'auto_increment','random','guid',
 		do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference','content_link','content_link_multi','user','user_multi','author',
 //			do_lang_tempcode('FIELD_TYPES__OTHER'),'date',			Will go under OTHER automatically
