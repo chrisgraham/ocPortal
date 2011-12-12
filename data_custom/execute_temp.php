@@ -67,8 +67,10 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('upgrade');
-	fix_mysql_database_charset();
+$zone='ocworld';
+	$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+	foreach (array_keys($groups) as $group_id)
+		$GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>$zone,'group_id'=>$group_id));
 }
 
 
