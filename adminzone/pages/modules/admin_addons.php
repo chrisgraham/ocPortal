@@ -433,7 +433,7 @@ class Module_admin_addons
 		install_addon($file,$files);
 
 		// Show it worked / Refresh
-		if (!is_null($theme))
+		if ((!is_null($theme)) && ($theme!='default'))
 		{
 			$url=build_url(array('page'=>'admin_themes','type'=>'edit_theme','theme'=>$theme),'adminzone');
 			return redirect_screen($title,$url,do_lang_tempcode('INSTALL_THEME_SUCCESS'));
