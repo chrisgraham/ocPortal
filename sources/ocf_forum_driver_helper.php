@@ -380,6 +380,7 @@ function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_
 					$message=get_translated_tempcode($myrow['p_post'],$GLOBALS['FORUM_DB']);
 			}
 			$temp['message']=$message;
+			$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);
 			$temp['user']=$myrow['p_poster'];
 			if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];
 			$temp['date']=$myrow['p_time'];

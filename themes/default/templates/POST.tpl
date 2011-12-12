@@ -18,6 +18,9 @@
 			{+START,IF_NON_EMPTY,{EDIT_URL}}
 				<span class="post_edit_link">(<a href="{EDIT_URL*}">{!EDIT}</a>)</span>
 			{+END}
+			{+START,IF,{$HAS_JS}}{+START,IF_PASSED,POST_COMCODE}
+				<span class="post_edit_link">(<a onclick="document.getElementById('post').focus(); document.getElementById('post').value='[quote=\'{POSTER_NAME*;}\']{POST_COMCODE*;}[/quote]\n\n'; return false;" href="#last_comment">{!ocf:QUOTE_POST}</a>)</span>
+			{+END}{+END}
 
 			{+START,LOOP,INDIVIDUAL_REVIEW_RATINGS}
 				{+START,IF_PASSED,REVIEW_RATING}

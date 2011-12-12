@@ -319,6 +319,7 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 		{
 			$comments='';
 			$staff_forum_link='';
+			$forum_link='';
 			$form=new ocp_tempcode();
 
 			// Show existing comments
@@ -367,15 +368,15 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 						$edit_post_url=build_url(array('page'=>'topics','type'=>'edit_post','id'=>$comment['id'],'redirect'=>get_self_url(true)),get_module_zone('topics'));
 					}
 
-					$tpl_post=do_template('POST',array('_GUID'=>'eb7df038959885414e32f58e9f0f9f39','POSTER_ID'=>strval($comment['user']),'EDIT_URL'=>$edit_post_url,'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,'HIGHLIGHT'=>$highlight,'TITLE'=>$comment['title'],'TIME_RAW'=>strval($datetime_raw),'TIME'=>$datetime,'POSTER_LINK'=>$poster_link,'POSTER_NAME'=>$poster_name,'POST'=>$comment['message']));
+					$tpl_post=do_template('POST',array('_GUID'=>'eb7df038959885414e32f58e9f0f9f39','POSTER_ID'=>strval($comment['user']),'EDIT_URL'=>$edit_post_url,'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,'HIGHLIGHT'=>$highlight,'TITLE'=>$comment['title'],'TIME_RAW'=>strval($datetime_raw),'TIME'=>$datetime,'POSTER_LINK'=>$poster_link,'POSTER_NAME'=>$poster_name,'POST'=>$comment['message'],'POST_COMCODE'=>isset($comment['message_comcode'])?$comment['message_comcode']:NULL));
 					$comments.=$tpl_post->evaluate();
 				}
 
+				$tid=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($full_title,$forum,$full_title);
+				$forum_link=$GLOBALS['FORUM_DRIVER']->topic_link($tid,$forum);
 				if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()) || ($forum==get_option('comments_forum_name')))
 				{
-					$tid=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($type.'_'.$id,$forum,$type.'_'.$id);
-					$url=$GLOBALS['FORUM_DRIVER']->topic_link($tid,$forum);
-					$staff_forum_link=$url;
+					$staff_forum_link=$forum_link;
 				}
 			} else
 			{
@@ -435,7 +436,7 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 			}
 
 			// Show comments/form
-			$comment_details=do_template('COMMENTS_WRAPPER',array('_GUID'=>'a89cacb546157d34vv0994ef91b2e707','RESULTS_BROWSER'=>$results_browser,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>is_null($review_titles)?array():$review_titles,'STAFF_FORUM_LINK'=>$staff_forum_link,'FORM'=>$form,'COMMENTS'=>$comments));
+			$comment_details=do_template('COMMENTS_WRAPPER',array('_GUID'=>'a89cacb546157d34vv0994ef91b2e707','RESULTS_BROWSER'=>$results_browser,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>is_null($review_titles)?array():$review_titles,'FORUM_LINK'=>$forum_link,'STAFF_FORUM_LINK'=>$staff_forum_link,'FORM'=>$form,'COMMENTS'=>$comments));
 		} else
 		{
 			attach_message(do_lang_tempcode('MISSING_FORUM',escape_html($forum)),'warn');
