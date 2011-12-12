@@ -2,10 +2,10 @@
 	<p class="ocf_profile_add_friend">
 		{+START,IF,{$NOT,{$MOBILE}}}[{+END}
 		{+START,IF_NON_EMPTY,{ADD_FRIEND_URL}}
-			<a href="{ADD_FRIEND_URL*}">{!_ADD_AS_FRIEND,{USERNAME*}}</a>
+			<a href="{ADD_FRIEND_URL*}">{!_ADD_AS_FRIEND,{$USERNAME*,{MEMBER_ID}}}</a>
 		{+END}
 		{+START,IF_NON_EMPTY,{REMOVE_FRIEND_URL}}
-			<a href="{REMOVE_FRIEND_URL*}">{!_REMOVE_AS_FRIEND,{USERNAME*}}</a>
+			<a href="{REMOVE_FRIEND_URL*}">{!_REMOVE_AS_FRIEND,{$USERNAME*,{MEMBER_ID}}}</a>
 		{+END}
 		{+START,IF_NON_EMPTY,{ALL_BUDDIES_LINK}}
 			<a href="{ALL_BUDDIES_LINK*}">{!VIEW_ARCHIVE}</a>
