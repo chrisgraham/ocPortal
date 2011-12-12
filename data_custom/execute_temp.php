@@ -67,6 +67,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('upgrade');
+	fix_mysql_database_charset();
 }
 
 

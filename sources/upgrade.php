@@ -1498,4 +1498,91 @@ function ocf_upgrade()
 	} return false;
 }
 
+/**
+ * Make sure the site database has the correct character set internally. ocPortal already ensures the communication charset makes sense for what ocPortal is using, this makes sure it stores sanely too.
+ */
+function fix_mysql_database_charset()
+{
+	global $SITE_INFO;
+	if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
+	change_mysql_database_charset($SITE_INFO['database_charset'],$GLOBALS['SITE_DB']);
+}
+
+/**
+ * Refresh a MySQL database's character set is correct.
+ *
+ * @param  ID_TEXT		Character set
+ * @param  object			Database
+ * @param  boolean		Whether to let MySQL do a reencoding of the characters (if this is set to false we actually are adjusting the interpretation whilst leaving the disk data the same)
+ */
+function change_mysql_database_charset($new_charset,$db,$reencode=false)
+{
+	@ob_end_clean();
+	
+	if (function_exists('set_time_limit')) @set_time_limit(0);
+	
+	$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
+	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+
+	$fulltext_indices=$GLOBALS['SITE_DB']->query_select('db_meta_indices',array('*'));
+	foreach ($fulltext_indices as $index)
+	{
+		if (substr($index['i_name'],0,1)=='#')
+		{
+			echo 'Deleting index: '.$index['i_table'].'/'.$index['i_name']."\n";
+			flush();
+
+			$GLOBALS['SITE_DB']->delete_index_if_exists($index['i_table'],$index['i_name']);
+		}
+	}
+
+	echo 'Changing overall character set for database'."\n";
+	flush();
+	$db->query('ALTER DATABASE '.get_db_site().' CHARACTER SET '.$new_charset);
+
+	$remap=$db->static_ob->db_get_type_remap();
+
+	$tables=collapse_1d_complexity('m_table',$db->query_select('db_meta',array('DISTINCT m_table')));
+	foreach ($tables as $table)
+	{
+		echo 'Changing character sets for: '.$table."\n";
+		flush();
+		
+		$fields=$db->query_select('db_meta',array('m_name','m_table','m_type'),array('m_table'=>$table));
+
+		$db->query('ALTER TABLE '.$db->get_table_prefix().$table.' CHARACTER SET '.$new_charset);
+		foreach ($fields as $field)
+		{
+			$db_type=strtoupper($remap[str_replace(array('*','?'),array('',''),$field['m_type'])]);
+			if ((strpos($db_type,'TEXT')!==false) || (strpos($db_type,'CHAR')!==false))
+			{
+				$db_type_temp=$db_type;
+				if (substr($db_type,0,4)=='CHAR') $db_type_temp=str_replace('CHAR','BINARY',$db_type);
+				elseif (substr($db_type,0,7)=='VARCHAR') $db_type_temp=str_replace('VARCHAR','VARBINARY',$db_type);
+				elseif (substr($db_type,0,4)=='LONGTEXT') $db_type_temp=str_replace('LONGTEXT','LONGBLOB',$db_type);
+
+				foreach ($reencode?array($db_type):array($db_type_temp,$db_type) as $i=>$db_type)
+				{
+					$query='ALTER TABLE '.$db->get_table_prefix().$table.' CHANGE '.$field['m_name'].' '.$field['m_name'].' '.$db_type;
+					if ($i==1 || $reencode) $query.=' CHARACTER SET '.$new_charset;
+					$query.=' '.((strpos($field['m_name'],'?')!==false)?'NULL':'NOT NULL');
+					$db->query($query);
+				}
+			}
+		}
+	}
+
+	foreach ($fulltext_indices as $index)
+	{
+		if (substr($index['i_name'],0,1)=='#')
+		{
+			echo 'Rebuilding index: '.$index['i_table'].'/'.$index['i_name']."\n";
+			flush();
+
+			$GLOBALS['SITE_DB']->create_index($index['i_table'],$index['i_name'],explode(',',$index['i_fields']));
+		}
+	}
+
+	$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
+}
 
