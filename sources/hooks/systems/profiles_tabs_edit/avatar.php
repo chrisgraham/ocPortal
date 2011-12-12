@@ -61,7 +61,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 						$stock=post_param('avatar_stock',NULL);
 						if (!is_null($stock)) // Stock
 						{
-							$urls[0]=find_theme_image($stock,false,true);
+							$urls[0]=($stock=='')?'':find_theme_image($stock,false,true);
 						} else $urls[0]=''; // None
 					} else
 					{
