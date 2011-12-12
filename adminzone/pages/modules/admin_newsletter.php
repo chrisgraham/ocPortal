@@ -351,17 +351,22 @@ class Module_admin_newsletter extends standard_aed_module
 			$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters));
 			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV_2'),'file',true,NULL,NULL,true,'csv,txt'));
 			// Choose level
-			$l=form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0'));
-			$l->attach(form_input_list_entry('1',$level==1,do_lang_tempcode('NEWSLETTER_1')));
-			$l->attach(form_input_list_entry('2',$level==2,do_lang_tempcode('NEWSLETTER_2')));
-			$l->attach(form_input_list_entry('3',$level==3,do_lang_tempcode('NEWSLETTER_3')));
-			$l->attach(form_input_list_entry('4',$level==4,do_lang_tempcode('NEWSLETTER_4')));
-			$fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL_2'),'level',$l));
+			if (get_option('interest_levels')=='0')
+			{
+				$hidden->attach(form_input_hidden('level','4'));
+			} else
+			{
+				$l=form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0'));
+				$l->attach(form_input_list_entry('1',$level==1,do_lang_tempcode('NEWSLETTER_1')));
+				$l->attach(form_input_list_entry('2',$level==2,do_lang_tempcode('NEWSLETTER_2')));
+				$l->attach(form_input_list_entry('3',$level==3,do_lang_tempcode('NEWSLETTER_3')));
+				$l->attach(form_input_list_entry('4',$level==4,do_lang_tempcode('NEWSLETTER_4')));
+				$fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL_2'),'level',$l));
+			}
 
 			$submit_name=do_lang_tempcode('IMPORT_NEWSLETTER_SUBSCRIBERS');
 			$post_url=get_self_url();
 
-			$hidden=new ocp_tempcode();
 			$hidden->attach(form_input_hidden('lang',$_lang));
 			handle_max_file_size($hidden);
 
@@ -944,6 +949,9 @@ class Module_admin_newsletter extends standard_aed_module
 
 		$submit_name=do_lang_tempcode('PREVIEW');
 
+		$hidden=new ocp_tempcode();
+		$hidden->attach(form_input_hidden('lang',$lang));
+
 		// Build up form
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
@@ -965,7 +973,10 @@ class Module_admin_newsletter extends standard_aed_module
 		{
 			$html_only=(strpos($existing->evaluate(),'<html')!==false);
 		} else $html_only=($_html_only==1);
-		$fields->attach(form_input_tick(do_lang_tempcode('HTML_ONLY'),do_lang_tempcode('DESCRIPTION_HTML_ONLY'),'html_only',$html_only));
+		if (get_value('force_html_only')==='1')
+			$hidden->attach(form_input_hidden('html_only','1'));
+		else
+			$fields->attach(form_input_tick(do_lang_tempcode('HTML_ONLY'),do_lang_tempcode('DESCRIPTION_HTML_ONLY'),'html_only',$html_only));
 		$l=new ocp_tempcode();
 		$priority=post_param_integer('priority',3);
 		for ($i=1;$i<=5;$i++)
@@ -990,7 +1001,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 				if (($c1==$c2) && ($c1==$c3) && ($c1==$c4))
 				{
-					$fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_PREFIX',escape_html($newsletter_title)),do_lang_tempcode('DESCRIPTION_NOSUBSCRIPTION_LEVEL',escape_html(integer_format($c4)),escape_html($newsletter_description)),strval($newsletter['id']),$level>=1));
+					$fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_PREFIX',escape_html($newsletter_title)),do_lang_tempcode('DESCRIPTION_NOSUBSCRIPTION_LEVEL',escape_html(integer_format($c4)),escape_html($newsletter_description)),strval($newsletter['id']),$level>=1,NULL,'4'));
 				} else
 				{
 					$l=new ocp_tempcode();
@@ -1025,8 +1036,6 @@ class Module_admin_newsletter extends standard_aed_module
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV'),'file',false,NULL,NULL,true,'csv,txt'));
 		//if ($fields->is_empty()) inform_exit(do_lang_tempcode('NOBODY_TO_SEND_TO'));
 
-		$hidden=new ocp_tempcode();
-		$hidden->attach(form_input_hidden('lang',$lang));
 		handle_max_file_size($hidden);
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'0b2a4825ec586d9ff557026d9a1e0cca','TITLE'=>$title,'TEXT'=>do_lang_tempcode('NEWSLETTER_SEND_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
