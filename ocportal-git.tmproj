@@ -1665,20 +1665,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>sources/hooks/systems/video_embed/youtube.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>61</integer>
-				<key>line</key>
-				<integer>65</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>31</integer>
-		</dict>
 		<key>sources/lang_compile.php</key>
 		<dict>
 			<key>caret</key>
@@ -2535,36 +2521,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates/OCF_POSTER_GUEST.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>316</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>305</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>316</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-		</dict>
 		<key>themes/default/templates/OCF_SCREEN_BUTTON_WRAP.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2965,6 +2921,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{811, 114}, {1009, 966}}</string>
+	<string>{{426, 122}, {1009, 966}}</string>
 </dict>
 </plist>

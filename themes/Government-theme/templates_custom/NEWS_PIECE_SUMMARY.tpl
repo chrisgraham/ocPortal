@@ -15,6 +15,6 @@
 
 <div class="news_goto">
 	{$,<img class="button_pageitem" src="{$IMG*,pageitem/goto}" title="{!VIEW} / {!COMMENTS}" alt="{!VIEW} / {!COMMENTS}" />}
-	<a title="#{ID*}" href="{FULL_URL*}">{!READ_MORE}</a> {+START,IF_PASSED,COMMENT_COUNT} ({$COMMENT_COUNT,news,{ID}}){+END}
+	<a title="#{ID*}" href="{FULL_URL*}">{!READ_MORE}</a>{+START,IF,{$NOT,{$MATCH_KEY_MATCH,forum:topicview}}} {+START,IF_PASSED,COMMENT_COUNT} ({$COMMENT_COUNT,news,{ID}}){+END}{+END}
 </div>
 
