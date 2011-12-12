@@ -664,7 +664,9 @@ function match_key_match($match_tag,$support_post=false)
 		$parts=explode(':',$potential);
 		if (($parts[0]=='_WILD') || ($parts[0]=='_SEARCH')) $parts[0]=get_zone_name();
 		if ((!array_key_exists(1,$parts)) || ($parts[1]=='_WILD')) $parts[1]=get_page_name();
-		if (($parts[0]==get_zone_name()) && ($parts[1]==get_page_name()))
+		$zone_matches=(($parts[0]==get_zone_name()) || ((strpos($parts[0],'*')!==false) && (simulated_wildcard_match(get_zone_name(),$parts[0],true))));
+		$page_matches=(($parts[1]==get_page_name()) || ((strpos($parts[1],'*')!==false) && (simulated_wildcard_match(get_page_name(),$parts[1],true))));
+		if (($zone_matches) && ($page_matches))
 		{
 			$bad=false;
 			for ($i=2;$i<count($parts);$i++)
