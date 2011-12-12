@@ -506,7 +506,7 @@ function set_permissions(setting)
 			id=node.getAttribute('id');
 			if (typeof window.attributes_full=='undefined') window.attributes_full=[];
 			if (typeof window.attributes_full[id]=='undefined') window.attributes_full[id]=node.attributes;
-			for (name in window.attributes_full[id])
+			for (var name in window.attributes_full[id])
 			{
 				var value=window.attributes_full[id][name];
 				if (name.substr(0,3)=='sp_')
