@@ -36,6 +36,7 @@ class Module_cms_galleries extends standard_aed_module
 	var $award_type='image';
 	var $javascript='standardAlternateFields(\'file\',\'url\'); standardAlternateFields(\'file2\',\'thumb_url\');';
 	var $menu_label='GALLERIES';
+	var $table='images';
 
 	var $donext_type=NULL;
 
@@ -1103,6 +1104,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	var $javascript='standardAlternateFields(\'file\',\'url\'); standardAlternateFields(\'file2\',\'thumb_url\');';
 	var $award_type='video';
 	var $menu_label='GALLERIES';
+	var $table='videos';
 
 	var $donext_type=NULL;
 
