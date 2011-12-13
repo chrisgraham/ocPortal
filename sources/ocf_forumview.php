@@ -461,8 +461,7 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 			$topic['description']='';
 
 			require_code('ocf_posts');
-			list($new_description,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
-			if (!is_null($new_description)) $topic['description']=$new_description;
+			list(,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
 			if (!is_null($new_post)) $topic['first_post']=$new_post;
 		}
 	}
@@ -471,6 +470,10 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 	$topic['first_time']=$topic_row['t_cache_first_time'];
 	$topic['first_title']=$topic_row['t_cache_first_title'];
 	if ($topic['first_title']=='') $topic['first_title']=do_lang_tempcode('NA');
+	if ($is_spacer_post)
+	{
+		$topic['first_title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$topic['first_title']);
+	}
 	$topic['first_username']=$topic_row['t_cache_first_username'];
 	$topic['first_member_id']=$topic_row['t_cache_first_member_id'];
 	if (is_null($topic['first_member_id']))

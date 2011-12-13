@@ -424,8 +424,11 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		{
 			require_code('ocf_posts');
 			list($new_description,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
-			if (!is_null($new_description)) $out['description']=$new_description;
+			//if (!is_null($new_description)) $out['description']=$new_description;	Actually, it's a bit redundant
 			if (!is_null($new_post)) $_postdetails['trans_post']=$new_post;
+
+			$out['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$out['title']);
+			$_postdetails['p_title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$_postdetails['p_title']);
 		}
 
 		// Put together

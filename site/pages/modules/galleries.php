@@ -1086,7 +1086,7 @@ class Module_galleries
 			$myrow['validated'],
 			$myrow['submitter'],
 			build_url(array('page'=>'_SELF','type'=>'image','id'=>$id),'_SELF'),
-			get_translated_text($myrow['comments']),
+			do_lang('VIEW_IMAGE_IN',$true_category_name),
 			get_value('comment_forum__images')
 		);
 
@@ -1209,7 +1209,7 @@ class Module_galleries
 			$myrow['validated'],
 			$myrow['submitter'],
 			build_url(array('page'=>'_SELF','type'=>'video','id'=>$id),'_SELF'),
-			get_translated_text($myrow['comments']),
+			do_lang('VIEW_VIDEO_IN',$true_category_name),
 			get_value('comment_forum__videos')
 		);
 
