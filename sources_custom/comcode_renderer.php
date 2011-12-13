@@ -46,12 +46,12 @@ if (!function_exists('init__comcode_renderer'))
 					if (is_null(\$video_width)) \$video_width=300;
 					if (is_null(\$video_height)) \$video_height=200;
 
-					add_video(\$gallery,\$comments,\$urls_gal[0],\$urls_gal[1],1,1,1,1,'',\$video_length,\$video_width,\$video_height);
+					add_video('',\$gallery,\$comments,\$urls_gal[0],\$urls_gal[1],1,1,1,1,'',\$video_length,\$video_width,\$video_height);
 				}
 
 				if (is_image(\$urls_gal[0]))
 				{
-					add_image(\$gallery,\$comments,\$urls_gal[0],\$urls_gal[1],1,1,1,1,'');
+					add_image('',\$gallery,\$comments,\$urls_gal[0],\$urls_gal[1],1,1,1,1,'');
 				}
 			}
 		";

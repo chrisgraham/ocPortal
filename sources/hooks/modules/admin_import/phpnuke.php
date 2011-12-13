@@ -437,7 +437,7 @@ class Hook_phpnuke
 				$image_url=$row['screenshot'];
 				if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
 				$thumb_url='';
-				add_image('download_'.strval($new_id),'',$image_url,$thumb_url,$row['validated'],1,1,1,'');
+				add_image('','download_'.strval($new_id),'',$image_url,$thumb_url,$row['validated'],1,1,1,'');
 			}
 		}
 	

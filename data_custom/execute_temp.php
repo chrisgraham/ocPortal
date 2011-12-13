@@ -67,10 +67,10 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-$zone='ocworld';
-	$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-	foreach (array_keys($groups) as $group_id)
-		$GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>$zone,'group_id'=>$group_id));
+	$GLOBALS['SITE_DB']->add_table_field('videos','title','SHORT_TRANS');
+	$GLOBALS['SITE_DB']->add_table_field('images','title','SHORT_TRANS');
+	$GLOBALS['SITE_DB']->add_table_field('galleries','gallery_views','INTEGER');
+	$GLOBALS['SITE_DB']->add_table_field('galleries','g_owner','?USER');
 }
 
 

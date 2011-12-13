@@ -126,7 +126,7 @@ $attribute";
 				if (!file_exists(get_custom_file_base().'/'.$url)) $url = "data_custom/addon_screenshots/".strtolower($name).".png";
 				if (!file_exists(get_custom_file_base().'/'.$url)) $url = "data_custom/addon_screenshots/".$addon.".png";
 				if (file_exists(get_custom_file_base().'/'.$url))
-					add_image('download_'.strval($downid),'',str_replace(' ','%20',$url),'',1,0,0,0,'',NULL,NULL,NULL,0);
+					add_image('','download_'.strval($downid),'',str_replace(' ','%20',$url),'',1,0,0,0,'',NULL,NULL,NULL,0);
 			}
 		}
 	}
@@ -174,7 +174,7 @@ if (get_param_integer('import_themes',1)==1)
 				$downid = add_download($cid,$name,$addon_path,$description,$author,'',NULL,1,1,2,1,'',$new_file,$fsize,0,0,NULL,NULL,0,0,$admin);
 
 				if (file_exists(get_custom_file_base().'/'.$url))
-					add_image('download_'.strval($downid),'',str_replace(' ','%20',$url),'',1,0,0,0,'',NULL,NULL,NULL,0);
+					add_image('','download_'.strval($downid),'',str_replace(' ','%20',$url),'',1,0,0,0,'',NULL,NULL,NULL,0);
 			}
 		}
 	}

@@ -287,13 +287,13 @@ function do_work()
 	require_code('galleries2');
 	for ($i=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_image('root',random_text(),get_logo_url(),get_logo_url(),1,1,1,1,'');
+		add_image('','root',random_text(),get_logo_url(),get_logo_url(),1,1,1,1,'');
 	}
 	// videos / validation queue
 	require_code('galleries2');
 	for ($i=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_video('root',random_text(),get_logo_url(),get_logo_url(),0,1,1,1,'',0,0,0);
+		add_video('','root',random_text(),get_logo_url(),get_logo_url(),0,1,1,1,'',0,0,0);
 	}
 	echo 'done galleries stuff'.chr(10);
 

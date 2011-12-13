@@ -34,7 +34,7 @@ class Hook_content_meta_aware_video
 			'id_field_numeric'=>true,
 			'parent_category_field'=>'cat',
 			'parent_category_meta_aware_type'=>'gallery',
-			'title_field'=>'comments',
+			'title_field'=>'title',
 			'title_field_dereference'=>true,
 
 			'is_category'=>false,

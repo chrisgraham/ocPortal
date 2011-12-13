@@ -89,7 +89,7 @@ class Hook_search_images
 				break;
 
 			case 'title':
-				$remapped_orderer='comments';
+				$remapped_orderer='title';
 				break;
 	
 			case 'add_date':
@@ -115,7 +115,7 @@ class Hook_search_images
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('image','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'images r',array('','r.comments'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'galleries','cat',true);
+		$rows=get_search_rows('image','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'images r',array('','r.comments','r.title'),$where_clause,$content_where,$remapped_orderer,'r.*',array(),'galleries','cat',true);
 
 		$out=array();
 		foreach ($rows as $i=>$row)
@@ -136,14 +136,8 @@ class Hook_search_images
 	 */
 	function render($row)
 	{
-		require_code('images');
-		$url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row['id']),get_module_zone('galleries'));
-		$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-		$tpl=hyperlink($url,do_image_thumb($thumb_url,get_translated_tempcode($row['comments']),true));
 		require_code('galleries');
-		$tree=gallery_breadcrumbs($row['cat'],'root',false);
-		$tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
-		return put_in_standard_box($tpl,do_lang_tempcode('IMAGE'));
+		return render_image_box($row);
 	}
 
 }

@@ -695,7 +695,7 @@ END;
 						$url=get_custom_base_url().'/uploads/galleries/'.$blog_pimage['file'];
 						$thumb_url='';
 
-						$id_new=add_image($cat_name,$comment_text,$url,$url,$row['validate'],1,1,1,'',$submitter,$row['creato'],$row['creato'],$row['click'],$id);
+						$id_new=add_image('',$cat_name,$comment_text,$url,$url,$row['validate'],1,1,1,'',$submitter,$row['creato'],$row['creato'],$row['click'],$id);
 
 						import_id_remap_put('blog_image',strval($blog_pimage['id']),$id_new);
 					}
@@ -907,7 +907,7 @@ END;
 				{
 					$image_url=$row['screen1'];
 					$thumb_url='';
-					add_image('download_'.strval($new_id),'',$image_url,$thumb_url,$row['validate'],1,1,1,'');
+					add_image('','download_'.strval($new_id),'',$image_url,$thumb_url,$row['validate'],1,1,1,'');
 				}
 
 				// Image 2
@@ -915,7 +915,7 @@ END;
 				{
 					$image_url=$row['screen2'];
 					$thumb_url='';
-					add_image('download_'.strval($new_id),'',$image_url,$thumb_url,$row['validate'],1,1,1,'');
+					add_image('','download_'.strval($new_id),'',$image_url,$thumb_url,$row['validate'],1,1,1,'');
 				}
 			}
 
@@ -1074,7 +1074,7 @@ END;
 			$url=get_custom_base_url().'/uploads/galleries/'.$row['file'];
 			$thumb_url=get_custom_base_url().'/uploads/galleries_thumbs/'.$row['file'];
 
-			$id_new=add_image('gallery_'.strval($row['evento']),$comment_text,$url,$url,$row['validate'],1,1,1,'',$submitter,$row['data'],NULL,$row['click'],$id);
+			$id_new=add_image('','gallery_'.strval($row['evento']),$comment_text,$url,$url,$row['validate'],1,1,1,'',$submitter,$row['data'],NULL,$row['click'],$id);
 
 			import_id_remap_put('image',strval($row['id']),$id_new);
 

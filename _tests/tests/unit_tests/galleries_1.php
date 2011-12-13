@@ -32,7 +32,7 @@ class galleries_1_test_set extends ocp_test_case
 		require_code('galleries');
 		require_code('galleries2');
 
-		$this->glry_id=add_image('','','http://www.msn.com','images/test.jpg',0,0,0,0,'',NULL,NULL,NULL,0,NULL);
+		$this->glry_id=add_image('','','','http://www.msn.com','images/test.jpg',0,0,0,0,'',NULL,NULL,NULL,0,NULL);
 
 		$this->assertTrue('http://www.msn.com'==$GLOBALS['SITE_DB']->query_value('images','url',array('id'=>$this->glry_id)));
 	}

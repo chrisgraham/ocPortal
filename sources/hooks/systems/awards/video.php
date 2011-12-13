@@ -64,15 +64,8 @@ class Hook_awards_video
 	 */
 	function run($row,$zone)
 	{
-		require_code('images');
-		$url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),$zone);
-		$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
-
-		$tpl=hyperlink($url,do_image_thumb($thumb_url,get_translated_tempcode($row['comments']),true));
 		require_code('galleries');
-		$tree=gallery_breadcrumbs($row['cat'],'root',false,$zone);
-		$tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
-		return put_in_standard_box($tpl,do_lang_tempcode('VIDEO'));
+		return render_video_box($row,$zone);
 	}
 
 }

@@ -64,14 +64,8 @@ class Hook_awards_image
 	 */
 	function run($row,$zone)
 	{
-		require_code('images');
-		$url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row['id']),$zone);
-		$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-		$tpl=hyperlink($url,do_image_thumb($thumb_url,get_translated_tempcode($row['comments']),true));
 		require_code('galleries');
-		$tree=gallery_breadcrumbs($row['cat'],'root',false,$zone);
-		$tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
-		return put_in_standard_box($tpl,do_lang_tempcode('IMAGE'));
+		return render_image_box($row,$zone);
 	}
 
 }

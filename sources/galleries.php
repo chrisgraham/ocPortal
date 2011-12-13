@@ -32,6 +32,72 @@ function init__galleries()
 }
 
 /**
+ * Render an image box.
+ *
+ * @param  array			The video row
+ * @param  ID_TEXT		The zone the galleries module is in
+ * @return tempcode		The rendered box
+ */
+function render_image_box($row,$zone='_SEARCH')
+{
+	require_css('galleries');
+	
+	require_code('images');
+	$url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row['id']),$zone);
+	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
+	$description=get_translated_tempcode($row['comments']);
+	$thumb=do_image_thumb($thumb_url,$description,true);
+	$tree=gallery_breadcrumbs($row['cat'],'root',false,$zone);
+
+	$image_url=$row['url'];
+	if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
+
+	$title=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$row['cat']));
+	if (is_null($title))
+	{
+		$gallery_title=do_lang('UNKNOWN');
+	} else
+	{
+		$gallery_title=get_translated_text($title);
+	}
+
+	return do_template('GALLERY_IMAGE_BOX',array('ADD_DATE_RAW'=>strval($row['add_date']),'ID'=>strval($row['id']),'TITLE'=>get_translated_text($row['title']),'NOTES'=>$row['notes'],'GALLERY_TITLE'=>$gallery_title,'CAT'=>$row['cat'],'VIEWS'=>strval($row['image_views']),'TREE'=>$tree,'URL'=>$url,'IMAGE_URL'=>$image_url,'DESCRIPTION'=>$description,'THUMB'=>$thumb,'THUMB_URL'=>$thumb_url));
+}
+
+/**
+ * Render a video box.
+ *
+ * @param  array			The video row
+ * @param  ID_TEXT		The zone the galleries module is in
+ * @return tempcode		The rendered box
+ */
+function render_video_box($row,$zone='_SEARCH')
+{
+	require_css('galleries');
+	
+	require_code('images');
+	$url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),$zone);
+	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
+	$description=get_translated_tempcode($row['comments']);
+	$thumb=do_image_thumb($thumb_url,$description,true);
+	$tree=gallery_breadcrumbs($row['cat'],'root',false,$zone);
+
+	$video_url=$row['url'];
+	if (url_is_local($video_url)) $video_url=get_custom_base_url().'/'.$video_url;
+
+	$title=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$row['cat']));
+	if (is_null($title))
+	{
+		$gallery_title=do_lang('UNKNOWN');
+	} else
+	{
+		$gallery_title=get_translated_text($title);
+	}
+
+	return do_template('GALLERY_VIDEO_BOX',array('ADD_DATE_RAW'=>strval($row['add_date']),'ID'=>strval($row['id']),'TITLE'=>get_translated_text($row['title']),'NOTES'=>$row['notes'],'GALLERY_TITLE'=>$gallery_title,'CAT'=>$row['cat'],'VIEWS'=>strval($row['video_views']),'TREE'=>$tree,'URL'=>$url,'VIDEO_URL'=>$video_url,'DESCRIPTION'=>$description,'THUMB'=>$thumb,'THUMB_URL'=>$thumb_url,'VIDEO_WIDTH'=>strval($row['video_width']),'VIDEO_HEIGHT'=>strval($row['video_height']),'VIDEO_LENGTH'=>strval($row['video_length'])));
+}
+
+/**
  * Find the default number of images per page in the galleries.
  *
  * @return integer		Images per page
@@ -100,12 +166,22 @@ function gallery_has_content($name)
  * Find the owner of a gallery.
  *
  * @param  ID_TEXT		The name of the gallery
+ * @param  array			Gallery row (NULL: look it up)
  * @return ?MEMBER		The owner of the gallery (NULL: not a member owned gallery)
  */
-function get_member_id_from_gallery_name($gallery_name)
+function get_member_id_from_gallery_name($gallery_name,$row=NULL)
 {
 	$is_member=(substr($gallery_name,0,7)=='member_');
-	if (!$is_member) return NULL;
+	if (!$is_member)
+	{
+		if (is_null($row))
+		{
+			$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('g_owner'),array('name'=>$gallery_name));
+			$row=$rows[0];
+		}
+
+		return $row['g_owner'];
+	}
 	return intval(substr($gallery_name,7,strpos($gallery_name,'_',7)-7));
 }
 
@@ -136,7 +212,7 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 	$is_member=(substr($child['name'],0,7)=='member_');
 	if ($is_member)
 	{
-		$member_id=get_member_id_from_gallery_name($child['name']);
+		$member_id=get_member_id_from_gallery_name($child['name'],$child);
 	}
 	$url=build_url(array('page'=>'galleries','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$child['name']),$zone);
 	$_title=get_translated_text($child['fullname']);
@@ -660,12 +736,14 @@ function get_gallery_content_tree($table,$submitter=NULL,$gallery=NULL,$tree=NUL
 	$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('name','fullname'),array('parent_id'=>$gallery),'ORDER BY add_date DESC',300);
 	$where=array('cat'=>$gallery);
 	if (!is_null($submitter)) $where['submitter']=$submitter;
-	$erows=$GLOBALS['SITE_DB']->query_select($table,array('id','url','submitter'),$where,'ORDER BY add_date DESC',300);
+	$erows=$GLOBALS['SITE_DB']->query_select($table,array('id','url','submitter','title'),$where,'ORDER BY add_date DESC',300);
 	$children[0]['entries']=array();
 	foreach ($erows as $row)
 	{
 		if (($editable_filter) && (!has_edit_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('galleries',$gallery)))) continue;
-		$children[0]['entries'][$row['id']]=(substr($row['url'],0,18)=='uploads/galleries/')?substr($row['url'],18):$row['url'];
+		$e_title=get_translated_text($row['title']);
+		if ($e_title=='') $e_title=basename($row['url']);
+		$children[0]['entries'][$row['id']]=$e_title;
 	}
 	$children[0]['child_entry_count']=count($children[0]['entries']);
 	if ($levels===0) // We throw them away now because they're not on the desired level
