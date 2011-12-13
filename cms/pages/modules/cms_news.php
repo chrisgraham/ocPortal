@@ -37,6 +37,7 @@ class Module_cms_news extends standard_aed_module
 	var $possibly_some_kind_of_upload=true;
 	var $upload='image';
 	var $menu_label='NEWS';
+	var $table='news';
 	var $orderer='title';
 	var $title_is_multi_lang=true;
 	
@@ -229,17 +230,19 @@ class Module_cms_news extends standard_aed_module
 	 * @param  LONG_TEXT			The news summary
 	 * @param  SHORT_TEXT		The name of the author
 	 * @param  BINARY				Whether the news is validated
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+ 	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+ 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+ 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  BINARY				Whether to show the "send trackback" field
 	 * @param  LONG_TEXT			Notes for the video
 	 * @param  URLPATH			URL to the image for the news entry (blank: use cat image)
 	 * @param  ?array				Scheduled go-live time (NULL: N/A)
 	 * @return array				A tuple of lots of info (fields, hidden fields, trailing fields, tabindex for posting form)
 	 */
-	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
+	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
 	{
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+
 		require_lang('menus');
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_WRITING');
 		$GLOBALS['HELPER_PANEL_PIC']='';

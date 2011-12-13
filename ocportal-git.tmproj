@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>sources/attachments.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -172,7 +174,7 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2011-12-05T17:45:27Z</date>
+			<date>2011-12-12T09:47:13Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -436,20 +438,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>adminzone/pages/modules/admin_newsletter.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>5</integer>
-				<key>line</key>
-				<integer>784</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>750</integer>
 		</dict>
 		<key>adminzone/pages/modules/admin_ocf_groups.php</key>
 		<dict>
@@ -901,6 +889,36 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
+		<key>site/pages/modules/calendar.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>71</integer>
+				<key>line</key>
+				<integer>213</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>187</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>64</integer>
+				<key>line</key>
+				<integer>213</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>71</integer>
+				<key>line</key>
+				<integer>213</integer>
+			</dict>
+		</dict>
 		<key>site/pages/modules/onlinemembers.php</key>
 		<dict>
 			<key>caret</key>
@@ -928,6 +946,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>sources/attachments.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>37</integer>
+				<key>line</key>
+				<integer>29</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>106</integer>
 		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
@@ -973,19 +1005,19 @@
 			<key>firstVisibleLine</key>
 			<integer>8</integer>
 		</dict>
-		<key>sources/downloads.php</key>
+		<key>sources/comcode_renderer.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>21</integer>
+				<integer>17</integer>
 				<key>line</key>
-				<integer>452</integer>
+				<integer>1068</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>408</integer>
+			<integer>1047</integer>
 		</dict>
 		<key>sources/forum/smf.php</key>
 		<dict>
@@ -1679,6 +1711,20 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
+		<key>sources/mail.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>188</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>183</integer>
+		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -1795,6 +1841,20 @@
 				<integer>18</integer>
 			</dict>
 		</dict>
+		<key>sources_custom/blocks/main_google_map_users.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>44</integer>
+				<key>line</key>
+				<integer>104</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>78</integer>
+		</dict>
 		<key>sources_custom/hooks/modules/tracking/cedi.php</key>
 		<dict>
 			<key>caret</key>
@@ -1866,6 +1926,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
+		</dict>
+		<key>sources_custom/tracking.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>80</integer>
+				<key>line</key>
+				<integer>72</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>41</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>70</integer>
+				<key>line</key>
+				<integer>72</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>80</integer>
+				<key>line</key>
+				<integer>72</integer>
+			</dict>
 		</dict>
 		<key>themes/default/css_custom/index.html</key>
 		<dict>
@@ -2128,20 +2218,6 @@
 				<key>line</key>
 				<integer>0</integer>
 			</dict>
-		</dict>
-		<key>themes/default/templates/ECOM_CANCEL_BUTTON_VIA_PAYPAL.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>72</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>themes/default/templates/ECOM_CANCEL_BUTTON_VIA_SECPAY.tpl</key>
 		<dict>
@@ -2918,9 +2994,17 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>sources_custom/tracking.php</string>
+		<string>sources/mail.php</string>
+		<string>sources/attachments.php</string>
+		<string>sources/comcode_renderer.php</string>
+		<string>site/pages/modules/calendar.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{426, 122}, {1009, 966}}</string>
+	<string>{{567, 204}, {1009, 966}}</string>
 </dict>
 </plist>

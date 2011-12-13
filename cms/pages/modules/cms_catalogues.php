@@ -303,14 +303,16 @@ class Module_cms_catalogues extends standard_aed_module
 	 * @param  ?AUTO_LINK		The category for the entry (NULL: first)
 	 * @param  BINARY				Whether the entry is validated
 	 * @param  LONG_TEXT			Staff notes
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  ?AUTO_LINK		The ID of the entry (NULL: not yet added)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($catalogue_name=NULL,$category_id=NULL,$validated=1,$notes='',$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$id=NULL)
+	function get_form_fields($catalogue_name=NULL,$category_id=NULL,$validated=1,$notes='',$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$id=NULL)
 	{
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+		
 		if (is_null($catalogue_name)) $catalogue_name=get_param('catalogue_name');
 
 		require_code('feedback');
@@ -1322,6 +1324,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	var $award_type='catalogue';
 	var $is_tree_catalogue=false; // Set for usage by do-next-manager
 	var $menu_label='CATALOGUES';
+	var $table='catalogue_entries';
 	var $javascript="var fn=document.getElementById('title'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,''); }; }";
 
 	/**

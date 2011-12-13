@@ -842,20 +842,23 @@ class Module_cms_galleries extends standard_aed_module
 	/**
 	 * Get tempcode for an image adding/editing form.
 	 *
+	 * @param  SHORT_TEXT			The title
 	 * @param  ID_TEXT			The gallery
 	 * @param  LONG_TEXT			The image description
 	 * @param  URLPATH			URL to the image
 	 * @param  URLPATH			URL to the image thumbnail
 	 * @param  BINARY				Image validation status
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  LONG_TEXT			Notes for the image
 	 * @param  boolean			Whether this form will be used for adding a new image
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$adding=true)
+	function get_form_fields($title='',$cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
 	{
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+		
 		if ($adding)
 		{
 			$cat=get_param('cat','');
@@ -1218,17 +1221,22 @@ class Module_cms_galleries_alt extends standard_aed_module
 	 * @param  URLPATH			The URL to the video file (blank: not yet added)
 	 * @param  URLPATH			The URL to the thumbnail
 	 * @param  BINARY				Video validation status
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+ 	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+ 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+ 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  LONG_TEXT			Notes for the video
 	 * @param  ?integer			The length of the video (NULL: not yet added, so not yet known)
 	 * @param  ?integer			The width of the video (NULL: not yet added, so not yet known)
 	 * @param  ?integer			The height of the video (NULL: not yet added, so not yet known)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$video_length=NULL,$video_width=NULL,$video_height=NULL)
+	function get_form_fields($cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$video_length=NULL,$video_width=NULL,$video_height=NULL)
 	{
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+
 		$no_thumb_needed=(get_option('ffmpeg_path')!='') || (class_exists('ffmpeg_movie'));
 		if (!$no_thumb_needed)
 			$this->javascript='standardAlternateFields(\'file\',\'url\'); standardAlternateFields(\'file2\',\'thumb_url\',null,true);';
@@ -1492,6 +1500,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	var $non_integer_id=true;
 	var $award_type='gallery';
 	var $menu_label='GALLERIES';
+	var $table='galleries';
 	var $javascript="var fn=document.getElementById('fullname'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,''); }; }";
 
 	/**
@@ -1529,12 +1538,14 @@ class Module_cms_galleries_cat extends standard_aed_module
 	 * @param  ?URLPATH			Watermark (NULL: none)
 	 * @param  ?URLPATH			Watermark (NULL: none)
 	 * @param  ?URLPATH			Watermark (NULL: none)
-	 * @param  BINARY				Whether rating are allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($name='',$fullname='',$description='',$teaser='',$notes='',$parent_id='',$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=NULL,$rep_image=NULL,$watermark_top_left=NULL,$watermark_top_right=NULL,$watermark_bottom_left=NULL,$watermark_bottom_right=NULL,$allow_rating=0,$allow_comments=0)
+	function get_form_fields($name='',$fullname='',$description='',$teaser='',$notes='',$parent_id='',$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=NULL,$rep_image=NULL,$watermark_top_left=NULL,$watermark_top_right=NULL,$watermark_bottom_left=NULL,$watermark_bottom_right=NULL,$allow_rating=NULL,$allow_comments=NULL)
 	{
+		list($allow_rating,$allow_comments,)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,1);
+
 		if (is_null($flow_mode_interface))
 		{
 			$cnt=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');

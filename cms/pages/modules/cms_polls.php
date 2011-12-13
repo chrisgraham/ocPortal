@@ -202,14 +202,16 @@ class Module_cms_polls extends standard_aed_module
 	 * @param  SHORT_TEXT		The ninth answer
 	 * @param  SHORT_TEXT		The tenth answer
 	 * @param  boolean			Whether the poll is/will-be currently active
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  LONG_TEXT			Notes for the poll
 	 * @return tempcode			The tempcode for the visible fields
 	 */
 	function get_form_fields($question='',$a1='',$a2='',$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a9='',$a10='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
 	{
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('QUESTION'),do_lang_tempcode('DESCRIPTION_QUESTION'),'question',$question,true));

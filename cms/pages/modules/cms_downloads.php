@@ -36,6 +36,7 @@ class Module_cms_downloads extends standard_aed_module
 	var $javascript='standardAlternateFields(\'file\',\'url\'); var url=document.getElementById(\'url\'); var form=url.form; var crf=function() { var s=url.value!=\'\'; if (form.elements[\'copy_to_server\']) form.elements[\'copy_to_server\'].disabled=!s; if (form.elements[\'file_size\']) form.elements[\'file_size\'].disabled=!s; }; crf(); url.onchange=crf; url.onkeyup=crf; var cost=document.getElementById(\'cost\'); if (cost) { var form=cost.form; var crf2=function() { var s=(cost.value!=\'\') && (cost.value!=\'0\'); if (form.elements[\'submitter_gets_points\']) form.elements[\'submitter_gets_points\'].disabled=!s; }; crf2(); cost.onchange=crf2; cost.onkeyup=crf2; }';
 	var $award_type='download';
 	var $menu_label='SECTION_DOWNLOADS';
+	var $table='download_downloads';
 
 	var $donext_type=NULL;
 
@@ -443,9 +444,9 @@ class Module_cms_downloads extends standard_aed_module
 	 * @param  LONG_TEXT			Additional comments for the download
 	 * @param  ?AUTO_LINK		The ID of the download this download is out-moding (NULL: none)
 	 * @param  BINARY				Whether the download is validated
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  LONG_TEXT			Notes
 	 * @param  ?integer			The file size (NULL: not added yet therefore unknown)
 	 * @param  integer			The point cost of the download
@@ -455,8 +456,10 @@ class Module_cms_downloads extends standard_aed_module
 	 * @param  integer			Which image to use for the downloads representative image (counts from 1)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($id=NULL,$name='',$category_id=NULL,$url='',$author='',$description='',$comments='',$out_mode_id=NULL,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$file_size=NULL,$cost=0,$submitter_gets_points=1,$original_filename=NULL,$licence=NULL,$default_pic=1)
+	function get_form_fields($id=NULL,$name='',$category_id=NULL,$url='',$author='',$description='',$comments='',$out_mode_id=NULL,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$file_size=NULL,$cost=0,$submitter_gets_points=1,$original_filename=NULL,$licence=NULL,$default_pic=1)
 	{
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+		
 		if ((is_null($id)) && (is_null($category_id)))
 		{
 			global $NON_CANONICAL_PARAMS;

@@ -286,16 +286,18 @@ class Module_cms_calendar extends standard_aed_module
 	 * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
 	 * @param  BINARY				Whether the time should be presented in the viewer's own timezone
 	 * @param  BINARY				Whether the event is validated
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+ 	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+ 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+ 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  LONG_TEXT			Notes
 	 * @return array				A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields)
 	 */
-	function get_form_fields($type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
+	function get_form_fields($type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='')
 	{
-		unset($content);
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
+		unset($content);
+		
 		if ((is_null($timezone)) || ($timezone=='')) $timezone=get_users_timezone();
 
 		require_code('form_templates');

@@ -88,7 +88,7 @@ class standard_aed_module
 	var $array_key='id';
 	var $title_is_multi_lang=true;
 	var $orderer=NULL;
-	var $table=NULL;
+	var $table=NULL; // Actually, this is used by choose_feedback_fields_statistically also
 
 	/**
 	 * Standard modular info function.
@@ -242,7 +242,38 @@ class standard_aed_module
 
 		return new ocp_tempcode();
 	}
-	
+
+	/**
+	 * Statistically work out defaults for feedback fields, if not currently set.
+	 *
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+	 * @return array				Array of all input parameters, converted
+	 */
+	function choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks)
+	{
+		if (is_null($allow_rating))
+		{
+			$val=$GLOBALS['SITE_DB']->query_value($this->table,'AVG(allow_rating)');
+			$allow_rating=is_null($val)?1:intval(round($val));
+		}
+
+		if (is_null($allow_comments))
+		{
+			$val=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT allow_comments,count(allow_comments) AS qty FROM '.get_table_prefix().$this->table.' GROUP BY allow_comments ORDER BY qty DESC',1); // We need the mode here, not the mean
+			$allow_comments=is_null($val)?1:$val;
+		}
+
+		if (is_null($allow_trackbacks))
+		{
+			$val=$GLOBALS['SITE_DB']->query_value($this->table,'AVG(allow_trackbacks)');
+			$allow_trackbacks=is_null($val)?1:intval(round($val));
+		}
+
+		return array($allow_rating,$allow_comments,$allow_trackbacks);
+	}
+
 	/**
 	 * Standard modular permission chooser.
 	 *

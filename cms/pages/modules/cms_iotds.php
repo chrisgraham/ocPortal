@@ -35,6 +35,7 @@ class Module_cms_iotds extends standard_aed_module
 	var $permissions_require='mid';
 	var $javascript='standardAlternateFields(\'file\',\'url\'); standardAlternateFields(\'file2\',\'thumb_url\');';
 	var $menu_label='IOTDS';
+	var $table='iotd';
 
 	/**
 	 * Standard aed_module run_start.
@@ -114,14 +115,16 @@ class Module_cms_iotds extends standard_aed_module
 	 * @param  SHORT_TEXT		The title
 	 * @param  LONG_TEXT			The caption
 	 * @param  boolean			Whether the IOTD is/will-be currently active
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  LONG_TEXT			Notes for the IOTD
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
 	function get_form_fields($url='',$thumb_url='',$title='',$caption='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
 	{
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 		require_code('form_templates');

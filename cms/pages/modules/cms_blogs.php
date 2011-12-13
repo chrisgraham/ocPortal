@@ -180,16 +180,18 @@ class Module_cms_blogs extends standard_aed_module
 	 * @param  LONG_TEXT			The news summary
 	 * @param  SHORT_TEXT		The name of the author
 	 * @param  BINARY				Whether the news is validated
-	 * @param  BINARY				Whether rating is allowed
-	 * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
-	 * @param  BINARY				Whether trackbacks are allowed
+	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
+	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  BINARY				Whether to show the "send trackback" field
 	 * @param  LONG_TEXT			Notes for the video
 	 * @param  URLPATH			URL to the image for the news entry (blank: use cat image)
 	 * @return array				A tuple of lots of info (fields, hidden fields, trailing fields)
 	 */
-	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$send_trackbacks=1,$notes='',$image='')
+	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='')
 	{
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+		
 		if (is_null($main_news_category))
 		{
 			global $NON_CANONICAL_PARAMS;
