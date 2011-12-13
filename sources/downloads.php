@@ -52,7 +52,7 @@ function download_licence_script()
  * @param  boolean		Whether to show a picture
  * @param  boolean		Whether to show breadcrumbs
  * @param  ?ID_TEXT		The zone the download module we're using is in (NULL: find it)
- * @param  tempcode		Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
+ * @param  ?string		Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
  * @return tempcode		A box for this download, linking to the full download page
  */
 function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_summary=NULL)

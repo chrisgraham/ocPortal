@@ -166,7 +166,7 @@ function gallery_has_content($name)
  * Find the owner of a gallery.
  *
  * @param  ID_TEXT		The name of the gallery
- * @param  array			Gallery row (NULL: look it up)
+ * @param  ?array			Gallery row (NULL: look it up)
  * @return ?MEMBER		The owner of the gallery (NULL: not a member owned gallery)
  */
 function get_member_id_from_gallery_name($gallery_name,$row=NULL)

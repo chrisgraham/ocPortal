@@ -22,10 +22,11 @@
  * Main wrapper function to embed miscellaneous feedback systems into a module output.
  *
  * @param  ID_TEXT		The page name
- * @param  AUTO_LINK		Content ID
+ * @param  ID_TEXT		Content ID
  * @param  BINARY			Whether rating is allowed
  * @param  integer		Whether comments/reviews is allowed (reviews allowed=2)
  * @set 0 1 2
+ * @param  BINARY			Whether trackbacks are allowed
  * @param  BINARY			Whether the content is validated
  * @param  ?MEMBER		Content owner (NULL: none)
  * @param  mixed			URL to view the content

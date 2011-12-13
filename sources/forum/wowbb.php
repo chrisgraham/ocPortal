@@ -529,7 +529,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 * @param  boolean		Whether to show in reverse
 	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
 	 */
-	function get_forum_topic_posts($forum_name,$topic_name,$topic_description,&$count,$max=100,$start=0)
+	function get_forum_topic_posts($forum_name,$topic_name,$topic_description,&$count,$max=100,$start=0,$mark_read=true,$reverse=false)
 	{
 		if (!is_integer($forum_name))
 		{

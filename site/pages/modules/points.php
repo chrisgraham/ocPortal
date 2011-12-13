@@ -297,7 +297,7 @@ class Module_points
 		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'188c059239b39ca8ee70f85b38019490','PREVIOUS_LINK'=>$previous_link,'NEXT_LINK'=>$next_link,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		require_code('points3');
-		$content=points_profile($member_id_of);
+		$content=points_profile($member_id_of,get_member());
 
 		return do_template('POINTS_SCREEN',array('TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
 	}

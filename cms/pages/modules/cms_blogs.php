@@ -454,7 +454,7 @@ class Module_cms_blogs extends standard_aed_module
 				$start_day=post_param_integer('schedule_day');
 				$start_hour=post_param_integer('schedule_hour');
 				$start_minute=post_param_integer('schedule_minute');
-				add_calendar_event('','','',db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+				add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
 			}
 		}
 

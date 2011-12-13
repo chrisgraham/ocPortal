@@ -292,10 +292,10 @@ class Module_galleries
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
 		{
- 			$GLOBALS['SITE_DB']->add_table_field('videos','title','SHORT_TRANS');
- 			$GLOBALS['SITE_DB']->add_table_field('images','title','SHORT_TRANS');
- 			$GLOBALS['SITE_DB']->add_table_field('galleries','gallery_views','INTEGER');
- 			$GLOBALS['SITE_DB']->add_table_field('galleries','g_owner','?USER');
+			$GLOBALS['SITE_DB']->add_table_field('videos','title','SHORT_TRANS');
+			$GLOBALS['SITE_DB']->add_table_field('images','title','SHORT_TRANS');
+			$GLOBALS['SITE_DB']->add_table_field('galleries','gallery_views','INTEGER');
+			$GLOBALS['SITE_DB']->add_table_field('galleries','g_owner','?USER');
 		}
 	}
 	
@@ -872,8 +872,8 @@ class Module_galleries
 		// Display entries
 		$where=db_string_equal_to('cat',$cat);
 		if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
-		$max_entries=get_value('flow_mode_max');
-		if (is_null($max_entries)) $max_entries=50;
+		$_max_entries=get_value('flow_mode_max');
+		if (is_null($_max_entries)) $max_entries=50; else $max_entries=intval($_max_entries);
 		$query_rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,$max_entries);
 		$query_rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,$max_entries);
 

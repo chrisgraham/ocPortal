@@ -296,7 +296,6 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false,
  * @param  ID_TEXT		The codename of the block
  * @param  ?array			Parameters to call up block with if we have to defer caching (NULL: none)
  * @param  boolean		Whether we are cacheing Tempcode (needs special care)
- * @return ?mixed			The cached result (NULL: no cached result)
  */
 function request_via_cron($codename,$map,$tempcode)
 {

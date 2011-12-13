@@ -24,7 +24,7 @@
  * @param  string		The password to check
  * @return integer	Password strength 
  */
-function testPassword($password)
+function test_password($password)
 {
 	if (strlen($password) == 0 )
 	{
@@ -67,16 +67,18 @@ function testPassword($password)
 	}
 
 	/*** get the numbers in the password ***/
+	$numbers = array();
 	preg_match_all('/[0-9]/', $password, $numbers);
 	$strength += count($numbers[0]);
 
 	/*** check for special chars ***/
+	$specialchars = array();
 	preg_match_all('/[|!@#$%&*\/=?,;.:\-_+~^]/', $password, $specialchars);
-	$strength += sizeof($specialchars[0]);
+	$strength += count($specialchars[0]);
 
 	/*** get the number of unique chars ***/
-	$chars = str_split($password);
-	$num_unique_chars = sizeof( array_unique($chars) );
+	$chars = preg_split('#(.)#',$password,NULL,PREG_SPLIT_DELIM_CAPTURE);
+	$num_unique_chars = count(array_unique($chars)) - 1;
 	$strength += $num_unique_chars * 2;
 
 	/*** strength is a number 1-10; ***/

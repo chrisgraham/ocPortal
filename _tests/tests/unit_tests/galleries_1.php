@@ -39,7 +39,7 @@ class galleries_1_test_set extends ocp_test_case
 
 	function testEditGalleries()
 	{
-		edit_image($this->glry_id,'','','http://www.google.com','images/sample.jpg',0,0,0,0,'','','');
+		edit_image('',$this->glry_id,'','','http://www.google.com','images/sample.jpg',0,0,0,0,'','','');
 
 		$this->assertTrue('http://www.google.com'==$GLOBALS['SITE_DB']->query_value('images','url',array('id'=>$this->glry_id)));
 	}

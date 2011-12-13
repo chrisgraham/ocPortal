@@ -842,7 +842,7 @@ function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
  * @param  BINARY			Whether comments are allowed
  * @param  boolean		Whether to skip the check for whether the gallery exists (useful for importers)
  * @param  ?TIME			The add time (NULL: now)
- * @param  ?USER			The gallery owner (NULL: nobody)
+ * @param  ?MEMBER		The gallery owner (NULL: nobody)
  */
 function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$allow_rating=1,$allow_comments=1,$skip_exists_check=false,$add_date=NULL,$g_owner=NULL)
 {
@@ -905,7 +905,7 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit)
  * @param  BINARY			Whether rating are allowed
  * @param  BINARY			Whether comments are allowed
- * @param  ?USER			The gallery owner (NULL: nobody)
+ * @param  ?MEMBER		The gallery owner (NULL: nobody)
  */
 function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL)
 {

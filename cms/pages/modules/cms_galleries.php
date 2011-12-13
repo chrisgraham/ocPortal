@@ -1229,9 +1229,6 @@ class Module_cms_galleries_alt extends standard_aed_module
 	 * @param  URLPATH			The URL to the video file (blank: not yet added)
 	 * @param  URLPATH			The URL to the thumbnail
 	 * @param  BINARY				Video validation status
- 	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
- 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
- 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
 	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)

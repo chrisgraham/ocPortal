@@ -107,6 +107,7 @@ class Hook_Profiles_Tabs_Edit_profile
 						return do_template('FORM_SCREEN',array('_GUID'=>'e49beafaf39e38b8aabb6d93c14e5b93','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$_url));
 					} else
 					{*/
+						$reason='';
 						if ($is_perm_banned==1) ocf_ban_member($member_id_of,$reason); else ocf_unban_member($member_id_of,$reason);
 					/*}*/
 				}

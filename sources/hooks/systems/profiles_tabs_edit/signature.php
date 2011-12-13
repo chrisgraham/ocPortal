@@ -136,7 +136,7 @@ class Hook_Profiles_Tabs_Edit_signature
 		$LAX_COMCODE=$temp;
 
 		$fields=new ocp_tempcode();
-		$fields->attach(do_template('POSTING_FIELD',array('PRETTY_NAME'=>do_lang_tempcode('SIGNATURE'),'DESCRIPTION'=>'','DEFAULT_PARSED'=>$_signature,'HIDDEN_FIELDS'=>$hidden_fields,'NAME'=>'signature','REQUIRED'=>$required,'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EXTRA'=>'','POST_COMMENT'=>$post_comment,'EMOTICON_CHOOSER'=>$emoticon_chooser,'COMCODE_HELP'=>$comcode_help,'POST'=>$_signature_original,'DEFAULT_PARSED'=>$default_parsed,'CONTINUE_URL'=>$continue_url,'ATTACHMENTS'=>$attachments)));
+		$fields->attach(do_template('POSTING_FIELD',array('PRETTY_NAME'=>do_lang_tempcode('SIGNATURE'),'DESCRIPTION'=>'','HIDDEN_FIELDS'=>$hidden_fields,'NAME'=>'signature','REQUIRED'=>$required,'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EXTRA'=>'','POST_COMMENT'=>$post_comment,'EMOTICON_CHOOSER'=>$emoticon_chooser,'COMCODE_HELP'=>$comcode_help,'POST'=>$_signature_original,'DEFAULT_PARSED'=>$default_parsed,'CONTINUE_URL'=>$continue_url,'ATTACHMENTS'=>$attachments)));
 
 		$text=do_template('OCF_EDIT_SIGNATURE_TAB',array('_GUID'=>'f5f2eb2552c34840c9cf46886422401e','SIZE'=>integer_format($size),'SIGNATURE'=>$signature,'TITLE'=>$title));
 
