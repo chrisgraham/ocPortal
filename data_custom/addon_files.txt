@@ -2005,7 +2005,7 @@ reported_content
 utf8
 ----
 
-####  # # lang_custom/EN/global.ini				Leave commented because we don't want our addon remove script to delete this
+# # lang_custom/EN/global.ini
 
 workflows
 ---------
@@ -2061,11 +2061,6 @@ gallery_carousel
 # # themes/default/templates_custom/GALLERY_ENTRY_WRAP.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_GALLERY_EMBED.tpl
 # # themes/default/templates_custom/BLOCK_NO_ENTRIES.tpl
-
-theme_fixer
------------
-
-# # adminzone/pages/minimodules_custom/fix_partial_themewizard_css.php
 
 signup_referrals
 ----------------
@@ -2285,12 +2280,7 @@ theme_debug
 -----------
 
 # # pages/minimodules_custom/EN/theme_debug.php
-
-nobox_gallery_entries
----------------------
-
-# # sources_custom/hooks/systems/awards/video.php
-# # sources_custom/hooks/systems/awards/image.php
+# # adminzone/pages/minimodules_custom/fix_partial_themewizard_css.php
 
 cleanup_repository
 ------------------

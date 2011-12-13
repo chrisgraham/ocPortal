@@ -1,6 +1,10 @@
 <?php
 
 $ie_needed=array_key_exists('ie_needed',$map)?floatval($map['ie_needed']):7.0; // Latest at time of writing is 8.0. Suggest 6.0 or 7.0 as often people have no choice about upgrading (if they are on corporate PC's, if they pirated Windows (!), or if they are on an old version of Windows
+$firefox_needed=array_key_exists('firefox_needed',$map)?floatval($map['firefox_needed']):8.0;
+$safari_needed=array_key_exists('safari_needed',$map)?floatval($map['safari_needed']):5.0;
+$chrome_needed=array_key_exists('chrome_needed',$map)?floatval($map['chrome_needed']):15.0;
+$opera_needed=array_key_exists('firefox_needed',$map)?floatval($map['firefox_needed']):11.0;
 
 require_code('browser_detect');
 require_lang('browser_upgrade_suggest');
@@ -8,7 +12,7 @@ require_lang('browser_upgrade_suggest');
 $message='';
 
 $browser = new Browser();
-if (($browser->getBrowser()==Browser::BROWSER_FIREFOX) && (floatval($browser->getVersion())<3.6))
+if (($browser->getBrowser()==Browser::BROWSER_FIREFOX) && (floatval($browser->getVersion())<$firefox_needed))
 {
 	if ($browser->getPlatform()==Browser::PLATFORM_LINUX)
 	{
@@ -18,7 +22,7 @@ if (($browser->getBrowser()==Browser::BROWSER_FIREFOX) && (floatval($browser->ge
 		$message=do_lang('UPGRADE_FIREFOX');
 	}
 }
-if (($browser->getBrowser()==Browser::BROWSER_SAFARI) && (floatval($browser->getVersion())<5.0))
+if (($browser->getBrowser()==Browser::BROWSER_SAFARI) && (floatval($browser->getVersion())<$safari_needed))
 {
 	if ($browser->getPlatform()==Browser::PLATFORM_APPLE)
 	{
@@ -28,7 +32,7 @@ if (($browser->getBrowser()==Browser::BROWSER_SAFARI) && (floatval($browser->get
 		$message=do_lang('UPGRADE_SAFARI');
 	}
 }
-if (($browser->getBrowser()==Browser::BROWSER_CHROME) && (floatval($browser->getVersion())<8.0))
+if (($browser->getBrowser()==Browser::BROWSER_CHROME) && (floatval($browser->getVersion())<$chrome_needed))
 {
 	if ($browser->getPlatform()==Browser::PLATFORM_LINUX)
 	{
@@ -57,7 +61,7 @@ if (($browser->getBrowser()==Browser::BROWSER_IE) && (floatval($browser->getVers
 	}
 	$message=do_lang('UPGRADE_IE',escape_html($year));
 }
-if (($browser->getBrowser()==Browser::BROWSER_OPERA) && (floatval($browser->getVersion())<11.0))
+if (($browser->getBrowser()==Browser::BROWSER_OPERA) && (floatval($browser->getVersion())<$opera_needed))
 {
 	$message=do_lang('UPGRADE_OPERA');
 }
