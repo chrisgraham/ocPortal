@@ -316,8 +316,16 @@ function check_captcha($code_entered)
 	if (use_captcha())
 	{
 		$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
+		if (get_value('more_captcha_security')==='1')
+		{
+			$GLOBALS['SITE_DB']->query_delete('security_images',array('si_session_id'=>get_session_id())); // Only allowed to check once
+		}
 		if (is_null($_code_needed))
 		{
+			if (get_value('more_captcha_security')==='1')
+			{
+				generate_captcha();
+			}
 			$GLOBALS['HTTP_STATUS_CODE']='500';
 			if (!headers_sent())
 			{
@@ -339,7 +347,12 @@ function check_captcha($code_entered)
 		{
 			$code_needed=str_pad(strval($_code_needed),6,'0',STR_PAD_LEFT);
 		}
-		return (strtolower($code_needed)==strtolower($code_entered));
+		$ret=(strtolower($code_needed)==strtolower($code_entered));
+		if (get_value('more_captcha_security')==='1')
+		{
+			if (!$ret) generate_captcha();
+		}
+		return $ret;
 	}
 	return true;
 }
@@ -365,6 +378,7 @@ function captcha_ajax_check()
 				var url='".addslashes($script)."?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['security_image'].value);
 				if (!do_ajax_field_test(url))
 				{
+					document.getElementById('captcha').src+='&'; // Force it to reload latest captcha
 					document.getElementById('submit_button').disabled=false;
 					return false;
 				}

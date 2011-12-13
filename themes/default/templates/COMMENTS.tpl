@@ -310,6 +310,7 @@
 					var url='{$FIND_SCRIPT;,snippet}?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['security_image'].value);
 					if (!do_ajax_field_test(url))
 					{
+						document.getElementById('captcha').src+='&'; // Force it to reload latest captcha
 						document.getElementById('submit_button').disabled=false;
 						return false;
 					}
@@ -317,6 +318,9 @@
 					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
 					return true;
 				};
+			addEventListenerAbstract(window,'pageshow',function () {
+				document.getElementById('captcha').src+='&'; // Force it to reload latest captcha
+			} );
 		//]]></script>
 	{+END}
 {+END}
