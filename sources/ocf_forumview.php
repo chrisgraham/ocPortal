@@ -446,6 +446,27 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 	$topic['num_posts']=$topic_row['t_cache_num_posts'];
 	$topic['forum_id']=$topic_row['t_forum_id'];
 	$topic['description']=$topic_row['t_description'];
+	$topic['description_link']=$topic_row['t_description_link'];
+
+	// If it's a spacer post, we need to intercede at this point, and make a better one
+	$linked_type='';
+	$linked_id='';
+	$is_spacer_post=(substr($topic['first_post']->evaluate(),0,strlen(do_lang('SPACER_POST_MATCHER')))==do_lang('SPACER_POST_MATCHER'));
+	if ($is_spacer_post)
+	{
+		$c_prefix=do_lang('COMMENT').': #';
+		if ((substr($topic['description'],0,strlen($c_prefix))==$c_prefix) && ($topic['description_link']!=''))
+		{
+			list($linked_type,$linked_id)=explode('_',substr($topic['description'],strlen($c_prefix)),2);
+			$topic['description']='';
+
+			require_code('ocf_posts');
+			list($new_description,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
+			if (!is_null($new_description)) $topic['description']=$new_description;
+			if (!is_null($new_post)) $topic['first_post']=$new_post;
+		}
+	}
+
 	$topic['emoticon']=$topic_row['t_emoticon'];
 	$topic['first_time']=$topic_row['t_cache_first_time'];
 	$topic['first_title']=$topic_row['t_cache_first_title'];

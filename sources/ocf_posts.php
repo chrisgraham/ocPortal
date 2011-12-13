@@ -93,4 +93,48 @@ function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id=NULL)
 	return has_delete_permission('low',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }
 
+/**
+ * Try and make a spacer post look nicer on OCF than it automatically would.
+ *
+ * @param  ID_TEXT		Content type.
+ * @param  ID_TEXT		Content ID.
+ * @return array			A pair: better description (may be NULL), better post (may be NULL).
+ */
+function ocf_display_spacer_post($linked_type,$linked_id)
+{
+	$new_description=mixed();
+	$new_post=mixed();
+	
+	if (addon_installed('awards'))
+	{
+		$award_hooks=find_all_hooks('systems','awards');
+		if (!array_key_exists($linked_type,$award_hooks)) // Ah, no easy match for award hook, we need to search via cma hooks
+		{
+			$cma_hooks=find_all_hooks('systems','content_meta_aware');
+			foreach (array_keys($cma_hooks) as $cma_hook)
+			{
+				require_code('hooks/systems/content_meta_aware/'.$cma_hook);
+				$cms_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
+				$cma_info=$cms_ob->info();
+				if ((isset($cma_info['feedback_type_code'])) && ($cma_info['feedback_type_code']==$linked_type))
+				{
+					$linked_type=$cma_hook;
+					break;
+				}
+			}
+		}
+		if (array_key_exists($linked_type,$award_hooks))
+		{
+			require_code('hooks/systems/awards/'.$linked_type);
+			$award_ob=object_factory('Hook_awards_'.$linked_type);
+			$award_info=$award_ob->info();
+			$linked_rows=$GLOBALS['SITE_DB']->query_select($award_info['table'],array('*'),array($award_info['id_field']=>$award_info['id_is_string']?$linked_id:intval($linked_id)),'',1);
+			if (array_key_exists(0,$linked_rows))
+				$new_post=$award_ob->run($linked_rows[0],'_SEARCH');
+			$new_description=do_lang('THIS_IS_COMMENT_TOPIC',get_site_name());
+		}
+	}
+
+	return array($new_description,$new_post);
+}
 
