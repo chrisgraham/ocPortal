@@ -118,6 +118,7 @@ class Hook_addon_registry_calendar
 			'CALENDAR_YEAR_MONTH_ROW.tpl',
 			'BLOCK_SIDE_CALENDAR.tpl',
 			'BLOCK_SIDE_CALENDAR_LISTING.tpl',
+			'CALENDAR_EVENT_BOX.tpl',
 			'themes/default/images/EN/page/add_event.png',
 			'sources/hooks/systems/awards/event.php',
 			'sources/hooks/systems/trackback/events.php',
@@ -201,6 +202,7 @@ class Hook_addon_registry_calendar
 				'CALENDAR_SCREEN_SUBSCRIPTION.tpl'=>'calendar_screen',
 				'CALENDAR_SCREEN_PERSONAL_SUBSCRIPTION.tpl'=>'calendar_screen',
 				'CALENDAR_SCREEN.tpl'=>'calendar_screen',
+				'CALENDAR_EVENT_BOX.tpl'=>'calendar_event_box',
 				);
 	}
 
@@ -329,7 +331,25 @@ class Hook_addon_registry_calendar
 			),NULL,'',true),
 		);
 	}
-
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__calendar_event_box()
+	{
+		return array(
+			lorem_globalise(
+				do_lorem_template('CALENDAR_EVENT_BOX',array(
+					'URL'=>placeholder_url(),
+					'SUMMARY'=>lorem_paragraph_html(),
+					'TITLE'=>lorem_phrase(),
+						)
+			),NULL,'',true),
+		);
+	}
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.

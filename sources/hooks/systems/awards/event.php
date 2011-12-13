@@ -62,9 +62,11 @@ class Hook_awards_event
 	 */
 	function run($row,$zone)
 	{
+		require_css('calendar');
+
 		$url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),$zone);
 
-		return put_in_standard_box(do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>get_translated_tempcode($row['e_content']),'URL'=>$url)),get_translated_text($row['e_title']));
+		return do_template('CALENDAR_EVENT_BOX',array('TITLE'=>get_translated_text($row['e_title']),'SUMMARY'=>get_translated_tempcode($row['e_content']),'URL'=>$url));
 	}
 
 }

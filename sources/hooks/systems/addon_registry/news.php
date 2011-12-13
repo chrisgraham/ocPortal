@@ -379,6 +379,7 @@ class Hook_addon_registry_news
 					'ID'=>placeholder_id(),
 					'SUBMITTER'=>placeholder_id(),
 					'AUTHOR'=>lorem_phrase(),
+					'IMG_URL'=>placeholder_image_url(),
 					'CATEGORY'=>lorem_phrase(),
 					'BLOG'=>TRUE,
 					'FULL_URL'=>placeholder_url(),
@@ -481,6 +482,7 @@ class Hook_addon_registry_news
 			lorem_globalise(
 				do_lorem_template('NEWS_FULL_SCREEN',array(
 					'ID'=>placeholder_id(),
+					'CATEGORY_ID'=>placeholder_id(),
 					'BLOG'=>TRUE,
 					'_TITLE'=>lorem_phrase(),
 					'TAGS'=>do_lorem_template('TAGS',array('TAGS'=>$tags, 'TYPE'=>'')),

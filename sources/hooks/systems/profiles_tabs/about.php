@@ -253,8 +253,10 @@ class Hook_Profiles_Tabs_about
 		if (member_is_online($member_id_of))
 		{
 			$online_now=do_lang_tempcode('YES');
+			$_online_now=true;
 		} else
 		{
+			$_online_now=false;
 			$minutes_ago=intval(floor((floatval(time()-$last_visit_time)/60.0)));
 			$hours_ago=intval(floor((floatval(time()-$last_visit_time)/60.0/60.0)));
 			$days_ago=intval(floor((floatval(time()-$last_visit_time)/60.0/60.0/24.0)));
@@ -386,6 +388,7 @@ class Hook_Profiles_Tabs_about
 					'SUBMIT_TIME_RAW'=>strval($last_submit_time),
 					'LAST_VISIT_TIME_RAW'=>strval($last_visit_time),
 					'ONLINE_NOW'=>$online_now,
+					'_ONLINE_NOW'=>$_online_now,
 					'BANNED'=>$banned,
 					'USER_AGENT'=>$user_agent,
 					'OPERATING_SYSTEM'=>$operating_system,

@@ -591,6 +591,7 @@ class Hook_addon_registry_core_ocf
 			'SUBMIT_TIME_RAW'=>placeholder_time(),
 			'LAST_VISIT_TIME_RAW'=>placeholder_date_raw(),
 			'ONLINE_NOW'=>lorem_phrase(),
+			'_ONLINE_NOW'=>false,
 			'BANNED'=>lorem_phrase(),
 			'USER_AGENT'=>lorem_phrase(),
 			'OPERATING_SYSTEM'=>lorem_phrase(),

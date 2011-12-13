@@ -127,11 +127,7 @@ class Hook_search_calendar
 	{
 		$url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),get_module_zone('calendar'));
 
-		$content=do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>get_translated_tempcode($row['e_content']),'URL'=>$url));
-
-		$tpl=put_in_standard_box($content,do_lang_tempcode('CALENDAR_EVENT',get_translated_text($row['e_title'])));
-
-		return $tpl;
+		return do_template('CALENDAR_EVENT_BOX',array('TITLE'=>get_translated_text($row['e_title']),'SUMMARY'=>get_translated_tempcode($row['e_content']),'URL'=>$url));
 	}
 
 }

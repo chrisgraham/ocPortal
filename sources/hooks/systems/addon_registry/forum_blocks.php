@@ -119,7 +119,7 @@ class Hook_addon_registry_forum_blocks
 		$out=new ocp_tempcode();
 		foreach(placeholder_array() as $k=>$v)
 		{
-			$out->attach(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array('FORUM_ID'=>NULL,'FORUM_NAME'=>lorem_word(),'TOPIC_LINK'=>placeholder_url(),'TITLE'=>lorem_word(),'DATE'=>placeholder_time(),'DATE_RAW'=>placeholder_date_raw(),'USERNAME'=>lorem_word(),'MEMBER_ID'=>NULL,'NUM_POSTS'=>placeholder_number())));
+			$out->attach(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array('POST'=>lorem_paragraph(),'FORUM_ID'=>NULL,'FORUM_NAME'=>lorem_word(),'TOPIC_LINK'=>placeholder_url(),'TITLE'=>lorem_word(),'DATE'=>placeholder_time(),'DATE_RAW'=>placeholder_date_raw(),'USERNAME'=>lorem_word(),'MEMBER_ID'=>NULL,'NUM_POSTS'=>placeholder_number())));
 		}
 
 		//Create the 'BLOCK_MAIN_FORUM_TOPICS' with 'BLOCK_MAIN_FORUM_TOPICS_TOPIC' as sub-template.
