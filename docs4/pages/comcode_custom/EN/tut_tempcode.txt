@@ -166,6 +166,14 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<td>{$CSS_TEMPCODE}</td>
 		<td>Get the Tempcode for all the CSS includes for this page</td>
 	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$PAGE_TITLE}</td>
+		<td>Get the currently set page title/td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$SET_TITLE,xxx}</td>
+		<td>Set the current page title (affects things like the <kbd>&lt;title&rt;</kbd></td>
+	</tr>
 	<tr style="background: #FFDDDD">
 		<td>{$EXTRA_HEAD}</td>
 		<td>Get the contents of this global Tempcode variable (used by some parts of the system to inject extra markup)</td>
@@ -326,6 +334,10 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 	<tr style="background: #DDFFDD">
 		<td>{$TIME}</td>
 		<td>The formatted time (may take optional parameters, not discussed here)</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$SECONDS_PERIOD,12345}</td>
+		<td>Show the number of hours/minutes/seconds in a given period of seconds</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$FROM_TIMESTAMP,%d %B %Y,123456780}</td>
@@ -1047,6 +1059,14 @@ Understanding of these symbols requires an understanding of basic boolean operat
 	<tr style="background: #DDFFDD">
 		<td>{$LENGTH,something}</td>
 		<td>Find the length of a string (give it a string, returns a Tempcode number)</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$PAD_LEFT,12,4,0}</td>
+		<td>Pad something out on the left. This example produces 0012</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$PAD_RIGHT,12,4,0}</td>
+		<td>Pad something out on the right. This example produces 1200</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$WCASE,A b C}</td>

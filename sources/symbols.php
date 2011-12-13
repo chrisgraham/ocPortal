@@ -1124,6 +1124,32 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=$_value->evaluate();
 				break;
 
+			case 'PAD_LEFT':
+				if (array_key_exists(1,$param))
+				{
+					$value=str_pad($param[0],intval($param[1]),array_key_exists(2,$param)?$param[2]:'',STR_PAD_LEFT);
+				}
+				break;
+
+			case 'PAD_RIGHT':
+				if (array_key_exists(1,$param))
+				{
+					$value=str_pad($param[0],intval($param[1]),array_key_exists(2,$param)?$param[2]:'',STR_PAD_RIGHT);
+				}
+				break;
+
+			case 'PAGE_TITLE':
+				global $DISPLAYED_TITLE;
+				$value=is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate();
+				break;
+
+			case 'SET_TITLE':
+				if (array_key_exists(0,$param))
+				{
+					get_page_title($param[0],false);
+				}
+				break;
+
 			case 'EXTRA_HEAD':
 				$_value=$GLOBALS['EXTRA_HEAD'];
 				if ($_value===NULL) $_value=new ocp_tempcode();
@@ -1350,6 +1376,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'TIME':
 				$time=isset($param[0])?intval($param[0]):time();
 				$value=get_timezoned_time($time);
+				break;
+
+			case 'SECONDS_PERIOD':
+				if (array_key_exists(0,$param))
+				{
+					$value=display_seconds_period(intval($param[0]));
+				}
 				break;
 
 			case 'FROM_TIMESTAMP':
