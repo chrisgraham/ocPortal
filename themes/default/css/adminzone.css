@@ -243,8 +243,34 @@ a.topleftlink:hover {
 	min-height: 400px;
 }
 
+.menu_editor_page.docked #mini_form_hider {
+	margin-top: 1em;
+	border-top: 3px dotted #8b96df !important; /* {$,wizard, 61% seed + 39% W/B} */
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	background: #ffffff; /* {$,wizard, 100% W/B} */
+	font-size: 0.9em;
+}
+
+.docked .menu_edit_main {
+	padding-bottom: 27em;
+}
+
+.dock_button {
+	float: right;
+	padding: 5px;
+	cursor: pointer;
+}
+
 .menu_editor_lh_side {
 	margin-{!en_right}: 420px;
+}
+
+.menu_editor_page.docked .menu_editor_rh_side {
+	overflow-y: scroll;
+	max-height: 380px;
+	margin-right: 10px;
 }
 
 .menu_editor_rh_side {

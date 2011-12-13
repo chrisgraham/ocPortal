@@ -5,14 +5,14 @@
 	{WARNING_DETAILS}
 {+END}
 
-<div class="menu_editor_page">
+<div class="menu_editor_page docked" id="menu_editor_wrap">
 	<form title="" action="{URL*}" method="post">
 		<!-- In separate form due to mod_security -->
 		<textarea cols="30" rows="3" style="display: none" name="template" id="template">{CHILD_BRANCH_TEMPLATE*}</textarea>
 	</form>
 
 	<form title="{!PRIMARY_PAGE_FORM}" id="edit_form" action="{URL*}" method="post">
-		<div class="float_surrounder">
+		<div class="float_surrounder menu_edit_main">
 			<div class="menu_editor_rh_side">
 				<h2>{!HELP}</h2>
 
@@ -30,10 +30,16 @@
 					{ROOT_BRANCH}
 				</div>
 			</div>
+
+			<div class="proceed_button">
+				<input accesskey="u" class="button_page" type="submit" value="{!SAVE}" onclick="if (validateMenu('{!MISSING_CAPTION_ERROR;}','{!MISSING_URL_ERROR;}')) { disable_button_just_clicked(this); return true; } else return false;" />
+			</div>
 		</div>
 
 		<div id="mini_form_hider" style="display: none" class="float_surrounder">
 			<div class="menu_editor_rh_side">
+				<img onclick="var e=document.getElementById('menu_editor_wrap'); if (e.className.indexOf(' docked')==-1) { e.className='menu_editor_page docked'; this.src='{$IMG;*,arrow_box_hover}'; } else { e.className='menu_editor_page'; this.src='{$IMG;*,arrow_box}'; }" class="dock_button" alt="" src="{$IMG*,arrow_box_hover}" />
+
 				<h2>{!CHOOSE_ENTRY_POINT}</h2>
 
 				<div class="accessibility_hidden"><label for="tree_list">{!ENTRY}</label></div>
@@ -68,10 +74,6 @@
 		</div>
 
 		<input type="hidden" name="confirm" value="1" />
-
-		<div class="proceed_button">
-			<input accesskey="u" class="button_page" type="submit" value="{!SAVE}" onclick="if (validateMenu('{!MISSING_CAPTION_ERROR;}','{!MISSING_URL_ERROR;}')) { disable_button_just_clicked(this); return true; } else return false;" />
-		</div>
 	</form>
 	
 	<br />
@@ -103,7 +105,7 @@
 		all_menus.push('{_loop_var;/}');
 	{+END}
 	
-	var cf=function() { smoothScroll(findPosY(document.getElementById('caption_'+window.current_selection))); };
+	var cf=function() { var e=document.getElementById('menu_editor_wrap'); if (e.className.indexOf(' docked')==-1) smoothScroll(findPosY(document.getElementById('caption_'+window.current_selection))); };
 	document.getElementById('url').ondblclick=cf;
 	document.getElementById('caption_long').ondblclick=cf;
 	document.getElementById('match_tags').ondblclick=cf;
