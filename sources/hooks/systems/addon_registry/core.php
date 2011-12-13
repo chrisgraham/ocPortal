@@ -74,6 +74,8 @@ class Hook_addon_registry_core
 	{
 		return array(
 
+			'sources/password_strength.php',
+			'sources/hooks/systems/snippets/password_strength.php',
 			'web.config',
 			'data/html5.js',
 			'themes/default/images/bottom/ocpchat.png',

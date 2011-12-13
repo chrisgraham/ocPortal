@@ -1770,6 +1770,18 @@ th.meta_data_title {
 .input_huge_field {
 }
 
+.password_strength {
+	float: right;
+	width: 100px;
+	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
+	display: none;
+}
+
+.password_strength_inner {
+	height: 1em;
+	width: 0px;
+}
+
 .input_colour, .input_list, .input_line, .input_integer,
 .input_author, .input_username, .input_colour, .input_email,
 .input_tick, .input_float, .input_text, .input_upload, .input_radio {

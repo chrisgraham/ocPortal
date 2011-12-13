@@ -4,6 +4,26 @@
 
 new Image().src='{$IMG,bottom/loading}'.replace(/^http:/,window.location.protocol);
 
+function password_strength(ob)
+{
+	if (ob.name.indexOf('2')!=-1) return;
+	if (ob.name.indexOf('confirm')!=-1) return;
+
+	var _ind=document.getElementById('password_strength_'+ob.id);
+	if (!_ind) return;
+	var ind=_ind.getElementsByTagName('div')[0];
+	var strength=load_snippet('password_strength','password='+window.encodeURIComponent(ob.value));
+	strength*=2; if (strength>10) strength=10; // Normally too harsh!
+	ind.style.width=(strength*10)+'px';
+	if (strength>=6)
+		ind.style.backgroundColor='green';
+	else if (strength<4)
+		ind.style.backgroundColor='red';
+	else
+		ind.style.backgroundColor='orange';
+	ind.parentNode.style.display=(ob.value.length==0)?'none':'block';
+}
+
 function fix_form_enter_key(form)
 {
 	var submit=document.getElementById('submit_button');
