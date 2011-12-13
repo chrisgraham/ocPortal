@@ -48,7 +48,7 @@ class upon_query_tracking_cedi
 			{
 				// Sending the Email and SMS alert to user
 				$page_title=get_translated_text($ob->query_value('seedy_pages','title',array('id'=>$cat)),$ob);
-				send_alert($type,$user_list,build_url(array('page'=>$view_page_name,'type'=>$view_type,'id'=>$cat),get_module_zone($view_page_name),NULL,false,false,true),$page_title,post_param('post',''));
+				send_alert($type,$user_list,build_url(array('page'=>$view_page_name,'type'=>$view_type,'id'=>$cat),get_module_zone($view_page_name),NULL,false,false,true),$page_title,preg_replace('#\[attachment[^\[\]]*\][^\[\]]*\[/attachment\]#','',post_param('post','')));
 			}
 		}
 
