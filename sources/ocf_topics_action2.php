@@ -32,8 +32,9 @@
  * @param  LONG_TEXT		The reason for this action.
  * @param  ?string		New title for the topic (NULL: do not change).
  * @param  ?SHORT_TEXT	Link related to the topic (e.g. link to view a ticket) (NULL: do not change).
+ * @param  boolean		Whether to check permissions.
  */
-function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NULL,$open=NULL,$pinned=NULL,$sunk=NULL,$cascading=NULL,$reason='',$title=NULL,$description_link=NULL)
+function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NULL,$open=NULL,$pinned=NULL,$sunk=NULL,$cascading=NULL,$reason='',$title=NULL,$description_link=NULL,$check_perms=true)
 {
 	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_from','t_pt_to','t_cache_first_member_id','t_cache_first_title','t_forum_id','t_cache_first_post_id'),array('id'=>$topic_id),'',1);
 	if (!array_key_exists(0,$info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -46,25 +47,29 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 		suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$title);
 	}
 
-	require_code('ocf_forums');
-	if (!ocf_may_moderate_forum($forum_id))
-	{
-		$pinned=0;
-		$sunk=0;
-		$open=1;
-		$cascading=0;
-	}
-
-	if (!(($info[0]['t_cache_first_member_id']==get_member()) && (has_specific_permission(get_member(),'close_own_topics'))))
-	{
-		require_code('ocf_topics');
-		if ((!ocf_may_edit_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) || ((($info[0]['t_pt_from']!=get_member()) && ($info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')) && (is_null($forum_id))))
-			access_denied('I_ERROR');
-	}
-
 	$update=array();
 
-	if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) $validated=NULL;
+	require_code('ocf_forums');
+
+	if ($check_perms)
+	{
+		if (!ocf_may_moderate_forum($forum_id))
+		{
+			$pinned=0;
+			$sunk=0;
+			$open=1;
+			$cascading=0;
+		}
+
+		if (!(($info[0]['t_cache_first_member_id']==get_member()) && (has_specific_permission(get_member(),'close_own_topics'))))
+		{
+			require_code('ocf_topics');
+			if ((!ocf_may_edit_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) || ((($info[0]['t_pt_from']!=get_member()) && ($info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')) && (is_null($forum_id))))
+				access_denied('I_ERROR');
+		}
+
+		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) $validated=NULL;
+	}
 
 	if (!is_null($description)) $update['t_description']=$description;
 	if (!is_null($description_link)) $update['t_description_link']=$description_link;

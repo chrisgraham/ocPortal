@@ -643,10 +643,13 @@ function update_spacer_post($allow_comments,$type,$id,$self_url,$self_title,$for
 	$spacer_title=is_null($self_title)?($type.'_'.$id):($self_title.' (#'.$type.'_'.$id.')');
 	$spacer_post='[semihtml]'.do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()).'[/semihtml]';
 
-	require_code('ocf_posts_action3');
-	ocf_edit_post($post_id,1,is_null($self_title)?$spacer_title:$self_title,$spacer_post,0,0,NULL,false,false,'');
-	require_code('ocf_topics_action2');
-	ocf_edit_topic($topic_id,do_lang('COMMENT').': #'.$type.'_'.$id,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,$home_link->evaluate());
+	if (get_forum_type()=='ocf')
+	{
+		require_code('ocf_posts_action3');
+		ocf_edit_post($post_id,1,is_null($self_title)?$spacer_title:$self_title,$spacer_post,0,0,NULL,false,false,'',false);
+		require_code('ocf_topics_action2');
+		ocf_edit_topic($topic_id,do_lang('COMMENT').': #'.$type.'_'.$id,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,$home_link->evaluate(),false);
+	}
 }
 
 /**

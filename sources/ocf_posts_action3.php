@@ -80,9 +80,10 @@ function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$
  * @param  boolean		Whether to show the post as edited.
  * @param  boolean		Whether to mark the topic as unread by those previous having read this post.
  * @param  LONG_TEXT		The reason for this action.
+ * @param  boolean		Whether to check permissions.
  * @return AUTO_LINK		The ID of the topic (whilst this could be known without calling this function, as we've gone to effort and grabbed it from the DB, it might turn out useful for something).
  */
-function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason)
+function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised,$intended_solely_for,$show_as_edited,$mark_as_unread,$reason,$check_perms=true)
 {
 	$post_info=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_topic_id','p_time','p_post','p_poster','p_cache_forum_id'),array('id'=>$post_id));
 	if (!array_key_exists(0,$post_info))
@@ -99,7 +100,8 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	require_code('ocf_posts');
 	ocf_check_post($post);
 
-	if (!ocf_may_edit_post_by($post_owner,$forum_id)) access_denied('I_ERROR');
+	if ($check_perms)
+		if (!ocf_may_edit_post_by($post_owner,$forum_id)) access_denied('I_ERROR');
 	if ((is_null($validated)) || ($validated==1))
 	{
 		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
