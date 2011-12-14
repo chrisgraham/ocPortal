@@ -788,8 +788,8 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				$fields[$i]['effective_value']=$fields[$i]['effective_value_pure'];
 				if (is_null($fields[$i]['effective_value']))
 				{
-					$fields[$i]['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
-					$fields[$i]['effective_value_pure']=do_lang('INTERNAL_ERROR');
+					$fields[$i]['effective_value']=do_lang_tempcode('NA_EM');
+					$fields[$i]['effective_value_pure']=do_lang('NA');
 					break;
 				}
 				break;
@@ -797,8 +797,8 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				$fields[$i]['effective_value']=_get_catalogue_entry_field($field_id,$entry_id,'long');
 				if (is_null($fields[$i]['effective_value']))
 				{
-					$fields[$i]['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
-					$fields[$i]['effective_value_pure']=do_lang('INTERNAL_ERROR');
+					$fields[$i]['effective_value']=do_lang_tempcode('NA_EM');
+					$fields[$i]['effective_value_pure']=do_lang('NA');
 					break;
 				}
 				break;
@@ -808,8 +808,8 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				$fields[$i]['effective_value']=_get_catalogue_entry_field($field_id,$entry_id,$type);
 				if (is_null($fields[$i]['effective_value']))
 				{
-					$fields[$i]['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
-					$fields[$i]['effective_value_pure']=do_lang('INTERNAL_ERROR');
+					$fields[$i]['effective_value']=do_lang_tempcode('NA_EM');
+					$fields[$i]['effective_value_pure']=do_lang('NA');
 					break;
 				}
 				break;
