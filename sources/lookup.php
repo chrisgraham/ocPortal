@@ -95,7 +95,6 @@ function lookup_member_page($member,&$name,&$id,&$ip)
  */
 function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',$sort_order='DESC')
 {
-	// NOTE: For privacy we will not display where this user came from ;). (www.bovine-dreams.com ?)
 	$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'the_page'=>do_lang_tempcode('PAGE'));
 	if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 		log_hack_attack_and_exit('ORDERBY_HACK');
@@ -105,7 +104,13 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 	$query='';
 	if (!is_guest($member))
 		$query.='the_user='.strval((integer)$member).' OR ';
-	$query.=db_string_equal_to('ip',$ip);
+	if (strpos($ip,'*')===false)
+	{
+		$query.=db_string_equal_to('ip',$ip);
+	} else
+	{
+		$query.='ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\'';
+	}
 	$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE '.$query);
 	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,get,post,browser,operating_system FROM '.get_table_prefix().'stats WHERE '.$query.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 
