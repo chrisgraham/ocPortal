@@ -69,7 +69,7 @@ function do_work()
 	require_code('ocf_members_action');
 	for ($i=$GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		$member_id=ocf_make_member(uniqid(''),uniqid(''),uniqid('').'@example.com',array(),intval(date('d')),intval(date('m')),intval(date('Y')),array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,'',NULL,'',false);
+		$member_id=ocf_make_member(uniqid(''),uniqid(''),uniqid('').'@example.com',array(),intval(date('d')),intval(date('m')),intval(date('Y')),array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
 		add_author(random_line(),'',$member_id,random_text(),random_text());
 
 		$GLOBALS['FORUM_DB']->query_insert('f_forum_tracking',array(

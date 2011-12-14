@@ -162,6 +162,7 @@ class Module_admin_ocf_join
 		$timezone=post_param('timezone',get_site_timezone());
 		$language=post_param('language',get_site_default_lang());
 		$allow_emails=post_param_integer('allow_emails',0);
+		$allow_emails_from_staff=post_param_integer('allow_emails_from_staff',0);
 		$custom_fields=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true));
 		$actual_custom_fields=ocf_read_in_custom_fields($custom_fields);
 		$validated=post_param_integer('validated',0);
@@ -188,7 +189,7 @@ class Module_admin_ocf_join
 		breadcrumb_set_self(do_lang_tempcode('DETAILS'));
 
 		// Add member
-		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$track_contributed_topics,$language,$allow_emails,'','','',true,'','',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
+		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$track_contributed_topics,$language,$allow_emails,$allow_emails_from_staff,'','','',true,'','',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
 
 		// Secondary groups
 		if (array_key_exists('secondary_groups',$_POST))
@@ -555,7 +556,8 @@ class Module_admin_ocf_join
 			'Date of birth'=>'m_dob_year/m_dob_month/m_dob_day',
 			'Reveal age'=>'!m_reveal_age',
 			'Language'=>'m_language',
-			'Opt-in'=>'!m_allow_emails',
+			'Accept member e-mails'=>'!m_allow_emails',
+			'Opt-in'=>'!m_allow_emails_from_staff',
 		);
 		return $headings;
 	}
@@ -577,7 +579,7 @@ class Module_admin_ocf_join
 
 		@ini_set('ocproducts.xss_detect','0');
 
-		$fields=array('id','m_username','m_email_address','m_last_visit_time','m_cache_num_posts','m_pass_hash_salted','m_pass_salt','m_password_compat_scheme','m_signature','m_validated','m_join_time','m_primary_group','m_is_perm_banned','m_dob_day','m_dob_month','m_dob_year','m_reveal_age','m_language','m_allow_emails','m_notes');
+		$fields=array('id','m_username','m_email_address','m_last_visit_time','m_cache_num_posts','m_pass_hash_salted','m_pass_salt','m_password_compat_scheme','m_signature','m_validated','m_join_time','m_primary_group','m_is_perm_banned','m_dob_day','m_dob_month','m_dob_year','m_reveal_age','m_language','m_allow_emails','m_allow_emails_from_staff','m_notes');
 		if (addon_installed('ocf_member_avatars')) $fields[]='m_avatar_url';
 		if (addon_installed('ocf_member_photos')) $fields[]='m_photo_url';
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,true);
@@ -994,7 +996,8 @@ class Module_admin_ocf_join
 				$is_perm_banned=array_key_exists('Banned',$line)?((strtoupper($line['Banned'])=='YES' || $line['Banned']=='1' || strtoupper($line['Banned'])=='Y' || strtoupper($line['Banned'])=='ON')?1:0):0;
 				$reveal_age=array_key_exists('Reveal age',$line)?((strtoupper($line['Reveal age'])=='YES' || $line['Reveal age']=='1' || strtoupper($line['Reveal age'])=='Y' || strtoupper($line['Reveal age'])=='ON')?1:0):0;
 				$language=array_key_exists('Language',$line)?$line['Language']:'';
-				$allow_emails=array_key_exists('Opt-in',$line)?((strtoupper($line['Opt-in'])=='YES' || $line['Opt-in']=='1' || strtoupper($line['Opt-in'])=='Y' || strtoupper($line['Opt-in'])=='ON')?1:0):0;
+				$allow_emails=array_key_exists('Accept member e-mails',$line)?((strtoupper($line['Accept member e-mails'])=='YES' || $line['Accept member e-mails']=='1' || strtoupper($line['Accept member e-mails'])=='Y' || strtoupper($line['Accept member e-mails'])=='ON')?1:0):0;
+				$allow_emails_from_staff=array_key_exists('Opt-in',$line)?((strtoupper($line['Opt-in'])=='YES' || $line['Opt-in']=='1' || strtoupper($line['Opt-in'])=='Y' || strtoupper($line['Opt-in'])=='ON')?1:0):0;
 				$primary_group=NULL;
 				$groups=NULL;
 				if (array_key_exists('Usergroup',$line))
@@ -1095,14 +1098,14 @@ class Module_admin_ocf_join
 					if (is_null($salt)) $salt='';
 					if (is_null($password_compatibility_scheme)) $password_compatibility_scheme='';
 
-					$linked_id=ocf_make_member($username,$password,is_null($email_address)?'':$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,NULL,$primary_group,$validated,$join_time,NULL,'',$avatar_url,$signature,$is_perm_banned,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,'',NULL,'',false,$password_compatibility_scheme,$salt,1,NULL,NULL,0,'*','');
+					$linked_id=ocf_make_member($username,$password,is_null($email_address)?'':$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,NULL,$primary_group,$validated,$join_time,NULL,'',$avatar_url,$signature,$is_perm_banned,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,'',NULL,'',false,$password_compatibility_scheme,$salt,1,NULL,NULL,0,'*','');
 					$num_added++;
 				} else
 				{
 					$old_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($linked_id,'m_username');
 					if ($old_username==$username) $username=NULL;
 
-					ocf_edit_member($linked_id,$email_address,NULL,$dob_day,$dob_month,$dob_year,NULL,$primary_group,$custom_fields,NULL,$reveal_age,NULL,NULL,$language,$allow_emails,$validated,$username,$password,NULL,NULL,NULL,NULL,NULL,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
+					ocf_edit_member($linked_id,$email_address,NULL,$dob_day,$dob_month,$dob_year,NULL,$primary_group,$custom_fields,NULL,$reveal_age,NULL,NULL,$language,$allow_emails,$allow_emails_from_staff,$validated,$username,$password,NULL,NULL,NULL,NULL,NULL,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
 					$num_edited++;
 				}
 

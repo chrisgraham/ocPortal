@@ -120,7 +120,7 @@ class Hook_joomla
 					$sec = $timearr[2];
 					$last_visit_date = mktime($hour, $min, $sec, $month, $date, $year);					
 					$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-					$member_id=ocf_make_member($row['username'],$row['password'],$row['email'],NULL,NULL,NULL,NULL,$custom_fields,NULL,$primary_group,1,$register_date,$last_visit_date,'',NULL,'',0,0,1,$row['name'],'','',1,1,NULL,$row['sendEmail'],'',NULL,'',false,NULL,'',1,$last_visit_date,$id,0,'*','');
+					$member_id=ocf_make_member($row['username'],$row['password'],$row['email'],NULL,NULL,NULL,NULL,$custom_fields,NULL,$primary_group,1,$register_date,$last_visit_date,'',NULL,'',0,0,1,$row['name'],'','',1,1,NULL,$row['sendEmail'],$row['sendEmail'],'',NULL,'',false,NULL,'',1,$last_visit_date,$id,0,'*','');
 				}
 			}
 
@@ -515,7 +515,7 @@ class Hook_joomla
 				$last_visit_date = mktime($hour, $min, $sec, $month, $date, $year);
 				
 				$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-				$id_new=ocf_make_member($row['username'],$row['password'],$row['email'],NULL,NULL,NULL,NULL,$custom_fields,NULL,$primary_group,1,$register_date,$last_visit_date,'',NULL,'',0,0,1,$row['name'],'','',1,1,NULL,$row['sendEmail'],'',NULL,'',FALSE,NULL,'',1,$last_visit_date,$id,0,'*','');
+				$id_new=ocf_make_member($row['username'],$row['password'],$row['email'],NULL,NULL,NULL,NULL,$custom_fields,NULL,$primary_group,1,$register_date,$last_visit_date,'',NULL,'',0,0,1,$row['name'],'','',1,1,NULL,$row['sendEmail'],$row['sendEmail'],'',NULL,'',FALSE,NULL,'',1,$last_visit_date,$id,0,'*','');
 
 				import_id_remap_put('member',strval($row['id']),$id_new);
 			}

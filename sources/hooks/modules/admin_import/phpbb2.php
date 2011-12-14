@@ -286,7 +286,7 @@ class Hook_phpbb2
 				$type='md5';
 				$salt='';
 
-				$id_new=ocf_make_member($row['username'],$password,$row['user_email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['user_timezone']),$primary_group,$validated,$row['user_regdate'],$row['user_lastvisit'],'',$avatar_url,$signature,(!is_null($row['ban_id']))?1:0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$row['user_allow_pm'],'','','',false,$type,$salt,1);
+				$id_new=ocf_make_member($row['username'],$password,$row['user_email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['user_timezone']),$primary_group,$validated,$row['user_regdate'],$row['user_lastvisit'],'',$avatar_url,$signature,(!is_null($row['ban_id']))?1:0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$row['user_allow_pm'],1,'','','',false,$type,$salt,1);
 
 				// Fix usergroup leadership
 				$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>$id_new),array('g_group_leader'=>-$row['user_id']));

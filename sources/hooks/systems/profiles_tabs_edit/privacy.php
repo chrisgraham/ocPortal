@@ -58,15 +58,26 @@ class Hook_Profiles_Tabs_Edit_privacy
 			{
 				$field_id=intval($_field_id);
 
-				$_guests_view=post_param('guests_'.strval($field_id),NULL);
-				$_members_view=post_param('members_'.strval($field_id),NULL);
-				$_friends_view=post_param('friends_'.strval($field_id),NULL);
-				$_groups_view=post_param('groups_'.strval($field_id),NULL);
+				if (get_value('simplify_privacy_options')==='1')
+				{
+					$_view=post_param('privacy_'.strval($field_id),NULL);
 
-				$guests_view=(!is_null($_guests_view))?1:0;
-				$members_view=(!is_null($_members_view))?1:0;
-				$friends_view=(!is_null($_friends_view))?1:0;
-				$groups_view=(!is_null($_groups_view))?$_groups_view:'';
+					$guests_view=($_view=='guests')?1:0;
+					$members_view=($_view=='guests' || $_view=='members')?1:0;
+					$friends_view=($_view=='guests' || $_view=='members' || $_view=='friends')?1:0;
+					$groups_view='';
+				} else
+				{
+					$_guests_view=post_param('guests_'.strval($field_id),NULL);
+					$_members_view=post_param('members_'.strval($field_id),NULL);
+					$_friends_view=post_param('friends_'.strval($field_id),NULL);
+					$_groups_view=post_param('groups_'.strval($field_id),NULL);
+
+					$guests_view=(!is_null($_guests_view))?1:0;
+					$members_view=(!is_null($_members_view))?1:0;
+					$friends_view=(!is_null($_friends_view))?1:0;
+					$groups_view=(!is_null($_groups_view))?$_groups_view:'';
+				}
 
 				$cpf_permissions=$GLOBALS['FORUM_DB']->query_select('f_member_cpf_perms',array('*'),array('member_id'=>$member_id_of, 'field_id'=>$field_id));
 
@@ -137,22 +148,33 @@ class Hook_Profiles_Tabs_Edit_privacy
 				if (!is_null($_cpf_title)) $cpf_title=$_cpf_title;
 			}
 
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$cpf_title)));
-
-			$fields->attach(form_input_tick(do_lang_tempcode('GUESTS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GUESTS'),'guests_'.strval($cpf_id),$view_by_guests));
-			$fields->attach(form_input_tick(do_lang_tempcode('MEMBERS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_MEMBERS'),'members_'.strval($cpf_id),$view_by_members));
-			$fields->attach(form_input_tick(do_lang_tempcode('FRIENDS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_FRIENDS'),'friends_'.strval($cpf_id),$view_by_friends));
-
-			$groups=new ocp_tempcode();
-			foreach ($tmp_groups as $gr_key=>$group)
+			if (get_value('simplify_privacy_options')==='1')
 			{
-				if ($group==get_option('probation_usergroup')) continue;
+				$privacy_options=new ocp_tempcode();
+				$privacy_options->attach(form_input_list_entry('guests',$view_by_guests==1,do_lang_tempcode('VISIBLE_TO_GUESTS')));
+				$privacy_options->attach(form_input_list_entry('members',$view_by_members==1 && $view_by_guests==0,do_lang_tempcode('VISIBLE_TO_MEMBERS')));
+				$privacy_options->attach(form_input_list_entry('friends',$view_by_friends==1 && $view_by_members==0 && $view_by_guests==0,do_lang_tempcode('VISIBLE_TO_FRIENDS')));
+				$privacy_options->attach(form_input_list_entry('staff',$view_by_friends==0 && $view_by_members==0 && $view_by_guests==0,do_lang_tempcode('VISIBLE_TO_STAFF')));
+				$fields->attach(form_input_list(do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)),'','privacy_'.strval($cpf_id),$privacy_options));
+			} else
+			{
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)))));
 
-				$current_group_view=(in_array($gr_key,$view_by_groups));
-				$groups->attach(form_input_list_entry(strval($gr_key),$current_group_view,$group,false,false));
+				$fields->attach(form_input_tick(do_lang_tempcode('GUESTS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GUESTS'),'guests_'.strval($cpf_id),$view_by_guests));
+				$fields->attach(form_input_tick(do_lang_tempcode('MEMBERS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_MEMBERS'),'members_'.strval($cpf_id),$view_by_members));
+				$fields->attach(form_input_tick(do_lang_tempcode('FRIENDS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_FRIENDS'),'friends_'.strval($cpf_id),$view_by_friends));
+
+				$groups=new ocp_tempcode();
+				foreach ($tmp_groups as $gr_key=>$group)
+				{
+					if ($group==get_option('probation_usergroup')) continue;
+
+					$current_group_view=(in_array($gr_key,$view_by_groups));
+					$groups->attach(form_input_list_entry(strval($gr_key),$current_group_view,$group,false,false));
+				}
+
+				$fields->attach(form_input_multi_list(do_lang_tempcode('GROUPS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GROUPS'),'groups_'.strval($cpf_id),$groups));
 			}
-
-			$fields->attach(form_input_multi_list(do_lang_tempcode('GROUPS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GROUPS'),'groups_'.strval($cpf_id),$groups));
 		}
 
 		$cpfs_hidden=form_input_hidden('cpf_fields',implode(',', $cpf_ids));

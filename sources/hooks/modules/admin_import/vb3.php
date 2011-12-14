@@ -369,7 +369,7 @@ class Hook_vb3
 				}
 				//if (($row['adminpermissions']&256)!=0) $secondary_groups[]=array('usergroupid'=>db_get_first_id()+1);
 
-				$id_new=ocf_make_member($row['username'],$password,$row['email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['timezoneoffset']),$primary_group,$validated,$row['joindate'],$row['lastvisit'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$row['autosubscribe'],$language,$row['options']&16,'',$row['ipaddress'],'',false,$type,$salt,1,($row['lastpost']==0)?$row['lastpost']:NULL);
+				$id_new=ocf_make_member($row['username'],$password,$row['email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['timezoneoffset']),$primary_group,$validated,$row['joindate'],$row['lastvisit'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$row['autosubscribe'],$language,$row['options']&16,$row['options']&16,'',$row['ipaddress'],'',false,$type,$salt,1,($row['lastpost']==0)?$row['lastpost']:NULL);
 
 				// Fix usergroup leadership
 				$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>$id_new),array('g_group_leader'=>-$row['userid']));

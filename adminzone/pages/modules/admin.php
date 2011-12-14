@@ -527,7 +527,7 @@ class Module_admin
 			$map=array();
 			if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) $map['shared_hosting_restricted']=0;
 			$all_options=$GLOBALS['SITE_DB']->query_select('config',array('the_name','human_name','the_page','section','explanation','eval'),$map);
-			$all_options[]=array('the_name'=>'timezone','human_name'=>'CURRENT_TIME','config_value'=>'','the_type'=>'special','eval'=>'','the_page'=>'SITE','section'=>'GENERAL','explanation'=>'','shared_hosting_restricted'=>0);
+			$all_options[]=array('the_name'=>'timezone','human_name'=>'TIME_ZONE','config_value'=>'','the_type'=>'special','eval'=>'','the_page'=>'SITE','section'=>'GENERAL','explanation'=>'','shared_hosting_restricted'=>0);
 			$config_categories=array();
 			$conf_found_count=0;
 			foreach ($all_options as $p)
@@ -536,7 +536,7 @@ class Module_admin
 				switch ($p['the_name'])
 				{
 					case 'timezone':
-						$t=do_lang('DESCRIPTION_CURRENT_TIME');
+						$t=do_lang('DESCRIPTION_TIMEZONE_SITE');
 						break;
 					
 					default:

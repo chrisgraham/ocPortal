@@ -381,8 +381,13 @@ function install_ocf($upgrade_from=NULL)
 	}
 	if ((is_null($upgrade_from)) || ($upgrade_from<8.0))
 	{
+		add_config_option('ALLOW_EMAIL_FROM_STAFF_DISABLE','allow_email_from_staff_disable','tick','return \'0\';','SECTION_FORUMS','GENERAL');
 		add_config_option('INTRO_FORUM_ID','intro_forum_id','?forum','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('SIGNUP_FULLNAME','signup_fullname','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+	}
+	if ((!is_null($upgrade_from)) && ($upgrade_from<8.0))
+	{
+		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_allow_emails_from_staff','BINARY');
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<4.2))
 	{
@@ -559,6 +564,7 @@ function install_ocf($upgrade_from=NULL)
 			'm_language'=>'ID_TEXT',
 			'm_ip_address'=>'IP',
 			'm_allow_emails'=>'BINARY',
+			'm_allow_emails_from_staff'=>'BINARY',
 			'm_notes'=>'LONG_TEXT', // TODO: Remove
 			'm_zone_wide'=>'BINARY',
 			'm_highlighted_name'=>'BINARY',
@@ -962,11 +968,11 @@ function install_ocf($upgrade_from=NULL)
 		if (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST') exit(); // Needed as YSlow can load as GET's in background and cause horrible results
 		// NB: post_param's will return default's if OCF is being installed but not used yet (e.g. IPB forum driver chosen at installation)
 		// Make guest
-		ocf_make_member(do_lang('GUEST'),'','',NULL,NULL,NULL,NULL,array(),NULL,$guest_group,1,time(),time(),'',NULL,'',0,1,1,'','','',1,0,'',1,'',NULL,'',false);
+		ocf_make_member(do_lang('GUEST'),'','',NULL,NULL,NULL,NULL,array(),NULL,$guest_group,1,time(),time(),'',NULL,'',0,1,1,'','','',1,0,'',1,1,'',NULL,'',false);
 		// Make admin user
-		ocf_make_member(post_param('admin_username','admin'),post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$administrator_group,1,time(),time(),'','themes/default/images/ocf_default_avatars/default_set/cool_flare.png','',0,0,1,'','','',1,0,'',1,'',NULL,'',false);
+		ocf_make_member(post_param('admin_username','admin'),post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$administrator_group,1,time(),time(),'','themes/default/images/ocf_default_avatars/default_set/cool_flare.png','',0,0,1,'','','',1,0,'',1,1,'',NULL,'',false);
 		// Make test user
-		ocf_make_member('test',post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$member_group_0,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,'',1,'',NULL,'',false);
+		ocf_make_member('test',post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$member_group_0,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,'',1,1,'',NULL,'',false);
 
 		$GLOBALS['FORUM_DB']->create_table('f_read_logs',array(
 			'l_member_id'=>'*USER',

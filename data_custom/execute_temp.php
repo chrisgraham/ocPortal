@@ -67,10 +67,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->add_table_field('videos','title','SHORT_TRANS');
-	$GLOBALS['SITE_DB']->add_table_field('images','title','SHORT_TRANS');
-	$GLOBALS['SITE_DB']->add_table_field('galleries','gallery_views','INTEGER');
-	$GLOBALS['SITE_DB']->add_table_field('galleries','g_owner','?USER');
+	add_config_option('ALLOW_EMAIL_FROM_STAFF_DISABLE','allow_email_from_staff_disable','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+	$GLOBALS['FORUM_DB']->add_table_field('f_members','m_allow_emails_from_staff','BINARY');
 }
 
 

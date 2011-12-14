@@ -127,7 +127,7 @@ class Hook_members
 			//We're at the top level, and adding a new member
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
-			ocf_make_member($new_dir_name,'occle','',NULL,NULL,NULL,NULL,array(),NULL,NULL,1,NULL,NULL,'','','',0,1,1,'','','',1,1,NULL,1,'',NULL,'',false);
+			ocf_make_member($new_dir_name,'occle','',NULL,NULL,NULL,NULL,array(),NULL,NULL,1,NULL,NULL,'','','',0,1,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
 		}
 		else return false; //Directories aren't allowed to be added anywhere else
 
@@ -268,6 +268,7 @@ class Hook_members
 				'track_contributed_topics'=>'m_track_contributed_topics',
 				'language'=>'m_language',
 				'allow_e-mails'=>'m_allow_emails',
+				'allow_e-mails_from_staff'=>'m_allow_emails_from_staff',
 				'notes'=>'m_notes',
 				'wide'=>'m_zone_wide',
 				'max_attach_size'=>'m_max_email_attach_size_mb'
@@ -339,6 +340,7 @@ class Hook_members
 				'track_contributed_topics'=>'m_track_contributed_topics',
 				'language'=>'m_language',
 				'allow_e-mails'=>'m_allow_emails',
+				'allow_e-mails_from_staff'=>'m_allow_emails_from_staff',
 				'notes'=>'m_notes',
 				'wide'=>'m_zone_wide',
 				'max_attach_size'=>'m_max_email_attach_size_mb',

@@ -394,7 +394,7 @@ class Hook_smf
 				$salt=$row['passwordSalt'];
 
 				if ($row['dateRegistered']==0) $row['dateRegistered']=time();
-				$id_new=ocf_make_member($row['memberName'],$password,$row['emailAddress'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['timeOffset']),$primary_group,$validated,$row['dateRegistered'],$row['lastLogin'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$row['instantMessages'],'','','',false,$type,$salt,1);
+				$id_new=ocf_make_member($row['memberName'],$password,$row['emailAddress'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['timeOffset']),$primary_group,$validated,$row['dateRegistered'],$row['lastLogin'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$row['instantMessages'],1,'','','',false,$type,$salt,1);
 
 				// Fix usergroup leadership
 				$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>$id_new),array('g_group_leader'=>-$row['muid']));

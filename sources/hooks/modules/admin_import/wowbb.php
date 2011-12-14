@@ -301,7 +301,7 @@ class Hook_wowbb
 				$type='md5';
 				$salt='';
 
-				$id_new=ocf_make_member($row['user_name'],$password,$row['user_email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,NULL,$primary_group,$validated,strtotime($row['user_joined']),strtotime($row['user_joined']),'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,0,$language,$row['user_admin_emails'],'','','',false,$type,$salt,1);
+				$id_new=ocf_make_member($row['user_name'],$password,$row['user_email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,NULL,$primary_group,$validated,strtotime($row['user_joined']),strtotime($row['user_joined']),'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,0,$language,1,$row['user_admin_emails'],'','','',false,$type,$salt,1);
 
 				// Fix usergroup leadership
 				$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>$id_new),array('g_group_leader'=>-$row['user_id']));

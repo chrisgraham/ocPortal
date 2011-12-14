@@ -239,6 +239,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	$timezone=post_param('timezone',get_users_timezone());
 	$language=post_param('language',get_site_default_lang());
 	$allow_emails=post_param_integer('allow_emails',0);
+	$allow_emails_from_staff=post_param_integer('allow_emails_from_staff',0);
 	$groups=ocf_get_all_default_groups(true);
 	$additional_group=post_param_integer('additional_group',-1);
 	if (($additional_group!=-1) && (!in_array($additional_group,$groups)))
@@ -309,7 +310,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	$coppa=(get_option('is_on_coppa')=='1') && (servertime_to_usertime(time()-mktime(0,0,0,$dob_month,$dob_day,$dob_year))/31536000.0<13.0);
 	if (!$coppa_if_enabled) $coppa=false;
 	$validated=($require_new_member_validation || $coppa)?0:1;
-	if (is_null($member_id)) $member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,($additional_group!=-1)?$additional_group:NULL,$validated,time(),time(),'',NULL,'',0,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'','','',1,(get_value('no_auto_track')==='1')?0:1,$language,$allow_emails,'',get_ip_address(),$validated_email_confirm_code,true,'','');
+	if (is_null($member_id)) $member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,($additional_group!=-1)?$additional_group:NULL,$validated,time(),time(),'',NULL,'',0,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'','','',1,(get_value('no_auto_track')==='1')?0:1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),$validated_email_confirm_code,true,'','');
 	/*if ($additional_group!=-1)
 	{
 		require_code('ocf_groups_action');

@@ -412,7 +412,7 @@ class Hook_phpbb3
 				$type='phpbb3';
 				$salt='';
 
-				$id_new=ocf_make_member($row['username'],$password,$row['user_email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['user_timezone']),$primary_group,$validated,$row['user_regdate'],$row['user_lastvisit'],'',$avatar_url,$signature,(!is_null($row['ban_id']))?1:0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$row['user_allow_massemail'],'','','',false,$type,$salt,1);
+				$id_new=ocf_make_member($row['username'],$password,$row['user_email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['user_timezone']),$primary_group,$validated,$row['user_regdate'],$row['user_lastvisit'],'',$avatar_url,$signature,(!is_null($row['ban_id']))?1:0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,1,$row['user_allow_massemail'],'','','',false,$type,$salt,1);
 
 				// CPF values
 				$cpf_rows=collapse_2d_complexity('field_name','field_type',$db->query('SELECT field_name,field_type FROM '.$table_prefix.'profile_fields f'));

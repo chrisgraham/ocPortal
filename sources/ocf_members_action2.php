@@ -111,7 +111,7 @@ function ocf_member_external_linker_ask($username,$type,$email='')
 		$username=$_username;
 	}
 
-	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email,1,NULL,NULL,NULL,NULL,NULL,NULL,1,1,0,NULL,1,1,NULL,$username,0,$type);
+	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email,1,NULL,NULL,NULL,NULL,NULL,NULL,1,1,0,NULL,1,1,1,NULL,$username,0,$type);
 	$hidden->attach(build_keep_post_fields());
 	$hidden->attach(form_input_hidden('finishing_profile','1'));
 
@@ -144,6 +144,7 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true)
 	$timezone=post_param('timezone',get_site_timezone());
 	$language=post_param('language',get_site_default_lang());
 	$allow_emails=post_param_integer('allow_emails',0);
+	$allow_emails_from_staff=post_param_integer('allow_emails_from_staff',0);
 	require_code('ocf_groups');
 	if (get_value('sep_cpf_join_setting')==='1')
 	{
@@ -186,7 +187,7 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true)
 
 	// Add member
 	require_code('ocf_members_action');
-	$ret=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,NULL,1,time(),time(),'',NULL,'',0,1,$reveal_age,'','','',1,1,$language,$allow_emails,'',get_ip_address(),'',false,$type,'');
+	$ret=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,NULL,1,time(),time(),'',NULL,'',0,1,$reveal_age,'','','',1,1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),'',false,$type,'');
 	return $ret;
 }
 
@@ -214,35 +215,81 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
 /**
  * Get form fields for adding/editing/finishing a member profile.
  *
- * @param  boolean		Whether we are only handling the essential details of a profile.
- * @param  ?MEMBER		The ID of the member we are handling (NULL: new member).
- * @param  ?array			A list of usergroups (NULL: default/current usergroups).
- * @param  SHORT_TEXT	The e-mail address.
- * @param  BINARY			Whether posts are previewed before they are made.
- * @param  ?integer		Day of date of birth (NULL: not known).
- * @param  ?integer		Month of date of birth (NULL: not known).
- * @param  ?integer		Year of date of birth (NULL: not known).
- * @param  ?ID_TEXT		The member timezone (NULL: site default).
- * @param  ?array			A map of custom fields values (field-id=>value) (NULL: not known).
- * @param  ?ID_TEXT		The members default theme (NULL: not known).
- * @param  BINARY			Whether the members age may be shown.
- * @param  BINARY			Whether the member sees signatures in posts.
- * @param  ?BINARY		Whether the member tracks topics they post in automatically (NULL: get default from config).
- * @param  ?LANGUAGE_NAME The members language (NULL: auto detect).
- * @param  BINARY			Whether the member allows e-mails via the site.
- * @param  BINARY			Whether the profile has been validated.
- * @param  ?GROUP			The members primary (NULL: not known).
- * @param  SHORT_TEXT	The username.
- * @param  BINARY			Whether the member is permanently banned.
- * @param  ID_TEXT		The special type of profile this is (blank: not a special type).
- * @param  BINARY			Whether the member likes to view zones without menus, when a choice is available.
- * @param  BINARY			Whether the member username will be highlighted.
- * @param  SHORT_TEXT	Usergroups that may PT the member.
- * @param  LONG_TEXT		Rules that other members must agree to before they may start a PT with the member.
- * @param  ?TIME			When the member is on probation until (NULL: just finished probation / or effectively was never on it)
- * @return array			A pair: The form fields, Hidden fields (both Tempcode).
+ * @param  boolean			Whether we are only handling the essential details of a profile.
+ * @param  ?MEMBER			The ID of the member we are handling (NULL: new member).
+ * @param  ?array				A list of usergroups (NULL: default/current usergroups).
+ * @param  SHORT_TEXT		The e-mail address.
+ * @param  BINARY				Whether posts are previewed before they are made.
+ * @param  ?integer			Day of date of birth (NULL: not known).
+ * @param  ?integer			Month of date of birth (NULL: not known).
+ * @param  ?integer			Year of date of birth (NULL: not known).
+ * @param  ?ID_TEXT			The member timezone (NULL: site default).
+ * @param  ?array				A map of custom fields values (field-id=>value) (NULL: not known).
+ * @param  ?ID_TEXT			The members default theme (NULL: not known).
+ * @param  BINARY				Whether the members age may be shown.
+ * @param  BINARY				Whether the member sees signatures in posts.
+ * @param  ?BINARY			Whether the member tracks topics they post in automatically (NULL: get default from config).
+ * @param  ?LANGUAGE_NAME	The members language (NULL: auto detect).
+ * @param  BINARY				Whether the member allows e-mails via the site.
+ * @param  BINARY				Whether the member allows e-mails from staff via the site.
+ * @param  BINARY				Whether the profile has been validated.
+ * @param  ?GROUP				The members primary (NULL: not known).
+ * @param  SHORT_TEXT		The username.
+ * @param  BINARY				Whether the member is permanently banned.
+ * @param  ID_TEXT			The special type of profile this is (blank: not a special type).
+ * @param  BINARY				Whether the member likes to view zones without menus, when a choice is available.
+ * @param  BINARY				Whether the member username will be highlighted.
+ * @param  SHORT_TEXT		Usergroups that may PT the member.
+ * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
+ * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
+ * @return array				A pair: The form fields, Hidden fields (both Tempcode).
  */
-function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$custom_fields=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$track_contributed_topics=NULL,$language=NULL,$allow_emails=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$custom_fields=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$track_contributed_topics=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+{
+	$fields=new ocp_tempcode();
+	$hidden=new ocp_tempcode();
+	list($_fields,$_hidden)=ocf_get_member_fields_profile($custom_fields);
+	$fields->attach($_fields);
+	$hidden->attach($_hidden);
+	list($_fields,$_hidden)=ocf_get_member_fields_settings($mini_mode,$member_id,$groups,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$theme,$reveal_age,$views_signatures,$track_contributed_topics,$language,$allow_emails,$allow_emails_from_staff,$validated,$primary_group,$username,$is_perm_banned,$special_type,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+	$fields->attach($_fields);
+	$hidden->attach($_hidden);
+
+	return array($fields,$hidden);
+}
+
+/**
+ * Get form fields for adding/editing/finishing a member profile.
+ *
+ * @param  boolean			Whether we are only handling the essential details of a profile.
+ * @param  ?MEMBER			The ID of the member we are handling (NULL: new member).
+ * @param  ?array				A list of usergroups (NULL: default/current usergroups).
+ * @param  SHORT_TEXT		The e-mail address.
+ * @param  BINARY				Whether posts are previewed before they are made.
+ * @param  ?integer			Day of date of birth (NULL: not known).
+ * @param  ?integer			Month of date of birth (NULL: not known).
+ * @param  ?integer			Year of date of birth (NULL: not known).
+ * @param  ?ID_TEXT			The member timezone (NULL: site default).
+ * @param  ?ID_TEXT			The members default theme (NULL: not known).
+ * @param  BINARY				Whether the members age may be shown.
+ * @param  BINARY				Whether the member sees signatures in posts.
+ * @param  ?BINARY			Whether the member tracks topics they post in automatically (NULL: get default from config).
+ * @param  ?LANGUAGE_NAME	The members language (NULL: auto detect).
+ * @param  BINARY				Whether the member allows e-mails via the site.
+ * @param  BINARY				Whether the member allows e-mails from staff via the site.
+ * @param  BINARY				Whether the profile has been validated.
+ * @param  ?GROUP				The members primary (NULL: not known).
+ * @param  SHORT_TEXT		The username.
+ * @param  BINARY				Whether the member is permanently banned.
+ * @param  ID_TEXT			The special type of profile this is (blank: not a special type).
+ * @param  BINARY				Whether the member likes to view zones without menus, when a choice is available.
+ * @param  BINARY				Whether the member username will be highlighted.
+ * @param  SHORT_TEXT		Usergroups that may PT the member.
+ * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
+ * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
+ * @return array				A pair: The form fields, Hidden fields (both Tempcode).
+ */
+function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$track_contributed_topics=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
 	if (is_null($track_contributed_topics))
 	{
@@ -274,7 +321,10 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 		}
 	}
 
+	if (is_null($groups)) $groups=is_null($member_id)?ocf_get_all_default_groups(true):$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
+
 	$fields=new ocp_tempcode();
+
 	if (($special_type!='ldap') && ($special_type!='remote'))
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self')))
@@ -315,102 +365,18 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 	$default_time=is_null($dob_month)?NULL:usertime_to_servertime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
 	if (get_option('no_dob_ask')!='1')
 	{
-		$fields->attach(form_input_date(do_lang_tempcode('DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
+		$fields->attach(form_input_date(do_lang_tempcode((get_value('dob_optional')==='1')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
 		if (addon_installed('ocf_forum'))
 		{
-			$fields->attach(form_input_tick(do_lang_tempcode('REVEAL_AGE'),do_lang_tempcode('DESCRIPTION_REVEAL_AGE'),'reveal_age',$reveal_age==1));
+			$fields->attach(form_input_tick(do_lang_tempcode('RELATED_FIELD',do_lang_tempcode('REVEAL_AGE')),do_lang_tempcode('DESCRIPTION_REVEAL_AGE'),'reveal_age',$reveal_age==1));
 		}
 	}
-	if (is_null($groups)) $groups=is_null($member_id)?ocf_get_all_default_groups(true):$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
-	if (get_value('sep_cpf_join_setting')==='1')
-	{
-		$_custom_fields=ocf_get_all_custom_fields_match(
-			$groups,
-			($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'view_any_profile_field')))?NULL:1, // public view
-			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
-			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
-			NULL,
-			NULL,
-			NULL,
-			0,
-			$mini_mode?true:NULL // show on join form
-		);
-	} else
-	{
-		$_custom_fields=ocf_get_all_custom_fields_match(
-			$groups,
-			($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'view_any_profile_field')))?NULL:1, // public view
-			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
-			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
-			$mini_mode?1:NULL // required
-		);
-	}
-	if (count($_custom_fields)!=0) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PROFILE'))));
-	$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
-	$field_groups=array();
-	require_code('fields');
-	foreach ($_custom_fields as $custom_field)
-	{
-//		if (($custom_field['cf_locked']==0) || (!is_null($member_id)))
-//		{
-			$ob=get_fields_hook($custom_field['cf_type']);
-			list(,,$storage_type)=$ob->get_field_value_row_bits($custom_field);
-
-			$existing_field=(!is_null($custom_fields)) && (array_key_exists($custom_field['id'],$custom_fields));
-			if ($existing_field)
-			{
-				$value=mixed();
-				$value=$custom_fields[$custom_field['id']];
-				if (strpos($storage_type,'_trans')!==false)
-				{
-					$value=((is_null($value)) || ($value==0))?'':get_translated_text($value,$GLOBALS['FORUM_DB']);
-				}
-				if (($custom_field['cf_encrypted']==1) && (is_encryption_enabled()))
-					$value=remove_magic_encryption_marker($value);
-			} else
-			{
-				$value=$custom_field['cf_default'];
-			}
-			$result=new ocp_tempcode();
-			$_description=escape_html(get_translated_text($custom_field['cf_description'],$GLOBALS['FORUM_DB']));
-			$field_cat='';
-			$matches=array();
-			if (strpos($custom_field['trans_name'],': ')!==false)
-			{
-				$field_cat=substr($custom_field['trans_name'],0,strpos($custom_field['trans_name'],': '));
-				$custom_field['trans_name']=substr($custom_field['trans_name'],strpos($custom_field['trans_name'],': ')+2);
-			}
-			elseif (preg_match('#(^\([A-Z][^\)]*\) )|( \([A-Z][^\)]*\)$)#',$custom_field['trans_name'],$matches)!=0)
-			{
-				$field_cat=trim($matches[0],'() ');
-				$custom_field['trans_name']=str_replace($matches[0],'',$custom_field['trans_name']);
-			}
-			$result=$ob->get_field_inputter($custom_field['trans_name'],$_description,$custom_field,$value,!$existing_field);
-			if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
-			$field_groups[$field_cat]->attach($result);
-			$hidden->attach(form_input_hidden('label_for__custom_'.strval($custom_field['id']).'_value',$custom_field['trans_name']));
-//		}
-	}
-	if (array_key_exists('',$field_groups)) // Blank prefix must go first
-	{
-		$field_groups_blank=$field_groups[''];
-		unset($field_groups['']);
-		$field_groups=array_merge(array($field_groups_blank),$field_groups);
-	}
-	foreach ($field_groups as $field_group_title=>$extra_fields)
-	{
-		if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
-	
-		if ($field_group_title!='')
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
-		$fields->attach($extra_fields);
-	}
-	$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=false;
 
 	$doing_international=(get_option('allow_international')=='1') && ($special_type!='remote');
 	$_langs=find_all_langs();
 	$doing_langs=(multi_lang()) && ($special_type!='remote');
 	$doing_email_option=(get_option('allow_email_disable')=='1');
+	$doing_email_from_staff_option=(get_option('allow_email_from_staff_disable')=='1');
 	$unspecced_width_zone_exists=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_name',array('zone_wide'=>NULL));
 	$unspecced_theme_zone_exists=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'zones WHERE '.db_string_equal_to('zone_theme','').' OR '.db_string_equal_to('zone_theme','-1'));
 	$doing_wide_option=($special_type!='remote') && (!is_null($unspecced_width_zone_exists)) && (!$mini_mode);
@@ -422,7 +388,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 	if ($doing_international)
 	{
 		$timezone_list=nice_get_timezone_list($timezone);
-		$fields->attach(form_input_list(do_lang_tempcode('CURRENT_TIME'),do_lang_tempcode('DESCRIPTION_CURRENT_TIME'),'timezone',$timezone_list));
+		$fields->attach(form_input_list(do_lang_tempcode('TIME_ZONE'),do_lang_tempcode('DESCRIPTION_TIMEZONE_MEMBER'),'timezone',$timezone_list));
 	}
 	if ($doing_langs)
 	{
@@ -441,6 +407,8 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 	}
 	if ($doing_email_option)
 		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_EMAILS'),do_lang_tempcode('DESCRIPTION_ALLOW_EMAILS'),'allow_emails',$allow_emails==1));
+	if ($doing_email_from_staff_option)
+		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_EMAILS_FROM_STAFF'),do_lang_tempcode('DESCRIPTION_ALLOW_EMAILS_FROM_STAFF'),'allow_emails_from_staff',$allow_emails_from_staff==1));
 	if (!$mini_mode)
 	{
 		require_lang('zones');
@@ -471,8 +439,8 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 				}
 				$fields->attach(form_input_tick(do_lang_tempcode('TRACK_CONTRIBUTED_TOPICS'),do_lang_tempcode('DESCRIPTION_TRACK_CONTRIBUTED_TOPICS'),'track_contributed_topics',$track_contributed_topics==1));
 				$usergroup_list=new ocp_tempcode();
-				$groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
-				foreach ($groups as $key=>$val)
+				$lgroups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
+				foreach ($lgroups as $key=>$val)
 				{
 					if ($key!=db_get_first_id())
 						$usergroup_list->attach(form_input_list_entry(strval($key),($pt_allow=='*') || count(array_intersect(array(strval($key)),explode(',',$pt_allow)))!=0,$val));
@@ -552,6 +520,109 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 }
 
 /**
+ * Get form fields for adding/editing/finishing a member profile.
+ *
+ * @param  boolean			Whether we are only handling the essential details of a profile.
+ * @param  ?MEMBER			The ID of the member we are handling (NULL: new member).
+ * @param  ?array				A list of usergroups (NULL: default/current usergroups).
+ * @param  ?array				A map of custom fields values (field-id=>value) (NULL: not known).
+ * @return array				A pair: The form fields, Hidden fields (both Tempcode).
+ */
+function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=NULL,$custom_fields=NULL)
+{
+	$fields=new ocp_tempcode();
+	$hidden=new ocp_tempcode();
+
+	if (is_null($groups)) $groups=is_null($member_id)?ocf_get_all_default_groups(true):$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
+
+	if (get_value('sep_cpf_join_setting')==='1')
+	{
+		$_custom_fields=ocf_get_all_custom_fields_match(
+			$groups,
+			($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'view_any_profile_field')))?NULL:1, // public view
+			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
+			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
+			NULL,
+			NULL,
+			NULL,
+			0,
+			$mini_mode?true:NULL // show on join form
+		);
+	} else
+	{
+		$_custom_fields=ocf_get_all_custom_fields_match(
+			$groups,
+			($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'view_any_profile_field')))?NULL:1, // public view
+			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
+			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
+			$mini_mode?1:NULL // required
+		);
+	}
+	$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
+	$field_groups=array();
+	require_code('fields');
+	foreach ($_custom_fields as $custom_field)
+	{
+//		if (($custom_field['cf_locked']==0) || (!is_null($member_id)))
+//		{
+			$ob=get_fields_hook($custom_field['cf_type']);
+			list(,,$storage_type)=$ob->get_field_value_row_bits($custom_field);
+
+			$existing_field=(!is_null($custom_fields)) && (array_key_exists($custom_field['id'],$custom_fields));
+			if ($existing_field)
+			{
+				$value=mixed();
+				$value=$custom_fields[$custom_field['id']];
+				if (strpos($storage_type,'_trans')!==false)
+				{
+					$value=((is_null($value)) || ($value==0))?'':get_translated_text($value,$GLOBALS['FORUM_DB']);
+				}
+				if (($custom_field['cf_encrypted']==1) && (is_encryption_enabled()))
+					$value=remove_magic_encryption_marker($value);
+			} else
+			{
+				$value=$custom_field['cf_default'];
+			}
+			$result=new ocp_tempcode();
+			$_description=escape_html(get_translated_text($custom_field['cf_description'],$GLOBALS['FORUM_DB']));
+			$field_cat='';
+			$matches=array();
+			if (strpos($custom_field['trans_name'],': ')!==false)
+			{
+				$field_cat=substr($custom_field['trans_name'],0,strpos($custom_field['trans_name'],': '));
+				$custom_field['trans_name']=substr($custom_field['trans_name'],strpos($custom_field['trans_name'],': ')+2);
+			}
+			elseif (preg_match('#(^\([A-Z][^\)]*\) )|( \([A-Z][^\)]*\)$)#',$custom_field['trans_name'],$matches)!=0)
+			{
+				$field_cat=trim($matches[0],'() ');
+				$custom_field['trans_name']=str_replace($matches[0],'',$custom_field['trans_name']);
+			}
+			$result=$ob->get_field_inputter($custom_field['trans_name'],$_description,$custom_field,$value,!$existing_field);
+			if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
+			$field_groups[$field_cat]->attach($result);
+			$hidden->attach(form_input_hidden('label_for__custom_'.strval($custom_field['id']).'_value',$custom_field['trans_name']));
+//		}
+	}
+	if (array_key_exists('',$field_groups)) // Blank prefix must go first
+	{
+		$field_groups_blank=$field_groups[''];
+		unset($field_groups['']);
+		$field_groups=array_merge(array($field_groups_blank),$field_groups);
+	}
+	foreach ($field_groups as $field_group_title=>$extra_fields)
+	{
+		if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
+
+		if ($field_group_title!='')
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
+		$fields->attach($extra_fields);
+	}
+	$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=false;
+
+	return array($fields,$hidden);
+}
+
+/**
  * Edit a member.
  *
  * @param  AUTO_LINK			The ID of the member.
@@ -569,6 +640,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  ?BINARY			Whether the member tracks topics they post in automatically. (NULL: don't change)
  * @param  ?LANGUAGE_NAME	The members language. (NULL: don't change)
  * @param  ?BINARY			Whether the member allows e-mails via the site. (NULL: don't change)
+ * @param  ?BINARY			Whether the member allows e-mails from staff via the site. (NULL: don't change)
  * @param  ?BINARY			Whether the profile has been validated (NULL: do not change this). (NULL: don't change)
  * @param  ?string			The username. (NULL: don't change)
  * @param  ?string			The password. (NULL: don't change)
@@ -587,7 +659,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  ?ID_TEXT			Password compatibility scheme (NULL: don't change)
  * @param  boolean			Whether to skip security checks and most of the change-triggered emails
  */
-function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$track_contributed_topics,$language,$allow_emails,$validated=NULL,$username=NULL,$password=NULL,$zone_wide=1,$highlighted_name=NULL,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL,$join_time=NULL,$avatar_url=NULL,$signature=NULL,$is_perm_banned=NULL,$photo_url=NULL,$photo_thumb_url=NULL,$salt=NULL,$password_compatibility_scheme=NULL,$skip_checks=false)
+function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$track_contributed_topics,$language,$allow_emails,$allow_emails_from_staff,$validated=NULL,$username=NULL,$password=NULL,$zone_wide=1,$highlighted_name=NULL,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL,$join_time=NULL,$avatar_url=NULL,$signature=NULL,$is_perm_banned=NULL,$photo_url=NULL,$photo_thumb_url=NULL,$salt=NULL,$password_compatibility_scheme=NULL,$skip_checks=false)
 {
 	require_code('mail');
 	require_code('type_validation');
@@ -661,6 +733,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($track_contributed_topics)) $update['m_track_contributed_topics']=$track_contributed_topics;
 	if (!is_null($language)) $update['m_language']=$language;
 	if (!is_null($allow_emails)) $update['m_allow_emails']=$allow_emails;
+	if (!is_null($allow_emails_from_staff)) $update['m_allow_emails_from_staff']=$allow_emails_from_staff;
 	if (!is_null($zone_wide)) $update['m_zone_wide']=$zone_wide;
 	if (!is_null($pt_allow)) $update['m_pt_allow']=$pt_allow;
 	if (!is_null($pt_rules_text)) $update['m_pt_rules_text']=lang_remap_comcode($_pt_rules_text,$pt_rules_text,$GLOBALS['FORUM_DB']);

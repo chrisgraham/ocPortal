@@ -487,7 +487,7 @@ class Module_admin_config
 		$rows=$GLOBALS['SITE_DB']->query_select('config',array('*'),array('the_page'=>$page));
 
 		// Addin special ones
-		if ($page=='SITE') $rows[]=array('the_name'=>'timezone','human_name'=>'CURRENT_TIME','config_value'=>'','the_type'=>'special','eval'=>'','the_page'=>'SITE','section'=>'GENERAL','explanation'=>'','shared_hosting_restricted'=>0);
+		if ($page=='SITE') $rows[]=array('the_name'=>'timezone','human_name'=>'TIME_ZONE','config_value'=>'','the_type'=>'special','eval'=>'','the_page'=>'SITE','section'=>'GENERAL','explanation'=>'','shared_hosting_restricted'=>0);
 
 		/*global $M_SORT_KEY;	This is a lame sort - it doesn't preserve internal order
 		$M_SORT_KEY='section';
@@ -611,7 +611,7 @@ class Module_admin_config
 							{
 								$list.=static_evaluate_tempcode(form_input_list_entry($_timezone,$_timezone==$timezone,$timezone_nice));
 							}
-							$out.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('CURRENT_TIME'),do_lang_tempcode('DESCRIPTION_CURRENT_TIME'),'timezone',make_string_tempcode($list)));
+							$out.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('TIME_ZONE'),do_lang_tempcode('DESCRIPTION_TIMEZONE_SITE'),'timezone',make_string_tempcode($list)));
 							break;
 
 						default:
