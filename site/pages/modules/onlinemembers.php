@@ -105,7 +105,14 @@ class Module_onlinemembers
 					if (addon_installed('stats'))
 					{
 						$test=$GLOBALS['SITE_DB']->query_value_null_ok('stats','ip',array('the_user'=>-$row['the_session']));
-						if (!is_null($test)) $ip=$test;
+						if (!is_null($test))
+						{
+							$ip=$test;
+						} else
+						{
+							$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT ip FROM '.get_table_prefix().'stats WHERE ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\' ORDER BY date_and_time DESC');
+							if (!is_null($test)) $ip=$test;
+						}
 					}
 				} else
 				{
