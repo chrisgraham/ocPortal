@@ -414,7 +414,7 @@ class Hook_Profiles_Tabs_about
 					'USERNAME'=>$username,
 					'MEMBER_ID'=>strval($member_id_of),
 					'SECONDARY_GROUPS'=>$secondary_groups,
-					'VIEW_PROFILES'=>has_specific_permission($member_id_viewing,'view_profiles'),
+					'VIEW_PROFILES'=>$member_id_viewing==$member_id_of ||  has_specific_permission($member_id_viewing,'view_profiles'),
 					'ON_PROBATION'=>$on_probation,
 					'EXTRA_INFO_DETAILS'=>$info_details,
 					'EXTRA_SECTIONS'=>$extra_sections,
