@@ -203,6 +203,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	$GLOBALS['SITE_DB']->query_update('news',$map,array('id'=>$id),'',1);
 
 	log_it('ADD_NEWS',strval($id),$title);
+	syndicate_described_activity('news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news');
 
 	if (function_exists('xmlrpc_encode'))
 	{

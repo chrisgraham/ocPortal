@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/hooks/systems/profiles_tabs_edit/settings.php</string>
+	<string>sources_custom/blocks/main_activities.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -1569,20 +1569,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>sources/hooks/systems/profiles_tabs_edit/settings.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>44</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>33</integer>
-		</dict>
 		<key>sources/hooks/systems/snippets/index.html</key>
 		<dict>
 			<key>caret</key>
@@ -1624,36 +1610,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>183</integer>
-		</dict>
-		<key>sources/ocf_members_action2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>33</integer>
-				<key>line</key>
-				<integer>528</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>499</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>9</integer>
-				<key>line</key>
-				<integer>528</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>38</integer>
-				<key>line</key>
-				<integer>528</integer>
-			</dict>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -1727,6 +1683,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>sources_custom/blocks/main_activities.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>109</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>419</integer>
+		</dict>
 		<key>sources_custom/blocks/main_facebook_comments.php</key>
 		<dict>
 			<key>caret</key>
@@ -1784,20 +1754,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>78</integer>
-		</dict>
-		<key>sources_custom/hooks/modules/tracking/cedi.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>102</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>77</integer>
 		</dict>
 		<key>sources_custom/miniblocks/.htaccess</key>
 		<dict>
@@ -2882,12 +2838,11 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/ocf_members_action2.php</string>
-		<string>sources/hooks/systems/profiles_tabs_edit/settings.php</string>
+		<string>sources_custom/blocks/main_activities.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{881, 190}, {1009, 966}}</string>
+	<string>{{730, 212}, {1009, 966}}</string>
 </dict>
 </plist>

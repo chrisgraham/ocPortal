@@ -90,6 +90,8 @@ class Block_main_awards
 			$submit_url.='award='.strval($award);
 		}
 
+		require_code('content');
+
 		$sup='';
 		do
 		{
@@ -102,7 +104,7 @@ class Block_main_awards
 
 			$submit_url=str_replace('!',$myrow['content_id'],$submit_url);
 
-			$award_content_row=get_award_content_row($myrow['content_id'],$info);
+			$award_content_row=content_get_row($myrow['content_id'],$info);
 			$sup=' AND date_and_time<'.strval($myrow['date_and_time']);
 		}
 		while (is_null($award_content_row));

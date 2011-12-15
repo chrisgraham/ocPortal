@@ -125,6 +125,7 @@ function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_
 	}
 
 	log_it('ADD_FORUM',strval($forum_id),$name);
+	syndicate_described_activity('ocf:ADD_FORUM',$name,'','','_SEARCH:news:view:'.strval($forum_id),'','','ocf_forum');
 
 	return $forum_id;
 }

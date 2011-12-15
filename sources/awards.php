@@ -58,20 +58,6 @@ function find_awards_for($content_type,$id)
 }
 
 /**
- * Get the content row for an award.
- *
- * @param  ID_TEXT			The content ID
- * @param  array				The info array for the content type
- * @return ?array				The row (NULL: not found)
- */
-function get_award_content_row($content_id,$info)
-{
-	require_code('content');
-	$row=content_get_row($content_id,$info);
-	return $row;
-}
-
-/**
  * Give an award.
  *
  * @param  AUTO_LINK			The award ID
@@ -95,7 +81,10 @@ function give_award($award_id,$content_id,$time=NULL)
 	if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	if ((array_key_exists('submitter_field',$info)) && (!is_null($info['submitter_field'])))
 	{
-		$content=get_award_content_row($content_id,$info);
+		require_code('content');
+		list($content_title,)=content_get_details($content_type,$content_id);
+		syndicate_described_activity('awards:GIVE_AWARD',$award_title,$content_title,'','_SEARCH:awards:award:'.strval($award_id),'','','awards');
+		$content=content_get_details($content_id,$info);
 		if (is_null($content)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE',escape_html($awards[0]['a_content_type'].':'.$content_id)));
 		if (strpos($info['submitter_field'],':')!==false)
 		{

@@ -101,7 +101,7 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 			mail_wrap(do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($mail),$their_username,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 		}
 	}
-	
+
 	if (get_forum_type()=='ocf')
 	{
 		require_code('ocf_posts_action');
@@ -115,6 +115,9 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 		$POINT_INFO_CACHE[$recipient_id]['points_gained_given']+=$amount;
 	if ((array_key_exists($sender_id,$POINT_INFO_CACHE)) && (array_key_exists('gift_points_used',$POINT_INFO_CACHE[$sender_id])))
 		$POINT_INFO_CACHE[$sender_id]['gift_points_used']+=$amount;
+
+	if (!$anonymous)
+		syndicate_described_activity('points:GIVE_POINTS',$reason,'','','_SEARCH:points:member:'.strval($recipient_id),'','','points');
 }
 
 /**

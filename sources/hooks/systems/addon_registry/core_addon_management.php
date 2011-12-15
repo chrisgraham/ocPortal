@@ -75,6 +75,7 @@ class Hook_addon_registry_core_addon_management
 		return array(
 
 			'sources/hooks/systems/addon_registry/core_addon_management.php',
+			'sources/addons_overview.php',
 			'ADDON_SCREEN_ADDON.tpl',
 			'ADDON_MULTI_CONFIRM_SCREEN.tpl',
 			'ADDON_SCREEN.tpl',

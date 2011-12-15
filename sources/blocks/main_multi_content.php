@@ -310,6 +310,8 @@ class Block_main_multi_content
 
 		$pinned_order=array();
 
+		require_code('content');
+
 		// Add in requested pinned awards
 		foreach ($pinned as $i=>$p)
 		{
@@ -317,7 +319,7 @@ class Block_main_multi_content
 			if (!array_key_exists(0,$awarded_rows)) continue;
 			$awarded_row=$awarded_rows[0];
 
-			$award_content_row=get_award_content_row($awarded_row['content_id'],$info);
+			$award_content_row=content_get_row($awarded_row['content_id'],$info);
 
 			if ((!is_null($award_content_row)) && ((!isset($info['validated_field'])) || ($award_content_row[$info['validated_field']]!=0)))
 			{

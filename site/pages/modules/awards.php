@@ -121,6 +121,8 @@ class Module_awards
 		$award_types=$GLOBALS['SITE_DB']->query_select('award_types',array('*'));
 
 		$content=new ocp_tempcode();
+		
+		require_code('content');
 
 		foreach ($award_types as $award_type_row)
 		{
@@ -135,7 +137,7 @@ class Module_awards
 			$rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>$award_type_row['id']),'ORDER BY date_and_time DESC',1);
 			foreach ($rows as $myrow)
 			{
-				$award_content_row=get_award_content_row($myrow['content_id'],$info);
+				$award_content_row=content_get_row($myrow['content_id'],$info);
 
 				if (!is_null($award_content_row))
 				{

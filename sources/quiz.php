@@ -302,6 +302,7 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 	seo_meta_set_for_implicit('quiz',strval($id),array($name,$start_text),$start_text);
 
 	log_it('ADD_QUIZ',strval($id),$name);
+	syndicate_described_activity('quiz:ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes');
 
 	return $id;
 }

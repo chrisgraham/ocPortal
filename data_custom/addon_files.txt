@@ -260,6 +260,7 @@ facebook_support
 # # themes/default/templates_custom/OCF_GUEST_BAR.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_SCREEN_ACTIONS.tpl
 # # sources_custom/users_active_actions.php
+# # sources_custom/hooks/systems/syndication/facebook.php
 
 google_search
 -------------
@@ -1878,6 +1879,7 @@ twitter_news_integration
 # # data_custom/twitter_oauth.php
 # # lang_custom/EN/config.ini
 # # sources_custom/news2.php
+# # sources_custom/hooks/systems/syndication/twitter.php
 
 transcoder
 ----------
@@ -1967,14 +1969,14 @@ cool_member_directory
 activity_feed
 -------------
 
-# # data_custom/main_activities_updater.php
-# # data_custom/main_activities_removal.php
-# # data_custom/main_activities_handler.php
+# # data_custom/activities_updater.php
+# # data_custom/activities_removal.php
+# # data_custom/activities_handler.php
 # # data_custom/latest_activity.txt
-# # lang_custom/EN/main_activities.ini
+# # lang_custom/EN/activities.ini
 # # sources_custom/blocks/main_activities_state.php
 # # sources_custom/blocks/main_activities.php
-# # sources_custom/main_activities_submission.php
+# # sources_custom/activities_submission.php
 # # sources_custom/support.php
 # # themes/default/templates_custom/JAVASCRIPT_BASE64.tpl
 # # themes/default/templates_custom/JAVASCRIPT_JQUERY.tpl
@@ -1983,12 +1985,17 @@ activity_feed
 # # themes/default/templates_custom/BLOCK_MAIN_ACTIVITIES.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_ACTIVITIES_XML.tpl
 # # themes/default/templates_custom/JAVASCRIPT_ACTIVITIES.tpl
-# # adminzone/pages/minimodules_custom/set_up_activities.php
-# # themes/default/images_custom/activities_avatar_fallback.png
+# # themes/default/templates_custom/ACTIVITY.tpl
+# # themes/default/templates_custom/OCF_MEMBER_PROFILE_ACTIVITIES.tpl
 # # themes/default/images_custom/stop12.png
 # # themes/default/images_custom/stop12Hover.png
 # # themes/default/images_custom/stop12Active.png
 # # themes/default/css_custom/activities.css
+# # sources_custom/hooks/systems/syndication/index.html
+# # sources_custom/hooks/systems/profiles_tabs/activities.php
+# # sources_custom/hooks/systems/profiles_tabs/posts.php
+# # uploads/avatar_normalise/index.html
+# # uploads/addon_icon_normalise/index.html
 
 under18s
 --------

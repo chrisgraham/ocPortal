@@ -1066,6 +1066,26 @@ function log_it($type,$a=NULL,$b=NULL)
 }
 
 /**
+ * Syndicate human-intended descriptions of activities performed to the internal wall, and external listeners.
+ *
+ * @param  string			Language string code
+ * @param  string			Label 1 (given as a parameter to the language string code)
+ * @param  string			Label 2 (given as a parameter to the language string code)
+ * @param  string			Label 3 (given as a parameter to the language string code)
+ * @param  string			Page link 1
+ * @param  string			Page link 2
+ * @param  string			Page link 3
+ * @param  string			Addon that caused the event
+ * @param  BINARY			Whether this post should be public or friends-only
+ * @return ?AUTO_LINK	ID of the row in the activities table (NULL: N/A)
+ */
+function syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=0)
+{
+	if (!function_exists('_syndicate_described_activity')) return NULL; // Addon not present
+	return _syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public);
+}
+
+/**
  * Escape a string to fit within PHP double quotes.
  *
  * @param  string			String in

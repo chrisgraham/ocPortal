@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		stats_block
+ * @package		activity_feed
  */
 
 class Block_main_activities_state
@@ -29,14 +29,14 @@ class Block_main_activities_state
 	function info()
 	{
 		$info=array();
-		$info['author']='Naveen';
+		$info['author']='Chris Warburton';
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
-		$info['parameters']=array();
+		$info['parameters']=array('param');
 		return $info;
 	}
 
@@ -48,20 +48,14 @@ class Block_main_activities_state
 	 */
 	function run($map)
 	{
-		require_lang('main_activities');
+		require_lang('activities');
 		require_css('activities');
 		require_javascript('javascript_activities_state');
 		require_javascript('javascript_jquery');
-/*		$_this_url=build_url(array('page'=>''),'',array('keep_session'=>1,'redirect'=>1));
-
-		$this_url=$_this_url->evaluate();
-
-		$login_url=$login_url=build_url(array('page'=>'login','type'=>'login','redirect'=>$this_url),get_module_zone('login'));*/
 
 		$title = array_key_exists('param', $map)? $map['param'] : do_lang('STATUS_UPDATE');
 
 		return do_template('BLOCK_MAIN_ACTIVITIES_STATE',array('TITLE'=>$title));
-
 	}
 
 }
