@@ -1304,7 +1304,7 @@ function key_pressed(event,key,no_error_if_bad)
 		if ((event.keyCode) && (event.keyCode>=96) && (event.keyCode<106) && (key>=48) && (key<58)) key+=48; {$,Numeric keypad special case}
 	}
 
-	return ret=((typeof event.keyCode!="undefined") && (event.keyCode==key));
+	return ((typeof event.keyCode!="undefined") && (event.keyCode==key));
 }
 
 {$,Tooltips that can work on any element with rich HTML support}
