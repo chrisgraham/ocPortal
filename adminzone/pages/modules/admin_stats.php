@@ -941,6 +941,7 @@ class Module_admin_stats
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort_views';
 
+		// NB: not used in default templates
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
 		$rows=$GLOBALS['SITE_DB']->query('SELECT date_and_time FROM '.get_table_prefix().'stats WHERE ('.$where.') ORDER BY '.$sortable.' '.$sort_order);
