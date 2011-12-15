@@ -114,7 +114,10 @@ function update_ajax_member_list_response(result,list_contents)
 
 	var current_list_for_copy=current_list_for;
 
-	var old_onkeyup=current_list_for.onkeyup;
+	if (typeof current_list_for.old_onkeyup=='undefined')
+		current_list_for.old_onkeyup=current_list_for.onkeyup;
+	if (typeof current_list_for.old_onchange=='undefined')
+		current_list_for.old_onchange=current_list_for.onchange;
 
 	var make_selection=function(e)
 	{
@@ -122,7 +125,8 @@ function update_ajax_member_list_response(result,list_contents)
 		var el=e.target;
 		if (!el) el=e.srcElement;
 		current_list_for_copy.value=el.value;
-		current_list_for_copy.onkeyup=old_onkeyup;
+		current_list_for_copy.onkeyup=current_list_for_copy.old_onkeyup;
+		current_list_for_copy.onchange=current_list_for_copy.old_onchange;
 		current_list_for_copy.onkeypress=function() {};
 		if (typeof current_list_for_copy.onrealchange!='undefined' && current_list_for_copy.onrealchange) current_list_for_copy.onrealchange();
 		if (typeof current_list_for_copy.onchange!='undefined' && current_list_for_copy.onchange) current_list_for_copy.onchange();
@@ -184,6 +188,12 @@ function update_ajax_member_list_response(result,list_contents)
 		var ret=handle_arrow_usage(event);
 		if (ret!=null) return ret;
 		return update_ajax_member_list(current_list_for_copy,current_list_for_copy.special,false,event);
+	}
+	current_list_for.onchange=function(event)
+	{
+		current_list_for_copy.onkeyup=current_list_for_copy.old_onkeyup;
+		current_list_for_copy.onchange=current_list_for_copy.old_onchange;
+		if (current_list_for_copy.onchange) current_list_for_copy.onchange();
 	}
 	list.onkeyup=function(event)
 	{
