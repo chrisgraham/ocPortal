@@ -58,11 +58,13 @@
 </form>
 
 {+START,IF_PASSED,TOGGLE_TICKET_CLOSED_URL}
-	<br />
-	<div>{!ACTIONS}:
-		<ul class="actions_list">
-			<li>&raquo; <form title="{$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}" class="inline" action="{TOGGLE_TICKET_CLOSED_URL*}"><div class="inline"><input type="submit" value="{$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}" class="buttonhyperlink" /></div></form></li>
-		</ul>
+	<div class="float_surrounder">
+		{+START,INCLUDE,SCREEN_BUTTON}
+			TITLE={$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}
+			IMG={$?,{CLOSED},closed,close}
+			IMMEDIATE=1
+			URL={TOGGLE_TICKET_CLOSED_URL}
+		{+END}
 	</div>
 {+END}
 
