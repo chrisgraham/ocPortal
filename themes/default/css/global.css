@@ -3488,6 +3488,10 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
    -moz-transform: rotate(10deg);
 }
 
+.menu_type__popup {
+	min-width: 150px;
+}
+
 .menu_type__dropdown ul.nlevel, .menu_type__popup ul {
 	line-height: 1.4em;
 	border-top: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
