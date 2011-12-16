@@ -458,7 +458,8 @@ class Module_filedump
 			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$file,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode(post_param('description'),3)));
 	
 			log_it('FILEDUMP_UPLOAD',$_FILES['file']['name'],$place);
-			syndicate_described_activity('filedump:FILEDUMP_UPLOAD',$place.'/'.$file,'','','','','','filedump');
+			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),get_page_name(),get_zone_name()))
+				syndicate_described_activity('filedump:FILEDUMP_UPLOAD',$place.'/'.$file,'','','','','','filedump');
 
 			return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
 		} else warn_exit(do_lang_tempcode('OVERWRITE_ERROR'));

@@ -686,7 +686,6 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 	if ($file_size>0) update_stat('archive_size',$file_size);
 
 	log_it('ADD_DOWNLOAD',strval($id),$name);
-	syndicate_described_activity('downloads:ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:view:'.strval($id),'','','downloads');
 
 	decache('main_recent_downloads');
 	decache('main_top_downloads');

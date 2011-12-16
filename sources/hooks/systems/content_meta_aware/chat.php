@@ -53,6 +53,8 @@ class Hook_content_meta_aware_chat
 			'validated_field'=>NULL,
 			
 			'addon_name'=>'chat',
+			
+			'module'=>'chat',
 		);
 	}
 	

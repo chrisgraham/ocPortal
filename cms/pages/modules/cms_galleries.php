@@ -537,6 +537,9 @@ class Module_cms_galleries extends standard_aed_module
 						$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
 						$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'',$length,$width,$height);
 						store_exif('video',strval($id),$exif);
+
+						if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+							syndicate_described_activity('galleries:ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
 					}
 				} else
 				{
@@ -557,6 +560,9 @@ class Module_cms_galleries extends standard_aed_module
 						$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
 						$id=add_image($exif['UserComments'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'');
 						store_exif('image',strval($id),$exif);
+
+						if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+							syndicate_described_activity('galleries:ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
 					}
 				}
 			}
@@ -704,6 +710,9 @@ class Module_cms_galleries extends standard_aed_module
 				$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
 				$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''),$length,$width,$height);
 				store_exif('video',strval($id),$exif);
+
+				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+					syndicate_described_activity('galleries:ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
 			}
 		} else
 		{
@@ -732,6 +741,9 @@ class Module_cms_galleries extends standard_aed_module
 
 				$id=add_image($exif['UserComments'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''));
 				store_exif('image',strval($id),$exif);
+
+				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+					syndicate_described_activity('galleries:ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
 			}
 		}
 	}
@@ -1004,6 +1016,9 @@ class Module_cms_galleries extends standard_aed_module
 		$this->donext_type=$cat;
 
 		$id=add_image($title,$cat,$comments,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+
+		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+			syndicate_described_activity('galleries:ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
 
 		if ((has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))) && (post_param_integer('rep_image',0)==1))
 		{
@@ -1402,6 +1417,9 @@ class Module_cms_galleries_alt extends standard_aed_module
 		$this->donext_type=$cat;
 
 		$id=add_video($title,$cat,$comments,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height);
+
+		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
+			syndicate_described_activity('galleries:ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
 
 		return strval($id);
 	}

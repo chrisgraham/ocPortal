@@ -54,6 +54,8 @@ class Hook_content_meta_aware_iotd
 			'validated_field'=>NULL,
 			
 			'addon_name'=>'iotds',
+			
+			'module'=>'iotd',
 		);
 	}
 	

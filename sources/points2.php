@@ -117,7 +117,10 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 		$POINT_INFO_CACHE[$sender_id]['gift_points_used']+=$amount;
 
 	if (!$anonymous)
-		syndicate_described_activity('points:GIVE_POINTS',$reason,'','','_SEARCH:points:member:'.strval($recipient_id),'','','points');
+	{
+		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'points'))
+			syndicate_described_activity('points:GIVE_POINTS',$reason,'','','_SEARCH:points:member:'.strval($recipient_id),'','','points');
+	}
 }
 
 /**

@@ -54,6 +54,8 @@ class Hook_content_meta_aware_topic
 			'validated_field'=>'t_validated',
 			
 			'addon_name'=>'ocf_forum',
+			
+			'module'=>'forumview',
 		);
 	}
 	

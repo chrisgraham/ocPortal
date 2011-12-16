@@ -53,6 +53,8 @@ class Hook_content_meta_aware_gallery
 			'validated_field'=>NULL,
 			
 			'addon_name'=>'galleries',
+			
+			'module'=>'galleries',
 		);
 	}
 	

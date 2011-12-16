@@ -54,6 +54,8 @@ class Hook_content_meta_aware_poll
 			'validated_field'=>NULL,
 			
 			'addon_name'=>'polls',
+			
+			'module'=>'polls',
 		);
 	}
 	

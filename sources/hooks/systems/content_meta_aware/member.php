@@ -53,6 +53,8 @@ class Hook_content_meta_aware_member
 			'validated_field'=>'m_validated',
 			
 			'addon_name'=>'core_ocf',
+			
+			'module'=>'members',
 		);
 	}
 	

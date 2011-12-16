@@ -46,7 +46,6 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
 	$id=$GLOBALS['SITE_DB']->query_insert('iotd',array('i_title'=>insert_lang_comcode($title,2),'add_date'=>time(),'edit_date'=>$edit_date,'iotd_views'=>$views,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'date_and_time'=>$use_time,'used'=>$used,'url'=>$url,'caption'=>insert_lang_comcode($caption,2),'thumb_url'=>$thumb_url,'submitter'=>$submitter,'is_current'=>$current),true);
 
 	log_it('ADD_IOTD',strval($id),$caption);
-	syndicate_described_activity('iotds:ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
 
 	return $id;
 }
@@ -124,7 +123,8 @@ function set_iotd($id)
 	$submitter=$rows[0]['submitter'];
 
 	log_it('CHOOSE_IOTD',strval($id),$title);
-	syndicate_described_activity('iotds:CHOOSE_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
+	if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
+		syndicate_described_activity('iotds:CHOOSE_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
 
 	if ((!is_guest($submitter)) && (addon_installed('points')))
 	{

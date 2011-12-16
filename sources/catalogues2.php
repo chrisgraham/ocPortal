@@ -777,8 +777,6 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	if ($catalogue_name[0]!='_')
 	{
 		log_it('ADD_CATALOGUE_ENTRY',strval($id),$title);
-		$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
-		syndicate_described_activity('catalogues:CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
 	}
 
 	decache('main_cc_embed');

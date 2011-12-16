@@ -121,7 +121,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 	}
 
 	log_it('ADD_CALENDAR_EVENT',strval($id),$title);
-	syndicate_described_activity('calendar:ADD_CALENDAR_EVENT',$title,'','','_SEARCH:calendar:view:'.strval($id),'','','calendar');
+
 	return $id;
 }
 

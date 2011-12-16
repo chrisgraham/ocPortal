@@ -53,6 +53,8 @@ class Hook_content_meta_aware_catalogue_category
 			'validated_field'=>NULL,
 			
 			'addon_name'=>'catalogues',
+			
+			'module'=>'catalogues',
 		);
 	}
 	

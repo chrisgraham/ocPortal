@@ -674,6 +674,9 @@ class Module_cms_calendar extends standard_aed_module
 		$this->donext_type=$type;
 		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day);
 
+		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
+			syndicate_described_activity('calendar:ADD_CALENDAR_EVENT',$title,'','','_SEARCH:calendar:view:'.strval($id),'','','calendar');
+
 		return array(strval($id),$_description);
 	}
 

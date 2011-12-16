@@ -54,6 +54,8 @@ class Hook_content_meta_aware_video
 			'validated_field'=>'validated',
 			
 			'addon_name'=>'galleries',
+			
+			'module'=>'galleries',
 		);
 	}
 	

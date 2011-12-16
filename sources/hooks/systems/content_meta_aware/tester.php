@@ -53,6 +53,8 @@ class Hook_content_meta_aware_tester
 			'validated_field'=>NULL,
 			
 			'addon_name'=>'tester',
+			
+			'module'=>'tester',
 		);
 	}
 

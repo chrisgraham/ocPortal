@@ -54,6 +54,8 @@ class Hook_content_meta_aware_download
 			'validated_field'=>'validated',
 			
 			'addon_name'=>'downloads',
+			
+			'module'=>'downloads',
 		);
 	}
 	

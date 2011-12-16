@@ -54,6 +54,8 @@ class Hook_content_meta_aware_catalogue_entry
 			'validated_field'=>'ce_validated',
 			
 			'addon_name'=>'catalogues',
+			
+			'module'=>'catalogues',
 		);
 	}
 	

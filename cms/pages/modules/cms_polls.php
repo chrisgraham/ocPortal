@@ -316,6 +316,9 @@ class Module_cms_polls extends standard_aed_module
 			set_poll($id);
 		}
 		
+		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
+			syndicate_described_activity('polls:ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls');
+
 		return strval($id);
 	}
 

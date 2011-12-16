@@ -19,6 +19,39 @@
  */
 
 /**
+ * Given a particular bit of feedback content, check if the user may access it.
+ *
+ * @param  MEMBER			User to check
+ * @param  ID_TEXT		Content type
+ * @param  ID_TEXT		Content ID
+ * @return boolean		Whether there is permission
+ */
+function may_view_content_behind_feedback_code($member_id,$type_id,$id)
+{
+	$permission_type_code=convert_ocportal_type_codes('feedback_type_code',$type_id,'permissions_type_code');
+
+	$module=convert_ocportal_type_codes('module',$type_id,'permissions_type_code');
+	if ($module=='') $module=$id;
+
+	$category_id=mixed();
+	$award_hook=convert_ocportal_type_codes('award_hook',$type_id,'permissions_type_code');
+	if ($award_hook!='')
+	{
+		require_code('hooks/systems/awards/'.$award_hook);
+		$award_hook_ob=object_factory('Hook_awards_'.$award_hook);
+		$info=$award_hook_ob->info();
+		if (isset($info['category_field']))
+		{
+			require_code('content');
+			list(,,,$content)=content_get_details($award_hook,$id);
+			$category_id=$content[$info['category_field']];
+		}
+	}
+
+	return ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$permission_type_code,$category_id))));
+}
+
+/**
  * Main wrapper function to embed miscellaneous feedback systems into a module output.
  *
  * @param  ID_TEXT		The page name
@@ -258,7 +291,8 @@ function do_rating($allow_rating,$rating_for_type,$id,$self_url,$self_title,$ext
 		if (/*(get_value('likes')==='1') && */($rating==10) && ($type==''))
 		{
 			require_code('content');
-			syndicate_described_activity('LIKES',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$rating_for_type,'addon_name'));
+			if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$rating_for_type,$id))
+				syndicate_described_activity('LIKES',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$rating_for_type,'addon_name'));
 		}
 
 		attach_message(do_lang_tempcode('THANKYOU_FOR_RATING'),'inform');
@@ -605,7 +639,8 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 	}
 
 	require_code('content');
-	syndicate_described_activity('ADDED_COMMENT_ON',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
+	if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$type,$id))
+		syndicate_described_activity('ADDED_COMMENT_ON',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
 
 	if (($post!='') && ($forum_tie) && (!$no_success_message))
 	{

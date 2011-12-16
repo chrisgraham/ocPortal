@@ -391,7 +391,6 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	$id=$GLOBALS['SITE_DB']->query_insert('images',$map,true);
 
 	log_it('ADD_IMAGE',strval($id),$title);
-	syndicate_described_activity('galleries:ADD_IMAGE',($title=='')?basename($url):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
 
 	require_code('seo2');
 	seo_meta_set_for_implicit('image',strval($id),array($comments),$comments);
@@ -633,7 +632,6 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	$id=$GLOBALS['SITE_DB']->query_insert('videos',$map,true);
 
 	log_it('ADD_VIDEO',strval($id),$title);
-	syndicate_described_activity('galleries:ADD_VIDEO',($title=='')?basename($url):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
 
 	require_code('seo2');
 	seo_meta_set_for_implicit('video',strval($id),array($comments),$comments);

@@ -653,6 +653,9 @@ class Module_cms_downloads extends standard_aed_module
 			$this->do_next_description=do_lang_tempcode('DOWNLOAD_ADDED',escape_html($add_image_url->evaluate()));
 		}
 
+		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category_id))))
+			syndicate_described_activity('downloads:ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:view:'.strval($id),'','','downloads');
+
 		return strval($id);
 	}
 

@@ -433,6 +433,9 @@ class Module_cms_news extends standard_aed_module
 		$time=$add_time;
 		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
 
+		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
+			syndicate_described_activity('news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news');
+
 		if (!is_null($schedule))
 		{
 			require_code('calendar');

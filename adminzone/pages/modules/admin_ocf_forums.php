@@ -467,7 +467,8 @@ class Module_admin_ocf_forums extends standard_aed_module
 		require_code('ocf_forums_action2');
 
 		$parent_forum=post_param_integer('parent_forum',-1);
-		$id=strval(ocf_make_forum(post_param('name'),post_param('description'),post_param_integer('category_id'),NULL,$parent_forum,post_param_integer('position'),post_param_integer('post_count_increment',0),post_param_integer('order_sub_alpha',0),post_param('intro_question'),post_param('intro_answer'),post_param('redirection'),post_param('order')));
+		$name=post_param('name');
+		$id=strval(ocf_make_forum($name,post_param('description'),post_param_integer('category_id'),NULL,$parent_forum,post_param_integer('position'),post_param_integer('post_count_increment',0),post_param_integer('order_sub_alpha',0),post_param('intro_question'),post_param('intro_answer'),post_param('redirection'),post_param('order')));
 
 		// Warning if there is full access to this forum, but not to the parent
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
@@ -512,6 +513,9 @@ class Module_admin_ocf_forums extends standard_aed_module
 
 		$this->set_permissions($id);
 		
+		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forumview')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',$id)))
+			syndicate_described_activity('ocf:ADD_FORUM',$name,'','','_SEARCH:news:view:'.$id,'','','ocf_forum');
+
 		return $id;
 	}
 

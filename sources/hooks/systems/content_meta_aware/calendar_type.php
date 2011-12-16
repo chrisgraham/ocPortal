@@ -53,6 +53,8 @@ class Hook_content_meta_aware_calendar_type
 			'validated_field'=>NULL,
 			
 			'addon_name'=>'calendar',
+			
+			'module'=>'calendar',
 		);
 	}
 

@@ -53,6 +53,8 @@ class Hook_content_meta_aware_quiz
 			'validated_field'=>'q_validated',
 			
 			'addon_name'=>'quizzes',
+			
+			'module'=>'quiz',
 		);
 	}
 	

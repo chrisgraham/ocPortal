@@ -82,10 +82,22 @@ function give_award($award_id,$content_id,$time=NULL)
 	if ((array_key_exists('submitter_field',$info)) && (!is_null($info['submitter_field'])))
 	{
 		require_code('content');
-		list($content_title,)=content_get_details($content_type,$content_id);
-		syndicate_described_activity('awards:GIVE_AWARD',$award_title,$content_title,'','_SEARCH:awards:award:'.strval($award_id),'','','awards');
-		$content=content_get_details($content_id,$info);
+		list($content_title,,,$content)=content_get_details($awards[0]['a_content_type'],$content_id);
+
 		if (is_null($content)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE',escape_html($awards[0]['a_content_type'].':'.$content_id)));
+
+		// Lots of fiddling around to work out how to check permissions for this
+		$permission_type_code=convert_ocportal_type_codes('award_hook',$awards[0]['a_content_type'],'permissions_type_code');
+		$module=convert_ocportal_type_codes('module',$awards[0]['a_content_type'],'permissions_type_code');
+		if ($module=='') $module=$content_id;
+		$category_id=mixed();
+		if (isset($info['category_field']))
+		{
+			$category_id=$content[$info['category_field']];
+		}
+		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'awards')) && (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$permission_type_code,$category_id))))
+			syndicate_described_activity('awards:GIVE_AWARD',$award_title,$content_title,'','_SEARCH:awards:award:'.strval($award_id),'','','awards');
+
 		if (strpos($info['submitter_field'],':')!==false)
 		{
 			$bits=explode(':',$info['submitter_field']);
