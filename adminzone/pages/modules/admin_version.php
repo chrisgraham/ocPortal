@@ -142,7 +142,7 @@ class Module_admin_version
 	
 		if (($upgrade_from<4) || (is_null($upgrade_from))) // These are for fresh installs and upgrades
 		{
-			add_specific_permission('_COMCODE','reuse_others_attachments',false);
+			add_specific_permission('_COMCODE','reuse_others_attachments',true);
 		}
 	
 		if (($upgrade_from<5) || (is_null($upgrade_from))) // These are for fresh installs and upgrades
