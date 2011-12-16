@@ -33,17 +33,26 @@ class Hook_rating
 		if (get_option('is_on_rating')=='0') return do_lang_tempcode('INTERNAL_ERROR');
 
 		// Has there actually been any rating?
-		$rating=post_param_integer('rating');
+		$rating=post_param_integer('rating',10/*TODO*/);
 		$type=get_param('root_type');
 		$type2=get_param('type');
 		if ($type2!='') $type.='_'.$type2;
 		$id=get_param('id');
 		if (($rating>10) || ($rating<1)) log_hack_attack_and_exit('VOTE_CHEAT');
 
+		$self_url=get_param('self_url');
+		$title=get_param('self_title');
+
 		if (!has_specific_permission(get_member(),'rate',get_page_name())) return do_lang_tempcode('INTERNAL_ERROR');
-		if (already_rated($type,$id)) return do_lang_tempcode('THANKYOU_FOR_RATING_SHORT');
+//		if (already_rated($type,$id)) return do_lang_tempcode('THANKYOU_FOR_RATING_SHORT'); TODO
 
 		$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$type,'rating_for_id'=>$id,'rating_member'=>get_member(),'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
+
+		if (/*(get_value('likes')==='1') && */($rating==10) && ($type2==''))
+		{
+			require_code('content');
+			syndicate_described_activity('LIKES',$title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
+		}
 
 		if ((!is_guest()) && (addon_installed('points')))
 		{
@@ -56,7 +65,7 @@ class Hook_rating
 		$template=get_param('template');
 		if (($type2=='') && ($template!=''))
 		{
-			return display_rating($type,$id,$template);
+			return display_rating($self_url,$title,$type,$id,$template);
 		}
 
 		return do_lang_tempcode('THANKYOU_FOR_RATING_SHORT');

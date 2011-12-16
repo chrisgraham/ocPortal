@@ -51,6 +51,8 @@ class Hook_content_meta_aware_member
 			'add_time_field'=>'m_join_time',
 			'edit_time_field'=>NULL,
 			'validated_field'=>'m_validated',
+			
+			'addon_name'=>'core_ocf',
 		);
 	}
 	

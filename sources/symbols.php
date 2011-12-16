@@ -72,7 +72,7 @@ function evaluate_conventional_variable($lang,$escaped,$type,$name,$param)
  */
 function ecv($lang,$escaped,$type,$name,$param)
 {
-	global $TEMPCODE_SETGET,$CYCLES,$PREPROCESSABLE_SYMBOLS;
+	global $TEMPCODE_SETGET,$CYCLES,$PREPROCESSABLE_SYMBOLS,$DISPLAYED_TITLE;
 
 	//echo '<!--'.$name.'-->'."\n";
 
@@ -1139,7 +1139,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'PAGE_TITLE':
-				global $DISPLAYED_TITLE;
 				$value=is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate();
 				break;
 
@@ -1897,7 +1896,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					require_code('feedback');
-					$rating=get_rating_simple_array($param[0],$param[1]);
+					$rating=get_rating_simple_array(array_key_exists(2,$param)?$param[2]:get_self_url(true),array_key_exists(3,$param)?$param[3]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1]);
 					if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
 					{
 						$value=isset($rating['_RATING'][0]['RATING'])?$rating['_RATING'][0]['RATING']:'';

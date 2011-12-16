@@ -36,11 +36,11 @@
  */
 function embed_feedback_systems($page_name,$id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$self_url,$self_title,$forum)
 {
-	do_rating($allow_rating==1,$page_name,$id);
+	do_rating($allow_rating==1,$page_name,$id,$self_url,$self_title);
 	if ((!is_null(post_param('title',NULL))) || ($validated==1))
 		do_comments($allow_comments>=1,$page_name,$id,$self_url,$self_title,$forum);
 	//do_trackback($allow_trackbacks==1,$page_name,$id);
-	$rating_details=get_rating_details($page_name,$id,$allow_rating==1);
+	$rating_details=get_rating_details($self_url,$self_title,$page_name,$id,$allow_rating==1);
 	$comment_details=get_comment_details($page_name,$allow_comments==1,$id,false,$forum,NULL,NULL,false,false,$submitter,$allow_comments==2);
 	$trackback_details=get_trackback_details($page_name,$id,$allow_trackbacks==1);
 
@@ -97,17 +97,19 @@ function post_comment_script()
 /**
  * Get tempcode for doing ratings (sits above get_rating_simple_array)
  *
+ * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
+ * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  boolean		Whether this resource allows rating (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
  * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
  * @return tempcode		Tempcode for complete rating box
  */
-function get_rating_details($rating_for_type,$id,$allow_rating,$extra_ratings=NULL)
-{	
+function get_rating_details($self_url,$self_title,$rating_for_type,$id,$allow_rating,$extra_ratings=NULL)
+{
 	if ($allow_rating)
 	{
-		return display_rating($rating_for_type,$id,'RATING_BOX',$extra_ratings);
+		return display_rating($self_url,$self_title,$rating_for_type,$id,'RATING_BOX',$extra_ratings);
 	}
 
 	return new ocp_tempcode();
@@ -116,15 +118,17 @@ function get_rating_details($rating_for_type,$id,$allow_rating,$extra_ratings=NU
 /**
  * Display rating using images
  *	
+ * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
+ * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  ID_TEXT		The template to use to display the rating box
  * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
  * @return tempcode		Tempcode for complete trackback box
  */
-function display_rating($rating_for_type,$id,$tpl='RATING_INLINE',$extra_ratings=NULL)
+function display_rating($self_url,$self_title,$rating_for_type,$id,$tpl='RATING_INLINE',$extra_ratings=NULL)
 {
-	$rating_data=get_rating_simple_array($rating_for_type,$id,'RATING_INSIDE',$extra_ratings);
+	$rating_data=get_rating_simple_array($self_url,$self_title,$rating_for_type,$id,'RATING_INSIDE',$extra_ratings);
 
 	if (is_null($rating_data)) 
 		return new ocp_tempcode();
@@ -135,13 +139,15 @@ function display_rating($rating_for_type,$id,$tpl='RATING_INLINE',$extra_ratings
 /**
  * Get rating information for the specified resource.
  *
+ * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
+ * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  ID_TEXT		The template to use to display the rating box
  * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
  * @return ?array			Current rating information (ready to be passed into a template). RATING is the rating (out of 10), NUM_RATINGS s the number of ratings so far, RATING_INSIDE is the tempcode of the rating box (NULL: rating disabled)
  */
-function get_rating_simple_array($rating_for_type,$id,$tpl='RATING_INSIDE',$extra_ratings=NULL)
+function get_rating_simple_array($self_url,$self_title,$rating_for_type,$id,$tpl='RATING_INSIDE',$extra_ratings=NULL)
 {
 	if (get_option('is_on_rating')=='1')
 	{
@@ -199,7 +205,7 @@ function get_rating_simple_array($rating_for_type,$id,$tpl='RATING_INSIDE',$extr
 		}
 
 		// Templating
-		$rating_inside=do_template($tpl,array('ERROR'=>$error,'TYPE'=>'','ROOT_TYPE'=>$rating_for_type,'ID'=>$id,'URL'=>$rate_url,'TITLES'=>$titles,'SIMPLISTIC'=>count($titles)==1));
+		$rating_inside=do_template($tpl,array('SELF_URL'=>$self_url,'SELF_TITLE'=>$self_title,'ERROR'=>$error,'TYPE'=>'','ROOT_TYPE'=>$rating_for_type,'ID'=>$id,'URL'=>$rate_url,'TITLES'=>$titles,'SIMPLISTIC'=>count($titles)==1));
 		return array('ROOT_TYPE'=>$rating_for_type,'ID'=>$id,'_RATING'=>$_rating,'NUM_RATINGS'=>integer_format($num_ratings),'RATING_INSIDE'=>$rating_inside);
 	}
 	return NULL;
@@ -226,9 +232,11 @@ function already_rated($rating_for_type,$id)
  * @param  boolean		Whether this resource allows rating (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
+ * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
+ * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
  * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
  */
-function do_rating($allow_rating,$rating_for_type,$id,$extra_ratings=NULL)
+function do_rating($allow_rating,$rating_for_type,$id,$self_url,$self_title,$extra_ratings=NULL)
 {
 	if ((get_option('is_on_rating')=='0') || (!$allow_rating)) return;
 
@@ -246,6 +254,12 @@ function do_rating($allow_rating,$rating_for_type,$id,$extra_ratings=NULL)
 		if (already_rated($rating_for_type.(($type=='')?'':('_'.$type)),$id)) return;
 
 		$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$rating_for_type.(($type=='')?'':('_'.$type)),'rating_for_id'=>$id,'rating_member'=>get_member(),'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
+
+		if (/*(get_value('likes')==='1') && */($rating==10) && ($type==''))
+		{
+			require_code('content');
+			syndicate_described_activity('LIKES',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$rating_for_type,'addon_name'));
+		}
 
 		attach_message(do_lang_tempcode('THANKYOU_FOR_RATING'),'inform');
 	}
@@ -589,6 +603,9 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 			}
 		}
 	}
+
+	require_code('content');
+	syndicate_described_activity('ADDED_COMMENT_ON',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
 
 	if (($post!='') && ($forum_tie) && (!$no_success_message))
 	{

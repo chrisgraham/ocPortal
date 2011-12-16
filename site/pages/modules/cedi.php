@@ -503,8 +503,8 @@ class Module_cedi
 			$post_date=get_timezoned_date($myrow['date_and_time']);
 
 			// Rating
-			do_rating(true,'seedy_post',strval($post_id));
-			$rating_array=get_rating_simple_array('seedy_post',strval($post_id),'CEDI_RATING_INSIDE');
+			do_rating(true,'seedy_post',strval($post_id),build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title);
+			$rating_array=get_rating_simple_array(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title,'seedy_post',strval($post_id),'CEDI_RATING_INSIDE');
 			if (!is_null($rating_array))
 			{
 				$rating=do_template('CEDI_RATING',$rating_array);

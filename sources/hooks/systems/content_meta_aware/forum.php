@@ -51,6 +51,8 @@ class Hook_content_meta_aware_forum
 			'add_time_field'=>NULL,
 			'edit_time_field'=>NULL,
 			'validated_field'=>NULL,
+			
+			'addon_name'=>'ocf_forum',
 		);
 	}
 	

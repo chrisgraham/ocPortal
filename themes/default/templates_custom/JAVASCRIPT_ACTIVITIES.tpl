@@ -27,10 +27,10 @@ function sUpdateGetData () {
 					var listels=jQuery('li','#activities_feed');
 
 					var postVal="lastid="+((typeof listels.attr('id')=='undefined')?'-1':listels.attr('id'))+"&mode="+jQuery('#activitiesfeed_info').attr('mode');
-					var userId=jQuery('#activitiesfeed_info').attr('member_id')
+					var memberIds=jQuery('#activitiesfeed_info').attr('member_ids')
 
-					if ((userId!==null) && (userId!==''))
-						postVal=postVal+"&member_id="+userId;
+					if ((memberIds!==null) && (memberIds!==''))
+						postVal=postVal+"&member_ids="+memberIds;
 
 					jQuery.ajax({
 								url: addy.replace(/^http:/,window.location.protocol),

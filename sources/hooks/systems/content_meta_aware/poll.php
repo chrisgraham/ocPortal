@@ -52,6 +52,8 @@ class Hook_content_meta_aware_poll
 			'add_time_field'=>'add_time',
 			'edit_time_field'=>'edit_date',
 			'validated_field'=>NULL,
+			
+			'addon_name'=>'polls',
 		);
 	}
 	

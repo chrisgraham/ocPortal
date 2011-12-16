@@ -52,6 +52,8 @@ class Hook_content_meta_aware_topic
 			'add_time_field'=>'t_cache_first_time',
 			'edit_time_field'=>'t_cache_last_time',
 			'validated_field'=>'t_validated',
+			
+			'addon_name'=>'ocf_forum',
 		);
 	}
 	

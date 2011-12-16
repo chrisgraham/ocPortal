@@ -629,14 +629,15 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	// Feedback
 	//Set basic rating display of item to the map array
 	require_code('feedback');
+	$c_value=array_key_exists('FIELD_0_PLAIN_PURE',$map)?$map['FIELD_0_PLAIN_PURE']:$map['FIELD_0_PLAIN'];
+	if (is_object($c_value)) $c_value=$c_value->evaluate();
+	$self_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues'));
 	if (($feedback_details) || ($only_fields!==array(0)))
 	{
-		$map['RATING']=($entry['allow_rating']==1)?display_rating('catalogues',strval($id)):new ocp_tempcode();
+		$map['RATING']=($entry['allow_rating']==1)?display_rating($self_url,$c_value,'catalogues',strval($id)):new ocp_tempcode();
 	}
 	if ($feedback_details)
 	{
-		$c_value=array_key_exists('FIELD_0_PLAIN_PURE',$map)?$map['FIELD_0_PLAIN_PURE']:$map['FIELD_0_PLAIN'];
-		if (is_object($c_value)) $c_value=$c_value->evaluate();
 		list($map['RATING_DETAILS'],$map['COMMENT_DETAILS'],$map['TRACKBACK_DETAILS'])=embed_feedback_systems(
 			get_page_name(),
 			strval($id),
@@ -645,7 +646,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			$entry['allow_trackbacks'],
 			$entry['ce_validated'],
 			$entry['ce_submitter'],
-			build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues')),
+			$self_url,
 			$c_value,
 			get_value('comment_forum__catalogues__'.$catalogue_name)
 		);

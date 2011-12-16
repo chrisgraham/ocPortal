@@ -333,7 +333,8 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 
 			if ($check_permissions) ocf_decache_ocp_blocks($forum_id,NULL,$intended_solely_for); // i.e. we don't run this if in installer
 
-			syndicate_described_activity($is_starter?'ocf:ADD_TOPIC':'ocf:ADD_POST',$is_starter?$title:$topic_title,'','','_SEARCH:topicview:misc:'.strval($topic_id).'#post_'.strval($post_id),'','','ocf_forum');
+			if ($check_permissions)
+				syndicate_described_activity($is_starter?'ocf:ADD_TOPIC':'ocf:ADD_POST_IN',$is_starter?$title:$topic_title,'','','_SEARCH:topicview:misc:'.strval($topic_id).'#post_'.strval($post_id),'','','ocf_forum');
 		}
 		if ($poster!=$GLOBALS['OCF_DRIVER']->get_guest_id())
 		{

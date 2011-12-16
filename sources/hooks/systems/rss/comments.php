@@ -34,40 +34,36 @@ class Hook_rss_comments
 	 */
 	function run($full_title,$cutoff,$prefix,$date_string,$max)
 	{
+		require_code('content');
+
 		// Check permissions (this is HARD, we have to tunnel through content_meta_aware hooks)
-		$hooks=find_all_hooks('systems','content_meta_aware');
-		$found=false;
 		$parts=explode('_',$full_title,2);
-		foreach (array_keys($hooks) as $hook)
+		$hook=convert_ocportal_type_codes('feedback_type_code',$parts[0],'cma_hook');
+		if ($hook!='')
 		{
 			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($hook));
 			$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($hook),true);
 			if (is_null($ob)) continue;
 			$info=$ob->info();
-			if ($info['feedback_type_code']===$parts[0])
+
+			// Category access
+			$permissions_field=$info['permissions_type_code'];
+			if (!is_null($permissions_field))
 			{
-				$found=true;
-				
-				// Category access
-				$permissions_field=$info['permissions_type_code'];
-				if (!is_null($permissions_field))
-				{
-					$cat=$GLOBALS['SITE_DB']->query_value_null_ok($info['table'],$info['parent_category_field'],array($info['id_field']=>$parts[1]));
-					if (is_null($cat)) return NULL;
-					if (!has_category_access(get_member(),$permissions_field,$cat)) return NULL;
-				}
-				
-				// Page/Zone access
-				if (!is_null($info['view_pagelink_pattern']))
-				{
-					$view_pagelink_bits=explode(':',$info['view_pagelink_pattern']);
-					$zone=$view_pagelink_bits[0];
-					if ($zone=='_SEARCH') $zone=get_module_zone($view_pagelink_bits[1]);
-					if (!has_actual_page_access(get_member(),$view_pagelink_bits[1],$zone)) return NULL;
-				}
+				$cat=$GLOBALS['SITE_DB']->query_value_null_ok($info['table'],$info['parent_category_field'],array($info['id_field']=>$parts[1]));
+				if (is_null($cat)) return NULL;
+				if (!has_category_access(get_member(),$permissions_field,$cat)) return NULL;
 			}
-		}
-		if (!$found)
+			
+			// Page/Zone access
+			if (!is_null($info['view_pagelink_pattern']))
+			{
+				$view_pagelink_bits=explode(':',$info['view_pagelink_pattern']);
+				$zone=$view_pagelink_bits[0];
+				if ($zone=='_SEARCH') $zone=get_module_zone($view_pagelink_bits[1]);
+				if (!has_actual_page_access(get_member(),$view_pagelink_bits[1],$zone)) return NULL;
+			}
+		} else
 		{
 			$zone=get_page_zone($parts[0],false);
 			if (is_null($zone)) return NULL;

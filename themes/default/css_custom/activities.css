@@ -22,13 +22,11 @@
 	float: left;
 	margin-top: 5px;
 	margin-bottom: 5px;
-	display: inline;	/* Fix for IE */
 }
 
 .activities_line {
 	margin-top: 0px;
 	font-size: 0.95em;
-	float: left;
 }
 
 .remove {
@@ -44,7 +42,7 @@
 	font-size: 0;
 	color: transparent;
 	border: none;
-	margin-top: 7px;
+	margin-top: 4px;
 	padding: 0;
 }
 
@@ -66,8 +64,8 @@
 .activities-content {
 	width: auto;
 	float: none;
-	padding: 4px 5px 5px 0;
-	font-size: 0.85em;
+	padding: 6px 5px 5px 45px;
+	font-size: 1.1em;
 	color: #333;
 	word-wrap: break-word;
 }

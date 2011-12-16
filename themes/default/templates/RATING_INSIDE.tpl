@@ -22,7 +22,7 @@
 					{+END}
 
 					<script type="text/javascript">// <![CDATA[
-						apply_rating_highlight_and_ajax_code('{TYPE%}','{ID%}','{ROOT_TYPE%}',0,true);
+						apply_rating_highlight_and_ajax_code('{TYPE%}','{ID%}','{ROOT_TYPE%}',0,'{SELF_URL;/}','{SELF_TITLE;/}',true);
 					//]]></script>
 				{+END}
 

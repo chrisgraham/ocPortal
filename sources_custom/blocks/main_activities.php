@@ -68,8 +68,12 @@ class Block_main_activities
 			'a_pagelink_3'=>'SHORT_TEXT',
 			'a_time'=>'TIME',
 			'a_addon'=>'ID_TEXT',
-			'a_is_public'=>'SHORT_TEXT'
+			'a_is_public'=>'BINARY'
 		));
+
+		$GLOBALS['SITE_DB']->create_index('activities','a_member_id',array('a_member_id'));
+		$GLOBALS['SITE_DB']->create_index('activities','a_time',array('a_time'));
+		$GLOBALS['SITE_DB']->create_index('activities','a_filtered_ordered',array('a_member_id','a_time'));
 
 		require_code('activities_submission');
 		log_newest_activity(0,1000,true);
@@ -102,27 +106,10 @@ class Block_main_activities
 		require_javascript('javascript_activities');
 		require_javascript('javascript_jquery');
 		require_javascript('javascript_base64');
-		$stored_max=$GLOBALS['SITE_DB']->query_value_null_ok('values', 'the_value', array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
 
-		if (is_null($stored_max))
+		if (!array_key_exists('max',$map))
 		{
-			if (!array_key_exists('max',$map))
-			{
-				$map['max']='10';
-			}
-
-			$GLOBALS['SITE_DB']->query_insert('values', array('the_value'=>$map['max'], 'the_name'=>get_zone_name()."_".get_page_name()."_update_max", 'date_and_time'=>time()));
-		}
-		else
-		{
-			if (!array_key_exists('max',$map))
-			{
-				$map['max']=$stored_max;
-			}
-			else
-			{
-				$GLOBALS['SITE_DB']->query_update('values', array('the_value'=>$map['max'], 'date_and_time'=>time()), array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
-			}
+			$map['max']='10';
 		}
 
 		if (array_key_exists('param',$map))
@@ -133,35 +120,12 @@ class Block_main_activities
 		// See if we're displaying for a specific member
 		if (array_key_exists('member',$map))
 		{
-			// Assume that we've been given a member ID
-			$username=$GLOBALS['FORUM_DRIVER']->get_member_row_field(intval($map['member']),'m_username');
-			// See if that worked
-			if (is_null($username))
-			{
-				// If not then we can try treating it as a username, if the forum
-				// supports it
-				if (method_exists($GLOBALS['FORUM_DRIVER'],'get_member_from_username'))
-				{
-					$username=$map['member'];
-					$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($map['member']);
-				}
-				// If we've still got nothing then forget the parameter completely
-				if (is_null($username))
-				{
-					return do_lang_tempcode('_USER_NO_EXIST',escape_html($map['member']));
-				}
-			}
-			else
-			{
-				// It worked, so the parameter must have been a member ID
-				$member_id=intval($map['member']);
-			}
+			$member_ids=array_map('intval',explode(',',$map['member']));
 		}
 		else
 		{
 			// No specific user. Use ourselves.
-			$member_id=get_member();
-			$username=$GLOBALS['FORUM_DRIVER']->get_member_from_username($member_id);
+			$member_ids=array(get_member());
 		}
 
 		require_css('side_blocks');
@@ -175,57 +139,56 @@ class Block_main_activities
 
 		$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
-		list($proceed_selection,$whereville)=find_activities($viewer_id,$mode,$member_id);
+		list($proceed_selection,$whereville)=find_activities($viewer_id,$mode,$member_ids);
+
+		$can_remove_others = (has_zone_access($viewer_id,'adminzone'))?true:false;
 
 		$content=array();
 
+		$start=get_param_integer('act_start',0);
+		$max=get_param_integer('act_max',intval($map['max']));
+
 		if ($proceed_selection===true)
 		{
-			$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE '.$whereville.' ORDER BY a_time DESC',$map['max']);
+			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'activities WHERE '.$whereville);
+
+			require_code('templates_results_browser');
+			$results_browser=results_browser(do_lang('ACTIVITIES_TITLE'),NULL,$start,'act_start',$max,'act_max',$max_rows,NULL,NULL,true,false,7,NULL,'tab__activities');
+
+			$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE '.$whereville.' ORDER BY a_time DESC',$max,$start);
 
 			if (!is_null($activities) && (count($activities)>0))
 			{
 				foreach ($activities as $row)
 				{
 					list($message,$memberpic,$datetime,$member_url)=render_activity($row);
-					$content[]=array('ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
+					$content[]=array('ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
 				}
 
 				return do_template('BLOCK_MAIN_ACTIVITIES',array(
 					'TITLE'=>$title,
 					'MODE'=>strval($mode),
-					'MEMBER_ID'=>strval($member_id),
+					'MEMBER_IDS'=>implode(',',$member_ids),
 					'CONTENT'=>$content,
 					'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
-					'MAX'=>$map['max'],
+					'RESULTS_BROWSER'=>$results_browser,
+					'MAX'=>($start==0)?strval($max):NULL,
 				));
 			}
-		}
-
-		switch($mode)
+		} else
 		{
-			case 'own':
-				$memberpic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id); //Get avatar if available
-				$donkey_url=build_url(array('page'=>'members', 'type'=>'view', 'id'=>$member_id), get_module_zone('members')); //Drop in a basic url that just comes straight back
-				$member=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members', 'm_username', array('id'=>$member_id));
-		      if (is_null($member)) $member='no-one'; //Make sure it's not allowed to be null in a graceful fashion
-		      break;
-			case 'friends':
-			case 'all':
-			default:
-				$memberpic='';
-				$donkey_url=build_url(array('page'=>'members', 'type'=>'view', 'id'=>$member_id), get_module_zone('members'));
-				$member='no-one';
-		      break;
+			$results_browser=new ocp_tempcode();
 		}
 
+		// No entries
 		return do_template('BLOCK_MAIN_ACTIVITIES',array(
 			'TITLE'=>$title,
 			'MODE'=>strval($mode),
 			'CONTENT'=>$content,
-			'MEMBER_ID'=>strval($member_id),
+			'MEMBER_IDS'=>'',
 			'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
-			'MAX'=>$map['max'],
+			'RESULTS_BROWSER'=>$results_browser,
+			'MAX'=>($start==0)?strval($max):NULL,
 		));
 	}
 

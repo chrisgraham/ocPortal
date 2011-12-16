@@ -18,7 +18,12 @@
  * @package		activity_feed
  */
 
-function find_activities($viewer_id,$mode,$member_id)
+/*
+TODO: Support if JS disabled
+TODO: PHP doc comments
+*/
+
+function find_activities($viewer_id,$mode,$member_ids)
 {
 	$proceed_selection=true; //There are some cases in which even glancing at the database is a waste of precious time.
 
@@ -27,11 +32,9 @@ function find_activities($viewer_id,$mode,$member_id)
 	if ($guest_id==$viewer_id)
 		$is_guest=true;
 
-	$can_remove_others = (has_zone_access($viewer_id,'adminzone'))?true:false;
-
 	if (addon_installed('chat'))
 	{
-		if ($is_guest===false) //If not a guest, get all blocks
+		if (!$is_guest) //If not a guest, get all blocks
 		{
 			//Grabbing who you're blocked-by
 			$blocked_by=$GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocker'), array('member_blocked'=>$viewer_id));
@@ -80,34 +83,40 @@ function find_activities($viewer_id,$mode,$member_id)
 
 	switch ($mode)
 	{
-		case 'own': //This is used to view one's own activity (eg. on a profile)
-
-			$whereville='a_member_id='.strval($member_id);
-
-			// If the chat addon is installed then there may be 'friends-only'
-			// posts, which we may need to filter out. Otherwise we don't need
-			// to care.
-			if (($member_id!=$viewer_id) && addon_installed('chat'))
+		case 'some_members': //This is used to view one's own activity (eg. on a profile)
+			$whereville='';
+			foreach ($member_ids as $member_id)
 			{
-				$view_private=NULL;        //Set to default denial level and only bother asking for perms if not a guest.
-				if (($is_guest===false))
+				if ($whereville!='') $whereville.=' AND ';
+				$_whereville='a_member_id='.strval($member_id);
+
+				// If the chat addon is installed then there may be 'friends-only'
+				// posts, which we may need to filter out. Otherwise we don't need
+				// to care.
+				if (($member_id!=$viewer_id) && addon_installed('chat'))
 				{
-					if (strlen($blocked_by)>0) //On the basis that you've sought this view out, your blocking them doesn't hide their messages.
-						$short_where=' WHERE (member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).' AND member_likes NOT IN('.$blocked_by.'))';
-					else
-						$short_where=' WHERE (member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).')';
+					$view_private=NULL;        //Set to default denial level and only bother asking for perms if not a guest.
+					if ((!$is_guest))
+					{
+						if (strlen($blocked_by)>0) //On the basis that you've sought this view out, your blocking them doesn't hide their messages.
+							$friends_check_where='(member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).' AND member_likes NOT IN('.$blocked_by.'))';
+						else
+							$friends_check_where='(member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).')';
 
-					$view_private=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies', 'member_likes',NULL, $short_where);
+						$view_private=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT member_likes FROM chat_buddies WHERE '.$friends_check_where);
+					}
+
+					if (is_null($view_private)) //If not friended by this person, the view is filtered.
+						$_whereville='('.$_whereville.' AND a_is_public=1)';
 				}
-
-				if (is_null($view_private)) //If not friended by this person, the view is filtered.
-					$whereville='('.$whereville.' AND a_is_public=1)';
-
+				
+				$whereville.=$_whereville;
 			}
 	      break;
+
 		case 'friends':
 			// "friends" only makes sense if the chat addon is installed
-			if (addon_installed('chat') && $is_guest===false) //If not a guest, get all reciprocal friendships.
+			if (addon_installed('chat') && !$is_guest) //If not a guest, get all reciprocal friendships.
 			{
 				$like_outgoing=array();
 				//Working on the principle that you only want to see people you like on this, only those you like and have not blocked will be selected
@@ -196,7 +205,7 @@ function find_activities($viewer_id,$mode,$member_id)
 				}
 				else //Has no mutual friends
 				{
-					if ($is_guest===false)
+					if (!$is_guest)
 						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one person
@@ -220,16 +229,17 @@ function find_activities($viewer_id,$mode,$member_id)
 			else
 				$proceed_selection=false;
 			break;
+
 		case 'all': //Frontpage, 100% permissions dependent.
 		default:
 			$view_private=array();
-			if (addon_installed('chat') && $is_guest===false)
+			if (addon_installed('chat') && !$is_guest)
 			{
-				$short_where='member_liked='.strval($viewer_id);
+				$friends_check_where='member_liked='.strval($viewer_id);
 				if (strlen($blocked_by)>0)
-					$short_where='('.$short_where.' AND member_likes NOT IN ('.$blocked_by.'))';
+					$friends_check_where='('.$friends_check_where.' AND member_likes NOT IN ('.$blocked_by.'))';
 				
-				$view_private=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_likes'), NULL, ' WHERE '.$short_where.';');
+				$view_private=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_likes'), NULL, ' WHERE '.$friends_check_where.';');
 				$view_private[]=array('member_likes'=>$viewer_id);
 			}
 
@@ -274,6 +284,8 @@ function render_activity($row)
 
 	$message=new ocp_tempcode();
 
+	$test=do_lang($row['a_language_string_code']);
+
 	// Convert our parameters and links to Tempcode
 	$label=array();
 	$link=array();
@@ -281,6 +293,11 @@ function render_activity($row)
 	{
 		$label[$i]=comcode_to_tempcode($row['a_label_'.strval($i)],$guest_id,false,NULL);
 		$link[$i]=($row['a_pagelink_'.strval($i)]=='')?new ocp_tempcode():pagelink_to_tempcode($row['a_pagelink_'.strval($i)]);
+
+		if (($row['a_pagelink_'.strval($i)]!='') && (strpos($test,'{'.strval($i+3).'}')===false))
+		{
+			$label[$i]=hyperlink($link[$i],$label[$i]->evaluate());
+		}
 	}
 
 	// Render primary language string
@@ -296,20 +313,13 @@ function render_activity($row)
 	));
 
 	// Lang string may not use all params, so add extras on if were unused
-	$test=do_lang($row['a_language_string_code']);
 	for ($i=1;$i<=3;$i++)
 	{
 		if ((strpos($test,'{'.strval($i).'}')===false) && ($row['a_label_'.strval($i)]!=''))
 		{
 			$message->attach(': ');
 
-			if ($row['a_pagelink_'.strval($i)]!='')
-			{
-				$message->attach(hyperlink($link[$i],$label[$i]->evaluate()));
-			} else
-			{
-				$message->attach($label_1->evaluate());
-			}
+			$message->attach($label[$i]->evaluate());
 		}
 	}
 	

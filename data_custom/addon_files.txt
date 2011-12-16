@@ -1969,6 +1969,7 @@ cool_member_directory
 activity_feed
 -------------
 
+# # sources_custom/hooks/systems/rss/activities.php
 # # data_custom/activities_updater.php
 # # data_custom/activities_removal.php
 # # data_custom/activities_handler.php

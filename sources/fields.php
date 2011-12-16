@@ -26,6 +26,9 @@
  */
 function get_fields_hook($type)
 {
+	static $fields_hook_cache=array();
+	if (isset($fields_hook_cache[$type])) return $fields_hook_cache[$type];
+
 	$path='hooks/systems/fields/'.filter_naughty($type);
 	if ((!/*common ones we know have hooks*/in_array($type,array('author','auto_increment','codename','color','content_link','date','email','float','guid','integer','just_date','just_time','list','long_text','long_trans','page_link','password','picture','video','posting_field','radiolist','random','reference','short_text','short_trans','theme_image','tick','upload','url','user'))) && (!is_file(get_file_base().'/sources/'.$path.'.php')) && (!is_file(get_file_base().'/sources_custom/'.$path.'.php')))
 	{
@@ -37,12 +40,18 @@ function get_fields_hook($type)
 			$ob=object_factory('Hook_fields_'.filter_naughty($hook));
 			if (method_exists($ob,'get_field_types'))
 			{
-				if (array_key_exists($type,$ob->get_field_types())) return $ob;
+				if (array_key_exists($type,$ob->get_field_types()))
+				{
+					$fields_hook_cache[$type]=$ob;
+					return $ob;
+				}
 			}
 		}
 	}
 	require_code($path);
-	return object_factory('Hook_fields_'.filter_naughty($type));
+	$ob=object_factory('Hook_fields_'.filter_naughty($type));
+	$fields_hook_cache[$type]=$ob;
+	return $ob;
 }
 
 /**

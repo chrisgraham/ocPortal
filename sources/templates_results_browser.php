@@ -189,7 +189,9 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 			}
 			if ($keep_all)
 			{
-				$hidden=build_keep_form_fields('_SELF',true,array($start_name,'id','type','wide_high'));
+				$dont_auto_keep=array($start_name,'type','wide_high');
+				if (!is_null($category_id)) $dont_auto_keep[]='id';
+				$hidden=build_keep_form_fields('_SELF',true,$dont_auto_keep);
 				if (!is_null($category_id)) $hidden->attach(form_input_hidden('id',strval($category_id)));
 				if (!is_null($type)) $hidden->attach(form_input_hidden('type',$type));
 			} else

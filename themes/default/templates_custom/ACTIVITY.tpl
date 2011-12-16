@@ -24,18 +24,16 @@
 </div>
 
 <div class="activities_line">
-	<div class="float_surrounder">
-		<!--
-			{+START,IF_PASSED,USERNAME}
-				<div class="name left">
-					<a href="{MEMBER_URL*}">{USERNAME*}</a>
-				</div>
-			{+END}
-		-->
+	<!--
+		{+START,IF_PASSED,USERNAME}
+			<div class="name left">
+				<a href="{MEMBER_URL*}">{USERNAME*}</a>
+			</div>
+		{+END}
+	-->
 
-		<div class="time right">
-			{$MAKE_RELATIVE_DATE*,{DATETIME}} {!AGO}
-		</div>
+	<div class="time right">
+		{$MAKE_RELATIVE_DATE*,{DATETIME}} {!AGO}
 	</div>
 
 	<div class="activities-content">

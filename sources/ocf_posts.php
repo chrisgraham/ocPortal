@@ -107,23 +107,9 @@ function ocf_display_spacer_post($linked_type,$linked_id)
 	
 	if (addon_installed('awards'))
 	{
-		$award_hooks=find_all_hooks('systems','awards');
-		if (!array_key_exists($linked_type,$award_hooks)) // Ah, no easy match for award hook, we need to search via cma hooks
-		{
-			$cma_hooks=find_all_hooks('systems','content_meta_aware');
-			foreach (array_keys($cma_hooks) as $cma_hook)
-			{
-				require_code('hooks/systems/content_meta_aware/'.$cma_hook);
-				$cms_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
-				$cma_info=$cms_ob->info();
-				if ((isset($cma_info['feedback_type_code'])) && ($cma_info['feedback_type_code']==$linked_type))
-				{
-					$linked_type=$cma_hook;
-					break;
-				}
-			}
-		}
-		if (array_key_exists($linked_type,$award_hooks))
+		require_code('content');
+		$linked_type=convert_ocportal_type_codes('award_hook',$linked_type,'feedback_type_code');
+		if ($linked_type!='')
 		{
 			require_code('hooks/systems/awards/'.$linked_type);
 			$award_ob=object_factory('Hook_awards_'.$linked_type);

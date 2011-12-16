@@ -52,6 +52,8 @@ class Hook_content_meta_aware_event
 			'add_time_field'=>'e_add_date',
 			'edit_time_field'=>'e_edit_date',
 			'validated_field'=>'validated',
+
+			'addon_name'=>'calendar',
 		);
 	}
 

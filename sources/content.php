@@ -19,6 +19,58 @@
  */
 
 /**
+ * Find a different content type code from the one had. In future we intend to change everything to be cma_hook internally.
+ *
+ * @param  ID_TEXT		Content type type we know
+ * @set addon cma_hook award_hook search_hook table seo_type_code feedback_type_code permissions_type_code
+ * @param  ID_TEXT		Content type ID we know
+ * @param  ID_TEXT		Desired content type
+ * @set addon cma_hook search_hook table seo_type_code feedback_type_code permissions_type_code
+ * @return ID_TEXT		Corrected content type type (blank: could not find)
+ */
+function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
+{
+	$real_type_wanted=$type_wanted;
+	if ($type_wanted=='award_hook') $type_wanted='cma_hook';
+
+	// TODO: remove legacy later
+	if ($type_has=='award_hook')
+	{
+		if ($type_id=='seedy_page') $type_id='cedi_page';
+		if ($type_id=='seedy_post') $type_id='cedi_post';
+		$type_has='cma_hook';
+	}
+
+	// Search content-meta-aware hooks
+	$found_type_id='';
+	$cma_hooks=find_all_hooks('systems','content_meta_aware');
+	foreach (array_keys($cma_hooks) as $cma_hook)
+	{
+		if ((($type_has=='cma_hook') && ($cma_hook==$type_id)) || ($type_has!='cma_hook'))
+		{
+			require_code('hooks/systems/content_meta_aware/'.$cma_hook);
+			$cms_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
+			$cma_info=$cms_ob->info();
+			$cma_info['cma_hook']=$cma_hook;
+			if ((isset($cma_info[$type_has])) && (isset($cma_info[$type_wanted])) && ($cma_info[$type_has]==$type_id))
+			{
+				$found_type_id=$cma_info[$type_wanted];
+				break;
+			}
+		}
+	}
+
+	if ($real_type_wanted=='award_hook')
+	{
+		// TODO: remove legacy later
+		if ($found_type_id=='cedi_page') $found_type_id='seedy_page';
+		if ($found_type_id=='cedi_post') $found_type_id='seedy_post';
+	}
+
+	return $found_type_id;
+}
+
+/**
  * Get meta details of a content item
  *
  * @param  ID_TEXT		Content type

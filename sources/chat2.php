@@ -95,7 +95,8 @@ function buddy_add($likes,$liked,$time=NULL)
 
 	// Log the action
 	log_it('MAKE_BUDDY',strval($likes),strval($liked));
-	syndicate_described_activity('chat:MAKE_BUDDY',$to_name,'','','_SEARCH:members:view:'.strval($liked),'','','chat');
+	syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$from_name,$to_name,'','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$likes);
+	syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$from_name,$to_name,'','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);
 }
 
 /**

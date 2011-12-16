@@ -2174,7 +2174,7 @@ function replace_comments_form_with_ajax(options,hash)
 	}
 }
 
-function apply_rating_highlight_and_ajax_code(type,id,root_type,rating,initialisation_phase)
+function apply_rating_highlight_and_ajax_code(type,id,root_type,rating,self_url,self_title,initialisation_phase)
 {
 	var i,bit;
 	for (i=1;i<=10;i++)
@@ -2188,7 +2188,7 @@ function apply_rating_highlight_and_ajax_code(type,id,root_type,rating,initialis
 		{
 			bit.onmouseover=function(i) { return function()
 			{
-				apply_rating_highlight_and_ajax_code(type,id,root_type,i,false);
+				apply_rating_highlight_and_ajax_code(type,id,root_type,i,self_url,self_title,false);
 			} }(i);
 
 			bit.onclick=function(i) {
@@ -2209,7 +2209,7 @@ function apply_rating_highlight_and_ajax_code(type,id,root_type,rating,initialis
 							break;
 						}
 					}
-					var message=load_snippet('rating&type='+type+'&id='+id+'&root_type='+root_type+'&template='+template,'rating='+i);
+					var message=load_snippet('rating&type='+window.encodeURIComponent(type)+'&id='+window.encodeURIComponent(id)+'&root_type='+window.encodeURIComponent(root_type)+'&template='+window.encodeURIComponent(template)+'&self_url='+window.encodeURIComponent(self_url)+'&self_title='+window.encodeURIComponent(self_title),'rating='+window.encodeURIComponent(i));
 					setInnerHTML((template=='')?bit.parentNode.parentNode.parentNode.parentNode:replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
 				}
 			}(i);

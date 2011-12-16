@@ -44,6 +44,8 @@ class Hook_Profiles_Tabs_activities
 	{
 		require_lang('activities');
 
+		$GLOBALS['FEED_URL']=find_script('backend').'?mode=activities&filter='.strval($member_id_of);
+
 		$title=do_lang_tempcode('ACTIVITIES_TITLE');
 
 		$order=70;

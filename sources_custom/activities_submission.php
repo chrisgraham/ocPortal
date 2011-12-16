@@ -113,28 +113,18 @@ function update_list_handler()
 
 	$can_remove_others = (has_zone_access($viewer_id,'adminzone'))?true:false;
 
-	//Getting the member viewed id if available, member viewing if not
-	$username=post_param('member_id',strval($viewer_id));
-	if ($username=='') $username=strval($viewer_id);
-	if (is_numeric($username))
-	{
-		$member_id=post_param_integer('member_id',$viewer_id);
-		$username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_username');
-		if ((is_null($username))) return do_lang_tempcode('USER_NO_EXIST');
-	}
-	else
-	{
-		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-		if (is_null($member_id)) return do_lang_tempcode('_USER_NO_EXIST',escape_html($username));
-	}
+	//Getting the member viewed ids if available, member viewing if not
+	$member_ids=array_map('intval',explode(',',post_param('member_ids',strval($viewer_id))));
 
-	list($proceed_selection,$whereville)=find_activities($viewer_id,$mode,$member_id);
+	list($proceed_selection,$whereville)=find_activities($viewer_id,$mode,$member_ids);
 
 	header("Content-Type: text/xml");
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
+
+	$can_remove_others = (has_zone_access($viewer_id,'adminzone'))?true:false;
 
 	if ($proceed_selection===true)
 	{
@@ -147,7 +137,7 @@ function update_list_handler()
 			{
 				list($message,$memberpic,$datetime,$member_url)=render_activity($row);
 
-				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message, 'MEMPIC'=>$memberpic, 'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
+				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message, 'MEMPIC'=>$memberpic, 'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
 				// We dump our response in CDATA, since that lets us work around the
 				// fact that our list elements aren't actually in a list, etc.
 				// However, we allow comcode but some tags make use of CDATA. Since

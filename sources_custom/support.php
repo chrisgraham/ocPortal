@@ -25,16 +25,18 @@
  * @param  string			Page link 3
  * @param  string			Addon that caused the event
  * @param  BINARY			Whether this post should be public or friends-only
+ * @param  ?MEMBER		Member being written for (NULL: current member)
  * @return ?AUTO_LINK	ID of the row in the activities table (NULL: N/A)
  */
-function _syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=1)
+function _syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=1,$a_member_id=NULL)
 {
 	require_code('activities_submission');
 
 	if ((get_db_type()=='xml') && (get_param_integer('keep_testing_logging',0)!=1)) return;
 
 	$stored_id=0;
-	$a_member_id=get_member();
+	if (is_null($a_member_id)) $a_member_id=get_member();
+	if (is_guest($a_member_id)) return NULL;
 
 	$go=array(
 		'a_language_string_code'=>$a_language_string_code,
