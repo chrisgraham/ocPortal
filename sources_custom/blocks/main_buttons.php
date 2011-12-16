@@ -79,7 +79,7 @@ class Block_main_buttons
 			log_it('ADD_BANNER_TYPE',$id);
 		}
 
-		$submitter=get_member();
+		$submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 		require_code('banners3');
 		//create default banners, if they don't exist 

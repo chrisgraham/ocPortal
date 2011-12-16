@@ -1836,8 +1836,8 @@ function step_7()
 	{
 		if (($module!='admin_version') && ($module!='admin_permissions'))
 		{
-			//if ($type=='modules') echo '<!-- Installing '.escape_html($module).' -->';
-			if (($type=='modules') && (reinstall_module('adminzone',$module)))
+			//echo '<!-- Installing '.escape_html($module).' -->';
+			if (reinstall_module('adminzone',$module))
 				$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'9fafb3dd014d589fcc057bba54fc4ab3','SOMETHING'=>do_lang_tempcode('INSTALL_MODULE',escape_html($module)))));
 		}
 	}
@@ -1861,7 +1861,7 @@ function step_8()
 	$modules=find_all_modules('site');
 	foreach ($modules as $module=>$type)
 	{
-		if (($type=='modules') && (reinstall_module('site',$module)))
+		if (reinstall_module('site',$module))
 			$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'9b3c23369e8ca719256ae44b3d42fd4c','SOMETHING'=>do_lang_tempcode('INSTALL_MODULE',escape_html($module)))));
 	}
 
@@ -1884,20 +1884,21 @@ function step_9()
 	$modules=find_all_modules('forum');
 	foreach ($modules as $module=>$type)
 	{
-		if (($type=='modules') && (reinstall_module('forum',$module)))
+		if (reinstall_module('forum',$module))
 			$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'c1d95b9713006acb491b44ff6c79099c','SOMETHING'=>do_lang_tempcode('INSTALL_MODULE',escape_html($module)))));
 	}
 	$modules=find_all_modules('cms');
 	foreach ($modules as $module=>$type)
 	{
-		if (($type=='modules') && (reinstall_module('cms',$module)))
+		if (reinstall_module('cms',$module))
 			$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'8fdbc968cae73c47d9faf3b4148ac7e1','SOMETHING'=>do_lang_tempcode('INSTALL_MODULE',escape_html($module)))));
 	}
 
 	$blocks=find_all_blocks();
 	foreach ($blocks as $block=>$type)
 	{
-		if (($type=='sources') && (reinstall_block($block)))
+		echo '<!-- Installing block: '.$block.' -->'."\n";
+		if (reinstall_block($block))
 			$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'dc9f833239d501f77729778b5c6681b6','SOMETHING'=>do_lang_tempcode('INSTALL_BLOCK',escape_html($block)))));
 	}
 
