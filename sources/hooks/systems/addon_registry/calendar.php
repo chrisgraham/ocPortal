@@ -305,7 +305,7 @@ class Hook_addon_registry_calendar
 					'TITLE'=>lorem_word(),
 					'TIME'=>placeholder_time(),
 					'VIEW_URL'=>placeholder_url(),
-					'ICON'=>'ocf_emoticons/upsidedown',
+					'ICON'=>'calendar/activity',
 					'T_TITLE'=>lorem_word(),
 					'DESCRIPTION'=>lorem_paragraph_html(),
 						)
