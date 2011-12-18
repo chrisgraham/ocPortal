@@ -292,20 +292,23 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 			$buildup='';
 			foreach ($path_components as $i=>$component)
 			{
-				if (array_key_exists($i+1,$path_components))
+				if ($component!='')
 				{
-					$buildup.=$component.'/';
-					if (!$use_afm)
+					if (array_key_exists($i+1,$path_components))
 					{
-						if (!file_exists($path.$buildup))
+						$buildup.=$component.'/';
+						if (!$use_afm)
 						{
-							@mkdir($path.$buildup,0777);
-							fix_permissions($path.$buildup,0777);
-							sync_file($path.$buildup);
+							if (!file_exists($path.$buildup))
+							{
+								@mkdir($path.$buildup,0777);
+								fix_permissions($path.$buildup,0777);
+								sync_file($path.$buildup);
+							}
+						} else
+						{
+							afm_make_directory($path.$buildup,true);
 						}
-					} else
-					{
-						afm_make_directory($path.$buildup,true);
 					}
 				}
 			}
