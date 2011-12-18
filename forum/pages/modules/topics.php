@@ -1098,7 +1098,8 @@ class Module_topics
 		$tabindex=get_form_field_tabindex(NULL);
 
 		$content=array();
-		$rows=$GLOBALS['FORUM_DB']->query_select('f_emoticons',array('e_theme_img_code'),array('e_use_topics'=>1));
+		$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT e_theme_img_code FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_use_topics=1'.$extra);
 		$content[]=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_3_NA',array('_GUID'=>'d9f9399072af3f19f21695aef01168c7','CHECKED'=>$selected_path=='','NAME'=>'emoticon'));
 
 		foreach ($rows as $row)

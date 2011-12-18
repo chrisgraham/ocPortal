@@ -945,8 +945,9 @@ function emoticons_script()
 
 	require_lang('ocf');
 	require_javascript('javascript_editing');
-	
-	$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_relevance_level<3');
+
+	$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
+	$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_relevance_level<3'.$extra);
 	$content=new ocp_tempcode();
 	$cols=4;
 	$current_row=new ocp_tempcode();
