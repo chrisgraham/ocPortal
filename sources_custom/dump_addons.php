@@ -15,14 +15,14 @@
 
 // returns the file list of an addon. addon_name => array(files);
 
-function get_file_list_of_addons($FILE_BASE)
+function get_file_list_of_addons()
 {
-	if (!file_exists($FILE_BASE.'/data_custom/addon_files.txt'))
-		exit("File missing : <br />".$FILE_BASE.'/data_custom/addon_files.txt');
+	if (!file_exists(get_file_base().'/data_custom/addon_files.txt'))
+		exit('File missing: data_custom/addon_files.txt');
 
 	$file_list = array();
 	$files = array();
-	$text = file($FILE_BASE.'/data_custom/addon_files.txt',FILE_IGNORE_NEW_LINES);
+	$text = file(get_file_base().'/data_custom/addon_files.txt',FILE_IGNORE_NEW_LINES);
 	// echo "<pre>";print_r($text);exit();
 	$key = '';
 	foreach($text as $i=>$val)
@@ -53,60 +53,48 @@ function get_file_list_of_addons($FILE_BASE)
 	return $file_list;
 }
 
-
-
-// returns details of the addons
-function get_details_of_addons($FILE_BASE)
+// Returns details of the addons
+function get_details_of_addons()
 {
-	if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
-		exit("File missing : <br />".$FILE_BASE.'/data_custom/addons-sheet.csv');
+	if (!file_exists(get_file_base().'/data_custom/addons-sheet.csv'))
+		exit('File missing: data_custom/addons-sheet.csv');
 
-	$map = array(0 => 'name', 1 => 'author', 7 => 'description', 10 => 'dependencies', 11 => 'incompatibilities', 12 => 'category', 14 => 'license', 17 => 'attribute');
 	$addon_list = array();
-	$fd = fopen ($FILE_BASE.'/data_custom/addons-sheet.csv', "r");
-	fgetcsv($fd, 4096); // Skip first (header)
+	$fd = fopen (get_file_base().'/data_custom/addons-sheet.csv', "r");
+	$header=fgetcsv($fd, 4096);
 	// initialize a loop to go through each line of the file
 	while (!feof($fd))
 	{
 		$buffer = fgetcsv($fd, 4096); // declare an array to hold all of the contents of each
 
-		$temp = array();
-		foreach($map as $k => $v)
+		$properties = array();
+		foreach ($header as $k => $h)
 		{
-			$temp[$v] = @trim($buffer[$k]);
+			$properties[$h] = @trim($buffer[$k]);
 		}
-		$addon_name = @strtolower(trim($buffer[0]));
-		$addon_name = preg_replace('/[\s_]/','_',$addon_name);
+		$formal_addon_name = preg_replace('/[\s_]/','_',strtolower($properties['Addon name']));
 
-		if (($addon_name!='') && (substr($addon_name,0,1)!='#'))
-			$addon_list[$addon_name] = $temp;
+		if (($formal_addon_name!='') && (substr($formal_addon_name,0,1)!='#'))
+			$addon_list[$formal_addon_name] = $properties;
 	}
 	fclose ($fd);
 	return $addon_list;
 }
 
-// returns list of category
-function category_list_from_details($FILE_BASE)
+// Returns list of category
+function category_list_from_details()
 {
-	if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
-		exit("File missing : <br />".$FILE_BASE.'/data_custom/addons-sheet.csv');
-
-	$category_list = array();
-	$fd = fopen ($FILE_BASE.'/data_custom/addons-sheet.csv', "r");
-	fgetcsv($fd, 4096); // Skip first (header)
-	// initialize a loop to go through each line of the file
-	while (!feof($fd))
+	$categories = array();
+	$addons = get_details_of_addons();
+	foreach ($addons as $addon)
 	{
-		$buffer = fgetcsv($fd, 4096); // declare an array to hold all of the contents of each
-		if (!in_array($buffer[12], $category_list) && $buffer[12] != '' )
-		{
-			$category_list[] = $buffer[12];
-		}
+		$categories[] = $addon['Category'];
 	}
-	return $category_list;
+
+	return array_unique($categories);
 }
 
-// insert into db if the category does not exist
+// Insert into db if the category does not exist
 function check_and_add_category($category, $parentid = 1)
 {
 	require_code('downloads2');
@@ -125,7 +113,7 @@ function check_and_add_category($category, $parentid = 1)
 		return $id;
 }
 
-// Retuens the category id
+// Returns the category id
 function fetch_category_id($category)
 {
 	$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>$category));
@@ -133,63 +121,15 @@ function fetch_category_id($category)
 	return $category_id;
 }
 
-function get_addons_list_under_category($category, $FILE_BASE)
+function get_addons_list_under_category($category)
 {
-	if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
-		exit("File missing : <br />".$FILE_BASE.'/data_custom/addons-sheet.csv');
-
-	$addon_list = array();
-	$fd = fopen ($FILE_BASE.'/data_custom/addons-sheet.csv', "r");
-	fgetcsv($fd, 4096); // Skip first (header)
-	// initialize a loop to go through each line of the file
-	while (!feof($fd))
+	$categories = array();
+	$addons = get_details_of_addons();
+	$addons_here = array();
+	foreach ($addons as $k => $addon)
 	{
-		$buffer = fgetcsv($fd, 4096); // declare an array to hold all of the contents of each
-
-		if ($buffer[12] == $category)
-		{
-			$addon_name = @strtolower(trim($buffer[0]));
-			$addon_name = preg_replace('/[\s_]/','_',$addon_name);
-
-			if (($addon_name!='') && (substr($addon_name,0,1)!='#'))
-				$addon_list[] = $addon_name;
-		}
+		if ($addon['Category'] == $category) $addons_here[] = $k;
 	}
-	fclose ($fd);
-	return $addon_list;
+	return $addons_here;
 }
-
-function get_basic_details_of_addons($category, $FILE_BASE)
-{
-	if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
-		exit("File missing : <br />".$FILE_BASE.'/data_custom/addons-sheet.csv');
-
-	$map = array(0 => 'name', 1 => 'author', 7 => 'description', 10 => 'dependencies', 11 => 'incompatibilities', 12 => 'category', 14 => 'license', 17 => 'attribute');
-	$addon_list = array();
-	$fd = fopen ($FILE_BASE.'/data_custom/addons-sheet.csv', "r");
-	fgetcsv($fd, 4096); // Skip first (header)
-	// initialize a loop to go through each line of the file
-	while (!feof($fd))
-	{
-		$buffer = fgetcsv($fd, 4096); // declare an array to hold all of the contents of each
-
-		if ($buffer[12] == $category)
-		{
-			$temp = array();
-			foreach($map as $k => $v)
-			{
-				$temp[$v] = @trim($buffer[$k]);
-			}
-			$addon_name = @strtolower(trim($buffer[0]));
-			$addon_name = preg_replace('/[\s_]/','_',$addon_name);
-		
-			if (($addon_name!='') && (substr($addon_name,0,1)!='#'))
-				$addon_list[$addon_name] = $temp;
-		}
-	}
-	fclose ($fd);
-	return $addon_list;
-}
-
-
 
