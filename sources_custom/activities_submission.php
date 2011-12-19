@@ -18,8 +18,68 @@
  * @package		activity_feed
  */
 
+function activities_addon_syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too)
+{
+	require_code('activities');
 
-function submit_handler()
+	if ((get_db_type()=='xml') && (get_param_integer('keep_testing_logging',0)!=1)) return;
+
+	$stored_id=0;
+	if (is_null($a_member_id)) $a_member_id=get_member();
+	if (is_guest($a_member_id)) return NULL;
+
+	$go=array(
+		'a_language_string_code'=>$a_language_string_code,
+		'a_label_1'=>$a_label_1,
+		'a_label_2'=>$a_label_2,
+		'a_label_3'=>$a_label_3,
+		'a_is_public'=>$a_is_public
+	);
+
+	// Check if this has been posted previously (within the last 10 minutes) to
+	// stop spamming but allow generalised repeat status messages.
+	$test=$GLOBALS['SITE_DB']->query_select('activities',array('a_language_string_code','a_label_1','a_label_2','a_label_3','a_is_public'),NULL,'WHERE a_time>'.strval(time()-600),1);
+	if ((!array_key_exists(0,$test)) || ($test[0]!=$go) || (running_script('execute_temp')))
+	{
+		// Log the activity
+		$row=$go+array(
+			'a_member_id'=>$a_member_id,
+			'a_pagelink_1'=>$a_pagelink_1,
+			'a_pagelink_2'=>$a_pagelink_2,
+			'a_pagelink_3'=>$a_pagelink_3,
+			'a_time'=>time(),
+			'a_addon'=>$a_addon,
+			'a_is_public'=>$a_is_public
+		);
+		$stored_id=$GLOBALS['SITE_DB']->query_insert('activities',$row,true);
+
+		// Update the latest activity file
+		log_newest_activity($stored_id,1000);
+
+		// External places
+		if ($a_is_public==1)
+		{
+			$dests=find_all_hooks('systems','syndication');
+			foreach (array_keys($dests) as $hook)
+			{
+				require_code('hooks/systems/syndication/'.$hook);
+				$ob=object_factory('Hook_Syndication_'.$hook);
+				if ($ob->is_available())
+				{
+					$ob->syndicate_user_activity($a_member_id,$row);
+					if (($sitewide_too) && (has_specific_permission(get_member(),'syndicate_site_activity')) && (post_param_integer('syndicate_this',0)==1))
+						$ob->syndicate_site_activity($row);
+				}
+			}
+		}
+	}
+	else
+		return NULL;
+
+	return $stored_id;
+}
+
+function activities_ajax_submit_handler()
 {
 	header('Content-Type: text/xml');
 //	header('HTTP/1.0 200 Ok');
@@ -87,7 +147,7 @@ function submit_handler()
 	echo $response;
 }
 
-function update_list_handler()
+function activities_ajax_update_list_handler()
 {
 	$map=array();
 	
@@ -111,7 +171,7 @@ function update_list_handler()
 	$guest_id=intval($GLOBALS['FORUM_DRIVER']->get_guest_id());
 	$viewer_id=intval(get_member()); //We'll need this later anyway.
 
-	$can_remove_others = (has_zone_access($viewer_id,'adminzone'))?true:false;
+	$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
 
 	//Getting the member viewed ids if available, member viewing if not
 	$member_ids=array_map('intval',explode(',',post_param('member_ids',strval($viewer_id))));
@@ -163,7 +223,7 @@ function update_list_handler()
 	echo $response;
 }
 
-function removal_handler()
+function activities_ajax_removal_handler()
 {
 	$is_guest=false; //Can't be doing with overcomplicated SQL breakages. Weed it out.
 	$guest_id=intval($GLOBALS['FORUM_DRIVER']->get_guest_id());

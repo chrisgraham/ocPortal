@@ -83,35 +83,58 @@ function validate_ip_script()
 }
 
 /**
+ * If we are using human names for usernames, a conflict is likely. Store a suffixed variety. Maybe later ocP will strip these suffixes out in some contexts.
+ *
+ * @param  SHORT_TEXT	The desired human name for the member profile.
+ * @return SHORT_TEXT	A unique username.
+ */
+function get_username_from_human_name($username)
+{
+	$_username=$username;
+	$_username=preg_replace('# \(\d+\)$#','',$username);
+	$i=1;
+	do
+	{
+		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$_username));
+		if (!is_null($test))
+		{
+			$i++;
+			$_username=$username.' ('.strval($i).')';
+		}
+	}
+	while (!is_null($test));
+	$username=$_username;
+	return $username;
+}
+
+/**
  * Get a form for finishing off a member profile (such as for LDAP or httpauth, where a partial profile is automatically made, but needs completion).
  *
  * @param  SHORT_TEXT	The username for the member profile.
  * @param  ID_TEXT		The type of member profile we are finishing off.
  * @param  string			Auto-detected e-mail address (blank: none)
+ * @param  ?integer		Auto-detected DOB day (NULL: unknown)
+ * @param  ?integer		Auto-detected DOB month (NULL: unknown)
+ * @param  ?integer		Auto-detected DOB year (NULL: unknown)
+ * @param  ?ID_TEXT		Auto-detected Timezone (NULL: unknown)
+ * @param  ?ID_TEXT		Auto-detected Language (NULL: unknown)
  * @return tempcode		The form.
  */
-function ocf_member_external_linker_ask($username,$type,$email='')
+function ocf_member_external_linker_ask($username,$type,$email_address='',$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$language=NULL)
 {
+	// If somehow, we're not fully started up, or in a messy state
+	require_code('urls');
+	@ob_end_clean();
+	if (!function_exists('do_header')) require_code('site');
+
 	$title=get_page_title('FINISH_PROFILE');
 
 	if (($username!='') && ($type!='ldap'))
 	{
-		$_username=$username;
-		$i=1;
-		do
-		{
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$_username));
-			if (!is_null($test))
-			{
-				$i++;
-				$_username=$username.' ('.strval($i).')';
-			}
-		}
-		while (!is_null($test));
-		$username=$_username;
+		$username=get_username_from_human_name($username);
 	}
 
-	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email,1,NULL,NULL,NULL,NULL,NULL,NULL,1,1,0,NULL,1,1,1,NULL,$username,0,$type);
+	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email_address,1,$dob_day,$dob_month,$dob_year,$timezone,NULL,NULL,1,1,0,NULL,1,1,1,$language,$username,0,$type);
 	$hidden->attach(build_keep_post_fields());
 	$hidden->attach(form_input_hidden('finishing_profile','1'));
 
@@ -130,21 +153,29 @@ function ocf_member_external_linker_ask($username,$type,$email='')
  * @param  SHORT_TEXT	The password for the member profile.
  * @param  ID_TEXT		The type of member profile we are finishing off.
  * @param  boolean		Whether to check for duplicated email addresses.
+ * @param  string			Auto-detected e-mail address (blank: none)
+ * @param  ?integer		Auto-detected DOB day (NULL: unknown)
+ * @param  ?integer		Auto-detected DOB month (NULL: unknown)
+ * @param  ?integer		Auto-detected DOB year (NULL: unknown)
+ * @param  ?ID_TEXT		Auto-detected Timezone (NULL: unknown)
+ * @param  ?ID_TEXT		Auto-detected Language (NULL: unknown)
  * @return MEMBER			The member ID for the finished off profile.
  */
-function ocf_member_external_linker($username,$password,$type,$email_check=true)
+function ocf_member_external_linker($username,$password,$type,$email_check=true,$email_address='',$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$language=NULL)
 {
 	// Read in data
-	$email_address=trim(post_param('email_address',''));
-	$dob_day=post_param_integer('dob_day',NULL);
-	$dob_month=post_param_integer('dob_month',NULL);
-	$dob_year=post_param_integer('dob_year',NULL);
-	$reveal_age=post_param_integer('reveal_age',0);
+	$email_address=trim(post_param('email_address',$email_address));
+	$dob_day=post_param_integer('dob_day',$dob_day);
+	$dob_month=post_param_integer('dob_month',$dob_month);
+	$dob_year=post_param_integer('dob_year',$dob_year);
+	$reveal_age=post_param_integer('reveal_age',0); // For default privacy, default off
 	require_code('temporal');
-	$timezone=post_param('timezone',get_site_timezone());
-	$language=post_param('language',get_site_default_lang());
-	$allow_emails=post_param_integer('allow_emails',0);
-	$allow_emails_from_staff=post_param_integer('allow_emails_from_staff',0);
+	if (is_null($timezone)) $timezone=get_site_timezone();
+	$timezone=post_param('timezone',$timezone);
+	if (is_null($language)) $language=get_site_default_lang();
+	$language=post_param('language',$language);
+	$allow_emails=post_param_integer('allow_emails',0); // For default privacy, default off
+	$allow_emails_from_staff=post_param_integer('allow_emails_from_staff',0); // For default privacy, default off
 	require_code('ocf_groups');
 	if (get_value('sep_cpf_join_setting')==='1')
 	{
@@ -325,6 +356,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 	$fields=new ocp_tempcode();
 
+	// Human name / Username
 	if (($special_type!='ldap') && ($special_type!='remote'))
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self')))
@@ -345,6 +377,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			}
 		}
 	}
+	
+	// Password
 	if ($special_type=='')
 	{
 		if ((is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'assume_any_member')))
@@ -353,6 +387,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',$mini_mode));
 		}
 	}
+	
+	// E-mail address
 	if ($email_address=='') $email_address=trim(get_param('email_address',''));
 	if ($special_type!='remote')
 	{
@@ -362,6 +398,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
 		}
 	}
+	
+	// DOB
 	$default_time=is_null($dob_month)?NULL:usertime_to_servertime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
 	if (get_option('no_dob_ask')!='1')
 	{
@@ -372,6 +410,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		}
 	}
 
+	// Work out what options we need to present
 	$doing_international=(get_option('allow_international')=='1') && ($special_type!='remote');
 	$_langs=find_all_langs();
 	$doing_langs=(multi_lang()) && ($special_type!='remote');
@@ -382,14 +421,20 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$doing_wide_option=($special_type!='remote') && (!is_null($unspecced_width_zone_exists)) && (!$mini_mode);
 	$doing_theme_option=($unspecced_theme_zone_exists!=0) && (!$mini_mode);
 	$doing_local_forum_options=(addon_installed('ocf_forum')) && ($special_type!='remote') && (!$mini_mode);
+
 	if (($doing_international) || ($doing_langs) || ($doing_email_option) || ($doing_wide_option) || ($doing_theme_option) || ($doing_local_forum_options))
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('FORCE_OPEN'=>is_null($member_id)?true:NULL,'TITLE'=>do_lang_tempcode('SETTINGS'))));
+
 	require_lang('config');
+
+	// Timezones, if enabled
 	if ($doing_international)
 	{
 		$timezone_list=nice_get_timezone_list($timezone);
 		$fields->attach(form_input_list(do_lang_tempcode('TIME_ZONE'),do_lang_tempcode('DESCRIPTION_TIMEZONE_MEMBER'),'timezone',$timezone_list));
 	}
+
+	// Language choice, if we have multiple languages on site
 	if ($doing_langs)
 	{
 		$lang_list=new ocp_tempcode();
@@ -405,17 +450,23 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		$lang_list->attach(nice_get_langs($language));
 		$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),'','language',$lang_list,NULL,false,!$allow_no_lang_set));
 	}
+
+	// Email privacy
 	if ($doing_email_option)
 		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_EMAILS'),do_lang_tempcode('DESCRIPTION_ALLOW_EMAILS'),'allow_emails',$allow_emails==1));
 	if ($doing_email_from_staff_option)
 		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_EMAILS_FROM_STAFF'),do_lang_tempcode('DESCRIPTION_ALLOW_EMAILS_FROM_STAFF'),'allow_emails_from_staff',$allow_emails_from_staff==1));
+
 	if (!$mini_mode)
 	{
+		// Wide-option, if we have any zones giving a choice
 		require_lang('zones');
 		if ($doing_wide_option)
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('WIDE'),do_lang_tempcode('DESCRIPTION_MEMBER_ZONE_WIDE'),'zone_wide',$zone_wide==1));
 		}
+		
+		// Theme, if we have any zones giving a choice
 		require_code('themes2');
 		$entries=nice_get_themes($theme,false,false,'RELY_SITE_DEFAULT');
 		require_lang('themes');
@@ -423,6 +474,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		{
 			$fields->attach(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode('DESCRIPTION_THEME'),'theme',$entries));
 		}
+		
+		// Various forum options
 		if (addon_installed('ocf_forum'))
 		{
 			if ($special_type!='remote')
@@ -452,6 +505,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				}
 			}
 		}
+		
+		// Prepare list of usergroups, if maybe we are gonna let (a) usergroup-change field(s)
 		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_hidden','g_open_membership'),($group_count>200)?array('g_is_private_club'=>0):NULL);
 		$_groups=new ocp_tempcode();
@@ -466,14 +521,19 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				$_groups->attach(form_input_list_entry(strval($group['id']),$selected,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
 			}
 		}
+		
+		// Some admin options...
 		if (has_specific_permission(get_member(),'member_maintenance'))
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MEMBER_ACCESS'))));
 
+			// Probation
    		if (has_specific_permission(get_member(),'probate_members'))
    		{
    			$fields->attach(form_input_date(do_lang_tempcode('ON_PROBATION_UNTIL'),do_lang_tempcode('DESCRIPTION_ON_PROBATION_UNTIL'),'on_probation_until',true,is_null($on_probation_until) || $on_probation_until<=time(),true,$on_probation_until,2));
    		}
+
+			// Primary usergroup
 			if ($special_type!='ldap')
 			{
 				if (has_specific_permission(get_member(),'assume_any_member'))
@@ -482,6 +542,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				}
 			}
 		}
+		
+		// Secondary usergroups
 		if ($special_type!='ldap')
 		{
 			$_groups2=new ocp_tempcode();
@@ -500,6 +562,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			if (!$_groups2->is_empty())
 				$fields->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'),do_lang_tempcode('DESCRIPTION_SECONDARY_GROUP',escape_html($sec_url->evaluate())),'secondary_groups',$_groups2));
 		}
+		
+		// Special admin options
 		if (has_specific_permission(get_member(),'member_maintenance'))
 		{
 			if ($validated==0)
@@ -1139,15 +1203,7 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 			warn_exit(do_lang_tempcode('USERNAME_ALREADY_EXISTS'));
 		} else // Adjust username as required
 		{
-			$_username=preg_replace('# \(\d+\)$#','',$username);
-			$i=1;
-			do
-			{
-				$test=$GLOBALS['FORUM_DB']->query_value_null_ok_full('f_members','id',array('m_username'=>$username));
-				$i++;
-				$username=$_username.' ('.strval($i).')';
-			}
-			while (!is_null($test));
+			$username=get_username_from_human_name($username);
 		}
 	}
 	$username_changed=is_null($test);

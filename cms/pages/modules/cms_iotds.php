@@ -289,11 +289,15 @@ class Module_cms_iotds extends standard_aed_module
 		$allow_comments=post_param_integer('allow_comments',0);
 		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
+		$validated=post_param_integer('validated',0);
 	
-		$id=add_iotd($url,$title,$caption,$thumb_url,post_param_integer('validated',0),$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		$id=add_iotd($url,$title,$caption,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 	
-		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
-			syndicate_described_activity('iotds:ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
+		if ($validated==1)
+		{
+			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
+				syndicate_described_activity('iotds:ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
+		}
 
 		$current=post_param_integer('validated',0);
 		if ($current==1)
@@ -312,9 +316,11 @@ class Module_cms_iotds extends standard_aed_module
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
-	function edit_actualisation($id)
+	function edit_actualisation($_id)
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('is_current','submitter'),array('id'=>intval($id)),'',1);
+		$id=intval($_id);
+		
+		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('is_current','submitter'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$is_current=$rows[0]['is_current'];
 		$submitter=$rows[0]['submitter'];
@@ -341,8 +347,17 @@ class Module_cms_iotds extends standard_aed_module
 		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 
-		edit_iotd(intval($id),post_param('title'),post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 		$current=post_param_integer('validated',0);
+		$title=post_param('title');
+
+		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('iotd','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		{
+			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
+				syndicate_described_activity('iotds:ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.$id,'','','iotds');
+		}
+
+		edit_iotd($id,$title,post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+
 		if ($current==1)
 		{
 			if ($is_current==0)
@@ -350,7 +365,7 @@ class Module_cms_iotds extends standard_aed_module
 				if (!has_specific_permission(get_member(),'choose_iotd'))
 					log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
 
-				set_iotd(intval($id));
+				set_iotd($id);
 			}
 		}
 	}
@@ -378,9 +393,11 @@ class Module_cms_iotds extends standard_aed_module
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
-	function delete_actualisation($id)
+	function delete_actualisation($_id)
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('is_current','submitter'),array('id'=>intval($id)));
+		$id=intval($_id);
+
+		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('is_current','submitter'),array('id'=>$id));
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$is_current=$rows[0]['is_current'];
 		$submitter=$rows[0]['submitter'];

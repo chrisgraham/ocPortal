@@ -86,26 +86,6 @@ If you uninstall the 'authors' addon it will automatically change to showing ava
 
 Instead of removing the 'authors' addon you could change the [tt]NEWS_PIECE_SUMMARY[/tt] template -- this template encodes the logic described above, so by changing the template you can achieve either behaviour, or any combination.
 
-[title="2"]Twitter and Facebook integration[/title]
-
-You can configure ocPortal to syndicate your news to Twitter and Facebook accounts in the configuration.
-When you post news (or calendar events) a link to them will be syndicated to these services.
-
-[title="3"]Twitter[/title]
-
-The Twitter support in ocPortal stopped working in 2010, due to a change in Twitter's security. However if you configure it you can then install an ocProducts-developed addon that fixes the issue by installing a much more sophisticated Twitter-authentication mechanism into ocPortal.
-
-[title="3"]Facebook[/title]
-
-You can actually syndicate to Facebook using RSS, as there is a builtin Facebook application for doing this.
-
-However, if you want to do it the fancy way then you need to:
-1) Create an app on Facebook. Make sure the app is configured for the real URL and domain name of your site
-2) Fill in all the details in your configuration
-3) When you first post, you will be directed to authorise your Facebook application to post to your wall. Make sure you are logged into the Facebook with the user you have configured as the target for the Facebook postings
-4) ocPortal will confirm the authorisation
-5) Your first post will appear on your Facebook wall, as will subsequent ones
-
 [title="2"]Integrating third-party widgets[/title]
 
 There are a lot of 'widgets' out there for blogging platforms and there's nothing stopping you using them with ocPortal too. For example, [url="this widget"]http://www.backtype.com/widgets/backtweets[/url] allows you to see what people are saying about your article on Twitter. You could easily put the HTML provided into your [tt]NEWS_FULL_SCREEN[/tt] template.

@@ -76,8 +76,8 @@ function handle_active_login($username)
 	}
 
 	$password=trim(post_param('password'));
-	$login_array=$GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,NULL,my_md5($password,$username),$password);
-	$id=$login_array['id'];
+	$login_array=$GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,NULL,apply_forum_driver_md5_variant($password,$username),$password);
+	$member=$login_array['id'];
 
 	// Run hooks, if any exist
 	$hooks=find_all_hooks('systems','upon_login');
@@ -86,10 +86,10 @@ function handle_active_login($username)
 		require_code('hooks/systems/upon_login/'.filter_naughty($hook));
 		$ob=object_factory('upon_login'.filter_naughty($hook),true);
 		if (is_null($ob)) continue;
-		$ob->run(true,$username,$id); // true means "a new login attempt"
+		$ob->run(true,$username,$member); // true means "a new login attempt"
 	}
 
-	if (!is_null($id)) // Valid user
+	if (!is_null($member)) // Valid user
 	{
 		// Store the cookies
 		$remember=post_param_integer('remember',0);
@@ -101,13 +101,13 @@ function handle_active_login($username)
 			// Create user cookie
 			if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_create_cookie'))
 			{
-				$GLOBALS['FORUM_DRIVER']->forum_create_cookie($id,NULL,$password);
+				$GLOBALS['FORUM_DRIVER']->forum_create_cookie($member,NULL,$password);
 			}
 			else
 			{
 				if ($GLOBALS['FORUM_DRIVER']->is_cookie_login_name())
 				{
-					$name=$GLOBALS['FORUM_DRIVER']->get_username($id);
+					$name=$GLOBALS['FORUM_DRIVER']->get_username($member);
 					if ($serialized)
 					{
 						$result[$real_member_cookie]=$name;
@@ -120,11 +120,11 @@ function handle_active_login($username)
 				{
 					if ($serialized)
 					{
-						$result[$real_member_cookie]=$id;
+						$result[$real_member_cookie]=$member;
 					} else
 					{
-						ocp_setcookie(get_member_cookie(),strval($id),false,true);
-						$_COOKIE[get_member_cookie()]=strval($id);
+						ocp_setcookie(get_member_cookie(),strval($member),false,true);
+						$_COOKIE[get_member_cookie()]=strval($member);
 					}
 				}
 
@@ -133,7 +133,7 @@ function handle_active_login($username)
 				{
 					if ($GLOBALS['FORUM_DRIVER']->is_hashed())
 					{
-						ocp_setcookie(get_pass_cookie(),my_md5($password,$username),false,true);
+						ocp_setcookie(get_pass_cookie(),apply_forum_driver_md5_variant($password,$username),false,true);
 					}
 					else
 					{
@@ -141,67 +141,16 @@ function handle_active_login($username)
 					}
 				} else
 				{
-					if ($GLOBALS['FORUM_DRIVER']->is_hashed()) $result[$real_pass_cookie]=my_md5($password,$username); else $result[$real_pass_cookie]=$password;
+					if ($GLOBALS['FORUM_DRIVER']->is_hashed()) $result[$real_pass_cookie]=apply_forum_driver_md5_variant($password,$username); else $result[$real_pass_cookie]=$password;
 					$_result=serialize($result);
 					ocp_setcookie($base,$_result,false,true);
 				}
 			}
 		}
 
-		// Store as logged in....
-		
-		global $MEMBER_CACHED;
-		$MEMBER_CACHED=$id;
-		if (addon_installed('points'))
-		{
-			$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));
-			if ($points_per_daily_visit!=0)
-			{
-				// See if this is the first visit today
-				$test=$GLOBALS['SITE_DB']->query_value('stats','MAX(date_and_time)',array('the_user'=>$id));
-				if ($test<time()-60*60*24)
-				{
-					require_code('points');
-					$_before=point_info($id);
-					if (array_key_exists('points_gained_given',$_before))
-						$GLOBALS['FORUM_DRIVER']->set_custom_field($id,'points_gained_given',strval(intval($_before['points_gained_given'])+$points_per_daily_visit));
-				}
-			}
-		}
-
-		// Create a session
-/*		$no_sessions=post_param_integer('no_sessions',0);
-		if ($no_sessions==0)
-		{*/
-			$new_session=delete_expired_sessions($id);
-
-			if (is_null($new_session))
-			{
-				// Generate random session
-				$new_session=mt_rand(0,10000000);
-
-				// Store session
-				$row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$id,'ip'=>get_ip_address(3),'session_confirmed'=>1,'session_invisible'=>post_param_integer('login_invisible',0),'cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username($id),'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type',''),0,80),'the_id'=>substr(either_param('id',''),0,80));
-				$GLOBALS['SITE_DB']->query_insert('sessions',$row);
-				$SESSION_CACHE[$new_session]=$row;
-			} else
-			{
-				$row=array('session_invisible'=>post_param_integer('login_invisible',0),'last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>1);
-				$GLOBALS['SITE_DB']->query_update('sessions',$row,array('the_session'=>$new_session),'',1);
-				$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$row);
-			}
-
-			//if (get_value('session_prudence')!=='1')
-			{
-				persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
-			}
-
-			require_code('users_inactive_occasionals');
-			set_session_id($new_session);
-
-			global $SESSION_CONFIRMED;
-			$SESSION_CONFIRMED=1;
-//		}
+		// Create session
+		require_code('users_inactive_occasionals');
+		create_session($member,true);
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>trim(post_param('login_username')),'date_and_time'=>time(),'ip'=>get_ip_address()));
@@ -234,16 +183,27 @@ function handle_active_logout()
 	$session=get_session_id();
 	if ($session!=-1)
 	{
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE the_session='.strval((integer)$session));
-		require_code('users_inactive_occasionals');
-		set_session_id(-1);
+		delete_session($session);
+	}
+}
 
-		global $SESSION_CACHE;
-		unset($SESSION_CACHE[$session]);
-		if (get_value('session_prudence')!=='1')
-		{
-			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
-		}
+/**
+ * Delete a session.
+ *
+ * @param  integer		The new session
+ */
+function delete_session($session)
+{
+	require_code('users_inactive_occasionals');
+	set_session_id(-1);
+
+	$GLOBALS['SITE_DB']->query_delete('sessions',array('the_session'=>$session),'',1);
+
+	global $SESSION_CACHE;
+	unset($SESSION_CACHE[$session]);
+	if (get_value('session_prudence')!=='1')
+	{
+		persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}
 }
 

@@ -28,7 +28,7 @@ class Block_main_facebook_friends
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('stream','fans','logobar','fan_profile_id','show_fanpage_link','fanpage_name');
+		$info['parameters']=array('stream','fans','logobar','show_fanpage_link','fanpage_name');
 		return $info;
 	}
 
@@ -40,7 +40,7 @@ class Block_main_facebook_friends
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'logobar\',$map)?$map[\'logobar\']:0,array_key_exists(\'stream\',$map)?$map[\'stream\']:0,array_key_exists(\'fans\',$map)?$map[\'fans\']:10,array_key_exists(\'fan_profile_id\',$map)?$map[\'fan_profile_id\']:0,array_key_exists(\'show_fanpage_link\',$map)?$map[\'show_fanpage_link\']:1,array_key_exists(\'fanpage_name\',$map)?$map[\'fanpage_name\']:\'\')';
+		$info['cache_on']='array(array_key_exists(\'logobar\',$map)?$map[\'logobar\']:0,array_key_exists(\'stream\',$map)?$map[\'stream\']:0,array_key_exists(\'fans\',$map)?$map[\'fans\']:10,array_key_exists(\'show_fanpage_link\',$map)?$map[\'show_fanpage_link\']:1,array_key_exists(\'fanpage_name\',$map)?$map[\'fanpage_name\']:\'\')';
 		$info['ttl']=1;
 		return $info;
 	}
@@ -56,20 +56,21 @@ class Block_main_facebook_friends
 		require_lang('facebook_friends');
 		require_code('facebook_connect');
 
+		$appid=get_option('facebook_appid',true);
+		if ((is_null($appid)) || ($appid=='')) return new ocp_tempcode();
+
 		if (!array_key_exists('param',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','param');
 
 		$stream=array_key_exists('stream',$map)?$map['stream']:'0';
 		$fans=array_key_exists('fans',$map)?$map['fans']:'10';
 		$logobar=array_key_exists('logobar',$map)?$map['logobar']:'0';
-		$fan_profile_id=array_key_exists('fan_profile_id',$map)?$map['fan_profile_id']:$map['param'];
-		if (is_null($fan_profile_id)) $fan_profile_id='';
 
 		$show_fanpage_link=array_key_exists('show_fanpage_link',$map)?$map['show_fanpage_link']:'0';
 		$fanpage_name=(isset($map['fanpage_name']) && strlen($map['fanpage_name'])>0)?$map['fanpage_name']:get_site_name();
 
 		$out = new ocp_tempcode();
 
-		return do_template('BLOCK_MAIN_FACEBOOK_FRIENDS',array('TITLE'=>do_lang_tempcode('BLOCK_FACEBOOK_FRIENDS_TITLE'),'CONTENT'=>$out,'FANPAGE_NAME'=>$fanpage_name,'SHOW_FANPAGE_LINK'=>$show_fanpage_link,'FAN_PROFILE_ID'=>$fan_profile_id,'LOGOBAR'=>$logobar,'FANS'=>$fans,'STREAM'=>$stream));
+		return do_template('BLOCK_MAIN_FACEBOOK_FRIENDS',array('TITLE'=>do_lang_tempcode('BLOCK_FACEBOOK_FRIENDS_TITLE'),'CONTENT'=>$out,'FANPAGE_NAME'=>$fanpage_name,'SHOW_FANPAGE_LINK'=>$show_fanpage_link,'LOGOBAR'=>$logobar,'FANS'=>$fans,'STREAM'=>$stream));
 	}
 
 }

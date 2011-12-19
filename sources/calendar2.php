@@ -107,19 +107,6 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 
 	decache('side_calendar');
 
-	if (($is_public==1) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
-	{
-		$timestamp=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
-
-		$first_date=get_timezoned_date($timestamp,false,false,false,true);
-
-		$message=do_lang('TWITTER_CALENDAR_EVENT',$content,$first_date);
-
-		twitter_event_update($id,$message,$validated,false);
-
-		facebook_wall_event_update($id,$title,$message,$validated,$type,false);
-	}
-
 	log_it('ADD_CALENDAR_EVENT',strval($id),$title);
 
 	return $id;
@@ -204,19 +191,6 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 
 	decache('side_calendar');
 
-	if (($is_public==1) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
-	{
-		$timestamp=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
-
-		$first_date=get_timezoned_date($timestamp,false,false,false,true);
-
-		$message=do_lang('TWITTER_CALENDAR_EVENT',$content,$first_date);
-
-		twitter_event_update($id,$message,$validated,true);
-
-		facebook_wall_event_update($id,$title,$message,$validated,$type,true);
-	}
-	
 	update_spacer_post($allow_comments!=0,'events',strval($id),build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true),$title,get_value('comment_forum__calendar'));
 
 	log_it('EDIT_CALENDAR_EVENT',strval($id),$title);
@@ -253,103 +227,6 @@ function delete_calendar_event($id)
 	decache('side_calendar');
 
 	log_it('DELETE_CALENDAR_EVENT',strval($id),$e_title);
-}
-
-/**
- * Update new event to twitter
- *
- * @param  AUTO_LINK		The ID of the event
- * @param  SHORT_TEXT	Event description
- * @param  BINARY			Whether the event has been validated	
- * @param  boolean		Current process indication. If it is update, need to check it's old "validated" state
- * @return boolean		Returns the success status of function
- */
-function twitter_event_update($id,$message,$validated,$update=true)
-{
-	if (!addon_installed('twitter')) return false;
-
-	if (!($validated==1) || !(has_specific_permission($GLOBALS['FORUM_DRIVER']->get_guest_id(),'view_calendar')))
-	{
-		return false;
-	}
-	
-	if($update)
-	{
-		$validated_old=$GLOBALS['SITE_DB']->query_value('calendar_events','validated',array('id'=>$id));
-
-		if($validated_old==1) return false; // skip twitter add if the event was already validated.
-	}
-
-	// username and password
-	$username=get_option('twitter_login');
-	$password=get_option('twitter_password');
-
-	// Checking twitter requirements
-	
-	if(is_null($username)) return false;
-	if($username=='') return false;
-
-	$url = 'http://twitter.com/statuses/update.xml';
-
-	if(strlen($message)>249)
-	{
-		$_more_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),'site',NULL,false,false,true);
-		$more_url=$_more_url->evaluate();
-		$url_length=strlen($more_url);
-		$message=substr($message,0,245-$url_length);
-		$message.= "...".urlencode($more_url);
-	}
-
-	require_code('files');
-	$ret=http_download_file($url,NULL,false,false,'ocPortal',array('status'=>$message),NULL,NULL,NULL,NULL,NULL,NULL,array($username,$password));
-	return !is_null($ret);
-}
-
-/**
- * Update new event to facebook wall
- *
- * @param  AUTO_LINK		The ID of the event
- * @param  SHORT_TEXT	Event title
- * @param  SHORT_TEXT	Event description
- * @param  BINARY			Whether the event has been validated	
- * @param  AUTO_LINK		Event type	
- * @param  boolean		Current process indication. If it is update, need to check it's old "validated" state
- * @return boolean		Returns the success status of function
- */
-function facebook_wall_event_update($id,$title,$message,$validated,$type,$update=true)
-{
-	if (!addon_installed('facebook')) return false;
-
-	if (!($validated==1) || !(has_specific_permission($GLOBALS['FORUM_DRIVER']->get_guest_id(),'view_calendar')))
-	{
-		return false;
-	}
-	
-	$appapikey	=	get_option('facebook_api');
-	$appsecret	=	get_option('facebook_secret_code');
-	$uid		=	get_option('facebook_uid');
-	if(($appapikey=='') || ($appsecret=='') || ($uid=='')) return false;
-	if (version_compare(PHP_VERSION, '5.0.0', '<')) return false;
-
-	if($update)
-	{
-		$validated_old=$GLOBALS['SITE_DB']->query_value('calendar_events','validated',array('id'=>$id));
-
-		if($validated_old==1) return false; // skip twitter add if the event was already validated.
-	}
-	
-	require_code('mail');
-
-	require_code('facebook_publish');
-	if (!function_exists('publish_to_FB')) return false; // Just for code quality checker
-	
-	$categorisation	=	do_lang('FACEBOOK_WALL_HEADING_EVENT',get_option('site_name'));
-
-	//$message	=	comcode_to_clean_text($message);
-
-	$view_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),'site',NULL,false,false,true);
-
-	publish_to_FB($title,$categorisation,$view_url->evaluate());
 }
 
 /**

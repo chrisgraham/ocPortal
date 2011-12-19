@@ -91,8 +91,8 @@ if (get_param_integer('export_bundled_addons',1)==1)
 
 if (get_param_integer('export_addons',1)==1)
 {
-	$file_list=get_file_list_of_addons($FILE_BASE);
-	$addon_list=get_details_of_addons($FILE_BASE);
+	$file_list=get_file_list_of_addons();
+	$addon_list=get_details_of_addons();
 	
 	foreach ($file_list as $addon => $files)
 	{
@@ -115,25 +115,27 @@ if (get_param_integer('export_addons',1)==1)
 	
 		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
 	
-		foreach ($val as $k => $v)
+		$name = $addon_list[$addon]['Addon name'];
+		$author = $addon_list[$addon]['Author'];
+		$description = $addon_list[$addon]['Help'];
+		$dependencies = $addon_list[$addon]['Requirements / Dependencies'];
+		$incompatibilities = $addon_list[$addon]['Incompatible with'];
+		$category = $addon_list[$addon]['Category'];
+		$license = $addon_list[$addon]['License'];
+		$attribute = $addon_list[$addon]['Attribute'];
+
+		// Formalise dependencies
+		$vs=explode(',',$dependencies);
+		$dependencies='';
+		foreach ($vs as $_v)
 		{
-			if ($k=='dependencies')
+			if ((!addon_installed($_v)) || (array_key_exists($_v,$addon_list)) || (!file_exists(get_file_base().'/exports/mods/'.$_v.'.tar')) || (!file_exists(get_file_base().'/imports/mods/'.$_v.'.tar')))
 			{
-				$vs=explode(',',$v);
-				$v='';
-				foreach ($vs as $_v)
-				{
-					if ((!addon_installed($_v)) || (array_key_exists($_v,$addon_list)) || (!file_exists(get_file_base().'/exports/mods/'.$_v.'.tar')) || (!file_exists(get_file_base().'/imports/mods/'.$_v.'.tar')))
-					{
-						if ($v!='') $v.=',';
-						$v.=$_v;
-					}
-				}
+				if ($dependencies!='') $dependencies.=',';
+				$dependencies.=$_v;
 			}
-			
-			$$k=$v;
 		}
-	
+
 	  	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
 	}
 	echo "All non-bundled addons have been exported to 'export/mods/'\n";

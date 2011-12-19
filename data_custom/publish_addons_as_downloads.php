@@ -55,8 +55,8 @@ if($get_cat == NULL)
 	exit("Please pass the category name in the URL (?cat=name).");
 }
 
-// $file_list = get_file_list_of_addons($FILE_BASE);
-$addon_list = get_details_of_addons($FILE_BASE);
+// $file_list = get_file_list_of_addons();
+$addon_list = get_details_of_addons();
 
 $parent_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>'Addons'));
 $c_main_id = check_and_add_category($get_cat,$parent_id);
@@ -74,14 +74,14 @@ $admin=2;
 
 if (get_param_integer('import_addons',1)==1)
 {
-	$categories = category_list_from_details($FILE_BASE);
+	$categories = category_list_from_details();
 	//if(!is_dir("uploads/downloads/$get_cat"))
 	//	mkdir("uploads/downloads/$get_cat");
 	foreach($categories as $category)
 	{
 		$cid = check_and_add_category($category, $c_main_id);
 	// exit('id : '.$cid);
-		$addon_arr = get_addons_list_under_category($category,$FILE_BASE);
+		$addon_arr = get_addons_list_under_category($category);
 		foreach($addon_arr as $addon)
 		{
 			$file = $addon.$version_for_name.'.tar';
@@ -96,10 +96,15 @@ if (get_param_integer('import_addons',1)==1)
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
 			if (is_null($test))
 			{
-				foreach($addon_list[$addon] as $k => $v)
-				{
-					$$k = $v;
-				}
+				$name = $addon_list[$addon]['Addon name'];
+				$author = $addon_list[$addon]['Author'];
+				$description = $addon_list[$addon]['Help'];
+				$dependencies = $addon_list[$addon]['Requirements / Dependencies'];
+				$incompatibilities = $addon_list[$addon]['Incompatible with'];
+				$category = $addon_list[$addon]['Category'];
+				$license = $addon_list[$addon]['License'];
+				$attribute = $addon_list[$addon]['Attribute'];
+
 				if ($dependencies!='') $description .= "
 	
 [title=\"2\"]System Requirements / Dependencies[/title]

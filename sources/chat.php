@@ -248,7 +248,7 @@ function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
 	if ($shoutbox_message!='')
 	{
 		if (!chat_post_message($room_id,$shoutbox_message,get_option('chat_default_post_font'),get_option('chat_default_post_colour'),15))
-		{ 
+		{
 			// Error. But actually we'll get it from below
 		}
 	}

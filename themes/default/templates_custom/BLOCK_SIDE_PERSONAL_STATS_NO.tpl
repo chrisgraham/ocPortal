@@ -28,7 +28,7 @@
 
 			{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
 				<span xmlns:fb="http://api.facebook.com/1.0/">
-					<fb:login-button perms="email,user_birthday"></fb:login-button>
+					<fb:login-button scope="email,user_birthday"></fb:login-button>
 				</span>
 			{+END}
 		</p>

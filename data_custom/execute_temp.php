@@ -67,8 +67,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	add_config_option('ALLOW_EMAIL_FROM_STAFF_DISABLE','allow_email_from_staff_disable','tick','return \'0\';','SECTION_FORUMS','GENERAL');
-	$GLOBALS['FORUM_DB']->add_table_field('f_members','m_allow_emails_from_staff','BINARY');
+	syndicate_described_activity('RAW_DUMP','Testing the new ocPortal activity syndication. If you can see this, it worked!');
 }
 
 

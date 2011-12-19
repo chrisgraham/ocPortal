@@ -136,23 +136,7 @@ class Module_cms_calendar extends standard_aed_module
 		if ($type=='_import_ical') return $this->_import_ical();
 		if ($type=='export') 	return 	$this->export_ical();
 		if ($type=='_export') 	return 	$this->_export_ical();
-		if ($type=='oauth_facebook') return $this->oauth_facebook();
 
-		return new ocp_tempcode();
-	}
-
-	/**
-	 * Handle a Facebook oauth request.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function oauth_facebook()
-	{
-		require_code('facebook_publish');
-		if (function_exists('oauth_receive'))
-		{
-			return oauth_receive();
-		}
 		return new ocp_tempcode();
 	}
 
@@ -436,6 +420,8 @@ class Module_cms_calendar extends standard_aed_module
 		require_code('feedback2');
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
+		$fields2->attach(get_syndication_option_fields());
+
 		return array($fields,$hidden,NULL,NULL,true,NULL,$fields2);
 	}
 
@@ -674,8 +660,16 @@ class Module_cms_calendar extends standard_aed_module
 		$this->donext_type=$type;
 		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day);
 
-		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
-			syndicate_described_activity('calendar:ADD_CALENDAR_EVENT',$title,'','','_SEARCH:calendar:view:'.strval($id),'','','calendar');
+		if ($validated==1)
+		{
+			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
+			{
+				$from=cal_servertime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
+				$to=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
+
+				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
+			}
+		}
 
 		return array(strval($id),$_description);
 	}
@@ -795,6 +789,17 @@ class Module_cms_calendar extends standard_aed_module
 			}
 		}
 
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('calendar_events','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		{
+			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
+			{
+				$from=cal_servertime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
+				$to=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
+
+				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
+			}
+		}
+
 		edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$do_timezone_conv,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 
 		if (!fractional_edit())
@@ -807,7 +812,7 @@ class Module_cms_calendar extends standard_aed_module
 
 		$this->donext_type=$type;
 		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day);
-		
+
 		return $_description;
 	}
 

@@ -45,7 +45,7 @@ class Hook_Profiles_Tabs_Edit_settings
 		$order=0;
 
 		// Actualiser
-		if (count($_POST)!=0)
+		if (post_param('submitting_settings_tab',NULL)!==NULL)
 		{
 			$is_ldap=ocf_is_ldap_member($member_id_of);
 			$is_httpauth=ocf_is_httpauth_member($member_id_of);
@@ -232,6 +232,8 @@ class Hook_Profiles_Tabs_Edit_settings
 		$redirect=get_param('redirect',NULL);
 		if (!is_null($redirect))
 			$hidden->attach(form_input_hidden('redirect',$redirect));
+
+		$hidden->attach(form_input_hidden('submitting_settings_tab','1'));
 
 		$javascript="
 			var form=document.getElementById('email_address').form;

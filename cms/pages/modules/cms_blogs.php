@@ -256,6 +256,8 @@ class Module_cms_blogs extends standard_aed_module
 		require_code('feedback2');
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,$send_trackbacks==1,$notes,$allow_comments==2));
 
+		$fields2->attach(get_syndication_option_fields());
+
 		return array($fields,$hidden,NULL,NULL,NULL,NULL,make_string_tempcode($fields2->evaluate())/*XHTMLXHTML*/);
 	}
 

@@ -47,7 +47,7 @@ class Hook_Profiles_Tabs_Edit_photo
 		$order=30;
 
 		// Actualiser
-		if (count($_POST)!=0)
+		if (post_param('submitting_photo_tab',0)==1)
 		{
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
@@ -72,6 +72,7 @@ class Hook_Profiles_Tabs_Edit_photo
 		}
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
+		$hidden->attach(form_input_hidden('submitting_photo_tab','1'));
 
 		$text=new ocp_tempcode();
 		require_code('images');
@@ -87,7 +88,7 @@ class Hook_Profiles_Tabs_Edit_photo
 
 		$javascript='';
 
-		return array($title,$fields,$text,$javascript,$order);
+		return array($title,$fields,$text,$javascript,$order,$hidden);
 	}
 
 }

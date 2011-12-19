@@ -50,6 +50,8 @@ class Block_main_facebook_facepile
 
 		require_code('facebook_connect');
 
+		$appid=get_option('facebook_appid',true);
+		if ((is_null($appid)) || ($app_id=='')) return new ocp_tempcode();
 		return do_template('BLOCK_MAIN_FACEBOOK_FACEPILE',array());
 	}
 

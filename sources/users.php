@@ -49,8 +49,7 @@ function init__users()
 	global $IS_A_COOKIE_LOGIN;
 	$IS_A_COOKIE_LOGIN=false;
 
-	global $IN_MINIKERNEL_VERSION;
-
+	// Load all sessions into memory, if possible
 	if (get_value('session_prudence')!=='1')
 	{
 		$SESSION_CACHE=persistant_cache_get('SESSION_CACHE');
@@ -58,6 +57,7 @@ function init__users()
 	{
 		$SESSION_CACHE=NULL;
 	}
+	global $IN_MINIKERNEL_VERSION;
 	if ((!is_array($SESSION_CACHE)) && ($IN_MINIKERNEL_VERSION==0))
 	{
 		if (get_value('session_prudence')!=='1')
@@ -83,6 +83,400 @@ function init__users()
 			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 		}
 	}
+
+	// Canonicalise various disparities in how HTTP auth environment variables are set
+	if (array_key_exists('REDIRECT_REMOTE_USER',$_SERVER))
+		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REDIRECT_REMOTE_USER']);
+	if (array_key_exists('PHP_AUTH_USER',$_SERVER))
+		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['PHP_AUTH_USER']);
+	if (array_key_exists('REMOTE_USER',$_SERVER))
+		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REMOTE_USER']);
+}
+
+/**
+ * Handles an attempted login or logout, and take care of all the sessions and cookies etc.
+ */
+function handle_logins()
+{
+	if (get_param_integer('httpauth',0)==1)
+	{
+		require_code('users_inactive_occasionals');
+		force_httpauth();
+	}
+	$username=trim(post_param('login_username',''));
+	if (($username!='') && ($username!=do_lang('GUEST')))
+	{
+		require_code('users_active_actions');
+		handle_active_login($username);
+	}
+
+	// If it was a log out
+	$page=get_page_name();
+	$type=get_param('type','',true);
+	if (($page=='login') && ($type=='logout'))
+	{
+		require_code('users_active_actions');
+		handle_active_logout();
+	}
+}
+
+/**
+ * Find whether the current member is a guest.
+ *
+ * @param  ?MEMBER		Member ID to check (NULL: current user)
+ * @param  boolean		Whether to just do a quick check, don't establish new sessions
+ * @return boolean		Whether the current member is a guest
+ */
+function is_guest($member_id=NULL,$quick_only=false)
+{
+	if ($member_id===NULL) $member_id=get_member($quick_only);
+	return ($GLOBALS['FORUM_DRIVER']->get_guest_id()==$member_id);
+}
+
+/**
+ * Get the ID of the currently active member.
+ * It see's if the session exists / cookie is valid -- and gets the member id accordingly
+ *
+ * @param  boolean		Whether to just do a quick check, don't establish new sessions
+ * @return MEMBER			The member requesting this web page (possibly the guest member - which strictly speaking, is not a member)
+ */
+function get_member($quick_only=false)
+{
+	global $SESSION_CACHE,$MEMBER_CACHED,$GETTING_MEMBER,$SITE_INFO;
+
+	if ($MEMBER_CACHED!==NULL)
+	{
+		$GETTING_MEMBER=false;
+		return $MEMBER_CACHED;
+	}
+
+	// If lots of aging sessions, clean out
+	reset($SESSION_CACHE);
+	if ((count($SESSION_CACHE)>50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity']<time()-60*60*max(1,intval(get_option('session_expiry_time')))))
+		delete_expired_sessions_or_recover();
+
+	// Try via backdoor that someone with full server access can place
+	$backdoor_ip_address=mixed(); // Enable to a real IP address to force login from FTP access (if lost admin password)
+	if (array_key_exists('backdoor_ip',$SITE_INFO)) $backdoor_ip_address=$SITE_INFO['backdoor_ip'];
+	if ((is_string($backdoor_ip_address)) && (get_ip_address()==$backdoor_ip_address))
+	{
+		require_code('users_active_actions');
+		$MEMBER_CACHED=restricted_manually_enabled_backdoor();
+		// Will have created a session in here already
+		return $MEMBER_CACHED;
+	}
+
+	if ($GETTING_MEMBER)
+	{
+		return $GLOBALS['FORUM_DRIVER']->get_guest_id();
+	}
+	$GETTING_MEMBER=true;
+
+	global $FORCE_INVISIBLE_GUEST;
+	if ($FORCE_INVISIBLE_GUEST)
+	{
+		$GETTING_MEMBER=false;
+		$MEMBER_CACHED=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+		return $MEMBER_CACHED;
+	}
+
+	$member=NULL;
+
+	$cookie_bits=explode(':',str_replace('|',':',get_member_cookie()));
+	$base=$cookie_bits[0];
+
+	// Try by session
+	$session=get_session_id();
+	if (($session!=-1) && (get_param_integer('keep_force_htaccess',0)==0))
+	{
+		$ip=get_ip_address(3); // I hope AOL can cope with this
+		$allow_unbound_guest=true; // Note: Guest sessions are not IP bound
+		$member_row=NULL;
+
+		if (($SESSION_CACHE!==NULL) && (array_key_exists($session,$SESSION_CACHE)) && ($SESSION_CACHE[$session]!==NULL) && (array_key_exists('the_user',$SESSION_CACHE[$session])) && ((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['the_user'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['the_user'])))) && ($SESSION_CACHE[$session]['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
+			$member_row=$SESSION_CACHE[$session];
+		if (($member_row!==NULL) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['the_user']))))
+		{
+			$member=$member_row['the_user'];
+
+			if (($member!==NULL) && ((time()-$member_row['last_activity'])>10)) // Performance optimisation. Pointless re-storing the last_activity if less than 3 seconds have passed!
+			{
+				//$GLOBALS['SITE_DB']->query_update('sessions',array('last_activity'=>time(),'the_zone'=>get_zone_name(),'the_page'=>get_page_name()),array('the_session'=>$session),'',1);  Done in get_page_title now
+				$SESSION_CACHE[$session]['last_activity']=time();
+				if (get_value('session_prudence')!=='1')
+				{
+					persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+				}
+			}
+			global $SESSION_CONFIRMED;
+			$SESSION_CONFIRMED=$member_row['session_confirmed'];
+
+			if (get_forum_type()=='ocf') $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
+
+			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
+			{
+				warn_exit(do_lang_tempcode('USER_BANNED'));
+			}
+
+			// Test this member still exists
+			if ($GLOBALS['FORUM_DRIVER']->get_username($member)===NULL) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
+			if (array_key_exists($base,$_COOKIE))
+			{
+				global $IS_A_COOKIE_LOGIN;
+				$IS_A_COOKIE_LOGIN=true;
+			}
+		} else
+		{
+			require_code('users_inactive_occasionals');
+			set_session_id(-1);
+		}
+	}
+
+	if (($member===NULL) && (get_session_id()==-1) && (get_param_integer('keep_force_htaccess',0)==0))
+	{
+		// Try by cookie (will defer to forum driver to authorise against detected cookie)
+		require_code('users_inactive_occasionals');
+		$member=try_cookie_login();
+
+		// Can forum driver help more directly?
+		if (method_exists($GLOBALS['FORUM_DRIVER'],'get_member')) $member=$GLOBALS['FORUM_DRIVER']->get_member();
+	}
+
+	// Try via additional login providers. They can choose whether to respect existing $member of get_session_id() settings. Some may do an account linkage, so we need to let them decide what to do.
+	$hooks=find_all_hooks('systems','login_providers');
+	foreach (array_keys($hooks) as $hook)
+	{
+		require_code('hooks/systems/login_providers/'.$hook);
+		$ob=object_factory('Hook_login_provider_'.$hook);
+		$member=$ob->try_login($member);
+	}
+
+	// Guest or banned
+	if ($member===NULL)
+	{
+		$member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+		$is_guest=true;
+	} else
+	{
+		$is_guest=is_guest($member);
+	}
+
+	// If we are doing a very quick init, bomb out now - no need to establish session etc
+	global $SITE_INFO;
+	if ($quick_only)
+	{
+		$GETTING_MEMBER=false;
+		return $member;
+	}
+
+	// If one of the try_* functions hasn't actually created the session, call it here
+	$session=get_session_id();
+	if ($session==-1)
+	{
+		require_code('users_inactive_occasionals');
+		create_session($member);
+	}
+
+	// If we are logged in, maybe do some further processing
+	if (!$is_guest)
+	{
+		// Is there a su operation?
+		$ks=get_param('keep_su','');
+		if ($ks!='')
+		{
+			require_code('users_inactive_occasionals');
+			$member=try_su_login($member);
+		}
+
+		// Run hooks, if any exist
+		$hooks=find_all_hooks('systems','upon_login');
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/systems/upon_login/'.filter_naughty($hook));
+			$ob=object_factory('upon_login'.filter_naughty($hook),true);
+			if ($ob===NULL) continue;
+			$ob->run(false,NULL,$member); // false means "not a new login attempt"
+		}
+	}
+
+	// Ok we have our answer
+	$MEMBER_CACHED=$member;
+	$GETTING_MEMBER=false;
+	return $member;
+}
+
+/**
+ * Apply hashing to some input. To this date, all forum drivers use md5, but some use it differently.
+ * This function will pass through the parameters to an equivalent forum_md5 function if it is defined.
+ *
+ * @param  string			The data to hash (the password in actuality)
+ * @param  string			The string converted member-ID in actuality, although this function is more general
+ * @return string			The hashed data
+ */
+function apply_forum_driver_md5_variant($data,$key)
+{
+	if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_md5')) return $GLOBALS['FORUM_DRIVER']->forum_md5($data,$key);
+	return md5($data);
+}
+
+/**
+ * Get the current session ID.
+ *
+ * @return integer		The current session ID
+ */
+function get_session_id()
+{
+	if ((!isset($_COOKIE['ocp_session'])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEBUG_MODE'] && running_script('occle')))
+	{
+		if (array_key_exists('keep_session',$_GET)) return get_param_integer('keep_session');
+		return (-1);
+	}
+	return intval($_COOKIE['ocp_session']); // No need to stripslashes as it's numeric
+}
+
+/**
+ * Find whether the current member is logged in via httpauth.
+ *
+ * @return boolean		Whether the current member is logged in via httpauth
+ */
+function is_httpauth_login()
+{
+	if (get_forum_type()!='ocf') return false;
+	if (is_guest()) return false;
+	
+	require_code('ocf_members');
+	return ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (!is_null(ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']))));
+}
+
+/**
+ * Make sure that the given URL contains a session if cookies are disabled.
+ * NB: This is used for login redirection. It had to add the session id into the redirect url.
+ *
+ * @param  URLPATH		The URL to enforce results in session persistence for the user
+ * @return URLPATH		The fixed URL (potentially nothing was done, depending on cookies)
+ */
+function enforce_sessioned_url($url)
+{
+	if ((!has_cookies()) && (is_null(get_bot_type())))
+	{
+		require_code('users_inactive_occasionals');
+		return _enforce_sessioned_url($url);
+	}
+	return $url;
+}
+
+/**
+ * Find what sessions are expired and delete them, and recover an existing one for $member if there is one.
+ *
+ * @param  ?MEMBER		User to get a current session for (NULL: do not try, which guarantees a return result of NULL also) 
+ * @return ?AUTO_LINK	The session id we rebound to (NULL: did not rebind)
+ */
+function delete_expired_sessions_or_recover($member=NULL)
+{
+	$new_session=NULL;
+	
+	$ip=get_ip_address(3);
+
+	// Delete expired sessions
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
+	$new_session=NULL;
+	$dirty_session_cache=false;
+	global $SESSION_CACHE;
+	foreach ($SESSION_CACHE as $_session=>$row)
+	{
+		if (!array_key_exists('the_user',$row)) continue; // Workaround to HipHop PHP weird bug
+
+		// Delete expiry from cache
+		if ($row['last_activity']<time()-60*60*max(1,intval(get_option('session_expiry_time'))))
+		{
+			$dirty_session_cache=true;
+			unset($SESSION_CACHE[$_session]);
+			continue;
+		}
+
+		// Get back to prior session if there was one
+		if ($member!==NULL)
+		{
+			if (get_value('allowed_shared_usernames')!=='1') // Only if we're not allowing multiple people to share the same username
+			{
+				if (($row['the_user']==$member) && ((get_option('ip_strict_for_sessions')=='0') || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
+				{
+					$new_session=$_session;
+				}
+			}
+		}
+	}
+	if ($dirty_session_cache)
+	{
+		if (get_value('session_prudence')!=='1')
+		{
+			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+		}
+	}
+	
+	return $new_session;
+}
+
+/**
+ * Get the member cookie's name.
+ *
+ * @return string			The member username/id (depending on forum driver) cookie's name
+ */
+function get_member_cookie()
+{
+	global $SITE_INFO;
+	if (!array_key_exists('user_cookie',$SITE_INFO)) $SITE_INFO['user_cookie']='ocp_member_id';
+	return $SITE_INFO['user_cookie'];
+}
+
+/**
+ * Get the member password cookie's name.
+ *
+ * @return string			The member password cookie's name
+ */
+function get_pass_cookie()
+{
+	global $SITE_INFO;
+	if (!array_key_exists('pass_cookie',$SITE_INFO)) $SITE_INFO['pass_cookie']='ocp_member_hash';
+	return $SITE_INFO['pass_cookie'];
+}
+
+/**
+ * Get a cookie value.
+ *
+ * @param  string			The name of the cookie
+ * @param  ?string		The default value (NULL: just use the value NULL)
+ * @return ?string		The value stored in the cookie (NULL: the default default)
+ */
+function ocp_admirecookie($name,$default=NULL)
+{
+	if (!isset($_COOKIE[$name])) return $default;
+	$the_cookie=$_COOKIE[$name];
+	if (get_magic_quotes_gpc()) $the_cookie=stripslashes($the_cookie);
+	return $the_cookie;
+}
+
+/**
+ * Deletes a cookie (if it exists), from within ocPortal's cookie environment.
+ *
+ * @param  string			The name of the cookie
+ * @return boolean		The result of the PHP setcookie command
+ */
+function ocp_eatcookie($name)
+{
+	$expire=time()-100000; // Note the negative number must be greater than 13*60*60 to account for maximum timezone difference
+
+	// Try and remove other potentials
+	@setcookie($name,'',$expire,'',preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
+	@setcookie($name,'',$expire,'/',preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
+	@setcookie($name,'',$expire,'','www.'.preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
+	@setcookie($name,'',$expire,'/','www.'.preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
+	@setcookie($name,'',$expire,'','');
+	@setcookie($name,'',$expire,'/','');
+
+	// Delete standard potential
+	return @setcookie($name,'',$expire,get_cookie_path(),get_cookie_domain());
 }
 
 /**
@@ -112,57 +506,6 @@ function get_ocp_cpf($cpf,$member=NULL)
 	}
 	
 	return '';
-}
-
-/**
- * Find whether the current member is logged in via httpauth.
- *
- * @return boolean		Whether the current member is logged in via httpauth
- */
-function is_httpauth_login()
-{
-	if (get_forum_type()!='ocf') return false;
-	if (is_guest()) return false;
-	
-	if (array_key_exists('REDIRECT_REMOTE_USER',$_SERVER))
-		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REDIRECT_REMOTE_USER']);
-	if (array_key_exists('PHP_AUTH_USER',$_SERVER))
-		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['PHP_AUTH_USER']);
-	if (array_key_exists('REMOTE_USER',$_SERVER))
-		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REMOTE_USER']);
-
-	/*if ($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_password_compat_scheme')=='httpauth')
-		return true;*/
-
-	require_code('ocf_members');
-	return ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (!is_null(ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']))));
-}
-
-/**
- * Find whether the current member is a guest.
- *
- * @param  ?MEMBER		Member ID to check (NULL: current user)
- * @param  boolean		Whether to just do a quick check, don't establish new sessions
- * @return boolean		Whether the current member is a guest
- */
-function is_guest($member_id=NULL,$quick_only=false)
-{
-	if ($member_id===NULL) $member_id=get_member($quick_only);
-	return ($GLOBALS['FORUM_DRIVER']->get_guest_id()==$member_id);
-}
-
-/**
- * Apply hashing to some input. To this date, all forum drivers use md5, but some use it differently.
- * This function will pass through the parameters to an equivalent forum_md5 function if it is defined.
- *
- * @param  string			The data to hash (the password in actuality)
- * @param  string			The string converted member-ID in actuality, although this function is more general
- * @return string			The hashed data
- */
-function my_md5($data,$key)
-{
-	if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_md5')) return $GLOBALS['FORUM_DRIVER']->forum_md5($data,$key);
-	return md5($data);
 }
 
 /**
@@ -279,429 +622,4 @@ function member_blocked($member_id,$member_blocker=NULL)
 		$MEMBERS_BLOCKED=collapse_1d_complexity('member_blocked',$rows);
 	}
 	return (in_array($member_id,$MEMBERS_BLOCKED));
-}
-
-/**
- * Handles an attempted login or logout, and take care of all the sessions and cookies etc.
- */
-function handle_logins()
-{
-	if (get_param_integer('httpauth',0)==1)
-	{
-		require_code('users_inactive_occasionals');
-		force_httpauth();
-	}
-	$username=trim(post_param('login_username',''));
-	if (($username!='') && ($username!=do_lang('GUEST')))
-	{
-		require_code('users_active_actions');
-		handle_active_login($username);
-	}
-
-	// If it was a log out
-	$page=get_page_name();
-	$type=get_param('type','',true);
-	if (($page=='login') && ($type=='logout'))
-	{
-		require_code('users_active_actions');
-		handle_active_logout();
-	}
-}
-
-/**
- * Get the ID of the currently active member.
- * It see's if the session exists / cookie is valid -- and gets the member id accordingly
- *
- * @param  boolean		Whether to just do a quick check, don't establish new sessions
- * @return MEMBER			The member requesting this web page (possibly the guest member - which strictly speaking, is not a member)
- */
-function get_member($quick_only=false)
-{
-	global $SESSION_CACHE,$MEMBER_CACHED,$GETTING_MEMBER,$SITE_INFO;
-
-	if ($MEMBER_CACHED!==NULL)
-	{
-		$GETTING_MEMBER=false;
-		return $MEMBER_CACHED;
-	}
-
-	reset($SESSION_CACHE);
-	if ((count($SESSION_CACHE)>50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity']<time()-60*60*max(1,intval(get_option('session_expiry_time')))))
-		delete_expired_sessions();
-
-	$backdoor_ip_address=mixed(); // Enable to a real IP address to force login from FTP access (if lost admin password)
-	if (array_key_exists('backdoor_ip',$SITE_INFO)) $backdoor_ip_address=$SITE_INFO['backdoor_ip'];
-	if ((is_string($backdoor_ip_address)) && (get_ip_address()==$backdoor_ip_address))
-	{
-		require_code('users_active_actions');
-		$MEMBER_CACHED=restricted_manually_enabled_backdoor();
-		return $MEMBER_CACHED;
-	}
-
-	if ($GETTING_MEMBER)
-	{
-		return $GLOBALS['FORUM_DRIVER']->get_guest_id();
-	}
-	$GETTING_MEMBER=true;
-
-	global $FORCE_INVISIBLE_GUEST;
-	if ($FORCE_INVISIBLE_GUEST)
-	{
-		$GETTING_MEMBER=false;
-		$MEMBER_CACHED=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-		return $MEMBER_CACHED;
-	}
-
-	$member=NULL;
-
-	$cookie_bits=explode(':',str_replace('|',':',get_member_cookie()));
-	$base=$cookie_bits[0];
-
-	// Try by session
-	$session=get_session_id();
-	if (($session!=-1) && (get_param_integer('keep_force_htaccess',0)==0))
-	{
-		$ip=get_ip_address(3); // I hope AOL can cope with this
-		$allow_unbound_guest=true; // Note: Guest sessions are not IP bound
-		$member_row=NULL;
-
-		if (($SESSION_CACHE!==NULL) && (array_key_exists($session,$SESSION_CACHE)) && ($SESSION_CACHE[$session]!==NULL) && (array_key_exists('the_user',$SESSION_CACHE[$session])) && ((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['the_user'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['the_user'])))) && ($SESSION_CACHE[$session]['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
-			$member_row=$SESSION_CACHE[$session];
-		if (($member_row!==NULL) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['the_user']))))
-		{
-			$member=$member_row['the_user'];
-
-			if (($member!==NULL) && ((time()-$member_row['last_activity'])>10)) // Performance optimisation. Pointless re-storing the last_activity if less than 3 seconds have passed!
-			{
-				//$GLOBALS['SITE_DB']->query_update('sessions',array('last_activity'=>time(),'the_zone'=>get_zone_name(),'the_page'=>get_page_name()),array('the_session'=>$session),'',1);  Done in get_page_title now
-				$SESSION_CACHE[$session]['last_activity']=time();
-				if (get_value('session_prudence')!=='1')
-				{
-					persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
-				}
-			}
-			global $SESSION_CONFIRMED;
-			$SESSION_CONFIRMED=$member_row['session_confirmed'];
-
-			if (get_forum_type()=='ocf') $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
-
-			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
-			{
-				warn_exit(do_lang_tempcode('USER_BANNED'));
-			}
-
-			// Test this member still exists
-			if ($GLOBALS['FORUM_DRIVER']->get_username($member)===NULL) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-
-			if (array_key_exists($base,$_COOKIE))
-			{
-				global $IS_A_COOKIE_LOGIN;
-				$IS_A_COOKIE_LOGIN=true;
-			}
-		} else
-		{
-			require_code('users_inactive_occasionals');
-			set_session_id(-1);
-			$session=-1;
-		}
-	}
-
-	if (($session==-1) && (get_param_integer('keep_force_htaccess',0)==0) && ($member===NULL))
-	{
-		// Try by cookie
-		require_code('users_inactive_occasionals');
-		$member=cookie_login();
-
-		// Can forum driver help?
-		if (method_exists($GLOBALS['FORUM_DRIVER'],'get_member')) $member=$GLOBALS['FORUM_DRIVER']->get_member();
-	}
-
-	// Can we try to see if we're httpauth-bound instead?
-	// Security note...
-	// New httpauth users will be added as members. Don't edit this to make them be added as privileged members, because presence of PHP_AUTH_USER only guarantees an authentication if it passed though an appropriate .htaccess (which would have filtered bad authentications for us). We are ASSUMING here that this is the case and therefore this must not be a permissive thing (all useful modules should also be in a .htaccess or privilege protected zone to stop member spoofing)
-	// As an alternative to the above, we will not allow httpauth to the welcome zone, as by convention, this is a place for visitors. If using httpauth, all other zones should have a relevant .htaccess.
-	// We could store the password from the first login and authenticate against that: but we do not want to create a sync issue.
-	// So to summarise, either:
-	//  - Don't assign any special permissions to these kinds of members
-	//  - or, lock off all zones with .htaccess other than root (and root has httpauth login denied)
-
-	if (array_key_exists('REDIRECT_REMOTE_USER',$_SERVER))
-		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REDIRECT_REMOTE_USER']);
-	
-	if (array_key_exists('PHP_AUTH_USER',$_SERVER))
-		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['PHP_AUTH_USER']);
-
-	if (array_key_exists('REMOTE_USER',$_SERVER))
-		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REMOTE_USER']);
-
-	if (get_value('ntlm')==='1') // Taken from http://www.wascou.org/wascou/Blogs/Xavier-GOULEY/Alternate-way-to-Kerberos-NTLM-auth-in-pure-PHP
-	{
-		$headers = apache_request_headers();
-		if(!isset($headers['Authorization'])) // step 1
-		{
-			header( "HTTP/1.1 401 Unauthorized" ); // step 2
-			header( "WWW-Authenticate: NTLM" );
-			exit();
-		}
-		if(isset($headers['Authorization']) && substr($headers['Authorization'],0,5) == 'NTLM ')
-		{
-			// step 3 to 6
-			$chaine=$headers['Authorization'];
-			$chaine=substr($chaine, 5); // type1 message
-			$chained64=base64_decode($chaine);
-			if(ord($chained64[8]) == 1) // step 3
-			{
-				// check NTLM flag "0xb2",
-				// offset 13 in type-1-message :
-				if (ord($chained64[13]) != 178)
-				{
-					warn_exit("Please use NTLM compatible browser");
-				}
-				$ret_auth = "NTLMSSP";
-				$ret_auth .= chr(0).chr(2).chr(0).chr(0);
-				$ret_auth .= chr(0).chr(0).chr(0).chr(0);
-				$ret_auth .= chr(0).chr(40).chr(0).chr(0);
-				$ret_auth .= chr(0).chr(1).chr(130).chr(0);
-				$ret_auth .= chr(0).chr(0).chr(2).chr(2);
-				$ret_auth .= chr(2).chr(0).chr(0).chr(0);
-				$ret_auth .= chr(0).chr(0).chr(0).chr(0);
-				$ret_auth .= chr(0).chr(0).chr(0).chr(0).chr(0);
-
-				$ret_auth64 =base64_encode($ret_auth);
-				$ret_auth64 = trim($ret_auth64);
-				header( "HTTP/1.1 401 Unauthorized" ); // step 4
-				header( "WWW-Authenticate: NTLM $ret_auth64" );
-				exit();
-			}
-			elseif(ord($chained64[8]) == 3) // step 5
-			{
-				$lenght_domain = (ord($chained64[31])*256 + ord($chained64[30]));
-				$offset_domain = (ord($chained64[33])*256 + ord($chained64[32]));
-				$domain = substr($chained64, $offset_domain, $lenght_domain);
-				$lenght_login = (ord($chained64[39])*256 + ord($chained64[38]));
-				$offset_login = (ord($chained64[41])*256 + ord($chained64[40]));
-				$login = substr($chained64, $offset_login, $lenght_login);
-				$lenght_host = (ord($chained64[47])*256 + ord($chained64[46]));
-				$offset_host = (ord($chained64[49])*256 + ord($chained64[48]));
-				$host = substr($chained64, $offset_host, $lenght_host);
-			}
-		}
-		$_SERVER['PHP_AUTH_USER']=strtolower(preg_replace("/(.)(.)/","$1",$login));
-	} else
-	{
-		if (get_option('windows_auth_is_enabled',true)=='1' && ((!array_key_exists('PHP_AUTH_USER',$_SERVER) || $_SERVER['PHP_AUTH_USER']=='')))
-		{
-			// For Windows auth, we force this always. For httpauth on non-Windows we let the .htaccess file force this, if the webmaster wants it
-			header('HTTP/1.1 401 Unauthorized');
-			header('WWW-Authenticate: Negotiate');
-			header('WWW-Authenticate: Basic',false);
-			exit();
-		}
-
-		if ((get_value('force_admin_auth')==='1') && ($GLOBALS['FORUM_DRIVER']->is_super_admin($GLOBALS['FORUM_DRIVER']->get_member_from_username($_SERVER['PHP_AUTH_USER']))))
-		{
-			$headers = apache_request_headers();
-			if (!isset($headers['Authorization']))
-			{
-				header('Location: '.get_base_url().'admin_login/index.php');
-				exit();
-			}
-		}
-	}
-
-	if ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (($member===NULL) || (is_guest($member))) && ((get_option('httpauth_is_enabled',true)=='1') || (get_option('windows_auth_is_enabled',true)=='1')) && (get_forum_type()=='ocf'))
-	{	
-		require_code('users_inactive_occasionals');
-		$member=httpauth_login();		
-	}
-
-	// Guest or banned
-	if ($member===NULL)
-	{
-		$member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-		$is_guest=true;
-	} else
-	{
-		$is_guest=($member==$GLOBALS['FORUM_DRIVER']->get_guest_id());
-	}
-
-	// Ensure there is a session, if we aren't trying to bomb out with a page cache quick
-	global $SITE_INFO;
-	if ($quick_only)
-	{
-		$GETTING_MEMBER=false;
-		return $member;
-	}
-	$session=get_session_id();
-	if ($session==-1)
-	{
-		require_code('users_inactive_occasionals');
-		create_session($member);
-	}
-
-	if (!$is_guest)
-	{
-		// Is there a su operation?
-		$ks=get_param('keep_su','');
-		if ($ks!='')
-		{
-			require_code('users_inactive_occasionals');
-			$member=su_login($member);
-		}
-
-		// Run hooks, if any exist
-		$hooks=find_all_hooks('systems','upon_login');
-		foreach (array_keys($hooks) as $hook)
-		{
-			require_code('hooks/systems/upon_login/'.filter_naughty($hook));
-			$ob=object_factory('upon_login'.filter_naughty($hook),true);
-			if ($ob===NULL) continue;
-			$ob->run(false,NULL,$member); // false means "not a new login attempt"
-		}
-	}
-
-	// Ok we have our answer
-	$MEMBER_CACHED=$member;
-	$GETTING_MEMBER=false;
-	return $member;
-}
-
-/**
- * Find what sessions are expired and delete them.
- *
- * @param  ?MEMBER		User to get a current session for (NULL: do not try, which guarantees a return result of NULL also) 
- * @return ?AUTO_LINK	The session id we rebound to (NULL: did not rebind)
- */
-function delete_expired_sessions($id=NULL)
-{
-	$new_session=NULL;
-	
-	// Delete expired sessions
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE last_activity<'.strval(time()-60*60*max(1,intval(get_option('session_expiry_time')))));
-	$new_session=NULL;
-	$dirty_session_cache=false;
-	global $SESSION_CACHE;
-	foreach ($SESSION_CACHE as $_session=>$row)
-	{
-		if (!array_key_exists('the_user',$row)) continue; // Workaround to HipHop PHP weird bug
-
-		// Delete expiry from cache
-		if ($row['last_activity']<time()-60*60*max(1,intval(get_option('session_expiry_time'))))
-		{
-			$dirty_session_cache=true;
-			unset($SESSION_CACHE[$_session]);
-			continue;
-		}
-
-		// Get back to prior session if there was one
-		if (get_value('allowed_shared_usernames')!=='1')
-		{
-			if (($id!==NULL) && ($row['the_user']==$id))
-			{
-				$new_session=$_session;
-			}
-		}
-	}
-	if ($dirty_session_cache)
-	{
-		if (get_value('session_prudence')!=='1')
-		{
-			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
-		}
-	}
-	
-	return $new_session;
-}
-
-/**
- * Get the member cookie's name.
- *
- * @return string			The member username/id (depending on forum driver) cookie's name
- */
-function get_member_cookie()
-{
-	global $SITE_INFO;
-	if (!array_key_exists('user_cookie',$SITE_INFO)) $SITE_INFO['user_cookie']='ocp_member_id';
-	return $SITE_INFO['user_cookie'];
-}
-
-/**
- * Get the member password cookie's name.
- *
- * @return string			The member password cookie's name
- */
-function get_pass_cookie()
-{
-	global $SITE_INFO;
-	if (!array_key_exists('pass_cookie',$SITE_INFO)) $SITE_INFO['pass_cookie']='ocp_member_hash';
-	return $SITE_INFO['pass_cookie'];
-}
-
-/**
- * Get the current session ID.
- *
- * @return integer		The current session ID
- */
-function get_session_id()
-{
-	if ((!isset($_COOKIE['ocp_session'])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEBUG_MODE'] && running_script('occle')))
-	{
-		if (array_key_exists('keep_session',$_GET)) return get_param_integer('keep_session');
-		return (-1);
-	}
-	return intval($_COOKIE['ocp_session']); // No need to stripslashes as it's numeric
-}
-
-/**
- * Make sure that the given URL contains a session if cookies are disabled.
- * NB: This is used for login redirection. It had to add the session id into the redirect url.
- *
- * @param  URLPATH		The URL to enforce results in session persistence for the user
- * @return URLPATH		The fixed URL (potentially nothing was done, depending on cookies)
- */
-function enforce_sessioned_url($url)
-{
-	if ((!has_cookies()) && (is_null(get_bot_type())))
-	{
-		require_code('users_inactive_occasionals');
-		return _enforce_sessioned_url($url);
-	}
-	return $url;
-}
-
-/**
- * Get a cookie value.
- *
- * @param  string			The name of the cookie
- * @param  ?string		The default value (NULL: just use the value NULL)
- * @return ?string		The value stored in the cookie (NULL: the default default)
- */
-function ocp_admirecookie($name,$default=NULL)
-{
-	if (!isset($_COOKIE[$name])) return $default;
-	$the_cookie=$_COOKIE[$name];
-	if (get_magic_quotes_gpc()) $the_cookie=stripslashes($the_cookie);
-	return $the_cookie;
-}
-
-/**
- * Deletes a cookie (if it exists), from within ocPortal's cookie environment.
- *
- * @param  string			The name of the cookie
- * @return boolean		The result of the PHP setcookie command
- */
-function ocp_eatcookie($name)
-{
-	$expire=time()-100000; // Note the negative number must be greater than 13*60*60 to account for maximum timezone difference
-
-	// Try and remove other potentials
-	@setcookie($name,'',$expire,'',preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
-	@setcookie($name,'',$expire,'/',preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
-	@setcookie($name,'',$expire,'','www.'.preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
-	@setcookie($name,'',$expire,'/','www.'.preg_replace('#^www\.#','',ocp_srv('HTTP_HOST')));
-	@setcookie($name,'',$expire,'','');
-	@setcookie($name,'',$expire,'/','');
-
-	// Delete standard potential
-	return @setcookie($name,'',$expire,get_cookie_path(),get_cookie_domain());
 }

@@ -91,7 +91,7 @@
 		<p>{!facebook:LOGIN_USING_FACEBOOK}</p>
 
 		<span xmlns:fb="http://api.facebook.com/1.0/">
-			<fb:login-button perms="email,user_birthday"></fb:login-button>
+			<fb:login-button scope="email,user_birthday"></fb:login-button>
 		</span>
 	{+END}
 </div>

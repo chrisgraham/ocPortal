@@ -1203,6 +1203,7 @@ function actual_check_method($class,$method,$params,$c_pos,$function_guard='')
 		// There is a strict coding standard such that files called foo.php
 		// must define a class OCP_Foo, thus we can infer the class from the
 		// include path.
+		if (!isset($params[0][1][1])) return 'object';
 		$ret=$params[0][1][1];		// Grab the path (first argument)
 		$ret=array_pop(explode('/',$ret));		// Only keep the filename, not the whole path
 		$ret='object-OCP_'.ucfirst($ret);		// Turn the filename into the class name, and prefix with 'object-'

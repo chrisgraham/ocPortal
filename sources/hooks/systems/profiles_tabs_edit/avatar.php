@@ -47,7 +47,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 		$order=20;
 
 		// Actualiser
-		if (count($_POST)!=0)
+		if (post_param('submitting_avatar_tab',0)==1)
 		{
 			require_code('uploads');
 			if (has_specific_permission($member_id_viewing,'own_avatars'))
@@ -138,7 +138,10 @@ class Hook_Profiles_Tabs_Edit_avatar
 
 		$text=do_template('OCF_EDIT_AVATAR_TAB',array('_GUID'=>'dbdac6ca3bc752b54d2a24a4c6e69c7c','MEMBER_ID'=>strval($member_id_of),'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id_of),'AVATAR'=>$avatar,'WIDTH'=>integer_format($width),'HEIGHT'=>integer_format($height)));
 
-		return array($title,$fields,$text,$javascript,$order);
+		$hidden=new ocp_tempcode();
+		$hidden->attach(form_input_hidden('submitting_avatar_tab','1'));
+
+		return array($title,$fields,$text,$javascript,$order,$hidden);
 	}
 
 }

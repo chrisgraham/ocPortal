@@ -77,6 +77,8 @@ class Block_main_activities
 
 		require_code('activities_submission');
 		log_newest_activity(0,1000,true);
+
+		add_specific_permission('SUBMISSION','syndicate_site_activity',false);
 	}
 
 	// CACHE MESSES WITH POST REMOVAL

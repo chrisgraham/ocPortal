@@ -243,10 +243,6 @@ facebook_support
 # # sources_custom/blocks/main_facebook_like.php
 # # sources_custom/blocks/main_facebook_comments.php
 # # sources_custom/facebook_connect.php
-# # sources_custom/hooks/systems/symbols/FB_CONNECT_ACCESS_TOKEN.php
-# # sources_custom/hooks/systems/symbols/FB_CONNECT_SECRET.php
-# # sources_custom/hooks/systems/symbols/FB_CONNECT_SESSION_KEY.php
-# # sources_custom/hooks/systems/symbols/FB_CONNECT_SIG.php
 # # sources_custom/hooks/systems/symbols/FB_CONNECT_UID.php
 # # sources_custom/hooks/systems/symbols/USER_FB_CONNECT.php
 # # sources_custom/hooks/systems/symbols/FB_CONNECT_LOGGED_OUT.php
@@ -261,6 +257,25 @@ facebook_support
 # # themes/default/templates_custom/BLOCK_MAIN_SCREEN_ACTIONS.tpl
 # # sources_custom/users_active_actions.php
 # # sources_custom/hooks/systems/syndication/facebook.php
+# # sources_custom/hooks/systems/do_next_menus/facebook.php
+# # sources_custom/hooks/systems/login_providers/facebook.php
+# # sources_custom/hooks/systems/login_providers/index.html
+# # themes/default/images_custom/bigicons/facebook.png
+# # adminzone/pages/minimodules_custom/facebook_oauth.php
+# # sources_custom/facebook/facebook.php
+# # sources_custom/facebook/jsonwrapper/JSON/JSON.php
+# # sources_custom/facebook/jsonwrapper/JSON/LICENSE
+# # facebook_connect.php
+
+twitter_support
+---------------
+
+# # sources_custom/twitter.php
+# # adminzone/pages/minimodules_custom/twitter_oauth.php
+# # lang_custom/EN/twitter.ini
+# # sources_custom/hooks/systems/syndication/twitter.php
+# # sources_custom/hooks/systems/do_next_menus/twitter.php
+# # themes/default/images_custom/bigicons/twitter.png
 
 google_search
 -------------
@@ -1860,6 +1875,8 @@ ocportal_tutorials
 openid
 ------
 
+# # sources_custom/hooks/systems/login_providers/openid.php
+# # sources_custom/hooks/systems/login_providers/index.html
 # # sources_custom/miniblocks/openid.php
 # # sources_custom/openid.php
 # # sources_custom/users.php
@@ -1871,15 +1888,6 @@ openid
 # # themes/default/templates_custom/JAVASCRIPT_OPENID.tpl
 # # themes/default/templates_custom/LOGIN_SCREEN.tpl
 # # themes/default/templates_custom/JAVASCRIPT_JQUERY.tpl
-
-twitter_news_integration
-------------------------
-
-# # sources_custom/twitter.php
-# # data_custom/twitter_oauth.php
-# # lang_custom/EN/config.ini
-# # sources_custom/news2.php
-# # sources_custom/hooks/systems/syndication/twitter.php
 
 transcoder
 ----------

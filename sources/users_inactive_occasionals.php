@@ -77,12 +77,129 @@ function _enforce_sessioned_url($url)
 }
 
 /**
+ * Set up a new session / Restore an existing one that was lost.
+ *
+ * @param  MEMBER			Logged in member
+ * @param  BINARY			Whether the session should be considered confirmed
+ * @return integer		New session ID
+ */
+function create_session($member,$session_confirmed=0)
+{
+	global $SESSION_CACHE;
+	
+	global $MEMBER_CACHED;
+	$MEMBER_CACHED=$member;
+
+	$new_session=mixed();
+	$restored_session=delete_expired_sessions_or_recover($member);
+	if (is_null($restored_session)) // We're force to make a new one
+	{
+		// Generate random session
+		$new_session=mt_rand(0,mt_getrandmax()-1);
+
+		// Store session
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+		$new_session_row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed,'session_invisible'=>0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
+		$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row);
+
+		$SESSION_CACHE[$new_session]=$new_session_row;
+
+		$big_change=true;
+	} else
+	{
+		$new_session=$restored_session;
+		$prior_session_row=$SESSION_CACHE[$new_session];
+		$new_session_row=array('last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed);
+		$big_change=($prior_session_row['last_activity']<time()-10) || ($prior_session_row['session_confirmed']!=0) || ($prior_session_row['ip']!=$new_session_row['ip']);
+		if ($big_change)
+			$GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session'=>$new_session,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>get_param('type','',true),'the_id'=>either_param('id','')),'',1);
+
+		$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$new_session_row);
+	}
+
+	if ($big_change) // Only update the persistant cache for non-trivial changes.
+	{
+		if (get_value('session_prudence')!=='1') // With session prudence we don't store all these in persistant cache due to the size of it all. So only re-save if that's not on.
+			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+	}
+
+	set_session_id($new_session/*,true*/); // We won't set it true here, but something that really needs it to persist might come back and re-set it
+
+	// New sessions = Login points
+	if ((!is_null($member)) && (addon_installed('points')) && (!is_guest($member)))
+	{
+		$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));
+		if ($points_per_daily_visit!=0)
+		{
+			// See if this is the first visit today
+			$test=$GLOBALS['SITE_DB']->query_value('stats','MAX(date_and_time)',array('the_user'=>$member));
+			if ($test<time()-60*60*24)
+			{
+				require_code('points');
+				$_before=point_info($member);
+				if (array_key_exists('points_gained_given',$_before))
+					$GLOBALS['FORUM_DRIVER']->set_custom_field($member,'points_gained_given',strval(intval($_before['points_gained_given'])+$points_per_daily_visit));
+			}
+		}
+	}
+
+	$GLOBALS['SESSION_CONFIRMED']=$session_confirmed;
+}
+
+/**
+ * Set the session ID of the user.
+ *
+ * @param  integer		The session ID
+ * @param  boolean		Whether this is a guest session (guest sessions will use persistent cookies)
+ */
+function set_session_id($id,$guest_session=false)  // NB: Guests sessions can persist because they are more benign
+{
+	// Save cookie
+	$timeout=$guest_session?(time()+60*60*max(1,intval(get_option('session_expiry_time')))):NULL;
+	/*if (($GLOBALS['DEBUG_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))
+	{
+		$test=false;
+	} else*/
+	{
+		$test=@setcookie('ocp_session',strval($id),$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
+	}
+	$_COOKIE['ocp_session']=strval($id); // So we remember for this page view
+	
+	// If we really have to, store in URL
+	if (((!has_cookies()) || (!$test)) && (is_null(get_bot_type())))
+	{
+		$_GET['keep_session']=strval($id);
+	}
+
+	if ($id!=get_session_id()) decache('side_users_online');
+}
+
+/**
+ * Force an HTTP authentication login box / relay it as if it were a posted login. This function is rarely used.
+ */
+function force_httpauth()
+{
+	if ((!isset($_SERVER['PHP_AUTH_USER'])) || ($_SERVER['PHP_AUTH_USER']==''))
+	{
+		header('WWW-Authenticate: Basic realm="'.urlencode(get_site_name()).'"'); 
+		$GLOBALS['HTTP_STATUS_CODE']='401';
+		header('HTTP/1.0 401 Unauthorized'); 
+		exit();
+	}
+	if (isset($_SERVER['PHP_AUTH_PW'])) // Ah, route as a normal login if we can then
+	{
+		$_POST['login_username']=$_SERVER['PHP_AUTH_USER'];
+		$_POST['password']=$_SERVER['PHP_AUTH_PW'];
+	}
+}
+
+/**
  * Filter a member ID through SU, if SU is on and if the user has permission.
  *
  * @param  MEMBER			Real logged in member
  * @return MEMBER			Simulated member
  */
-function su_login($member)
+function try_su_login($member)
 {
 	$ks=get_param('keep_su','');
 
@@ -117,124 +234,11 @@ function su_login($member)
 }
 
 /**
- * Set up a new session / Restore an existing one that was lost.
- *
- * @param  MEMBER			Logged in member
- */
-function create_session($member)
-{
-	global $SESSION_CACHE;
-	
-	// Get back to prior session if there was one
-	$new_session=NULL;
-	$new_session_row=NULL;
-	if (!is_guest($member))
-	{
-		$ip=get_ip_address(3);
-		if (get_value('allowed_shared_usernames')!=='1')
-		{
-			foreach ($SESSION_CACHE as $_session=>$row)
-			{
-				if (!array_key_exists('the_user',$row)) continue; // Workaround to HipHop PHP weird bug
-
-				if (($row['the_user']==$member) && ((get_option('ip_strict_for_sessions')=='0') || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
-				{
-					$new_session=$_session;
-					$new_session_row=$row;
-					break;
-				}
-			}
-		}
-	} else
-	{
-		// If it is refusing to store even a guest session, then we will try and force the issue by binding to a guest session with a similar IP
-		$ip3part=get_ip_address(3);
-		foreach ($SESSION_CACHE as $_session=>$row)
-		{
-			if (!array_key_exists('the_user',$row)) continue; // Workaround to HipHop PHP weird bug
-
-			if ((is_guest($row['the_user'])) && ($row['ip']==$ip3part))
-			{
-				$new_session=$_session;
-				$new_session_row=$row;
-				break;
-			}
-		}
-	}
-	if (is_null($new_session))
-	{
-		// Generate random session
-		$new_session=mt_rand(0,mt_getrandmax()-1);
-
-		// Store session
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		$row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>0,'session_invisible'=>0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
-		$GLOBALS['SITE_DB']->query_insert('sessions',$row);
-
-		$SESSION_CACHE[$new_session]=$row;
-		$new_session_row=$row;
-
-		$big_change=true;
-	} else
-	{
-		$big_change=false;
-
-		$row=array('last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>0);
-		$big_change=($new_session_row['last_activity']<time()-10) || ($new_session_row['session_confirmed']!=0) || ($new_session_row['ip']!=$row['ip']);
-		if ($big_change)
-			$GLOBALS['SITE_DB']->query_update('sessions',$row,array('the_session'=>$new_session,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>get_param('type','',true),'the_id'=>either_param('id','')),'',1);
-
-		$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$row);
-	}
-	if (get_value('session_prudence')!=='1')
-	{
-		if ($big_change)
-			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
-	}
-
-	set_session_id($new_session/*,true*/); // We won't set it true here, but something that really needs it to persist might come back and re-set it
-
-	// New sessions = Login points
-	if ((!is_null($member)) && (addon_installed('points')) && (!is_guest($member)))
-	{
-		$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));
-		if ($points_per_daily_visit!=0)
-		{
-			// See if this is the first visit today
-			$test=$GLOBALS['SITE_DB']->query_value('stats','MAX(date_and_time)',array('the_user'=>$member));
-			if ($test<time()-60*60*24)
-			{
-				require_code('points');
-				$_before=point_info($member);
-				if (array_key_exists('points_gained_given',$_before))
-					$GLOBALS['FORUM_DRIVER']->set_custom_field($member,'points_gained_given',strval(intval($_before['points_gained_given'])+$points_per_daily_visit));
-			}
-		}
-	}
-}
-
-/**
- * Force an HTTP authentication login box / relay it as if it were a posted login. This function is rarely used.
- */
-function force_httpauth()
-{
-	if (!isset($_SERVER['PHP_AUTH_USER']))
-	{
-		header('WWW-Authenticate: Basic realm="My Realm"'); 
-		$GLOBALS['HTTP_STATUS_CODE']='401';
-		header('HTTP/1.0 401 Unauthorized'); 
-		exit();
-	}
-	$_POST['login_username']=$_SERVER['PHP_AUTH_USER'];
-	$_POST['password']=$_SERVER['PHP_AUTH_PW'];
-}
-
-/**
  * Try and login via HTTP authentication. This function is only called if HTTP authentication is currently active. With HTTP authentication we trust the PHP_AUTH_USER setting.
  *
  * @return ?MEMBER		Logged in member (NULL: no login happened)
  */
-function httpauth_login()
+function try_httpauth_login()
 {
 	global $LDAP_CONNECTION;
 	
@@ -260,14 +264,9 @@ function httpauth_login()
 			$member=ocf_member_external_linker($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled',true)!='1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
 		}
 	}
-	
+
 	if (!is_null($member))
-	{
-		global $SESSION_CONFIRMED;
-		$SESSION_CONFIRMED=1;
-	}
-	
-	delete_expired_sessions($member);
+		create_session($member,1); // This will mark it as confirmed
 
 	return $member;
 }
@@ -277,7 +276,7 @@ function httpauth_login()
  *
  * @return MEMBER			Logged in member (NULL: no login happened)
  */
-function cookie_login()
+function try_cookie_login()
 {
 	$member=NULL;
 	
@@ -366,43 +365,19 @@ function cookie_login()
 			} else
 			{
 				// Test password plain
-				$login_array=$GLOBALS['FORUM_DRIVER']->forum_authorise_login(NULL,$member,my_md5($pass,$username),$pass,true);
+				$login_array=$GLOBALS['FORUM_DRIVER']->forum_authorise_login(NULL,$member,apply_forum_driver_md5_variant($pass,$username),$pass,true);
 				$member=$login_array['id'];
 			}
-		}
-	
-		if (!is_null($member))
-		{
-			global $IS_A_COOKIE_LOGIN;
-			$IS_A_COOKIE_LOGIN=true;
+
+			if (!is_null($member))
+			{
+				global $IS_A_COOKIE_LOGIN;
+				$IS_A_COOKIE_LOGIN=true;
+			}
+
+			create_session($member);
 		}
 	}
 
 	return $member;
 }
-
-/**
- * Set the session ID of the user.
- *
- * @param  integer		The session ID
- * @param  boolean		Whether this is a guest session (guest sessions will use persistent cookies)
- */
-function set_session_id($id,$guest_session=false)  // NB: Guests sessions can persist because they are more benign
-{
-	$timeout=$guest_session?(time()+60*60*max(1,intval(get_option('session_expiry_time')))):NULL;
-	/*if (($GLOBALS['DEBUG_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))
-	{
-		$test=false;
-	} else*/
-	{
-		$test=@setcookie('ocp_session',strval($id),$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
-	}
-	if (((!has_cookies()) || (!$test)) && (is_null(get_bot_type())))
-	{
-		$_GET['keep_session']=strval($id);
-	}
-	$_COOKIE['ocp_session']=strval($id); // So we remember for this page view
-
-	if ($id!=get_session_id()) decache('side_users_online');
-}
-

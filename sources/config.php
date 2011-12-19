@@ -205,7 +205,7 @@ function get_long_value_newer_than($name,$cutoff)
  * Set the specified situational value to the specified long value.
  *
  * @param  ID_TEXT		The name of the value
- * @param  SHORT_TEXT	The value
+ * @param  ?SHORT_TEXT	The value (NULL: delete it)
  */
 function set_long_value($name,$value)
 {

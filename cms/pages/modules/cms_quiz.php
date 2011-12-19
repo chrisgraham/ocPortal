@@ -321,13 +321,18 @@ class Module_cms_quiz extends standard_aed_module
 		$open_time=get_input_date('open_time');
 		$close_time=get_input_date('close_time');
 
+		$validated=post_param_integer('validated',0);
+
 		$_tied_newsletter=post_param('tied_newsletter','');
 		$tied_newsletter=($_tied_newsletter=='')?NULL:intval($_tied_newsletter);
 		$name=post_param('name');
-		$id=add_quiz($name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),post_param_integer('validated',0),post_param('text'),NULL,post_param_integer('points_for_passing',0),$tied_newsletter);
+		$id=add_quiz($name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),NULL,post_param_integer('points_for_passing',0),$tied_newsletter);
 
-		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
-			syndicate_described_activity('quiz:ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes');
+		if ($validated==1)
+		{
+			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
+				syndicate_described_activity('quiz:ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes');
+		}
 
 		return strval($id);
 	}
@@ -347,7 +352,16 @@ class Module_cms_quiz extends standard_aed_module
 		$_tied_newsletter=post_param('tied_newsletter','');
 		$tied_newsletter=($_tied_newsletter=='')?NULL:intval($_tied_newsletter);
 
-		edit_quiz($id,post_param('name'),post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),post_param_integer('validated',0),post_param('text'),post_param('meta_keywords'),post_param('meta_description'),post_param_integer('points_for_passing',0),$tied_newsletter);
+		$name=post_param('name');
+		$validated=post_param_integer('validated',0);
+
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('quizzes','q_validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		{
+			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
+				syndicate_described_activity('quiz:ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes');
+		}
+
+		edit_quiz($id,$name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),post_param('meta_keywords'),post_param('meta_description'),post_param_integer('points_for_passing',0),$tied_newsletter);
 	}
 
 	/**

@@ -653,8 +653,11 @@ class Module_cms_downloads extends standard_aed_module
 			$this->do_next_description=do_lang_tempcode('DOWNLOAD_ADDED',escape_html($add_image_url->evaluate()));
 		}
 
-		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category_id))))
-			syndicate_described_activity('downloads:ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:view:'.strval($id),'','','downloads');
+		if ($validated==1)
+		{
+			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category_id))))
+				syndicate_described_activity('downloads:ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:view:'.strval($id),'','','downloads');
+		}
 
 		return strval($id);
 	}
@@ -706,6 +709,12 @@ class Module_cms_downloads extends standard_aed_module
 		$allow_trackbacks=post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
 		$this->donext_type=$category_id;
+
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('download_downloads','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		{
+			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category_id))))
+				syndicate_described_activity('downloads:ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:view:'.strval($id),'','','downloads');
+		}
 
 		edit_download($id,$category_id,$name,$url,$description,$author,$comments,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
 

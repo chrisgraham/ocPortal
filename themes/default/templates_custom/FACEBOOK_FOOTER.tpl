@@ -1,41 +1,51 @@
 {+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
    <div id="fb-root"></div>
-   <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js#appId={$CONFIG_OPTION*,facebook_appid}&amp;xfbml=1"></script>
-   <script type="text/javascript">// <![CDATA[
-	   FB.init({appId: '{$CONFIG_OPTION*;,facebook_appid}', status: true,cookie: true, xfbml: true});
-		window.setTimeout(function () {
-			var logged_in=(ReadCookie('fbs_{$CONFIG_OPTION*;,facebook_appid}')!='');
+ 	<script type="text/javascript">
+		window.fbAsyncInit=function() {
+			FB.init({
+				appId: '{$CONFIG_OPTION*;,facebook_appid}',
+				channelUrl: '{$BASE_URL*;}/facebook_connect.php',
+				status: true,
+				cookie: true,
+				xfbml: true
+			});
 
-			{+START,IF,{$FB_CONNECT_LOGGED_OUT}}
-				{$,Protection to make sure cookie has gone}
-				SetCookie('fbs_{$CONFIG_OPTION*;,facebook_appid}','');
-			{+END}
+			{$,Ignore floods of "Unsafe JavaScript attempt to access frame with URL" errors in Chrome they are benign}
 
-			FB.Event.subscribe('auth.login', function(response) {
-				{+START,IF,{$FB_CONNECT_LOGGED_OUT}}
-					if (FB.getSession())
-						FB.logout();
-				{+END}
+			{$,Calling this effectively waits until the login is active on the client side, which we must do before we can call a log out}
+			FB.getLoginStatus(function(response) {
+				if (response.status=='connected') {
+					{$,If ocP is currently logging out, tell FB connect to disentangle}
+					{$,Must have JS FB login before can instruct to logout. Will not re-auth -- we know we have authed due to FB_CONNECT_LOGGED_OUT being set}
+					{+START,IF,{$FB_CONNECT_LOGGED_OUT}}
+						FB.logout(function(response) {
+							if (typeof window.console!='undefined' && window.console) console.log('Logged out.');
+						});
+					{+END}
+				}
+			});
 
+			FB.Event.subscribe('auth.login',function() {
 				{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}}
-					{$,Protection if Facebook failed to save the cookie}
-					if (!logged_in)
+					{$,Only refresh if this was a new login initiated just now on the client side}
+					if (window.location.href.indexOf('login')!=-1)
 					{
-						var val='',s=FB.getSession();
-						for (var i in s)
-						{
-							val+=i+'='+window.encodeURIComponent(s[i])+'&';
-						}
-						SetCookie('fbs_{$CONFIG_OPTION*;,facebook_appid}',val);
+						window.location='{$PAGE_LINK;*,:}';
 					}
-
-					{$,Only refresh if ocPortal would have thought we were not already logged in (if Facebook failed to save the cookie and we made it, Facebook does not like it somehow}
-					if (!logged_in)
+					else
 					{
-						if (window.location.href.indexOf('login')!=-1) window.location='{$PAGE_LINK;*,:}'; else window.location.reload();
+						window.location.reload();
 					}
 				{+END}
 			});
-		}, 0 );
-   //]]></script>
+		};
+
+		// Load the SDK Asynchronously
+		(function(d){
+			var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "//connect.facebook.net/en_US/all.js";
+			d.getElementsByTagName('head')[0].appendChild(js);
+		 }(document));
+	</script>
 {+END}

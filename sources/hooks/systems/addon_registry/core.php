@@ -155,6 +155,8 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/upon_access_denied/index.html',
 			'sources/hooks/systems/upon_query/index.html',
 			'sources/hooks/systems/upon_login/index.html',
+			'sources/hooks/systems/login_providers/index.html',
+			'sources/hooks/systems/login_providers/httpauth.php',
 			'data/question_ui.php',
 			'data/.htaccess',
 			'data_custom/.htaccess',

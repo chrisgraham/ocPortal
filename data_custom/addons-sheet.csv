@@ -114,8 +114,6 @@ Example Comcode to use it:
 
 'fans' is the number of fans you want the block to display.
 
-'fan_profile_id' is the Fan Page ID in Facebook to find this you need to goto the fan page you want to take the data from the URL will be something like [tt]http://www.facebook.com/#!/pages/ocPortal/80430912569[/tt] you need the number at the end ""80430912569"" in this section.
-
 'show_fanpage_link' is either ""1"" or ""0"" -- 1 is you would like to display a link to the fan page, 0 means you don't.
 
 'fanpage_name' is the name you want to display on the link to the page.

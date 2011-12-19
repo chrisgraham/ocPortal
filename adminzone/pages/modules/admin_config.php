@@ -47,7 +47,7 @@ class Module_admin_config
 	 */
 	function uninstall()
 	{
-		$config_options=array('simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','logo_map','validation','twitter_login','twitter_password','facebook_api','facebook_appid','facebook_secret_code','facebook_uid','facebook_target_ids',
+		$config_options=array('simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','logo_map','validation',
 										'gzip_output','forum_in_portal','staff_address','is_on_gd','is_on_folder_create','site_closed','closed',
 										'maximum_users','cc_address','log_php_errors','display_php_errors','valid_types','valid_images','is_on_rating',
 										'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','mod_rewrite','is_on_trackbacks',
@@ -243,7 +243,8 @@ class Module_admin_config
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<12))
 		{
-			delete_config_option('ocf_show_personal_myhome_link');
+			foreach (array('ocf_show_personal_myhome_link','twitter_login','twitter_password','facebook_api','facebook_appid','facebook_secret_code','facebook_uid','facebook_target_ids') as $option_to_delete)
+				delete_config_option($option_to_delete);
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
@@ -267,14 +268,6 @@ class Module_admin_config
 				add_config_option('MAIN_FORUM_NAME','main_forum_name','forum','return has_no_forum()?NULL:do_lang(\'DEFAULT_FORUM_TITLE\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','USER_INTERACTION');
 				add_config_option('KEYWORDS','keywords','line','return \'\';','SITE','GENERAL');
 				
-			// Social networking integration
-				add_config_option('TWITTER_LOGIN','twitter_login','line','return (!addon_installed(\'twitter\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION');
-				add_config_option('TWITTER_PASSWORD','twitter_password','line','return (!addon_installed(\'twitter\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION');
-				add_config_option('FACEBOOK_API','facebook_api','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION');
-				add_config_option('FACEBOOK_APPID','facebook_appid','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION');
-				add_config_option('FACEBOOK_SECRET','facebook_secret_code','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION');
-				add_config_option('FACEBOOK_UID','facebook_uid','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION');
-				add_config_option('FACEBOOK_TARGET_IDS','facebook_target_ids','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION');
 			//  Advanced
 				//add_config_option('LOGO_MAP','logo_map','text','$tpl=do_template(\'IMAGE_MAP\'); return $tpl->evaluate();','SITE','ADVANCED');
 				add_config_option('GZIP_OUTPUT','gzip_output','tick','return \'0\';','SITE','ADVANCED',1);
@@ -480,7 +473,7 @@ class Module_admin_config
 
 		$page=get_param('id');
 		$title=get_page_title(do_lang_tempcode('CONFIG_CATEGORY_'.$page),false);
-		$post_url=build_url(array('page'=>'_SELF','type'=>'set','id'=>$page),'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'set','id'=>$page,'redirect'=>get_param('redirect',NULL)),'_SELF');
 
 		$category_description=do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$page);
 
@@ -923,7 +916,14 @@ class Module_admin_config
 		erase_cached_templates();
 
 		// Show it worked / Refresh
-		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF'); // ,'type'=>'category','id'=>$page
+		$redirect=get_param('redirect',NULL);
+		if ($redirect===NULL)
+		{
+			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF'); // ,'type'=>'category','id'=>$page
+		} else
+		{
+			$url=make_string_tempcode($redirect);
+		}
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
 

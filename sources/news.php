@@ -172,10 +172,6 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 
 	require_code('mail');
 
-	require_code('news2');
-	twitter_news_update($id,comcode_to_clean_text(($news=='')?$news_article:$news),$validated,$main_news_category_id,false);
-	facebook_wall_news_update($id,$title,$news,$validated,$main_news_category_id,false);
-
 	if (!is_null($news_category))
 	{
 		foreach ($news_category as $value)
@@ -298,10 +294,6 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	$_news_article=$rows[0]['news_article'];
 	
 	require_code('mail');
-
-	require_code('news2');
-	twitter_news_update($id,comcode_to_clean_text(($news=='')?$news_article:$news),$validated,$main_news_category);
-	facebook_wall_news_update($id,$title,$news,$validated,$main_news_category);
 
 	require_code('urls2');
 

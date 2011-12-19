@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>lang/EN/ocf.ini</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -81,8 +79,6 @@
 			<date>2011-10-31T22:51:23Z</date>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>data</string>
 			<key>regexFolderFilter</key>
@@ -113,12 +109,6 @@
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
 			<key>sourceDirectory</key>
 			<string>docs4</string>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>facebook_connect.php</string>
-			<key>lastUsed</key>
-			<date>2011-09-14T12:33:49Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -162,7 +152,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2011-12-08T20:33:34Z</date>
+			<date>2011-12-17T11:07:42Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -174,13 +164,13 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2011-12-12T09:47:13Z</date>
+			<date>2011-12-16T12:39:25Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>install.sql</string>
 			<key>lastUsed</key>
-			<date>2011-12-06T17:01:15Z</date>
+			<date>2011-12-16T19:38:32Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -579,20 +569,6 @@
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
 		</dict>
-		<key>data/shoutbox.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>5</integer>
-		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
 			<key>caret</key>
@@ -791,20 +767,6 @@
 			<key>firstVisibleLine</key>
 			<integer>27</integer>
 		</dict>
-		<key>lang/EN/ocf.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>31</integer>
-				<key>line</key>
-				<integer>691</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>665</integer>
-		</dict>
 		<key>lang/EN/quotes.ini</key>
 		<dict>
 			<key>caret</key>
@@ -818,36 +780,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>lang_custom/EN/activities.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>16</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
 		</dict>
 		<key>pages/comcode/EN/privacy.txt</key>
 		<dict>
@@ -1685,34 +1617,6 @@
 				<integer>303</integer>
 			</dict>
 		</dict>
-		<key>sources/tar.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>373</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>350</integer>
-		</dict>
-		<key>sources/templates_results_browser.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>16</integer>
-				<key>line</key>
-				<integer>189</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>166</integer>
-		</dict>
 		<key>sources/templates_view_space.php</key>
 		<dict>
 			<key>caret</key>
@@ -1726,64 +1630,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>sources_custom/blocks/main_activities.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>68</integer>
-				<key>line</key>
-				<integer>174</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>161</integer>
-		</dict>
-		<key>sources_custom/blocks/main_facebook_comments.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>16</integer>
-				<key>line</key>
-				<integer>27</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>14</integer>
-		</dict>
-		<key>sources_custom/blocks/main_facebook_facepile.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>18</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>12</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>17</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>18</integer>
-			</dict>
 		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
@@ -2237,6 +2083,36 @@
 				<integer>70</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/FORM_SCREEN_INPUT_DATE.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>28</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>25</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>75</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>28</integer>
+			</dict>
+		</dict>
 		<key>themes/default/templates/FORM_SCREEN_INPUT_LIST_ENTRY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2639,20 +2515,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates_custom/BLOCK_MAIN_ACTIVITIES.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>6</integer>
-				<key>line</key>
-				<integer>21</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>themes/default/templates_custom/BLOCK_MAIN_GOOGLE_SEARCH_REULTS.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2694,6 +2556,50 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates_custom/BOOKING_START_SCREEN.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>145</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>114</integer>
+		</dict>
+		<key>themes/default/templates_custom/BOOK_DATE_CHOOSE.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>20</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
 		</dict>
 		<key>themes/default/templates_custom/CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE.tpl</key>
 		<dict>
@@ -2738,20 +2644,6 @@
 				<key>line</key>
 				<integer>0</integer>
 			</dict>
-		</dict>
-		<key>themes/default/templates_custom/FACEBOOK_FOOTER.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>themes/default/templates_custom/GALLERY_VIDEO.tpl</key>
 		<dict>
@@ -2894,17 +2786,9 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>sources_custom/blocks/main_activities.php</string>
-		<string>sources/templates_results_browser.php</string>
-		<string>lang/EN/ocf.ini</string>
-		<string>lang_custom/EN/activities.ini</string>
-		<string>themes/default/templates_custom/BLOCK_MAIN_ACTIVITIES.tpl</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{710, 212}, {1009, 966}}</string>
+	<string>{{857, 199}, {1009, 966}}</string>
 </dict>
 </plist>

@@ -50,7 +50,38 @@ class Hook_Profiles_Tabs_activities
 
 		$order=70;
 
-		$content=do_template('OCF_MEMBER_PROFILE_ACTIVITIES',array('MEMBER_ID'=>strval($member_id_of)));
+		// Allow user to link up things for syndication
+		$syndications=array();
+		if ($member_id_of==$member_id_viewing)
+		{
+			$dests=find_all_hooks('systems','syndication');
+			foreach (array_keys($dests) as $hook)
+			{
+				require_code('hooks/systems/syndication/'.$hook);
+				$ob=object_factory('Hook_Syndication_'.$hook);
+				if ($ob->is_available())
+				{
+					if (either_param('syndicate_stop__'.$hook,NULL)!==NULL)
+					{
+						$ob->auth_unset($member_id_of);
+					}
+					elseif (either_param('syndicate_start__'.$hook,NULL)!==NULL)
+					{
+						$url_map=array('page'=>'_SELF','type'=>'view','id'=>$member_id_of,'oauth_in_progress'=>1);
+						$url_map['syndicate_start__'.$hook]=1;
+						$oauth_url=build_url($url_map,'_SELF',NULL,false,false,false,'tab__activities');
+						$ob->auth_set($member_id_of,$oauth_url);
+					}
+
+					$syndications[$hook]=array(
+						'SYNDICATION_IS_SET'=>$ob->auth_is_set($member_id_of),
+						'SYNDICATION_SERVICE_NAME'=>$ob->get_service_name(),
+					);
+				}
+			}
+		}
+
+		$content=do_template('OCF_MEMBER_PROFILE_ACTIVITIES',array('MEMBER_ID'=>strval($member_id_of),'SYNDICATIONS'=>$syndications));
 
 		return array($title,$content,$order);
 	}

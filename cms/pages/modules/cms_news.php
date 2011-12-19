@@ -87,26 +87,9 @@ class Module_cms_news extends standard_aed_module
 
 		if ($type=='_import_news') return $this->_import_news();
 		
-		if ($type=='oauth_facebook') return $this->oauth_facebook();
-
 		return new ocp_tempcode();
 	}
 	
-	/**
-	 * Handle a Facebook oauth request.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function oauth_facebook()
-	{
-		require_code('facebook_publish');
-		if (function_exists('oauth_receive'))
-		{
-			return oauth_receive();
-		}
-		return new ocp_tempcode();
-	}
-
 	/**
 	 * The do-next manager for before content management.
 	 *
@@ -308,6 +291,8 @@ class Module_cms_news extends standard_aed_module
 
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,$send_trackbacks==1,$notes,$allow_comments==2));
 
+		$fields2->attach(get_syndication_option_fields());
+
 		return array($fields,$hidden,NULL,NULL,NULL,NULL,make_string_tempcode($fields2->evaluate())/*XHTMLXHTML*/,$posting_form_tabindex);
 	}
 
@@ -433,8 +418,11 @@ class Module_cms_news extends standard_aed_module
 		$time=$add_time;
 		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
 
-		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
-			syndicate_described_activity('news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news');
+		if ($validated==1)
+		{
+			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
+				syndicate_described_activity('news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
+		}
 
 		if (!is_null($schedule))
 		{
@@ -526,7 +514,15 @@ class Module_cms_news extends standard_aed_module
 			}
 		}
 
-		edit_news(intval($id),post_param('title',STRING_MAGIC_NULL),post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);
+		$title=post_param('title',STRING_MAGIC_NULL);
+
+		if (($validated==1) && ($title!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
+		{
+			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
+				syndicate_described_activity('news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
+		}
+
+		edit_news($id,$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);
 	}
 
 	/**

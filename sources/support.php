@@ -1078,12 +1078,35 @@ function log_it($type,$a=NULL,$b=NULL)
  * @param  string			Addon that caused the event
  * @param  BINARY			Whether this post should be public or friends-only
  * @param  ?MEMBER		Member being written for (NULL: current member)
+ * @param  boolean		Whether to push this out as a site event if user requested
  * @return ?AUTO_LINK	ID of the row in the activities table (NULL: N/A)
  */
-function syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=0,$a_member_id=NULL)
+function syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=0,$a_member_id=NULL,$sitewide_too=false)
 {
-	if (!function_exists('_syndicate_described_activity')) return NULL; // Addon not present
-	return _syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id);
+	// THIS FUNCTION ONLY EXISTS TO BE OVERRIDDEN. THIS IS A STUB.
+	return NULL;
+}
+
+/**
+ * Detect whether we have external site-wide syndication support somewhere.
+ *
+ * @return boolean		Whether we do
+ */
+function has_external_site_wide_syndication()
+{
+	// THIS FUNCTION ONLY EXISTS TO BE OVERRIDDEN. THIS IS A STUB.
+	return false;
+}
+
+/**
+ * Get syndication field UI.
+ *
+ * @return tempcode		Syndication fields (or empty)
+ */
+function get_syndication_option_fields()
+{
+	// THIS FUNCTION ONLY EXISTS TO BE OVERRIDDEN. THIS IS A STUB.
+	return new ocp_tempcode();
 }
 
 /**

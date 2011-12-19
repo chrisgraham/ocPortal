@@ -556,11 +556,14 @@ class Module_cms_catalogues extends standard_aed_module
 
 		$id=actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map);
 
-		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name)) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))))
+		if ($validated==1)
 		{
-			$title=array_shift($map);
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
-			syndicate_described_activity('catalogues:CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
+			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name)) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))))
+			{
+				$title=array_shift($map);
+				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
+				syndicate_described_activity('catalogues:CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
+			}
 		}
 
 		$this->donext_category_id=$category_id;
@@ -590,6 +593,16 @@ class Module_cms_catalogues extends standard_aed_module
 		$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$category_id));
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$map=$this->get_set_field_map($catalogue_name,$id);
+
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('catalogue_entries','ce_validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		{
+			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name)) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))))
+			{
+				$title=array_shift($map);
+				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
+				syndicate_described_activity('catalogues:CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
+			}
+		}
 
 		actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
 

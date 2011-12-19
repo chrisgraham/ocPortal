@@ -284,7 +284,7 @@ function render_activity($row)
 
 	$message=new ocp_tempcode();
 
-	$test=do_lang($row['a_language_string_code']);
+	$test=do_lang($row['a_language_string_code'],'{1}','{2}','{3}');
 
 	// Convert our parameters and links to Tempcode
 	$label=array();
@@ -317,11 +317,26 @@ function render_activity($row)
 	{
 		if ((strpos($test,'{'.strval($i).'}')===false) && ($row['a_label_'.strval($i)]!=''))
 		{
-			$message->attach(': ');
+			if (!$message->is_empty())
+				$message->attach(': ');
 
 			$message->attach($label[$i]->evaluate());
 		}
 	}
 	
 	return array($message,$memberpic,$datetime,$member_url);
+}
+
+/**
+ * Convert a page link into a tempcode.
+ *
+ * @param  string			The page link
+ * @param  boolean		Whether the link is for putting out externally to the site (so no keep_* parameters)
+ * @return array			tempcode url
+ */
+function pagelink_to_tempcode($pagelink,$external=false)
+{
+	list($zone,$map,$hash)=page_link_decode($pagelink);
+
+	return build_url($map,$zone,array(),false,false,$external,$hash);
 }

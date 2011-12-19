@@ -6,7 +6,7 @@
 		<fb:fan profile_id="{FAN_PROFILE_ID}" stream="{STREAM}" connections="{FANS}" logobar="{LOGOBAR}" width="300"></fb:fan>
 
 		{+START,IF,{SHOW_FANPAGE_LINK}}
-			<div style="font-size:8px; padding-left:10px"><a href="http://www.facebook.com/pages/redirect/{FAN_PROFILE_ID}">{FANPAGE_NAME}</a> on Facebook</div>
+			<div style="font-size:8px; padding-left:10px"><a href="http://www.facebook.com/pages/redirect/{$CONFIG_OPTION*,facebook_uid}">{FANPAGE_NAME}</a> on Facebook</div>
 		{+END}
 	</div>
 {+END}
