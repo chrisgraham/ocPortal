@@ -224,7 +224,7 @@ function do_form_preview(form,preview_url,has_separate_preview)
 	}
 
 	if (!form.old_action) form.old_action=old_action;
-	form.setAttribute('action',maintain_theme_in_link(preview_url)+((form.old_action.indexOf('&uploading=1')!=-1)?'&uploading=1':''));
+	form.setAttribute('action',/*maintain_theme_in_link - no, we want correct theme images to work*/(preview_url)+((form.old_action.indexOf('&uploading=1')!=-1)?'&uploading=1':''));
 	var old_target=form.getAttribute('target');
 	if (!old_target) old_target='_top'; {$,not _self due to edit screen being a frame itself}
 	if (!form.old_target) form.old_target=old_target;
