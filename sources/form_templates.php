@@ -170,7 +170,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
 	$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-	/*if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($post,NULL,false,60,NULL,NULL,true);
+	/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($post,NULL,false,60,NULL,NULL,true);
 	$LAX_COMCODE=$temp;
 
 	return do_template('POSTING_FORM',array('_GUID'=>'41259424ca13c437d5bc523ce18980fe','REQUIRED'=>$required,'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'JAVASCRIPT'=>$javascript,'PREVIEW'=>$has_preview?true:NULL,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EXTRA'=>$extra,'POST_COMMENT'=>$post_comment,'EMOTICON_CHOOSER'=>$emoticon_chooser,'SUBMIT_NAME'=>$submit_name,'HIDDEN_FIELDS'=>$hidden_fields,'COMCODE_HELP'=>$comcode_help,'URL'=>$post_url,'POST'=>$post,'DEFAULT_PARSED'=>$default_parsed,'CONTINUE_URL'=>$continue_url,'ATTACHMENTS'=>$attachments,'SPECIALISATION'=>$specialisation,'SPECIALISATION2'=>$specialisation2));
@@ -710,7 +710,7 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
 		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-		/*if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
+		/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
 		$LAX_COMCODE=$temp;
 	} else
 	{
@@ -764,7 +764,7 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
 	$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-	/*if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
+	/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
 	$LAX_COMCODE=$temp;
 
 	$_comcode=do_template('COMCODE_MESSAGE',array('_GUID'=>'fbcf2413f754ca5829b9f4c908746843','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false))));
