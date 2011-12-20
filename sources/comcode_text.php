@@ -1303,7 +1303,11 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							}
 						} else
 						{
-							if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
+							if (!$lax)
+							{
+								$_last=array_pop($tag_stack);
+								return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
+							}
 							break;
 						}
 
