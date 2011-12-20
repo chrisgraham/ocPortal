@@ -57,7 +57,8 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 		{
 			$pinned=0;
 			$sunk=0;
-			$open=1;
+			if (($info[0]['t_cache_first_member_id']!=get_member()) || (!has_specific_permission(get_member(),'close_own_topics')))
+				$open=1;
 			$cascading=0;
 		}
 

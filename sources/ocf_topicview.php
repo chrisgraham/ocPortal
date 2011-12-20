@@ -471,7 +471,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 			$out['may_change_max']=1;
 		} else
 		{
-			if (($topic_info['t_cache_first_member_id']==get_member()) && (has_specific_permission(get_member(),'close_own_topics')) && ($topic_info['t_is_open']==0))
+			if (($topic_info['t_cache_first_member_id']==get_member()) && (has_specific_permission(get_member(),'close_own_topics')) && ($topic_info['t_is_open']==1))
 			{
 				$out['may_close_topic']=1;
 			}
