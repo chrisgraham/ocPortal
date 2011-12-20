@@ -154,7 +154,7 @@ class Block_main_multi_content
 		}
 
 		$where='';
-		$query='FROM '.get_table_prefix().$info['table'].' g';
+		$query='FROM '.get_table_prefix().$info['table'].' r';
 		if ((!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (!$efficient))
 		{
 			$_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false,true);
