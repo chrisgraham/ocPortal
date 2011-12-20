@@ -151,6 +151,7 @@ function actual_rename_theme($theme,$to)
 		$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>$new_path),array('path'=>$image['path']),'',1);
 	}
 	if (get_forum_type()=='ocf') $GLOBALS['FORUM_DB']->query_update('f_members',array('m_theme'=>$to),array('m_theme'=>$theme));
+	$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>$to),array('zone_theme'=>$theme));
 	log_it('RENAME_THEME',$theme,$to);
 }
 
