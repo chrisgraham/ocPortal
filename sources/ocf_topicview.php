@@ -55,6 +55,7 @@ function find_post_id_url($post_id)
 function find_first_unread_url($id)
 {
 	$max=intval(get_option('forum_posts_per_page'));
+	if ($max==0) $max=1;
 
 	$last_read_time=$GLOBALS['FORUM_DB']->query_value_null_ok('f_read_logs','l_time',array('l_member_id'=>get_member(),'l_topic_id'=>$id));
 	if (is_null($last_read_time))
