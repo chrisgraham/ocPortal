@@ -294,19 +294,19 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL)
 
 	if (($db->connection_write==$GLOBALS['SITE_DB']->connection_write) || (get_db_forums()==get_db_site()))
 	{
-		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.$type.'/',$type,$recurse);
-		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.get_site_default_lang().'/'.$type.'/',$type,$recurse);
+		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.(($type=='')?'':($type.'/')),$type,$recurse);
+		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse);
 		if ($theme!='default')
 		{
-			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images/'.$type.'/',$type,$recurse);
-			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images/'.get_site_default_lang().'/'.$type.'/',$type,$recurse);
+			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images/'.(($type=='')?'':($type.'/')),$type,$recurse);
+			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse);
 		}
-		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images_custom/'.$type.'/',$type,$recurse);
-		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images_custom/'.get_site_default_lang().'/'.$type.'/',$type,$recurse);
+		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images_custom/'.(($type=='')?'':($type.'/')),$type,$recurse);
+		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images_custom/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse);
 		if ($theme!='default')
 		{
-			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images_custom/'.$type.'/',$type,$recurse);
-			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images_custom/'.get_site_default_lang().'/'.$type.'/',$type,$recurse);
+			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images_custom/'.(($type=='')?'':($type.'/')),$type,$recurse);
+			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images_custom/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse);
 		}
 	}
 

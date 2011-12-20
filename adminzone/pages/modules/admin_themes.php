@@ -1756,7 +1756,7 @@ class Module_admin_themes
 		}
 		$fields=form_input_huge_list(do_lang_tempcode('CODENAME'),'','id',make_string_tempcode($list),NULL,true,true,725);*/
 		require_code('themes2');
-		$ids=get_all_image_ids_type('',false,$GLOBALS['SITE_DB'],$theme);
+		$ids=get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme);
 		$fields=form_input_picture_choose_specific(do_lang_tempcode('CODENAME'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang);
 		$hidden=form_input_hidden('theme',$theme);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');
@@ -1878,6 +1878,10 @@ class Module_admin_themes
 		} else
 		{
 			$path=get_url('path','file','themes/'.$theme.'/images_custom');
+
+			if ((url_is_local($path[0])) && (!file_exists(((substr($path[0],0,15)=='themes/default/')?get_file_base():get_custom_file_base()).'/'.rawurldecode($path[0]))))
+				warn_screen($title,do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+
 			if ($path[0]=='') return warn_screen($title,do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
 			actual_edit_theme_image($old_id,$theme,$lang,$id,$path[0]);
 		}

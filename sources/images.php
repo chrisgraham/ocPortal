@@ -42,7 +42,7 @@ function _symbol_image_dims($param)
 		} else
 		{
 			require_code('files');
-			$source=@imagecreatefromstring(http_download_file($param[0],1024*1024*20/*reasonable limit*/));
+			$source=@imagecreatefromstring(http_download_file($param[0],1024*1024*20/*reasonable limit*/,false));
 			if ($source!==false)
 			{
 				$value=array(strval(imagesx($source)),strval(imagesy($source)));
@@ -497,7 +497,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			$from_file=@file_get_contents($file_path_stub);
 		} else
 		{
-			$from_file=http_download_file($from,1024*1024*20/*reasonable limit*/);
+			$from_file=http_download_file($from,1024*1024*20/*reasonable limit*/,false);
 		}
 	}
 	if ($from_file===false)
