@@ -40,7 +40,7 @@
 					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!CONTENT}</a>
 				</h3>
 
-				<div class="hide_tag" style="display: {$JS_ON,none,block}">
+				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}">
 					<ul>
 						{ACTIONS_content}
 					</ul>
