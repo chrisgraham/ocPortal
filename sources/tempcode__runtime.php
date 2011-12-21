@@ -520,6 +520,11 @@ function handle_symbol_preprocessing($bit,&$children)
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
+			if ((count($param)==1) && (strpos($param[0],',')!==false))
+			{
+				$param=preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
+			}
+
 			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
 
 			global $LOADED_BLOCKS;

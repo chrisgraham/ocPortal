@@ -955,6 +955,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 					foreach ($param as $i=>$p)
 						if (is_object($p)) $param[$i]=$p->evaluate();
 
+					if ((count($param)==1) && (strpos($param[0],',')!==false))
+					{
+						$param=preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
+					}
+
 					global $LOADED_BLOCKS;
 					if (isset($LOADED_BLOCKS[serialize($param)])) // Will always be set
 						$value=$LOADED_BLOCKS[serialize($param)]->evaluate();
