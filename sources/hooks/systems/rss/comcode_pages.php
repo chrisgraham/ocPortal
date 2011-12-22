@@ -37,7 +37,7 @@ class Hook_rss_comcode_pages
 		$filters=explode(',',$_filters);
 
 		$content=new ocp_tempcode();
-		$_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages');
+		$_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('the_page','the_zone'));
 		$rows=array();
 		foreach ($_rows as $row)
 			$rows[$row['the_zone'].':'.$row['the_page']]=$row;
