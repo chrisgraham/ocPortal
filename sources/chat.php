@@ -280,12 +280,13 @@ function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
 	if (running_script('shoutbox'))
 	{
 		$keep=symbol_tempcode('KEEP');
-		$url=find_script('shoutbox').'?room_id='.strval($room_id).'&num_messages='.strval($num_messages).$keep->evaluate();
+		$_url=find_script('shoutbox').'?room_id='.strval($room_id).'&num_messages='.strval($num_messages).$keep->evaluate();
+		if (get_param('utheme','')!='') $_url.='&utheme='.get_param('utheme');
+		$url=make_string_tempcode($_url);
 	} else
 	{
-		$url=get_self_url(true,(array_keys($_POST)!=array('shoutbox_message')),array('room_id'=>$room_id));
+		$url=get_self_url(false,(array_keys($_POST)!=array('shoutbox_message')),array('room_id'=>$room_id));
 	}
-	if (get_param('utheme','')!='') $url.='&utheme='.get_param('utheme');
 	$tpl=do_template('BLOCK_SIDE_SHOUTBOX',array('_GUID'=>'080880eb9ebdb7fcdca1ebdae6b1b9aa','MESSAGES'=>$tpl,'URL'=>$url));
 
 	if ($ret) return $tpl;
