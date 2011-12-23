@@ -118,7 +118,7 @@ function resizeEmbeddedFrame()
 
 <script type="text/javascript">
 <!--
-   var tid=window.setInterval('resizeEmbeddedFrame()',500);
+	var tid=window.setInterval(function() { resizeEmbeddedFrame(); },500);
 // -->
 </script>
 [/html]

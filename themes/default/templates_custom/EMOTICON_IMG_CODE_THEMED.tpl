@@ -9,7 +9,7 @@
 		if (typeof window.crazy_criters=='undefined')
 		{
 			window.crazy_criters=[];
-			window.setInterval('crazy_tick();',300);
+			window.setInterval(crazy_tick,300);
 		}
 
 		var my_id=parseInt(Math.random()*10000),smilecrazy=document.getElementById('smilecrazy{UNIQID%}');

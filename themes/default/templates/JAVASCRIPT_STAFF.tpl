@@ -380,7 +380,7 @@ function handleImageClick(event,ob,force)
 
 		if (src.indexOf('{$BASE_URL_NOHTTP;}/themes/')!=-1)
 			ob.edit_window=window.open('{$BASE_URL;,0}/adminzone/index.php?page=admin_themes&type=edit_image&lang='+window.encodeURIComponent(window.ocp_lang)+'&theme='+window.encodeURIComponent(window.ocp_theme)+'&url='+window.encodeURIComponent(src.replace('{$BASE_URL;,0}/',''))+keep_stub(),'edit_theme_image_'+ob.id);
-		else window.alert('{!NOT_THEME_IMAGE^;}');
+		else window.fauxmodal_alert('{!NOT_THEME_IMAGE^;}');
 
 		return false;
 	}
@@ -473,25 +473,37 @@ function load_management_menu(type,no_confirm_needed)
 	}
 	if ((window.ajax_supported) && (ajax_supported()))
 	{
-		if ((!no_confirm_needed) && (!confirm_session())) return false;
+		var show_overlay=function()
+		{
+			addEventListenerAbstract(document,'click',function (e) { if (!e) e=window.event; var el=e.target; if (!el) el=e.srcElement; if (el.id!=type+'_menu_img') { document.getElementById(type+'_menu_img').src=on_url; document.getElementById(type+'_menu_box').style.display='none'; } },false);
 
-		addEventListenerAbstract(document,'click',function (e) { if (!e) e=window.event; var el=e.target; if (!el) el=e.srcElement; if (el.id!=type+'_menu_img') { document.getElementById(type+'_menu_img').src=on_url; document.getElementById(type+'_menu_box').style.display='none'; } },false);
+			var img=document.getElementById(type+'_menu_img');
+			img.src=off_url;
+			fixImage(img);
 
-		var img=document.getElementById(type+'_menu_img');
-		img.src=off_url;
-		fixImage(img);
+			tmp_element=document.getElementById(type+'_menu_img_loader');
+			if (tmp_element) tmp_element.parentNode.removeChild(tmp_element);
+			setOpacity(img,1.0);
+			var e=document.createElement('div');
+			e.setAttribute('id',type+'_menu_box');
+			e.style.zIndex=200;
+			var b=document.getElementById(type+'_menu_rel');
+			e.style.position='absolute';
+			e.style.bottom='10px';
+			setInnerHTML(e,load_snippet(type+'_menu'));
+			b.appendChild(e);
+		}
 
-		tmp_element=document.getElementById(type+'_menu_img_loader');
-		if (tmp_element) tmp_element.parentNode.removeChild(tmp_element);
-		setOpacity(img,1.0);
-		var e=document.createElement('div');
-		e.setAttribute('id',type+'_menu_box');
-		e.style.zIndex=200;
-		var b=document.getElementById(type+'_menu_rel');
-		e.style.position='absolute';
-		e.style.bottom='10px';
-		setInnerHTML(e,load_snippet(type+'_menu'));
-		b.appendChild(e);
+		if (no_confirm_needed)
+		{
+			show_overlay();
+		} else
+		{
+			confirm_session(
+				true,
+				show_overlay
+			);
+		}
 
 		return false; // No need to load link now, because we've done an overlay
 	}

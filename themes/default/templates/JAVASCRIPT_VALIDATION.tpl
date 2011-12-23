@@ -48,11 +48,6 @@ function radioValue(radios)
 	return '';
 }
 
-function confirmDelete()
-{
-	return window.confirm("{!ARE_YOU_SURE_DELETE^#}");
-}
-
 function setFieldError(theElement,errorMsg)
 {
 	var errorElement=null;
@@ -130,23 +125,39 @@ function try_to_simplify_iframe_form()
 			{
 				if ((iframe.contentDocument) && (iframe.contentDocument.getElementsByTagName('form').length!=0))
 				{
-					if (!window.confirm('{!Q_SURE_LOSE^;}')) return false;
+					window.fauxmodal_confirm(
+						'{!Q_SURE_LOSE^;}',
+						function(result)
+						{
+							if (result)
+							{
+								_simplified_form_continue_submit(iframe,form_cat_selector);
+							}
+						}
+					);
+
+					return null;
 				}
 			}
+
+			_simplified_form_continue_submit(iframe,form_cat_selector);
 			
-			if (checkForm(form_cat_selector))
-			{
-				if (iframe) animateFrameLoad(iframe,'iframe_under');
-				form_cat_selector.submit();
-			}
-			
-			return true;
+			return null;
 		}
 		if ((found.getAttribute('size')>1) || (found.multiple)) found.onclick=found.onchange;
 		if (iframe)
 		{
 			foundButton.style.display='none';
 		}
+	}
+}
+
+function _simplified_form_continue_submit(iframe,form_cat_selector)
+{
+	if (checkForm(form_cat_selector))
+	{
+		if (iframe) animateFrameLoad(iframe,'iframe_under');
+		form_cat_selector.submit();
 	}
 }
 
@@ -230,7 +241,7 @@ function do_form_preview(form,preview_url,has_separate_preview)
 	if (!form.old_target) form.old_target=old_target;
 	form.setAttribute('target','preview_iframe');
 	document.getElementById('submit_button').style.display='inline';
-	//window.setInterval('resizeFrame(\'preview_iframe\','+(window.top.scrollY+window.top.getWindowHeight())+')',1500);
+	//window.setInterval(function() { resizeFrame('preview_iframe',window.top.scrollY+window.top.getWindowHeight()); },1500);
 	var pf=document.getElementById('preview_iframe');
 
 	{$,Do our loading-animation}
@@ -245,7 +256,7 @@ function do_form_preview(form,preview_url,has_separate_preview)
 		if ((input.type=='file') && (!input.name.match(/file\d*$/)) && (input.className.indexOf('previews')==-1) && (!input.disabled) && (input.value!=''))
 		{
 			input.disabled=true;
-			window.setTimeout('document.getElementById(\''+input.id+'\').disabled=false;',500);
+			window.setTimeout(function() { document.getElementById(input.id).disabled=false; },500);
 		}
 	}*/
 
@@ -299,7 +310,7 @@ function checkField(theElement,theForm,forPreview)
 		if (!type_ok)
 		{
 			errorMsg="{!INVALID_FILE_TYPE^#,xx1xx,{$VALID_FILE_TYPES}}".replace(/xx1xx/g,theFileType).replace(/<[^>]*>/g,'').replace(/&[lr][sd]quo;/g,"'").replace(/,/g,', ');
-			if (!alerted) window.alert(errorMsg);
+			if (!alerted) window.fauxmodal_alert(errorMsg);
 			alerted=true;
 		}
 	}
@@ -318,9 +329,9 @@ function checkField(theElement,theForm,forPreview)
 
 	theClass=firstClassName(theElement.className);
 
-	if ((!forPreview) && (theElement.name=='delete') && (((theClass=='input_radio') && (theElement.value!='0')) || (theClass=='input_tick')) && (theElement.checked)) {
-		erroneous = !confirmDelete();
-			return [erroneous,theElement,0,true]; // Because we're deleting, errors do not matter
+	if ((!forPreview) && (theElement.name=='delete') && (((theClass=='input_radio') && (theElement.value!='0')) || (theClass=='input_tick')) && (theElement.checked))
+	{
+		return [false,theElement,0,true]; // Because we're deleting, errors do not matter
 	}
 
 	// Find whether field is required and value of it
@@ -427,7 +438,7 @@ function checkForm(theForm,forPreview)
 			}
 			if (!alerted)
 			{
-				window.alert("{!TOO_MUCH_FILE_DATA^#}".replace(new RegExp('\\\\{'+'1'+'\\\\}','g'),Math.round(totalFileSize/1024)).replace(new RegExp('\\\\{'+'2'+'\\\\}','g'),Math.round(theForm.elements['MAX_FILE_SIZE'].value/1024)));
+				window.fauxmodal_alert("{!TOO_MUCH_FILE_DATA^#}".replace(new RegExp('\\\\{'+'1'+'\\\\}','g'),Math.round(totalFileSize/1024)).replace(new RegExp('\\\\{'+'2'+'\\\\}','g'),Math.round(theForm.elements['MAX_FILE_SIZE'].value/1024)));
 			}
 			alerted=true;
 		}
@@ -435,7 +446,7 @@ function checkForm(theForm,forPreview)
 
 	if (erroneous)
 	{
-		if (!alerted) window.alert("{!IMPROPERLY_FILLED_IN^#}");
+		if (!alerted) window.fauxmodal_alert("{!IMPROPERLY_FILLED_IN^#}");
 		var posy=findPosY(errorElement,true);
 		if (posy==0)
 		{
@@ -794,7 +805,7 @@ function disable_preview_scripts(under)
 
 	var elements,i;
 	var no_go=function() {
-		window.alert('{!NOT_IN_PREVIEW_MODE^;}');
+		window.fauxmodal_alert('{!NOT_IN_PREVIEW_MODE^;}');
 		return false;
 	};
 	elements=under.getElementsByTagName('button');

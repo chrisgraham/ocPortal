@@ -84,13 +84,21 @@ class Module_filedump
 			add_specific_permission('FILE_DUMP','delete_anything_filedump',false);
 
 			require_lang('filedump');
-			add_menu_item_simple('collab_features',NULL,'FILE_DUMP','_SEARCH:filedump:type=misc');
+			if (addon_installed('collaboration_zone'))
+			{
+				add_menu_item_simple('collab_features',NULL,'FILE_DUMP','_SEARCH:filedump:type=misc');
+			}
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
 			add_config_option('FILEDUMP_COUNT_FILES','filedump_show_stats_count_total_files','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('FILEDUMP_DISK_USAGE','filedump_show_stats_count_total_space','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+		}
+
+		if (addon_installed('redirects_editor'))
+		{
+			$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'filedump','r_from_zone'=>'collaboration','r_to_page'=>'filedump','r_to_zone'=>'cms','r_is_transparent'=>1));
 		}
 	}
 	
@@ -112,6 +120,7 @@ class Module_filedump
 	function run()
 	{
 		require_lang('filedump');
+		require_code('files2');
 	
 		$type=get_param('type','misc');
 	
@@ -145,7 +154,7 @@ class Module_filedump
 		$file_tree=new ocp_tempcode();
 		while (array_key_exists($i,$dirs))
 		{
-			if ($i>0) $d=$dirs[$i]; else $d=do_lang('ROOT');
+			if ($i>0) $d=$dirs[$i]; else $d=do_lang('FILE_DUMP');
 			
 			if (array_key_exists($i+1,$dirs))
 			{
@@ -193,9 +202,18 @@ class Module_filedump
 				if (!array_key_exists(0,$dbrows)) $description[$i]=($directory[$i])?do_lang_tempcode('NA_EM'):do_lang_tempcode('NONE_EM'); else $description[$i]=make_string_tempcode(get_translated_text($dbrows[0]['description']));
 				if ($description[$i]->is_empty()) $description[$i]=do_lang_tempcode('NONE_EM');
 				$deletable[$i]=(array_key_exists(0,$dbrows) && ($dbrows[0]['the_member']==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump'));
-				$filesize[$i]=integer_format(filesize(get_custom_file_base().'/uploads/filedump'.$place.$file));
-				$timestamp=filemtime(get_custom_file_base().'/uploads/filedump'.$place.$file);
-				$filetime[$i]=get_timezoned_date($timestamp);
+				if ($directory[$i])
+				{
+					$size=get_directory_size(get_custom_file_base().'/uploads/filedump'.$place.$file);
+					$timestamp=NULL;
+				} else
+				{
+					$size=filesize(get_custom_file_base().'/uploads/filedump'.$place.$file);
+					$timestamp=filemtime(get_custom_file_base().'/uploads/filedump'.$place.$file);
+				}
+				$filesize[$i]=clean_file_size($size);
+				$filetime[$i]=is_null($timestamp)?NULL:get_timezoned_date($timestamp);
+
 				$i++;
 			}
 		}
@@ -228,7 +246,13 @@ class Module_filedump
 					$actions=do_template('TABLE_TABLE_ACTION_DELETE_CATEGORY',array('_GUID'=>'0fa7d4090c6195328191399a14799169','NAME'=>$filename[$a],'URL'=>$delete_url));
 				}
 
-				$rows->attach(table_table_row(array(hyperlink($link,escape_html($filename[$a])),escape_html($description[$a]),escape_html($filesize[$a]),escape_html($filetime[$a]),$actions)));
+				$rows->attach(table_table_row(array(
+					hyperlink($link,escape_html($filename[$a]),!$directory[$a]),
+					escape_html($description[$a]),
+					escape_html($filesize[$a]),
+					is_null($filetime[$a])?do_lang_tempcode('NA'):make_string_tempcode(escape_html($filetime[$a])),
+					$actions
+				)));
 			}
 
 			$files=do_template('TABLE_TABLE',array('_GUID'=>'1c0a91d47c5fc8a7c2b35c7d9b36132f','HEADER_ROW'=>$header_row,'ROWS'=>$rows));
@@ -243,8 +267,7 @@ class Module_filedump
 		if (has_specific_permission(get_member(),'upload_filedump'))
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'ad','uploading'=>1),'_SELF');
-			$submit_name=do_lang_tempcode('UPLOAD');
-			require_code('files2');
+			$submit_name=do_lang_tempcode('FILEDUMP_UPLOAD');
 			$max=floatval(get_max_file_size());
 			$text=new ocp_tempcode();
 			if ($max<30.0)
@@ -418,7 +441,6 @@ class Module_filedump
 		if ((!is_swf_upload(true)) && ((!array_key_exists('file',$_FILES)) || (!is_uploaded_file($_FILES['file']['tmp_name'])))) // Error
 		{
 			$attach_name='file';
-			require_code('files2');
 			$max_size=get_max_file_size();
 			if (($_FILES[$attach_name]['error']==1) || ($_FILES[$attach_name]['error']==2))
 				warn_exit(do_lang_tempcode('FILE_TOO_BIG',integer_format($max_size)));
@@ -429,7 +451,6 @@ class Module_filedump
 
 		if (get_magic_quotes_gpc()) $_FILES['file']['name']=stripslashes($_FILES['file']['name']);
 
-		require_code('files2');
 		if (!has_specific_permission(get_member(),'upload_anything_filedump')) check_extension($_FILES['file']['name']);
 		$_FILES['file']['name']=str_replace('.','-',basename($_FILES['file']['name'],'.'.get_file_extension($_FILES['file']['name']))).'.'.get_file_extension($_FILES['file']['name']);
 

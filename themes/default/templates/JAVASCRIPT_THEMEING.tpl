@@ -85,12 +85,18 @@ function templateEditPage(name,id)
 
 	var ecw=document.getElementById('frame_'+box.name).contentWindow;
 
-	if ((value=='BLOCK') && (typeof window.showModalDialog!='undefined'))
+	if ((value=='BLOCK'){+START,IF,{$NOT,{$VALUE_OPTION,faux_popups}}} && (typeof window.showModalDialog!='undefined'){+END})
 	{
 		if (ecw) box.value=editAreaLoader.getValue(box.name);
 		var url='{$FIND_SCRIPT_NOHTTP;,block_helper}?field_name='+box.name+'&block_type=template'+keep_stub();
-		window.showModalDialog(maintain_theme_in_link(url),'dialogWidth=750;dialogHeight=600;status=no;resizable=yes;scrollbars=yes;unadorned=yes');
-		if (ecw) editAreaLoader.setValue(box.name,box.value);
+		window.faux_showModalDialog(
+			maintain_theme_in_link(url),
+			null,
+			'dialogWidth=750;dialogHeight=600;status=no;resizable=yes;scrollbars=yes;unadorned=yes',
+			function() {
+				if (ecw) editAreaLoader.setValue(box.name,box.value);
+			}
+		);
 		return;
 	}
 
@@ -105,53 +111,97 @@ function templateEditPage(name,id)
 	else if (arity=='3-4') definite_gets=3;
 	else if (arity=='0+') definite_gets=0;
 	else if (arity=='1+') definite_gets=1;
-	var i,v;
 	var parameter=['A','B','C','D','E','F','G','H','I','J','K'];
-	for (i=0;i<definite_gets;i++)
-	{
-		v=window.prompt('{!INPUT_NECESSARY_PARAMETER^;}'+', '+parameter[i],'');
-		if (v==null) return false;
-		params=params+','+v;
-	}
-	if ((arity=='0+') || (arity=='1+'))
-	{
-		while (true)
+
+	_getParameterParameters(
+		definite_gets,
+		parameter,
+		arity,
+		box,
+		name,
+		value,
+		0,
+		'',
+		function(box,name,value,params)
 		{
-			v=window.prompt('{!INPUT_OPTIONAL_PARAMETER^;}','');
-			if (v==null) break;
-			params=params+','+v;
+			if (ecw) box.value=editAreaLoader.getValue(box.name);
+
+			if (name.indexOf('ppdirective')!=-1)
+			{
+				insertTextboxWrapping(box,'{'+'+START,'+value+params+'}','{'+'+END}');
+			} else
+			{
+				var st_value;
+				if (name.indexOf('ppparameter')==-1)
+				{
+					st_value='{'+'$';
+				} else
+				{
+					st_value='{';
+				}
+
+				value=st_value+value+params+'}';
+
+				insertTextbox(box,value);
+			}
+
+			if (ecw) editAreaLoader.setValue(box.name,box.value);
 		}
-	}
-	else if ((arity=='0-1') || (arity=='3-4'))
-	{
-		v=window.prompt('{!INPUT_OPTIONAL_PARAMETER^;}','');
-		if (v!=null) params=params+','+v;
-	}
-
-	if (ecw) box.value=editAreaLoader.getValue(box.name);
-
-	if (name.indexOf('ppdirective')!=-1)
-	{
-		insertTextboxWrapping(box,'{'+'+START,'+value+params+'}','{'+'+END}');
-	} else
-	{
-		var st_value;
-		if (name.indexOf('ppparameter')==-1)
-		{
-			st_value='{'+'$';
-		} else
-		{
-			st_value='{';
-		}
-
-		value=st_value+value+params+'}';
-
-		insertTextbox(box,value);
-	}
-
-	if (ecw) editAreaLoader.setValue(box.name,box.value);
+	);
 
 	return false;
+}
+
+function _getParameterParameters(definite_gets,parameter,arity,box,name,value,num_done,params,callback)
+{
+	if (num_done<definite_gets)
+	{
+		window.fauxmodal_prompt(
+			'{!INPUT_NECESSARY_PARAMETER^;}'+', '+parameter[i],
+			'',
+			function(v)
+			{
+				if (v!==null)
+				{
+					params=params+','+v;
+					_getParameterParameters(definite_gets,parameter,arity,box,name,value,num_done+1,params,callback);
+				}
+			},
+			"{!INSERT_PARAMETER^#}"
+		);
+	} else
+	{
+		if ((arity=='0+') || (arity=='1+'))
+		{
+			window.fauxmodal_prompt(
+				'{!INPUT_OPTIONAL_PARAMETER^;}',
+				'',
+				function(v)
+				{
+					if (v!==null)
+					{
+						params=params+','+v;
+						_getParameterParameters(definite_gets,parameter,arity,box,name,value,num_done+1,params,callback);
+					} else callback(box,name,value,params);
+				},
+				"{!INSERT_PARAMETER^#}"
+			);
+		}
+		else if ((arity=='0-1') || (arity=='3-4'))
+		{
+			window.fauxmodal_prompt(
+				'{!INPUT_OPTIONAL_PARAMETER^;}',
+				'',
+				function(v)
+				{
+					if (v!=null)
+						params=params+','+v;
+					callback(box,name,value,params);
+				},
+				"{!INSERT_PARAMETER^#}"
+			);
+		}
+	}
 }
 
 function decToHex(number)

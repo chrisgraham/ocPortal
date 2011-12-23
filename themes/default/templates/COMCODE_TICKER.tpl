@@ -13,7 +13,7 @@ addEventListenerAbstract(window,'load',function () {
 		window.focused=true;
 		addEventListenerAbstract(window,"focus",function() { window.focused=true; });
 		addEventListenerAbstract(window,"blur",function() { window.focused=false; });
-		timer=window.setInterval('ticker_tick('+my_id+',{WIDTH%});', 100/{SPEED%});
+		timer=window.setInterval(function() { ticker_tick(my_id,{WIDTH%}); },100/{SPEED%});
 	} else
 	{
 		setInnerHTML(ticktickticker,'<marquee style="display: block" class="ticker" onmouseover="this.setAttribute(\'scrolldelay\',\'10000\');" onmouseout="this.setAttribute(\'scrolldelay\',(100/{SPEED%}));" scrollamount="2" scrolldelay="'+(100/{SPEED%})+'" width="{WIDTH|}">{TEXT/;~}<\/marquee>');

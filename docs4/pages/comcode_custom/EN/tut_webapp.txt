@@ -18,7 +18,7 @@ URLs actually encode a number of things that together provide all the informatio
 </li>
 <li>the name of the page on that computer &ndash; http://ocportal.com<b>/example.html</b></li>
 </ol>
-For a simple web-page, (2) is simply a file-name that  the computer reads from its hard-disk and sends back.<br /><br /></li>
+For a simple web-page, (2) is simply a filename that  the computer reads from its hard-disk and sends back.<br /><br /></li>
 <li><em>pages are joined to other pages via hyper-links</em><br />
 Fortunately there is not much to explain here beyond what you already know. Pages each have their own URL, and it is these URLs that are used for hyper-links.</li>
 </ul>

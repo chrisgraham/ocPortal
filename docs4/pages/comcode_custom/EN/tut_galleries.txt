@@ -53,14 +53,14 @@ ocPortal can usually auto-detect video widths, heights and lengths, from the act
 [exp_thumb="Adding an image to a gallery" float="right"]gallery_add_image[/exp_thumb]
 Gallery entries are ordered in the same order they were added to the system. If you are batch importing (covered in the Advanced Galleries tutorial), then you may want to define a custom ordering. To do this, you just need to give all the images in the batch names that are consistent with a numbering scheme of your choice. ocPortal will detect numbering schemes automatically, and order by them.
 
-The rule is very simple: ocPortal will order by file-name if when taking all numbers out of all file-names in the gallery, the file-names are all the same.
+The rule is very simple: ocPortal will order by filename if when taking all numbers out of all filenames in the gallery, the filenames are all the same.
 
 For example, a gallery with the following named files would not be ordered according to a scheme:
  - foo.png
  - foo1.png
  - foo2.png
  - foo2something.png
-But without the last image, the contents would be ordered by file-name.
+But without the last image, the contents would be ordered by filename.
 
 [title="2"]Slide-shows[/title]
 

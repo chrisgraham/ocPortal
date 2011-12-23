@@ -5233,7 +5233,7 @@ function doSubmit(e,ob) {
 
 		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form);
 		if (ret2 && !ret)
-			window.alert("{!REQUIRED_NOT_FILLED_IN^#}");
+			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
 		return ret && ret2;
 	}
 	
@@ -5385,7 +5385,7 @@ function uploadError(ob,error) {
 
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
 	if (txtFileName.value != "")
-		window.alert("{!SWFUPLOAD_FAILED^#}: "+error.message);
+		window.fauxmodal_alert("{!SWFUPLOAD_FAILED^#}: "+error.message);
 	txtFileName.value = "";
 
 	fireFakeChangeFor(ob.settings.txtName,'');
@@ -5567,7 +5567,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 				old_onclick();
 				return;
 			}
-			window.alert('{!UPLOAD_FIRST^;}');
+			window.fauxmodal_alert('{!UPLOAD_FIRST^;}');
 			btnSubmit.disabled=true;
 			var timer=window.setInterval(function() {
 				if (rep2.value=='1')
@@ -5998,8 +5998,16 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 
 			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash={$USER.;}&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
 		};
-		edit_link.onclick=function() {
-			return window.confirm('You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.');
+		edit_link.onclick=function()
+		{
+			window.fauxmodal_confirm(
+				'You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.'
+				function(result)
+				{
+					if (result) click_link(edit_link);
+				}
+			);
+			return false;
 		};
 		edit_link.onmousedown();
 		//field.parentNode.appendChild(document.createElement('br'));

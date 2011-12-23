@@ -2644,7 +2644,7 @@ END;
 					if ((!post.value) && (post[1])) post=post[1];
 					if (post.value.length>".strval($size).")
 					{
-						window.alert('".php_addslashes(do_lang('_POST_TOO_LONG'))."');
+						window.fauxmodal_alert('".php_addslashes(do_lang('_POST_TOO_LONG'))."');
 						return false;
 					}
 					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();

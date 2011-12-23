@@ -85,7 +85,7 @@
 								{MARKED_POST_ACTIONS}
 							</select>
 							</label>
-							<input class="button_pageitem" type="submit" onclick="if (!addFormMarkedPosts(this.form,'mark_')) { window.alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />
+							<input class="button_pageitem" type="submit" onclick="if (!addFormMarkedPosts(this.form,'mark_')) { window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false; } if (document.getElementById('mpa_type').selectedIndex!=-1) { disable_button_just_clicked(this); return true; } return false;" value="{!PROCEED}" />
 						</div>
 					</form>
 				{+END}

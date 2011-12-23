@@ -728,6 +728,12 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 	border-top: 0px;
 }
 
+#word_count {
+	float: right;
+	font-size: 0.8em;
+	padding: 4px;
+}
+
 /* medborder is similar to lightborder; in fact, there isn't any rule as to when to use each: it is just artistic */
 .medborder,
 .results_browser a,

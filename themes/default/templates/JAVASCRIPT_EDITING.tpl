@@ -16,7 +16,7 @@ function toggle_wysiwyg(name)
 {
 	if (!browser_matches('wysiwyg'))
 	{
-		window.alert('{!TOGGLE_WYSIWYG_ERROR^;}');
+		window.fauxmodal_alert('{!TOGGLE_WYSIWYG_ERROR^;}');
 		return false;
 	}
 
@@ -25,7 +25,23 @@ function toggle_wysiwyg(name)
 	if (typeof window.get_elements_by_class_name=='undefined') return false;
 
 	var is_wysiwyg_on=wysiwyg_on();
-	var saving_cookies=!is_wysiwyg_on || window.confirm('{!WHETHER_SAVE_WYSIWYG_SELECTION;}');
+	if (is_wysiwyg_on)
+	{
+		window.fauxmodal_confirm(
+			'{!WHETHER_SAVE_WYSIWYG_SELECTION;}',
+			function(saving_cookies)
+			{
+				_toggle_wysiwyg(name,saving_cookies);
+			}
+		);
+		return false;
+	}
+
+	return _toggle_wysiwyg(name,saving_cookies);
+}
+
+function _toggle_wysiwyg(name,saving_cookies)
+{
 	if (saving_cookies)
 	{
 		SetCookie('use_wysiwyg',is_wysiwyg_on?'0':'1',3000);
@@ -53,76 +69,99 @@ function toggle_wysiwyg(name)
 			}
 		}
 
-		// If we do not need to prompt, hard coded it with the "discard" line text, else make real prompt
-		var prompt=all_empty?'{!DISCARD_WYSIWYG_CHANGES_LINE^;}':generate_question_ui('{!DISCARD_WYSIWYG_CHANGES_NICE^;}',{cancel: '{!INPUTSYSTEM_CANCEL^;}',convert: '{!DISCARD_WYSIWYG_CHANGES_LINE_CONVERT^;}',discard: '{!DISCARD_WYSIWYG_CHANGES_LINE^;}'},'{!DISABLE_WYSIWYG^;}','{!DISCARD_WYSIWYG_CHANGES^;}');
-		if ((!prompt) || (prompt.toLowerCase()=='{!INPUTSYSTEM_CANCEL^;}'.toLowerCase()))
+		if (all_empty)
 		{
-			if (saving_cookies)
-				SetCookie('use_wysiwyg','1',3000);
-			return false;
-		}
-		var discard=(prompt.toLowerCase()=='{!DISCARD_WYSIWYG_CHANGES_LINE^;}'.toLowerCase());
-
-		for (var fid=0;fid<forms.length;fid++)
+			disable_wysiwyg(forms,so,so2,true);
+		} else
 		{
-			for (counter=0;counter<forms[fid].elements.length;counter++)
-			{
-				id=forms[fid].elements[counter].id;
-				if (typeof window.areaedit_editors[id]!='undefined')
+			generate_question_ui(
+				'{!DISCARD_WYSIWYG_CHANGES_NICE^;}',
+				{cancel: '{!INPUTSYSTEM_CANCEL^;}',convert: '{!DISCARD_WYSIWYG_CHANGES_LINE_CONVERT^;}',discard: '{!DISCARD_WYSIWYG_CHANGES_LINE^;}'},
+				'{!DISABLE_WYSIWYG^;}',
+				'{!DISCARD_WYSIWYG_CHANGES^;}',
+				function(prompt)
 				{
-					var textarea=forms[fid].elements[counter];
-
-					// Mark as non-WYSIWYG
-					document.getElementById(id+'__is_wysiwyg').value='0';
-					textarea.style.display='block';
-					textarea.style.visibility='visible';
-					textarea.disabled=false;
-					textarea.readOnly=false;
-
-					// Comcode conversion
-					if ((discard) && (window.areaedit_original_comcode[id]))
+					if ((!prompt) || (prompt.toLowerCase()=='{!INPUTSYSTEM_CANCEL^;}'.toLowerCase()))
 					{
-						textarea.value=window.areaedit_original_comcode[id];
-					} else
-					{
-						request=load_XML_doc('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub(),false,'data='+window.encodeURIComponent(window.areaedit_editors[id].getData()));
-						if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName("result")[0]))
-						{
-							textarea.value='[semihtml]'+areaedit_editors[id].getData()+'[/semihtml]';
-						} else
-						{
-							var result_tags=request.responseXML.documentElement.getElementsByTagName("result");
-							result=result_tags[0];
-							textarea.value=merge_text_nodes(result.childNodes).replace(/\s*$/,'');
-						}
-						if ((textarea.value.indexOf('{\$,page hint: no_wysiwyg}')==-1) && (textarea.value!='')) textarea.value+='{\$,page hint: no_wysiwyg}';
+						if (saving_cookies)
+							SetCookie('use_wysiwyg','1',3000);
+						return false;
 					}
-					if (document.getElementById('toggle_wysiwyg_'+id))
-						setInnerHTML(document.getElementById('toggle_wysiwyg_'+id),'{!ENABLE_WYSIWYG^;}');
+					var discard=(prompt.toLowerCase()=='{!DISCARD_WYSIWYG_CHANGES_LINE^;}'.toLowerCase());
 
-					// Unload editor
-					window.areaedit_editors[id].elementMode=CKEDITOR.ELEMENT_MODE_NONE;
-					CKEDITOR.remove(window.areaedit_editors[id]);
-					delete window.areaedit_editors[id];
-					var wysiwyg_node=document.getElementById('cke_'+id);
-					wysiwyg_node.parentNode.removeChild(wysiwyg_node);
+					disable_wysiwyg(forms,so,so2,discard);
 				}
-			}
+			);
 		}
-		if (so) so.style.display='block';
-		if (so2) so2.style.display='none';
 	} else
 	{
-		if (so) so.style.display='none';
-		if (so2) so2.style.display='block';
-
-		for (var fid=0;fid<forms.length;fid++)
-		{
-			load_html_edit(forms[fid],true);
-		}
+		enable_wysiwyg(forms,so,so2);
 	}
 
 	return false;
+}
+
+function enable_wysiwyg(forms,so,so2)
+{
+	if (so) so.style.display='none';
+	if (so2) so2.style.display='block';
+
+	for (var fid=0;fid<forms.length;fid++)
+	{
+		load_html_edit(forms[fid],true);
+	}
+}
+
+function disable_wysiwyg(forms,so,so2,discard)
+{
+	for (var fid=0;fid<forms.length;fid++)
+	{
+		for (counter=0;counter<forms[fid].elements.length;counter++)
+		{
+			id=forms[fid].elements[counter].id;
+			if (typeof window.areaedit_editors[id]!='undefined')
+			{
+				var textarea=forms[fid].elements[counter];
+
+				// Mark as non-WYSIWYG
+				document.getElementById(id+'__is_wysiwyg').value='0';
+				textarea.style.display='block';
+				textarea.style.visibility='visible';
+				textarea.disabled=false;
+				textarea.readOnly=false;
+
+				// Comcode conversion
+				if ((discard) && (window.areaedit_original_comcode[id]))
+				{
+					textarea.value=window.areaedit_original_comcode[id];
+				} else
+				{
+					request=load_XML_doc('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub(),false,'data='+window.encodeURIComponent(window.areaedit_editors[id].getData()));
+					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName("result")[0]))
+					{
+						textarea.value='[semihtml]'+areaedit_editors[id].getData()+'[/semihtml]';
+					} else
+					{
+						var result_tags=request.responseXML.documentElement.getElementsByTagName("result");
+						result=result_tags[0];
+						textarea.value=merge_text_nodes(result.childNodes).replace(/\s*$/,'');
+					}
+					if ((textarea.value.indexOf('{\$,page hint: no_wysiwyg}')==-1) && (textarea.value!='')) textarea.value+='{\$,page hint: no_wysiwyg}';
+				}
+				if (document.getElementById('toggle_wysiwyg_'+id))
+					setInnerHTML(document.getElementById('toggle_wysiwyg_'+id),'{!ENABLE_WYSIWYG^;}');
+
+				// Unload editor
+				window.areaedit_editors[id].elementMode=CKEDITOR.ELEMENT_MODE_NONE;
+				CKEDITOR.remove(window.areaedit_editors[id]);
+				delete window.areaedit_editors[id];
+				var wysiwyg_node=document.getElementById('cke_'+id);
+				wysiwyg_node.parentNode.removeChild(wysiwyg_node);
+			}
+		}
+	}
+	if (so) so.style.display='block';
+	if (so2) so2.style.display='none';
 }
 
 var areaedit_editors=[];
@@ -271,9 +310,9 @@ function areaedit_init(element)
 		customConfig : '',
 		bodyId : 'htmlarea',
 		baseHref : get_base_url(),
-		linkShowAdvancedTab : false,
-		imageShowAdvancedTab : false,
-		imageShowLinkTab : false,
+		linkShowAdvancedTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
+		imageShowAdvancedTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
+		imageShowLinkTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 		autoUpdateElement : true,
 		contentsCss : pageStyleSheets,
 		cssStatic : css,
@@ -295,7 +334,7 @@ function areaedit_init(element)
 	css+='body { width: 100%; min-height: 140px; }'; // IE9 selectability fix
 	css+="#main_page_title { display: block !important }";
 	css+=".MsoNormal { margin: 0; }";
-	css+='.ocp_keep, .ocp_keep_block { font-weight: bold; background-color: #BABAFF; }';
+	//css+='.ocp_keep, .ocp_keep_block { font-weight: bold; background-color: #BABAFF; }';
 	//css+='.ocp_keep_block[tag="block"] { display: block; padding: 30px 0; text-align: center; }';  Cutting and pasting becomes dodgy if this is enabled
 	css+='.comcode_fake_table > div, .fp_col_block { outline: 1px dotted; margin: 1px 0; }';
 	for (counter=0;counter<linked_sheets.length;counter++)
@@ -410,7 +449,7 @@ function findTagsInEditor(editor,element)
 					if (this.id=='') this.id='block_'+Math.round(Math.random()*10000000);
 					var url='{$FIND_SCRIPT;,block_helper}?type=step2&block='+window.encodeURIComponent(block_name)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
 					url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');
-					window.open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+					window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
 					return false;
 				}
 			}
@@ -493,7 +532,7 @@ function convert_xml(name)
 
 	if (isWYSIWYGField(element))
 	{
-		window.alert('{!COMCODE_XML_CONVERT_NOT_WITH_WYSIWYG^;}');
+		window.fauxmodal_alert('{!COMCODE_XML_CONVERT_NOT_WITH_WYSIWYG^;}');
 		return false;
 	}
 
@@ -506,7 +545,7 @@ function convert_xml(name)
 		var error_window=window.open();
 		error_window.document.write(request.responseText);
 		error_window.document.close();
-		window.alert('{!COMCODE_XML_CONVERT_PARSE_ERROR^;}');
+		window.fauxmodal_alert('{!COMCODE_XML_CONVERT_PARSE_ERROR^;}');
 	}
 
 	return false;
@@ -625,9 +664,9 @@ function insertTextbox(element,text,sel,plain_insert,html)
 			{
 				var tag_name=text.replace(/^\[/,'').replace(/[ \]].*$/,'');
 				insert=getSelectedHTML(areaedit_editors[element.id])+
-					('<span title="'+(html?tag_name:escape_html(tag_name))+'" class="ocp_keep">')+
+					('&#8203;<kbd title="'+(html?tag_name:escape_html(tag_name))+'" class="ocp_keep">')+
 					(html?html:escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />'))+
-					'</span> ';
+					'</kbd>&#8203;';
 			}
 		}
 		areaedit_editors[element.id].focus();
@@ -744,7 +783,7 @@ function insertTextboxWrapping(element,beforeWrapTag,afterWrapTag)
 		if (!browser_matches('opera')) areaedit_editors[element.id].focus(); // Needed on some browsers, but on Opera will defocus our selection
 		var selectedHTML=getSelectedHTML(areaedit_editors[element.id]);
 		if (browser_matches('opera')) areaedit_editors[element.id].getSelection().getNative().getRangeAt(0).deleteContents();
-		areaedit_editors[element.id].insertHtml('<span title="'+escape_html(beforeWrapTag.replace(/^\[/,'').replace(/[ \]].*$/,''))+'" class="ocp_keep">'+beforeWrapTag+selectedHTML+afterWrapTag+'</span> ');
+		areaedit_editors[element.id].insertHtml('&#8203;<kbd title="'+escape_html(beforeWrapTag.replace(/^\[/,'').replace(/[ \]].*$/,'').replace(/=.*$/,''))+'" class="ocp_keep">'+beforeWrapTag+selectedHTML+afterWrapTag+'</kbd>&#8203;');
 		fixImagesIn(areaedit_editors[element.id].document.getBody());
 		findTagsInEditor(areaedit_editors[element.id],element);
 		return;

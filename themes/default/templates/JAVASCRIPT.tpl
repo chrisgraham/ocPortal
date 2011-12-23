@@ -31,7 +31,6 @@ function scriptLoadStuff()
 	if (!document.images) document.images=document.getElementsByTagName('img');
 	if (!document.forms) document.forms=document.getElementsByTagName('form');
 	if (!document.links) document.links=document.getElementsByTagName('a');
-	if (typeof window.expandImages!='undefined') expandImages();
 	for (i=0;i<document.images.length;i++)
 	{
 		var j=document.images[i];
@@ -139,7 +138,7 @@ function initialise_error_mechanism()
 			if ((typeof window.done_one_error=='undefined') || (!window.done_one_error))
 			{
 				window.done_one_error=true;
-				window.alert('{!JAVASCRIPT_ERROR^;}\n\n'+code+': '+msg+'\n'+file);
+				window.fauxmodal_alert('{!JAVASCRIPT_ERROR^;}\n\n'+code+': '+msg+'\n'+file,null,'{!ERROR_OCCURED^;}');
 			}
 			return false;
 		};
@@ -229,7 +228,7 @@ function checkFieldForBlankness(field,event)
 			setInnerHTML(ee,"{!REQUIRED_NOT_FILLED_IN^#}");
 		}
 
-		window.alert("{!IMPROPERLY_FILLED_IN^#}");
+		window.fauxmodal_alert("{!IMPROPERLY_FILLED_IN^#}");
 		return false;
 	}
 
@@ -276,7 +275,7 @@ function manageScrollHeight(ob)
 }
 
 // 'Cancel' should come as index 0 and Ok/default-option should come as index 1. This is so that the fallback works right.
-function generate_question_ui(message,button_set,window_title,fallback_message)
+function generate_question_ui(message,button_set,window_title,fallback_message,callback)
 {
 	var image_set=[];
 	if (typeof button_set.length=='undefined')
@@ -294,32 +293,51 @@ function generate_question_ui(message,button_set,window_title,fallback_message)
 	{
 		var height=230;
 		if (button_set.length>4) height+=5*(button_set.length-4);
-		var timer=new Date().getTime();
 
 		{$,Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups don't know if they run on HTTPS if behind a transparent reverse proxy}
 		var url=maintain_theme_in_link('{$PREG_REPLACE,^https,http,{$FIND_SCRIPT;,question_ui}}?message='+window.encodeURIComponent(message)+'&image_set='+window.encodeURIComponent(image_set.join(','))+'&button_set='+window.encodeURIComponent(button_set.join(','))+'&window_title='+window.encodeURIComponent(window_title)+keep_stub());
-		try
-		{
-			var result=window.showModalDialog(url,null,'dialogWidth=440;dialogHeight='+height+';status=no;unadorned=yes');
-		}
-		catch (e) {}; // IE gives "Access is denied" if popup was blocked, due to var result assignment to non-real window
-		var timer_now=new Date().getTime();
-		if (timer_now-100>timer) // Not popup blocked
-		{
-			if ((typeof result=="undefined") || (result===null)) return button_set[0]; // just pressed 'cancel', so assume option 0
-			return result;
-		}
+		window.faux_showModalDialog(
+			url,
+			null,
+			'dialogWidth=440;dialogHeight='+height+';status=no;unadorned=yes',
+			function(result)
+			{
+				if ((typeof result=="undefined") || (result===null))
+				{
+					callback(button_set[0]); // just pressed 'cancel', so assume option 0
+				} else
+				{
+					callback(result);
+				}
+			}
+		);
+
+		return;
 	}
 
 	if (button_set.length==1)
 	{
-		window.alert(fallback_message?fallback_message:message);
-		return button_set[0];
+		window.fauxmodal_alert(
+			fallback_message?fallback_message:message,
+			function()
+			{
+				callback(button_set[0]);
+			},
+			window_title
+		);
+		return;
 	} else
 	if (button_set.length==2)
 	{
-		var result=window.confirm(fallback_message?fallback_message:message);
-		return result?button_set[1]:button_set[0];
+		window.fauxmodal_confirm(
+			fallback_message?fallback_message:message,
+			function(result)
+			{
+				callback(result?button_set[1]:button_set[0]);
+			},
+			window_title
+		);
+		return;
 	} else
 	{
 		if (!fallback_message)
@@ -331,17 +349,27 @@ function generate_question_ui(message,button_set,window_title,fallback_message)
 			}
 			message=message.substr(0,message.length-1);
 		} else message=fallback_message;
-		var result=window.prompt(message,'');
-		if ((typeof result=="undefined") || (result===null)) return button_set[0]; // just pressed 'cancel', so assume option 0
-		if (result=='') return button_set[1]; // just pressed 'ok', so assume option 1
-		for (var i=0;i<button_set.length;i++)
-		{
-			if (result.toLowerCase()==button_set[i].toLowerCase()) return result; // match
-		}
-		return button_set[0]; // unknown
+
+		window.fauxmodal_prompt(
+			message,
+			'',
+			function(result)
+			{
+				if ((typeof result=="undefined") || (result===null)) return button_set[0]; // just pressed 'cancel', so assume option 0
+				if (result=='') return button_set[1]; // just pressed 'ok', so assume option 1
+				for (var i=0;i<button_set.length;i++)
+				{
+					if (result.toLowerCase()==button_set[i].toLowerCase()) return result; // match
+				}
+				return button_set[0]; // unknown
+			},
+			window_title
+		);
+
+		return;
 	}
 
-	return null;
+	return;
 }
 
 function doc_onmouseout()
@@ -455,20 +483,33 @@ function help_panel(show)
 	{
 		if (ReadCookie('hide_help_panel')=='')
 		{
-			if (!window.confirm('{!CLOSING_HELP_PANEL_CONFIRM^;}')) return false;
+			window.fauxmodal_confirm(
+				'{!CLOSING_HELP_PANEL_CONFIRM^;}',
+				function(answer)
+				{
+					if (answer)
+						_hide_help_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle);
+				}
+			);
+			return false;
 		}
-		panel_right.style.width='26px';
-		if (global_message) global_message.style.margin{$WCASE,{!en_right}}='16px';
-		for (i=0;i<middles.length;i++)
-		{
-			middles[i].style.margin{$WCASE,{!en_right}}='16px';
-		}
-		helper_panel_contents.style.display='none';
-		SetCookie('hide_help_panel','1',100);
-		helper_panel_toggle.onclick=function() { return help_panel(true); };
-		helper_panel_toggle.childNodes[0].setAttribute('src','{$IMG;,help_panel_show}'.replace(/^http:/,window.location.protocol));
+		_hide_help_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle);
 	}
 	return false;
+}
+
+function _hide_help_panel(middles,panel_right,global_message,helper_panel_contents,helper_panel_toggle)
+{
+	panel_right.style.width='26px';
+	if (global_message) global_message.style.margin{$WCASE,{!en_right}}='16px';
+	for (var i=0;i<middles.length;i++)
+	{
+		middles[i].style.margin{$WCASE,{!en_right}}='16px';
+	}
+	helper_panel_contents.style.display='none';
+	SetCookie('hide_help_panel','1',100);
+	helper_panel_toggle.onclick=function() { return help_panel(true); };
+	helper_panel_toggle.childNodes[0].setAttribute('src','{$IMG;,help_panel_show}'.replace(/^http:/,window.location.protocol));
 }
 
 function sts(src)
@@ -554,7 +595,7 @@ function SetCookie(cookieName,cookieValue,nDays)
 	if ((read!=cookieValue) && (read))
 	{
 		{+START,IF,{$DEV_MODE}}
-			if (!window.done_cookie_alert) window.alert('{!COOKIE_CONFLICT_DELETE_COOKIES^;}'+'... '+document.cookie+' ('+to_set+')');
+			if (!window.done_cookie_alert) window.fauxmodal_alert('{!COOKIE_CONFLICT_DELETE_COOKIES^;}'+'... '+document.cookie+' ('+to_set+')',null,'{!ERROR_OCCURED^;}');
 		{+END}
 		window.done_cookie_alert=true;
 	}
@@ -695,26 +736,49 @@ function get_base_url()
 }
 
 {$,Enforcing a session using AJAX}
-function confirm_session(jump_initial_test)
+function confirm_session(do_initial_test,callback)
 {
-	if (typeof window.load_XML_doc=='undefined') return false;
+	if (typeof window.load_XML_doc=='undefined') return;
 
 	var url='{$FIND_SCRIPT_NOHTTP;,confirm_session}';
+
+	// First see if session already established
 	var ret=null;
-	if (!jump_initial_test)
+	if (do_initial_test)
 	{
 		require_javascript("javascript_ajax");
 		if (typeof window.load_XML_doc!='undefined') ret=load_XML_doc(url+keep_stub(true),false);
-		if (!ret) return false;
+		if (!ret) return;
+
+		if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
+		{
+			callback();
+			return;
+		}
 	}
-	var promptt="!";
-	while (((!ret) || ((ret.responseText!='') && (ret.responseText))) && (promptt!='') && (promptt))
-	{
-		promptt=window.prompt('{!ENTER_PASSWORD_JS^;}','');
-		if ((window.load_XML_doc) && (promptt) && (promptt!=''))
-			ret=load_XML_doc(url,false,'login_username='+ret.responseText+'&password='+promptt+keep_stub());
-	}
-	return ret.responseText=='' || (!ret.responseText);
+
+	_confirm_session(callback);
+}
+
+function _confirm_session(callback)
+{
+	window.fauxmodal_prompt(
+		'{!ENTER_PASSWORD_JS^;}',
+		'',
+		function(promptt)
+		{
+			if ((promptt) && (promptt!=''))
+			{
+				ret=load_XML_doc(url,false,'login_username='+ret.responseText+'&password='+promptt+keep_stub());
+
+				if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
+					callback();
+				else
+					_confirm_session(callback); // Recurse
+			}
+		},
+		'{!_LOGIN;}'
+	);
 }
 
 {$,Dynamic inclusion}
@@ -949,8 +1013,21 @@ function animateFrameLoad(pf,frame,leave_gap_top)
 {
 	if (!leave_gap_top) leave_gap_top=0;
 
+	pf.style.height=window.top.getWindowHeight()+'px'; {$,Enough to stop jumping around}
+
+	illustrateFrameLoad(pf,frame);
+
+	var ifuob=window.top.document.getElementById('iframe_under');
+	var extra=ifuob?((window!=window.top)?findPosY(ifuob):0):0;
+	if (ifuob) ifuob.scrolling='no';
+
+	if (window==window.top)
+		window.top.smoothScroll(findPosY(pf)+extra-leave_gap_top);
+}
+
+function illustrateFrameLoad(pf,frame)
+{
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_animations}}}
-		pf.style.height=window.top.getWindowHeight()+'px'; {$,Enough to stop jumping around}
 		var head='<style type="text/css">',cssText='';
 		for (var i=0;i<document.styleSheets.length;i++)
 		{
@@ -981,12 +1058,14 @@ function animateFrameLoad(pf,frame,leave_gap_top)
 		}
 		head+=cssText+'<\/style>';
 
+		if (!window.frames[frame]) return;
+		if (!window.frames[frame].document) return;
 		var de=window.frames[frame].document.documentElement;
 		if (!de) return;
 		var body=de.getElementsByTagName('body');
 		if (body.length==0)
 		{
-			setInnerHTML(de,'<head>'+head+'<\/head><body class="re_body"><div class="spaced"><div class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div><\/body>');
+			setInnerHTML(de,'<head>'+head+'<\/head><body class="re_body"><div class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div><\/body>');
 		} else
 		{
 			body[0].className='re_body';
@@ -1000,17 +1079,27 @@ function animateFrameLoad(pf,frame,leave_gap_top)
 
 			if (de.getElementsByTagName('style').length==0) {$,The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice}
 				setInnerHTML(head_element,head);
-			setInnerHTML(body[0],'<div class="spaced"><div class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div>');
+			setInnerHTML(body[0],'<div class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div>');
 		}
+		var the_frame=window.frames[frame];
+		window.setTimeout( // Stupid workaround for Google Chrome not loading an image on unload even if in cache
+			function() { 
+				if (the_frame.document && the_frame.document.getElementById('loading_image'))
+				{
+					var i_new=document.createElement('img');
+					i_new.src=the_frame.document.getElementById('loading_image').src;
+					var i_default=the_frame.document.getElementById('loading_image');
+					i_new.className=i_default.className;
+					i_new.alt=i_default.alt;
+					i_new.id=i_default.id;
+					i_default.parentNode.replaceChild(i_new,i_default);
+				}
+			},
+			0
+		);
 		var style=de.getElementsByTagName('style')[0];
 		if ((style) && (style.styleSheet)) style.styleSheet.cssText=cssText; {$,For IE}
 	{+END}
-
-	var ifuob=window.top.document.getElementById('iframe_under');
-	var extra=ifuob?((window!=window.top)?findPosY(ifuob):0):0;
-	if (ifuob) ifuob.scrolling='no';
-
-	window.top.smoothScroll(findPosY(pf)+extra-leave_gap_top);
 }
 
 function smoothScroll(destY,expectedScrollY,dir,eventAfter)
@@ -1480,7 +1569,7 @@ function resizeFrame(name,minHeight)
 	if (!minHeight) minHeight=0;
 	var frame_element=document.getElementById(name);
 	var frame_window;
-	if (top.frames[name]) frame_window=top.frames[name]; else if (typeof window.frames[name]!='undefined') frame_window=window.frames[name]; else return;
+	if (typeof window.frames[name]!='undefined') frame_window=window.frames[name]; else if (parent && parent.frames[name]) frame_window=parent.frames[name]; else return;
 	if ((frame_element) && (frame_window) && (frame_window.document) && (frame_window.document.body))
 	{
 		var h=getWindowScrollHeight(frame_window);
@@ -1491,10 +1580,13 @@ function resizeFrame(name,minHeight)
 		}
 		if (h+'px'!=frame_element.style.height)
 		{
-			frame_element.style.height=((h>=minHeight)?h:minHeight)+'px';
-			if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
-			frame_element.scrolling='no';
-			frame_window.onscroll=function(event) { if (!event) event=window.event; if (event==null) return false; if (typeof frame_window.scrollTo!='undefined') frame_window.scrollTo(0,0); return cancelBubbling(event); }; {$,Needed for Opera}
+			if (frame_element.scrolling!='auto')
+			{
+				frame_element.style.height=((h>=minHeight)?h:minHeight)+'px';
+				if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
+				frame_element.scrolling='no';
+				frame_window.onscroll=function(event) { if (!event) event=window.event; if (event==null) return false; if (typeof frame_window.scrollTo!='undefined') frame_window.scrollTo(0,0); return cancelBubbling(event); }; {$,Needed for Opera}
+			}
 		}
 	}
 }
@@ -2216,6 +2308,34 @@ function apply_rating_highlight_and_ajax_code(type,id,root_type,rating,self_url,
 		}
 	}
 }
+
+function click_link(link)
+{
+	var cancelled=false;
+
+	if (typeof document.createEvent!='undefined')
+	{
+		var event=document.createEvent('MouseEvents');
+			event.initMouseEvent('click',true,true,window,
+			0,0,0,0,0,
+			false,false,false,false,
+			0,null
+		);
+		cancelled=!link.dispatchEvent(event);
+	}
+	else if (typeof link.fireEvent!='undefined')
+	{
+		cancelled=!link.fireEvent('onclick');
+	}
+
+	if (!cancelled)
+	{
+		if (link.getAttribute('target')) window.open(link.href,link.getAttribute('target'));
+		window.location=link.href;
+	}
+}
+
+{+START,INCLUDE,JAVASCRIPT_MODALWINDOW}{+END}
 
 {$,Put your extra custom code in an overrided version of the template below + it will take function precedence also}
 {+START,INCLUDE,JAVASCRIPT_CUSTOM_GLOBALS}{+END}

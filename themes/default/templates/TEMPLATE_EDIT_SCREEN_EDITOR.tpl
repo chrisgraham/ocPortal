@@ -7,7 +7,7 @@
 
 		{+START,IF_NON_EMPTY,{GUID}}
 			<div class="right">
-				<a onclick="if (window.confirm('{$STRIP_TAGS,{!HELP_INSERT_DISTINGUISHING_TEMPCODE;}}')) insertTextbox(document.getElementById('f{I*}_new'),'{'+'+START,IF,{'+'$EQ,{'+'_GUID},{GUID*}}}\n{'+'+END}'); return false;" href="#">{!INSERT_DISTINGUISHING_TEMPCODE}</a>
+				<a onclick="window.fauxmodal_confirm('{$STRIP_TAGS,{!HELP_INSERT_DISTINGUISHING_TEMPCODE;}}',function(result) { if (result) { insertTextbox(document.getElementById('f{I*}_new'),'{'+'+START,IF,{'+'$EQ,{'+'_GUID},{GUID*}}}\n{'+'+END}'); } }); return false;" href="#">{!INSERT_DISTINGUISHING_TEMPCODE}</a>
 			</div>
 		{+END}
 		<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('f{I*}sdp','block'); return false;"><img id="e_f{I*}sdp" alt="{!EXPAND}: {!SYMBOLS_AND_DIRECTIVES}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>

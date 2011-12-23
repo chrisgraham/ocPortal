@@ -10,7 +10,7 @@ addEventListenerAbstract(window,'load',function () {
 	var comcodejumping=document.getElementById('comcodejumping{$GET%,RAND_ID_JUMPING}');
 	setInnerHTML(comcodejumping,'<span id="'+my_id+'">'+jumper_parts[my_id][0]+'<\/span>');
 
-	window.setInterval('jumper_tick('+my_id+');',{TIME%});
+	window.setInterval(function() { jumper_tick(my_id); },{TIME%});
 } );
 //]]></script>
 <noscript>

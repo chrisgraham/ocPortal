@@ -46,7 +46,6 @@
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry},1}{+END}
 <tr>
 	<td class="cedi_post_expand_button">
-		{+START,IF,{INCLUDE_EXPANSION}}<a href="{EXPAND_URL*}"><img title="{!EXPAND_INFO}" alt="{!EXPAND_INFO}" src="{$IMG*,{EXP_IMG*}}" /></a>{+END}
 	</td>
 	<td class="ocf_post_buttons ocf_post1">
 		<div class="cedi_buttons">

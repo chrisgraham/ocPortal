@@ -875,7 +875,7 @@ function block_helper_script()
 		}
 		$text=do_lang_tempcode('BLOCK_HELPER_2',escape_html(cleanup_block_name($block)),escape_html(do_lang('BLOCK_'.$block.'_DESCRIPTION')),escape_html(do_lang('BLOCK_'.$block.'_USE')));
 		$hidden=form_input_hidden('block',$block);
-		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'BACK'=>true,'SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>true,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
+		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>true,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 
 		if ($fields->is_empty()) $type='step3';
 	}
@@ -949,7 +949,7 @@ function emoticons_script()
 	$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 	$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_relevance_level<3'.$extra);
 	$content=new ocp_tempcode();
-	$cols=4;
+	$cols=8;
 	$current_row=new ocp_tempcode();
 	foreach ($rows as $i=>$myrow)
 	{

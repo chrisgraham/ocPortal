@@ -285,7 +285,7 @@ class Module_newsletter
 				{
 					if ((form.elements['password_confirm']) && (form.elements['password_confirm'].value!=form.elements['password'].value))
 					{
-						window.alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
+						window.fauxmodal_alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
 						return false;
 					}
 					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();

@@ -610,6 +610,12 @@ form { /* For IE6 */
 	border-top: 0px;
 }
 
+#word_count {
+	float: right;
+	font-size: 0.8em;
+	padding: 4px;
+}
+
 /* medborder is similar to lightborder; in fact, there isn't any rule as to when to use each: it is just artistic */
 
 .boxes_together_follower { /* boxes_together_follower is just for IE6, which does not support +, we have to go to extra effort in our templates to add this class */

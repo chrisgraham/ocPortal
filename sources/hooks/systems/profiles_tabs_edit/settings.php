@@ -244,7 +244,7 @@ class Hook_Profiles_Tabs_Edit_settings
 					{
 						if ((form.elements['password_confirm']) && (form.elements['password_confirm'].value!=form.elements['edit_password'].value))
 						{
-							window.alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
+							window.fauxmodal_alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
 							return false;
 						}
 					}

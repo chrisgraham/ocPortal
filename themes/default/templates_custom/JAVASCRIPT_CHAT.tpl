@@ -110,7 +110,7 @@ function xmpp_connect(username,password,onLoginCompleted)
 function onConnectError()
 {
 	if (typeof window.mucMan=='undefined')
-		window.alert('Error connecting to XMPP server.');
+		window.fauxmodal_alert('Error connecting to XMPP server.');
 }
 
 function onConnectForLogin(username,password,onLoginCompleted)

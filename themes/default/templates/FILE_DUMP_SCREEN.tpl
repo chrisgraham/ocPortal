@@ -11,18 +11,17 @@
 
 <br />
 
-{+START,BOX,{!MAKE_CHANGES},,light}
-	<h2>{!FILEDUMP_UPLOAD}</h2>
+<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
 
+{+START,BOX,{!FILEDUMP_UPLOAD},,med}
 	{UPLOAD_FORM}
+{+END}
 
-	{+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}
-		<h2>{!FILEDUMP_CREATE_FOLDER}</h2>
-
+{+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}
+	<br />
+	{+START,BOX,{!FILEDUMP_CREATE_FOLDER},,light}
 		{CREATE_FOLDER_FORM}
 	{+END}
-
-	<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
 {+END}
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}

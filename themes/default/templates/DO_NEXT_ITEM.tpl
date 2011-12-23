@@ -4,7 +4,7 @@
 	<tr>
 {+END}
 {$SET,rand_donextitem,{$RAND}}
-<td id="donext_item_{$GET*,rand_donextitem}" class="do_next_item" onclick="var as=this.getElementsByTagName('a'); var a=as[as.length-1]; var loc=a.href; if (a.getAttribute('target')) window.open(loc,a.getAttribute('target')); else window.location=loc;" onkeypress="if (enter_pressed(event)) this.onclick(event);" onmouseout="this.className='do_next_item'; if (typeof window.doc_onmouseout!='undefined') doc_onmouseout();" onmouseover="this.className='do_next_item_hover'; if (typeof window.doc_onmouseover!='undefined') doc_onmouseover('{I2}');">
+<td id="donext_item_{$GET*,rand_donextitem}" class="do_next_item" onclick="var as=this.getElementsByTagName('a'); var a=as[as.length-1]; click_link(a);" onkeypress="if (enter_pressed(event)) this.onclick(event);" onmouseout="this.className='do_next_item'; if (typeof window.doc_onmouseout!='undefined') doc_onmouseout();" onmouseover="this.className='do_next_item_hover'; if (typeof window.doc_onmouseover!='undefined') doc_onmouseover('{I2}');">
 	{+START,IF_NON_EMPTY,{DOC}}<div id="doc_{I2}" style="display: none">{DOC}</div>{+END}
 
 	<div>
@@ -12,7 +12,7 @@
 			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancelBubbling(event);" href="{LINK*}"><img class="do_next_icon" title="" alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
 		{+END}
 		{+START,IF_NON_EMPTY,{WARNING}}
-			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancelBubbling(event); if (!window.confirm('{WARNING*;}')) return false; else return true;" href="{LINK*}"><img class="do_next_icon" title="" alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
+			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancelBubbling(event); var t=this; window.fauxmodal_confirm('{WARNING*;}',function(answer) { if (answer) click_link(t); }); return false;" href="{LINK*}"><img class="do_next_icon" title="" alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
 		{+END}
 	</div>
 
@@ -27,13 +27,19 @@
 				for (var i=0;i<as.length;i++)
 				{
 					addEventListenerAbstract(as[i],'click',function(event) {
-						var test=window.confirm('{!KEEP_ADDING_QUESTION;}');
-						if (test)
-						{
-							this.href+=(this.href.indexOf('?')!=-1)?'&':'?';
-							this.href+='{AUTO_ADD*}=1';
-						}
-						return test;
+						test=window.fauxmodal_confirm(
+							'{!KEEP_ADDING_QUESTION;}',
+							function(test)
+							{
+								if (test)
+								{
+									this.href+=(this.href.indexOf('?')!=-1)?'&':'?';
+									this.href+='{AUTO_ADD*}=1';
+									click_link(this);
+								}
+							}
+						);
+						return false;
 					} );
 				}
 			} );

@@ -10,7 +10,7 @@
 {$SET,rand_id,{$RAND}}
 
 <div class="xhtml_validator_off">
-	<{$?,{$EQ,{$SUBSTR,{A_URL},-4},.mp3},audio,video} width="{$MIN*,{A_WIDTH},600}" {+START,IF,{$EQ,{A_WIDTH},{$MIN,{A_WIDTH},600}}}height="{A_HEIGHT*}" {+END}id="flv_container_{$GET%,rand_id}">
+	<{$?,{$EQ,{$SUBSTR,{A_URL},-4},.mp3},audio,video} width="{$MIN*,{A_WIDTH},600}" {+START,IF,{$EQ,{A_WIDTH},{$MIN,{A_WIDTH},600}}}height="{A_HEIGHT*}" {+END}id="flv_container_{$GET%,rand_id}"{+START,IF_PASSED,A_THUMB_URL}{+START,IF_NON_EMPTY,{A_THUMB_URL}} poster="{SCRIPT*}?id={ID*}{SUP_PARAMS*}{$KEEP*,0,1}&thumb=1&amp;for_session={$SESSION_HASHED*}&amp;no_count=1"{+END}{+END}>
 		<source type="{MIME_TYPE*}" src="{$GET*,flv_url}" />
 		{!VIDEO}{+START,IF_NON_EMPTY,{A_DESCRIPTION}}; {A_DESCRIPTION}{+END}
 	</{$?,{$EQ,{$SUBSTR,{A_URL},-4},.mp3},audio,video}>

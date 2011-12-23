@@ -3,7 +3,7 @@
 	<br />
 {+END}
 
-<form onsubmit="if ((checkFieldForBlankness(this.elements['address'],event)) &amp;&amp; (this.elements['address'].value.match(/^[a-zA-Z0-9\._\-\+]+@[a-zA-Z0-9\._\-]+$/))) { disable_button_just_clicked(this); return true; } window.alert('{!NOT_A_EMAIL;=*}'); return false;" action="{URL*}" method="post">
+<form onsubmit="if ((checkFieldForBlankness(this.elements['address'],event)) &amp;&amp; (this.elements['address'].value.match(/^[a-zA-Z0-9\._\-\+]+@[a-zA-Z0-9\._\-]+$/))) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOT_A_EMAIL;=*}'); return false;" action="{URL*}" method="post">
 	<p class="accessibility_hidden"><label for="baddress">{!EMAIL_ADDRESS}</label></p>
 
 	<div class="constrain_field">

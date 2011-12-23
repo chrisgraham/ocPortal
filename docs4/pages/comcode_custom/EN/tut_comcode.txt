@@ -1435,14 +1435,14 @@ Section 3
 			attachment, shown inside a box. Use '/' to say  not to put an
 			image in a box. Note that for new uploads, descriptions are
 			addable in the attachment editor, and automatically moved them
-			into the tag after form submission. Supports Comcode.</p><p><em>filename</em> &ndash; the file-name to have the attachment
-			downloaded under.</p><p><em>type</em>=auto|island|inline|download|code|hyperlink|mail &ndash; what type of
+			into the tag after form submission. Supports Comcode.</p><p><em>filename</em> &ndash; the filename to have the attachment
+			downloaded under.</p><p><em>type</em>=auto|island|inline|download|code|hyperlink|mail|inline_extract|island_extract &ndash; what type of
 			attachment display should be used (default is auto). For auto,
 			ocPortal detects what the file is from file extension, and uses
-			appropriate templates to tie to relevant XHTML tags or plugins. 'mail' only applies to Comcode included in an e-mail and takes the attachment out-of-context, running it into a real e-mail attachment.</p><p><em>width</em> &ndash; width, if appropriate.</p><p><em>height</em> &ndash; height, if appropriate</p><p><em>align</em> &ndash; alignment</p><p><em>float</em>=left|right &ndash; Float the tag to the left/right. Normally this parameter would not be given.</p>
+			appropriate templates to tie to relevant XHTML tags or plugins. 'mail' only applies to Comcode included in an e-mail and takes the attachment out-of-context, running it into a real e-mail attachment.</p><p><em>width</em> &ndash; width, if appropriate.</p><p><em>height</em> &ndash; height, if appropriate</p><p><em>align</em> &ndash; alignment</p><p><em>float</em>=left|right &ndash; Float the tag to the left/right. Normally this parameter would not be given.</p><p><em>thumbnail_url</em> &ndash; Optional, the URL to a thumbnail to show before a movie starts playing (only works with h.264 media files)</p>
 		</td>
 		<td>
-			<p>This can be many things, and determined how the attachment
+			<p>This can be many things, and determines how the attachment
 			works.</p><p>If it is 'new_X' then ocPortal will look for an attached file
 			to the posted form.</p><p>If it is a number, it will tie to that numbered attachment.</p><p>If it is 'url_URL' it will make an attachment from that URL.</p><p>If it is something else, it will be interpreted as an encoded
 			file.</p>
@@ -1496,7 +1496,7 @@ Section 3
 			to a file in</p><p><em>param</em> &ndash; the link caption. Supports Comcode.</p>
 		</td>
 		<td>
-			<p>The file-name to link to.</p>
+			<p>The filename to link to.</p>
 		</td>
 	</tr>
 	<tr>

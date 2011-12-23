@@ -433,11 +433,6 @@ class Module_cedi
 
 		seo_meta_load_for('seedy_page',strval($id),$title_to_use_2);
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='te_all';
-
-		$expanded=get_param_integer('te_all',0);
-	
 		// Description
 		$description=get_translated_tempcode($page['description']);
 		$description_comcode=get_translated_text($page['description']);
@@ -524,13 +519,7 @@ class Module_cedi
 			} else $extra=new ocp_tempcode();
 			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_link($poster,false,true);
 			$rate_url=get_self_url(true);
-			$NON_CANONICAL_PARAMS[]='te_'.strval($post_id);
-			$this_expand=get_param_integer('te_'.strval($post_id),0);
-			$anti_this_expand=(1-$this_expand);
-			$_expand_url=build_url(array('page'=>'_SELF','type'=>'misc','te_'.strval($post_id)=>$anti_this_expand),'_SELF',array('te_all'=>1),true);
-			$expand_url=$_expand_url->evaluate();
-			if ($this_expand==0) $exp_img='expand'; else $exp_img='contract';
-			$posts->attach(do_template('CEDI_POST',array('_GUID'=>'a29b107abfaf7689c8392676c63093f5','INCLUDE_EXPANSION'=>$include_expansion_here,'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),'STAFF_ACCESS'=>$staff_access,'EXP_IMG'=>$exp_img,'EXPAND_URL'=>$expand_url.'#post_'.strval($post_id),'RATE_URL'=>$rate_url.'#post_'.strval($post_id),'RATING'=>$rating,'ID'=>strval($myrow['id']),'POSTER_URL'=>$poster_url,'POSTER'=>$username,'POST_DATE_RAW'=>strval($post_date_raw),'POST_DATE'=>$post_date,'POST'=>$post,'BUTTONS'=>$extra)));
+			$posts->attach(do_template('CEDI_POST',array('_GUID'=>'a29b107abfaf7689c8392676c63093f5','INCLUDE_EXPANSION'=>$include_expansion_here,'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),'STAFF_ACCESS'=>$staff_access,'EXP_IMG'=>$exp_img,'RATE_URL'=>$rate_url.'#post_'.strval($post_id),'RATING'=>$rating,'ID'=>strval($myrow['id']),'POSTER_URL'=>$poster_url,'POSTER'=>$username,'POST_DATE_RAW'=>strval($post_date_raw),'POST_DATE'=>$post_date,'POST'=>$post,'BUTTONS'=>$extra)));
 
 			$num_posts++;
 		}
@@ -540,7 +529,7 @@ class Module_cedi
 			attach_message(do_lang_tempcode('TOO_MANY_CEDI_POSTS'),'warn');
 		}
 
-		$menu=$this->do_menu($chain,$expanded,$id,$include_expansion,count($dbposts)<300);
+		$menu=$this->do_menu($chain,$id,$include_expansion,count($dbposts)<300);
 
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$page['add_date']),
@@ -562,29 +551,14 @@ class Module_cedi
 	 * Show the buttons on the CEDI page viewing page.
 	 *
 	 * @param  SHORT_TEXT	The ID chain being used to get to this page
-	 * @param  BINARY			Whether the images embedded in the tempcode are expanded
 	 * @param  AUTO_LINK		The ID of the page we are showing the menu on
 	 * @param  boolean		Whether to include the expansion/contraction button
 	 * @param  boolean		Whether posting is generally allowed (may be passed false if too many posts)
 	 * @return tempcode		The button tempcode
 	 */
-	function do_menu($chain,$expanded,$id,$include_expansion,$may_post=true)
+	function do_menu($chain,$id,$include_expansion,$may_post=true)
 	{
-		$anti_expanded=1-$expanded;
-		$page_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain,'te_all'=>$anti_expanded),'_SELF');
-		if ($include_expansion)
-		{
-			if ($expanded==1)
-			{
-				$expand_button=do_template('SCREEN_BUTTON',array('_GUID'=>'6b7c0ae0f7480b001c483918f7612a13','REL'=>'pagecontract','IMMEDIATE'=>true,'URL'=>$page_url,'TITLE'=>do_lang_tempcode('CONTRACT'),'IMG'=>'contract'));
-			} else
-			{
-				$expand_button=do_template('SCREEN_BUTTON',array('_GUID'=>'d1494e5ba6c8264132179458114045ba','REL'=>'pageexpand','IMMEDIATE'=>true,'URL'=>$page_url,'TITLE'=>do_lang_tempcode('EXPAND_INFO'),'IMG'=>'expand'));
-			}
-		} else
-		{
-			$expand_button=new ocp_tempcode();
-		}
+		$page_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF');
 		$pos=strpos($chain,'/');
 		$id=intval(substr($chain,($pos===false)?0:($pos+1)));
 		if (addon_installed('search'))
@@ -611,7 +585,6 @@ class Module_cedi
 		} else $post_button=new ocp_tempcode();
 
 		$tpl=new ocp_tempcode();
-		$tpl->attach($expand_button);
 		$tpl->attach($search_button);
 		$tpl->attach($changes_button);
 		$tpl->attach($tree_button);

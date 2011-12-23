@@ -1783,8 +1783,8 @@ Xmpp4Js.PacketListenerManager.prototype = {
                 }
             } catch( e ) {
 //;;;           Xmpp4Js.PacketListenerManager.logger.error( "Error running packet listener");
-                //	alert( "Exception executing filter: " + e +"\n" + e.fileName + "(" + e.lineNumber + ")");
-                //	alert( e.stack );
+                //	window.fauxmodal_alert( "Exception executing filter: " + e +"\n" + e.fileName + "(" + e.lineNumber + ")");
+                //	window.fauxmodal_alert( e.stack );
             }
         }
     }
@@ -6062,7 +6062,7 @@ DataStorage.prototype.set = function( xmlns, data, elementName ) {
 
 	this.con.send( iq, function(packet) {
 		if( packet.getType() == "error" ) {
-			alert( "Error storing IQ: "+xmlns + ", " + elementName );
+			window.fauxmodal_alert( "Error storing IQ: "+xmlns + ", " + elementName );
 			return;
 		}
 	});
@@ -6079,7 +6079,7 @@ DataStorage.prototype.get = function( xmlns, cb, elementName ) {
 
 	this.con.send( iq, function(packet) {
 		if( packet.getType() == "error" ) {
-			alert( "Error retreiving IQ: "+xmlns + ", " + elementName );
+			window.fauxmodal_alert( "Error retreiving IQ: "+xmlns + ", " + elementName );
 			return;
 		}
 		var responseNodes = packet.getQuery().getElementsByTagNameNS( xmlns, elementName );

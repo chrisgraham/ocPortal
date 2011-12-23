@@ -96,7 +96,7 @@ function sUpdateRetrieve(data, tStat) {
 		if (jQuery('success', data).text()=='0') {
 
 			if (jQuery('feedback', data).text().substr(0,13)=='{!MUST_LOGIN}') { //if refusal is due to login expiry...
-				window.alert('{!MUST_LOGIN}');
+				window.fauxmodal_alert('{!MUST_LOGIN}');
 			} else
 				updateBox.attr('class', 'update_error').html(jQuery('feedback', data).text());
 		}

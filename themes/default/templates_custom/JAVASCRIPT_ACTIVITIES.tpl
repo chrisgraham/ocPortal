@@ -7,16 +7,20 @@
 // Assume that our activity feed needs updating to start with
 window.latest_activity = 0;
 
-function sUpdateGetData () {
+function sUpdateGetData ()
+{
 	// Lock feed updates by setting ugdCanICant to 1
-	if ((++ugdCanICant)>1) {
+	if ((++ugdCanICant)>1)
+	{
 		ugdCanICant=1;
-	} else {
+	} else
+	{
 		// First we check whether our feed is already up to date
 		jQuery.ajax({
 			url: "{$BASE_URL;}/data_custom/latest_activity.txt?chrome_fix="+Math.floor(Math.random()*10000),
 			data: {},
-			success: function (data, status, requestObject) {
+			success: function (data, status, requestObject)
+			{
 				if (parseInt(data) != window.latest_activity)
 				{
 					// If not then remember the new value
@@ -57,13 +61,18 @@ function sUpdateGetData () {
  * Receive and parse data for the activities activities feed
  */
 
-function sUpdateShow(data, stat) {
-	if (ugdCanICant>1) {
+function sUpdateShow(data, stat)
+{
+	if (ugdCanICant>1)
+	{
 		ugdCanICant=1;
-	} else {
+	} else
+	{
 		var succeeded = false;
-		if (stat=='success') {
-			if (jQuery('success', data).text()=='1') {
+		if (stat=='success')
+		{
+			if (jQuery('success', data).text()=='1')
+			{
 				var listels=jQuery('li','#activities_feed');
 				var feedLen=parseInt(jQuery('feedlen', data).text());
 				var oldEndId=parseInt(listels.attr('id'));
@@ -75,7 +84,8 @@ function sUpdateShow(data, stat) {
 
 				var top_of_list = document.getElementById('activities_holder').firstChild;
 
-				jQuery.each(listitems, function () {
+				jQuery.each(listitems, function ()
+				{
 					var this_li = document.createElement('li');
 					this_li.id = jQuery(this).attr('id');
 					this_li.className = "activities-box lightborder";
@@ -100,56 +110,75 @@ function sUpdateShow(data, stat) {
 			}
 			else
 			{
-				if (jQuery('success', data).text()=='2') {
+				if (jQuery('success', data).text()=='2')
+				{
 					jQuery('#activitiesfeed_info').text('');
 					succeeded = true;
 				}
 			}
 		}
-		if (!succeeded) {
+		if (!succeeded)
+		{
 			jQuery('#activitiesfeed_info').text('Error reading activities feed');
 		}
 		ugdCanICant = 0;
 	}
 }
 
-function sUpdateRemove (evt) {
-	if (confirm('{!activities:DELETE_CONFIRM}')) {
-		var addy="{$BASE_URL;,0}/data_custom/activities_removal.php"+keep_stub(true);
-		jQuery.ajax({
-				url: addy.replace(/^http:/,window.location.protocol),
-				type: 'POST',
-				data: jQuery(this).serialize(),
-				cache: false,
-				timeout: 5000,
-				success: function(data, stat) { sUpdateRmShow(data, stat); },
-				error: function(a, stat, err) { sUpdateRmShow(err,  stat); }
-		});
-	}
+function sUpdateRemove(evt)
+{
+	window.fauxmodal_confirm(
+		'{!activities:DELETE_CONFIRM}',
+		function(result)
+		{
+			if (result)
+			{
+				var addy="{$BASE_URL;,0}/data_custom/activities_removal.php"+keep_stub(true);
+				jQuery.ajax({
+						url: addy.replace(/^http:/,window.location.protocol),
+						type: 'POST',
+						data: jQuery(this).serialize(),
+						cache: false,
+						timeout: 5000,
+						success: function(data, stat) { sUpdateRmShow(data, stat); },
+						error: function(a, stat, err) { sUpdateRmShow(err,  stat); }
+				});
+			);
+		}
+	);
 	evt.preventDefault();
 }
 
-function sUpdateRmShow(data, stat) {
+function sUpdateRmShow(data, stat)
+{
 	var succeeded = false;
 	var status_id='';
 
 	var velocifero=1600;
 
-	if (stat=='success') {
-		if (jQuery('success', data).text()=='1') {
+	if (stat=='success')
+	{
+		if (jQuery('success', data).text()=='1')
+		{
 			status_id = '#'+jQuery('status_id', data).text();
-			jQuery('.activities-content', status_id, '#activities_feed').text(jQuery('feedback', data).text()).attr('style', 'color: #00CBF6;').hide().fadeIn(velocifero, function () {
-				jQuery(status_id, '#activities_feed').fadeOut(velocifero, function() {
+			jQuery('.activities-content', status_id, '#activities_feed').text(jQuery('feedback', data).text()).attr('style', 'color: #00CBF6;').hide().fadeIn(velocifero, function ()
+			{
+				jQuery(status_id, '#activities_feed').fadeOut(velocifero, function()
+				{
 					jQuery(status_id, '#activities_feed').remove();
 				});
 			});
-		} else {
-			switch (jQuery('err', data).text()) {
+		} else
+		{
+			switch (jQuery('err', data).text())
+			{
 				case 'perms':
 					status_id = '#'+jQuery('status_id', data).text();
 					var savetext=jQuery('activities-content', status_id, '#activities_feed').text();
-					jQuery('.activities-content', status_id, '#activities_feed').text(jQuery('feedback', data).text()).attr('style', 'color: #FF0000;').hide().fadeIn(velocifero, function () {
-						jQuery('.activities-content', status_id, '#activities_feed').fadeOut( velocifero, function () {
+					jQuery('.activities-content', status_id, '#activities_feed').text(jQuery('feedback', data).text()).attr('style', 'color: #FF0000;').hide().fadeIn(velocifero, function ()
+					{
+						jQuery('.activities-content', status_id, '#activities_feed').fadeOut( velocifero, function ()
+						{
 							jQuery('.activities-content', status_id, '#activities_feed').text(savetext).removeAttr('style').fadeIn(velocifero);
 						});
 					});
@@ -159,20 +188,24 @@ function sUpdateRmShow(data, stat) {
 					break;
 			}
 		}
-	} else {
 	}
 }
 
 /*String.trim() is not native in all browsers*/
-if (typeof String.prototype.trim !== 'function') {
-	String.prototype.trim = function() {
+if (typeof String.prototype.trim !== 'function')
+{
+	String.prototype.trim = function()
+	{
 		return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 	}
 }
 
-if (typeof Array.prototype.indexOf !== 'function') {
-	Array.prototype.indexOf = function(obj) {
-		for(var i=0; i<this.length; i++) {
+if (typeof Array.prototype.indexOf !== 'function')
+{
+	Array.prototype.indexOf = function(obj)
+	{
+		for(var i=0; i<this.length; i++)
+		{
 			if(this[i]==obj)
 				return i;
 		}

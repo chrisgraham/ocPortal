@@ -17,7 +17,7 @@
 
 {$JAVASCRIPT_INCLUDE,javascript_validation}
 {+START,IF_NON_PASSED,IFRAME_URL}
-<form title="{!PRIMARY_PAGE_FORM}" id="main_form" {+START,IF_NON_PASSED,GET}method="post" action="{URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED,GET}method="get" action="{$URL_FOR_GET_FORM*,{URL}}"{+END} target="_top" {+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
+<form title="{!PRIMARY_PAGE_FORM}" id="main_form" {+START,IF_NON_PASSED,GET}method="post" action="{URL*}"{+START,IF,{$IN_STR,{FIELDS},"file"}} enctype="multipart/form-data"{+END}{+END}{+START,IF_PASSED,GET}method="get" action="{$URL_FOR_GET_FORM*,{URL}}"{+END} {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}{+START,IF_NON_PASSED,TARGET}target="_top" {+END}{+START,IF_PASSED,AUTOCOMPLETE}{+START,IF,{AUTOCOMPLETE}}class="autocomplete" {+END}{+END}>
 	{+START,IF_PASSED,GET}{$HIDDENS_FOR_GET_FORM,{URL}}{+END}
 {+END}
 {+START,IF_PASSED,IFRAME_URL}
@@ -77,7 +77,7 @@
 		if (typeof window.try_to_simplify_iframe_form!='undefined') try_to_simplify_iframe_form();
 		var non_iframe_url='{URL;*}';
 		var iframe_url='{IFRAME_URL;*}';
-		window.setInterval('resizeFrame(\'iframe_under\')',1500);
+		window.setInterval(function() { resizeFrame('iframe_under'); },1500);
 	//]]></script>
 {+END}
 {+START,IF_NON_PASSED,IFRAME_URL}

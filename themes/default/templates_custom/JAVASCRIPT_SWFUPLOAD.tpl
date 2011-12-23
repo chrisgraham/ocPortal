@@ -984,7 +984,7 @@ SWFUpload.Console.writeLine = function (message) {
 
 		console.scrollTop = console.scrollHeight - console.clientHeight;
 	} catch (ex) {
-		alert("Exception: " + ex.name + " Message: " + ex.message);
+		window.fauxmodal_alert("Exception: " + ex.name + " Message: " + ex.message);
 	}
 };
 
@@ -1221,7 +1221,7 @@ function doSubmit(e,ob) {
 		}
 		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form);
 		if (ret2 && !ret)
-			window.alert("{!REQUIRED_NOT_FILLED_IN^#}");
+			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
 
 		return ret && ret2;
 	}
@@ -1276,22 +1276,22 @@ function fileQueueError(file, errorCode, message)  {
 	// Handle this error separately because we don't want to create a FileProgress element for it.
 	switch (errorCode) {
 		case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
-			alert("You have attempted to queue too many files.\n" + (message === 0 ? "You have reached the upload limit." : "You may select " + (message > 1 ? "up to " + message + " files." : "one file.")));
+			window.fauxmodal_alert("You have attempted to queue too many files.\n" + (message === 0 ? "You have reached the upload limit." : "You may select " + (message > 1 ? "up to " + message + " files." : "one file.")));
 			return;
 		case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
-			alert("{!FILE_TOO_BIG_GENERAL^#}");
+			window.fauxmodal_alert("{!FILE_TOO_BIG_GENERAL^#}");
 			this.debug("Error Code: File too big, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 			return;
 		case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
-			alert("{!FILE_WAS_EMPTY^#}");
+			window.fauxmodal_alert("{!FILE_WAS_EMPTY^#}");
 			this.debug("Error Code: Zero byte file, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 			return;
 		case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
-			alert("{!INVALID_FILE_TYPE_GENERAL^#,{$CONFIG_OPTION,valid_types}}");
+			window.fauxmodal_alert("{!INVALID_FILE_TYPE_GENERAL^#,{$CONFIG_OPTION,valid_types}}");
 			this.debug("Error Code: Invalid File Type, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 			return;
 		default:
-			alert("{!INTERNAL_ERROR^#}");
+			window.fauxmodal_alert("{!INTERNAL_ERROR^#}");
 			this.debug("Error Code: " + errorCode + ", File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 			return;
 	}
@@ -1429,7 +1429,7 @@ function uploadComplete(file, ob) {
 		var txtFileName = document.getElementById(ob.settings.txtFileNameID);
 
 		if (txtFileName.value != "")
-			alert("{!INTERNAL_ERROR^#}");
+			window.fauxmodal_alert("{!INTERNAL_ERROR^#}");
 		
 		txtFileName.value = "";
 		fireFakeChangeFor(ob.settings.txtName,'');
@@ -1451,14 +1451,14 @@ function uploadError(file, errorCode, message, ob) {
 	// Handle this error separately because we don't want to create a FileProgress element for it.
 	switch (errorCode) {
 		case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
-			alert("{!ONLY_ONE_FILE^#}");
+			window.fauxmodal_alert("{!ONLY_ONE_FILE^#}");
 			this.debug("Error Code: Upload Limit Exceeded, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 			return;
 		case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:
 		case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:
 			break;
 		default:
-			alert("An error occurred in the upload. Try again later.");
+			window.fauxmodal_alert("An error occurred in the upload. Try again later.");
 			this.debug("Error Code: " + errorCode + ", File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 			return;
 	}
@@ -1745,7 +1745,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 				old_onclick();
 				return;
 			}
-			window.alert('{!UPLOAD_FIRST^;}');
+			window.fauxmodal_alert('{!UPLOAD_FIRST^;}');
 			btnSubmit.disabled=true;
 			var timer=window.setInterval(function() {
 				if (rep2.value=='1')
@@ -1784,14 +1784,8 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 			// Flash file settings
 			file_size_limit : (typeof mfs=='undefined')?'2 GB':(mfs.value+' B'),
-			{+START,IF,{$LT,{$LENGTH,{$CONFIG_OPTION,valid_types}},30}}
 			file_types : (name.indexOf('file_novalidate')==-1)?filter:"*.*",
 			file_types_description : "{!ALLOWED_FILES^#}",
-			{+END}
-			{+START,IF,{$NOT,{$LT,{$LENGTH,{$CONFIG_OPTION,valid_types}},30}}}
-			file_types : (name.indexOf('file_novalidate')==-1)?filter:"*.*",
-			file_types_description : "{!ALLOWED_FILES^#}                                                                                                    ",
-			{+END}
 			file_upload_limit : "0",
 			file_queue_limit : "1",
 
@@ -1854,7 +1848,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		};
 	}
 	catch (e) {
-		//window.alert(e.message);
+		//window.fauxmodal_alert(e.message);
 		// Failed to load - so restore normal file input
 		restoreFormerInput(maindiv,rep2,rep,name,page_type,_btnSubmitID,posting_field_name);
 	}
@@ -2039,7 +2033,7 @@ function gears_upload(event,field_name)
 
 		if ((typeof file.size!='undefined') && (file.size>3000000))
 		{
-			window.alert('{!FILE_TOO_LARGE_DRAGANDDROP^;}');
+			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP^;}');
 			continue;
 		}
 
@@ -2057,7 +2051,7 @@ function gears_upload(event,field_name)
 		}
 		if (!good_type)
 		{
-			window.alert('{!INVALID_FILE_TYPE_GENERAL^;}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL^;}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
 			continue;
 		}
 
@@ -2187,7 +2181,7 @@ function html5_upload(event,field_name,files)
 		
 		if ((typeof file.size!='undefined') && (file.size>3000000))
 		{
-			window.alert('{!FILE_TOO_LARGE_DRAGANDDROP^;}');
+			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP^;}');
 			continue;
 		}
 
@@ -2207,7 +2201,7 @@ function html5_upload(event,field_name,files)
 		}
 		if (!good_type)
 		{
-			window.alert('{!INVALID_FILE_TYPE_GENERAL^;}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL^;}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
 			continue;
 		}
 
@@ -2423,8 +2417,16 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 
 			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash={$USER.;}&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
 		};
-		edit_link.onclick=function() {
-			return window.confirm('You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.');
+		edit_link.onclick=function()
+		{
+			window.fauxmodal_confirm(
+				'You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.'
+				function(result)
+				{
+					if (result) click_link(edit_link);
+				}
+			);
+			return false;
 		};
 		edit_link.onmousedown();
 		field.parentNode.appendChild(document.createElement('br'));

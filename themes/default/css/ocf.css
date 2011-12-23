@@ -1027,7 +1027,7 @@ ul.ocf_profile_friends li:hover {
 
 .ocf_emoticon_cell {
 	float: {!en_left};
-	width: 25%;
+	width: 12.5%;
 	text-align: center;
 	padding: 5px 0;
 }

@@ -49,7 +49,7 @@
 						{CANCEL_BUTTON}
 					{+END}
 					{+START,IF_NON_PASSED,CANCEL_BUTTON}
-						&nbsp; <a onclick="return window.confirm('{!SUBSCRIPTION_CANCEL_WARNING_GENERAL=;}');" href="{$PAGE_LINK*,_SELF:_SELF:cancel:{ID}}">{!SUBSCRIPTION_CANCEL}</a>
+						&nbsp; <a onclick="var t=this; window.fauxmodal_confirm('{!SUBSCRIPTION_CANCEL_WARNING_GENERAL=;}',function(result) { if (result) { click_link(t); } }); return false;" href="{$PAGE_LINK*,_SELF:_SELF:cancel:{ID}}">{!SUBSCRIPTION_CANCEL}</a>
 					{+END}
 				</td>
 			</tr>

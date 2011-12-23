@@ -256,6 +256,7 @@ class Hook_addon_registry_core_feedback_features
 		$attachments=do_lorem_template('ATTACHMENTS',array(
 					'ATTACHMENT_TEMPLATE'=>$content,
 					'IMAGE_TYPES'=>placeholder_types(),
+					'POSTING_FIELD_NAME'=>'',
 					'ATTACHMENTS'=>$content,
 					'MAX_ATTACHMENTS'=>placeholder_number(),
 					'NUM_ATTACHMENTS'=>placeholder_number(),

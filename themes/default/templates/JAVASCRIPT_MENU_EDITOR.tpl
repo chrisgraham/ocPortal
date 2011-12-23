@@ -293,18 +293,32 @@ function magicCopier(object,caption,url,error_message,confirm_message)
 			target_type=parent.document.getElementById('branch_type_'+num);
 			if ((target_type.value=='page') || (target_type.getElementsByTagName('option').length<3))
 			{
-				if ((parent.document.getElementById('url_'+num).value=='') || (window.confirm(confirm_message)))
+				if (parent.document.getElementById('url_'+num).value=='')
 				{
-					parent.document.getElementById('url_'+num).value=url;
-					parent.document.getElementById('caption_'+num).value=caption;
+					_doMagicCopier(num,url,caption);
+				} else
+				{
+					window.fauxmodal_confirm(
+						confirm_message,
+						function(answer)
+						{
+							if (answer) _doMagicCopier(num,url,caption);
+						}
+					);
 				}
-			} else window.alert(error_message);
+			} else window.fauxmodal_alert(error_message);
 			yes=true;
 		}
 	}
-	if (!yes) window.alert('{!RADIO_NOTHING_SELECTED^;}');
+	if (!yes) window.fauxmodal_alert('{!RADIO_NOTHING_SELECTED^;}');
 
 	return false;
+}
+
+function _doMagicCopier(num,url,caption)
+{
+	parent.document.getElementById('url_'+num).value=url;
+	parent.document.getElementById('caption_'+num).value=caption;
 }
 
 function menuEditorBranchTypeChange(id)
@@ -403,7 +417,7 @@ function validateMenu(missingCaptionError,missingURLError)
 				url=document.getElementById('url_'+id);
 				if ((caption.value=='') && (url.value!=''))
 				{
-					window.alert(missingCaptionError);
+					window.fauxmodal_alert(missingCaptionError);
 					return false;
 				}
 
@@ -413,7 +427,7 @@ function validateMenu(missingCaptionError,missingURLError)
 				{
 					if ((caption.value!='') && (url.value==''))
 					{
-						window.alert(missingURLError);
+						window.fauxmodal_alert(missingURLError);
 						return false;
 					}
 				}
@@ -428,51 +442,72 @@ function delete_menu_branch(ob)
 {
 	var id=ob.id.substring(4,ob.id.length);
 	
-	if ((typeof window.showModalDialog!='undefined') || (ob.form.elements['branch_type_'+id]!='page'))
+	if ((typeof window.showModalDialog!='undefined'{+START,IF,{$VALUE_OPTION,faux_popups}} || true{+END}) || (ob.form.elements['branch_type_'+id]!='page'))
 	{
 		var choices=['{!INPUTSYSTEM_CANCEL^;}','{!DELETE^;}','{!MOVETO_MENU^;}'];
-		var result=generate_question_ui('{!CONFIRM_DELETE_LINK_NICE^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),choices,'{!DELETE_MENU_ITEM^;}','');
-		if (result.toLowerCase()=='{!DELETE^;}'.toLowerCase())
-		{
-			deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
-		} else if (result.toLowerCase()=='{!MOVETO_MENU^;}'.toLowerCase())
-		{
-			var choices=['{!INPUTSYSTEM_CANCEL^;}'];
-			for (var i=0;i<window.all_menus.length;i++)
+		generate_question_ui(
+			'{!CONFIRM_DELETE_LINK_NICE^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
+			choices,
+			'{!DELETE_MENU_ITEM^;}',
+			null,
+			function(result)
 			{
-				choices.push(window.all_menus[i]);
-			}
-			var result=generate_question_ui('{!CONFIRM_MOVE_LINK_NICE^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),choices,'{!MOVE_MENU_ITEM^;}','');
-			if (result.toLowerCase()!='{!INPUTSYSTEM_CANCEL^;}'.toLowerCase())
-			{
-				var post='',name,value;
-				for (var i=0;i<ob.form.elements.length;i++)
+				if (result.toLowerCase()=='{!DELETE^;}'.toLowerCase())
 				{
-					name=ob.form.elements[i].name;
-					if (name.substr(name.length-('_'+id).length)=='_'+id)
+					deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
+				} else if (result.toLowerCase()=='{!MOVETO_MENU^;}'.toLowerCase())
+				{
+					var choices=['{!INPUTSYSTEM_CANCEL^;}'];
+					for (var i=0;i<window.all_menus.length;i++)
 					{
-						if (ob.nodeName.toLowerCase()=='select')
-						{
-							value=ob.form.elements[i].value;
-							myValue=ob.options[ob.selectedIndex].value;
-						} else
-						{
-							if ((ob.type.toLowerCase()=='checkbox') && (!ob.checked)) continue;
-
-							value=ob.form.elements[i].value;
-						}
-						if (post!='') post+='&';
-						post+=name+'='+window.encodeURIComponent(value);
+						choices.push(window.all_menus[i]);
 					}
+					generate_question_ui(
+						'{!CONFIRM_MOVE_LINK_NICE^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
+						choices,
+						'{!MOVE_MENU_ITEM^;}',
+						null,
+						function(result)
+						{
+							if (result.toLowerCase()!='{!INPUTSYSTEM_CANCEL^;}'.toLowerCase())
+							{
+								var post='',name,value;
+								for (var i=0;i<ob.form.elements.length;i++)
+								{
+									name=ob.form.elements[i].name;
+									if (name.substr(name.length-('_'+id).length)=='_'+id)
+									{
+										if (ob.nodeName.toLowerCase()=='select')
+										{
+											value=ob.form.elements[i].value;
+											myValue=ob.options[ob.selectedIndex].value;
+										} else
+										{
+											if ((ob.type.toLowerCase()=='checkbox') && (!ob.checked)) continue;
+
+											value=ob.form.elements[i].value;
+										}
+										if (post!='') post+='&';
+										post+=name+'='+window.encodeURIComponent(value);
+									}
+								}
+								load_XML_doc('{$FIND_SCRIPT_NOHTTP;,menu_management}'+'?id='+window.encodeURIComponent(id)+'&menu='+window.encodeURIComponent(result)+keep_stub(),null,post);
+								deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
+							}
+						}
+					);
 				}
-				load_XML_doc('{$FIND_SCRIPT_NOHTTP;,menu_management}'+'?id='+window.encodeURIComponent(id)+'&menu='+window.encodeURIComponent(result)+keep_stub(),null,post);
-				deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
 			}
-		}
+		);
 	} else
 	{
-		var result=window.confirm('{!CONFIRM_DELETE_LINK^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value));
-		if (result)
-			deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
+		window.fauxmodal_confirm(
+			'{!CONFIRM_DELETE_LINK^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
+			function(result)
+			{
+				if (result)
+					deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
+			}
+		);
 	}
 }

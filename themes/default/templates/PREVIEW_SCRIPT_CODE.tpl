@@ -15,7 +15,7 @@
 			{
 				if ((inputs[i].value!='-1') && (inputs[i].value!=''))
 				{
-					if (!done_one) window.alert('{!javascript:ATTACHMENT_SAVED;^}');
+					if (!done_one) window.fauxmodal_alert('{!javascript:ATTACHMENT_SAVED;^}');
 					done_one=true;
 				}
 				

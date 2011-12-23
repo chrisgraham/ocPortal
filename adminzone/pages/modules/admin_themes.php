@@ -953,7 +953,7 @@ class Module_admin_themes
 		{
 			return inform_screen($title,protect_from_escaping('
 				<script type="text/javascript">// <![CDATA[
-					if (window.hasFocus) window.alert(\''.addslashes(do_lang('SUCCESS')).'\');
+					window.fauxmodal_alert(\''.addslashes(do_lang('SUCCESS')).'\');
 				//]]></script>
 			'));
 		}
@@ -1603,7 +1603,7 @@ class Module_admin_themes
 		{
 			return inform_screen($title,protect_from_escaping('
 				<script type="text/javascript">// <![CDATA[
-					if (window.hasFocus) window.alert(\''.addslashes(do_lang('SUCCESS')).'\');
+					window.fauxmodal_alert(\''.addslashes(do_lang('SUCCESS')).'\');
 				//]]></script>
 			'));
 		}

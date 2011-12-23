@@ -64,7 +64,7 @@
 		<form title="{!MERGE_CEDI_POSTS}" action="{$PAGE_LINK*,_SEARCH:cedi:type=mg:id={ID},1}" method="post">
 			<div class="float_surrounder">
 				<div class="cedi_merge_posts_button">
-					<input onclick="if (addFormMarkedPosts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.alert('{!NOTHING_SELECTED=;}'); return false;" class="button_page" type="submit" value="{!MERGE_CEDI_POSTS}" />
+					<input onclick="if (addFormMarkedPosts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_page" type="submit" value="{!MERGE_CEDI_POSTS}" />
 				</div>
 			</div>
 		</form>

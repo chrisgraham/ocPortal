@@ -69,7 +69,7 @@
 						<option value="-1">-</option>
 						{MODERATOR_ACTIONS}
 					</select>
-					<input onclick="if (addFormMarkedPosts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
+					<input onclick="if (addFormMarkedPosts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />
 				</div>
 			</form>
 

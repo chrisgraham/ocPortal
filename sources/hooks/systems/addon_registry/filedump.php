@@ -48,7 +48,7 @@ class Hook_addon_registry_filedump
 	 */
 	function get_description()
 	{
-		return 'Allow members to upload files for other members to access, in an informal way.';
+		return 'File/media library, for use in attachments or for general ad-hoc sharing.';
 	}
 
 	/**
@@ -59,7 +59,7 @@ class Hook_addon_registry_filedump
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array('collaboration_zone'),
+			'requires'=>array(),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
 		);
@@ -78,15 +78,17 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/config_default/filedump_show_stats_count_total_space.php',
 			'sources/hooks/blocks/side_stats/stats_filedump.php',
 			'sources/hooks/systems/addon_registry/filedump.php',
+			'sources/hooks/systems/do_next_menus/filedump.php',
 			'sources/hooks/modules/admin_import_types/filedump.php',
 			'FILE_DUMP_SCREEN.tpl',
 			'uploads/filedump/index.html',
-			'collaboration/pages/modules/filedump.php',
+			'cms/pages/modules/filedump.php',
 			'lang/EN/filedump.ini',
 			'sources/hooks/modules/search/filedump.php',
 			'sources/hooks/systems/rss/filedump.php',
 			'sources/hooks/modules/admin_occle_fs/home.php',
 			'uploads/filedump/.htaccess',
+			'themes/default/images/bigicons/filedump.png',
 		);
 	}
 

@@ -17,8 +17,8 @@
 
 {+START,IF_NON_EMPTY,{TIMEOUT}}
 	<script type="text/javascript">// <![CDATA[
-		setTimeout('window.alert(\'{!OUT_OF_TIME;;}\'); document.getElementById(\'survey\').submit();', {TIMEOUT%}*1000);
-		setInterval('var st=document.getElementById(\'survey_timer\'); var new_value=window.parseInt(getInnerHTML(st))-1; if (new_value>=0) setInnerHTML(st,new_value);', 1000);
+		setTimeout(function() { window.fauxmodal_alert('{!OUT_OF_TIME;;}',function() { document.getElementById('survey').submit(); } ); }, {TIMEOUT%}*1000);
+		setInterval(function() { var st=document.getElementById('survey_timer'); var new_value=window.parseInt(getInnerHTML(st))-1; if (new_value>=0) setInnerHTML(st,new_value); }, 1000);
 	//]]></script>
 
 	<p>

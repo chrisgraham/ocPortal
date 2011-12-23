@@ -77,7 +77,7 @@ class Hook_Profiles_Tabs_Edit_signature
 					if ((!post.value) && (post[1])) post=post[1];
 					if (post.value.length>".strval($size).")
 					{
-						window.alert('".php_addslashes(do_lang('SIGNATURE_TOO_BIG'))."');
+						window.fauxmodal_alert('".php_addslashes(do_lang('SIGNATURE_TOO_BIG'))."');
 						return false;
 					}
 					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/alerts.php</string>
+	<string>themes/default/templates_custom/COMCODE_THUMB.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -81,6 +81,8 @@
 			<date>2011-10-31T22:51:23Z</date>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>data</string>
 			<key>regexFolderFilter</key>
@@ -166,13 +168,13 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2011-12-16T12:39:25Z</date>
+			<date>2011-12-21T16:23:37Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>install.sql</string>
 			<key>lastUsed</key>
-			<date>2011-12-16T19:38:32Z</date>
+			<date>2011-12-21T16:23:39Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -232,7 +234,7 @@
 			<key>filename</key>
 			<string>recommended.htaccess</string>
 			<key>lastUsed</key>
-			<date>2011-10-27T02:11:35Z</date>
+			<date>2011-12-22T14:52:05Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -577,6 +579,20 @@
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
 		</dict>
+		<key>data_custom/addon_files.txt</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>44</integer>
+				<key>line</key>
+				<integer>621</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>594</integer>
+		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
 			<key>caret</key>
@@ -747,20 +763,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>lang/EN/filedump.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>lang/EN/newsletter.ini</key>
 		<dict>
 			<key>caret</key>
@@ -845,20 +847,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>sources/alerts.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>151</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>100</integer>
-		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
 			<key>caret</key>
@@ -902,6 +890,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>8</integer>
+		</dict>
+		<key>sources/comcode_from_html.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>53</integer>
+				<key>line</key>
+				<integer>275</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>247</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1783,6 +1785,34 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/default/templates/ATTACHMENT_IMG.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>8</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/ATTACHMENT_IMG_MINI.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>6</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>themes/default/templates/BLOCK_MAIN_IMAGE_FADER.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2091,36 +2121,6 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates/FORM_SCREEN_INPUT_DATE.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>28</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>25</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>75</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>28</integer>
-			</dict>
-		</dict>
 		<key>themes/default/templates/FORM_SCREEN_INPUT_LIST_ENTRY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2192,6 +2192,20 @@
 				<key>line</key>
 				<integer>2</integer>
 			</dict>
+		</dict>
+		<key>themes/default/templates/JAVASCRIPT_THUMBNAILS.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>90</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>39</integer>
 		</dict>
 		<key>themes/default/templates/MENU_BRANCH_popup.tpl</key>
 		<dict>
@@ -2410,20 +2424,6 @@
 				<key>line</key>
 				<integer>1</integer>
 			</dict>
-		</dict>
-		<key>themes/default/templates/QUESTION_UI_BUTTONS.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>17</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>themes/default/templates/STANDARDBOX_invisible.tpl</key>
 		<dict>
@@ -2653,6 +2653,50 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates_custom/COMCODE_EXP_THUMB.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>6</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+		</dict>
+		<key>themes/default/templates_custom/COMCODE_THUMB.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>8</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>themes/default/templates_custom/GALLERY_VIDEO.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2796,12 +2840,17 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/mail.php</string>
-		<string>sources/alerts.php</string>
+		<string>themes/default/templates/ATTACHMENT_IMG.tpl</string>
+		<string>themes/default/templates/JAVASCRIPT_THUMBNAILS.tpl</string>
+		<string>sources/comcode_from_html.php</string>
+		<string>themes/default/templates/ATTACHMENT_IMG_MINI.tpl</string>
+		<string>themes/default/templates_custom/COMCODE_THUMB.tpl</string>
+		<string>data_custom/addon_files.txt</string>
+		<string>themes/default/templates_custom/COMCODE_EXP_THUMB.tpl</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{857, 198}, {1009, 966}}</string>
+	<string>{{550, 212}, {1088, 966}}</string>
 </dict>
 </plist>

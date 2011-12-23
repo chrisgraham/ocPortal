@@ -30,6 +30,11 @@ function addAttachment(startNum,posting_field_name)
 	if (typeof window.trigger_resize!='undefined') trigger_resize();
 }
 
+function attachment_present(post_value,number)
+{
+	return !(post_value.indexOf('[attachment]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe]new_'+number+'[/attachment_safe]')==-1) && (post_value.indexOf('[attachment thumb="1"]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe thumb="1"]new_'+number+'[/attachment_safe]')==-1) && (post_value.indexOf('[attachment thumb="0"]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe thumb="0"]new_'+number+'[/attachment_safe]')==-1);
+}
+
 function setAttachment(field_name,number,filename)
 {
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -47,9 +52,9 @@ function setAttachment(field_name,number,filename)
 		tmp_form.preview.disabled=true;
 	}
 
-	var done=(post.value.indexOf('[attachment]new_'+number+'[/attachment]')!=-1) || (post.value.indexOf('[attachment_safe]new_'+number+'[/attachment_safe]')!=-1);
+	var done=attachment_present(post.value,number);
 	var post_value=getTextbox(post);
-	if ((!done) && (post_value.indexOf('[attachment]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe]new_'+number+'[/attachment_safe]')==-1) && (post_value.indexOf('[attachment thumb="1"]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe thumb="1"]new_'+number+'[/attachment_safe]')==-1) && (post_value.indexOf('[attachment thumb="0"]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe thumb="0"]new_'+number+'[/attachment_safe]')==-1))
+	if ((!done) && (!attachment_present(post_value,number)))
 	{
 		var url=filename;
 		if ((!filename) && (document.getElementById('file'+number)))
@@ -76,28 +81,46 @@ function setAttachment(field_name,number,filename)
 
 		if ((ext=='.tar') || (ext=='.zip') || (ext=='.png') || (ext=='.jpg') || (ext=='jpeg') || (ext=='.gif') || (ext=='.bmp'))
 		{
-			var vb=generate_question_ui("{!THUMB_OR_IMG_2^#}",{thumbnail: '{!THUMBNAIL^;}',fullsize: '{!IMAGE^;}'},'{!_ATTACHMENT^;}');
-			ins=(vb.toLowerCase()=='{!THUMBNAIL^;}'.toLowerCase())?"_safe thumb=\"1\"":"_safe thumb=\"0\"";
-			ins2=(vb.toLowerCase()=='{!THUMBNAIL^;}'.toLowerCase())?"_safe":"_safe";
-		}
-
-		var add;
-		if (is_comcode_xml(post))
-		{
-			add='<attachment'+ins+'>new_'+number+'</attachment'+ins2+'>';
+			generate_question_ui(
+				"{!THUMB_OR_IMG_2^#}",
+				{thumbnail: '{!THUMBNAIL^;}',fullsize: '{!IMAGE^;}'},
+				'{!_ATTACHMENT^;}',
+				null,
+				function(vb)
+				{
+					ins=(vb.toLowerCase()=='{!THUMBNAIL^;}'.toLowerCase())?"_safe thumb=\"1\"":"_safe thumb=\"0\"";
+					ins2=(vb.toLowerCase()=='{!THUMBNAIL^;}'.toLowerCase())?"_safe":"_safe";
+					
+					insert_attachment(post,number,ins,ins2);
+				}
+			);
 		} else
 		{
-			add='[attachment'+ins+']new_'+number+'[/attachment'+ins2+']';
+			insert_attachment(post,number,ins,ins2);
 		}
-
-		try
-		{
-			insertTextbox(post,add);
-		}
-		catch (e) { } // Yuck, WYSIWYG editors can be buggy
 	}
+
+	// Add field for next one
 	if ((number==numAttachments) && (numAttachments<maxAttachments))
 		addAttachment(numAttachments+1,field_name);
+}
+
+function insert_attachment(post,number,ins,ins2)
+{
+	var add;
+	if (is_comcode_xml(post))
+	{
+		add='<attachment'+ins+'>new_'+number+'</attachment'+ins2+'>';
+	} else
+	{
+		add='[attachment'+ins+']new_'+number+'[/attachment'+ins2+']';
+	}
+
+	try
+	{
+		insertTextbox(post,add);
+	}
+	catch (e) { } // Yuck, WYSIWYG editors can be buggy
 }
 
 // ====================
@@ -128,9 +151,15 @@ function doInput_quote(field_name)
 
 	var post=document.getElementById(field_name);
 	post=ensure1_id(post,field_name);
-	var va=window.prompt("{!ENTER_QUOTE_BY^#}",'');
-	if (va===null) return;
-	insertTextboxWrapping(post,"[quote=\""+va+"\"]","[/quote]");
+	window.fauxmodal_prompt(
+		"{!ENTER_QUOTE_BY^#}",
+		'',
+		function(va)
+		{
+			if (va) insertTextboxWrapping(post,"[quote=\""+va+"\"]","[/quote]");
+		},
+		"{!comcode:INPUT_COMCODE_quote^#}"
+	);
 }
 
 function doInput_box(field_name)
@@ -139,9 +168,15 @@ function doInput_box(field_name)
 
 	var post=document.getElementById(field_name);
 	post=ensure1_id(post,field_name);
-	var va=window.prompt("{!ENTER_BOX_TITLE^#}",'');
-	if (va===null) return;
-	insertTextboxWrapping(post,"[box=\""+va+"\" type=\"light\"]","[/box]");
+	window.fauxmodal_prompt(
+		"{!ENTER_BOX_TITLE^#}",
+		'',
+		function(va)
+		{
+			if (va!==null) insertTextboxWrapping(post,"[box=\""+va+"\" type=\"light\"]","[/box]");
+		},
+		"{!comcode:INPUT_COMCODE_box^#}"
+	);
 }
 
 function doInput_menu(field_name)
@@ -149,19 +184,38 @@ function doInput_menu(field_name)
 	if (typeof window.insertTextbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
-	var va=window.prompt("{!ENTER_MENU_NAME^#,"+(document.getElementById(field_name).form.menu_items.value)+"}",'');
-	var vb=window.prompt("{!ENTER_MENU_CAPTION^#}",'');
-	var add;
-	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
-	if (is_comcode_xml(element))
-	{
-		add="<block><blockParam key=\"type\" val=\"tree\" /><blockParam key=\"caption\" val=\""+escape_html(vb)+"\" /><blockParam key=\"param\" val=\""+escape_html(va)+"\" />side_stored_menu</block>";
-	} else
-	{
-		add="[block=\""+escape_comcode(va)+"\" caption=\""+escape_comcode(vb)+"\" type=\"tree\"]side_stored_menu[/block]";
-	}
-	insertTextbox(element,add);
+	window.fauxmodal_prompt(
+		"{!ENTER_MENU_NAME^#,"+(document.getElementById(field_name).form.menu_items.value)+"}",
+		'',
+		function(va)
+		{
+			if (va)
+			{
+				window.fauxmodal_prompt(
+					"{!ENTER_MENU_CAPTION^#}",
+					'',
+					function(vb)
+					{
+						if (!vb) vb='';
+
+						var add;
+						var element=document.getElementById(field_name);
+						element=ensure1_id(element,field_name);
+						if (is_comcode_xml(element))
+						{
+							add="<block><blockParam key=\"type\" val=\"tree\" /><blockParam key=\"caption\" val=\""+escape_html(vb)+"\" /><blockParam key=\"param\" val=\""+escape_html(va)+"\" />side_stored_menu</block>";
+						} else
+						{
+							add="[block=\""+escape_comcode(va)+"\" caption=\""+escape_comcode(vb)+"\" type=\"tree\"]side_stored_menu[/block]";
+						}
+						insertTextbox(element,add);
+					},
+					"{!comcode:INPUT_COMCODE_menu^#}"
+				);
+			}
+		},
+		"{!comcode:INPUT_COMCODE_menu^#}"
+	);
 }
 
 function doInput_block(field_name)
@@ -169,61 +223,69 @@ function doInput_block(field_name)
 	if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 	var url='{$FIND_SCRIPT;,block_helper}?field_name='+field_name+keep_stub();
 	url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');
-	window.open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+	window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
 }
 
-function doInput_comcode(field_name)
+function doInput_comcode(field_name,tag)
 {
 	if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 	var url='{$FIND_SCRIPT;,comcode_helper}?field_name='+field_name;
+	if (tag) url+='&type=step2&tag='+tag;
 	if (isWYSIWYGField(document.getElementById(field_name))) url+='&in_wysiwyg=1';
 	url+=keep_stub();
-	window.open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+	window.faux_open(maintain_theme_in_link(url),'','width=750,height=620,status=no,resizable=yes,scrollbars=yes');
 }
 
-function doInput_list(field_name)
+function doInput_list(field_name,add)
 {
 	if (typeof window.insertTextbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
+	if (!add) add=[];
+
 	var post=document.getElementById(field_name);
 	post=ensure1_id(post,field_name);
-	var va;
-	var add=[];
 	insertTextbox(post,"\n");
-	do
-	{
-		va=window.prompt("{!ENTER_LIST_ENTRY^#}",'');
-		if ((va!=null) && (va!='')) add.push(va);
-	}
-	while ((va!=null) && (va!=''));
-	if (add.length==0) return;
-	var i;
-	if (is_comcode_xml(post))
-	{
-		insertTextbox(post,"<list>\n")
-		for (i=0;i<add.length;i++)
+	window.fauxmodal_prompt(
+		"{!ENTER_LIST_ENTRY^#}",
+		'',
+		function(va)
 		{
-			insertTextbox(post,"<list_element>"+add[i]+"</list_element>\n")
-		}
-		insertTextbox(post,"</list>\n")
-	} else
-	{
-		if (post.value.indexOf('[semihtml')!=-1)
-			insertTextbox(post,"[list]\n")
-		for (i=0;i<add.length;i++)
-		{
-			if (post.value.indexOf('[semihtml')!=-1)
+			if ((va!=null) && (va!=''))
 			{
-				insertTextbox(post,"[*]"+add[i]+"\n")
+				add.push(va);
+				return doInput_list(field_name,add)
+			}
+			if (add.length==0) return;
+			var i;
+			if (is_comcode_xml(post))
+			{
+				insertTextbox(post,"<list>\n")
+				for (i=0;i<add.length;i++)
+				{
+					insertTextbox(post,"<list_element>"+add[i]+"</list_element>\n")
+				}
+				insertTextbox(post,"</list>\n")
 			} else
 			{
-				insertTextbox(post," - "+add[i]+"\n")
+				if (post.value.indexOf('[semihtml')!=-1)
+					insertTextbox(post,"[list]\n")
+				for (i=0;i<add.length;i++)
+				{
+					if (post.value.indexOf('[semihtml')!=-1)
+					{
+						insertTextbox(post,"[*]"+add[i]+"\n")
+					} else
+					{
+						insertTextbox(post," - "+add[i]+"\n")
+					}
+				}
+				if (post.value.indexOf('[semihtml')!=-1)
+					insertTextbox(post,"[/list]\n")
 			}
-		}
-		if (post.value.indexOf('[semihtml')!=-1)
-			insertTextbox(post,"[/list]\n")
-	}
+		},
+		"{!comcode:INPUT_COMCODE_list^#}"
+	);
 }
 
 function doInput_hide(field_name)
@@ -231,69 +293,102 @@ function doInput_hide(field_name)
 	if (typeof window.insertTextbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
-	var va=window.prompt("{!ENTER_WARNING^#}",'');
-	if (va!=null) var vb=window.prompt("{!ENTER_HIDDEN_TEXT^#}",''); else return;
-	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
-	if (vb!=null)
-	{
-		if (is_comcode_xml(element))
+	window.fauxmodal_prompt(
+		"{!ENTER_WARNING^#}",
+		'',
+		function(va)
 		{
-			insertTextbox(element,"<hide><hideTitle>"+va+"</hideTitle>"+escape_html(vb)+"</hide>");
-		} else
-		{
-			insertTextbox(element,"[hide=\""+escape_comcode(va)+"\"]"+escape_comcode(vb)+"[/hide]");
-		}
-	}
+			if (va)
+			{
+				window.fauxmodal_prompt(
+					"{!ENTER_HIDDEN_TEXT^#}",
+					'',
+					function(vb)
+					{
+						var element=document.getElementById(field_name);
+						element=ensure1_id(element,field_name);
+						if (vb)
+						{
+							if (is_comcode_xml(element))
+							{
+								insertTextbox(element,"<hide><hideTitle>"+va+"</hideTitle>"+escape_html(vb)+"</hide>");
+							} else
+							{
+								insertTextbox(element,"[hide=\""+escape_comcode(va)+"\"]"+escape_comcode(vb)+"[/hide]");
+							}
+						}
+					},
+					"{!comcode:INPUT_COMCODE_hide^#}"
+				);
+			}
+		},
+		"{!comcode:INPUT_COMCODE_hide^#}"
+	);
 }
 
-function doInput_thumb(field_name)
+function doInput_thumb(field_name,va)
 {
 	if (typeof window.insertTextbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
-	var va="";
-	var broken;
-	do
-	{
-		broken=false;
-		va=window.prompt("{!ENTER_URL^#}",va);
-		if ((va!=null) && (va.indexOf('://')==-1))
+	window.fauxmodal_prompt(
+		"{!ENTER_URL^#}",
+		va,
+		function(va)
 		{
-			window.alert("{!NOT_A_URL^#}");
-			broken=true;
-		}
-	}
-	while ((va!=null) && (broken));
+			if ((va!=null) && (va.indexOf('://')==-1))
+			{
+				window.fauxmodal_alert("{!NOT_A_URL^#}");
+				return doInput_thumb(field_name,va);
+			}
 
-	if (!va) return;
+			if (va)
+			{
+				generate_question_ui(
+					"{!THUMB_OR_IMG_2^#}",
+					{thumbnail: '{!THUMBNAIL^;}',fullsize: '{!IMAGE^;}'},
+					'{!_ATTACHMENT^;}',
+					null,
+					function(vb)
+					{
+						window.fauxmodal_prompt(
+							"{!ENTER_IMAGE_CAPTION^#}",
+							'',
+							function(vc)
+							{
+								if (!vc) vc='';
 
-	var vb=generate_question_ui("{!THUMB_OR_IMG_2^#}",{thumbnail: '{!THUMBNAIL^;}',fullsize: '{!IMAGE^;}'},'{!_ATTACHMENT^;}');
-
-	var vc=window.prompt("{!ENTER_IMAGE_CAPTION^#}",'');
-	if (!vc) vc='';
-
-	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
-	if (vb.toLowerCase()=='{!IMAGE^;}'.toLowerCase())
-	{
-		if (is_comcode_xml(element))
-		{
-			insertTextbox(element,"<img url=\""+escape_html(va)+"\">"+escape_html(vc)+"</img>");
-		} else
-		{
-			insertTextbox(element,"[img=\""+escape_comcode(vc)+"\"]"+escape_comcode(va)+"[/img]");
-		}
-	} else
-	{
-		if (is_comcode_xml(element))
-		{
-			insertTextbox(element,"<thumb caption=\""+escape_html(vc)+"\">"+escape_html(va)+"</thumb>");
-		} else
-		{
-			insertTextbox(element,"[thumb caption=\""+escape_comcode(vc)+"\"]"+escape_comcode(va)+"[/thumb]");
-		}
-	}
+								var element=document.getElementById(field_name);
+								element=ensure1_id(element,field_name);
+								if (vb.toLowerCase()=='{!IMAGE^;}'.toLowerCase())
+								{
+									if (is_comcode_xml(element))
+									{
+										insertTextbox(element,"<img url=\""+escape_html(va)+"\">"+escape_html(vc)+"</img>");
+									} else
+									{
+										insertTextbox(element,"[img=\""+escape_comcode(vc)+"\"]"+escape_comcode(va)+"[/img]");
+									}
+								} else
+								{
+									if (is_comcode_xml(element))
+									{
+										insertTextbox(element,"<thumb caption=\""+escape_html(vc)+"\">"+escape_html(va)+"</thumb>");
+									} else
+									{
+										insertTextbox(element,"[thumb caption=\""+escape_comcode(vc)+"\"]"+escape_comcode(va)+"[/thumb]");
+									}
+								}
+							},
+							"{!comcode:INPUT_COMCODE_img^#}"
+						);
+					},
+					"{!comcode:INPUT_COMCODE_img^#}"
+				);
+			}
+		},
+		"{!comcode:INPUT_COMCODE_img^#}"
+	);
 }
 
 function doInput_attachment(field_name)
@@ -301,53 +396,70 @@ function doInput_attachment(field_name)
 	if (typeof window.insertTextbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
-	var va=window.prompt("{!ENTER_ATTACHMENT^#}",'');
-	if (!isInteger(va))
-	{
-		window.alert("{!NOT_VALID_ATTACHMENT^#}");
-		return;
-	}
-	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
-	if (is_comcode_xml(element))
-	{
-		insertTextbox(element,"<attachment>new_"+va+"</attachment>");
-	} else
-	{
-		insertTextbox(element,"[attachment]new_"+va+"[/attachment]");
-	}
+	window.fauxmodal_prompt(
+		"{!ENTER_ATTACHMENT^#}",
+		'',
+		function(va)
+		{
+			if (!isInteger(va))
+			{
+				window.fauxmodal_alert("{!NOT_VALID_ATTACHMENT^#}");
+			} else
+			{
+				var element=document.getElementById(field_name);
+				element=ensure1_id(element,field_name);
+				if (is_comcode_xml(element))
+				{
+					insertTextbox(element,"<attachment>new_"+va+"</attachment>");
+				} else
+				{
+					insertTextbox(element,"[attachment]new_"+va+"[/attachment]");
+				}
+			}
+		},
+		"{!comcode:INPUT_COMCODE_attachment^#}"
+	);
 }
 
-function doInput_url(field_name)
+function doInput_url(field_name,va)
 {
 	if (typeof window.insertTextbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
-	var va="";
-	var broken;
-	do
-	{
-		broken=false;
-		va=window.prompt("{!ENTER_URL^#}",va);
-		if ((va!=null) && (va.indexOf('://')==-1))
+	window.fauxmodal_prompt(
+		"{!ENTER_URL^#}",
+		va,
+		function(va)
 		{
-			window.alert("{!NOT_A_URL^#}");
-			broken=true;
-		}
-	}
-	while ((va!=null) && (broken));
+			if ((va!=null) && (va.indexOf('://')==-1))
+			{
+				window.fauxmodal_alert("{!NOT_A_URL^#}");
+				return doInput_url(field_name,va);
+			}
 
-	var vb;
-	if (va!=null) vb=window.prompt("{!ENTER_LINK_NAME^#}",''); else return;
-	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
-	if (is_comcode_xml(element))
-	{
-		if (vb!=null) insertTextbox(element,"<url param=\""+escape_html(va)+"\">"+escape_html(vb)+"</url>");
-	} else
-	{
-		if (vb!=null) insertTextbox(element,"[url=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/url]");
-	}
+			if (va!==null)
+			{
+				window.fauxmodal_prompt(
+					"{!ENTER_LINK_NAME^#}",
+					'',
+					function(vb)
+					{
+						var element=document.getElementById(field_name);
+						element=ensure1_id(element,field_name);
+						if (is_comcode_xml(element))
+						{
+							if (vb!=null) insertTextbox(element,"<url param=\""+escape_html(va)+"\">"+escape_html(vb)+"</url>");
+						} else
+						{
+							if (vb!=null) insertTextbox(element,"[url=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/url]");
+						}
+					},
+					"{!comcode:INPUT_COMCODE_url^#}"
+				);
+			}
+		},
+		"{!comcode:INPUT_COMCODE_url^#}"
+	);
 }
 
 function doInput_page(field_name)
@@ -357,22 +469,66 @@ function doInput_page(field_name)
 
 	var result;
 
-	if (typeof window.showModalDialog!='undefined')
+	if (typeof window.showModalDialog!='undefined'{+START,IF,{$VALUE_OPTION,faux_popups}} || true{+END})
 	{
-		result=window.showModalDialog(maintain_theme_in_link('{$FIND_SCRIPT;,page_link_chooser}'+keep_stub(true)),null,'dialogWidth=600;dialogHeight=400;status=no;unadorned=yes');
-		if ((typeof result=="undefined") || (result===null)) return;
+		window.faux_showModalDialog(
+			maintain_theme_in_link('{$FIND_SCRIPT;,page_link_chooser}'+keep_stub(true)),
+			null,
+			'dialogWidth=600;dialogHeight=400;status=no;unadorned=yes',
+			function(result)
+			{
+				if ((typeof result=="undefined") || (result===null)) return;
+
+				window.fauxmodal_prompt(
+					"{!ENTER_CAPTION^#}",
+					'',
+					function(vc)
+					{
+						_doInput_page(field_name,result,vc);
+					},
+					"{!comcode:INPUT_COMCODE_page^#}"
+				);
+			}
+		);
 	} else
 	{
-		var va=window.prompt("{!ENTER_ZONE^#}",'');
-		if (va==null) return;
-		var vb=window.prompt("{!ENTER_PAGE^#}",'');
-		if (vb==null) return;
-		
-		result=va+':'+vb;
+		window.fauxmodal_prompt(
+			"{!ENTER_ZONE^#}",
+			'',
+			function(va)
+			{
+				if (va!==null)
+				{
+					window.fauxmodal_prompt(
+						"{!ENTER_PAGE^#}",
+						'',
+						function(vb)
+						{
+							if (vb!==null)
+							{
+								result=va+':'+vb;
+
+								window.fauxmodal_prompt(
+									"{!ENTER_CAPTION^#}",
+									'',
+									function(vc)
+									{
+										_doInput_page(field_name,result,vc);
+									},
+									"{!comcode:INPUT_COMCODE_page^#}"
+								);
+							}
+						}
+					);
+				}
+			},
+			"{!comcode:INPUT_COMCODE_page^#}"
+		);
 	}
+}
 
-	var vc=window.prompt("{!ENTER_CAPTION^#}",'');
-
+function _doInput_page(field_name,result,vc)
+{
 	var element=document.getElementById(field_name);
 	element=ensure1_id(element,field_name);
 	if (is_comcode_xml(element))
@@ -384,36 +540,45 @@ function doInput_page(field_name)
 	}
 }
 
-function doInput_email(field_name)
+function doInput_email(field_name,va)
 {
 	if (typeof window.insertTextbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
-	var va="";
-	var broken;
-	do
-	{
-		broken=false;
-		va=window.prompt("{!ENTER_ADDRESS^#}",va);
-		if ((va!=null) && (va.indexOf('@')==-1))
+	window.fauxmodal_prompt(
+		"{!ENTER_ADDRESS^#}",
+		va,
+		function(va)
 		{
-			window.alert("{!NOT_A_EMAIL^#}");
-			broken=true;
-		}
-	}
-	while ((va!=null) && (broken));
+			if ((va!=null) && (va.indexOf('@')==-1))
+			{
+				window.fauxmodal_alert("{!NOT_A_EMAIL^#}");
+				return doInput_email(field_name,va);
 
-	var vb;
-	if (va!=null) vb=window.prompt("{!ENTER_CAPTION^#}",''); else return;
-	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
-	if (is_comcode_xml(element))
-	{
-		if (vb!=null) insertTextbox(element,"<email address=\""+escape_html(va)+"\">"+escape_html(vb)+"</email>");
-	} else
-	{
-		if (vb!=null) insertTextbox(element,"[email=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/email]");
-	}
+				if (va!==null)
+				{
+					window.fauxmodal_prompt(
+						"{!ENTER_CAPTION^#}",
+						'',
+						function(vb)
+						{
+							var element=document.getElementById(field_name);
+							element=ensure1_id(element,field_name);
+							if (is_comcode_xml(element))
+							{
+								if (vb!==null) insertTextbox(element,"<email address=\""+escape_html(va)+"\">"+escape_html(vb)+"</email>");
+							} else
+							{
+								if (vb!==null) insertTextbox(element,"[email=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/email]");
+							}
+						},
+						"{!comcode:INPUT_COMCODE_email^#}"
+					);
+				}
+			}
+		},
+		"{!comcode:INPUT_COMCODE_email^#}"
+	);
 }
 
 function doInput_b(field_name)
@@ -447,7 +612,7 @@ function doInput_font(field_name)
 	var colour=form.elements['f_colour'];
 	if ((face.value=='') && (size.value=='') && (colour.value==''))
 	{
-		window.alert("{!NO_FONT_SELECTED^#}");
+		window.fauxmodal_alert("{!NO_FONT_SELECTED^#}");
 		return;
 	}
 	if (is_comcode_xml(element))
@@ -513,28 +678,34 @@ function init_form_saving()
 	{
 		var key;
 		if (biggest_length_data.length>100) biggest_length_data=biggest_length_data.substr(0,100)+'...';
-		if (window.confirm('{!RESTORE_SAVED_FORM_DATA^;}\n\n'+biggest_length_data.replace(/<[^>]*>/g,'')))
-		{
-			for (key in fields_to_do)
+		window.fauxmodal_confirm(
+			'{!RESTORE_SAVED_FORM_DATA^;}\n\n'+biggest_length_data.replace(/<[^>]*>/g,''),
+			function(result)
 			{
-				if (typeof fields_to_do[key]!='string') continue;
-				
-				if ((posting_form.elements[key]) && (posting_form.elements[key].style))
+				if (result)
 				{
-					setTextbox(posting_form.elements[key],fields_to_do[key],fields_to_do[key]);
+					for (key in fields_to_do)
+					{
+						if (typeof fields_to_do[key]!='string') continue;
+
+						if ((posting_form.elements[key]) && (posting_form.elements[key].style))
+						{
+							setTextbox(posting_form.elements[key],fields_to_do[key],fields_to_do[key]);
+						}
+					}
+				} else
+				{
+					for (key in fields_to_do)
+					{
+						if (typeof fields_to_do[key]!='string') continue;
+
+						cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+key;
+						cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
+						SetCookie(encodeURIComponent(cookie_name),'0',1);
+					}
 				}
 			}
-		} else
-		{
-			for (key in fields_to_do)
-			{
-				if (typeof fields_to_do[key]!='string') continue;
-				
-				cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+key;
-				cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
-				SetCookie(encodeURIComponent(cookie_name),'0',1);
-			}
-		}
+		);
 	}
 }
 

@@ -22,7 +22,7 @@
 
 	{+START,IF,{$JS_ON}}
 		<div class="trackback_inside">
-			&raquo;&nbsp;<a onclick="window.alert('{!DONT_CLICK_TRACKBACK=;}'); return false;" href="{$FIND_SCRIPT*,trackback}?page={TRACKBACK_PAGE*}&amp;id={TRACKBACK_ID*}&amp;time={$FROM_TIMESTAMP}">{!TRACKBACK_LINK}</a>
+			&raquo;&nbsp;<a onclick="window.fauxmodal_alert('{!DONT_CLICK_TRACKBACK=;}'); return false;" href="{$FIND_SCRIPT*,trackback}?page={TRACKBACK_PAGE*}&amp;id={TRACKBACK_ID*}&amp;time={$FROM_TIMESTAMP}">{!TRACKBACK_LINK}</a>
 		</div>
 	{+END}
 {+END}

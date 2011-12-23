@@ -29,7 +29,7 @@ addEventListenerAbstract(window,'load',function () {
 		progress_ticker.style.verticalAlign='middle';
 		progress_ticker.style.marginLeft='20px';
 		button.parentNode.appendChild(progress_ticker,button);
-		window.alert('{!CALCULATED_SIZE;}'.replace('\{1\}',load_snippet('backup_size&max_size='+window.encodeURIComponent(max_size_field.value))));
+		window.fauxmodal_alert('{!CALCULATED_SIZE;}'.replace('\{1\}',load_snippet('backup_size&max_size='+window.encodeURIComponent(max_size_field.value))));
 		button.parentNode.removeChild(progress_ticker);
 	};
 	max_size_field.parentNode.appendChild(button,max_size_field);

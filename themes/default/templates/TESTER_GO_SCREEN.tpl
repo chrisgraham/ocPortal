@@ -40,7 +40,7 @@
 		<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!PROCEED}" />
 	</p>
 	<p class="proceed_button">
-		<input type="button" value="{!MARK_ALL_UNDONE}" onclick="if (window.confirm('{!MARK_ALL_UNDONE_SURE}')) mark_all_undone();" />
+		<input type="button" value="{!MARK_ALL_UNDONE}" onclick="window.fauxmodal_confirm('{!MARK_ALL_UNDONE_SURE}',function(answer) { if (answer) mark_all_undone(); });" />
 	</p>
 </form>
 

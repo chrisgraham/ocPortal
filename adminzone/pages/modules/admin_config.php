@@ -188,7 +188,7 @@ class Module_admin_config
 			add_config_option('IP_FORWARDING','ip_forwarding','tick','return \'0\';','SITE','ENVIRONMENT');
 			add_config_option('FORCE_META_REFRESH','force_meta_refresh','tick','return \'0\';','SITE','ENVIRONMENT');
 			add_config_option('USE_CONTEXTUAL_DATES','use_contextual_dates','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('EAGER_WYSIWYG','eager_wysiwyg','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('EAGER_WYSIWYG','eager_wysiwyg','tick','return \'0\';','SITE','ADVANCED');
 			add_config_option('WEBSITE_EMAIL','website_email','line','$staff_address=get_option(\'staff_address\'); $website_email=\'website@\'.get_domain(); if (substr($staff_address,-strlen(get_domain())-1)==\'@\'.get_domain()) $website_email=$staff_address; return $website_email;','SITE','EMAIL');
 			add_config_option('ENVELOPER_OVERRIDE','enveloper_override','tick','return \'0\';','SITE','EMAIL');
 			add_config_option('BCC','bcc','tick','return \'1\';','SITE','EMAIL');

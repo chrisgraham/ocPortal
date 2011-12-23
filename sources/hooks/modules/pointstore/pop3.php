@@ -178,7 +178,7 @@ class Hook_pointstore_pop3
 				{
 					if ((form.elements['pass1'].value!=form.elements['pass2'].value))
 					{
-						window.alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
+						window.fauxmodal_alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
 						return false;
 					}
 					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();

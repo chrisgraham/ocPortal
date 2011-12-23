@@ -73,7 +73,7 @@ function do_ajax_field_test(url,post)
 				}
 			} else
 			{
-				window.alert(xmlhttp.responseText);
+				window.fauxmodal_alert(xmlhttp.responseText);
 			}
 		}
 		return false;
@@ -114,7 +114,7 @@ function ajax_form_submit(event,form,block_name,map)
 
 				setInnerHTML(element_replace,xhtml);
 
-				window.alert('{!SUCCESS;}');
+				window.fauxmodal_alert('{!SUCCESS;}');
 
 				return false; // We've handled it internally
 			}
@@ -224,7 +224,7 @@ function process_request_changes()
 					{
 						if ((!window.network_down) && (!window.unloaded))
 						{
-							if (result.status==12029) window.alert("{!NETWORK_DOWN^#}");
+							if (result.status==12029) window.fauxmodal_alert("{!NETWORK_DOWN^#}");
 							window.network_down=true;
 						}
 					} else
@@ -290,11 +290,11 @@ function process_request_change(ajax_result_frame,i)
 		if (ajax_result_frame.getElementsByTagName("error")[0])
 		{
 			//It's an error :|
-			window.alert("An error ("+ajax_result_frame.getElementsByTagName("error")[0].firstChild.data+") message was returned by the server: "+message);
+			window.fauxmodal_alert("An error ("+ajax_result_frame.getElementsByTagName("error")[0].firstChild.data+") message was returned by the server: "+message);
 			return null;
 		}
 
-		window.alert("An informational message was returned by the server: "+message);
+		window.fauxmodal_alert("An informational message was returned by the server: "+message);
 		return null;
 	}
 
@@ -307,7 +307,7 @@ function process_request_change(ajax_result_frame,i)
 		if (typeof method.response!='undefined') method.response(ajax_result_frame,ajax_result);
 		else method(ajax_result_frame,ajax_result);
 
-	}// else window.alert("Method required: as it is non-blocking");
+	}// else window.fauxmodal_alert("Method required: as it is non-blocking");
 	
 	return null;
 }

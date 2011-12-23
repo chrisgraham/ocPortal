@@ -112,12 +112,12 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 			{
 				if ((form.elements['email_address_confirm']) && (form.elements['email_address_confirm'].value!=form.elements['email_address'].value))
 				{
-					window.alert('".php_addslashes(do_lang('EMAIL_ADDRESS_MISMATCH'))."');
+					window.fauxmodal_alert('".php_addslashes(do_lang('EMAIL_ADDRESS_MISMATCH'))."');
 					return false;
 				}
 				if ((form.elements['password_confirm']) && (form.elements['password_confirm'].value!=form.elements['password'].value))
 				{
-					window.alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
+					window.fauxmodal_alert('".php_addslashes(do_lang('PASSWORD_MISMATCH'))."');
 					return false;
 				}
 				document.getElementById('submit_button').disabled=true;

@@ -2,19 +2,19 @@
 
 function update_cart(pro_ids)
 {	
-	var pro_ids_array	=	pro_ids.split(",");
+	var pro_ids_array=pro_ids.split(",");
 
-	var tot			=	pro_ids_array.length;	
+	var tot=pro_ids_array.length;	
 
-	for(var i=0; i<tot; i++)
+	for (var i=0;i<tot;i++)
 	{	
-		var quantity_data = 'quantity_'+pro_ids_array[i];
+		var quantity_data='quantity_'+pro_ids_array[i];
 
-		var qval = document.getElementById(quantity_data).value;
+		var qval=document.getElementById(quantity_data).value;
 
-		if(isNaN(qval))
+		if (isNaN(qval))
 		{
-			alert('{!CART_VALIDATION_REQUIRE_NUMBER^;}');
+			window.fauxmodal_alert('{!CART_VALIDATION_REQUIRE_NUMBER^;}');
 			return false;
 		}
 	}	
@@ -22,14 +22,15 @@ function update_cart(pro_ids)
 
 function confirm_empty(message,action_url,form)
 {	
-	if(confirm(message)) 
-	{
-		form.action=action_url;
-		return true;
-	} else 
-	{
-		return false;
-	}
+	window.fauxmodal_confirm(
+		message,
+		function() {
+		{
+			form.action=action_url;
+			form.submit();
+		}
+	);
+	return false;
 }
 
 function checkout(form_name,checkout_url)
@@ -40,21 +41,35 @@ function checkout(form_name,checkout_url)
 	return true;
 }
 
-function confirm_admin_order_actions(action_event)
+function confirm_admin_order_actions(action_event,form)
 {
-	if(action_event=='dispatch')
+	if (action_event=='dispatch')
 	{
-		if(!confirm('{!DISPATCH_CONFIRMATION_MESSAGE^;}')) 
-		{
-			return false;
-		}
+		window.fauxmodal_confirm(
+			'{!DISPATCH_CONFIRMATION_MESSAGE^;}',
+			function(result)
+			{
+				if (result)
+				{
+					disable_button_just_clicked(form);
+					form.submit();
+				}
+			}
+		);
 	}
-	if(action_event=='del_order')
+	if (action_event=='del_order')
 	{
-		if(!confirm('{!CANCEL_ORDER_CONFIRMATION_MESSAGE^;}')) 
-		{
-			return false;
-		}
+		window.fauxmodal_confirm(
+			'{!CANCEL_ORDER_CONFIRMATION_MESSAGE^;}',
+			function(result)
+			{
+				if (result)
+				{
+					disable_button_just_clicked(form);
+					form.submit();
+				}
+			}
+		);
 	}
-	return true;
+	return false;
 }

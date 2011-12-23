@@ -8,7 +8,7 @@
 	<div class="twitter"><a target="_blank" title="{!ADD_TO_TWITTER}: {!LINK_NEW_WINDOW}" onclick="this.setAttribute('href','http://twitter.com/share?count=horizontal&amp;counturl={EASY_SELF_URL;*}&amp;original_referer={EASY_SELF_URL;*}&amp;text='+window.encodeURIComponent(document.title)+'&amp;url={EASY_SELF_URL;*}');" href="http://twitter.com/home?status=RT%20{EASY_SELF_URL*}">{!ADD_TO_TWITTER}</a></div>
 	{$,<div class="stumbleupon"><a target="_blank" title="{!ADD_TO_STUMBLEUPON}: {!LINK_NEW_WINDOW}" href="http://www.stumbleupon.com/submit?url={EASY_SELF_URL*}">{!ADD_TO_STUMBLEUPON}</a></div>}
 	{$,<div class="digg"><a target="_blank" title="{!ADD_TO_DIGG}: {!LINK_NEW_WINDOW}" href="http://digg.com/submit?phase=2&amp;url={EASY_SELF_URL*}">{!ADD_TO_DIGG}</a></div>}
-	{$,<div class="favorites"><a href="{$FIND_SCRIPT*,bookmarks}?no_redirect=1&amp;type=ad&amp;url={$SELF_URL*&}&amp;title={TITLE*&}" onclick="window.open(maintain_theme_in_link(this.getAttribute('href')),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;">Bookmark this</a></div>}
+	{$,<div class="favorites"><a href="{$FIND_SCRIPT*,bookmarks}?no_redirect=1&amp;type=ad&amp;url={$SELF_URL*&}&amp;title={TITLE*&}" onclick="window.faux_open(maintain_theme_in_link(this.getAttribute('href')),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;">Bookmark this</a></div>}
 
 	<div class="google_plusone">
 		<div class="g-plusone" data-size="small" data-count="true" data-href="{EASY_SELF_URL*}"></div>

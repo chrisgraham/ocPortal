@@ -304,10 +304,10 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 									{
 										if (array_key_exists($potential_tag,$BLOCK_TAGS))
 										{
-											$tag_raw='<span title="'.escape_html($potential_tag).'" class="ocp_keep_block">[';
+											$tag_raw='&#8203;<kbd title="'.escape_html($potential_tag).'" class="ocp_keep_block">[';
 										} else
 										{
-											$tag_raw='<span title="'.escape_html($potential_tag).'" class="ocp_keep">[';
+											$tag_raw='&#8203;<kbd title="'.escape_html($potential_tag).'" class="ocp_keep">[';
 										}
 									} else
 									{
@@ -1384,7 +1384,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 					if (($close) && ($mindless_mode))
 					{
-						$temp_tpl='</span>';
+						$temp_tpl='</kbd>&#8203;';
 						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
 						$tag_output->attach($temp_tpl);
 					}

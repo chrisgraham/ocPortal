@@ -140,7 +140,7 @@ function slideshow_ensure_loaded(slide,immediate)
 		}
 	} else
 	{
-		window.alert('Internal error: should not be preloading more than one step ahead');
+		window.fauxmodal_alert('Internal error: should not be preloading more than one step ahead');
 	}
 }
 

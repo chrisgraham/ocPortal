@@ -7,7 +7,7 @@
 	</li>
 {+END}
 {+START,IF,{$NOT,{TOP_LEVEL}}}
-	<li{+START,IF_NON_EMPTY,{CHILDREN}} onmousemove="return popUpMenu('{MENU|*;}_dexpand_{RANDOM*;}',null,'{MENU|*;}_d',event);"{+END} class="nlevel {$?,{CURRENT},current,non_current} {$?,{$IS_EMPTY,{IMG}},has_no_img,has_img}" onkeypress="this.onclick(event);" onclick="var as=this.getElementsByTagName('a'); if (!as[0]) return; var a=as[as.length-1]; var loc=a.href; if (a.getAttribute('target')) window.open(loc,a.getAttribute('target')); else window.location=loc;">
+	<li{+START,IF_NON_EMPTY,{CHILDREN}} onmousemove="return popUpMenu('{MENU|*;}_dexpand_{RANDOM*;}',null,'{MENU|*;}_d',event);"{+END} class="nlevel {$?,{CURRENT},current,non_current} {$?,{$IS_EMPTY,{IMG}},has_no_img,has_img}" onkeypress="this.onclick(event);" onclick="var as=this.getElementsByTagName('a'); if (!as[0]) return; var a=as[as.length-1]; click_link(a);">
 		{+START,IF_NON_EMPTY,{IMG}}<img alt="" src="{$IMG*,{IMG}}" />{+END}
 		{+START,IF_NON_EMPTY,{URL}}
 			<a{+START,INCLUDE,MENU_LINK_PROPERTIES}{+END}{+START,IF,{$NOT,{POPUP}}} onkeypress="this.onclick(event);" onclick="cancelBubbling(event);"{+END} {+START,IF_NON_EMPTY,{CHILDREN}} class="drawer"{+END}>{CAPTION}</a>{+START,IF_NON_EMPTY,{CHILDREN}} &rarr;{+END}

@@ -122,8 +122,6 @@ class Hook_addon_registry_cedi
 			'sources/hooks/systems/awards/seedy_post.php',
 			'sources/hooks/systems/module_permissions/seedy_page.php',
 			'themes/default/images/EN/page/edit_tree.png',
-			'themes/default/images/EN/page/contract.png',
-			'themes/default/images/EN/page/expand.png',
 			'site/pages/html_custom/EN/cedi_tree_made.htm',
 		);
 	}
@@ -222,7 +220,6 @@ class Hook_addon_registry_cedi
 					'UNVALIDATED'=>do_lang('UNVALIDATED'),
 					'STAFF_ACCESS'=>lorem_phrase(),
 					'EXP_IMG'=>placeholder_img_code(),
-					'EXPAND_URL'=>placeholder_url(),
 					'RATE_URL'=>placeholder_url(),
 					'RATING'=>$rating_details,
 					'ID'=>placeholder_id(),

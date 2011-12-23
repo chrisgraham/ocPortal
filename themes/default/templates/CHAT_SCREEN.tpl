@@ -25,7 +25,7 @@
 			&nbsp;
 			{MICRO_BUTTONS}
 			{+START,IF,{$OCF}}
-				<span class="associated_details">[ <a tabindex="6" href="#" onclick="window.open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'emoticon_chooser','width=180,height=500,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a> ]</span>
+				<span class="associated_details">[ <a tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a> ]</span>
 			{+END}
 		{+END}
 	</div>
@@ -93,7 +93,7 @@
 			</div>
 
 			<div class="chat_options">
-				<input class="button_pageitem" onclick="return window.confirm('{!SAVE_COMPUTER_USING_COOKIE;}');" type="submit" value="{!CHAT_CHANGE_OPTIONS=}" />
+				<input class="button_pageitem" onclick="window.fauxmodal_confirm('{!SAVE_COMPUTER_USING_COOKIE}',function(answer) { if (answer) form.submit(); }); return false;" type="submit" value="{!CHAT_CHANGE_OPTIONS=}" />
 			</div>
 		</div>
 	{+END}

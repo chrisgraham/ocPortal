@@ -115,7 +115,7 @@
 									<input class="button_pageitem" type="button" value="{!START_IM}" onclick="var people=get_ticked_people(this.form); if (people) start_im(people);" />
 								{+END}
 								{+START,IF_NON_EMPTY,{URL_REMOVE_BUDDIES}}
-									<input class="button_pageitem" type="submit" value="{!DUMP_BUDDIES}" onclick="var people=get_ticked_people(this.form); if ((!people) || (!window.confirm('{!Q_SURE=;}'))) return false; disable_button_just_clicked(this); return true;" />
+									<input class="button_pageitem" type="submit" value="{!DUMP_BUDDIES}" onclick="var people=get_ticked_people(this.form); if (!people) return false; var t=this; window.fauxmodal_confirm('{!Q_SURE=;}',function(result) { if (result) { disable_button_just_clicked(this); click_link(t); } })); return false;" />
 								{+END}
 							</div>
 						</form>

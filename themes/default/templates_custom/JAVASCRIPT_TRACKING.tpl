@@ -8,32 +8,37 @@ function track_children()
 	if (_sms) sms=((_sms.type=='checkbox') && (_sms.checked)) || ((_sms.type=='hidden') && (_sms.value=='1'));
 	if(!email && !sms)
 	{
-		window.alert('{!tracking:TRACKING_ALERT_MESSAGE;}');
+		window.fauxmodal_alert('{!tracking:TRACKING_ALERT_MESSAGE;}');
 		return false;
 	}
 }
 
 function check_all(form, checkBox, button)
 {
-	var btntxt	=	button.value;
+	var btntxt=button.value;
 
-	if(btntxt=='{!CHECK_ALL;}')
+	if (btntxt=='{!CHECK_ALL;}')
 	{
-		var enable	=	true;
-		var btntxt	=	'{!UNCHECK_ALL;}';
-	}
-	else
+		var enable=true;
+		var btntxt='{!UNCHECK_ALL;}';
+	} else
 	{
 		var enable=false;
-		var btntxt	=	'{!CHECK_ALL;}';
+		var btntxt='{!CHECK_ALL;}';
 	}
 
-	if(confirm(enable?'{!tracking:CHECK_ALL_CONFIRM_MESSAGE;}':'{!tracking:UNCHECK_ALL_CONFIRM_MESSAGE;}'))
-	{
-		var objCheckBoxes = document.forms[form].elements[checkBox];
-		var countCheckBoxes = objCheckBoxes.length;
-		for(var i = 0; i < countCheckBoxes; i++)
-			objCheckBoxes[i].checked = enable;
-		button.value	=	btntxt;
-	}
+	window.fauxmodal_confirm(
+		enable?'{!tracking:CHECK_ALL_CONFIRM_MESSAGE;}':'{!tracking:UNCHECK_ALL_CONFIRM_MESSAGE;}',
+		function(answer)
+		{
+			if (answer)
+			{
+				var objCheckBoxes=document.forms[form].elements[checkBox];
+				var countCheckBoxes=objCheckBoxes.length;
+				for (var i=0;i<countCheckBoxes;i++)
+					objCheckBoxes[i].checked=enable;
+				button.value=btntxt;
+			}
+		}
+	);
 }

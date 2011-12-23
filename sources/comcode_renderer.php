@@ -1079,6 +1079,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 			}
 
+			$thumb_url=array_key_exists('thumb_url',$attributes)?$attributes['thumb_url']:'';
+
 			// Embedded attachments
 			if ((!is_numeric($id)) && (substr($id,0,4)!='new_') && (substr($id,0,4)!='url_'))
 			{
@@ -1115,20 +1117,22 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $url=get_custom_base_url().'/'.$url;
 
 				// Thumbnail
-				$thumb_url='';
-				require_code('images');
-				if (is_image($original_filename))
+				if ($thumb_url=='')
 				{
-					$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
-					if ($gd)
+					require_code('images');
+					if (is_image($original_filename))
 					{
-						require_code('images');
-						if (!is_saveable_image($url)) $ext='.png'; else $ext='.'.get_file_extension($original_filename);
-						$thumb_url='uploads/attachments_thumbs/'.$md5.$ext;
-						convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/'.$thumb_url,-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
+						$gd=((get_option('is_on_gd')=='1') && (function_exists('imagetypes')));
+						if ($gd)
+						{
+							require_code('images');
+							if (!is_saveable_image($url)) $ext='.png'; else $ext='.'.get_file_extension($original_filename);
+							$thumb_url='uploads/attachments_thumbs/'.$md5.$ext;
+							convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/'.$thumb_url,-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
-						if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $thumb_url=get_custom_base_url().'/'.$thumb_url;
-					} else $thumb_url=$url;
+							if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $thumb_url=get_custom_base_url().'/'.$thumb_url;
+						} else $thumb_url=$url;
+					}
 				}
 
 				if (addon_installed('galleries'))
@@ -1178,7 +1182,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$attributes['type']=post_param('attachmenttype'.$_id,array_key_exists('type',$attributes)?$attributes['type']:'auto');
 					if (substr($attributes['type'],-8)=='_extract') $attributes['type']=substr($attributes['type'],0,strlen($attributes['type'])-8);
 
-					$urls=get_url('','file'.$_id,'uploads/attachments',2,OCP_UPLOAD_ANYTHING,(!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0'),'','',true,true,true);
+					$urls=get_url('','file'.$_id,'uploads/attachments',2,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true,true,true);
 					if ($urls[0]=='') return new ocp_tempcode();//warn_exit(do_lang_tempcode('ERROR_UPLOADING'));  Can't do this, because this might not be post-calculated if something went wrong once
 					is_swf_upload(true);
 					$_size=$_FILES['file'.$_id]['size'];
@@ -1194,7 +1198,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$url=remove_url_mistakes(substr($id,4));
 					$_POST['_specify_url']=$url; // Little hack, as we need to read it from a POST
 					if (get_magic_quotes_gpc()) $_POST['_specify_url']=addslashes($_POST['_specify_url']);
-					$urls=get_url('_specify_url','','uploads/attachments',1,OCP_UPLOAD_ANYTHING,get_option('is_on_gd')=='1','','',true);
+					$urls=get_url('_specify_url','','uploads/attachments',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true);
 					$original_filename=rawurldecode(substr($url,strrpos($url,'/')+1));
 
 					if (url_is_local($urls[0]))
@@ -1218,7 +1222,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 				$url=$urls[0];
 				if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) $url=get_custom_base_url().'/'.$url;
-				$thumb_url=array_key_exists(1,$urls)?$urls[1]:'';
+				if ($thumb_url=='')
+					$thumb_url=array_key_exists(1,$urls)?$urls[1]:'';
 				if (($thumb_url!='') && ($connection!=$GLOBALS['SITE_DB'])) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 				$num_downloads=0;
 				$last_downloaded_time=NULL;

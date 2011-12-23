@@ -101,7 +101,7 @@ function get_attachments($posting_field_name)
 	} else $max_attachments=100;
 
 	$attachment_template=do_template('ATTACHMENT',array('_GUID'=>'c3b38ca70cbd1c5f9cf91bcae9ed11dsds','POSTING_FIELD_NAME'=>$posting_field_name,'I'=>'__num_attachments__'));
-	$attachments=do_template('ATTACHMENTS',array('_GUID'=>'054921e7c09412be479676759accf222','ATTACHMENT_TEMPLATE'=>$attachment_template,'IMAGE_TYPES'=>$image_types,'ATTACHMENTS'=>$attachments,'MAX_ATTACHMENTS'=>strval($max_attachments),'NUM_ATTACHMENTS'=>strval($num_attachments)));
+	$attachments=do_template('ATTACHMENTS',array('_GUID'=>'054921e7c09412be479676759accf222','POSTING_FIELD_NAME'=>$posting_field_name,'ATTACHMENT_TEMPLATE'=>$attachment_template,'IMAGE_TYPES'=>$image_types,'ATTACHMENTS'=>$attachments,'MAX_ATTACHMENTS'=>strval($max_attachments),'NUM_ATTACHMENTS'=>strval($num_attachments)));
 
 	return array($attachments,$attach_size_field);
 }

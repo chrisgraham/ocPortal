@@ -2495,7 +2495,7 @@ function SoundManager(smURL, smID) {
   };
 
   if (_wl.indexOf('debug=alert') + 1 && _s.debugMode) {
-    _s._wD = function(sText) {window.alert(sText);};
+    _s._wD = function(sText) {window.fauxmodal_alert(sText);};
   }
 
   _toggleDebug = function() {

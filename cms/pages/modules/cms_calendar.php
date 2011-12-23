@@ -108,7 +108,7 @@ class Module_cms_calendar extends standard_aed_module
 						var end=new Date(form.elements['end_year'].value,form.elements['end_month'].value,form.elements['end_day'].value,form.elements['end_hour'].value,form.elements['end_minute'].value);
 						if (start>end)
 						{
-							window.alert('".php_addslashes(do_lang('EVENT_CANNOT_AROUND'))."');
+							window.fauxmodal_alert('".php_addslashes(do_lang('EVENT_CANNOT_AROUND'))."');
 							return false;
 						}
 					}

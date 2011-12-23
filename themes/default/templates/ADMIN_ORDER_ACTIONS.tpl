@@ -1,5 +1,5 @@
 <div>
-	<form title="{!ACTION}: {ORDER_TITLE*}" method="post" action="{ORDR_ACT_URL*}" onsubmit="if (confirm_admin_order_actions(this.elements['action'].value)) { disable_button_just_clicked(this); return true; } return false;">
+	<form title="{!ACTION}: {ORDER_TITLE*}" method="post" action="{ORDR_ACT_URL*}" onsubmit="return confirm_admin_order_actions(this.elements['action'].value,this);">
 		<label for="action">{!ACTION}</label>
 		<select name="action" id="action" class="ecom_actions_list">
 			<option value="add_note">{!ADD_NOTE}</option>

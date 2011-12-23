@@ -166,7 +166,7 @@ function copy_permission_presets(name,value,just_track)
 	
 	if ((!just_track) && (elements.length==2) && (made_change))
 	{
-		window.alert('{!JUST_PRESETS^;}');
+		window.fauxmodal_alert('{!JUST_PRESETS^;}');
 	}
 	
 	return made_change;
@@ -205,7 +205,7 @@ function permission_repeating(button,name)
 	{
 		button.style.textDecoration='blink';
 		window.permission_copying=name;
-		window.alert('{!REPEAT_PERMISSION_NOTICE^;}');
+		window.fauxmodal_alert('{!REPEAT_PERMISSION_NOTICE^;}');
 		for (var i=0;i<trs.length;i++)
 		{
 			if (trs[i]!=tr) trs[i].onclick=copy_permissions_function(trs[i],tr,name);
@@ -540,7 +540,7 @@ function set_permissions(setting)
 		// Send AJAX request
 		if (set_request!='') load_XML_doc("{$BASE_URL_NOHTTP#}/data/site_tree.php?set_perms=1"+keep_stub(),null,set_request);
 	}
-	window.alert('{!PERMISSIONS_TREE_EDITOR_SAVED^;}');
+	window.fauxmodal_alert('{!PERMISSIONS_TREE_EDITOR_SAVED^;}');
 }
 
 function permissions_img_func_1(node,id)
