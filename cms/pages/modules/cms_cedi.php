@@ -107,7 +107,7 @@ class Module_cms_cedi
 						array('add_one',array('_SELF',array('type'=>'add_page'),'_SELF'),do_lang('CEDI_ADD_PAGE')),
 						array('edit_one',array('_SELF',array('type'=>'choose_page_to_edit'),'_SELF'),do_lang('CEDI_EDIT_PAGE')),
 					),manage_custom_fields_donext_link('seedy_post'),manage_custom_fields_donext_link('seedy_page')),
-					do_lang('MANAGE_QUIZZES')
+					do_lang('MANAGE_CEDI')
 		);
 	}
 
