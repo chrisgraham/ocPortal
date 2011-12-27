@@ -593,10 +593,14 @@ class Module_cms_calendar extends standard_aed_module
 		$rem_groups=array();
 		if ((has_specific_permission(get_member(),'add_public_events')) && (array_key_exists('sign_up_reminder_groups',$_POST)))
 		{
-			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
+			$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 			$multi_code=read_multi_code('sign_up_reminder_groups'); // Usergroups signed up
 			require_code('ocfiltering');
-			$groups_inv=array_flip($GLOBALS['FORUM_DRIVER']->get_usergroup_list(true));
+			foreach (explode(',',$multi_code) as $m)
+			{
+				if (array_key_exists(intval($m),$all_groups))
+					$rem_groups[]=intval($m);
+			}
 		}
 		$start=0;
 		do
