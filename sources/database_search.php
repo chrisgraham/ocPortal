@@ -479,7 +479,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			{
 				if (($field=='') || ($field=='!') || (strpos($select,'t1.text_original')===false)) continue;
 
-				$extra_join.=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+				$extra_join.=' LEFT JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 			}
 			if (!db_has_subqueries($db->connection_read) || true /* Forced this old code to run because the "optimisation" does not work for larger result sets */)
 			{
@@ -488,7 +488,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$_keywords_query.=(($where_clause!='')?(' AND '.$where_clause):'');
 			} else
 			{
-				$_keywords_query=str_replace(' LEFT JOIN ',' JOIN ',$table_clause).' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') LEFT JOIN '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
+				$_keywords_query=/*str_replace(' LEFT JOIN ',' JOIN ',*/$table_clause/*)*/.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') LEFT JOIN '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
 				$_keywords_query.=' WHERE '.$keywords_where;
 				$_keywords_query.=(($where_clause!='')?(' AND tm.id IN (SELECT m.id FROM '.$table_clause.' LEFT JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') LEFT JOIN '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).' WHERE '.$where_clause.' AND '.$keywords_where.')'):'');
 			}
@@ -538,7 +538,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			{
 				if ((strpos($select,'t'.strval($i).'.text_original')!==false) || (strpos($where_clause,'t'.strval($i).'.text_original')!==false))
 				{
-					$tc_add=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+					$tc_add=' LEFT JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 					$orig_table_clause.=$tc_add;
 				}
 			}
@@ -548,7 +548,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($field==$order) $order='t'.$i.'.text_original'; // Ah, remap to the textual equivalent then
 
-				$tc_add=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+				$tc_add=' LEFT JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 				if (strpos($orig_table_clause,$tc_add)!==false) $tc_add='';
 
 				if (($only_titles) && ($i!=0)) break;
@@ -636,7 +636,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 					$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
 				} else // Optimised using subqueries. We need the fulltext search to run first to avoid non-bounded joins over potentially huge tables
 				{
-					$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.str_replace(' LEFT JOIN ',' JOIN ',$_table_clause);
+					$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM './*str_replace(' LEFT JOIN ',' JOIN ',*/$_table_clause/*)*/;
 					if (($where_clause_2!='') || ($where_clause_3!=''))
 					{
 						$query.=' WHERE '.$where_clause_2;
@@ -683,7 +683,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 					$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3).')';
 				} else // Optimised using subqueries. We need the fulltext search to run first to avoid non-bounded joins over potentially huge tables
 				{
-					$_query.='(SELECT COUNT(*) FROM '.str_replace(' LEFT JOIN ',' JOIN ',$_table_clause);
+					$_query.='(SELECT COUNT(*) FROM './*str_replace(' LEFT JOIN ',' JOIN ',*/$_table_clause/*)*/;
 					if (($where_clause_2!='') || ($where_clause_3!=''))
 					{
 						$_query.=' WHERE '.$where_clause_2;
