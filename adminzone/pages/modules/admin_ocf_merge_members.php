@@ -120,6 +120,8 @@ class Module_admin_ocf_merge_members
 			$GLOBALS['SITE_DB']->query_update($m['m_table'],array($m['m_name']=>$to_id),array($m['m_name']=>$from_id),'',NULL,NULL,false,true);
 		}
 
+		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_poster_name_if_guest'=>$to_username),array('p_poster'=>$from_id));
+
 		$new_post_count=$GLOBALS['FORUM_DRIVER']->get_member_row_field($from_id,'m_cache_num_posts')+$GLOBALS['FORUM_DRIVER']->get_member_row_field($to_id,'m_cache_num_posts');
 		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_num_posts'=>$new_post_count),array('id'=>$to_id),'',1);
 
