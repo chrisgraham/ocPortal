@@ -9,7 +9,7 @@
 				if (typeof elements[0]!='undefined')
 				{
 					var func= {
-						exec: elements[0].onclick
+						exec: function(e) { return function() { e.onclick.call(e); } }(elements[0])
 					};
 					var label=elements[0].title;
 					var icon='plugins/ocportal/images/'+buttonName+'.png';

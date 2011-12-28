@@ -182,8 +182,8 @@ function ModalWindow()
 	return {
 
 		box: null,
-		overlay: null,
 		returnValue: null,
+		topWindow: null,
 
 		open: function() {
 			var options = arguments[0] || {};
@@ -208,28 +208,36 @@ function ModalWindow()
 				'input_type': 'text'
 			};
 
+			this.topWindow=window.top;
+			if (this.topWindow.opener) this.topWindow=this.topWindow.opener;
+			this.topWindow=this.topWindow.top;
+
 			for(var key in defaults) {
 				this[key] = (typeof options[key] != "undefined") ? options[key] : defaults[key] ;
 			}
 		
-			this.close(window.top);
+			this.close(this.topWindow);
 			this.initOverlay();
 			this.initBox();
 		},
 	
 		close: function(win) {
-			if(this.box && this.overlay) {
+			if(this.box) {
 				this.remove(this.box, win);
 				this.box = null;
-				this.remove(this.overlay, win);
-				this.overlay = null;
+
+				var bi=this.topWindow.document.getElementById('body_inner');
+				if (bi)
+				{
+					setOpacity(bi,1.0);
+				}
 			}
 			this.removeEvent(document, "keyup", this.keyup);
 			this.opened = false;
 		},
 	
 		option: function(method) {
-			var win = window.top; // The below call may end up killing our window reference (for nested alerts), so we need to grab it first
+			var win = this.topWindow; // The below call may end up killing our window reference (for nested alerts), so we need to grab it first
 			if(this[ method ]) {
 				if(this.type == "prompt") {
 					this[ method ](this.input.value);
@@ -272,7 +280,7 @@ function ModalWindow()
 					'position': /*"absolute"*/"fixed",
 					'top': boxPosTop,
 					'left': boxPosLeft,
-					'zIndex': window.top.overlay_zIndex++,
+					'zIndex': this.topWindow.overlay_zIndex++,
 					'overflow': "auto",
 					'borderRadius': "15px"
 				}
@@ -340,7 +348,9 @@ function ModalWindow()
 						'class': "button_pageitem",
 					});
 					this.addEvent( button, "click", function() { _this.option('finished'); } );
-					this.addEvent( this.overlay, "click", function() { _this.option('finished'); } );
+					var bi=this.topWindow.document.getElementById('body_inner');
+					if (bi)
+						window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", function() { _this.option('finished'); } ); }, 1000);
 					buttonContainer.appendChild(button);
 					container.appendChild(this.element("hr", { 'class': 'spaced_rule' } ));
 					container.appendChild(buttonContainer);
@@ -356,7 +366,7 @@ function ModalWindow()
 					// Fiddle it, to behave like a popup would
 					var name=this.name;
 					var makeFrameLikePopup=function() {
-						if ((iframe) && (iframe.contentWindow) && (iframe.contentWindow.document))
+						if ((iframe) && (iframe.contentWindow) && (iframe.contentWindow.document) && (iframe.contentWindow.document.body))
 						{
 							iframe.contentWindow.document.body.style.background='none !important';
 							iframe.contentWindow.document.body.style.backgroundColor='transparent !important';
@@ -409,7 +419,9 @@ function ModalWindow()
 							'class': "button_pageitem",
 						});
 						this.addEvent( button, "click", function() { _this.option('yes'); } );
-						this.addEvent( this.overlay, "click", function() { _this.option('yes'); } );
+						var bi=this.topWindow.document.getElementById('body_inner');
+						if (bi)
+							window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", function() { _this.option('yes'); } ); }, 1000);
 						buttonContainer.appendChild(button);
 						container.appendChild(buttonContainer);
 					}
@@ -462,13 +474,17 @@ function ModalWindow()
 						'class': "button_pageitem",
 					});
 					this.addEvent( button, "click", function() { _this.option('cancel'); } );
-					this.addEvent( this.overlay, "click", function() { _this.option('cancel'); } );
+					var bi=this.topWindow.document.getElementById('body_inner');
+					if (bi)
+						window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", function() { _this.option('cancel'); } ); }, 1000);
 					buttonContainer.appendChild(button);
 
 					container.appendChild(buttonContainer);
 				break;
 			}
 		
+			this.addEvent( this.box, "click", function(e) { cancelBubbling(e); } );
+
 			this.box.appendChild(container);
 		
 			if(this.input) this.input.focus();
@@ -478,35 +494,32 @@ function ModalWindow()
 		},
 	
 		initOverlay: function() {
-			var dim = this.getPageSize();
-			this.overlay = this.element("div", {
-				'styles': {
-					'backgroundColor': "black",
-					'opacity': this.opacity,
-					'position': "absolute",
-					'top': "0px",
-					'left': "0px",
-					'width': dim.pageWidth + "px",
-					'height': dim.pageHeight + "px",
-					'zIndex': window.top.overlay_zIndex++
-			
+			var bi=this.topWindow.document.getElementById('body_inner');
+			if (bi)
+			{
+				if (typeof window.nereidFade!='undefined')
+				{
+					setOpacity(bi,1.0);
+					nereidFade(bi,30,30,-5);
+				} else
+				{
+					setOpacity(bi,0.3);
 				}
-			});
-			this.inject(this.overlay);
+			}
 		},
 	
 		inject: function(el) {
-			window.top.document.body.appendChild(el);
+			this.topWindow.document.body.appendChild(el);
 		},
 	
 		remove: function(el, win) {
-			if (!win) win = window.top;
+			if (!win) win = this.topWindow;
 			win.document.body.removeChild(el);
 		},
 	
 		element: function() {
 			var tag = arguments[0], options = arguments[1];
-			var el = window.top.document.createElement(tag);
+			var el = this.topWindow.document.createElement(tag);
 			var attributes = {
 				'html': 'innerHTML',
 				'class': 'className',
@@ -559,51 +572,7 @@ function ModalWindow()
 		},
 		
 		getPageSize: function() {
-			var xScroll, yScroll;
-		
-			if (window.top.innerHeight && window.top.scrollMaxY) {	
-				xScroll = window.top.innerWidth + window.top.scrollMaxX;
-				yScroll = window.top.innerHeight + window.top.scrollMaxY;
-			} else if (window.top.document.body.scrollHeight > window.top.document.body.offsetHeight) {
-				xScroll = window.top.document.body.scrollWidth;
-				yScroll = window.top.document.body.scrollHeight;
-			} else {
-				xScroll = window.top.document.body.offsetWidth;
-				yScroll = window.top.document.body.offsetHeight;
-			}
-		
-			var windowWidth, windowHeight;
-	
-			if (window.top.self.innerHeight) {
-				if(window.top.document.documentElement.clientWidth){
-					windowWidth = window.top.document.documentElement.clientWidth; 
-				} else {
-					windowWidth = window.top.self.innerWidth;
-				}
-				windowHeight = window.top.self.innerHeight;
-			} else if (window.top.document.documentElement && window.top.document.documentElement.clientHeight) {
-				windowWidth = window.top.document.documentElement.clientWidth;
-				windowHeight = window.top.document.documentElement.clientHeight;
-			} else if (window.top.document.body) {
-				windowWidth = window.top.document.body.clientWidth;
-				windowHeight = window.top.document.body.clientHeight;
-			}	
-
-			var pageHeight;
-			if(yScroll < windowHeight){
-				pageHeight = windowHeight;
-			} else { 
-				pageHeight = yScroll;
-			}
-
-			var pageWidth;
-			if(xScroll < windowWidth){	
-				pageWidth = xScroll;		
-			} else {
-				pageWidth = windowWidth;
-			}
-	
-			return { 'pageWidth': pageWidth, 'pageHeight': pageHeight, 'windowWidth' : windowWidth, 'windowHeight': windowHeight };
+			return { 'pageWidth': this.topWindow.getWindowScrollWidth(this.topWindow), 'pageHeight': this.topWindow.getWindowScrollHeight(this.topWindow), 'windowWidth' : this.topWindow.getWindowScrollX(), 'windowHeight': this.topWindow.getWindowScrollY() };
 		}
 	};
 }
