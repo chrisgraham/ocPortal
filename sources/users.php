@@ -303,6 +303,10 @@ function get_member($quick_only=false)
 	// Ok we have our answer
 	$MEMBER_CACHED=$member;
 	$GETTING_MEMBER=false;
+
+	// We call this to ensure any HTTP-auth specific code has a chance to run
+	is_httpauth_login();
+
 	return $member;
 }
 
