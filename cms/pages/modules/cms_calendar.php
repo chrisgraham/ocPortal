@@ -407,6 +407,8 @@ class Module_cms_calendar extends standard_aed_module
 			if (has_specific_permission(get_member(),'add_public_events'))
 			{
 				$usergroup_list=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
+				if (get_forum_type()=='ocf')
+					unset($usergroup_list[db_get_first_id()]);
 				$t_usergroup_list=new ocp_tempcode();
 				foreach ($usergroup_list as $id=>$name)
 				{
@@ -596,11 +598,23 @@ class Module_cms_calendar extends standard_aed_module
 			$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 			$multi_code=read_multi_code('sign_up_reminder_groups'); // Usergroups signed up
 			require_code('ocfiltering');
-			foreach (explode(',',$multi_code) as $m)
+			if ((substr($multi_code,0,1)=='-') || (substr($multi_code,0,1)=='*'))
 			{
-				if (array_key_exists(intval($m),$all_groups))
-					$rem_groups[]=intval($m);
+				$rem_groups=$all_groups;
+				if (get_forum_type()=='ocf')
+					unset($rem_groups[db_get_first_id()]);
 			}
+			foreach (explode(',',substr($multi_code,1)) as $m)
+			{
+				if (substr($multi_code,0,1)=='-')
+				{
+					unset($rem_groups[intval($m)]);
+				} elseif (substr($multi_code,0,1)=='+')
+				{
+					$rem_groups[intval($m)]=$all_groups[intval($m)];
+				}
+			}
+			$rem_groups=array_keys($rem_groups);
 		}
 		$start=0;
 		do
