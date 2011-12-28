@@ -500,8 +500,10 @@ function load_management_menu(type,no_confirm_needed)
 		} else
 		{
 			confirm_session(
-				true,
-				show_overlay
+				function(result)
+				{
+					show_overlay(result);
+				}
 			);
 		}
 

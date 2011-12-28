@@ -1,5 +1,13 @@
 var overlay_zIndex=1000;
 
+function open_as_overlay(ob,width,height)
+{
+	if (!width) width=900;
+	if (!height) height=700;
+	faux_open(ob.href+((ob.href.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,'_top');
+	return false;
+}
+
 function fauxmodal_confirm(question,callback,title)
 {
 	if (!title) title='{!Q_SURE;}';
@@ -51,7 +59,7 @@ function fauxmodal_alert(notice,callback,title)
 	{+END}
 }
 
-function fauxmodal_prompt(question,defaultValue,callback,title)
+function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 {
 	{+START,IF,{$VALUE_OPTION,faux_popups}}
 		var myPrompt = {
@@ -65,10 +73,11 @@ function fauxmodal_prompt(question,defaultValue,callback,title)
 				callback(value);
 			},
 			cancel: function() {
-				callback(false);
+				callback(null);
 			},
 			width: 450
 		};
+		if (input_type) myPrompt.input_type=input_type;
 		new ModalWindow().open(myPrompt);
 	{+END}
 
@@ -77,7 +86,7 @@ function fauxmodal_prompt(question,defaultValue,callback,title)
 	{+END}
 }
 
-function faux_showModalDialog(url,name,options,callback)
+function faux_showModalDialog(url,name,options,callback,target)
 {
 	if (!callback) callback=function() {};
 
@@ -114,6 +123,7 @@ function faux_showModalDialog(url,name,options,callback)
 			scrollbars: scrollbars,
 			href: url
 		};
+		if (target) myOverlay.target=target;
 		new ModalWindow().open(myOverlay);
 	{+END}
 
@@ -138,10 +148,10 @@ function faux_showModalDialog(url,name,options,callback)
 	{+END}
 }
 
-function faux_open(url,name,options)
+function faux_open(url,name,options,target)
 {
 	{+START,IF,{$VALUE_OPTION,faux_popups}}
-		faux_showModalDialog(url,name,options);
+		faux_showModalDialog(url,name,options,null,target);
 	{+END}
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,faux_popups}}}
@@ -170,11 +180,11 @@ Modified by ocProducts for ocPortal.
 function ModalWindow()
 {
 	return {
-	
+
 		box: null,
 		overlay: null,
 		returnValue: null,
-	
+
 		open: function() {
 			var options = arguments[0] || {};
 			var defaults = {
@@ -190,9 +200,12 @@ function ModalWindow()
 				'yes': null,
 				'no': null,
 				'finished': null,
+				'cancel': null,
 				'href': null,
 				'scrollbars': null,
-				'defaultValue': null
+				'defaultValue': null,
+				'target': '_self',
+				'input_type': 'text'
 			};
 
 			for(var key in defaults) {
@@ -252,7 +265,7 @@ function ModalWindow()
 			var boxPosLeft = boxPosHCentre + "px";
 		
 			this.box = this.element("div", {
-				'class': 'medborder medborder_box',
+				'class': 'medborder medborder_box overlay',
 				'styles' : {
 					'width': boxWidth,
 					'height': boxHeight,
@@ -343,12 +356,16 @@ function ModalWindow()
 					// Fiddle it, to behave like a popup would
 					var name=this.name;
 					var makeFrameLikePopup=function() {
-						if ((iframe) && (iframe.contentWindow))
+						if ((iframe) && (iframe.contentWindow) && (iframe.contentWindow.document))
 						{
-							if (iframe.contentWindow.document.body)
-								iframe.contentWindow.document.body.style.backgroundColor='transparent';
-							if (iframe.contentWindow.document.body)
-								iframe.contentWindow.document.body.style.background='none';
+							iframe.contentWindow.document.body.style.background='none !important';
+							iframe.contentWindow.document.body.style.backgroundColor='transparent !important';
+
+							// Remove fixed width
+							var body_inner=iframe.contentWindow.document.getElementById('body_inner');
+							if (body_inner) body_inner.id='';
+							var fw=get_elements_by_class_name(iframe.contentWindow.document.body,'top_level_wrap_fixed');
+							if (fw[0]) fw[0].className='top_level_wrap';
 
 							iframe.contentWindow.opener = window;
 							var bases=iframe.contentWindow.document.getElementsByTagName('base');
@@ -368,12 +385,10 @@ function ModalWindow()
 							{
 								baseElement=bases[0];
 							}
-							baseElement.target='_self';
-							if (iframe.contentWindow.document.body)
-								iframe.contentWindow.document.body.style.backgroundColor='transparent';
-							if (iframe.contentWindow.document.body)
-								iframe.contentWindow.document.body.style.background='none';
+							baseElement.target=_this.target;
+
 							if (name && iframe.contentWindow.name != name) iframe.contentWindow.name=name;
+
 							if (typeof iframe.contentWindow.faux_close=='undefined')
 							{
 								iframe.contentWindow.faux_close=function() {
@@ -422,7 +437,7 @@ function ModalWindow()
 					this.input = this.element("input", {
 						'name': "prompt",
 						'id': "overlay_prompt",
-						'type': "text",
+						'type': this.input_type,
 						'size': "40",
 						'class': "wide_field",
 						'value': this.defaultValue,

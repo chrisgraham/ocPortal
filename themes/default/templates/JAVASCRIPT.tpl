@@ -736,48 +736,46 @@ function get_base_url()
 }
 
 {$,Enforcing a session using AJAX}
-function confirm_session(do_initial_test,callback)
+function confirm_session(callback)
 {
 	if (typeof window.load_XML_doc=='undefined') return;
 
-	var url='{$FIND_SCRIPT_NOHTTP;,confirm_session}';
+	var url='{$FIND_SCRIPT_NOHTTP;,confirm_session}'+keep_stub(true);
 
 	// First see if session already established
 	var ret=null;
-	if (do_initial_test)
-	{
-		require_javascript("javascript_ajax");
-		if (typeof window.load_XML_doc!='undefined') ret=load_XML_doc(url+keep_stub(true),false);
-		if (!ret) return;
+	require_javascript("javascript_ajax");
+	if (typeof window.load_XML_doc!='undefined') ret=load_XML_doc(url+keep_stub(true),false);
+	if (!ret) return;
 
-		if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
-		{
-			callback();
-			return;
-		}
+	if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
+	{
+		callback(true);
+		return;
 	}
 
-	_confirm_session(callback);
+	_confirm_session(callback,ret.responseText,url);
 }
 
-function _confirm_session(callback)
+function _confirm_session(callback,username,url)
 {
 	window.fauxmodal_prompt(
-		'{!ENTER_PASSWORD_JS^;}',
+		'{$?,{$VALUE_OPTION,faux_popups},{!ENTER_PASSWORD_JS_2^;},{!ENTER_PASSWORD_JS^;}}',
 		'',
 		function(promptt)
 		{
-			if ((promptt) && (promptt!=''))
+			if (promptt!==null)
 			{
-				ret=load_XML_doc(url,false,'login_username='+ret.responseText+'&password='+promptt+keep_stub());
+				var ret=load_XML_doc(url,false,'login_username='+window.encodeURIComponent(username)+'&password='+window.encodeURIComponent(promptt));
 
 				if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
-					callback();
+					callback(true);
 				else
-					_confirm_session(callback); // Recurse
-			}
+					_confirm_session(callback,username,url); // Recurse
+			} else callback(false);
 		},
-		'{!_LOGIN;}'
+		'{!_LOGIN;}',
+		'password'
 	);
 }
 

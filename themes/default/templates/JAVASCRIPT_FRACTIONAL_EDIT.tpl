@@ -56,15 +56,16 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 						}
 
 						var session_test_url='{$FIND_SCRIPT_NOHTTP;,confirm_session}';
-						var session_test_ret=load_XML_doc(session_test_url+keep_stub(true),false);
+						var session_test_ret=load_XML_doc(session_test_url+keep_stub(true));
 
 						if ((session_test_ret.responseText!='') && (session_test_ret.responseText!=Null)) // If it failed, see if it is due to a non-confirmed session
 						{
 							confirm_session(
 								false,
-								function()
+								function(result)
 								{
-									input.onkeypress(event);
+									if (result)
+										input.onkeypress(event);
 								}
 							);
 						} else

@@ -33,9 +33,15 @@ function load_occle()
 	if ((window.ajax_supported) && (ajax_supported()) && (typeof window.occle_command_response!='undefined'))
 	{
 		confirm_session(
-			true,
-			function()
+			function(result)
 			{
+				// Remove "loading" indicator from button
+				var img=document.getElementById('occle_img');
+				var tmp_element=document.getElementById('occle_img_loader');
+				if (tmp_element) tmp_element.parentNode.removeChild(tmp_element);
+
+				if (!result) return;
+
 				// Set up OcCLE window
 				var occle_box=document.getElementById('occle_box');
 				if (!occle_box)
@@ -54,11 +60,6 @@ function load_occle()
 					document.body.appendChild(occle_box);
 					setInnerHTML(occle_box,load_snippet("occle"));
 				}
-
-				// Remove "loading" indicator from button
-				var img=document.getElementById('occle_img');
-				var tmp_element=document.getElementById('occle_img_loader');
-				if (tmp_element) tmp_element.parentNode.removeChild(tmp_element);
 
 				if (occle_box.style.display=='none') // Showing OcCLE again
 				{
