@@ -57,6 +57,12 @@ function handle_facebook_connection_login($current_logged_in_member)
 		set_session_id(-1);
 	}
 
+	// If already session-logged-in onto a Facebook account, don't bother doing anything
+	if ((!is_null($current_logged_in_member)) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($current_logged_in_member,'m_password_compat_scheme')=='facebook'))
+	{
+		return $current_logged_in_member;
+	}
+
 	// Who is this user, from Facebook's point of view?
 	global $FACEBOOK_CONNECT;
 	$facebook_uid=$FACEBOOK_CONNECT->getUser();
