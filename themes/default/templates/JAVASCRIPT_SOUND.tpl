@@ -286,6 +286,8 @@ function SoundManager(smURL, smID) {
       _s._wD('Loading sound '+_tO.id+' via HTML5');
       oSound._setup_html5(_tO);
     } else {
+		if (!_s.o) return null;
+
       if (_fV > 8 && _s.useMovieStar) {
         if (_tO.isMovieStar === null) {
           _tO.isMovieStar = ((_tO.serverURL || (_tO.type?_tO.type.match(_s.netStreamPattern):false)||_tO.url.match(_s.netStreamPattern))?true:false);
