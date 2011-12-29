@@ -1,4 +1,5 @@
 {$,Parser hint: pure}
+{$,Parser hint: .innerHTML okay}
 
 jwplayer = function (a) {
     return jwplayer.constructor(a)
