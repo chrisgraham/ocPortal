@@ -5378,6 +5378,7 @@ function uploadSuccess(ob,file,data) {
 
 function uploadError(ob,error) {
 	var file=error.file?error.file:ob.files[ob.files.length-1];
+	if (typeof file=='undefined') file=null;
 	
 	var progress = new FileProgress(file, ob.settings.progress_target);
 	progress.setError();
@@ -5388,7 +5389,8 @@ function uploadError(ob,error) {
 		window.fauxmodal_alert("{!SWFUPLOAD_FAILED^#}: "+error.message);
 	txtFileName.value = "";
 
-	fireFakeChangeFor(ob.settings.txtName,'');
+	if (file)
+		fireFakeChangeFor(ob.settings.txtName,'');
 
 	document.getElementById(ob.settings.btnSubmitID).disabled = false;
 }
@@ -5782,7 +5784,7 @@ function initialise_dragdrop_upload(key,key2)
 // targetID is the HTML element id attribute that the FileProgress HTML structure will be added to.
 // Instantiating a new FileProgress object with an existing file will reuse/update the existing DOM elements
 function FileProgress(file, targetID) {
-	this.fileProgressID = 'progress_'+file.id;
+	this.fileProgressID = 'progress_'+(file && typeof file.id=='undefined')?'not_inited':file.id;
 	this.opacity = 100;
 	this.height = 0;
 
@@ -5803,7 +5805,7 @@ function FileProgress(file, targetID) {
 
 		var progressText = document.createElement("div");
 		progressText.className = "progressName";
-		if (typeof file.name!='undefined')
+		if (file && typeof file.name!='undefined')
 			progressText.appendChild(document.createTextNode(file.name));
 
 		var progressBar = document.createElement("div");
