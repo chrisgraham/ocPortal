@@ -44,7 +44,7 @@
 					</tbody>
 				</table>
 				<p class="button_panel">
-					[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
+					[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a onclick="return open_link_as_overlay(this);" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
 				</p>
 				<input class="search-but" type="submit" value="{!_LOGIN}" />
 			</form>

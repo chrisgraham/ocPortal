@@ -21,7 +21,7 @@
 						if ((window.detect_change) && (detect_change('{CHANGE_DETECTION_URL;}','{REFRESH_IF_CHANGED;}')) && ((!top.frames['iframe_page'].document.getElementById('post')) || (top.frames['iframe_page'].document.getElementById('post').value=='')))
 					{+END}
 							top.frames['iframe_page'].location.reload();
-				}
+				},
 				{REFRESH_TIME%}*1000);
 		{+END}
 	//]]></script>

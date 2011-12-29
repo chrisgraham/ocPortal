@@ -382,7 +382,7 @@ form { /* For IE6 */
 	width: {$?,{$MOBILE},315,390}px;
 }
 
-.top_level_wrap_fixed .global_middle {
+#login_page {
 	background: white url('{$IMG,background_image}') no-repeat 20px 44px #ffffff; /* {$,maincolor, 100% W/B} */
 	padding: 5px;
 }

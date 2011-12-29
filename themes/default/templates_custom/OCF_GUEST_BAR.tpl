@@ -8,7 +8,7 @@
 					<div>
 						<div class="accessibility_hidden"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
 						<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
-						<input size="15" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
+						<input accesskey="l" size="15" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
 						<input size="15" type="password" value="password" name="password" id="s_password" />
 						<label for="remember">{!REMEMBER_ME}</label> <input {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) { .checked=false; } }); }" {+END}type="checkbox" value="1" id="remember" name="remember" />
 						<input class="button_pageitem" type="submit" value="{!_LOGIN}" />
@@ -17,7 +17,7 @@
 								<fb:login-button scope="email,user_birthday"></fb:login-button>
 							</span>
 						{+END}
-						<span class="button_options_spacer">[ <a href="{JOIN_LINK*}">{!_JOIN}</a> | <a href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]</span>
+						<span class="button_options_spacer">[ <a href="{JOIN_LINK*}">{!_JOIN}</a> | <a onclick="return open_link_as_overlay(this);" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]</span>
 					</div>
 				</form>
 			</div>

@@ -1,6 +1,6 @@
 {$SET,FIRST_IMAGE_ID,{ID}}
 <span class="block">
-	<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
+	<a rel="lightbox" href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
 </span>
 {+START,IF_NON_EMPTY,{COMMENT}}
 	<span class="block associated_caption">

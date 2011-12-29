@@ -24,9 +24,11 @@
 			</div>
 		</form>
 		<p class="button_panel">
-			[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
+			[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a onclick="return open_link_as_overlay(this);" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
 
 			{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
+				<br />
+				<br />
 				<span xmlns:fb="http://api.facebook.com/1.0/">
 					<fb:login-button scope="email,user_birthday"></fb:login-button>
 				</span>

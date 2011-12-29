@@ -8,7 +8,7 @@
 		<form action="{LOGIN_URL*}" method="post" class="login autocomplete">
 			<input type="submit" class="login-button" value="LOGIN"/>
 			<input type="hidden" value="1" id="remember" name="remember" />
-			<div class="accessibility_hidden"><label for="login_username">{!USERNAME}</label></div><input maxlength="80" accesskey="l" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" class="login-box"/>
+			<div class="accessibility_hidden"><label for="login_username">{!USERNAME}</label></div><input maxlength="80" onclick="return open_link_as_overlay(this);" accesskey="l" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" class="login-box"/>
 			<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div><input maxlength="255" type="password" value="" name="password" id="s_password" class="login-box" />
 		</form>
 	</div>

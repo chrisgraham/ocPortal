@@ -611,29 +611,6 @@ octavius
 # # sources_custom/programe/respond.php
 # # sources_custom/programe/util.php
 
-lightbox2
----------
-
-# # themes/default/templates_custom/CATALOGUE_DEFAULT_SCREEN_PICTURE.tpl
-# # themes/default/templates_custom/DOWNLOAD_SCREEN_IMAGE.tpl
-# # themes/default/templates_custom/CATALOGUE_products_ENTRY.tpl
-# # themes/default/templates_custom/ATTACHMENT_IMG.tpl
-# # themes/default/templates_custom/COMCODE_EXP_THUMB.tpl
-# # themes/default/templates_custom/COMCODE_THUMB.tpl
-# # themes/default/templates_custom/HYPERLINK.tpl
-# # themes/default/templates_custom/JAVASCRIPT_LIGHTBOX.tpl
-# # themes/default/templates_custom/JAVASCRIPT_PROTOTYPE.tpl
-# # themes/default/templates_custom/JAVASCRIPT_SCRIPTACULOUS.tpl
-# # themes/default/templates_custom/JAVASCRIPT_SCRIPTACULOUS_BUILDER.tpl
-# # themes/default/templates_custom/JAVASCRIPT_SCRIPTACULOUS_EFFECTS.tpl
-# # themes/default/css_custom/lightbox.css
-# # themes/default/images_custom/EN/lightbox/closelabel.gif
-# # themes/default/images_custom/EN/lightbox/nextlabel.gif
-# # themes/default/images_custom/EN/lightbox/prevlabel.gif
-# # themes/default/images_custom/lightbox/close.gif
-# # themes/default/images_custom/lightbox/download-icon.gif
-# # themes/default/images_custom/lightbox/loading.gif
-
 java_uploader_ftp_source_code
 -----------------------------
 

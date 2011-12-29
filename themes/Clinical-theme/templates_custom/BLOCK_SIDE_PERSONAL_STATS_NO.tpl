@@ -5,7 +5,7 @@
 		<div class="login-container">
 			<div class="constrain_field">
 				<div class="login"><label for="login_username">{!USERNAME}</label></div>
-				<input alt="{!USERNAME}" accesskey="l" class="login-box" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
+				<input alt="{!USERNAME}" onclick="return open_link_as_overlay(this);" accesskey="l" class="login-box" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
 				<div class="login"><label for="s_password">{!PASSWORD}</label></div>
 				<input alt="{!PASSWORD}" class="login-box " type="password" value="password" name="password" id="s_password" />
 			</div>

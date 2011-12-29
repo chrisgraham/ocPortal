@@ -73,11 +73,10 @@ class Block_main_greeting
 			{
 				$redirect=get_self_url(true,true);
 				$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
-				$join_link=hyperlink($GLOBALS['FORUM_DRIVER']->join_link(),do_lang_tempcode('JOIN'));
-				$login_link=hyperlink($login_url,do_lang_tempcode('LOGIN'));
-				$_login_link=$login_link->evaluate();
-				$_join_link=$join_link->evaluate();
-				$p=do_lang_tempcode('WELCOME',do_lang_tempcode('A_OR_B',$_join_link,$_login_link));
+				$join_url=$GLOBALS['FORUM_DRIVER']->join_link();
+				$join_bits=do_template('JOIN_OR_LOGIN',array('LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
+
+				$p=do_lang_tempcode('WELCOME',$join_bits);
 				$out->attach(paragraph($p,'hhrt4dsgdsgd'));
 			} else
 			{

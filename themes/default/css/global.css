@@ -552,7 +552,7 @@ form { /* For IE6 */
 	width: {$?,{$MOBILE},315,390}px;
 }
 
-.top_level_wrap_fixed .global_middle {
+.login_page {
 	background: url('{$IMG,background_image}') no-repeat 20px 44px;
 	padding: 5px;
 }
@@ -1381,7 +1381,7 @@ h3.standardbox_title_classic {
 }
 
 .ajax_tree_list_loading {
-	margin: 35% auto 0 auto;
+	margin: 35% auto 35% auto;
 	text-align: center;
 }
 

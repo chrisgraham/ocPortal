@@ -239,6 +239,7 @@ class Hook_addon_registry_core
 			'data/quick_js_loader.js',
 			'ZONE_CHOOSE.tpl',
 			'ZONE_CHOOSE_INLINE.tpl',
+			'JOIN_OR_LOGIN.tpl',
 			'JAVASCRIPT.tpl',
 			'JAVASCRIPT_AJAX.tpl',
 			'JAVASCRIPT_NEED.tpl',
@@ -904,6 +905,7 @@ class Hook_addon_registry_core
 				'BROKEN_LANG_STRINGS.tpl'=>'administrative__broken_lang_strings',
 				'ZONE_CHOOSE.tpl'=>'zone_choose',
 				'ZONE_CHOOSE_INLINE.tpl'=>'block_side_zone_jump',
+				'JOIN_OR_LOGIN.tpl'=>'join_or_login',
 				'FORUM_ATTACHMENT_IMAGE.tpl'=>'forum_attachment_image',
 				'FORUM_ATTACHMENT_IMAGE_THUMB.tpl'=>'forum_attachment_link',
 				'FORUM_ATTACHMENT_LINK.tpl'=>'forum_attachment_link',
@@ -1420,6 +1422,24 @@ class Hook_addon_registry_core
 				do_lorem_template('BLOCK_MAIN_EMOTICON_CODES',array(
 					'ENTRIES'=>$entries,
 				)
+			),NULL,'',true),
+		);
+	}
+	/**
+	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	*
+	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	*/
+	function tpl_preview__join_or_login()
+	{		
+		return array(
+			lorem_globalise(
+				do_lorem_template('JOIN_OR_LOGIN',array(
+					'LOGIN_URL'=>placeholder_url(),
+					'JOIN_URL'=>placeholder_url(),
+						)
 			),NULL,'',true),
 		);
 	}

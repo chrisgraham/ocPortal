@@ -5825,7 +5825,7 @@ function FileProgress(file, targetID) {
 		document.getElementById(targetID).appendChild(this.fileProgressWrapper);
 	} else {
 		this.fileProgressElement = this.fileProgressWrapper.firstChild;
-		if (typeof file.name!='undefined')
+		if (file && typeof file.name!='undefined')
 			setInnerHTML(this.fileProgressElement.childNodes[1],file.name);
 	}
 	

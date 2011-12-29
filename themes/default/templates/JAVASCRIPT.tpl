@@ -38,6 +38,7 @@ function scriptLoadStuff()
 		{
 			setOpacity(j,0.7);
 		}
+
 		if ((firstClassName(j.className)=='scale_down') || (j.className.indexOf(' scale_down')!=-1))
 		{
 			j.onclick=function(j) { return function() { if (j.className=='scale_down') { j.className='dont_scale_down'; j.setAttribute('title',''); } else { j.className='scale_down'; j.setAttribute('title','{!CLICK_EXPAND_FULL^;}'); } } } (j);
@@ -48,7 +49,7 @@ function scriptLoadStuff()
 	var helper_pic=document.getElementById('global_helper_panel_pic');
 	if (helper_pic) setOpacity(helper_pic,0.08);
 	fixImages();
-	
+
 	{$,Textarea scroll support}
 	handleTextareaScrolling();
 
@@ -115,6 +116,22 @@ function scriptLoadStuff()
 			}
 		}
 	}
+
+	{$,Lightboxes}
+	{+START,IF,{$VALUE_OPTION,faux_popups}}
+		for (i=0;i<document.links.length;i++)
+		{
+			var j=document.links[i];
+			var rel=j.getAttribute('rel');
+			if (rel && rel.match(/(^|\s)lightbox($|\s)/))
+			{
+				j.onclick=function(j) { return function() {
+					open_image_into_lightbox(j);
+					return false;
+				} }(j);
+			}
+		}
+	{+END}
 
 	{$,Autosaving}
 	if ((typeof window.want_form_saving!='undefined') && (window.want_form_saving))

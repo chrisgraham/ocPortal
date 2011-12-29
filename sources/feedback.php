@@ -474,11 +474,7 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 				$join_bits=new ocp_tempcode();
 				if (is_guest())
 				{
-					$redirect=get_self_url(true);
-					$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
-					$join_link=hyperlink($GLOBALS['FORUM_DRIVER']->join_link(),do_lang_tempcode('JOIN'));
-					$login_link=hyperlink($login_url,do_lang_tempcode('LOGIN'));
-					$join_bits=do_lang_tempcode('A_OR_B',$join_link,$login_link);
+					$join_bits=do_template('JOIN_OR_LOGIN',array('LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
 				}
 
 				$form=do_template('COMMENTS',array('_GUID'=>'c87025f81ee64c885f0ac545efa5f16c','EXPAND_TYPE'=>'contract','FIRST_POST_URL'=>'','FIRST_POST'=>'','JOIN_BITS'=>$join_bits,'REVIEWS'=>$allow_reviews,'COMMENTS'=>$comments,'TYPE'=>$type,'ID'=>$id,'REVIEW_TITLES'=>$review_titles,'USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>$post_warning,'COMMENT_TEXT'=>$comment_text,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$title));

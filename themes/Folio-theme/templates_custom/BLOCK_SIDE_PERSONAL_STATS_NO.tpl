@@ -5,7 +5,7 @@
 				<div class="float_surrounder">
 					<div>
 						<label for="login_username">{!USERNAME}</label>
-						<input size="26" maxlength="80" accesskey="l" class="login_block_username" type="text" value="" id="login_username" name="login_username" />
+						<input size="26" maxlength="80" onclick="return open_link_as_overlay(this);" accesskey="l" class="login_block_username" type="text" value="" id="login_username" name="login_username" />
 					</div>
 					<div>
 						<label for="s_password">{!PASSWORD}</label>

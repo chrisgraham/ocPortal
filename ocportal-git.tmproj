@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>themes/default/templates/JAVASCRIPT.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -314,7 +316,7 @@
 			<key>filename</key>
 			<string>uninstall.php</string>
 			<key>lastUsed</key>
-			<date>2010-11-26T18:04:14Z</date>
+			<date>2011-12-29T11:30:22Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -747,6 +749,34 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>lang/EN/filedump.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lang/EN/global.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>29</integer>
+				<key>line</key>
+				<integer>907</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>857</integer>
+		</dict>
 		<key>lang/EN/newsletter.ini</key>
 		<dict>
 			<key>caret</key>
@@ -874,6 +904,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>8</integer>
+		</dict>
+		<key>sources/comcode_add.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>172</integer>
+				<key>line</key>
+				<integer>452</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>409</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>159</integer>
+				<key>line</key>
+				<integer>452</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>174</integer>
+				<key>line</key>
+				<integer>452</integer>
+			</dict>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1367,6 +1427,20 @@
 			<key>firstVisibleLine</key>
 			<integer>42</integer>
 		</dict>
+		<key>sources/hooks/systems/ajax_tree/choose_filedump_file.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>112</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>68</integer>
+		</dict>
 		<key>sources/hooks/systems/ajax_tree/choose_gallery.php</key>
 		<dict>
 			<key>caret</key>
@@ -1713,6 +1787,20 @@
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
 		</dict>
+		<key>themes/default/css/global.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>21</integer>
+				<key>line</key>
+				<integer>1383</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1357</integer>
+		</dict>
 		<key>themes/default/css_custom/index.html</key>
 		<dict>
 			<key>caret</key>
@@ -1749,6 +1837,20 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/ATTACHMENT_FLV.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>312</integer>
+				<key>line</key>
+				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -2063,6 +2165,20 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/FILE_DUMP_SCREEN.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>18</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>themes/default/templates/FORM_SCREEN_INPUT_LIST_ENTRY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2134,6 +2250,48 @@
 				<key>line</key>
 				<integer>2</integer>
 			</dict>
+		</dict>
+		<key>themes/default/templates/JAVASCRIPT.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>1769</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1748</integer>
+		</dict>
+		<key>themes/default/templates/JAVASCRIPT_EDITING.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>8</integer>
+				<key>line</key>
+				<integer>774</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>760</integer>
+		</dict>
+		<key>themes/default/templates/JAVASCRIPT_MODALWINDOW.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>58</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>29</integer>
 		</dict>
 		<key>themes/default/templates/MENU_BRANCH_popup.tpl</key>
 		<dict>
@@ -2537,20 +2695,6 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates_custom/CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>themes/default/templates_custom/CHAT_ROOM_LINK.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2623,19 +2767,19 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates_custom/JAVASCRIPT_SCRIPTACULOUS_EFFECTS.tpl</key>
+		<key>themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>46</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>5800</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>5785</integer>
 		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_SHAKE.tpl</key>
 		<dict>
@@ -2678,6 +2822,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates_custom/LOGIN_SCREEN.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>3</integer>
 		</dict>
 		<key>themes/default/templates_custom/POINTSTORE_BANK.tpl</key>
 		<dict>
@@ -2722,9 +2880,19 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>themes/default/templates/JAVASCRIPT.tpl</string>
+		<string>themes/default/templates/JAVASCRIPT_MODALWINDOW.tpl</string>
+		<string>themes/default/templates/JAVASCRIPT_EDITING.tpl</string>
+		<string>themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl</string>
+		<string>lang/EN/global.ini</string>
+		<string>themes/default/templates_custom/LOGIN_SCREEN.tpl</string>
+		<string>themes/default/css/global.css</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{550, 212}, {1088, 966}}</string>
+	<string>{{383, 212}, {1088, 966}}</string>
 </dict>
 </plist>

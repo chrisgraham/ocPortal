@@ -3,8 +3,6 @@
 {$SET,login_screen,1}
 
 <div class="login_page">
-	<h2>Regular login</h2>
-
 	{+START,BOX,,,light}
 		{!LOGIN_TEXT,<a href="{JOIN_LINK*}">{!JOIN_HERE}</a>}
 	{+END}

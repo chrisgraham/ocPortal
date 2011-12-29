@@ -1,8 +1,0 @@
-{$CSS_INCLUDE,lightbox}
-{$JAVASCRIPT_INCLUDE,javascript_prototype}
-{$JAVASCRIPT_INCLUDE,javascript_scriptaculous}
-{$JAVASCRIPT_INCLUDE,javascript_scriptaculous_builder}
-{$JAVASCRIPT_INCLUDE,javascript_scriptaculous_effects}
-{$JAVASCRIPT_INCLUDE,javascript_lightbox}
-
-<a rel="lightbox" title="{CAPTION*}: {!LINK_NEW_WINDOW}" class="link_exempt" target="_blank" href="{URL_FULL}"><img style="vertical-align: {ALIGN|}" src="{URL_THUMB*}" title="{CAPTION*}" alt="{CAPTION*}" /></a>

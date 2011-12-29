@@ -5,7 +5,7 @@
 				<div class="constrain_field">
 					<div class="accessibility_hidden"><label for="login_username">{!USERNAME}</label></div>
 					<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
-					<input maxlength="80" accesskey="l" class="wide_field login_block_username" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
+					<input maxlength="80" onclick="return open_link_as_overlay(this);" accesskey="l" class="wide_field login_block_username" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
 					<input maxlength="255" class="wide_field" type="password" value="password" name="password" id="s_password" />
 				</div>
 				<div class="login_block_cookies">

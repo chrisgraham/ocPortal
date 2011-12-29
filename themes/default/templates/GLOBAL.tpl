@@ -5,21 +5,11 @@
 {$SET,HELPER_PANEL_TUTORIAL,{$?,{$HAS_SPECIFIC_PERMISSION,see_software_docs},{HELPER_PANEL_TUTORIAL}}}
 {$SET,helper_panel,{$OR,{$IS_NON_EMPTY,{$GET,HELPER_PANEL_TUTORIAL}},{$IS_NON_EMPTY,{HELPER_PANEL_PIC}},{$IS_NON_EMPTY,{HELPER_PANEL_HTML}},{$IS_NON_EMPTY,{HELPER_PANEL_TEXT}}}}
 
-{$,Will this be a fixed-width page? (not the same as a fixed-width design! This is for individual pages that can't stretch)}
-{$SET,fixed_middle_width,{$EQ,{$PAGE}:{$_GET,type,misc},login:misc}}
-
 {+START,IF,{$NOT,{$MOBILE}}}
 	{$,Work out the panel/central CSS widths}
-	{+START,IF,{$GET,fixed_middle_width}}
-		{$SET,left_width,auto}
-		{$SET,right_width,auto}
-		{$SET,middle_width,800px}
-	{+END}
-	{+START,IF,{$NOT,{$GET,fixed_middle_width}}}
-		{$SET,left_width,{$?,{$IS_EMPTY,{$TRIM,{$GET,panel_left}}},0,{$PANEL_WIDTH_SPACED'}}}
-		{$SET,right_width,{$?,{$IS_EMPTY,{$TRIM,{$GET,panel_right}}},{$?,{$GET,helper_panel},{$?,{$HIDE_HELP_PANEL},26px,275px},0},{$PANEL_WIDTH_SPACED'}}}
-		{$SET,middle_width,auto}
-	{+END}
+	{$SET,left_width,{$?,{$IS_EMPTY,{$TRIM,{$GET,panel_left}}},0,{$PANEL_WIDTH_SPACED'}}}
+	{$SET,right_width,{$?,{$IS_EMPTY,{$TRIM,{$GET,panel_right}}},{$?,{$GET,helper_panel},{$?,{$HIDE_HELP_PANEL},26px,275px},0},{$PANEL_WIDTH_SPACED'}}}
+	{$SET,middle_width,auto}
 
 	<div class="float_surrounder_precise" id="global_surround">
 		{+START,IF_NON_EMPTY,{$GET,panel_top}}
@@ -34,15 +24,15 @@
 			</div>
 		{+END}{+END}
 
-		<div class="{$?,{$GET,fixed_middle_width},top_level_wrap_fixed ,}top_level_wrap">
+		<div class="top_level_wrap">
 			{+START,IF,{$NEQ,{$GET,left_width},0,auto}}
 				<div id="panel_left" style="width: {$GET,left_width}" class="global_side">
-					{$GET,panel_left}{+START,IF,{$GET,fixed_middle_width}}&nbsp;{+END}
+					{$GET,panel_left}
 				</div>
 			{+END}
 			{+START,IF,{$NEQ,{$GET,right_width},0,auto}}
 				<div id="panel_right" style="width: {$GET,right_width}" class="global_side">{+START,IF,{$GET,helper_panel}}{+START,IF_EMPTY,{$GET,panel_right}}<div class="global_helper_panel_wrap">{+END}{+END}
-					{$GET,panel_right}{+START,IF,{$GET,fixed_middle_width}}&nbsp;{+END}
+					{$GET,panel_right}
 					{+START,IF,{$GET,helper_panel}}{+START,IF_EMPTY,{$GET,panel_right}}
 						{+START,IF,{$NOT,{$HIDE_HELP_PANEL}}}
 						<a id="helper_panel_toggle" href="#" onclick="return help_panel(false);"><img title="{!HELP_OR_ADVICE}: {!HIDE}" alt="{!HELP_OR_ADVICE}: {!HIDE}" src="{$IMG*,help_panel_hide}" /></a>
@@ -110,7 +100,7 @@
 			</div>
 		{+END}
 		{+START,IF_NON_EMPTY,{MESSAGE}}
-			<div class="{$?,{$GET,fixed_middle_width},top_level_wrap_fixed,top_level_wrap}">
+			<div class="top_level_wrap">
 				<div id="global_message" style="width: {$GET,middle_width}{+START,IF,{$NEQ,{$GET,left_width},0}}; margin-{!en_left}: {$GET,left_width}{+END}{+START,IF,{$NEQ,{$GET,right_width},0}}; margin-{!en_right}: {$GET,right_width}{+END}" class="global_message">
 					{MESSAGE}
 				</div>
@@ -124,7 +114,6 @@
 	{$SET,left_width,{$?,{$IS_EMPTY,{$TRIM,{$GET,panel_left}}},0,{$PANEL_WIDTH_SPACED'}}}
 	{$SET,right_width,{$?,{$IS_EMPTY,{$TRIM,{$GET,panel_right}}},0,{$PANEL_WIDTH_SPACED'}}}
 	{$SET,middle_width,auto}
-	{+START,IF,{$GET,fixed_middle_width}}{$SET,left_width,auto}{$SET,right_width,auto}{+END}
 
 	<div class="float_surrounder_precise" id="global_surround">
 		{+START,IF_PASSED,MESSAGE_TOP}{+START,IF_NON_EMPTY,{MESSAGE_TOP}}

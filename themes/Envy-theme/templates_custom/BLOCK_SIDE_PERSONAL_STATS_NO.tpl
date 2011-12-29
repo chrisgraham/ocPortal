@@ -3,7 +3,7 @@
 		<div>
 			<div class="constrain_field">
 				<div><label for="login_username">{!USERNAME}</label></div>
-				<input alt="{!USERNAME}" accesskey="l" class="search-box" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="" id="login_username" name="login_username" />
+				<input alt="{!USERNAME}" onclick="return open_link_as_overlay(this);" accesskey="l" class="search-box" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="" id="login_username" name="login_username" />
 				<div><label for="s_password">{!PASSWORD}</label></div>
 				<input alt="{!PASSWORD}" class="search-box" type="password" value="" name="password" id="s_password" />
 			</div>
