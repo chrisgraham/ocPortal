@@ -390,17 +390,6 @@ function render_attachment($attributes,$attachment,$pass_id,$source_member,$as_a
 				require_code('images');
 				ensure_thumbnail($attachment['a_url'],$attachment['a_thumb_url'],'attachments','attachments',intval($attachment['id']),'a_thumb_url');
 
-				if ($semiparse_mode) // HACKHACK. This is to stop overridden templates not converting back to Comcode
-				{
-					$safe_mode_backup=get_param('keep_safe_mode','0');
-					$_GET['keep_safe_mode']='1';
-					$GLOBALS['POSSIBLY_IN_SAFE_MODE']=true;
-					global $CACHED_FOUND;
-					unset($CACHED_FOUND['ATTACHMENT_IMG'.(((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1'))?'_MINI':'')]);
-					unset($CACHED_FOUND['ATTACHMENT_LEFT']);
-					unset($CACHED_FOUND['ATTACHMENT_RIGHT']);
-				}
-
 				$temp_tpl=do_template('ATTACHMENT_IMG'.(((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1'))?'_MINI':''),map_keys_to_upper($attachment));
 				if (($type=='left') || ($type=='left_inline'))
 				{
@@ -409,15 +398,6 @@ function render_attachment($attributes,$attachment,$pass_id,$source_member,$as_a
 				if (($type=='right') || ($type=='right_inline'))
 				{
 					$temp_tpl=do_template('ATTACHMENT_RIGHT',array('_GUID'=>'1a7209d67d91db740c86e7a331720195','CONTENT'=>$temp_tpl));
-				}
-
-				if ($semiparse_mode) // HACKHACK
-				{
-					$_GET['keep_safe_mode']=$safe_mode_backup;
-					if ($_GET['keep_safe_mode']=='0') unset($_GET['keep_safe_mode']);
-					unset($CACHED_FOUND['ATTACHMENT_IMG'.(((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1'))?'_MINI':'')]);
-					unset($CACHED_FOUND['ATTACHMENT_LEFT']);
-					unset($CACHED_FOUND['ATTACHMENT_RIGHT']);
 				}
 
 				break;

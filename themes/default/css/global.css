@@ -1986,11 +1986,8 @@ button.wide_button:disabled, button.button_micro:disabled, button.button_page:di
 	padding-{!en_right}: 10px;
 }
 
-.hide_button img {
-	vertical-align: middle;
-}
-
 .hide_button {
+	vertical-align: middle;
 	-webkit-transition: opacity 0.2s linear !important;
 	-moz-transition: opacity 0.2s linear !important;
 	-o-transition: opacity 0.2s linear !important;

@@ -80,7 +80,7 @@ function resizeImage($image,$width,$height,$scale) {
 		case "image/gif":
 			$source=imagecreatefromgif($image); 
 			break;
-	    case "image/pjpeg":
+		case "image/pjpeg":
 		case "image/jpeg":
 		case "image/jpg":
 			$source=imagecreatefromjpeg($image); 
@@ -96,7 +96,7 @@ function resizeImage($image,$width,$height,$scale) {
 		case "image/gif":
 	  		imagegif($newImage,$image); 
 			break;
-      	case "image/pjpeg":
+		case "image/pjpeg":
 		case "image/jpeg":
 		case "image/jpg":
 	  		imagejpeg($newImage,$image,90); 

@@ -1196,6 +1196,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$_id='!';
 					$attributes['type']=post_param('attachmenttype'.$_id,array_key_exists('type',$attributes)?$attributes['type']:'auto');
 					$url=remove_url_mistakes(substr($id,4));
+
 					$_POST['_specify_url']=$url; // Little hack, as we need to read it from a POST
 					if (get_magic_quotes_gpc()) $_POST['_specify_url']=addslashes($_POST['_specify_url']);
 					$urls=get_url('_specify_url','','uploads/attachments',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true);

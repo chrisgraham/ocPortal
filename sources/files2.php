@@ -210,9 +210,10 @@ function find_php_path()
  * @param  PATH			The path to search
  * @param  PATH			The path we prepend to everything we find (intended to be used inside the recursion)
  * @param  boolean		Whether to also get special files
+ * @param  boolean		Whether to recurse (if not, will return directories as files)
  * @return array			The contents of the directory
  */
-function get_directory_contents($path,$rel_path='',$special_too=false)
+function get_directory_contents($path,$rel_path='',$special_too=false,$recurse=true)
 {
 	$out=array();
 
@@ -224,12 +225,12 @@ function get_directory_contents($path,$rel_path='',$special_too=false)
 			if (is_special_file($file)) continue;
 		} elseif (($file=='.') || ($file=='..')) continue;
 
-		if (is_file($path.'/'.$file))
+		if ((is_file($path.'/'.$file)) || (!$recurse))
 		{
 			$out[]=$rel_path.(($rel_path=='')?'':'/').$file;
 		} elseif (is_dir($path.'/'.$file))
 		{
-			$out=array_merge($out,get_directory_contents($path.'/'.$file,$rel_path.(($rel_path=='')?'':'/').$file,$special_too));
+			$out=array_merge($out,get_directory_contents($path.'/'.$file,$rel_path.(($rel_path=='')?'':'/').$file,$special_too,$recurse));
 		}
 	}
 	closedir($d);

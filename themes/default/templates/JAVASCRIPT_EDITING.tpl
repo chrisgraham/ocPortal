@@ -313,6 +313,7 @@ function areaedit_init(element)
 		linkShowAdvancedTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 		imageShowAdvancedTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 		imageShowLinkTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
+		imageShowSizing : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 		autoUpdateElement : true,
 		contentsCss : pageStyleSheets,
 		cssStatic : css,

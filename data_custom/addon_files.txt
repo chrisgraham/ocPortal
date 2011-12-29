@@ -620,6 +620,7 @@ lightbox2
 # # themes/default/templates_custom/ATTACHMENT_IMG.tpl
 # # themes/default/templates_custom/COMCODE_EXP_THUMB.tpl
 # # themes/default/templates_custom/COMCODE_THUMB.tpl
+# # themes/default/templates_custom/HYPERLINK.tpl
 # # themes/default/templates_custom/JAVASCRIPT_LIGHTBOX.tpl
 # # themes/default/templates_custom/JAVASCRIPT_PROTOTYPE.tpl
 # # themes/default/templates_custom/JAVASCRIPT_SCRIPTACULOUS.tpl

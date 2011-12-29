@@ -220,7 +220,7 @@ Lightbox.prototype = {
 
         if ((imageLink.getAttribute("rel") == 'lightbox')){
             // if image is NOT part of a set, add single image to imageArray
-            this.imageArray.push([imageLink.href, imageLink.title.replace('{!LINK_NEW_WINDOW;}','')]);         
+            this.imageArray.push([imageLink.href, imageLink.title.replace(': {!LINK_NEW_WINDOW;}','')]);         
         } else {
             // if image is part of a set..
             this.imageArray = 
@@ -261,7 +261,6 @@ Lightbox.prototype = {
         var imgPreloader = new Image();
         
         // once image is preloaded, resize image container
-
 
         imgPreloader.onload = (function(){
             this.lightboxImage.src = this.imageArray[this.activeImage][0];

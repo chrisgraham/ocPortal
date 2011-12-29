@@ -84,8 +84,6 @@ function _get_details_comcode_tags()
 		/*'block'=>array(),*/
 		'if_in_group'=>array('param','type'),
 		'flash'=>array('param'),
-		'attachment'=>array('description','filename','type','width','height','align','float','thumb','thumb_url'),
-		//'attachment_safe'=>array('description','filename','type','width','height','align','float','thumb_url'),	Merged into attachment in UI
 		'img'=>array('align','float','param','title','rollover','refresh_time'),
 		'upload'=>array('type','param'),
 		'exp_thumb'=>array('float'),
@@ -99,6 +97,9 @@ function _get_details_comcode_tags()
 		'post'=>array('param','forum'),
 		'topic'=>array('param','forum')
 	);
+	if (addon_installed('filedump'))
+		$tag_list['attachment']=array('description','filename','type','width','height','align','float','thumb','thumb_url');
+	//'attachment_safe'=>array('description','filename','type','width','height','align','float','thumb_url'),	Merged into attachment in UI
 	ksort($tag_list);
 	/* // Helps find missing tags
 	unset($VALID_COMCODE_TAGS['section']);
@@ -179,9 +180,10 @@ function _get_group_tags($group=NULL)
 		'semantic'=>array('cite','samp','q','var','dfn','address'),
 		'display_code'=>array('php','codebox','sql','code','tt','no_parse'),
 		'execute_code'=>array('semihtml','html'),
-		'media'=>array('flash','img','upload','exp_thumb','exp_ref','thumb'),
+		'media'=>array('flash','img'/*Over complex,'upload','exp_thumb','exp_ref'*/,'thumb'),
 		'linking'=>array('url','email','reference','page','snapback','post','topic')
 	);
+	if (addon_installed('filedump')) $group_tags['media'][]='attachment';
 	if ($group!==NULL && array_key_exists($group,$group_tags))
 		return $group_tags[$group];
 
@@ -195,7 +197,9 @@ function _get_group_tags($group=NULL)
  */
 function _get_non_wysiwyg_tags()
 {
-	return array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','upload','exp_thumb','exp_ref','thumb','reference','snapback','post','topic');
+	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','upload','exp_thumb','exp_ref','thumb','reference','snapback','post','topic');
+	if (addon_installed('filedump')) $ret[]='attachment';
+	return $ret;
 }
 
 /**
@@ -274,9 +278,12 @@ function comcode_helper_script()
 		$fields=new ocp_tempcode();
 		$fields_advanced=new ocp_tempcode();
 		$done_tag_contents=false;
+		$hidden=new ocp_tempcode();
 
 		$embed_required=true;
 		if ($tag=='contents') $embed_required=false;
+
+		$tag_description=protect_from_escaping(do_lang('COMCODE_TAG_'.$tag));
 
 		if (array_key_exists($tag,$tag_list))
 		{
@@ -384,50 +391,60 @@ function comcode_helper_script()
 						$parameter_name=do_lang('COMCODE_TAG_'.$tag.'_NAME_OF_PARAM_'.$param,NULL,NULL,NULL,NULL,false);
 						if (is_null($parameter_name)) $parameter_name=ucwords(str_replace('_',' ',$param));
 
+						$default=get_param('default_'.$param,'');
+
 						$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 						$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
 						$is_advanced=(strpos($descriptiont,do_lang('BLOCK_IND_ADVANCED'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_ADVANCED'),'',$descriptiont));
-						if (substr($descriptiont,0,12)=='0|1 &ndash; ')
+
+						if (($tag=='attachment') && ($param=='thumb_url'))
 						{
-							$field=form_input_tick($parameter_name,protect_from_escaping(ucfirst(substr($descriptiont,12))),$param,false);
-						} elseif ((substr($descriptiont,-1)!='.') && (strpos($descriptiont,'|')!==false))
-						{
-							$list=new ocp_tempcode();
-							if (substr($descriptiont,0,1)!='=')
-								$list->attach(form_input_list_entry(''));
-							foreach (explode('|',$descriptiont) as $item)
-							{
-								if (strpos($item,'=')!==false)
-								{
-									list($item,$label)=explode('=',$item,2);
-									$list->attach(form_input_list_entry($item,false,protect_from_escaping($label)));
-								} else
-								{
-									$list->attach(form_input_list_entry($item));
-								}
-							}
-							$field=form_input_list($parameter_name,'',$param,$list,NULL,false,false);
-						} elseif ($param=='width' || $param=='height')
-						{
-							$field=form_input_integer($parameter_name,protect_from_escaping($descriptiont),$param,'',false);
-						} else
-						{
-							if ($supports_comcode)
-							{
-								$field=form_input_line_comcode($parameter_name,protect_from_escaping($descriptiont),$param,'',false);
-							} else
-							{
-								$field=form_input_line($parameter_name,protect_from_escaping($descriptiont),$param,'',false);
-							}
-						}
-						if ($is_advanced)
-						{
+							$field=form_input_tree_list(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_thumb_url'),'thumb_url','','choose_filedump_file',array('only_images'=>true),true,'',false);
 							$fields_advanced->attach($field);
 						} else
 						{
-							$fields->attach($field);
+							if (substr($descriptiont,0,12)=='0|1 &ndash; ')
+							{
+								$field=form_input_tick($parameter_name,protect_from_escaping(ucfirst(substr($descriptiont,12))),$param,$default=='1');
+							} elseif ((substr($descriptiont,-1)!='.') && (strpos($descriptiont,'|')!==false))
+							{
+								$list=new ocp_tempcode();
+								if (substr($descriptiont,0,1)!='=')
+									$list->attach(form_input_list_entry(''));
+								foreach (explode('|',$descriptiont) as $item)
+								{
+									if (strpos($item,'=')!==false)
+									{
+										list($item,$label)=explode('=',$item,2);
+										$list->attach(form_input_list_entry($item,($item==$default),protect_from_escaping($label)));
+									} else
+									{
+										$list->attach(form_input_list_entry($item,($item==$default)));
+									}
+								}
+								$field=form_input_list($parameter_name,'',$param,$list,NULL,false,false);
+							} elseif ($param=='width' || $param=='height')
+							{
+								$field=form_input_integer($parameter_name,protect_from_escaping($descriptiont),$param,$default,false);
+							} else
+							{
+								if ($supports_comcode)
+								{
+									$field=form_input_line_comcode($parameter_name,protect_from_escaping($descriptiont),$param,$default,false);
+								} else
+								{
+									$field=form_input_line($parameter_name,protect_from_escaping($descriptiont),$param,$default,false);
+								}
+							}
+							if ($is_advanced)
+							{
+								$fields_advanced->attach($field);
+							} else
+							{
+								$fields->attach($field);
+							}
 						}
 					}
 
@@ -449,7 +466,20 @@ function comcode_helper_script()
 			}
 		}
 
-		if($tag=='sections' || $tag=='big_tabs' || $tag=='tabs' || $tag=='list')
+		if ($tag=='attachment')
+		{
+			$existing_attachment=get_param('existing_attachment','');
+			if ($existing_attachment!='')
+			{
+				$hidden->attach(form_input_hidden('tag_contents',$existing_attachment));
+				$tag_description=new ocp_tempcode();
+			} else
+			{
+				$filedump_url=build_url(array('page'=>'filedump'),get_module_zone('filedump'));
+				$fields->attach(form_input_tree_list(do_lang_tempcode('FILE'),do_lang_tempcode('COMCODE_TAG_attachment_EMBED_FILE',escape_html($filedump_url->evaluate())),'tag_contents','','choose_filedump_file',array('attachment_ready'=>true),true,'',false));
+			}
+		}
+		elseif (($tag=='sections') || ($tag=='big_tabs') || ($tag=='tabs') || ($tag=='list'))
 		{
 			$fields->attach(form_input_text_multi(do_lang_tempcode('TAG_CONTENTS'),protect_from_escaping(do_lang('COMCODE_TAG_'.$tag.'_EMBED')),'tag_contents',array(),2));
 		}
@@ -486,8 +516,8 @@ function comcode_helper_script()
 		$keep=symbol_tempcode('KEEP');
 		$post_url=find_script('comcode_helper').'?type=step3&field_name='.get_param('field_name').$keep->evaluate();
 		if (get_param('utheme','')!='') $post_url.='&utheme='.get_param('utheme');
-		$text=do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),protect_from_escaping(do_lang('COMCODE_TAG_'.$tag)));
-		$hidden=form_input_hidden('tag',$tag);
+		$text=$tag_description->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
+		$hidden->attach(form_input_hidden('tag',$tag));
 		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>true,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 	}
 	elseif ($type=='step3')

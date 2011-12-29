@@ -25,7 +25,7 @@ var Builder = {
   // note: For Firefox < 1.5, OPTION and OPTGROUP tags are currently broken,
   //       due to a Firefox bug
   node: function(elementName) {
-    elementName = elementName.toUpperCase();
+    elementName = elementName.toLowerCase();
 
     // try innerHTML approach
     var parentTag = this.NODEMAP[elementName] || 'div';
@@ -36,7 +36,7 @@ var Builder = {
     var element = parentElement.firstChild || null;
 
     // see if browser added wrapping tags
-    if(element && (element.tagName.toUpperCase() != elementName))
+    if(element && (element.tagName.toLowerCase() != elementName))
       element = element.getElementsByTagName(elementName)[0];
 
     // fallback to createElement approach
@@ -65,7 +65,7 @@ var Builder = {
               for(attr in arguments[1])
                 element[attr == 'class' ? 'className' : attr] = arguments[1][attr];
             }
-            if(element.tagName.toUpperCase() != elementName)
+            if(element.tagName.toLowerCase() != elementName)
               element = parentElement.getElementsByTagName(elementName)[0];
           }
         }

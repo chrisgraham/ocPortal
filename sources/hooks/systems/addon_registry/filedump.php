@@ -78,6 +78,7 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/config_default/filedump_show_stats_count_total_space.php',
 			'sources/hooks/blocks/side_stats/stats_filedump.php',
 			'sources/hooks/systems/addon_registry/filedump.php',
+			'sources/hooks/systems/ajax_tree/choose_filedump_file.php',
 			'sources/hooks/systems/do_next_menus/filedump.php',
 			'sources/hooks/modules/admin_import_types/filedump.php',
 			'FILE_DUMP_SCREEN.tpl',
