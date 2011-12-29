@@ -46,10 +46,10 @@ class Hook_choose_filedump_file
 			{
 				if ((isset($options['attachment_ready'])) && ($options['attachment_ready']))
 				{
-					$entry_id='url_'.'uploads/filedump/'.(($id=='')?'':(rawurlencode($id).'/')).'/'.rawurlencode($f);
+					$entry_id='url_'.'uploads/filedump/'.(($id=='')?'':(rawurlencode($id).'/')).rawurlencode($f);
 				} else
 				{
-					$entry_id='uploads/filedump/'.(($id=='')?'':(rawurlencode($id).'/')).'/'.rawurlencode($f);
+					$entry_id='uploads/filedump/'.(($id=='')?'':(rawurlencode($id).'/')).rawurlencode($f);
 				}
 
 				if (is_dir($fullpath.'/'.$f))

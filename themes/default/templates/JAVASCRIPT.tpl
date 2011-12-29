@@ -118,7 +118,7 @@ function scriptLoadStuff()
 	}
 
 	{$,Lightboxes}
-	{+START,IF,{$VALUE_OPTION,faux_popups}}
+	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		for (i=0;i<document.links.length;i++)
 		{
 			var j=document.links[i];
@@ -308,7 +308,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 
 	if ((typeof window.showModalDialog!='undefined'))
 	{
-		var height=230;
+		var height=160;
 		if (button_set.length>4) height+=5*(button_set.length-4);
 
 		{$,Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups don't know if they run on HTTPS if behind a transparent reverse proxy}
@@ -777,7 +777,7 @@ function confirm_session(callback)
 function _confirm_session(callback,username,url)
 {
 	window.fauxmodal_prompt(
-		'{$?,{$VALUE_OPTION,faux_popups},{!ENTER_PASSWORD_JS_2^;},{!ENTER_PASSWORD_JS^;}}',
+		'{$?,{$VALUE_OPTION,no_faux_popups},{!ENTER_PASSWORD_JS^;},{!ENTER_PASSWORD_JS_2^;}}',
 		'',
 		function(promptt)
 		{
@@ -1692,7 +1692,7 @@ function markAllTopics()
 
 function setOpacity(element,fraction)
 {
-	if ((typeof element.faderKey!='undefined') && (element.faderKey))
+	if ((typeof element.faderKey!='undefined') && (element.faderKey) && (thumbFadeTimers[element.faderKey]))
 	{
 		window.clearTimeout(thumbFadeTimers[element.faderKey]);
 		thumbFadeTimers[element.faderKey]=null;

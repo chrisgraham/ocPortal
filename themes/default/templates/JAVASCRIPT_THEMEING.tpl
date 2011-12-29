@@ -85,7 +85,7 @@ function templateEditPage(name,id)
 
 	var ecw=document.getElementById('frame_'+box.name).contentWindow;
 
-	if ((value=='BLOCK'){+START,IF,{$NOT,{$VALUE_OPTION,faux_popups}}} && (typeof window.showModalDialog!='undefined'){+END})
+	if ((value=='BLOCK'){+START,IF,{$VALUE_OPTION,no_faux_popups}} && (typeof window.showModalDialog!='undefined'){+END})
 	{
 		if (ecw) box.value=editAreaLoader.getValue(box.name);
 		var url='{$FIND_SCRIPT_NOHTTP;,block_helper}?field_name='+box.name+'&block_type=template'+keep_stub();

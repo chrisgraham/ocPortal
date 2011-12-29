@@ -12,7 +12,7 @@
 			comcode='<br /><br />{COMCODE_XML^;/}';
 		} else
 		{
-			comcode='\n\n{COMCODE^;/}';
+			comcode='{COMCODE^;/}';
 		}
 
 		if ('{$_GET%,save_to_id}'!='')

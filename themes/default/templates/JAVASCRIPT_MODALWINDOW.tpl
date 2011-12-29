@@ -2,7 +2,7 @@ var overlay_zIndex=1000;
 
 function open_link_as_overlay(ob,width,height)
 {
-	{+START,IF,{$VALUE_OPTION,faux_popups}}
+	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		if (!width) width=900;
 		if (!height) height=700;
 		faux_open(ob.href+((ob.href.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,'_top');
@@ -12,7 +12,7 @@ function open_link_as_overlay(ob,width,height)
 	return true;
 }
 
-{+START,IF,{$VALUE_OPTION,faux_popups}}
+{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 	function open_image_into_lightbox(a)
 	{
 		// Set up overlay for Lightbox
@@ -73,7 +73,7 @@ function fauxmodal_confirm(question,callback,title)
 {
 	if (!title) title='{!Q_SURE;}';
 
-	{+START,IF,{$VALUE_OPTION,faux_popups}}
+	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		var myConfirm = {
 			type: "confirm",
 			text: escape_html(question),
@@ -91,7 +91,7 @@ function fauxmodal_confirm(question,callback,title)
 		new ModalWindow().open(myConfirm);
 	{+END}
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,faux_popups}}}
+	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
 		callback(window.confirm(question));
 	{+END}
 }
@@ -102,7 +102,7 @@ function fauxmodal_alert(notice,callback,title)
 	
 	if (!title) title='{!MESSAGE;}';
 
-	{+START,IF,{$VALUE_OPTION,faux_popups}}
+	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		var myAlert = {
 			type: "alert",
 			text: escape_html(notice),
@@ -114,7 +114,7 @@ function fauxmodal_alert(notice,callback,title)
 		new ModalWindow().open(myAlert);
 	{+END}
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,faux_popups}}}
+	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
 		window.alert(notice);
 		callback();
 	{+END}
@@ -122,7 +122,7 @@ function fauxmodal_alert(notice,callback,title)
 
 function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 {
-	{+START,IF,{$VALUE_OPTION,faux_popups}}
+	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		var myPrompt = {
 			type: "prompt",
 			text: escape_html(question),
@@ -142,7 +142,7 @@ function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 		new ModalWindow().open(myPrompt);
 	{+END}
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,faux_popups}}}
+	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
 		callback(window.prompt(question,defaultValue));
 	{+END}
 }
@@ -151,8 +151,8 @@ function faux_showModalDialog(url,name,options,callback,target)
 {
 	if (!callback) callback=function() {};
 
-	{+START,IF,{$VALUE_OPTION,faux_popups}}
-		var width=null,height=null,scrollbars=null;
+	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+		var width=null,height=null,scrollbars=null,unadorned=null;
 
 		if (options)
 		{
@@ -168,13 +168,13 @@ function faux_showModalDialog(url,name,options,callback,target)
 						height=window.parseInt(bits[1].replace(/px$/,''));
 					if (((bits[0]=='resizable') || (bits[0]=='scrollbars')) && scrollbars!==true)
 						scrollbars=((bits[1]=='yes') || (bits[1]=='1'))/*if either resizable or scrollbars set we go for scrollbars*/;
+					if (bits[0]=='unadorned') unadorned=((bits[1]=='yes') || (bits[1]=='1'));
 				}
 			}
 		}
 
 		var myOverlay = {
 			type: "overlay",
-			cancel_button: "{!INPUTSYSTEM_CLOSE#}",
 			finished: function(value) {
 				callback(value);
 			},
@@ -184,11 +184,12 @@ function faux_showModalDialog(url,name,options,callback,target)
 			scrollbars: scrollbars,
 			href: url
 		};
+		myOverlay.cancel_button=(unadorned!==true)?"{!INPUTSYSTEM_CLOSE#}":null;
 		if (target) myOverlay.target=target;
 		new ModalWindow().open(myOverlay);
 	{+END}
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,faux_popups}}}
+	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
 		var timer=new Date().getTime();
 		try
 		{
@@ -211,16 +212,16 @@ function faux_showModalDialog(url,name,options,callback,target)
 
 function faux_open(url,name,options,target)
 {
-	{+START,IF,{$VALUE_OPTION,faux_popups}}
+	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		faux_showModalDialog(url,name,options,null,target);
 	{+END}
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,faux_popups}}}
+	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
 		window.open(url,name,options);
 	{+END}
 }
 
-{+START,IF,{$VALUE_OPTION,faux_popups}}
+{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 /*
 Script: modalwindow.js
 	ModalWindow - Simple javascript popup overlay to replace builtin alert, prompt and confirm.
@@ -255,9 +256,9 @@ function ModalWindow()
 				'height': 'auto',
 				'title': "",
 				'text': "",
-				'yes_button': "Yes",
-				'no_button': "No",
-				'cancel_button': "Cancel",
+				'yes_button': "{!YES#}",
+				'no_button': "{!NO#}",
+				'cancel_button': "{!INPUTSYSTEM_CANCEL#}",
 				'yes': null,
 				'no': null,
 				'finished': null,
@@ -283,16 +284,20 @@ function ModalWindow()
 		},
 	
 		close: function(win) {
+			var bi=this.topWindow.document.getElementById('body_inner');
+
 			if(this.box) {
 				this.remove(this.box, win);
 				this.box = null;
 
-				var bi=this.topWindow.document.getElementById('body_inner');
 				if (bi)
 				{
 					setOpacity(bi,1.0);
 				}
 			}
+			if (this.type == "prompt") this.removeEvent(bi.parentNode, "click", this.clickout_cancel);
+			if (this.type == "overlay") this.removeEvent(bi.parentNode, "click", this.clickout_finished);
+			if (this.type == "alert") this.removeEvent(bi.parentNode, "click", this.clickout_yes);
 			this.removeEvent(document, "keyup", this.keyup);
 			this.opened = false;
 		},
@@ -311,20 +316,12 @@ function ModalWindow()
 			this.close(win);
 		},
 	
-		keyup: function(e,ob) {
-			if(!e) e = window.event ;
-			var keyCode = (e) ? (e.which || e.keyCode) : null ;
-
-			if(keyCode == 13) {
-				ob.option('yes');
-			}
-		},
-
 		resetDimensions: function(width, height) { // Don't re-call this for an iframe-based overlay, doesn't work retro-actively on the iframe size (but CSS sized inards are fine)
 			var dim = this.getPageSize();
 
 			var boxWidth = ((width) ? (width + 8) : (dim.pageWidth / 4))  + "px";
-			var extra_box_height = (this.type == "overlay") ? 160 : 120;
+			var extra_box_height = (this.type == "overlay" ) ? 160 : 120;
+			if (this.cancel_button === null) extra_box_height = 0;
 			var boxHeight = (typeof height == "string" || height === null || this.type == "overlay") ? "auto" : (height + extra_box_height) + "px" ;
 
 			var boxPosVCentre = (typeof height == "string" || height === null || this.type == "overlay") ? ((this.type == "overlay") ? 20 : 150) : ((dim.windowHeight / 2.5) - (parseInt(boxHeight) / 2)) ;
@@ -401,6 +398,27 @@ function ModalWindow()
 
 			var _this = this;
 
+			this.clickout_cancel = function() {
+				_this.option('cancel');
+			};
+
+			this.clickout_finished = function() {
+				_this.option('finished');
+			};
+
+			this.clickout_yes = function() {
+				_this.option('yes');
+			};
+
+			this.keyup = function(e) {
+				if(!e) e = window.event ;
+				var keyCode = (e) ? (e.which || e.keyCode) : null ;
+
+				if(keyCode == 13) {
+					_this.option('yes');
+				}
+			};
+
 			switch(this.type) {
 				case "overlay" :
 					var iframe = this.element("iframe", {
@@ -419,17 +437,20 @@ function ModalWindow()
 
 					container.appendChild(iframe);
 
-					var button=this.element("button", {
-						'html': this.cancel_button,
-						'class': "button_pageitem"
-					});
-					this.addEvent( button, "click", function() { _this.option('finished'); } );
+					if (this.cancel_button)
+					{
+						var button=this.element("button", {
+							'html': this.cancel_button,
+							'class': "button_pageitem"
+						});
+						this.addEvent( button, "click", function() { _this.option('finished'); } );
+						buttonContainer.appendChild(button);
+						container.appendChild(this.element("hr", { 'class': 'spaced_rule' } ));
+						container.appendChild(buttonContainer);
+					}
 					var bi=this.topWindow.document.getElementById('body_inner');
 					if (bi)
-						window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", function() { _this.option('finished'); } ); }, 1000);
-					buttonContainer.appendChild(button);
-					container.appendChild(this.element("hr", { 'class': 'spaced_rule' } ));
-					container.appendChild(buttonContainer);
+						window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", _this.clickout_finished); }, 1000);
 
 					this.addEvent( iframe, "load", function() {
 						if (typeof iframe.contentWindow.document.getElementsByTagName('h1')[0] == 'undefined' && typeof iframe.contentWindow.document.getElementsByTagName('h2')[0] == 'undefined')
@@ -450,6 +471,10 @@ function ModalWindow()
 							// Remove fixed width
 							var body_inner=iframe.contentWindow.document.getElementById('body_inner');
 							if (body_inner) body_inner.id='';
+
+							// Remove popup spacing
+							var popup_spacer=iframe.contentWindow.document.getElementById('popup_spacer');
+							if (popup_spacer) popup_spacer.id='';
 
 							iframe.contentWindow.opener = window;
 							var bases=iframe.contentWindow.document.getElementsByTagName('base');
@@ -476,7 +501,8 @@ function ModalWindow()
 							if (typeof iframe.contentWindow.faux_close=='undefined')
 							{
 								iframe.contentWindow.faux_close=function() {
-									_this.returnValue=iframe.contentWindow.returnValue;
+									if (iframe && iframe.contentWindow && typeof iframe.contentWindow.returnValue!='undefined')
+										_this.returnValue=iframe.contentWindow.returnValue;
 									_this.option('finished');
 								};
 							}
@@ -484,7 +510,7 @@ function ModalWindow()
 					};
 					window.setTimeout(function() { illustrateFrameLoad(iframe,'overlay_iframe'); makeFrameLikePopup(); },0);
 					window.setInterval(makeFrameLikePopup,100); // In case internal nav changes
-				break;
+					break;
 
 				case "alert" :
 					if(this.yes != false) {
@@ -495,11 +521,11 @@ function ModalWindow()
 						this.addEvent( button, "click", function() { _this.option('yes'); } );
 						var bi=this.topWindow.document.getElementById('body_inner');
 						if (bi)
-							window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", function() { _this.option('yes'); } ); }, 1000);
+							window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", _this.clickout_yes); }, 1000);
 						buttonContainer.appendChild(button);
 						container.appendChild(buttonContainer);
 					}
-				break;
+					break;
 
 				case "confirm" :
 					var button=this.element("button", {
@@ -517,7 +543,7 @@ function ModalWindow()
 					buttonContainer.appendChild(button);
 
 					container.appendChild(buttonContainer);
-				break;
+					break;
 
 				case "prompt" :
 					this.input = this.element("input", {
@@ -550,11 +576,11 @@ function ModalWindow()
 					this.addEvent( button, "click", function() { _this.option('cancel'); } );
 					var bi=this.topWindow.document.getElementById('body_inner');
 					if (bi)
-						window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", function() { _this.option('cancel'); } ); }, 1000);
+						window.setTimeout(function() { _this.addEvent( bi.parentNode, "click", _this.clickout_cancel); }, 1000);
 					buttonContainer.appendChild(button);
 
 					container.appendChild(buttonContainer);
-				break;
+					break;
 			}
 		
 			this.addEvent( this.box, "click", function(e) { cancelBubbling(e); } );
@@ -562,9 +588,9 @@ function ModalWindow()
 			this.box.appendChild(container);
 		
 			if(this.input) this.input.focus();
-			else this.box.getElementsByTagName('button')[0].focus();
+			else if (typeof this.box.getElementsByTagName('button')[0]!='undefined') this.box.getElementsByTagName('button')[0].focus();
 		
-			if(this.yes || this.yes != false) this.addEvent(document, "keyup", function(e) { _this.keyup(e,_this); } );
+			if(this.yes || this.yes != false) this.addEvent(document, "keyup", this.keyup );
 		},
 	
 		initOverlay: function() {

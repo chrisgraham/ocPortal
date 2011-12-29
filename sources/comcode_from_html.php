@@ -228,8 +228,7 @@ function semihtml_to_comcode($semihtml)
 	$semihtml=str_replace('</kbd>&#8203;','</kbd>',$semihtml);
 	$array_html_preg_replace[]=array('#^<kbd class="ocp_keep"[^>]*>(.*)</kbd>$#siU',"\${1}");
 	$array_html_preg_replace[]=array('#^<kbd class="ocp_keep_block"[^>]*>(.*)</kbd>$#siU',"\${1}");
-	$semihtml=array_html_preg_replace('span',$array_html_preg_replace,$semihtml);
-
+	$semihtml=array_html_preg_replace('kbd',$array_html_preg_replace,$semihtml);
 	$semihtml=str_replace('<!-- >','',$semihtml);
 	$semihtml=preg_replace('#<span id="cke_bm_[^"]+" style="display: none;\s*">&nbsp;</span>#','',$semihtml);
 
@@ -241,11 +240,11 @@ function semihtml_to_comcode($semihtml)
 	if (((get_option('eager_wysiwyg')=='0') && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
 	{
 		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'<h1');
-		if ($count==0) return '[html]'.$semihtml.'[/html]';
+		if ($count==0) return ($semihtml=='')?'':('[html]'.$semihtml.'[/html]');
 		$count2=substr_count($semihtml,'[/attachment]')+substr_count($semihtml,'<h1');
 		if ($count2==$count)
 		{
-			$semihtml='[html]'.$semihtml.'[/html]';
+			if ($semihtml!='') $semihtml='[html]'.$semihtml.'[/html]';
 			$semihtml=preg_replace('#<h1[^>]*><span class="inner">(.*)</span></h1>#U','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
 			$semihtml=preg_replace('#<h1[^>]*>(.*)</h1>#U','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
 			$semihtml=str_replace('[attachment','[/html][semihtml][attachment',str_replace('[/attachment]','[/attachment][/semihtml][html]',$semihtml));
@@ -253,7 +252,7 @@ function semihtml_to_comcode($semihtml)
 			$semihtml=str_replace('[html][/html]','',$semihtml);
 			return $semihtml;
 		}
-		$semihtml='[semihtml]'.$semihtml.'[/semihtml]';
+		if ($semihtml!='') $semihtml='[html]'.$semihtml.'[/html]';
 		$semihtml=preg_replace('#<h1[^>]*><span class="inner">(.*)</span></h1>#U','[title]${1}[/title]',$semihtml);
 		$semihtml=preg_replace('#<h1[^>]*>(.*)</h1>#U','[title]${1}[/title]',$semihtml);
 		return $semihtml;

@@ -1374,14 +1374,8 @@ h3.standardbox_title_classic {
 	padding-bottom: 4px;
 }
 
-.ajax_tree_list_loading_wrap.spaced {
-	padding: 200px 0;
-	background-color: #e3e9f2; /* {$,wizard, 100% sb_color } */
-	border: 1px dotted #072d65; /* {$,wizard, 100% bordcolor}*/
-}
-
 .ajax_tree_list_loading {
-	margin: 35% auto 35% auto;
+	padding: 80px;
 	text-align: center;
 }
 
@@ -2024,6 +2018,7 @@ button.wide_button:disabled, button.button_micro:disabled, button.button_page:di
 .proceed_button {
 	text-align: center;
 	padding: 15px 0; /* Can't be margin, as in Firefox it can collapse below the body */
+	margin: 0;
 }
 
 .global_side .proceed_button {

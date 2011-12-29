@@ -442,7 +442,7 @@ function delete_menu_branch(ob)
 {
 	var id=ob.id.substring(4,ob.id.length);
 	
-	if ((typeof window.showModalDialog!='undefined'{+START,IF,{$VALUE_OPTION,faux_popups}} || true{+END}) || (ob.form.elements['branch_type_'+id]!='page'))
+	if ((typeof window.showModalDialog!='undefined'{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}} || true{+END}) || (ob.form.elements['branch_type_'+id]!='page'))
 	{
 		var choices=['{!INPUTSYSTEM_CANCEL^;}','{!DELETE^;}','{!MOVETO_MENU^;}'];
 		generate_question_ui(

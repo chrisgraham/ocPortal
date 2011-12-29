@@ -6,10 +6,15 @@
 // HTML EDITOR
 // ===========
 
-function wysiwyg_on()
+function wysiwyg_cookie_says_on()
 {
 	var cookie=ReadCookie('use_wysiwyg');
 	return ((cookie=='') || (cookie=='1')) && (browser_matches('wysiwyg') && ('{$MOBILE}'!='1'));
+}
+
+function wysiwyg_on()
+{
+	return wysiwyg_cookie_says_on();
 }
 
 function toggle_wysiwyg(name)
@@ -37,31 +42,31 @@ function toggle_wysiwyg(name)
 		return false;
 	}
 
-	return _toggle_wysiwyg(name,saving_cookies);
+	return _toggle_wysiwyg(name,true);
 }
 
 function _toggle_wysiwyg(name,saving_cookies)
 {
+	var is_wysiwyg_on=wysiwyg_on();
+
 	if (saving_cookies)
 	{
 		SetCookie('use_wysiwyg',is_wysiwyg_on?'0':'1',3000);
 	}
 
 	var forms=document.getElementsByTagName('form');
-	var counter,id;
 	var so=document.getElementById('post_special_options');
 	var so2=document.getElementById('post_special_options2');
 
-	var request,result;
 	if (is_wysiwyg_on)
 	{
 		// Find if the WYSIWYG has anything in it - if not, discard
 		var all_empty=true,myregexp=new RegExp(/((\s)|(<p\d*\/>)|(<\/p>)|(<p>)|(&nbsp;)|(<br[^>]*>))*/);
 		for (var fid=0;fid<forms.length;fid++)
 		{
-			for (counter=0;counter<forms[fid].elements.length;counter++)
+			for (var counter=0;counter<forms[fid].elements.length;counter++)
 			{
-				id=forms[fid].elements[counter].id;
+				var id=forms[fid].elements[counter].id;
 				if (typeof window.areaedit_editors[id]!='undefined')
 				{
 					if (window.areaedit_editors[id].getData().replace(myregexp,'')!='') all_empty=false;
@@ -103,8 +108,7 @@ function _toggle_wysiwyg(name,saving_cookies)
 
 function enable_wysiwyg(forms,so,so2)
 {
-	if (so) so.style.display='none';
-	if (so2) so2.style.display='block';
+	window.wysiwyg_on=function() { return true; };
 
 	for (var fid=0;fid<forms.length;fid++)
 	{
@@ -116,9 +120,9 @@ function disable_wysiwyg(forms,so,so2,discard)
 {
 	for (var fid=0;fid<forms.length;fid++)
 	{
-		for (counter=0;counter<forms[fid].elements.length;counter++)
+		for (var counter=0;counter<forms[fid].elements.length;counter++)
 		{
-			id=forms[fid].elements[counter].id;
+			var id=forms[fid].elements[counter].id;
 			if (typeof window.areaedit_editors[id]!='undefined')
 			{
 				var textarea=forms[fid].elements[counter];
@@ -136,14 +140,14 @@ function disable_wysiwyg(forms,so,so2,discard)
 					textarea.value=window.areaedit_original_comcode[id];
 				} else
 				{
-					request=load_XML_doc('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub(),false,'data='+window.encodeURIComponent(window.areaedit_editors[id].getData()));
+					var request=load_XML_doc('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub(),false,'data='+window.encodeURIComponent(window.areaedit_editors[id].getData()));
 					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName("result")[0]))
 					{
 						textarea.value='[semihtml]'+areaedit_editors[id].getData()+'[/semihtml]';
 					} else
 					{
 						var result_tags=request.responseXML.documentElement.getElementsByTagName("result");
-						result=result_tags[0];
+						var result=result_tags[0];
 						textarea.value=merge_text_nodes(result.childNodes).replace(/\s*$/,'');
 					}
 					if ((textarea.value.indexOf('{\$,page hint: no_wysiwyg}')==-1) && (textarea.value!='')) textarea.value+='{\$,page hint: no_wysiwyg}';
@@ -162,6 +166,8 @@ function disable_wysiwyg(forms,so,so2,discard)
 	}
 	if (so) so.style.display='block';
 	if (so2) so2.style.display='none';
+	
+	window.wysiwyg_on=function() { return false; };
 }
 
 var areaedit_editors=[];
@@ -195,7 +201,7 @@ function load_html_edit(posting_form,ajax_copy)
 		if (so2) so2.style.display='block';
 	}
 
-	var counter,count=0,e,indicator,those_done=[],result,request,id;
+	var counter,count=0,e,indicator,those_done=[],id;
 	for (counter=0;counter<posting_form.elements.length;counter++)
 	{
 		e=posting_form.elements[counter];
@@ -230,7 +236,7 @@ function load_html_edit(posting_form,ajax_copy)
 					e.value=posting_form.elements[id+"_parsed"].value;
 			} else
 			{
-				request=load_XML_doc('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?semihtml=1&from_html=0'+keep_stub(),false,'data='+window.encodeURIComponent(posting_form.elements[counter].value));
+				var request=load_XML_doc('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?semihtml=1&from_html=0'+keep_stub(),false,'data='+window.encodeURIComponent(posting_form.elements[counter].value.replace('{'+'$,page hint: no_wysiwyg}','')));
 				if (!request.responseXML)
 				{
 					posting_form.elements[counter].value='';
@@ -242,7 +248,7 @@ function load_html_edit(posting_form,ajax_copy)
 						posting_form.elements[counter].value='';
 					} else
 					{
-						result=result_tags[0];
+						var result=result_tags[0];
 						posting_form.elements[counter].value=merge_text_nodes(result.childNodes);
 					}
 				}
@@ -344,9 +350,9 @@ function areaedit_init(element)
 	}
 	editor.addCss(css);
 
-	window.setTimeout( function() {
+	/*window.setTimeout( function() {
 		window.scrollTo(0,0); // Otherwise jumps to last editor
-	} , 500);
+	} , 500);*/
 
 	editor.on('key', function (event) {
 		if (typeof element.externalonKeyPress!='undefined')
@@ -650,47 +656,54 @@ function insertTextbox(element,text,sel,plain_insert,html)
 {
 	if (isWYSIWYGField(element))
 	{
+		var editor=areaedit_editors[element.id];
+
 		var insert='';
 		if (plain_insert)
 		{
-			insert=getSelectedHTML(areaedit_editors[element.id])+(html?html:escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />'));
+			insert=getSelectedHTML(editor)+(html?html:escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />'));
 		} else
 		{
 			var matches=text.match(/^\s*\[block(.*)\](.*)\[\/block\]\s*$/);
 			if (matches)
 			{
-				insert=getSelectedHTML(areaedit_editors[element.id])+
+				insert=getSelectedHTML(editor)+
 					('<input class="ocp_keep_real_block" title="'+(html?matches[0].replace(/^\s*/,'').replace(/\s*$/,''):escape_html(matches[0].replace(/^\s*/,'').replace(/\s*$/,'')))+'" type="button" value="'+('{!comcode:COMCODE_EDITABLE_BLOCK;*}'.replace('\{1\}',matches[2]))+'" />');
 			} else
 			{
 				var tag_name=text.replace(/^\[/,'').replace(/[ \]].*$/,'');
-				insert=getSelectedHTML(areaedit_editors[element.id])+
+				insert=getSelectedHTML(editor)+
 					('&#8203;<kbd title="'+(html?tag_name:escape_html(tag_name))+'" class="ocp_keep">')+
 					(html?html:escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />'))+
 					'</kbd>&#8203;';
 			}
 		}
-		areaedit_editors[element.id].focus();
+
 		try
 		{
-			var before=areaedit_editors[element.id].getData();
-			areaedit_editors[element.id].insertHtml(insert);
-			var after=areaedit_editors[element.id].getData();
+			var before=editor.getData();
+
+			if (!browser_matches('opera')) editor.focus(); // Needed on some browsers, but on Opera will defocus our selection
+			var selectedHTML=getSelectedHTML(editor);
+			if (browser_matches('opera')) editor.getSelection().getNative().getRangeAt(0).deleteContents();
+
+			if ((editor.getSelection()) && (editor.getSelection().getStartElement().getName()=='kbd')) // Danger Danger - don't want to insert into another Comcode tag. Put it after. They can cut+paste back if they need.
+			{
+				editor.document.getBody().appendHtml(insert);
+			} else
+			{
+				editor.insertHtml(insert);
+			}
+
+			var after=editor.getData();
 			if (after==before) throw "Failed to insert";
-			findTagsInEditor(areaedit_editors[element.id],element);
-			fixImagesIn(areaedit_editors[element.id].document.getBody());
+
+			findTagsInEditor(editor,element);
+			fixImagesIn(editor.document.getBody());
 		}
 		catch (e) // Sometimes happens on Firefox in Windows, appending is a bit tamer (e.g. you cannot insert if you have the start of a h1 at cursor)
 		{
-			if (areaedit_editors[element.id].document)
-			{
-				setInnerHTML(areaedit_editors[element.id].document.getBody().$,insert,true);
-				findTagsInEditor(areaedit_editors[element.id],element);
-				fixImagesIn(areaedit_editors[element.id].document.getBody());
-			} else
-			{
-				areaedit_editors[element.id].textarea.$.value+=text;
-			}
+			editor.document.getBody().appendHtml(insert);
 		}
 		return;
 	}
@@ -781,12 +794,24 @@ function insertTextboxWrapping(element,beforeWrapTag,afterWrapTag)
 
 	if (isWYSIWYGField(element))
 	{
-		if (!browser_matches('opera')) areaedit_editors[element.id].focus(); // Needed on some browsers, but on Opera will defocus our selection
-		var selectedHTML=getSelectedHTML(areaedit_editors[element.id]);
-		if (browser_matches('opera')) areaedit_editors[element.id].getSelection().getNative().getRangeAt(0).deleteContents();
-		areaedit_editors[element.id].insertHtml('&#8203;<kbd title="'+escape_html(beforeWrapTag.replace(/^\[/,'').replace(/[ \]].*$/,'').replace(/=.*$/,''))+'" class="ocp_keep">'+beforeWrapTag+selectedHTML+afterWrapTag+'</kbd>&#8203;');
-		fixImagesIn(areaedit_editors[element.id].document.getBody());
-		findTagsInEditor(areaedit_editors[element.id],element);
+		var editor=areaedit_editors[element.id];
+
+		if (!browser_matches('opera')) editor.focus(); // Needed on some browsers, but on Opera will defocus our selection
+		var selectedHTML=getSelectedHTML(editor);
+		if (browser_matches('opera')) editor.getSelection().getNative().getRangeAt(0).deleteContents();
+
+		var new_html='&#8203;<kbd title="'+escape_html(beforeWrapTag.replace(/^\[/,'').replace(/[ \]].*$/,'').replace(/=.*$/,''))+'" class="ocp_keep">'+beforeWrapTag+selectedHTML+afterWrapTag+'</kbd>&#8203;';
+		if ((editor.getSelection()) && (editor.getSelection().getStartElement().getName()=='kbd')) // Danger Danger - don't want to insert into another Comcode tag. Put it after. They can cut+paste back if they need.
+		{
+			editor.document.getBody().appendHtml(new_html);
+		} else
+		{
+			editor.insertHtml(new_html);
+		}
+
+		fixImagesIn(editor.document.getBody());
+		findTagsInEditor(editor,element);
+
 		return;
 	}
 

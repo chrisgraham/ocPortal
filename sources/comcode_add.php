@@ -401,7 +401,7 @@ function comcode_helper_script()
 
 						if (($tag=='attachment') && ($param=='thumb_url'))
 						{
-							$field=form_input_tree_list(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_thumb_url'),'thumb_url','','choose_filedump_file',array('only_images'=>true),true,'',false);
+							$field=form_input_tree_list(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_thumb_url'),'thumb_url','','choose_filedump_file',array('only_images'=>true),false,'',false);
 							$fields_advanced->attach($field);
 						} else
 						{
@@ -418,6 +418,21 @@ function comcode_helper_script()
 									if (strpos($item,'=')!==false)
 									{
 										list($item,$label)=explode('=',$item,2);
+
+										// Simplify the choices
+										if ($tag=='attachment')
+										{
+											if (($item=='inline_extract') && (get_param_integer('is_archive',NULL)===0)) continue;
+											if (($item=='island_extract') && (get_param_integer('is_archive',NULL)===0)) continue;
+
+											if (($item=='island') && (get_param_integer('is_image',NULL)===0)) continue;
+											if (($item=='island') && (get_param_integer('is_image',NULL)===0)) continue;
+
+											if (($item=='code') && ((get_param_integer('is_image',NULL)===1) || (get_param_integer('is_archive',NULL)===1))) continue;
+
+											if (($item=='mail') && (get_param('default_type',NULL)!==NULL)) continue;
+										}
+										
 										$list->attach(form_input_list_entry($item,($item==$default),protect_from_escaping($label)));
 									} else
 									{

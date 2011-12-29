@@ -19,7 +19,6 @@ function addAttachment(startNum,posting_field_name)
 	setInnerHTML(new_div,attachment_template.replace(/\_\_num_attachments\_\_/g,numAttachments));
 	addTo.appendChild(new_div);
 	document.getElementById('file'+numAttachments).setAttribute('unselectable','on');
-	document.getElementById('attachmenttype'+numAttachments).selectedIndex=document.getElementById('attachmenttype'+(numAttachments-1)).selectedIndex;
 
 	if (numAttachments==maxAttachments)
 	{
@@ -52,75 +51,58 @@ function setAttachment(field_name,number,filename)
 		tmp_form.preview.disabled=true;
 	}
 
-	var done=attachment_present(post.value,number);
+	var add_another_field=(number==numAttachments) && (numAttachments<maxAttachments);
+
 	var post_value=getTextbox(post);
-	if ((!done) && (!attachment_present(post_value,number)))
+	var done=attachment_present(post.value,number) || attachment_present(post_value,number);
+	if (!done)
 	{
-		var url=filename;
+		var filepath=filename;
 		if ((!filename) && (document.getElementById('file'+number)))
 		{
-			url=document.getElementById('file'+number).value;
+			filepath=document.getElementById('file'+number).value;
 		}
 
-		var ext=url.substr(url.length-4,4).toLowerCase();
-		var ins='',ins2='';
-
-		{$,Make it really quick to set file paths as captions when choosing from source repositories}
-		var caption_field=document.getElementById('caption'+number);
-		if (caption_field.value=='')
+		var is_archive=true,is_image=true;
+		if (filepath!='')
 		{
-			if (url.indexOf('.x/')!=-1)
+			var ext=filepath.substr(filepath.length-4,4).toLowerCase();
+
+			is_archive=(ext=='.tar') || (ext=='.zip');
+			is_image=(ext=='.png') || (ext=='.jpg') || (ext=='jpeg') || (ext=='.gif');
+		}
+
+		var wysiwyg=isWYSIWYGField(document.getElementById(field_name));
+
+		if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
+		var url='{$FIND_SCRIPT;,comcode_helper}';
+		url+='?field_name='+field_name;
+		url+='&type=step2';
+		url+='&tag='+(wysiwyg?'attachment_safe':'attachment');
+		url+='&existing_attachment=new_'+number;
+		url+='&default_type='+(is_archive?'download':'island');
+		url+='&is_archive='+(is_archive?'1':'0');
+		url+='&is_image='+(is_image?'1':'0');
+		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path
+		if (wysiwyg) url+='&in_wysiwyg=1';
+		url+=keep_stub();
+		window.faux_showModalDialog(
+			maintain_theme_in_link(url),
+			'',
+			'width=750,height=530,status=no,resizable=yes,scrollbars=yes',
+			function()
 			{
-				caption_field.value=url.substr(url.indexOf('.x/')+3);
+				// Add field for next one
+				if (add_another_field)
+					addAttachment(numAttachments+1,field_name);
 			}
-			else if (url.indexOf('.x\\')!=-1)
-			{
-				caption_field.value=url.substr(url.indexOf('.x\\')+3).replace(/\\/g,'/');
-			}
-		}
-
-		if ((ext=='.tar') || (ext=='.zip') || (ext=='.png') || (ext=='.jpg') || (ext=='jpeg') || (ext=='.gif') || (ext=='.bmp'))
-		{
-			generate_question_ui(
-				"{!THUMB_OR_IMG_2^#}",
-				{thumbnail: '{!THUMBNAIL^;}',fullsize: '{!IMAGE^;}'},
-				'{!_ATTACHMENT^;}',
-				null,
-				function(vb)
-				{
-					ins=(vb.toLowerCase()=='{!THUMBNAIL^;}'.toLowerCase())?"_safe thumb=\"1\"":"_safe thumb=\"0\"";
-					ins2=(vb.toLowerCase()=='{!THUMBNAIL^;}'.toLowerCase())?"_safe":"_safe";
-					
-					insert_attachment(post,number,ins,ins2);
-				}
-			);
-		} else
-		{
-			insert_attachment(post,number,ins,ins2);
-		}
-	}
-
-	// Add field for next one
-	if ((number==numAttachments) && (numAttachments<maxAttachments))
-		addAttachment(numAttachments+1,field_name);
-}
-
-function insert_attachment(post,number,ins,ins2)
-{
-	var add;
-	if (is_comcode_xml(post))
-	{
-		add='<attachment'+ins+'>new_'+number+'</attachment'+ins2+'>';
+		);
 	} else
 	{
-		add='[attachment'+ins+']new_'+number+'[/attachment'+ins2+']';
+		// Add field for next one
+		if (add_another_field)
+			addAttachment(numAttachments+1,field_name);
 	}
-
-	try
-	{
-		insertTextbox(post,add);
-	}
-	catch (e) { } // Yuck, WYSIWYG editors can be buggy
 }
 
 // ====================
@@ -469,7 +451,7 @@ function doInput_page(field_name)
 
 	var result;
 
-	if (typeof window.showModalDialog!='undefined'{+START,IF,{$VALUE_OPTION,faux_popups}} || true{+END})
+	if (typeof window.showModalDialog!='undefined'{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}} || true{+END})
 	{
 		window.faux_showModalDialog(
 			maintain_theme_in_link('{$FIND_SCRIPT;,page_link_chooser}'+keep_stub(true)),
