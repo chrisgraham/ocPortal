@@ -43,9 +43,24 @@
 				win.close();
 		} else
 		{
+			var message='';
+			if (comcode.indexOf('[attachment')==0)
+			{
+				if (comcode.indexOf('[attachment_safe')==0)
+				{
+					message='{!ADDED_COMCODE_ONLY_SAFE_ATTACHMENT;}';
+				} else
+				{
+					message='{!ADDED_COMCODE_ONLY_ATTACHMENT;}';
+				}
+			} else
+			{
+				message='{!ADDED_COMCODE_ONLY;}';
+			}
+
 			insertTextboxOpener(element,comcode);
 			window.fauxmodal_alert(
-				'{!ADDED_COMCODE_ONLY;}',
+				message,
 				function() {
 					if (typeof win.faux_close!='undefined')
 						win.faux_close();

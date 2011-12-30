@@ -1360,7 +1360,7 @@ function fireFakeChangeFor(name,value)
 	}
 
 	var ob=rep.swfob;
-	if (ob.immediate_submit)
+	if ((typeof ob.immediate_submit!='undefined') && (ob.immediate_submit))
 	{
 		var txtID = document.getElementById(ob.settings.txtFileDbID);
 		var txtFileName = document.getElementById(ob.settings.txtFileNameID);
