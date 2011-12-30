@@ -1212,6 +1212,11 @@ h3.standardbox_title_classic {
 	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 }
 
+/* Undo for nested tables from WYSIWYG */
+.solidborder table[border="0"] td, .solidborder table[border="0"] th {
+	border: 0;
+}
+
 .do_next_page_question {
 	font-size: 1em;
 	{+START,IF,{$NOT,{$MOBILE}}}
@@ -1889,6 +1894,11 @@ input.buttonhyperlink {
 
 .spaced_table th, .spaced_table td {
 	padding: 3px;
+}
+
+/* Undo for nested tables from WYSIWYG */
+.solidborder table[cellpadding="0"] td, .solidborder table[cellpadding="0"] th {
+	padding: 0;
 }
 
 .highlighted_table_cell {
@@ -3824,7 +3834,8 @@ a[href$=".rss"], body div a.feed_link {background: url('{$IMG,filetypes/feed}') 
 a[href$=".torrent"], body div a.torrent_link {background: url('{$IMG,filetypes/page_torrent}') no-repeat right top; padding: 0 22px 5px 0;}
 a[href$=".zip"], a[href$=".gz"], a[href$=".bz2"], a[href$=".tar"], a[href$=".rar"], body div a.archive_link {background: url('{$IMG,filetypes/page_archive}') no-repeat right top; padding: 0 22px 5px 0;}
 a[href$=".asf"], a[href$=".ra"], a[href$=".wma"], a[href$=".wav"], a[href$=".mp3"], a[href$=".ogg"], a[href$=".mid"], a[href$=".mov"], a[href$=".qt"], a[href$=".wmv"], a[href$=".ram"], a[href$=".rm"], a[href$=".avi"], a[href$=".mpg"], a[href$=".mpe"], a[href$=".mpeg"], a[href$=".mp4"], a[href$=".webm"], body div a.media_link {background: url('{$IMG,filetypes/page_media}') no-repeat right top; padding: 0 22px 5px 0;}
-a[target="_blank"], a[onclick$="window.open"], body div a.external_link {background: url('{$IMG,filetypes/external_link}') no-repeat right top; padding-right:10px;}
+a[target="_blank"] {background: url('{$IMG,filetypes/external_link}') no-repeat right top; padding-right:10px;}
+a[onclick$="window.open"], body div a.external_link {background: url('{$IMG,filetypes/external_link}') no-repeat right top !important; padding-right:10px !important;}
 body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] {background-image:none; padding:0px;}
 body a.link_exempt2 {background-image:none;}
 {+START,IF,{$ADDON_INSTALLED,recommend}}
