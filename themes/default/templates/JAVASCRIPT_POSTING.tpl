@@ -79,7 +79,7 @@ function setAttachment(field_name,number,filename)
 		url+='?field_name='+field_name;
 		url+='&type=step2';
 		url+='&tag='+(wysiwyg?'attachment_safe':'attachment');
-		url+='&existing_attachment=new_'+number;
+		url+='&default=new_'+number;
 		url+='&default_type='+(is_archive?'download':'island');
 		url+='&is_archive='+(is_archive?'1':'0');
 		url+='&is_image='+(is_image?'1':'0');

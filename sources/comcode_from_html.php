@@ -222,12 +222,11 @@ function semihtml_to_comcode($semihtml)
 
 	@ini_set('pcre.backtrack_limit','10000000');
 	
-	$semihtml=preg_replace('#<input [^>]*class="ocp_keep_real_block" [^>]*title="([^"]*)" [^>]*type="button" [^>]*value="[^"]*"[^>]*/?'.'>#siU','${1}',$semihtml);
+	$semihtml=preg_replace('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="button" [^>]*value="[^"]*"[^>]*/?'.'>#siU','${1}',$semihtml);
 	$array_html_preg_replace=array();
 	$semihtml=str_replace('&#8203;<kbd','<kbd',$semihtml);
 	$semihtml=str_replace('</kbd>&#8203;','</kbd>',$semihtml);
-	$array_html_preg_replace[]=array('#^<kbd class="ocp_keep"[^>]*>(.*)</kbd>$#siU',"\${1}");
-	$array_html_preg_replace[]=array('#^<kbd class="ocp_keep_block"[^>]*>(.*)</kbd>$#siU',"\${1}");
+	$array_html_preg_replace[]=array('#^<kbd class="(ocp_keep|ocp_keep_block)"[^>]*>(.*)</kbd>$#siU',"\${2}");
 	$semihtml=array_html_preg_replace('kbd',$array_html_preg_replace,$semihtml);
 	$semihtml=str_replace('<!-- >','',$semihtml);
 	$semihtml=preg_replace('#<span id="cke_bm_[^"]+" style="display: none;\s*">&nbsp;</span>#','',$semihtml);

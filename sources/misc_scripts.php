@@ -538,46 +538,8 @@ function block_helper_script()
 	}
 	elseif ($type=='step2') // Ask for block fields
 	{
-		$defaults=array();
-
-		$__defaults=get_param('parse_defaults','',true);
-		
-		$_defaults=preg_replace('#^\[block\s*#','',preg_replace('#\][^\[\]]*\[/block\]#Us','',$__defaults));
-		if ($_defaults!='')
-		{
-			if (substr($_defaults,0,1)=='=') $_defaults='param'.$_defaults;
-			$current_tag='';
-			$current_value='';
-			$in_tag=false;
-			for ($i=0;$i<strlen($_defaults);$i++)
-			{
-				$next=$_defaults[$i];
-				if (!$in_tag)
-				{
-					if ($next=='=')
-					{
-						$in_tag=true;
-						if ($_defaults[$i+1]=='"') $i++; // Skip opening "
-						$current_value='';
-					} else
-					{
-						$current_tag.=$next;
-					}
-				} else
-				{
-					if ($next=='"')
-					{
-						$in_tag=false;
-						if (($i!=strlen($_defaults)-1) && ($_defaults[$i+1]==' ')) $i++; // Skip space
-						$defaults[$current_tag]=str_replace(array('\\[','\\]','\\{','\\}','\\\''),array('[',']','{','}','\''),$current_value);
-						$current_tag='';
-					} else
-					{
-						$current_value.=$next;
-					}
-				}
-			}
-		}
+		require_code('comcode_text');
+		$defaults=parse_single_comcode_tag(get_param('parse_defaults','',true),'block');
 
 		$block=trim(get_param('block'));
 		$title=get_page_title('_BLOCK_HELPER',true,array(escape_html($block)));

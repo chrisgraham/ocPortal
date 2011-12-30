@@ -68,7 +68,10 @@ function init__comcode_text()
 	global $REVERSABLE_TAGS;
 	$REVERSABLE_TAGS=array('surround'=>1,'attachment_safe'=>1,'attachment2'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'highlight'=>1,'indent'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
 										'title'=>1,'size'=>1,'color'=>1,'font'=>1,'tt'=>1,'img'=>'#\s(rollover|refresh\_time)=#','url'=>1,'email'=>1,'upload'=>1,
-										'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'block'=>1/*Handled in special way*/);
+										'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
+
+										/*Handled in special way*/
+										'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'menu'=>1,'email'=>1,'reference'=>1,'upload'=>1,'page'=>1,'exp_thumb'=>1,'exp_ref'=>1,'thumb'=>1,'snapback'=>1,'post'=>1,'thread'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,);
 	// These are not reversable, but we want them WYSIWYGABLE
 	global $PUREHTML_TAGS;
 	$PUREHTML_TAGS=array(/*'attachment2'=>1,'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
@@ -283,7 +286,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							if ((isset($VALID_COMCODE_TAGS[$potential_tag])) && (substr($ahead,0,2)!='i ')) // The "i" bit is just there to block a common annoyance: [i] doesn't take parameters and we don't want "[i think]" (for example) being parsed.
 							{
 								if (($comcode[$pos]!='/') || (count($tag_stack)==0))
-									$mindless_mode=($semiparse_mode) && /*(!isset($CODE_TAGS[$potential_tag])) && */((!isset($REVERSABLE_TAGS[$potential_tag])) || ((is_string($REVERSABLE_TAGS[$potential_tag])) && (preg_match($REVERSABLE_TAGS[$potential_tag],substr($comcode,$pos,100))!=0)) || ((($potential_tag=='attachment') || ($potential_tag=='attachment2') || ($potential_tag=='attachment_safe')) && (preg_match('#type=(("\s*inline")|("\s*left_inline")|("\s*right_inline")|(&quot;\s*inline&quot;)|(&quot;\s*left_inline&quot;)|(&quot;\s*right_inline&quot;))#',substr($comcode,$pos,strpos($comcode,']',$pos)-$pos))==0))) && (!isset($PUREHTML_TAGS[$potential_tag]));
+									$mindless_mode=($semiparse_mode) && /*(!isset($CODE_TAGS[$potential_tag])) && */((!isset($REVERSABLE_TAGS[$potential_tag])) || ((is_string($REVERSABLE_TAGS[$potential_tag])) && (preg_match($REVERSABLE_TAGS[$potential_tag],substr($comcode,$pos,100))!=0))) && (!isset($PUREHTML_TAGS[$potential_tag]));
 								else $mindless_mode=$tag_stack[count($tag_stack)-1][7];
 
 								$close=false;
@@ -1920,3 +1923,56 @@ function _close_open_lists($list_indent,$list_type)
 	return array($tag_output,$list_indent);
 }
 
+/**
+ * Parse a single tag. For use separately, not used by main parser.
+ *
+ * @param  string			The data being parsed
+ * @param  string			The tag we're expecting to see here / a regexp
+ * @return array			A map of parsed attributes
+ */
+function parse_single_comcode_tag($data,$tag='\w+')
+{
+	$attributes=array();
+	$_attributes=preg_replace('#^\['.$tag.'\s*#','',preg_replace('#\[/'.$tag.'\]$#Us','',$data));
+	if (($_attributes!='') && ($_attributes!=$data/*if it matched*/))
+	{
+		if (substr($_attributes,0,1)=='=') $_attributes='param'.$_attributes;
+		$current_attribute='';
+		$current_value='';
+		$in_attribute=false;
+		for ($i=0;$i<strlen($_attributes);$i++)
+		{
+			$next=$_attributes[$i];
+			if (!$in_attribute)
+			{
+				if ($next=='=')
+				{
+					$in_attribute=true;
+					if ($_attributes[$i+1]=='"') $i++; // Skip opening "
+					$current_value='';
+				} elseif ($next==']')
+				{
+					$attributes['']=substr($_attributes,$i+1);
+					break;
+				} else
+				{
+					$current_attribute.=$next;
+				}
+			} else
+			{
+				if ($next=='"')
+				{
+					$in_attribute=false;
+					if (($i!=strlen($_attributes)-1) && ($_attributes[$i+1]==' ')) $i++; // Skip space
+					$attributes[$current_attribute]=str_replace(array('\\[','\\]','\\{','\\}','\\\''),array('[',']','{','}','\''),$current_value);
+					$current_attribute='';
+				} else
+				{
+					$current_value.=$next;
+				}
+			}
+		}
+	}
+
+	return $attributes;
+}

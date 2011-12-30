@@ -1,3 +1,10 @@
+<div class="spaced">
+	<div class="ajax_tree_list_loading">
+		<img id="loading_image" class="inline_image_2" src="{$IMG*,bottom/loading}" alt="{!LOADING^;}" />
+		{!LOADING}
+	</div>
+</div>
+
 <script type="text/javascript">// <![CDATA[
 	window.setTimeout(function () {
 		var element;
@@ -15,6 +22,8 @@
 			comcode='{COMCODE^;/}';
 		}
 
+		var win=window;
+
 		if ('{$_GET%,save_to_id}'!='')
 		{
 			var ob=opener.areaedit_editors[element.id].document.$.getElementById('{$_GET%,save_to_id}');
@@ -27,10 +36,14 @@
 			}
 		
 			opener.areaedit_editors[element.id].updateElement();
+
+			if (typeof win.faux_close!='undefined')
+				win.faux_close();
+			else
+				win.close();
 		} else
 		{
 			insertTextboxOpener(element,comcode);
-			var win=window;
 			window.fauxmodal_alert(
 				'{!ADDED_COMCODE_ONLY;}',
 				function() {

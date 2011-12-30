@@ -553,6 +553,20 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		if (array_key_exists('class',$attributes)) $attributes['type']=$attributes['class'];
 	}
 
+	if ($semiparse_mode) // We have got to this point because we want to provide a special 'button' editing representation for these tags
+	{
+		$non_text_tags=array('block','contents','concepts','attachment','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker');
+		if (in_array($tag,$non_text_tags))
+		{
+			$params='';
+			foreach ($attributes as $key=>$val)
+			{
+				$params.=' '.$key.'="'.comcode_escape($val).'"';
+			}
+			return make_string_tempcode('<input class="ocp_keep_ui_controlled" title="['.$tag.''.escape_html($params).']'.escape_html($embed->evaluate()).'[/'.$tag.']" type="button" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+		}
+	}
+
 	$temp_tpl=new ocp_tempcode();
 	switch ($tag)
 	{
@@ -2297,17 +2311,6 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=$embed; // Hybrid HTML. But it's been filtered already
 			break;
 		case 'block':
-			if ($semiparse_mode)
-			{
-				$params='';
-				foreach ($attributes as $key=>$val)
-				{
-					$params.=' '.$key.'="'.comcode_escape($val).'"';
-				}
-				$temp_tpl=make_string_tempcode('<input class="ocp_keep_real_block" title="[block'.escape_html($params).']'.escape_html($embed->evaluate()).'[/block]" type="button" value="'.do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())).'" />');
-				break;
-			}
-		
 			if ($wml)
 			{
 				break;

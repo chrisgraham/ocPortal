@@ -311,8 +311,8 @@ function areaedit_init(element)
 		enterMode : CKEDITOR.ENTER_BR,
 		uiColor : wysiwyg_color,
 		fontSize_sizes : '0.6em;0.85em;1em;1.1em;1.2em;1.3em;1.4em;1.5em;1.6em;1.7em;1.8em;2em',
-		removePlugins: 'smiley,uicolor,contextmenu',
-		extraPlugins: use_ocportal_toolbar?'ocportal':'',
+		removePlugins: 'smiley,uicolor,contextmenu,forms',
+		extraPlugins: ''+(use_ocportal_toolbar?'ocportal':''),
 		customConfig : '',
 		bodyId : 'htmlarea',
 		baseHref : get_base_url(),
@@ -341,8 +341,7 @@ function areaedit_init(element)
 	css+='body { width: 100%; min-height: 140px; }'; // IE9 selectability fix
 	css+="#main_page_title { display: block !important }";
 	css+=".MsoNormal { margin: 0; }";
-	//css+='.ocp_keep, .ocp_keep_block { font-weight: bold; background-color: #BABAFF; }';
-	//css+='.ocp_keep_block[tag="block"] { display: block; padding: 30px 0; text-align: center; }';  Cutting and pasting becomes dodgy if this is enabled
+	css+='kbd.ocp_keep,kbd.ocp_keep_ui_controlled { background-color: #BABAFF; }';
 	css+='.comcode_fake_table > div, .fp_col_block { outline: 1px dotted; margin: 1px 0; }';
 	for (counter=0;counter<linked_sheets.length;counter++)
 	{
@@ -395,7 +394,7 @@ function findTagsInEditor(editor,element)
 	if (typeof editor.document.$=='undefined') return;
 	if (!editor.document.$) return;
 	
-	var comcodes=get_elements_by_class_name(editor.document.$.getElementsByTagName('body')[0],'(ocp_keep|ocp_keep_block|ocp_keep_real_block)');
+	var comcodes=get_elements_by_class_name(editor.document.$.getElementsByTagName('body')[0],'(ocp_keep|ocp_keep_block|ocp_keep_ui_controlled)');
 
 	for (var i=0;i<comcodes.length;i++)
 	{
@@ -449,18 +448,27 @@ function findTagsInEditor(editor,element)
 			}
 			if (comcodes[i].nodeName.toLowerCase()=='input')
 			{
-				comcodes[i].onmouseup=function(event) {
+				comcodes[i].contentEditable=true; // Undoes what ckeditor sets. Fixes weirdness with copy and paste in Chrome (adding extra block on end)
+				comcodes[i].ondblclick=function(event) {
 					var field_name=editor.name;
 					if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
-					var block_name=this.title.replace(/\[\/block\]$/,'').replace(/^(.|\s)*\]/,'');
-					if (this.id=='') this.id='block_'+Math.round(Math.random()*10000000);
-					var url='{$FIND_SCRIPT;,block_helper}?type=step2&block='+window.encodeURIComponent(block_name)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
-					url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');
-					window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+					if (this.id=='') this.id='comcode_tag_'+Math.round(Math.random()*10000000);
+					var tag_type=this.title.substring(1,(this.title.indexOf(' ')==-1)?this.title.indexOf(']'):this.title.indexOf(' '));
+					if (tag_type=='block')
+					{
+						var block_name=this.title.replace(/\[\/block\]$/,'').replace(/^(.|\s)*\]/,'');
+						var url='{$FIND_SCRIPT;,block_helper}?type=step2&block='+window.encodeURIComponent(block_name)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
+						url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');
+						window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+					} else
+					{
+						var url='{$FIND_SCRIPT;,comcode_helper}?type=step2&tag='+window.encodeURIComponent(tag_type)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
+						window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+					}
 					return false;
 				}
 			}
-			comcodes[i].onmouseover=function(event) {
+			comcodes[i].onmouseover=function(event) { // Shows preview
 				if (!event) event=editor.window.$.event;
 				
 				cancelBubbling(event);
@@ -664,11 +672,17 @@ function insertTextbox(element,text,sel,plain_insert,html)
 			insert=getSelectedHTML(editor)+(html?html:escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />'));
 		} else
 		{
-			var matches=text.match(/^\s*\[block(.*)\](.*)\[\/block\]\s*$/);
-			if (matches)
+			var is_block=text.match(/^\s*\[block(.*)\](.*)\[\/block\]\s*$/);
+			var is_non_text_tag=false;
+			var non_text_tags=['contents','concepts','attachment','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'];
+			for (var i=0;i<non_text_tags.length;i++)
+				is_non_text_tag=is_non_text_tag || text.match(new RegExp('^\s*\\['+non_text_tags[i]+'(.*)\\](.*)\\[\/'+non_text_tags[i]+'\\]\s*$'));
+			if (is_block || is_non_text_tag)
 			{
+				var button_text=is_block?'{!comcode:COMCODE_EDITABLE_BLOCK;*}':'{!comcode:COMCODE_EDITABLE_TAG;*}';
+				var matches=text.match(/^\s*\[(\w+)( .*)?\](.*)\[\/\w+\]\s*$/);
 				insert=getSelectedHTML(editor)+
-					('<input class="ocp_keep_real_block" title="'+(html?matches[0].replace(/^\s*/,'').replace(/\s*$/,''):escape_html(matches[0].replace(/^\s*/,'').replace(/\s*$/,'')))+'" type="button" value="'+('{!comcode:COMCODE_EDITABLE_BLOCK;*}'.replace('\{1\}',matches[2]))+'" />');
+					('<input class="ocp_keep_ui_controlled" title="'+(html?matches[0].replace(/^\s*/,'').replace(/\s*$/,''):escape_html(matches[0].replace(/^\s*/,'').replace(/\s*$/,'')))+'" type="button" value="'+(button_text.replace('\{1\}',matches[is_block?3:1]))+'" />');
 			} else
 			{
 				var tag_name=text.replace(/^\[/,'').replace(/[ \]].*$/,'');

@@ -1,3 +1,21 @@
+/*
+
+This file does a lot of stuff relating to overlays...
+
+It provides callback-based *overlay*-driven substitutions for the standard browser windowing API...
+ - alert
+ - prompt
+ - confirm
+ - open (known as popups)
+ - showModalDialog
+A term we are using for these kinds of 'overlay' is '(faux) modal window'.
+
+It provides a generic function to open a link as an overlay.
+
+It provides a function to open an image link as a 'lightbox' (we use the term lightbox exclusively to refer to images in an overlay).
+
+*/
+
 var overlay_zIndex=1000;
 
 function open_link_as_overlay(ob,width,height)
@@ -19,15 +37,15 @@ function open_link_as_overlay(ob,width,height)
 		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" class="inline_image_2" src="{$IMG*,bottom/loading}" /></p><p class="community_block_tagline">[ <a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a> ]</p>';
 
 		// Show overlay
-		var myAlert = {
-			type: "alert",
+		var myLightbox = {
+			type: "lightbox",
 			text: lightbox_code,
 			yes_button: "{!INPUTSYSTEM_CLOSE#}",
 			width: 450,
 			height: 300
 		};
 		var modal=new ModalWindow();
-		modal.open(myAlert);
+		modal.open(myLightbox);
 
 		// Load proper image
 		window.setTimeout(function() { // Defer execution until the HTML was parsed
@@ -175,8 +193,8 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 			}
 		}
 
-		var myOverlay = {
-			type: "overlay",
+		var myFrame = {
+			type: "iframe",
 			finished: function(value) {
 				callback(value);
 			},
@@ -186,9 +204,9 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 			scrollbars: scrollbars,
 			href: url
 		};
-		myOverlay.cancel_button=(unadorned!==true)?cancel_text:null;
-		if (target) myOverlay.target=target;
-		new ModalWindow().open(myOverlay);
+		myFrame.cancel_button=(unadorned!==true)?cancel_text:null;
+		if (target) myFrame.target=target;
+		new ModalWindow().open(myFrame);
 	{+END}
 
 	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
@@ -225,8 +243,10 @@ function faux_open(url,name,options,target)
 
 {+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 /*
+Originally...
+
 Script: modalwindow.js
-	ModalWindow - Simple javascript popup overlay to replace builtin alert, prompt and confirm.
+	ModalWindow - Simple javascript popup overlay to replace builtin alert, prompt and confirm, and more.
 
 License:
 	PHP-style license.
@@ -237,7 +257,7 @@ Copyright:
 Code & Documentation:
 	http://kd3sign.co.uk/examples/modalwindow/
 
-Modified by ocProducts for ocPortal.
+HEAVILY Modified by ocProducts for ocPortal.
 
 */
 
@@ -298,8 +318,8 @@ function ModalWindow()
 				}
 			}
 			if (this.type == "prompt") this.removeEvent(bi.parentNode, "click", this.clickout_cancel);
-			if (this.type == "overlay") this.removeEvent(bi.parentNode, "click", this.clickout_finished);
-			if (this.type == "alert") this.removeEvent(bi.parentNode, "click", this.clickout_yes);
+			if (this.type == "iframe") this.removeEvent(bi.parentNode, "click", this.clickout_finished);
+			if (this.type == "alert" || this.type == "lightbox") this.removeEvent(bi.parentNode, "click", this.clickout_yes);
 			this.removeEvent(document, "keyup", this.keyup);
 			this.opened = false;
 		},
@@ -310,7 +330,7 @@ function ModalWindow()
 				if(this.type == "prompt") {
 					this[ method ](this.input.value);
 				}
-				else if(this.type == "overlay") {
+				else if(this.type == "iframe") {
 					this[ method ](this.returnValue);
 				}
 				else this[ method ]();
@@ -322,11 +342,11 @@ function ModalWindow()
 			var dim = this.getPageSize();
 
 			var boxWidth = ((width) ? (width + 8) : (dim.pageWidth / 4))  + "px";
-			var extra_box_height = (this.type == "overlay" ) ? 160 : 120;
+			var extra_box_height = (this.type == "iframe" ) ? 160 : 120;
 			if (this.cancel_button === null) extra_box_height = 0;
-			var boxHeight = (typeof height == "string" || height === null || this.type == "overlay") ? "auto" : (height + extra_box_height) + "px" ;
+			var boxHeight = (typeof height == "string" || height === null || this.type == "iframe") ? "auto" : (height + extra_box_height) + "px" ;
 
-			var boxPosVCentre = (typeof height == "string" || height === null || this.type == "overlay") ? ((this.type == "overlay") ? 20 : 150) : ((dim.windowHeight / 2.5) - (parseInt(boxHeight) / 2)) ;
+			var boxPosVCentre = (typeof height == "string" || height === null || this.type == "iframe") ? ((this.type == "iframe") ? 20 : 150) : ((dim.windowHeight / 2.5) - (parseInt(boxHeight) / 2)) ;
 			if (boxPosVCentre < 20) boxPosVCentre = 20;
 			var boxPosHCentre = ((dim.pageWidth / 2) - (parseInt(boxWidth) / 2));
 
@@ -349,7 +369,7 @@ function ModalWindow()
 				'styles' : {
 					'position': browser_matches('ie_old')?"absolute":"fixed",
 					'zIndex': this.topWindow.overlay_zIndex++,
-					'overflow': (this.type == "overlay") ? "auto" : "hidden",
+					'overflow': (this.type == "iframe") ? "auto" : "hidden",
 					'borderRadius': "15px"
 				}
 			});
@@ -367,7 +387,7 @@ function ModalWindow()
 			});
 
 			var overlay_header = null;
-			if (this.title != '' || this.type == "overlay") {
+			if (this.title != '' || this.type == "iframe") {
 				overlay_header = this.element("h3", {
 					'html': this.title,
 					'styles' : {
@@ -422,7 +442,7 @@ function ModalWindow()
 			};
 
 			switch(this.type) {
-				case "overlay" :
+				case "iframe":
 					var iframe = this.element("iframe", {
 						'frameBorder': "0",
 						'scrolling': (this.scrollbars === false)?"no":"auto",
@@ -518,7 +538,8 @@ function ModalWindow()
 					window.setInterval(makeFrameLikePopup,100); // In case internal nav changes
 					break;
 
-				case "alert" :
+				case "lightbox":
+				case "alert":
 					if(this.yes != false) {
 						var button=this.element("button", {
 							'html': this.yes_button,
@@ -533,7 +554,7 @@ function ModalWindow()
 					}
 					break;
 
-				case "confirm" :
+				case "confirm":
 					var button=this.element("button", {
 						'html': this.yes_button,
 						'class': "button_pageitem",
@@ -551,7 +572,7 @@ function ModalWindow()
 					container.appendChild(buttonContainer);
 					break;
 
-				case "prompt" :
+				case "prompt":
 					this.input = this.element("input", {
 						'name': "prompt",
 						'id': "overlay_prompt",
