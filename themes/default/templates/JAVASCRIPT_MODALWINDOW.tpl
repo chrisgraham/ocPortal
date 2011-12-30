@@ -230,10 +230,12 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 	{+END}
 }
 
-function faux_open(url,name,options,target)
+function faux_open(url,name,options,target,cancel_text)
 {
+	if (!cancel_text) cancel_text="{!INPUTSYSTEM_CLOSE#}";
+
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
-		faux_showModalDialog(url,name,options,null,target,"{!INPUTSYSTEM_CLOSE#}");
+		faux_showModalDialog(url,name,options,null,target,cancel_text);
 	{+END}
 
 	{+START,IF,{$VALUE_OPTION,no_faux_popups}}

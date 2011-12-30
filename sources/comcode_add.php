@@ -98,7 +98,7 @@ function _get_details_comcode_tags()
 		'topic'=>array('param','forum')
 	);
 	if (addon_installed('filedump'))
-		$tag_list['attachment']=array('description','filename','type','width','height','align','float','thumb','thumb_url');
+		$tag_list['attachment']=array('description','filename','type','thumb','float','align','width','height','thumb_url');
 	//'attachment_safe'=>array('description','filename','type','width','height','align','float','thumb_url'),	Merged into attachment in UI
 	ksort($tag_list);
 	/* // Helps find missing tags
@@ -281,7 +281,9 @@ function comcode_helper_script()
 		$fields_advanced=new ocp_tempcode();
 		$done_tag_contents=false;
 		$hidden=new ocp_tempcode();
-		
+
+		$javascript='';
+
 		$preview=true;
 
 		require_code('comcode_text');
@@ -474,7 +476,7 @@ function comcode_helper_script()
 
 					if ($tag=='attachment')
 					{
-						$field=form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'),do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'),'_safe',$actual_tag=='attachment_safe');
+						$field=form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'),do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'),'_safe',$actual_tag=='attachment_safe' || $actual_tag=='attachment2');
 						$fields_advanced->attach($field);
 					}
 				}
@@ -492,11 +494,13 @@ function comcode_helper_script()
 
 		if ($tag=='attachment')
 		{
+			$javascript.="document.getElementById('type').onchange=function() { document.getElementById('_safe').checked=(this.options[this.selectedIndex].value=='inline'); };";
+
 			if ($default_embed!='')
 			{
 				$hidden->attach(form_input_hidden('tag_contents',$default_embed));
 				$tag_description=new ocp_tempcode();
-				
+
 				if (substr($default_embed,0,4)=='new_') $preview=NULL;
 			} else
 			{
@@ -556,7 +560,7 @@ function comcode_helper_script()
 
 		$text=$tag_description->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
 		$hidden->attach(form_input_hidden('tag',$tag));
-		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>$preview,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
+		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>$preview,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 	}
 	elseif ($type=='step3')
 	{
@@ -569,7 +573,7 @@ function comcode_helper_script()
 
 		if (($tag=='attachment') && (post_param_integer('_safe',0)==1)) $tag='attachment_safe';
 
-		list($comcode,$bparameters)=_get_preview_environment_comcode();
+		list($comcode,$bparameters)=_get_preview_environment_comcode($tag);
 		if($tag=='sections' || $tag=='big_tabs' || $tag=='tabs' || $tag=='list')
 			$comcode_xml=$bparameters;
 		else
@@ -588,12 +592,14 @@ function comcode_helper_script()
 /**
  * Reads a Comcode tag from the POST environment.
  *
+ * @param  ID_TEXT		Tag being read.
  * @return array			A pair: The full Comcode for that tag, just the parameters bit.
 */
-function _get_preview_environment_comcode()
+function _get_preview_environment_comcode($tag)
 {
-	$tag=post_param('tag');
-
+	$actual_tag=$tag;
+	if ($tag=='attachment_safe') $tag='attachment';
+	
 	$comcode='';
 	list($tag_list,$custom_tag_list)=_get_details_comcode_tags();
 
@@ -769,6 +775,11 @@ function _get_preview_environment_comcode()
 		{
 			$value=post_param($parameter,'');
 
+			if (($tag=='attachment') && ($parameter=='thumb') && ($value==''))
+			{
+				$value='0';
+			}
+
 			if ($value!='')
 			{
 				if ($parameter=='param')
@@ -782,7 +793,7 @@ function _get_preview_environment_comcode()
 		}
 	}
 	if($comcode=='')
-		$comcode='['.$tag.$bparameters.']'.$tag_contents.'[/'.$tag.']';
-	
+		$comcode='['.$actual_tag.$bparameters.']'.$tag_contents.'[/'.$actual_tag.']';
+
 	return array($comcode,$bparameters);
 }

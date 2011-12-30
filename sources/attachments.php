@@ -31,26 +31,33 @@ function attachments_script()
 		@exit(get_option('closed'));
 	}
 
-	if ((get_param('for_session','-1')!=md5(strval(get_session_id()))) && (get_option('anti_leech')=='1') && (ocp_srv('HTTP_REFERER')!=''))
-		warn_exit(do_lang_tempcode('LEECH_BLOCK'));
+	$id=get_param_integer('id',0);
+	$connection=$GLOBALS[(get_param_integer('forum_db',0)==1)?'FORUM_DB':'SITE_DB'];
+	$has_no_restricts=!is_null($connection->query_value_null_ok('attachment_refs','id',array('r_referer_type'=>'null','a_id'=>$id)));
+
+	if (!$has_no_restricts)
+	{
+		if ((get_param('for_session','-1')!=md5(strval(get_session_id()))) && (get_option('anti_leech')=='1') && (ocp_srv('HTTP_REFERER')!=''))
+			warn_exit(do_lang_tempcode('LEECH_BLOCK'));
+	}
 
 	require_lang('comcode');
 
-	$id=get_param_integer('id',0);
-
 	// Lookup
-	$connection=$GLOBALS[(get_param_integer('forum_db',0)==1)?'FORUM_DB':'SITE_DB'];
 	$rows=$connection->query_select('attachments',array('*'),array('id'=>$id));
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s \G\M\T',$myrow['a_add_time']));
 	if ($myrow['a_url']=='') warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	
-	// Permission
-	if (substr($myrow['a_url'],0,20)=='uploads/attachments/')
+
+	if (!$has_no_restricts)
 	{
-		if (!has_attachment_access(get_member(),$id,$connection))
-			access_denied('ATTACHMENT_ACCESS');
+		// Permission
+		if (substr($myrow['a_url'],0,20)=='uploads/attachments/')
+		{
+			if (!has_attachment_access(get_member(),$id,$connection))
+				access_denied('ATTACHMENT_ACCESS');
+		}
 	}
 	
 	$thumb=get_param_integer('thumb',0);
@@ -263,7 +270,7 @@ function attachment_popup_script()
 	foreach ($rows as $myrow)
 	{
 		$myrow['description']=$myrow['a_description'];
-		$tpl=render_attachment(array(),$myrow,uniqid(''),get_member(),false,$connection,NULL,get_member());
+		$tpl=render_attachment('attachment',array(),$myrow,uniqid(''),get_member(),false,$connection,NULL,get_member());
 		$content->attach(do_template('ATTACHMENTS_BROWSER_ATTACHMENT',array('_GUID'=>'64356d30905c99325231d3bbee92128c','FIELD_NAME'=>$field_name,'TPL'=>$tpl,'DESCRIPTION'=>$myrow['a_description'],'ID'=>strval($myrow['id']))));
 	}
 
@@ -276,6 +283,8 @@ function attachment_popup_script()
 /**
  * Get tempcode for a Comcode rich-media attachment.
  *
+ * @param  ID_TEXT		The attachment tag
+ * @set attachment attachment_safe attachment2
  * @param  array			A map of the attributes (name=>val) for the tag
  * @param  array			A map of the attachment properties (name=>val) for the attachment
  * @param  string			A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
@@ -287,7 +296,7 @@ function attachment_popup_script()
  * @param  boolean		Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
  * @return tempcode		The tempcode for the attachment
  */
-function render_attachment($attributes,$attachment,$pass_id,$source_member,$as_admin,$connection,$highlight_bits=NULL,$on_behalf_of_member=NULL,$semiparse_mode=false)
+function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,$as_admin,$connection,$highlight_bits=NULL,$on_behalf_of_member=NULL,$semiparse_mode=false)
 {
 	require_code('comcode_renderer');
 	
@@ -371,14 +380,17 @@ function render_attachment($attributes,$attachment,$pass_id,$source_member,$as_a
 			$file_contents=http_download_file($url,1024*1024*20/*reasonable limit*/);
 			list($_embed,$title)=do_code_box($extension,make_string_tempcode($file_contents));
 			if ($attachment['a_original_filename']!='') $title=escape_html($attachment['a_original_filename']);
-			$temp_tpl=do_template('COMCODE_CODE',array('STYLE'=>'','TYPE'=>$extension,'CONTENT'=>$_embed,'TITLE'=>$title));
+			$temp_tpl=do_template('COMCODE_CODE',array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true,'STYLE'=>'','TYPE'=>$extension,'CONTENT'=>$_embed,'TITLE'=>$title));
 			break;
 		
 		case 'hyperlink':
-			$keep=symbol_tempcode('KEEP');
-			$_url=new ocp_tempcode();
-			$_url->attach(find_script('attachment').'?id='.urlencode($attachment['id']).$keep->evaluate().'&for_session=');
-			$_url->attach(symbol_tempcode('SESSION_HASHED'));
+			if ($tag=='attachment')
+			{
+				$keep=symbol_tempcode('KEEP');
+				$_url=new ocp_tempcode();
+				$_url->attach(find_script('attachment').'?id='.urlencode($attachment['id']).$keep->evaluate().'&for_session=');
+				$_url->attach(symbol_tempcode('SESSION_HASHED'));
+			}
 			
 			$temp_tpl=hyperlink($_url,($attachment['a_description']!='')?$attachment['a_description']:$attachment['a_original_filename'],true);
 			break;
@@ -390,41 +402,41 @@ function render_attachment($attributes,$attachment,$pass_id,$source_member,$as_a
 				require_code('images');
 				ensure_thumbnail($attachment['a_url'],$attachment['a_thumb_url'],'attachments','attachments',intval($attachment['id']),'a_thumb_url');
 
-				$temp_tpl=do_template('ATTACHMENT_IMG'.(((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1'))?'_MINI':''),map_keys_to_upper($attachment));
+				$temp_tpl=do_template('ATTACHMENT_IMG'.(((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1'))?'_MINI':''),map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				if (($type=='left') || ($type=='left_inline'))
 				{
-					$temp_tpl=do_template('ATTACHMENT_LEFT',array('_GUID'=>'aee2a6842d369c8dae212c3478a3a3e9','CONTENT'=>$temp_tpl));
+					$temp_tpl=do_template('ATTACHMENT_LEFT',array('_GUID'=>'aee2a6842d369c8dae212c3478a3a3e9','WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true,'CONTENT'=>$temp_tpl));
 				}
 				if (($type=='right') || ($type=='right_inline'))
 				{
-					$temp_tpl=do_template('ATTACHMENT_RIGHT',array('_GUID'=>'1a7209d67d91db740c86e7a331720195','CONTENT'=>$temp_tpl));
+					$temp_tpl=do_template('ATTACHMENT_RIGHT',array('_GUID'=>'1a7209d67d91db740c86e7a331720195','WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true,'CONTENT'=>$temp_tpl));
 				}
 
 				break;
 			}
 			elseif ($extension=='swf')
 			{
-				$temp_tpl=do_template('ATTACHMENT_SWF',map_keys_to_upper($attachment));
+				$temp_tpl=do_template('ATTACHMENT_SWF',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				break;
 			}
 			elseif ((addon_installed('jwplayer')) && (($mime_type=='video/x-flv') || ($mime_type=='video/mp4') || ($mime_type=='video/webm')))
 			{
-				$temp_tpl=do_template('ATTACHMENT_FLV',map_keys_to_upper($attachment));
+				$temp_tpl=do_template('ATTACHMENT_FLV',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				break;
 			}
 			elseif ($mime_type=='video/quicktime')
 			{
-				$temp_tpl=do_template('ATTACHMENT_QT',map_keys_to_upper($attachment));
+				$temp_tpl=do_template('ATTACHMENT_QT',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				break;
 			}
 			elseif ($mime_type=='audio/x-pn-realaudio')
 			{
-				$temp_tpl=do_template('ATTACHMENT_RM',map_keys_to_upper($attachment));
+				$temp_tpl=do_template('ATTACHMENT_RM',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				break;
 			}
 			elseif ((substr($mime_type,0,5)=='video') || (substr($mime_type,0,5)=='audio'))
 			{
-				$temp_tpl=do_template('ATTACHMENT_MEDIA',map_keys_to_upper($attachment));
+				$temp_tpl=do_template('ATTACHMENT_MEDIA',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				break;
 			}
 			// Continues on, as it's not a media type...
@@ -432,10 +444,10 @@ function render_attachment($attributes,$attachment,$pass_id,$source_member,$as_a
 		case 'download':
 			if (is_null($attachment['a_file_size']))
 			{
-				$temp_tpl=do_template('ATTACHMENT_DOWNLOAD_REMOTE',map_keys_to_upper($attachment));
+				$temp_tpl=do_template('ATTACHMENT_DOWNLOAD_REMOTE',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 			} else
 			{
-				$temp_tpl=do_template('ATTACHMENT_DOWNLOAD',map_keys_to_upper($attachment));
+				$temp_tpl=do_template('ATTACHMENT_DOWNLOAD',map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 			}
 			break;
 	}

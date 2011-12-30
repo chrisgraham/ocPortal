@@ -323,6 +323,7 @@ function areaedit_init(element)
 		autoUpdateElement : true,
 		contentsCss : pageStyleSheets,
 		cssStatic : css,
+		startupOutlineBlocks : true,
 		language : _editor_lang,
 		emailProtection : false,
 		resize_enabled : true,
@@ -341,7 +342,7 @@ function areaedit_init(element)
 	css+='body { width: 100%; min-height: 140px; }'; // IE9 selectability fix
 	css+="#main_page_title { display: block !important }";
 	css+=".MsoNormal { margin: 0; }";
-	css+='kbd.ocp_keep,kbd.ocp_keep_ui_controlled { background-color: #BABAFF; }';
+	css+='kbd.ocp_keep,kbd.ocp_keep_block { background-color: #BABAFF; }';
 	css+='.comcode_fake_table > div, .fp_col_block { outline: 1px dotted; margin: 1px 0; }';
 	for (counter=0;counter<linked_sheets.length;counter++)
 	{
@@ -459,11 +460,11 @@ function findTagsInEditor(editor,element)
 						var block_name=this.title.replace(/\[\/block\]$/,'').replace(/^(.|\s)*\]/,'');
 						var url='{$FIND_SCRIPT;,block_helper}?type=step2&block='+window.encodeURIComponent(block_name)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
 						url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');
-						window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+						window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
 					} else
 					{
 						var url='{$FIND_SCRIPT;,comcode_helper}?type=step2&tag='+window.encodeURIComponent(tag_type)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
-						window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+						window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
 					}
 					return false;
 				}
@@ -674,7 +675,7 @@ function insertTextbox(element,text,sel,plain_insert,html)
 		{
 			var is_block=text.match(/^\s*\[block(.*)\](.*)\[\/block\]\s*$/);
 			var is_non_text_tag=false;
-			var non_text_tags=['contents','concepts','attachment','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'];
+			var non_text_tags=['contents','concepts','attachment','attachment_safe','attachment2','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'];
 			for (var i=0;i<non_text_tags.length;i++)
 				is_non_text_tag=is_non_text_tag || text.match(new RegExp('^\s*\\['+non_text_tags[i]+'(.*)\\](.*)\\[\/'+non_text_tags[i]+'\\]\s*$'));
 			if (is_block || is_non_text_tag)

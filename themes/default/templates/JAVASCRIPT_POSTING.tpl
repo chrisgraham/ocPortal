@@ -78,8 +78,9 @@ function setAttachment(field_name,number,filename)
 		var url='{$FIND_SCRIPT;,comcode_helper}';
 		url+='?field_name='+field_name;
 		url+='&type=step2';
-		url+='&tag='+(wysiwyg?'attachment_safe':'attachment');
+		url+='&tag=attachment';
 		url+='&default=new_'+number;
+		url+='&default_thumb=1';
 		url+='&default_type='+(is_archive?'download':'island');
 		url+='&is_archive='+(is_archive?'1':'0');
 		url+='&is_image='+(is_image?'1':'0');
@@ -205,7 +206,7 @@ function doInput_block(field_name)
 	if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 	var url='{$FIND_SCRIPT;,block_helper}?field_name='+field_name+keep_stub();
 	url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');
-	window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes');
+	window.faux_open(maintain_theme_in_link(url),'','width=750,height=600,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
 }
 
 function doInput_comcode(field_name,tag)
@@ -215,7 +216,7 @@ function doInput_comcode(field_name,tag)
 	if (tag) url+='&type=step2&tag='+tag;
 	if (isWYSIWYGField(document.getElementById(field_name))) url+='&in_wysiwyg=1';
 	url+=keep_stub();
-	window.faux_open(maintain_theme_in_link(url),'','width=750,height=620,status=no,resizable=yes,scrollbars=yes');
+	window.faux_open(maintain_theme_in_link(url),'','width=750,height=620,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
 }
 
 function doInput_list(field_name,add)

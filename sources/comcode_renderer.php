@@ -1324,7 +1324,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 			// Now, render it
 			// ==============
-			$temp_tpl=render_attachment($attributes,$attachment,$pass_id,$source_member,$as_admin,$connection,$highlight_bits,$on_behalf_of_member,$semiparse_mode);
+			$temp_tpl=render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,$as_admin,$connection,$highlight_bits,$on_behalf_of_member,$semiparse_mode);
 
 			if (array_key_exists('float',$attributes)) $temp_tpl=do_template('FLOATER',array('_GUID'=>'802fe29019be80993296de7cc8b5cc5e','FLOAT'=>$attributes['float'],'CONTENT'=>$temp_tpl));
 
