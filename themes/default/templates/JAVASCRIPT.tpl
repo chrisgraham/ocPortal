@@ -1694,7 +1694,11 @@ function setOpacity(element,fraction)
 {
 	if ((typeof element.faderKey!='undefined') && (element.faderKey) && (thumbFadeTimers[element.faderKey]))
 	{
-		window.clearTimeout(thumbFadeTimers[element.faderKey]);
+		try // Cross-frame issues may cause error
+		{
+			window.clearTimeout(thumbFadeTimers[element.faderKey]);
+		}
+		catch (e) {};
 		thumbFadeTimers[element.faderKey]=null;
 	}
 

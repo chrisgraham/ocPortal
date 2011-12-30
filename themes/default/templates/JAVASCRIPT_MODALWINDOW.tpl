@@ -147,12 +147,14 @@ function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 	{+END}
 }
 
-function faux_showModalDialog(url,name,options,callback,target)
+function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 {
 	if (!callback) callback=function() {};
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		var width=null,height=null,scrollbars=null,unadorned=null;
+
+		if (!cancel_text) cancel_text="{!INPUTSYSTEM_CANCEL#}";
 
 		if (options)
 		{
@@ -184,7 +186,7 @@ function faux_showModalDialog(url,name,options,callback,target)
 			scrollbars: scrollbars,
 			href: url
 		};
-		myOverlay.cancel_button=(unadorned!==true)?"{!INPUTSYSTEM_CLOSE#}":null;
+		myOverlay.cancel_button=(unadorned!==true)?cancel_text:null;
 		if (target) myOverlay.target=target;
 		new ModalWindow().open(myOverlay);
 	{+END}
@@ -213,7 +215,7 @@ function faux_showModalDialog(url,name,options,callback,target)
 function faux_open(url,name,options,target)
 {
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
-		faux_showModalDialog(url,name,options,null,target);
+		faux_showModalDialog(url,name,options,null,target,"{!INPUTSYSTEM_CLOSE#}");
 	{+END}
 
 	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
@@ -471,6 +473,10 @@ function ModalWindow()
 							// Remove fixed width
 							var body_inner=iframe.contentWindow.document.getElementById('body_inner');
 							if (body_inner) body_inner.id='';
+
+							// Remove main_website marker
+							var main_website=iframe.contentWindow.document.getElementById('main_website');
+							if (main_website) main_website.id='';
 
 							// Remove popup spacing
 							var popup_spacer=iframe.contentWindow.document.getElementById('popup_spacer');
