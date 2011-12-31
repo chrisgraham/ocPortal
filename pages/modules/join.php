@@ -104,7 +104,7 @@ class Module_join
 		$url=build_url($map,'_SELF');
 
 		$group_select=new ocp_tempcode();
-		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_is_default'),array('g_is_presented_at_install'=>1));
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_is_default'),array('g_is_presented_at_install'=>1),'ORDER BY g_order');
 		if (count($rows)>1)
 		{
 			foreach ($rows as $group)

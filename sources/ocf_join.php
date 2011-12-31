@@ -47,6 +47,7 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 	require_css('ocf');
 	require_code('ocf_members_action');
 	require_code('ocf_members_action2');
+	require_code('form_templates');
 
 	$hidden=new ocp_tempcode();
 	$hidden->attach(build_keep_post_fields());

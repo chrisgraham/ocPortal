@@ -77,7 +77,7 @@ function ocf_get_all_default_groups($include_primary=false)
 	global $ALL_DEFAULT_GROUPS;
 	if (array_key_exists($include_primary?1:0,$ALL_DEFAULT_GROUPS)) return $ALL_DEFAULT_GROUPS[$include_primary?1:0];
 	
-	$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_default'=>1,'g_is_presented_at_install'=>0),'ORDER BY id');
+	$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_default'=>1,'g_is_presented_at_install'=>0),'ORDER BY g_order');
 	$groups=collapse_1d_complexity('id',$rows);
 	if ($include_primary)
 	{

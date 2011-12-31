@@ -279,10 +279,11 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 {
 	$fields=new ocp_tempcode();
 	$hidden=new ocp_tempcode();
-	list($_fields,$_hidden)=ocf_get_member_fields_profile($custom_fields);
+	list($_fields,$_hidden)=ocf_get_member_fields_settings($mini_mode,$member_id,$groups,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$theme,$reveal_age,$views_signatures,$track_contributed_topics,$language,$allow_emails,$allow_emails_from_staff,$validated,$primary_group,$username,$is_perm_banned,$special_type,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 	$fields->attach($_fields);
 	$hidden->attach($_hidden);
-	list($_fields,$_hidden)=ocf_get_member_fields_settings($mini_mode,$member_id,$groups,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$theme,$reveal_age,$views_signatures,$track_contributed_topics,$language,$allow_emails,$allow_emails_from_staff,$validated,$primary_group,$username,$is_perm_banned,$special_type,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+	if (!$mini_mode) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PROFILE'))));
+	list($_fields,$_hidden)=ocf_get_member_fields_profile($mini_mode,$member_id,$groups,$custom_fields);
 	$fields->attach($_fields);
 	$hidden->attach($_hidden);
 
@@ -508,7 +509,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		
 		// Prepare list of usergroups, if maybe we are gonna let (a) usergroup-change field(s)
 		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
-		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_hidden','g_open_membership'),($group_count>200)?array('g_is_private_club'=>0):NULL);
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_hidden','g_open_membership'),($group_count>200)?array('g_is_private_club'=>0):NULL,'ORDER BY g_order');
 		$_groups=new ocp_tempcode();
 		$default_primary_group=get_first_default_group();
 		$current_primary_group=NULL;
