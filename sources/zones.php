@@ -640,6 +640,10 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 						$row=array('cached_for'=>$codename,'cache_on'=>$info['cache_on'],'cache_ttl'=>$info['ttl']);
 				}
 			}
+			if (($row===NULL) && ((isset($map['cache'])) && ($map['cache']=='1') || (isset($map['quick_cache'])) && ($map['quick_cache']=='1')))
+			{
+				$row=array('cached_for'=>$codename,'cache_on'=>'array()','cache_ttl'=>60);
+			}
 		}
 		if ($row!==NULL)
 		{
