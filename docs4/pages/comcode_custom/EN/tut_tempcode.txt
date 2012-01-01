@@ -1333,7 +1333,7 @@ The 'IF' directive allows particular complex calculations to be done. For a simp
 	<p>We have the following downloads and images:</p>
 	{DOWNLOADS}
 	{IMAGES}
-	{+START,IF,{$AND,{$IS_EMPTY,{DOWNLOADS}}{$IS_EMPTY,{IMAGES}}}}
+	{+START,IF,{$AND,{$IS_EMPTY,{DOWNLOADS}},{$IS_EMPTY,{IMAGES}}}}
 		<p class="nothing_here">(none)</p>
 	{+END}
 {+END}
