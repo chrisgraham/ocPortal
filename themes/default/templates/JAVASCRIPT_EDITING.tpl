@@ -454,7 +454,7 @@ function findTagsInEditor(editor,element)
 					var field_name=editor.name;
 					if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 					if (this.id=='') this.id='comcode_tag_'+Math.round(Math.random()*10000000);
-					var tag_type=this.title.substring(1,(this.title.indexOf(' ')==-1)?this.title.indexOf(']'):this.title.indexOf(' '));
+					var tag_type=this.title.replace(/^\[/,'').replace(/[= \]].*$/,'');
 					if (tag_type=='block')
 					{
 						var block_name=this.title.replace(/\[\/block\]$/,'').replace(/^(.|\s)*\]/,'');
@@ -677,7 +677,7 @@ function insertTextbox(element,text,sel,plain_insert,html)
 			var is_non_text_tag=false;
 			var non_text_tags=['contents','concepts','attachment','attachment_safe','attachment2','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'];
 			for (var i=0;i<non_text_tags.length;i++)
-				is_non_text_tag=is_non_text_tag || text.match(new RegExp('^\s*\\['+non_text_tags[i]+'(.*)\\](.*)\\[\/'+non_text_tags[i]+'\\]\s*$'));
+				is_non_text_tag=is_non_text_tag || text.match(new RegExp('^\s*\\['+non_text_tags[i]+'([ =].*)?\\](.*)\\[\/'+non_text_tags[i]+'\\]\s*$'));
 			if (is_block || is_non_text_tag)
 			{
 				var button_text=is_block?'{!comcode:COMCODE_EDITABLE_BLOCK;*}':'{!comcode:COMCODE_EDITABLE_TAG;*}';
