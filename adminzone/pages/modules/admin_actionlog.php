@@ -62,7 +62,7 @@ class Module_admin_actionlog
 	
 		$type=get_param('type','misc');
 	
-		if ($type=='misc') return $this->choose_member();
+		if ($type=='misc') return $this->search();
 		if ($type=='list') return $this->choose_action();
 		if ($type=='view') return $this->view_action();
 		if (addon_installed('securitylogging'))
@@ -77,17 +77,23 @@ class Module_admin_actionlog
 	}
 	
 	/**
-	 * The UI to choose the member to view action logs of.
+	 * The UI to choose filter parameters.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function choose_member()
+	function search()
 	{
+		$title=get_page_title('VIEW_ACTION_LOGS');
+
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/actionlog';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_trace';
 
-		// Fiddly sorting into our list
-		$list=array();
+		require_code('form_templates');
+
+		$fields=new ocp_tempcode();
+
+		// Possible selections for member filter
+		$_member_choice_list=array();
 		if (get_forum_type()=='ocf')
 		{
 			if ($GLOBALS['FORUM_DB']->query_value('f_moderator_logs','COUNT(DISTINCT l_by)')<5000)
@@ -97,7 +103,7 @@ class Module_admin_actionlog
 				{
 					$username=$GLOBALS['FORUM_DRIVER']->get_username($member['l_by']);
 					if (is_null($username)) $username=strval($member['l_by']);
-					$list[$member['l_by']]=array($username,$member['cnt']);
+					$_member_choice_list[$member['l_by']]=array($username,$member['cnt']);
 				}
 			}
 		}
@@ -108,30 +114,55 @@ class Module_admin_actionlog
 			{
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($staff['the_user']);
 				if (is_null($username)) $username=strval($staff['the_user']);
-				if (!array_key_exists($staff['the_user'],$list))
+				if (!array_key_exists($staff['the_user'],$_member_choice_list))
 				{
-					$list[$staff['the_user']]=array($username,$staff['cnt']);
+					$_member_choice_list[$staff['the_user']]=array($username,$staff['cnt']);
 				} else
 				{
-					$list[$staff['the_user']][1]+=$staff['cnt'];
+					$_member_choice_list[$staff['the_user']][1]+=$staff['cnt'];
 				}
 			}
 		}
-		$entries=form_input_list_entry('-1',true,do_lang_tempcode('ALL_EM'));
-		foreach ($list as $id=>$user_actions)
+		$member_choice_list=new ocp_tempcode();
+		$member_choice_list->attach(form_input_list_entry('-1',true,do_lang_tempcode('_ALL')));
+		foreach ($_member_choice_list as $id=>$user_actions)
 		{
 			list($username,$action_count)=$user_actions;
-			$entries->attach(form_input_list_entry(strval($id),false,do_lang(($action_count==1)?'ACTIONLOG_USERCOUNT_UNI':'ACTIONLOG_USERCOUNT',$username,integer_format($action_count))));
+			$member_choice_list->attach(form_input_list_entry(strval($id),false,do_lang(($action_count==1)?'ACTIONLOG_USERCOUNT_UNI':'ACTIONLOG_USERCOUNT',$username,integer_format($action_count))));
 		}
+		$fields->attach(form_input_list(do_lang_tempcode('USERNAME'),'','id',$member_choice_list,NULL,true));
 
-		$title=get_page_title('VIEW_ACTION_LOGS');
+		// Possible selections for action type filter
+		$_action_type_list=array();
+		$rows1=$GLOBALS['FORUM_DB']->query_select('f_moderator_logs',array('DISTINCT l_the_type'));
+		$rows2=$GLOBALS['SITE_DB']->query_select('adminlogs',array('DISTINCT the_type'));
+		foreach ($rows1 as $row)
+		{
+			$lang=do_lang($row['l_the_type'],NULL,NULL,NULL,NULL,false);
+			if (!is_null($lang)) $_action_type_list[$row['l_the_type']]=$lang;
+		}
+		foreach ($rows2 as $row)
+		{
+			$lang=do_lang($row['the_type'],NULL,NULL,NULL,NULL,false);
+			if (!is_null($lang)) $_action_type_list[$row['the_type']]=$lang;
+		}
+		asort($_action_type_list);
+		$action_type_list=new ocp_tempcode();
+		$action_type_list->attach(form_input_list_entry('-1',true,do_lang_tempcode('_ALL')));
+		foreach ($_action_type_list as $lang_id=>$lang)
+		{
+			$action_type_list->attach(form_input_list_entry($lang_id,false,$lang));
+		}
+		$fields->attach(form_input_list(do_lang_tempcode('ACTION'),'','to_type',$action_type_list));
+
+		// Filters
+		$fields->attach(form_input_line(do_lang_tempcode('PARAMETER_A'),'','param_a','',false));
+		$fields->attach(form_input_line(do_lang_tempcode('PARAMETER_B'),'','param_b','',false));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'list'),'_SELF',NULL,false,true);
-		require_code('form_templates');
-		$fields=form_input_list(do_lang_tempcode('USERNAME'),'','id',$entries,NULL,true);
 		$submit_name=do_lang_tempcode('VIEW_ACTION_LOGS');
 
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE_MEMBER'));
+		breadcrumb_set_self(do_lang_tempcode('VIEW_ACTION_LOGS'));
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'f2c6eda24e0e973aa7e253054f6683a5','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
@@ -143,8 +174,8 @@ class Module_admin_actionlog
 	 */
 	function choose_action()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE_MEMBER'))));
-		breadcrumb_set_self(do_lang_tempcode('CHOOSE_ACTION'));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTION_LOGS'))));
+		breadcrumb_set_self(do_lang_tempcode('RESULTS'));
 
 		$title=get_page_title('VIEW_ACTION_LOGS');
 
@@ -184,9 +215,9 @@ class Module_admin_actionlog
 			if ($filter_to_type!='')
 				$where.=' AND '.db_string_equal_to('l_the_type',$filter_to_type);
 			if ($filter_param_a!='')
-				$where.=' AND '.db_string_equal_to('l_param_a',$filter_param_a);
+				$where.=' AND l_param_a LIKE \''.db_encode_like('%'.$filter_param_a.'%').'\'';
 			if ($filter_param_b!='')
-				$where.=' AND '.db_string_equal_to('l_param_b',$filter_param_b);
+				$where.=' AND l_param_b LIKE \''.db_encode_like('%'.$filter_param_b.'%').'\'';
 			if ($id!=-1) $where.=' AND l_by='.strval($id);
 
 			// Fetch
@@ -201,9 +232,9 @@ class Module_admin_actionlog
 			if ($filter_to_type!='')
 				$where.=' AND '.db_string_equal_to('the_type',$filter_to_type);
 			if ($filter_param_a!='')
-				$where.=' AND '.db_string_equal_to('param_a',$filter_param_a);
+				$where.=' AND param_a LIKE \''.db_encode_like('%'.$filter_param_a.'%').'\'';
 			if ($filter_param_b!='')
-				$where.=' AND '.db_string_equal_to('param_b',$filter_param_b);
+				$where.=' AND param_b LIKE \''.db_encode_like('%'.$filter_param_b.'%').'\'';
 			if ($id!=-1) $where.=' AND the_user='.strval($id);
 
 			// Fetch
@@ -290,7 +321,7 @@ class Module_admin_actionlog
 	function view_action()
 	{
 		breadcrumb_set_self(do_lang_tempcode('ENTRY'));
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE_MEMBER')),array('_SELF:_SELF:list',do_lang_tempcode('CHOOSE_ACTION'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('VIEW_ACTION_LOGS')),array('_SELF:_SELF:list',do_lang_tempcode('RESULTS'))));
 
 		$mode=get_param('mode','ocf');
 		$id=get_param_integer('id');
