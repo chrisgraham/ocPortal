@@ -577,7 +577,7 @@ function do_emoticon(field_name,p,_opener)
 	{
 		element=document.getElementById(field_name);
 	}
-	element=ensure1_id(element,field_name);
+	element=ensure_true_id(element,field_name);
 
 	var title=p.title;
 	title=title.replace(/^.*: /,'');
@@ -600,7 +600,7 @@ function do_attachment(field_name,id,description)
 	if (!description) description='';
 
 	var element=opener.document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
+	element=ensure_true_id(element,field_name);
 
 	var comcode;
 	if (!is_comcode_xml(element))
@@ -614,7 +614,7 @@ function do_attachment(field_name,id,description)
 	insertTextboxOpener(element,comcode);
 }
 
-function ensure1_id(element,field_name) // Works around IE bug
+function ensure_true_id(element,field_name) // Works around IE bug
 {
 	var form=element.form;
 	var i;

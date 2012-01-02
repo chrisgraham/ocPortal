@@ -42,7 +42,7 @@ function setAttachment(field_name,number,filename)
 	if (typeof window.maxAttachments=='undefined') return;
 
 	var post=document.getElementById(field_name);
-	post=ensure1_id(post,field_name);
+	post=ensure_true_id(post,field_name);
 
 	var tmp_form=post.form;
 	if ((tmp_form) && (tmp_form.preview))
@@ -115,7 +115,7 @@ function doInput_html(field_name)
 	if (typeof window.insertTextboxWrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
-	post=ensure1_id(post,field_name);
+	post=ensure_true_id(post,field_name);
 	insertTextboxWrapping(post,"semihtml","");
 }
 
@@ -124,7 +124,7 @@ function doInput_code(field_name)
 	if (typeof window.insertTextboxWrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
-	post=ensure1_id(post,field_name);
+	post=ensure_true_id(post,field_name);
 	insertTextboxWrapping(post,"codebox","");
 }
 
@@ -133,7 +133,7 @@ function doInput_quote(field_name)
 	if (typeof window.insertTextboxWrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
-	post=ensure1_id(post,field_name);
+	post=ensure_true_id(post,field_name);
 	window.fauxmodal_prompt(
 		"{!ENTER_QUOTE_BY^#}",
 		'',
@@ -150,7 +150,7 @@ function doInput_box(field_name)
 	if (typeof window.insertTextboxWrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
-	post=ensure1_id(post,field_name);
+	post=ensure_true_id(post,field_name);
 	window.fauxmodal_prompt(
 		"{!ENTER_BOX_TITLE^#}",
 		'',
@@ -183,7 +183,7 @@ function doInput_menu(field_name)
 
 						var add;
 						var element=document.getElementById(field_name);
-						element=ensure1_id(element,field_name);
+						element=ensure_true_id(element,field_name);
 						if (is_comcode_xml(element))
 						{
 							add="<block><blockParam key=\"type\" val=\"tree\" /><blockParam key=\"caption\" val=\""+escape_html(vb)+"\" /><blockParam key=\"param\" val=\""+escape_html(va)+"\" />side_stored_menu</block>";
@@ -227,7 +227,7 @@ function doInput_list(field_name,add)
 	if (!add) add=[];
 
 	var post=document.getElementById(field_name);
-	post=ensure1_id(post,field_name);
+	post=ensure_true_id(post,field_name);
 	insertTextbox(post,"\n");
 	window.fauxmodal_prompt(
 		"{!ENTER_LIST_ENTRY^#}",
@@ -289,7 +289,7 @@ function doInput_hide(field_name)
 					function(vb)
 					{
 						var element=document.getElementById(field_name);
-						element=ensure1_id(element,field_name);
+						element=ensure_true_id(element,field_name);
 						if (vb)
 						{
 							if (is_comcode_xml(element))
@@ -342,7 +342,7 @@ function doInput_thumb(field_name,va)
 								if (!vc) vc='';
 
 								var element=document.getElementById(field_name);
-								element=ensure1_id(element,field_name);
+								element=ensure_true_id(element,field_name);
 								if (vb.toLowerCase()=='{!IMAGE^;}'.toLowerCase())
 								{
 									if (is_comcode_xml(element))
@@ -390,7 +390,7 @@ function doInput_attachment(field_name)
 			} else
 			{
 				var element=document.getElementById(field_name);
-				element=ensure1_id(element,field_name);
+				element=ensure_true_id(element,field_name);
 				if (is_comcode_xml(element))
 				{
 					insertTextbox(element,"<attachment>new_"+va+"</attachment>");
@@ -428,7 +428,7 @@ function doInput_url(field_name,va)
 					function(vb)
 					{
 						var element=document.getElementById(field_name);
-						element=ensure1_id(element,field_name);
+						element=ensure_true_id(element,field_name);
 						if (is_comcode_xml(element))
 						{
 							if (vb!=null) insertTextbox(element,"<url param=\""+escape_html(va)+"\">"+escape_html(vb)+"</url>");
@@ -513,7 +513,7 @@ function doInput_page(field_name)
 function _doInput_page(field_name,result,vc)
 {
 	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
+	element=ensure_true_id(element,field_name);
 	if (is_comcode_xml(element))
 	{
 		insertTextbox(element,"<page pageLink=\""+escape_html(result)+"\">"+escape_html(vc)+"</page>");
@@ -546,7 +546,7 @@ function doInput_email(field_name,va)
 						function(vb)
 						{
 							var element=document.getElementById(field_name);
-							element=ensure1_id(element,field_name);
+							element=ensure_true_id(element,field_name);
 							if (is_comcode_xml(element))
 							{
 								if (vb!==null) insertTextbox(element,"<email address=\""+escape_html(va)+"\">"+escape_html(vb)+"</email>");
@@ -569,7 +569,7 @@ function doInput_b(field_name)
 	if (typeof window.insertTextboxWrapping=='undefined') return;
 
 	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
+	element=ensure_true_id(element,field_name);
 	insertTextboxWrapping(element,"b","");
 }
 
@@ -578,7 +578,7 @@ function doInput_i(field_name)
 	if (typeof window.insertTextboxWrapping=='undefined') return;
 
 	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
+	element=ensure_true_id(element,field_name);
 	insertTextboxWrapping(element,"i","");
 }
 
@@ -588,7 +588,7 @@ function doInput_font(field_name)
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	var element=document.getElementById(field_name);
-	element=ensure1_id(element,field_name);
+	element=ensure_true_id(element,field_name);
 	var form=element.form;
 	var face=form.elements['f_face'];
 	var size=form.elements['f_size'];
