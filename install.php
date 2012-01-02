@@ -644,6 +644,8 @@ function step_3()
 	$tdatabase=new ocp_tempcode();
 	foreach (array_keys($databases) as $database)
 	{
+		if ((count($databases)==1) && ($database=='xml')) continue; // If they only have experimental XML option, they'll choose it - we don't want that - we want them to get the error
+
 		if (($database=='mysqli') && (!function_exists('mysqli_connect'))) continue;
 		if (($database=='mysql_dbx') && (!function_exists('dbx_connect'))) continue;
 		if (($database=='mysql') && (!function_exists('mysql_connect'))) continue;
