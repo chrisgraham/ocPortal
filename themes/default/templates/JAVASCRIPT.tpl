@@ -1692,7 +1692,7 @@ function markAllTopics()
 
 function setOpacity(element,fraction)
 {
-	if ((typeof element.faderKey!='undefined') && (element.faderKey) && (thumbFadeTimers[element.faderKey]))
+	if ((typeof element.faderKey!='undefined') && (element.faderKey) && (typeof window.thumbFadeTimers!='undefined') && (thumbFadeTimers[element.faderKey]))
 	{
 		try // Cross-frame issues may cause error
 		{
