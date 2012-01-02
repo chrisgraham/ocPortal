@@ -25,3 +25,6 @@
 {$BROWSER,ie6, .global_helper_panel \{ height: 450px; \}, .global_helper_panel \{ min-height: 450px; \} }
 
 {$BROWSER,safari,,input.buttonhyperlink \{ font-weight: bold; /* underline won't stick on most browsers so we'll bold instead */ \}}
+
+{$BROWSER,opera,,tt\, kbd\, samp \{ font-size: 1.25em; \}}
+

@@ -8,8 +8,8 @@
 <script type="text/javascript">// <![CDATA[
 	window.setTimeout(function () {
 		var element;
-		if (!window.opener) window.opener=window.parent;
-		element=opener.document.getElementById('{FIELD_NAME;}');
+		var target_window=window.opener?window.opener:window.parent;
+		element=target_window.document.getElementById('{FIELD_NAME;}');
 		element=ensure_true_id(element,'{FIELD_NAME;}');
 
 		var comcode;
@@ -26,7 +26,7 @@
 
 		if ('{$_GET%,save_to_id}'!='')
 		{
-			var ob=opener.areaedit_editors[element.id].document.$.getElementById('{$_GET%,save_to_id}');
+			var ob=target_window.areaedit_editors[element.id].document.$.getElementById('{$_GET%,save_to_id}');
 			ob.orig_title=comcode.replace(/^\s*/,'');
 			ob.title=comcode.replace(/^\s*/,'');
 
@@ -35,7 +35,7 @@
 				ob.parentNode.removeChild(ob);
 			}
 		
-			opener.areaedit_editors[element.id].updateElement();
+			target_window.areaedit_editors[element.id].updateElement();
 
 			if (typeof win.faux_close!='undefined')
 				win.faux_close();
@@ -58,7 +58,7 @@
 				message='{!ADDED_COMCODE_ONLY;}';
 			}
 
-			insertTextboxOpener(element,comcode);
+			target_window.insertTextbox(element,comcode,target_window.document.selection?target_window.document.selection:null);
 			window.fauxmodal_alert(
 				message,
 				function() {

@@ -563,7 +563,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				$params.=' '.$key.'="'.comcode_escape($val).'"';
 			}
-			return make_string_tempcode('<input class="ocp_keep_ui_controlled" title="['.$tag.''.escape_html($params).']'.escape_html($embed->evaluate()).'[/'.$tag.']" type="button" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+			return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.escape_html($params).']'.escape_html($embed->evaluate()).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
 		}
 	}
 
@@ -1213,7 +1213,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 					$_POST['_specify_url']=$url; // Little hack, as we need to read it from a POST
 					if (get_magic_quotes_gpc()) $_POST['_specify_url']=addslashes($_POST['_specify_url']);
-					$urls=get_url('_specify_url','','uploads/attachments',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true);
+					$urls=get_url('_specify_url','','uploads/filedump',1,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true);
 					$original_filename=rawurldecode(substr($url,strrpos($url,'/')+1));
 
 					if (url_is_local($urls[0]))

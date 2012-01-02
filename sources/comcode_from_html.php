@@ -222,7 +222,7 @@ function semihtml_to_comcode($semihtml)
 
 	@ini_set('pcre.backtrack_limit','10000000');
 	
-	$semihtml=preg_replace('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="button" [^>]*value="[^"]*"[^>]*/?'.'>#siU','${1}',$semihtml);
+	$semihtml=preg_replace('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','${1}',$semihtml);
 	$array_html_preg_replace=array();
 	$semihtml=str_replace('&#8203;<kbd','<kbd',$semihtml);
 	$semihtml=str_replace('</kbd>&#8203;','</kbd>',$semihtml);

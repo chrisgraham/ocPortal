@@ -343,6 +343,9 @@ function areaedit_init(element)
 	css+="#main_page_title { display: block !important }";
 	css+=".MsoNormal { margin: 0; }";
 	css+='kbd.ocp_keep,kbd.ocp_keep_block { background-color: #BABAFF; }';
+	css+='input.ocp_keep_ui_controlled,input.ocp_keep_ui_controlled:focus { border:1px dotted; text-align: center; color: buttontext; background: buttonface; }';
+	css+='input.ocp_keep_ui_controlled::selection { background: buttonface; }';
+	css+='input.ocp_keep_ui_controlled::-moz-selection { background: buttonface; }';
 	css+='.comcode_fake_table > div, .fp_col_block { outline: 1px dotted; margin: 1px 0; }';
 	for (counter=0;counter<linked_sheets.length;counter++)
 	{
@@ -449,6 +452,7 @@ function findTagsInEditor(editor,element)
 			}
 			if (comcodes[i].nodeName.toLowerCase()=='input')
 			{
+				comcodes[i].readOnly=true;
 				comcodes[i].contentEditable=true; // Undoes what ckeditor sets. Fixes weirdness with copy and paste in Chrome (adding extra block on end)
 				comcodes[i].ondblclick=function(event) {
 					var field_name=editor.name;
@@ -497,8 +501,9 @@ function findTagsInEditor(editor,element)
 							if (event.clientY) eventCopy.clientY=3000;
 
 							var self_ob=this;
-							if ((typeof this.rendered_tooltip=='undefined') || (this.tag_text!=tag_text))
+							if ((typeof this.rendered_tooltip=='undefined' && !self_ob.is_over) || (self_ob.tag_text!=tag_text))
 							{
+								self_ob.tag_text=tag_text;
 								self_ob.is_over=true;
 
 								var request=load_XML_doc(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub(false)),function(ajax_result_frame,ajax_result) {
@@ -510,7 +515,6 @@ function findTagsInEditor(editor,element)
 									}
 									if (typeof self_ob.rendered_tooltip!='undefined')
 									{
-										self_ob.tag_text=tag_text;
 										if (self_ob.is_over)
 										{
 											activateTooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'auto');
@@ -681,9 +685,9 @@ function insertTextbox(element,text,sel,plain_insert,html)
 			if (is_block || is_non_text_tag)
 			{
 				var button_text=is_block?'{!comcode:COMCODE_EDITABLE_BLOCK;*}':'{!comcode:COMCODE_EDITABLE_TAG;*}';
-				var matches=text.match(/^\s*\[(\w+)( .*)?\](.*)\[\/\w+\]\s*$/);
+				var matches=text.match(/^\s*\[(\w+)([ =].*)?\](.*)\[\/\w+\]\s*$/);
 				insert=getSelectedHTML(editor)+
-					('<input class="ocp_keep_ui_controlled" title="'+(html?matches[0].replace(/^\s*/,'').replace(/\s*$/,''):escape_html(matches[0].replace(/^\s*/,'').replace(/\s*$/,'')))+'" type="button" value="'+(button_text.replace('\{1\}',matches[is_block?3:1]))+'" />');
+					('<input class="ocp_keep_ui_controlled" size="45" title="'+(html?matches[0].replace(/^\s*/,'').replace(/\s*$/,''):escape_html(matches[0].replace(/^\s*/,'').replace(/\s*$/,'')))+'" readonly="readonly" type="text" value="'+(button_text.replace('\{1\}',matches[is_block?3:1]))+'" />');
 			} else
 			{
 				var tag_name=text.replace(/^\[/,'').replace(/[ \]].*$/,'');

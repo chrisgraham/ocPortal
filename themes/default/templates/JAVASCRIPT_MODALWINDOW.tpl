@@ -117,7 +117,7 @@ function fauxmodal_confirm(question,callback,title)
 function fauxmodal_alert(notice,callback,title)
 {
 	if (!callback) callback=function() {};
-	
+
 	if (!title) title='{!MESSAGE;}';
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
@@ -301,12 +301,12 @@ function ModalWindow()
 			for(var key in defaults) {
 				this[key] = (typeof options[key] != "undefined") ? options[key] : defaults[key] ;
 			}
-		
+
 			this.close(this.topWindow);
 			this.initOverlay();
 			this.initBox();
 		},
-	
+
 		close: function(win) {
 			var bi=this.topWindow.document.getElementById('body_inner');
 
@@ -316,7 +316,7 @@ function ModalWindow()
 
 				if (bi)
 				{
-					setOpacity(bi,1.0);
+					this.topWindow.setOpacity(bi,1.0);
 				}
 			}
 			if (this.type == "prompt") this.removeEvent(bi.parentNode, "click", this.clickout_cancel);
@@ -325,7 +325,7 @@ function ModalWindow()
 			this.removeEvent(document, "keyup", this.keyup);
 			this.opened = false;
 		},
-	
+
 		option: function(method) {
 			var win = this.topWindow; // The below call may end up killing our window reference (for nested alerts), so we need to grab it first
 			if(this[ method ]) {
@@ -339,7 +339,7 @@ function ModalWindow()
 			}
 			this.close(win);
 		},
-	
+
 		resetDimensions: function(width, height) { // Don't re-call this for an iframe-based overlay, doesn't work retro-actively on the iframe size (but CSS sized inards are fine)
 			var dim = this.getPageSize();
 
@@ -379,7 +379,7 @@ function ModalWindow()
 			this.resetDimensions(this.width,this.height);
 
 			this.inject(this.box);
-		
+
 			var container = this.element("div", {
 				'class': "standardbox_main_classic",
 				'styles' : {
@@ -415,7 +415,7 @@ function ModalWindow()
 					}));
 				}
 			}
-		
+
 			var buttonContainer = this.element("div", {
 				'class': "proceed_button"
 			});
@@ -442,6 +442,8 @@ function ModalWindow()
 					_this.option('yes');
 				}
 			};
+
+			this.addEvent( this.box, "click", function(e) { cancelBubbling(e); } );
 
 			switch(this.type) {
 				case "iframe":
@@ -611,41 +613,39 @@ function ModalWindow()
 					container.appendChild(buttonContainer);
 					break;
 			}
-		
-			this.addEvent( this.box, "click", function(e) { cancelBubbling(e); } );
 
 			this.box.appendChild(container);
-		
+
 			if(this.input) this.input.focus();
 			else if (typeof this.box.getElementsByTagName('button')[0]!='undefined') this.box.getElementsByTagName('button')[0].focus();
-		
+
 			if(this.yes || this.yes != false) this.addEvent(document, "keyup", this.keyup );
 		},
-	
+
 		initOverlay: function() {
 			var bi=this.topWindow.document.getElementById('body_inner');
 			if (bi)
 			{
 				if (typeof window.nereidFade!='undefined')
 				{
-					setOpacity(bi,1.0);
+					this.topWindow.setOpacity(bi,1.0);
 					nereidFade(bi,30,30,-5);
 				} else
 				{
-					setOpacity(bi,0.3);
+					this.topWindow.setOpacity(bi,0.3);
 				}
 			}
 		},
-	
+
 		inject: function(el) {
 			this.topWindow.document.body.appendChild(el);
 		},
-	
+
 		remove: function(el, win) {
 			if (!win) win = this.topWindow;
 			win.document.body.removeChild(el);
 		},
-	
+
 		element: function() {
 			var tag = arguments[0], options = arguments[1];
 			var el = this.topWindow.document.createElement(tag);
@@ -673,35 +673,35 @@ function ModalWindow()
 			}
 			return el;
 		},
-	
+
 		addEvent: function(o, e, f) {
 			if(o) {
 				if(o.addEventListener) o.addEventListener(e, f, false);
 				else if(o.attachEvent) o.attachEvent( 'on'+e , f);
 			}
 		},
-	
+
 		removeEvent: function(o, e, f) {
 			if(o) {
 				if(o.removeEventListener) o.removeEventListener(e, f, false);
 				else if(o.detachEvent) o.detachEvent('on'+e, f);
 			}
 		},
-	
+
 		setStyles: function(e, o) {
 			for(var k in o) {
 				this.setStyle(e, k, o[k]);
 			}
 		},
-	
+
 		setStyle: function(e, p, v) {
 			if (p == 'opacity') {
-				setOpacity(e,v);
+				this.topWindow.setOpacity(e,v);
 			} else {
 				e.style[p] = v;
 			}
 		},
-		
+
 		getPageSize: function() {
 			return { 'pageWidth': this.topWindow.getWindowScrollWidth(this.topWindow), 'pageHeight': this.topWindow.getWindowScrollHeight(this.topWindow), 'windowWidth' : this.topWindow.getWindowWidth(), 'windowHeight': this.topWindow.getWindowHeight() };
 		}
