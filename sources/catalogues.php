@@ -202,14 +202,17 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 			list($order_by,$direction)=explode(' ',$_order_by);
 			if (($order_by!='rating') && ($order_by!='add_date'))
 			{
+				$found=false;
 				foreach ($fields as $i=>$field)
 				{
 					if ($order_by==$field['id'])
 					{
 						$order_by=strval($i);
+						$found=true;
 						break;
 					}
 				}
+				if (!$found) $order_by='0'; // Could not find
 			}
 		}
 	} else
