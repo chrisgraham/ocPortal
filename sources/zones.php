@@ -642,7 +642,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			}
 			if (($row===NULL) && ((isset($map['cache'])) && ($map['cache']=='1') || (isset($map['quick_cache'])) && ($map['quick_cache']=='1')))
 			{
-				$row=array('cached_for'=>$codename,'cache_on'=>'array()','cache_ttl'=>60);
+				$row=array('cached_for'=>$codename,'cache_on'=>'$map','cache_ttl'=>60);
 			}
 		}
 		if ($row!==NULL)
