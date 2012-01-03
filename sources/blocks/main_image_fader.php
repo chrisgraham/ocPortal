@@ -40,6 +40,19 @@ class Block_main_image_fader
 	}
 	
 	/**
+	 * Standard modular cache function.
+	 *
+	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
+	 */
+	function cacheing_environment()
+	{
+		$info=array();
+		$info['cache_on']='array(array_key_exists(\'order\',$map)?$map[\'order\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['ttl']=60;
+		return $info;
+	}
+	
+	/**
 	 * Standard modular run function.
 	 *
 	 * @param  array		A map of parameters.
