@@ -723,11 +723,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IS_STAFF':
 				if (isset($GLOBALS['FORUM_DRIVER']))
 					$value=$GLOBALS['FORUM_DRIVER']->is_staff(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member())?'1':'0';
+				else $value='0';
 				break;
 
 			case 'IS_SUPER_ADMIN':
 				if (isset($GLOBALS['FORUM_DRIVER']))
 					$value=$GLOBALS['FORUM_DRIVER']->is_super_admin(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member())?'1':'0';
+				else $value='0';
 				break;
 
 			case 'PHOTO':
