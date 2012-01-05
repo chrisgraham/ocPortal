@@ -50,19 +50,20 @@ function load_html_page($string,$file_base=NULL)
 			{
 				$old_link=$matches[1][$i];
 
+				$zone='_SELF';
+				if ($old_link[0]=='/')
+				{
+					$old_link=substr($old_link,1);
+					$zone='';
+				}
+				$possible_zone=str_replace('/','_',dirname($old_link));
+				if (($possible_zone!='') && ($possible_zone!=get_zone_name()) && (file_exists(get_file_base().'/'.$possible_zone)))
+				{
+					$zone=$possible_zone;
+				}
+
 				if (substr($old_link,-4)=='.htm')
 				{
-					$zone='_SELF';
-					if ($old_link[0]=='/')
-					{
-						$old_link=substr($old_link,1);
-						$zone='';
-					}
-					$possible_zone=str_replace('/','_',dirname($old_link));
-					if (($possible_zone!='') && ($possible_zone!=get_zone_name()) && (file_exists(get_file_base().'/'.$possible_zone)))
-					{
-						$zone=$possible_zone;
-					}
 					$_new_link=build_url(array('page'=>basename(substr($old_link,0,strlen($old_link)-4))),$zone);
 					$new_link=$_new_link->evaluate();
 				}
