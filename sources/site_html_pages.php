@@ -73,7 +73,17 @@ function load_html_page($string,$file_base=NULL)
 					$new_link=$_new_link->evaluate();
 				} else
 				{
-					$new_link=get_base_url().'/uploads/website_specific/'.$old_link;
+					$new_link=$old_link;
+					if (url_is_local($old_link))
+					{
+						if (is_file(get_custom_file_base().'/'.dirname($string).'/'.$old_link))
+						{
+							$new_link=get_base_url().'/'.dirname($string).'/'.$old_link;
+						} else
+						{
+							$new_link=get_base_url().'/uploads/website_specific/'.$old_link;
+						}
+					}
 				}
 
 				$html=str_replace(' '.$attribute.'="'.$old_link.'"',' '.$attribute.'="'.$new_link.'"',$html);
