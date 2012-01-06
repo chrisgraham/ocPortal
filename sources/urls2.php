@@ -445,7 +445,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
 			}
 
 			// Deprecate
-			$GLOBALS['SITE_DB']->query_update('url_id_monikers',array('m_deprecated'=>1),array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id),'',1); // Deprecate
+			$GLOBALS['SITE_DB']->query_update('url_id_monikers',array('m_deprecated'=>1),array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id,'m_deprecated'=>0),'',1); // Deprecate
 
 			// Deprecate anything underneath
 			global $CONTENT_OBS;
