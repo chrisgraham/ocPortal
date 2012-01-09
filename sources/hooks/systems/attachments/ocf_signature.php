@@ -31,7 +31,7 @@ class Hook_attachments_ocf_signature
 	function run($id,$connection)
 	{
 		if (get_forum_type()!='ocf') return false; // Shouldn't be here, but maybe it's left over somehow
-		return get_member()==intval($id);
+		return true;
 	}
 
 }
