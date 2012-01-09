@@ -31,10 +31,10 @@ class Hook_checklist_copyright
 		$copyright=get_option('copyright');
 
 		$matches=array();
-		if ((preg_match('#[^\d]\d\d\d\d-(\d\d\d\d)([^\d]|$)#',$copyright,$matches)==0) && (preg_match('#[^\d](\d\d\d\d)([^\d]|$)#',$copyright,$matches)==0))
+		if ((preg_match('#[^\d]\d\d\d\d-(\d\d(\d\d)?)([^\d]|$)#',$copyright,$matches)==0) && (preg_match('#[^\d](\d\d(\d\d)?)([^\d]|$)#',$copyright,$matches)==0))
 			return array();
 
-		if (intval($matches[1])<intval(date('Y')))
+		if ((intval($matches[1])<intval(date('Y'))) && (intval($matches[1])<intval(substr(date('Y'),2))))
 		{
 			$status=0;
 		} else
