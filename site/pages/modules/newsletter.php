@@ -350,7 +350,7 @@ class Module_newsletter
 		}
 		elseif ($old_confirm!=0) // Reconfirm
 		{
-			$this->send_confirmation($email,$old_confirm,$forename,$surname);
+			$this->send_confirmation($email,$old_confirm,NULL,$forename,$surname);
 			return inform_screen($title,do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email)));
 		}
 
@@ -453,7 +453,7 @@ class Module_newsletter
 	 * @param  string				Subscribers forename
 	 * @param  string				Subscribers surname
 	 */
-	function send_confirmation($email,$code_confirm,$password=NULL,$forename,$surname)
+	function send_confirmation($email,$code_confirm,$password,$forename,$surname)
 	{
 		if (is_null($password)) $password=do_lang('NEWSLETTER_PASSWORD_ENCRYPTED');
 	
