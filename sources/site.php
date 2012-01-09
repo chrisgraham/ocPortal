@@ -157,7 +157,7 @@ function init__site()
 		if (($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))
 		{
 			global $NON_PAGE_SCRIPT;
-			if (($NON_PAGE_SCRIPT==0) && (!has_page_access(get_member(),get_page_name(),$ZONE['zone_name'],true)))
+			if (($NON_PAGE_SCRIPT==0) && ((get_page_name()!=$ZONE['zone_default_page']) || ($real_zone!='')) && (!has_page_access(get_member(),get_page_name(),$ZONE['zone_name'],true)))
 			{
 				access_denied('PAGE_ACCESS');
 			}
