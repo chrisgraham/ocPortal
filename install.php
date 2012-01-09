@@ -287,9 +287,10 @@ function step_1()
 	global $MYFILE;
 	if (!@is_resource($MYFILE)) // Do an integrity check - missing corrupt files
 	{
-		if (array_key_exists('skip_disk_checks',$_GET))
+		if ((array_key_exists('skip_disk_checks',$_GET)) || (file_exists(get_file_base().'/.git')))
 		{
-			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('INSTALL_SLOW_SERVER'))));
+			if (!file_exists(get_file_base().'/.git'))
+				$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('INSTALL_SLOW_SERVER'))));
 		} else
 		{
 			$files=@unserialize(file_get_contents(get_file_base().'/data/files.dat',FILE_TEXT));
