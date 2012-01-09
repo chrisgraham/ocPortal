@@ -34,7 +34,9 @@
 					}
 					else
 					{
-						window.location.reload();
+						window.setTimeout(function() { {$,Firefox needs us to wait a bit}
+							window.location.reload();
+						},500);
 					}
 				{+END}
 			});

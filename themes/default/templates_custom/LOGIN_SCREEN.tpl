@@ -3,8 +3,20 @@
 {$SET,login_screen,1}
 
 <div class="login_page">
+	{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
+		<h2>{!facebook:LOGIN_NATIVE_HEADER}</h2>
+
+		<p>{!facebook:LOGIN_USING_FACEBOOK}</p>
+
+		<span xmlns:fb="http://api.facebook.com/1.0/">
+			<fb:login-button size="large" scope="email,user_birthday"></fb:login-button>
+		</span>
+		
+		<h2>{!facebook:LOGIN_NATIVE_HEADER,{$SITE_NAME*}}</h2>
+	{+END}
+
 	{+START,BOX,,,light}
-		{!LOGIN_TEXT,<a href="{JOIN_LINK*}">{!JOIN_HERE}</a>}
+		{!LOGIN_TEXT,<a href="{JOIN_LINK*}"><strong>{!JOIN_HERE}</strong></a>}
 	{+END}
 
 	<form onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete">
@@ -76,21 +88,9 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{$BLOCK,block=openid,failsafe=1}}
-		<hr />
-
-		<p>OpenID login</p>
+		<h2>Login using OpenID</h2>
 
 		{$BLOCK,block=openid}
-	{+END}
-
-	{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
-		<hr />
-
-		<p>{!facebook:LOGIN_USING_FACEBOOK}</p>
-
-		<span xmlns:fb="http://api.facebook.com/1.0/">
-			<fb:login-button scope="email,user_birthday"></fb:login-button>
-		</span>
 	{+END}
 </div>
 

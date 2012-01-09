@@ -72,16 +72,36 @@ function handle_facebook_connection_login($current_logged_in_member)
 	global $FACEBOOK_CONNECT;
 	$facebook_uid=$FACEBOOK_CONNECT->getUser();
 	if (is_null($facebook_uid)) return $current_logged_in_member;
-	$details=$FACEBOOK_CONNECT->api('/me');
+	try
+	{
+		$details=$FACEBOOK_CONNECT->api('/me');
+	}
+	catch (Exception $e)
+	{
+		return $current_logged_in_member;
+	}
+	$details=array_merge($details,$FACEBOOK_CONNECT->api('/me',array('fields'=>'picture','type'=>'normal')));
 	$username=$details['name'];
+	$photo_url=array_key_exists('picture',$details)?$details['picture']:'';
+	$avatar_url=($photo_url=='')?mixed():$photo_url;
+	$photo_thumb_url='';
+	if ($photo_url!='') $photo_thumb_url=$photo_url;
 	$email_address=array_key_exists('email',$details)?$details['email']:'';
 	$timezone=mixed();
 	if (isset($details['timezone']))
 		$timezone=convert_timezone_offset_to_formal_timezone($details['timezone']);
 	$language=mixed();
-	if (isset($details['languages'][0]->id))
-		$language=strtoupper($details['languages'][0]->id);
-	if (!file_exists(get_custom_file_base().'/lang_custom/'.$language)) $language='';
+	if (isset($details['locale']))
+		$language=strtoupper($details['locale']);
+	if ($language!==NULL)
+	{
+		if (!file_exists(get_custom_file_base().'/lang_custom/'.$language))
+		{
+			$language=preg_replace('#\_.*$#','',$language);
+			if (!file_exists(get_custom_file_base().'/lang_custom/'.$language))
+				$language='';
+		}
+	}
 	$dob=array_key_exists('birthday',$details)?$details['birthday']:'';
 	$dob_day=mixed();
 	$dob_month=mixed();
@@ -99,6 +119,13 @@ function handle_facebook_connection_login($current_logged_in_member)
 	$member=array_key_exists(0,$member_row)?$member_row[0]['id']:NULL;
 	if (is_guest($member)) $member=NULL;
 
+	/*if (!is_null($member)) // Useful for debugging
+	{
+		require_code('ocf_members_action2');
+		ocf_delete_member($member);
+		$member=NULL;
+	}*/
+
 	// If logged in before using Facebook, see if they've changed their name or email or timezone on Facebook -- if so, try and update locally to match
 	if (!is_null($member))
 	{
@@ -106,20 +133,26 @@ function handle_facebook_connection_login($current_logged_in_member)
 			return $current_logged_in_member; // User has an active login, and the Facebook account is bound to a DIFFERENT login. Take precedence to the other login that is active on top of this
 
 		$last_visit_time=$member[0]['m_last_visit_time'];
-		if ($last_visit_time>5*60*60)
+		//if ($last_visit_time>5*60*60)		No need, this is only happening for a new session
 		{
 			if ($timezone!==NULL)
 			{
 				if (tz_time(time(),$timezone)==tz_time(time(),$member[0]['m_timezone_offset'])) $timezone=$member[0]['m_timezone_offset']; // If equivalent, don't change
 			}
-			if (($username!=$member[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member[0]['m_timezone_offset'])) || ($email_address!=$member[0]['m_email_address']))
+			//if (($username!=$member[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member[0]['m_timezone_offset'])) || ($email_address!=$member[0]['m_email_address']))
 			{
 				$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
 				if (!is_null($test)) // Make sure there's no conflict
 				{
-					$update_map=array('m_username'=>$username,'m_email_address'=>$email_address);
+					$update_map=array('m_username'=>$username,'m_email_address'=>$email_address,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);
 					if ($timezone!==NULL)
 						$update_map['m_timezone_offset']=$timezone;
+					if ($avatar_url!==NULL)
+					{
+						$update_map['m_avatar_url']=$avatar_url;
+						$update_map['m_photo_url']=$photo_url;
+						$update_map['m_photo_thumb_url']=$photo_thumb_url;
+					}
 					$GLOBALS['FORUM_DB']->query_update('f_members',$update_map,array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>strval($facebook_uid)),'',1);
 				}
 			}
@@ -163,7 +196,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 			exit();
 		} else // Actualiser
 		{
-			$member=ocf_member_external_linker(post_param('username',$username)/*user may have customised username*/,$facebook_uid,'facebook',false,$email_address,$dob_day,$dob_month,$dob_year,$timezone,$language);
+			$member=ocf_member_external_linker(post_param('username',$username)/*user may have customised username*/,$facebook_uid,'facebook',false,$email_address,$dob_day,$dob_month,$dob_year,$timezone,$language,$avatar_url,$photo_url,$photo_thumb_url);
 		}
 	}
 

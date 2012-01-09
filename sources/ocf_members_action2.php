@@ -159,9 +159,12 @@ function ocf_member_external_linker_ask($username,$type,$email_address='',$dob_d
  * @param  ?integer		Auto-detected DOB year (NULL: unknown)
  * @param  ?ID_TEXT		Auto-detected Timezone (NULL: unknown)
  * @param  ?ID_TEXT		Auto-detected Language (NULL: unknown)
+ * @param  ?URLPATH		The URL to the member's avatar (blank: none) (NULL: choose one automatically).
+ * @param  URLPATH		The URL to the member's photo (blank: none).
+ * @param  URLPATH		The URL to the member's photo thumbnail (blank: none).
  * @return MEMBER			The member ID for the finished off profile.
  */
-function ocf_member_external_linker($username,$password,$type,$email_check=true,$email_address='',$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$language=NULL)
+function ocf_member_external_linker($username,$password,$type,$email_check=true,$email_address='',$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$language=NULL,$avatar_url=NULL,$photo_url='',$photo_thumb_url='')
 {
 	// Read in data
 	$email_address=trim(post_param('email_address',$email_address));
@@ -218,7 +221,7 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 
 	// Add member
 	require_code('ocf_members_action');
-	$ret=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,NULL,1,time(),time(),'',NULL,'',0,1,$reveal_age,'','','',1,1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),'',false,$type,'');
+	$ret=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,NULL,1,time(),time(),'',$avatar_url,'',0,1,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),'',false,$type,'');
 	return $ret;
 }
 
