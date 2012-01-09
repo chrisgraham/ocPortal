@@ -40,8 +40,12 @@ function dload_script()
 		@exit(get_option('closed'));
 	}
 
-	if ((get_param('for_session','-1')!=md5(strval(get_session_id()))) && (get_option('anti_leech')=='1') && (ocp_srv('HTTP_REFERER')!=''))
-		warn_exit(do_lang_tempcode('LEECH_BLOCK'));
+	global $SITE_INFO;
+	if ((!is_guest()) || (!isset($SITE_INFO['any_guest_cached_too'])) || ($SITE_INFO['any_guest_cached_too']=='0'))
+	{
+		if ((get_param('for_session','-1')!=md5(strval(get_session_id()))) && (get_option('anti_leech')=='1') && (ocp_srv('HTTP_REFERER')!=''))
+			warn_exit(do_lang_tempcode('LEECH_BLOCK'));
+	}
 
 	require_lang('downloads');
 
