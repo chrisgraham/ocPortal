@@ -9,7 +9,12 @@
 			{+START,IF,{$HAS_SPECIFIC_PERMISSION,show_user_browsing}}
 				<p class="associated_details">
 					{+START,IF_EMPTY,{AT_URL}}
-						{LOCATION}
+						{+START,IF_NON_EMPTY,{AT_URL}}
+							{LOCATION}
+						{+END}
+						{+START,IF_EMPTY,{AT_URL}}
+							<em>{!UNKNOWN}</em>
+						{+END}
 					{+END}
 					{+START,IF_NON_EMPTY,{AT_URL}}
 						<a href="{AT_URL*}">{LOCATION}</a>

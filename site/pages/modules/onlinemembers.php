@@ -108,25 +108,26 @@ class Module_onlinemembers
 					if (addon_installed('stats'))
 					{
 						$test=$GLOBALS['SITE_DB']->query_value_null_ok('stats','ip',array('the_user'=>-$row['the_session']));
-						if (!is_null($test))
+						if ((!is_null($test)) && ($test!=''))
 						{
 							$ip=$test;
 						} else
 						{
 							$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT ip FROM '.get_table_prefix().'stats WHERE ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\' ORDER BY date_and_time DESC');
-							if (!is_null($test)) $ip=$test;
+							if ((!is_null($test)) && ($test!='')) $ip=$test;
 						}
 					}
 				} else
 				{
 					$test=$GLOBALS['FORUM_DRIVER']->get_member_ip($member);
-					if (!is_null($test)) $ip=$test;
+					if ((!is_null($test)) && ($test!='')) $ip=$test;
 				}
 			}
 
 			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member,false,$name);
 
-			$rows->attach(do_template('OCF_MEMBER_ONLINE_ROW',array('_GUID'=>'2573786f3bccf9e613b125befb3730e8','IP'=>$ip,'AT_URL'=>$at_url,'LOCATION'=>$location,'MEMBER'=>$link,'TIME'=>integer_format(intval((time()-$last_activity)/60)))));
+			if ($ip!='') // CRON?
+				$rows->attach(do_template('OCF_MEMBER_ONLINE_ROW',array('_GUID'=>'2573786f3bccf9e613b125befb3730e8','IP'=>$ip,'AT_URL'=>$at_url,'LOCATION'=>$location,'MEMBER'=>$link,'TIME'=>integer_format(intval((time()-$last_activity)/60)))));
 		}
 
 		return do_template('OCF_MEMBERS_ONLINE_SCREEN',array('_GUID'=>'2f63e2926c5a4690d905f97661afe6cc','TITLE'=>$title,'ROWS'=>$rows));
