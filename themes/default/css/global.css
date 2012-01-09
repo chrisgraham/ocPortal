@@ -3663,6 +3663,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 
 .menu_type__zone {
 	font-size: 0.9em;
+	max-height: 15px;
 }
 
 .menu_type__zone ul {
@@ -3686,6 +3687,10 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	display: inline;
 	padding: 0;
 	list-style-type: none;
+}
+
+.menu_type__zone li * {
+	vertical-align: middle;
 }
 
 .menu_type__zone .divider {
