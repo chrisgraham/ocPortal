@@ -568,9 +568,9 @@ class Module_admin_version
 
 			$GLOBALS['SITE_DB']->create_table('notifications_enabled',array(
 				'id'=>'*AUTO',
-				'l_member_id'=>'*USER',
-				'l_notification_code'=>'*ID_TEXT',
-				'l_code_category'=>'*SHORT_TEXT',
+				'l_member_id'=>'USER',
+				'l_notification_code'=>'ID_TEXT',
+				'l_code_category'=>'SHORT_TEXT',
 				'l_setting'=>'INTEGER',
 			));
 			$GLOBALS['SITE_DB']->create_index('notifications_enabled','l_member_id',array('l_member_id','l_notification_code'));
