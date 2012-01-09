@@ -41,7 +41,7 @@ class Hook_Preview_comcode_tag
 	{
 		require_code('comcode_add');
 
-		$comcode=_get_preview_environment_comcode();
+		$comcode=_get_preview_environment_comcode(post_param('tag'));
 		$temp_tpl=comcode_to_tempcode($comcode[0]);
 
 		return array($temp_tpl,NULL);

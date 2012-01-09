@@ -323,6 +323,17 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								continue;
 							}
 						}
+					} else
+					{
+						if (($use_pos!=22) && ((($in_semihtml) || ($in_html)) && (($potential_tag=='html') || ($potential_tag=='semihtml'))) && (!$in_code_tag))
+						{
+							$ahc=strpos($ahead,']');
+							if ($ahc!==false)
+							{
+								$pos+=$ahc+1;
+								continue;
+							}
+						}
 					}
 				}
 
@@ -1189,7 +1200,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 										$ahead=substr($comcode,$pos,20);
 										$ahead_lower=strtolower($ahead);
 										$matches=array();
-										$entity=preg_match('#(\#)?([\w]*);#',$ahead_lower,$matches)!=0; // If it is a SAFE entity, use it
+										$entity=preg_match('#^(\#)?([\w]*);#',$ahead_lower,$matches)!=0; // If it is a SAFE entity, use it
 
 										if (($entity) && (!$in_code_tag))
 										{
@@ -1269,20 +1280,25 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE',$current_tag),strrpos(substr($comcode,0,$pos),'['),$comcode,$check_only);
 						}
 						$has_it=false;
-						foreach ($tag_stack as $t)
+						foreach (array_reverse($tag_stack) as $t)
 						{
 							if ($t[0]==$current_tag)
 							{
 								$has_it=true;
 								break;
 							}
+							if ((($is_all_semihtml) || ($in_semihtml)) && (($current_tag=='html') || ($current_tag=='semihtml'))) // Only search one level for this
+								break;
 						}
 						if ($has_it)
 						{
 							$_last=array_pop($tag_stack);
 							if ($_last[0]!=$current_tag)
 							{
-								if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
+								if (!$lax)
+								{
+									return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
+								}
 								do
 								{
 									$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
@@ -1306,11 +1322,13 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							}
 						} else
 						{
-							if (!$lax)
+							$extraneous_semihtml=((!$is_all_semihtml) && (!$in_semihtml)) || (($current_tag!='html') && ($current_tag!='semihtml'));
+							if ((!$lax) && ($extraneous_semihtml))
 							{
 								$_last=array_pop($tag_stack);
 								return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
 							}
+							$status=CCP_NO_MANS_LAND;
 							break;
 						}
 
@@ -1379,7 +1397,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 						array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
 
-						list ($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+						list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 						if ($in_code_tag) $code_nest_stack=0;
 					}
 
@@ -1435,7 +1453,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
 
-					list ($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					if ($in_code_tag) $code_nest_stack=0;
 
 					$tag_output->attach($tag_raw);
@@ -1454,7 +1472,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
 
-					list ($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					if ($in_code_tag) $code_nest_stack=0;
 
 					$tag_output->attach($tag_raw);
@@ -1486,7 +1504,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
 
-					list ($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					if ($in_code_tag) $code_nest_stack=0;
 
 					$tag_output->attach($tag_raw);
@@ -1507,7 +1525,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
 
-					list ($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					if ($in_code_tag) $code_nest_stack=0;
 
 					$tag_output->attach($tag_raw);

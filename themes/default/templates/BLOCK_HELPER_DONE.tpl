@@ -12,23 +12,23 @@
 		element=target_window.document.getElementById('{FIELD_NAME;}');
 		element=ensure_true_id(element,'{FIELD_NAME;}');
 
-		var comcode;
-	
+		var comcode,comcode_semihtml;
 		if (is_comcode_xml(element))
 		{
-			comcode='<br /><br />{COMCODE_XML^;/}';
+			comcode='<br /><br />{COMCODE_XML/^;}';
+			comcode_semihtml=comcode;
 		} else
 		{
-			comcode='{COMCODE^;/}';
+			comcode='{COMCODE/^;}';
+			comcode_semihtml='{COMCODE_SEMIHTML/^;}';
 		}
-
 		var win=window;
-
 		if ('{$_GET%,save_to_id}'!='')
 		{
 			var ob=target_window.areaedit_editors[element.id].document.$.getElementById('{$_GET%,save_to_id}');
-			ob.orig_title=comcode.replace(/^\s*/,'');
-			ob.title=comcode.replace(/^\s*/,'');
+			var input_container=document.createElement('div');
+			setInnerHTML(input_container,comcode_semihtml.replace(/^\s*/,''));
+			ob.parentNode.replaceChild(input_container.childNodes[0],ob);
 
 			if ('{$_POST%,_delete}'=='1')
 			{
@@ -58,7 +58,7 @@
 				message='{!ADDED_COMCODE_ONLY;}';
 			}
 
-			target_window.insertTextbox(element,comcode,target_window.document.selection?target_window.document.selection:null);
+			target_window.insertTextbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
 			window.fauxmodal_alert(
 				message,
 				function() {

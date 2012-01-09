@@ -92,7 +92,7 @@ function _get_details_comcode_tags()
 		'url'=>array('param','title','target'),
 		'email'=>array('param','title','subject','body'),
 		'reference'=>array('type','param'),
-		'page'=>array('param','caption'),
+		'page'=>array('param'),
 		'snapback'=>array('param','forum'),
 		'post'=>array('param','forum'),
 		'topic'=>array('param','forum')
@@ -289,7 +289,7 @@ function comcode_helper_script()
 		require_code('comcode_text');
 		$defaults=parse_single_comcode_tag(get_param('parse_defaults','',true),$actual_tag);
 
-		$default_embed=array_key_exists('',$defaults)?$defaults['']:get_param('default','');
+		$default_embed=array_key_exists('',$defaults)?('[semihtml]'.$defaults[''].'[/semihtml]'):get_param('default','');
 
 		$embed_required=true;
 		if ($tag=='contents') $embed_required=false;
@@ -412,7 +412,7 @@ function comcode_helper_script()
 
 						if (($tag=='attachment') && ($param=='thumb_url'))
 						{
-							$field=form_input_tree_list(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_thumb_url'),'thumb_url','','choose_filedump_file',array('only_images'=>true),false,'',false);
+							$field=form_input_tree_list(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_thumb_url'),'thumb_url','','choose_filedump_file',array('only_images'=>true),false,$default,false);
 							$fields_advanced->attach($field);
 						} else
 						{
@@ -531,7 +531,16 @@ function comcode_helper_script()
 		{
 			if (!$done_tag_contents)
 			{
-				$fields->attach(form_input_line(do_lang_tempcode('TAG_CONTENTS'),protect_from_escaping(do_lang('COMCODE_TAG_'.$tag.'_EMBED')),'tag_contents',$default_embed,$embed_required));
+				$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_EMBED');
+				$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
+				$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
+				if ($supports_comcode)
+				{
+					$fields->attach(form_input_line_comcode(do_lang_tempcode('TAG_CONTENTS'),protect_from_escaping($descriptiont),'tag_contents',$default_embed,$embed_required));
+				} else
+				{
+					$fields->attach(form_input_line(do_lang_tempcode('TAG_CONTENTS'),protect_from_escaping($descriptiont),'tag_contents',$default_embed,$embed_required));
+				}
 			}
 		}
 
@@ -574,12 +583,14 @@ function comcode_helper_script()
 		if (($tag=='attachment') && (post_param_integer('_safe',0)==1)) $tag='attachment_safe';
 
 		list($comcode,$bparameters)=_get_preview_environment_comcode($tag);
-		if($tag=='sections' || $tag=='big_tabs' || $tag=='tabs' || $tag=='list')
+		if ($tag=='sections' || $tag=='big_tabs' || $tag=='tabs' || $tag=='list')
 			$comcode_xml=$bparameters;
 		else
 			$comcode_xml='<'.$tag.$bparameters.'>'.post_param('tag_contents','').'</'.$tag.'>';
-		
-		$content=do_template('BLOCK_HELPER_DONE',array('TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode));
+
+		$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
+
+		$content=do_template('BLOCK_HELPER_DONE',array('TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
 	}
 
 	$content->handle_symbol_preprocessing();

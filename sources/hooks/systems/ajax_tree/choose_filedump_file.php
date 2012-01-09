@@ -44,6 +44,8 @@ class Hook_choose_filedump_file
 			$files=get_directory_contents($fullpath,'',false,false);
 			foreach ($files as $f)
 			{
+				$description=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>basename($f),'path'=>$id.'/'));
+
 				if ((isset($options['attachment_ready'])) && ($options['attachment_ready']))
 				{
 					$entry_id='url_'.'uploads/filedump/'.(($id=='')?'':(rawurlencode($id).'/')).rawurlencode($f);
@@ -60,7 +62,7 @@ class Hook_choose_filedump_file
 				} else
 				{
 					if ((!isset($options['only_images'])) || (!$options['only_images']) || (is_image($f)))
-						$out.='<entry id="'.xmlentities($entry_id).'" title="'.xmlentities($f).'" selectable="true"></entry>';
+						$out.='<entry id="'.xmlentities($entry_id).'" title="'.xmlentities($f).'" description="'.xmlentities(is_null($description)?$f:get_translated_text($description)).'" selectable="true"></entry>';
 				}
 			}
 

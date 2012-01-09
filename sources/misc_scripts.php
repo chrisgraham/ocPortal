@@ -888,7 +888,10 @@ function block_helper_script()
 		$comcode_xml='<block>'.$bparameters_xml.$block.'</block>';
 		$tempcode='{$BLOCK,block='.$block.$bparameters_tempcode.'}';
 		if ($type_wanted=='template') $comcode=$tempcode; // This is what will be written in
-		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'575d6c8120d6001c8156560be518f296','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$block,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode));
+
+		$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
+
+		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'575d6c8120d6001c8156560be518f296','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$block,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
 	}
 
 	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'CONTENT'=>$content));

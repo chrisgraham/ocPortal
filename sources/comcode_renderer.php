@@ -564,7 +564,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				$params.=' '.$key.'="'.comcode_escape($val).'"';
 			}
-			return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.escape_html($params).']'.escape_html($embed->evaluate()).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+			return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.(escape_html($embed->evaluate())).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
 		}
 	}
 

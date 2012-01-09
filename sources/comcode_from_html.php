@@ -210,6 +210,17 @@ function semihtml_to_comcode_wrap($matches)
 }
 
 /**
+ * Extract underlying Comcode from an editor Comcode-management button. preg_replace_callback callback
+ *
+ * @param  array			Array of matches
+ * @return string			Substituted text
+ */
+function debuttonise($matches)
+{
+	return html_entity_decode($matches[1],ENT_QUOTES,get_charset());
+}
+
+/**
  * Convert Semi-HTML into comcode. Cleanup where possible
  *
  * @param  LONG_TEXT		The Semi-HTML to converted
@@ -221,8 +232,8 @@ function semihtml_to_comcode($semihtml)
 	$semihtml=trim($semihtml);
 
 	@ini_set('pcre.backtrack_limit','10000000');
-	
-	$semihtml=preg_replace('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','${1}',$semihtml);
+
+	$semihtml=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$semihtml);
 	$array_html_preg_replace=array();
 	$semihtml=str_replace('&#8203;<kbd','<kbd',$semihtml);
 	$semihtml=str_replace('</kbd>&#8203;','</kbd>',$semihtml);

@@ -442,9 +442,9 @@ class Module_filedump
 		{
 			$attach_name='file';
 			$max_size=get_max_file_size();
-			if (($_FILES[$attach_name]['error']==1) || ($_FILES[$attach_name]['error']==2))
+			if ((isset($_FILES[$attach_name])) && (($_FILES[$attach_name]['error']==1) || ($_FILES[$attach_name]['error']==2)))
 				warn_exit(do_lang_tempcode('FILE_TOO_BIG',integer_format($max_size)));
-			elseif (($_FILES[$attach_name]['error']==3) || ($_FILES[$attach_name]['error']==6) || ($_FILES[$attach_name]['error']==7))
+			elseif ((isset($_FILES[$attach_name])) && (($_FILES[$attach_name]['error']==3) || ($_FILES[$attach_name]['error']==6) || ($_FILES[$attach_name]['error']==7)))
 				warn_exit(do_lang_tempcode('ERROR_UPLOADING_'.strval($_FILES[$attach_name]['error'])));
 			else warn_exit(do_lang_tempcode('ERROR_UPLOADING'));
 		}
@@ -479,7 +479,7 @@ class Module_filedump
 			$description=post_param('description');
 			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$file,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
 
-			require_lang('notifications');
+			require_code('notifications');
 			$subject=do_lang('FILEDUMP_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$file,$place);
 			$mail=do_lang('FILEDUMP_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($file),array(comcode_escape($place),comcode_escape($description)));
 			dispatch_notification('filedump',$place,$subject,$mail);
