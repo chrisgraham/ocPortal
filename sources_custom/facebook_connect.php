@@ -71,6 +71,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 	// Who is this user, from Facebook's point of view?
 	global $FACEBOOK_CONNECT;
 	$facebook_uid=$FACEBOOK_CONNECT->getUser();
+	if (is_null($facebook_uid)) return $current_logged_in_member;
 	$details=$FACEBOOK_CONNECT->api('/me');
 	$username=$details['name'];
 	$email_address=array_key_exists('email',$details)?$details['email']:'';
