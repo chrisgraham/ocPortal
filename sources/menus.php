@@ -526,7 +526,7 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
 
 	$content=new ocp_tempcode();
 
-	if ($menu['type']!='root') fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+	if ((!isset($menu['type'])) || ($menu['type']!='root')) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 	$codename=$menu['special'];
 
