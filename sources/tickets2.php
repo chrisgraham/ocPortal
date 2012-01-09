@@ -24,12 +24,10 @@
  * @param  SHORT_TEXT		The ticket type
  * @param  BINARY				Whether guest e-mail addresses are mandatory for new tickets
  * @param  BINARY				Whether the FAQ should be searched before submitting a new ticket
- * @param  ?SHORT_TEXT		Comma-separated list of member IDs to text when a post is made in a ticket of this type (NULL: don't text anyone)
  */
-function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0,$send_sms_to=NULL)
+function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 {
-	if (is_null($send_sms_to)) $send_sms_to='';
-	$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>insert_lang($ticket_type,1),'guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq,'send_sms_to'=>$send_sms_to,'cache_lead_time'=>NULL));
+	$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>insert_lang($ticket_type,1),'guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq,'cache_lead_time'=>NULL));
 
 	log_it('ADD_TICKET_TYPE',$ticket_type);
 }
@@ -41,12 +39,10 @@ function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0,$s
  * @param  ?SHORT_TEXT		The new ticket type (NULL: do not change)
  * @param  BINARY				Whether guest e-mail addresses are mandatory for new tickets
  * @param  BINARY				Whether the FAQ should be searched before submitting a new ticket
- * @param  ?SHORT_TEXT		Comma-separated list of member IDs to text when a post is made in a ticket of this type (NULL: don't text anyone)
  */
-function edit_ticket_type($old_ticket_type,$new_ticket_type,$guest_emails_mandatory,$search_faq,$send_sms_to)
+function edit_ticket_type($old_ticket_type,$new_ticket_type,$guest_emails_mandatory,$search_faq)
 {
-	if (is_null($send_sms_to)) $send_sms_to='';
-	$GLOBALS['SITE_DB']->query_update('ticket_types',array('guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq,'send_sms_to'=>$send_sms_to),array('ticket_type'=>$old_ticket_type),'',1);
+	$GLOBALS['SITE_DB']->query_update('ticket_types',array('guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq),array('ticket_type'=>$old_ticket_type),'',1);
 
 	if (!is_null($new_ticket_type))
 		lang_remap($old_ticket_type,$new_ticket_type);
@@ -80,7 +76,7 @@ function delete_ticket_type($ticket_type)
  */
 function get_ticket_type($ticket_type)
 {
-	if (is_null($ticket_type)) return array('ticket_type'=>NULL,'guest_emails_mandatory'=>false,'search_faq'=>false,'send_sms_to'=>NULL,'cache_lead_time'=>NULL);
+	if (is_null($ticket_type)) return array('ticket_type'=>NULL,'guest_emails_mandatory'=>false,'search_faq'=>false,'cache_lead_time'=>NULL);
 
 	$row=$GLOBALS['SITE_DB']->query_select('ticket_types',NULL,array('ticket_type'=>$ticket_type),'',1);
 	if (count($row)==0) return NULL;
@@ -271,13 +267,13 @@ function delete_ticket_by_topic_id($topic_id)
  * @param  boolean		Whether the reply is staff only (invisible to ticket owner, only on OCF)
  * @return boolean		Success?
  */
-function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$home_link,$home_url,$staff_only=false)
+function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$home_link,$ticket_url,$staff_only=false)
 {
 	// Get the forum ID first
 	$fid=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','forum_id',array('ticket_id'=>$ticket_id));
 	if (is_null($fid)) $fid=get_ticket_forum_id($member,$ticket_type);
 
-	$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($fid,$ticket_id,$member,$post,$title,$home_link,NULL,NULL,1,1,false,array($title,do_lang('SUPPORT_TICKET').': #'.$ticket_id,$home_url,$staff_only));
+	$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($fid,$ticket_id,$member,$post,$title,$home_link,NULL,NULL,1,1,false,array($title,do_lang('SUPPORT_TICKET').': #'.$ticket_id,$ticket_url,$staff_only));
 	$topic_id=$GLOBALS['LAST_TOPIC_ID'];
 	$is_new=$GLOBALS['LAST_TOPIC_IS_NEW'];
 	if ($is_new)
@@ -295,10 +291,10 @@ function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$home_link
  * @param  string			Ticket owner's e-mail address, in the case of a new ticket
  * @param  integer		The new ticket type, or -1 if it is a reply to an existing ticket
  */
-function send_ticket_email($ticket_id,$title,$post,$home_url,$email,$ticket_type_if_new)
+function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_type_if_new)
 {
 	require_lang('tickets');
-	require_code('mail');
+	require_code('notifications');
 
 	$_temp=explode('_',$ticket_id);
 	$uid=intval($_temp[0]);
@@ -307,75 +303,25 @@ function send_ticket_email($ticket_id,$title,$post,$home_url,$email,$ticket_type
 
 	$new_ticket=($ticket_type_if_new!=-1);
 
+	$ticket_type_id=$GLOBALS['SITE_DB']->query_value('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+
 	if (($uid!=get_member()) && (!is_guest($uid)))
 	{
 		// Reply from staff, notification to user
 		$ticket_type_text=$GLOBALS['SITE_DB']->query_value_null_ok('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
-		$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($uid);
 		$their_lang=get_lang($uid);
 		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,$title,$their_lang);
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
-			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape($title),comcode_escape($home_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),$post,comcode_escape($ticket_type_text)),$their_lang);
-			mail_wrap($subject,$message,array($email),$username,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape($title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),$post,comcode_escape($ticket_type_text)),$their_lang);
+			dispatch_notification('ticket_reply',strval($ticket_type_id),$subject,$message,array($uid));
 		}
 	}
 	elseif ($uid==get_member())
 	{
 		// Reply from user, notification to staff
-		$rows=$GLOBALS['SITE_DB']->query('SELECT send_sms_to,text_original FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'ticket_types c ON t.ticket_type=c.ticket_type LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON c.ticket_type=tr.id WHERE '.db_string_equal_to('ticket_id',$ticket_id),1);
-		$ticket_type_text=NULL;
-		$members=NULL;
-		if (array_key_exists(0,$rows))
-		{
-			$send_sms_to=$rows[0]['send_sms_to'];
-			$ticket_type_text=$rows[0]['text_original'];
-
-			// Find members online, so don't SMS people who have been online in last 5 minutes (get's annoying - they surely know about the ticket and are working on it)
-			$members_online=array();
-			if (!$new_ticket)
-			{
-				global $SESSION_CACHE;
-				foreach ($SESSION_CACHE as $session_row)
-				{
-					if (!array_key_exists('the_user',$session_row)) continue; // Workaround to HipHop PHP weird bug
-
-					if ($session_row['last_activity']>time()-60*5) // Anytime in last 5 minutes
-					{
-						$members_online[]=$session_row['the_user'];
-					}
-				}
-			}
-
-			// Send an SMS to all the relevant members of staff
-			$_members=explode(',',$send_sms_to);
-			$members=array();
-			foreach($_members as $member_id)
-			{
-				if (trim($member_id)!='')
-				{
-					$_member_id=intval(trim($member_id));
-					if (!in_array($_member_id,$members_online))
-					{
-						$members[]=$_member_id;
-					}
-				}
-			}
-			if (count($members)!=0)
-				sms_wrap(do_lang('TICKET_REPLY_SMS_FOR_STAFF',comcode_escape($title),comcode_escape($home_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang()),$members);
-		}
-
-		// Get a list of e-mail addresses to contact
-		if ((!is_null($members)) && (count($members)!=0)) // Sends via SMS, so we also send to (just) these people with notifications
-		{
-			$email_addresses=array();
-			foreach ($members as $member_id)
-				$email_addresses[]=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
-		}
-		else $email_addresses=array(get_option('staff_address')); // Notify staff in general
-
-		if (is_object($home_url)) $home_url=$home_url->evaluate();
+		if (is_object($ticket_url)) $ticket_url=$ticket_url->evaluate();
 
 		if (is_null($ticket_type_text))
 		{
@@ -383,10 +329,13 @@ function send_ticket_email($ticket_id,$title,$post,$home_url,$email,$ticket_type
 		}
 
 		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',$ticket_type_text,$title,NULL,get_site_default_lang());
-		mail_wrap($subject,do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape($title),comcode_escape($home_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang()),$email_addresses,NULL,$email,$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape($title),comcode_escape($ticket_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang());
+		dispatch_notification($new_ticket?'ticket_new_staff':'ticket_reply_staff',strval($ticket_type_id),$subject,$message);
 
+		// Tell user that their message was received
 		if ($email!='')
 		{
+			require_code('mail');
 			mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email),NULL,'','',3,NULL,false,get_member());
 		}
 	}

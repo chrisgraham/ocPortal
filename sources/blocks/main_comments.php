@@ -108,13 +108,14 @@ class Block_main_comments
 
 			if (get_forum_type()=='ocf')
 			{
-				require_code('mail');
-				$validate_url=get_self_url(true,false,array('keep_session'=>NULL));
-				$_validate_url=build_url(array('page'=>'topics','type'=>'validate_post','id'=>$GLOBALS['LAST_POST_ID'],'redirect'=>$validate_url),get_module_zone('topics'),NULL,false,false,true);
-				$validate_url=$_validate_url->evaluate();
-				$message_raw=do_lang('NEW_MESSAGE_BODY',$validate_url,post_param('post'),NULL,get_site_default_lang());
-
-				mail_wrap(do_lang('NEW_MESSAGE_SUBJECT',post_param('title'),NULL,NULL,get_site_default_lang()),$message_raw,NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+				if (addon_installed('unvalidated'))
+				{
+					require_code('submit');
+					$validate_url=get_self_url(true,false,array('keep_session'=>NULL));
+					$_validate_url=build_url(array('page'=>'topics','type'=>'validate_post','id'=>$GLOBALS['LAST_POST_ID'],'redirect'=>$validate_url),get_module_zone('topics'),NULL,false,false,true);
+					$validate_url=$_validate_url->evaluate();
+					send_validation_request('MAKE_POST','f_posts',false,$GLOBALS['LAST_POST_ID'],$validate_url);
+				}
 			}
 		}
 

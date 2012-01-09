@@ -624,87 +624,21 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 	if (!is_object($url))
 	{
 		$parts=array();
-		$sym_pos=mixed();
-		$sym_pos=is_null($url)?false:strpos($url,'{$');
 		if ((preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$url,$parts)!=0) && ($parts[1]!='mailto')) // Specially encoded page link. Complex regexp to make sure URLs do not match
 		{
-			if (!array_key_exists(2,$parts))
-			{
-				$parts[2]=get_zone_default_page($parts[1]);
-				$parts[3]='';
-			}
-
 			$page_link=$url;
-
-			if (($parts[1]=='site') && (get_option('collapse_user_zones',true)==='1')) $parts[1]='';
-
-			if ($parts[1]=='_SEARCH')
-			{
-				$parts[1]=get_page_zone($parts[2],false);
-				if (is_null($parts[1]))
-				{
-					if (has_actual_page_access(get_member(),'admin_menus'))
-					{
-						require_code('site');
-						attach_message(do_lang_tempcode('MISSING_MODULE_REFERENCED',escape_html($parts[2])),'warn');
-					}
-					return array(NULL,false); // Not found
-				}
-			} elseif ($parts[1]=='_SELF') $parts[1]=$users_current_zone;
-
-			if (($parts[1]=='forum') && (get_forum_type()!='ocf')) return array(NULL,false);
+			list($zone_name,$map,$hash)=page_link_decode($url);
+			if (($zone_name=='forum') && (get_forum_type()!='ocf')) return array(NULL,false);
+			if (!isset($map['page'])) $map['page']=get_zone_default_page($zone_name);
 
 			// If we need to check access
 			if (array_key_exists('check_perms',$branch['modifiers']))
 			{
-				if (!has_zone_access(get_member(),$parts[1])) return array(NULL,false);
-				if (!has_page_access(get_member(),$parts[2],$parts[1])) return array(NULL,false);
+				if (!has_zone_access(get_member(),$zone_name)) return array(NULL,false);
+				if (!has_page_access(get_member(),$map['page'],$zone_name)) return array(NULL,false);
 			}
 
-			$map=array('page'=>$parts[2]);
-			$params=explode(':',substr($parts[3],1));
-			$late_build=false;
-			foreach ($params as $i=>$param)
-			{
-				if ($param!='')
-				{
-					if (($i==0) && (strpos($param,'=')===false))
-					{
-						$param='type='.$param;
-					}
-					elseif (($i==1) && (strpos($param,'=')===false))
-					{
-						$param='id='.$param;
-					}
-				}
-				$bits=explode('=',$param,2);
-				if (isset($bits[1]))
-				{
-					list($bits_0,$bits_1)=$bits;
-					
-					if (($bits_1!='') && ($bits_1[0]=='{')) // If it is in template format (symbols)
-					{
-	//						require_code('tempcode_compiler');
-	//						$bits_1=template_to_tempcode($bits_1);
-	//						$bits_1=$bits_1->evaluate();
-						$late_build=true;
-						break;
-					}
-					$map[$bits_0]=$bits_1;
-				}
-			}
-
-			// Do we build the URL or do we have to make it purely in terms of tempcode?
-			if ($late_build)
-			{
-				$tpl='{$PAGE_LINK,'.$parts[1].':'.$parts[2].$parts[3].'}';
-
-				require_code('tempcode_compiler');
-				$url=template_to_tempcode($tpl);
-			} else
-			{
-				$url=build_url($map,$parts[1]);
-			}
+			$url=build_url($map,$zone_name,NULL,false,false,false,$hash);
 
 			// See if this is current page
 			$somewhere_definite=false;
@@ -718,8 +652,8 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 					if ($_parts[1]==$users_current_zone) $somewhere_definite=true;
 				}
 			}
-			$current_zone=(($parts[1]==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($parts[1]==$REDIRECTED_TO['r_to_zone']) && (!$somewhere_definite))); // This code is a bit smart, as zone menus usually have a small number of zones on them - redirects will be counted into the zone redirected to, so long as there is no more suitable zone and so long as it is not a transparent redirect 
-			if (($parts[1]==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($parts[1]==$REDIRECTED_TO['r_to_zone']) && (array_key_exists('page',$map)) && ($map['page']==$REDIRECTED_TO['r_to_page'])))
+			$current_zone=(($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($zone_name==$REDIRECTED_TO['r_to_zone']) && (!$somewhere_definite))); // This code is a bit smart, as zone menus usually have a small number of zones on them - redirects will be counted into the zone redirected to, so long as there is no more suitable zone and so long as it is not a transparent redirect 
+			if (($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($zone_name==$REDIRECTED_TO['r_to_zone']) && (array_key_exists('page',$map)) && ($map['page']==$REDIRECTED_TO['r_to_page'])))
 			{
 				$current_page=true;
 				foreach ($map as $k=>$v)
@@ -727,14 +661,14 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 					if (($v=='') && ($k=='page'))
 					{
 						$v='start';
-						if ($parts[1]==$users_current_zone) // More precision if current zone (don't want to do query for any zone)
+						if ($zone_name==$users_current_zone) // More precision if current zone (don't want to do query for any zone)
 						{
 							global $ZONE;
 							$v=$ZONE['zone_default_page'];
 						}
 					}
 					$pv=get_param($k,($k=='page')?$dp:NULL,true);
-					if (($pv!==$v) && (($k!='page') || (is_null($REDIRECTED_TO)) || ((!is_null($REDIRECTED_TO)) && (($v!==$REDIRECTED_TO['r_to_page']) || ($parts[1]!=$REDIRECTED_TO['r_to_zone'])))) && (($k!='type') || ($v!='misc')) && (($v!=$dp) || ($k!='page') || (get_param('page','')!='')) && (substr($k,0,5)!='keep_'))
+					if (($pv!==$v) && (($k!='page') || (is_null($REDIRECTED_TO)) || ((!is_null($REDIRECTED_TO)) && (($v!==$REDIRECTED_TO['r_to_page']) || ($zone_name!=$REDIRECTED_TO['r_to_zone'])))) && (($k!='type') || ($v!='misc')) && (($v!=$dp) || ($k!='page') || (get_param('page','')!='')) && (substr($k,0,5)!='keep_'))
 					{
 						$current_page=false;
 						break;
@@ -745,6 +679,8 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 		{
 			$page_link='';
 		
+			$sym_pos=mixed();
+			$sym_pos=is_null($url)?false:strpos($url,'{$');
 			if ($sym_pos!==false) // Specially encoded $ symbols
 			{
 				$_url=new ocp_tempcode();

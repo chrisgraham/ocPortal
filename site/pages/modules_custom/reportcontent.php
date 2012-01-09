@@ -188,7 +188,7 @@ class Module_reportcontent
 			'r_content_id'=>$content_id,
 		))))
 			warn_exit(do_lang_tempcode('ALREADY_REPORTED_CONTENT'));
-		list($content_title,,$cma_info)=content_get_details($content_type,$content_id);
+		list($content_title,,$cma_info,$content_url)=content_get_details($content_type,$content_id);
 
 		// Create reported post...
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('reported_posts_forum'));
@@ -241,13 +241,11 @@ class Module_reportcontent
 		}
 
 		// Done
-		list($zone,$url_bits)=page_link_decode(str_replace('_WILD',$content_id,$cma_info['view_pagelink_pattern']));
-		$url=build_url($url_bits,$zone);
 		$_url=post_param('url','',true);
 		if ($_url!='')
-			$url=make_string_tempcode($_url);
+			$content_url=make_string_tempcode($_url);
 		require_code('templates_redirect_screen');
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($title,$content_url,do_lang_tempcode('SUCCESS'));
 	}
 
 }

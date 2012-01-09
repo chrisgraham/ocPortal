@@ -127,6 +127,15 @@ function ocf_make_group($name,$is_default,$is_super_admin,$is_super_moderator,$t
 
 	log_it('ADD_GROUP',strval($group_id),$name);
 
+	if ($is_private_club==1)
+	{
+		require_code('notifications');
+		$subject=do_lang('NEW_CLUB_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
+		$view_url=build_url(array('page'=>'groups','type'=>'view','id'=>$group_id),get_module_zone('groups'),NULL,false,false,true);
+		$mail=do_lang('NEW_CLUB_NOTIFICATION_MAIL',get_site_name(),comcode_escape($name),array(comcode_escape($view_url->evaluate())));
+		dispatch_notification('ocf_club',strval($group_id),$subject,$mail);
+	}
+
 	return $group_id;
 }
 

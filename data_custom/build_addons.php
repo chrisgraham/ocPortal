@@ -45,8 +45,8 @@ require($FILE_BASE.'/sources/global.php');
 require_code('addons');
 require_code('version');
 require_code('dump_addons');
-$version=ocp_version();
-$version_for_name=preg_replace('/\./','',$version);
+$version=ocp_version_number();
+$version_for_name=preg_replace('/\./','',float_to_raw_string($version));
 
 header('Content-type: text/plain');
 
@@ -136,7 +136,7 @@ if (get_param_integer('export_addons',1)==1)
 			}
 		}
 
-	  	create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
+		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
 	}
 	echo "All non-bundled addons have been exported to 'export/mods/'\n";
 }
@@ -182,9 +182,9 @@ if (get_param_integer('export_themes',1)==1)
 				$files2[]=dirname($file2).'/'.substr(basename($file2),strlen($theme)+2);
 			}
 		}
-	 	$_GET['keep_theme_test']='1';
-	 	$_GET['theme']=$theme;
-	 	create_addon($file,$files2,$name,array(),array(),$author,'ocProducts Ltd','1.0',$description,'exports/mods');
+		$_GET['keep_theme_test']='1';
+		$_GET['theme']=$theme;
+		create_addon($file,$files2,$name,'','',$author,'ocProducts Ltd','1.0',$description,'exports/mods');
 	}
 	
 	echo "All themes have been exported to 'export/mods/'";

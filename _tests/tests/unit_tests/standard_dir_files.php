@@ -40,8 +40,6 @@ class standard_dir_files_test_set extends ocp_test_case
 			$this->assertTrue(false,'touch "'.$dir.'/index.html" ; svn add "'.$dir.'/index.html"');
 		}
 
-		if (!file_exists($dir.'/.svn')) return;
-
 		if (($dh=opendir($dir))!==false)
 		{
 			while (($file=readdir($dh))!==false)
@@ -55,7 +53,7 @@ class standard_dir_files_test_set extends ocp_test_case
 			}
 		}
 
-		if ((!file_exists($dir.'/.htaccess')) && (!file_exists($dir.'/index.php')) && (strpos($dir,'ckeditor')===false) && (strpos($dir,'transcoder')===false) && (strpos($dir,'nbproject')===false) && (strpos($dir,'facebook')===false) && (strpos($dir,'uploads')===false) && (preg_match('#/data(/|$|\_)#',$dir)==0) && (strpos($dir,'themes')===false) && (strpos($dir,'exports')===false))
+		if ((!file_exists($dir.'/.htaccess')) && (!file_exists($dir.'/index.php')) && (!file_exists($dir.'/html_custom')) && (!file_exists($dir.'/EN')) && (strpos($dir,'ckeditor')===false) && (strpos($dir,'transcoder')===false) && (strpos($dir,'nbproject')===false) && (strpos($dir,'facebook')===false) && (strpos($dir,'uploads')===false) && (preg_match('#/data(/|$|\_)#',$dir)==0) && (strpos($dir,'themes')===false) && (strpos($dir,'exports')===false))
 		{
 			$this->assertTrue(false,'cp "'.get_file_base().'/sources/.htaccess" "'.$dir.'/.htaccess" ; svn add "'.$dir.'/.htaccess"');
 		}

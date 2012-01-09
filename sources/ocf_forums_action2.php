@@ -173,7 +173,7 @@ function ocf_delete_forum($forum_id,$target_forum_id,$delete_topics=0)
 	$GLOBALS['FORUM_DB']->query_delete('f_forums',array('id'=>$forum_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('group_category_access',array('module_the_name'=>'forums','category_name'=>strval($forum_id)));
 	$GLOBALS['FORUM_DB']->query_delete('gsp',array('module_the_name'=>'forums','category_name'=>strval($forum_id)));
-	$GLOBALS['FORUM_DB']->query_delete('f_forum_tracking',array('r_forum_id'=>$forum_id));
+	delete_all_notifications_on('ocf_forum',strval($forum_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_member',array('i_forum_id'=>$forum_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_ip',array('i_forum_id'=>$forum_id));
 
@@ -256,40 +256,5 @@ function ocf_ensure_forum_exists($forum_id)
 		warn_exit(do_lang_tempcode('FORUM_NOT_FOUND',strval($forum_id)));
 	}
 	return $test;
-}
-
-/**
- * Change tracking setting with respect to a certain member and forum.
- *
- * @param  AUTO_LINK		The ID of the forum.
- * @param  ?MEMBER		The member (NULL: current member).
- * @param  boolean		Whether the member is wanting to be untracking the forum (i.e. if false, they are wanting to be tracking the forum).
- * @param  boolean		Whether to check permissions to see if the member is allowed to do this.
- */
-function ocf_track_forum($forum_id,$member_id=NULL,$untrack=false,$check_permissions=true)
-{
-	if (is_null($member_id)) $member_id=get_member();
-
-	if (($check_permissions) && (!ocf_may_track_forum($forum_id,$member_id))) access_denied('I_ERROR');
-
-	$GLOBALS['FORUM_DB']->query_delete('f_forum_tracking',array('r_member_id'=>$member_id,'r_forum_id'=>$forum_id),'',1);
-	if (!$untrack)
-	{
-		$GLOBALS['FORUM_DB']->query_insert('f_forum_tracking',array('r_member_id'=>$member_id,'r_forum_id'=>$forum_id));
-	}
-}
-
-/**
- * Untrack all forums for a member.
- *
- * @param  ?MEMBER		The member ID (NULL: current member).
- */
-function ocf_wipe_forum_trackings($member_id=NULL)
-{
-	$where=NULL;
-	if (!is_null($member_id)) $where=array('r_member_id'=>$member_id);
-
-	$GLOBALS['FORUM_DB']->query_delete('f_forum_tracking',$where);
-	log_it('WIPE_FORUM_TRACKINGS');
 }
 

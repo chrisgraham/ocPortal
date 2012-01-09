@@ -64,10 +64,10 @@ if (!function_exists('critical_error'))
 				$error='This is a less-critical error that has been elevated for quick dismissal due to high server load.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
 				break;
 			case 'EMERGENCY':
-				$error='This is an error that has been elevated to critical error status because it occured during the primary error mechanism reporting system itself (possibly due to it occuring within the standard output framework). It may be masking a secondary error that occured before this, but was never output - if so, it is likely strongly related to this one, thus fixing this will fix the other.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
+				$error='This is an error that has been elevated to critical error status because it occurred during the primary error mechanism reporting system itself (possibly due to it occuring within the standard output framework). It may be masking a secondary error that occurred before this, but was never output - if so, it is likely strongly related to this one, thus fixing this will fix the other.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
 				break;
 			case 'RELAY':
-				$error='This is a relayed critical error, which means that this less-critical error has occured during startup, and thus halted startup.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
+				$error='This is a relayed critical error, which means that this less-critical error has occurred during startup, and thus halted startup.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
 				break;
 			case 'FILE_DOS':
 				$error='This website was prompted to download a file ('.htmlentities($relay).') which seemingly has a never-ending chain of redirections. Because this could be a denial of service attack, execution has been terminated.';

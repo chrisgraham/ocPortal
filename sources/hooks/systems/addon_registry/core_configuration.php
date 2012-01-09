@@ -157,7 +157,6 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/panel_width.php',
 			'sources/hooks/systems/config_default/panel_width_spaced.php',
 			'sources/hooks/systems/config_default/root_zone_login_theme.php',
-			'sources/hooks/systems/config_default/send_error_emails.php',
 			'sources/hooks/systems/config_default/send_error_emails_ocproducts.php',
 			'sources/hooks/systems/config_default/session_expiry_time.php',
 			'sources/hooks/systems/config_default/show_docs.php',

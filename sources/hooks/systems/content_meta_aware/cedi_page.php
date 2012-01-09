@@ -29,6 +29,8 @@ class Hook_content_meta_aware_cedi_page
 	function info()
 	{
 		return array(
+			'content_type_label'=>'cedi:_CEDI_PAGE',
+
 			'table'=>'seedy_pages',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

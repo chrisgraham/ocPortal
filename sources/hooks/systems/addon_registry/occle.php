@@ -101,7 +101,6 @@ class Hook_addon_registry_occle
 			'OCCLE_PT_NOTIFICATION.tpl',
 			'OCCLE_RSS.tpl',
 			'OCCLE_RSS_ITEM.tpl',
-			'OCCLE_UNVALIDATED_NOTIFICATION.tpl',
 			'OCCLE_USERS_ONLINE.tpl',
 			'OCCLE_WHOIS.tpl',
 			'JAVASCRIPT_BUTTON_OCCLE.tpl',
@@ -168,7 +167,6 @@ class Hook_addon_registry_occle
 			'sources/hooks/modules/admin_occle_fs/root.php',
 			'sources/hooks/modules/admin_occle_notifications/index.html',
 			'sources/hooks/modules/admin_occle_notifications/occlechat.php',
-			'sources/hooks/modules/admin_occle_notifications/unvalidated.php',
 			'sources/hooks/systems/do_next_menus/occle.php',
 			'sources/hooks/systems/snippets/occle.php',
 			'sources/occle.php',
@@ -203,7 +201,6 @@ class Hook_addon_registry_occle
 				'OCCLE_LS.tpl'=>'administrative__occle_ls',
 				'OCCLE_CHAT_NOTIFICATION.tpl'=>'administrative__occle_chat_notification',
 				'OCCLE_OCCLECHAT_NOTIFICATION.tpl'=>'administrative__occle_occlechat_notification',
-				'OCCLE_UNVALIDATED_NOTIFICATION.tpl'=>'administrative__occle_unvalidated_notification',
 				'OCCLE_OCF_NOTIFICATION.tpl'=>'administrative__occle_ocf_notification',
 				'OCCLE_PT_NOTIFICATION.tpl'=>'administrative__occle_pt_notification',
 				);
@@ -529,28 +526,6 @@ class Hook_addon_registry_occle
 				do_lorem_template('OCCLE_OCCLECHAT_NOTIFICATION',array(
 					'MESSAGE_COUNT'=>placeholder_number(),
 					'MESSAGES'=>placeholder_array(),
-						)
-			),NULL,'',true),
-		);
-	}
-	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
-	function tpl_preview__administrative__occle_unvalidated_notification()
-	{
-		$mod = array();
-		foreach(placeholder_array() as $k=>$v)
-		{
-			$mod[] = array('_loop_var'=>"$k", '_loop_key'=>$v);
-		}
-		return array(
-			lorem_globalise(
-				do_lorem_template('OCCLE_UNVALIDATED_NOTIFICATION',array(
-					'MODULES'=>$mod,
 						)
 			),NULL,'',true),
 		);

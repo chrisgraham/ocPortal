@@ -74,6 +74,7 @@ class Hook_addon_registry_iotds
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/iotd_chosen.php',
 			'sources/hooks/systems/config_default/iotd_update_time.php',
 			'sources/hooks/systems/config_default/points_ADD_IOTD.php',
 			'sources/hooks/systems/config_default/points_CHOOSE_IOTD.php',

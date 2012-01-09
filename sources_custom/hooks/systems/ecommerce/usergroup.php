@@ -20,15 +20,15 @@ function handle_sub_referrals($to_email)
 		
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($inviter);
 		
-		require_code('mail');
+		require_code('notifications');
 
 		$ini_file=parse_ini_file(get_custom_file_base().'/data_custom/signup_refer.ini');
 		if (array_key_exists('referral_'.strval($num_total),$ini_file))
 		{
 			$level=$ini_file['referral_'.strval($num_total)];
-			mail_wrap(do_lang('MAIL_SIGNUP_REFER__TOSTAFF_SUBJECT',$level),do_lang('MAIL_SIGNUP_REFER__TOSTAFF_BODY',$level,$username,number_format($num_total)));
+			dispatch_notification('referral_staff',NULL,do_lang('MAIL_SIGNUP_REFER__TOSTAFF_SUBJECT',$level),do_lang('MAIL_SIGNUP_REFER__TOSTAFF_BODY',$level,$username,number_format($num_total)),NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
 		}
 
-		mail_wrap(do_lang('MAIL_SIGNUP_REFER__TOREFERER_SUBJECT'),do_lang('MAIL_SIGNUP_REFER__TOREFERER_BODY',$username,number_format($num_total)));
+		dispatch_notification('referral',NULL,do_lang('MAIL_SIGNUP_REFER__TOREFERER_SUBJECT'),do_lang('MAIL_SIGNUP_REFER__TOREFERER_BODY',$username,number_format($num_total)),array($inviter),A_FROM_SYSTEM_PRIVILEGED);
 	}
 }

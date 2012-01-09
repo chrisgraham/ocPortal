@@ -35,6 +35,8 @@ function activities_addon_syndicate_described_activity($a_language_string_code,$
 		'a_label_3'=>$a_label_3,
 		'a_is_public'=>$a_is_public
 	);
+	
+	$stored_id=mixed();
 
 	// Check if this has been posted previously (within the last 10 minutes) to
 	// stop spamming but allow generalised repeat status messages.
@@ -72,9 +74,15 @@ function activities_addon_syndicate_described_activity($a_language_string_code,$
 				}
 			}
 		}
+
+		list($message)=render_activity($row);
+
+		require_code('notifications');
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($a_member_id);
+		$subject=do_lang('ACTIVITY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username,html_entity_decode(strip_tags($message->evaluate()),ENT_QUOTES,get_charset()));
+		$mail=do_lang('ACTIVITY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array('[semihtml]'.$message->evaluate().'[/semihtml]'));
+		dispatch_notification('activity',strval($a_member_id),$subject,$mail);
 	}
-	else
-		return NULL;
 
 	return $stored_id;
 }
@@ -124,7 +132,7 @@ function activities_ajax_submit_handler()
 													'',
 													'',
 													'',
-													($map['PRIVACY']=='public')?'1':'0'
+													($map['PRIVACY']=='public')?1:0
 					);
 
 					if ($stored_id>0)
@@ -293,7 +301,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 	if ($fp)
 	{
 		// Grab our current time in milliseconds
-		$start_time = microtime();
+		$start_time = microtime(true);
 
 		$sleep_multiplier = $timeout / 10;
 
@@ -307,7 +315,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 			// to avoid collision and CPU load
 			if(!$can_write) usleep(intval(mt_rand(0, intval($sleep_multiplier))*1000));		// *1000 as usleep uses microseconds
 		}
-		while ((!$can_write) && ((microtime()-$start_time) < $timeout));
+		while ((!$can_write) && ((microtime(true)-$start_time) < $timeout));
 
 		// File was locked so now we can store information
 		if ($can_write)

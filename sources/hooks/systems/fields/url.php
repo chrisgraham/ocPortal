@@ -78,7 +78,8 @@ class Hook_fields_url
 		if (is_object($ev)) return $ev;
 
 		if ($ev=='') return '';
-		
+		if ($ev=='http://') return '';
+
 		return hyperlink((url_is_local($ev)?(get_base_url().'/'):'').$ev,escape_html(basename($ev)),true);
 	}
 

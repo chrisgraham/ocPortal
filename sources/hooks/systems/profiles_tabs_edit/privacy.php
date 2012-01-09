@@ -151,10 +151,10 @@ class Hook_Profiles_Tabs_Edit_privacy
 			if (get_value('simplify_privacy_options')==='1')
 			{
 				$privacy_options=new ocp_tempcode();
-				$privacy_options->attach(form_input_list_entry('guests',$view_by_guests==1,do_lang_tempcode('VISIBLE_TO_GUESTS')));
-				$privacy_options->attach(form_input_list_entry('members',$view_by_members==1 && $view_by_guests==0,do_lang_tempcode('VISIBLE_TO_MEMBERS')));
-				$privacy_options->attach(form_input_list_entry('friends',$view_by_friends==1 && $view_by_members==0 && $view_by_guests==0,do_lang_tempcode('VISIBLE_TO_FRIENDS')));
-				$privacy_options->attach(form_input_list_entry('staff',$view_by_friends==0 && $view_by_members==0 && $view_by_guests==0,do_lang_tempcode('VISIBLE_TO_STAFF')));
+				$privacy_options->attach(form_input_list_entry('guests',$view_by_guests,do_lang_tempcode('VISIBLE_TO_GUESTS')));
+				$privacy_options->attach(form_input_list_entry('members',$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_MEMBERS')));
+				$privacy_options->attach(form_input_list_entry('friends',$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_FRIENDS')));
+				$privacy_options->attach(form_input_list_entry('staff',!$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_STAFF')));
 				$fields->attach(form_input_list(do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)),'','privacy_'.strval($cpf_id),$privacy_options));
 			} else
 			{

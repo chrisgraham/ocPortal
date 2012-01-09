@@ -386,9 +386,8 @@ class Hook_secpay
 
 		if ($success)
 		{
-			require_code('mail');
-			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-			mail_wrap(do_lang('PAYMENT_RECEIVED_SUBJECT',$txn_id,NULL,NULL,get_lang($member_id)),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($mc_gross)),$mc_currency,get_site_name(),get_lang($member_id)),array($email),$to_name);
+			require_code('notifications');
+			dispatch_notification('payment_received',NULL,do_lang('PAYMENT_RECEIVED_SUBJECT',$txn_id,NULL,NULL,get_lang($member_id)),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($mc_gross)),$mc_currency,get_site_name(),get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 		}
 
 		// Subscription stuff

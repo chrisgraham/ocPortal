@@ -702,7 +702,7 @@ class Module_quiz
 			$_unknowns->attach(do_lang('QUIZ_UNKNOWN',$unknown[0],$unknown[1]));
 		}
 
-		require_code('mail');
+		require_code('notifications');
 
 		// Award points?
 		if ($out_of==0) $out_of=1;
@@ -741,7 +741,7 @@ class Module_quiz
 
 			// Send mail about the result to the staff: include result and corrections, and unknowns
 			$mail=do_template('QUIZ_TEST_ANSWERS_MAIL',array('_GUID'=>'a0f8f47cdc1ef83b59c93135ebb5c114','UNKNOWNS'=>$_unknowns,'CORRECTIONS'=>$_corrections,'RESULT'=>$result2,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
-			mail_wrap($mail_title,$mail->evaluate(get_site_default_lang()),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			dispatch_notification('quiz_results',strval($id),$mail_title,$mail->evaluate(get_site_default_lang()));
 		}
 		// Give them corrections if it is a quiz.
 		elseif ($quiz['q_type']=='COMPETITION')
@@ -754,7 +754,7 @@ class Module_quiz
 			$_answers=do_template('QUIZ_ANSWERS_MAIL',array('_GUID'=>'381f392c8e491b6e078bcae34adc45e8','ANSWERS'=>$_answers,'MEMBER_PROFILE_URL'=>is_guest()?'':$GLOBALS['FORUM_DRIVER']->member_profile_link(get_member(),false,true),'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
 
 			// Send mail of answers to the staff
-			mail_wrap($mail_title,$_answers->evaluate(get_site_default_lang()),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			dispatch_notification('quiz_results',strval($id),$mail_title,$_answers->evaluate(get_site_default_lang()));
 		}
 
 		// Store results for entry

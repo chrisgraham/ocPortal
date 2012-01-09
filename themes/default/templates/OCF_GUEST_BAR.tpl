@@ -12,7 +12,7 @@
 						<input maxlength="255" size="15" type="password" value="password" name="password" id="s_password" />
 						<label for="remember">{!REMEMBER_ME}</label> <input {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) t.checked=false; } );  }" {+END}type="checkbox" value="1" id="remember" name="remember" />
 						<input class="button_pageitem" type="submit" value="{!_LOGIN}" />
-						<span class="button_options_spacer">[ <a href="{JOIN_LINK*}">{!_JOIN}</a> | <a onclick="return open_link_as_overlay(this);" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]</span>
+						<span class="button_options_spacer">[ <a href="{JOIN_LINK*}">{!_JOIN}</a> | <a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]</span>
 					</div>
 				</form>
 			</div>

@@ -29,6 +29,8 @@ class Hook_content_meta_aware_forum
 	function info()
 	{
 		return array(
+			'content_type_label'=>'ocf:FORUM',
+
 			'table'=>'f_forums',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

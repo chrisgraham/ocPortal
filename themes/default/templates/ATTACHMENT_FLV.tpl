@@ -7,7 +7,8 @@
 	{+END}
 {+END}
 
-{$SET,flv_url,{SCRIPT}?id={ID}{SUP_PARAMS}{$KEEP,0,1}&for_session={$SESSION_HASHED}}
+{$,NB: Filename is appended so jwplayer can read the file extension to determine native playability}
+{$SET,flv_url,{SCRIPT}?id={ID}{SUP_PARAMS}{$KEEP,0,1}&for_session={$SESSION_HASHED}&filename={A_ORIGINAL_FILENAME&}}
 {$JAVASCRIPT_INCLUDE,javascript_jwplayer}
 {$SET,rand_id,{$RAND}}
 

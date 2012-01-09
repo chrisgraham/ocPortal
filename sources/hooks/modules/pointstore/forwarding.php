@@ -27,7 +27,7 @@ class Hook_pointstore_forwarding
 	function init()
 	{
 	}
-	
+
 	/**
 	 * Standard pointstore item "shop front" function.
 	 *
@@ -124,11 +124,11 @@ class Hook_pointstore_forwarding
 		if (get_option('is_on_forw_buy')=='0') return new ocp_tempcode();
 
 		$title=get_page_title('TITLE_NEWFORWARDING');
-	
+
 		$member_id=get_member();
-	
+
 		pointstore_handle_error_already_has('forwarding');
-	
+
 		// What addresses are there?
 		$pointsleft=available_points($member_id); // the number of points this member has left
 		$list=get_mail_domains('forw_',$pointsleft);
@@ -136,19 +136,19 @@ class Hook_pointstore_forwarding
 		{
 			return warn_screen($title,do_lang_tempcode('NO_FORWARDINGS'));
 		}
-	
+
 		// Build up fields
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('ADDRESS_DESIRED_STUB'),'','email-prefix','',true));
 		$fields->attach(form_input_list(do_lang_tempcode('ADDRESS_DESIRED_DOMAIN'),'','esuffix',$list));
 		$fields->attach(form_input_line(do_lang_tempcode('ADDRESS_CURRENT'),'','email',$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),true));
-	
+
 		// Return template
 		$newfor_url=build_url(array('page'=>'_SELF','type'=>'_newforwarding','id'=>'forwarding'),'_SELF');
 		return do_template('FORM_SCREEN',array('_GUID'=>'1fcc6083db18c996fabb51d0ac10bc88','HIDDEN'=>'','TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWFORWARDING'),'TEXT'=>paragraph(do_lang_tempcode('ADDRESSES_ABOUT')),'URL'=>$newfor_url,'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -159,46 +159,46 @@ class Hook_pointstore_forwarding
 		if (get_option('is_on_forw_buy')=='0') return new ocp_tempcode();
 
 		require_code('type_validation');
-	
+
 		$title=get_page_title('TITLE_NEWFORWARDING');
-	
+
 		//Getting User Information
 		$member_id=get_member();
 		$pointsleft=available_points($member_id);
-	
+
 		//So we don't need to call these big ugly names, again...
 		$_suffix=post_param('esuffix');
 		$prefix=post_param('email-prefix');
 		$email=post_param('email');
-	
+
 		//Which suffix have we chosen?
 		$suffix='forw_'.$_suffix;
-	
+
 		$suffix_price=get_price($suffix);
 		$points_after=$pointsleft-$suffix_price;
-	
+
 		pointstore_handle_error_already_has('forwarding');
-	
+
 		if (($points_after<0) && (!has_specific_permission(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('NOT_ENOUGH_POINTS',escape_html($suffix)));
 		}
-	
+
 		// Does the prefix contain valid characters?
 		require_code('type_validation');
 		if (!is_valid_email_address($prefix.'@'.$_suffix))
 		{
 			return warn_screen($title,do_lang_tempcode('INVALID_EMAIL_PREFIX'));
 		}
-	
+
 		// Is the email for things to be forwarded to valid?
 		if (!is_valid_email_address($email))
 		{
 			return warn_screen($title,do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
 		}
-	
+
 		pointstore_handle_error_taken($prefix,$_suffix);
-	
+
 		// Return
 		$proceed_url=build_url(array('page'=>'_SELF','type'=>'__newforwarding','id'=>'forwarding'),'_SELF');
 		$keep=new ocp_tempcode();
@@ -207,7 +207,7 @@ class Hook_pointstore_forwarding
 		$keep->attach(form_input_hidden('email',$email));
 		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'2209e63206edac410bf553b96eee4782','MESSAGE'=>paragraph($prefix.'@'.$_suffix),'TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWFORWARDING'),'KEEP'=>$keep,'COST'=>integer_format($suffix_price),'POINTS_AFTER'=>integer_format($points_after),'PROCEED_URL'=>$proceed_url,'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF')));
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -222,36 +222,36 @@ class Hook_pointstore_forwarding
 		$member_id=get_member();
 		$pointsleft=available_points($member_id); // the number of points this member has left
 		$time=time();
-	
-		//So we don't need to call these big ugly names, again...
+
+		// So we don't need to call these big ugly names, again...
 		$prefix=post_param('prefix');
 		$_suffix=post_param('suffix');
 		$email=post_param('email');
-	
+
 		$suffix='forw_'.$_suffix;
 		$suffix_price=get_price($suffix);
-	
+
 		pointstore_handle_error_already_has('forwarding');
 
-		//If the price is more than we can afford...
+		// If the price is more than we can afford...
 		if (($suffix_price>$pointsleft) && (!has_specific_permission(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('NOT_ENOUGH_POINTS',escape_html($_suffix)));
 		}
 
 		pointstore_handle_error_taken($prefix,$_suffix);
-	
-		//Add us to the database
+
+		// Add us to the database
 		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>$time,'memberid'=>get_member(),'purchasetype'=>'forwarding','details'=>$prefix,'details2'=>'@'.$_suffix));
 
 		$forw_url=get_option('forw_url');
-	
-		//Mail off the order form:
+
+		// Mail off the order form
 		$encoded_reason=do_lang('TITLE_NEWFORWARDING');
 		$message_raw=do_template('POINTSTORE_FORWARDER_MAIL',array('_GUID'=>'a09dba8b440baa5cd48d462ebfafd15f','ENCODED_REASON'=>$encoded_reason,'EMAIL'=>$email,'PREFIX'=>$prefix,'SUFFIX'=>$_suffix,'FORW_URL'=>$forw_url,'SUFFIX_PRICE'=>integer_format($suffix_price)));
-		require_code('mail');
 
-		mail_wrap(do_lang('MAIL_REQUEST_FORWARDING',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		require_code('notifications');
+		dispatch_notification('pointstore_request_forwarding',NULL,do_lang('MAIL_REQUEST_FORWARDING',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 
 		$text=do_lang_tempcode('ORDER_FORWARDER_DONE',$email,escape_html($prefix.'@'.$_suffix));
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

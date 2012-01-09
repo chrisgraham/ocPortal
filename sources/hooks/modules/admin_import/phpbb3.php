@@ -66,7 +66,7 @@ class Hook_phpbb3
 								'attachments',
 								'ocf_posts',
 								'ocf_polls_and_votes',
-								//'ocf_tracking',  Actually this is read tracking, not for notifications
+								//'notifications',  Actually this is read tracking, not for notifications
 								'ocf_personal_topics',
 								'ocf_warnings',
 								'wordfilter',
@@ -86,7 +86,7 @@ class Hook_phpbb3
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members','attachments'),
-								'ocf_tracking'=>array('ocf_topics','ocf_members'),
+								'notifications'=>array('ocf_topics','ocf_members'),
 								'ocf_personal_topics'=>array('ocf_members','attachments'),
 								'friends'=>array('ocf_members'),
 								'bookmarks'=>array('ocf_members','ocf_topics'),
@@ -1178,11 +1178,9 @@ class Hook_phpbb3
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_tracking($db,$table_prefix,$file_base)
+	function import_notifications($db,$table_prefix,$file_base)
 	{
-		require_code('ocf_forums');
-		require_code('ocf_topics');
-		require_code('ocf_forums_action2');
+		require_code('notifications');
 		
 		$row_start=0;
 		$rows=array();
@@ -1191,15 +1189,15 @@ class Hook_phpbb3
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'topics_track',200,$row_start);
 			foreach ($rows as $row)
 			{
-				if (import_check_if_imported('topic_tracking',strval($row['topic_id']).'-'.strval($row['user_id']))) continue;
+				if (import_check_if_imported('topic_notification',strval($row['topic_id']).'-'.strval($row['user_id']))) continue;
 	
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
 				if (is_null($topic_id)) continue;
-				ocf_track_topic($topic_id,$member_id,false,false);
+				enable_notifications('ocf_topic',strval($topic_id),$member_id);
 
-				import_id_remap_put('topic_tracking',strval($row['topic_id']).'-'.strval($row['user_id']),1);
+				import_id_remap_put('topic_notification',strval($row['topic_id']).'-'.strval($row['user_id']),1);
 			}
 	
 			$row_start+=200;
@@ -1213,15 +1211,15 @@ class Hook_phpbb3
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'forums_track',200,$row_start);
 			foreach ($rows as $row)
 			{
-				if (import_check_if_imported('forum_tracking',strval($row['forum_id']).'-'.strval($row['user_id']))) continue;
+				if (import_check_if_imported('forum_notification',strval($row['forum_id']).'-'.strval($row['user_id']))) continue;
 	
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) continue;
 				$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
 				if (is_null($forum_id)) continue;
-				ocf_track_forum($forum_id,$member_id,false,false);
+				enable_notifications('ocf_forum',strval($forum_id),$member_id);
 
-				import_id_remap_put('forum_tracking',strval($row['forum_id']).'-'.strval($row['user_id']),1);
+				import_id_remap_put('forum_notification',strval($row['forum_id']).'-'.strval($row['user_id']),1);
 			}
 	
 			$row_start+=200;

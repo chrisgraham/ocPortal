@@ -47,8 +47,8 @@ function find_addon_icon($hook)
 			$addon_files=eval($matches[1]);
 		} else
 		{
-			require_code('hooks/systems/addon_registry/'.$addon_name);
-			$hook_ob=object_factory('Hook_addon_registry_'.$addon_name);
+			require_code('hooks/systems/addon_registry/'.$hook);
+			$hook_ob=object_factory('Hook_addon_registry_'.$hook);
 			$addon_files=$hook_ob->get_file_list();
 		}
 		foreach ($addon_files as $file)

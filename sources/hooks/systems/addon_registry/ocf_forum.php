@@ -73,9 +73,16 @@ class Hook_addon_registry_ocf_forum
 	function get_file_list()
 	{
 		return array(
+
+			'sources/hooks/systems/notifications/ocf_topic_invite.php',
+			'sources/hooks/systems/notifications/ocf_new_pt.php',
+			'sources/hooks/systems/notifications/ocf_pt.php',
+			'sources/hooks/systems/notifications/ocf_topic.php',
+			'sources/hooks/systems/notifications/ocf_password_changed.php',
 			'themes/default/images/bigicons/forums.png',
 			'sources/hooks/systems/content_meta_aware/forum.php',
 			'sources/hooks/systems/content_meta_aware/topic.php',
+			'sources/hooks/systems/content_meta_aware/post.php',
 			'sources/hooks/modules/admin_stats/ocf_posting_rates.php',
 			'themes/default/images/bigicons/statistics_posting_rates.png',
 			'OCF_BIRTHDAY_LINK.tpl',
@@ -216,6 +223,9 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/systems/awards/forum.php',
 			'sources/hooks/systems/awards/post.php',
 			'sources/hooks/systems/awards/topic.php',
+			'sources/hooks/systems/notifications/ocf_topic.php',
+			'sources/hooks/systems/notifications/ocf_forum.php',
+			'sources/hooks/systems/notifications/ocf_new_pt.php',
 			'themes/default/images/EN/page/forum.png',
 			'themes/default/images/EN/page/send_message.png',
 			'themes/default/images/EN/page/mark_read.png',
@@ -224,10 +234,6 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/EN/page/new_topic.png',
 			'themes/default/images/EN/page/quick_reply.png',
 			'themes/default/images/EN/page/reply.png',
-			'themes/default/images/EN/page/track_forum.png',
-			'themes/default/images/EN/page/track_topic.png',
-			'themes/default/images/EN/page/untrack_forum.png',
-			'themes/default/images/EN/page/untrack_topic.png',
 			'themes/default/images/EN/pageitem/quote.png',
 			'themes/default/images/EN/pageitem/whisper.png',
 			'themes/default/images/EN/pageitem/send_message.png',

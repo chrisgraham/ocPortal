@@ -168,7 +168,7 @@ function reconstitute_booking_requests(&$request)
 				$a['end_year']=$b['end_year'];
 				$a['supplements']+=$b['supplements'];
 				$a['_rows']=array_merge($a['_rows'],$b['_rows']);
-				if (($b['notes']!='') && (strpos($a['notes'],$b['notes'])===false)) $a['notes']+="\n\n".$b['notes'];
+				if (($b['notes']!='') && (strpos($a['notes'],$b['notes'])===false)) $a['notes'].="\n\n".$b['notes'];
 				unset($request[$i]);
 				$request=array_values($request);
 				$i--;

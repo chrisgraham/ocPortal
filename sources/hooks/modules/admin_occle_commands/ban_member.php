@@ -43,12 +43,11 @@ class Hook_ban_member
 
 			if (is_numeric($parameters[0])) $member_id=$parameters[0];
 			else $member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($parameters[0]);
-			if (!array_key_exists(1,$parameters)) $parameters[1]='';
 
 			if (is_null($member_id)) return array('','','',do_lang('USER_NO_EXIST'));
 
-			if ((array_key_exists('u',$options)) || (array_key_exists('unban',$options))) ocf_unban_member($member_id,$parameters[1]);
-			else ocf_ban_member($member_id,$parameters[1]);
+			if ((array_key_exists('u',$options)) || (array_key_exists('unban',$options))) ocf_unban_member($member_id);
+			else ocf_ban_member($member_id);
 			return array('','',do_lang('SUCCESS'),'');
 		}
 	}

@@ -74,6 +74,7 @@ class Hook_addon_registry_ocf_member_avatars
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/ocf_choose_avatar.php',
 			'sources/hooks/systems/addon_registry/ocf_member_avatars.php',
 			'OCF_EDIT_AVATAR_TAB.tpl',
 			'uploads/ocf_avatars/index.html',

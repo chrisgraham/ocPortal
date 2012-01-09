@@ -984,7 +984,7 @@ function workflow_update_handler()
 	
 	// Find out which groups/members to inform, starting with the
 	// original submitter
-	$send_to_addresses = array();		// This stores who we're emailing as ID=>email
+	$send_to_members = array();
 	if (array_key_exists('send_author',$_POST))
 	{
 		if (post_param_integer('send_author')==1)
@@ -992,11 +992,7 @@ function workflow_update_handler()
 			$submitter = get_submitter_of_workflow_content($content_id);
 			if (!is_null($submitter))
 			{
-				$current_email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($submitter);
-				if ($current_email!='')
-				{
-					$send_to_addresses[$submitter] = $current_email;
-				}
+				$send_to_members[$submitter] = 1;
 			}
 		}
 	}
@@ -1018,12 +1014,7 @@ function workflow_update_handler()
 	// From the groups we can get the members, and from there the emails
 	foreach ($GLOBALS['FORUM_DRIVER']->member_group_query($group_ids) as $member)		// FIXME: OCF-specific
 	{
-		$current_email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($member['id']);
-		// Check that we have a valid, unencountered email address
-		if ($current_email!='' && !in_array($current_email,$send_to_addresses))
-		{
-			$send_to_addresses[$member['id']] = $current_email;
-		}
+		$send_to_members[$member['id']] = 1;
 	}
 	
 	////////////////////////////////////////////
@@ -1225,15 +1216,7 @@ function workflow_update_handler()
 	///////////////////////////////////////////
 	// Now inform members about this content //
 	///////////////////////////////////////////
-	// First make sure we have aligned arrays of emails and names
-	$emails = array();
-	$names = array();
-	foreach ($send_to_addresses as $member=>$email)
-	{
-		$emails[] = $email;
-		$names[] = $GLOBALS['FORUM_DRIVER']->get_username($member);
-	}
-	// Now make a nicely formatted list of the statuses
+	// Make a nicely formatted list of the statuses
 	$status_list = '';
 	foreach ($all_approval_statuses as $point=>$status)
 	{
@@ -1243,15 +1226,17 @@ function workflow_update_handler()
 	}
 	
 	// At last we can send the email
-	require_code('mail');
-	if (count($emails) > 0)
+	require_code('notifications');
+	if (count($send_to_members) > 0)
 	{
 		$success_message .= do_lang('APPROVAL_CHANGED_NOTIFICATIONS');
 	}
 	//require_code('developer_tools');
 	//inspect($emails);
-	mail_wrap(do_lang('APPROVAL_EMAIL_SUBJECT',/*TODO: Should pass title in, for unique email subject line*/NULL,NULL,NULL,get_site_default_lang()),do_lang('APPROVAL_EMAIL_BODY',post_param('http_referer',ocp_srv('HTTP_REFERER')),$status_list,$workflow_notes,get_site_default_lang()),$emails,$names);
-	
+	$subject=do_lang('APPROVAL_EMAIL_SUBJECT',/*TODO: Should pass title in, for unique email subject line*/NULL,NULL,NULL,get_site_default_lang());
+	$body=do_lang('APPROVAL_EMAIL_BODY',post_param('http_referer',ocp_srv('HTTP_REFERER')),$status_list,$workflow_notes,get_site_default_lang());
+	dispatch_notification('workflow_step',strval($workflow_id),$subject,$body,$send_to_members);
+
 	// Finally return a success message
 	$return_url = strip_tags(post_param('return_url'));
 	return redirect_screen(new ocp_tempcode(),$return_url,$success_message);

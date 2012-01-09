@@ -196,7 +196,8 @@ class Module_awards
 		$content=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
-			$award_content_row=get_award_content_row($myrow['content_id'],$info);
+			require_code('content');
+			list(,,,$award_content_row)=content_get_details($myrow['content_id'],$info);
 
 			if (!is_null($award_content_row))
 			{

@@ -220,11 +220,11 @@ class Hook_pointstore_custom
 		charge_member(get_member(),$cost,$c_title);
 		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($rows[0]['id'])));
 
-		require_code('mail');
+		require_code('notifications');
+		$subject=do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),NULL,NULL,get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$message_raw=do_lang('MAIL_REQUEST_CUSTOM_BODY',comcode_escape($c_title),$username,NULL,get_site_default_lang());
-
-		mail_wrap(do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),NULL,NULL,get_site_default_lang()),$message_raw,NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		dispatch_notification('pointstore_request_custom',strval($id),$subject,$message_raw,NULL,NULL,3,true);
 
 		// Show message
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

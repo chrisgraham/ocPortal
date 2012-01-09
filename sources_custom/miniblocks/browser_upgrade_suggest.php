@@ -68,6 +68,6 @@ if (($browser->getBrowser()==Browser::BROWSER_OPERA) && (floatval($browser->getV
 
 if ($message!='')
 {
-	$out=put_in_standard_box($message,'',NULL,'curved');
+	$out=put_in_standard_box(make_string_tempcode($message),'',NULL,'curved');
 	$out->evaluate_echo();
 }

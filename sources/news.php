@@ -170,8 +170,6 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('news',$map,true);
 
-	require_code('mail');
-
 	if (!is_null($news_category))
 	{
 		foreach ($news_category as $value)
@@ -250,6 +248,8 @@ END;
 		decache('side_news');
 		decache('side_news_archive');
 		decache('bottom_news');
+
+		dispatch_news_notification($id,$title,$main_news_category_id);
 	}
 
 	if (($validated==1) && (get_option('site_closed')=='0') && (ocp_srv('HTTP_HOST')!='127.0.0.1') && (ocp_srv('HTTP_HOST')!='localhost') && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category_id))))
@@ -261,7 +261,7 @@ END;
 			$ping_url=trim($ping_url);
 			if ($ping_url!='') http_download_file($ping_url,NULL,false);
 		}
-	}	
+	}
 
 	return $id;
 }
@@ -293,15 +293,22 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	$_news=$rows[0]['news'];
 	$_news_article=$rows[0]['news_article'];
 	
-	require_code('mail');
-
 	require_code('urls2');
 
 	suggest_new_idmoniker_for('news','view',strval($id),$title);
 
 	require_code('attachments2');
 	require_code('attachments3');
+
 	if (!addon_installed('unvalidated')) $validated=1;
+
+	require_code('submit');
+	$just_validated=(!content_validated('news',strval($id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('news',strval($id));
+	}
+
 	$map=array('news_category'=>$main_news_category,'news_article'=>update_lang_comcode_attachments($_news_article,$news_article,'news',strval($id),NULL,false,$rows[0]['submitter']),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'title'=>lang_remap_comcode($_title,$title),'news'=>lang_remap_comcode($_news,$news),'author'=>$author);
 
 	if (!is_null($time)) $map['date_and_time']=$time;
@@ -333,6 +340,13 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	$GLOBALS['SITE_DB']->query_update('news',$map,array('id'=>$id),'',1);
 
+	$self_url=build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news'),NULL,false,false,true);
+
+	if ($just_validated)
+	{
+		dispatch_news_notification($id,$title,$main_news_category);
+	}
+
 	require_code('seo2');
 	seo_meta_set_for_explicit('news',strval($id),$meta_keywords,$meta_description);
 
@@ -352,7 +366,35 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 		}
 	}
 
-	update_spacer_post($allow_comments!=0,'news',strval($id),build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news'),NULL,false,false,true),$title,get_value('comment_forum__news'));
+	update_spacer_post($allow_comments!=0,'news',strval($id),$self_url,$title,get_value('comment_forum__news'));
+}
+
+/**
+ * Send out a notification of some new news.
+ *
+ * @param  AUTO_LINK		The ID of the news
+ * @param  SHORT_TEXT	The title
+ * @param  AUTO_LINK		The main news category
+ */
+function dispatch_news_notification($id,$title,$main_news_category)
+{
+	$self_url=build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news'),NULL,false,false,true);
+
+	$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$main_news_category)));
+
+	require_code('notifications');
+	require_lang('news');
+	if ($is_blog)
+	{
+		$subject=do_lang('BLOG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$title);
+		$mail=do_lang('BLOG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate()));
+		dispatch_notification('blog_post',strval($id),$subject,$mail);
+	} else
+	{
+		$subject=do_lang('NEWS_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$title);
+		$mail=do_lang('NEWS_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate()));
+		dispatch_notification('news_entry',strval($id),$subject,$mail);
+	}
 }
 
 /**

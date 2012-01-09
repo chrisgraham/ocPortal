@@ -141,10 +141,10 @@ class Module_filedump
 	function module_do_gui()
 	{
 		$title=get_page_title('FILE_DUMP');
-	
+
 		$place=filter_naughty(get_param('place','/'));
 		if (substr($place,-1,1)!='/') $place.='/';
-	
+
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=filedump&filter='.$place;
 
 		// Show tree
@@ -449,18 +449,18 @@ class Module_filedump
 			else warn_exit(do_lang_tempcode('ERROR_UPLOADING'));
 		}
 
-		if (get_magic_quotes_gpc()) $_FILES['file']['name']=stripslashes($_FILES['file']['name']);
+		$file=$_FILES['file']['name'];
+		if (get_magic_quotes_gpc()) $file=stripslashes($file);
 
-		if (!has_specific_permission(get_member(),'upload_anything_filedump')) check_extension($_FILES['file']['name']);
-		$_FILES['file']['name']=str_replace('.','-',basename($_FILES['file']['name'],'.'.get_file_extension($_FILES['file']['name']))).'.'.get_file_extension($_FILES['file']['name']);
+		if (!has_specific_permission(get_member(),'upload_anything_filedump')) check_extension($file);
+		$file=str_replace('.','-',basename($file,'.'.get_file_extension($file))).'.'.get_file_extension($file);
 
-		if (!file_exists(get_custom_file_base().'/uploads/filedump'.$place.$_FILES['file']['name']))
+		if (!file_exists(get_custom_file_base().'/uploads/filedump'.$place.$file))
 		{
 			$max_size=get_max_file_size();
 			if ($_FILES['file']['size']>$max_size) warn_exit(do_lang_tempcode('FILE_TOO_BIG',integer_format(intval($max_size))));
 
-			$file=$_FILES['file']['name'];
-			$full=get_custom_file_base().'/uploads/filedump'.$place.$_FILES['file']['name'];
+			$full=get_custom_file_base().'/uploads/filedump'.$place.$file;
 			if (is_swf_upload(true))
 			{
 				@rename($_FILES['file']['tmp_name'],$full) OR warn_exit(do_lang_tempcode('FILE_MOVE_ERROR',escape_html($file),escape_html('uploads/filedump'.$place)));
@@ -476,9 +476,16 @@ class Module_filedump
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>$file,'path'=>$place));
 			if (!is_null($test)) delete_lang($test);
 			$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>$file,'path'=>$place),'',1);
-			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$file,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode(post_param('description'),3)));
-	
-			log_it('FILEDUMP_UPLOAD',$_FILES['file']['name'],$place);
+			$description=post_param('description');
+			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$file,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
+
+			require_lang('notifications');
+			$subject=do_lang('FILEDUMP_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$file,$place);
+			$mail=do_lang('FILEDUMP_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($file),array(comcode_escape($place),comcode_escape($description)));
+			dispatch_notification('filedump',$place,$subject,$mail);
+
+			log_it('FILEDUMP_UPLOAD',$file,$place);
+
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),get_page_name(),get_zone_name()))
 				syndicate_described_activity('filedump:FILEDUMP_UPLOAD',$place.'/'.$file,'','','','','','filedump');
 

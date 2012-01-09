@@ -120,6 +120,8 @@ class Hook_addon_registry_banners
 			'POINTSTORE_BANNERS_ACTIVATE.tpl',
 			'POINTSTORE_BANNERS_UPGRADE.tpl',
 			'sources/hooks/systems/do_next_menus/banners.php',
+			'sources/hooks/systems/content_meta_aware/banner.php',
+			'sources/hooks/systems/content_meta_aware/banner_type.php',
 			'data/images/advertise_here.png',
 			'data/images/donate.png',
 			'data/images/hosting.png',

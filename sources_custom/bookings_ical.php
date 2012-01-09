@@ -49,8 +49,8 @@ function bookables_ical_script()
 	{
 		echo "BEGIN:VEVENT\n";
 
-		echo "DTSTAMP:".date('Ymd',$booking['booked_at'])."T".date('His',$event['add_date'])."\n";
-		echo "CREATED:".date('Ymd',$booking['booked_at'])."T".date('His',$event['add_date'])."\n";
+		echo "DTSTAMP:".date('Ymd',$event['add_date'])."T".date('His',$event['add_date'])."\n";
+		echo "CREATED:".date('Ymd',$event['add_date'])."T".date('His',$event['add_date'])."\n";
 		if (!is_null($event['edit_date'])) echo "LAST-MODIFIED:".date('Ymd',time())."T".date('His',$event['edit_date'])."\n";
 
 		echo "SUMMARY:".ical_escape(get_translated_text($event['title']))."\n";

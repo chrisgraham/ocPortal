@@ -162,7 +162,7 @@ foreach ($zones2 as $z)
 				}
 			}
 		}
-		$url='';
+		$url=new ocp_tempcode();
 		ksort($_pages);
 		$temp='<DT><H3>'.escape_html($zone_title).'</H3><DL><p>'.implode('',$_pages).'</p></DL>';
 		$_zones[]=$temp;

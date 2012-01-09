@@ -150,7 +150,7 @@ function handle_active_login($username)
 
 		// Create session
 		require_code('users_inactive_occasionals');
-		create_session($member,true);
+		create_session($member,1);
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>trim(post_param('login_username')),'date_and_time'=>time(),'ip'=>get_ip_address()));

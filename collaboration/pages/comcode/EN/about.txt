@@ -23,9 +23,9 @@ Some of the services we may offer ([b]DEFAULT. PLEASE EDIT AS REQUIRED[/b]):
  - A points system on the forums, so you can be awarded for your work. You can use your gained points to 'purchase' banner hits, emails and text-banner promotion
  - Advertisement of your works as images of the day
 {+START,IF,{$ADDON_INSTALLED,filedump}}
-[title="2"]The file-dump (file storage service)[/title]
+[title="2"]The file/media library[/title]
 
-{$ANCHOR,FILE_DUMP}[semihtml]<a href="{$PAGE_LINK*,_SELF:filedump}">The file-dump</a>[/semihtml] is a place where you may store files to share with other super-members.
+{$ANCHOR,FILE_DUMP}[semihtml]<a href="{$PAGE_LINK*,_SELF:filedump}">The file/media library</a>[/semihtml] is a place where you may store files to share with other super-members.
 
 Feel free to create personal folders in here for your own use.
 

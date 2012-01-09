@@ -75,6 +75,7 @@ class Hook_addon_registry_weather
 		return array(
 
 			'sources/hooks/systems/addon_registry/weather.php',
+			'sources/hooks/systems/notifications/error_occurred_weather.php',
 			'BLOCK_SIDE_WEATHER.tpl',
 			'sources/blocks/side_weather.php',
 			'lang/EN/weather.ini',

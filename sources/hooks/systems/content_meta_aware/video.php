@@ -29,6 +29,8 @@ class Hook_content_meta_aware_video
 	function info()
 	{
 		return array(
+			'content_type_label'=>'VIDEO',
+
 			'table'=>'videos',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

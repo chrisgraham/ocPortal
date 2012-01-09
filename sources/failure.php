@@ -176,8 +176,8 @@ function improperly_filled_in_post($name)
  * @param  ID_TEXT		Error type indicator (tiny human-readable text string)
  * @param  integer		The error code-number
  * @param  PATH			The error message
- * @param  string			The file the error occured in
- * @param  integer		The line the error occured on
+ * @param  string			The file the error occurred in
+ * @param  integer		The line the error occurred on
  */
 function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 {
@@ -212,7 +212,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	{
 		@ini_set('display_errors','0');
 		fatal_exit('PHP '.strtoupper($type).' ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline));
-		relay_error_mail($out);
+		relay_error_notification($out);
 		exit();
 	} else
 	{
@@ -247,10 +247,10 @@ function _generic_exit($text,$template)
 			$GLOBALS['HTTP_STATUS_CODE']='404';
 			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
 		}
-		/*if (ocp_srv('HTTP_REFERER')!='')		Too annoying. Spiders keep causing it
+		if (ocp_srv('HTTP_REFERER')!='')
 		{
-			relay_error_mail($text_eval.' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false);
-		}*/
+			relay_error_notification($text_eval.' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_resource');
+		}
 	}
 
 	if ((array_key_exists('MSN_DB',$GLOBALS)) && (!is_null($GLOBALS['MSN_DB'])))
@@ -283,12 +283,12 @@ function _generic_exit($text,$template)
 		$title=get_page_title($GLOBALS['DISPLAYED_TITLE'],false);
 	} else
 	{
-		$title=get_page_title(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURED');
+		$title=get_page_title(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED');
 	}
 
 	if (running_script('preview') || running_script('iframe') || running_script('shoutbox'))
 	{
-		$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURED'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$text));
+		$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$text));
 		$echo->handle_symbol_preprocessing();
 		$echo->evaluate_echo();
 		exit();
@@ -414,7 +414,6 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 				$summary.="\n".' - '.$full_reason.' ['.$row['url'].']';
 			}
 			add_ip_ban($alt_ip?$ip2:$ip,$full_reason);
-			require_code('mail');
 			$_ip_ban_url=build_url(array('page'=>'admin_ipban','type'=>'misc'),get_module_zone('admin_ipban'),NULL,false,false,true);
 			$ip_ban_url=$_ip_ban_url->evaluate();
 			$ip_ban_todo=do_lang('AUTO_BAN_HACK_MESSAGE',$alt_ip?$ip2:$ip,integer_format($hack_threshold),array($summary,$ip_ban_url),get_site_default_lang());
@@ -435,12 +434,15 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		$time=get_timezoned_date(time(),true,true,true);
 		$message=do_template('HACK_ATTEMPT_MAIL',array('_GUID'=>'6253b3c42c5e6c70d20afa9d1f5b40bd','STACK_TRACE'=>$stack_trace,'USER_AGENT'=>get_browser_string(),'REFERER'=>ocp_srv('HTTP_REFERER'),'USER_OS'=>get_os_string(),'REASON'=>$reason_full,'IP'=>$ip,'ID'=>strval($id),'USERNAME'=>$username,'TIME_RAW'=>strval(time()),'TIME'=>$time,'URL'=>$url,'POST'=>$post),get_site_default_lang());
 
-		require_code('mail');
-		mail_wrap(do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),$message->evaluate(get_site_default_lang(),false),array(get_option('staff_address')),get_site_name());
+		require_code('notifications');
+
+		$subject=do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang());
+		dispatch_notification('hack_attack',NULL,$subject,$message->evaluate(get_site_default_lang(),false),NULL,A_FROM_SYSTEM_PRIVILEGED);
 
 		if (!is_null($ip_ban_todo))
 		{
-			mail_wrap(do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),$ip_ban_todo);
+			$subject=do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang());
+			dispatch_notification('auto_ban',NULL,$subject,$ip_ban_todo,NULL,A_FROM_SYSTEM_PRIVILEGED);
 		}
 	}
 
@@ -668,10 +670,10 @@ function _fatal_exit($text,$return=false)
 		$trace=get_html_trace();
 	} else
 	{
-		$trace=paragraph(do_lang_tempcode((get_option('send_error_emails',true)=='1')?'STACK_TRACE_DENIED_ERROR_MAIL':'STACK_TRACE_DENIED'),'yrthrty4ttewdf');
+		$trace=paragraph(do_lang_tempcode('STACK_TRACE_DENIED_ERROR_ALERT'),'yrthrty4ttewdf');
 	}
 
-	$title=get_page_title('ERROR_OCCURED');
+	$title=get_page_title('ERROR_OCCURRED');
 
 	@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text),0);
 
@@ -682,7 +684,7 @@ function _fatal_exit($text,$return=false)
 	$echo->evaluate_echo();
 
 	if (get_param_integer('keep_fatalistic',0)==0)
-		relay_error_mail((is_object($text)?$text->evaluate():$text).'[html]'.$error_tpl->evaluate().'[/html]');
+		relay_error_notification((is_object($text)?$text->evaluate():$text).'[html]'.$error_tpl->evaluate().'[/html]');
 
 	if (!$return) exit();
 }
@@ -692,8 +694,9 @@ function _fatal_exit($text,$return=false)
  *
  * @param  string			A error message (in HTML)
  * @param  boolean		Also send to ocProducts
+ * @param  ID_TEXT		The notification type
  */
-function relay_error_mail($text,$ocproducts=true)
+function relay_error_notification($text,$ocproducts=true,$notification_type='error_occurred')
 {
 	// Make sure we don't send too many error emails
 	if ((function_exists('get_value')) && ($GLOBALS['BOOTSTRAPPING']==0) && (array_key_exists('SITE_DB',$GLOBALS)) && (!is_null($GLOBALS['SITE_DB'])))
@@ -706,7 +709,6 @@ function relay_error_mail($text,$ocproducts=true)
 	}
 
 	if (!function_exists('require_lang')) return;
-	require_code('mail');
 
 	$protocol=((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off'))?'https':'http';
 	if (!array_key_exists('HTTP_HOST',$_SERVER))
@@ -727,18 +729,20 @@ function relay_error_mail($text,$ocproducts=true)
 	$url=post_param('base_url',$default);
 
 	$error_url=$url.'?'.ocp_srv('QUERY_STRING');
+	require_code('notifications');
 	require_code('comcode');
 	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),$text,NULL,get_site_default_lang());
-	if (get_option('send_error_emails',true)=='1')
-		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,'','','',3,NULL,true,NULL,true);
+	dispatch_notification($notification_type,NULL,do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,A_FROM_SYSTEM_PRIVILEGED);
 	if (($ocproducts) && (get_option('send_error_emails_ocproducts',true)=='1') && (!running_script('cron_bridge')) && (strpos($text,'_custom/')===false) && (strpos($text,'data/occle.php')===false) && (strpos($text,'/mini')===false) && (strpos($text,'&#')===false/*charset encoding issue*/) && (strpos($text,'has been disabled for security reasons')===false) && (strpos($text,'max_questions')/*mysql limit*/===false) && (strpos($text,'Error at offset')===false) && (strpos($text,'Unable to allocate memory for pool')===false) && (strpos($text,'Out of memory')===false) && (strpos($text,'Disk is full writing')===false) && (strpos($text,'Disk quota exceeded')===false) && (strpos($text,'from storage engine')===false) && (strpos($text,'Lost connection to MySQL server')===false) && (strpos($text,'Unable to save result set')===false) && (strpos($text,'.MYI')===false) && (strpos($text,'MySQL server has gone away')===false) && (strpos($text,'Incorrect key file')===false) && (strpos($text,'Too many connections')===false) && (strpos($text,'marked as crashed and should be repaired')===false) && (strpos($text,'connect to')===false) && (strpos($text,'Access denied for')===false) && (strpos($text,'Unknown database')===false) && (strpos($text,'headers already sent')===false) && (preg_match('#Maximum execution time of \d+ seconds#',$text)==0) && (strpos($text,'File(/tmp/) is not within the allowed path')===false))
 	{
-		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
+		require_code('mail');
+		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
 	}
 	if (($ocproducts) && (!is_null(get_value('agency_email_address'))))
 	{
+		require_code('mail');
 		$agency_email_address=get_value('agency_email_address');
-		mail_wrap(do_lang('ERROR_OCCURED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
 	}
 }
 

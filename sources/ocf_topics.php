@@ -131,46 +131,6 @@ function ocf_may_delete_topics_by($forum_id,$member_id,$resource_owner)
 }
 
 /**
- * Find whether a member is tracking a certain topic.
- *
- * @param  AUTO_LINK The ID of the topic.
- * @param  ?MEMBER	The member (NULL: current member).
- * @return boolean	The answer.
- */
-function ocf_is_tracking_topic($topic_id,$member_id=NULL)
-{
-	if (is_null($member_id)) $member_id=get_member();
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topic_tracking','r_member_id',array('r_member_id'=>$member_id,'r_topic_id'=>$topic_id));
-	return !is_null($test);
-}
-
-/**
- * Change a members tracking settings with respect to a certain topic.
- *
- * @param  AUTO_LINK The topic.
- * @param  ?MEMBER	The member (NULL: current member).
- * @param  boolean	Whether we are untracking the topic.
- * @param  boolean	Whether we are checking permissions for the member to actually track this topic.
- */
-function ocf_track_topic($topic_id,$member_id=NULL,$untrack=false,$check_permissions=true)
-{
-	if (is_null($member_id)) $member_id=get_member();
-	$info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id','t_pt_from','t_pt_to'),array('id'=>$topic_id),'',1);
-	if (!array_key_exists(0,$info)) return;
-	$forum_id=$info[0]['t_forum_id'];
-	if (($check_permissions) && (!$untrack))
-	{
-		if ((!has_category_access($member_id,'forums',strval($forum_id))) && (!((is_null($forum_id)) && (($info[0]['t_pt_from']==$member_id) || ($info[0]['t_pt_to']==$member_id) || (ocf_has_special_pt_access($topic_id))))))
-			access_denied('I_ERROR');
-	}
-	$GLOBALS['FORUM_DB']->query_delete('f_topic_tracking',array('r_member_id'=>$member_id,'r_topic_id'=>$topic_id),'',1);
-	if (!$untrack)
-	{
-		$GLOBALS['FORUM_DB']->query_insert('f_topic_tracking',array('r_member_id'=>$member_id,'r_last_message_time'=>0,'r_topic_id'=>$topic_id));
-	}
-}
-
-/**
  * Mark a topic as read by the current member.
  *
  * @param  AUTO_LINK The Id of the topic to mark as read.

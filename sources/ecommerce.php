@@ -227,11 +227,10 @@ function make_cancel_button($purchase_id,$via)
 function send_invoice_mail($member_id,$id)
 {
 	// Send out mail
-	require_code('mail');
-	$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
+	require_code('notifications');
 	$_url=build_url(array('page'=>'invoices','type'=>'misc'),get_module_zone('invoices'),NULL,false,false,true);
 	$url=$_url->evaluate();
-	mail_wrap(do_lang('INVOICE_SUBJECT',strval($id),NULL,NULL,get_lang($member_id)),do_lang('INVOICE_MESSAGE',$url,get_site_name(),NULL,get_lang($member_id)),array($email));
+	dispatch_notification('invoice',NULL,do_lang('INVOICE_SUBJECT',strval($id),NULL,NULL,get_lang($member_id)),do_lang('INVOICE_MESSAGE',$url,get_site_name(),NULL,get_lang($member_id)),array($member_id));
 }
 
 /**
@@ -357,7 +356,6 @@ function perform_local_payment()
 function handle_transaction_script()
 {
 	require_lang('ecommerce');
-	require_code('mail');
 	$via=get_param('from',get_option('payment_gateway'));
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 	$object=object_factory('Hook_'.$via);
@@ -542,25 +540,6 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 }
 
 /**
- * Notify the user that a service has been paid for (invoice-linked).
- *
- * @param  ID_TEXT	The ID of the invoice.
- * @param  array		The details of the service (well, proper terminology is 'product').
- * @param  ID_TEXT	The product.
- * @param  boolean	Whether this is a subscription being cancelled.
- */
-function notify_service_paid_for($id,$details,$product,$termination=false)
-{
-	$member_id=$GLOBALS['SITE_DB']->query_value('invoices','i_member_id',array('id'=>intval($id)));
-	$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-
-	require_code('mail');
-	$type=$termination?'CANCELLED':'PAID_FOR';
-	mail_wrap(do_lang('SERVICE_'.$type,NULL,NULL,NULL,get_lang($member_id)),do_lang('SERVICE_'.$type.'_TEXT',$details[4],get_site_name(),NULL,get_lang($member_id)),array($email,get_option('staff_address')),$username,$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
-}
-
-/**
  * Exit ocPortal and write to the error log file.
  *
  * @param  string		The message.
@@ -708,14 +687,10 @@ function delete_usergroup_subscription($id,$uhoh_mail)
 	// Remove benefits
 	$product='USERGROUP'.strval($id);
 	$subscriptions=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'),array('s_type_code'=>$product));
-	require_code('mail');
-	$to_mails=array();
-	$usernames=array();
+	$to_members=array();
 	foreach ($subscriptions as $sub)
 	{
 		$member_id=$sub['s_member_id'];
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-		$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
 		if ((get_value('unofficial_ecommerce')=='1') && (get_forum_type()!='ocf'))
 		{
 			$GLOBALS['FORUM_DB']->remove_member_from_group($member_id,$new_group);
@@ -723,11 +698,13 @@ function delete_usergroup_subscription($id,$uhoh_mail)
 		{
 			$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_members',array('gm_group_id'=>$new_group,'gm_member_id'=>$member_id),'',1);
 		}
-		$to_mails[]=$to_email;
-		$usernames[]=$username;
+		$to_members[]=$member_id;
 	}
 	if ($uhoh_mail!='')
-		mail_wrap(do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_site_default_lang()),$uhoh_mail,$to_mails,$usernames);
+	{
+		require_code('notifications');
+		dispatch_notification('paid_subscription_ended',NULL,do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_site_default_lang()),$uhoh_mail,$to_members);
+	}
 
 	$_title=$myrow['s_title'];
 	$_description=$myrow['s_description'];

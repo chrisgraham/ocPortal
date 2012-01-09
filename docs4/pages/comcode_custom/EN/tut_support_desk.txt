@@ -3,7 +3,7 @@
 [exp_thumb="Configuring the support ticket and comment topic systems" float="right"]support_forum_config[/exp_thumb]
 ocPortal can be used as an effective support desk tool. For those unfamiliar with the concept of a support desk, or who may not relate their personal needs to being an application of such, these are some common properties of a support desk system:
  - PLACEMENT: the ability for issues to be placed, both by staff, and by the audience being supported
- - NOTIFICATION: alerts, for staff to be made aware of issues
+ - NOTIFICATION: notifications, for staff to be made aware of issues
  - CATEGORISATION: categorisation of issues
  - PRIORITISATION: prioritisation of issues
  - ASSIGNING: the issue is assigned to a specific member of staff
@@ -50,10 +50,6 @@ Staff will see all open support tickets when they visit the support ticket page,
       <td>A special interface is provided for this</td>
    </tr>
    <tr>
-      <td>NOTIFICATION</td>
-      <td>E-mail notifications are sent</td>
-   </tr>
-   <tr>
       <td>CATEGORISATION</td>
       <td>Support ticket types may be managed from the Admin Zone</td>
    </tr>
@@ -63,11 +59,11 @@ Staff will see all open support tickets when they visit the support ticket page,
    </tr>
    <tr>
       <td>ASSIGNING</td>
-      <td>If more than one member of staff are viewing the same support ticket then an alert will be shown</td>
+      <td>If more than one member of staff are viewing the same support ticket then a notification will be shown</td>
    </tr>
    <tr>
-      <td>TRACKING</td>
-      <td>E-mail notifications are sent</td>
+      <td>NOTIFICATIONS</td>
+      <td>E-mail/etc notifications are sent</td>
    </tr>
    <tr>
       <td>COORDINATION</td>
@@ -88,7 +84,7 @@ Staff will see all open support tickets when they visit the support ticket page,
 
 The Messaging system is designed to allow staff to easily receive messages and organise themselves with respect to those messages. It is different from the Support Ticket system because the Messaging system is designed around staff planning, and unlike support tickets there is no inbuilt reply mechanism to reply to messages received (although people may leave their contact details). It is optimised for managing feedback instead of maintaining customer relationships.
 
-The Messaging system hooks up to the [tt]main_contact_us[/tt] block. This block gets placed on a Comcode page of your choice, and you use it to gather messages. Any messages gathered will be e-mailed out to any staff who are tracking that particular usage of the block. Staff can set up their tracking by visiting the Comcode page where the block is placed. When staff are e-mailed they get a link to view the message, and discuss it between themselves. One member of staff may opt to take ownership over the message, which gives them the responsibility of actioning/implementing whatever it implies is required (e.g. if it is a suggestion, implementing that suggestion).
+The Messaging system hooks up to the [tt]main_contact_us[/tt] block. This block gets placed on a Comcode page of your choice, and you use it to gather messages. Any messages gathered will be e-mailed out to any staff who have notifications enabled for the particular usage of the block. Staff can set up their notifications by visiting the Comcode page where the block is placed. When staff are e-mailed they get a link to view the message, and discuss it between themselves. One member of staff may opt to take ownership over the message, which gives them the responsibility of actioning/implementing whatever it implies is required (e.g. if it is a suggestion, implementing that suggestion).
 
 [html]
 <table class="solidborder wide_table" summary="Columned table">
@@ -101,12 +97,8 @@ The Messaging system hooks up to the [tt]main_contact_us[/tt] block. This block 
       <td>A special interface is provided for this</td>
    </tr>
    <tr>
-      <td>NOTIFICATION</td>
-      <td>E-mail notifications are sent</td>
-   </tr>
-   <tr>
       <td>CATEGORISATION</td>
-      <td>You can place multiple contact-us blocks, each identified with different IDs. Staff members may set tracking for them individually.</td>
+      <td>You can place multiple contact-us blocks, each identified with different IDs. Staff members may set notifications for them individually.</td>
    </tr>
    <tr>
       <td>PRIORITISATION</td>
@@ -114,11 +106,11 @@ The Messaging system hooks up to the [tt]main_contact_us[/tt] block. This block 
    </tr>
    <tr>
       <td>ASSIGNING</td>
-      <td>If more than one member of staff are viewing the same support ticket then an alert will be shown</td>
+      <td>If more than one member of staff are viewing the same support ticket then a notification will be shown</td>
    </tr>
    <tr>
-      <td>TRACKING</td>
-      <td>E-mail notifications are sent</td>
+      <td>NOTIFICATIONS</td>
+      <td>E-mail/etc notifications are sent</td>
    </tr>
    <tr>
       <td>COORDINATION</td>
@@ -152,8 +144,8 @@ For more information on this, see the 'Running a discussion forum based help des
       <td>Standard forum features may be used effectively</td>
    </tr>
    <tr>
-      <td>NOTIFICATION</td>
-      <td>Staff may subscribe (track) to forums as appropriate</td>
+      <td>NOTIFICATIONS</td>
+      <td>Staff may set up notifications against forums as appropriate</td>
    </tr>
    <tr>
       <td>CATEGORISATION</td>
@@ -166,10 +158,6 @@ For more information on this, see the 'Running a discussion forum based help des
    <tr>
       <td>ASSIGNING</td>
       <td>Sub-forums or topic titles may be used for this</td>
-   </tr>
-   <tr>
-      <td>TRACKING</td>
-      <td>Members may choose to subscribe to their topics either automatically or manually</td>
    </tr>
    <tr>
       <td>COORDINATION</td>
@@ -206,10 +194,6 @@ To use the feedback commenting system, you must not be using the 'none' forum dr
       <td>There is an implicit attachment to a related piece of content (such as a download)</td>
    </tr>
    <tr>
-      <td>NOTIFICATION</td>
-      <td>Indirectly, seeing that there is a new post on the forum either via subscription or 'unread' status</td>
-   </tr>
-   <tr>
       <td>CATEGORISATION</td>
       <td>There is an implicit attachment to a related piece of content (such as a download)</td>
    </tr>
@@ -222,8 +206,8 @@ To use the feedback commenting system, you must not be using the 'none' forum dr
       <td><i>Not supported</i></td>
    </tr>
    <tr>
-      <td>TRACKING</td>
-      <td><i>Not supported</i></td>
+      <td>NOTIFICATIONS</td>
+      <td>a notification can be enabled for when new feedback is posted</td>
    </tr>
    <tr>
       <td>COORDINATION</td>

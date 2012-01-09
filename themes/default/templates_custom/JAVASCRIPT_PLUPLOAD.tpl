@@ -1116,7 +1116,7 @@
 				self.bind('QueueChanged', calc);
 
 				self.bind("Error", function(up, err) {
-					// Set failed status if an error occured on a file
+					// Set failed status if an error occurred on a file
 					if (err.file) {
 						err.file.status = plupload.FAILED;
 						calc();
@@ -5403,6 +5403,9 @@ function queueChanged(ob)
 
 function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
+	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
+	if ('{$MOBILE}'=='1') return;
+
 	if (!posting_field_name) posting_field_name='post';
 	
 	var rep=document.getElementById(name);
@@ -5413,6 +5416,8 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
+	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
+
 	if (!filter) filter='{$CONFIG_OPTION#,valid_types}';
 
 	{+START,IF,{$VALUE_OPTION,aviary}}

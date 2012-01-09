@@ -134,7 +134,7 @@ function ocf_member_external_linker_ask($username,$type,$email_address='',$dob_d
 		$username=get_username_from_human_name($username);
 	}
 
-	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email_address,1,$dob_day,$dob_month,$dob_year,$timezone,NULL,NULL,1,1,0,NULL,1,1,1,$language,$username,0,$type);
+	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email_address,1,$dob_day,$dob_month,$dob_year,$timezone,NULL,NULL,1,1,0,NULL,$language,1,1,1,NULL,$username,0,$type);
 	$hidden->attach(build_keep_post_fields());
 	$hidden->attach(form_input_hidden('finishing_profile','1'));
 
@@ -259,7 +259,7 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
  * @param  ?ID_TEXT			The members default theme (NULL: not known).
  * @param  BINARY				Whether the members age may be shown.
  * @param  BINARY				Whether the member sees signatures in posts.
- * @param  ?BINARY			Whether the member tracks topics they post in automatically (NULL: get default from config).
+ * @param  ?BINARY			Whether the member automatically is enabled for notifications for content they contribute to (NULL: get default from config).
  * @param  ?LANGUAGE_NAME	The members language (NULL: auto detect).
  * @param  BINARY				Whether the member allows e-mails via the site.
  * @param  BINARY				Whether the member allows e-mails from staff via the site.
@@ -275,11 +275,11 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
  * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
  * @return array				A pair: The form fields, Hidden fields (both Tempcode).
  */
-function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$custom_fields=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$track_contributed_topics=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$custom_fields=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
 	$fields=new ocp_tempcode();
 	$hidden=new ocp_tempcode();
-	list($_fields,$_hidden)=ocf_get_member_fields_settings($mini_mode,$member_id,$groups,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$theme,$reveal_age,$views_signatures,$track_contributed_topics,$language,$allow_emails,$allow_emails_from_staff,$validated,$primary_group,$username,$is_perm_banned,$special_type,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+	list($_fields,$_hidden)=ocf_get_member_fields_settings($mini_mode,$member_id,$groups,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$primary_group,$username,$is_perm_banned,$special_type,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 	$fields->attach($_fields);
 	$hidden->attach($_hidden);
 	if (!$mini_mode) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PROFILE'))));
@@ -305,7 +305,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  ?ID_TEXT			The members default theme (NULL: not known).
  * @param  BINARY				Whether the members age may be shown.
  * @param  BINARY				Whether the member sees signatures in posts.
- * @param  ?BINARY			Whether the member tracks topics they post in automatically (NULL: get default from config).
+ * @param  ?BINARY			Whether the member automatically is enabled for notifications for content they contribute to (NULL: get default from config).
  * @param  ?LANGUAGE_NAME	The members language (NULL: auto detect).
  * @param  BINARY				Whether the member allows e-mails via the site.
  * @param  BINARY				Whether the member allows e-mails from staff via the site.
@@ -321,11 +321,11 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
  * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
  * @return array				A pair: The form fields, Hidden fields (both Tempcode).
  */
-function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$track_contributed_topics=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
+function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=NULL,$email_address='',$preview_posts=0,$dob_day=NULL,$dob_month=NULL,$dob_year=NULL,$timezone=NULL,$theme=NULL,$reveal_age=1,$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$validated=1,$primary_group=NULL,$username='',$is_perm_banned=0,$special_type='',$zone_wide=1,$highlighted_name=0,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL)
 {
-	if (is_null($track_contributed_topics))
+	if (is_null($auto_monitor_contrib_content))
 	{
-		$track_contributed_topics=(get_value('no_auto_track')==='1')?0:1;
+		$auto_monitor_contrib_content=(get_value('no_auto_notifications')==='1')?0:1;
 	}
 
 	$hidden=new ocp_tempcode();
@@ -491,7 +491,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				{
 					$hidden->attach(form_input_hidden('views_signatures','1'));
 				}
-				$fields->attach(form_input_tick(do_lang_tempcode('TRACK_CONTRIBUTED_TOPICS'),do_lang_tempcode('DESCRIPTION_TRACK_CONTRIBUTED_TOPICS'),'track_contributed_topics',$track_contributed_topics==1));
+				$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));
 				$usergroup_list=new ocp_tempcode();
 				$lgroups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
 				foreach ($lgroups as $key=>$val)
@@ -702,7 +702,7 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
  * @param  ?ID_TEXT			The members default theme. (NULL: don't change)
  * @param  ?BINARY			Whether the members age may be shown. (NULL: don't change)
  * @param  ?BINARY			Whether the member sees signatures in posts. (NULL: don't change)
- * @param  ?BINARY			Whether the member tracks topics they post in automatically. (NULL: don't change)
+ * @param  ?BINARY			Whether the member automatically is enabled for notifications for content they contribute to. (NULL: don't change)
  * @param  ?LANGUAGE_NAME	The members language. (NULL: don't change)
  * @param  ?BINARY			Whether the member allows e-mails via the site. (NULL: don't change)
  * @param  ?BINARY			Whether the member allows e-mails from staff via the site. (NULL: don't change)
@@ -724,9 +724,8 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
  * @param  ?ID_TEXT			Password compatibility scheme (NULL: don't change)
  * @param  boolean			Whether to skip security checks and most of the change-triggered emails
  */
-function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$track_contributed_topics,$language,$allow_emails,$allow_emails_from_staff,$validated=NULL,$username=NULL,$password=NULL,$zone_wide=1,$highlighted_name=NULL,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL,$join_time=NULL,$avatar_url=NULL,$signature=NULL,$is_perm_banned=NULL,$photo_url=NULL,$photo_thumb_url=NULL,$salt=NULL,$password_compatibility_scheme=NULL,$skip_checks=false)
+function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated=NULL,$username=NULL,$password=NULL,$zone_wide=1,$highlighted_name=NULL,$pt_allow='*',$pt_rules_text='',$on_probation_until=NULL,$join_time=NULL,$avatar_url=NULL,$signature=NULL,$is_perm_banned=NULL,$photo_url=NULL,$photo_thumb_url=NULL,$salt=NULL,$password_compatibility_scheme=NULL,$skip_checks=false)
 {
-	require_code('mail');
 	require_code('type_validation');
 
 	if (!$skip_checks)
@@ -795,7 +794,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($reveal_age)) $update['m_reveal_age']=$reveal_age;
 	if (!is_null($email_address)) $update['m_email_address']=$email_address;
 	if (!is_null($views_signatures)) $update['m_views_signatures']=$views_signatures;
-	if (!is_null($track_contributed_topics)) $update['m_track_contributed_topics']=$track_contributed_topics;
+	if (!is_null($auto_monitor_contrib_content)) $update['m_auto_monitor_contrib_content']=$auto_monitor_contrib_content;
 	if (!is_null($language)) $update['m_language']=$language;
 	if (!is_null($allow_emails)) $update['m_allow_emails']=$allow_emails;
 	if (!is_null($allow_emails_from_staff)) $update['m_allow_emails_from_staff']=$allow_emails_from_staff;
@@ -815,8 +814,16 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if ((!is_null($username)) && ($username!=$old_username) && (($skip_checks) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self'))))
 	{
 		$update['m_username']=$username;
-		$mail=do_lang('USERNAME_CHANGED_MAIL',get_site_name(),$username,$old_username,get_lang($member_id));
-		mail_wrap(do_lang('USERNAME_CHANGED_MAIL_SUBJECT',$username,$old_username,NULL,get_lang($member_id)),$mail,array($email_address),$username,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),2);
+
+		require_code('notifications');
+
+		$subject=do_lang('USERNAME_CHANGED_MAIL_SUBJECT',$username,$old_username,NULL,get_lang($member_id));
+		$mail=do_lang('USERNAME_CHANGED_MAIL',comcode_escape(get_site_name()),comcode_escape($username),comcode_escape($old_username),get_lang($member_id));
+		dispatch_notification('ocf_username_changed',NULL,$subject,$mail,array($member_id));
+
+		$subject=do_lang('STAFF_USERNAME_CHANGED_MAIL_SUBJECT',$username,$old_username,NULL,get_site_default_lang());
+		$mail=do_lang('STAFF_USERNAME_CHANGED_MAIL',comcode_escape(get_site_name()),comcode_escape($username),comcode_escape($old_username),get_site_default_lang());
+		dispatch_notification('ocf_username_changed_staff',NULL,$subject,$mail);
 
 		// Fix cacheing for usernames
 		$to_fix=array('f_forums/f_cache_last_username','f_posts/p_poster_name_if_guest','f_topics/t_cache_first_username','f_topics/t_cache_last_username');
@@ -859,7 +866,9 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			if (($member_id==get_member()) || (get_value('disable_password_change_mails_for_staff')!=='1'))
 			{
 				if (get_page_name()!='admin_ocf_join')
-					mail_wrap(do_lang('PASSWORD_CHANGED_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($old_email_address),$username,'','',2);
+				{
+					dispatch_notification('ocf_password_changed',NULL,do_lang('PASSWORD_CHANGED_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($member_id),NULL,2);
+				}
 			}
 		}
 	}
@@ -880,13 +889,6 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	$GLOBALS['FORUM_DB']->query_update('f_members',$update,array('id'=>$member_id),'',1);
 
 	if (get_member()!=$member_id) log_it('EDIT_MEMBER_PROFILE',strval($member_id),$username);
-
-	if ($old_primary_group!=$primary_group)
-	{
-		require_code('ocf_groups_action');
-		require_code('ocf_groups_action2');
-		ocf_update_member_tracking_group_change($member_id);
-	}
 
 	if (($old_validated==0) && ($validated==1))
 	{
@@ -967,9 +969,8 @@ function ocf_delete_member($member_id)
  * Ban a member.
  *
  * @param  AUTO_LINK The ID of the member.
- * @param  LONG_TEXT The reason for the banning.
  */
-function ocf_ban_member($member_id,$reason)
+function ocf_ban_member($member_id)
 {
 	require_code('mail');
 
@@ -977,7 +978,7 @@ function ocf_ban_member($member_id,$reason)
 	$email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>1),array('id'=>$member_id),'',1);
 	log_it('BAN_MEMBER',strval($member_id),$username);
-	$mail=do_lang('BAN_MEMBER_MAIL',$username,get_site_name(),array($reason),get_lang($member_id));
+	$mail=do_lang('BAN_MEMBER_MAIL',$username,get_site_name(),array(),get_lang($member_id));
 	mail_wrap(do_lang('BAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2);
 }
 
@@ -985,9 +986,8 @@ function ocf_ban_member($member_id,$reason)
  * Unban a member.
  *
  * @param  AUTO_LINK The ID of the member.
- * @param  LONG_TEXT The reason for the unbanning.
  */
-function ocf_unban_member($member_id,$reason)
+function ocf_unban_member($member_id)
 {
 	require_code('mail');
 
@@ -995,7 +995,7 @@ function ocf_unban_member($member_id,$reason)
 	$email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>0),array('id'=>$member_id),'',1);
 	log_it('UNBAN_MEMBER',strval($member_id),$username);
-	$mail=do_lang('UNBAN_MEMBER_MAIL',$username,get_site_name(),array($reason),get_lang($member_id));
+	$mail=do_lang('UNBAN_MEMBER_MAIL',$username,get_site_name(),array(),get_lang($member_id));
 	mail_wrap(do_lang('UNBAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2);
 }
 
@@ -1337,8 +1337,8 @@ function ocf_member_choose_signature($new_signature,$member_id=NULL)
 	require_code('attachments3');
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_signature'=>update_lang_comcode_attachments($_signature,$new_signature,'ocf_signature',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id)),array('id'=>$member_id),'',1);
 
-	require_code('mail');
-	mail_wrap(do_lang('CHOOSE_SIGNATURE_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_SIGNATURE_BODY',$new_signature,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)),NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+	require_code('notifications');
+	dispatch_notification('ocf_choose_signature',NULL,do_lang('CHOOSE_SIGNATURE_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_SIGNATURE_BODY',$new_signature,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)));
 
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
@@ -1406,8 +1406,8 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 
 		if ((substr($avatar_url,0,7)!='themes/') && (addon_installed('ocf_avatars')))
 		{
-			require_code('mail');
-			mail_wrap(do_lang('CHOOSE_AVATAR_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_AVATAR_BODY',$stub.$avatar_url,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)),NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+			require_code('notifications');
+			dispatch_notification('ocf_choose_avatar',NULL,do_lang('CHOOSE_AVATAR_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_AVATAR_BODY',$stub.$avatar_url,$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id)));
 		}
 	}
 
@@ -1473,8 +1473,8 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_photo_url'=>$urls[0],'m_photo_thumb_url'=>$urls[1]),array('id'=>$member_id),'',1);
 
-	require_code('mail');
-	mail_wrap(do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)),NULL,'',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+	require_code('notifications');
+	dispatch_notification('ocf_member_photo',NULL,do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)));
 
 	// If [s]no avatar, or default avatar, or [/s]avatars not installed, use photo for it
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);

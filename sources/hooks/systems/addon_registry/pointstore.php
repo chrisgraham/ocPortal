@@ -74,6 +74,11 @@ class Hook_addon_registry_pointstore
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/pointstore_request_custom.php',
+			'sources/hooks/systems/notifications/pointstore_request_flagrant.php',
+			'sources/hooks/systems/notifications/pointstore_request_forwarding.php',
+			'sources/hooks/systems/notifications/pointstore_request_pop3.php',
+			'sources/hooks/systems/notifications/pointstore_request_quota.php',
 			'sources/hooks/systems/config_default/average_gamble_multiplier.php',
 			'sources/hooks/systems/config_default/banner_hit.php',
 			'sources/hooks/systems/config_default/banner_imp.php',

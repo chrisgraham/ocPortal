@@ -31,13 +31,10 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 
 	if (is_null($member_id)) return;
 
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-	$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
-
 	require_code('ocf_groups_action');
 	require_code('ocf_groups_action2');
 	require_code('ocf_members');
-	require_code('mail');
+	require_code('notifications');
 
 	$usergroup_subscription_id=intval(substr($product,9));
 	$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
@@ -81,7 +78,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 					}
 				}
 
-				mail_wrap(do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_lang($member_id)),get_translated_text($myrow['s_mail_end'],NULL,get_lang($member_id)),array($to_email));
+				dispatch_notification('paid_subscription_ended',strval($usergroup_subscription_id),do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_lang($member_id)),get_translated_text($myrow['s_mail_end'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 			}
 		}
 	} else
@@ -104,7 +101,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 					ocf_add_member_to_group($member_id,$new_group);
 				}
 			}
-			mail_wrap(do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],NULL,get_lang($member_id)),array($to_email));
+			dispatch_notification('paid_subscription_started',strval($usergroup_subscription_id),do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 		}
 	}
 }

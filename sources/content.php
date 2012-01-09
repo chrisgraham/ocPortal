@@ -65,6 +65,7 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 		// TODO: remove legacy later
 		if ($found_type_id=='cedi_page') $found_type_id='seedy_page';
 		if ($found_type_id=='cedi_post') $found_type_id='seedy_post';
+		if ($found_type_id=='iotd') $found_type_id=''; // TODO: No award hook right now
 	}
 
 	return $found_type_id;
@@ -75,7 +76,7 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
  *
  * @param  ID_TEXT		Content type
  * @param  ID_TEXT		Content ID
- * @return array			Tuple: title, submitter, content hook info
+ * @return array			Tuple: title, submitter, content hook info, URL (for use within current browser session), URL (for use in emails / sharing)
  */
 function content_get_details($content_type,$content_id)
 {
@@ -88,13 +89,19 @@ function content_get_details($content_type,$content_id)
 	$content_row=content_get_row($content_id,$cma_info);
 	if (is_null($content_row)) return array(NULL,NULL,NULL,NULL);
 
-	if (strpos($cma_info['title_field'],'CALL:')!==false)
+	if (is_null($cma_info['title_field']))
 	{
-		$content_title=call_user_func(trim(substr($cma_info['title_field'],5)),array('id'=>$content_id));
+		$content_title=do_lang($cma_info['content_type_label']);
 	} else
 	{
-		$_content_title=$content_row[$cma_info['title_field']];
-		$content_title=$cma_info['title_field_dereference']?get_translated_text($_content_title,$db):$_content_title;
+		if (strpos($cma_info['title_field'],'CALL:')!==false)
+		{
+			$content_title=call_user_func(trim(substr($cma_info['title_field'],5)),array('id'=>$content_id));
+		} else
+		{
+			$_content_title=$content_row[$cma_info['title_field']];
+			$content_title=$cma_info['title_field_dereference']?get_translated_text($_content_title,$db):$_content_title;
+		}
 	}
 	if (isset($cma_info['submitter_field']))
 	{
@@ -104,7 +111,11 @@ function content_get_details($content_type,$content_id)
 		$submitter_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 	}
 
-	return array($content_title,$submitter_id,$cma_info,$content_row);
+	list($zone,$url_bits,$hash)=page_link_decode(str_replace('_WILD',$content_id,$cma_info['view_pagelink_pattern']));
+	$content_url=build_url($url_bits,$zone,NULL,false,false,false,$hash);
+	$content_url_email_safe=build_url($url_bits,$zone,NULL,false,false,true,$hash);
+
+	return array($content_title,$submitter_id,$cma_info,$content_row,$content_url,$content_url_email_safe);
 }
 
 /**

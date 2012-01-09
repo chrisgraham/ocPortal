@@ -1499,6 +1499,8 @@ function uploadError(file, errorCode, message, ob) {
 
 function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
+	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
+
 	if (!posting_field_name) posting_field_name='post';
 	
 	var rep=document.getElementById(name);

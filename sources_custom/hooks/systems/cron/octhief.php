@@ -23,15 +23,8 @@ class Hook_cron_octhief
 	{
 		//if (!addon_installed('octhief')) return;
 
-		require_code('mail');
-		require_code('ocf_topics');
-		require_code('ocf_forums');
-		require_code('ocf_topics_action');
-		require_code('ocf_posts_action');
 		require_code('ocf_topics_action2');
-		require_code('ocf_posts_action2');
-		require_code('ocf_members');
-		require_code('ocf_members2');
+
 		require_code('points');
 
 		require_lang('octhief');
@@ -102,8 +95,8 @@ class Hook_cron_octhief
 
 					$post_id=ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
-					sent_pt_notification($post_id,$subject,$topic_id,$give_to_member,$GLOBALS['FORUM_DRIVER']->pname_id($member));
-					sent_pt_notification($post_id,$subject,$topic_id,$GLOBALS['FORUM_DRIVER']->pname_id($member),$give_to_member);
+					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$GLOBALS['FORUM_DRIVER']->pname_id($member));
+					send_pt_notification($post_id,$subject,$topic_id,$GLOBALS['FORUM_DRIVER']->pname_id($member),$give_to_member);
 				}
 			}
 
@@ -151,10 +144,9 @@ class Hook_cron_octhief
 
 					$post_id=ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
-					sent_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
-					sent_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
+					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
+					send_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
 				}
-
 			}
 
 		} elseif($octhief_type == "Members that are random")
@@ -188,10 +180,9 @@ class Hook_cron_octhief
 
 					$post_id=ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
-					sent_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
-					sent_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
+					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
+					send_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
 				}
-
 			}
 
 		} elseif($octhief_type == "Members that are in a certain usergroup")
@@ -242,8 +233,8 @@ class Hook_cron_octhief
 
 					$post_id=ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
-					sent_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
-					sent_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
+					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
+					send_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
 				}
 			}
 		}

@@ -24,7 +24,7 @@ These may be used, deleted, or moved, according to your specific needs.
 [title="2"]File Dump[/title]
 [html]<div class="float_surrounder">[/html]
 The file dump is a tool to allow sharing of files. It provides the ability to upload, download, and delete files, and organise files into folders.
-[box="Important note" breadth="250px" type="light" float="right"]There is nothing stopping ordinary users from downloading from the file-dump if they have the URL to a file. This is sometimes useful, but you should be aware that if files are given guessable filenames, they will not be secure.[/box]
+[box="Important note" breadth="250px" type="light" float="right"]There is nothing stopping ordinary users from downloading from the file/media library if they have the URL to a file. This is sometimes useful, but you should be aware that if files are given guessable filenames, they will not be secure.[/box]
 [exp_thumb="The File Dump" float="left"]collaboration_filedump[/exp_thumb]
 [html]</div>[/html]
 [title="2"]Other Super-members[/title]

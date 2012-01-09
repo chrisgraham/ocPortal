@@ -19,6 +19,30 @@
  */
 
 /**
+ * Find who submitted a piece of feedbackable content.
+ *
+ * @param  ID_TEXT		Content type
+ * @param  ID_TEXT		Content ID
+ * @return array			A tuple: Content title (NULL: unknown), Submitter (NULL: unknown), URL (for use within current browser session), URL (for use in emails / sharing)
+ */
+function get_details_behind_feedback_code($type_id,$id)
+{
+	require_code('content');
+
+	$cma_hook=convert_ocportal_type_codes('feedback_type_code',$type_id,'cma_hook');
+	if ($cma_hook!='')
+	{
+		require_code('hooks/systems/content_meta_aware/'.$cma_hook);
+		$cma_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
+		$info=$cma_ob->info();
+		list($content_title,$submitter_id,,,$content_url,$content_url_email_safe)=content_get_details($cma_hook,$id);
+		return array($content_title,$submitter_id,$content_url,$content_url_email_safe);
+	}
+
+	return array(NULL,NULL,NULL,NULL);
+}
+
+/**
  * Given a particular bit of feedback content, check if the user may access it.
  *
  * @param  MEMBER			User to check
@@ -28,9 +52,11 @@
  */
 function may_view_content_behind_feedback_code($member_id,$type_id,$id)
 {
+	require_code('content');
+
 	$permission_type_code=convert_ocportal_type_codes('feedback_type_code',$type_id,'permissions_type_code');
 
-	$module=convert_ocportal_type_codes('module',$type_id,'permissions_type_code');
+	$module=convert_ocportal_type_codes('permissions_type_code',$type_id,'module');
 	if ($module=='') $module=$id;
 
 	$category_id=mixed();
@@ -42,8 +68,8 @@ function may_view_content_behind_feedback_code($member_id,$type_id,$id)
 		$info=$award_hook_ob->info();
 		if (isset($info['category_field']))
 		{
-			require_code('content');
-			list(,,,$content)=content_get_details($award_hook,$id);
+			$cma_hook=convert_ocportal_type_codes('award_hook',$award_hook,'cma_hook');
+			list(,,,$content)=content_get_details($cma_hook,$id);
 			$category_id=$content[$info['category_field']];
 		}
 	}
@@ -69,6 +95,14 @@ function may_view_content_behind_feedback_code($member_id,$type_id,$id)
  */
 function embed_feedback_systems($page_name,$id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$self_url,$self_title,$forum)
 {
+	// Sign up original poster for notifications
+	$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field($submitter,'m_auto_monitor_contrib_content');
+	if ($auto_monitor_contrib_content==1)
+	{
+		require_code('notifications');
+		enable_notifications('comment_posted',$page_name.'_'.$id,$submitter);
+	}
+
 	do_rating($allow_rating==1,$page_name,$id,$self_url,$self_title);
 	if ((!is_null(post_param('title',NULL))) || ($validated==1))
 		do_comments($allow_comments>=1,$page_name,$id,$self_url,$self_title,$forum);
@@ -281,20 +315,10 @@ function do_rating($allow_rating,$rating_for_type,$id,$self_url,$self_title,$ext
 		// Has there actually been any rating?
 		$rating=post_param_integer('rating__'.$type.'__'.$id,NULL);
 		if (is_null($rating)) return;
-		if (($rating>10) || ($rating<1)) log_hack_attack_and_exit('VOTE_CHEAT');
-	
-		if (!has_specific_permission(get_member(),'rate',get_page_name())) return;
-		if (already_rated($rating_for_type.(($type=='')?'':('_'.$type)),$id)) return;
 
-		$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$rating_for_type.(($type=='')?'':('_'.$type)),'rating_for_id'=>$id,'rating_member'=>get_member(),'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
+		do_specific_rating($rating,get_page_name(),get_member(),$rating_for_type,$type,$id,$self_url,$self_title);
 
-		if (/*(get_value('likes')==='1') && */($rating==10) && ($type==''))
-		{
-			require_code('content');
-			if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$rating_for_type,$id))
-				syndicate_described_activity('LIKES',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$rating_for_type,'addon_name'));
-		}
-
+		// Ok, so just thank 'em
 		attach_message(do_lang_tempcode('THANKYOU_FOR_RATING'),'inform');
 	}
 
@@ -305,6 +329,58 @@ function do_rating($allow_rating,$rating_for_type,$id,$self_url,$self_title,$ext
 		$count=array_key_exists('points_gained_rating',$_count)?$_count['points_gained_rating']:0;
 		$GLOBALS['FORUM_DRIVER']->set_custom_field(get_member(),'points_gained_rating',$count+1);
 	}
+}
+
+/**
+ * Implement a rating at the quantum level.
+ *
+ * @param  integer		Rating given
+ * @range 1 10
+ * @param  ID_TEXT		The page name the rating is on
+ * @param  MEMBER			The member doing the rating
+ * @param  ID_TEXT		The type (download, etc) that this rating is for
+ * @param  ID_TEXT		The second level type (probably blank)
+ * @param  ID_TEXT		The ID of the type that this rating is for
+ * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
+ * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
+ */
+function do_specific_rating($rating,$page_name,$member_id,$rating_for_type,$type,$id,$self_url,$self_title)
+{
+	if (($rating>10) || ($rating<1)) log_hack_attack_and_exit('VOTE_CHEAT');
+
+	if (!has_specific_permission($member_id,'rate',$page_name)) return;
+	if (already_rated($rating_for_type.(($type=='')?'':('_'.$type)),$id)) return;
+
+	$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$rating_for_type.(($type=='')?'':('_'.$type)),'rating_for_id'=>$id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
+
+	// Top rating / liked
+	if (/*(get_value('likes')==='1') && */($rating==10) && ($type==''))
+	{
+		list(,$submitter)=get_details_behind_feedback_code($rating_for_type,$id);
+		if ((!is_null($submitter)) && (!is_guest($submitter)))
+		{
+			// Give points
+			if (addon_installed('points'))
+			{
+				require_code('points2');
+				require_lang('points');
+				system_gift_transfer(do_lang('CONTENT_LIKED'),intval(get_option('points_if_liked')),$submitter);
+			}
+
+			// Notification
+			require_code('notifications');
+			$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$self_title);
+			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($self_title),array(is_object($self_url)?$self_url->evaluate():$self_url));
+			dispatch_notification('like',NULL,$subject,$mail,array($submitter));
+		}
+
+		// Put on activity wall / whatever
+		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$rating_for_type,$id))
+			syndicate_described_activity('LIKES',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$rating_for_type,'addon_name'));
+	}
+
+	// Enter them for a prize draw to win a free jet
+	// NOT IMPLEMENTED- Anyone want to donate the jet?
 }
 
 /**
@@ -474,6 +550,9 @@ function get_comment_details($type,$allow_comments,$id,$invisible_if_no_comments
 				$join_bits=new ocp_tempcode();
 				if (is_guest())
 				{
+					$redirect=get_self_url(true,true);
+					$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
+					$join_url=$GLOBALS['FORUM_DRIVER']->join_link();
 					$join_bits=do_template('JOIN_OR_LOGIN',array('LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
 				}
 
@@ -536,9 +615,10 @@ function sanitise_topic_description($description)
  * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver (hence is the last parameter).
  * @param  boolean		Whether to force allowance
  * @param  boolean		Whether to skip a success message
+ * @param  boolean		Whether posts made should not be shared
  * @return boolean		Whether a hidden post has been made
  */
-function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL,$avoid_captcha=false,$validated=NULL,$explicit_allow=false,$no_success_message=false)
+function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL,$avoid_captcha=false,$validated=NULL,$explicit_allow=false,$no_success_message=false,$private=false)
 {
 	if (!$explicit_allow)
 	{
@@ -585,6 +665,8 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 
 	$self_title=strip_comcode($self_title);
 
+	$self_url_flat=(is_object($self_url)?$self_url->evaluate():$self_url);
+
 	$full_title=is_null($self_title)?($type.'_'.$id):($self_title.' (#'.$type.'_'.$id.')');
 	$poster_name_if_guest=post_param('poster_name_if_guest','');
 	$result=$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
@@ -602,7 +684,7 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 		array(
 			is_null($self_title)?($type.'_'.$id):($self_title), /* Prettier topic title, used if the forum driver supports topic descriptions (where we will instead store the technical back-reference) */
 			do_lang('COMMENT').': #'.$type.'_'.$id, /* Topic description, used if the forum driver supports topic descriptions */
-			is_object($self_url)?$self_url->evaluate():$self_url),
+			$self_url_flat),
 		$poster_name_if_guest
 	);
 	if (is_null($result))
@@ -634,9 +716,25 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 		}
 	}
 
-	require_code('content');
-	if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$type,$id))
-		syndicate_described_activity('ADDED_COMMENT_ON',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
+	if (!$private)
+	{
+		// Notification
+		require_code('notifications');
+		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),$self_title,array(post_param('title'),$username),get_site_default_lang());
+		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape($self_title),array(post_param('title'),post_param('post'),$self_url_flat,comcode_escape($username)),get_site_default_lang());
+		dispatch_notification('comment_posted',$type.'_'.$id,$subject,$message_raw);
+
+		// Is the user gonna automatically enable notifications for this?
+		$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(),'m_auto_monitor_contrib_content');
+		if ($auto_monitor_contrib_content==1)
+			enable_notifications('comment_posted',$type.'_'.$id);
+
+		// Activity
+		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$type,$id))
+			syndicate_described_activity('ADDED_COMMENT_ON',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
+	}
 
 	if (($post!='') && ($forum_tie) && (!$no_success_message))
 	{

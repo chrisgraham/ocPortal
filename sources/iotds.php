@@ -141,6 +141,15 @@ function set_iotd($id)
 	// Turn ours on
 	$GLOBALS['SITE_DB']->query_update('iotd',array('is_current'=>1,'used'=>1,'date_and_time'=>time()),array('id'=>$id),'',1);
 
+	require_lang('iotds');
+	require_code('notifications');
+	$view_url=build_url(array('page'=>'iotds','type'=>'view','id'=>$id),get_module_zone('iotds'),NULL,false,false,true);
+	$thumb_url=$rows[0]['thumb_url'];
+	if (url_is_local($thumb_url)) $thumb_url=get_custom_base_url().'/'.$thumb_url;
+	$subject=do_lang('IOTD_CHOSEN_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$title);
+	$mail=do_lang('IOTD_CHOSEN_NOTIFICATION_MAIL',comcode_escape(get_site_name()),$title,array($view_url->evaluate(),$thumb_url));
+	dispatch_notification('iotd_chosen',NULL,$subject,$mail);
+
 	decache('main_iotd');
 }
 

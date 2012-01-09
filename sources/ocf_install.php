@@ -45,7 +45,6 @@ function init__ocf_install()
 	global $OCF_TRUE_PERMISSIONS,$OCF_FALSE_PERMISSIONS;
 	$OCF_TRUE_PERMISSIONS=array(
 									'run_multi_moderations',
-									'may_track_forums',
 									'use_pt',
 									'edit_personal_topic_posts',
 									'may_unblind_own_poll',
@@ -102,6 +101,8 @@ function uninstall_ocf_everytime()
 
 	$GLOBALS['FORUM_DB']->query_delete('group_category_access',array('module_the_name'=>'forums'));
 
+	delete_config_option('signup_fullname');
+	delete_config_option('allow_email_from_staff_disable');
 	delete_config_option('forum_posts_per_page');
 	delete_config_option('forum_topics_per_page');
 	delete_config_option('prevent_shouting');
@@ -289,7 +290,6 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('REPORTED_POSTS_FORUM','reported_posts_forum','forum','return (has_no_forum()||(!addon_installed(\'ocf_reported_posts\')))?NULL:do_lang(\'ocf:REPORTED_POSTS_FORUM\');','SECTION_FORUMS','GENERAL');
 		add_config_option('ONE_PER_EMAIL_ADDRESS','one_per_email_address','tick','return \'1\';','SECTION_FORUMS','GENERAL');
 		add_config_option('HOT_TOPIC_DEFINITION','hot_topic_definition','integer','return has_no_forum()?NULL:\'20\';','SECTION_FORUMS','GENERAL');
-		add_config_option('SEND_STAFF_MESSAGE_POST_VALIDATION','send_staff_message_post_validation','tick','return \'1\';','SECTION_FORUMS','GENERAL');
 	}
 
 	if ((!is_null($upgrade_from)) && ($upgrade_from<7.2))
@@ -322,6 +322,8 @@ function install_ocf($upgrade_from=NULL)
 			$i+=100;
 		}
 		while (count($rows)!=0);
+
+		$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_track_contributed_topics','BINARY','m_auto_monitor_contrib_content');
 	}
 
 	if ((!is_null($upgrade_from)) && ($upgrade_from<4.0))
@@ -388,6 +390,31 @@ function install_ocf($upgrade_from=NULL)
 	if ((!is_null($upgrade_from)) && ($upgrade_from<8.0))
 	{
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_allow_emails_from_staff','BINARY');
+		delete_config_option('send_staff_message_post_validation');
+
+		$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_tracking');
+		$GLOBALS['FORUM_DB']->drop_if_exists('f_topic_tracking');
+		require_code('notifications');
+		$start=0;
+		do
+		{
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_forum_tracking',array('r_forum_id','r_member_id'),NULL,'',100,$start);
+			foreach ($rows as $row)
+			{
+				enable_notifications('ocf_forum',strval($row['r_forum_id']),$row['r_member_id']);
+			}
+		}
+		while (count($rows)==100);
+		$start=0;
+		do
+		{
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_topic_tracking',array('r_topic_id','r_member_id'),NULL,'',100,$start);
+			foreach ($rows as $row)
+			{
+				enable_notifications('ocf_topic',strval($row['r_topic_id']),$row['r_member_id']);
+			}
+		}
+		while (count($rows)==100);
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<4.2))
 	{
@@ -560,7 +587,7 @@ function install_ocf($upgrade_from=NULL)
 			'm_photo_url'=>'URLPATH', // Blank means no photo
 			'm_photo_thumb_url'=>'URLPATH', // Blank means no photo
 			'm_views_signatures'=>'BINARY',
-			'm_track_contributed_topics'=>'BINARY',
+			'm_auto_monitor_contrib_content'=>'BINARY',
 			'm_language'=>'ID_TEXT',
 			'm_ip_address'=>'IP',
 			'm_allow_emails'=>'BINARY',
@@ -970,7 +997,7 @@ function install_ocf($upgrade_from=NULL)
 		// Make guest
 		ocf_make_member(do_lang('GUEST'),'','',NULL,NULL,NULL,NULL,array(),NULL,$guest_group,1,time(),time(),'',NULL,'',0,1,1,'','','',1,0,'',1,1,'',NULL,'',false);
 		// Make admin user
-		ocf_make_member(post_param('admin_username','admin'),post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$administrator_group,1,time(),time(),'','themes/default/images/ocf_default_avatars/default_set/cool_flare.png','',0,0,1,'','','',1,0,'',1,1,'',NULL,'',false);
+		ocf_make_member(post_param('admin_username','admin'),post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$administrator_group,1,time(),time(),'','themes/default/images/ocf_default_avatars/default_set/cool_flare.png','',0,0,1,'','','',1,1,'',1,1,'',NULL,'',false);
 		// Make test user
 		ocf_make_member('test',post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$member_group_0,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,'',1,1,'',NULL,'',false);
 
@@ -980,17 +1007,6 @@ function install_ocf($upgrade_from=NULL)
 			'l_time'=>'TIME'
 		));
 		$GLOBALS['FORUM_DB']->create_index('f_read_logs','erase_old_read_logs',array('l_time'));
-
-		$GLOBALS['FORUM_DB']->create_table('f_forum_tracking',array(
-			'r_forum_id'=>'*AUTO_LINK',
-			'r_member_id'=>'*USER'
-		));
-
-		$GLOBALS['FORUM_DB']->create_table('f_topic_tracking',array(
-			'r_topic_id'=>'*AUTO_LINK',
-			'r_member_id'=>'*USER',
-			'r_last_message_time'=>'TIME'
-		));
 
 		ocf_make_post($topic_id,do_lang('DEFAULT_POST_TITLE'),do_lang('DEFAULT_POST_CONTENT'),0,true,1,0,do_lang('SYSTEM'),'127.0.0.1',time(),$GLOBALS['OCF_DRIVER']->get_guest_id(),NULL,NULL,NULL,false,true);
 	}

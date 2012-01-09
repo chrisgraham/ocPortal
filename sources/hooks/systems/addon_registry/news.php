@@ -69,6 +69,8 @@ class Hook_addon_registry_news
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/news_entry.php',
+			'sources/hooks/systems/notifications/blog_post.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/blog.php',
 			'sources/hooks/systems/realtime_rain/news.php',
 			'sources/hooks/systems/content_meta_aware/news.php',

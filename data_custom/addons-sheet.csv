@@ -139,9 +139,8 @@ PHP5 is required, as well as OpenSSL support in PHP.",,,"Third Party Integration
 New content enters the default workflow (unless another is specified) and notifications are sent to those users with permission to approve the next level. This continues until all of the levels are approved, at which point the content goes live.
 
 Note that this addon only affects galleries at the moment, and it requires the ""unvalidated"" system to be installed (this comes with ocPortal but may have been uninstalled). Other content types can be added by a programmer as this addon has been implemented in a modular way.","unvalidated",,"New Features","Licensed on the same terms as ocPortal",,
-"Tracking","Sujith","New/edited entry tracking support for additional content types in ocPortal.",,,"New Features","Licensed on the same terms as ocPortal","Moxiecode Systems AB",
 "plupload","Chris Graham","Replaces swfupload with plupload, which is a better uploader that supports HTML5 and other alternative technologies rather than purely relying on Flash. This addon is implemented on top of the swfupload support, using the same UI.",,,"New Features","GPL",,
-"Member filedumps","Chris Graham","Adds a tab to member profiles to show file-dump contents in a folder corresponding to the member's username.",,,"New Features","Licensed on the same terms as ocPortal",,
+"Member filedumps","Chris Graham","Adds a tab to member profiles to show file/media library contents in a folder corresponding to the member's username.",,,"New Features","Licensed on the same terms as ocPortal",,
 "Gallery carousel","Chris Graham","Replaces templates to that the main_gallery_embed block uses a carousel to display content.",,,"Graphical","Licensed on the same terms as ocPortal",,
 "Reported content","Chris Graham","A new module for reporting content, that can be linked into templates via setting up a URL into that module.",,,"Development","Licensed on the same terms as ocPortal",,
 "Cool member directory","Chris Graham","Re-styles the member directory to show avatars, etc.",,,"Graphical","Licensed on the same terms as ocPortal",,

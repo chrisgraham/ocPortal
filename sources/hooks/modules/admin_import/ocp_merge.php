@@ -51,7 +51,6 @@ class Hook_ocp_merge
 								'ocf_emoticons',
 								'ocf_forums', // including intros
 								'ocf_topics', // including readlogs
-								'ocf_tracking',
 								'ocf_multi_moderations',
 								'ocf_polls_and_votes',
 								'ocf_post_templates',
@@ -110,7 +109,6 @@ class Hook_ocp_merge
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members','attachments'),
-								'ocf_tracking'=>array('ocf_topics','ocf_members'),
 								'ocf_personal_topics'=>array('custom_comcode','ocf_members'),
 								'ocf_post_templates'=>array('ocf_forums'),
 								'ocf_warnings'=>array('ocf_members','ocf_groups','ocf_topics','ocf_forums'),
@@ -1354,7 +1352,7 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$GLOBALS['SITE_DB']->query_insert('ticket_types',array('send_sms_to'=>array_key_exists('send_sms_to',$row)?$row['send_sms_to']:'','search_faq'=>array_key_exists('search_faq',$row)?$row['search_faq']:0,'guest_emails_mandatory'=>array_key_exists('guest_emails_mandatory',$row)?$row['guest_emails_mandatory']:0,'ticket_type'=>insert_lang($this->get_lang_string($db,$row['ticket_type']),1)));
+			$GLOBALS['SITE_DB']->query_insert('ticket_types',array('search_faq'=>array_key_exists('search_faq',$row)?$row['search_faq']:0,'guest_emails_mandatory'=>array_key_exists('guest_emails_mandatory',$row)?$row['guest_emails_mandatory']:0,'ticket_type'=>insert_lang($this->get_lang_string($db,$row['ticket_type']),1)));
 		}
 	}
 
@@ -1799,7 +1797,7 @@ class Hook_ocp_merge
 				$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
 				$timezone=$row['m_timezone_offset'];
 				if (is_integer($timezone)) $timezone=strval($timezone);
-				$id_new=ocf_make_member($row['m_username'],$row['m_pass_hash_salted'],$row['m_email_address'],NULL,$row['m_dob_day'],$row['m_dob_month'],$row['m_dob_year'],$custom_fields,$timezone,$primary_group,$row['m_validated'],$row['m_join_time'],$row['m_last_visit_time'],$row['m_theme'],$row['m_avatar_url'],$this->get_lang_string($db,$row['m_signature']),$row['m_is_perm_banned'],$row['m_preview_posts'],$row['m_reveal_age'],$row['m_title'],$row['m_photo_url'],$row['m_photo_thumb_url'],$row['m_views_signatures'],$row['m_track_contributed_topics'],$row['m_language'],$row['m_allow_emails'],array_key_exists('m_allow_emails_from_staff',$row)?$row['m_allow_emails_from_staff']:$row['m_allow_emails'],$row['m_notes'],$row['m_ip_address'],$row['m_validated_email_confirm_code'],false,array_key_exists('m_password_compat_scheme',$row)?$row['m_password_compat_scheme']:$row['m_password_compatibility_scheme'],$row['m_pass_salt'],$row['m_zone_wide'],$row['m_last_submit_time'],$id,array_key_exists('m_highlighted_name',$row)?$row['m_highlighted_name']:'*',array_key_exists('m_pt_allow',$row)?$row['m_pt_allow']:'*',array_key_exists('m_pt_rules_text',$row)?$this->get_lang_string($db,$row['m_pt_rules_text']):'');
+				$id_new=ocf_make_member($row['m_username'],$row['m_pass_hash_salted'],$row['m_email_address'],NULL,$row['m_dob_day'],$row['m_dob_month'],$row['m_dob_year'],$custom_fields,$timezone,$primary_group,$row['m_validated'],$row['m_join_time'],$row['m_last_visit_time'],$row['m_theme'],$row['m_avatar_url'],$this->get_lang_string($db,$row['m_signature']),$row['m_is_perm_banned'],$row['m_preview_posts'],$row['m_reveal_age'],$row['m_title'],$row['m_photo_url'],$row['m_photo_thumb_url'],$row['m_views_signatures'],$row['m_auto_alert_contrib_content'],$row['m_language'],$row['m_allow_emails'],array_key_exists('m_allow_emails_from_staff',$row)?$row['m_allow_emails_from_staff']:$row['m_allow_emails'],$row['m_notes'],$row['m_ip_address'],$row['m_validated_email_confirm_code'],false,array_key_exists('m_password_compat_scheme',$row)?$row['m_password_compat_scheme']:$row['m_password_compatibility_scheme'],$row['m_pass_salt'],$row['m_zone_wide'],$row['m_last_submit_time'],$id,array_key_exists('m_highlighted_name',$row)?$row['m_highlighted_name']:'*',array_key_exists('m_pt_allow',$row)?$row['m_pt_allow']:'*',array_key_exists('m_pt_rules_text',$row)?$this->get_lang_string($db,$row['m_pt_rules_text']):'');
 				$rows2=$db->query('SELECT * FROM '.$table_prefix.'f_member_custom_fields WHERE mf_member_id='.strval((integer)$row['id']),1);
 				$row2=array();
 				foreach ($rows2[0] as $key=>$val)
@@ -2138,55 +2136,6 @@ class Hook_ocp_merge
 		}
 	}
 	
-	/**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
-	function import_ocf_tracking($db,$table_prefix,$file_base)
-	{
-		if ($this->on_same_msn($file_base)) return;
-	
-		require_code('ocf_forums_action2');
-		require_code('ocf_topics');
-
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_forum_tracking');
-		foreach ($rows as $row)
-		{
-			if (import_check_if_imported('forum_tracking',strval($row['r_forum_id']))) continue;
-
-			$member_id=import_id_remap_get('member',strval($row['r_member_id']),true);
-			if (is_null($member_id)) continue;
-			$forum_id=import_id_remap_get('forum',strval($row['r_forum_id']),true);
-			if (is_null($forum_id)) continue;
-			ocf_track_forum($forum_id,$member_id,false,false);
-
-			import_id_remap_put('forum_tracking',strval($row['r_forum_id']),1);
-		}
-		$row_start=0;
-		do
-		{
-			$rows=$db->query('SELECT * FROM '.$table_prefix.'f_topic_tracking',200,$row_start);
-			foreach ($rows as $row)
-			{
-				if (import_check_if_imported('topic_tracking',strval($row['r_topic_id']))) continue;
-
-				$member_id=import_id_remap_get('member',strval($row['r_member_id']),true);
-				if (is_null($member_id)) continue;
-				$topic_id=import_id_remap_get('topic',strval($row['r_topic_id']),true);
-				if (is_null($topic_id)) continue;
-				ocf_track_topic($topic_id,$member_id,false,false);
-
-				import_id_remap_put('topic_tracking',strval($row['r_topic_id']),1);
-			}
-
-			$row_start+=200;
-		}
-		while (count($rows)>0);
-	}
-
 	/**
 	 * Standard import function.
 	 *

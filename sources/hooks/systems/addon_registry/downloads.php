@@ -74,6 +74,7 @@ class Hook_addon_registry_downloads
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/download.php',
 			'sources/hooks/systems/config_default/download_gallery_root.php',
 			'sources/hooks/systems/config_default/downloads_show_stats_count_archive.php',
 			'sources/hooks/systems/config_default/downloads_show_stats_count_bandwidth.php',

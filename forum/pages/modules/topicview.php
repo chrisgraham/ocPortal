@@ -377,24 +377,24 @@ class Module_topicview
 		$button_array=array();
 		if ((!is_guest()) && (!is_null($id)))
 		{
-			if (!$topic_info['is_being_tracked'])
+			if (!$topic_info['notifications_enabled'])
 			{
-				if (get_value('disable_track_topic')!=='1')
+				if (get_value('disable_notifications_topic')!=='1')
 				{
-					$map=array('page'=>'topics','type'=>'track_topic','id'=>$id);
+					$map=array('page'=>'topics','type'=>'enable_notifications_topic','id'=>$id);
 					$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
 					if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
 					$track_topic_url=build_url($map,get_module_zone('topics'));
-					$button_array[]=array('immediate'=>true,'rel'=>'track','title'=>do_lang_tempcode('TRACK_TOPIC'),'url'=>$track_topic_url,'img'=>'track_topic');
+					$button_array[]=array('immediate'=>true,'rel'=>'enable-notifications','title'=>do_lang_tempcode('ENABLE_NOTIFICATIONS'),'url'=>$track_topic_url,'img'=>'enable_notifications');
 				}
 			}
 			else
 			{
-				$map=array('page'=>'topics','type'=>'untrack_topic','id'=>$id);
+				$map=array('page'=>'topics','type'=>'disable_notifications_topic','id'=>$id);
 				$test=get_param_integer('kfs'.strval($forum_id),-1);
 				if (($test!=-1) && ($test!=0)) $map['kfs'.strval($forum_id)]=$test;
 				$track_topic_url=build_url($map,get_module_zone('topics'));
-				$button_array[]=array('immediate'=>true,'rel'=>'untrack','title'=>do_lang_tempcode('UNTRACK_TOPIC'),'url'=>$track_topic_url,'img'=>'untrack_topic');
+				$button_array[]=array('immediate'=>true,'rel'=>'disable-notifications','title'=>do_lang_tempcode('DISABLE_NOTIFICATIONS'),'url'=>$track_topic_url,'img'=>'disable_notifications');
 			}
 		}
 		if (!is_null($id))

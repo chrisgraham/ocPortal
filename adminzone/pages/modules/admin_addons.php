@@ -254,7 +254,7 @@ class Module_admin_addons
 		$full=get_custom_file_base().'/'.$urls[0];
 		if (strtolower(substr($full,-4))!='.tar')
 		{
-			return warn_screen(get_page_title('ERROR_OCCURED'),do_lang_tempcode('ADDON_NOT_TAR'));
+			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('ADDON_NOT_TAR'));
 		}
 
 		// Show it worked / Refresh

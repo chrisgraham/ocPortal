@@ -29,6 +29,8 @@ class Hook_content_meta_aware_image
 	function info()
 	{
 		return array(
+			'content_type_label'=>'IMAGE',
+
 			'table'=>'images',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

@@ -148,12 +148,12 @@ class Module_admin_actionlog
 		}
 		asort($_action_type_list);
 		$action_type_list=new ocp_tempcode();
-		$action_type_list->attach(form_input_list_entry('-1',true,do_lang_tempcode('_ALL')));
+		$action_type_list->attach(form_input_list_entry('',true,do_lang_tempcode('_ALL')));
 		foreach ($_action_type_list as $lang_id=>$lang)
 		{
 			$action_type_list->attach(form_input_list_entry($lang_id,false,$lang));
 		}
-		$fields->attach(form_input_list(do_lang_tempcode('ACTION'),'','to_type',$action_type_list));
+		$fields->attach(form_input_list(do_lang_tempcode('ACTION'),'','to_type',$action_type_list,NULL,false,false));
 
 		// Filters
 		$fields->attach(form_input_line(do_lang_tempcode('PARAMETER_A'),'','param_a','',false));
@@ -407,7 +407,7 @@ class Module_admin_actionlog
 
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
-			ocf_ban_member($id,'');
+			ocf_ban_member($id);
 		} else
 		{
 			$title=get_page_title('MEMBER_UNBANNED');
@@ -421,7 +421,7 @@ class Module_admin_actionlog
 
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
-			ocf_unban_member($id,'');
+			ocf_unban_member($id);
 		}
 
 		persistant_cache_delete('IP_BANS');
@@ -579,7 +579,7 @@ class Module_admin_actionlog
 			return do_template('CONFIRM_SCREEN',array('_GUID'=>'3840c52b23d9034cb6f9dd529b236c97','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 		}
 
-		if (!is_null($member)) ocf_ban_member(intval($member),'');
+		if (!is_null($member)) ocf_ban_member(intval($member));
 		require_code('failure');
 		add_ip_ban($ip);
 

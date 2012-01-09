@@ -232,7 +232,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			// Render self
 			node_self.className=(node.getAttribute('highlighted')=='true')?'tree_list_highlighted':'tree_list_nonhighlighted';
 			initially_expanded=(node.getAttribute('has_children')!='true') || (node.getAttribute('expanded')=='true');
-			escaped_title=escape_html(node.getAttribute('title'));
+			escaped_title=escape_html((typeof node.getAttribute('title')!='undefined')?node.getAttribute('title'):'');
 			if (escaped_title=='') escaped_title='{!NA_EM^;}';
 			var description='';
 			var description_in_use='';
@@ -296,7 +296,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			}
 		} else // Assume entry
 		{
-			escaped_title=escape_html(node.getAttribute('title'));
+			escaped_title=escape_html((typeof node.getAttribute('title')!='undefined')?node.getAttribute('title'):'');
 			if (escaped_title=='') escaped_title='{!NA_EM^;}';
 
 			var description='';

@@ -94,22 +94,7 @@ class Hook_Profiles_Tabs_Edit_settings
 				$old_is_perm_banned=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_is_perm_banned');
 				if ($old_is_perm_banned!=$is_perm_banned)
 				{
-					/*$reason=post_param('reason',NULL);
-					if (is_null($reason)) // If a reason hasn't been given, we loop back to a form, then back here with a reason to actualalise the ban and edit
-					{
-						$title=get_page_title(($is_perm_banned==1)?'BAN_MEMBER':'UNBAN_MEMBER');
-						$hidden=build_keep_post_fields();
-						require_code('form_templates');
-						$fields=form_input_line(do_lang_tempcode('REASON'),'','reason','',false);
-						$text=do_lang_tempcode('DETECTED_BAN');
-						$submit_name=do_lang_tempcode('PROCEED');
-						$_url=build_url(array('page'=>'_SELF','type'=>'actual','id'=>$member_id_of),'_SELF');
-						return do_template('FORM_SCREEN',array('_GUID'=>'e49beafaf39e38b8aabb6d93c14e5b93','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$_url));
-					} else
-					{*/
-						$reason='';
-						if ($is_perm_banned==1) ocf_ban_member($member_id_of,$reason); else ocf_unban_member($member_id_of,$reason);
-					/*}*/
+					if ($is_perm_banned==1) ocf_ban_member($member_id_of); else ocf_unban_member($member_id_of);
 				}
 				$highlighted_name=post_param_integer('highlighted_name',0);
 				if (has_specific_permission($member_id_viewing,'probate_members'))
@@ -158,19 +143,19 @@ class Hook_Profiles_Tabs_Edit_settings
 			{
 				$preview_posts=NULL;
 				$zone_wide=NULL;
-				$track_contributed_topics=NULL;
+				$auto_monitor_contrib_content=NULL;
 				$views_signatures=NULL;
 				$timezone=NULL;
 			} else
 			{
 				$preview_posts=post_param_integer('preview_posts',0);
 				$zone_wide=post_param_integer('zone_wide',0);
-				$track_contributed_topics=post_param_integer('track_contributed_topics',0);
+				$auto_monitor_contrib_content=post_param_integer('auto_monitor_contrib_content',0);
 				$views_signatures=post_param_integer('views_signatures',0);
 				$timezone=post_param('timezone',get_site_timezone());
 			}
 
-			ocf_edit_member($member_id_of,$email,$preview_posts,post_param_integer('dob_day',NULL),post_param_integer('dob_month',NULL),post_param_integer('dob_year',NULL),$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$track_contributed_topics,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+			ocf_edit_member($member_id_of,$email,$preview_posts,post_param_integer('dob_day',NULL),post_param_integer('dob_month',NULL),post_param_integer('dob_year',NULL),$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$auto_monitor_contrib_content,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 
 			// Secondary groups
 			//if (array_key_exists('secondary_groups',$_POST)) Can't use this line, because deselecting all will result in it not being passed
@@ -220,7 +205,7 @@ class Hook_Profiles_Tabs_Edit_settings
 		if (is_null($myrow)) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
 
 		require_code('ocf_members_action2');
-		list($fields,$hidden)=ocf_get_member_fields_settings(false,$member_id_of,NULL,$myrow['m_email_address'],$myrow['m_preview_posts'],$myrow['m_dob_day'],$myrow['m_dob_month'],$myrow['m_dob_year'],get_users_timezone($member_id_of),$myrow['m_theme'],$myrow['m_reveal_age'],$myrow['m_views_signatures'],$myrow['m_track_contributed_topics'],$myrow['m_language'],$myrow['m_allow_emails'],$myrow['m_allow_emails_from_staff'],$myrow['m_validated'],$myrow['m_primary_group'],$myrow['m_username'],$myrow['m_is_perm_banned'],'',$myrow['m_zone_wide'],$myrow['m_highlighted_name'],$myrow['m_pt_allow'],get_translated_text($myrow['m_pt_rules_text'],$GLOBALS['FORUM_DB']),$myrow['m_on_probation_until']);
+		list($fields,$hidden)=ocf_get_member_fields_settings(false,$member_id_of,NULL,$myrow['m_email_address'],$myrow['m_preview_posts'],$myrow['m_dob_day'],$myrow['m_dob_month'],$myrow['m_dob_year'],get_users_timezone($member_id_of),$myrow['m_theme'],$myrow['m_reveal_age'],$myrow['m_views_signatures'],$myrow['m_auto_monitor_contrib_content'],$myrow['m_language'],$myrow['m_allow_emails'],$myrow['m_allow_emails_from_staff'],$myrow['m_validated'],$myrow['m_primary_group'],$myrow['m_username'],$myrow['m_is_perm_banned'],'',$myrow['m_zone_wide'],$myrow['m_highlighted_name'],$myrow['m_pt_allow'],get_translated_text($myrow['m_pt_rules_text'],$GLOBALS['FORUM_DB']),$myrow['m_on_probation_until']);
 
 		// Awards?
 		if (addon_installed('awards'))

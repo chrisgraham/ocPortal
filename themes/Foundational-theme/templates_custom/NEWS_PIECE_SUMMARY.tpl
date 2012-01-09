@@ -3,7 +3,7 @@
 		<div class="newscat_img_member">
 			{+START,IF_NON_EMPTY,{$USERNAME*,{SUBMITTER}}}
 				<div class="news_by">
-					<a class="poster_member" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>
+					<a class="poster_member" rel="author" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>
 				</div>
 			{+END}
 

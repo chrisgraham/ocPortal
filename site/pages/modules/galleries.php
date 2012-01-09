@@ -532,7 +532,7 @@ class Module_galleries
 		$gallery_rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$cat),'',1);
 		if (!array_key_exists(0,$gallery_rows))
 		{
-			return warn_screen(get_page_title('ERROR_OCCURED'),do_lang_tempcode('MISSING_RESOURCE'));
+			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$gallery_rows[0];
 		$fullname=get_translated_text($myrow['fullname']);
@@ -644,7 +644,7 @@ class Module_galleries
 			0,
 			1,
 			NULL,
-			get_self_url(),
+			build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true),
 			$title_to_use_2,
 			get_value('comment_forum__galleries')
 		);
@@ -1068,7 +1068,7 @@ class Module_galleries
 		$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{
-			return warn_screen(get_page_title('ERROR_OCCURED'),do_lang_tempcode('MISSING_RESOURCE'));
+			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
 		$url=$myrow['url'];
@@ -1118,7 +1118,7 @@ class Module_galleries
 			$myrow['allow_trackbacks'],
 			$myrow['validated'],
 			$myrow['submitter'],
-			build_url(array('page'=>'_SELF','type'=>'image','id'=>$id),'_SELF'),
+			build_url(array('page'=>'_SELF','type'=>'image','id'=>$id),'_SELF',NULL,false,false,true),
 			(get_translated_text($myrow['title'])=='')?do_lang('VIEW_IMAGE_IN',$true_category_name):get_translated_text($myrow['title']),
 			get_value('comment_forum__images')
 		);
@@ -1194,7 +1194,7 @@ class Module_galleries
 		$rows=$GLOBALS['SITE_DB']->query_select('videos',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{
-			return warn_screen(get_page_title('ERROR_OCCURED'),do_lang_tempcode('MISSING_RESOURCE'));
+			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
 		$url=$myrow['url'];
@@ -1247,7 +1247,7 @@ class Module_galleries
 			$myrow['allow_trackbacks'],
 			$myrow['validated'],
 			$myrow['submitter'],
-			build_url(array('page'=>'_SELF','type'=>'video','id'=>$id),'_SELF'),
+			build_url(array('page'=>'_SELF','type'=>'video','id'=>$id),'_SELF',NULL,false,false,true),
 			(get_translated_text($myrow['title'])=='')?do_lang('VIEW_VIDEO_IN',$true_category_name):get_translated_text($myrow['title']),
 			get_value('comment_forum__videos')
 		);

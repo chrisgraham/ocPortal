@@ -65,7 +65,6 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_if_exists('member_page_access');
 		$GLOBALS['SITE_DB']->drop_if_exists('member_category_access');
 		$GLOBALS['SITE_DB']->drop_if_exists('tracking');
-		$GLOBALS['SITE_DB']->drop_if_exists('tracking_digest_queue');
 		$GLOBALS['SITE_DB']->drop_if_exists('sms_log');
 		$GLOBALS['SITE_DB']->drop_if_exists('confirmed_mobiles');
 		$GLOBALS['SITE_DB']->drop_if_exists('autosave');
@@ -78,6 +77,9 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_if_exists('f_group_member_timeouts');
 		$GLOBALS['SITE_DB']->drop_if_exists('temp_block_permissions');
 		$GLOBALS['SITE_DB']->drop_if_exists('cron_caching_requests');
+		$GLOBALS['SITE_DB']->drop_if_exists('notifications_enabled');
+		$GLOBALS['SITE_DB']->drop_if_exists('digestives_tin');
+		$GLOBALS['SITE_DB']->drop_if_exists('digestives_consumed');
 		delete_specific_permission('reuse_others_attachments');
 		delete_specific_permission('use_sms');
 		delete_specific_permission('sms_higher_limit');
@@ -369,22 +371,6 @@ class Module_admin_version
 
 		if (($upgrade_from<9) || (is_null($upgrade_from)))
 		{
-			$GLOBALS['SITE_DB']->create_table('tracking',array(
-				'r_resource_type'=>'*ID_TEXT',
-				'r_resource_id'=>'*ID_TEXT',
-				'r_member_id'=>'*USER',
-				'r_notify_sms'=>'BINARY',
-				'r_notify_email'=>'BINARY',
-				'r_filter'=>'LONG_TEXT' // This is a serialized $_POST in the format expected by the search module. blank: not filtered
-			));
-
-			/*$GLOBALS['SITE_DB']->create_table('tracking_digest_queue',array(
-				'id'=>'*AUTO',
-				'r_member_id'=>'USER',
-				'r_digest_snippet'=>'LONG_TEXT',
-				'r_time'=>'TIME'
-			));*/
-
 			/*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(
 				'm_phone_number'=>'*SHORT_TEXT',
 				'm_member_id'=>'USER',
@@ -449,6 +435,7 @@ class Module_admin_version
 			));
 			$GLOBALS['SITE_DB']->create_index('review_supplement','rating_for_id',array('r_rating_for_id'));
 
+			// TODO: Move these into sms addon_registry hook, once these hooks support installation
 			$GLOBALS['SITE_DB']->create_table('sms_log',array(
 				'id'=>'*AUTO',
 				's_member_id'=>'USER',
@@ -457,7 +444,6 @@ class Module_admin_version
 			));
 			$GLOBALS['SITE_DB']->create_index('sms_log','sms_log_for',array('s_member_id','s_time'));
 			$GLOBALS['SITE_DB']->create_index('sms_log','sms_trigger_ip',array('s_trigger_ip'));
-
 			require_lang('ocf');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('mobile_phone_number',20,1,0,1,0,do_lang('SPECIAL_CPF__ocp_mobile_phone_number_DESCRIPTION'),'short_text');
 			add_specific_permission('GENERAL_SETTINGS','use_sms',false);
@@ -548,6 +534,11 @@ class Module_admin_version
 			}
 		}
 
+		if ((!is_null($upgrade_from)) && ($upgrade_from<14))
+		{
+			$GLOBALS['SITE_DB']->drop_if_exists('tracking');
+		}
+
 		if ((is_null($upgrade_from)) || ($upgrade_from<14))
 		{
 			$GLOBALS['SITE_DB']->create_table('temp_block_permissions',array(
@@ -574,6 +565,38 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_in_panel',array('c_in_panel'));
 			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_interlock',array('c_interlock'));
 			$GLOBALS['SITE_DB']->create_index('cron_caching_requests','c_store_as_tempcode',array('c_store_as_tempcode'));
+
+			$GLOBALS['SITE_DB']->create_table('notifications_enabled',array(
+				'id'=>'*AUTO',
+				'l_member_id'=>'*USER',
+				'l_notification_code'=>'*ID_TEXT',
+				'l_code_category'=>'*SHORT_TEXT',
+				'l_setting'=>'INTEGER',
+			));
+			$GLOBALS['SITE_DB']->create_index('notifications_enabled','l_member_id',array('l_member_id','l_notification_code'));
+			$GLOBALS['SITE_DB']->create_index('notifications_enabled','l_code_category',array('l_code_category'));
+
+			$GLOBALS['SITE_DB']->create_table('digestives_tin',array( // Notifications queued up ready for the regular digest email
+				'id'=>'*AUTO',
+				'd_subject'=>'LONG_TEXT',
+				'd_message'=>'LONG_TEXT',
+				'd_from_member_id'=>'INTEGER',
+				'd_to_member_id'=>'USER',
+				'd_priority'=>'SHORT_INTEGER',
+				'd_no_cc'=>'BINARY',
+				'd_date_and_time'=>'TIME',
+				'd_notification_code'=>'ID_TEXT',
+				'd_code_category'=>'SHORT_TEXT',
+				'd_frequency'=>'INTEGER', // e.g. A_DAILY_EMAIL_DIGEST
+			));
+			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_date_and_time',array('d_date_and_time'));
+			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_frequency',array('d_frequency'));
+			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_to_member_id',array('d_to_member_id'));
+			$GLOBALS['SITE_DB']->create_table('digestives_consumed',array(
+				'c_member_id'=>'*USER',
+				'c_frequency'=>'*INTEGER', // e.g. A_DAILY_EMAIL_DIGEST
+				'c_time'=>'TIME',
+			));
 		}
 
 		if (is_null($upgrade_from)) // These are only for fresh installs

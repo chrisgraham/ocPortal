@@ -44,7 +44,7 @@
  * @param  URLPATH			The URL to the member's photo (blank: none).
  * @param  URLPATH			The URL to the member's photo thumbnail (blank: none).
  * @param  BINARY				Whether the member sees signatures in posts.
- * @param  ?BINARY			Whether the member tracks topics they post in automatically (NULL: get default from config).
+ * @param  ?BINARY			Whether the member automatically is enabled for notifications for content they contribute to (NULL: get default from config).
  * @param  ?LANGUAGE_NAME	The member's language (NULL: auto detect).
  * @param  BINARY				Whether the member allows e-mails via the site.
  * @param  BINARY				Whether the member allows e-mails from staff via the site.
@@ -62,11 +62,11 @@
  * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
  * @return AUTO_LINK			The ID of the new member.
  */
-function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=0,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$track_contributed_topics=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$personal_notes='',$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=1,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='')
+function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=0,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$personal_notes='',$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=1,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='')
 {
-	if (is_null($track_contributed_topics))
+	if (is_null($auto_monitor_contrib_content))
 	{
-		$track_contributed_topics=(get_value('no_auto_track')==='1')?0:1;
+		$auto_monitor_contrib_content=(get_value('no_auto_notifications')==='1')?0:1;
 	}
 
 	if (is_null($password_compatibility_scheme))
@@ -203,7 +203,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		'm_photo_url'=>$photo_url,
 		'm_photo_thumb_url'=>$photo_thumb_url,
 		'm_views_signatures'=>$views_signatures,
-		'm_track_contributed_topics'=>$track_contributed_topics,
+		'm_auto_monitor_contrib_content'=>$auto_monitor_contrib_content,
 		'm_highlighted_name'=>$highlighted_name,
 		'm_pt_allow'=>$pt_allow,
 		'm_pt_rules_text'=>insert_lang_comcode($pt_rules_text,4,$GLOBALS['FORUM_DB']),

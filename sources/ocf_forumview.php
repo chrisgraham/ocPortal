@@ -242,18 +242,18 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 
 	// Buttons
 	$button_array=array();
-	if (array_key_exists('may_track_forum',$details))
+	if (array_key_exists('notifications_enabled',$details))
 	{
-		if (get_value('disable_track_forum')!=='1')
+		if (get_value('disable_enable_notifications_forum')!=='1')
 		{
-			$track_forum_url=build_url(array('page'=>'topics','type'=>'track_forum','id'=>$id),get_module_zone('topics'));
-			$button_array[]=array('immediate'=>true,'rel'=>'track','title'=>do_lang_tempcode('TRACK_FORUM'),'url'=>$track_forum_url,'img'=>'track_forum');
+			$enable_notifications_url=build_url(array('page'=>'topics','type'=>'enable_notifications_forum','id'=>$id),get_module_zone('topics'));
+			$button_array[]=array('immediate'=>true,'rel'=>'enable-notifications','title'=>do_lang_tempcode('ENABLE_NOTIFICATIONS'),'url'=>$enable_notifications_url,'img'=>'enable_notifications');
 		}
 	}
-	elseif (array_key_exists('may_untrack_forum',$details))
+	elseif (array_key_exists('notifications_disabled',$details))
 	{
-		$untrack_forum_url=build_url(array('page'=>'topics','type'=>'untrack_forum','id'=>$id),get_module_zone('topics'));
-		$button_array[]=array('immediate'=>true,'rel'=>'untrack','title'=>do_lang_tempcode('UNTRACK_FORUM'),'url'=>$untrack_forum_url,'img'=>'untrack_forum');
+		$disable_notifications_url=build_url(array('page'=>'topics','type'=>'disable_notifications_forum','id'=>$id),get_module_zone('topics'));
+		$button_array[]=array('immediate'=>true,'rel'=>'disable-notifications','title'=>do_lang_tempcode('DISABLE_NOTIFICATIONS'),'url'=>$disable_notifications_url,'img'=>'disable_notifications');
 	}
 	if (!is_guest())
 	{
@@ -888,15 +888,13 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		}
 	}
 
-	if (ocf_may_track_forum($forum_id,$member_id))
+	require_code('notifications');
+	if (!notifications_enabled('ocf_forum',strval($forum_id),$member_id))
 	{
-		if (!ocf_is_tracking_forum($forum_id))
-		{
-			$out['may_track_forum']=1;
-		} else
-		{
-			$out['may_untrack_forum']=1;
-		}
+		$out['notifications_enabled']=1;
+	} else
+	{
+		$out['notifications_disabled']=1;
 	}
 	if (ocf_may_post_topic($forum_id,$member_id)) $out['may_post_topic']=1;
 	if (ocf_may_moderate_forum($forum_id,$member_id))

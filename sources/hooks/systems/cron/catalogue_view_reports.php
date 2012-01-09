@@ -73,7 +73,7 @@ class Hook_cron_catalogue_view_reports
 
 		if (count($doing)!=0)
 		{
-			require_code('mail');
+			require_code('notifications');
 			require_code('catalogues');
 			require_lang('catalogues');
 		}
@@ -105,8 +105,6 @@ class Hook_cron_catalogue_view_reports
 				{
 					// Work out the contents of the mail
 					$buildup='';
-					$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-					$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
 					foreach ($member as $entry)
 					{
 						$field_values=get_catalogue_entry_field_values($catalogue['c_name'],$entry,array(0),$fields);
@@ -122,8 +120,8 @@ class Hook_cron_catalogue_view_reports
 					$subject_tag=do_lang($catalogue['c_name'].'__CATALOGUE_VIEW_REPORT_SUBJECT',$catalogue_title,get_site_name(),NULL,get_lang($member_id),false);
 					if (is_null($subject_tag)) $subject_tag=do_lang('DEFAULT__CATALOGUE_VIEW_REPORT_SUBJECT',comcode_escape($catalogue_title),comcode_escape(get_site_name()),NULL,get_lang($member_id));
 
-					// Send actual mail
-					mail_wrap($subject_tag,$mail,array($email_address),$username,'','',3,NULL,false,NULL,true);
+					// Send actual notification
+					dispatch_notification('catalogue_view_reports',$catalogue['c_name'],$subject_tag,$mail,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 				}
 				
 				$start+=2000;

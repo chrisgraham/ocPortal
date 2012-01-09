@@ -109,7 +109,6 @@ class Module_admin_tickets
 		$fields=form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type_2','',false);
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'),do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'),'guest_emails_mandatory',false));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'),do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'),'search_faq',false));
-		$fields->attach(form_input_line(do_lang_tempcode('TICKET_SEND_SMS_TO'),do_lang_tempcode('DESCRIPTION_TICKET_SEND_SMS_TO'),'send_sms_to','',false));
 		// Permissions
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -126,53 +125,6 @@ class Module_admin_tickets
 	}
 
 	/**
-	 * Takes a comma-separated list of member usernames, splits it up, converts all the member names to IDs, and puts it all back together again.
-	 *
-	 * @param  string			A comma-separated list of usernames
-	 * @return string			A comma-separated list of member IDs
-	*/
-	function parse_send_sms_to_input($_usernames)
-	{
-		if ($_usernames=='') return '';
-		$usernames=explode(',',$_usernames);
-		$member_ids='';
-		$failed=false;
-		foreach ($usernames as $username)
-		{
-			if (($member_ids!='') && (!$failed)) $member_ids.=',';
-			$temp=$GLOBALS['FORUM_DRIVER']->get_member_from_username(trim($username));
-			if (is_null($temp))
-			{
-				$failed=true;
-				continue;
-			}
-			$member_ids.=strval($temp);
-			$failed=false;
-		}
-		return $member_ids;
-	}
-
-	/**
-	 * Reverse of parse_send_sms_to_input.
-	 *
-	 * @param  string			A comma-separated list of member IDs
-	 * @return string			A comma-separated list of member usernames
-	*/
-	function rev_parse_send_sms_to_input($_member_ids)
-	{
-		if ($_member_ids=='') return '';
-		$member_ids=explode(',',$_member_ids);
-		$usernames='';
-		foreach ($member_ids as $member_id)
-		{
-			if ($usernames!='') $usernames.=',';
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-			if (!is_null($username)) $usernames.=$username;
-		}
-		return $usernames;
-	}
-
-	/**
 	 * The actualiser to add a ticket type.
 	 *
 	 * @return tempcode		The UI
@@ -182,8 +134,7 @@ class Module_admin_tickets
 		$title=get_page_title('ADD_TICKET_TYPE');
 
 		$ticket_type=post_param('ticket_type',post_param('ticket_type_2'));
-		$send_sms_to=$this->parse_send_sms_to_input(post_param('send_sms_to'));
-		add_ticket_type($ticket_type,post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0),$send_sms_to);
+		add_ticket_type($ticket_type,post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
 
 		// Permissions
 		require_code('permissions2');
@@ -208,7 +159,6 @@ class Module_admin_tickets
 
 		$ticket_type=get_param_integer('ticket_type');
 		$details=get_ticket_type($ticket_type);
-		$send_sms_to=$this->rev_parse_send_sms_to_input($details['send_sms_to']);
 		$type_text=get_translated_text($ticket_type);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit','ticket_type'=>$ticket_type),'_SELF');
 		$submit_name=do_lang_tempcode('SAVE');
@@ -217,7 +167,6 @@ class Module_admin_tickets
 		$fields->attach(form_input_line(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'new_type',$type_text,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'),do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'),'guest_emails_mandatory',$details['guest_emails_mandatory']));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'),do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'),'search_faq',$details['search_faq']));
-		$fields->attach(form_input_line(do_lang_tempcode('TICKET_SEND_SMS_TO'),do_lang_tempcode('DESCRIPTION_TICKET_SEND_SMS_TO'),'send_sms_to',$send_sms_to,false));
 		$fields->attach(get_category_permissions_for_environment('tickets',$type_text));
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
@@ -244,8 +193,7 @@ class Module_admin_tickets
 		else
 		{
 			$trans_old_ticket_type=get_translated_text($type);
-			$send_sms_to=$this->parse_send_sms_to_input(post_param('send_sms_to'));
-			edit_ticket_type($type,post_param('new_type'),post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0),$send_sms_to);
+			edit_ticket_type($type,post_param('new_type'),post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
 
 			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>$trans_old_ticket_type),'',1);
 			require_code('permissions2');

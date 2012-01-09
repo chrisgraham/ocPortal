@@ -29,6 +29,8 @@ class Hook_content_meta_aware_calendar_type
 	function info()
 	{
 		return array(
+			'content_type_label'=>'calendar:EVENT_TYPE',
+
 			'table'=>'calendar_types',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

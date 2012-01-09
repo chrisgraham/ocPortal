@@ -47,7 +47,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 		$order=20;
 
 		// Actualiser
-		if (post_param('submitting_avatar_tab',0)==1)
+		if (post_param_integer('submitting_avatar_tab',0)==1)
 		{
 			require_code('uploads');
 			if (has_specific_permission($member_id_viewing,'own_avatars'))

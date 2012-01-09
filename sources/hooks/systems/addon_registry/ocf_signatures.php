@@ -79,6 +79,7 @@ class Hook_addon_registry_ocf_signatures
 			'sources/hooks/systems/attachments/ocf_signature.php',
 			'sources/hooks/systems/preview/ocf_signature.php',
 			'sources/hooks/systems/profiles_tabs_edit/signature.php',
+			'sources/hooks/systems/notifications/ocf_choose_signature.php',
 		);
 	}
 

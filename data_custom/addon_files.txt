@@ -26,6 +26,7 @@ ocbanter
 
 ocdeadpeople
 ------------
+# # sources/hooks/systems/notifications/got_disease.php
 # # adminzone/pages/modules_custom/admin_ocdeadpeople.php
 # # lang_custom/EN/ocdeadpeople.ini
 # # sources_custom/hooks/modules/pointstore/ocdeadpeople.php
@@ -38,6 +39,7 @@ ocdeadpeople
 
 ocgiftgiver
 -----------
+# # sources/hooks/systems/notifications/gift.php
 # # adminzone/pages/modules_custom/admin_ocgifts.php
 # # lang_custom/EN/ocgifts.ini
 # # sources_custom/hooks/modules/members/gifts.php
@@ -1966,7 +1968,7 @@ activity_feed
 # # sources_custom/blocks/main_activities_state.php
 # # sources_custom/blocks/main_activities.php
 # # sources_custom/activities_submission.php
-# # sources_custom/support.php
+# # sources_custom/hooks/systems/activities/activities.php
 # # themes/default/templates_custom/JAVASCRIPT_BASE64.tpl
 # # themes/default/templates_custom/JAVASCRIPT_JQUERY.tpl
 # # themes/default/templates_custom/JAVASCRIPT_ACTIVITIES_STATE.tpl
@@ -2006,6 +2008,7 @@ utf8
 workflows
 ---------
 
+# # sources/hooks/systems/notifications/workflow_step.php
 # # lang_custom/EN/workflows.ini
 # # cms/pages/modules_custom/cms_galleries.php
 # # adminzone/pages/modules_custom/admin_workflow.php
@@ -2021,34 +2024,6 @@ workflows
 # # site/pages/modules_custom/galleries.php
 # # adminzone/pages/modules_custom/admin_unvalidated.php
 
-tracking
---------
-
-# # lang_custom/EN/tracking.ini
-# # personalzone/pages/modules_custom/tracking.php
-# # sources_custom/hooks/modules/tracking/catalogues.php
-# # sources_custom/hooks/modules/tracking/cedi.php
-# # sources_custom/hooks/modules/tracking/downloads.php
-# # sources_custom/hooks/modules/tracking/galleries.php
-# # sources_custom/hooks/systems/symbols/IS_TRACKED.php
-# # sources_custom/hooks/systems/upon_query/tracking_catalogues.php
-# # sources_custom/hooks/systems/upon_query/tracking_cedi.php
-# # sources_custom/hooks/systems/upon_query/tracking_downloads.php
-# # sources_custom/hooks/systems/upon_query/tracking_galleries.php
-# # sources_custom/tracking.php
-# # themes/default/css_custom/tracking.css
-# # themes/default/templates_custom/JAVASCRIPT_TRACKING.tpl
-# # themes/default/templates_custom/TRACKING.tpl
-# # themes/default/templates_custom/TRACKING_BUTTONS.tpl
-# # themes/default/templates_custom/TRACKING_SCREEN.tpl
-# # themes/default/templates_custom/CEDI_PAGE_SCREEN.tpl
-# # themes/default/templates_custom/GALLERY_REGULAR_MODE_SCREEN.tpl
-# # themes/default/templates_custom/GALLERY_FLOW_MODE_SCREEN.tpl
-# # themes/default/templates_custom/DOWNLOAD_CATEGORY_SCREEN.tpl
-# # themes/default/templates_custom/CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl
-# # cms/pages/modules_custom/cms_cedi.php
-# # site/pages/modules_custom/cedi.php
-
 gallery_carousel
 ----------------
 
@@ -2061,6 +2036,8 @@ gallery_carousel
 signup_referrals
 ----------------
 
+# # sources/hooks/systems/notifications/referral.php
+# # sources/hooks/systems/notifications/referral_staff.php
 # # data_custom/signup_refer.ini
 # # lang_custom/EN/signup_refer.ini
 # # sources_custom/ocf_join.php
@@ -2287,6 +2264,8 @@ cleanup_repository
 booking
 -------
 
+# # sources/hooks/systems/notifications/booking_customer.php
+# # sources/hooks/systems/notifications/booking_inform_staff.php
 # # cms/pages/modules_custom/cms_booking.php
 # # sources_custom/booking.php
 # # sources_custom/booking2.php

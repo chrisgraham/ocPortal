@@ -83,7 +83,7 @@ function test_password($password)
 
 	/*** strength is a number 1-10; ***/
 	$strength = $strength > 99 ? 99 : $strength;
-	$strength = floor($strength / 10 + 1);
+	$strength = intval(floor($strength / 10 + 1));
 
-	return intval($strength);
+	return $strength;
 }

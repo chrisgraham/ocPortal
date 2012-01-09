@@ -447,7 +447,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		$out['last_post_id']=$topic_info['t_cache_last_post_id'];
 		if ((is_null($forum_id)) || (ocf_may_post_in_topic($forum_id,$topic_id,$topic_info['t_cache_last_member_id'])))
 			$out['may_reply']=true;
-		$out['is_being_tracked']=ocf_is_tracking_topic($topic_id);
+		require_code('notifications');
+		$out['notifications_enabled']=notifications_enabled('ocf_topic',strval($topic_id));
 		if (ocf_may_report_post()) $out['may_report_posts']=true;
 		if (ocf_may_make_personal_topic()) $out['may_pt_members']=true;
 		if (ocf_may_edit_topics_by($forum_id,get_member(),$topic_info['t_cache_first_member_id'])) $out['may_edit_topic']=true;
@@ -496,7 +497,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		$out['last_poster']=NULL;
 		$out['last_post_id']=NULL;
 		$out['may_reply']=false;
-		$out['is_being_tracked']=false;
+		$out['notifications_enabled']=false;
 	}
 
 	return $out;

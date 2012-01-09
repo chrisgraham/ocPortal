@@ -19,34 +19,6 @@
  */
 
 /**
- * If a members membership change, it is crucial that they're tracking options are updated - lest they might find confidential information e-mailed to them when people reply to tracked topics.
- *
- * @param  MEMBER	The ID of the member who's tracking needs updating.
- */
-function ocf_update_member_tracking_group_change($member_id)
-{
-	$forums=$GLOBALS['FORUM_DB']->query_select('f_forum_tracking',array('r_forum_id'),array('r_member_id'=>$member_id));
-	foreach ($forums as $forum)
-	{
-		if (!is_null($forum['r_forum_id']))
-		{
-			if (!has_category_access($member_id,'forums',strval($forum['r_forum_id'])))
-				$GLOBALS['FORUM_DB']->query_delete('f_forum_tracking',array('r_member_id'=>$member_id,'r_forum_id'=>$forum['r_forum_id']),'',1);
-		}
-	}
-	$topics=$GLOBALS['FORUM_DB']->query_select('f_topic_tracking t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics f ON f.id=r_topic_id',array('id','r_topic_id'),array('r_member_id'=>$member_id));
-	foreach ($topics as $topic)
-	{
-		$forum_id=$topic['id'];
-		if (!is_null($forum_id))
-		{
-			if (!has_category_access($member_id,'forums',strval($forum_id)))
-				$GLOBALS['FORUM_DB']->query_delete('f_topic_tracking',array('r_member_id'=>$member_id,'r_topic_id'=>$topic['r_topic_id']),'',1);
-		}
-	}
-}
-
-/**
  * Find whether a certain member may control a certain usergroup.
  *
  * @param  GROUP		The usergroup.
@@ -190,7 +162,7 @@ function ocf_delete_group($group_id,$target_group=NULL)
  */
 function ocf_member_ask_join_group($group_id,$member_id=NULL)
 {
-	require_code('mail');
+	require_code('notifications');
 
 	$group_info=$GLOBALS['FORUM_DB']->query_select('f_groups',array('g_name','g_group_leader'),array('id'=>$group_id),'',1);
 	if (!array_key_exists(0,$group_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -230,16 +202,14 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 		$leader_id=$group_info[0]['g_group_leader'];
 		if (!is_null($leader_id))
 		{
-			$leader_name=$GLOBALS['OCF_DRIVER']->get_member_row_field($leader_id,'m_username');
-			$leader_email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($leader_id,'m_email_address');
-			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',$their_username,$group_name,array($url),get_lang($leader_id));
+			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',comcode_escape($their_username),comcode_escape($group_name),array($url),get_lang($leader_id));
 			$subject=do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($leader_id));
-			mail_wrap($subject,$mail,array($leader_email_address),$leader_name,$GLOBALS['OCF_DRIVER']->get_member_email_address(get_member()),$GLOBALS['OCF_DRIVER']->get_username(get_member()));
+			dispatch_notification('ocf_group_join_request',NULL,$subject,$mail,array($leader_id));
 		} else
 		{
-			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',$their_username,$group_name,array($url),get_site_default_lang());
+			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',comcode_escape($their_username),comcode_escape($group_name),array($url),get_site_default_lang());
 			$subject=do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
-			mail_wrap($subject,$mail,NULL,NULL,$GLOBALS['OCF_DRIVER']->get_member_email_address(get_member()),$GLOBALS['OCF_DRIVER']->get_username(get_member()));
+			dispatch_notification('ocf_group_join_request_staff',NULL,$subject,$mail);
 		}
 	}
 }
@@ -260,9 +230,6 @@ function ocf_member_leave_group($group_id,$member_id=NULL)
 	if ($group_leader==$member_id) $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>NULL),array('id'=>$group_id),'',1);
 
 	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1);
-
-	// Do they need untracking from anything?
-	ocf_update_member_tracking_group_change($member_id);
 }
 
 /**
@@ -284,6 +251,14 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 		'gm_member_id'=>$member_id,
 		'gm_validated'=>$validated
 	),false,true); // Allow failure, if member is already in (handy for importers)
+
+	require_code('notifications');
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+	$group_name=ocf_get_group_name($id);
+	$subject=do_lang('MJG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username,$group_name);
+	$group_url=build_url(array('page'=>'groups','type'=>'view','id'=>$id),get_module_zone('groups'),NULL,false,false,true);
+	$mail=do_lang('MJG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($group_name),$group_url));
+	dispatch_notification('ocf_member_joined_group',strval($id),$subject,$mail);
 }
 
 /**
@@ -298,12 +273,9 @@ function ocf_member_validate_into_group($group_id,$prospective_member_id,$declin
 {
 	if (ocf_is_ldap_member($prospective_member_id)) return;
 
-	require_code('mail');
+	require_code('notifications');
 
 	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$prospective_member_id,'gm_group_id'=>$group_id),'',1);
-
-	$their_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($prospective_member_id,'m_username');
-	$their_email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($prospective_member_id,'m_email_address');
 
 	$name=ocf_get_group_name($group_id);
 
@@ -321,15 +293,15 @@ function ocf_member_validate_into_group($group_id,$prospective_member_id,$declin
 	{
 		if ($reason!='')
 		{
-			$mail=do_lang('GROUP_DECLINED_MAIL_REASON',get_site_name(),$name,$reason,get_lang($prospective_member_id));
+			$mail=do_lang('GROUP_DECLINED_MAIL_REASON',comcode_escape(get_site_name()),comcode_escape($name),comcode_escape($reason),get_lang($prospective_member_id));
 		} else
 		{
-			$mail=do_lang('GROUP_DECLINED_MAIL',get_site_name(),$name,NULL,get_lang($prospective_member_id));
+			$mail=do_lang('GROUP_DECLINED_MAIL',comcode_escape(get_site_name()),comcode_escape($name),NULL,get_lang($prospective_member_id));
 		}
 		$subject=do_lang('GROUP_DECLINED_MAIL_SUBJECT',$name,NULL,NULL,get_lang($prospective_member_id));
 	}
 
-	mail_wrap($subject,$mail,array($their_email_address),$their_username);
+	dispatch_notification('ocf_group_declined',NULL,$subject,$mail,array($prospective_member_id));
 }
 
 /**

@@ -82,7 +82,6 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 	$GLOBALS['FORUM_DRIVER']->set_custom_field($sender_id,'gift_points_used',strval($sender_gift_points_used+$amount));
 	$temp_points=point_info($recipient_id);
 	$GLOBALS['FORUM_DRIVER']->set_custom_field($recipient_id,'points_gained_given',strval((array_key_exists('points_gained_given',$temp_points)?$temp_points['points_gained_given']:0)+$amount));
-	$mail=$GLOBALS['FORUM_DRIVER']->get_member_email_address($recipient_id);
 	$their_username=$GLOBALS['FORUM_DRIVER']->get_username($recipient_id);
 	if (is_null($their_username)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$recipient_id));
 	$yes=$GLOBALS['FORUM_DRIVER']->get_member_email_allowed($recipient_id);
@@ -90,16 +89,18 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 	{
 		$_url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$recipient_id),'_SELF',NULL,false,false,true);
 		$url=$_url->evaluate();
-		require_code('mail');
+		require_code('notifications');
 		if ($anonymous)
 		{
 			$message_raw=do_lang('GIVEN_POINTS_FOR_ANON',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url)),get_lang($recipient_id));
-			mail_wrap(do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($mail),$their_username);
+			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($recipient_id),A_FROM_SYSTEM_UNPRIVILEGED);
 		} else
 		{
-			$message_raw=do_lang('GIVEN_POINTS_FOR',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_username)),get_lang($recipient_id));
-			mail_wrap(do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($mail),$their_username,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			$message_raw=do_lang('GIVEN_POINTS_FOR',comcode_escape($their_username),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_username)),get_lang($recipient_id));
+			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,NULL,$sender_id);
 		}
+		$message_raw=do_lang('USER_GIVEN_POINTS_FOR',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_username)),get_site_default_lang());
+		dispatch_notification('received_points_staff',NULL,do_lang('USER_GIVEN_POINTS',number_format($amount),NULL,NULL,get_site_default_lang()),$message_raw,array($recipient_id),$sender_id);
 	}
 
 	if (get_forum_type()=='ocf')

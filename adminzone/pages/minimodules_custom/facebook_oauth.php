@@ -41,7 +41,7 @@ if ($result)
 	$out=do_lang_tempcode('FACEBOOK_OAUTH_SUCCESS');
 } else
 {
-	$out=do_lang_tempcode('SOME_ERRORS_OCCURED');
+	$out=do_lang_tempcode('SOME_ERRORS_OCCURRED');
 }
 
 $title->evaluate_echo();

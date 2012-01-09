@@ -861,7 +861,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 /**
  * Get some general debugging information for an identified XHTML error.
  *
- * @param  string			The error that occured
+ * @param  string			The error that occurred
  * @param  string			The first parameter of the error
  * @param  string			The second parameter of the error
  * @param  string			The third parameter of the error

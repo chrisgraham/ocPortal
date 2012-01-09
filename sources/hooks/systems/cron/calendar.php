@@ -30,7 +30,7 @@ class Hook_cron_calendar
 		
 		require_code('calendar');
 		require_lang('calendar');
-		require_code('mail');
+		require_code('notifications');
 
 		$start=0;
 		do
@@ -87,11 +87,8 @@ class Hook_cron_calendar
 					$url=$_url->evaluate();
 					$subject_tag=do_lang('EVENT_REMINDER_SUBJECT',$title,NULL,NULL,get_lang($job['n_member_id']));
 					$message_raw=do_lang('EVENT_REMINDER_CONTENT',comcode_escape($date),comcode_escape($url),get_translated_text($job['e_content']),get_lang($job['n_member_id']));
-					$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($job['n_member_id']);
-					$to_name=$GLOBALS['FORUM_DRIVER']->get_username($job['n_member_id']);
-					if (is_null($to_name)) continue;
-					mail_wrap($subject_tag,$message_raw,array($to_email),$to_name,'','',$job['e_priority'],NULL,true);
-	
+					dispatch_notification('calendar_reminder',strval($job['e_type']),$subject_tag,$message_raw,array($job['n_member_id']),A_FROM_SYSTEM_UNPRIVILEGED);
+
 					//echo $subject_tag."\n\n".$message_raw;
 				}
 	

@@ -29,6 +29,8 @@ class Hook_content_meta_aware_quiz
 	function info()
 	{
 		return array(
+			'content_type_label'=>'quiz:QUIZ',
+
 			'table'=>'quizzes',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

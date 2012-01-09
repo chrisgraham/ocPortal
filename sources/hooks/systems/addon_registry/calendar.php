@@ -74,6 +74,8 @@ class Hook_addon_registry_calendar
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/calendar_reminder.php',
+			'sources/hooks/systems/notifications/calendar_event.php',
 			'sources/hooks/systems/config_default/calendar_show_stats_count_events.php',
 			'sources/hooks/systems/config_default/calendar_show_stats_count_events_this_month.php',
 			'sources/hooks/systems/config_default/calendar_show_stats_count_events_this_week.php',

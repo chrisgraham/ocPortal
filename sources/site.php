@@ -781,7 +781,7 @@ function do_site()
 		$GLOBALS['HTTP_STATUS_CODE']='404';
 		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
 
-		$title=get_page_title('ERROR_OCCURED');
+		$title=get_page_title('ERROR_OCCURRED');
 		$text=do_lang_tempcode('NO_PAGE_OUTPUT');
 		$middle=warn_screen($title,$text,false);
 	}
@@ -900,10 +900,18 @@ function do_site()
 	// Finally, stats
 	if ($PAGE_STRING!==NULL) log_stats($PAGE_STRING,intval($page_generation_time));
 
-	// Track very basic details of what sites use ocPortal. You can remove if you like.
-	if ($ZONE['zone_name']=='adminzone')
+	// When someone hits the Admin Zone front page.
+	if (($ZONE['zone_name']=='adminzone') && (get_page_name()=='start'))
 	{
-		if ((preg_match('#^localhost[\.\:$]?#',ocp_srv('HTTP_HOST'))==0) && (get_page_name()=='start'))
+		// Security feature admins can turn on
+		require_code('notifications');
+		$current_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$subject=do_lang('AFA_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$current_username);
+		$mail=do_lang('AFA_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($current_username));
+		dispatch_notification('adminzone_frontpage_accessed',NULL,$subject,$mail);
+
+		// Track very basic details of what sites use ocPortal. You can remove if you like.
+		if (preg_match('#^localhost[\.\:$]?#',ocp_srv('HTTP_HOST'))==0)
 		{
 			global $EXPIRE,$KEY;
 			$timeout_before=@ini_get('default_socket_timeout');
@@ -923,8 +931,10 @@ function do_site()
 		$disk_space=@disk_free_space(get_file_base());
 		if ((is_integer($disk_space)) && ($disk_space<$low_space_check))
 		{
-			require_code('mail');
-			mail_wrap(do_lang('LOW_DISK_SPACE_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),do_lang('LOW_DISK_SPACE_MAIL',strval(intval(round($disk_space/1024/1024))),NULL,get_site_default_lang()),NULL,'','','',1);
+			require_code('notifications');
+			$subject=do_lang('LOW_DISK_SPACE_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
+			$message=do_lang('LOW_DISK_SPACE_MAIL',strval(intval(round($disk_space/1024/1024))),NULL,get_site_default_lang());
+			dispatch_notification('low_disk_space',NULL,$subject,$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
 		}
 	}
 
@@ -1313,6 +1323,17 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 	if ($file_base===NULL) $file_base=get_file_base();
 
 	if (!$being_included) $GLOBALS['TITLE_CALLED']=true;
+	
+	$is_panel=substr($codename,0,6)=='panel_';
+
+	if ($zone=='' && $codename=='404')
+	{
+		global $EXTRA_HEAD;
+		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
+		$GLOBALS['HTTP_STATUS_CODE']='404';
+		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+	}
 
 	if ($zone=='adminzone')
 	{
@@ -1327,7 +1348,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	global $PAGE_STRING,$COMCODE_PARSE_TITLE,$LAST_COMCODE_PARSED_TITLE;
 	$COMCODE_PARSE_TITLE=NULL;
-	if ($PAGE_STRING===NULL) $PAGE_STRING=$string;
+	if ($PAGE_STRING===NULL && !$being_included && !$is_panel) $PAGE_STRING=$string;
 
 	$new_comcode_page_row=array(
 		'the_zone'=>$zone,
@@ -1429,7 +1450,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		$new_comcode_page_row['p_add_date']=filectime($file_base.'/'.$string);
 		list($html,$comcode_page_row,$title_to_use)=_load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included);
 	}
-	if ((substr($codename,0,6)!='panel_') && ($title_to_use!==NULL) && (!$being_included))
+	if ((!$is_panel) && ($title_to_use!==NULL) && (!$being_included))
 	{
 		if ($title_to_use!='')
 		{
@@ -1466,7 +1487,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		$warning_details=get_page_warning_details($zone,$codename,$edit_url);
 	}
 
-	if ((substr($codename,0,6)!='panel_') && ($title_to_use!==NULL) && (!$being_included))
+	if ((!$is_panel) && ($title_to_use!==NULL) && (!$being_included))
 	{
 		global $PT_PAIR_CACHE_CP;
 		$PT_PAIR_CACHE_CP[$codename]['cc_page_title']=($title_to_use===NULL)?do_lang_tempcode('NA_EM'):make_string_tempcode($title_to_use);

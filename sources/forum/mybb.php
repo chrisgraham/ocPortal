@@ -1238,7 +1238,7 @@ class forum_driver_mybb extends forum_driver_base
 	 * @param  MD5				The md5-hashed password
 	 * @param  string			The raw password
 	 * @param  boolean		Whether this is a cookie login
-	 * @return array			A map of 'id' and 'error'. If 'id' is NULL, an error occured and 'error' is set
+	 * @return array			A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
 	 */
 	function forum_authorise_login($username,$userid,$password_hashed,$password_raw,$cookie_login=false)
 	{

@@ -88,7 +88,7 @@ function get_cedi_page_html($row,$zone='_SEARCH',$put_in_box=true)
  * @param  boolean		Whether to send out a staff e-mail about the new CEDI post
  * @return AUTO_LINK		The post ID
  */
-function cedi_add_post($id,$message,$validated=1,$member=NULL,$send_mail=true)
+function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_mail=true)
 {
 	if (is_null($member)) $member=get_member();
 
@@ -96,13 +96,13 @@ function cedi_add_post($id,$message,$validated=1,$member=NULL,$send_mail=true)
 	check_comcode($message,NULL,false,NULL,true);
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$post_id=$GLOBALS['SITE_DB']->query_insert('seedy_posts',array('validated'=>$validated,'edit_date'=>NULL,'the_message'=>0,'the_user'=>$member,'date_and_time'=>time(),'page_id'=>$id,'seedy_views'=>0),true);
+	$id=$GLOBALS['SITE_DB']->query_insert('seedy_posts',array('validated'=>$validated,'edit_date'=>NULL,'the_message'=>0,'the_user'=>$member,'date_and_time'=>time(),'page_id'=>$page_id,'seedy_views'=>0),true);
 	require_code('attachments2');
-	$the_message=insert_lang_comcode_attachments(2,$message,'cedi_post',strval($post_id));
-	$GLOBALS['SITE_DB']->query_update('seedy_posts',array('the_message'=>$the_message),array('id'=>$post_id),'',1);
+	$the_message=insert_lang_comcode_attachments(2,$message,'cedi_post',strval($id));
+	$GLOBALS['SITE_DB']->query_update('seedy_posts',array('the_message'=>$the_message),array('id'=>$id),'',1);
 
 	// Log
-	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_MAKE_POST','the_page'=>$id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
+	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_MAKE_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
 
 	// Update post count
 	if (addon_installed('points'))
@@ -117,23 +117,15 @@ function cedi_add_post($id,$message,$validated=1,$member=NULL,$send_mail=true)
 	update_stat('num_seedy_posts',1);
 	//update_stat('num_seedy_files',count($_FILES));
 
-	// Send e-mail to the staff. These exist because CEDI exists in the 'space' between a forum, and a website- usually there is no validation, but the content does not moderation (and unlike a forum, staff are unlikely to 'lurk')
+	// Send e-mail to the staff. These exist because CEDI exists in the 'space' between a forum, and a website- usually there is no validation, but the content does need moderation (and unlike a forum, staff are unlikely to 'lurk')
 	if ($send_mail)
 	{
-		$page_name=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$id)));
-		$_the_message=mixed();
-		$_the_message=get_translated_text($the_message);
-		$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($id==db_get_first_id())?NULL:$id),'_SELF',NULL,false,false,true);
-		$view_url=$_view_url->evaluate();
-		$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$message_raw=do_lang('CEDI_POST_TAG_LINE',comcode_escape($their_username),comcode_escape($page_name),array(comcode_escape($view_url),$_the_message),get_site_default_lang());
-		require_code('mail');
-		mail_wrap(do_lang('NEW_CEDI_POST',$page_name,NULL,NULL,get_site_default_lang()),$message_raw,NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),3,NULL,false,get_member());
+		dispatch_cedi_post_notification($id,'ADD');
 	}
 
 	if (get_option('show_post_validation')=='1') decache('main_staff_checklist');
 
-	return $post_id;
+	return $id;
 }
 
 /**
@@ -144,25 +136,41 @@ function cedi_add_post($id,$message,$validated=1,$member=NULL,$send_mail=true)
  * @param  BINARY			Whether the post will be validated
  * @param  ?MEMBER		The member doing the action (NULL: current member)
  */
-function cedi_edit_post($post_id,$message,$validated,$member=NULL)
+function cedi_edit_post($id,$message,$validated,$member=NULL)
 {
 	if (is_null($member)) $member=get_member();
 
-	$rows=$GLOBALS['SITE_DB']->query_select('seedy_posts',array('*'),array('id'=>$post_id),'',1);
+	$rows=$GLOBALS['SITE_DB']->query_select('seedy_posts',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 	$original_poster=$myrow['the_user'];
 	$page_id=$myrow['page_id'];
 
-	$_message=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_message',array('id'=>$post_id));
+	$_message=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_message',array('id'=>$id));
 
 	require_code('attachments2');
 	require_code('attachments3');
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$GLOBALS['SITE_DB']->query_update('seedy_posts',array('validated'=>$validated,'edit_date'=>time(),'the_message'=>update_lang_comcode_attachments($_message,$message,'cedi_post',strval($post_id),NULL,false,$original_poster)),array('id'=>$post_id),'',1);
+
+	require_code('submit');
+	$just_validated=(!content_validated('cedi_post',strval($id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('cedi_post',strval($id));
+	}
+
+	$GLOBALS['SITE_DB']->query_update('seedy_posts',array('validated'=>$validated,'edit_date'=>time(),'the_message'=>update_lang_comcode_attachments($_message,$message,'cedi_post',strval($id),NULL,false,$original_poster)),array('id'=>$id),'',1);
 
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
+
+	if ($just_validated)
+	{
+		dispatch_cedi_post_notification($id,'ADD');
+	} else
+	{
+		dispatch_cedi_post_notification($id,'EDIT');
+	}
 }
 
 /**
@@ -227,6 +235,8 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL)
 	require_code('seo2');
 	seo_meta_set_for_implicit('seedy_page',strval($id),array($title,$description),$description);
 
+	dispatch_cedi_page_notification($id,'ADD');
+
 	return $id;
 }
 
@@ -259,6 +269,8 @@ function cedi_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('seedy_page',strval($id),$meta_keywords,$meta_description);
+
+	dispatch_cedi_page_notification($id,'EDIT');
 }
 
 /**
@@ -596,4 +608,50 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$tree=NULL,$title=NULL,$do
 	return $use_compound_list?array($children,$children[0]['compound_list']):$children;
 }
 
+/**
+ * Dispatch a notification about a CEDI post
+ *
+ * @param  AUTO_LINK		The post ID
+ * @param  ID_TEXT		The action type
+ * @set ADD EDIT
+ */
+function dispatch_cedi_post_notification($post_id,$type)
+{
+	$page_id=$GLOBALS['SITE_DB']->query_value('seedy_posts','page_id',array('id'=>$post_id));
+	$the_message=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_message',array('id'=>$post_id));
+	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$page_id)));
+	$_the_message=get_translated_text($the_message);
 
+	$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),'_SELF',NULL,false,false,true);
+	$view_url=$_view_url->evaluate();
+	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+
+	$subject=do_lang($type.'_CEDI_POST_SUBJECT',$page_name,NULL,NULL,get_site_default_lang());
+	$message_raw=do_lang($type.'_CEDI_POST_BODY',comcode_escape($their_username),comcode_escape($page_name),array(comcode_escape($view_url),$_the_message),get_site_default_lang());
+
+	require_code('notifications');
+	dispatch_notification('cedi',strval($page_id),$subject,$message_raw);
+}
+
+/**
+ * Dispatch a notification about a CEDI page
+ *
+ * @param  AUTO_LINK		The page ID
+ * @param  ID_TEXT		The action type
+ * @set ADD EDIT
+ */
+function dispatch_cedi_page_notification($page_id,$type)
+{
+	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$page_id)));
+	$_the_message=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','description',array('id'=>$page_id)));
+
+	$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),'_SELF',NULL,false,false,true);
+	$view_url=$_view_url->evaluate();
+	$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+
+	$subject=do_lang($type.'_CEDI_PAGE_SUBJECT',$page_name,NULL,NULL,get_site_default_lang());
+	$message_raw=do_lang($type.'_CEDI_PAGE_BODY',comcode_escape($their_username),comcode_escape($page_name),array(comcode_escape($view_url),$_the_message),get_site_default_lang());
+
+	require_code('notifications');
+	dispatch_notification('cedi',strval($page_id),$subject,$message_raw);
+}

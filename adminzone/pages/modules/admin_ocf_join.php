@@ -170,7 +170,7 @@ class Module_admin_ocf_join
 		$theme=post_param('theme','');
 		$views_signatures=post_param_integer('views_signatures',0);
 		$preview_posts=post_param_integer('preview_posts',0);
-		$track_contributed_topics=post_param_integer('track_contributed_topics',0);
+		$auto_monitor_contrib_content=post_param_integer('auto_monitor_contrib_content',0);
 		$pt_allow=array_key_exists('pt_allow',$_POST)?implode(',',$_POST['pt_allow']):'';
 		$tmp_groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
 		$all_pt_allow='';
@@ -189,7 +189,7 @@ class Module_admin_ocf_join
 		breadcrumb_set_self(do_lang_tempcode('DETAILS'));
 
 		// Add member
-		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$track_contributed_topics,$language,$allow_emails,$allow_emails_from_staff,'','','',true,'','',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
+		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,'','','',true,'','',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
 
 		// Secondary groups
 		if (array_key_exists('secondary_groups',$_POST))

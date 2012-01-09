@@ -261,6 +261,14 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$campaignremai
 	decache('main_topsites');
 
 	if (!addon_installed('unvalidated')) $validated=1;
+
+	require_code('submit');
+	$just_validated=(!content_validated('banner',$name)) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('banner',$name);
+	}
+
 	$GLOBALS['SITE_DB']->query_update('banners',array('b_title_text'=>$title_text,'edit_date'=>time(),'expiry_date'=>$expiry_date,'the_type'=>$the_type,'submitter'=>$submitter,'name'=>$name,'img_url'=>$imgurl,'caption'=>lang_remap_comcode($_caption,$caption),'campaign_remaining'=>$campaignremaining,'site_url'=>$site_url,'importance_modulus'=>$importancemodulus,'notes'=>$notes,'validated'=>$validated,'b_type'=>$b_type),array('name'=>$old_name),'',1);
 }
 

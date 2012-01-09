@@ -212,8 +212,8 @@ function _comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap
  *
  * @param  boolean		Whether this is being pre-parsed, to pick up errors before row insertion.
  * @param  array			Error message details to pass to do_lang, or if the first in the list is NULL, use directly
- * @param  integer		The position during parsing that the error occured at
- * @param  LONG_TEXT		The comcode the parser error occured in
+ * @param  integer		The position during parsing that the error occurred at
+ * @param  LONG_TEXT		The comcode the parser error occurred in
  * @param  boolean		Whether to only check the Comcode.
  * @return tempcode		An error message to put in the output stream (shown in certain situations, where in other situations we bomb out).
  */
@@ -314,7 +314,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	$fields=form_input_text_comcode(do_lang_tempcode('NEW'),do_lang_tempcode('COMCODE_REPLACEMENT'),$name,$comcode,true,NULL,true);
 	$post_url=get_self_url();
 	$form=do_template('FORM',array('_GUID'=>'207bad1252add775029b34ba36e02856','URL'=>$post_url,'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
-	$output=do_template('COMCODE_MISTAKE_SCREEN',array('_GUID'=>'0010230e6612b0775566d07ddf54305a','EDITABLE'=>!running_script('preview'),'FORM'=>$form,'TITLE'=>get_page_title('ERROR_OCCURED'),'LINE'=>integer_format($line),'MESSAGE'=>$message,'LINES'=>$lines));
+	$output=do_template('COMCODE_MISTAKE_SCREEN',array('_GUID'=>'0010230e6612b0775566d07ddf54305a','EDITABLE'=>!running_script('preview'),'FORM'=>$form,'TITLE'=>get_page_title('ERROR_OCCURRED'),'LINE'=>integer_format($line),'MESSAGE'=>$message,'LINES'=>$lines));
 	$echo=new ocp_tempcode();
 	if (!running_script('preview'))
 	{
@@ -351,9 +351,10 @@ function reinsert_parameters($attributes)
  * @param  URLPATH		URL to test.
  * @param  string			Comcode tag type, to which the URL is associated.
  * @param  string			URL actually provided.
+ * @param  MEMBER			The member who is responsible for this Comcode
  * @return tempcode		Error message, or blank if no error.
 */
-function test_url($url_full,$tag_type,$given_url)
+function test_url($url_full,$tag_type,$given_url,$source_member)
 {
 	if (get_option('check_broken_urls')=='0') return new ocp_tempcode();
 	if (strpos($url_full,'{$')!==false) return new ocp_tempcode();
@@ -381,7 +382,7 @@ function test_url($url_full,$tag_type,$given_url)
 				if (!$found_in_post)
 				{
 					require_code('failure');
-					relay_error_mail(do_lang('MISSING_URL_COMCODE',$tag_type,$url_full),false);
+					relay_error_notification(do_lang('MISSING_URL_COMCODE',$tag_type,$url_full),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 				}
 			}
 		}
@@ -555,7 +556,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 	if ($semiparse_mode) // We have got to this point because we want to provide a special 'button' editing representation for these tags
 	{
-		$non_text_tags=array('block','contents','concepts','attachment','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker');
+		$non_text_tags=array('section_controller','big_tab_controller','img','currency','block','contents','concepts','attachment','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
 		if (in_array($tag,$non_text_tags))
 		{
 			$params='';
@@ -833,7 +834,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
 			if (!is_null($cite))
 			{
-				$temp_tpl=test_url($cite,'del',$cite);
+				$temp_tpl=test_url($cite,'del',$cite,$source_member);
 			}
 			$datetime=array_key_exists('datetime',$attributes)?$attributes['datetime']:NULL;
 			$temp_tpl->attach(do_template('COMCODE_DEL',array('_GUID'=>'acsd4f9910sfd03f81b61919b74ac24c91','CONTENT'=>$embed,'CITE'=>$cite,'DATETIME'=>$datetime)));
@@ -842,7 +843,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
 			if (!is_null($cite))
 			{
-				$temp_tpl=test_url($cite,'ins',$cite);
+				$temp_tpl=test_url($cite,'ins',$cite,$source_member);
 				if (!$temp_tpl->is_empty()) break;
 			}
 			$datetime=array_key_exists('datetime',$attributes)?$attributes['datetime']:NULL;
@@ -1292,7 +1293,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						require_code('failure');
-						relay_error_mail(do_lang('MISSING_RESOURCE_COMCODE','attachment',strval($__id)),false);
+						relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','attachment',strval($__id)),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 					}
 					break;
 				}
@@ -1344,7 +1345,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 				{
 					require_code('failure');
-					relay_error_mail(do_lang('MISSING_RESOURCE_COMCODE','include',$zone.':'.$codename),false);
+					relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','include',$zone.':'.$codename),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 				}
 			} else
 			{
@@ -1797,7 +1798,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						require_code('failure');
-						relay_error_mail(do_lang('MISSING_RESOURCE_COMCODE','exp_ref',$_embed),false);
+						relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','exp_ref',$_embed),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 					}
 					
 					break;
@@ -1842,7 +1843,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						require_code('failure');
-						relay_error_mail(do_lang('MISSING_RESOURCE_COMCODE','exp_thumb',$_embed),false);
+						relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','exp_thumb',$_embed),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 					}
 					break;
 				}
@@ -1967,7 +1968,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				$url_full=$_embed;
 			}
-			$temp_tpl=test_url($url_full,'img',@html_entity_decode($given_url,ENT_QUOTES,get_charset()));
+			$temp_tpl=test_url($url_full,'img',@html_entity_decode($given_url,ENT_QUOTES,get_charset()),$source_member);
 			$align=array_key_exists('align',$attributes)?$attributes['align']:'';
 			$caption=is_object($attributes['param'])?$attributes['param']:comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
 			if (array_key_exists('title',$attributes))
@@ -1996,7 +1997,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
 			check_naughty_javascript_url($source_member,$_embed,$as_admin);
 			$url_full=url_is_local($_embed)?(get_custom_base_url().'/'.$_embed):$_embed;
-			$temp_tpl=test_url($url_full,'flash',@html_entity_decode($given_url,ENT_QUOTES,get_charset()));
+			$temp_tpl=test_url($url_full,'flash',@html_entity_decode($given_url,ENT_QUOTES,get_charset()),$source_member);
 			if (($attributes['param']=='') || (strpos($attributes['param'],'x')===false))
 			{
 				if (!array_key_exists('width',$attributes)) $attributes['width']='300';
@@ -2083,7 +2084,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$striped_base_url=str_replace('www.','',str_replace('http://','',get_base_url()));
 			if (($striped_base_url!='') && (substr($url,0,1)!='%') && (strpos($url_full,$striped_base_url)===false)) // We don't want to hammer our own server when we have Comcode pages full of links to our own site (much less risk of hammering other people's servers, as we won't tend to have loads of links to them). Would also create bugs in emails sent out - e.g. auto-running validateip.php links hence voiding the intent of the feature.
 			{
-				$temp_tpl=test_url($url_full,'url',$given_url);
+				$temp_tpl=test_url($url_full,'url',$given_url,$source_member);
 			}
 			
 			// Render
@@ -2148,7 +2149,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			} else $__caption=$_embed;
 			$url=get_custom_base_url().'/'.$type.'/'.rawurlencode($_embed);
 			check_naughty_javascript_url($source_member,$url,$as_admin);
-			$temp_tpl=test_url($url,'upload',$_embed);
+			$temp_tpl=test_url($url,'upload',$_embed,$source_member);
 			$temp_tpl->attach(hyperlink($url,$__caption));
 			break;
 		case 'page':
@@ -2247,7 +2248,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						} else
 						{
 							require_code('failure');
-							relay_error_mail(do_lang('MISSING_RESOURCE_COMCODE','page',$zone.':'.$page),false);
+							relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','page',$zone.':'.$page),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 						}
 					}
 				}
@@ -2280,7 +2281,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$cite=array_key_exists('cite',$attributes)?$attributes['cite']:NULL;
 			if (!is_null($cite))
 			{
-				$temp_tpl=test_url($cite,'del',$cite);
+				$temp_tpl=test_url($cite,'del',$cite,$source_member);
 			}
 
 			if ($attributes['param']!='')

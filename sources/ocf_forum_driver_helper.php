@@ -165,10 +165,10 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
 		$TOPIC_NAMES_TO_IDS=array();
 	}
 
-	// Send out to trackers
+	// Send out notifications
 	$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
 	$url=$_url->evaluate();
-	ocf_send_tracker_about($url,$topic_id,$forum_id,$member,!$is_new,$post,$topic_name);
+	ocf_send_topic_notification($url,$topic_id,$forum_id,$member,!$is_new,$post,$topic_name);
 
 	$result=false;
 	if ((!running_script('stress_test_loader')) && (get_page_name()!='admin_import'))
@@ -182,10 +182,10 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
 		}
 	}
 
-	// Is the user gonna be tracking this?
-	$track_contributed_topics=$this_ref->get_member_row_field($member,'m_track_contributed_topics');
-	if (($track_contributed_topics==1) && (has_category_access($member,'forums',strval($forum_id))))
-		ocf_track_topic($topic_id,$member);
+	// Is the user gonna automatically enable notifications for this?
+	$auto_monitor_contrib_content=$this_ref->get_member_row_field($member,'m_auto_monitor_contrib_content');
+	if (($auto_monitor_contrib_content==1) && (has_category_access($member,'forums',strval($forum_id))))
+		enable_notifications('ocf_topic',strval($topic_id),$member);
 
 	return $result;
 }

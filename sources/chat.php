@@ -863,21 +863,18 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 							fclose($myfile);
 							sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
 
-							$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($allow);
-							$to_name=$GLOBALS['FORUM_DRIVER']->get_username($allow);
-							if ($to_email!='')
-							{
-								require_lang('chat');
-								require_code('mail');
-								$username=$GLOBALS['FORUM_DRIVER']->get_username($room_check[0]['room_owner']);
-								$username2=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-								$email2=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
-								$zone=get_module_zone('chat');
-								$_lobby_url=build_url(array('page'=>'chat'),$zone,NULL,false,false,true);
-								$lobby_url=$_lobby_url->evaluate();
-								$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message),get_lang($allow));
-								mail_wrap(do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow)),$message,array($to_email),$to_name,$email2,$username2,1);
-							}
+							require_lang('chat');
+
+							$zone=get_module_zone('chat');
+							$_lobby_url=build_url(array('page'=>'chat'),$zone,NULL,false,false,true);
+							$lobby_url=$_lobby_url->evaluate();
+							$subject=do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow));
+							$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+							$username2=$GLOBALS['FORUM_DRIVER']->get_username($allow);
+							$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message),get_lang($allow));
+
+							require_code('notifications');
+							dispatch_notification('im_invited',NULL,$subject,$message,array($allow),$room_check[0]['room_owner'],1);
 						}
 					}
 				}
@@ -1179,10 +1176,12 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 
 	if (!is_null($entering_room))
 	{
+		$their_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+
 		$_entering_room=get_translated_text($entering_room);
 		if ($_entering_room!='')
 		{
-			$_message_parsed=insert_lang_comcode('[private="'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'"]'.$_entering_room.'[/private]',4);
+			$_message_parsed=insert_lang_comcode('[private="'.$their_username.'"]'.$_entering_room.'[/private]',4);
 			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 			$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 			fwrite($myfile,strval($message_id));
@@ -1190,12 +1189,21 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 			sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		}
 
-		$_message_parsed=insert_lang_comcode(do_lang('ENTERED_THE_ROOM',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),4);
+		$_message_parsed=insert_lang_comcode(do_lang('ENTERED_THE_ROOM',$their_username),4);
 		$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
 		$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		fwrite($myfile,strval($message_id));
 		fclose($myfile);
 		sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+
+		$room_name=$GLOBALS['SITE_DB']->query_value('chat_rooms','room_name',array('id'=>$room_id));
+		$room_language=$GLOBALS['SITE_DB']->query_value('chat_rooms','room_language',array('id'=>$room_id));
+
+		require_code('notifications');
+		$subject=do_lang('MEC_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$their_username,$room_name,$room_language);
+		$room_url=build_url(array('page'=>'chat','type'=>'room','id'=>$room_id),$zone,NULL,false,false,true);
+		$mail=do_lang('MEC_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($their_username),array(comcode_escape($room_name),$room_url->evaluate()),$room_language);
+		dispatch_notification('member_entered_chatroom',strval($room_id),$subject,$mail);
 	}
 
 	// Load all the room content from the db for one room and replace smilies and banned words etc.

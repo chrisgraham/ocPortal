@@ -97,9 +97,10 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
  * @param  boolean		Whether to make the post anonymous
  * @param  boolean		Whether to skip post checks
  * @param  boolean		Whether this is for a new Private Topic
+ * @param  boolean		Whether to explicitly insert the Comcode with admin privileges
  * @return AUTO_LINK		The ID of the new post.
  */
-function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false)
+function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false,$insert_comcode_as_admin=false)
 {
 	if (is_null($poster)) $poster=get_member();
 
@@ -125,10 +126,10 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	if (is_null($time))
 	{
 		$time=time();
-		$send_to_trackers=true;
+		$send_notification=true;
 	} else
 	{
-		$send_to_trackers=false;
+		$send_notification=false;
 	}
 	if (is_null($poster_name_if_guest))
 	{
@@ -184,7 +185,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	
 	if (!$support_attachments)
 	{
-		$lang_id=insert_lang_comcode($post,4,$GLOBALS['FORUM_DB']);
+		$lang_id=insert_lang_comcode($post,4,$GLOBALS['FORUM_DB'],$insert_comcode_as_admin);
 	} else
 	{
 		$lang_id=0;
@@ -219,11 +220,13 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 
 	if ($check_permissions) // Not automated, so we'll have to be doing run-time progressing too
 	{
-		// Is the user gonna be tracking this?
-		$track_contributed_topics=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster,'m_track_contributed_topics');
-
-		if ($track_contributed_topics==1)
-			ocf_track_topic($topic_id,$poster);
+		// Is the user gonna automatically enable notifications for this?
+		$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster,'m_auto_monitor_contrib_content');
+		if ($auto_monitor_contrib_content==1)
+		{
+			require_code('notifications');
+			enable_notifications('ocf_topic',strval($topic_id),$poster);
+		}
 	}
 
 	if (($validated==0) || ($check_permissions))
@@ -233,36 +236,23 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	}
 	if ($validated==0)
 	{
-		if ((get_option('send_staff_message_post_validation')=='1') && ($check_permissions))
+		if ($check_permissions)
 		{
 			// send_validation_mail is used for other content - but forum is special
 			$subject=do_lang('POST_REQUIRING_VALIDATION_MAIL_SUBJECT',$topic_title,NULL,NULL,get_site_default_lang());
 			$post_text=get_translated_text($lang_id,$GLOBALS['FORUM_DB'],get_site_default_lang());
 			$mail=do_lang('POST_REQUIRING_VALIDATION_MAIL',comcode_escape($url),comcode_escape($poster_name_if_guest),$post_text);
-			require_code('mail');
-			if (!defined('HIPHOP_PHP'))
-			{
-				register_shutdown_function('mail_wrap',$subject,$mail,array(get_option('staff_address')),'','','',3,NULL,false,get_member());
-			} else
-			{
-				mail_wrap($subject,$mail,array(get_option('staff_address')),'','','',3,NULL,false,get_member());
-			}
+			require_code('notifications');
+			mail_wrap('validation','ocf_forum:'.strval($forum_id),$subject,$mail);
 		}
 	} else
 	{
 		if ($check_permissions) // Not automated, so we'll have to be doing run-time progressing too
 		{
-			if ($send_to_trackers)
+			if ($send_notification)
 			{
 				require_code('ocf_posts_action2');
-				//ocf_send_tracker_about($url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,get_translated_text($lang_id),$topic_title,$intended_solely_for,$is_pt);
-				if (!defined('HIPHOP_PHP'))
-				{
-					register_shutdown_function('ocf_send_tracker_about',$url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,get_translated_text($lang_id,$GLOBALS['FORUM_DB']),$topic_title,$intended_solely_for,$is_pt);
-				} else
-				{
-					ocf_send_tracker_about($url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,get_translated_text($lang_id,$GLOBALS['FORUM_DB']),$topic_title,$intended_solely_for,$is_pt);
-				}
+				ocf_send_topic_notification($url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,get_translated_text($lang_id,$GLOBALS['FORUM_DB']),$topic_title,$intended_solely_for,$is_pt);
 			}
 		}
 	}

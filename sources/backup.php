@@ -266,8 +266,8 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 		}
 	}
 
-	require_code('mail');
-	mail_wrap(do_lang('BACKUP',NULL,NULL,NULL,get_site_default_lang()),do_lang('BACKUP_FINISHED',comcode_escape($url),get_site_default_lang()));
+	require_code('notifications');
+	dispatch_notification('backup_finished',NULL,do_lang('BACKUP',NULL,NULL,NULL,get_site_default_lang()),do_lang('BACKUP_FINISHED',comcode_escape($url),get_site_default_lang()),NULL,A_FROM_SYSTEM_PRIVILEGED);
 }
 
 

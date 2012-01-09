@@ -34,18 +34,27 @@ class Hook_checklist_task_manage
 
 		decache('main_staff_checklist');
 
+		require_lang('staff_checklist');
+
 		switch ($type)
 		{
 			case 'add':
 				$recurinterval=get_param_integer('recurinterval',0);
 
+				$task_title=get_param('tasktitle',false,true);
+
 				$id=$GLOBALS['SITE_DB']->query_insert('customtasks',array(
-					'tasktitle'=>get_param('tasktitle',false,true),
+					'tasktitle'=>$task_title,
 					'datetimeadded'=>time(),
 					'recurinterval'=>$recurinterval,
 					'recurevery'=>get_param('recurevery'),
 					'taskisdone'=>NULL,
 				),true);
+
+				require_code('notifications');
+				$subject=do_lang('CT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$task_title);
+				$mail=do_lang('CT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($task_title));
+				dispatch_notification('checklist_task',NULL,$subject,$mail);
 
 				return do_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK',array(
 					'TASKTITLE'=>comcode_to_tempcode(get_param('tasktitle',false,true)),

@@ -81,7 +81,7 @@ function _enforce_sessioned_url($url)
  *
  * @param  MEMBER			Logged in member
  * @param  BINARY			Whether the session should be considered confirmed
- * @return integer		New session ID
+ * @return AUTO_LINK		New session ID
  */
 function create_session($member,$session_confirmed=0)
 {
@@ -144,6 +144,8 @@ function create_session($member,$session_confirmed=0)
 	}
 
 	$GLOBALS['SESSION_CONFIRMED']=$session_confirmed;
+
+	return $new_session;
 }
 
 /**

@@ -1368,7 +1368,7 @@ class Module_calendar
 			$event['allow_trackbacks'],
 			((get_option('is_on_strong_forum_tie')=='0') || ($event['e_is_public']==1))?1:0,
 			$event['e_submitter'],
-			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF'),
+			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF',NULL,false,false,true),
 			$_title,
 			get_value('comment_forum__calendar')
 		);

@@ -60,7 +60,7 @@ class Hook_vb3
 								'ocf_posts',
 								'ocf_post_files',
 								'ocf_polls_and_votes',
-								'ocf_tracking',
+								'notifications',
 								'ocf_personal_topics',
 								'wordfilter',
 								'config',
@@ -75,7 +75,7 @@ class Hook_vb3
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members'),
 								'ocf_post_files'=>array('ocf_posts'),
-								'ocf_tracking'=>array('ocf_topics','ocf_members'),
+								'notifications'=>array('ocf_topics','ocf_members'),
 								'ocf_personal_topics'=>array('custom_comcode','ocf_members'),
 								'points_gifts_and_charges'=>array('ocf_members'),
 								'logs'=>array('ocf_members','ocf_posts'),
@@ -141,7 +141,6 @@ class Hook_vb3
 			'maxposts'=>'forum_posts_per_page',
 			'maxthreads'=>'forum_topics_per_page',
 			//'reputationenable'=>'is_on_points',
-			'disableerroremail'=>'!send_error_emails',
 			'gzipoutput'=>'gzip_output',
 			'regimagecheck'=>'use_security_images',
 			'moderatenewmembers'=>'require_new_member_validation'
@@ -1170,24 +1169,22 @@ class Hook_vb3
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_tracking($db,$table_prefix,$file_base)
+	function import_notifications($db,$table_prefix,$file_base)
 	{
-		require_code('ocf_forums');
-		require_code('ocf_topics');
-		require_code('ocf_forums_action2');
+		require_code('notifications');
 		
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'subscribeforum');
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('forum_tracking',strval($row['subscribeforumid']))) continue;
+			if (import_check_if_imported('forum_notification',strval($row['subscribeforumid']))) continue;
 	
 			$member_id=import_id_remap_get('member',strval($row['userid']),true);
 			if (is_null($member_id)) continue;
 			$forum_id=import_id_remap_get('forum',strval($row['forumid']),true);
 			if (is_null($forum_id)) continue;
-			ocf_track_forum($forum_id,$member_id,false,false);
+			enable_notifications('ocf_forum',strval($forum_id),$member_id);
 
-			import_id_remap_put('forum_tracking',strval($row['subscribeforumid']),1);
+			import_id_remap_put('forum_notification',strval($row['subscribeforumid']),1);
 		}
 		$row_start=0;
 		do
@@ -1195,15 +1192,15 @@ class Hook_vb3
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'subscribethread',200,$row_start);
 			foreach ($rows as $row)
 			{
-				if (import_check_if_imported('topic_tracking',strval($row['subscribethreadid']))) continue;
+				if (import_check_if_imported('topic_notification',strval($row['subscribethreadid']))) continue;
 	
 				$member_id=import_id_remap_get('member',strval($row['userid']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['threadid']),true);
 				if (is_null($topic_id)) continue;
-				ocf_track_topic($topic_id,$member_id,false,false);
+				enable_notifications('ocf_topic',strval($topic_id),$member_id);
 
-				import_id_remap_put('topic_tracking',strval($row['subscribethreadid']),1);
+				import_id_remap_put('topic_notification',strval($row['subscribethreadid']),1);
 			}
 	
 			$row_start+=200;

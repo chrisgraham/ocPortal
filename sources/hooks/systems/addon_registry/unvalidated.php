@@ -75,6 +75,8 @@ class Hook_addon_registry_unvalidated
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/content_validated.php',
+			'sources/hooks/systems/notifications/needs_validation.php',
 			'sources/hooks/systems/addon_registry/unvalidated.php',
 			'UNVALIDATED_SCREEN.tpl',
 			'UNVALIDATED_SECTION.tpl',

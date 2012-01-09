@@ -63,7 +63,7 @@ class Block_main_feedback
 		{
 			if (!has_no_forum())
 			{
-				$hidden=do_comments(true,$type,$id,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,($is_occle_talking) || (get_option('captcha_on_feedback')=='0'),1,false,true);
+				$hidden=do_comments(true,$type,$id,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,($is_occle_talking) || (get_option('captcha_on_feedback')=='0'),1,false,true,true);
 				if (array_key_exists('title',$_POST))
 				{
 					$redirect=get_param('redirect',NULL);
@@ -83,23 +83,18 @@ class Block_main_feedback
 				$title=post_param('title','');
 				if ($post!='')
 				{
-					require_code('mail');
-					mail_wrap(
+					require_code('notifications');
+					dispatch_notification(
+						'new_feedback',
+						$type,
 						do_lang('NEW_FEEDBACK_SUBJECT',$title,NULL,NULL,get_site_default_lang()),
-						do_lang('NEW_FEEDBACK_MESSAGE',$post,NULL,NULL,get_site_default_lang()),
-						NULL,
-						NULL,
-						$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),
-						$GLOBALS['FORUM_DRIVER']->get_username(get_member()),
-						3,
-						NULL,
-						false,
-						get_member()
+						do_lang('NEW_FEEDBACK_MESSAGE',$post,NULL,NULL,get_site_default_lang())
 					);
 
 					$email_from=trim(post_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
 					if ($email_from!='')
 					{
+						require_code('mail');
 						mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email_from),NULL,'','',3,NULL,false,get_member());
 					}
 				}

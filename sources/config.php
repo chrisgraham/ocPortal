@@ -179,7 +179,7 @@ function set_tutorial_link($name,$value)
 }
 
 /**
- * Find a specified long value.
+ * Find a specified long value. Long values are either really long strings, or just ones you don't want on each page load (i.e. it takes a query to read them, because you don't always need them).
  *
  * @param  ID_TEXT		The name of the value
  * @return ?SHORT_TEXT	The value (NULL: value not found)
@@ -202,7 +202,7 @@ function get_long_value_newer_than($name,$cutoff)
 }
 
 /**
- * Set the specified situational value to the specified long value.
+ * Set the specified situational value to the specified long value. Long values are either really long strings, or just ones you don't want on each page load (i.e. it takes a query to read them, because you don't always need them).
  *
  * @param  ID_TEXT		The name of the value
  * @param  ?SHORT_TEXT	The value (NULL: delete it)

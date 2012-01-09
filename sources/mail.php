@@ -203,7 +203,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_to_name'=>serialize($to_name),
 			'm_from_email'=>$from_email,
 			'm_from_name'=>$from_name,
-			'm_priority'=>3,
+			'm_priority'=>$priority,
 			'm_attachments'=>serialize($attachments),
 			'm_no_cc'=>$no_cc?1:0,
 			'm_as'=>$as,
@@ -212,10 +212,10 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_date_and_time'=>time(),
 			'm_member_id'=>get_member(),
 			'm_url'=>get_self_url(true),
-			'm_queued'=>(get_value('mail_queue')==='1')?1:0,
+			'm_queued'=>(get_option('mail_queue_debug')==='1' || get_option('mail_queue')==='1' && cron_installed())?1:0,
 		));
-		
-		if (get_value('mail_queue')==='1') return;
+
+		if (get_option('mail_queue_debug')==='1' || get_option('mail_queue')==='1' && cron_installed()) return;
 	}
 
 	if (count($attachments)==0) $attachments=NULL;
@@ -330,7 +330,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	$headers.='Reply-To: <'.$from_email.'>'.$line_term;
 	$headers.='Return-Path: <'.$website_email.'>'.$line_term;
 	$headers.='X-Sender: <'.$website_email.'>'.$line_term;
-	$cc_address=$no_cc?'':get_option("cc_address");
+	$cc_address=$no_cc?'':get_option('cc_address');
 	if (($cc_address!='') && (!in_array($cc_address,$to_email))) $headers.=((get_option('bcc')=='1')?'Bcc: <':'Cc: <').$cc_address.'>'.$line_term;
 	$headers.='Message-ID: <'.$_boundary.'@'.get_domain().'>'.$line_term;
 	$headers.='X-Priority: '.strval($priority).$line_term;
@@ -594,7 +594,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			attach_message(!is_null($error)?make_string_tempcode($error):do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))),'warn');
 		} else
 		{
-			return warn_screen(get_page_title('ERROR_OCCURED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
+			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
 		}
 	}
 
@@ -710,103 +710,6 @@ function filter_css($css,$context)
 	while (true);
 
 	return $css_new;
-}
-
-/**
- * Attempt to send an SMS.
- *
- * @param  string			The message
- * @param  array			The member IDs of those tracking this
- */
-function sms_wrap($message,$to_sms)
-{
-	// 140 byte limit for single packet
-	// 134*255 byte limit for multiple packets (but there's cost for each additional 134 byte segment)
-
-	if (count($to_sms)==0) return;
-
-	$is_super_admin=$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member());
-
-	$api_id=xmlentities(get_option('sms_api_id'));
-	$username=xmlentities(get_option('sms_username'));
-	$password=xmlentities(get_option('sms_password'));
-	$site_name=xmlentities(substr(get_site_name(),0,11));
-	if ((strtolower(get_charset())!='utf-8') && (strtolower(get_charset())!='utf8')) $site_name=utf8_encode($site_name);
-	//$callback=xmlentities(find_script('sms')); --- set on clickatell's site
-	$callback='0'; /* return nothing (for the moment); TODO: change to 3 (return all message statuses) */
-
-	$threshold=mktime(0,0,0,intval(date('m')),0,intval(date('Y')));
-
-	$triggered=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'sms_log WHERE s_time>'.strval(time()-60*60*24*31).' AND '.db_string_equal_to('s_trigger_ip',get_ip_address(2)));
-	$trigger_limit=intval(get_option('sms_'.(has_specific_permission(get_member(),'sms_higher_trigger_limit')?'high':'low').'_trigger_limit'));
-	if ($triggered+count($to_sms)>$trigger_limit) return;
-
-	// TODO: $confirmed_numbers=collapse_2d_complexity('m_phone_number','m_member_id',$GLOBALS['SITE_DB']->query_select('confirmed_mobiles',array('m_phone_number','m_member_id'),array('m_confirm_code'=>'')));
-
-	foreach ($to_sms as $to_member)
-	{
-		if (!has_specific_permission($to_member,'use_sms')) continue;
-
-		// Check that not over quota
-		$sent_in_month=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'sms_log WHERE s_member_id='.strval(intval($to_member)).' AND s_time>'.strval(intval($threshold)));
-		$limit=intval(get_option('sms_'.(has_specific_permission($to_member,'sms_higher_limit')?'high':'low').'_limit'));
-		if ($sent_in_month+1>$limit) continue;
-
-		$_message=($sent_in_month+1==$limit)?do_lang('OVER_SMS_LIMIT'):xmlentities($message);
-		if ((strtolower(get_charset())!='utf-8') && (strtolower(get_charset())!='utf8')) $_message=utf8_encode($_message);
-
-		// Let the super-admin trigger or receive longer messages
-		$is_this_super_admin=$GLOBALS['FORUM_DRIVER']->is_super_admin($to_member);
-		$concat=($is_super_admin || $is_this_super_admin)?'3':'1';
-
-		$cpf_values=$GLOBALS['FORUM_DRIVER']->get_custom_fields($to_member);
-		if (!array_key_exists('mobile_phone_number',$cpf_values)) return; // :S  -- should be there
-		$to=str_replace('-','',str_replace('(','',str_replace(')','',str_replace('+','',str_replace(' ','',$cpf_values['mobile_phone_number'])))));
-		if ($to=='') continue;
-		// TODO: if (!array_key_exists($to,$confirmed_numbers)) continue;
-		$to=xmlentities($to);
-
-		$xml=<<<END
-<clickAPI>
-	<sendMsg>
-		<api_id>{$api_id}</api_id>
-		<user>{$username}</user>
-		<password>{$password}</password>
-		<to>{$to}</to>
-		<text>{$_message}</text>
-		<from>{$site_name}</from>
-		<callback>{$callback}</callback>
-		<max_credits>2.5</max_credits>
-		<concat>{$concat}</concat>
-	</sendMsg>
-</clickAPI>
-END;
-
-		$result=http_download_file('http://api.clickatell.com/xml/xml',NULL,false,false,'ocPortal',array('data'=>$xml));
-		if (strpos($result,'fault')!==false) warn_exit($result);
-
-		$GLOBALS['SITE_DB']->query_insert('sms_log',array('s_trigger_ip'=>get_ip_address(2),'s_member_id'=>$to_member,'s_time'=>time()));
-	}
-}
-
-/**
- * Handle maintenance of SMS numbers (block numbers if they prove unreliable).
- */
-function sms_callback_script()
-{
-	// Currently does nothing. Would receive messages in the form below, via the "data" GET parameter
-	/*
-	< ?xml version="1.0"? >
-	<callback>
-		<apiMsgId>996411ad91fa211e7d17bc873aa4a41d</apiMsgId>
-		<cliMsgId></cliMsgId>
-		<timestamp>1218008129</timestamp>
-		<to>279995631564</to>
-		<from>27833001171</from>
-		<charge>0.300000</charge>
-		<status>004</status>
-	</callback>
-	*/
 }
 
 /**

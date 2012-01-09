@@ -685,6 +685,16 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 	update_stat('num_archive_downloads',1);
 	if ($file_size>0) update_stat('archive_size',$file_size);
 
+	if ($validated==1)
+	{
+		require_lang('downloads');
+		require_code('notifications');
+		$subject=do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
+		$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);
+		$mail=do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
+		dispatch_notification('download',strval($id),$subject,$mail);
+	}
+
 	log_it('ADD_DOWNLOAD',strval($id),$name);
 
 	decache('main_recent_downloads');
@@ -749,9 +759,29 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 	$met=@ini_get('max_execution_time');
 	$data_mash=create_data_mash($url,NULL,get_file_extension($original_filename));
 	if (function_exists('set_time_limit')) @set_time_limit($met);
+
 	if (!addon_installed('unvalidated')) $validated=1;
+
+	require_code('submit');
+	$just_validated=(!content_validated('download',strval($id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('download',strval($id));
+	}
+
 	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'original_filename'=>$original_filename,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'edit_date'=>time(),'file_size'=>$file_size,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'name'=>lang_remap($myrow['name'],$name),'description'=>lang_remap_comcode($myrow['description'],$description),'comments'=>lang_remap_comcode($myrow['comments'],$comments),'validated'=>$validated,'category_id'=>$category_id,'url'=>$url,'author'=>$author,'default_pic'=>$default_pic,'out_mode_id'=>$out_mode_id);
 	$GLOBALS['SITE_DB']->query_update('download_downloads',$map,array('id'=>$id),'',1);
+
+	$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);
+
+	if ($just_validated)
+	{
+		require_lang('downloads');
+		require_code('notifications');
+		$subject=do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
+		$mail=do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
+		dispatch_notification('download',strval($id),$subject,$mail);
+	}
 
 	log_it('EDIT_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 
@@ -771,7 +801,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 	decache('main_download_category');
 	decache('main_download_tease');
 
-	update_spacer_post($allow_comments!=0,'downloads',strval($id),build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true),$name,get_value('comment_forum__downloads'));
+	update_spacer_post($allow_comments!=0,'downloads',strval($id),$self_url,$name,get_value('comment_forum__downloads'));
 }
 
 /**

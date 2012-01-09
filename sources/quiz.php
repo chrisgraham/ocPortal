@@ -343,6 +343,14 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 	$_end_text_fail=$rows[0]['q_end_text_fail'];
 
 	if (!addon_installed('unvalidated')) $validated=1;
+
+	require_code('submit');
+	$just_validated=(!content_validated('quiz',strval($id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('quiz',strval($id));
+	}
+
 	$GLOBALS['SITE_DB']->query_update('quizzes',array(
 		'q_name'=>lang_remap($_name,$name),
 		'q_timeout'=>$timeout,

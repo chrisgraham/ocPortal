@@ -29,6 +29,8 @@ class Hook_content_meta_aware_group
 	function info()
 	{
 		return array(
+			'content_type_label'=>'GROUP',
+
 			'table'=>'f_groups',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

@@ -30,6 +30,8 @@
  */
 function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$post=NULL)
 {
+	send_content_validated_notification('post',strval($post_id));
+
 	if (is_null($topic_id))
 	{
 		$post_info=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>$post_id),'',1);
@@ -57,7 +59,7 @@ function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$
 	$_url=build_url(array('page'=>'topicview','id'=>$topic_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
 	$url=$_url->evaluate();
 
-	ocf_send_tracker_about($url,$topic_id,$forum_id,$poster,$is_starter,$post,$topic_info[0]['t_cache_first_title'],NULL,!is_null($topic_info[0]['t_pt_from']));
+	ocf_send_topic_notification($url,$topic_id,$forum_id,$poster,$is_starter,$post,$topic_info[0]['t_cache_first_title'],NULL,!is_null($topic_info[0]['t_pt_from']));
 
 	if (!is_null($forum_id))
 		ocf_force_update_forum_cacheing($forum_id,0,1);

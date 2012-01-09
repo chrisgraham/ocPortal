@@ -311,7 +311,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	$coppa=(get_option('is_on_coppa')=='1') && (servertime_to_usertime(time()-mktime(0,0,0,$dob_month,$dob_day,$dob_year))/31536000.0<13.0);
 	if (!$coppa_if_enabled) $coppa=false;
 	$validated=($require_new_member_validation || $coppa)?0:1;
-	if (is_null($member_id)) $member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,($additional_group!=-1)?$additional_group:NULL,$validated,time(),time(),'',NULL,'',0,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'','','',1,(get_value('no_auto_track')==='1')?0:1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),$validated_email_confirm_code,true,'','');
+	if (is_null($member_id)) $member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,($additional_group!=-1)?$additional_group:NULL,$validated,time(),time(),'',NULL,'',0,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'','','',1,(get_value('no_auto_notifications')==='1')?0:1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),$validated_email_confirm_code,true,'','');
 	/*if ($additional_group!=-1)
 	{
 		require_code('ocf_groups_action');
@@ -349,17 +349,18 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		$_privacy_url=build_url(array('page'=>'privacy'),'_SEARCH',NULL,false,false,true);
 		$privacy_url=$_privacy_url->evaluate();
 		$message=do_lang('COPPA_MAIL',comcode_escape(get_option('site_name')),comcode_escape(get_option('privacy_fax')),array(comcode_escape(get_option('privacy_postal_address')),comcode_escape($fields_done),comcode_escape($privacy_url)),$language);
+		require_code('mail');
 		mail_wrap(do_lang('COPPA_JOIN_SUBJECT',$username,get_site_name(),NULL,$language),$message,array($email_address),$username);
 	}
 	
 	// Send 'validate this member' mail
 	if ($require_new_member_validation)
 	{
-		require_code('mail');
+		require_code('notifications');
 		$_validation_url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'),NULL,false,false,true,'tab__edit');
 		$validation_url=$_validation_url->evaluate();
 		$message=do_lang('VALIDATE_NEW_MEMBER_MAIL',comcode_escape($username),comcode_escape($validation_url),comcode_escape(strval($member_id)),get_site_default_lang());
-		mail_wrap(do_lang('VALIDATE_NEW_MEMBER_SUBJECT',$username,NULL,NULL,get_site_default_lang()),$message,is_null(get_value('member_validator'))?NULL:array(get_value('member_validator')));
+		dispatch_notification('ocf_member_needs_validation',NULL,do_lang('VALIDATE_NEW_MEMBER_SUBJECT',$username,NULL,NULL,get_site_default_lang()),$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
 	}
 
 	// Intro post

@@ -23,14 +23,7 @@ class Hook_cron_insults
 	{
 		//if (!addon_installed('octhief')) return;
 
-		//require_code('mail');
-		require_code('ocf_topics');
-		require_code('ocf_forums');
-		require_code('ocf_members');
-		require_code('ocf_topics_action');
-		require_code('ocf_posts_action');
 		require_code('ocf_topics_action2');
-		require_code('ocf_posts_action2');
 		require_lang('insults');
 
 		//ensure it is done once per week		
@@ -55,7 +48,7 @@ class Hook_cron_insults
 		$selected_member2=(isset($selected_members[1]['id']) && $selected_members[1]['id']>0)?$selected_members[1]['id']:0;
 
 
-		if($selected_member1!=0 && $selected_member2!=0)
+		if ($selected_member1!=0 && $selected_member2!=0)
 		{
 			$get_insult='';
 			if (is_file(get_file_base().'/text_custom/'.user_lang().'/insults.txt'))
@@ -85,11 +78,8 @@ class Hook_cron_insults
 
 				$post_id=ocf_make_post($topic_id,$subject,$insult_pt_topic_post,0,true,1,0,do_lang('SYSTEM'),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_guest_id(),NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
-				sent_pt_notification($post_id,$subject,$topic_id,$selected_member2,$selected_member1);
+				send_pt_notification($post_id,$subject,$topic_id,$selected_member2,$selected_member1);
 			}
-
-
 		}
-
 	}
 }

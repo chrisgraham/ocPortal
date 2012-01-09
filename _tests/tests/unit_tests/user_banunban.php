@@ -33,7 +33,7 @@ class user_banunban_test_set extends ocp_test_case
 		require_code('ocf_members_action2');
 		require_lang('ocf');
 
-		ocf_ban_member($member_id=3,$reason='nothing');
+		ocf_ban_member(3);
 
 		// Test the forum was actually created
 		$this->assertTrue(1==$GLOBALS['FORUM_DB']->query_value('f_members','m_is_perm_banned',array('id'=>3)));
@@ -42,7 +42,7 @@ class user_banunban_test_set extends ocp_test_case
 	function testEdituser_banunban()
 	{
 		// Test the forum edits
-		ocf_unban_member($member_id=3,$reason='something');
+		ocf_unban_member(3);
 
 		// Test the forum was actually created
 		$this->assertTrue(0==$GLOBALS['FORUM_DB']->query_value('f_members','m_is_perm_banned ',array('id'=>3)));

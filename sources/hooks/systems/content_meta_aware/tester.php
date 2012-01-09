@@ -29,6 +29,8 @@ class Hook_content_meta_aware_tester
 	function info()
 	{
 		return array(
+			'content_type_label'=>'tester:TEST_SECTION',
+
 			'table'=>'tests',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

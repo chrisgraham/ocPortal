@@ -138,8 +138,18 @@ jwplayer.utils.vidCanPlay = function (b, a, sourceType) {
 	}
     return (b.canPlayType(sourceType) || a.toLowerCase().indexOf("youtube.com") > -1)
 };
-jwplayer.utils.hasFlash = function () {
-    try { return (typeof navigator.plugins != "undefined" && typeof navigator.plugins["Shockwave Flash"] != "undefined") || (typeof window.ActiveXObject != "undefined" && new ActiveXObject('ShockwaveFlash.ShockwaveFlash')); } catch (e) {}; return false;
+jwplayer.utils.hasFlash = function() { 
+   if (typeof navigator.plugins != "undefined" && typeof navigator.plugins['Shockwave Flash'] != "undefined") { 
+       return true; 
+   } 
+   if (typeof window.ActiveXObject != "undefined") { 
+       try { 
+           new ActiveXObject("ShockwaveFlash.ShockwaveFlash"); 
+           return true 
+       } catch (err) { 
+       } 
+   }
+   return false; 
 };
 (function (e) {
     e.utils.mediaparser = function () {};

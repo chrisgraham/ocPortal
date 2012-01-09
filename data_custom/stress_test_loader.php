@@ -63,25 +63,19 @@ function do_work()
 
 	// members (remember to test the username autocompleter, and birthdays)
 	// authors (remember to check author autocompleter and popup author list)
-	// lots of people tracking a forum
-	// lots of people tracking a topic
+	// lots of people getting notifications on a forum
+	// lots of people getting notifications on a topic
 	require_code('authors');
 	require_code('ocf_members_action');
+	require_code('notifications');
 	for ($i=$GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$member_id=ocf_make_member(uniqid(''),uniqid(''),uniqid('').'@example.com',array(),intval(date('d')),intval(date('m')),intval(date('Y')),array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
 		add_author(random_line(),'',$member_id,random_text(),random_text());
 
-		$GLOBALS['FORUM_DB']->query_insert('f_forum_tracking',array(
-			'r_forum_id'=>db_get_first_id(),
-			'r_member_id'=>$member_id
-		));
+		enable_notifications('ocf_forum',strval(db_get_first_id()),$member_id);
 
-		$GLOBALS['FORUM_DB']->query_insert('f_topic_tracking',array(
-			'r_topic_id'=>db_get_first_id(),
-			'r_member_id'=>$member_id,
-			'r_last_message_time'=>time()
-		));
+		enable_notifications('ocf_topic',strval(db_get_first_id()),$member_id);
 
 		// number of friends to a single member
 		$GLOBALS['SITE_DB']->query_insert('chat_buddies',array(
@@ -106,7 +100,7 @@ function do_work()
 			'date_and_time'=>time()
 		),false,true);
 	}
-	echo 'done member/authors/points/tracking/friends stuff'.chr(10);
+	echo 'done member/authors/points/notifications/friends stuff'.chr(10);
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
@@ -139,7 +133,7 @@ function do_work()
 			'p_validated'=>1,
 			'p_edit_date'=>NULL,
 			'p_add_date'=>time(),
-			'p_submitter'=>db_get_First_id(),
+			'p_submitter'=>db_get_first_id(),
 			'p_show_as_edit'=>0
 		));
 	}

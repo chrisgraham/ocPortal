@@ -121,8 +121,10 @@ class Hook_addon_registry_cedi
 			'sources/hooks/systems/awards/seedy_page.php',
 			'sources/hooks/systems/awards/seedy_post.php',
 			'sources/hooks/systems/module_permissions/seedy_page.php',
+			'sources/hooks/systems/content_meta_aware/cedi_post.php',
 			'themes/default/images/EN/page/edit_tree.png',
 			'site/pages/html_custom/EN/cedi_tree_made.htm',
+			'sources/hooks/systems/notifications/cedi.php',
 		);
 	}
 

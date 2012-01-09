@@ -420,8 +420,11 @@ class Module_cms_news extends standard_aed_module
 
 		if ($validated==1)
 		{
+			$main_news_category=$GLOBALS['SITE_DB']->query_value('news','news_category',array('id'=>$id));
+			$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$main_news_category)));
+
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
-				syndicate_described_activity('news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
+				syndicate_described_activity($is_blog?'news:ADD_NEWS_BLOG':'news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
 		}
 
 		if (!is_null($schedule))
@@ -516,10 +519,12 @@ class Module_cms_news extends standard_aed_module
 
 		$title=post_param('title',STRING_MAGIC_NULL);
 
-		if (($validated==1) && ($title!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($main_news_category!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
 		{
+			$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$main_news_category)));
+
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
-				syndicate_described_activity('news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
+				syndicate_described_activity($is_blog?'news:ADD_NEWS_BLOG':'news:ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
 		}
 
 		edit_news($id,$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);

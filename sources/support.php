@@ -1083,8 +1083,15 @@ function log_it($type,$a=NULL,$b=NULL)
  */
 function syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=0,$a_member_id=NULL,$sitewide_too=false)
 {
-	// THIS FUNCTION ONLY EXISTS TO BE OVERRIDDEN. THIS IS A STUB.
-	return NULL;
+	$hooks=find_all_hooks('systems','activities');
+	$ret=mixed();
+	foreach (array_keys($hooks) as $hook) // We only expect one actually
+	{
+		require_code('hooks/systems/activities/'.$hook);
+		$ob=object_factory('Activity_'.$hook);
+		$ret=$ob->syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too);
+	}
+	return $ret;
 }
 
 /**
@@ -1094,8 +1101,15 @@ function syndicate_described_activity($a_language_string_code='',$a_label_1='',$
  */
 function has_external_site_wide_syndication()
 {
-	// THIS FUNCTION ONLY EXISTS TO BE OVERRIDDEN. THIS IS A STUB.
-	return false;
+	$hooks=find_all_hooks('systems','activities');
+	$ret=false;
+	foreach (array_keys($hooks) as $hook) // We only expect one actually
+	{
+		require_code('hooks/systems/activities/'.$hook);
+		$ob=object_factory('Activity_'.$hook);
+		$ret=$ret || $ob->has_external_site_wide_syndication();
+	}
+	return $ret;
 }
 
 /**
@@ -1105,8 +1119,15 @@ function has_external_site_wide_syndication()
  */
 function get_syndication_option_fields()
 {
-	// THIS FUNCTION ONLY EXISTS TO BE OVERRIDDEN. THIS IS A STUB.
-	return new ocp_tempcode();
+	$hooks=find_all_hooks('systems','activities');
+	$ret=new ocp_tempcode();
+	foreach (array_keys($hooks) as $hook) // We only expect one actually
+	{
+		require_code('hooks/systems/activities/'.$hook);
+		$ob=object_factory('Activity_'.$hook);
+		$ret->attach($ob->get_syndication_option_fields());
+	}
+	return $ret;
 }
 
 /**

@@ -81,17 +81,14 @@ function buddy_add($likes,$liked,$time=NULL)
 		'date_and_time'=>$time
 	));
 
-	// Send a notification email
-	require_code('mail');
-	$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($liked);
+	// Send a notification
+	require_code('notifications');
 	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($liked);
-	$subject_tag=do_lang('YOURE_MY_BUDDY_SUBJECT',NULL,NULL,NULL,get_lang($liked));
-	$befriend_url=build_url(array('page'=>'chat','type'=>'buddy_add','member_id'=>$likes),get_module_zone('chat'),NULL,false,false,true);
-	$message_raw=do_lang('YOURE_MY_BUDDY_BODY',$to_name,get_site_name(),$befriend_url->evaluate(),get_lang($liked));
-	$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($likes);
 	$from_name=$GLOBALS['FORUM_DRIVER']->get_username($likes);
-	if (!is_null($to_email))
-		mail_wrap($subject_tag,$message_raw,array($to_email),$to_name,$from_email,$from_name);
+	$subject_tag=do_lang('YOURE_MY_BUDDY_SUBJECT',$from_name,get_site_name(),NULL,get_lang($liked));
+	$befriend_url=build_url(array('page'=>'chat','type'=>'buddy_add','member_id'=>$likes),get_module_zone('chat'),NULL,false,false,true);
+	$message_raw=do_lang('YOURE_MY_BUDDY_BODY',comcode_escape($to_name),comcode_escape(get_site_name()),array($befriend_url->evaluate(),comcode_escape($from_name)),get_lang($liked));
+	dispatch_notification('new_buddy',NULL,$subject_tag,$message_raw,array($liked),$likes);
 
 	// Log the action
 	log_it('MAKE_BUDDY',strval($likes),strval($liked));

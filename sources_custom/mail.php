@@ -56,10 +56,10 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_date_and_time'=>time(),
 			'm_member_id'=>get_member(),
 			'm_url'=>get_self_url(true),
-			'm_queued'=>(get_value('mail_queue')==='1')?1:0,
+			'm_queued'=>(get_option('mail_queue_debug')==='1' || get_option('mail_queue')==='1' && cron_installed())?1:0,
 		));
 		
-		if (get_value('mail_queue')==='1') return;
+		if (get_option('mail_queue_debug')==='1' || get_option('mail_queue')==='1' && cron_installed()) return;
 	}
 
 	if (count($attachments)==0) $attachments=NULL;
@@ -315,7 +315,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			attach_message(!is_null($error)?make_string_tempcode($error):do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))),'warn');
 		} else
 		{
-			return warn_screen(get_page_title('ERROR_OCCURED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
+			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
 		}
 	}
 	return NULL;

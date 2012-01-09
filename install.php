@@ -2620,7 +2620,9 @@ END;
 
 $base=dirname(ocp_srv('PHP_SELF'));
 $clauses[]=<<<END
+<FilesMatch !"\.(jpg|jpeg|gif|png|ico)$">
 ErrorDocument 404 {$base}/index.php?page=404
+</FilesMatch>
 END;
 
 	if ((is_writable_wrap(get_file_base().'/exports/mods')) && ((!file_exists(get_file_base().'/.htaccess')) || (trim(file_get_contents(get_file_base().'/.htaccess'))=='')))

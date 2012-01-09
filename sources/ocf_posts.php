@@ -108,7 +108,7 @@ function ocf_display_spacer_post($linked_type,$linked_id)
 	if (addon_installed('awards'))
 	{
 		require_code('content');
-		$linked_type=convert_ocportal_type_codes('award_hook',$linked_type,'feedback_type_code');
+		$linked_type=convert_ocportal_type_codes('feedback_type_code',$linked_type,'award_hook');
 		if ($linked_type!='')
 		{
 			require_code('hooks/systems/awards/'.$linked_type);

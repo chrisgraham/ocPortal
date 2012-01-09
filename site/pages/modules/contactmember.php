@@ -88,6 +88,9 @@ class Module_contactmember
 	
 		$title=get_page_title('EMAIL_MEMBER',true,array(escape_html($username)));
 
+		global $EXTRA_HEAD;
+		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 		$text=do_lang_tempcode('EMAIL_MEMBER_TEXT');
 
 		$fields=new ocp_tempcode();

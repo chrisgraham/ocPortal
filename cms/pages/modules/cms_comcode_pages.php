@@ -880,6 +880,13 @@ class Module_cms_comcode_pages
 			));
 		} else // Edit
 		{
+			require_code('submit');
+			$just_validated=(!content_validated('comcode_page',$zone.':'.$file)) && ($validated==1);
+			if ($just_validated)
+			{
+				send_content_validated_notification('comcode_page',$zone.':'.$file);
+			}
+
 			if (!addon_installed('unvalidated')) $validated=1;
 			$GLOBALS['SITE_DB']->query_update('comcode_pages',array(
 				'p_parent_page'=>$parent_page,

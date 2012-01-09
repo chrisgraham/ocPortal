@@ -121,11 +121,7 @@ class Hook_Syndication_facebook
 		}
 		catch (Exception $e)
 		{
-			if ($e->getMessage()=='(#200) The user hasn\'t authorized the application to perform this action')
-			{
-		      header('Location: '.$oauth_redir_url);
-				exit();
-			} else fatal_exit($e->getMessage());
+			warn_exit($e->getMessage());
 		}
 
 		return true;

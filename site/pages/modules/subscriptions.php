@@ -197,10 +197,10 @@ class Module_subscriptions
 			$hook=object_factory($via);
 			if ($hook->auto_cancel($id)!==true)
 			{
-				require_code('mail');
-				$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+				require_code('notifications');
 				$trans_id=$GLOBALS['SITE_DB']->query_value('transactions','id',array('purchase_id'=>strval($id)));
-				mail_wrap(do_lang('SUBSCRIPTION_CANCELLED_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),do_lang('SUBSCRIPTION_CANCELLED_BODY',$trans_id,$username,NULL,get_site_default_lang()));
+				$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+				dispatch_notification('subscription_cancelled_staff',NULL,do_lang('SUBSCRIPTION_CANCELLED_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),do_lang('SUBSCRIPTION_CANCELLED_BODY',$trans_id,$username,NULL,get_site_default_lang()));
 			}
 		}
 

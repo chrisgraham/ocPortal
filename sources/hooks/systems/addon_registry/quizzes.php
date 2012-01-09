@@ -74,6 +74,7 @@ class Hook_addon_registry_quizzes
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/quiz_results.php',
 			'sources/hooks/systems/config_default/points_ADD_QUIZ.php',
 			'sources/hooks/systems/config_default/quiz_show_stats_count_total_open.php',
 			'sources/hooks/systems/meta/quiz.php',

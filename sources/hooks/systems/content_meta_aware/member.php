@@ -29,6 +29,8 @@ class Hook_content_meta_aware_member
 	function info()
 	{
 		return array(
+			'content_type_label'=>'MEMBER',
+
 			'table'=>'f_members',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

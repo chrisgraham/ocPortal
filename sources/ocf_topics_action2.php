@@ -87,6 +87,13 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_title'=>$title),array('id'=>$info[0]['t_cache_first_post_id']),'',1);
 	}
 
+	require_code('submit');
+	$just_validated=(!content_validated('topic',strval($topic_id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('topic',strval($topic_id));
+	}
+
 	$GLOBALS['FORUM_DB']->query_update('f_topics',$update,array('id'=>$topic_id),'',1);
 
 	if ((!is_null($title)) && ($title!=''))
@@ -200,7 +207,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 	}
 	$GLOBALS['FORUM_DB']->query_delete('f_topics',array('id'=>$topic_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id));
-	$GLOBALS['FORUM_DB']->query_delete('f_topic_tracking',array('r_topic_id'=>$topic_id));
+	delete_all_notifications_on('ocf_topics',strval($topic_id));
 
 	// Delete the ticket row if it's a ticket
 	if (addon_installed('tickets'))
@@ -241,10 +248,9 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
  */
 function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
 {
-	require_code('mail');
-
 	if ($from==$to) return; // That would be nuts, and interfere with our logic
 
+	require_code('notifications');
 	require_code('ocf_forums_action2');
 
 	$forum_name=ocf_ensure_forum_exists($to);
@@ -388,42 +394,10 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 			suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$topic_name);
 
 			// Now lets inform people tracking the topic that it has moved
-			// Also: Do we have to untrack anyone?
-			$start2=0;
-			do
-			{
-				$members=$GLOBALS['FORUM_DB']->query_select('f_topic_tracking t JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m ON m.id=r_member_id',array('r_member_id','m_language'),array('r_topic_id'=>$topic_id),'',100,$start2);
-				$emails=array();
-				$usernames=array();
-				foreach ($members as $member)
-				{
-					$member_id=$member['r_member_id'];
-					if ($member_id==get_member()) continue;
-			
-					if (!array_key_exists($member['m_language'],$emails))
-					{
-						$emails[$member['m_language']]=array();
-						$usernames[$member['m_language']]=array();
-					}
-					$emails[$member['m_language']][]=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
-					$usernames[$member['m_language']][]=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
-
-					if (!is_null($from))
-					{
-						if (!has_category_access($member_id,'forums',strval($from))) ocf_track_topic($topic_id,$member_id,true);
-					}
-				}
-				foreach (array_keys($emails) as $lang)
-				{
-					$subject=do_lang('TOPIC_MOVE_MAIL_SUBJECT',get_site_name(),$topic_name,NULL,$lang);
-					$mail=do_lang('TOPIC_MOVE_MAIL',get_site_name(),$topic_name,array($forum_name),$lang);
-					mail_wrap($subject,$mail,$emails[$lang],$usernames[$lang],'','',3,NULL,true);
-				}
-				$start2+=100;
-			}
-			while (count($members)==100);
+			$subject=do_lang('TOPIC_MOVE_MAIL_SUBJECT',get_site_name(),$topic_name);
+			$mail=do_lang('TOPIC_MOVE_MAIL',comcode_escape(get_site_name()),comcode_escape($topic_name),array(comcode_escape($forum_name)));
+			dispatch_notification('ocf_topic',strval($topic_id),$subject,$mail);
 		}
-		$start+=100;
 	}
 	while (count($topics2)==100);
 }
@@ -464,14 +438,10 @@ function ocf_invite_to_pt($member_id,$topic_id)
 	$post=do_lang('INVITED_TO_PT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$current_username);
 	ocf_make_post($topic_id,'',$post,0,false,1,1,do_lang('SYSTEM'),NULL,NULL,db_get_first_id(),NULL,NULL,NULL,false);
 
-	if ((get_value('ocf_optional_pt_tracking')!=='1') || ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_track_contributed_topics')==1))
-	{
-		require_code('mail');
-		$subject=do_lang('INVITED_TO_TOPIC_SUBJECT',get_site_name(),$topic_name,get_lang($member_id));
-		$mail=do_lang('INVITED_TO_TOPIC_BODY',get_site_name(),$topic_name,array($current_username,$topic_link),get_lang($member_id));
-
-		mail_wrap($subject,$mail,array($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address')),$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username'),'','',3,NULL,true);
-	}
+	require_code('notifications');
+	$subject=do_lang('INVITED_TO_TOPIC_SUBJECT',get_site_name(),$topic_name,get_lang($member_id));
+	$mail=do_lang('INVITED_TO_TOPIC_BODY',get_site_name(),comcode_escape($topic_name),array(comcode_escape($current_username),$topic_link),get_lang($member_id));
+	dispatch_notification('ocf_topic_invite',NULL,$subject,$mail,array($member_id));
 }
 
 /**
@@ -485,18 +455,17 @@ function ocf_invite_to_pt($member_id,$topic_id)
  * @param  ?mixed			Post language ID or post text (NULL: unknown, lookup from $post_id)
  * @param  boolean		Whether to also mark the topic as unread
  */
-function sent_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$post=NULL,$mark_unread=false)
+function send_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$post=NULL,$mark_unread=false)
 {
 	if (is_null($from_id)) $from_id=get_member();
 	
-	require_code('mail');
 	$post_lang_id=is_integer($post)?$post:$GLOBALS['FORUM_DB']->query_value('f_posts','p_post',array('id'=>$post_id));
 	$post_comcode=get_translated_text((integer)$post_lang_id,$GLOBALS['FORUM_DB']);
-	$message=do_lang('NEW_PERSONAL_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_link($topic_id)),$post_comcode),get_lang($to_id));
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($to_id);
-	if (is_null($username)) $username=get_site_name();
-	$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_id);
-	mail_wrap(do_lang('NEW_PERSONAL_TOPIC_SUBJECT',$subject,NULL,NULL,get_lang($to_id)),$message,array($GLOBALS['FORUM_DRIVER']->get_member_email_address($to_id)),$username,$from_email,$GLOBALS['FORUM_DRIVER']->get_username($from_id),3,NULL,true,$from_id);
+
+	require_code('notifications');
+	$msubject=do_lang('NEW_PERSONAL_TOPIC_SUBJECT',$subject,NULL,NULL,get_lang($to_id));
+	$mmessage=do_lang('NEW_PERSONAL_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_link($topic_id)),$post_comcode),get_lang($to_id));
+	dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($to_id),$from_id);
 
 	if ($mark_unread)
 	{

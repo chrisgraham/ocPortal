@@ -680,7 +680,7 @@ class Module_news
 			$myrow['allow_trackbacks'],
 			$myrow['validated'],
 			$myrow['submitter'],
-			build_url($self_url_map,'_SELF'),
+			build_url($self_url_map,'_SELF',NULL,false,false,true),
 			get_translated_text($myrow['title']),
 			get_value('comment_forum__news')
 		);

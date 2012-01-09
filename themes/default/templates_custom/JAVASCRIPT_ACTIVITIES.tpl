@@ -127,6 +127,7 @@ function sUpdateShow(data, stat)
 
 function sUpdateRemove(evt)
 {
+	var this_copy=this;
 	window.fauxmodal_confirm(
 		'{!activities:DELETE_CONFIRM}',
 		function(result)
@@ -137,13 +138,13 @@ function sUpdateRemove(evt)
 				jQuery.ajax({
 						url: addy.replace(/^http:/,window.location.protocol),
 						type: 'POST',
-						data: jQuery(this).serialize(),
+						data: jQuery(this_copy).serialize(),
 						cache: false,
 						timeout: 5000,
 						success: function(data, stat) { sUpdateRmShow(data, stat); },
 						error: function(a, stat, err) { sUpdateRmShow(err,  stat); }
 				});
-			);
+			}
 		}
 	);
 	evt.preventDefault();

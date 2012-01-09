@@ -17,10 +17,10 @@
 				{+END}
 				<br />
 				{+START,IF_NON_EMPTY,{AUTHOR_URL}}
-					{!AUTHOR}: <a rel="author" href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a><br />
+					{!AUTHOR}: <a rel="author"{$?,{$VALUE_OPTION,html5}, itemprop="author"} href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a><br />
 				{+END}
 				{+START,IF_EMPTY,{AUTHOR_URL}}{+START,IF_NON_EMPTY,{$USERNAME,{SUBMITTER}}}
-					{!BY_SIMPLE,<a href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}"{$?,{$VALUE_OPTION,html5}, itemprop="author"}>{$USERNAME*,{SUBMITTER}}</a>}
+					{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}"{$?,{$VALUE_OPTION,html5}, itemprop="author"}>{$USERNAME*,{SUBMITTER}}</a>}
 				{+END}{+END}
 			</div>
 

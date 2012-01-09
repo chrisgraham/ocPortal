@@ -27,6 +27,6 @@
 		</div>
 	</form>
 	<div class="button_panel">
-		[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a href="{FULL_LINK*}" title="{!_LOGIN}">{!MORE}</a> ]
+		[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a rel="nofollow" href="{FULL_LINK*}" title="{!_LOGIN}">{!MORE}</a> ]
 	</div>
 </div>

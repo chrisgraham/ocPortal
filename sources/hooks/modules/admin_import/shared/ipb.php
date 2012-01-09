@@ -942,24 +942,22 @@ class Hook_ipb_base
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_tracking($db,$table_prefix,$file_base)
+	function import_notifications($db,$table_prefix,$file_base)
 	{
-		require_code('ocf_forums');
-		require_code('ocf_topics');
-		require_code('ocf_forums_action2');
+		require_code('notifications');
 		
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'forum_tracker');
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('forum_tracking',strval($row['frid']))) continue;
+			if (import_check_if_imported('forum_notification',strval($row['frid']))) continue;
 	
 			$member_id=import_id_remap_get('member',$row['member_id'],true);
 			if (is_null($member_id)) continue;
 			$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
 			if (is_null($forum_id)) continue;
-			ocf_track_forum($forum_id,$member_id,false,false);
+			enable_notifications('ocf_forum',strval($forum_id),$member_id);
 	
-			import_id_remap_put('forum_tracking',strval($row['frid']),1);
+			import_id_remap_put('forum_notification',strval($row['frid']),1);
 		}
 		$row_start=0;
 		do
@@ -967,15 +965,15 @@ class Hook_ipb_base
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'tracker',200,$row_start);
 			foreach ($rows as $row)
 			{
-				if (import_check_if_imported('topic_tracking',strval($row['trid']))) continue;
+				if (import_check_if_imported('topic_notification',strval($row['trid']))) continue;
 	
 				$member_id=import_id_remap_get('member',strval($row['member_id']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
 				if (is_null($topic_id)) continue;
-				ocf_track_topic($topic_id,$member_id,false,false);
+				enable_notifications('ocf_topic',strval($topic_id),$member_id);
 	
-				import_id_remap_put('topic_tracking',strval($row['trid']),1);
+				import_id_remap_put('topic_notification',strval($row['trid']),1);
 			}
 	
 			$row_start+=200;

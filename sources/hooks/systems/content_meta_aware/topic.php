@@ -29,6 +29,8 @@ class Hook_content_meta_aware_topic
 	function info()
 	{
 		return array(
+			'content_type_label'=>'FORUM_TOPIC',
+
 			'table'=>'f_topics',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,
@@ -37,7 +39,7 @@ class Hook_content_meta_aware_topic
 			'title_field'=>'t_cache_first_title',
 			'title_field_dereference'=>false,
 
-			'is_category'=>false,
+			'is_category'=>true,
 			'is_entry'=>true,
 			'seo_type_code'=>'topic',
 			'feedback_type_code'=>NULL,

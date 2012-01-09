@@ -1201,7 +1201,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'COPYRIGHT':
-				$value=get_option('copyright');
+				$value=str_replace('$CURRENT_YEAR',date('Y'),get_option('copyright'));
 				break;
 
 			case 'KEYWORDS_SPACED':

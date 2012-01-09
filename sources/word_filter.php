@@ -158,7 +158,7 @@ function warn_exit_wordfilter($name,$message)
 		$fields=form_input_text(do_lang_tempcode('CHANGE'),'',$name,$value,true);
 	}
 	$post_url=get_self_url();
-	$output=do_template('FORM_SCREEN',array('TITLE'=>get_page_title('ERROR_OCCURED'),'TEXT'=>$message,'URL'=>$post_url,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+	$output=do_template('FORM_SCREEN',array('TITLE'=>get_page_title('ERROR_OCCURRED'),'TEXT'=>$message,'URL'=>$post_url,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 	$echo=new ocp_tempcode();
 	if (!running_script('preview'))
 	{

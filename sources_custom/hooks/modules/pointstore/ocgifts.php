@@ -161,49 +161,29 @@ class Hook_pointstore_ocgifts
 				$gift_row_id=$GLOBALS['SITE_DB']->query_insert('members_gifts',array('to_user_id'=>$to_member_id,'from_user_id'=>$member_id,'gift_id'=>$gift_id,'add_time'=>time(),'is_anonymous'=>$anonymous,'topic_id'=>NULL,'gift_message'=>$gift_message),true);
 			}
 
-			require_code('ocf_topics');
-			require_code('ocf_forums');
-			require_code('ocf_topics_action');
-			require_code('ocf_topics_action2');
-			require_code('ocf_posts_action');
-
-			if(isset($gift_row[0]['id']) && $gift_row[0]['id']>0) 
+			if (isset($gift_row[0]['id']) && $gift_row[0]['id']>0) 
 			{
-				if($anonymous==0)
+				require_code('notifications');
+
+				if ($anonymous==0)
 				{
 					$subject=do_lang('GOT_GIFT');
-					$gift_pt_topic_post=do_lang('GIFT_EXPLANATION1',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$gift_row[0]['name']) . '.  '."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
+					$message=do_lang('GIFT_EXPLANATION1',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$gift_row[0]['name']) . '.  '."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
 
-					$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$member_id,$to_member_id,true,0,NULL,'');
-
-					$post_id=ocf_make_post($topic_id,$subject,$gift_pt_topic_post,0,true,1,0,NULL,NULL,NULL,$member_id,NULL,NULL,NULL,true,true,NULL,true,$subject,0,NULL,false,true,true);
-
-					sent_pt_notification($post_id,$subject,$topic_id,$to_member_id);
-
-					$GLOBALS['SITE_DB']->query_update('members_gifts',array('topic_id'=>$topic_id),array('id'=>$gift_row_id) );
-
+					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id));
 				}
-				else // If it's anonymous, send via e-mail
+				else
 				{
-					$gift_pt_topic_post=do_lang('GIFT_EXPLANATION2',$gift_row[0]['name'],NULL,NULL,get_lang($to_member_id))."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
+					$subject=do_lang('GOT_GIFT',NULL,NULL,NULL,get_lang($to_member_id));
+					$message=do_lang('GIFT_EXPLANATION2',$gift_row[0]['name'],NULL,NULL,get_lang($to_member_id))."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
 
-					require_code('mail');
-
-					$message=$gift_pt_topic_post;
-					$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to_member_id);
-					$member_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id);
-
-					mail_wrap(do_lang('GOT_GIFT',NULL,NULL,NULL,get_lang($to_member_id)),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
+					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id),A_FROM_SYSTEM_UNPRIVILEGED);
 				}
 			}
-		}
-
-
-		else 
+		} else 
 		{
 			warn_exit(do_lang_tempcode('NO_MEMBER_SELECTED'));
 		}
-		
 
 		// Show message
 		$result=do_lang_tempcode('GIFT_CONGRATULATIONS');
@@ -211,7 +191,4 @@ class Hook_pointstore_ocgifts
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,$result);
 	}
-
 }
-
-

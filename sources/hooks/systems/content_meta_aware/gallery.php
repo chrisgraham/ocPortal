@@ -29,6 +29,8 @@ class Hook_content_meta_aware_gallery
 	function info()
 	{
 		return array(
+			'content_type_label'=>'galleries:GALLERY',
+
 			'table'=>'galleries',
 			'id_field'=>'name',
 			'id_field_numeric'=>false,

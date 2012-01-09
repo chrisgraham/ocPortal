@@ -51,11 +51,6 @@ class Hook_members_gifts
 			if (strlen($gift_info[0]['name'])>0)
 			{
 				$gift_url='';
-				if((!is_null($gift['topic_id'])) && ($member_id==get_member()))
-				{
-					$gift_url=build_url(array('page'=>'topicview','id'=>$gift['topic_id']),'_SEARCH');
-					$gift_url=$gift_url->evaluate();
-				}
 				
 				if($gift['is_anonymous']==0)
 				{

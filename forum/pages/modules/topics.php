@@ -107,10 +107,10 @@ class Module_topics
 			'new_post',
 			'new_pt',
 			'_add_reply',
-			'track_topic',
-			'untrack_topic',
-			'track_forum',
-			'untrack_forum',
+			'enable_notifications_topic',
+			'disable_notifications_topic',
+			'enable_notifications_forum',
+			'disable_notifications_forum',
 			'vote_poll',
 			'add_poll',
 			'_add_poll',
@@ -284,17 +284,18 @@ class Module_topics
 	 *
 	 * @return tempcode		The UI
 	 */
-	function track_forum() // Type
+	function enable_notifications_forum() // Type
 	{
 		require_code('ocf_forums_action2');
 
 		$forum_id=get_param_integer('id');
-		ocf_track_forum($forum_id,NULL,false);
+		require_code('notifications');
+		enable_notifications('ocf_forum',strval($forum_id));
 
 		$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
 		breadcrumb_add_segment($tree,do_lang_tempcode('TRACK_FORUM'));
 
-		return $this->redirect_to_forum('TRACK_FORUM',$forum_id,do_lang_tempcode('NOW_TRACKING_FORUM'));
+		return $this->redirect_to_forum('ENABLE_NOTIFICATIONS',$forum_id,do_lang_tempcode('NOW_ENABLED_NOTIFICATIONS_FORUM'));
 	}
 
 	/**
@@ -302,17 +303,18 @@ class Module_topics
 	 *
 	 * @return tempcode		The UI
 	 */
-	function untrack_forum() // Type
+	function disable_notifications_forum() // Type
 	{
 		require_code('ocf_forums_action2');
 
 		$forum_id=get_param_integer('id');
-		ocf_track_forum($forum_id,NULL,true);
+		require_code('notifications');
+		disable_notifications('ocf_forum',strval($forum_id));
 
 		$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
 		breadcrumb_add_segment($tree,do_lang_tempcode('UNTRACK_FORUM'));
 
-		return $this->redirect_to_forum('UNTRACK_FORUM',$forum_id,do_lang_tempcode('NOW_NOT_TRACKING_FORUM'));
+		return $this->redirect_to_forum('DISABLE_NOTIFICATIONS',$forum_id,do_lang_tempcode('NOW_DISABLED_NOTIFICATIONS_FORUM'));
 	}
 
 	// =================
@@ -2061,9 +2063,9 @@ END;
 			handle_award_setting('post',strval($post_id));
 		}
 
-		if (($forum_id==-1) && ($member_id!=-1) && ((get_value('ocf_optional_pt_tracking')!=='1') || ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_track_contributed_topics')==1)))
+		if (($forum_id==-1) && ($member_id!=-1))
 		{
-			sent_pt_notification($post_id,$title,$topic_id,$member_id,NULL,$post);
+			send_pt_notification($post_id,$title,$topic_id,$member_id,NULL,$post);
 		}
 
 		if ($add_poll==1)
@@ -2090,18 +2092,19 @@ END;
 		$url=get_param('redirect',$url);
 		return redirect_screen($_title,$url,$text);
 	}
-	
+
 	/**
 	 * The actualiser to track a topic.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function track_topic() // Type
+	function enable_notifications_topic() // Type
 	{
 		$topic_id=get_param_integer('id');
-		ocf_track_topic($topic_id,NULL,false);
+		require_code('notifications');
+		enable_notifications('ocf_topic',strval($topic_id));
 	
-		return $this->redirect_to('TRACK_TOPIC',$topic_id,do_lang_tempcode('NOW_TRACKING_TOPIC'));
+		return $this->redirect_to('ENABLE_NOTIFICATIONS',$topic_id,do_lang_tempcode('NOW_ENABLED_NOTIFICATIONS_TOPIC'));
 	}
 
 	/**
@@ -2109,12 +2112,13 @@ END;
 	 *
 	 * @return tempcode		The UI
 	 */
-	function untrack_topic() // Type
+	function disable_notifications_topic() // Type
 	{
 		$topic_id=get_param_integer('id');
-		ocf_track_topic($topic_id,NULL,true);
+		require_code('notifications');
+		disable_notifications('ocf_topic',strval($topic_id));
 
-		return $this->redirect_to('UNTRACK_TOPIC',$topic_id,do_lang_tempcode('NOW_NOT_TRACKING_TOPIC'));
+		return $this->redirect_to('DISABLE_NOTIFICATIONS',$topic_id,do_lang_tempcode('NOW_DISABLED_NOTIFICATIONS_TOPIC'));
 	}
 
 	/**

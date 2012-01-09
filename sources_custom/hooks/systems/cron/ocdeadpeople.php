@@ -23,13 +23,11 @@ class Hook_cron_ocdeadpeople
 	{
 		//if (!addon_installed('ocdeadpeople')) return;
 
-		require_code('mail');
-
 		//get just disease that should spead and are enabled
 		$diseases_to_spread=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'diseases WHERE (last_spread_time<('.strval(time()).'-(spread_rate*60*60)) OR  last_spread_time=0) AND enabled=1',NULL,NULL,true);
 		if (is_null($diseases_to_spread)) return;
 
-		foreach($diseases_to_spread as $disease)
+		foreach ($diseases_to_spread as $disease)
 		{
 			//select infected by the disease members
 			$sick_by_disease_members=$GLOBALS['FORUM_DB']->query('SELECT user_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'members_diseases WHERE sick=1 AND disease_id='.strval($disease['id']).' ',NULL, NULL,true);
@@ -81,7 +79,6 @@ class Hook_cron_ocdeadpeople
 
 				if(isset($friends_healthy[$to_infect]) && ($friends_healthy[$to_infect]!=0))
 				{
-
 					$member_rows=$GLOBALS['FORUM_DB']->query_select('members_diseases',array('*'),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']));
 					
 					$insert=true;
@@ -94,39 +91,24 @@ class Hook_cron_ocdeadpeople
 							$has_immunization=true;
 					}
  
-					if(!$has_immunization)
+					if (!$has_immunization)
 					{
+						//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
+						$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
+						$cure_url=$cure_url->evaluate();
+
 						if($insert)
 						{
+							//infect the member for the first time
 							$GLOBALS['SITE_DB']->query_insert('members_diseases',array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0));
-
-							$cure_url='';
-							//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
-							$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
-							$cure_url=$cure_url->evaluate();
-
-							$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
-							$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($friends_healthy[$to_infect]);
-							$member_name=$GLOBALS['FORUM_DRIVER']->get_username($friends_healthy[$to_infect]);
-
-							mail_wrap(do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
-						}
-						else
+						} else
 						{
-							$cure_url='';
-							//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
-							$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
-							$cure_url=$cure_url->evaluate();
-
-							$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
-							$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($friends_healthy[$to_infect]);
-							$member_name=$GLOBALS['FORUM_DRIVER']->get_username($friends_healthy[$to_infect]);
-
-							mail_wrap(do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
-
-							//infect again the member
+							//infect the member again
 							$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']),'',1);
 						}
+
+						$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
+						dispatch_notification('got_disease',NULL,do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($friends_healthy[$to_infect]),A_FROM_SYSTEM_PRIVILEGED);
 
 						$sick_members[]=$friends_healthy[$to_infect];
 					}
@@ -158,47 +140,33 @@ class Hook_cron_ocdeadpeople
 			//if there is a rondomly selected members that can be infected, otherwise all of the members are already infected or immunalized
 			if(isset($random_member[0]['id']) && $random_member[0]['id']>0)
 			{
-		
 				$member_rows=$GLOBALS['FORUM_DB']->query_select('members_diseases',array('*'),array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id']));
 				
 				$insert=true;
-				if(isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']>0)
+				if (isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']>0)
 				{
 					//there is already a db member disease record
 					$insert=false;
 				}
 
-				if($insert)
+				require_code('notifications');
+
+				//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
+				$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
+				$cure_url=$cure_url->evaluate();
+
+				if ($insert)
 				{
+					//infect the member for the first time
 					$GLOBALS['SITE_DB']->query_insert('members_diseases',array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0));
-
-					$cure_url='';
-					//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
-					$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
-					$cure_url=$cure_url->evaluate();
-
-					$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
-					$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($random_member[0]['id']);
-					$member_name=$GLOBALS['FORUM_DRIVER']->get_username($random_member[0]['id']);
-
-					mail_wrap(do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
-				}
-				else
+				} else
 				{
-					//infect again the member
-					$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>strval($random_member[0]['id']),'disease_id'=>strval($disease['id']),'sick'=>1,'cure'=>0,'immunisation'=>0),array('user_id'=>strval($random_member[0]['id']),'disease_id'=>strval($disease['id'])),'',1);
-
-					$cure_url='';
-					//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
-					$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
-					$cure_url=$cure_url->evaluate();
-
-					$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
-					$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address($random_member[0]['id']);
-					$member_name=$GLOBALS['FORUM_DRIVER']->get_username($random_member[0]['id']);
-
-					mail_wrap(do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
+					//infect the member again
+					$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0),array('user_id'=>strval($random_member[0]['id']),'disease_id'=>strval($disease['id'])),'',1);
 				}
+
+				$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
+				dispatch_notification('got_disease',NULL,do_lang('DISEASES_MAIL_SUBJECT',get_site_name(),$disease['name'],NULL,get_lang($friends_healthy[$to_infect])),$message,array($random_member[0]['id']),A_FROM_SYSTEM_PRIVILEGED);
 			}
 
 			//record disease spreading

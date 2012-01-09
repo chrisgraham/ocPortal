@@ -106,7 +106,7 @@ class Hook_Profiles_Tabs_about
 			$author=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT author FROM '.get_table_prefix().'authors WHERE (forum_handle='.strval($member_id_viewing).') OR (forum_handle IS NULL AND '.db_string_equal_to('author',$username).')');
 			if ((has_actual_page_access($member_id_viewing,'authors')) && (!is_null($author)))
 			{
-				$modules[]=array('content',do_lang_tempcode('AUTHOR'),build_url(array('page'=>'authors','type'=>'misc','id'=>$author),get_module_zone('authors')));
+				$modules[]=array('content',do_lang_tempcode('AUTHOR'),build_url(array('page'=>'authors','type'=>'misc','id'=>$author),get_module_zone('authors')),'me');
 			}
 		}
 		require_code('ocf_members2');

@@ -522,9 +522,9 @@ function findTagsInEditor(editor,element)
 										}
 									}
 								},'data='+window.encodeURIComponent('[semihtml]'+tag_text.replace(/<\/?span[^>]*>/gi,'')).substr(0,1000)+'[/semihtml]');
-							} else
+							} else if (typeof this.rendered_tooltip!='undefined')
 							{
-								activateTooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'400px');
+									activateTooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'400px');
 							}
 						}
 					}
@@ -679,7 +679,7 @@ function insertTextbox(element,text,sel,plain_insert,html)
 		{
 			var is_block=text.match(/^\s*\[block(.*)\](.*)\[\/block\]\s*$/);
 			var is_non_text_tag=false;
-			var non_text_tags=['contents','concepts','attachment','attachment_safe','attachment2','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'];
+			var non_text_tags=['section_controller','big_tab_controller','img','currency','contents','concepts','attachment','attachment_safe','attachment2','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'];
 			for (var i=0;i<non_text_tags.length;i++)
 				is_non_text_tag=is_non_text_tag || text.match(new RegExp('^\s*\\['+non_text_tags[i]+'([ =].*)?\\](.*)\\[\/'+non_text_tags[i]+'\\]\s*$'));
 			if (is_block || is_non_text_tag)
@@ -818,6 +818,8 @@ function insertTextboxWrapping(element,beforeWrapTag,afterWrapTag)
 		if (!browser_matches('opera')) editor.focus(); // Needed on some browsers, but on Opera will defocus our selection
 		var selectedHTML=getSelectedHTML(editor);
 		if (browser_matches('opera')) editor.getSelection().getNative().getRangeAt(0).deleteContents();
+
+		if (selectedHTML=='') selectedHTML='{!comcode:TEXT_OR_COMCODE_GOES_HERE;}'.toUpperCase();
 
 		var new_html='&#8203;<kbd title="'+escape_html(beforeWrapTag.replace(/^\[/,'').replace(/[ \]].*$/,'').replace(/=.*$/,''))+'" class="ocp_keep">'+beforeWrapTag+selectedHTML+afterWrapTag+'</kbd>&#8203;';
 		if ((editor.getSelection()) && (editor.getSelection().getStartElement().getName()=='kbd')) // Danger Danger - don't want to insert into another Comcode tag. Put it after. They can cut+paste back if they need.

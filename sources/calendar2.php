@@ -107,6 +107,16 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 
 	decache('side_calendar');
 
+	if ($validated==1)
+	{
+		require_lang('calendar');
+		require_code('notifications');
+		$subject=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+		$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true);
+		$mail=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate()));
+		dispatch_notification('calendar_event',strval($type),$subject,$mail);
+	}
+
 	log_it('ADD_CALENDAR_EVENT',strval($id),$title);
 
 	return $id;
@@ -160,6 +170,14 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 	require_code('attachments3');
 
 	if (!addon_installed('unvalidated')) $validated=1;
+
+	require_code('submit');
+	$just_validated=(!content_validated('event',strval($id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('event',strval($id));
+	}
+
 	$GLOBALS['SITE_DB']->query_update('calendar_events',array(
 		'e_title'=>lang_remap($myrow['e_title'],$title),
 		'e_content'=>update_lang_comcode_attachments($myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']),
@@ -189,9 +207,20 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'notes'=>$notes
 	),array('id'=>$id),'',1);
 
+	$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true);
+
+	if ($just_validated)
+	{
+		require_lang('calendar');
+		require_code('notifications');
+		$subject=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+		$mail=do_lang('CALENDAR_EVENT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate()));
+		dispatch_notification('calendar_event',strval($type),$subject,$mail);
+	}
+
 	decache('side_calendar');
 
-	update_spacer_post($allow_comments!=0,'events',strval($id),build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true),$title,get_value('comment_forum__calendar'));
+	update_spacer_post($allow_comments!=0,'events',strval($id),$self_url,$title,get_value('comment_forum__calendar'));
 
 	log_it('EDIT_CALENDAR_EVENT',strval($id),$title);
 }

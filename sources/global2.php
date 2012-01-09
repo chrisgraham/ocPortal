@@ -613,7 +613,7 @@ function fast_spider_cache($bot=true)
 	$fast_cache_path.='.gcd';
 	if (is_file($fast_cache_path))
 	{
-		$expires=60*60*intval($SITE_INFO['fast_spider_cache']); // Just 2 hours, should be a nice space of time for spiders to update with
+		$expires=60*60*intval($SITE_INFO['fast_spider_cache']);
 		$mtime=filemtime($fast_cache_path);
 		if ($mtime>time()-$expires)
 		{
@@ -796,8 +796,8 @@ function catch_fatal_errors()
  *
  * @param  integer		The error code-number
  * @param  PATH			The error message
- * @param  string			The file the error occured in
- * @param  integer		The line the error occured on
+ * @param  string			The file the error occurred in
+ * @param  integer		The line the error occurred on
  * @return boolean		Always false
  */
 function ocportal_error_handler($errno,$errstr,$errfile,$errline)
@@ -938,7 +938,7 @@ function warn_exit($text)
 	suggest_fatalistic();
 	_generic_exit($text,'WARN_SCREEN');
 	if (running_script('cron_bridge'))
-		relay_error_mail(is_object($text)?$text->evaluate():escape_html($text));
+		relay_error_notification(is_object($text)?$text->evaluate():escape_html($text),false,'error_occurred_cron');
 }
 
 /**

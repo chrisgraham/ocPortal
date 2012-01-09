@@ -629,7 +629,7 @@ class Module_admin_import
 		if (!$all_skipped)
 		{
 			$lang_code='SUCCESS';
-			if (count($GLOBALS['ATTACHED_MESSAGES_RAW'])!=0) $lang_code='SOME_ERRORS_OCCURED';
+			if (count($GLOBALS['ATTACHED_MESSAGES_RAW'])!=0) $lang_code='SOME_ERRORS_OCCURRED';
 			$out->attach(do_template('IMPORT_MESSAGE',array('_GUID'=>'4c4860d021814ffd1df6e21e712c7b44','MESSAGE'=>do_lang_tempcode($lang_code))));
 		}
 

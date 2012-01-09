@@ -23,7 +23,7 @@
  *
  * @param  ?AUTO_LINK	The ID of the forum the topic will be in (NULL: Private Topic).
  * @param  SHORT_TEXT	Description of the topic.
- * @param  SHORT_TEXT	The image code of the emoticon for the topic.
+ * @param  SHORT_TEXT	The theme image code of the emoticon for the topic.
  * @param  ?BINARY		Whether the topic is validated (NULL: detect whether it should be).
  * @param  BINARY			Whether the topic is open.
  * @param  BINARY			Whether the topic is pinned.

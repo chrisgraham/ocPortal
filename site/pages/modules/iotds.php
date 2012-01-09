@@ -254,7 +254,7 @@ class Module_iotds
 			$myrow['allow_trackbacks'],
 			((is_null($myrow['date_and_time'])) && ($myrow['used']==0))?0:1,
 			$myrow['submitter'],
-			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF'),
+			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),
 			get_translated_text($myrow['i_title']),
 			get_value('comment_forum__iotds')
 		);

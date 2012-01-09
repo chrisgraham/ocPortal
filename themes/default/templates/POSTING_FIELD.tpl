@@ -55,7 +55,7 @@
 			</div>
 		</div>
 
-		{+START,IF_NON_EMPTY,{EMOTICON_CHOOSER}}
+		{+START,IF_NON_EMPTY,{$TRIM,{EMOTICON_CHOOSER}}}
 			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$OR,{$CONFIG_OPTION,is_on_emoticon_choosers},{$AND,{$OCF},{$JS_ON}}}}
 				<div class="emoticon_chooser lightborder"><div class="float_surrounder">
 					{+START,IF,{$AND,{$OCF},{$JS_ON}}}

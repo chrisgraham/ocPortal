@@ -951,7 +951,7 @@ CREATE TABLE `ocp7_f_members` (
   `m_photo_url` varchar(255) COLLATE latin1_bin NOT NULL,
   `m_photo_thumb_url` varchar(255) COLLATE latin1_bin NOT NULL,
   `m_views_signatures` tinyint(1) NOT NULL,
-  `m_track_contributed_topics` tinyint(1) NOT NULL,
+  `m_auto_alert_contrib_content` tinyint(1) NOT NULL,
   `m_language` varchar(80) COLLATE latin1_bin NOT NULL,
   `m_ip_address` varchar(40) COLLATE latin1_bin NOT NULL,
   `m_allow_emails` tinyint(1) NOT NULL,

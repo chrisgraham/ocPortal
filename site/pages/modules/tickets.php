@@ -36,7 +36,7 @@ class Module_tickets
 		$info['organisation']='ocProducts'; 
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=4;
+		$info['version']=5;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -73,9 +73,13 @@ class Module_tickets
 	{
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
+			$GLOBALS['SITE_DB']->delete_table_field('ticket_types','send_sms_to');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+		{
 			$GLOBALS['SITE_DB']->add_table_field('ticket_types','guest_emails_mandatory','BINARY',0);
 			$GLOBALS['SITE_DB']->add_table_field('ticket_types','search_faq','BINARY',0);
-			$GLOBALS['SITE_DB']->add_table_field('ticket_types','send_sms_to','SHORT_TEXT');
 			$GLOBALS['SITE_DB']->add_table_field('ticket_types','cache_lead_time','?TIME');
 		}
 
@@ -115,7 +119,6 @@ class Module_tickets
 				'ticket_type'=>'*SHORT_TRANS',
 				'guest_emails_mandatory'=>'BINARY',
 				'search_faq'=>'BINARY',
-				'send_sms_to'=>'SHORT_TEXT',
 				'cache_lead_time'=>'?TIME'
 			));
 	
@@ -124,7 +127,7 @@ class Module_tickets
 			$default_types=array(/*'TT_FEATURE_REQUEST','TT_FEATURE_INQUIRY','TT_MODDING_HELP','TT_REPAIR_HELP',*/'TT_OTHER',/*'TT_FINANCIAL_INQUIRY',*/'TT_COMPLAINT');
 			foreach ($default_types as $type)
 			{
-				$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>insert_lang(do_lang($type),1),'guest_emails_mandatory'=>0,'search_faq'=>0,'send_sms_to'=>'','cache_lead_time'=>NULL));
+				$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>insert_lang(do_lang($type),1),'guest_emails_mandatory'=>0,'search_faq'=>0,'cache_lead_time'=>NULL));
 
 				foreach (array_keys($groups) as $id)
 				{

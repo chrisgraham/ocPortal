@@ -575,7 +575,7 @@ class Module_downloads
 			$myrow['allow_trackbacks'],
 			$myrow['validated'],
 			$myrow['submitter'],
-			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF'),
+			build_url(array('page'=>'_SELF','type'=>'entry','id'=>$id),'_SELF',NULL,false,false,true),
 			$name,
 			get_value('comment_forum__downloads')
 		);

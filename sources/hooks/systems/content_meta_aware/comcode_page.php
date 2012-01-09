@@ -29,6 +29,8 @@ class Hook_content_meta_aware_comcode_page
 	function info()
 	{
 		return array(
+			'content_type_label'=>'zones:COMCODE_PAGE',
+
 			'table'=>'comcode_pages',
 			'id_field'=>'the_page',
 			'id_field_numeric'=>false,

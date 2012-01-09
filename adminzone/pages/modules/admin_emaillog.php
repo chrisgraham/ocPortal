@@ -78,7 +78,7 @@ class Module_admin_emaillog
 	 */
 	function show()
 	{
-		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/emaillog';
+		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/email';
 
 		$title=get_page_title('EMAIL_LOG');
 
@@ -251,7 +251,7 @@ class Module_admin_emaillog
 
 					require_code('mail');
 					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true);
-					
+
 					$remap['m_queued']=0;
 				}
 

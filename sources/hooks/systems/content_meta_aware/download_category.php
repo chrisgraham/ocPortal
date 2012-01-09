@@ -29,6 +29,8 @@ class Hook_content_meta_aware_download_category
 	function info()
 	{
 		return array(
+			'content_type_label'=>'downloads:DOWNLOAD_CATEGORY',
+
 			'table'=>'download_categories',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

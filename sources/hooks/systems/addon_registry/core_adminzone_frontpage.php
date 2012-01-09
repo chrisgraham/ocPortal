@@ -112,6 +112,7 @@ class Hook_addon_registry_core_adminzone_frontpage
 			'BLOCK_MAIN_STAFF_WEBSITE_MONITORING.tpl',
 			'themes/default/images/checklist/cross.png',
 			'themes/default/images/checklist/cross2.png',
+			'sources/hooks/systems/notifications/checklist_task.php',
 		);
 	}
 

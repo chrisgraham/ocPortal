@@ -493,15 +493,11 @@ class Module_admin_orders
 
 		$order_det	=	$res[0];
 
-		$email_address	=	$GLOBALS['FORUM_DRIVER']->get_member_email_address($order_det['c_member']);
-	
-		$member_name	=	$GLOBALS['FORUM_DRIVER']->get_username($order_det['c_member']);
-
 		//$message	=do_lang('ORDER_DISPATCHED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($order_id)));
 		
-		require_code('mail');
+		require_code('notifications');
 
-		mail_wrap(do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),strval($order_id),NULL,get_lang($order_det['c_member'])),$message,array($email_address),$member_name,'','',3,NULL,false,NULL,false,false);
+		dispatch_notification('order_dispatched',NULL,do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),strval($order_id),NULL,get_lang($order_det['c_member'])),$message,array($order_det['c_member']),A_FROM_SYSTEM_PRIVILEGED);
 	}
 
 	/**

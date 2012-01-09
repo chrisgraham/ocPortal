@@ -202,7 +202,7 @@ function fatal_exit($text)
 	}
 	$EXITING=1;
 
-	$title=get_page_title('ERROR_OCCURED');
+	$title=get_page_title('ERROR_OCCURRED');
 
 	$trace=get_html_trace();
 	$echo=new ocp_tempcode();
@@ -261,8 +261,8 @@ function catch_fatal_errors()
  *
  * @param  integer		The error code-number
  * @param  PATH			The error message
- * @param  string			The file the error occured in
- * @param  integer		The line the error occured on
+ * @param  string			The file the error occurred in
+ * @param  integer		The line the error occurred on
  * @return boolean		Always false
  */
 function ocportal_error_handler($errno,$errstr,$errfile,$errline)
@@ -397,7 +397,7 @@ function warn_exit($text)
 	}
 	$EXITING=1;
 
-	$title=get_page_title('ERROR_OCCURED');
+	$title=get_page_title('ERROR_OCCURRED');
 
 	$echo=new ocp_tempcode();
 	$echo->attach(do_template('WARN_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>false)));

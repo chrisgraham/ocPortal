@@ -155,7 +155,7 @@ function initialise_error_mechanism()
 			if ((typeof window.done_one_error=='undefined') || (!window.done_one_error))
 			{
 				window.done_one_error=true;
-				window.fauxmodal_alert('{!JAVASCRIPT_ERROR^;}\n\n'+code+': '+msg+'\n'+file,null,'{!ERROR_OCCURED^;}');
+				window.fauxmodal_alert('{!JAVASCRIPT_ERROR^;}\n\n'+code+': '+msg+'\n'+file,null,'{!ERROR_OCCURRED^;}');
 			}
 			return false;
 		};
@@ -288,7 +288,11 @@ function manageScrollHeight(ob)
 	var dif=0;
 	if ((browser_matches('chrome'))/* || (browser_matches('ie')) This is some gap but it is needed for the scrollbox rendering */) dif=-4;
 	var height=(ob.scrollHeight-sts(ob.style.paddingTop)-sts(ob.style.paddingBottom)-sts(ob.style.marginTop)-sts(ob.style.marginBottom)+dif)
-	if ((height>5) && (sts(ob.style.height)<height) && (findHeight(ob)<height)/*findHeight needed for IE6*/) ob.style.height=height+'px';
+	if ((height>5) && (sts(ob.style.height)<height) && (findHeight(ob)<height)/*findHeight needed for IE6*/)
+	{
+		ob.style.height=height+'px';
+		trigger_resize();
+	}
 }
 
 // 'Cancel' should come as index 0 and Ok/default-option should come as index 1. This is so that the fallback works right.
@@ -612,7 +616,7 @@ function SetCookie(cookieName,cookieValue,nDays)
 	if ((read!=cookieValue) && (read))
 	{
 		{+START,IF,{$DEV_MODE}}
-			if (!window.done_cookie_alert) window.fauxmodal_alert('{!COOKIE_CONFLICT_DELETE_COOKIES^;}'+'... '+document.cookie+' ('+to_set+')',null,'{!ERROR_OCCURED^;}');
+			if (!window.done_cookie_alert) window.fauxmodal_alert('{!COOKIE_CONFLICT_DELETE_COOKIES^;}'+'... '+document.cookie+' ('+to_set+')',null,'{!ERROR_OCCURRED^;}');
 		{+END}
 		window.done_cookie_alert=true;
 	}

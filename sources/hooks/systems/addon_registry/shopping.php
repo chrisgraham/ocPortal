@@ -73,6 +73,10 @@ class Hook_addon_registry_shopping
 	function get_file_list()
 	{
 		return array(
+
+			'sources/hooks/systems/notifications/order_dispatched.php',
+			'sources/hooks/systems/notifications/new_order.php',
+			'sources/hooks/systems/notifications/low_stock.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/shopping.php',
 			'sources/hooks/systems/config_default/allow_opting_out_of_tax.php',
 			'sources/hooks/systems/config_default/shipping_cost_factor.php',

@@ -29,7 +29,7 @@ class tickettype_test_set extends ocp_test_case
 	{
 		parent::setUp();
 		require_code('tickets2');
-		add_ticket_type($ticket_type="platinum",$guest_emails_mandatory=0,$search_faq=0,$send_sms_to=NULL);
+		add_ticket_type("platinum",0,0);
 		// Test the forum was actually created
 		$this->tickettype_id = $GLOBALS['SITE_DB']->query_value_null_ok('translate','id',array('text_original'=>"platinum"));
 		$this->assertTrue('platinum'==get_translated_text($this->tickettype_id));
@@ -38,9 +38,9 @@ class tickettype_test_set extends ocp_test_case
 	function testEditNewscategory()
 	{
 		// Test the forum edits
-		edit_ticket_type($old_ticket_type="platinum",$new_ticket_type="gold",$guest_emails_mandatory=0,$search_faq=0,$send_sms_to=NULL);
+		$this->tickettype_id = $GLOBALS['SITE_DB']->query_value_null_ok('translate','id',array('text_original'=>"platinum"));
+		edit_ticket_type($this->tickettype_id,"gold",0,0);
 		// Test the forum was actually created
-		$this->tickettype_id = $GLOBALS['SITE_DB']->query_value_null_ok('translate','id',array('text_original'=>"gold"));
 		$this->assertTrue('gold'==get_translated_text($this->tickettype_id));;
 	}
 	

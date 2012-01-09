@@ -129,6 +129,7 @@ class Module_cms_iotds extends standard_aed_module
 		$hidden=new ocp_tempcode();
 		require_code('form_templates');
 		handle_max_file_size($hidden,'image');
+		$fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$url,false));
 		if (get_option('is_on_gd')=='0')
@@ -137,7 +138,6 @@ class Module_cms_iotds extends standard_aed_module
 			$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),'file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
 			$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'thumb_url',$thumb_url,false));
 		}
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('CAPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'caption',$caption,false));
 		if (has_specific_permission(get_member(),'choose_iotd'))
 		{
@@ -353,7 +353,7 @@ class Module_cms_iotds extends standard_aed_module
 		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('iotd','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
-				syndicate_described_activity('iotds:ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.$id,'','','iotds');
+				syndicate_described_activity('iotds:ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
 		}
 
 		edit_iotd($id,$title,post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);

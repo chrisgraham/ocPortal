@@ -56,7 +56,7 @@ class Module_admin_config
 										'smtp_from_address','use_security_images','send_error_emails','send_error_emails_ocproducts','width_left','width_right',
 										'validation_xhtml','validation_wcag','validation_css','validation_javascript','validation_ext_files','validation_compat',
 										'is_on_strong_forum_tie','is_on_preview_validation','show_inline_stats',
-										'is_on_sms','sms_username','sms_password','sms_api_id','sms_low_limit','sms_high_limit','sms_low_trigger_limit','sms_high_trigger_limit','max_download_size',
+										'sms_username','sms_password','sms_api_id','sms_low_limit','sms_high_limit','sms_low_trigger_limit','sms_high_trigger_limit','max_download_size',
 										'bottom_show_admin_menu','bottom_show_top_button','bottom_show_feedback_link','bottom_show_privacy_link',
 										'bottom_show_sitemap_button','forum_show_personal_stats_posts','forum_show_personal_stats_topics',
 										'ocp_show_personal_sub_links','ocp_show_personal_adminzone_link','ocp_show_conceded_mode_link','ocp_show_su','ocp_show_staff_page_actions','ocf_show_profile_link',
@@ -70,7 +70,7 @@ class Module_admin_config
 										'deeper_admin_breadcrumbs','has_low_memory_limit','is_on_comcode_page_children','global_donext_icons','no_bot_stats',
 										'java_upload','java_ftp_host','java_username','java_password','java_ftp_path','filesystem_caching',
 										'check_broken_urls','advanced_admin_cache','collapse_user_zones','google_analytics','fixed_width','show_screen_actions','show_content_tagging','show_content_tagging_inline',
-										'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support',
+										'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support','mail_queue','mail_queue_debug',
 										);
 
 		foreach ($config_options as $option)
@@ -110,8 +110,9 @@ class Module_admin_config
 			add_config_option('USE_SECURITY_IMAGES','use_security_images','tick','return \'1\';','SECURITY','GENERAL');
 			add_config_option('HTTPS_SUPPORT','enable_https','tick','return \'0\';','SECURITY','GENERAL',1);
 
-			add_config_option('SEND_ERROR_EMAILS','send_error_emails','tick','return \'0\';','SITE','ADVANCED');
 			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return '.strval(post_param_integer('allow_reports_default',0)).';','SITE','ADVANCED',1);
+
+			add_config_option('LOW_DISK_SPACE_SUBJECT','low_space_check','integer','return \'20\';','SITE','GENERAL'); // 20MB - very very low even for lame web hosts
 
 			add_config_option('DETECT_LANG_FORUM','detect_lang_forum','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('DETECT_LANG_BROWSER','detect_lang_browser','tick','return \'0\';','SITE','ADVANCED');
@@ -133,7 +134,6 @@ class Module_admin_config
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
-			add_config_option('LOW_DISK_SPACE_SUBJECT','low_space_check','integer','return \'20\';','SITE','GENERAL'); // 20MB - very very low even for lame web hosts
 			add_config_option('ALLOW_AUDIO_VIDEOS','allow_audio_videos','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('VALIDATION','validation','tick','return \'0\';','SITE','VALIDATION',1); /*(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'1':'0')*/ // return (!function_exists(\'memory_get_usage()\') || (ini_get(\'memory_limit\')!=\'8M\'))?\'1\':\'0\';
 			add_config_option('VALIDATION_XHTML','validation_xhtml','tick','return \'1\';','SITE','VALIDATION',1);
@@ -146,20 +146,21 @@ class Module_admin_config
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<8))
 		{
+			// TODO: Move these into sms addon_registry hook, once these hooks support installation
+			add_config_option('USERNAME','sms_username','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
+			add_config_option('PASSWORD','sms_password','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
+			add_config_option('API_ID','sms_api_id','integer','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
+			add_config_option('SMS_LOW_LIMIT','sms_low_limit','integer','return addon_installed(\'sms\')?\'10\':NULL;','FEATURE','SMS');
+			add_config_option('SMS_HIGH_LIMIT','sms_high_limit','integer','return addon_installed(\'sms\')?\'20\':NULL;','FEATURE','SMS');
+			add_config_option('SMS_LOW_TRIGGER_LIMIT','sms_low_trigger_limit','integer','return addon_installed(\'sms\')?\'50\':NULL;','FEATURE','SMS');
+			add_config_option('SMS_HIGH_TRIGGER_LIMIT','sms_high_trigger_limit','integer','return addon_installed(\'sms\')?\'100\':NULL;','FEATURE','SMS');
+
 			add_config_option('ALLOWED_POST_SUBMITTERS','allowed_post_submitters','text','return \'\';','SECURITY','ADVANCED',1);
 			add_config_option('STRONG_FORUM_TIE','is_on_strong_forum_tie','tick','return \'0\';','FEATURE','USER_INTERACTION',1);
 			add_config_option('VALIDATION_ON_PREVIEW','is_on_preview_validation','tick','return \'1\';','SITE','VALIDATION',1);
 			add_config_option('SHOW_INLINE_STATS','show_inline_stats','tick','return \'1\';','SITE','GENERAL');
 			add_config_option('SIMPLIFIED_DONEXT','simplified_donext','tick','return \'0\';','SITE','ADVANCED');
 			add_config_option('ANTI_LEECH','anti_leech','tick','return \'0\';','SECURITY','GENERAL');
-//			add_config_option('ENABLED','is_on_sms','tick','return \'0\';','FEATURE','SMS');
-			add_config_option('USERNAME','sms_username','line','return \'\';','FEATURE','SMS');
-			add_config_option('PASSWORD','sms_password','line','return \'\';','FEATURE','SMS');
-			add_config_option('API_ID','sms_api_id','integer','return \'\';','FEATURE','SMS');
-			add_config_option('SMS_LOW_LIMIT','sms_low_limit','integer','return \'10\';','FEATURE','SMS');
-			add_config_option('SMS_HIGH_LIMIT','sms_high_limit','integer','return \'20\';','FEATURE','SMS');
-			add_config_option('SMS_LOW_TRIGGER_LIMIT','sms_low_trigger_limit','integer','return \'50\';','FEATURE','SMS');
-			add_config_option('SMS_HIGH_TRIGGER_LIMIT','sms_high_trigger_limit','integer','return \'100\';','FEATURE','SMS');
 			add_config_option('SSW','ssw','tick','return \'0\';','SITE','GENERAL');
 			add_config_option('ADMIN_MENU','bottom_show_admin_menu','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
 			add_config_option('TOP_LINK','bottom_show_top_button','tick','return \'0\';','FEATURE','BOTTOM_LINKS');
@@ -243,7 +244,12 @@ class Module_admin_config
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<12))
 		{
-			foreach (array('ocf_show_personal_myhome_link','twitter_login','twitter_password','facebook_api','facebook_appid','facebook_secret_code','facebook_uid','facebook_target_ids') as $option_to_delete)
+			add_config_option('MAIL_QUEUE','mail_queue','tick','return \'1\';','SITE','EMAIL');
+			add_config_option('MAIL_QUEUE_DEBUG','mail_queue_debug','tick','return \'0\';','SITE','EMAIL');
+		}
+		if ((!is_null($upgrade_from)) && ($upgrade_from<12))
+		{
+			foreach (array('send_error_emails','ocf_show_personal_myhome_link','twitter_login','twitter_password','facebook_api','facebook_appid','facebook_secret_code','facebook_uid','facebook_target_ids') as $option_to_delete)
 				delete_config_option($option_to_delete);
 		}
 

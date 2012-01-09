@@ -395,6 +395,16 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	require_code('seo2');
 	seo_meta_set_for_implicit('image',strval($id),array($comments),$comments);
 
+	if ($validated==1)
+	{
+		require_lang('galleries');
+		require_code('notifications');
+		$subject=do_lang('IMAGE_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+		$self_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
+		$mail=do_lang('IMAGE_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
+		dispatch_notification('gallery_entry',$cat,$subject,$mail);
+	}
+
 	decache('side_root_galleries');
 	decache('main_gallery_embed');
 
@@ -436,7 +446,26 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	delete_upload('uploads/galleries_thumbs','images','thumb_url','id',$id,$thumb_url);
 
 	if (!addon_installed('unvalidated')) $validated=1;
+
+	require_code('submit');
+	$just_validated=(!content_validated('image',strval($id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('image',strval($id));
+	}
+
 	$GLOBALS['SITE_DB']->query_update('images',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'comments'=>lang_remap_comcode($_comments,$comments),'url'=>$url,'thumb_url'=>$thumb_url),array('id'=>$id),'',1);
+
+	$self_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
+
+	if ($just_validated)
+	{
+		require_lang('galleries');
+		require_code('notifications');
+		$subject=do_lang('IMAGE_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+		$mail=do_lang('IMAGE_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
+		dispatch_notification('gallery_entry',$cat,$subject,$mail);
+	}
 
 	log_it('EDIT_IMAGE',strval($id),$title);
 
@@ -447,7 +476,7 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	decache('main_image_fader');
 
 	require_lang('galleries');
-	update_spacer_post($allow_comments!=0,'images',strval($id),build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true),do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
+	update_spacer_post($allow_comments!=0,'images',strval($id),$self_url,do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
 }
 
 /**
@@ -633,6 +662,16 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 
 	log_it('ADD_VIDEO',strval($id),$title);
 
+	if ($validated==1)
+	{
+		require_lang('galleries');
+		require_code('notifications');
+		$subject=do_lang('VIDEO_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+		$self_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
+		$mail=do_lang('VIDEO_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
+		dispatch_notification('gallery_entry',$cat,$subject,$mail);
+	}
+
 	require_code('seo2');
 	seo_meta_set_for_implicit('video',strval($id),array($comments),$comments);
 
@@ -678,7 +717,26 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	$url=transcode_video($url,'videos','url',NULL,'video_width','video_height');
 
 	if (!addon_installed('unvalidated')) $validated=1;
+
+	require_code('submit');
+	$just_validated=(!content_validated('video',strval($id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('video',strval($id));
+	}
+
 	$GLOBALS['SITE_DB']->query_update('videos',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'comments'=>lang_remap_comcode($_comments,$comments),'url'=>$url,'thumb_url'=>$thumb_url,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height),array('id'=>$id),'',1);
+
+	$self_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
+
+	if ($just_validated)
+	{
+		require_lang('galleries');
+		require_code('notifications');
+		$subject=do_lang('VIDEO_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+		$mail=do_lang('VIDEO_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
+		dispatch_notification('gallery_entry',$cat,$subject,$mail);
+	}
 
 	log_it('EDIT_VIDEO',strval($id),$title);
 
@@ -688,7 +746,7 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	decache('main_gallery_embed');
 
 	require_lang('galleries');
-	update_spacer_post($allow_comments!=0,'videos',strval($id),build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true),do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
+	update_spacer_post($allow_comments!=0,'videos',strval($id),$self_url,do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
 }
 
 /**

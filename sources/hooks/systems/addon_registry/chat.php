@@ -74,6 +74,10 @@ class Hook_addon_registry_chat
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/im_invited.php',
+			'sources/hooks/systems/notifications/new_buddy.php',
+			'sources/hooks/systems/notifications/member_entered_chatroom.php',
+			'sources/hooks/systems/notifications/ocf_friend_birthday.php',
 			'sources/hooks/systems/config_default/chat_default_post_colour.php',
 			'sources/hooks/systems/config_default/chat_default_post_font.php',
 			'sources/hooks/systems/config_default/chat_flood_timelimit.php',

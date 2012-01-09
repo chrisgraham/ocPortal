@@ -545,20 +545,6 @@ class Module_admin_ocf_forums extends standard_aed_module
 					$lost_groups[]=$group_id;
 			}
 	
-			if (function_exists('set_time_limit')) @set_time_limit(0);
-			$start=0;
-			do
-			{
-				$members=$GLOBALS['FORUM_DRIVER']->member_group_query($lost_groups,300,$start);
-				foreach (array_keys($members) as $member_id)
-				{
-					// Update tracking
-					ocf_update_member_tracking_group_change($member_id);
-				}
-				$start+=300;
-			}
-			while (count($members)>=300);
-
 			$this->set_permissions($id);
 		}
 	}

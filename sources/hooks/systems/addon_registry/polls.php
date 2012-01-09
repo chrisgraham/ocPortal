@@ -74,6 +74,7 @@ class Hook_addon_registry_polls
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/poll_chosen.php',
 			'sources/hooks/systems/config_default/points_ADD_POLL.php',
 			'sources/hooks/systems/config_default/points_CHOOSE_POLL.php',
 			'sources/hooks/systems/config_default/poll_update_time.php',

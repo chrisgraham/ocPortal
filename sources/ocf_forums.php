@@ -137,38 +137,6 @@ function ocf_get_all_subordinate_forums($forum_id,$create_or_list=NULL,$tree=NUL
 }*/
 
 /**
- * Find whether a member is tracking a certain forum.
- *
- * @param  AUTO_LINK		The ID of the forum.
- * @param  ?MEMBER		The member ID (NULL: current member).
- * @return boolean		The answer.
- */
-function ocf_is_tracking_forum($forum_id,$member_id=NULL)
-{
-	if (is_null($member_id)) $member_id=get_member();
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forum_tracking','r_member_id',array('r_member_id'=>$member_id,'r_forum_id'=>$forum_id));
-	return !is_null($test);
-}
-
-/**
- * Find whether a member may track a certain forum.
- *
- * @param  AUTO_LINK		The ID of the forum.
- * @param  ?MEMBER		The member ID (NULL: current member).
- * @return boolean		The answer.
- */
-function ocf_may_track_forum($forum_id,$member_id=NULL)
-{
-	if (is_null($member_id)) $member_id=get_member();
-
-	if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
-
-	if (!has_specific_permission($member_id,'may_track_forums')) return false;
-
-	return true;
-}
-
-/**
  * Find whether a member may moderate a certain forum.
  *
  * @param  AUTO_LINK		The ID of the forum.

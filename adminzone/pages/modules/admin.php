@@ -157,7 +157,7 @@ class Module_admin
 			array('forum','board','bbs'),
 			array('thread','topic'),
 			array('karma','point'),
-			array('subscribe','track','notification'),
+			array('subscribe','track','notification','alert','monitor','watch'),
 			array('bbcode','wikicode','comcode'),
 			array('html','xhtml'),
 			array('addon','add-on','mod','hack','extension','plugin'),
@@ -838,7 +838,7 @@ class Module_admin
 				array('WIDE','DESCRIPTION_WIDE'),
 				array('REVEAL_AGE','DESCRIPTION_REVEAL_AGE'),
 				array('PREVIEW_POSTS','DESCRIPTION_PREVIEW_POSTS'),
-				array('TRACK_CONTRIBUTED_TOPICS','DESCRIPTION_TRACK_CONTRIBUTED_TOPICS'),
+				array('AUTO_MONITOR_CONTRIB_CONTENT','DESCRIPTION_AUTO_MONITOR_CONTRIB_CONTENT'),
 				array('PT_RULES_TEXT','PT_RULES_TEXT_DESCRIPTION'),
 			);
 			foreach ($applicable_langstrings as $_langstring)

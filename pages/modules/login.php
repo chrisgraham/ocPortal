@@ -102,6 +102,9 @@ class Module_login
 	{
 		$title=get_page_title('_LOGIN');
 
+		global $EXTRA_HEAD;
+		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 		global $ZONE;
 	
 		// Where we will be redirected to after login

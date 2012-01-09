@@ -48,7 +48,9 @@ class Module_members
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'MEMBERS'/*,'remote'=>'LEARN_ABOUT_REMOTE_LOGINS'*/);
+		$ret=array('misc'=>'MEMBERS'/*,'remote'=>'LEARN_ABOUT_REMOTE_LOGINS'*/);
+		if (!is_guest()) $ret['view']='MY_PROFILE';
+		return $ret;
 	}
 
 	/**
@@ -245,6 +247,8 @@ class Module_members
 		if (is_numeric($username))
 		{
 			$member_id=get_param_integer('id',get_member());
+			if (is_guest($member_id))
+				access_denied('NOT_AS_GUEST');
 			$username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_username');
 			if ((is_null($username)) || (is_guest($member_id))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
 		} else

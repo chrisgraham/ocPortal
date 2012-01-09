@@ -27,7 +27,7 @@ class Hook_pointstore_pop3
 	function init()
 	{
 	}
-	
+
 	/**
 	 * Standard pointstore item "shop front" function.
 	 *
@@ -124,7 +124,7 @@ class Hook_pointstore_pop3
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
 		$title=get_page_title('TITLE_POP3');
-	
+
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>get_member(),'purchasetype'=>'pop3'));
 		if (is_null($test))
 		{
@@ -137,10 +137,10 @@ class Hook_pointstore_pop3
 			$quota_url=build_url(array('page'=>'_SELF','type'=>'buyquota','id'=>'pop3'),'_SELF');
 			$quota=do_template('POINTSTORE_POP3_QUOTA',array('_GUID'=>'d0345bb481155e92aaee889cb742ab5a','MAX_QUOTA'=>integer_format(intval(get_option('max_quota'))),'QUOTA_URL'=>$quota_url));
 		}
-	
+
 		return do_template('POINTSTORE_POP3_SCREEN',array('_GUID'=>'80a09c6bc30ab9d2821f12b77ee75ae8','TITLE'=>$title,'ACTIVATE'=>$activate,'QUOTA'=>$quota,'INITIAL_QUOTA'=>integer_format(intval(get_option('initial_quota')))));
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -153,7 +153,7 @@ class Hook_pointstore_pop3
 		$title=get_page_title('TITLE_NEWPOP3');
 
 		pointstore_handle_error_already_has('pop3');
-	
+
 		// What addresses are there?
 		$member_id=get_member();
 		$pointsleft=available_points($member_id); // the number of points this member has left
@@ -162,7 +162,7 @@ class Hook_pointstore_pop3
 		{
 			return warn_screen($title,do_lang_tempcode('NO_POP3S'));
 		}
-	
+
 		// Build up fields
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
@@ -170,7 +170,7 @@ class Hook_pointstore_pop3
 		$fields->attach(form_input_list(do_lang_tempcode('ADDRESS_DESIRED_DOMAIN'),'','esuffix',$list));
 		$fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),'','pass1',true));
 		$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','pass2',true));
-	
+
 		$javascript="
 			var form=document.getElementById('pass1').form;
 			form.old_submit=form.onsubmit;
@@ -190,7 +190,7 @@ class Hook_pointstore_pop3
 		$newpop_url=build_url(array('page'=>'_SELF','type'=>'_newpop3','id'=>'pop3'),'_SELF');
 		return do_template('FORM_SCREEN',array('_GUID'=>'addf1563770845ba5fe4aaf2e60ca6fc','JAVASCRIPT'=>$javascript,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('ADDRESSES_ABOUT')),'URL'=>$newpop_url,'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -201,30 +201,30 @@ class Hook_pointstore_pop3
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
 		$title=get_page_title('TITLE_NEWPOP3');
-	
+
 		// Getting User Information
 		$member_id=get_member();
 		$pointsleft=available_points($member_id);
-	
+
 		// So we don't need to call these big ugly names, again...
 		$_suffix=post_param('esuffix');
 		$prefix=post_param('email-prefix');
 		$pass1=post_param('pass1');
 		$pass2=post_param('pass2');
-	
+
 		// Which suffix have we chosen?
 		$suffix='pop3_'.$_suffix;
-	
+
 		$_suffix_price=get_price($suffix);
 		$points_after=$pointsleft-$_suffix_price;
-	
+
 		pointstore_handle_error_already_has('pop3');
-	
+
 		if (($points_after<0) && (!has_specific_permission(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('NOT_ENOUGH_POINTS',escape_html($_suffix)));
 		}
-	
+
 		// Password checking (to see if both 'passwords' are the same)
 		if ($pass1!=$pass2)
 		{
@@ -237,9 +237,9 @@ class Hook_pointstore_pop3
 		{
 			return warn_screen($title,do_lang_tempcode('INVALID_EMAIL_PREFIX'));
 		}
-	
+
 		pointstore_handle_error_taken($prefix,$_suffix);
-	
+
 		// Return
 		$proceed_url=build_url(array('page'=>'_SELF','type'=>'__newpop3','id'=>'pop3'),'_SELF');
 		$keep=new ocp_tempcode();
@@ -248,7 +248,7 @@ class Hook_pointstore_pop3
 		$keep->attach(form_input_hidden('password',$pass1));
 		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'099ab9d87fb6e68d74de27e7d41d50c0','MESSAGE'=>paragraph($prefix.'@'.$_suffix),'TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWPOP3'),'KEEP'=>$keep,'COST'=>integer_format($_suffix_price),'POINTS_AFTER'=>integer_format($points_after),'PROCEED_URL'=>$proceed_url,'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF')));
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -259,48 +259,48 @@ class Hook_pointstore_pop3
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
 		$title=get_page_title('TITLE_NEWPOP3');
-	
+
 		$member_id=get_member();
 		$pointsleft=available_points($member_id); // the number of points this member has left
 		$time=time();
-	
+
 		// So we don't need to call these big ugly names, again...
 		$prefix=post_param('prefix');
 		$_suffix=post_param('suffix');
 		$password=trim(post_param('password'));
-	
+
 		$suffix='pop3_'.$_suffix;
 		$suffix_price=get_price($suffix);
-	
+
 		pointstore_handle_error_already_has('pop3');
-	
+
 		// If the price is more than we can afford...
 		if (($suffix_price>$pointsleft) && (!has_specific_permission(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('NOT_ENOUGH_POINTS',escape_html($_suffix)));
 		}
-	
+
 		pointstore_handle_error_taken($prefix,$_suffix);
-	
+
 		// Add us to the database
 		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>$time,'memberid'=>get_member(),'purchasetype'=>'pop3','details'=>$prefix,'details2'=>'@'.$_suffix));
-	
+
 		$mail_server=get_option('mail_server');
 		$pop3_url=get_option('pop_url');
 		$initial_quota=intval(get_option('initial_quota'));
 		$login=$prefix.'@'.$_suffix;
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
-	
-		// Mail off the order form:
+
+		// Mail off the order form
 		$encoded_reason=do_lang('TITLE_NEWPOP3');
 		$message_raw=do_template('POINTSTORE_POP3_MAIL',array('_GUID'=>'19022c49d0bdde39735245850d04fca7','EMAIL'=>$email,'ENCODED_REASON'=>$encoded_reason,'LOGIN'=>$login,'QUOTA'=>integer_format($initial_quota),'MAIL_SERVER'=>$mail_server,'PASSWORD'=>$password,'PREFIX'=>$prefix,'SUFFIX'=>$_suffix,'POP3_URL'=>$pop3_url,'SUFFIX_PRICE'=>integer_format($suffix_price)));
-		require_code('mail');
-		mail_wrap(do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		require_code('notifications');
+		dispatch_notification('pointstore_request_pop3',NULL,do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 
 		$text=do_lang_tempcode('ORDER_POP3_DONE',escape_html($prefix.'@'.$_suffix));
 		return inform_screen($title,$text);
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -319,16 +319,16 @@ class Hook_pointstore_pop3
 
 		if ($price==0) $topamount=$pointsleft; else $topamount=intval(round($pointsleft/$price));
 		$details=$GLOBALS['SITE_DB']->query_select('sales',array('details','details2'),array('memberid'=>$member_id,'purchasetype'=>'pop3'),'',1);
-	
+
 		// If we don't own a POP3 account, stop right here.
 		if (!array_key_exists(0,$details))
 		{
 			return warn_screen($title,do_lang_tempcode('NO_POP3'));
 		}
-	
+
 		$prefix=$details[0]['details'];
 		$suffix=$details[0]['details2'];
-	
+
 		// Screen
 		$submit_name=do_lang_tempcode('TITLE_QUOTA');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_buyquota','id'=>'pop3'),'_SELF');
@@ -337,7 +337,7 @@ class Hook_pointstore_pop3
 		$fields=form_input_integer(do_lang_tempcode('QUOTA'),do_lang_tempcode('QUOTA_DESCRIPTION'),'quota',100,true);
 		return do_template('FORM_SCREEN',array('_GUID'=>'1c82c713beaa03d1e3045e50295c722c','HIDDEN'=>'','URL'=>$post_url,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -348,35 +348,35 @@ class Hook_pointstore_pop3
 		if (get_option('is_on_pop3_buy')=='0') return new ocp_tempcode();
 
 		$title=get_page_title('TITLE_QUOTA');
-	
+
 		$member_id=get_member();
 		$pointsleft=available_points($member_id);
 		$price=intval(get_option('quota'));
 		$quota=post_param_integer('quota');
-	
+
 		$details=$GLOBALS['SITE_DB']->query_select('sales',array('details','details2'),array('memberid'=>$member_id,'purchasetype'=>'pop3'),'',1);
 		$prefix=$details[0]['details'];
 		$suffix=$details[0]['details2'];
-	
+
 		// If we don't own a POP3 account, stop right here.
 		if (!array_key_exists(0,$details))
 		{
 			return warn_screen($title,do_lang_tempcode('NO_POP3'));
 		}
-	
+
 		// Stop if we can't afford this much quota
 		if ((($quota*$price)>$pointsleft)  && (!has_specific_permission(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('CANT_AFFORD'));
 		}
-	
-		// Mail off the order form:
+
+		// Mail off the order form
 		$quota_url=get_option('quota_url');
 		$_price=$quota*$price;
 		$encoded_reason=do_lang('TITLE_QUOTA');
 		$message_raw=do_template('POINTSTORE_QUOTA_MAIL',array('_GUID'=>'5a4e0bb5e53e6ccf8e57581c377557f4','ENCODED_REASON'=>$encoded_reason,'QUOTA'=>integer_format($quota),'EMAIL'=>$prefix.$suffix,'QUOTA_URL'=>$quota_url,'PRICE'=>integer_format($_price)));
-		require_code('mail');
-		mail_wrap(do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+		require_code('notifications');
+		dispatch_notification('pointstore_request_quota',NULL,do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('ORDER_QUOTA_DONE'));

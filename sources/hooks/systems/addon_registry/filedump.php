@@ -74,6 +74,7 @@ class Hook_addon_registry_filedump
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/filedump.php',
 			'sources/hooks/systems/config_default/filedump_show_stats_count_total_files.php',
 			'sources/hooks/systems/config_default/filedump_show_stats_count_total_space.php',
 			'sources/hooks/blocks/side_stats/stats_filedump.php',

@@ -19,6 +19,38 @@
  */
 
 /**
+ * Find whether some content is validated.
+ *
+ * @param  ID_TEXT		Content type
+ * @param  ID_TEXT		Content ID
+ * @return boolean		Whether it is validated
+ */
+function content_validated($content_type,$content_id)
+{
+	require_code('content');
+	list(,,$cma_info,$content_row,)=content_get_details($content_type,$content_id);
+	return ($content_row[$cma_info['validated_field']]==1);
+}
+
+/**
+ * Send a "your content has been validated" notification out to the submitter of some content. Only call if this is true ;).
+ *
+ * @param  ID_TEXT		Content type
+ * @param  ID_TEXT		Content ID
+ */
+function send_content_validated_notification($content_type,$content_id)
+{
+	require_code('content');
+	list($content_title,$submitter_id,,,$content_url)=content_get_details($content_type,$content_id);
+
+	require_code('notifications');
+	require_lang('unvalidated');
+	$subject=do_lang('CONTENT_VALIDATED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$content_title);
+	$mail=do_lang('CONTENT_VALIDATED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($content_title),array($content_url->evaluate()));
+	dispatch_notification('content_validated',NULL,$subject,$mail,array($submitter_id));
+}
+
+/**
  * Send (by e-mail) a validation request for a submitted item to the admin.
  *
  * @param  ID_TEXT		The validation request will say one of this type has been submitted. By convention it is the language code of what was done, e.g. ADD_DOWNLOAD
@@ -76,8 +108,10 @@ function send_validation_request($type,$table,$non_integer_id,$id,$url,$member_i
 
 	$comcode=do_template('VALIDATION_REQUEST',array('_GUID'=>'1885be371b2ff7810287715ef2f7b948','USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'TYPE'=>$type,'ID'=>$id,'URL'=>$url),get_site_default_lang());
 
-	require_code('mail');
-	mail_wrap(do_lang('UNVALIDATED_TITLE',$title,'','',get_site_default_lang()),$comcode->evaluate(get_site_default_lang(),false));
+	require_code('notifications');
+	$subject=do_lang('UNVALIDATED_TITLE',$title,'','',get_site_default_lang());
+	$message=$comcode->evaluate(get_site_default_lang(),false);
+	dispatch_notification('needs_validation',NULL,$subject,$message);
 }
 
 /**

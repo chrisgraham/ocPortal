@@ -2544,7 +2544,7 @@ Xmpp4Js.Transport.Base = function(config) {
          * @event error
          * @param \{DomElement} the body element of the node received.
          *
-         * A non-terminal error has occured. Connection is not necisarily closed.
+         * A non-terminal error has occurred. Connection is not necisarily closed.
          */
         error : true,
         

@@ -74,6 +74,7 @@ class Hook_addon_registry_backup
 	{
 		return array(
 
+			'sources/hooks/systems/notifications/backup_finished.php',
 			'sources/hooks/systems/config_default/backup_overwrite.php',
 			'sources/hooks/systems/config_default/backup_server_hostname.php',
 			'sources/hooks/systems/config_default/backup_server_password.php',

@@ -45,27 +45,29 @@ Marking as read is a function only available for forums, to save you the hassle 
 
 This function is not available for individual topics, as to reach the button, you would be marking the topic as read anyway.
 [html]</div>[/html]
-[title="2"]Tracking[/title]
+[title="2"]Notifications[/title]
 [html]<div class="float_surrounder">[/html]
-[exp_thumb="The button to track a forum" float="left"]forum_tracking_Track-forum-link[/exp_thumb]
-[exp_thumb="Options for tracking a topic in your member profile" float="right"]forum_tracking_Tracking-options[/exp_thumb]
-Tracking allows you to mark topics for notification; when a new reply is posted, you will be notified by e-mail of its presence. Also an e-mail notification will be sent if a topic is moved (as long as there is activity within the last two weeks). There is an automatic tracking option that each member may set in his/her profile (options for automatically marking topics the member posts in to be tracked).
+[exp_thumb="The button to get notifications for a forum" float="left"]forum_tracking_Track-forum-link[/exp_thumb]
+[exp_thumb="Options for getting notifications for a topic in your member profile" float="right"]forum_tracking_Tracking-options[/exp_thumb]
+Notifications (previously called 'tracking' -- note that the screenshots in this tutorial are out-dated) allows you to mark topics for notification; when a new reply is posted, you will be notified of its presence (e.g. by e-mail). Also a notification can be sent if a topic is moved (as long as there is activity within the last two weeks). There is an automatic notifications option that each member may set in his/her profile (options for automatically enabling topics the member posts in for notifications).
 
-As well as automatic tracking, you can tell ocPortal to track topics manually, by clicking the "track topic" button in the topic view.
-[exp_thumb="The button to track a topic" float="right"]forum_tracking_Track-topic-link[/exp_thumb]
+As well as automatic notifications, you can enable notifications for topics manually, by clicking the "monitor" button in the topic view.
+[exp_thumb="The button to enable notifications for a topic" float="right"]forum_tracking_Track-topic-link[/exp_thumb]
 
-You can also mark whole forums to be tracked, by clicking the "track forum" button in the forum view. Note that if you mark a forum to be tracked, all sub-forums will be marked to be tracked too.
+You can also mark whole forums for notifications, by clicking the "monitor" button in the forum view. Note that if you enable notifications in a forum it does not automatically enable for sub-forums of that forum.
+
+In fact, since ocPortal 8, you can set notifications for virtually any category of content. This can all be configured within your member settings.
 [html]</div>[/html]
-[title="2"]Untracking[/title]
+[title="2"]Disabling notifications[/title]
 [html]<div class="float_surrounder">[/html]
-[exp_thumb="The button to untrack a forum" float="left"]forum_tracking_Untrack-forum-link[/exp_thumb]
-[exp_thumb="The button to untrack a topic" float="right"]forum_tracking_Untrack-topic-link[/exp_thumb]
-As well as tracking topics and forums, you can easily mark them to not be tracked, using the untrack buttons. To untrack a topic, just click the "untrack topic" button in the topic view, and to untrack a forum, click the "untrack forum" button in the forum view.
+[exp_thumb="The button to disable notifications for a forum" float="left"]forum_tracking_Untrack-forum-link[/exp_thumb]
+[exp_thumb="The button to disable notifications for a topic" float="right"]forum_tracking_Untrack-topic-link[/exp_thumb]
+After enabling notifications topics and forums, you can easily disable it again, using the obvious buttons.
 [html]</div>[/html]
 
 [concepts
  1_key="Virtual forum"   1_value="A special, separate forum view that lists special types of topic, such as Private Topics."
- 2_key="Tracking"        2_value="By tracking a topic, you get e-mail notifications when there are new posts to that topic. Also known as subscribing in some forum systems."
+ 2_key="Notifications"   2_value="By enabling notifications, you get notifications when there is new content. Also known as subscribing or tracking in some forum systems."
  3_key="Forum view"      3_value="The screen where you view a forum on. From it you see a list of the topics in the forum you are in any any subforums."
  4_key="Topic view"      4_value="The screen where you view a topic on. From it you can read the posts in the topic."
 ]Concepts[/concepts]

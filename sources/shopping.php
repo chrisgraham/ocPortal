@@ -166,24 +166,18 @@ function show_cart_image()
 }
 
 /**
- * Send Staff mails when purchase is done
+ * Tell the staff the shopping order was placed
  *
  * @param  AUTO_LINK		Order Id
 */
 function purchase_done_staff_mail($order_id)
 {
-	//Mail dispatch notification to site staffs
-
-	$email_address	=	array(get_option('staff_address'));
-
-
-	$member_name	=	$GLOBALS['OCF_DRIVER']->get_username(get_member());
-
-	$message	=do_lang('ORDER_PLACED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($order_id)),get_site_default_lang());
-
-	require_code('mail');
-
-	mail_wrap(do_lang('ORDER_PLACED_MAIL_SUBJECT',get_site_name(),strval($order_id),get_site_default_lang()),$message,$email_address,$member_name,'','',3,NULL,false,NULL,false,false);
+	$member_id=$GLOBALS['SITE_DB']->query_value('shopping_order','c_member_id',array('id'=>$order_id));
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+	$subject=do_lang('ORDER_PLACED_MAIL_SUBJECT',get_site_name(),strval($order_id),get_site_default_lang());
+	$message=do_lang('ORDER_PLACED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($username),array(strval($order_id)),get_site_default_lang());
+	require_code('notifications');
+	dispatch_notification('new_order',NULL,$subject,$message);
 }
 
 /**
@@ -208,17 +202,13 @@ function find_products_in_cart()
 */
 function stock_maintain_warn_mail($product_name,$product_id)
 {
-	$email_address	=	array(get_option('staff_address'));
-
-	$member_name	=	$GLOBALS['OCF_DRIVER']->get_username(get_member());
-
 	$product_info_url	=	build_url(array('page'=>'catalogues','type'=>'entry','id'=>$product_id),get_module_zone('catalogues'));
 
-	$message	=do_lang('STOCK_MAINTENANCE_WARN_MAIL',comcode_escape(get_site_name()),comcode_escape($member_name),array($product_name,$product_info_url->evaluate()),get_site_default_lang());
+	$subject=do_lang('STOCK_LEVEL_MAIL_SUBJECT',get_site_name(),$product_name,NULL,get_site_default_lang());
+	$message=do_lang('STOCK_MAINTENANCE_WARN_MAIL',comcode_escape(get_site_name()),comcode_escape($product_name),array($product_info_url->evaluate()),get_site_default_lang());
 
-	require_code('mail');
-
-	mail_wrap(do_lang('STOCK_LEVEL_MAIL_SUBJECT',get_site_name(),$product_name,NULL,get_site_default_lang()),$message,$email_address,$member_name,'','',3,NULL,false,NULL,false,false);
+	require_code('notifications');
+	dispatch_notification('low_stock',NULL,$subject,$message,NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
 }	
 
 /**

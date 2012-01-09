@@ -56,6 +56,7 @@ class Module_points
 		delete_config_option('points_voting');
 		delete_config_option('points_per_day');
 		delete_config_option('points_per_daily_visit');
+		delete_config_option('points_if_liked');
 		delete_config_option('points_show_personal_stats_points_left');
 		delete_config_option('points_show_personal_stats_points_used');
 		delete_config_option('points_show_personal_stats_gift_points_left');
@@ -128,6 +129,11 @@ class Module_points
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
 		{
 			delete_config_option('points_show_personal_profile_link');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<7))
+		{
+			add_config_option('POINTS_IF_LIKED','points_if_liked','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<5))

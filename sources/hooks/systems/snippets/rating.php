@@ -28,8 +28,6 @@ class Hook_rating
 	 */
 	function run()
 	{
-		require_code('feedback');
-
 		if (get_option('is_on_rating')=='0') return do_lang_tempcode('INTERNAL_ERROR');
 
 		// Has there actually been any rating?
@@ -38,30 +36,12 @@ class Hook_rating
 		$type2=get_param('type');
 		if ($type2!='') $type.='_'.$type2;
 		$id=get_param('id');
-		if (($rating>10) || ($rating<1)) log_hack_attack_and_exit('VOTE_CHEAT');
 
 		$self_url=get_param('self_url');
 		$title=get_param('self_title');
 
-		if (!has_specific_permission(get_member(),'rate',get_page_name())) return do_lang_tempcode('INTERNAL_ERROR');
-		if (already_rated($type,$id)) return do_lang_tempcode('THANKYOU_FOR_RATING_SHORT');
-
-		$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$type,'rating_for_id'=>$id,'rating_member'=>get_member(),'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
-
-		if (/*(get_value('likes')==='1') && */($rating==10) && ($type2==''))
-		{
-			require_code('content');
-			if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$type,$id))
-				syndicate_described_activity('LIKES',$title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
-		}
-
-		if ((!is_guest()) && (addon_installed('points')))
-		{
-			require_code('points');
-			$_count=point_info(get_member());
-			$count=array_key_exists('points_gained_rating',$_count)?$_count['points_gained_rating']:0;
-			$GLOBALS['FORUM_DRIVER']->set_custom_field(get_member(),'points_gained_rating',$count+1);
-		}
+		require_code('feedback');
+		do_specific_rating($rating,get_page_name(),get_member(),$type,$type2,$id,$self_url,$title);
 
 		$template=get_param('template');
 		if (($type2=='') && ($template!=''))

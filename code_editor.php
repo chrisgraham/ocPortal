@@ -287,7 +287,7 @@ function do_get_path($given_password)
 	$test=open_up_ftp_connection();
 	if (is_string($test))
 	{
-		echo '<h1 class="main_page_title">An FTP error occured</h1>';
+		echo '<h1 class="main_page_title">An FTP error occurred</h1>';
 		echo '<p>'.htmlentities($test).'</p>';
 		return;
 	}

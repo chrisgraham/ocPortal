@@ -85,10 +85,12 @@ class Hook_addon_registry_staff_messaging
 			'adminzone/pages/modules/admin_messaging.php',
 			'MESSAGING_MESSAGE_SCREEN.tpl',
 			'messaging.css',
+			'sources/hooks/systems/notifications/messaging.php',
 			'lang/EN/messaging.ini',
 			'data/form_to_email.php',
 			'sources/blocks/main_contact_simple.php',
 			'sources/blocks/main_contact_us.php',
+			'sources/hooks/systems/notifications/messaging.php',
 		);
 	}
 
@@ -152,8 +154,8 @@ class Hook_addon_registry_staff_messaging
 				do_lorem_template('BLOCK_MAIN_CONTACT_US',array(
 					'COMMENT_DETAILS'=>$comment_details,
 					'MESSAGE'=>lorem_phrase(),
-					'TRACKING'=>lorem_phrase(),
-					'TRACKING_URL'=>placeholder_url(),
+					'NOTIFICATIONS_ENABLED'=>lorem_phrase(),
+					'NOTIFICATION_CHANGE_URL'=>placeholder_url(),
 					'FIRST_POST'=>lorem_paragraph_html(),
 						)
 			),NULL,'',true),

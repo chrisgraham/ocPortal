@@ -29,6 +29,8 @@ class Hook_content_meta_aware_iotd
 	function info()
 	{
 		return array(
+			'content_type_label'=>'iotds:IOTD',
+
 			'table'=>'iotd',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

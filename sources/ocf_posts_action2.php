@@ -89,7 +89,7 @@ function ocf_member_handle_promotion($member_id=NULL)
 }
 
 /**
- * Send out tracker information, as a topic just got a new post.
+ * Send out a notification, as a topic just got a new post.
  *
  * @param  URLPATH		The URL to view the new post.
  * @param  AUTO_LINK		The ID of the topic that got posted in.
@@ -101,109 +101,21 @@ function ocf_member_handle_promotion($member_id=NULL)
  * @param  ?MEMBER		Only send the notification to this member (NULL: no such limit).
  * @param  boolean		Whether this is for a Private Topic.
  */
-function ocf_send_tracker_about($url,$topic_id,$forum_id,$sender_member_id,$is_starter,$post,$topic_title,$limit_to=NULL,$is_pt=false)
+function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,$is_starter,$post,$topic_title,$limit_to=NULL,$is_pt=false)
 {
-	if (running_script('stress_test_loader')) return;
-
 	if ((is_null($forum_id)) && ($is_starter)) return;
-
-	$their_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($sender_member_id,'m_username');
-
-	// Find a list of people who potential track this
-	// ==============================================
-
-	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_to','t_pt_from','t_cache_first_title'),array('id'=>$topic_id),'',1);
 	if (!array_key_exists(0,$topic_info)) return; // Topic's gone missing somehow (e.g. race condition)
 	$topic_title=$topic_info[0]['t_cache_first_title'];
 
-	$start=0;
-	do
-	{
-		$trackers=array();
-		if ($start==0) // Only on first iteration as not ranged
-		{
-			if (!is_null($limit_to)) $trackers[$limit_to]=1;
-			if ((is_null($forum_id)) && (get_value('ocf_optional_pt_tracking')!=='1'))
-			{
-				if ($topic_info[0]['t_pt_from']!=$sender_member_id) $trackers[$topic_info[0]['t_pt_from']]=1;
-				if ($topic_info[0]['t_pt_to']!=$sender_member_id) $trackers[$topic_info[0]['t_pt_to']]=1;
-			}
-		}
-		if ((!is_null($forum_id)) || (get_value('ocf_optional_pt_tracking')==='1'))
-		{
-			// Who tracks this topic? (all stored trackers definitely have permission to)
-			$members1=$GLOBALS['FORUM_DB']->query_select('f_topic_tracking',array('r_member_id','r_last_message_time'),array('r_topic_id'=>$topic_id),'',100,$start);
-			foreach ($members1 as $member)
-			{
-				$member_id=$member['r_member_id'];
-				if ($member_id==$sender_member_id) continue;
-	
-				// We do not send out tracking if there have been tracking mails before the members last read and now
-				if ($member['r_last_message_time']!=0)
-					$last_time_read=$GLOBALS['FORUM_DB']->query_value_null_ok('f_read_logs','l_time',array('l_member_id'=>$member_id,'l_topic_id'=>$topic_id));
-				if (($member['r_last_message_time']==0) || ($last_time_read>$member['r_last_message_time']) || (is_null($last_time_read)))
-					$trackers[$member_id]=1;
-			}
-	
-			// Who tracks this forum? (all stored trackers definitely have permission to)
-			$members2=$GLOBALS['FORUM_DB']->query_select('f_forum_tracking',array('r_member_id'),array('r_forum_id'=>$forum_id),'',100,$start);
-			foreach ($members2 as $member)
-			{
-				if ($member['r_member_id']==$sender_member_id) continue;
+	$sender_username=$GLOBALS['FORUM_DRIVER']->get_username($sender_member_id);
 
-				if (has_specific_permission($member['r_member_id'],'may_track_forums'))
-				{
-					$trackers[$member['r_member_id']]=1;
-				} else
-				{
-					$GLOBALS['FORUM_DB']->query_delete('f_forum_tracking',array('r_member_id'=>$member['r_member_id']));
-				}
-			}
-		} else
-		{
-			$members1=array();
-			$members2=array();
-		}
+	$subject=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL_SUBJECT':'POST_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$topic_title);
+	$mail=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL':'POST_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($url),array(comcode_escape($sender_username),$post,$topic_title));
 
-		// Send out tracking mails
-		// =======================
-
-		$emails=array();
-		$usernames=array();
-		foreach (array_keys($trackers) as $tracking_member_id)
-		{
-			if ((!is_null($limit_to)) && ($limit_to!=$tracking_member_id)) continue;
-
-			$lang=$GLOBALS['OCF_DRIVER']->get_member_row_field($tracking_member_id,'m_language');
-
-			if (!array_key_exists($lang,$emails))
-			{
-				$emails[$lang]=array();
-				$usernames[$lang]=array();
-			}
-
-			$emails[$lang][]=$GLOBALS['OCF_DRIVER']->get_member_row_field($tracking_member_id,'m_email_address');
-			$usernames[$lang][]=$GLOBALS['OCF_DRIVER']->get_member_row_field($tracking_member_id,'m_username');
-		}
-		if (count($emails)!=0)
-		{
-			require_code('mail');
-			foreach (array_keys($emails) as $lang)
-			{
-				$subject=do_lang($is_starter?'TOPIC_TRACKING_MAIL_SUBJECT':'TRACKING_MAIL_SUBJECT',get_site_name(),$topic_title,NULL,$lang);
-				$mail=do_lang($is_starter?'TOPIC_TRACKING_MAIL':'TRACKING_MAIL',get_site_name(),comcode_escape($url),array(comcode_escape($their_username),$post,$topic_title),$lang);
-
-				mail_wrap($subject,$mail,$emails[$lang],$usernames[$lang],'','',3,NULL,true,get_member());
-			}
-		}
-		
-		$start+=100;
-	}
-	while ((array_key_exists(0,$members1)) || (array_key_exists(0,$members2)));
-
-	$GLOBALS['FORUM_DB']->query_update('f_topic_tracking',array('r_last_message_time'=>time()),array('r_topic_id'=>$topic_id));
+	require_code('notifications');
+	dispatch_notification($is_pt?'ocf_pt':'ocf_topic',strval($topic_id),$subject,$mail);
 }
 
 /**

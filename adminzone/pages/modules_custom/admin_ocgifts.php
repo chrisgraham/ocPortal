@@ -101,7 +101,7 @@ class Module_admin_ocgifts extends standard_aed_module
 				'gift_id'=>'AUTO_LINK',
 				'add_time'=>'TIME',
 				'is_anonymous'=>'BINARY',
-				'topic_id'=>'?AUTO_LINK',
+				'topic_id'=>'?AUTO_LINK', // TODO: Remove
 				'gift_message'=>'LONG_TEXT',
 			));
 		}

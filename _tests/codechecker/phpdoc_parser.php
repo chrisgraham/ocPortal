@@ -23,6 +23,7 @@ require('lib.php');
 
 if (isset($_SERVER['argv']))
 {
+	$extra=array();
 	foreach ($_SERVER['argv'] as $index=>$argv)
 	{
 		$argv=str_replace('\\\\','\\',$argv);

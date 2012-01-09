@@ -47,10 +47,10 @@ require_code('dump_addons');
 require_code('version');
 require_code('downloads2');
 $version = ocp_version_number();
-$version_for_name = preg_replace('/\./','',$version);
+$version_for_name = preg_replace('/\./','',float_to_raw_string($version));
 
 $get_cat = get_param('cat',NULL);
-if($get_cat == NULL)
+if($get_cat === NULL)
 {
 	exit("Please pass the category name in the URL (?cat=name).");
 }

@@ -239,10 +239,10 @@ function page_not_found($codename,$zone)
 	if ((ocp_srv('HTTP_REFERER')!='') && (!handle_has_checked_recently('request-'.$zone.':'.$codename)))
 	{
 		require_code('failure');
-		relay_error_mail(do_lang('_MISSING_RESOURCE',$zone.':'.$codename).' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false);
+		relay_error_notification(do_lang('_MISSING_RESOURCE',$zone.':'.$codename).' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_page');
 	}
 
-	$title=get_page_title('ERROR_OCCURED');
+	$title=get_page_title('ERROR_OCCURRED');
 	$add_access=has_actual_page_access(get_member(),'cms_comcode_pages',NULL,NULL,'submit_highrange_content');
 	$redirect_access=addon_installed('redirects_editor') && has_actual_page_access(get_member(),'admin_redirects');
 	require_lang('zones');

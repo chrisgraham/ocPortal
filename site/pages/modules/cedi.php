@@ -340,6 +340,15 @@ class Module_cedi
 		require_css('cedi');
 
 		// Decide what to do
+		if ($type=='findpost')
+		{
+			$post_id=get_param_integer('id');
+			$page_id=$GLOBALS['SITE_DB']->query_select('seedy_posts','page_id',array('id'=>$post_id));
+			$redirect=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$page_id),'_SELF',NULL,false,false,false,'post_'.strval($post_id));
+			require_code('site2');
+			assign_refresh($redirect,0.0);
+			return do_template('REDIRECT_SCREEN',array('URL'=>$redirect,'TITLE'=>get_page_title('CEDI'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		}
 		if ($type=='misc') return $this->page();
 		if ($type=='random') return $this->random();
 		if ($type=='changes') return $this->changes();
@@ -393,7 +402,7 @@ class Module_cedi
 			$id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON p.title=t.id','p.id',array('text_original'=>$find));
 			if (is_null($id))
 			{
-				$title=get_page_title('ERROR_OCCURED');
+				$title=get_page_title('ERROR_OCCURRED');
 				$add_access=(has_submit_permission('low',get_member(),get_ip_address(),'cms_cedi'));
 				require_lang('zones');
 				$add_url=$add_access?build_url(array('page'=>'cms_cedi','type'=>'add_page','id'=>$find,'redirect'=>get_self_url(true,true)),get_module_zone('cms_cedi')):new ocp_tempcode();
@@ -519,7 +528,7 @@ class Module_cedi
 			} else $extra=new ocp_tempcode();
 			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_link($poster,false,true);
 			$rate_url=get_self_url(true);
-			$posts->attach(do_template('CEDI_POST',array('_GUID'=>'a29b107abfaf7689c8392676c63093f5','INCLUDE_EXPANSION'=>$include_expansion_here,'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),'STAFF_ACCESS'=>$staff_access,'EXP_IMG'=>$exp_img,'RATE_URL'=>$rate_url.'#post_'.strval($post_id),'RATING'=>$rating,'ID'=>strval($myrow['id']),'POSTER_URL'=>$poster_url,'POSTER'=>$username,'POST_DATE_RAW'=>strval($post_date_raw),'POST_DATE'=>$post_date,'POST'=>$post,'BUTTONS'=>$extra)));
+			$posts->attach(do_template('CEDI_POST',array('_GUID'=>'a29b107abfaf7689c8392676c63093f5','INCLUDE_EXPANSION'=>$include_expansion_here,'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),'STAFF_ACCESS'=>$staff_access,'RATE_URL'=>$rate_url.'#post_'.strval($post_id),'RATING'=>$rating,'ID'=>strval($myrow['id']),'POSTER_URL'=>$poster_url,'POSTER'=>$username,'POST_DATE_RAW'=>strval($post_date_raw),'POST_DATE'=>$post_date,'POST'=>$post,'BUTTONS'=>$extra)));
 
 			$num_posts++;
 		}

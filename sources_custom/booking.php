@@ -435,18 +435,17 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
  */
 function send_booking_emails($request)
 {
-	require_code('mail');
-
-	$customer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
-	$customer_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+	require_code('notifications');
 
 	// Send receipt to customer
+	$customer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
+	$customer_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 	$receipt=do_template('BOOKING_CONFIRM_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'DETAILS'=>make_booking_request_printable($request)));
-	mail_wrap(do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name()),static_evaluate_tempcode($receipt),array($customer_email),$customer_name);
+	dispatch_notification('booking_customer',NULL,do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name()),static_evaluate_tempcode($receipt),array(get_member()),A_FROM_SYSTEM_PRIVILEGED);
 
 	// Send notice to staff
-	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'DETAILS'=>make_booking_request_printable($request)));
-	mail_wrap(do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),get_site_name()),static_evaluate_tempcode($notice),NULL,NULL,'','',2);
+	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'DETAILS'=>make_booking_request_printable($request)),get_site_default_lang());
+	dispatch_notification('booking_inform_staff',NULL,do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),get_site_name()),static_evaluate_tempcode($notice),NULL,NULL,2);
 }
 
 /**

@@ -711,6 +711,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	if (is_null($submitter)) $submitter=get_member();
 
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
+	$catalogue_title=$GLOBALS['SITE_DB']->query_value('catalogue_catalogues','c_title',array('c_name'=>$catalogue_name));
 	$fields=collapse_2d_complexity('id','cf_type',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
 
 	require_code('comcode_check');
@@ -776,6 +777,16 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 	if ($catalogue_name[0]!='_')
 	{
+		if ($validated==1)
+		{
+			require_lang('catalogues');
+			require_code('notifications');
+			$subject=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),array($catalogue_title));
+			$self_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues'),NULL,false,false,true);
+			$mail=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(strip_comcode($title)),array(comcode_escape($self_url->evaluate()),comcode_escape($catalogue_title)));
+			dispatch_notification('catalogue_entry',strval($id),$subject,$mail);
+		}
+
 		log_it('ADD_CATALOGUE_ENTRY',strval($id),$title);
 	}
 
@@ -802,6 +813,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords='',$meta_description='')
 {
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
+	$catalogue_title=$GLOBALS['SITE_DB']->query_value('catalogue_catalogues','c_title',array('c_name'=>$catalogue_name));
 	$fields=collapse_2d_complexity('id','cf_type',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
 
 	$original_submitter=$GLOBALS['SITE_DB']->query_value('catalogue_entries','ce_submitter',array('id'=>$id));
@@ -809,6 +821,14 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	$old_category_id=$GLOBALS['SITE_DB']->query_value('catalogue_entries','cc_id',array('id'=>$id));
 
 	if (!addon_installed('unvalidated')) $validated=1;
+
+	require_code('submit');
+	$just_validated=(!content_validated('catalogue_entry',strval($id))) && ($validated==1);
+	if ($just_validated)
+	{
+		send_content_validated_notification('catalogue_entry',strval($id));
+	}
+
 	$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_edit_date'=>time(),'cc_id'=>$category_id,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks),array('id'=>$id),'',1);
 	require_code('fields');
 	$title=NULL;
@@ -864,6 +884,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	require_code('seo2');
 	seo_meta_set_for_explicit('catalogue_entry',strval($id),$meta_keywords,$meta_description);
 
+	$self_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues'),NULL,false,false,true);
+
 	if ($category_id!=$old_category_id)
 	{
 		calculate_category_child_count_cache($category_id);
@@ -874,9 +896,20 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	decache('main_recent_cc_entries');
 
 	if ($catalogue_name[0]!='_')
+	{
 		log_it('EDIT_CATALOGUE_ENTRY',strval($id),$title);
 
-	update_spacer_post($allow_comments!=0,'catalogues',strval($id),build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues'),NULL,false,false,true),$title,get_value('comment_forum__catalogues__'.$catalogue_name));
+		if ($just_validated)
+		{
+			require_lang('catalogues');
+			require_code('notifications');
+			$subject=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title),array($catalogue_title));
+			$mail=do_lang('CATALOGUE_ENTRY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(strip_comcode($title)),array(comcode_escape($self_url->evaluate()),comcode_escape($catalogue_title)));
+			dispatch_notification('catalogue_entry',strval($id),$subject,$mail);
+		}
+	}
+
+	update_spacer_post($allow_comments!=0,'catalogues',strval($id),$self_url,$title,get_value('comment_forum__catalogues__'.$catalogue_name));
 }
 
 /**

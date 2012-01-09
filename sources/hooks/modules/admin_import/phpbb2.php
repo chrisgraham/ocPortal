@@ -56,7 +56,7 @@ class Hook_phpbb2
 								'ocf_topics',
 								'ocf_posts',
 								'ocf_polls_and_votes',
-								//'ocf_tracking',
+								//'notifications',
 								'ocf_personal_topics',
 								'ocf_post_files',
 								'wordfilter',
@@ -71,7 +71,7 @@ class Hook_phpbb2
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members'),
 								'ocf_post_files'=>array('ocf_posts','ocf_personal_topics'),
-								'ocf_tracking'=>array('ocf_topics','ocf_members'),
+								'notifications'=>array('ocf_topics','ocf_members'),
 								'ocf_personal_topics'=>array('ocf_members'),
 							);
 		$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
@@ -868,10 +868,9 @@ class Hook_phpbb2
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_tracking($db,$table_prefix,$file_base)
+	function import_notifications($db,$table_prefix,$file_base)
 	{
-		require_code('ocf_forums');
-		require_code('ocf_topics');
+		require_code('notifications');
 		
 		$row_start=0;
 		$rows=array();
@@ -880,15 +879,15 @@ class Hook_phpbb2
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'topics_watch',200,$row_start);
 			foreach ($rows as $row)
 			{
-				if (import_check_if_imported('topic_tracking',strval($row['topic_id']).'-'.strval($row['user_id']))) continue;
+				if (import_check_if_imported('topic_notification',strval($row['topic_id']).'-'.strval($row['user_id']))) continue;
 	
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
 				if (is_null($topic_id)) continue;
-				ocf_track_topic($topic_id,$member_id,false,false);
+				enable_notifications('ocf_topic',strval($topic_id),$member_id);
 
-				import_id_remap_put('topic_tracking',strval($row['topic_id']).'-'.strval($row['user_id']),1);
+				import_id_remap_put('topic_notification',strval($row['topic_id']).'-'.strval($row['user_id']),1);
 			}
 	
 			$row_start+=200;

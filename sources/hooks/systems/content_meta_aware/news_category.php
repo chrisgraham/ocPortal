@@ -29,6 +29,8 @@ class Hook_content_meta_aware_news_category
 	function info()
 	{
 		return array(
+			'content_type_label'=>'news:NEWS_CATEGORY',
+
 			'table'=>'news_categories',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,

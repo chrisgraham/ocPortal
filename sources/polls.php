@@ -411,6 +411,13 @@ function set_poll($id)
 	$GLOBALS['SITE_DB']->query_update('poll',array('is_current'=>0),array('is_current'=>1));
 	$GLOBALS['SITE_DB']->query_update('poll',array('is_current'=>1,'date_and_time'=>time()),array('id'=>$id),'',1);
 	decache('main_poll');
+
+	require_lang('polls');
+	require_code('notifications');
+	$subject=do_lang('POLL_CHOSEN_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$question);
+	$poll_url=build_url(array('page'=>'polls','type'=>'view','id'=>$id),get_module_zone('polls'),NULL,false,false,true);
+	$mail=do_lang('POLL_CHOSEN_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($question),$poll_url->evaluate());
+	dispatch_notification('poll_chosen',NULL,$subject,$mail);
 }
 
 /**

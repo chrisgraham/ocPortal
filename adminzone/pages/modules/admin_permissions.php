@@ -36,7 +36,7 @@ class Module_admin_permissions
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=7;
 		$info['update_require_upgrade']=1;
 		$info['locked']=true;
 		return $info;
@@ -73,6 +73,7 @@ class Module_admin_permissions
 		delete_specific_permission('avoid_simplified_adminzone_look');
 		delete_specific_permission('see_software_docs');
 		delete_specific_permission('bypass_validation_lowrange_content');
+		delete_specific_permission('may_enable_staff_notifications');
 
 		$false_permissions=get_false_permissions();
 		foreach ($false_permissions as $permission)
@@ -96,6 +97,11 @@ class Module_admin_permissions
 				'k_message'=>'LONG_TRANS',
 				'k_match_key'=>'SHORT_TEXT'
 			));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<7))
+		{
+			add_specific_permission('STAFF_ACTIONS','may_enable_staff_notifications',false);
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
@@ -147,7 +153,7 @@ class Module_admin_permissions
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'GENERAL_SETTINGS\' WHERE the_name IN (\'jump_to_unvalidated\',\'see_unvalidated\',\'bypass_word_filter\',\'bypass_flood_control\')');
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'SEEDY\' WHERE the_name IN (\'cedi_edit\',\'cedi_manage_tree\',\'cedi_edit_pages\')');
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'FILE_DUMP\' WHERE the_name IN (\'delete_anything_filedump\',\'upload_filedump\',\'upload_anything_filedump\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'SECTION_FORUMS\' WHERE the_name IN (\'run_multi_moderations\',\'vote_in_polls\',\'may_track_forums\',\'use_pt\',\'may_report_post\',\'view_member_photos\',\'use_quick_reply\',\'rename_self\',\'view_any_profile_field\',\'disable_lost_passwords\',\'close_own_topics\',\'edit_own_polls\',\'double_post\',\'warn_members\',\'see_warnings\',\'see_ip\',\'may_choose_custom_title\',\'delete_account\',\'view_other_pt\',\'view_poll_results_before_voting\',\'may_unblind_own_poll\',\'moderate_personal_topic\')');
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'SECTION_FORUMS\' WHERE the_name IN (\'run_multi_moderations\',\'vote_in_polls\',\'use_pt\',\'may_report_post\',\'view_member_photos\',\'use_quick_reply\',\'rename_self\',\'view_any_profile_field\',\'disable_lost_passwords\',\'close_own_topics\',\'edit_own_polls\',\'double_post\',\'warn_members\',\'see_warnings\',\'see_ip\',\'may_choose_custom_title\',\'delete_account\',\'view_other_pt\',\'view_poll_results_before_voting\',\'may_unblind_own_poll\',\'moderate_personal_topic\')');
 		}
 
 		if (is_null($upgrade_from))
