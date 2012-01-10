@@ -548,7 +548,7 @@ class Hook_catalogue_items
 		if($current_stock<$quantity && $stock_maintained)
 		{
 			require_code('site');
-			attach_message(do_lang_tempcode('LOW_STOCK_DESPATCH_FAILED',$product_name));
+			attach_message(do_lang_tempcode('LOW_STOCK_DISPATCH_FAILED',$product_name));
 		}
 
 		$stock_after_dispatch	=	$current_stock-$quantity;
