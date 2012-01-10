@@ -253,7 +253,16 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			}
 		}
 	}
-	if (is_null($to_name)) $to_name=get_site_name();
+	if (is_null($to_name))
+	{
+		if ($to_email[0]==$staff_address)
+		{
+			$to_name='';
+		} else
+		{
+			$to_name=get_site_name();
+		}
+	}
 	if ($from_email=='') $from_email=get_option('staff_address');
 	if ($from_name=='') $from_name=get_site_name();
 	$from_email=str_replace("\r",'',$from_email);
@@ -533,7 +542,13 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 
 								if (count($to_email)==1)
 								{
-									fwrite($socket,'To: '.(is_array($to_name)?$to_name[$i]:$to_name).' <'.$to_email[$i].'>'."\r\n");
+									if ($to_name==='')
+									{
+										fwrite($socket,'To: '.$to_email[$i]."\r\n");
+									} else
+									{
+										fwrite($socket,'To: '.(is_array($to_name)?$to_name[$i]:$to_name).' <'.$to_email[$i].'>'."\r\n");
+									}
 								} else
 								{
 									fwrite($socket,'To: '.(is_array($to_name)?$to_name[$i]:$to_name)."\r\n");
@@ -574,12 +589,19 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 
 			$additional='';
 			if (get_option('enveloper_override')=='1') $additional='-f '.$website_email;
-			if (ini_get('safe_mode')=='1')
+			if ($to_name==='')
 			{
-				$worked=mail('"'.(is_array($to_name)?$to_name[$i]:$to_name).'" <'.$to.'>',$tightened_subject,$sending_message,$headers);
+				$to_line=$to;
 			} else
 			{
-				$worked=mail('"'.(is_array($to_name)?$to_name[$i]:$to_name).'" <'.$to.'>',$tightened_subject,$sending_message,$headers,$additional);
+				$to_line='"'.(is_array($to_name)?$to_name[$i]:$to_name).'" <'.$to.'>';
+			}
+			if (ini_get('safe_mode')=='1')
+			{
+				$worked=mail($to_line,$tightened_subject,$sending_message,$headers);
+			} else
+			{
+				$worked=mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
 			}
 			$GLOBALS['SUPRESS_ERROR_DEATH']=false;
 		}
@@ -772,7 +794,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 	}
 	$from_email=trim(post_param('email',''));
 
-	$to_name=get_site_name();
+	$to_name=mixed();
 	if (is_null($to_email))
 	{
 		$from_name=post_param('name',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
