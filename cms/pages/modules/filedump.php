@@ -165,7 +165,7 @@ class Module_filedump
 			$pre.=$dirs[$i].'/';
 			$i++;
 		}
-		if (!$file_tree->is_empty()) breadcrumb_add_segment($file_tree,$d); else breadcrumb_set_self(make_string_tempcode(escape_html($d)));
+		if (!$file_tree->is_empty()) breadcrumb_add_segment($file_tree,$d); else breadcrumb_set_self(($i==1)?do_lang_tempcode('FILE_DUMP'):make_string_tempcode(escape_html($d)));
 
 		// Check directory exists
 		$fullpath=get_custom_file_base().'/uploads/filedump'.$place;
