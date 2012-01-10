@@ -143,7 +143,8 @@ function log_cart_actions($action)
 */
 function delete_incomplete_orders()
 {
-	$GLOBALS['SITE_DB']->query("DELETE t1,t2 FROM ".get_table_prefix()."shopping_order t1, ".get_table_prefix()."shopping_order_details t2 WHERE t1.id=t2.order_id AND t1.order_status='ORDER_STATUS_awaiting_payment' AND t1.c_member=".strval(get_member())." AND session_id=".strval(get_session_id()));
+	// Delete any 2-week+ old orders
+	$GLOBALS['SITE_DB']->query("DELETE t1,t2 FROM ".get_table_prefix()."shopping_order t1, ".get_table_prefix()."shopping_order_details t2 WHERE t1.id=t2.order_id AND t1.order_status='ORDER_STATUS_awaiting_payment' AND t1.c_member=".strval(get_member())." AND session_id=".strval(get_session_id()).' AND add_date<'.strval(time()-60*60*24*14));
 }
 
 /**
