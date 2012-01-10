@@ -4,13 +4,15 @@
 
 <div class="login_page">
 	{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
-		<h2>{!facebook:LOGIN_NATIVE_HEADER}</h2>
+		{+START,IF_EMPTY,{$FB_CONNECT_UID}}
+			<h2>{!facebook:LOGIN_NATIVE_HEADER}</h2>
 
-		<p>{!facebook:LOGIN_USING_FACEBOOK}</p>
+			<p>{!facebook:LOGIN_USING_FACEBOOK}</p>
 
-		<span xmlns:fb="http://api.facebook.com/1.0/">
-			<fb:login-button size="large" scope="email,user_birthday"></fb:login-button>
-		</span>
+			<span xmlns:fb="http://api.facebook.com/1.0/">
+				<fb:login-button size="large" scope="email,user_birthday"></fb:login-button>
+			</span>
+		{+END}
 		
 		<h2>{!facebook:LOGIN_NATIVE_HEADER,{$SITE_NAME*}}</h2>
 	{+END}

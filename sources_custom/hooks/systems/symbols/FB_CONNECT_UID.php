@@ -11,7 +11,7 @@ class Hook_symbol_FB_CONNECT_UID
 			global $FACEBOOK_CONNECT;
 			if (!is_null($FACEBOOK_CONNECT))
 			{
-				$value=strval($FACEBOOK_CONNECT->getUserFromAccessToken());
+				$value=strval($FACEBOOK_CONNECT->getUser());
 				if ($value=='0') $value='';
 			}
 		}

@@ -25,21 +25,23 @@
 				}
 			});
 
-			FB.Event.subscribe('auth.login',function() {
-				{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}}
-					{$,Only refresh if this was a new login initiated just now on the client side}
-					if (window.location.href.indexOf('login')!=-1)
-					{
-						window.location='{$PAGE_LINK;*,:}';
-					}
-					else
-					{
-						window.setTimeout(function() { {$,Firefox needs us to wait a bit}
-							window.location.reload();
-						},500);
-					}
-				{+END}
-			});
+			{+START,IF_EMPTY,{$FB_CONNECT_UID}}
+				FB.Event.subscribe('auth.login',function() {
+					{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}}
+						{$,Only refresh if this was a new login initiated just now on the client side}
+						if (window.location.href.indexOf('login')!=-1)
+						{
+							window.location='{$SELF_URL;*,1}';
+						}
+						else
+						{
+							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
+								window.location.reload();
+							},500);
+						}
+					{+END}
+				});
+			{+END}
 		};
 
 		// Load the SDK Asynchronously
