@@ -2336,10 +2336,14 @@ function click_link(link)
 {
 	var cancelled=false;
 
+	var backup=link.onclick;
+
+	link.onclick=function(e) { if (!e) e=window.event; cancelBubbling(e); };
+
 	if (typeof document.createEvent!='undefined')
 	{
 		var event=document.createEvent('MouseEvents');
-			event.initMouseEvent('click',true,true,window,
+		event.initMouseEvent('click',true,true,window,
 			0,0,0,0,0,
 			false,false,false,false,
 			0,null
@@ -2350,6 +2354,7 @@ function click_link(link)
 	{
 		cancelled=!link.fireEvent('onclick');
 	}
+	link.onclick=backup;
 
 	if (!cancelled)
 	{

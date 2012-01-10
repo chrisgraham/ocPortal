@@ -257,10 +257,10 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	{
 		if ($to_email[0]==$staff_address)
 		{
-			$to_name='';
+			$to_name=get_site_name();
 		} else
 		{
-			$to_name=get_site_name();
+			$to_name='';
 		}
 	}
 	if ($from_email=='') $from_email=get_option('staff_address');

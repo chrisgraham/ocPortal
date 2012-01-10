@@ -1435,7 +1435,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	color: #ffffff; /* {$,wizard, 100% W/B} */
 	border-radius: 6px;
 	-moz-border-radius: 6px;
-	background-image: url("{$IMG,standardboxes/title_gradiant}");
+	background-image: url("{$IMG,standardboxes/title_gradient}");
 	opacity: 0.85;
 	text-shadow: 1px 1px 1px #000000; /* {$,wizard, 100% !W/B} */
 	margin: 0 2px;
@@ -2117,7 +2117,7 @@ ul.sitemap li li {
 	border: 1px solid #ddaec1; /* {$,wizard, 68% seed + 32% W/B} */
 	padding: 4px;
 	margin-bottom: 0;
-	background: #e1b7c8 url("{$IMG,quote_gradiant}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
+	background: #e1b7c8 url("{$IMG,quote_gradient}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
 }
 
 .comcode_quote_content,

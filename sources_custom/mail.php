@@ -97,7 +97,16 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			}
 		}
 	}
-	if (is_null($to_name)) $to_name=get_site_name();
+	if (is_null($to_name))
+	{
+		if ($to_email[0]==$staff_address)
+		{
+			$to_name=get_site_name();
+		} else
+		{
+			$to_name='';
+		}
+	}
 	if ($from_email=='') $from_email=get_option('staff_address');
 	if ($from_name=='') $from_name=get_site_name();
 
@@ -256,9 +265,18 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 
 	// Create a message
 	$to_array=array();
-	foreach ($to_email as $_to_email)
+	if ($to_name==='')
 	{
-		$to_array[$_to_email]=$to_name;
+		foreach ($to_email as $_to_email)
+		{
+			$to_array[]=$_to_email;
+		}
+	} else
+	{
+		foreach ($to_email as $i=>$_to_email)
+		{
+			$to_array[$_to_email]=is_array($to_name)?$to_name[$i]:$to_name;
+		}
 	}
 	$message=Swift_Message::newInstance($subject)
 		->setFrom(array($website_email=>$from_name))

@@ -193,7 +193,7 @@ class Module_shopping
 	 */
 	function get_entry_points()
 	{
-		return array('my_orders'=>'MY_ORDERS','view_cart'=>'SHOPPING');
+		return array('my_orders'=>'MY_ORDERS','misc'=>'SHOPPING');
 	}
 
 	/**
@@ -219,7 +219,7 @@ class Module_shopping
 
 		$type	=	get_param('type','misc');
 		
-		if ($type=='view_cart') 	return	$this->view_shopping_cart();
+		if ($type=='misc') 	return	$this->view_shopping_cart();
 		if ($type=='add_item') 		return	$this->add_item_to_cart();
 		if ($type=='update_cart') 	return	$this->update_cart();
 		if ($type=='empty_cart') 	return	$this->empty_cart();
@@ -386,7 +386,7 @@ class Module_shopping
 
 		log_cart_actions('Added to cart');
 
-		$cart_view		=	build_url(array('page'=>'_SELF','type'=>'view_cart'),'_SELF');
+		$cart_view		=	build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		
 		return redirect_screen($title,$cart_view,do_lang_tempcode('SUCCESS'));		
 	}
@@ -444,7 +444,7 @@ class Module_shopping
 			remove_from_cart($product_to_remove);
 
 
-		$cart_view	=	build_url(array('page'=>'_SELF','type'=>'view_cart'),'_SELF');
+		$cart_view	=	build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		
 		return redirect_screen($title,$cart_view,do_lang_tempcode('CART_UPDATED'));
 	}
@@ -462,7 +462,7 @@ class Module_shopping
 
 		$GLOBALS['SITE_DB']->query_update('shopping_cart', array('is_deleted'=>1),array('session_id'=>get_session_id()));
 		
-		$cart_view	=	build_url(array('page'=>'_SELF','type'=>'view_cart'),'_SELF');
+		$cart_view	=	build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		
 		return redirect_screen($title,$cart_view,do_lang_tempcode('CART_EMPTIED'));
 	}
@@ -493,9 +493,9 @@ class Module_shopping
 	{
 		$title		=	get_page_title('_PURCHASE_FINISHED');
 		
-		breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES')),array('_SELF:_SELF:view_cart',do_lang_tempcode('SHOPPING'))));
+		breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES')),array('_SELF:_SELF:misc',do_lang_tempcode('SHOPPING'))));
 
-		$message=get_param('message',NULL,true);
+		$message=get_param('message',NULL,true); // TODO: Assumption, needs to really go through the payment gateway API
 
 		if (get_param_integer('cancel',0)==0)
 		{
@@ -556,17 +556,18 @@ class Module_shopping
 				}
 			}
 
-			$order_id	=	post_param('custom','-1');
-
-			handle_transaction_script();
-
 			attach_message(do_lang_tempcode('SUCCESS'),'inform');
 
-			$object=find_product(do_lang('CART-ORDER',$order_id));
-
-			if (method_exists($object,'get_finish_url'))
+			if (count($_POST)!=0)
 			{
-				return redirect_screen($title,$object->get_finish_url(),$message);
+				$order_id = handle_transaction_script();
+
+				$object=find_product(do_lang('CART-ORDER',$order_id));
+
+				if (method_exists($object,'get_finish_url'))
+				{
+					return redirect_screen($title,$object->get_finish_url(),$message);
+				}
 			}
 
 			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);

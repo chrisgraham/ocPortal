@@ -165,21 +165,24 @@ class Hook_paypal
 		$receiver_email=post_param('receiver_email');
 
 		// post back to PayPal system to validate
-		require_code('files');
-		$pure_post=isset($GLOBALS['PURE_POST'])?$GLOBALS['PURE_POST']:$_POST;
-		$x=0;
-		$res=mixed();
-		do
+		if (!ecommerce_test_mode())
 		{
-			$res=http_download_file('http://'.(ecommerce_test_mode()?'www.sandbox.paypal.com':'www.paypal.com').'/cgi-bin/webscr',NULL,false,false,'ocPortal',$pure_post+array('cmd'=>'_notify-validate'));
-			$x++;
-		}
-		while ((is_null($res)) && ($x<3));
-		if (is_null($res)) my_exit(do_lang('IPN_SOCKET_ERROR'));
-		if (!(strcmp($res,'VERIFIED')==0))
-		{
-			if (post_param('txn_type','')=='send_money') exit('Unexpected'); // PayPal has been seen to mess up on send_money transactions, making the IPN unverifiable
-			my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post));
+			require_code('files');
+			$pure_post=isset($GLOBALS['PURE_POST'])?$GLOBALS['PURE_POST']:$_POST;
+			$x=0;
+			$res=mixed();
+			do
+			{
+				$res=http_download_file('http://'.(ecommerce_test_mode()?'www.sandbox.paypal.com':'www.paypal.com').'/cgi-bin/webscr',NULL,false,false,'ocPortal',$pure_post+array('cmd'=>'_notify-validate'));
+				$x++;
+			}
+			while ((is_null($res)) && ($x<3));
+			if (is_null($res)) my_exit(do_lang('IPN_SOCKET_ERROR'));
+			if (!(strcmp($res,'VERIFIED')==0))
+			{
+				if (post_param('txn_type','')=='send_money') exit('Unexpected'); // PayPal has been seen to mess up on send_money transactions, making the IPN unverifiable
+				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post));
+			}
 		}
 
 		$txn_type=str_replace('-','_',post_param('txn_type'));

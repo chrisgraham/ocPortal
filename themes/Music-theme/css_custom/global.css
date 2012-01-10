@@ -2042,7 +2042,7 @@ ul.sitemap li li {
 	border: 1px solid #a7c2bd; /* {$,wizard, 68% seed + 32% W/B} */
 	padding: 4px;
 	margin-bottom: 0;
-	background: #b1c9c4 url("{$IMG,quote_gradiant}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
+	background: #b1c9c4 url("{$IMG,quote_gradient}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
 }
 
 .comcode_quote_content,

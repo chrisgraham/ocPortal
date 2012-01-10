@@ -722,9 +722,9 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 							fatal_exit(do_lang_tempcode('UNRESOLVABLE_COLOURS',escape_html($colour_needed)));
 					}
 
-					if ($show=='standardboxes/title_gradiant')
+					if ($show=='standardboxes/title_gradient')
 					{
-						$img=generate_gradiant($colours['lgradcolor'],$colours['dgradcolor']);
+						$img=generate_gradient($colours['lgradcolor'],$colours['dgradcolor']);
 					}
 					elseif ((preg_match('#^standardboxes/nontitle\_left#',$show)!=0) || (preg_match('#^standardboxes/nontitle\_right#',$show)!=0) || (preg_match('#^standardboxes/bottom\_right#',$show)!=0) || (preg_match('#^standardboxes/bottom\_left#',$show)!=0))
 					{
@@ -742,7 +742,7 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					{
 						$img=generate_recoloured_image($path,'#c1cee3',$colours['lightborder'],'#5B84C3',$colours['lgradcolor'],'#466EAD',$colours['dgradcolor']);
 					}
-					elseif ($show=='quote_gradiant')
+					elseif ($show=='quote_gradient')
 					{
 						$img=generate_recoloured_image($path,'#072A66',$colours['bordcolor'],'#C7D5EC',$colours['comcode_quote_left'],'#8CA7D2',$colours['comcode_quote_right'],'horizontal');
 					}
@@ -774,7 +774,7 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					{
 						$img=generate_recoloured_image($path,'#82A3D8',$colours['zg_top'],'#82A3D8',$colours['zg_top']);
 					}
-					elseif ($show=='zone_gradiant')
+					elseif ($show=='zone_gradient')
 					{
 						$img=generate_recoloured_image($path,'#FFFFFF'/*3660A6*/,'#FFFFFF'/*$colours['zg_peak']*/,'#82A3D8',$colours['zg_top'],'#3865A9',$colours['zg_bot']);
 					}
@@ -1474,15 +1474,15 @@ function re_hue_image($path,$seed,$source_theme,$also_s_and_v=false,$invert=fals
 }
 
 /**
- * Generate a gradiant for a theme.
+ * Generate a gradient for a theme.
  *
  * @param  string		Colour for the top.
  * @param  string		Colour for the bottom.
  * @return resource  The image
  */
-function generate_gradiant($top,$bottom)
+function generate_gradient($top,$bottom)
 {
-	$gradiant=imagecreate(1,27);
+	$gradient=imagecreate(1,27);
 	$width=27;
 
 	$topred=intval(base_convert(substr($top,0,2),16,10));
@@ -1499,12 +1499,12 @@ function generate_gradiant($top,$bottom)
 
 	for ($i=0;$i<$width;$i++)
 	{
-		$color=imagecolorallocate($gradiant,$topred+intval(round($dr*floatval($i))),$topgrn+intval(round($dg*floatval($i))),$topblu+intval(round($db*floatval($i))));
-		imagesetpixel($gradiant,0,$i,$color);
-		//ImageLine($gradiant, 0,$i, 1,$i+1 ,$color);
+		$color=imagecolorallocate($gradient,$topred+intval(round($dr*floatval($i))),$topgrn+intval(round($dg*floatval($i))),$topblu+intval(round($db*floatval($i))));
+		imagesetpixel($gradient,0,$i,$color);
+		//ImageLine($gradient, 0,$i, 1,$i+1 ,$color);
 	}
 
-	return $gradiant;
+	return $gradient;
 }
 
 /**
@@ -1515,16 +1515,16 @@ function generate_gradiant($top,$bottom)
  * @param  string		The colour code of what we want as our "minor" colour (often a border colour)
  * @param  string		The colour code of what we have as our first major colour (often the only major colour)
  * @param  string		The colour code of what we want as our first major colour (often the only major colour)
- * @param  ?string	The colour code of what we have as our second major colour (the gradiant target, at the bottom/right of the image) (NULL: not gradianted)
- * @param  ?string	The colour code of what we want as our second major colour (the gradiant target, at the bottom/right of the image) (NULL: not gradianted)
- * @param  string		The directional code for the gradiant
+ * @param  ?string	The colour code of what we have as our second major colour (the gradient target, at the bottom/right of the image) (NULL: not gradiented)
+ * @param  ?string	The colour code of what we want as our second major colour (the gradient target, at the bottom/right of the image) (NULL: not gradiented)
+ * @param  string		The directional code for the gradient
  * @set    vertical horizontal
  * @param  ?array		An array that is used to limit where we do our conversion on. It specifies, for each y-offset, the x-offset we start from (NULL: no such limitation)
- * @param  integer	What the gradiant assumed start-position will be offset by (in the gradiant direction).
+ * @param  integer	What the gradient assumed start-position will be offset by (in the gradient direction).
  * @param  boolean	Whether the pixel_x_start array is actually an end array.
  * @return resource  The image
  */
-function generate_recoloured_image($path,$colour_a_orig,$colour_a_new,$colour_b1_orig,$colour_b1_new,$colour_b2_orig=NULL,$colour_b2_new=NULL,$gradiant_direction='vertical',$pixel_x_start_array=NULL,$gradiant_offset=0,$end_array=false)
+function generate_recoloured_image($path,$colour_a_orig,$colour_a_new,$colour_b1_orig,$colour_b1_new,$colour_b2_orig=NULL,$colour_b2_new=NULL,$gradient_direction='vertical',$pixel_x_start_array=NULL,$gradient_offset=0,$end_array=false)
 {
 	/*$colour_a_new=$colour_a_orig;  For testing: a null conversion
 	$colour_b1_new=$colour_b1_orig;
@@ -1620,11 +1620,11 @@ function generate_recoloured_image($path,$colour_a_orig,$colour_a_new,$colour_b1
 		} else $trans_colour=imagecolortransparent($_image);
 	} else $trans_colour=imagecolortransparent($_image);
 	
-	$gh=floatval($height-$gradiant_offset);
-	$gw=floatval($width-$gradiant_offset);
+	$gh=floatval($height-$gradient_offset);
+	$gw=floatval($width-$gradient_offset);
 	
-	$vertical=($gradiant_direction=='vertical');
-	$horizontal=($gradiant_direction=='horizontal');
+	$vertical=($gradient_direction=='vertical');
+	$horizontal=($gradient_direction=='horizontal');
 
 	for ($y=0;$y<$height;$y++)
 	{
@@ -1654,11 +1654,11 @@ function generate_recoloured_image($path,$colour_a_orig,$colour_a_new,$colour_b1
 			{
 				if ($vertical)
 				{
-					$ratio=floatval($y-$gradiant_offset)/$gh;
+					$ratio=floatval($y-$gradient_offset)/$gh;
 				}
 				elseif ($horizontal)
 				{
-					$ratio=floatval($x-$gradiant_offset)/$gw;
+					$ratio=floatval($x-$gradient_offset)/$gw;
 				}
 				$colour_b_orig_r=intval($colour_b1_orig_r+($ratio*($colour_b2_orig_r-$colour_b1_orig_r)));
 				$colour_b_orig_g=intval($colour_b1_orig_g+($ratio*($colour_b2_orig_g-$colour_b1_orig_g)));

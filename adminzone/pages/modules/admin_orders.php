@@ -234,7 +234,7 @@ class Module_admin_orders
 				$transaction_id	=	hyperlink($transaction_details_link,strval($row['transaction_id']));
 			}
 			else
-				$transaction_id	=	do_lang_tempcode('UNCOMPLETED_TRANCACTION');
+				$transaction_id	=	do_lang_tempcode('INCOMPLETED_TRANCACTION');
 
 			$order_entries->attach(results_entry(
 						array(

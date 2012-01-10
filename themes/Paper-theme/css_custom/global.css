@@ -586,7 +586,7 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 .standardbox_title_classic, .tabletitle_internal, .standardbox_title_med, .standardbox_title_curved, .standardbox_title_curved_iesucks {
 	/* Structure */
 	background-color: #bf5a3e; /* {$,wizard, 100% seed} */
-	background-image: url("{$IMG,standardboxes/title_gradiant}");
+	background-image: url("{$IMG,standardboxes/title_gradient}");
 	background-repeat: repeat-x;
 
 	/* Text */
@@ -1488,7 +1488,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	color: #ffffff; /* {$,wizard, 100% W/B} */
 	border-radius: 6px;
 	-moz-border-radius: 6px;
-	background-image: url("{$IMG,standardboxes/title_gradiant}");
+	background-image: url("{$IMG,standardboxes/title_gradient}");
 	opacity: 0.85;
 	text-shadow: 1px 1px 1px #000000; /* {$,wizard, 100% !W/B} */
 	margin: 0 2px;
@@ -2170,7 +2170,7 @@ ul.sitemap li li {
 	border: 1px solid #d48f7c; /* {$,wizard, 68% seed + 32% W/B} */
 	padding: 4px;
 	margin-bottom: 0;
-	background: #d99c8b url("{$IMG,quote_gradiant}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
+	background: #d99c8b url("{$IMG,quote_gradient}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
 }
 
 .comcode_quote_content,

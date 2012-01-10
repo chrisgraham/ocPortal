@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>sources/mail.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -76,7 +78,7 @@
 			<key>filename</key>
 			<string>config_editor.php</string>
 			<key>lastUsed</key>
-			<date>2011-10-31T22:51:23Z</date>
+			<date>2012-01-09T20:31:50Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -154,7 +156,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2011-12-17T11:07:42Z</date>
+			<date>2012-01-09T20:31:49Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -166,7 +168,7 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2012-01-02T15:37:57Z</date>
+			<date>2012-01-10T01:11:59Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -494,6 +496,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>cms/pages/modules/filedump.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>84</integer>
+				<key>line</key>
+				<integer>160</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>136</integer>
 		</dict>
 		<key>collaboration/index.php</key>
 		<dict>
@@ -931,6 +947,34 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>site/pages/modules/shopping.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>549</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>530</integer>
+		</dict>
+		<key>sources/blocks/main_contact_simple.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>72</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>60</integer>
+		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
 			<key>caret</key>
@@ -945,6 +989,20 @@
 			<key>firstVisibleLine</key>
 			<integer>21</integer>
 		</dict>
+		<key>sources/catalogues2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>811</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>792</integer>
+		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
 			<key>caret</key>
@@ -958,6 +1016,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>8</integer>
+		</dict>
+		<key>sources/ecommerce.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>361</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>332</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1552,14 +1624,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>17</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>131</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>222</integer>
+			<integer>117</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>131</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>131</integer>
+			</dict>
 		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
@@ -1616,6 +1704,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
+		</dict>
+		<key>sources/mail.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>550</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>783</integer>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -2095,20 +2197,6 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates/FILE_DUMP_SCREEN.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>18</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>themes/default/templates/FORM_SCREEN_INPUT_LIST_ENTRY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2239,36 +2327,6 @@
 				<integer>15</integer>
 				<key>line</key>
 				<integer>124</integer>
-			</dict>
-		</dict>
-		<key>themes/default/templates/JAVASCRIPT_SWFUPLOAD.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>2039</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2017</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>2039</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>2039</integer>
 			</dict>
 		</dict>
 		<key>themes/default/templates/MENU_BRANCH_popup.tpl</key>
@@ -2964,9 +3022,19 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>site/pages/modules/shopping.php</string>
+		<string>cms/pages/modules/filedump.php</string>
+		<string>sources/catalogues2.php</string>
+		<string>sources/blocks/main_contact_simple.php</string>
+		<string>sources/mail.php</string>
+		<string>sources/ecommerce.php</string>
+		<string>sources/hooks/systems/ecommerce_via/paypal.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{1000, 134}, {895, 887}}</string>
+	<string>{{688, 291}, {895, 887}}</string>
 </dict>
 </plist>

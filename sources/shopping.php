@@ -138,10 +138,10 @@ function log_cart_actions($action)
 }
 
 /**
- *	Delete uncomplete orders of current session of logged in user.
+ *	Delete incomplete orders of current session of logged in user.
  * 
 */
-function delete_uncomplete_orders()
+function delete_incomplete_orders()
 {
 	$GLOBALS['SITE_DB']->query("DELETE t1,t2 FROM ".get_table_prefix()."shopping_order t1, ".get_table_prefix()."shopping_order_details t2 WHERE t1.id=t2.order_id AND t1.order_status='ORDER_STATUS_awaiting_payment' AND t1.c_member=".strval(get_member())." AND session_id=".strval(get_session_id()));
 }
@@ -153,7 +153,7 @@ function delete_uncomplete_orders()
 */
 function show_cart_image()
 {
-	$cart_url	=	build_url(array('page'=>'shopping','type'=>'view_cart'),get_module_zone('shopping'));
+	$cart_url	=	build_url(array('page'=>'shopping','type'=>'misc'),get_module_zone('shopping'));
 
 	$item_count	=	$GLOBALS['SITE_DB']->query_value_null_ok('shopping_cart','count(id)',array('session_id'=>get_session_id(),'is_deleted'=>0));
 
@@ -251,7 +251,7 @@ function payment_form()
 
 	$tax_opt_out	=	get_order_tax_opt_out_status();
 
-	delete_uncomplete_orders();
+	delete_incomplete_orders();
 
 	if(count($cart_items)>0)
 	{

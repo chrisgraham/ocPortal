@@ -33,15 +33,23 @@ function handle_product_orders($purchase_id,$details,$product)
 {
 	require_code('shopping');
 
-	$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>$details['ORDER_STATUS']),array('order_id'=>$purchase_id));
+	$old_status = $GLOBALS['SITE_DB']->query_value('shopping_order_details','dispatch_status',array('order_id'=>$purchase_id));
 
-	$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>$details['ORDER_STATUS'],'transaction_id'=>$details['txn_id']),array('id'=>$purchase_id));
+	if ($old_status != $details['ORDER_STATUS'])
+	{
+		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>$details['ORDER_STATUS']),array('order_id'=>$purchase_id));
 
-	purchase_done_staff_mail($purchase_id);
+		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>$details['ORDER_STATUS'],'transaction_id'=>$details['txn_id']),array('id'=>$purchase_id));
 
-	if($details['ORDER_STATUS']=='ORDER_STATUS_dispatched')
-	{	
-		update_stock($purchase_id);	//Update stock after dispatch
+		if($details['ORDER_STATUS']=='ORDER_STATUS_payment_received')
+		{	
+			purchase_done_staff_mail($purchase_id);
+		}
+
+		if($details['ORDER_STATUS']=='ORDER_STATUS_dispatched')
+		{	
+			update_stock($purchase_id);	//Update stock after dispatch
+		}
 	}
 }
 
@@ -68,21 +76,21 @@ class Hook_cart_orders
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
-		$where=array('order_status'=>'ORDER_STATUS_awaiting_payment');
+		$where=(db_string_equal_to('order_status','ORDER_STATUS_awaiting_payment').' OR '.db_string_equal_to('order_status','ORDER_STATUS_payment_received'));
 		if (!is_null($search))
 		{
 			if (!$search_titles_not_ids)
 			{
 				$l=do_lang('CART_ORDER','',NULL,NULL,$site_lang?get_site_default_lang():user_lang());
 				if (substr($search,0,strlen($l))!=$l) return array();
-				$where['id']=intval(substr($search,strlen($l)));
+				$where.=' AND id='.strval(intval(substr($search,strlen($l))));
 			}
 		}
 
 		$start=0;
 		do
 		{
-			$orders		=	$GLOBALS['SITE_DB']->query_select('shopping_order',array('id','tot_price'),$where,'',500);
+			$orders		=	$GLOBALS['SITE_DB']->query('SELECT id,tot_price FROM '.get_table_prefix().'shopping_order WHERE '.$where,500);
 
 			foreach($orders as $order)
 			{			

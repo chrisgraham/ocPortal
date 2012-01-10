@@ -598,7 +598,7 @@ class Hook_catalogue_items
 
 		require_code('images');
 
-		$shopping_cart_url	=	build_url(array('page'=>'shopping','type'=>'view_cart'),'_SELF');
+		$shopping_cart_url	=	build_url(array('page'=>'shopping','type'=>'misc'),'_SELF');
 
 		$product_title			=	NULL;
 

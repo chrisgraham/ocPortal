@@ -352,6 +352,8 @@ function perform_local_payment()
 
 /**
  * Handle IPN's.
+ *
+ * @return ID_TEXT		The ID of the purchase-type (meaning depends on item_name)
  */
 function handle_transaction_script()
 {
@@ -359,7 +361,7 @@ function handle_transaction_script()
 	$via=get_param('from',get_option('payment_gateway'));
 	require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 	$object=object_factory('Hook_'.$via);
-	
+
 	ob_start();
 	$test=false;
 	if (!$test)
@@ -380,6 +382,8 @@ function handle_transaction_script()
 	}
 
 	handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$via,post_param('period3',''));
+
+	return $purchase_id;
 
 	//my_exit(do_lang('SUCCESS'));
 }

@@ -1908,7 +1908,7 @@ ul.sitemap li li {
 	border: 1px solid #c8847d; /* {$,wizard, 68% seed + 32% W/B} */
 	padding: 4px;
 	margin-bottom: 0;
-	background: #ce928c url("{$IMG,quote_gradiant}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
+	background: #ce928c url("{$IMG,quote_gradient}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
 }
 
 .comcode_quote_content,

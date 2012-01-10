@@ -315,7 +315,7 @@ form { /* For IE6 */
 		text-align: right;
 		margin-top: 59px;
 		padding: 8px 5px 6px 0;
-		background: url('{$IMG,zone_gradiant}') repeat-x;
+		background: url('{$IMG,zone_gradient}') repeat-x;
 	{+END}
 	min-height: 15px;
 	font-weight: bold;
@@ -913,7 +913,7 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 .standardbox_title_classic, .tabletitle_internal, .standardbox_title_med, .standardbox_title_curved, .standardbox_title_curved_iesucks {
 	/* Structure */
 	background-color: #426aa9; /* {$,wizard, 100% seed} */
-	background-image: url("{$IMG,standardboxes/title_gradiant}");
+	background-image: url("{$IMG,standardboxes/title_gradient}");
 	background-repeat: repeat-x;
 
 	/* Text */
@@ -952,7 +952,7 @@ h3.standardbox_title_classic {
 .menu_block .standardbox_title_panel {
 	background-color: #426aa9 !important; /* {$,wizard, 100% seed} */
 	color: white !important;
-	background-image: url("{$IMG,standardboxes/title_gradiant}");
+	background-image: url("{$IMG,standardboxes/title_gradient}");
 	background-repeat: repeat-x;
 }
 
@@ -1941,7 +1941,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	color: #ffffff; /* {$,wizard, 100% W/B} */
 	border-radius: 6px 6px 6px 6px;
 	-moz-border-radius: 6px;
-	background-image: url("{$IMG,standardboxes/title_gradiant}");
+	background-image: url("{$IMG,standardboxes/title_gradient}");
 	opacity: 0.85;
 	text-shadow: 1px 1px 1px #000000; /* {$,wizard, 100% !W/B} */
 	margin: 0 2px;
@@ -2673,7 +2673,7 @@ ul.sitemap li li {
 	border: 1px solid #7f9ac5; /* {$,wizard, 68% seed + 32% W/B} */
 	padding: 4px;
 	margin-bottom: 0;
-	background: #8ea6cb url("{$IMG,quote_gradiant}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
+	background: #8ea6cb url("{$IMG,quote_gradient}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
 }
 
 .comcode_quote_content,
