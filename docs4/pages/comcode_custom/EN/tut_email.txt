@@ -6,7 +6,19 @@ E-mail can be a complex thing. There are a number of e-mail protocols with stand
 
 [title="2"]E-mails in ocPortal[/title]
 
-ocPortal constructs it's e-mails using language strings: each different e-mail is built from a different language string. These strings are written in Comcode. ocPortal sends out e-mails in dual format -- both [abbr="HyperText Markup Language"]HTML[/abbr] and plain text, so that people can disable HTML in their e-mail software if they wish to. Plain text versions are made by automatic tidying-up of the Comcode (i.e. making it a little more human-readable), and HTML versions are made by parsing the Comcode to HTML and then putting that HTML inside the [tt]MAIL[/tt] template. ocPortal goes to great lengths to reduce the chance of e-mails being marked as spam, and embeds all CSS and images inside the e-mail instead of linking (so that the user does not need images enabled to see them -- most users do not as it can aid spammer tracking).
+ocPortal constructs its e-mails using language strings: each different e-mail is built from a different language string. These strings are written in Comcode. ocPortal sends out e-mails in dual format -- both [abbr="HyperText Markup Language"]HTML[/abbr] and plain text, so that people can disable HTML in their e-mail software if they wish to. Plain text versions are made by automatic tidying-up of the Comcode (i.e. making it a little more human-readable), and HTML versions are made by parsing the Comcode to HTML and then putting that HTML inside the [tt]MAIL[/tt] template. ocPortal goes to great lengths to reduce the chance of e-mails being marked as spam, and embeds all CSS and images inside the e-mail instead of linking (so that the user does not need images enabled to see them -- most users do not as it can aid spammer tracking).
+
+Just taking one example, the 'MAIL_NEW_PASSWORD' language string from the 'ocf' language file, which is:
+[codebox]
+Your password has successfully been changed to '{1}'. You may log back into {3} from...
+
+[url="{2}"]{2}[/url]
+
+
+If you wish to change your password to something more memorable you can do so by editing your profile.
+[/codebox]
+
+You can see it is fed with various parameters, and is written in Comcode.
 
 [title="2"]Mail server overview[/title]
 
