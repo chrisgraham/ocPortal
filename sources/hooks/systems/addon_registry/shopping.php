@@ -532,7 +532,7 @@ class Hook_addon_registry_shopping
 				'PRODUCT_NAME'=>lorem_word(),
 				'AMOUNT'=>placeholder_id(),
 				'QUANTITY'=>"2",
-				'DESPATCH_STATUS'=>lorem_word_2()
+				'DISPATCH_STATUS'=>lorem_word_2()
 			);
 		}
 		return array(

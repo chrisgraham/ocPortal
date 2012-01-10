@@ -653,7 +653,7 @@ class Module_shopping
 
 			$quantity	=	$row['p_quantity'];
 
-			$products[]	=	array('PRODUCT_NAME'=>$row['p_name'],'ID'=>strval($row['p_id']),'AMOUNT'=>strval($row['p_price']),'QUANTITY'=>strval($row['p_quantity']),'DESPATCH_STATUS'=>do_lang_tempcode($row['dispatch_status']),'PRODUCT_DET_URL'=>$product_info_url,'DELIVERABLE'=>'');
+			$products[]	=	array('PRODUCT_NAME'=>$row['p_name'],'ID'=>strval($row['p_id']),'AMOUNT'=>strval($row['p_price']),'QUANTITY'=>strval($row['p_quantity']),'DISPATCH_STATUS'=>do_lang_tempcode($row['dispatch_status']),'PRODUCT_DET_URL'=>$product_info_url,'DELIVERABLE'=>'');
 		}
 
 		if (count($products)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));

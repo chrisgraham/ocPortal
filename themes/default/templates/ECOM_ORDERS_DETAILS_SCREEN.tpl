@@ -28,7 +28,7 @@
 					{QUANTITY*}
 				</td>
 				<td>
-					{DESPATCH_STATUS*}
+					{DISPATCH_STATUS*}
 				</td>
 			</tr>
 		{+END}
