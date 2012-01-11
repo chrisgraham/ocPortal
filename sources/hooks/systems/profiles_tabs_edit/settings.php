@@ -47,6 +47,8 @@ class Hook_Profiles_Tabs_Edit_settings
 		// Actualiser
 		if (post_param('submitting_settings_tab',NULL)!==NULL)
 		{
+			require_code('ocf_members_action2');
+
 			$is_ldap=ocf_is_ldap_member($member_id_of);
 			$is_httpauth=ocf_is_httpauth_member($member_id_of);
 			$is_remote=($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_password_compat_scheme')=='remote');

@@ -11,7 +11,7 @@
 		<form title="{!MESSAGE}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
 			<div style="display: inline;">
 				<p style="display: none;"><label for="post">{!MESSAGE}</label></p>
-				<textarea style="font-family: {FONT_NAME_DEFAULT*;}" class="input_text_required" onkeyup="manageScrollHeight(this);" onkeypress="if (enter_pressed(event)) return chat_post(event,{ROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="{$?,{$MOBILE},37,39}" rows="1"></textarea>
+				<textarea style="font-family: {FONT_NAME_DEFAULT*;}" class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,{ROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="{$?,{$MOBILE},37,39}" rows="1"></textarea>
 				<input type="hidden" name="font" id="font" value="{FONT_NAME_DEFAULT*}" />
 				<input type="hidden" name="colour" id="colour" value="{TEXT_COLOUR_DEFAULT*}" />
 			</div>

@@ -710,25 +710,11 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 
 	if (!function_exists('require_lang')) return;
 
-	$protocol=((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off'))?'https':'http';
-	if (!array_key_exists('HTTP_HOST',$_SERVER))
-	{
-		$domain=get_domain();
-	} else
-	{
-		$domain=$_SERVER['HTTP_HOST'];
-	}
-	$colon_pos=strpos($domain,':');
-	if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
-	$port=ocp_srv('SERVER_PORT');
-	if (($port!='') && ($port!='80')) $port=':'.$port; else $port='';
-	$default=$protocol.'://'.$domain.$port;
-	$s=ocp_srv('PHP_SELF');
-	if (substr($s,0,1)!='/') $default.='/';
-	$default.=$s;
-	$url=post_param('base_url',$default);
+	require_code('urls');
+	require_code('tempcode');
 
-	$error_url=$url.'?'.ocp_srv('QUERY_STRING');
+	$error_url=running_script('index')?static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true)):get_self_url_easy();
+
 	require_code('notifications');
 	require_code('comcode');
 	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),$text,NULL,get_site_default_lang());

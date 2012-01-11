@@ -469,6 +469,14 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 	}
 	$_cats=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news_categories '.$where.' ORDER BY id');
 
+	foreach ($_cats as $i=>$cat)
+	{
+		$_cats[$i]['nice_title']=get_translated_text($cat['nc_title']);
+	}
+	global $M_SORT_KEY;
+	$M_SORT_KEY='nice_title';
+	usort($_cats,'multi_sort');
+
 	$categories=new ocp_tempcode();
 	$add_cat=true;
 
@@ -481,7 +489,7 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 
 		if (is_null($cat['nc_owner']))
 		{
-			$li=form_input_list_entry(strval($cat['id']),($it!=array(NULL)) && in_array($cat['id'],$it),get_translated_text($cat['nc_title']).' (#'.strval($cat['id']).')');
+			$li=form_input_list_entry(strval($cat['id']),($it!=array(NULL)) && in_array($cat['id'],$it),$cat['nice_title'].' (#'.strval($cat['id']).')');
 			$categories->attach($li);
 		} else
 		{

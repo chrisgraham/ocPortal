@@ -40,9 +40,9 @@ if (!function_exists('_load_comcode_page_not_cached'))
 		{
 			$as_admin=true;
 			$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups());
-			if (array_key_exists(0,$members))
+			if (count($members)!=0)
 			{
-				$new_comcode_page_row['p_submitter']=$GLOBALS['FORUM_DRIVER']->pname_id($members[0]);
+				$new_comcode_page_row['p_submitter']=$GLOBALS['FORUM_DRIVER']->pname_id(key($members));
 			} else
 			{
 				$new_comcode_page_row['p_submitter']=db_get_first_id()+1; // On OCF and most forums, this is the first admin member
@@ -140,9 +140,9 @@ if (!function_exists('_load_comcode_page_cache_off'))
 		{
 			$as_admin=true;
 			$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups());
-			if (array_key_exists(0,$members))
+			if (count($members)!=0)
 			{
-				$new_comcode_page_row['p_submitter']=$GLOBALS['FORUM_DRIVER']->pname_id($members[0]);
+				$new_comcode_page_row['p_submitter']=$GLOBALS['FORUM_DRIVER']->pname_id(key($members));
 			} else
 			{
 				$new_comcode_page_row['p_submitter']=db_get_first_id()+1; // On OCF and most forums, this is the first admin member
