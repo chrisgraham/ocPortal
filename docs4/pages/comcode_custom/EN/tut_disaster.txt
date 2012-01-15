@@ -74,6 +74,18 @@ It should go without saying that you should only use this 'backdoor' for a short
 [exp_thumb="Delete the row corresponding to your IP address" float="right"]disaster_ban_2[/exp_thumb]
 If you are unfortunate enough to have somehow been banned from your own website, use phpMyAdmin to browse the 'usersubmitban_ip' table, and delete the row containing your IP address. If you don't know your IP address then you can find it out from http://www.myipaddress.com/.
 
+[title="2"]Resetting page ownerships[/title]
+
+If you delete or demote an admin, you may find lots of pages now show Comcode permission errors (even default ones, which are assigned to the first site admin automatically).
+
+To fix this, edit the Comcode page and assign a new submitter via the edit form.
+
+To do it en-masse, you can run this in OcCLE (this example assumes you are reassigning from member #5 to member #2):
+[code]
+:$GLOBALS['SITE_DB']->query_update('comcode_pages',array('p_submitter'=>2),array('p_submitter'=>5));
+[/code]
+and then clear the Comcode page cache from Admin Zone > Tools > Cleanup tools.
+
 [title="2"]Changing base configuration[/title]
 
 If your server base configuration has changed (such as your database password, for example) then you need to update ocPortal's [tt]info.php[/tt] config file to reflect this. You can either do this directly, or you can do it via launching the [tt]config_editor.php[/tt] script installed at the base of your website (you will need your master password to do this).

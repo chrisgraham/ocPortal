@@ -714,6 +714,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 		}
 	}
 
+	// NB: If we've got this far cache="2" is ignored. But later on (for normal expiries, different contexts, etc) cache_on will be known so not an issue.
+
 	// We will need to load the actual file
 	if (is_null($object)) $object=do_block_hunt_file($codename,$map);
 	if (is_object($object))
