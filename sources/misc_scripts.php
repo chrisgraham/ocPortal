@@ -244,6 +244,9 @@ function iframe_script()
 		@exit(get_option('closed'));
 	}
 
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 	$output=request_page($page,true);
 
 	global $ATTACHED_MESSAGES;
@@ -283,6 +286,9 @@ function page_link_chooser_script()
 	require_javascript('javascript_ajax');
 	require_javascript('javascript_tree_list');
 	require_javascript('javascript_more');
+
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	// Display
 	$content=do_template('PAGE_LINK_CHOOSER',array('NAME'=>'tree_list'));
@@ -360,6 +366,9 @@ function staff_tips_script($ret=false)
 	$content=do_template('BLOCK_MAIN_STAFF_TIPS',array('_GUID'=>'c2cffc480b7bd9beef7f78a8ee7b7359','TIP'=>$tip,'TIP_CODE'=>$tip_code,'LEVEL'=>integer_format($level),'COUNT'=>integer_format($count)));
 
 	if ($ret) return $content;
+
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	// Display
 	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'3b5596a12c46295081f09ebe5349a479','FRAME'=>true,'TITLE'=>do_lang_tempcode('TIPS'),'CONTENT'=>$content));
@@ -894,6 +903,9 @@ function block_helper_script()
 		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'575d6c8120d6001c8156560be518f296','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$block,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
 	}
 
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
@@ -931,6 +943,9 @@ function emoticons_script()
 		$content->attach(do_template('OCF_EMOTICON_ROW',array('_GUID'=>'d13e74f7febc560dc5fc241dc7914a03','CELLS'=>$current_row)));
 	
 	$content=do_template('OCF_EMOTICON_TABLE',array('_GUID'=>'d3dd9bbfacede738e2aff4712b86944b','ROWS'=>$content));
+
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$echo=do_template('POPUP_HTML_WRAP',array('_GUID'=>'8acac778b145bfe7b063317fbcae7fde','TITLE'=>do_lang_tempcode('EMOTICONS_POPUP'),'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
@@ -978,6 +993,9 @@ function question_ui_script()
 	$image_set=($_image_set=='')?array():explode(',',$_image_set);
 	$message=do_template('QUESTION_UI_BUTTONS',array('TITLE'=>$title,'IMAGES'=>$image_set,'BUTTONS'=>$button_set,'MESSAGE'=>$_message));
 	
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>escape_html($title),'CONTENT'=>$message));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();

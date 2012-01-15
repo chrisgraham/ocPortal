@@ -314,7 +314,7 @@ form { /* For IE6 */
 	{+START,IF,{$NOT,{$MOBILE}}}
 		text-align: right;
 		margin-top: 59px;
-		padding: 8px 5px 6px 0;
+		padding: 6px 5px 8px 0;
 		background: url('{$IMG,zone_gradient}') repeat-x;
 	{+END}
 	min-height: 15px;

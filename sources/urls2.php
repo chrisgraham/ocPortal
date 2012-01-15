@@ -19,6 +19,14 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__urls2()
+{
+	define('MAX_MONIKER_LENGTH',24); // TODO: Make proper option
+}
+
+/**
  * Get hidden fields for a form representing 'keep_x'. If we are having a GET form instead of a POST form, we need to do this. This function also encodes the page name, as we'll always want that.
  *
  * @param  ID_TEXT		The page for the form to go to (blank: don't attach)
@@ -497,10 +505,10 @@ function _choose_moniker($page,$type,$moniker_src,$no_exists_check_for=NULL)
 
 	$moniker=str_replace(array('ä','ö','ü','ß'),array('ae','oe','ue','ss'),$moniker_src);
 	$moniker=strtolower(preg_replace('#[^A-Za-z\d\_\-]#','-',$moniker));
-	if (strlen($moniker)>24)
+	if (strlen($moniker)>MAX_MONIKER_LENGTH)
 	{
-		$pos=strrpos(substr($moniker,0,24),'-');
-		if (($pos===false) || ($pos<12)) $pos=24;
+		$pos=strrpos(substr($moniker,0,MAX_MONIKER_LENGTH),'-');
+		if (($pos===false) || ($pos<12)) $pos=MAX_MONIKER_LENGTH;
 		$moniker=substr($moniker,0,$pos);
 	}
 	$moniker=preg_replace('#\-+#','-',$moniker);

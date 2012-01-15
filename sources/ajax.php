@@ -250,6 +250,9 @@ function comcode_convert_script()
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 	require_lang('comcode');
 
 	convert_data_encodings(true);

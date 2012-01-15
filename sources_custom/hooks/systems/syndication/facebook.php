@@ -48,9 +48,15 @@ class Hook_Syndication_facebook
 		// oauth apparently worked
 		$access_token=$FACEBOOK_CONNECT->getAccessToken();
 
-		$facebook_uid=$FACEBOOK_CONNECT->getUser();
+		if (is_null($member_id))
+		{
+			if (get_option('facebook_uid')=='')
+			{
+				$facebook_uid=$FACEBOOK_CONNECT->getUser();
+				set_option('facebook_uid',strval($facebook_uid));
+			}
+		}
 
-		// Save in two parts, as too long
 		$save_to='facebook_oauth_token';
 		if (!is_null($member_id)) $save_to.='__'.strval($member_id);
 		set_long_value($save_to,$access_token);
@@ -88,13 +94,14 @@ class Hook_Syndication_facebook
 		{
 			return $this->_send(
 				get_value('facebook_oauth_token'),
-				$row
+				$row,
+				get_option('facebook_uid'),
 			);
 		}
 		return false;
 	}
 
-	function _send($token,$row)
+	function _send($token,$row,$post_to_uid='me')
 	{
 		require_lang('facebook');
 		require_code('facebook_connect');
@@ -108,16 +115,18 @@ class Hook_Syndication_facebook
 		$message=html_entity_decode(strip_tags($message->evaluate()),ENT_COMPAT,get_charset());
 		$message=convert_to_internal_encoding($message,get_charset(),'utf-8');
 
-		$post_to_uid=get_option('facebook_uid');
-
 		// Send message
-		global $FACEBOOK_CONNECT;
+		$appid=get_option('facebook_appid');
+		$appsecret=get_option('facebook_secret_code');
+		$fb=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
+		$fb->setAccessToken($token);
+
 		$attachment=array('description'=>$message);
 		if ($name!='') $attachment['name']=$name;
 		if ($link!='') $attachment['link']=$link;
 		try
 		{
-			$ret=$FACEBOOK_CONNECT->api('/'.$post_to_uid.'/feed','POST',$attachment);
+			$ret=$fb->api('/'.$post_to_uid.'/feed','POST',$attachment);
 		}
 		catch (Exception $e)
 		{

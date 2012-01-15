@@ -21,8 +21,8 @@ var overlay_zIndex=1000;
 function open_link_as_overlay(ob,width,height)
 {
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
-		if (!width) width=900;
-		if (!height) height=700;
+		if (!width) width=800;
+		if (!height) height=550;
 		faux_open(ob.href+((ob.href.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,'_top');
 		return false;
 	{+END}

@@ -16,30 +16,30 @@
 			<td><a href="{PROFILE_URL*}">{NAME*}</a></td>
 		</tr>
 		{+START,IF_NON_EMPTY,{REAL_NAME}}
-		<tr>
-			<th>{!REALNAME}</th>
-			<td>{REAL_NAME*}</td>
-		</tr>
+			<tr>
+				<th>{!REALNAME}</th>
+				<td>{REAL_NAME*}</td>
+			</tr>
 		{+END}
 		{+START,IF_NON_EMPTY,{ROLE}}
-		<tr>
-			<th>{!ROLE}</th>
-			<td>{ROLE*}</td>
-		</tr>
+			<tr>
+				<th>{!ROLE}</th>
+				<td>{ROLE*}</td>
+			</tr>
 		{+END}
 		{+START,IF_NON_EMPTY,{ADDRESS}}
-		{+START,IF,{$OCF}}
-		<tr>
-			<th>{!ocf:_EMAIL_MEMBER}</th>
-			<td><a href="{$PAGE_LINK*,_SEARCH:contactmember:misc:{MEMBER_ID}}">{!EMAIL}</a></td>
-		</tr>
-		{+END}
-		{+START,IF,{$NOT,{$OCF}}}
-		<tr>
-			<th>{!EMAIL}</th>
-			<td><a href="{$MAILTO}{$OBFUSCATE,{ADDRESS}}">{!EMAIL}</a></td>
-		</tr>
-		{+END}
+			{+START,IF,{$OCF}}
+				<tr>
+					<th>{!ocf:ADD_PERSONAL_TOPIC}</th>
+					<td><a href="{$PAGE_LINK*,_SEARCH:topics:new_pt:{MEMBER_ID}}">{!ocf:ADD_PERSONAL_TOPIC}</a></td>
+				</tr>
+			{+END}
+			{+START,IF,{$NOT,{$OCF}}}
+				<tr>
+					<th>{!EMAIL}</th>
+					<td><a href="{$MAILTO}{$OBFUSCATE,{ADDRESS}}">{!EMAIL}</a></td>
+				</tr>
+			{+END}
 		{+END}
 	</tbody>
 </table></div>

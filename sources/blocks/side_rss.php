@@ -83,7 +83,10 @@ class Block_side_rss
 			require_code('failure');
 			if (strpos($url,'twitter')===false) // Twitter is always failing ;).
 				relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED',$url,$rss->error),false,'error_occurred_rss');
-			if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
+			if (cron_installed())
+			{
+				if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
+			}
 			return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>htmlentities($rss->error)));
 		}
 	
@@ -152,7 +155,7 @@ class Block_side_rss
  */
 function block_side_rss__cache_on($map)
 {
-	return array($GLOBALS['FORUM_DRIVER']->is_staff(get_member()),array_key_exists('max_entries',$map)?intval($map['max_entries']):10,array_key_exists('title',$map)?$map['title']:'',array_key_exists('copyright',$map)?$map['copyright']:'',array_key_exists('param',$map)?$map['param']:'');
+	return array(cron_installed()?NULL:$GLOBALS['FORUM_DRIVER']->is_staff(get_member()),array_key_exists('max_entries',$map)?intval($map['max_entries']):10,array_key_exists('title',$map)?$map['title']:'',array_key_exists('copyright',$map)?$map['copyright']:'',array_key_exists('param',$map)?$map['param']:'');
 }
 
 

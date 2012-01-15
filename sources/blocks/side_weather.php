@@ -70,7 +70,7 @@ class Block_side_weather
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array((array_key_exists(\'unit\',$map) && ($map[\'unit\']!=\'\'))?$map[\'unit\']:\'c\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+		$info['cache_on']='array(cron_installed()?NULL:$GLOBALS[\'FORUM_DRIVER\']->is_staff(get_member()),(array_key_exists(\'unit\',$map) && ($map[\'unit\']!=\'\'))?$map[\'unit\']:\'c\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
 		$info['ttl']=60;
 		return $info;
 	}
@@ -138,7 +138,10 @@ class Block_side_weather
 			$GLOBALS['DO_NOT_CACHE_THIS']=true;
 			require_code('failure');
 			relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED','',$rss->error),false,'error_occurred_weather');
-			if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
+			if (cron_installed())
+			{
+				if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
+			}
 			return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>htmlentities($rss->error)));
 		}
 

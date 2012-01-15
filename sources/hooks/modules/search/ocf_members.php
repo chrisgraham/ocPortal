@@ -340,9 +340,6 @@ class Hook_search_ocf_members
 		require_lang('ocf');
 		require_code('ocf_groups');
 
-		$redirect=get_self_url(true);
-		$email_member_url=build_url(array('page'=>'contactmember','redirect'=>$redirect,'id'=>$member_id),get_module_zone('contactmember'));
-
 		$_lines=array();
 		$primary_group=ocf_get_member_primary_group($member_id);
 		if (is_null($primary_group))
@@ -389,8 +386,13 @@ class Hook_search_ocf_members
 			{
 				if ($val['RAW']!='') $_lines[$key]=$val['RENDERED'];
 			}
-			if ((!$preview) && (has_actual_page_access(get_member(),'contactmember')))
+			if ((!$preview) && (addon_installed('ocf_contactmember')) && (has_actual_page_access(get_member(),'contactmember')))
+			{
+				$redirect=get_self_url(true);
+				$email_member_url=build_url(array('page'=>'contactmember','redirect'=>$redirect,'id'=>$member_id),get_module_zone('contactmember'));
+
 				$_lines[do_lang('ACTIONS')]=hyperlink($email_member_url,do_lang_tempcode('_EMAIL_MEMBER'));
+			}
 		}
 		
 		return $_lines;

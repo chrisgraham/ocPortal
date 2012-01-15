@@ -272,6 +272,7 @@ function comcode_helper_script()
 		require_code('form_templates');
 
 		$actual_tag=get_param('tag');
+		if (!isset($custom_tag_list[$tag])) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		$tag=$actual_tag;
 		if ($tag=='attachment_safe') $tag='attachment';
 

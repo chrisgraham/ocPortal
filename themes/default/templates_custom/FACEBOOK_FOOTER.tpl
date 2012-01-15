@@ -19,26 +19,26 @@
 					{$,Must have JS FB login before can instruct to logout. Will not re-auth -- we know we have authed due to FB_CONNECT_LOGGED_OUT being set}
 					{+START,IF,{$FB_CONNECT_LOGGED_OUT}}
 						FB.logout(function(response) {
-							if (typeof window.console!='undefined' && window.console) console.log('Logged out.');
+							if (typeof window.console!='undefined' && window.console) console.log('Facebook: Logged out.');
 						});
 					{+END}
 				}
 			});
 
+			/*Facebook: Current user is "{$FB_CONNECT_UID*}"*/
 			{+START,IF_EMPTY,{$FB_CONNECT_UID}}
 				FB.Event.subscribe('auth.login',function() {
 					{+START,IF,{$NOT,{$FB_CONNECT_LOGGED_OUT}}}
 						{$,Only refresh if this was a new login initiated just now on the client side}
-						if (window.location.href.indexOf('login')!=-1)
-						{
-							window.location='{$SELF_URL;*,1}';
-						}
-						else
-						{
-							window.setTimeout(function() { {$,Firefox needs us to wait a bit}
+						window.setTimeout(function() { {$,Firefox needs us to wait a bit}
+							if (window.location.href.indexOf('login')!=-1)
+							{
+								window.location='{$SELF_URL;,1}';
+							} else
+							{
 								window.location.reload();
-							},500);
-						}
+							}
+						},1000);
 					{+END}
 				});
 			{+END}

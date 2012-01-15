@@ -620,6 +620,14 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 	$DO_NOT_CACHE_THIS=false;
 
+	if ((cron_installed()) && (running_script('index')))
+	{
+		if ($codename=='side_weather' || $codename=='side_rss' || $codename=='main_rss') // Special cases to stop external dependencies causing issues
+		{
+			$map['cache']='2';
+		}
+	}
+
 	$object=NULL;
 	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1) || (get_param_integer('cache_blocks',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache_blocks',NULL)!==0) && (get_param_integer('cache',NULL)!==0)) && (strpos(get_param('special_page_type',''),'t')===false))
 	{

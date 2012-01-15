@@ -1450,14 +1450,15 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		$new_comcode_page_row['p_add_date']=filectime($file_base.'/'.$string);
 		list($html,$comcode_page_row,$title_to_use)=_load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included);
 	}
-	if ((!$is_panel) && ($title_to_use!==NULL) && (!$being_included))
+	$filtered_title_to_use=mixed();
+	if ((!$is_panel) && (!$being_included))
 	{
-		if ($title_to_use!='')
+		if (($title_to_use!==NULL) && ($title_to_use!=''))
 		{
 			get_page_title($title_to_use,false); // Little hack - this gets shift encoded, but shift encoding can't survive a tempcode cache. This will force it to reshift. It'll also make sure DISPLAYED_TITLE gets set.
 			$filtered_title_to_use=@html_entity_decode(strip_tags($title_to_use),ENT_QUOTES,get_charset());
-			seo_meta_load_for('comcode_page',$zone.':'.$codename,$filtered_title_to_use);
 		}
+		seo_meta_load_for('comcode_page',$zone.':'.$codename,$filtered_title_to_use);
 	}
 	$LAST_COMCODE_PARSED_TITLE=$title_to_use;
 

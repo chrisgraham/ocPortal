@@ -138,10 +138,13 @@ class Hook_Profiles_Tabs_about
 				$extra_sections=array_merge($extra_sections,$hook_result);
 			}
 		}
-		if ((($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_allow_emails')==1) || (get_option('allow_email_disable')=='0')) && (!is_guest($member_id_of)) && (has_actual_page_access($member_id_viewing,'contactmember')))
+		if (addon_installed('ocf_contactmember'))
 		{
-			$redirect=get_self_url(true);
-			$modules[]=array('contact',do_lang_tempcode('_EMAIL_MEMBER'),build_url(array('page'=>'contactmember','redirect'=>$redirect,'id'=>$member_id_of),get_module_zone('contactmember')),'reply');
+			if ((($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_allow_emails')==1) || (get_option('allow_email_disable')=='0')) && (!is_guest($member_id_of)) && (has_actual_page_access($member_id_viewing,'contactmember')))
+			{
+				$redirect=get_self_url(true);
+				$modules[]=array('contact',do_lang_tempcode('_EMAIL_MEMBER'),build_url(array('page'=>'contactmember','redirect'=>$redirect,'id'=>$member_id_of),get_module_zone('contactmember')),'reply');
+			}
 		}
 		require_lang('menus');
 		$sections=array('contact'=>do_lang_tempcode('CONTACT'),'profile'=>do_lang_tempcode('EDIT_PROFILE'),'views'=>do_lang_tempcode('ACCOUNT'),'usage'=>do_lang_tempcode('USAGE'),'content'=>do_lang_tempcode('CONTENT'));

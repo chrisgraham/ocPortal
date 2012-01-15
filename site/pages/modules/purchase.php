@@ -537,7 +537,10 @@ class Module_purchase
 			$product=get_param('product','');
 			if ($product!='')
 			{
-				handle_transaction_script();
+				if (count($_POST)!=0)
+				{
+					handle_transaction_script();
+				}
 
 				attach_message(do_lang_tempcode('SUCCESS'),'inform');
 
