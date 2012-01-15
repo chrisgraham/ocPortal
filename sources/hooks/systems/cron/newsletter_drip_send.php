@@ -54,7 +54,7 @@ class Hook_cron_newsletter_drip_send
 			require_code('mail');
 			foreach ($to_send as $mail)
 			{
-				mail_wrap($mail['d_subject'],$mail['d_message'],array($mail['d_to_email']),array($mail['d_to_name']),$mail['d_from_email'],$mail['d_from_name'],$mail['d_priority'],NULL,true,NULL,true,$mail['d_html_only']==1);
+				mail_wrap($mail['d_subject'],$mail['d_message'],array($mail['d_to_email']),array($mail['d_to_name']),$mail['d_from_email'],$mail['d_from_name'],$mail['d_priority'],NULL,true,NULL,true,$mail['d_html_only']==1,false,$mail['d_template']);
 			}
 		}
 	}

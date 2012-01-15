@@ -88,8 +88,9 @@ function basic_newsletter_join($email,$interest_level=4,$lang=NULL,$get_confirm_
  * @param  integer			The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
  * @param  string				CSV data of extra subscribers (blank: none). This is in the same ocPortal newsletter CSV format that we export elsewhere.
+ * @param  ID_TEXT			The template used to show the email
  */
-function actual_send_newsletter($message,$subject,$lang,$send_details,$html_only=0,$from_email='',$from_name='',$priority=3,$csv_data='')
+function actual_send_newsletter($message,$subject,$lang,$send_details,$html_only=0,$from_email='',$from_name='',$priority=3,$csv_data='',$mail_template='MAIL')
 {
 	require_lang('newsletter');
 
@@ -113,6 +114,7 @@ function actual_send_newsletter($message,$subject,$lang,$send_details,$html_only
 	$NEWSLETTER_PRIORITY=$priority;
 	$NEWSLETTER_SEND_DETAILS=$send_details;
 	$NEWSLETTER_LANGUAGE=$lang;
+	$NEWSLETTER_MAIL_TEMPLATE=$mail_template;
 	$CSV_DATA=$csv_data;
 
 	if (get_param_integer('keep_send_immediately',0)==1) newsletter_shutdown_function(); else register_shutdown_function('newsletter_shutdown_function');
@@ -372,7 +374,7 @@ function newsletter_variable_substitution($message,$subject,$forename,$surname,$
  */
 function newsletter_shutdown_function()
 {
-	global $NEWSLETTER_SUBJECT,$NEWSLETTER_MESSAGE,$NEWSLETTER_HTML_ONLY,$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,$NEWSLETTER_SEND_DETAILS,$NEWSLETTER_LANGUAGE,$CSV_DATA;
+	global $NEWSLETTER_SUBJECT,$NEWSLETTER_MESSAGE,$NEWSLETTER_HTML_ONLY,$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,$NEWSLETTER_SEND_DETAILS,$NEWSLETTER_LANGUAGE,$CSV_DATA,$NEWSLETTER_MAIL_TEMPLATE;
 
 	//mail_wrap($NEWSLETTER_SUBJECT,$NEWSLETTER_MESSAGE,$NEWSLETTER_ADDRESSES,$NEWSLETTER_USERNAMES,$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,3,NULL,true,NULL,true,$NEWSLETTER_HTML_ONLY==1);  Not so easy any more as message needs tailoring per subscriber
 
@@ -417,10 +419,11 @@ function newsletter_shutdown_function()
 					'd_from_email'=>$NEWSLETTER_FROM_EMAIL,
 					'd_from_name'=>$NEWSLETTER_FROM_NAME,
 					'd_priority'=>$NEWSLETTER_PRIORITY,
+					'd_template'=>$NEWSLETTER_MAIL_TEMPLATE,
 				));
 			} else
 			{
-				mail_wrap($NEWSLETTER_SUBJECT,$newsletter_message_substituted,array($email_address),array($usernames[$i]),$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,NULL,true,NULL,true,$in_html);
+				mail_wrap($NEWSLETTER_SUBJECT,$newsletter_message_substituted,array($email_address),array($usernames[$i]),$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,$NEWSLETTER_PRIORITY,NULL,true,NULL,true,$in_html,false,$NEWSLETTER_MAIL_TEMPLATE);
 			}
 		}
 		$start+=100;

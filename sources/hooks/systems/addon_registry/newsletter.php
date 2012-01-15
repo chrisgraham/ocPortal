@@ -80,6 +80,7 @@ class Hook_addon_registry_newsletter
 			'sources/hooks/systems/config_default/newsletter_title.php',
 			'sources/hooks/systems/addon_registry/newsletter.php',
 			'sources/hooks/systems/cron/newsletter_drip_send.php',
+			'sources/hooks/systems/cron/newsletter_periodic.php',
 			'sources/hooks/modules/admin_import_types/newsletter.php',
 			'NEWSLETTER_AUTOMATED_FCOMCODE.tpl',
 			'NEWSLETTER_AUTOMATE_SECTION_FCOMCODE.tpl',

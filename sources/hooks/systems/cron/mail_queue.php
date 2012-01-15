@@ -30,7 +30,7 @@ class Hook_cron_mail_queue
 		{
 			$mails=$GLOBALS['SITE_DB']->query_select(
 				'logged_mail_messages',
-				array('m_subject','m_message','m_to_email','m_to_name','m_from_email','m_from_name','m_priority','m_attachments','m_no_cc','m_as','m_as_admin','m_in_html','m_date_and_time','m_member_id','m_url'),
+				array('m_subject','m_message','m_to_email','m_to_name','m_from_email','m_from_name','m_priority','m_attachments','m_no_cc','m_as','m_as_admin','m_in_html','m_date_and_time','m_member_id','m_url','m_template'),
 				array('m_queued'=>1),
 				'',
 				100
@@ -49,7 +49,7 @@ class Hook_cron_mail_queue
 					$from_email=$row['m_from_email'];
 					$from_name=$row['m_from_name'];
 			
-					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true);
+					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,$row['m_template']);
 				}
 			}
 		}

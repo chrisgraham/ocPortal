@@ -36,7 +36,7 @@ class Module_newsletter
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL; 
 		$info['hack_version']=NULL;
-		$info['version']=8;
+		$info['version']=9;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -52,11 +52,12 @@ class Module_newsletter
 		$GLOBALS['SITE_DB']->drop_if_exists('newsletter_archive');
 		$GLOBALS['SITE_DB']->drop_if_exists('newsletter_subscribe');
 		$GLOBALS['SITE_DB']->drop_if_exists('newsletter_drip_send');
-		
+		$GLOBALS['SITE_DB']->drop_if_exists('newsletter_periodic');
+
 		delete_config_option('newsletter_text');
 		delete_config_option('newsletter_title');
 		delete_config_option('interest_levels');
-	
+
 		delete_value('newsletter_whatsnew');
 		delete_value('newsletter_send_time');
 
@@ -183,8 +184,33 @@ class Module_newsletter
 				'd_from_email'=>'SHORT_TEXT',
 				'd_from_name'=>'SHORT_TEXT',
 				'd_priority'=>'SHORT_INTEGER',
+				'd_mail_template'=>'ID_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('newsletter_drip_send','d_inject_time',array('d_inject_time'));
+		}
+		if ((is_null($upgrade_from)) || ($upgrade_from<9))
+		{
+			$GLOBALS['SITE_DB']->create_table('newsletter_periodic',array(
+				'id'=>'*AUTO',
+				'np_message'=>'LONG_TEXT',
+				'np_subject'=>'LONG_TEXT',
+				'np_lang'=>'LANGUAGE_NAME',
+				'np_send_details'=>'LONG_TEXT',
+				'np_html_only'=>'BINARY',
+				'np_from_email'=>'SHORT_TEXT',
+				'np_from_name'=>'SHORT_TEXT',
+				'np_priority'=>'SHORT_INTEGER',
+				'np_csv_data'=>'LONG_TEXT',
+				'np_frequency'=>'SHORT_TEXT',
+				'np_day'=>'SHORT_INTEGER',
+				'np_in_full'=>'BINARY',
+				'np_template'=>'ID_TEXT',
+				'np_last_sent'=>'TIME',
+			));
+		}
+		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send','d_mail_template','ID_TEXT');
 		}
 	}
 

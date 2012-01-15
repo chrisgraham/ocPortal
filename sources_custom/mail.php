@@ -20,9 +20,10 @@
  * @param  boolean		Replace above with arbitrary admin
  * @param  boolean		HTML-only
  * @param  boolean		Whether to bypass queueing, because this code is running as a part of the queue management tools
+ * @param  ID_TEXT		The template used to show the email
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false)
+function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL')
 {
 	if (get_option('smtp_sockets_use')=='0') return non_overrided__mail_wrap($subject_tag,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
 
@@ -57,6 +58,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_member_id'=>get_member(),
 			'm_url'=>get_self_url(true),
 			'm_queued'=>(get_option('mail_queue_debug')==='1' || get_option('mail_queue')==='1' && cron_installed())?1:0,
+			'm_template'=>$mail_template,
 		));
 		
 		if (get_option('mail_queue_debug')==='1' || get_option('mail_queue')==='1' && cron_installed()) return;
@@ -142,7 +144,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	{
 		$_html_content=$html_content->evaluate($lang);
 		$_html_content=preg_replace('#(keep|for)_session=[\d\w]*#','filtered=1',$_html_content);
-		$message_html=(strpos($_html_content,'<html')!==false)?make_string_tempcode($_html_content):do_template('MAIL',array('_GUID'=>'b23069c20202aa59b7450ebf8d49cde1','CSS'=>'{CSS}','LOGOURL'=>get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/'LANG'=>$lang,'TITLE'=>$subject,'CONTENT'=>$_html_content),$lang,false,NULL,'.tpl','templates',$theme);
+		$message_html=(strpos($_html_content,'<html')!==false)?make_string_tempcode($_html_content):do_template($mail_template,array('_GUID'=>'b23069c20202aa59b7450ebf8d49cde1','CSS'=>'{CSS}','LOGOURL'=>get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/'LANG'=>$lang,'TITLE'=>$subject,'CONTENT'=>$_html_content),$lang,false,NULL,'.tpl','templates',$theme);
 		$css=css_tempcode(true,true,$message_html->evaluate($lang),$theme);
 		$_css=$css->evaluate($lang);
 		if (get_option('allow_ext_images')!='1')

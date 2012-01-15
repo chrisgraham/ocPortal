@@ -468,6 +468,7 @@ class Module_admin_version
 				'm_member_id'=>'USER',
 				'm_url'=>'LONG_TEXT',
 				'm_queued'=>'BINARY',
+				'm_template'=>'ID_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('logged_mail_messages','recentmessages',array('m_date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('logged_mail_messages','queued',array('m_queued'));
@@ -537,6 +538,7 @@ class Module_admin_version
 		if ((!is_null($upgrade_from)) && ($upgrade_from<14))
 		{
 			$GLOBALS['SITE_DB']->drop_if_exists('tracking');
+			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_template','ID_TEXT');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<14))
