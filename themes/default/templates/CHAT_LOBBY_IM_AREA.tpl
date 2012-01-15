@@ -14,7 +14,7 @@
 		<div class="chat_lobby_convos_area_main">
 			<div class="im_post_bits">
 				<label class="accessibility_hidden" for="post_{ROOM_ID*}">{!MESSAGE}</label>
-				<textarea class="input_required im_post_field" onkeypress="if (enter_pressed(event)) { cancelBubbling(event); return false; } return true;" onkeyup="manageScrollHeight(this); if (enter_pressed(event)) { return chat_post(event,{ROOM_ID*},'post_{ROOM_ID*}','',''); SetCookie('last_chat_msg_{ROOM_ID;}',''); return true; } else { SetCookie('last_chat_msg_{ROOM_ID;}',this.value); } " id="post_{ROOM_ID*}" name="post_{ROOM_ID*}" cols="30" rows="1"></textarea><br />
+				<textarea class="input_required im_post_field" onkeypress="if (enter_pressed(event)) { cancelBubbling(event); return false; } return true;" onkeyup="{+START,IF,{$NOT,{$MOBILE}}}manageScrollHeight(this); {+END}if (enter_pressed(event)) { return chat_post(event,{ROOM_ID*},'post_{ROOM_ID*}','',''); SetCookie('last_chat_msg_{ROOM_ID;}',''); return true; } else { SetCookie('last_chat_msg_{ROOM_ID;}',this.value); } " id="post_{ROOM_ID*}" name="post_{ROOM_ID*}" cols="30" rows="1"></textarea><br />
 				{+START,IF,{$AND,{$OCF},{$JS_ON}}}
 				<span class="associated_link_to_small">[ <a href="#" title="{!EMOTICONS}: {!LINK_NEW_WINDOW}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post_{ROOM_ID*}{$KEEP*;,0,1}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS}</a> ]</span>
 				{+END}

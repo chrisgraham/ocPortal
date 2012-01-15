@@ -5661,7 +5661,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		progress_target : "fsUploadProgress_"+name,
 
 		// General settings
-		runtimes : 'flash,silverlight,gears,browserplus,html5',
+		runtimes : 'html5,silverlight,flash,gears,browserplus',
 		url : "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true),
 		max_file_size : (typeof mfs=='undefined')?'2000mb':(mfs.value+'b'),
 

@@ -375,9 +375,9 @@ function try_cookie_login()
 			{
 				global $IS_A_COOKIE_LOGIN;
 				$IS_A_COOKIE_LOGIN=true;
-			}
 
-			create_session($member);
+				create_session($member);
+			}
 		}
 	}
 

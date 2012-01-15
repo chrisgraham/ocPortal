@@ -41,14 +41,16 @@ function restricted_manually_enabled_backdoor()
 		if (!is_null($su)) return $su; elseif (is_numeric($ks)) return intval($ks);
 	}
 
-	if (get_forum_type()=='ocf')
+	$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups());
+	if (count($members)!=0)
 	{
-		$ret=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members m JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g ON m.m_primary_group=g.id','MIN(m.id)',array('g.g_is_super_admin'=>1));
+		$ret=$GLOBALS['FORUM_DRIVER']->pname_id($members[key($members)]);
 		$GLOBALS['FORUM_DRIVER']->ocf_flood_control($ret);
 	} else
 	{
 		$ret=$GLOBALS['FORUM_DRIVER']->get_guest_id()+1;
 	}
+
 	return $ret;
 }
 

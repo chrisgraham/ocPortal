@@ -11,7 +11,7 @@
 		<form onsubmit="return false;" action="#" method="post" style="display: inline;">
 			<div style="display: inline;">
 				<p style="display: none;"><label for="post">{!MESSAGE}</label></p>
-				<textarea class="input_text_required" onkeyup="manageScrollHeight(this);" onkeypress="if (enter_pressed(event)) return chat_post(event,'{ROOM_ID*}','post'); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="42" rows="1"></textarea>
+				<textarea class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,'{ROOM_ID*}','post'); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="42" rows="1"></textarea>
 			</div>
 		</form>
 	</div>
