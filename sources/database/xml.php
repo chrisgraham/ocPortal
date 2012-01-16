@@ -1163,7 +1163,8 @@ class Database_Static_xml
 	function _read_record($path,$schema=NULL,$must_contain_strings=NULL,$include_unused_fields=false)
 	{
 		if (file_exists($path.'.mine')) $path.='.mine';
-		$file_contents=file_get_contents($path);
+		$file_contents=@file_get_contents($path);
+		if ($file_contents===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 		if (!is_null($must_contain_strings))
 		{

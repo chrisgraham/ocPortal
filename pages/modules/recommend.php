@@ -111,6 +111,9 @@ class Module_recommend
 	{
 		require_code('form_templates');
 
+		global $EXTRA_HEAD;
+		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='page_title';
 		$NON_CANONICAL_PARAMS[]='subject';

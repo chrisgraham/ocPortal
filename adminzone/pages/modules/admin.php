@@ -1054,7 +1054,9 @@ class Module_admin
 					if ($this->_keyword_match(file_get_contents(get_file_base().'/themes/default/css/'.$n)))
 					{
 						$_url=build_url(array('page'=>'admin_themes','type'=>'edit_css','theme'=>$default_theme,'file'=>$file),'adminzone');
-						$url=$_url->evaluate().'#'.$keywords[0];
+						$url=$_url->evaluate();
+						if (isset($keywords[0]))
+							$url.='#'.$keywords[0];
 						$tree=new ocp_tempcode();
 						$tree->attach(hyperlink(build_url(array('page'=>'admin','type'=>'style'),'adminzone'),do_lang_tempcode('STYLE')));
 						$tree->attach(do_template('BREADCRUMB_ESCAPED'));

@@ -565,6 +565,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			{
 				if((!is_null($ev)) && ($dereference_ev!=''))
 				{
+					require_code('images');
 					$map['FIELD_'.strval($i).'_THUMB']=do_image_thumb($dereference_ev,($i==0)?'':(is_object($map['FIELD_0'])?$map['FIELD_0']->evaluate():$map['FIELD_0']),false,false,100,100);
 				} else
 				{

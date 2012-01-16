@@ -561,6 +561,8 @@ class Hook_html_site
 		// Copy all remaining files to under uploads/website_specific
 		foreach ($files as $file)
 		{
+			if (!file_exists($file_base.'/'.$file)) continue;
+
 			$path=get_custom_file_base().'/uploads/website_specific/'.$file;
 			$create_path=$path;
 			do

@@ -203,7 +203,7 @@ class Block_main_multi_content
 			}
 		}
 
-		if (array_key_exists('validated_field',$info))
+		if ((array_key_exists('validated_field',$info)) && ($info['validated_field']!=''))
 		{
 			if ($where!='') $where.=' AND ';
 			$where.='r.'.$info['validated_field'].'=1';

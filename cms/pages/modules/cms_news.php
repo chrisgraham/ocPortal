@@ -652,7 +652,7 @@ class Module_cms_news extends standard_aed_module
 			//echo "<pre>";print_r($item);exit();
 
 			// Add news
-			$ts=array_key_exists('clean_add_date',$item)?$item['clean_add_date']:strtotime($item['add_date']);
+			$ts=array_key_exists('clean_add_date',$item)?$item['clean_add_date']:(array_key_exists('add_date',$item)?strtotime($item['add_date']):time());
 			if ($ts===false) $ts=time(); // Seen in error email, it's if the add date won't parse by PHP
 			add_news($item['title'],array_key_exists('news',$item)?html_to_comcode($item['news']):'',array_key_exists('author',$item)?$item['author']:$GLOBALS['FORUM_DRIVER']->get_username(get_member()),0,1,1,1,'',array_key_exists('news_article',$item)?html_to_comcode($item['news_article']):'',$cat_id,NULL,$ts,$submitter,0,time(),NULL,'');
 		}

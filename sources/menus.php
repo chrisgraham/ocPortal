@@ -553,11 +553,11 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
 				'POSITION'=>strval($i),
 				'LAST'=>$i==$num-1,
 				'BRETHREN_COUNT'=>strval($num),
-			)));
+			),NULL,false,'MENU_BRANCH_tree'));
 		}
 	}
 
-	return do_template('MENU_'.filter_naughty_harsh($type),array('CONTENT'=>$content,'MENU'=>$menu['special']));
+	return do_template('MENU_'.filter_naughty_harsh($type),array('CONTENT'=>$content,'MENU'=>$menu['special']),NULL,false,'MENU_tree');
 }
 
 /**
@@ -599,7 +599,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 
 	// Spacers
 	if ($branch['type']=='blank')
-		return array(do_template('MENU_SPACER_'.filter_naughty_harsh($type)),false);
+		return array(do_template('MENU_SPACER_'.filter_naughty_harsh($type),NULL,NULL,false,'MENU_SPACER_tree'),false);
 
 	// Normal branches...
 
@@ -735,7 +735,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 				'POSITION'=>strval($i),
 				'LAST'=>$i==$num-1,
 				'BRETHREN_COUNT'=>strval($num),
-			)));
+			),NULL,false,'MENU_BRANCH_tree'));
 		}
 		if ($children->is_empty()) return array(NULL,false); // Nothing here!
 		if ((!array_key_exists('expanded',$branch['modifiers'])) && (!$expand_this) && (!$current_page))

@@ -452,10 +452,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 	if ($filter=='*') return '1=1';
 	if ($filter==strval(db_get_first_id()).'*') return '1=1';
 	
-	if (!is_null($parent_spec__table_name))
-	{
-		if ((is_null($parent_field_name)) || (is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	} else
+	if (is_null($parent_spec__table_name))
 	{
 		if ((!is_null($parent_spec__parent_name)) || (!is_null($parent_field_name)) || (!is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
@@ -494,7 +491,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 			if ($out_or!='') $out_or.=' OR ';
 			$out_or.=$field_name.'>='.strval(intval($matches[1]));
 		}
-		elseif (preg_match('#^(.+)\*$#',$token,$matches)!=0) // e.g. '3*'
+		elseif ((preg_match('#^(.+)\*$#',$token,$matches)!=0) && ($parent_spec__parent_name!==NULL)) // e.g. '3*'
 		{
 			if (($parent_spec__table_name=='catalogue_categories') && (db_has_subqueries($db->connection_read))) // Special case (optimisation) for catalogues
 			{
@@ -519,7 +516,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 				}
 			}
 		}
-		elseif (preg_match('#^(.+)\~$#',$token,$matches)!=0) // e.g. '3~'
+		elseif ((preg_match('#^(.+)\~$#',$token,$matches)!=0) && ($parent_spec__parent_name!==NULL) // e.g. '3~'
 		{
 			$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings);
 			foreach ($subtree as $ii)

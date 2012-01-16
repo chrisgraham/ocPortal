@@ -99,7 +99,7 @@ function create_session($member,$session_confirmed=0)
 
 		// Store session
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		$new_session_row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed,'session_invisible'=>0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
+		$new_session_row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed,'session_invisible'=>0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
 		$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row);
 
 		$SESSION_CACHE[$new_session]=$new_session_row;

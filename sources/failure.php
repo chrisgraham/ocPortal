@@ -313,6 +313,9 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 {
 	if (function_exists('set_time_limit')) @set_time_limit(4);
 
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 	$GLOBALS['HTTP_STATUS_CODE']='403';
 	if (!headers_sent())
 	{
@@ -719,7 +722,43 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 	require_code('comcode');
 	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),$text,NULL,get_site_default_lang());
 	dispatch_notification($notification_type,NULL,do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,A_FROM_SYSTEM_PRIVILEGED);
-	if (($ocproducts) && (get_option('send_error_emails_ocproducts',true)=='1') && (!running_script('cron_bridge')) && (strpos($text,'_custom/')===false) && (strpos($text,'data/occle.php')===false) && (strpos($text,'/mini')===false) && (strpos($text,'&#')===false/*charset encoding issue*/) && (strpos($text,'has been disabled for security reasons')===false) && (strpos($text,'max_questions')/*mysql limit*/===false) && (strpos($text,'Error at offset')===false) && (strpos($text,'Unable to allocate memory for pool')===false) && (strpos($text,'Out of memory')===false) && (strpos($text,'Disk is full writing')===false) && (strpos($text,'Disk quota exceeded')===false) && (strpos($text,'from storage engine')===false) && (strpos($text,'Lost connection to MySQL server')===false) && (strpos($text,'Unable to save result set')===false) && (strpos($text,'.MYI')===false) && (strpos($text,'MySQL server has gone away')===false) && (strpos($text,'Incorrect key file')===false) && (strpos($text,'Too many connections')===false) && (strpos($text,'marked as crashed and should be repaired')===false) && (strpos($text,'connect to')===false) && (strpos($text,'Access denied for')===false) && (strpos($text,'Unknown database')===false) && (strpos($text,'headers already sent')===false) && (preg_match('#Maximum execution time of \d+ seconds#',$text)==0) && (strpos($text,'File(/tmp/) is not within the allowed path')===false))
+	if (
+		($ocproducts) && 
+		(get_option('send_error_emails_ocproducts',true)=='1') && 
+		(!running_script('cron_bridge')) && 
+		(strpos($text,'_custom/')===false) && 
+		(strpos($text,'data/occle.php')===false) && 
+		(strpos($text,'/mini')===false) && 
+		(strpos($text,'&#')===false/*charset encoding issue*/) && 
+		(strpos($text,'has been disabled for security reasons')===false) && 
+		(strpos($text,'max_questions')/*mysql limit*/===false) && 
+		(strpos($text,'Error at offset')===false) && 
+		(strpos($text,'Unable to allocate memory for pool')===false) && 
+		(strpos($text,'Out of memory')===false) && 
+		(strpos($text,'Disk is full writing')===false) && 
+		(strpos($text,'Disk quota exceeded')===false) && 
+		(strpos($text,'from storage engine')===false) && 
+		(strpos($text,'Lost connection to MySQL server')===false) && 
+		(strpos($text,'Unable to save result set')===false) && 
+		(strpos($text,'.MYI')===false) && 
+		(strpos($text,'MySQL server has gone away')===false) && 
+		(strpos($text,'Incorrect key file')===false) && 
+		(strpos($text,'Too many connections')===false) && 
+		(strpos($text,'marked as crashed and should be repaired')===false) && 
+		(strpos($text,'connect to')===false) && 
+		(strpos($text,'Access denied for')===false) && 
+		(strpos($text,'Unknown database')===false) && 
+		(strpos($text,'headers already sent')===false) && 
+		(preg_match('#Maximum execution time of \d+ seconds#',$text)==0) && 
+		(preg_match('#Out of memory \(allocated (1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)\d{6}\)#',$text)==0) && 
+		(strpos($text,'is marked as crashed and last')===false) && 
+		(strpos($text,'failed to open stream: Permission denied')===false) && 
+		(strpos($text,'phpinfo() has been disabled')===false) && 
+		((strpos($text,'Maximum execution time')===false) || ((strpos($text,'/js_')===false) && (strpos($text,'/caches_filesystem.php')===false) && (strpos($text,'/files2.php')===false))) && 
+		((strpos($text,'doesn\'t exist')===false) || ((strpos($text,'import')===false))) && 
+		((strpos($text,'No such file or directory')===false) || ((strpos($text,'admin_setupwizard')===false))) && 
+		(strpos($text,'File(/tmp/) is not within the allowed path')===false)
+	)
 	{
 		require_code('mail');
 		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);

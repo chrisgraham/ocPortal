@@ -152,6 +152,7 @@ class Hook_addon_registry_core_ocf
 			'adminzone/pages/modules/admin_ocf_merge_members.php',
 			'adminzone/pages/modules/admin_ocf_join.php',
 			'sources/hooks/modules/admin_import/csv_members.php',
+			'OCF_BIRTHDAYS.tpl',
 			'OCF_EMOTICON_CELL.tpl',
 			'OCF_EMOTICON_ROW.tpl',
 			'OCF_EMOTICON_TABLE.tpl',

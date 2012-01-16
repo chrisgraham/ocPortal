@@ -756,6 +756,8 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 			}
 		}
 
+		if ($sup_table_name=='short') $val=substr($val,0,255);
+
 		if ($sup_table_name=='float')
 		{
 			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>((is_null($val)) || ($val==''))?NULL:floatval($val));

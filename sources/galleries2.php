@@ -549,22 +549,24 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 		if (file_exists($expected_output_path))
 			return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
 
-		$movie=new ffmpeg_movie($src_file,false);
-
-		if ($movie->getFrameCount()==0) return '';
-
-		$frame=$movie->getFrame(min($movie->getFrameCount(),25));
-		$gd_img=$frame->toGDImage();
-
-		@imagejpeg($gd_img,$expected_output_path);
-
-		if (file_exists($expected_output_path))
+		$movie=@(new ffmpeg_movie($src_file,false));
+		if ($movie!==false)
 		{
-			require_code('images');
-			if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
-				convert_image($expected_output_path,$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
+			if ($movie->getFrameCount()==0) return '';
 
-			return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
+			$frame=$movie->getFrame(min($movie->getFrameCount(),25));
+			$gd_img=$frame->toGDImage();
+
+			@imagejpeg($gd_img,$expected_output_path);
+
+			if (file_exists($expected_output_path))
+			{
+				require_code('images');
+				if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring')))
+					convert_image($expected_output_path,$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
+
+				return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
+			}
 		}
 	}
 

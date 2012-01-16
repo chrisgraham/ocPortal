@@ -29,6 +29,7 @@ class Hook_stats_filedump
 	function run()
 	{
 		if (!addon_installed('filedump')) return new ocp_tempcode();
+		if (!file_exists(get_custom_file_base().'/uploads/filedump')) return new ocp_tempcode();
 
 		require_lang('filedump');
 		

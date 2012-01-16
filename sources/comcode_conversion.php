@@ -1542,5 +1542,47 @@ class ocp_tempcode_static
 	{
 		return count($this->bits)==0;
 	}
+
+	/**
+	 * Parses the current tempcode object, then return the parsed string
+	 *
+	 * @param  ?LANGUAGE_NAME The language to evaluate with (NULL: current user's language)
+	 * @param  mixed			 Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
+	 * @return string			The evaluated thing. Voila, it's all over!
+	 */
+	function evaluate($lang=NULL,$_escape=false)
+	{
+		$empty_array=array();
+		$out='';
+
+		foreach ($this->bits as $bit)
+		{
+			$bit_0=$bit[0];
+			if ($_escape!==false) array_unshift($bit_0,$_escape);
+
+			if ($bit[1]==TC_KNOWN) // Just pick up the string
+			{
+				apply_tempcode_escaping($bit_0,$bit[2]);
+				$out.=$bit[2];
+			} else
+			{
+				$bit_3=$bit[3];
+				if (($bit_3) && ($bit[1]!=TC_DIRECTIVE))
+				{
+					foreach ($bit_3 as $i=>$decode_bit)
+					{
+						if (is_object($decode_bit))
+						{
+							$bit_3[$i]=$decode_bit->evaluate($lang,false);
+						}
+					}
+				}
+
+				$out.=ecv($lang,$bit_0,$bit[1],$bit[2],is_null($bit_3)?array():$bit_3);
+			}
+		}
+
+		return $out;
+	}
 }
 

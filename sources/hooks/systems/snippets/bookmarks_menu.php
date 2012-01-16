@@ -31,7 +31,9 @@ class Hook_bookmarks_menu
 		if (!is_guest())
 		{
 			require_code('menus');
-			return build_stored_menu('popup','_bookmarks');
+			$built=build_stored_menu('popup','_bookmarks');
+			if (is_null($built)) return new ocp_tempcode();
+			return $built;
 		}
 	}
 

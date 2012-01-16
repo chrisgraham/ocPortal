@@ -67,6 +67,7 @@ class Hook_awards_news
 		$title=get_translated_tempcode($row['title']);
 		$title_plain=get_translated_text($row['title']);
 		$news_cat_rows=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title','nc_img'),array('id'=>$row['news_category']),'',1);
+		if (!array_key_exists(0,$news_cat_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$news_cat_row=$news_cat_rows[0];
 		$category=get_translated_text($news_cat_row['nc_title']);
 		$img=find_theme_image($news_cat_row['nc_img']);

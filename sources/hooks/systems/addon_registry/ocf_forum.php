@@ -251,7 +251,6 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/systems/ajax_tree/choose_forum.php',
 			'sources/hooks/systems/rss/ocf_unread_topics.php',
 			'sources/hooks/systems/rss/ocf_personal_topics.php',
-			'OCF_BIRTHDAYS.tpl',
 			'OCF_MEMBER_LINK.tpl',
 			'TOPIC_LIST.tpl',
 			'OCF_PT_FILTERS.tpl',

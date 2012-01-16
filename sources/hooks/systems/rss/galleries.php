@@ -72,7 +72,11 @@ class Hook_rss_galleries
 			$news='';
 
 			if (!array_key_exists($row['cat'],$galleries))
-				$galleries[$row['cat']]=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$row['cat'])));
+			{
+				$_fullname=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$row['cat']));
+				if (is_null($_fullname)) continue;
+				$galleries[$row['cat']]=get_translated_text($_fullname);
+			}
 			$category=$galleries[$row['cat']];
 			$category_raw=$row['cat'];
 
