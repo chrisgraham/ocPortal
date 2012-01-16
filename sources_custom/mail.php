@@ -169,6 +169,20 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	if (get_option('allow_ext_images')!='1')
 	{
 		$html_evaluated=preg_replace_callback('#<img\s([^>]*)src="(http://[^"]*)"#U','_mail_img_rep_callback',$html_evaluated);
+		$matches=array();
+		foreach (array('#<([^"<>]*\s)style="([^"]*)"#','#<style( [^<>]*)?>(.*)</style>#Us') as $over)
+		{
+			$num_matches=preg_match_all($over,$html_evaluated,$matches);
+			for ($i=0;$i<$num_matches;$i++)
+			{
+				$altered_inner=preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$matches[2][$i]);
+				if ($matches[2][$i]!=$altered_inner)
+				{
+					$altered_outer=str_replace($matches[2][$i],$altered_inner,$matches[0][$i]);
+					$html_evaluated=str_replace($matches[0][$i],$altered_outer,$html_evaluated);
+				}
+			}
+		}
 	}
 	$cid_attachments=array();
 	foreach ($CID_IMG_ATTACHMENT as $id=>$img)

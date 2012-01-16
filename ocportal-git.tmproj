@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/zones.php</string>
+	<string>sources/hooks/systems/cron/newsletter_periodic.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -961,20 +961,6 @@
 			<key>firstVisibleLine</key>
 			<integer>60</integer>
 		</dict>
-		<key>sources/blocks/main_rss.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>27</integer>
-				<key>line</key>
-				<integer>125</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>104</integer>
-		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
 			<key>caret</key>
@@ -1018,20 +1004,6 @@
 				<key>line</key>
 				<integer>89</integer>
 			</dict>
-		</dict>
-		<key>sources/blocks/side_weather.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>144</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>117</integer>
 		</dict>
 		<key>sources/catalogues2.php</key>
 		<dict>
@@ -1693,6 +1665,20 @@
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
 		</dict>
+		<key>sources/hooks/systems/cron/newsletter_periodic.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>4</integer>
+				<key>line</key>
+				<integer>25</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>2</integer>
+		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
 			<key>caret</key>
@@ -1790,20 +1776,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>sources/zones.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>625</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>608</integer>
 		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
@@ -2313,36 +2285,6 @@
 				<integer>2</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates/JAVASCRIPT_MODALWINDOW.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>15</integer>
-				<key>line</key>
-				<integer>124</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>94</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>124</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>15</integer>
-				<key>line</key>
-				<integer>124</integer>
-			</dict>
-		</dict>
 		<key>themes/default/templates/MENU_BRANCH_popup.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2747,20 +2689,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates_custom/BOOKING_NOTICE_FCOMCODE.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>94</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>themes/default/templates_custom/BOOKING_START_SCREEN.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2994,16 +2922,11 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/database/mysql.php</string>
-		<string>sources/database/shared/mysql.php</string>
-		<string>sources/blocks/side_rss.php</string>
-		<string>sources/zones.php</string>
-		<string>sources/blocks/main_rss.php</string>
-		<string>sources/blocks/side_weather.php</string>
+		<string>sources/hooks/systems/cron/newsletter_periodic.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{977, 176}, {895, 887}}</string>
+	<string>{{412, 234}, {1148, 940}}</string>
 </dict>
 </plist>

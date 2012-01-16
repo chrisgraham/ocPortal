@@ -112,270 +112,6 @@ class Module_admin_newsletter extends standard_aed_module
 	}
 
 	/**
-	 * The UI to create an automated what's new newsletter.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function automatic_whats_new()
-	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/newsletter_from_changes';
-
-		$title=get_page_title('NEW_CONTENT');
-
-		$lang=choose_language($title);
-		if (is_object($lang)) return $lang;
-
-		if (post_param('message','')!='')
-		{
-			return $this->send_gui(post_param('message'));
-		}
-
-		$_hooks=find_all_hooks('modules','admin_newsletter');
-
-		$chosen_content=post_param_integer('chosen_content',0);
-		if ($chosen_content==0) // Content selection
-		{
-			require_code('form_templates');
-			
-			require_lang('menus');
-			
-			$fields=new ocp_tempcode();
-
-			$_cutoff_time=get_value('newsletter_whatsnew');
-			$cutoff_time=is_null($_cutoff_time)?NULL:intval($_cutoff_time);
-			if (is_null($cutoff_time)) $cutoff_time=time()-60*60*24*365*3;
-			$fields->attach(form_input_date(do_lang_tempcode('CUTOFF_DATE'),do_lang_tempcode('DESCRIPTION_CUTOFF_DATE'),'cutoff',false,false,true,$cutoff_time,3,intval(date('Y'))-3,NULL,true));
-
-			//$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('CONTENT'))));
-
-			//$_fields=array();
-			$content='';
-			foreach (array_keys($_hooks) as $hook)
-			{
-				require_code('hooks/modules/admin_newsletter/'.filter_naughty_harsh($hook));
-				$object=object_factory('Hook_whats_news_'.filter_naughty_harsh($hook),true);
-				if (is_null($object)) continue;
-
-				$done=false;
-				if (method_exists($object,'choose_categories'))
-				{
-					list($cats,$_title)=$object->choose_categories();
-					//$field=form_input_multi_list($_title,'','whatsnew_'.$hook.'_filter',$cats);
-					if (is_object($cats)) $cats=$cats->evaluate($lang);
-					$matches=array();
-					$num_matches=preg_match_all('#<option [^>]*value="([^"]*)"[^>]*>([^<]*)</option>#',$cats,$matches);
-					if ($num_matches<500) /*reasonable limit*/
-					{
-						for ($i=0;$i<$num_matches;$i++)
-						{
-							$hook_result=$object->run(0,$lang,$matches[1][$i]);
-							if ($hook_result==array()) continue;
-							list($hook_content,$_title)=$hook_result;
-							if (!$hook_content->is_empty())
-							{
-								$decoded=@html_entity_decode($matches[2][$i],ENT_QUOTES,get_charset());
-								$content.=$_title.': '.trim($decoded).' ['.$hook.'/'.$matches[1][$i]."]\n";
-							}
-						}
-						$done=true;
-					}
-				}
-				if (!$done)
-				{
-					$new=$object->run(0,$lang,'');
-					if ($new!=array())
-					{
-						list($hook_content,$_title)=$new;
-						if (!$hook_content->is_empty())
-						{
-							//$field=form_input_tick($_title,'','whatsnew_'.$hook.'_include',false);
-							$content.=$_title.' ['.$hook."]\n";
-						}
-					}
-				}
-				//$_fields[$_title]=$field;
-			}
-			/*ksort($_fields);
-			foreach ($_fields as $field)
-			{
-				$fields->attach($field);
-			}*/
-			$fields->attach(form_input_huge(do_lang_tempcode('CONTENT'),do_lang('NEWSLETTER_CONTENT_SELECT'),'content',$content,true));
-
-			$template_choices=new ocp_tempcode();
-			$dh=opendir(get_custom_file_base().'/themes/default/templates_custom');
-			while (($f=readdir($dh))!==false)
-			{
-				if (preg_match('#^MAIL.*\.tpl$#',$f)!=0)
-				{
-					$tpl=basename($f,'.tpl');
-					$template_choices->attach(form_input_list_entry($tpl,post_param('template','MAIL')==$tpl,$tpl));
-				}
-			}
-			closedir($dh);
-			$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER_TEMPLATE'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_TEMPLATE'),'template',$template_choices,NULL,false,true));
-
-			$fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',post_param_integer('in_full',0)==1));
-
-			$hidden=new ocp_tempcode();
-			$hidden->attach(form_input_hidden('chosen_content','1'));
-
-			$periodic_options=new ocp_tempcode();
-
-			$current_periodic_newsletters=$GLOBALS['SITE_DB']->query_select('newsletter_periodic',array('*'));
-			if (count($current_periodic_newsletters)==0)
-			{
-				$extra_help=do_lang('PERIODIC_NEWSLETTER_EMPTY');
-				$periodic_choice_name=do_lang('PERIODIC_CREATE');
-				$periodic_choice_help=do_lang('PERIODIC_CREATE_HELP');
-				$periodic_options->attach(form_input_list_entry('no_change',true,do_lang('DONT_MAKE_PERIODIC_NEWSLETTER'),false,false));
-				$periodic_options->attach(form_input_list_entry('make_periodic',false,do_lang('MAKE_PERIODIC_NEWSLETTER'),false,false));
-			}
-			else
-			{
-				$extra_help=do_lang('PERIODIC_NEWSLETTER_EXISTS');
-				$periodic_choice_name=do_lang('PERIODIC_REPLACE');
-				$periodic_choice_help=do_lang('PERIODIC_REPLACE_HELP');
-				$periodic_options->attach(form_input_list_entry('no_change',true,do_lang('LEAVE_PERIODIC_NEWSLETTER'),false,false));
-				$periodic_options->attach(form_input_list_entry('make_periodic',false,do_lang('MAKE_PERIODIC_NEWSLETTER'),false,false));
-				foreach ($current_periodic_newsletters as $current_periodic_newsletter)
-				{
-					$periodic_options->attach(form_input_list_entry('remove_existing_'.strval($current_periodic_newsletter['id']),false,do_lang('REMOVE_PERIODIC',$current_periodic_newsletter['np_subject'],strval($current_periodic_newsletter['id'])),false,false));
-					$periodic_options->attach(form_input_list_entry('replace_existing_'.strval($current_periodic_newsletter['id']),false,do_lang('REPLACE_PERIODIC',$current_periodic_newsletter['np_subject'],strval($current_periodic_newsletter['id'])),false,false));
-				}
-			}
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-				'TITLE'=>do_lang('PERIODIC_NEWSLETTER_SETTINGS'),
-				'HELP'=>do_lang('PERIODIC_NEWSLETTER_HELP',$extra_help),
-			)));
-
-			$fields->attach(form_input_list($periodic_choice_name,$periodic_choice_help,'periodic_choice',$periodic_options,NULL,false,false));
-
-			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),'URL'=>get_self_url()));
-		} else
-		{
-			$cutoff_time=get_input_date('cutoff');
-		}
-
-		$matches=array();
-
-		// Bit of a hack, but we include the remove option here for simplicity
-		// It has a confirm screen
-		if (preg_match('#^remove\_existing\_(\d+)$#',post_param('periodic_choice',''),$matches)!=0)
-		{
-			$hidden=new ocp_tempcode();
-			$hidden->attach(form_input_hidden('chosen_content','1'));
-			$hidden->attach(form_input_hidden('periodic_choice','periodic_remove_confirmed_'.$matches[1]));
-			return do_template('PERIODIC_NEWSLETTER_REMOVE',array(
-				'TITLE'=>get_page_title('REMOVE_PERIODIC_NEWSLETTER'),
-				'URL'=>get_self_url(),
-				'HIDDEN'=>$hidden,
-			));
-		}
-		// It has an actualiser
-		if (preg_match('#^periodic\_remove\_confirmed\_(\d+)$#',post_param('periodic_choice',''),$matches)!=0)
-		{
-			$GLOBALS['SITE_DB']->query_delete('newsletter_periodic',array('id'=>intval($matches[1])),'',1);
-
-			// We redirect back to the admin_newsletter main page
-			$url=build_url(array('page'=>'admin_newsletter','type'=>'misc','redirected'=>'1'),get_module_zone('admin_newsletter'));
-			return redirect_screen(do_lang('PERIODIC_REMOVED'),$url,do_lang('PERIODIC_REMOVED_TEXT'));
-		}
-
-		$in_full=(post_param_integer('in_full',0)==1);
-
-		// Generate Comcode for content selected, drawing on hooks
-		$automatic=array();
-		$i=0;
-		$contentarr=explode("\n",post_param('content'));
-		foreach (array_keys($_hooks) as $hook)
-		{
-			require_code('hooks/modules/admin_newsletter/'.filter_naughty_harsh($hook));
-			$object=object_factory('Hook_whats_news_'.filter_naughty_harsh($hook),true);
-			if (is_null($object)) continue;
-			//$filter=array_key_exists('whatsnew_'.$hook.'_filter',$_POST)?$_POST['whatsnew_'.$hook.'_filter']:NULL;
-			$found_one_match=false;
-			$last_find_id=mixed();
-			$last_cat_id=NULL;
-			$filter='';
-			foreach ($contentarr as $find_id=>$line)
-			{
-				$matches=array();
-				if (preg_match('#\['.str_replace('#','\#',preg_quote($hook)).'/(.*)\]#',$line,$matches)!=0)
-				{
-					$found_one_match=true;
-
-					if ((!is_null($last_find_id)) && (($find_id!=$last_find_id+1)/* || ($last_cat_id>intval($matches[1]))*/))
-					{
-						$last_cat_id=intval($matches[1]);
-
-						$temp=$object->run(intval($cutoff_time),$lang,$filter);
-						if ((is_null($temp)) || (count($temp)==0)) continue;
-						if (!$temp[0]->is_empty())
-						{
-							$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
-							$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
-							$i++;
-						}
-						
-						$filter=$matches[1];
-					} else
-					{
-						if ($filter!='') $filter.=',';
-						$filter.=$matches[1];
-					}
-
-					$last_find_id=$find_id;
-				}
-			}
-			//if (is_null($filter))
-			if (!$found_one_match)
-			{
-				//$test=post_param_integer('whatsnew_'.$hook.'_include',0);
-				//if ($test==0) continue;
-				$found=false;
-				foreach ($contentarr as $find_id=>$line)
-				{
-					if (strpos($line,'['.$hook.']')!==false)
-					{
-						$found=true;
-						break;
-					}
-				}
-				if (!$found) continue;
-
-				$temp=$object->run(intval($cutoff_time),$lang,$filter,$in_full);
-				if ((is_null($temp)) || (count($temp)==0)) continue;
-				if (!$temp[0]->is_empty())
-				{
-					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
-					$automatic[$find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
-					$i++;
-				}
-			} elseif ($filter!='')
-			{
-				$temp=$object->run(intval($cutoff_time),$lang,$filter,$in_full);
-				if ((is_null($temp)) || (count($temp)==0)) continue;
-				if (!$temp[0]->is_empty())
-				{
-					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
-					$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
-					$i++;
-				}
-			}
-		}
-		ksort($automatic);
-		$_automatic='';
-		foreach ($automatic as $tp)
-		{
-			$_automatic.=$tp;
-		}
-		$completed=do_template('NEWSLETTER_AUTOMATED_FCOMCODE',array('_GUID'=>'20f6adc244b04d9e5206682ec4e0cc0f','CONTENT'=>$_automatic));
-
-		return $this->send_gui($completed->evaluate($lang));
-	}
-	
-	/**
 	 * Count the number of users on a certain level and language of the newsletter.
 	 *
 	 * @param  AUTO_LINK		The newsletter
@@ -972,6 +708,277 @@ class Module_admin_newsletter extends standard_aed_module
 	}
 
 	/**
+	 * The UI to create an automated what's new newsletter.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function automatic_whats_new()
+	{
+		$GLOBALS['HELPER_PANEL_PIC']='pagepics/newsletter_from_changes';
+
+		$title=get_page_title('NEW_CONTENT');
+
+		$lang=choose_language($title);
+		if (is_object($lang)) return $lang;
+
+		if (post_param('message','')!='')
+		{
+			return $this->send_gui(post_param('message'));
+		}
+
+		$_hooks=find_all_hooks('modules','admin_newsletter');
+
+		$chosen_content=post_param_integer('chosen_content',0);
+		if ($chosen_content==0) // Content selection
+		{
+			require_code('form_templates');
+			
+			require_lang('menus');
+			
+			$fields=new ocp_tempcode();
+
+			$_cutoff_time=get_value('newsletter_whatsnew');
+			$cutoff_time=is_null($_cutoff_time)?NULL:intval($_cutoff_time);
+			if (is_null($cutoff_time)) $cutoff_time=time()-60*60*24*365*3;
+			$fields->attach(form_input_date(do_lang_tempcode('CUTOFF_DATE'),do_lang_tempcode('DESCRIPTION_CUTOFF_DATE'),'cutoff',false,false,true,$cutoff_time,3,intval(date('Y'))-3,NULL,true));
+
+			//$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('CONTENT'))));
+
+			$fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',post_param_integer('in_full',0)==1));
+
+			//$_fields=array();
+			$chosen_categories='';
+			foreach (array_keys($_hooks) as $hook)
+			{
+				require_code('hooks/modules/admin_newsletter/'.filter_naughty_harsh($hook));
+				$object=object_factory('Hook_whats_news_'.filter_naughty_harsh($hook),true);
+				if (is_null($object)) continue;
+
+				$done=false;
+				if (method_exists($object,'choose_categories'))
+				{
+					list($cats,$_title)=$object->choose_categories();
+					//$field=form_input_multi_list($_title,'','whatsnew_'.$hook.'_filter',$cats);
+					if (is_object($cats)) $cats=$cats->evaluate($lang);
+					$matches=array();
+					$num_matches=preg_match_all('#<option [^>]*value="([^"]*)"[^>]*>([^<]*)</option>#',$cats,$matches);
+					if ($num_matches<500) /*reasonable limit*/
+					{
+						for ($i=0;$i<$num_matches;$i++)
+						{
+							$hook_result=$object->run(0,$lang,$matches[1][$i]);
+							if ($hook_result==array()) continue;
+							list($hook_content,$_title)=$hook_result;
+							if (!$hook_content->is_empty())
+							{
+								$decoded=@html_entity_decode($matches[2][$i],ENT_QUOTES,get_charset());
+								$chosen_categories.=$_title.': '.trim($decoded).' ['.$hook.'/'.$matches[1][$i]."]\n";
+							}
+						}
+						$done=true;
+					}
+				}
+				if (!$done)
+				{
+					$new=$object->run(0,$lang,'');
+					if ($new!=array())
+					{
+						list($hook_content,$_title)=$new;
+						if (!$hook_content->is_empty())
+						{
+							//$field=form_input_tick($_title,'','whatsnew_'.$hook.'_include',false);
+							$chosen_categories.=$_title.' ['.$hook."]\n";
+						}
+					}
+				}
+				//$_fields[$_title]=$field;
+			}
+			/*ksort($_fields);
+			foreach ($_fields as $field)
+			{
+				$fields->attach($field);
+			}*/
+			$fields->attach(form_input_huge(do_lang_tempcode('CONTENT'),do_lang('NEWSLETTER_CONTENT_SELECT'),'chosen_categories',$chosen_categories,true));
+
+			$hidden=new ocp_tempcode();
+			$hidden->attach(form_input_hidden('chosen_content','1'));
+
+			if (cron_installed())
+			{
+				$periodic_options=new ocp_tempcode();
+
+				$current_periodic_newsletters=$GLOBALS['SITE_DB']->query_select('newsletter_periodic',array('*'));
+				if (count($current_periodic_newsletters)==0)
+				{
+					$extra_help=do_lang('PERIODIC_NEWSLETTER_EMPTY');
+					$periodic_choice_name=do_lang('PERIODIC_CREATE');
+					$periodic_choice_help=do_lang('PERIODIC_CREATE_HELP');
+					$periodic_options->attach(form_input_list_entry('no_change',true,do_lang('DONT_MAKE_PERIODIC_NEWSLETTER'),false,false));
+					$periodic_options->attach(form_input_list_entry('make_periodic',false,do_lang('MAKE_PERIODIC_NEWSLETTER'),false,false));
+				}
+				else
+				{
+					$extra_help=do_lang('PERIODIC_NEWSLETTER_EXISTS');
+					$periodic_choice_name=do_lang('PERIODIC_REPLACE');
+					$periodic_choice_help=do_lang('PERIODIC_REPLACE_HELP');
+					$periodic_options->attach(form_input_list_entry('no_change',true,do_lang('LEAVE_PERIODIC_NEWSLETTER'),false,false));
+					$periodic_options->attach(form_input_list_entry('make_periodic',false,do_lang('MAKE_PERIODIC_NEWSLETTER'),false,false));
+					foreach ($current_periodic_newsletters as $current_periodic_newsletter)
+					{
+						$periodic_options->attach(form_input_list_entry('remove_existing_'.strval($current_periodic_newsletter['id']),false,do_lang('REMOVE_PERIODIC',$current_periodic_newsletter['np_subject'],strval($current_periodic_newsletter['id'])),false,false));
+						$periodic_options->attach(form_input_list_entry('replace_existing_'.strval($current_periodic_newsletter['id']),false,do_lang('REPLACE_PERIODIC',$current_periodic_newsletter['np_subject'],strval($current_periodic_newsletter['id'])),false,false));
+					}
+				}
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+					'TITLE'=>do_lang('PERIODIC_NEWSLETTER_SETTINGS'),
+					'HELP'=>do_lang('PERIODIC_NEWSLETTER_HELP',$extra_help),
+				)));
+
+				$fields->attach(form_input_list($periodic_choice_name,$periodic_choice_help,'periodic_choice',$periodic_options,NULL,false,false));
+			}
+
+			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),'URL'=>get_self_url()));
+		} else
+		{
+			$cutoff_time=get_input_date('cutoff');
+		}
+
+		$matches=array();
+
+		// Bit of a hack, but we include the remove option here for simplicity
+		// It has a confirm screen
+		if (preg_match('#^remove\_existing\_(\d+)$#',post_param('periodic_choice',''),$matches)!=0)
+		{
+			$hidden=new ocp_tempcode();
+			$hidden->attach(form_input_hidden('chosen_content','1'));
+			$hidden->attach(form_input_hidden('periodic_choice','periodic_remove_confirmed_'.$matches[1]));
+			return do_template('PERIODIC_NEWSLETTER_REMOVE',array(
+				'TITLE'=>get_page_title('REMOVE_PERIODIC_NEWSLETTER'),
+				'URL'=>get_self_url(),
+				'HIDDEN'=>$hidden,
+			));
+		}
+		// It has an actualiser
+		if (preg_match('#^periodic\_remove\_confirmed\_(\d+)$#',post_param('periodic_choice',''),$matches)!=0)
+		{
+			$GLOBALS['SITE_DB']->query_delete('newsletter_periodic',array('id'=>intval($matches[1])),'',1);
+
+			// We redirect back to the admin_newsletter main page
+			$url=build_url(array('page'=>'admin_newsletter','type'=>'misc','redirected'=>'1'),get_module_zone('admin_newsletter'));
+			return redirect_screen(do_lang('PERIODIC_REMOVED'),$url,do_lang('PERIODIC_REMOVED_TEXT'));
+		}
+
+		$in_full=(post_param_integer('in_full',0)==1);
+		$chosen_categories=post_param('chosen_categories');
+		$message=$this->generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
+
+		return $this->send_gui($message);
+	}
+	
+	/**
+	 * Generate Comcode for a what's new newsletter.
+	 *
+	 * @param  LONG_TEXT				Category selection
+	 * @param  BINARY					Whether to show artices in full (as opposed to summaries)
+	 * @param  LANGUAGE_NAME		Language to send in
+	 * @param  TIME					When to cut off content from
+	 * @return tempcode				The UI
+	 */
+	function generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time)
+	{
+		$_hooks=find_all_hooks('modules','admin_newsletter');
+
+		// Generate Comcode for content selected, drawing on hooks
+		$automatic=array();
+		$i=0;
+		$catarr=explode("\n",$chosen_categories);
+		foreach (array_keys($_hooks) as $hook)
+		{
+			require_code('hooks/modules/admin_newsletter/'.filter_naughty_harsh($hook));
+			$object=object_factory('Hook_whats_news_'.filter_naughty_harsh($hook),true);
+			if (is_null($object)) continue;
+			//$filter=array_key_exists('whatsnew_'.$hook.'_filter',$_POST)?$_POST['whatsnew_'.$hook.'_filter']:NULL;
+			$found_one_match=false;
+			$last_find_id=mixed();
+			$last_cat_id=NULL;
+			$filter='';
+			foreach ($catarr as $find_id=>$line)
+			{
+				$matches=array();
+				if (preg_match('#\['.str_replace('#','\#',preg_quote($hook)).'/(.*)\]#',$line,$matches)!=0)
+				{
+					$found_one_match=true;
+
+					if ((!is_null($last_find_id)) && (($find_id!=$last_find_id+1)/* || ($last_cat_id>intval($matches[1]))*/))
+					{
+						$last_cat_id=intval($matches[1]);
+
+						$temp=$object->run(intval($cutoff_time),$lang,$filter);
+						if ((is_null($temp)) || (count($temp)==0)) continue;
+						if (!$temp[0]->is_empty())
+						{
+							$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
+							$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
+							$i++;
+						}
+
+						$filter=$matches[1];
+					} else
+					{
+						if ($filter!='') $filter.=',';
+						$filter.=$matches[1];
+					}
+
+					$last_find_id=$find_id;
+				}
+			}
+			//if (is_null($filter))
+			if (!$found_one_match)
+			{
+				//$test=post_param_integer('whatsnew_'.$hook.'_include',0);
+				//if ($test==0) continue;
+				$found=false;
+				foreach ($catarr as $find_id=>$line)
+				{
+					if (strpos($line,'['.$hook.']')!==false)
+					{
+						$found=true;
+						break;
+					}
+				}
+				if (!$found) continue;
+
+				$temp=$object->run(intval($cutoff_time),$lang,$filter,$in_full);
+				if ((is_null($temp)) || (count($temp)==0)) continue;
+				if (!$temp[0]->is_empty())
+				{
+					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
+					$automatic[$find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
+					$i++;
+				}
+			} elseif ($filter!='')
+			{
+				$temp=$object->run(intval($cutoff_time),$lang,$filter,$in_full);
+				if ((is_null($temp)) || (count($temp)==0)) continue;
+				if (!$temp[0]->is_empty())
+				{
+					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
+					$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
+					$i++;
+				}
+			}
+		}
+		ksort($automatic);
+		$_automatic='';
+		foreach ($automatic as $tp)
+		{
+			$_automatic.=$tp;
+		}
+		$completed=do_template('NEWSLETTER_AUTOMATED_FCOMCODE',array('_GUID'=>'20f6adc244b04d9e5206682ec4e0cc0f','CONTENT'=>$_automatic));
+		return $completed->evaluate($lang);
+	}
+	
+	/**
 	 * The UI to send a newsletter.
 	 *
 	 * @param  LONG_TEXT		Default newsletter to put in
@@ -1073,15 +1080,36 @@ class Module_admin_newsletter extends standard_aed_module
 
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('SUBJECT'),do_lang_tempcode('NEWSLETTER_DESCRIPTION_TITLE',$periodic_subject),'subject',$default_subject,true));
 
+		$in_full=post_param_integer('in_full',0);
+		$chosen_categories=post_param('chosen_categories','');
+
 		if ($periodic_action=='make' || $periodic_action=='replace')
 		{
 			// We are making a periodic newsletter. This means we need to pass
 			// through the chosen categories
-			$hidden->attach(form_input_hidden('chosen_categories',post_param('content','')));
-			
+			if (!is_null($defaults))
+			{
+				$chosen_categories=$defaults['np_message'];
+				$in_full=$defaults['np_in_full'];
+
+				$fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',$in_full==1));
+				$fields->attach(form_input_huge(do_lang_tempcode('NEWSLETTER_CONTENT'),do_lang('NEWSLETTER_CONTENT_SELECT'),'chosen_categories',$chosen_categories,true));
+			} else
+			{
+				$hidden->attach(form_input_hidden('chosen_categories',$chosen_categories));
+				$hidden->attach(form_input_hidden('in_full',strval($in_full)));
+			}
+			$hidden->attach(form_input_hidden('cutoff_day',post_param('cutoff_day')));
+			$hidden->attach(form_input_hidden('cutoff_month',post_param('cutoff_month')));
+			$hidden->attach(form_input_hidden('cutoff_year',post_param('cutoff_year')));
+			$hidden->attach(form_input_hidden('cutoff_hour',post_param('cutoff_hour')));
+			$hidden->attach(form_input_hidden('cutoff_minute',post_param('cutoff_minute')));
+
 			$hidden->attach(form_input_hidden('message',$existing->evaluate()));
 		} else
 		{
+			$hidden->attach(form_input_hidden('in_full',strval($in_full)));
+
 			if (strpos($existing->evaluate(),'<html')===false)
 			{
 				$fields->attach(form_input_huge_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_MESSAGE_NEWSLETTER'),'message',$existing->evaluate(),true));
@@ -1171,6 +1199,19 @@ class Module_admin_newsletter extends standard_aed_module
 
 		handle_max_file_size($hidden);
 
+		$template_choices=new ocp_tempcode();
+		$dh=opendir(get_custom_file_base().'/themes/default/templates_custom');
+		while (($f=readdir($dh))!==false)
+		{
+			if (preg_match('#^MAIL.*\.tpl$#',$f)!=0)
+			{
+				$tpl=basename($f,'.tpl');
+				$template_choices->attach(form_input_list_entry($tpl,post_param('template','MAIL')==$tpl,$tpl));
+			}
+		}
+		closedir($dh);
+		$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER_TEMPLATE'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_TEMPLATE'),'template',$template_choices,NULL,false,true));
+
 		// If we're making a periodic newsletter then we need to know when it
 		// should be sent
 		if ($periodic_action=='make' || $periodic_action=='replace')
@@ -1235,10 +1276,6 @@ class Module_admin_newsletter extends standard_aed_module
 			}
 		}
 
-		$template=post_param('template','MAIL');
-		$in_full=post_param_integer('in_full',0);
-		$hidden->attach(form_input_hidden('template',$template));
-		$hidden->attach(form_input_hidden('in_full',strval($in_full)));
 		return do_template('FORM_SCREEN',array('_GUID'=>'0b2a4825ec586d9ff557026d9a1e0cca','TITLE'=>$title,'TEXT'=>(($periodic_action=='make' || $periodic_action=='replace')? do_lang_tempcode('PERIODIC_NO_EDIT') : do_lang_tempcode('NEWSLETTER_SEND_TEXT')),'HIDDEN'=>$hidden,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
@@ -1253,6 +1290,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 		$message=post_param('message');
 		$subject=post_param('subject');
+		$lang=choose_language($title);
 
 		$template=post_param('template','MAIL');
 		$in_full=post_param_integer('in_full',0);
@@ -1286,17 +1324,9 @@ class Module_admin_newsletter extends standard_aed_module
 			// We're making a periodic newsletter. Thus we need to pass this info
 			// through to the next step
 			$extra_post_data['make_periodic']='1';
-			$extra_post_data['periodic_choice']=post_param('periodic_choice','');
-			$extra_post_data['periodic_for']=post_param('periodic_for','future');
 
-			// We also need to pass through the chosen categories
-			$extra_post_data['chosen_categories']=post_param('chosen_categories','');
-
-			// and the chosen interval
-			$extra_post_data['periodic_when']=post_param('periodic_when','weekly');
-			$extra_post_data['periodic_weekday_weekly']=post_param('periodic_weekday_weekly','1');
-			$extra_post_data['periodic_weekday_biweekly']=post_param('periodic_weekday_biweekly','1');
-			$extra_post_data['periodic_monthly']=post_param('periodic_monthly','1');
+			// Re-generate preview from latest chosen_categories
+			$message=$this->generate_whats_new_comcode(post_param('chosen_categories',''),$in_full,$lang,get_input_date('cutoff'));
 		}
 
 		$address=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());

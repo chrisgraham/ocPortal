@@ -30,13 +30,14 @@ class Hook_cron_newsletter_periodic
 		// newsletter that should be sent out automatically.
 
 		// Grab the details of this periodic newsletter
-		$periodic_rows=$GLOBALS['SITE_DB']->query_select('newsletter_periodic',array('*'),NULL,'',1); // Limited to 1 because we use global variables to store what we're sending, so can only do one per request
+		$periodic_rows=$GLOBALS['SITE_DB']->query_select('newsletter_periodic',array('*'));
 		foreach ($periodic_rows as $periodic_row)
 		{
 			$last_sent=$this->newsletter_periodic_handle($periodic_row);
 			if (!is_null($last_sent)) // was sent, so update with new time
 			{
 				$GLOBALS['SITE_DB']->query_update('newsletter_periodic',array('np_last_sent'=>$last_sent),array('id'=>$periodic_row['id']),'',1);
+				break; // Limited to 1 because we use global variables to store what we're sending, so can only do one per request
 			}
 		}
 	}
@@ -55,7 +56,7 @@ class Hook_cron_newsletter_periodic
 		// don't need to run. This is useful because it stops the code sending out
 		// multiple issues all day, and because we may as well extend it a few
 		// days either side so that we bail out more quickly.
-		if (abs(time()-$last_sent) < 60*60*24*4) return NULL;
+		if (abs(time()-$last_sent)<60*60*24*4) return NULL;
 
 		if ($periodic_row['np_frequency']=='monthly')
 		{
@@ -74,7 +75,7 @@ class Hook_cron_newsletter_periodic
 
 			// Are we meant to be sending out an issue today?
 			if ($today!=$send_day) return NULL;		// No, we're not
-			if (($periodic_row['np_frequency']=='biweekly') && (abs(time()-$last_sent) < 60*60*24*14))
+			if (($periodic_row['np_frequency']=='biweekly') && (abs(time()-$last_sent)<60*60*24*14))
 			{
 				return NULL;
 			}
