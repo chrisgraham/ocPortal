@@ -20,7 +20,7 @@
 				</h3>
 			</div>
 		{+END}
-		<div class="toggler_main hide_button_spacing" id="comments_outer" style="{$JS_ON,display: {DISPLAY*},}">
+		<div class="toggler_main{+START,IF_PASSED,EXPAND_TYPE} hide_button_spacing{+END}" id="comments_outer" style="{$JS_ON,display: {DISPLAY*},}">
 			<div class="comments_inner">
 				{+START,IF,{$MOBILE}}
 					<div class="contact-form">

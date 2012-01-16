@@ -189,19 +189,16 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 	$max_rows=0;
 	$topics=$GLOBALS['FORUM_DRIVER']->show_forum_topics(array_flip($forums),100,0,$max_rows,$restrict,true,'lasttime',false,$restrict_description);
 	if (is_null($topics)) return array();
-	if (!is_null($ticket_type))
+	$filtered_topics=array();
+	foreach ($topics as $topic)
 	{
-		$filtered_topics=array();
-		foreach ($topics as $topic)
+		unset($topic['firstpost']); // To stop Tempcode randomly making serialization sometimes change such that the refresh_if_changed is triggered
+		if ((is_null($ticket_type)) || (strpos($topic['firstpost']->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type))!==false))
 		{
-			if (strpos($topic['firstpost']->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type))!==false)
-			{
-				$filtered_topics[]=$topic;
-			}
+			$filtered_topics[]=$topic;
 		}
-		return $filtered_topics;
 	}
-	return $topics;
+	return $filtered_topics;
 }
 
 /**
