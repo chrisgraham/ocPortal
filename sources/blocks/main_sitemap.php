@@ -106,6 +106,7 @@ class Block_main_sitemap
 					if (substr($page,0,6)=='panel_') continue;
 					if (substr($page,0,1)=='_') continue;
 					if (in_array($page,$skip_pages)) continue;
+					if (in_array($zone.':'.$page,$skip_pages)) continue;
 					if ($page=='404') continue;
 					if (substr($page,-10)=='_tree_made') continue;
 					if ($page=='sitemap') continue;
