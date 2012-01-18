@@ -123,7 +123,10 @@ function set_option($name,$value,$type=NULL,$current_value=NULL)
 	$OPTIONS[$name]['config_value_translated']=$value;
 
 	if (function_exists('log_it'))
+	{
+		require_lang('config');
 		log_it('CONFIGURATION',$name,$value);
+	}
 
 	if (function_exists('persistant_cache_delete'))
 		persistant_cache_delete('OPTIONS');

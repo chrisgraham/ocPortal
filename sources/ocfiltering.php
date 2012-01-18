@@ -516,7 +516,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 				}
 			}
 		}
-		elseif ((preg_match('#^(.+)\~$#',$token,$matches)!=0) && ($parent_spec__parent_name!==NULL) // e.g. '3~'
+		elseif ((preg_match('#^(.+)\~$#',$token,$matches)!=0) && ($parent_spec__parent_name!==NULL)) // e.g. '3~'
 		{
 			$subtree=_ocfilter_subtree_fetch($matches[1],$parent_spec__table_name,$parent_spec__parent_name,$parent_spec__field_name,$numeric_category_set_ids,$db,$cached_mappings);
 			foreach ($subtree as $ii)

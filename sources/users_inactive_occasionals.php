@@ -109,10 +109,10 @@ function create_session($member,$session_confirmed=0)
 	{
 		$new_session=$restored_session;
 		$prior_session_row=$SESSION_CACHE[$new_session];
-		$new_session_row=array('last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed);
-		$big_change=($prior_session_row['last_activity']<time()-10) || ($prior_session_row['session_confirmed']!=0) || ($prior_session_row['ip']!=$new_session_row['ip']);
+		$new_session_row=array('the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>get_param('type','',true),'the_id'=>either_param('id',''),'last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed);
+		$big_change=($prior_session_row['last_activity']<time()-10) || ($prior_session_row['session_confirmed']!=$session_confirmed) || ($prior_session_row['ip']!=$new_session_row['ip']);
 		if ($big_change)
-			$GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session'=>$new_session,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>get_param('type','',true),'the_id'=>either_param('id','')),'',1);
+			$GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session'=>$new_session),'',1);
 
 		$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$new_session_row);
 	}

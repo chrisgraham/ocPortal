@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="{!charset}"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
    <ShortName>{$SITE_NAME*}{$_GET*,name}</ShortName>
    <Description>{DESCRIPTION*}</Description>

@@ -3518,8 +3518,8 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 .menu_type__popup li a:link, .menu_type__popup li a:visited, .menu_type__popup li a:active {
 	color: #123d7b; /* {$,wizard, 73% (seed sat_to 85) + 27% !W/B} */
 }
-.menu_type__popup li a:link a:hover {
-	color: #9C202F; /* {$,wizard, 100% a.hover}*/
+.menu_type__popup li a:hover {
+	color: #9C202F !important; /* {$,wizard, 100% a.hover}*/
 }
 
 .menu_type__popup ul ul {

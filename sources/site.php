@@ -512,7 +512,7 @@ function do_header($skip_top=false)
 	// Some meta details
 	if (($SEO_DESCRIPTION===NULL) || ($SEO_DESCRIPTION==''))
 	{
-		if (isset($GLOBALS['META_DATA']['description']))
+		if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description']!=''))
 		{
 			$description=$GLOBALS['META_DATA']['description'];
 		} else
@@ -1333,6 +1333,12 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 		$GLOBALS['HTTP_STATUS_CODE']='404';
 		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+	}
+	
+	if (($is_panel) || ($codename[0]=='_'))
+	{
+		global $EXTRA_HEAD;
+		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 	}
 
 	if ($zone=='adminzone')

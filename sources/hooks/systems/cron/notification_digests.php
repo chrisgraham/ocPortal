@@ -35,10 +35,13 @@ class Hook_cron_notifications_digests
 			$start=0;
 			do
 			{
+				// Find where not tint-in-tin
 				$members=$GLOBALS['SITE_DB']->query('SELECT DISTINCT d_to_member_id FROM '.get_table_prefix().'digestives_consumed c JOIN '.get_table_prefix().'digestives_tin t ON c.c_member_id=t.d_to_member_id AND c.c_frequency='.strval($frequency).' WHERE c_time<'.strval(time()-$timespan).' AND c_frequency='.strval($frequency),100,$start);
 
 				foreach ($members as $member)
 				{
+					require_lang('notifications');
+
 					$to_member_id=$member['d_to_member_id'];
 					$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id);
 					$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to_member_id);
@@ -46,12 +49,12 @@ class Hook_cron_notifications_digests
 					$messages=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('d_subject','d_message'),array(
 						'd_to_member_id'=>$to_member_id,
 						'd_frequency'=>$frequency,
-					));
+					),'ORDER BY d_date_and_time');
 
 					$message='';
 					foreach ($messages as $message)
 					{
-						$message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),$message['d_message'],comcode_escape(get_site_name()));
+						$message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),$message['d_message'],array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));
 					}
 					$wrapped_subject=do_lang('DIGEST_EMAIL_SUBJECT_'.strval($frequency),comcode_escape(get_site_name()));
 					$wrapped_message=do_lang('DIGEST_EMAIL_MESSAGE_WRAP',$message,comcode_escape(get_site_name()));

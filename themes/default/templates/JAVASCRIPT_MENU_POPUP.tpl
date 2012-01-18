@@ -122,7 +122,7 @@ function popUpMenu(id,place,menu,event)
 		e.style.left=l+'px';
 	},0);
 	if ((findPosY(e.parentNode,true)+findHeight(e)+10>full_height) && (t-findHeight(e)>0)) t-=findHeight(e)+26;
-	var ppp_id=e.parentNode.parentNode.parentNode.id;
+	var ppp_id=e.parentNode.parentNode.parentNode.parentNode.id;
 	if (ppp_id.substr(ppp_id.length-9)=='_menu_box')
 		e.style.top=(t-e.clientHeight+20)+'px';
 	else

@@ -16,6 +16,41 @@
 class Hook_Notification_ocf_topic extends Hook_Notification
 {
 	/**
+	 * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @return integer		Allowed settings
+	 */
+	function allowed_settings($notification_code)
+	{
+		return A__ALL & ~A_INSTANT_PT;
+	}
+
+	/**
+	 * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
+	 * @return integer		Initial setting
+	 */
+	function get_initial_setting($notification_code,$category=NULL)
+	{
+		return A_NA;
+	}
+
+	/**
+	 * Find the setting that members have for a notification code if they have done some action triggering automatic setting (e.g. posted within a topic).
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
+	 * @return integer		Automatic setting
+	 */
+	function get_default_auto_setting($notification_code,$category=NULL)
+	{
+		return A_INSTANT_EMAIL;
+	}
+
+	/**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *

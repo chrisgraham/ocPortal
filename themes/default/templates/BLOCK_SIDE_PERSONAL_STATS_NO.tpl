@@ -5,7 +5,7 @@
 				<div class="constrain_field">
 					<div class="accessibility_hidden"><label for="s_login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
 					<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
-					<input maxlength="80" onclick="return open_link_as_overlay(this);" accesskey="l" class="wide_field login_block_username" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="s_login_username" name="login_username" />
+					<input maxlength="80" accesskey="l" class="wide_field login_block_username" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="s_login_username" name="login_username" />
 					<input maxlength="255" class="wide_field" type="password" value="" name="password" id="s_password" />
 				</div>
 				<div class="login_block_cookies">
@@ -24,7 +24,7 @@
 			</div>
 		</form>
 		<p class="button_panel">
-			[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
+			[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
 		</p>
 	{+END}
 {+END}

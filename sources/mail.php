@@ -336,7 +336,13 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	// Headers
 	$website_email=get_option('website_email');
 	if ($website_email=='') $website_email=$from_email;
-	$headers='From: "'.$from_name.'" <'.$website_email.'>'.$line_term;
+	if (get_value('use_true_from')!=='1')
+	{
+		$headers='From: "'.$from_name.'" <'.$website_email.'>'.$line_term;
+	} else
+	{
+		$headers.='From: <'.$from_email.'>'.$line_term;
+	}
 	$headers.='Reply-To: <'.$from_email.'>'.$line_term;
 	$headers.='Return-Path: <'.$website_email.'>'.$line_term;
 	$headers.='X-Sender: <'.$website_email.'>'.$line_term;

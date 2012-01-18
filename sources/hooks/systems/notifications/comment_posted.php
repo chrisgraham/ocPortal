@@ -13,7 +13,7 @@
  * @package		core_feedback_features
  */
 
-class Hook_Notification_comment_posted extends Hook_Notification__Staff
+class Hook_Notification_comment_posted extends Hook_Notification
 {
 	/**
 	 * Get a list of all the notification codes this hook can handle.

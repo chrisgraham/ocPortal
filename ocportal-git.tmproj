@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/hooks/systems/cron/newsletter_periodic.php</string>
+	<string>sources/users_inactive_occasionals.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -156,13 +156,13 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2012-01-09T20:31:49Z</date>
+			<date>2012-01-16T13:58:15Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>info.php.template</string>
 			<key>lastUsed</key>
-			<date>2011-06-01T17:14:13Z</date>
+			<date>2012-01-16T13:58:16Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -441,20 +441,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>adminzone/pages/modules/admin.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>137</integer>
-		</dict>
 		<key>adminzone/pages/modules/admin_ocf_groups.php</key>
 		<dict>
 			<key>caret</key>
@@ -502,14 +488,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>84</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>160</integer>
+				<integer>256</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>136</integer>
+			<integer>251</integer>
 		</dict>
 		<key>collaboration/index.php</key>
 		<dict>
@@ -947,20 +933,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>sources/blocks/main_contact_simple.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>72</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>60</integer>
-		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
 			<key>caret</key>
@@ -1004,20 +976,6 @@
 				<key>line</key>
 				<integer>89</integer>
 			</dict>
-		</dict>
-		<key>sources/catalogues2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>811</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>792</integer>
 		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
@@ -1076,6 +1034,20 @@
 				<key>line</key>
 				<integer>200</integer>
 			</dict>
+		</dict>
+		<key>sources/files2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>139</integer>
+				<key>line</key>
+				<integer>359</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>334</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1665,20 +1637,6 @@
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
 		</dict>
-		<key>sources/hooks/systems/cron/newsletter_periodic.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>4</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2</integer>
-		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
 			<key>caret</key>
@@ -1776,6 +1734,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>sources/users_inactive_occasionals.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>385</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>335</integer>
 		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
@@ -2224,36 +2196,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/HEADER.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>106</integer>
-				<key>line</key>
-				<integer>85</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>63</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>101</integer>
-				<key>line</key>
-				<integer>85</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>106</integer>
-				<key>line</key>
-				<integer>85</integer>
-			</dict>
 		</dict>
 		<key>themes/default/templates/INFORM_SCREEN.tpl</key>
 		<dict>
@@ -2922,11 +2864,13 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/hooks/systems/cron/newsletter_periodic.php</string>
+		<string>sources/files2.php</string>
+		<string>cms/pages/modules/filedump.php</string>
+		<string>sources/users_inactive_occasionals.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{412, 234}, {1148, 940}}</string>
+	<string>{{663, 238}, {1148, 940}}</string>
 </dict>
 </plist>

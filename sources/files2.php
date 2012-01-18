@@ -357,7 +357,7 @@ function check_extension($name,$skip_server_side_security_check=false,$file_to_d
 	$_types=substr($_types,0,strlen($_types)-1);
 	if (!$skip_server_side_security_check)
 	{
-		if (($ext=='py') || ($ext=='fcgi') || ($ext=='cgi') || ($ext=='pl') || ($ext=='php') || ($ext=='php4') || ($ext=='php5') || ($ext=='php6') || ($ext=='phtml') || ($ext=='asp') || ($ext=='jsp') || ($ext=='sh') || ($ext=='cgi') || (strtolower($name)=='.htaccess'))
+		if (($ext=='py') || ($ext=='fcgi') || ($ext=='yaws') || ($ext=='dll') || ($ext=='cgi') || ($ext=='cfm') || ($ext=='vbs') || ($ext=='rhtml') || ($ext=='rb') || ($ext=='pl') || ($ext=='phtml') || ($ext=='php') || ($ext=='php3') || ($ext=='php4') || ($ext=='php5') || ($ext=='php6') || ($ext=='phtml') || ($ext=='aspx') || ($ext=='ashx') || ($ext=='asmx') || ($ext=='asx') || ($ext=='axd') || ($ext=='asp') || ($ext=='aspx') || ($ext=='jsp') || ($ext=='sh') || ($ext=='cgi') || (strtolower($name)=='.htaccess'))
 		{
 			if (!is_null($file_to_delete)) unlink($file_to_delete);
 			if ($accept_errors) return false;
