@@ -1,0 +1,38 @@
+.column_wrapper .column {
+	width: 280px;
+}
+
+.column_wrapper_2 .column {
+	width: 420px;
+}
+
+.column {
+	margin: 0 25px;
+	color: #535353;
+	font-size: 0.95em;
+	text-align: justify;
+}
+
+.column ul {
+	text-align: left;
+}
+
+.column>:first-child {
+	margin-top: 0;
+}
+
+.column.first {
+	margin-left: 0;
+}
+
+.column.first:first-letter {
+	font-size: 1.5em;
+}
+
+.column.last {
+	margin-right: 0;
+}
+
+.column img {
+	max-width: 100%;
+}
