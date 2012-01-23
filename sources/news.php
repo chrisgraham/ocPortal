@@ -177,7 +177,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 			if ((is_null($value)) && (!$already_created_personal_category))
 			{
 				$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
-				$news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',array('nc_title'=>0,'nc_img'=>'','notes'=>'','nc_owner'=>$submitter),true);
+				$news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',array('nc_title'=>$p_nc_title,'nc_img'=>'newscats/community','notes'=>'','nc_owner'=>$submitter),true);
 
 				$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
@@ -482,10 +482,10 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 
 	foreach ($_cats as $cat)
 	{
+		if ($cat['nc_owner']==get_member()) $add_cat=false;
+
 		if (!has_category_access(get_member(),'news',strval($cat['id']))) continue;
 		if (($addable_filter) && (!has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$cat['id'])))) continue;
-
-		if ($cat['nc_owner']==get_member()) $add_cat=false;
 
 		if (is_null($cat['nc_owner']))
 		{

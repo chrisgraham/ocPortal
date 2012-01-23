@@ -288,12 +288,14 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['closed']=1-$r['t_is_open'];
 		$out[$i]['forum_id']=$r['t_forum_id'];
 
-		$fp_rows=$this_ref->connection->query('SELECT p_title,text_parsed,t.id FROM '.$this_ref->connection->get_table_prefix().'f_posts p LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE p_validated=1 AND p_topic_id='.strval((integer)$out[$i]['id']).' '.not_like_spacer_posts('t.text_original').' ORDER BY p_time,p.id',1);
+		$fp_rows=$this_ref->connection->query('SELECT p_title,text_parsed,t.id,p_poster,p_poster_name_if_guest FROM '.$this_ref->connection->get_table_prefix().'f_posts p LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE p_validated=1 AND p_topic_id='.strval((integer)$out[$i]['id']).' '.not_like_spacer_posts('t.text_original').' ORDER BY p_time,p.id',1);
 		if (!array_key_exists(0,$fp_rows))
 		{
 			unset($out[$i]);
 			continue;
 		}
+		$out[$i]['firstusername']=$fp_rows[0]['p_poster_name_if_guest'];
+		$out[$i]['firstmemberid']=$fp_rows[0]['p_poster'];
 		$out[$i]['firsttitle']=$fp_rows[0]['p_title'];
 		if ($show_first_posts)
 		{

@@ -65,6 +65,8 @@ class Module_cms_blogs extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_news';
 
 		$this->posting_form_title=do_lang_tempcode('BLOG_NEWS_ARTICLE');
+		
+		if (is_guest()) access_denied('NOT_AS_GUEST');
 
 		require_css('news');
 		require_lang('news');

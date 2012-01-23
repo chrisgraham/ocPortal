@@ -35,10 +35,11 @@
 								{
 									this.href+=(this.href.indexOf('?')!=-1)?'&':'?';
 									this.href+='{AUTO_ADD*}=1';
-									click_link(this);
 								}
+								click_link(this);
 							}
 						);
+						if (typeof event.preventDefault!='undefined') event.preventDefault();
 						return false;
 					} );
 				}

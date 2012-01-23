@@ -133,6 +133,7 @@ class Module_admin_version
 				'a_last_downloaded_time'=>'?INTEGER',
 				'a_add_time'=>'INTEGER'
 			));
+			$GLOBALS['SITE_DB']->create_index('attachments','a_add_time',array('a_member_id','a_add_time'));
 
 			$GLOBALS['SITE_DB']->create_table('attachment_refs',array(
 				'id'=>'*AUTO',

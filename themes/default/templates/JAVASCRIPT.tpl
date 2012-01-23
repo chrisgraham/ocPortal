@@ -1030,6 +1030,7 @@ function animate(itm,finalHeight,animateDif,origOverflow,animateTicks,pic)
 
 function animateFrameLoad(pf,frame,leave_gap_top)
 {
+	if (!pf) return;
 	if (!leave_gap_top) leave_gap_top=0;
 
 	pf.style.height=window.top.getWindowHeight()+'px'; {$,Enough to stop jumping around}

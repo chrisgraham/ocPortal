@@ -878,7 +878,7 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
 }
 
-.standardbox_classic, .standardbox_links_classic {
+.standardbox_classic, .standardbox_wrap_classic .standardbox_links_classic {
 	margin: 0;
 
 	/* Want to change the tiled background?
@@ -1755,6 +1755,7 @@ ul.actions_list li, ul.actions_list_compact li, ul.actions_list_super_compact li
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
+	list-style-image: none;
 }
 
 ul.actions_list h4 {
@@ -2579,6 +2580,7 @@ th.meta_data_title {
 
 ul.sitemap {
 	list-style-type: none;
+	list-style-image: none;
 	margin-left: 0;
 	padding-left: 0;
 }
@@ -3417,6 +3419,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	margin-{!en_left}: 0;
 	padding-{!en_left}: 0;
 	list-style-type: none;
+	list-style-image: none;
 }
 
 .menu_type__tree .has_no_img .drawer, .menu_type__popup .has_no_img .drawer {
@@ -3614,6 +3617,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	float: {!en_left};
 	border-{!en_left}: 1px solid #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
 	margin-{!en_right}: -1px;
+	margin-bottom: 0;
 	{+START,IF,{$MOBILE}}
 		font-size: 0.8em;
 	{+END}
@@ -3687,6 +3691,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	display: inline;
 	padding: 0;
 	list-style-type: none;
+	list-style-image: none;
 }
 
 .menu_type__zone li * {

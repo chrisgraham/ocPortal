@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/users_inactive_occasionals.php</string>
+	<string>sources/hooks/systems/video_embed/youtube.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -150,7 +150,7 @@
 			<key>filename</key>
 			<string>index.php</string>
 			<key>lastUsed</key>
-			<date>2011-08-17T08:55:40Z</date>
+			<date>2012-01-19T13:41:44Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -168,7 +168,7 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2012-01-10T01:11:59Z</date>
+			<date>2012-01-19T13:41:45Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -224,7 +224,7 @@
 			<key>filename</key>
 			<string>plain.htaccess</string>
 			<key>lastUsed</key>
-			<date>2011-10-27T02:00:19Z</date>
+			<date>2012-01-19T13:41:44Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -236,7 +236,7 @@
 			<key>filename</key>
 			<string>recommended.htaccess</string>
 			<key>lastUsed</key>
-			<date>2012-01-07T17:04:12Z</date>
+			<date>2012-01-19T13:41:44Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -441,6 +441,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>adminzone/pages/modules/admin_custom_comcode.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>30</integer>
+				<key>line</key>
+				<integer>238</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>224</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>18</integer>
+				<key>line</key>
+				<integer>238</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>33</integer>
+				<key>line</key>
+				<integer>238</integer>
+			</dict>
+		</dict>
 		<key>adminzone/pages/modules/admin_ocf_groups.php</key>
 		<dict>
 			<key>caret</key>
@@ -469,6 +499,20 @@
 			<key>firstVisibleLine</key>
 			<integer>155</integer>
 		</dict>
+		<key>adminzone/pages/modules/admin_version.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>84</integer>
+				<key>line</key>
+				<integer>135</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>98</integer>
+		</dict>
 		<key>cms/pages/comcode/EN/panel_top.txt</key>
 		<dict>
 			<key>caret</key>
@@ -482,20 +526,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>cms/pages/modules/filedump.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>256</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>251</integer>
 		</dict>
 		<key>collaboration/index.php</key>
 		<dict>
@@ -608,6 +638,34 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
+		</dict>
+		<key>data_custom/addon_files.txt</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>2305</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>2256</integer>
+		</dict>
+		<key>data_custom/addons-sheet.csv</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>14</integer>
+				<key>line</key>
+				<integer>169</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>121</integer>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -933,6 +991,80 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>sources/attachments.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>100</integer>
+				<key>line</key>
+				<integer>50</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>38</integer>
+		</dict>
+		<key>sources/attachments2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>66</integer>
+				<key>line</key>
+				<integer>82</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>471</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>55</integer>
+				<key>line</key>
+				<integer>82</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>66</integer>
+				<key>line</key>
+				<integer>82</integer>
+			</dict>
+		</dict>
+		<key>sources/attachments3.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>57</integer>
+				<key>line</key>
+				<integer>32</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>46</integer>
+				<key>line</key>
+				<integer>32</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>57</integer>
+				<key>line</key>
+				<integer>32</integer>
+			</dict>
+		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
 			<key>caret</key>
@@ -1034,20 +1166,6 @@
 				<key>line</key>
 				<integer>200</integer>
 			</dict>
-		</dict>
-		<key>sources/files2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>139</integer>
-				<key>line</key>
-				<integer>359</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>334</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1679,6 +1797,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>sources/hooks/systems/video_embed/youtube.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>559</integer>
+				<key>line</key>
+				<integer>65</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>65</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>559</integer>
+				<key>line</key>
+				<integer>65</integer>
+			</dict>
+		</dict>
 		<key>sources/lang_compile.php</key>
 		<dict>
 			<key>caret</key>
@@ -1692,6 +1840,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
+		</dict>
+		<key>sources/misc_scripts.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>26</integer>
+				<key>line</key>
+				<integer>566</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>540</integer>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -1734,20 +1896,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>sources/users_inactive_occasionals.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>385</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>335</integer>
 		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
@@ -1820,6 +1968,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
+		</dict>
+		<key>themes/default/css_custom/columns.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>38</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>themes/default/css_custom/index.html</key>
 		<dict>
@@ -2225,6 +2387,36 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>2</integer>
+			</dict>
+		</dict>
+		<key>themes/default/templates/JAVASCRIPT.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1032</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1002</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1033</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1032</integer>
 			</dict>
 		</dict>
 		<key>themes/default/templates/MENU_BRANCH_popup.tpl</key>
@@ -2719,6 +2911,20 @@
 			<key>firstVisibleLine</key>
 			<integer>15</integer>
 		</dict>
+		<key>themes/default/templates_custom/JAVASCRIPT_COLUMNS.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>177</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>165</integer>
+		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_JQUERY_FLIP.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2864,9 +3070,18 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/files2.php</string>
-		<string>cms/pages/modules/filedump.php</string>
-		<string>sources/users_inactive_occasionals.php</string>
+		<string>themes/default/templates_custom/JAVASCRIPT_COLUMNS.tpl</string>
+		<string>sources/misc_scripts.php</string>
+		<string>sources/attachments3.php</string>
+		<string>sources/attachments2.php</string>
+		<string>sources/attachments.php</string>
+		<string>adminzone/pages/modules/admin_version.php</string>
+		<string>adminzone/pages/modules/admin_custom_comcode.php</string>
+		<string>sources/hooks/systems/video_embed/youtube.php</string>
+		<string>themes/default/templates/JAVASCRIPT.tpl</string>
+		<string>data_custom/addons-sheet.csv</string>
+		<string>themes/default/css_custom/columns.css</string>
+		<string>data_custom/addon_files.txt</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

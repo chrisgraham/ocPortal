@@ -145,6 +145,49 @@ function init__site()
 		}
 	}
 
+	// SEO redirection
+	if (can_try_mod_rewrite())
+	{
+		$ruri=ocp_srv('REQUEST_URI');
+		
+		$old_style=get_option('htm_short_urls')!='1';
+
+		if ((!headers_sent()) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
+		{
+			$GLOBALS['HTTP_STATUS_CODE']='301';
+			header('HTTP/1.0 301 Moved Permanently');
+			header('Location: '.get_self_url(true));
+			exit();
+		}
+	}
+	
+	// Search engine having session in URL, we don't like this
+	if ((get_bot_type()!==NULL) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
+	{
+		$GLOBALS['HTTP_STATUS_CODE']='301';
+		header('HTTP/1.0 301 Moved Permanently');
+		header('Location: '.get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)));
+		exit();
+	}
+
+	// Detect bad access domain
+	global $SITE_INFO;
+	$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
+	if ($access_host!='')
+	{
+		$parsed_base_url=parse_url(get_base_url());
+		if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))
+		{
+			if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO)))
+			{
+				attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
+			}
+
+			header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
+			exit();
+		}
+	}
+
 	// The most important security check
 	global $SESSION_CONFIRMED;
 	get_member(); // Make sure we've loaded our backdoor if installed
@@ -612,31 +655,6 @@ function do_footer($bail_out=false)
  */
 function do_site()
 {
-	// SEO redirection
-	if (can_try_mod_rewrite())
-	{
-		$ruri=ocp_srv('REQUEST_URI');
-		
-		$old_style=get_option('htm_short_urls')!='1';
-
-		if ((!headers_sent()) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
-		{
-			$GLOBALS['HTTP_STATUS_CODE']='301';
-			header('HTTP/1.0 301 Moved Permanently');
-			header('Location: '.get_self_url(true));
-			exit();
-		}
-	}
-	
-	// Search engine having session in URL, we don't like this
-	if ((get_bot_type()!==NULL) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
-	{
-		$GLOBALS['HTTP_STATUS_CODE']='301';
-		header('HTTP/1.0 301 Moved Permanently');
-		header('Location: '.get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)));
-		exit();
-	}
-
 	// More SEO redirection (monikers)
 	// Does this URL arrangement support monikers?
 	$url_id=get_param('id',NULL,true);
@@ -712,21 +730,6 @@ function do_site()
 		if (count($messages)!=0)
 		{
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'messages_to_render WHERE r_session_id='.strval((integer)get_session_id()).' OR r_time<'.strval(time()-60*60));
-		}
-	}
-
-	// Detect bad access domain
-	global $SITE_INFO;
-	if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO)))
-	{
-		$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
-		if ($access_host!='')
-		{
-			$parsed_base_url=parse_url(get_base_url());
-			if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))
-			{
-				attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
-			}
 		}
 	}
 

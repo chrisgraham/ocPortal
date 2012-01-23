@@ -2297,3 +2297,9 @@ booking
 # # themes/default/images_custom/bigicons/bookable.png
 # # themes/default/images_custom/bigicons/booking.png
 # # themes/default/images_custom/bigicons/supplement.png
+
+columns
+-------
+
+# # themes/default/css_custom/columns.css
+# # themes/default/templates_custom/JAVASCRIPT_COLUMNS.tpl

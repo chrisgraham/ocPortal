@@ -76,10 +76,9 @@ class Block_side_root_galleries
 		// For all galleries off the root gallery
 		$query='SELECT name,fullname FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE '.db_string_equal_to('parent_id',$parent_id).' AND name NOT LIKE \''.db_encode_like('download\_%').'\' ORDER BY add_date';
 		$galleries=$GLOBALS['SITE_DB']->query($query,300 /*reasonable limit*/);
-		$access=has_actual_page_access(get_member(),'galleries',$zone);
 		if ($depth==0)
 		{
-			$content=$this->inside($zone,$galleries,$access,'BLOCK_SIDE_ROOT_GALLERIES_LINE',$show_empty);
+			$content=$this->inside($zone,$galleries,'BLOCK_SIDE_ROOT_GALLERIES_LINE',$show_empty);
 		} else
 		{
 			$content=new ocp_tempcode();
@@ -89,7 +88,7 @@ class Block_side_root_galleries
 				if (($show_empty) || (gallery_has_content($gallery['name'])))
 				{
 					$subgalleries=$GLOBALS['SITE_DB']->query_select('galleries',array('name','fullname'),array('parent_id'=>$gallery['name']),'ORDER BY add_date',300 /*reasonable limit*/);
-					$nest=$this->inside($zone,$subgalleries,$access,'BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH',$show_empty);
+					$nest=$this->inside($zone,$subgalleries,'BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH',$show_empty);
 					$caption=get_translated_text($gallery['fullname']);
 					$content->attach(do_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER',array('_GUID'=>'e50b84369b5e2146c4fab4fddc84bf0a','ID'=>$gallery['name'],'CAPTION'=>$caption,'CONTENTS'=>$nest)));
 				}
@@ -113,12 +112,11 @@ class Block_side_root_galleries
 	 *
 	 * @param  ID_TEXT			The zone our gallery module is in
 	 * @param  array				A list of gallery rows
-	 * @param  boolean			Whether the viewing member has access to enter the galleries
 	 * @param  ID_TEXT			The template to use to show each subgallery
 	 * @param  boolean			Whether to show empty galleries
 	 * @return tempcode			The shown galleries
 	 */
-	function inside($zone,$galleries,$access,$tpl,$show_empty)
+	function inside($zone,$galleries,$tpl,$show_empty)
 	{
 		$content=new ocp_tempcode();
 	
@@ -126,13 +124,7 @@ class Block_side_root_galleries
 		{
 			if (($show_empty) || (gallery_has_content($gallery['name'])))
 			{
-				if ($access)
-				{
-					$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$gallery['name']),$zone);
-				} else
-				{
-					$url=build_url(array('page'=>'tease'));
-				}
+				$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$gallery['name']),$zone);
 				$content->attach(do_template($tpl,array('TITLE'=>get_translated_text($gallery['fullname']),'URL'=>$url)));
 			}
 		}

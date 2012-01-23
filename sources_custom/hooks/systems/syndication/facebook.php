@@ -95,7 +95,7 @@ class Hook_Syndication_facebook
 			return $this->_send(
 				get_value('facebook_oauth_token'),
 				$row,
-				get_option('facebook_uid'),
+				get_option('facebook_uid')
 			);
 		}
 		return false;

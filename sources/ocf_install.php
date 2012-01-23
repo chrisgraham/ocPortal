@@ -776,7 +776,7 @@ function install_ocf($upgrade_from=NULL)
 		$staff_post_access=array($guest_group=>1,$administrator_group=>5,$super_moderator_group=>5,$probation_group=>1,$super_member_group=>2,$member_group_0=>1,$member_group_1=>1,$member_group_2=>1,$member_group_3=>1,$member_group_4=>1);
 		$staff_access=array($administrator_group=>5,$super_moderator_group=>5);
 		$root_forum=ocf_make_forum(do_lang('ROOT_FORUM'),'',NULL,$staff_post_access,NULL);
-		ocf_make_forum(do_lang('NEWS'),'',$category_id,$staff_post_access,$root_forum);
+		//ocf_make_forum(do_lang('NEWS'),'',$category_id,$staff_post_access,$root_forum);
 		ocf_make_forum(do_lang('DEFAULT_FORUM_TITLE'),'',$category_id,$typical_access,$root_forum);
 		//ocf_make_forum(do_lang('_FEEDBACK'),'',$category_id,$typical_access,$root_forum);	We already have a feedback page
 		ocf_make_forum(do_lang('REPORTED_POSTS_FORUM'),'',$category_id_staff,$staff_access,$root_forum);

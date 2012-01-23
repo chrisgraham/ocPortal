@@ -48,7 +48,7 @@ function attachments_script()
 	require_lang('comcode');
 
 	// Lookup
-	$rows=$connection->query_select('attachments',array('*'),array('id'=>$id));
+	$rows=$connection->query_select('attachments',array('*'),array('id'=>$id),'ORDER BY a_add_time DESC');
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s \G\M\T',$myrow['a_add_time']));

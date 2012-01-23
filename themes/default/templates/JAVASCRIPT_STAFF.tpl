@@ -502,7 +502,7 @@ function load_management_menu(type,no_confirm_needed)
 			confirm_session(
 				function(result)
 				{
-					show_overlay(result);
+					if (result) show_overlay();
 				}
 			);
 		}
