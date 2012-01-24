@@ -1202,6 +1202,7 @@ class Module_chat
 
 		// Find all our suffixes to check for
 		$buddy_count=$GLOBALS['SITE_DB']->query_value('chat_buddies','COUNT(*)',array('member_likes'=>get_member()));
+		$suffixes=array();
 		if ($buddy_count<200)
 		{
 			$buddies=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()));
