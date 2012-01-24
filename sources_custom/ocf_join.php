@@ -141,7 +141,7 @@ function referrer_report_script()
 	foreach ($referrals as $ref)
 	{
 		$data_row=array();
-		$data_row[do_lang('DATE_TIME')]=get_timezoned_date($ref['time']);
+		$data_row[do_lang('DATE_TIME')]=get_timezoned_date($ref['time'],true,true,false,true);
 		$data_row[do_lang('TYPE_REFERRER')]=$ref['referrer'];
 		$data_row[do_lang('TYPE_REFERRER').' ('.do_lang('EMAIL_ADDRESS').')']=$ref['referrer_email'];
 		$data_row[do_lang('REFERREE')]=$ref['referree'];
