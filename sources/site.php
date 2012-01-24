@@ -54,7 +54,7 @@ function init__site()
 	$FEED_URL_2=NULL;
 
 	global $NON_CANONICAL_PARAMS;
-	$NON_CANONICAL_PARAMS=array('keep_has_js','keep_session','redirected','redirect_url','redirect','redirect_passon','keep_devtest','keep_su','wide_print','keep_cache','keep_markers','keep_print','keep_novalidate','keep_no_query_limit','keep_avoid_memory_limit','keep_no_swfupload','keep_no_xhtml','keep_no_minify','keep_no_frames','keep_su_online','keep_show_parse_errors','keep_firephp_queries','keep_firephp','keep_fatalistic','keep_currency','keep_country','keep_mobile','keep_textonly','keep_noiepng','keep_no_debug_mode');
+	$NON_CANONICAL_PARAMS=array('keep_has_js','keep_session','redirected','redirect_url','redirect','redirect_passon','keep_devtest','keep_su','wide_print','keep_cache','keep_markers','keep_print','keep_novalidate','keep_no_query_limit','keep_avoid_memory_limit','keep_no_swfupload','keep_no_xhtml','keep_no_minify','keep_no_frames','keep_su_online','keep_show_parse_errors','keep_firephp_queries','keep_firephp','keep_fatalistic','keep_currency','keep_country','keep_mobile','keep_textonly','keep_noiepng','keep_no_debug_mode','keep_referrer');
 
 	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$FAILED_TO_ATTACH_ALL_ERRORS;
 	$ATTACHED_MESSAGES=new ocp_tempcode();
@@ -152,7 +152,7 @@ function init__site()
 		
 		$old_style=get_option('htm_short_urls')!='1';
 
-		if ((!headers_sent()) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
+		if ((!headers_sent()) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
 		{
 			$GLOBALS['HTTP_STATUS_CODE']='301';
 			header('HTTP/1.0 301 Moved Permanently');
@@ -162,7 +162,7 @@ function init__site()
 	}
 	
 	// Search engine having session in URL, we don't like this
-	if ((get_bot_type()!==NULL) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
+	if ((get_bot_type()!==NULL) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
 	{
 		$GLOBALS['HTTP_STATUS_CODE']='301';
 		header('HTTP/1.0 301 Moved Permanently');
@@ -173,7 +173,7 @@ function init__site()
 	// Detect bad access domain
 	global $SITE_INFO;
 	$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
-	if ($access_host!='')
+	if (($access_host!='') && (isset($_SERVER['HTTP_HOST'])))
 	{
 		$parsed_base_url=parse_url(get_base_url());
 		if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))

@@ -2033,15 +2033,18 @@ gallery_carousel
 # # themes/default/templates_custom/BLOCK_MAIN_GALLERY_EMBED.tpl
 # # themes/default/templates_custom/BLOCK_NO_ENTRIES.tpl
 
-signup_referrals
-----------------
+referrals
+---------
 
 # # sources/hooks/systems/notifications/referral.php
 # # sources/hooks/systems/notifications/referral_staff.php
-# # data_custom/signup_refer.ini
-# # lang_custom/EN/signup_refer.ini
+# # data_custom/referrals.ini
+# # data_custom/referrer_report.php
+# # lang_custom/EN/referrals.ini
 # # sources_custom/ocf_join.php
 # # sources_custom/hooks/systems/ecommerce/usergroup.php
+# # sources_custom/hooks/systems/ecommerce/catalogue_items.php
+# # sources_custom/hooks/systems/referrals/index.html
 
 better_mail
 -----------

@@ -592,7 +592,8 @@ class Module_recommend
 			{
 				$title=get_page_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
 
-				$_url=(post_param_integer('invite',0)==1)?build_url(array('page'=>'join','email_address'=>$email_address),get_module_zone('join')):make_string_tempcode(get_base_url());
+				$referring_username=is_guest()?NULL:get_member();
+				$_url=(post_param_integer('invite',0)==1)?build_url(array('page'=>'join','email_address'=>$email_address,'keep_referrer'=>$referring_username),get_module_zone('join')):build_url(array('page'=>'','keep_referrer'=>$referring_username),'');
 				$url=$_url->evaluate();
 				$message=do_lang((post_param_integer('invite',0)==1)?'INVITE_MEMBER_MESSAGE':'RECOMMEND_MEMBER_MESSAGE',$name,$url,array(get_site_name())).$message;
 			} else

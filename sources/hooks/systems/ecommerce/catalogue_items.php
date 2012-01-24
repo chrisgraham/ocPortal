@@ -638,7 +638,7 @@ class Hook_catalogue_items
  */
 function handle_product_orders_items($purchase_id,$details)
 {
-	$status	=	$details['ORDER_STATUS'];
+	$status=$details['ORDER_STATUS'];
 
 	$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>$status),array('order_id'=>$purchase_id));
 

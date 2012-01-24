@@ -866,6 +866,11 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			$mail=do_lang('PASSWORD_CHANGED_MAIL_BODY',get_site_name(),$part_b,NULL,get_lang($member_id));
 			$old_email_address=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 
+			if ($old_email_address!=$email_address)
+			{
+				$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_email_address'=>$old_email_address),array('i_email_address'=>$email_address));
+			}
+
 			if (($member_id==get_member()) || (get_value('disable_password_change_mails_for_staff')!=='1'))
 			{
 				if (get_page_name()!='admin_ocf_join')

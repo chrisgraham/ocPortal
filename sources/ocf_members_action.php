@@ -144,6 +144,13 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		$secondary_groups=ocf_get_all_default_groups();
 	} else $secondary_groups=ocf_get_all_default_groups();
 	if (is_null($ip_address)) $ip_address=get_ip_address();
+
+	if (($password_compatibility_scheme=='') && (get_value('no_password_hashing')==='1'))
+	{
+		$password_compatibility_scheme='plain';
+		$salt='';
+	}
+
 	if (($salt=='') && ($password_compatibility_scheme==''))
 	{
 		$salt=uniqid('');
@@ -221,7 +228,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	
 	if ($check_correctness)
 	{
-		// If it was an invite, award the inviter
+		// If it was an invite/recommendation, award the referrer
 		if (addon_installed('recommend'))
 		{
 			$inviter=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_email_address'=>$email_address),'ORDER BY i_time');
@@ -231,7 +238,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 				{
 					require_code('points2');
 					require_lang('recommend');
-					system_gift_transfer(do_lang('RECOMMEND_SITE'),intval(get_option('points_RECOMMEND_SITE')),$inviter);
+					system_gift_transfer(do_lang('RECOMMEND_SITE_TO',$username,get_site_name()),intval(get_option('points_RECOMMEND_SITE')),$inviter);
 				}
 				if (addon_installed('chat'))
 				{

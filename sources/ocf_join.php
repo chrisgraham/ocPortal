@@ -223,7 +223,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	}
 	require_code('type_validation');
 	if (!is_valid_email_address($email_address)) warn_exit(do_lang_tempcode('INVALID_EMAIL_ADDRESS'));
-	if ($invites_if_enabled)
+	if ($invites_if_enabled) // code branch also triggers general tracking of referrals
 	{
 		if (get_option('is_on_invites')=='1')
 		{
@@ -352,7 +352,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		require_code('mail');
 		mail_wrap(do_lang('COPPA_JOIN_SUBJECT',$username,get_site_name(),NULL,$language),$message,array($email_address),$username);
 	}
-	
+
 	// Send 'validate this member' mail
 	if ($require_new_member_validation)
 	{
@@ -414,6 +414,6 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		$message->attach(do_lang_tempcode('OCF_WAITING_CONFIRM_MAIL_INSTANT'));
 	}
 	$message=protect_from_escaping($message);
-	
+
 	return array($message);
 }
