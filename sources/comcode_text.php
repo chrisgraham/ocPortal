@@ -544,7 +544,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						$continuation='';
 						$just_new_line=true;
 						$none_wrap_length=0;
-						if ($list_indent==0)
+						if (($list_indent==0) && (!$just_ended))
 						{
 							$temp_tpl='<br />';
 							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
