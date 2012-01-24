@@ -942,8 +942,8 @@ class Module_admin_ocf_join
 				{
 					$parts=explode('/',$line['Password']);
 					$password=$parts[0];
-					$salt=array_key_exists(1,$parts)?$parts[1]:'';
-					$password_compatibility_scheme=array_key_exists(2,$parts)?$parts[2]:'';
+					$salt=array_key_exists(1,$parts)?$parts[1]:NULL;
+					$password_compatibility_scheme=array_key_exists(2,$parts)?$parts[2]:NULL;
 				} else
 				{
 					$password=NULL;
@@ -1033,8 +1033,6 @@ class Module_admin_ocf_join
 				$custom_fields=array();
 				foreach ($all_cpfs as $cpf)
 				{
-					$cpf['text_original']=get_translated_text($cpf['cf_name'],$GLOBALS['FORUM_DB']);
-
 					$custom_fields[$cpf['id']]=array_key_exists($cpf['text_original'],$line)?$line[$cpf['text_original']]:$cpf['cf_default'];
 					if ((!array_key_exists($cpf['text_original'],$line)) && ($cpf['cf_type']=='list'))
 					{
@@ -1052,7 +1050,7 @@ class Module_admin_ocf_join
 						$custom_fields[$cpf['id']]=substr(str_replace(chr(10),', ',str_replace(','.chr(10),chr(10),$custom_fields[$cpf['id']])),0,255);
 					} elseif (($cpf['cf_type']=='long_text') || ($cpf['cf_type']=='long_trans'))
 					{
-						$custom_fields[$cpf['id']]=str_replace(chr(10),', ',str_replace(','.chr(10),chr(10),$custom_fields[$cpf['id']]));
+						$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];
 					} elseif ($cpf['cf_type']=='float')
 					{
 						if (preg_match('#^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\n(\d\d\d\d)$#',$custom_fields[$cpf['id']])!=0) // Convert to float based date
