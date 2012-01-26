@@ -39,14 +39,20 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
-	if (function_exists('get_member'))
+	if ($for_member!==NULL)
 	{
-		$member=get_member();
-		if (is_null($insert_as_admin)) $insert_as_admin=false;
+		$member=$for_member;
 	} else
 	{
-		$member=0;
-		if (is_null($insert_as_admin)) $insert_as_admin=true;
+		if (function_exists('get_member'))
+		{
+			$member=get_member();
+			if (is_null($insert_as_admin)) $insert_as_admin=false;
+		} else
+		{
+			$member=0;
+			if (is_null($insert_as_admin)) $insert_as_admin=true;
+		}
 	}
 
 	$comcode_text=(substr($original_comcode,0,8)!='<comcode');

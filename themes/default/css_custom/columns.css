@@ -1,9 +1,17 @@
-.column_wrapper .column {
-	width: 280px;
+.re_body .column_wrapper, .re_body .column_wrapper_2 {
+	visibility: hidden;
+	width: 955px;
+	overflow: scroll;
 }
 
-.column_wrapper_2 .column {
+.re_body .column_wrapper .column {
+	width: 279px; /*280 wraps on IE9*/
+	visibility: visible;
+}
+
+.re_body .column_wrapper_2 .column {
 	width: 420px;
+	visibility: visible;
 }
 
 .column {

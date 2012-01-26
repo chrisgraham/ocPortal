@@ -76,7 +76,7 @@ class Module_invoices
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'MY_INVOICES');
+		return ((is_guest()) || ($GLOBALS['SITE_DB']->query_value('invoices','COUNT(*)',array('i_member_id'=>get_member()))==0))?array():array('misc'=>'MY_INVOICES');
 	}
 
 	/**

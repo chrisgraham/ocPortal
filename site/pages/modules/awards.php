@@ -48,7 +48,7 @@ class Module_awards
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'AWARDS','overview'=>'AWARD_OVERVIEW');
+		return ($GLOBALS['SITE_DB']->query_value('award_types','COUNT(*)')==0)?array():array('misc'=>'AWARDS','overview'=>'AWARD_OVERVIEW');
 	}
 	
 	/**

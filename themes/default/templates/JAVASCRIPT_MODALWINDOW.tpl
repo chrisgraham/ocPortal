@@ -23,7 +23,8 @@ function open_link_as_overlay(ob,width,height)
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		if (!width) width=800;
 		if (!height) height=550;
-		faux_open(ob.href+((ob.href.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,'_top');
+		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
+		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,'_top');
 		return false;
 	{+END}
 
@@ -318,11 +319,12 @@ function ModalWindow()
 				{
 					this.topWindow.setOpacity(bi,1.0);
 				}
+
+				if (this.type == "prompt") this.removeEvent(bi.parentNode, "click", this.clickout_cancel);
+				if (this.type == "iframe") this.removeEvent(bi.parentNode, "click", this.clickout_finished);
+				if (this.type == "alert" || this.type == "lightbox") this.removeEvent(bi.parentNode, "click", this.clickout_yes);
+				this.removeEvent(document, "keyup", this.keyup);
 			}
-			if (this.type == "prompt") this.removeEvent(bi.parentNode, "click", this.clickout_cancel);
-			if (this.type == "iframe") this.removeEvent(bi.parentNode, "click", this.clickout_finished);
-			if (this.type == "alert" || this.type == "lightbox") this.removeEvent(bi.parentNode, "click", this.clickout_yes);
-			this.removeEvent(document, "keyup", this.keyup);
 			this.opened = false;
 		},
 
@@ -454,10 +456,11 @@ function ModalWindow()
 						'name': "overlay_iframe",
 						'id': "overlay_iframe",
 						'src': this.href,
-						'allowtransparency': "true",
+						'allowTransparency': "true",
 						'styles' : {
 							'width': this.width?(this.width+'px'):"100%",
-							'height': this.height?(this.height+'px'):"50%"
+							'height': this.height?(this.height+'px'):"50%",
+							'background': "transparent"
 						}
 					});
 
@@ -491,8 +494,7 @@ function ModalWindow()
 					var makeFrameLikePopup=function() {
 						if ((iframe) && (iframe.contentWindow) && (iframe.contentWindow.document) && (iframe.contentWindow.document.body))
 						{
-							iframe.contentWindow.document.body.style.background='none';
-							iframe.contentWindow.document.body.style.backgroundColor='transparent';
+							iframe.contentWindow.document.body.style.background='transparent';
 
 							// Remove fixed width
 							var body_inner=iframe.contentWindow.document.getElementById('body_inner');

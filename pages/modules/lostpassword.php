@@ -66,7 +66,7 @@ class Module_lostpassword
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'RESET_PASSWORD');
+		return is_guest()?array('misc'=>'RESET_PASSWORD'):array();
 	}
 	
 	/**

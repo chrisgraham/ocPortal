@@ -116,7 +116,7 @@ class Module_subscriptions
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'MY_SUBSCRIPTIONS');
+		return ((is_guest()) || ($GLOBALS['SITE_DB']->query_value('subscriptions','COUNT(*)')==0))?array():array('misc'=>'MY_SUBSCRIPTIONS');
 	}
 
 	/**

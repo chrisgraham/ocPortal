@@ -80,7 +80,8 @@ function init__site()
 	$BREADCRUMB_EXTRA_SEGMENTS=new ocp_tempcode();
 	$DISPLAYED_TITLE=NULL;
 	$BREADCRUMB_SET_SELF=NULL;
-	define('BREADCRUMB_CROP_LENGTH',26);
+	$bcl=get_value('breadcrumb_crop_length');
+	define('BREADCRUMB_CROP_LENGTH',is_null($bcl)?26:intval($bcl));
 
 	global $PT_PAIR_CACHE_CP;
 	$PT_PAIR_CACHE_CP=array();
@@ -357,7 +358,7 @@ function breadcrumbs()
 		$_out=$out->evaluate();
 		foreach ($segment_substitutions as $from=>$to)
 		{
-			$_out=preg_replace('~'.str_replace('~','\~',$from).'~U',$to,$_out,1);
+			$_out=preg_replace('~'.str_replace('~','\~',$from).'~Us',$to,$_out,1);
 		}
 		return make_string_tempcode($_out);
 	}

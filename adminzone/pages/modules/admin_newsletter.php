@@ -29,7 +29,6 @@ class Module_admin_newsletter extends standard_aed_module
 {
 	var $lang_type='NEWSLETTER';
 	var $select_name='TITLE';
-	var $protect_first=1;
 	var $do_preview=NULL;
 	var $cache_level_counts;
 	var $menu_label='NEWSLETTER';
@@ -1267,13 +1266,10 @@ class Module_admin_newsletter extends standard_aed_module
 			$radios->attach(form_input_radio_entry('periodic_when','monthly',$frequency=='monthly',$monthly_desc,NULL,''));
 			$fields->attach(form_input_radio(do_lang('PERIODIC_WHEN_CHOICE'),'',$radios,true));
 
-			if ($periodic_action=='make')
-			{
-				$radios=new ocp_tempcode();
-				$radios->attach(form_input_radio_entry('periodic_for','all',false,do_lang_tempcode('CREATE_PERIODIC_FOR_ALL'),NULL,''));
-				$radios->attach(form_input_radio_entry('periodic_for','future',true,do_lang_tempcode('CREATE_PERIODIC_FOR_FUTURE'),NULL,''));
-				$fields->attach(form_input_radio(do_lang('CREATE_PERIODIC_FOR'),'',$radios,true));
-			}
+			$radios=new ocp_tempcode();
+			$radios->attach(form_input_radio_entry('periodic_for','all',false,do_lang_tempcode('CREATE_PERIODIC_FOR_ALL'),NULL,''));
+			$radios->attach(form_input_radio_entry('periodic_for','future',true,do_lang_tempcode('CREATE_PERIODIC_FOR_FUTURE'),NULL,''));
+			$fields->attach(form_input_radio(do_lang('CREATE_PERIODIC_FOR'),'',$radios,true));
 		}
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'0b2a4825ec586d9ff557026d9a1e0cca','TITLE'=>$title,'TEXT'=>(($periodic_action=='make' || $periodic_action=='replace')? do_lang_tempcode('PERIODIC_NO_EDIT') : do_lang_tempcode('NEWSLETTER_SEND_TEXT')),'HIDDEN'=>$hidden,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
@@ -1460,6 +1456,8 @@ class Module_admin_newsletter extends standard_aed_module
 			$matches=array();
 			if (preg_match('#^replace_existing\_(\d+)$#',post_param('periodic_choice',''),$matches)!=0)
 			{
+				if (post_param('periodic_for')!='future')
+					$map['np_last_sent']=0;
 				$GLOBALS['SITE_DB']->query_update('newsletter_periodic',$map,array('id'=>intval($matches[1])),'',1);
 				$message=do_lang('PERIODIC_SUCCESS_MESSAGE_EDIT',$when,$each);
 			} else

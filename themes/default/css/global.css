@@ -315,7 +315,7 @@ form { /* For IE6 */
 		text-align: right;
 		margin-top: 59px;
 		padding: 6px 5px 8px 0;
-		background: url('{$IMG,zone_gradient}') repeat-x;
+		background: url('{$IMG;,zone_gradient}') repeat-x;
 	{+END}
 	min-height: 15px;
 	font-weight: bold;
@@ -552,7 +552,7 @@ form { /* For IE6 */
 }
 
 .login_page {
-	background: url('{$IMG,background_image}') no-repeat 20px 44px;
+	background: url('{$IMG;,background_image}') no-repeat 20px 44px;
 	padding: 5px;
 }
 
@@ -832,27 +832,27 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 }
 
 .standardbox_curved_title_left {
-	background: url("{$IMG,standardboxes/title_left}") 0 0 no-repeat;
+	background: url('{$IMG;,standardboxes/title_left}') 0 0 no-repeat;
 }
 
 .standardbox_curved_nontitle_left {
-	background: url("{$IMG,standardboxes/nontitle_left}") 0 0 no-repeat;
+	background: url('{$IMG;,standardboxes/nontitle_left}') 0 0 no-repeat;
 }
 
 .standardbox_curved_bottom_left {
-	background: url("{$IMG,standardboxes/bottom_left}") 0 100% no-repeat;
+	background: url('{$IMG;,standardboxes/bottom_left}') 0 100% no-repeat;
 }
 
 .standardbox_curved_title_right {
-	background: url("{$IMG,standardboxes/title_right}") 100% 0 no-repeat;
+	background: url('{$IMG;,standardboxes/title_right}') 100% 0 no-repeat;
 }
 
 .standardbox_curved_nontitle_right {
-	background: url("{$IMG,standardboxes/nontitle_right}") 100% 0 no-repeat;
+	background: url('{$IMG;,standardboxes/nontitle_right}') 100% 0 no-repeat;
 }
 
 .standardbox_curved_bottom_right {
-	background: url("{$IMG,standardboxes/bottom_right}") 100% 100% no-repeat;
+	background: url('{$IMG;,standardboxes/bottom_right}') 100% 100% no-repeat;
 }
 
 .standardbox_iesucks_curved_left, .standardbox_iesucks_curved_right {
@@ -913,7 +913,7 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 .standardbox_title_classic, .tabletitle_internal, .standardbox_title_med, .standardbox_title_curved, .standardbox_title_curved_iesucks {
 	/* Structure */
 	background-color: #426aa9; /* {$,wizard, 100% seed} */
-	background-image: url("{$IMG,standardboxes/title_gradient}");
+	background-image: url('{$IMG;,standardboxes/title_gradient}');
 	background-repeat: repeat-x;
 
 	/* Text */
@@ -952,7 +952,7 @@ h3.standardbox_title_classic {
 .menu_block .standardbox_title_panel {
 	background-color: #426aa9 !important; /* {$,wizard, 100% seed} */
 	color: white !important;
-	background-image: url("{$IMG,standardboxes/title_gradient}");
+	background-image: url('{$IMG;,standardboxes/title_gradient}');
 	background-repeat: repeat-x;
 }
 
@@ -1298,7 +1298,7 @@ h3.standardbox_title_classic {
 
 .do_next_pretty_title_left {
 	width: 21px;
-	background-image: url('{$IMG,donext/titleleft}');
+	background-image: url('{$IMG;,donext/titleleft}');
 	background-repeat: no-repeat;
 	background-position: bottom right;
 }
@@ -1316,7 +1316,7 @@ h3.standardbox_title_classic {
 
 .do_next_pretty_title_right {
 	width: 21px;
-	background-image: url('{$IMG,donext/titleright}');
+	background-image: url('{$IMG;,donext/titleright}');
 	background-repeat: no-repeat;
 	background-position: bottom left;
 }
@@ -1324,46 +1324,46 @@ h3.standardbox_title_classic {
 .do_next_pretty_top_left {
 	height: 10px;
 	background-repeat: no-repeat;
-	background-image: url('{$IMG,donext/topleft}');
+	background-image: url('{$IMG;,donext/topleft}');
 }
 
 .do_next_pretty_top {
 	height: 10px;
 	background-repeat: repeat-x;
-	background-image: url('{$IMG,donext/topcent}');
+	background-image: url('{$IMG;,donext/topcent}');
 }
 
 .do_next_pretty_top_right {
 	height: 10px;
 	background-repeat: no-repeat;
-	background-image: url('{$IMG,donext/topright}');
+	background-image: url('{$IMG;,donext/topright}');
 }
 
 .do_next_pretty_mid_left {
 	background-repeat: repeat-y;
-	background-image: url('{$IMG,donext/midleft}');
+	background-image: url('{$IMG;,donext/midleft}');
 }
 
 .do_next_pretty_mid_right {
 	background-repeat: repeat-y;
-	background-image: url('{$IMG,donext/midright}');
+	background-image: url('{$IMG;,donext/midright}');
 }
 
 .do_next_pretty_bottom_left {
 	height: 10px;
 	background-repeat: no-repeat;
-	background-image: url('{$IMG,donext/botleft}');
+	background-image: url('{$IMG;,donext/botleft}');
 }
 
 .do_next_pretty_bottom {
 	background-repeat: repeat-x;
-	background-image: url('{$IMG,donext/botmid}');
+	background-image: url('{$IMG;,donext/botmid}');
 }
 
 .do_next_pretty_bottom_right {
 	height: 10px;
 	background-repeat: no-repeat;
-	background-image: url('{$IMG,donext/botright}');
+	background-image: url('{$IMG;,donext/botright}');
 }
 
 .control_functions {
@@ -1435,6 +1435,7 @@ body .accessibility_hidden { /* {$,Contents should be made visible (or interpret
 	position: absolute;
 	top: -256000px;
 	left: 0;
+	display: block; /* stops browser bugs where it interacts with the layout flow incorrectly */
 }
 
 .non_accessibility_redundancy { /* {$,Contents should be skipped by screen readers} */
@@ -1636,7 +1637,7 @@ hr.long_break {
 	font-size: 0.9em;
 	padding-{!en_left}: 15px;
 	margin-{!en_left}: 10px;
-	background-image: url("{$IMG,edited}");
+	background-image: url('{$IMG;,edited}');
 	background-position: {!en_left} 4px;
 	background-repeat: no-repeat;
 }
@@ -1942,10 +1943,11 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	color: #ffffff; /* {$,wizard, 100% W/B} */
 	border-radius: 6px 6px 6px 6px;
 	-moz-border-radius: 6px;
-	background-image: url("{$IMG,standardboxes/title_gradient}");
+	background-image: url('{$IMG;,standardboxes/title_gradient}');
 	opacity: 0.85;
 	text-shadow: 1px 1px 1px #000000; /* {$,wizard, 100% !W/B} */
 	margin: 0 2px;
+	overflow: visible; /* stops button padding on IE7 */
 }
 
 .button_pageitem_tall {
@@ -2675,7 +2677,7 @@ ul.sitemap li li {
 	border: 1px solid #7f9ac5; /* {$,wizard, 68% seed + 32% W/B} */
 	padding: 4px;
 	margin-bottom: 0;
-	background: #8ea6cb url("{$IMG,quote_gradient}") repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
+	background: #8ea6cb url('{$IMG;,quote_gradient}') repeat-y; /* {$,comcode_code_h4, 60% seed + 40% W/B} */
 }
 
 .comcode_quote_content,
@@ -2725,11 +2727,11 @@ ul.sitemap li li {
 }
 
 .comcode_exp_ref a {
-	background-image: url('{$IMG,arrow_box}') !important;
+	background-image: url('{$IMG;,arrow_box}') !important;
 }
 
 .cedi_link a {
-	background-image: url('{$IMG,cedi_link}') !important;
+	background-image: url('{$IMG;,cedi_link}') !important;
 }
 
 .comcode_exp_ref a, .cedi_link a {
@@ -2739,11 +2741,11 @@ ul.sitemap li li {
 }
 
 .comcode_exp_ref a:hover {
-	background-image: url('{$IMG,arrow_box_hover}') !important;
+	background-image: url('{$IMG;,arrow_box_hover}') !important;
 }
 
 .cedi_link a:hover {
-	background-image: url('{$IMG,cedi_link_hover}') !important;
+	background-image: url('{$IMG;,cedi_link_hover}') !important;
 }
 
 .comcode_exp_ref a:hover, .cedi_link a:hover {
@@ -2798,7 +2800,7 @@ ul.sitemap li li {
 }
 
 .comcode_concepts_title {
-	background-image: url('{$IMG,checklist/checklist1}');
+	background-image: url('{$IMG;,checklist/checklist1}');
 	background-repeat: no-repeat;
 	background-position: 1px 0;
 	vertical-align: top;
@@ -3368,7 +3370,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 
 .tab {
 	float: left;
-	background: url('{$IMG,tab}') !important;
+	background: url('{$IMG;,tab}') !important;
 	padding: 3px 7px 0 7px !important;
 	height: 20px;
 	text-align: center;
@@ -3454,7 +3456,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 }
 
 .menu_type__tree .current a, .menu_type__popup .current a, .menu_type__dropdown .nlevel .current a {
-	background: transparent url("{$IMG,menus/menu_bullet_current}") no-repeat 5px 6px !important;
+	background: transparent url('{$IMG;,menus/menu_bullet_current}') no-repeat 5px 6px !important;
 }
 
 .menu_type__popup .has_img.current a, .menu_type__dropdown .nlevel .has_img.current a {
@@ -3462,11 +3464,11 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 }
 
 .menu_type__tree .non_current a, .menu_type__popup .non_current a, .menu_type__dropdown .nlevel .non_current a {
-	background: transparent url("{$IMG,menus/menu_bullet}") no-repeat 5px 6px;
+	background: transparent url('{$IMG;,menus/menu_bullet}') no-repeat 5px 6px;
 }
 
 .menu_type__tree .non_current a:hover, .menu_type__popup .non_current a:hover, .menu_type__dropdown .nlevel .non_current a:hover {
-	background: transparent url("{$IMG,menus/menu_bullet_hover}") no-repeat 5px 6px;
+	background: transparent url('{$IMG;,menus/menu_bullet_hover}') no-repeat 5px 6px;
 }
 
 .menu_type__select li, .menu_type__dropdown .nlevel li {
@@ -3655,6 +3657,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	height: 1.15em;
 	width: 4em;
 	padding: 4px;
+	float: {!en_left};
 }
 
 .menu_type__tree ul, .menu_type__select ul {
@@ -3790,31 +3793,31 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 
 {+START,IF,{$ADDON_INSTALLED,recommend}}
 #screen_actions .print {
-	background-image: url('{$IMG,recommend/print}');
+	background-image: url('{$IMG;,recommend/print}');
 }
 
 #screen_actions .recommend {
-	background-image: url('{$IMG,recommend/recommend}');
+	background-image: url('{$IMG;,recommend/recommend}');
 }
 
 #screen_actions .favorites {
-	background-image: url('{$IMG,recommend/favorites}');
+	background-image: url('{$IMG;,recommend/favorites}');
 }
 
 #screen_actions .facebook {
-	background-image: url('{$IMG,recommend/facebook}');
+	background-image: url('{$IMG;,recommend/facebook}');
 }
 
 #screen_actions .twitter {
-	background-image: url('{$IMG,recommend/twitter}');
+	background-image: url('{$IMG;,recommend/twitter}');
 }
 
 #screen_actions .stumbleupon {
-	background-image: url('{$IMG,recommend/stumbleupon}');
+	background-image: url('{$IMG;,recommend/stumbleupon}');
 }
 
 #screen_actions .digg {
-	background-image: url('{$IMG,recommend/digg}');
+	background-image: url('{$IMG;,recommend/digg}');
 }
 
 #screen_actions .google_plusone {
@@ -3830,25 +3833,25 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 =========================
 */
 
-a[href^="mailto:"] {background: url('{$IMG,filetypes/email_link}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".pdf"], a[href$=".ps"], body div a.pdf_link {background: url('{$IMG,filetypes/page_pdf}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".doc"], a[href$=".docx"], a[href$=".rtf"], body div a.doc_link {background: url('{$IMG,filetypes/page_doc}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".xls"], a[href$=".xlsx"], body div a.xls_link {background: url('{$IMG,filetypes/page_xls}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".ppt"], a[href$=".pptx"], body div a.ppt_link {background: url('{$IMG,filetypes/page_ppt}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".log"], a[href$=".txt"], body div a.txt_link {background: url('{$IMG,filetypes/page_txt}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".odt"], body div a.odt_link {background: url('{$IMG,filetypes/page_odt}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".odp"], body div a.odp_link {background: url('{$IMG,filetypes/page_odt}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".ods"], body div a.ods_link {background: url('{$IMG,filetypes/page_ods}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".rss"], body div a.feed_link {background: url('{$IMG,filetypes/feed}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".torrent"], body div a.torrent_link {background: url('{$IMG,filetypes/page_torrent}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".zip"], a[href$=".gz"], a[href$=".bz2"], a[href$=".tar"], a[href$=".rar"], body div a.archive_link {background: url('{$IMG,filetypes/page_archive}') no-repeat right top; padding: 0 22px 5px 0;}
-a[href$=".asf"], a[href$=".ra"], a[href$=".wma"], a[href$=".wav"], a[href$=".mp3"], a[href$=".ogg"], a[href$=".mid"], a[href$=".mov"], a[href$=".qt"], a[href$=".wmv"], a[href$=".ram"], a[href$=".rm"], a[href$=".avi"], a[href$=".mpg"], a[href$=".mpe"], a[href$=".mpeg"], a[href$=".mp4"], a[href$=".webm"], body div a.media_link {background: url('{$IMG,filetypes/page_media}') no-repeat right top; padding: 0 22px 5px 0;}
-a[target="_blank"] {background: url('{$IMG,filetypes/external_link}') no-repeat right top; padding-right:10px;}
-a[onclick$="window.open"], body div a.external_link {background: url('{$IMG,filetypes/external_link}') no-repeat right top !important; padding-right:10px !important;}
+a[href^="mailto:"] {background: url('{$IMG;,filetypes/email_link}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".pdf"], a[href$=".ps"], body div a.pdf_link {background: url('{$IMG;,filetypes/page_pdf}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".doc"], a[href$=".docx"], a[href$=".rtf"], body div a.doc_link {background: url('{$IMG;,filetypes/page_doc}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".xls"], a[href$=".xlsx"], body div a.xls_link {background: url('{$IMG;,filetypes/page_xls}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".ppt"], a[href$=".pptx"], body div a.ppt_link {background: url('{$IMG;,filetypes/page_ppt}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".log"], a[href$=".txt"], body div a.txt_link {background: url('{$IMG;,filetypes/page_txt}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".odt"], body div a.odt_link {background: url('{$IMG;,filetypes/page_odt}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".odp"], body div a.odp_link {background: url('{$IMG;,filetypes/page_odt}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".ods"], body div a.ods_link {background: url('{$IMG;,filetypes/page_ods}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".rss"], body div a.feed_link {background: url('{$IMG;,filetypes/feed}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".torrent"], body div a.torrent_link {background: url('{$IMG;,filetypes/page_torrent}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".zip"], a[href$=".gz"], a[href$=".bz2"], a[href$=".tar"], a[href$=".rar"], body div a.archive_link {background: url('{$IMG;,filetypes/page_archive}') no-repeat right top; padding: 0 22px 5px 0;}
+a[href$=".asf"], a[href$=".ra"], a[href$=".wma"], a[href$=".wav"], a[href$=".mp3"], a[href$=".ogg"], a[href$=".mid"], a[href$=".mov"], a[href$=".qt"], a[href$=".wmv"], a[href$=".ram"], a[href$=".rm"], a[href$=".avi"], a[href$=".mpg"], a[href$=".mpe"], a[href$=".mpeg"], a[href$=".mp4"], a[href$=".webm"], body div a.media_link {background: url('{$IMG;,filetypes/page_media}') no-repeat right top; padding: 0 22px 5px 0;}
+a[target="_blank"] {background: url('{$IMG;,filetypes/external_link}') no-repeat right top; padding-right:10px;}
+a[onclick$="window.open"], body div a.external_link {background: url('{$IMG;,filetypes/external_link}') no-repeat right top !important; padding-right:10px !important;}
 body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] {background-image:none; padding:0px;}
 body a.link_exempt2 {background-image:none;}
 {+START,IF,{$ADDON_INSTALLED,recommend}}
-.print_icon {background: url('{$IMG,recommend/print}') no-repeat left top !important; padding: 0 0 5px 22px !important;}
+.print_icon {background: url('{$IMG;,recommend/print}') no-repeat left top !important; padding: 0 0 5px 22px !important;}
 {+END}
 
 a[title="{!VIRTUAL_ROOT}"]:hover {

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources_custom/hooks/systems/ecommerce/catalogue_item.php</string>
+	<string>themes/default/templates/JAVASCRIPT_MODALWINDOW.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -81,8 +81,6 @@
 			<date>2012-01-09T20:31:50Z</date>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>data</string>
 			<key>regexFolderFilter</key>
@@ -156,7 +154,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2012-01-16T13:58:15Z</date>
+			<date>2012-01-25T15:19:31Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -455,20 +453,6 @@
 			<key>firstVisibleLine</key>
 			<integer>330</integer>
 		</dict>
-		<key>adminzone/pages/modules/admin_ocf_join.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>155</integer>
-		</dict>
 		<key>cms/pages/comcode/EN/panel_top.txt</key>
 		<dict>
 			<key>caret</key>
@@ -581,34 +565,6 @@
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
 		</dict>
-		<key>data_custom/addon_files.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>57</integer>
-				<key>line</key>
-				<integer>2044</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2018</integer>
-		</dict>
-		<key>data_custom/addons-sheet.csv</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>138</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>133</integer>
-		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
 			<key>caret</key>
@@ -631,20 +587,6 @@
 				<integer>20</integer>
 				<key>line</key>
 				<integer>10</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>data_custom/signup_refer.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>6</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -891,20 +833,6 @@
 			<key>firstVisibleLine</key>
 			<integer>12</integer>
 		</dict>
-		<key>lang_custom/EN/signup_refer.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>45</integer>
-				<key>line</key>
-				<integer>11</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>pages/comcode/EN/privacy.txt</key>
 		<dict>
 			<key>caret</key>
@@ -933,36 +861,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>pages/modules/recommend.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>119</integer>
-				<key>line</key>
-				<integer>595</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>571</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>110</integer>
-				<key>line</key>
-				<integer>595</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>123</integer>
-				<key>line</key>
-				<integer>595</integer>
-			</dict>
-		</dict>
 		<key>parameters.xml</key>
 		<dict>
 			<key>caret</key>
@@ -990,6 +888,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>sources/attachments2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>56</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>14</integer>
 		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
@@ -1049,6 +961,34 @@
 			<key>firstVisibleLine</key>
 			<integer>8</integer>
 		</dict>
+		<key>sources/comcode_add.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>275</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>265</integer>
+		</dict>
+		<key>sources/comcode_renderer.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>65</integer>
+				<key>line</key>
+				<integer>561</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>536</integer>
+		</dict>
 		<key>sources/database/mysql.php</key>
 		<dict>
 			<key>caret</key>
@@ -1092,20 +1032,6 @@
 				<key>line</key>
 				<integer>200</integer>
 			</dict>
-		</dict>
-		<key>sources/ecommerce.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>382</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>348</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1695,34 +1621,6 @@
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
 		</dict>
-		<key>sources/hooks/systems/ecommerce/cart_orders.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>88</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>63</integer>
-		</dict>
-		<key>sources/hooks/systems/ecommerce/catalogue_items.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>36</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
 			<key>caret</key>
@@ -1779,47 +1677,19 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
-		<key>sources/ocf_join.php</key>
+		<key>sources/mail.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>203</integer>
+				<integer>217</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>198</integer>
-		</dict>
-		<key>sources/ocf_members_action.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>225</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>204</integer>
-		</dict>
-		<key>sources/ocf_members_action2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>567</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>555</integer>
+			<integer>188</integer>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -1835,19 +1705,19 @@
 			<key>firstVisibleLine</key>
 			<integer>81</integer>
 		</dict>
-		<key>sources/site.php</key>
+		<key>sources/site2.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>57</integer>
+				<integer>389</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>30</integer>
+			<integer>359</integer>
 		</dict>
 		<key>sources/sms.php</key>
 		<dict>
@@ -1921,20 +1791,6 @@
 			<key>firstVisibleLine</key>
 			<integer>78</integer>
 		</dict>
-		<key>sources_custom/hooks/systems/ecommerce/catalogue_item.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>sources_custom/miniblocks/.htaccess</key>
 		<dict>
 			<key>caret</key>
@@ -1948,20 +1804,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>sources_custom/ocf_join.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>34</integer>
-				<key>line</key>
-				<integer>69</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>40</integer>
 		</dict>
 		<key>sources_custom/programe/botloaderfuncs.php</key>
 		<dict>
@@ -2006,6 +1848,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
+		</dict>
+		<key>themes/default/css_custom/columns.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>8</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>themes/default/css_custom/index.html</key>
 		<dict>
@@ -2413,6 +2269,34 @@
 				<integer>2</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/JAVASCRIPT_MENU_POPUP.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>30</integer>
+				<key>line</key>
+				<integer>102</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>83</integer>
+		</dict>
+		<key>themes/default/templates/JAVASCRIPT_MODALWINDOW.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>326</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>299</integer>
+		</dict>
 		<key>themes/default/templates/MENU_BRANCH_popup.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2471,36 +2355,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>8</integer>
-			</dict>
-		</dict>
-		<key>themes/default/templates/MENU_SPACER_dropdown.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
 			</dict>
 		</dict>
 		<key>themes/default/templates/MENU_SPACER_embossed.tpl</key>
@@ -3050,25 +2904,12 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources_custom/ocf_join.php</string>
-		<string>pages/modules/recommend.php</string>
-		<string>sources/ocf_join.php</string>
-		<string>sources/ocf_members_action2.php</string>
-		<string>sources/ocf_members_action.php</string>
-		<string>data_custom/addons-sheet.csv</string>
-		<string>sources/support.php</string>
-		<string>sources/site.php</string>
-		<string>sources_custom/hooks/systems/ecommerce/catalogue_item.php</string>
-		<string>data_custom/addon_files.txt</string>
-		<string>data_custom/signup_refer.ini</string>
-		<string>sources/ecommerce.php</string>
-		<string>sources/hooks/systems/ecommerce/catalogue_items.php</string>
-		<string>sources/hooks/systems/ecommerce/cart_orders.php</string>
-		<string>lang_custom/EN/signup_refer.ini</string>
+		<string>themes/default/css_custom/columns.css</string>
+		<string>themes/default/templates/JAVASCRIPT_MODALWINDOW.tpl</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{674, 131}, {1148, 940}}</string>
+	<string>{{654, 76}, {1148, 940}}</string>
 </dict>
 </plist>

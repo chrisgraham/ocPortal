@@ -206,7 +206,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 	{
 		if (($_postdetails['p_poster_name_if_guest']==do_lang('SYSTEM')) && (addon_installed('ocf_member_avatars')))
 		{
-			$post['poster_avatar']=find_theme_image('ocf_default_avatars/default_set/ocp_fanatic');
+			$post['poster_avatar']=find_theme_image('ocf_default_avatars/default_set/ocp_fanatic',true);
 		}
 	}
 

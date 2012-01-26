@@ -221,7 +221,7 @@ class Module_newsletter
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'NEWSLETTER_JOIN');
+		return ($GLOBALS['SITE_DB']->query_value('newsletters','COUNT(*)')==0)?array():array('misc'=>'NEWSLETTER_JOIN');
 	}
 	
 	/**
@@ -253,6 +253,9 @@ class Module_newsletter
 	{
 		$title=get_page_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
 	
+		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
+		if (count($newsletters)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'do'),'_SELF');
 		$submit_name=do_lang_tempcode('NEWSLETTER_JOIN');
 
@@ -277,7 +280,6 @@ class Module_newsletter
 		$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',true));
 		if (count(find_all_langs())!=1)
 			$fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),'','lang',nice_get_langs(user_lang())));
-		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
 		$level=get_param_integer('level',NULL);
 		if (is_null($level))
 		{

@@ -599,7 +599,27 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 
 	// Spacers
 	if ($branch['type']=='blank')
-		return array(do_template('MENU_SPACER_'.filter_naughty_harsh($type),NULL,NULL,false,'MENU_SPACER_tree'),false);
+	{
+		return array(
+			do_template(
+				'MENU_SPACER_'.filter_naughty_harsh($type),
+				array(
+					// Useful contextual information
+					'MENU'=>$codename,
+					'TOP_LEVEL'=>$the_level==1,
+					'THE_LEVEL'=>strval($the_level),
+
+					// Hints for current-page rendering
+					'CURRENT'=>$current_page,
+					'CURRENT_ZONE'=>$current_zone,
+				),
+				NULL,
+				false,
+				'MENU_SPACER_tree'
+			),
+			false
+		);
+	}
 
 	// Normal branches...
 

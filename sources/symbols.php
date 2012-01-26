@@ -513,7 +513,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'TRIM':
 				if (isset($param[0]))
 				{
-					$value=preg_replace(array('#^\s+#','#^(<br\s*/?'.'>)+#','#^(&nbsp;)+#','#\s+$#','#(<br\s*/?'.'>)+$#','#(&nbsp;)+$#'),array('','','','','',''),$param[0]);
+					$value=preg_replace(array('#^\s+#','#^(<br\s*/?'.'>\s*)+#','#^(&nbsp;)+#','#\s+$#','#(<br\s*/?'.'>\s*)+$#','#(&nbsp;)+$#'),array('','','','','',''),$param[0]);
 				}
 				break;
 
@@ -2433,7 +2433,17 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 
 		if ($tooltip)
 		{
-			if (!is_null($tooltip_if_truncated)) $html.=' &ndash; '.(is_object($tooltip_if_truncated)?$tooltip_if_truncated->evaluate():$tooltip_if_truncated);
+			if (!is_null($tooltip_if_truncated))
+			{
+				$tif=(is_object($tooltip_if_truncated)?$tooltip_if_truncated->evaluate():$tooltip_if_truncated);
+				if (strpos($tif,$html)!==false)
+				{
+					$html=$tif;
+				} else
+				{
+					$html.=' &ndash; '.$tif;
+				}
+			}
 			$tpl=((strpos($truncated,'<div')!==false || strpos($truncated,'<p')!==false || strpos($truncated,'<table')!==false)?'CROP_TEXT_MOUSE_OVER':'CROP_TEXT_MOUSE_OVER_INLINE');
 			$value_tempcode=do_template($tpl,array('_GUID'=>'36ae945ed864633cfa0d67e5c3f2d1c8','TEXT_SMALL'=>$truncated,'TEXT_LARGE'=>$html));
 			$value=$value_tempcode->evaluate();

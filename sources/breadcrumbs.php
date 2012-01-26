@@ -19,6 +19,14 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__breadcrumbs()
+{
+	define('REGEXP_CODENAME','[\w\_\-]*');
+}
+
+/**
  * Load all breadcrumb substitutions and return them.
  *
  * @param  string			The default breadcrumbs
@@ -130,7 +138,7 @@ class breadcrumb_substitution_loader
 		{
 			case 'substitution':
 				list($zone,$attributes,$hash)=page_link_decode($this->substitution_current_match_key);
-				if ($zone=='_WILD') $zone='[\w\_\-]*';
+				if ($zone=='_WILD') $zone=REGEXP_CODENAME;
 				if (!isset($attributes['page'])) $attributes['page']='';
 				/*
 				Commented for performance. This isn't user-data, so we're safe
@@ -141,11 +149,11 @@ class breadcrumb_substitution_loader
 				{
 					$zones=find_all_zones(false,true);
 					if (isset($zones[$zone]))
-						$attributes['page']='(?!'.$zones[$zone][3].')[\w\_\-]*';
+						$attributes['page']='(?!'.$zones[$zone][3].')'.REGEXP_CODENAME;
 					else
 						$attributes['page']='_WILD';
 				}
-				if ($attributes['page']=='_WILD') $attributes['page']='[\w\_\-]*';
+				if ($attributes['page']=='_WILD') $attributes['page']=REGEXP_CODENAME;
 				foreach ($attributes as $key=>$val)
 				{
 					$attributes[$key]=/*Actually let's allow regexps so we can do binding str_replace('~','\~',preg_quote(*/$val/*))*/;
@@ -154,14 +162,35 @@ class breadcrumb_substitution_loader
 				$source_url=urldecode(urldecode($_source_url->evaluate())); // urldecode because we don't want our regexp syntax mangled. Highly unlikely our sub's are going to really use special characters as parts of the URL
 				if ((strpos($source_url,'.htm')===false) && (strpos($source_url,'.php')===false))
 					$source_url.='(?:/index\.php)?';
-				$source_url1=str_replace(array('?','(\?',')\?','&',get_base_url().'/[\w\_\-]*/'),array('\?','(?',')?','(?:&[^<>]*)*&'/*Match-key like behaviour, allow extra URL clauses*/,get_base_url().'/?[\w\_\-]*/'),$source_url).'(?:[&\?][^<>]*)*';
+				$source_url1= // this is kinda like preg_quote, but allows some regexp stuff through because we want to support some of it, without making it hard to write out URLs
+					str_replace(
+						array('.htm',	'?',	'(\?',	')\?',	'&',																							get_base_url().'/'.REGEXP_CODENAME.'/'),
+						array('\.htm',	'\?',	'(?',		')?',		'(?:&[^<>]*)*&'/*Match-key like behaviour, allow extra URL clauses*/,	get_base_url().'/?'.REGEXP_CODENAME.'/'),
+						$source_url
+					)
+					.
+					'(?:[&\?][^<>]*)*';
 				$escaped_source_url=escape_html($source_url);
-				$source_url2=($source_url==$escaped_source_url)?$source_url1:str_replace(array('?','(\?',')\?','&',get_base_url().'/[\w\_\-]*/'),array('\?','(?',')?','(?:&[^<>]*)*&'/*Match-key like behaviour, allow extra URL clauses*/,get_base_url().'/?[\w\_\-]*/'),$escaped_source_url).'(?:[&\?][^<>]*)*';
-				$from='^.*<a[^<>]* href="('.$source_url2.')">([^<>]*)</a>';
-				$regexp='#^'.$source_url1.'$#';
-				if ((preg_match($regexp,get_self_url(true))!=0) && (preg_match('~'.$from.'~U',$this->current_breadcrumbs)==0))
+				if ($source_url==$escaped_source_url) // optimisation
 				{
-					$from='^.*(<span>(<span[^<>]*>)?|<a[^<>]* href="('.$source_url2.')">)([^<>]*)((</(span)>)?</(a|span)>)';
+					$source_url2=$source_url1;
+				} else
+				{
+					$source_url2= // this is kinda like preg_quote, but allows some regexp stuff through because we want to support some of it, without making it hard to write out URLs
+						str_replace(
+							array('.htm',	'?',	'(\?',	')\?',	'&',																							get_base_url().'/'.REGEXP_CODENAME.'/'),
+							array('\.htm',	'\?',	'(?',		')?',		'(?:&[^<>]*)*&'/*Match-key like behaviour, allow extra URL clauses*/,	get_base_url().'/?'.REGEXP_CODENAME.'/'),
+							$escaped_source_url
+						)
+						.
+						'(?:[&\?][^<>]*)*';
+				}
+				$from='^.*<a[^<>]*\shref="('.$source_url2.')"[^<>]*>(<abbr[^<>]*>)?([^<>]*)(</abbr>)?</a>';
+				$regexp='#^'.$source_url1.'$#';
+				$have_url_match=(preg_match($regexp,get_self_url(true))!=0); // we either bind rule via URL match, or finding it in the defined breadcrumb chain
+				if ($have_url_match && (preg_match('~'.$from.'~Us',$this->current_breadcrumbs)==0))
+				{ // Probably it's a non-link chain in the breadcrumbs, so try to bind to the <span> portion too (possibly nested)
+					$from='^.*(<span>(<span[^<>]*>)?|<a[^<>]*\shref="('.$source_url2.')"[^<>]*>)(<abbr[^<>]*>)?([^<>]*)(</abbr>)?((</(span)>)?</(a|span)>)';
 					$from_non_link=true;
 				} else $from_non_link=false;
 				$to='';
@@ -180,15 +209,15 @@ class breadcrumb_substitution_loader
 					}
 				}
 				$_target_url=$from_non_link?'${3}':'${1}';
-				$existing_label=$from_non_link?'${4}':'${2}';
+				$existing_label=$from_non_link?'${5}':'${3}';
 				$_link_title=($this->substitution_current_label===NULL)?$existing_label:$this->substitution_current_label;
 				$link_title=(preg_match('#(\{\!)|(\{\?)|(\{\$)|(\[)#',$_link_title)==0)?$_link_title:static_evaluate_tempcode(comcode_to_tempcode($_link_title));
 				if ($from_non_link)
 				{
-					$to.='${1}'.$link_title.'${5}';
+					$to.='${1}'.$link_title.'${7}';
 				} else
 				{
-					$to.='<a title="'.do_lang('GO_BACKWARDS_TO',escape_html(strip_tags($link_title))).'" href="'.escape_html($_target_url).'">'.$link_title.'</a>';
+					$to.='<a title="'.do_lang('GO_BACKWARDS_TO',escape_html(strip_tags($link_title))).'" href="'.escape_html($_target_url).'">${2}'.$link_title.'${4}</a>';
 				}
 				$this->substitutions[$from]=$to;
 				break;

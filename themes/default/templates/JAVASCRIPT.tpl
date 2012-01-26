@@ -775,6 +775,22 @@ function confirm_session(callback)
 		return;
 	}
 
+	// But non blank tells us the username, and there is an implication that no session is confirmed for this login
+
+	if (ret.responseText=='{!GUEST;}') // Hmm, actually whole login was lost, so we need to ask for username too
+	{
+		window.fauxmodal_prompt(
+			'{!USERNAME^;}',
+			'',
+			function(promptt)
+			{
+				_confirm_session(callback,promptt,url);
+			},
+			'{!_LOGIN;}'
+		);
+		return;
+	}
+
 	_confirm_session(callback,ret.responseText,url);
 }
 
@@ -1516,7 +1532,7 @@ function repositionTooltip(ac,event,bottom,starting,tooltipElement,force_width)
 	if (!starting) // Real JS mousemove event, so we assume not a screen reader and have to remove natural tooltip
 	{
 		if (ac.getAttribute('title')) ac.setAttribute('title','');
-		if ((ac.parentNode.nodeName.toLowerCase()=='a') && (ac.parentNode.getAttribute('title')) && (ac.parentNode.getAttribute('title').indexOf('{!LINK_NEW_WINDOW^;}')!=-1))
+		if ((ac.parentNode.nodeName.toLowerCase()=='a') && (ac.parentNode.getAttribute('title')) && ((ac.nodeName.toLowerCase()=='abbr') || (ac.parentNode.getAttribute('title').indexOf('{!LINK_NEW_WINDOW^;}')!=-1)))
 			ac.parentNode.setAttribute('title',''); {$,Do not want second tooltips that are not useful}
 	}
 	

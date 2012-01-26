@@ -559,7 +559,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 	if ($semiparse_mode) // We have got to this point because we want to provide a special 'button' editing representation for these tags
 	{
-		$non_text_tags=array('section_controller','big_tab_controller','img','currency','block','contents','concepts','attachment','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
+		$non_text_tags=array('section_controller','big_tab_controller','currency','block','contents','concepts','attachment','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
 		if (in_array($tag,$non_text_tags))
 		{
 			$params='';
@@ -1048,7 +1048,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$temp_tpl=make_string_tempcode('<h'.strval($level).(($level==1)?' class="main_page_title"':'').'><span class="inner">'.$embed->evaluate().'</span></h'.strval($level).'>');
 				break;
 			}
-			$tpl_map=array('ID'=>($pass_id=='panel')?NULL:$uniq_id,'TITLE'=>$embed,'HELP_URL'=>'','HELP_TERM'=>'');
+			$tpl_map=array('ID'=>(substr($pass_id,0,5)=='panel')?NULL:$uniq_id,'TITLE'=>$embed,'HELP_URL'=>'','HELP_TERM'=>'');
 			if (array_key_exists('sub',$attributes)) $tpl_map['SUB']=protect_from_escaping(comcode_to_tempcode($attributes['sub'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member));
 			$temp_tpl=do_template($template,$tpl_map);
 			break;

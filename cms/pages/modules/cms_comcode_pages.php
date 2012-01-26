@@ -713,9 +713,10 @@ class Module_cms_comcode_pages
 			$owner=get_member();
 		}
 		$_pages=find_all_pages($zone,'comcode/'.$lang,'txt',false,NULL,FIND_ALL_PAGES__NEWEST);
-		$_pages=array_merge($_pages,find_all_pages($zone,'comcode_custom/'.$lang,'txt',false,NULL,FIND_ALL_PAGES__NEWEST));
-		$_pages=array_merge($_pages,find_all_pages($zone,'comcode/'.get_site_default_lang(),'txt',false,NULL,FIND_ALL_PAGES__NEWEST));
-		$_pages=array_merge($_pages,find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt',false,NULL,FIND_ALL_PAGES__NEWEST));
+		$_pages+=find_all_pages($zone,'comcode_custom/'.$lang,'txt',false,NULL,FIND_ALL_PAGES__NEWEST);
+		$_pages+=find_all_pages($zone,'comcode/'.get_site_default_lang(),'txt',false,NULL,FIND_ALL_PAGES__NEWEST);
+		$_pages+=find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt',false,NULL,FIND_ALL_PAGES__NEWEST);
+		ksort($_pages);
 		$pages=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
 		foreach (array_keys($_pages) as $page)
 		{
@@ -747,7 +748,10 @@ class Module_cms_comcode_pages
 		if (!$simple_add)
 		{
 			$fields2->attach(form_input_tick(do_lang_tempcode('SHOW_AS_EDITED'),do_lang_tempcode('DESCRIPTION_SHOW_AS_EDITED'),'show_as_edit',$show_as_edit));
-			$fields2->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$GLOBALS['FORUM_DRIVER']->get_username($owner),true));
+			if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()) // TODO: Make a proper permission
+			{
+				$fields2->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$GLOBALS['FORUM_DRIVER']->get_username($owner),true));
+			}
 
 			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SEO'),'SECTION_HIDDEN'=>true,'HELP'=>(get_option('show_docs')=='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_seo','tut_seo','1'))))));
 			$fields2->attach(form_input_line_multi(do_lang_tempcode('KEYWORDS'),do_lang_tempcode('DESCRIPTION_META_KEYWORDS'),'meta_keywords[]',array_map('trim',explode(',',preg_replace('#,+#',',',$meta_keywords))),0));
@@ -857,9 +861,12 @@ class Module_cms_comcode_pages
 
 		$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		check_edit_permission('high',$resource_owner);
-		$_owner=post_param('owner',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
-		$owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_owner);
-		if (is_null($owner)) $owner=get_member();
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()) // TODO: Make a proper permission
+		{
+			$_owner=post_param('owner',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			$owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_owner);
+			if (is_null($owner)) $owner=get_member();
+		} else $owner=get_member();
 		if (is_null($resource_owner)) // Add
 		{
 			check_submit_permission('high');
@@ -918,6 +925,11 @@ class Module_cms_comcode_pages
 			if (fwrite($myfile,$new)<strlen($new)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			fclose($myfile);
 			sync_file($fullpath);
+			
+			$file_changed=true;
+		} else
+		{
+			$file_changed=false;
 		}
 		require_code('seo2');
 		$new_keywords=post_param('meta_keywords','');
@@ -958,7 +970,7 @@ class Module_cms_comcode_pages
 
 		fix_permissions($fullpath);
 
-		if ((file_exists($fullpath)) && (get_option('store_revisions')=='1'))
+		if ((file_exists($fullpath)) && (get_option('store_revisions')=='1') && ($file_changed))
 		{
 			$time=time();
 			@copy($fullpath,$fullpath.'.'.strval($time)) OR intelligent_write_error($fullpath.'.'.strval($time));

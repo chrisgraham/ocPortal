@@ -1,7 +1,7 @@
 // Based on http://welcome.totheinter.net/columnizer-jquery-plugin/
 //  But with fixes and better flexibility, and pure CSS-based activation
 
-addEventListenerAbstract(window,'load',function () {
+addEventListenerAbstract(window,'real_load',function () {
 	$('.column_wrapper').columnize({ columns: 3 });
 	$('.column_wrapper_2').columnize({ columns: 2 });
 } );
@@ -130,9 +130,14 @@ addEventListenerAbstract(window,'load',function () {
 				counter2 = options.accuracy;
 				var columnText;
 				var latestTextNode = null;
-				while($parentColumn.height() < height && oText.length){
-					var pos = oText.indexOf(' ', counter2);
-					if (pos == 0) pos = oText.substring(1).indexOf(' ', counter2)+1;
+				var partsUsed = 0;
+				while($parentColumn.height() < height && oText.length != 0){
+					var pos = oText.indexOf(' '/*, counter2*/);
+					if (pos == 0)
+					{
+						pos = oText.substring(1).indexOf(' '/*, counter2*/);
+						if (pos != -1) pos++;
+					}
 					if (pos != -1) {
 						columnText = oText.substring(0, pos);
 					} else {
@@ -140,27 +145,42 @@ addEventListenerAbstract(window,'load',function () {
 					}
 					latestTextNode = document.createTextNode(columnText);
 					$putInHere.append(latestTextNode);
+					partsUsed++;
 					
-					if((oText.length > counter2) && (pos)) {
+					if((oText.length > counter2) && (pos != -1)) {
 						oText = oText.substring(pos);
 					}else{
 						oText = "";
 					}
 				}
+
 				if($parentColumn.height() >= height && latestTextNode != null){
-					// too tall :(
+					// too tall - step back :(
 					$putInHere[0].removeChild(latestTextNode);
 					oText = latestTextNode.nodeValue + oText;
+					partsUsed--;
 				}
-				if(oText.length){
+				if(oText.length != 0){
+					if (partsUsed != 0){
+						if (latestTextNode != null){
+							// Step back a bit further, to make a very small bit of space
+							latestTextNode=$putInHere[0].lastChild;
+							$putInHere[0].removeChild(latestTextNode);
+							oText = latestTextNode.nodeValue + oText;
+						}
+
+						// Add a dash
+						latestTextNode = document.createTextNode(' \u2014');
+						$putInHere.append(latestTextNode);
+					}
 					$item[0].nodeValue = oText;
 				}else{
 					return false; // we ate the whole text node, move on to the next node
 				}
 			}
-			
+
 			// Put what is left back
-			if($pullOutHere.children().length){
+			if($pullOutHere.contents().length !=0 ){
 				$pullOutHere.prepend($item);
 			}else{
 				$pullOutHere.append($item);
@@ -200,7 +220,10 @@ addEventListenerAbstract(window,'load',function () {
 		}
 		
 		function checkDontEndColumnOnConstraints(dom){
-			if(dom.nodeType != 1) return false;
+			if(dom.nodeType != 1)
+			{
+				return (dom.nodeType == 3) && (dom.nodeValue.replace(/\s/g,'') == '');
+			}
 			if($(dom).hasClass("dontend")) return true;
 			if(dom.childNodes.length == 0) return false;
 			return checkDontEndColumnOnConstraints(dom.childNodes[dom.childNodes.length-1]);
@@ -274,8 +297,9 @@ addEventListenerAbstract(window,'load',function () {
 						}
 					}
 					
-					while(checkDontEndColumnOnConstraints($col.children(":last").length && $col.children(":last").get(0))){
-						var $lastKid = $col.children(":last");
+					// Any "dontend" stuff needs to be yonked off our current column and put back onto the start of $destroyable. Loop whilst we need to keep doing this.
+					while(checkDontEndColumnOnConstraints($col.contents(":last").length != 0 && $col.contents(":last").get(0))){
+						var $lastKid = $col.contents(":last");
 						$lastKid.remove();
 						$destroyable.prepend($lastKid);
 					}

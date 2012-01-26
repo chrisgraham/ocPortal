@@ -100,7 +100,7 @@ function popUpMenu(id,place,menu,event)
 	}
 	if (place=='below')
 	{
-		t+=e.parentNode.offsetHeight+4;
+		t+=e.parentNode.offsetHeight;
 	} else
 	{
 		l+=e.parentNode.offsetWidth;

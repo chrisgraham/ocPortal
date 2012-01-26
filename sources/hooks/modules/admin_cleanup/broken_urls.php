@@ -141,7 +141,7 @@ class Hook_broken_urls
 		$LAX_COMCODE=true;
 		foreach ($zones as $zone)
 		{
-			$pages=array_merge(find_all_pages($zone,'comcode/'.get_site_default_lang(),'txt',true),find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt',true));
+			$pages=find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt',true)+find_all_pages($zone,'comcode/'.get_site_default_lang(),'txt',true);
 			foreach ($pages as $page=>$type)
 			{
 				$file_path=zone_black_magic_filterer(((strpos($type,'_custom')!==false)?get_custom_file_base():get_file_base()).'/'.$zone.'/pages/'.$type.'/'.$page);

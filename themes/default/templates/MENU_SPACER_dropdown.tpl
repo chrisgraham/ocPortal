@@ -1,1 +1,1 @@
-<li class="menu_spacer">&nbsp;</li>
+<li class="menu_spacer{+START,IF,{TOP_LEVEL}} toplevel{+END}">&nbsp;</li>
