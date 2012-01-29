@@ -10,7 +10,7 @@ addEventListenerAbstract(window,'real_load',function () {
 // http://welcome.totheinter.net/columnizer-jquery-plugin/
 // created by: Adam Wulf @adamwulf, adam.wulf@gmail.com
 
-(function($){
+(function($) {
 
  $.fn.columnize = function(options) {
 
@@ -25,7 +25,7 @@ addEventListenerAbstract(window,'real_load',function () {
 		// it's container if it can't fit within a specified height
 		overflow : false,
 		// this function is called after content is columnized
-		doneFunc : function(){},
+		doneFunc : function() {},
 		// if the content should be columnized into a 
 		// container node other than it's own node
 		target : false,
@@ -39,11 +39,15 @@ addEventListenerAbstract(window,'real_load',function () {
 		// (int) the minimum number of characters to jump when splitting
 		// text nodes. smaller numbers will result in higher accuracy
 		// column widths, but will take slightly longer
-		accuracy : false
+		accuracy : false,
+		// if we need a 'force-break' class set
+		explicitBreaks : $(this).find('.force-break').length!=0,
 	};
 	var options = $.extend(defaults, options);
 
-	$(this).find('h1, h2, h3, h4, h5, h6').addClass('dontend');
+	if (!options.explicitBreaks) {
+		$(this).find('h1, h2, h3, h4, h5, h6').addClass('dontend');
+	}
 	$(this).find('table, thead, tbody, tfoot, colgroup, caption, label, legend, script, style, textarea, button, object, embed, tr, th, td, li, h1, h2, h3, h4, h5, h6, form').addClass('dontsplit');
 	$(this).find('br').addClass('removeiflast').addClass('removeiffirst');
 
@@ -61,14 +65,14 @@ addEventListenerAbstract(window,'real_load',function () {
 	    // images loading after dom load
 	    // can screw up the column heights,
 	    // so recolumnize after images load
-	    if(!options.ignoreImageLoading && !options.target){
-	    	if(!$inBox.data("imageLoaded")){
+	    if(!options.ignoreImageLoading && !options.target) {
+	    	if(!$inBox.data("imageLoaded")) {
 		    	$inBox.data("imageLoaded", true);
-		    	if($(this).find("img").length > 0){
+		    	if($(this).find("img").length > 0) {
 		    		// only bother if there are
 		    		// actually images...
-			    	var func = function($inBox,$cache){ return function(){
-				    	if(!$inBox.data("firstImageLoaded")){
+			    	var func = function($inBox,$cache) { return function() {
+				    	if(!$inBox.data("firstImageLoaded")) {
 				    		$inBox.data("firstImageLoaded", "true");
 					    	$inBox.empty().append($cache.children().clone(true));
 					    	$inBox.columnize(options);
@@ -85,14 +89,14 @@ addEventListenerAbstract(window,'real_load',function () {
 		
 		columnizeIt();
 		
-		if(!options.buildOnce){
+		if(!options.buildOnce) {
 			$(window).resize(function() {
-				if(!options.buildOnce && $.browser.msie){
-					if($inBox.data("timeout")){
+				if(!options.buildOnce && $.browser.msie) {
+					if($inBox.data("timeout")) {
 						clearTimeout($inBox.data("timeout"));
 					}
 					$inBox.data("timeout", setTimeout(columnizeIt, 200));
-				}else if(!options.buildOnce){
+				}else if(!options.buildOnce) {
 					columnizeIt();
 				}else{
 					// don't rebuild
@@ -103,14 +107,31 @@ addEventListenerAbstract(window,'real_load',function () {
 		/**
 		 * Create a node that has a height
 		 * less than or equal to height.
-		 * Returns a boolean on whether we did some splitting successfully at a text point (so we know we don't need to split a real element).
+		 * Returns a boolean on whether we did some splitting successfully at an optimal point (so we know we don't need to continue to split elements recursively).
 		 *
 		 * @param putInHere, a jQuery element
 		 * @$pullOutHere, a dom element
 		 */
-		function columnize($putInHere, $pullOutHere, $parentColumn, height){
-			while($parentColumn.height() < height && $pullOutHere[0].childNodes.length){
-				$putInHere.append($pullOutHere[0].childNodes[0]); // Because we're not cloning, jquery will actually move the element
+		function columnize($putInHere, $pullOutHere, $parentColumn, height) {
+			if (options.explicitBreaks) { // We're doing explicit breaks, meaning we only ever break on a force-break node
+				var splitHere = false;
+				while($pullOutHere[0].childNodes.length) {
+					var next = $($pullOutHere[0].childNodes[0]);
+					splitHere = next.hasClass('force-break');
+					if (splitHere) break;
+					var splitUnder = next.find('force-break').length != 0;
+					if (splitUnder) break;
+					$putInHere.append(next); // Because we're not cloning, jquery will actually move the element
+				}
+				if (splitHere) {
+					$($pullOutHere[0].childNodes[0]).remove();
+					return true; // No further splits needs
+				}
+				return false; // Will need to go down to split recursively
+			} else{
+				while($parentColumn.height() < height && $pullOutHere[0].childNodes.length) {
+					$putInHere.append($pullOutHere[0].childNodes[0]); // Because we're not cloning, jquery will actually move the element
+				}
 			}
 			if($putInHere[0].childNodes.length == 0) return false;
 
@@ -121,7 +142,7 @@ addEventListenerAbstract(window,'real_load',function () {
 			var $item = $(lastKid);
 			
 			// and now try and put a split version of it
-			if($item[0].nodeType == 3){
+			if($item[0].nodeType == 3) {
 				// it's a text node, split it up
 				var oText = $item[0].nodeValue;
 
@@ -131,10 +152,9 @@ addEventListenerAbstract(window,'real_load',function () {
 				var columnText;
 				var latestTextNode = null;
 				var partsUsed = 0;
-				while($parentColumn.height() < height && oText.length != 0){
+				while($parentColumn.height() < height && oText.length != 0) {
 					var pos = oText.indexOf(' '/*, counter2*/);
-					if (pos == 0)
-					{
+					if (pos == 0) {
 						pos = oText.substring(1).indexOf(' '/*, counter2*/);
 						if (pos != -1) pos++;
 					}
@@ -154,15 +174,15 @@ addEventListenerAbstract(window,'real_load',function () {
 					}
 				}
 
-				if($parentColumn.height() >= height && latestTextNode != null){
+				if($parentColumn.height() >= height && latestTextNode != null) {
 					// too tall - step back :(
 					$putInHere[0].removeChild(latestTextNode);
 					oText = latestTextNode.nodeValue + oText;
 					partsUsed--;
 				}
-				if(oText.length != 0){
-					if (partsUsed != 0){
-						if (latestTextNode != null){
+				if(oText.length != 0) {
+					if (partsUsed != 0) {
+						if (latestTextNode != null) {
 							// Step back a bit further, to make a very small bit of space
 							latestTextNode=$putInHere[0].lastChild;
 							$putInHere[0].removeChild(latestTextNode);
@@ -180,7 +200,7 @@ addEventListenerAbstract(window,'real_load',function () {
 			}
 
 			// Put what is left back
-			if($pullOutHere.contents().length !=0 ){
+			if($pullOutHere.contents().length !=0 ) {
 				$pullOutHere.prepend($item);
 			}else{
 				$pullOutHere.append($item);
@@ -190,27 +210,29 @@ addEventListenerAbstract(window,'real_load',function () {
 		}
 
 		// Split up an element, which is more complex than splitting text. We need to create two copies of the element with it's contents divided between each
-		function split($putInHere, $pullOutHere, $parentColumn, height){
-			if($pullOutHere.children().length){
+		function split($putInHere, $pullOutHere, $parentColumn, height) {
+			if($pullOutHere.children().length) {
 				var $cloneMe = $pullOutHere.children(":first"); // From
 				var $clone = $cloneMe.clone(true); // To
-				if($clone.prop("nodeType") == 1 && !$clone.hasClass("dontend")){ 
+				if($clone.prop("nodeType") == 1 && !$clone.hasClass("dontend")) { 
 					$putInHere.append($clone);
 					var dontsplit=$cloneMe.hasClass("dontsplit");
-					if($clone.is("img") && $parentColumn.height() < height + 20){ // Images are easy to handle, just shift them
+					if((options.explicitBreaks) && ($clone.hasClass('force-break'))) { // Explicit break
 						$cloneMe.remove();
-					}else if(!dontsplit && $parentColumn.height() < height + 20){ // If this is a viable split point, do it
+					} else if((!options.explicitBreaks) && ($clone.is("img") && $parentColumn.height() < height + 20)) { // Images are easy to handle, just shift them
+						$cloneMe.remove();
+					}else if((!options.explicitBreaks) && (!dontsplit && $parentColumn.height() < height + 20)) { // If this is a viable split point, do it
 						$cloneMe.remove(); // Remove from from
-					}else if($clone.is("img") || dontsplit){ // Can't split, we'll just have to let it all stay where it is
+					}else if((!options.explicitBreaks) && ($clone.is("img") || dontsplit)) { // Can't split, we'll just have to let it all stay where it is
 						$clone.remove(); // Remove from to (i.e. undo copy). Stays at from.
 					}else{ // Look deeper for split point
 						$clone.empty();
-						if(!columnize($clone, $cloneMe, $parentColumn, height)){
-							if($cloneMe.children().length){
+						if(!columnize($clone, $cloneMe, $parentColumn, height)) {
+							if($cloneMe.children().length) {
 								split($clone, $cloneMe, $parentColumn, height);
 							}
 						}
-						if($clone.get(0).childNodes.length == 0){
+						if($clone.get(0).childNodes.length == 0) {
 							// it was split, but nothing is in it :(. No deeper to go.
 							$clone.remove();
 						}
@@ -219,9 +241,8 @@ addEventListenerAbstract(window,'real_load',function () {
 			}
 		}
 		
-		function checkDontEndColumnOnConstraints(dom){
-			if(dom.nodeType != 1)
-			{
+		function checkDontEndColumnOnConstraints(dom) {
+			if(dom.nodeType != 1) {
 				return (dom.nodeType == 3) && (dom.nodeValue.replace(/\s/g,'') == '');
 			}
 			if($(dom).hasClass("dontend")) return true;
@@ -250,23 +271,23 @@ addEventListenerAbstract(window,'real_load',function () {
 			var firstTime = true;
 			var maxLoops = 3;
 			var scrollHorizontally = false;
-			if(options.overflow){
+			if(options.overflow) {
 				maxLoops = 1;
 				targetHeight = options.overflow.height;
-			}else if(options.height){
+			}else if(options.height) {
 				maxLoops = 1;
 				targetHeight = options.height;
 				scrollHorizontally = true;
 			}
 			
-			for(var loopCount=0;loopCount<maxLoops;loopCount++){
+			for(var loopCount=0;loopCount<maxLoops;loopCount++) {
 				if (typeof window.console!='undefined') console.log('STARTING COLUMNISATION ITERATION');
 				
 				$inBox.empty();
 				var $destroyable; // This is where we'll pull all our data from, as we progressively fill our columns
 				try{
 					$destroyable = $cache.clone(true);
-				}catch(e){
+				}catch(e) {
 					// jquery in ie6 can't clone with true
 					$destroyable = $cache.clone();
 				}
@@ -278,43 +299,46 @@ addEventListenerAbstract(window,'real_load',function () {
 					var className = (i == numCols - 1) ? ("last " + className) : className;
 					$inBox.append($("<div class='" + className + "' style='float: " + options.columnFloat + ";'></div>")); //"
 				}
-				
+
 				// fill all but the last column (unless overflowing)
 				var i = 0;
-				while(i < numCols - (options.overflow ? 0 : 1) || scrollHorizontally && $destroyable.contents().length){
-					if($inBox.children().length <= i){
+				while(i < numCols - (options.overflow ? 0 : 1) || scrollHorizontally && $destroyable.contents().length) {
+					if($inBox.children().length <= i) {
 						// we ran out of columns, make another
 						$inBox.append($("<div class='" + className + "' style='float: " + options.columnFloat + ";'></div>")); //"
 					}
 					var $col = $inBox.children().eq(i);
-					if (!columnize($col, $destroyable, $col, targetHeight))
-					{
+					var needsDeepSplit = !columnize($col, $destroyable, $col, targetHeight);
+					if (needsDeepSplit) {
 						// do a split, but only if the last item in the column isn't a "dontend"
-						if(!$destroyable.contents().find(":first-child").hasClass("dontend")){
+						if(!$destroyable.contents().find(":first-child").hasClass("dontend")) {
 							split($col/*put in here*/, $destroyable/*pull out here*/, $col, targetHeight);
 						}else{
 	//						alert("not splitting a dontend");
 						}
 					}
-					
-					// Any "dontend" stuff needs to be yonked off our current column and put back onto the start of $destroyable. Loop whilst we need to keep doing this.
-					while(checkDontEndColumnOnConstraints($col.contents(":last").length != 0 && $col.contents(":last").get(0))){
-						var $lastKid = $col.contents(":last");
-						$lastKid.remove();
-						$destroyable.prepend($lastKid);
+
+					if (!options.explicitBreaks) {
+						// Any "dontend" stuff needs to be yonked off our current column and put back onto the start of $destroyable. Loop whilst we need to keep doing this.
+						while(checkDontEndColumnOnConstraints($col.contents(":last").length != 0 && $col.contents(":last").get(0))) {
+							var $lastKid = $col.contents(":last");
+							$lastKid.remove();
+							$destroyable.prepend($lastKid);
+						}
 					}
 					i++;
 				}
-				if(options.overflow && !scrollHorizontally){
+
+				if(options.overflow && !scrollHorizontally) {
 					var IE6 = false /*@cc_on || @_jscript_version < 5.7 @*/;
 					var IE7 = (document.all) && (navigator.appVersion.indexOf("MSIE 7.") != -1);
-					if(IE6 || IE7){
+					if(IE6 || IE7) {
 						var html = "";
 						var div = document.createElement('DIV');
-						while($destroyable[0].childNodes.length > 0){
+						while($destroyable[0].childNodes.length > 0) {
 							var kid = $destroyable[0].childNodes[0];
-							for(var i=0;i<kid.attributes.length;i++){
-								if(kid.attributes[i].nodeName.indexOf("jQuery") == 0){
+							for(var i=0;i<kid.attributes.length;i++) {
+								if(kid.attributes[i].nodeName.indexOf("jQuery") == 0) {
 									kid.removeAttribute(kid.attributes[i].nodeName);
 								}
 							}
@@ -327,7 +351,7 @@ addEventListenerAbstract(window,'real_load',function () {
 					}else{
 						$(options.overflow.id).empty().append($destroyable.contents().clone(true));
 					}
-				}else if(!scrollHorizontally){
+				}else if(!scrollHorizontally) {
 					// it's scrolling horizontally, try and workout our average height. We know it initially but if the last column is too high we need to raise 'adjustment'. We try this over a few iterations until we're 'solid'.
 
 					// the last column in the series
@@ -339,7 +363,7 @@ addEventListenerAbstract(window,'real_load',function () {
 					var min = 10000000;
 					var max = 0;
 					var lastIsMax = false;
-					$inBox.children().each(function($inBox){ return function($item){
+					$inBox.children().each(function($inBox) { return function($item) {
 						var h = $inBox.children().eq($item).height();
 						lastIsMax = false;
 						totalH += h;
@@ -351,22 +375,22 @@ addEventListenerAbstract(window,'real_load',function () {
 					}}($inBox));
 
 					var avgH = totalH / numCols;
-					if(options.lastNeverTallest && lastIsMax){
+					if(options.lastNeverTallest && lastIsMax) {
 						// the last column is the tallest
 						// so allow columns to be taller
 						// and retry
 						adjustment += 30;
-						if(adjustment < 100){
+						if(adjustment < 100) {
 							targetHeight = targetHeight + 30;
 							if(loopCount == maxLoops-1) maxLoops++;
 						}else{
 							debugger;
 							loopCount = maxLoops;
 						}
-					}else if(max - min > 30){
+					}else if(max - min > 30) {
 						// too much variation, try again
 						targetHeight = avgH + 30;
-					}else if(Math.abs(avgH-targetHeight) > 20){
+					}else if(Math.abs(avgH-targetHeight) > 20) {
 						// too much variation, try again
 						targetHeight = avgH;
 					}else {
@@ -375,11 +399,11 @@ addEventListenerAbstract(window,'real_load',function () {
 					}
 				}else{
 					// it's scrolling horizontally, fix the classes of the columns
-					$inBox.children().each(function(i){
+					$inBox.children().each(function(i) {
 						$col = $inBox.children().eq(i);
-						if(i==0){
+						if(i==0) {
 							$col.addClass("first");
-						}else if(i==$inBox.children().length-1){
+						}else if(i==$inBox.children().length-1) {
 							$col.addClass("last");
 						}else{
 							$col.removeClass("first");
@@ -393,7 +417,7 @@ addEventListenerAbstract(window,'real_load',function () {
 				var $col = $inBox.children().eq(i);
 				var runOn;
 
-				do	{
+				do{
 					runOn=$col.children(":first-child.removeiffirst");
 					if (runOn.length!=0) {
 						// Protect if a relevant text node preceding
@@ -408,7 +432,7 @@ addEventListenerAbstract(window,'real_load',function () {
 				}
 				while (runOn.length!=0);
 
-				do	{
+				do{
 					runOn=$col.children(":last-child.removeiflast");
 					if (runOn.length!=0) {
 						// Protect if a relevant text node suceeding
@@ -425,7 +449,7 @@ addEventListenerAbstract(window,'real_load',function () {
 			}
 			$inBox.data("columnizing", false);
 
-			if(options.overflow){
+			if(options.overflow) {
 				options.overflow.doneFunc();
 			}
 			options.doneFunc();
