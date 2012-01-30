@@ -115,11 +115,12 @@ addEventListenerAbstract(window,'real_load',function () {
 		function columnize($putInHere, $pullOutHere, $parentColumn, height) {
 			if (options.explicitBreaks) { // We're doing explicit breaks, meaning we only ever break on a force-break node
 				var splitHere = false;
-				while($pullOutHere[0].childNodes.length) {
+				var splitUnder = false;
+				while($pullOutHere[0].childNodes.length != 0 ) {
 					var next = $($pullOutHere[0].childNodes[0]);
 					splitHere = next.hasClass('force-break');
 					if (splitHere) break;
-					var splitUnder = next.find('force-break').length != 0;
+					splitUnder = next.find('.force-break').length != 0;
 					if (splitUnder) break;
 					$putInHere.append(next); // Because we're not cloning, jquery will actually move the element
 				}
@@ -129,7 +130,7 @@ addEventListenerAbstract(window,'real_load',function () {
 				}
 				return false; // Will need to go down to split recursively
 			} else{
-				while($parentColumn.height() < height && $pullOutHere[0].childNodes.length) {
+				while($parentColumn.height() < height && $pullOutHere[0].childNodes.length != 0 ) {
 					$putInHere.append($pullOutHere[0].childNodes[0]); // Because we're not cloning, jquery will actually move the element
 				}
 			}
@@ -200,7 +201,7 @@ addEventListenerAbstract(window,'real_load',function () {
 			}
 
 			// Put what is left back
-			if($pullOutHere.contents().length !=0 ) {
+			if($pullOutHere.contents().length != 0 ) {
 				$pullOutHere.prepend($item);
 			}else{
 				$pullOutHere.append($item);
@@ -211,14 +212,15 @@ addEventListenerAbstract(window,'real_load',function () {
 
 		// Split up an element, which is more complex than splitting text. We need to create two copies of the element with it's contents divided between each
 		function split($putInHere, $pullOutHere, $parentColumn, height) {
-			if($pullOutHere.children().length) {
+			if($pullOutHere.children().length != 0) {
 				var $cloneMe = $pullOutHere.children(":first"); // From
 				var $clone = $cloneMe.clone(true); // To
-				if($clone.prop("nodeType") == 1 && !$clone.hasClass("dontend")) { 
+				if($clone.prop("nodeType") == 1 && (options.explicitBreaks || !$clone.hasClass("dontend"))) { 
 					$putInHere.append($clone);
 					var dontsplit=$cloneMe.hasClass("dontsplit");
 					if((options.explicitBreaks) && ($clone.hasClass('force-break'))) { // Explicit break
 						$cloneMe.remove();
+						$clone.remove();
 					} else if((!options.explicitBreaks) && ($clone.is("img") && $parentColumn.height() < height + 20)) { // Images are easy to handle, just shift them
 						$cloneMe.remove();
 					}else if((!options.explicitBreaks) && (!dontsplit && $parentColumn.height() < height + 20)) { // If this is a viable split point, do it
@@ -228,9 +230,13 @@ addEventListenerAbstract(window,'real_load',function () {
 					}else{ // Look deeper for split point
 						$clone.empty();
 						if(!columnize($clone, $cloneMe, $parentColumn, height)) {
-							if($cloneMe.children().length) {
+							if($cloneMe.children().length != 0 ) {
 								split($clone, $cloneMe, $parentColumn, height);
 							}
+						} else {
+							// Case where explicit break might be at end of list item, we need to not copy over shell of this list item
+							if ((options.explicitBreaks) && ($cloneMe[0].nodeName.toLowerCase()=='li') && ($cloneMe[0].childNodes.length == 1) && ($cloneMe[0].childNodes[0].nodeType == 3) && ($cloneMe[0].childNodes[0].nodeValue.replace(/\s*/g,'') == ''))
+								$cloneMe.first().remove();
 						}
 						if($clone.get(0).childNodes.length == 0) {
 							// it was split, but nothing is in it :(. No deeper to go.
@@ -302,7 +308,7 @@ addEventListenerAbstract(window,'real_load',function () {
 
 				// fill all but the last column (unless overflowing)
 				var i = 0;
-				while(i < numCols - (options.overflow ? 0 : 1) || scrollHorizontally && $destroyable.contents().length) {
+				while(i < numCols - (options.overflow ? 0 : 1) || scrollHorizontally && $destroyable.contents().length != 0 ) {
 					if($inBox.children().length <= i) {
 						// we ran out of columns, make another
 						$inBox.append($("<div class='" + className + "' style='float: " + options.columnFloat + ";'></div>")); //"
@@ -311,7 +317,7 @@ addEventListenerAbstract(window,'real_load',function () {
 					var needsDeepSplit = !columnize($col, $destroyable, $col, targetHeight);
 					if (needsDeepSplit) {
 						// do a split, but only if the last item in the column isn't a "dontend"
-						if(!$destroyable.contents().find(":first-child").hasClass("dontend")) {
+						if(options.explicitBreaks || !$destroyable.contents().find(":first-child").hasClass("dontend")) {
 							split($col/*put in here*/, $destroyable/*pull out here*/, $col, targetHeight);
 						}else{
 	//						alert("not splitting a dontend");
@@ -356,7 +362,7 @@ addEventListenerAbstract(window,'real_load',function () {
 
 					// the last column in the series
 					$col = $inBox.children().eq($inBox.children().length-1);
-					while($destroyable.contents().length) $col.append($destroyable.contents(":first"));
+					while($destroyable.contents().length != 0 ) $col.append($destroyable.contents(":first"));
 					var afterH = $col.height();
 					var diff = afterH - targetHeight;
 					var totalH = 0;
