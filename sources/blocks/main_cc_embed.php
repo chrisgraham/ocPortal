@@ -35,7 +35,7 @@ class Block_main_cc_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('sort','search','filter','max','param','select','template_set','display_type');
+		$info['parameters']=array('root','sort','search','filter','max','param','select','template_set','display_type');
 		return $info;
 	}
 	
@@ -47,7 +47,7 @@ class Block_main_cc_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'search\',$map)?$map[\'search\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),get_param_integer(\'max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer(\'start\',0))';
+		$info['cache_on']='array(((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'root\',NULL),array_key_exists(\'search\',$map)?$map[\'search\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),get_param_integer(\'max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer(\'start\',0))';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -63,6 +63,7 @@ class Block_main_cc_embed
 		$category_id=array_key_exists('param',$map)?intval($map['param']):db_get_first_id();
 		$max=get_param_integer('max',array_key_exists('max',$map)?intval($map['max']):30);
 		$start=get_param_integer('start',0);
+		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('root',NULL);
 
 		$sort=array_key_exists('sort',$map)?$map['sort']:'';
 		$search=array_key_exists('search',$map)?$map['search']:'';
@@ -93,7 +94,6 @@ class Block_main_cc_embed
 		$tpl_set=array_key_exists('template_set',$map)?$map['template_set']:$catalogue_name;
 		$display_type=array_key_exists('display_type',$map)?intval($map['display_type']):NULL;
 
-		$root=get_param_integer('root',NULL);
 		list($entry_buildup,,,)=get_catalogue_category_entry_buildup(is_null($select)?$category_id:NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,$select,$root,$display_type,true,NULL,$search,$sort);
 
 		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array('ROOT'=>strval($root),'CATALOGUE'=>$catalogue_name,'ENTRIES'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');

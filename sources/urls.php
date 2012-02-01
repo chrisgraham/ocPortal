@@ -287,7 +287,7 @@ function can_try_mod_rewrite($avoid_remap=false)
  * Build and return a proper URL, from the $vars array.
  * Note: URL parameters should always be in lower case (one of the coding standards)
  *
- * @param  array			A map of parameter names to parameter values. E.g. array('page'=>'example','type'=>'foo','id'=>2). Values may be strings or integers, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
+ * @param  array			A map of parameter names to parameter values. E.g. array('page'=>'example','type'=>'foo','id'=>2). Values may be strings or integers, or Tempcode, or NULL. NULL indicates "skip this". 'page' cannot be NULL.
  * @param  ID_TEXT		The zone the URL is pointing to. YOU SHOULD NEVER HARD CODE THIS- USE '_SEARCH', '_SELF' (if you're self-referencing your own page) or the output of get_module_zone.
  * @param  ?array			Variables to explicitly not put in the URL (perhaps because we have $keep_all set, or we are blocking certain keep_ values). The format is of a map where the keys are the names, and the values are 1. (NULL: don't skip any)
  * @param  boolean		Whether to keep all non-skipped parameters that were in the current URL, in this URL
@@ -306,19 +306,30 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 	
 	$id=isset($vars['id'])?$vars['id']:NULL;
 
-	$page_link=$zone_name.':'./*urlencode not needed in reality, performance*/($vars['page']);
+	$page_link=make_string_tempcode($zone_name.':'./*urlencode not needed in reality, performance*/($vars['page']));
 	if ((isset($vars['type'])) || (array_key_exists('type',$vars)))
 	{
-		$page_link.=':'.(($vars['type']===NULL)?'<null>':urlencode($vars['type']));
+		if (is_object($vars['type']))
+		{
+			$page_link->attach(':');
+			$page_link->attach($vars['type']);
+		} else
+		{
+			$page_link->attach(':'.(($vars['type']===NULL)?'<null>':urlencode($vars['type'])));
+		}
 		unset($vars['type']);
 		if ((isset($id)) || (array_key_exists('id',$vars)))
 		{
 			if (is_integer($id))
 			{
-				$page_link.=':'.strval($id);
+				$page_link->attach(':'.strval($id));
+			} elseif (is_object($id))
+			{
+				$page_link->attach(':');
+				$page_link->attach($id);
 			} else
 			{
-				$page_link.=':'.(($id===NULL)?'<null>':urlencode($id));
+				$page_link->attach(':'.(($id===NULL)?'<null>':urlencode($id)));
 			}
 			unset($vars['id']);
 		}
@@ -330,13 +341,24 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 		if ($val===NULL) $val='<null>';
 		
 		if ($key!='page')
-			$page_link.=':'.$key.'='.urlencode($val);
+		{
+			if (is_object($val))
+			{
+				$page_link->attach(':'.$key.'=');
+				$page_link->attach($val);
+			} else
+			{
+				$page_link->attach(':'.$key.'='.(($val===NULL)?'<null>':urlencode($val)));
+			}
+		}
 	}
 
 	if (($hash!='') && (substr($hash,0,1)!='#')) $hash='#'.$hash;
 
+	$page_link->attach($hash);
+
 	$arr=array(
-		$page_link.$hash,
+		$page_link,
 		$avoid_remap?'1':'0',
 		$skip_keep?'1':'0',
 		$keep_all?'1':'0'

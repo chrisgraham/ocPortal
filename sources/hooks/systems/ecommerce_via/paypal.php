@@ -145,6 +145,7 @@ class Hook_paypal
 
 		if($txn_type=='cart')
 		{	
+			require_lang('shopping');
 			$item_name	= 	do_lang('CART_ORDER',$purchase_id);
 		}
 		else

@@ -3130,7 +3130,6 @@ END;
 		$topic_id=get_param_integer('id');
 		$to=post_param_integer('to');
 		$from=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_forum_id',array('id'=>$topic_id));
-		if (is_null($from)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
 		ocf_move_topics($from,$to,array($topic_id));

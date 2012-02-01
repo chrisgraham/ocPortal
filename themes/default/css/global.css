@@ -3647,10 +3647,13 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	border-left: 1px solid #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
 }
 
-.menu_type__top img, .menu_type__dropdown li.toplevel img {
+.menu_type__top img, .menu_type__dropdown .toplevel_link img {
+	margin-top: 7px;
+}
+
+.menu_type__top img, .menu_type__dropdown img {
 	float: {!en_left};
 	padding: 0 8px 0 3px;
-	margin-top: -2px;
 }
 
 .menu_type__top .menu_spacer, .menu_type__dropdown li.toplevel.menu_spacer {

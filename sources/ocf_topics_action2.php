@@ -294,7 +294,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 		if ($topic_info[0]['t_validated']==1) $topic_count++;
 		$topic_name=$topic_info[0]['t_cache_first_title'];
 		$post_count=$topic_info[0]['t_cache_num_posts'];
-		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_forum_id'=>$to),array('t_forum_id'=>$from,'id'=>$topics[0]),'',1); // Extra where constraint for added security
+		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_pt_from'=>NULL,'t_pt_to'=>NULL,'t_forum_id'=>$to),array('t_forum_id'=>$from,'id'=>$topics[0]),'',1); // Extra where constraint for added security
 		log_it('MOVE_TOPICS',$topic_name,$topics[0]);
 		$or_list='id='.strval($topics[0]);
 		$or_list_2='p_topic_id='.strval($topics[0]);

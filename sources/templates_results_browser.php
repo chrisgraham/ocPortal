@@ -253,6 +253,7 @@ function _build_results_browser_cat_url($url_array,$post_array,$type,$root,$cate
 	{
 		$cat_url=build_url($url_array,'_SELF',NULL,$keep_all,false,false,$hash);
 	}
+
 	return $cat_url;
 }
 

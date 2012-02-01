@@ -26,6 +26,7 @@
 				var as=document.getElementById('donext_item_{$GET*,rand_donextitem}').getElementsByTagName('a');
 				for (var i=0;i<as.length;i++)
 				{
+					var _this=this;
 					addEventListenerAbstract(as[i],'click',function(event) {
 						test=window.fauxmodal_confirm(
 							'{!KEEP_ADDING_QUESTION;}',
@@ -33,10 +34,10 @@
 							{
 								if (test)
 								{
-									this.href+=(this.href.indexOf('?')!=-1)?'&':'?';
-									this.href+='{AUTO_ADD*}=1';
+									_this.href+=(_this.href.indexOf('?')!=-1)?'&':'?';
+									_this.href+='{AUTO_ADD*}=1';
 								}
-								click_link(this);
+								click_link(_this);
 							}
 						);
 						if (typeof event.preventDefault!='undefined') event.preventDefault();

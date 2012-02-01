@@ -99,7 +99,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'PAGE_LINK':
 				if (isset($param[0]))
 				{
-					list($zone,$map,$hash)=page_link_decode($param[0]);
+					list($zone,$map,$hash)=page_link_decode(is_object($param[0])?$param[0]->evaluate():$param[0]);
 
 					$skip=NULL;
 					if (isset($param[4]))
@@ -110,6 +110,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$avoid_remap=isset($param[1]) && ($param[1]=='1');
 					$skip_keep=isset($param[2]) && ($param[2]=='1');
 					$keep_all=isset($param[3]) && ($param[3]=='1');
+
+					foreach ($map as $key=>$val)
+					{
+						if (is_object($val)) $map[$key]=$val->evaluate();
+					}
 
 					$value=_build_url($map,$zone,$skip,$keep_all,$avoid_remap,$skip_keep,$hash);
 				} else

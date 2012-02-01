@@ -178,7 +178,7 @@ class Notification_dispatcher
 
 		if ($GLOBALS['DEBUG_MODE'])
 		{
-			if (strpos($this->message,'keep_devtest')!==false) // Bad URL - it has to be general, not session-specific
+			if ((strpos($this->message,'keep_devtest')!==false) && ((strpos(ocp_srv('HTTP_REFERER'),'keep_devtest')===false) || (strpos($this->message,ocp_srv('HTTP_REFERER'))===false))) // Bad URL - it has to be general, not session-specific
 				fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		}
 

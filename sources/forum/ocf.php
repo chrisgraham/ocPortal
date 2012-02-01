@@ -1244,6 +1244,7 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_members');
 		require_code('ocf_groups');
 		if (!function_exists('require_lang')) require_code('lang');
+		if (!function_exists('do_lang_tempcode')) require_code('tempcode');
 		if (!function_exists('require_lang')) return $out;
 		require_lang('ocf');
 		require_code('mail');
@@ -1517,6 +1518,7 @@ class forum_driver_ocf extends forum_driver_base
 				dispatch_notification('auto_ban',NULL,do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),do_lang('AUTO_BAN_DOS_MESSAGE',$ip,integer_format($count_threshold),integer_format($time_threshold),get_site_default_lang()),NULL,A_FROM_SYSTEM_PRIVILEGED);
 			}
 			if (!function_exists('require_lang')) require_code('lang');
+			if (!function_exists('do_lang_tempcode')) require_code('tempcode');
 			require_lang('ocf');
 
 			warn_exit(do_lang_tempcode('FLOOD_CONTROL_RESTRICT',integer_format($wait_time)));

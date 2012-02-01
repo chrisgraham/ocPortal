@@ -6,8 +6,10 @@
 <title>{TITLE*}</title>
 {CSS}
 </head>
-<body class="re_body">
-	{CONTENT}
+<body style="font-size: 12px">
+	<div style="font-size: 12px">
+		{CONTENT}
+	</div>
 </body>
 </html>
 

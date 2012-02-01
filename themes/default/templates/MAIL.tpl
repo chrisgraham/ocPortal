@@ -8,16 +8,18 @@
 <title>{TITLE*}</title>
 {CSS}
 </head>
-<body class="re_body">
-	{+START,BOX}
-		<a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed-logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a>
-	{+END}
+<body style="font-size: 12px">
+	<div style="font-size: 12px">
+		{+START,BOX}
+			<a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed-logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a>
+		{+END}
 	
-	<br />
+		<br />
 
-	{+START,BOX}
-		{CONTENT}
-	{+END}
+		{+START,BOX}
+			{CONTENT}
+		{+END}
+	</div>
 </body>
 </html>
 

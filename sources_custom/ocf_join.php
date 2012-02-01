@@ -60,6 +60,9 @@ function assign_referral_awards($referree,$trigger)
 	$referree_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referree);
 	if ($referree_email=='') return; // Weird situation! Somehow the member has no email address defined and hence we can't lookup the referral, can't normally happen
 
+	require_lang('referrals');
+	require_code('notifications');
+
 	$referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_taken'=>0,'i_email_address'=>$referree_email),'ORDER BY i_time');
 	if (is_null($referrer)) // Was not actually a referral, member joined site on own accord
 	{
@@ -72,9 +75,6 @@ function assign_referral_awards($referree,$trigger)
 	}
 	$referrer_username=$GLOBALS['FORUM_DRIVER']->get_username($referrer);
 	$referrer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referrer);
-
-	require_lang('referrals');
-	require_code('notifications');
 
 	$report_url=find_script('referrer_report');
 

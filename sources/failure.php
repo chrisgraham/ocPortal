@@ -122,6 +122,8 @@ function _param_invalid($name,$ret,$posted)
  */
 function improperly_filled_in($name,$posted,$array)
 {
+	require_code('tempcode');
+
 	$GLOBALS['HTTP_STATUS_CODE']='400';
 	if (!headers_sent())
 	{
@@ -206,7 +208,8 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	} else $out=$outx;
 
 	// Put into error log
-	@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline),0);
+	if (get_param_integer('keep_fatalistic',0)==0)
+		@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline),0);
 
 	if (!$GLOBALS['SUPRESS_ERROR_DEATH']) // Don't display - die as normal
 	{
@@ -678,7 +681,8 @@ function _fatal_exit($text,$return=false)
 
 	$title=get_page_title('ERROR_OCCURRED');
 
-	@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text),0);
+	if (get_param_integer('keep_fatalistic',0)==0)
+		@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text),0);
 
 	$trace=get_html_trace();
 

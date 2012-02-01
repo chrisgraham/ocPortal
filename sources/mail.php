@@ -213,11 +213,11 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_date_and_time'=>time(),
 			'm_member_id'=>get_member(),
 			'm_url'=>get_self_url(true),
-			'm_queued'=>(get_option('mail_queue_debug')==='1' || get_option('mail_queue')==='1' && cron_installed())?1:0,
+			'm_queued'=>((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && cron_installed()))?1:0,
 			'm_template'=>$mail_template,
 		));
 
-		if (get_option('mail_queue_debug')==='1' || get_option('mail_queue')==='1' && cron_installed()) return;
+		if ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && cron_installed())) return;
 	}
 
 	if (count($attachments)==0) $attachments=NULL;

@@ -35,7 +35,7 @@ class Block_main_recent_cc_entries
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','catalogue','zone','display_type');
+		$info['parameters']=array('root','param','catalogue','zone','display_type');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_recent_cc_entries
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'catalogue\',$map)?$map[\'catalogue\']:10,array_key_exists(\'param\',$map)?intval($map[\'param\']):10,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'catalogues\'))';
+		$info['cache_on']='array(((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):NULL,array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'catalogue\',$map)?$map[\'catalogue\']:10,array_key_exists(\'param\',$map)?intval($map[\'param\']):10,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'catalogues\'))';
 		$info['ttl']=60;
 		return $info;
 	}
@@ -67,6 +67,7 @@ class Block_main_recent_cc_entries
 		$number=array_key_exists('param',$map)?intval($map['param']):10;
 		$catalogue=array_key_exists('catalogue',$map)?$map['catalogue']:'faqs';
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('catalogues');
+		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):NULL;
 
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue),'',1);
 		if (!array_key_exists(0,$catalogues)) return do_lang_tempcode('MISSING_RESOURCE',escape_html($catalogue));
@@ -74,7 +75,7 @@ class Block_main_recent_cc_entries
 		$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('c_name'=>$catalogue,'ce_validated'=>1),'ORDER BY ce_add_date DESC',$number);
 		$tpl_set=$catalogue;
 		$display_type=array_key_exists('display_type',$map)?intval($map['display_type']):NULL;
-		list($content,,)=get_catalogue_category_entry_buildup(db_get_first_id() /* ignored */,$catalogue,$catalogue_row,'SEARCH',$tpl_set,$number,0,NULL,NULL,$display_type,false,$entries);
+		list($content,,)=get_catalogue_category_entry_buildup(db_get_first_id() /* ignored */,$catalogue,$catalogue_row,'SEARCH',$tpl_set,$number,0,NULL,$root,$display_type,false,$entries);
 
 		$catalogue_title=get_translated_text($catalogue_row['c_title']);
 

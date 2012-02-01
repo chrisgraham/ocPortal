@@ -585,7 +585,12 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 
 	if ((!is_null($branch['only_on_page'])) && ($branch['only_on_page']!=''))
 	{
-		if (!match_key_match($branch['only_on_page']))
+		if (strpos($branch['only_on_page'],'{')!==false)
+		{
+			require_code('tempcode_compiler');
+			$branch['only_on_page']=static_evaluate_tempcode(template_to_tempcode($branch['only_on_page']));
+		}
+		if (($branch['only_on_page']!='') && (!match_key_match($branch['only_on_page'])))
 			return array(NULL,false); // We are not allowed to render this on this page
 	}
 
@@ -656,6 +661,16 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 			{
 				if (!has_zone_access(get_member(),$zone_name)) return array(NULL,false);
 				if (!has_page_access(get_member(),$map['page'],$zone_name)) return array(NULL,false);
+			}
+
+			// Scan for Tempcode symbols etc
+			foreach ($map as $key=>$val)
+			{
+				if (strpos($val,'{')!==false)
+				{
+					require_code('tempcode_compiler');
+					$map[$key]=template_to_tempcode($val);
+				}
 			}
 
 			$url=build_url($map,$zone_name,NULL,false,false,false,$hash);

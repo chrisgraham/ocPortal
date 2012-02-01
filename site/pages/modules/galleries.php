@@ -530,12 +530,29 @@ class Module_galleries
 
 		// Info on our gallery
 		$gallery_rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$cat),'',1);
+		$implied_existence=false;
 		if (!array_key_exists(0,$gallery_rows))
 		{
-			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MISSING_RESOURCE'));
+			// Possibly we will 'imply' it's existance if this is a member gallery; allows normal rendering to finish, with add links
+			$matches=array();
+			if (preg_match('#^member\_(\d+)\_(.*)$#',$cat,$matches)!=0)
+			{
+				$username=$GLOBALS['FORUM_DRIVER']->get_username(intval($matches[1]));
+				if (!is_null($username))
+					$gallery_rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$matches[2]),'',1);
+			}
+			if (!array_key_exists(0,$gallery_rows))
+				return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MISSING_RESOURCE'));
+			$myrow=$gallery_rows[0];
+			$myrow['is_member_synched']=0;
+			$fullname=do_lang('PERSONAL_GALLERY_OF',$username,get_translated_text($myrow['fullname']));
+			$myrow['parent_id']=$matches[2];
+			$implied_existence=true;
+		} else
+		{
+			$myrow=$gallery_rows[0];
+			$fullname=get_translated_text($myrow['fullname']);
 		}
-		$myrow=$gallery_rows[0];
-		$fullname=get_translated_text($myrow['fullname']);
 		if ($fullname=='') $fullname=$cat;
 
 		$description=get_translated_tempcode($myrow['description']);
@@ -551,12 +568,12 @@ class Module_galleries
 			$submit_video_url=new ocp_tempcode();
 		}
 
-		if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))))
+		if ((!$implied_existence) && (has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))))
 		{
 			$edit_url=build_url(array('page'=>'cms_galleries','type'=>'_ec','id'=>$cat),get_module_zone('cms_galleries'));
 		} else $edit_url=new ocp_tempcode();
 
-		if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('cat_mid',get_member(),get_ip_address(),'cms_galleries')))
+		if ((!$implied_existence) && (has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('cat_mid',get_member(),get_ip_address(),'cms_galleries')))
 		{
 			$add_gallery_url=build_url(array('page'=>'cms_galleries','type'=>'ac','cat'=>$cat),get_module_zone('cms_galleries'));
 		} else $add_gallery_url=new ocp_tempcode();
