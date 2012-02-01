@@ -375,8 +375,63 @@ class Module_cms_comcode_pages
 		
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
+		$start=get_param_integer('start',0);
+		$max=get_param_integer('max',300);
+
 		$filesarray=$this->get_comcode_files_array($lang);
-		ksort($filesarray);
+		if (true/*TODO*/ || count($filesarray)>=300) // Oh dear, limits reached, try another tact
+		{
+			$orderer='p_add_date ASC';
+			switch ($sortable)
+			{
+				case 'page_title':
+					$orderer='t.text_original '.$sort_order;
+					break;
+				case 'page':
+					$orderer='c.the_page '.$sort_order;
+					break;
+				case 'zone_name':
+					$orderer='c.the_zone '.$sort_order;
+					break;
+				case 'pagelink':
+					$orderer='c.the_zone '.$sort_order.',c.the_page '.$sort_order;
+					break;
+			}
+			$group_by='';
+			if (can_arbitrary_groupby())
+				$group_by='GROUP BY c.the_zone,c.the_page';
+
+			$where_map=array('language'=>$lang);
+			if (!has_specific_permission(get_member(),'edit_highrange_content'))
+				$where_map['submitter']=get_member();
+			$table='comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
+			$page_rows=$GLOBALS['SITE_DB']->query_select($table,array('c.*','cc_page_title'),$where_map,$group_by.' ORDER BY '.$orderer,$max,$start);
+			$max_rows=$GLOBALS['SITE_DB']->query_value($table,'COUNT(DISTINCT c.the_zone,c.the_page)',$where_map);
+
+			$filesarray=array();
+			foreach ($page_rows as $row)
+			{
+				$located=_request_page($row['the_page'],$row['the_zone'],NULL,$lang);
+				if ($located!==false)
+				{
+					$filesarray[$row['the_zone'].':'.$row['the_page']]=array(
+						$row['the_zone'].'/pages/'.strtolower($located[0]).'/'.$row['the_page'],
+						NULL,
+						$row
+					);
+				}
+			}
+
+			$found_via_query=true;
+		} else
+		{
+			$max_rows=0;
+			ksort($filesarray);
+
+			$found_via_query=false;
+		}
+
+		// Render table rows
 		$_table_rows=array();
 		foreach ($filesarray as $pagelink=>$path_bits)
 		{
@@ -388,18 +443,27 @@ class Module_cms_comcode_pages
 
 			$zone_name=array_key_exists($zone,$all_zones)?$all_zones[$zone][1]:$zone;
 
-			$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone',array('c.*','cc_page_title'),array('c.the_zone'=>$zone,'c.the_page'=>$page),'',1);
-			$page_title=make_string_tempcode(do_lang('UNKNOWN'));
-			if ((!array_key_exists(0,$rows)) && ($number_pages_parsed_for_titles<15))
+			// We need to separately read from DB to work out meta data?
+			$row=mixed();
+			if (!array_key_exists(2,$path_bits))
 			{
-				$result=request_page($page,false,$zone,'comcode_custom_pure',true);
 				$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone',array('c.*','cc_page_title'),array('c.the_zone'=>$zone,'c.the_page'=>$page),'',1);
-				$number_pages_parsed_for_titles++;
-			}
-			if (array_key_exists(0,$rows))
+				$page_title=make_string_tempcode(do_lang('UNKNOWN'));
+				if ((!array_key_exists(0,$rows)) && ($number_pages_parsed_for_titles<15))
+				{
+					$result=request_page($page,false,$zone,'comcode_custom_pure',true);
+					$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone',array('c.*','cc_page_title'),array('c.the_zone'=>$zone,'c.the_page'=>$page),'',1);
+					$number_pages_parsed_for_titles++;
+				}
+				$row=array_key_exists(0,$rows)?$rows[0]:NULL;
+			} else // Ah, no we got everything from DB in one go
 			{
-				$row=$rows[0];
+				$row=$path_bits[2];
+			}
 
+			// Work out meta data
+			if (!is_null($row))
+			{
 				$username=protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['p_submitter']));
 				
 				$parent_page=$row['p_parent_page'];
@@ -440,7 +504,7 @@ class Module_cms_comcode_pages
 				'actions'=>$actions,
 			);
 		}
-		
+
 		// Manual sorting
 		global $M_SORT_KEY;
 		$M_SORT_KEY=$sortable;
@@ -448,13 +512,18 @@ class Module_cms_comcode_pages
 		if ($sort_order=='DESC') $_table_rows=array_reverse($_table_rows);
 
 		$table_rows=new ocp_tempcode();
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',300);
+		if (!$found_via_query)
+		{
+			$max_rows=count($_table_rows);
+		}
 		foreach ($_table_rows as $i=>$table_row)
 		{
-			if ($i<$start) continue;
-			if ($i+$start>$max) break;
-			
+			if (!$found_via_query)
+			{
+				if ($i<$start) continue;
+				if ($i+$start>$max) break;
+			}
+
 			$table_rows->attach(results_entry(array(
 				protect_from_escaping(hyperlink(build_url(array('page'=>$table_row['page']),$table_row['zone']),$table_row['page_title'])),
 				protect_from_escaping(do_template('COMCODE_TELETYPE',array('CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['page']))))),
@@ -467,8 +536,8 @@ class Module_cms_comcode_pages
 				protect_from_escaping($table_row['actions']),
 			),true));
 		}
-		
-		$table=results_table(do_lang('COMCODE_PAGES'),$start,'start',$max,'max',count($_table_rows),$header_row,$table_rows,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fdgfdfdfdggfd',true);
+
+		$table=results_table(do_lang('COMCODE_PAGES'),$start,'start',$max,'max',$max_rows,$header_row,$table_rows,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fdgfdfdfdggfd',true);
 
 		return do_template('TABLE_TABLE_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name));
 	}
@@ -748,7 +817,7 @@ class Module_cms_comcode_pages
 		if (!$simple_add)
 		{
 			$fields2->attach(form_input_tick(do_lang_tempcode('SHOW_AS_EDITED'),do_lang_tempcode('DESCRIPTION_SHOW_AS_EDITED'),'show_as_edit',$show_as_edit));
-			if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()) // TODO: Make a proper permission
+			if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission
 			{
 				$fields2->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$GLOBALS['FORUM_DRIVER']->get_username($owner),true));
 			}
@@ -861,7 +930,7 @@ class Module_cms_comcode_pages
 
 		$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		check_edit_permission('high',$resource_owner);
-		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()) // TODO: Make a proper permission
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission
 		{
 			$_owner=post_param('owner',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 			$owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_owner);
