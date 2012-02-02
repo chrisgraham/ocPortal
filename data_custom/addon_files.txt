@@ -2038,13 +2038,18 @@ referrals
 
 # # sources/hooks/systems/notifications/referral.php
 # # sources/hooks/systems/notifications/referral_staff.php
-# # data_custom/referrals.ini
+# # text_custom/referrals.txt
 # # data_custom/referrer_report.php
 # # lang_custom/EN/referrals.ini
 # # sources_custom/ocf_join.php
 # # sources_custom/hooks/systems/ecommerce/usergroup.php
 # # sources_custom/hooks/systems/ecommerce/catalogue_items.php
 # # sources_custom/hooks/systems/referrals/index.html
+# # sources_custom/hooks/systems/do_next_menus/referrals.php
+# # sources_custom/hooks/modules/members/referrals.php
+# # themes/default/images_custom/bigicons/referrals.png
+# # adminzone/pages/minimodules_custom/admin_referrals.php
+# # adminzone/pages/comcode_custom/EN/referrals.txt
 
 better_mail
 -----------

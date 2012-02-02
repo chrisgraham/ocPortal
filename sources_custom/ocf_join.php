@@ -52,23 +52,23 @@ function set_from_referrer_field()
 	}
 }
 
-function assign_referral_awards($referree,$trigger)
+function assign_referral_awards($referee,$trigger)
 {
-	$ini_file=parse_ini_file(get_custom_file_base().'/data_custom/referrals.ini');
+	$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt');
 
-	$referree_username=$GLOBALS['FORUM_DRIVER']->get_username($referree);
-	$referree_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referree);
-	if ($referree_email=='') return; // Weird situation! Somehow the member has no email address defined and hence we can't lookup the referral, can't normally happen
+	$referee_username=$GLOBALS['FORUM_DRIVER']->get_username($referee);
+	$referee_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referee);
+	if ($referee_email=='') return; // Weird situation! Somehow the member has no email address defined and hence we can't lookup the referral, can't normally happen
 
 	require_lang('referrals');
 	require_code('notifications');
 
-	$referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_taken'=>0,'i_email_address'=>$referree_email),'ORDER BY i_time');
+	$referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_taken'=>0,'i_email_address'=>$referee_email),'ORDER BY i_time');
 	if (is_null($referrer)) // Was not actually a referral, member joined site on own accord
 	{
 		if ((isset($ini_file['notify_if_join_but_no_referral'])) && ($ini_file['notify_if_join_but_no_referral']=='1'))
 		{
-			dispatch_notification('referral_staff',NULL,do_lang('MAIL_REFERRALS__NONREFERRAL__TOSTAFF_SUBJECT',$referree_username),do_lang('MAIL_REFERRALS__NONREFERRAL__TOSTAFF_BODY',comcode_escape($referree_username)),NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
+			dispatch_notification('referral_staff',NULL,do_lang('MAIL_REFERRALS__NONREFERRAL__TOSTAFF_SUBJECT',$referee_username),do_lang('MAIL_REFERRALS__NONREFERRAL__TOSTAFF_BODY',comcode_escape($referee_username)),NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
 		}
 
 		return;
@@ -76,34 +76,45 @@ function assign_referral_awards($referree,$trigger)
 	$referrer_username=$GLOBALS['FORUM_DRIVER']->get_username($referrer);
 	$referrer_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($referrer);
 
-	$report_url=find_script('referrer_report');
+	$report_url=find_script('referrer_report').'?csv=1';
 
-	$num_total=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','COUNT(*)',array('i_inviter'=>$referrer,'i_taken'=>1),'ORDER BY i_time');
+	$num_total_qualified_by_referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','COUNT(*)',array('i_inviter'=>$referrer,'i_taken'=>1),'ORDER BY i_time');
+	$num_total_by_referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','COUNT(*)',array('i_inviter'=>$referrer),'ORDER BY i_time');
 
-	if ((isset($ini_file['referrer_trigger__'.$trigger])) && ($ini_file['referrer_trigger__'.$trigger]=='1')) // Valid referral
+	$referrer_is_qualified=referrer_is_qualified($referrer);
+
+	$qualified=(isset($ini_file['referral_trigger__'.$trigger])) && ($ini_file['referral_trigger__'.$trigger]=='1');
+	if ($qualified) // Valid referral
 	{
-		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>$referree_email),'',1);
-		$num_total++;
+		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>$referee_email),'',1);
+		$num_total_qualified_by_referrer++;
+		$num_total_by_referrer++;
 
-		// Tell staff (referrer just completed a level)
-		if (array_key_exists('level_'.strval($num_total),$ini_file))
+		if ($referrer_is_qualified)
 		{
-			$level_description=$ini_file['level_'.strval($num_total)];
-			dispatch_notification('referral_staff',NULL,do_lang('MAIL_REFERRALS__QUALIFIED__TOSTAFF_AWARD_SUBJECT',$level_description,$referrer_username,$referree_username),do_lang('MAIL_REFERRALS__QUALIFIED__TOSTAFF_AWARD_BODY',comcode_escape($level_description),comcode_escape($referrer_username),array(comcode_escape(integer_format($num_total)),comcode_escape($referree_username),$report_url)),NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
-		} else // Tell staff (referrer is between levels / no level hit yet)
-		{
-			dispatch_notification('referral_staff',NULL,do_lang('MAIL_REFERRALS__QUALIFIED__TOSTAFF_SUBJECT',$referrer_username,$referree_username),do_lang('MAIL_REFERRALS__QUALIFIED__TOSTAFF_BODY',comcode_escape($referrer_username),comcode_escape(integer_format($num_total)),array(comcode_escape($referree_username),$report_url)),NULL,NULL,$referrer);
+			// Tell staff (referrer just completed a level)
+			if (array_key_exists('level_'.strval($num_total_qualified_by_referrer),$ini_file))
+			{
+				$level_description=$ini_file['level_'.strval($num_total_qualified_by_referrer)];
+				dispatch_notification('referral_staff',NULL,do_lang('MAIL_REFERRALS__QUALIFIED__TOSTAFF_AWARD_SUBJECT',$level_description,$referrer_username,$referee_username),do_lang('MAIL_REFERRALS__QUALIFIED__TOSTAFF_AWARD_BODY',comcode_escape($level_description),comcode_escape($referrer_username),array(comcode_escape(integer_format($num_total_qualified_by_referrer)),comcode_escape($referee_username),$report_url,comcode_escape(integer_format($num_total_by_referrer)))),NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
+			} else // Tell staff (referrer is between levels / no level hit yet)
+			{
+				dispatch_notification('referral_staff',NULL,do_lang('MAIL_REFERRALS__QUALIFIED__TOSTAFF_SUBJECT',$referrer_username,$referee_username),do_lang('MAIL_REFERRALS__QUALIFIED__TOSTAFF_BODY',comcode_escape($referrer_username),comcode_escape(integer_format($num_total_qualified_by_referrer)),array(comcode_escape($referee_username),$report_url,comcode_escape(integer_format($num_total_by_referrer)))),NULL,NULL,$referrer);
+			}
+
+			// Tell referrer they got a referrer, but don't mention any awards explicitly regardless if achieved yet (because the staff will do this when they're ready with the award)
+			dispatch_notification('referral',NULL,do_lang('MAIL_REFERRALS__QUALIFIED__TOREFERRER_SUBJECT',$referee_username),do_lang('MAIL_REFERRALS__QUALIFIED__TOREFERRER_BODY',comcode_escape($referrer_username),comcode_escape(integer_format($num_total_qualified_by_referrer)),array(comcode_escape($referee_username),comcode_escape(integer_format($num_total_by_referrer)))),array($referrer),A_FROM_SYSTEM_PRIVILEGED);
 		}
-
-		// Tell referrer they got a referrer, but don't mention any awards explicitly regardless if achieved yet (because the staff will do this when they're ready with the award)
-		dispatch_notification('referral',NULL,do_lang('MAIL_REFERRALS__QUALIFIED__TOREFERRER_SUBJECT',$referree_username),do_lang('MAIL_REFERRALS__QUALIFIED__TOREFERRER_BODY',comcode_escape($referrer_username),comcode_escape(integer_format($num_total)),array(comcode_escape($referree_username))),array($referrer),A_FROM_SYSTEM_PRIVILEGED);
 	} else
 	{
-		if ($trigger=='join')
+		if ($referrer_is_qualified)
 		{
-			// Say if first step of referral happened (non-qualified referral), even if we've set not to award them for it
-			dispatch_notification('referral_staff',NULL,do_lang('MAIL_REFERRALS__NONQUALIFIED__TOSTAFF_SUBJECT',$referrer_username,$referree_username),do_lang('MAIL_REFERRALS__NONQUALIFIED__TOSTAFF_BODY',comcode_escape($referrer_username),comcode_escape($referree_username),array($report_url)),NULL,NULL,$referrer);
-			dispatch_notification('referral',NULL,do_lang('MAIL_REFERRALS__NONQUALIFIED__TOREFERRER_SUBJECT',$referree_username),do_lang('MAIL_REFERRALS__NONQUALIFIED__TOREFERRER_BODY',comcode_escape($referrer_username),comcode_escape($referree_username)),NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
+			if ($trigger=='join')
+			{
+				// Say if first step of referral happened (non-qualified referral), even if we've set not to award them for it
+				dispatch_notification('referral_staff',NULL,do_lang('MAIL_REFERRALS__NONQUALIFIED__TOSTAFF_SUBJECT',$referrer_username,$referee_username),do_lang('MAIL_REFERRALS__NONQUALIFIED__TOSTAFF_BODY',comcode_escape($referrer_username),comcode_escape($referee_username),array($report_url,comcode_escape(integer_format($num_total_qualified_by_referrer)),comcode_escape(integer_format($num_total_by_referrer)))),NULL,NULL,$referrer);
+				dispatch_notification('referral',NULL,do_lang('MAIL_REFERRALS__NONQUALIFIED__TOREFERRER_SUBJECT',$referee_username),do_lang('MAIL_REFERRALS__NONQUALIFIED__TOREFERRER_BODY',comcode_escape($referrer_username),comcode_escape($referee_username),array(comcode_escape(integer_format($num_total_qualified_by_referrer)),comcode_escape(integer_format($num_total_by_referrer)))),NULL,NULL,A_FROM_SYSTEM_PRIVILEGED);
+			}
 		}
 	}
 
@@ -114,42 +125,146 @@ function assign_referral_awards($referree,$trigger)
 		require_code('hooks/systems/referrals/'.$hook);
 		$ob=object_factory('Hook_referrals_'.$hook,true);
 		if ($ob!==NULL)
-			$ob->fire_referral($trigger,$referree,$num_total);
+			$ob->fire_referral($trigger,$referrer,$referrer_is_qualified,$referee,$qualified,$num_total_qualified_by_referrer,$num_total_by_referrer);
 	}
 }
 
-function referrer_report_script()
+function referrer_is_qualified($member_id)
 {
-	if (!has_zone_access(get_member(),'adminzone')) access_denied('ZONE_ACCESS','adminzone');
+	if (is_guest($member_id)) return false;
+
+	$ini_file=parse_ini_file(get_custom_file_base().'/text_custom/referrals.txt');
+
+	if ((isset($ini_file['referrer_qualified_regardless'])) && ($ini_file['referrer_qualified_regardless']=='1'))
+		return true;
+
+	$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
+
+	foreach ($groups as $group_id)
+	{
+		if ((isset($ini_file['referrer_qualified_for_group_'.strval($group_id)])) && ($ini_file['referrer_qualified_for_group_'.strval($group_id)]=='1'))
+			return true;
+	}
+
+	if ((isset($ini_file['referrer_qualified_for_misc_purchase'])) && ($ini_file['referrer_qualified_for_misc_purchase']=='1'))
+	{
+		if ((addon_installed('shopping')) && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'shopping_order WHERE c_member='.strval($member_id).' AND '.(db_string_equal_to('order_status','payment_received').' OR '.db_string_equal_to('order_status','dispatched'))))))
+			return true;
+	}
+
+	return false;
+}
+
+function referrer_report_script($ret=false)
+{
+	$member_id=get_param_integer('member_id',NULL);
+	if ((!has_zone_access(get_member(),'adminzone')) && ($member_id!==get_member()))
+		access_denied('ZONE_ACCESS','adminzone');
 
 	require_lang('referrals');
+	$csv=(get_param_integer('csv',0)==1);
+
+	$where=mixed();
+	if ($member_id!==NULL)
+	{
+		$where=array('referrer.id'=>$member_id);
+	}
+
+	$max=get_param_integer('max',$csv?10000:30);
+	$start=get_param_integer('start',0);
 
 	$data=array();
+	$table='f_invites i LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members referrer ON referrer.id=i_inviter LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members referee ON referee.m_email_address=i_email_address';
 	$referrals=$GLOBALS['FORUM_DB']->query_select(
-		'f_invites i LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members referrer ON referrer.id=i_inviter LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members referree ON referree.m_email_address=i_email_address',
+		$table,
 		array(
 			'i_time AS time',
+			'referrer.id AS referrer_id',
 			'referrer.m_username AS referrer',
 			'referrer.m_email_address AS referrer_email',
-			'referree.m_username AS referree',
-			'referree.m_email_address AS referree_email',
+			'referee.id AS referee_id',
+			'referee.m_username AS referee',
+			'referee.m_email_address AS referee_email',
 			'i_taken AS qualified',
 		),
-		NULL,
-		'ORDER BY i_time'
+		$where,
+		'ORDER BY i_time DESC',
+		$max,
+		$start
 	);
+	$max_rows=$GLOBALS['FORUM_DB']->query_value($table,'COUNT(*)',$where);
+	if (count($referrals)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 	foreach ($referrals as $ref)
 	{
 		$data_row=array();
 		$data_row[do_lang('DATE_TIME')]=get_timezoned_date($ref['time'],true,true,false,true);
-		$data_row[do_lang('TYPE_REFERRER')]=$ref['referrer'];
+		if ($csv)
+		{
+			$data_row[do_lang('TYPE_REFERRER')]=$ref['referrer'];
+		} else
+		{
+			$data_row[do_lang('TYPE_REFERRER')]=is_null($ref['referrer_id'])?'':strval($ref['referrer_id']);
+		}
 		$data_row[do_lang('TYPE_REFERRER').' ('.do_lang('EMAIL_ADDRESS').')']=$ref['referrer_email'];
-		$data_row[do_lang('REFERREE')]=$ref['referree'];
-		$data_row[do_lang('REFERREE').' ('.do_lang('EMAIL_ADDRESS').')']=$ref['referree_email'];
+		$data_row[do_lang('QUALIFIED_REFERRER')]=do_lang(referrer_is_qualified($ref['referrer_id'])?'YES':'NO');
+
+		$deleted=false;
+		if (is_null($ref['referee']))
+		{
+			$deleted=($ref['qualified']==1);//!is_null($GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','id',array('the_type'=>'DELETE_MEMBER','param_b'=>TODO Unfortunately we can't tell)));
+		}
+		if ($csv)
+		{
+			$data_row[do_lang('REFEREE')]=is_null($ref['referee'])?do_lang($deleted?'REFEREE_DELETED':'REFEREE_NOT_SIGNED_UP'):$ref['referee'];
+		} else
+		{
+			$data_row[do_lang('REFEREE')]=is_null($ref['referee_id'])?'':strval($ref['referee_id']);
+		}
+		$data_row[do_lang('REFEREE').' ('.do_lang('EMAIL_ADDRESS').')']=is_null($ref['referee_email'])?'':$ref['referee_email'];
 		$data_row[do_lang('QUALIFIED_REFERRAL')]=do_lang(($ref['qualified']==1)?'YES':'NO');
 		$data[]=$data_row;
 	}
 
-	require_code('files2');
-	make_csv($data,get_site_name().' referrals.csv');
+	if ($csv)
+	{
+		require_code('files2');
+		make_csv($data,get_site_name().' referrals.csv');
+	} else
+	{
+		require_code('templates_results_table');
+
+		$fields_title=new ocp_tempcode();
+		$fields=new ocp_tempcode();
+		foreach ($data as $i=>$data_row)
+		{
+			if ($i==0)
+			{
+				$fields_title->attach(results_field_title(array_keys($data_row)));
+			}
+			foreach ($data_row as $key=>$val)
+			{
+				if (($key==do_lang('REFEREE')) || ($key==do_lang('REFEREE')))
+				{
+					$val=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($val,true);
+				}
+				$data_row[$key]=escape_html($val);
+			}
+			$fields->attach(results_entry($data_row));
+		}
+
+		$table=results_table(do_lang('REFERRALS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields);
+
+		if ($ret) return $table;
+
+		$title=get_page_title('REFERRALS');
+		
+		$out=new ocp_tempcode();
+		$out->attach($title);
+		$out->attach($table);
+
+		$out=globalise($out,NULL,'',true);
+		$out->evaluate_echo();
+	}
+	
+	return NULL;
 }

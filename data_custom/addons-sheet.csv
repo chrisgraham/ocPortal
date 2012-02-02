@@ -155,17 +155,12 @@ Note that this addon only affects galleries at the moment, and it requires the "
 "Theme debug","Chris Graham","Can run a number of fixes to themes to get them up to spec.",,,"Development","Licensed on the same terms as ocPortal",,
 "Referrals","Chris Graham","Allows people to specify who referred them when they join your site or other configurable triggers in the system, and defines award levels people can reach. Note that tracking of referrals and award of point is a default part of ocPortal, but referrals are only picked up if made via the recommend module and the new member uses the same address they were recommended to. This addon will allow referrals to be specified explicitly via the URL or typed in manually.
 
-1) Edit the following settings in data_custom/signup_refer_levels.ini
-
-referrer_trigger__join (default 0) - if joining triggers a referral
-referrer_trigger__usergroup_subscribe (default 0) - if buying a usergroup subscription triggers a referral
-
-level_<number> - Add strings like this to define levels that can be reached (as per example). At each level a staff notification is dispatched saying the referrer has reached the level
+1) Edit the following settings in text_custom/signup_refer_levels.txt (there is an editing link for this on the setup menu)
 
 2) Edit the messages in the signup_refer.ini language file as required.
 
 3) Probably set up a page on your site explaining the awards you give.
-",,,"New Features","Licensed on the same terms as ocPortal",,
+",,,"New Features","Licensed on the same terms as ocPortal","Icon by Titan Creations",
 "utf8","Chris Graham","Trivial change to make ocPortal run UTF-8 (changes one language string).",,,"Development","Licensed on the same terms as ocPortal",,
 "under18s","Chris Graham","Example of an implicit usergroup hook, to automatically put all members under 18 into a special usergroup.",,,"Development","Licensed on the same terms as ocPortal",,
 "Release compile","Chris Graham","Compile meta data for a release required for the installer and upgrader intelli-sense functionality.",,,"Development","Licensed on the same terms as ocPortal",,
