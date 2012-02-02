@@ -46,7 +46,10 @@ function _find_text_file_path($codename,$lang)
 	{
 		$lang=$langs[$i];
 		$path=get_custom_file_base().'/text_custom/'.$lang.'/'.$codename.'.txt';
-		if (!file_exists($path)) $path=get_file_base().'/text/'.$lang.'/'.$codename.'.txt';
+		if (!file_exists($path))
+		{
+			$path=get_file_base().'/text/'.$lang.'/'.$codename.'.txt';
+		}
 		$i++;
 	}
 	while ((!file_exists($path)) && (array_key_exists($i,$langs)));

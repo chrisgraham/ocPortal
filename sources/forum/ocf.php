@@ -945,7 +945,7 @@ class forum_driver_ocf extends forum_driver_base
 	function _is_staff($member)
 	{
 		if ($member==$this->get_guest_id()) return false;
-		$users_groups=$this->get_members_groups($member,true);
+		$users_groups=$this->get_members_groups($member);
 		return ((ocf_get_best_group_property($users_groups,'is_super_moderator')==1) || (ocf_get_best_group_property($users_groups,'is_super_admin')==1));
 	}
 
@@ -958,7 +958,7 @@ class forum_driver_ocf extends forum_driver_base
 	function _is_super_admin($member)
 	{
 		if ($member==$this->get_guest_id()) return false;
-		$users_groups=$this->get_members_groups($member,true);
+		$users_groups=$this->get_members_groups($member);
 		return ocf_get_best_group_property($users_groups,'is_super_admin')==1;
 	}
 
@@ -1420,7 +1420,7 @@ class forum_driver_ocf extends forum_driver_base
 		}
 
 		// Ok, authorised basically, but we need to see if this is a valid login IP
-		if ((ocf_get_best_group_property($this->get_members_groups($row['id'],true),'enquire_on_new_ips')==1)) // High security usergroup membership
+		if ((ocf_get_best_group_property($this->get_members_groups($row['id']),'enquire_on_new_ips')==1)) // High security usergroup membership
 		{
 			global $SENT_OUT_VALIDATE_NOTICE;
 			$ip=get_ip_address(3);
@@ -1493,7 +1493,7 @@ class forum_driver_ocf extends forum_driver_base
 		$submitting=((count($_POST)>0) && (get_param('type',NULL)!=='ed') && (get_param('type',NULL)!=='ec') && (!running_script('preview')));
 		$restrict=$submitting?'flood_control_submit_secs':'flood_control_access_secs';
 		$restrict_setting=$submitting?'m_last_submit_time':'m_last_visit_time';
-		$restrict_answer=ocf_get_best_group_property($this->get_members_groups($id,true),$restrict);
+		$restrict_answer=ocf_get_best_group_property($this->get_members_groups($id),$restrict);
 		if ((!$submitting) && (array_key_exists('redirect',$_GET))) $restrict_answer=0;
 		if ($restrict_answer<0) $restrict_answer=0;
 		$last=$this->get_member_row_field($id,$restrict_setting);

@@ -3648,7 +3648,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 }
 
 .menu_type__top img, .menu_type__dropdown .toplevel_link img {
-	margin-top: 7px;
+	margin-top: -2px;
 }
 
 .menu_type__top img, .menu_type__dropdown img {

@@ -637,9 +637,11 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 		if ((isset($url->seq_parts)) && (isset($url->seq_parts[0])) && ($url->seq_parts[0][3]=='PAGE_LINK'))
 		{
 			$url=$url->seq_parts[0][1][0];
+			if (is_object($url)) $url=$url->evaluate();
 		} elseif ((isset($url->bits)) && (isset($url->bits[0])) && ($url->bits[0][2]=='PAGE_LINK'))
 		{
 			$url=$url->bits[0][3][0];
+			if (is_object($url)) $url=$url->evaluate();
 		} elseif (substr($url->evaluate(),0,strlen(get_base_url()))==get_base_url())
 		{
 			$page_link=url_to_pagelink($url->evaluate(),true,true);
