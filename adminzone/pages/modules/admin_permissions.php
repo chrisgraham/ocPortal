@@ -393,16 +393,6 @@ class Module_admin_permissions
 			}
 		}
 		
-		if (file_exists($css_path))
-		{
-			$tmp_file=file_get_contents($css_path);
-			$matches=array();
-			if (preg_match('#\nth[\s,][^\}]*\sbackground-color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
-			{
-				$color=$matches[1];
-			}
-		}
-
 		// Standard editing matrix
 		// NB: For permissions tree editor, default access is shown as -1 in editor for clarity (because the parent permissions are easily findable which implies the default access would mean something else which would confuse [+ this would be hard to do due to the dynamicness of the interface])
 		require_code('permissions2');

@@ -41,12 +41,13 @@ function handle_product_orders($purchase_id,$details,$product)
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>$details['ORDER_STATUS'],'transaction_id'=>$details['txn_id']),array('id'=>$purchase_id));
 
-		if($details['ORDER_STATUS']=='ORDER_STATUS_payment_received')
+		if ($details['ORDER_STATUS']=='ORDER_STATUS_payment_received')
 		{	
 			purchase_done_staff_mail($purchase_id);
 		}
 
-		if($details['ORDER_STATUS']=='ORDER_STATUS_dispatched')
+		// TODO: Suspect this is never called ?!? admin_orders.php runs it's own update_stock, and dispatching is not a part of the core eCommerce framework
+		if ($details['ORDER_STATUS']=='ORDER_STATUS_dispatched')
 		{	
 			update_stock($purchase_id);	//Update stock after dispatch
 		}
@@ -68,8 +69,6 @@ class Hook_cart_orders
 	 */
 	function get_products($site_lang=false,$search=NULL,$search_titles_not_ids=false)
 	{	
-		if (is_null($search)) return array(); // Too many to list potentially
-
 		$products		=	array();
 
 		require_lang('shopping');	
@@ -85,6 +84,12 @@ class Hook_cart_orders
 				if (substr($search,0,strlen($l))!=$l) return array();
 				$where.=' AND id='.strval(intval(substr($search,strlen($l))));
 			}
+		}
+
+		if (is_null($search))
+		{
+			$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order WHERE '.$where);
+			if ($count>50) return array(); // Too many to list
 		}
 
 		$start=0;

@@ -33,7 +33,12 @@ class Hook_catalogue_items
 	 */
 	function get_products($site_lang=false,$search=NULL,$search_titles_not_ids=false)
 	{
-		if (is_null($search)) return array(); // Too many to list potentially
+		if (is_null($search))
+		{
+			$cnt=$GLOBALS['SITE_DB']->query_value('catalogue_entries t1 LEFT JOIN '.get_table_prefix().'catalogues t2 ON t1.c_name=t2.c_name','COUNT(*)',array('c_ecommerce'=>1));
+			if ($cnt>50)
+				return array(); // Too many to list
+		}
 
 		require_code('catalogues');
 
@@ -86,7 +91,7 @@ class Hook_catalogue_items
 				$price	=	float_to_raw_string($this->calculate_product_price(floatval($item_price),$tax,$product_weight));
 
 				/* For catalogue items we make the numeric product ID the raw ID for the eCommerce item. This is unique to catalogue items (necessarily so, to avoid conflicts), and we do it for convenience */
-				$products[strval($ecomm_item['id'])]	=	array(PRODUCT_CATALOGUE,$price,'handle_product_orders_items',array('tax'=>$tax),$product_title);
+				$products[strval($ecomm_item['id'])]	=	array(PRODUCT_CATALOGUE,$price,'handle_catalogue_items',array('tax'=>$tax),$product_title);
 			}
 			$start+=500;
 		}
@@ -499,7 +504,7 @@ class Hook_catalogue_items
 	 * Calculate product price
 	 *
 	 * @param  AUTO_LINK	Catalogue entry id
-	 * @param  integer	Quantity
+	 * @param  integer	Quantity to deduct
 	 */
 	function update_stock($entry_id,$quantity)
 	{
@@ -614,7 +619,7 @@ class Hook_catalogue_items
 
 		if(array_key_exists('FIELD_3',$map))
 		{
-			$out_of_stock=$map['FIELD_3']=='0';
+			$out_of_stock=($map['FIELD_3']=='0');
 		} else
 		{
 			$out_of_stock=false;
@@ -636,11 +641,8 @@ class Hook_catalogue_items
  * @param  AUTO_LINK	Purchase/Order id.
  * @param  array		Details of product.
  */
-function handle_product_orders_items($purchase_id,$details)
+function handle_catalogue_items($entry_id,$details)
 {
-	$status=$details['ORDER_STATUS'];
-
-	$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>$status),array('order_id'=>$purchase_id));
-
-	$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>$status,'transaction_id'=>$details['txn_id']),array('id'=>$purchase_id),'',1);
+	$object=object_factory('Hook_catalogue_items');
+	$object->update_stock($entry_id,1);
 }

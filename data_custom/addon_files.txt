@@ -2043,7 +2043,7 @@ referrals
 # # lang_custom/EN/referrals.ini
 # # sources_custom/ocf_join.php
 # # sources_custom/hooks/systems/ecommerce/usergroup.php
-# # sources_custom/hooks/systems/ecommerce/catalogue_items.php
+# # sources_custom/hooks/systems/ecommerce/cart_orders.php
 # # sources_custom/hooks/systems/referrals/index.html
 # # sources_custom/hooks/systems/do_next_menus/referrals.php
 # # sources_custom/hooks/modules/members/referrals.php

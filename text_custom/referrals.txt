@@ -30,8 +30,10 @@ referral_trigger__join=1
 ; if buying a usergroup subscription triggers a qualified referral (default 0)
 referral_trigger__usergroup_subscribe=0
 
-; if buying an item from the shopping catalogue triggers a qualified referral (default 0)
+; if buying any item from the shopping catalogue triggers a qualified referral (default 0)
 referral_trigger__misc_purchase=0
+; or some specific item number (e.g. product #4)
+referral_trigger__purchase_4=1
 
 ;; =============
 ;; MISC SETTINGS
@@ -48,18 +50,20 @@ notify_if_join_but_no_referral=0
 ; If they later become a qualified referrer, the referrals count retroactively from the point of the next referral happening.
 
 ; add settings like this to define what usergroup IDs qualify a referrer. Below we have configured everyone in the default rank set to qualify.
-referrer_qualified_for_group_4=1
-referrer_qualified_for_group_5=1
-referrer_qualified_for_group_6=1
-referrer_qualified_for_group_7=1
-referrer_qualified_for_group_8=1
-referrer_qualified_for_group_9=1
+referrer_qualified_for__group_4=1
+referrer_qualified_for__group_5=1
+referrer_qualified_for__group_6=1
+referrer_qualified_for__group_7=1
+referrer_qualified_for__group_8=1
+referrer_qualified_for__group_9=1
 ; also staff
-referrer_qualified_for_group_2=1
-referrer_qualified_for_group_3=1
+referrer_qualified_for__group_2=1
+referrer_qualified_for__group_3=1
 
-; if buying an item from the shopping catalogue triggers a referrer to be qualified (default 0)
-referrer_qualified_for_misc_purchase=1
+; if buying any item from the shopping catalogue triggers a referrer to be qualified (default 0)
+referrer_qualified_for__misc_purchase=1
+; or some specific item number (e.g. product #4)
+referrer_qualified_for__purchase_4=1
 
 ; If you just want everyone to be a qualified referrer (default 0)
-referrer_qualified_regardless=0
+referrer_qualified_for__all=0

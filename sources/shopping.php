@@ -173,7 +173,7 @@ function show_cart_image()
 */
 function purchase_done_staff_mail($order_id)
 {
-	$member_id=$GLOBALS['SITE_DB']->query_value('shopping_order','c_member_id',array('id'=>$order_id));
+	$member_id=$GLOBALS['SITE_DB']->query_value('shopping_order','c_member',array('id'=>$order_id));
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 	$subject=do_lang('ORDER_PLACED_MAIL_SUBJECT',get_site_name(),strval($order_id),get_site_default_lang());
 	$message=do_lang('ORDER_PLACED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($username),array(strval($order_id)),get_site_default_lang());
@@ -229,7 +229,8 @@ function update_stock($order_id)
 
 		$object=object_factory('Hook_'.$hook);
 
-		$object->update_stock($ordered_items['p_id'],$ordered_items['p_quantity']);	
+		if (method_exists($object,'update_stock')) // TODO: This is silly, we should recurse to the proper handler in the eCommerce hook, for whatever delivery is needed
+			$object->update_stock($ordered_items['p_id'],$ordered_items['p_quantity']);	
 	}
 }
 
