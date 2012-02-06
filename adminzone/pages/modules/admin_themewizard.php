@@ -33,7 +33,7 @@ class Module_admin_themewizard
 	{
 		$info=array();
 		$info['author']='Allen Ellis';
-		$info['organisation']='ocProducts'; 
+		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=2;

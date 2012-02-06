@@ -197,7 +197,7 @@ function display_rating($self_url,$self_title,$rating_for_type,$id,$tpl='RATING_
 {
 	$rating_data=get_rating_simple_array($self_url,$self_title,$rating_for_type,$id,'RATING_INSIDE',$extra_ratings);
 
-	if (is_null($rating_data)) 
+	if (is_null($rating_data))
 		return new ocp_tempcode();
 
 	return do_template($tpl,$rating_data);

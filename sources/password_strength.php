@@ -22,7 +22,7 @@
  * Test password strength.
  *
  * @param  string		The password to check
- * @return integer	Password strength 
+ * @return integer	Password strength
  */
 function test_password($password)
 {

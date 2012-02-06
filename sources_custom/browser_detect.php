@@ -61,7 +61,7 @@
 	 *  + Updated the checkes for Firefox
 	 *  + Added the NOKIA platform
 	 *  + Added Checks for the NOKIA brower(s)
-	 *  
+	 *
 	 * 2009-11-08:
 	 *  + PHP 5.3 Support
 	 *  + Added support for BlackBerry OS and BlackBerry browser
@@ -467,8 +467,8 @@
 				return true;
 			}
 			return false;
-		}	    
-	    
+		}
+
 	    /**
 	     * Determine if the browser is the W3C Validator or not (last updated 1.7)
 	     * @return boolean True if the browser is the W3C Validator otherwise false

@@ -40,7 +40,7 @@ version: 2.5.1
 .yui-picker-hue-thumb {
 	cursor:default;
 	width:18px;
-	height:18px; 
+	height:18px;
 	top: -8px;
 	left: -2px;
 	z-index: 9;
@@ -52,27 +52,27 @@ version: 2.5.1
 	left:200px;
 	height:183px;
 	width:14px;
-	background:url({$IMG,colour_picker/hue_bg}) no-repeat; 
-	top:4px; 
+	background:url({$IMG,colour_picker/hue_bg}) no-repeat;
+	top:4px;
 }
 
 .yui-picker-bg {
-	outline:0px none; 
-	position:absolute; 
+	outline:0px none;
+	position:absolute;
 	top:4px;
-	left:4px; 
-	height:182px; 
-	width:182px; 
-	background-color:#F00; 
+	left:4px;
+	height:182px;
+	width:182px;
+	background-color:#F00;
 	background-image: url({$IMG,colour_picker/picker_mask});
-} 
+}
 
 *html .yui-picker-bg {
 	background-image: none;
 	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{$IMG,colour_picker/picker_mask}', sizingMethod='scale');
 }
 
-.yui-picker-mask { position:absolute; z-index: 1; top:0px; left:0px; } 
+.yui-picker-mask { position:absolute; z-index: 1; top:0px; left:0px; }
 
 .yui-picker-thumb { cursor:default; width:11px; height:11px; z-index: 9; position:absolute; top:-4px; left:-4px; }
 
@@ -84,15 +84,15 @@ version: 2.5.1
 .yui-picker-controls .bd { height: 100px; border-width: 0px !important; }
 .yui-picker-controls ul { float:left;padding:0 2px 0 0;margin:0 }
 .yui-picker-controls li { padding:2px;list-style:none;margin:0 }
-.yui-picker-controls input { 
+.yui-picker-controls input {
 	font-size: 0.85em;
 	width: 2.4em;
 }
-.yui-picker-hex-controls { 
-	clear: both; 
+.yui-picker-hex-controls {
+	clear: both;
 	padding: 2px;
 }
-.yui-picker-hex-controls input { 
+.yui-picker-hex-controls input {
 	width: 4.6em;
 }
 

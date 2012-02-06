@@ -509,7 +509,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 				}
 			}
 			if ($id_list=='') return NULL;
-		}		  
+		}
 
 		$topic_filter=($filter_topic_name!='')?'AND title LIKE \''.db_encode_like($this->ipb_escape($filter_topic_name)).'\'':'';
 		if ($filter_topic_description!='')

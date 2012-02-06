@@ -530,7 +530,7 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
 
 	$codename=$menu['special'];
 
-	// A bit of a hack to calculate the true number of rendered items... 
+	// A bit of a hack to calculate the true number of rendered items...
 	$new_children=array();
 	foreach ($menu['children'] as $child)
 	{
@@ -689,7 +689,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 					if ($_parts[1]==$users_current_zone) $somewhere_definite=true;
 				}
 			}
-			$current_zone=(($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($zone_name==$REDIRECTED_TO['r_to_zone']) && (!$somewhere_definite))); // This code is a bit smart, as zone menus usually have a small number of zones on them - redirects will be counted into the zone redirected to, so long as there is no more suitable zone and so long as it is not a transparent redirect 
+			$current_zone=(($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($zone_name==$REDIRECTED_TO['r_to_zone']) && (!$somewhere_definite))); // This code is a bit smart, as zone menus usually have a small number of zones on them - redirects will be counted into the zone redirected to, so long as there is no more suitable zone and so long as it is not a transparent redirect
 			if (($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($zone_name==$REDIRECTED_TO['r_to_zone']) && (array_key_exists('page',$map)) && ($map['page']==$REDIRECTED_TO['r_to_page'])))
 			{
 				$current_page=true;

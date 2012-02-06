@@ -26,7 +26,7 @@
  * @param  string			Second parameter
  * @param  tempcode		First parameter (cropped)
  * @param  tempcode		Second parameter (cropped)
- * @return ?array			Pair: first parameter as possible link, second parameter as possible link (NULL: could not construct a nice link) 
+ * @return ?array			Pair: first parameter as possible link, second parameter as possible link (NULL: could not construct a nice link)
  */
 function actionlog_linkage($type,$a,$b,$_a,$_b)
 {

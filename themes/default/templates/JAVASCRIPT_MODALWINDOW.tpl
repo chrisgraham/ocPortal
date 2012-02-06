@@ -665,10 +665,10 @@ function ModalWindow()
 							this.setStyles(el, value);
 						} else if(name == "html") {
 							setInnerHTML(el, value);
-						} else if (attributes[name]) { 
-							el[attributes[name]] = value; 
-						} else { 
-							el.setAttribute(name, value); 
+						} else if (attributes[name]) {
+							el[attributes[name]] = value;
+						} else {
+							el.setAttribute(name, value);
 						}
 					}
 				}

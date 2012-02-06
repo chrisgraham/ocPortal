@@ -100,7 +100,7 @@ class Module_bookmarks
 
 		return new ocp_tempcode();
 	}
-						  
+
 	/**
 	 * The UI to manage bookmarks.
 	 *

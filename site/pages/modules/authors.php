@@ -112,7 +112,7 @@ class Module_authors
 
 		return new ocp_tempcode();
 	}
-						  
+
 	/**
 	 * The UI to view an author.
 	 *

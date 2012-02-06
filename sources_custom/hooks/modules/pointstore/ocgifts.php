@@ -139,14 +139,14 @@ class Hook_pointstore_ocgifts
 		$gift_message=post_param('gift_message','');
 
 		$member_row=$GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('m_username'=>$to_member),'',1);
-		if(isset($member_row[0]['id']) && $member_row[0]['id']>0) 
+		if(isset($member_row[0]['id']) && $member_row[0]['id']>0)
 		{
 			$to_member_id=$member_row[0]['id'];		
 			$anonymous=post_param_integer('anonymous',0);
 
 			$gift_row=$GLOBALS['FORUM_DB']->query_select('ocgifts',array('*'),array('id'=>$gift_id) );
 
-			if(isset($gift_row[0]['id']) && $gift_row[0]['id']>0) 
+			if(isset($gift_row[0]['id']) && $gift_row[0]['id']>0)
 			{
 				//check available points and charge
 				$available_points=available_points($member_id);
@@ -161,7 +161,7 @@ class Hook_pointstore_ocgifts
 				$gift_row_id=$GLOBALS['SITE_DB']->query_insert('members_gifts',array('to_user_id'=>$to_member_id,'from_user_id'=>$member_id,'gift_id'=>$gift_id,'add_time'=>time(),'is_anonymous'=>$anonymous,'topic_id'=>NULL,'gift_message'=>$gift_message),true);
 			}
 
-			if (isset($gift_row[0]['id']) && $gift_row[0]['id']>0) 
+			if (isset($gift_row[0]['id']) && $gift_row[0]['id']>0)
 			{
 				require_code('notifications');
 
@@ -180,7 +180,7 @@ class Hook_pointstore_ocgifts
 					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id),A_FROM_SYSTEM_UNPRIVILEGED);
 				}
 			}
-		} else 
+		} else
 		{
 			warn_exit(do_lang_tempcode('NO_MEMBER_SELECTED'));
 		}

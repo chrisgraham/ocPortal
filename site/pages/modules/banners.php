@@ -32,9 +32,9 @@ class Module_banners
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham'; 
-		$info['organisation']='ocProducts'; 
-		$info['hacked_by']=NULL; 
+		$info['author']='Chris Graham';
+		$info['organisation']='ocProducts';
+		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=5;
 		$info['locked']=true;

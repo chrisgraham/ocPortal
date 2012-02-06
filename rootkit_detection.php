@@ -67,7 +67,7 @@ if ($type=='')
 			<p>Database table prefix: <input type="text" name="db_prefix" value="ocp4_" /></p>
 			<p>Database username: <input type="text" name="db_user" value="root" /></p>
 			<p>Database password: <input type="password" name="db_pass" /></p>
-		  
+
 			<input type="submit" value="Begin" />
 		</div>
 END;

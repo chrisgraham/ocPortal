@@ -951,7 +951,7 @@ class Module_catalogues
 			require_code('shopping');
 			require_lang('shopping');
 
-			$cart_link=show_cart_image(); 
+			$cart_link=show_cart_image();
 		}
 
 		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('ID'=>strval($id),'ADD_DATE_RAW'=>strval($category['cc_add_date']),'TITLE'=>$title,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'BROWSER'=>$browser,'SORTING'=>$sorting,'ADD_LINK'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$entry_buildup,'SUBCATEGORIES'=>$subcategories,'DESCRIPTION'=>get_translated_tempcode($category['cc_description']),'CART_LINK'=>$cart_link,'TREE'=>$tree),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');

@@ -43,8 +43,8 @@ class Module_admin_workflow extends standard_aed_module
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Warburton'; 
-		$info['organisation']='ocProducts'; 
+		$info['author']='Chris Warburton';
+		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['update_require_upgrade']=0;

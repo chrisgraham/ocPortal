@@ -86,7 +86,7 @@ class Module_cms_authors
 
 		return new ocp_tempcode();
 	}
-						  
+
 	/**
 	 * The do-next manager for before content management.
 	 *

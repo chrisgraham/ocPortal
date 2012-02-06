@@ -298,7 +298,7 @@ class Module_cms_banners extends standard_aed_module
 	 * @param  ?integer			The number of hits the banner may have (NULL: not applicable for this banner type)
 	 * @range  0 max
 	 * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
-	 * @set    0 1 2 
+	 * @set    0 1 2
 	 * @param  ?TIME				The banner expiry date (NULL: never expires)
 	 * @param  ?MEMBER			The banners submitter (NULL: current member)
 	 * @param  BINARY				Whether the banner has been validated

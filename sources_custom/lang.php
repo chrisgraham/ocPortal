@@ -410,7 +410,7 @@ function google_translate($str_in, $lang)
 			return $tempcode?protect_from_escaping($str_in):$str_in; // Cannot translate as it has very complex Tempcode in it
 		}
 
-		$to = $language_list[$lang]; 
+		$to = $language_list[$lang];
 		$from_lang=strtolower(get_site_default_lang());
 		try
 		{
@@ -444,7 +444,7 @@ function google_translate($str_in, $lang)
 	}
 	$DOING_TRANSLATE=false;
 	if ((function_exists('ocp_mark_as_escaped')) && (ocp_is_escaped($str_in))) ocp_mark_as_escaped($str);
-	return $tempcode?protect_from_escaping($str):$str;  
+	return $tempcode?protect_from_escaping($str):$str;
 }
 
 /**
@@ -486,7 +486,7 @@ function check_google_cache($str, $lang)
 function save_google_cache($str, $lang, $result)
 {
 	$time = time();
-	$GLOBALS['SITE_DB']->query_insert('gtranslate_cache',array('language'=>$lang,'stringtoconvert'=>$str,'t_result'=>$result,'create_time'=>$time));  
+	$GLOBALS['SITE_DB']->query_insert('gtranslate_cache',array('language'=>$lang,'stringtoconvert'=>$str,'t_result'=>$result,'create_time'=>$time));
 	return true;
 }
 

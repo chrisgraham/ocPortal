@@ -29,9 +29,9 @@ class Block_side_users_online
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham'; 
+		$info['author']='Chris Graham';
 		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL; 
+		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=3;
 		$info['update_require_upgrade']=1;

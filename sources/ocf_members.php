@@ -187,7 +187,7 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
  * @param  ?BINARY	That are to be shown in post previews (NULL: don't care).
  * @param  BINARY		That start 'ocp_'
  * @param  ?boolean	That are to go on the join form (NULL: don't care).
- * @return array		A mapping of field key to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value.
+ * @return array		A mapping of field title to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value.
  */
 function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$encrypted=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
 {
@@ -277,6 +277,25 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 	}
 
 	return $custom_fields;
+}
+
+/**
+ * Get the ID for a CPF if we only know the title. Warning: Only use this with custom code, never core code! It assumes a single language and that fields aren't renamed.
+ *
+ * @param  SHORT_TEXT	The title.
+ * @return ?AUTO_LINK	The ID (NULL: could not find).
+ */
+function find_cpf_field_id($title)
+{
+	$fields_to_show=ocf_get_all_custom_fields_match(NULL);
+	foreach ($fields_to_show as $field_to_show)
+	{
+		if ($field_to_show['trans_name']==$title)
+		{
+			return $field_to_show['id'];
+		}
+	}
+	return NULL;
 }
 
 /**

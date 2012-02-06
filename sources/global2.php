@@ -268,7 +268,7 @@ function init__global2()
 	$BASE_URL_HTTP=NULL;
 	$BASE_URL_HTTPS=NULL;
 
-	$WORDS_TO_FILTER=NULL;  
+	$WORDS_TO_FILTER=NULL;
 	$FIELD_RESTRICTIONS=NULL;
 
 	$VALID_ENCODING=false;
@@ -1990,7 +1990,7 @@ function convert_data_encodings($known_utf8=false)
 	$done_something=false;
 
 	// Conversion of parameters that might be in the wrong character encoding (e.g. Javascript uses UTF to make requests regardless of document encoding, so the stuff needs converting)
-	//  If we don't have any PHP extensions (mbstring etc) that can perform the detection/conversion, our code will take this into account and use utf8_decode at points where it knows that it's being communicated with by Javascript. 
+	//  If we don't have any PHP extensions (mbstring etc) that can perform the detection/conversion, our code will take this into account and use utf8_decode at points where it knows that it's being communicated with by Javascript.
 	if (@strlen(ini_get('unicode.runtime_encoding'))>0)
 	{
 		@ini_set('default_charset',$charset);

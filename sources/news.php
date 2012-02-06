@@ -90,7 +90,7 @@ function delete_news_category($id)
 	$myrow=$rows[0];
 
 	$min=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval((integer)$id));
-	if (is_null($min)) 
+	if (is_null($min))
 	{
 		warn_exit(do_lang_tempcode('YOU_MUST_KEEP_ONE_NEWS_CAT'));
 	}
@@ -526,7 +526,7 @@ function nice_get_news($it,$only_owned=NULL,$editable_filter=false,$only_in_blog
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news WHERE '.$where.' ORDER BY date_and_time DESC',300/*reasonable limit*/);
 	}
 
-	if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(number_format(300))),'warn');
+	if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 
 	$out=new ocp_tempcode();
 	foreach ($rows as $myrow)

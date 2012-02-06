@@ -65,7 +65,7 @@ class Block_main_buttons
 		$comcode_inline=0;
 
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banner_types','id',array('id'=>$id));
-		if (is_null($test)) 
+		if (is_null($test))
 		{
 			$GLOBALS['SITE_DB']->query_insert('banner_types',array(
 				'id'=>$id,
@@ -82,7 +82,7 @@ class Block_main_buttons
 		$submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 		require_code('banners3');
-		//create default banners, if they don't exist 
+		//create default banners, if they don't exist
 		add_banner_quiet('ocportal','data_custom/causes/ocportal.gif','ocPortal','ocPortal',0,'http://ocportal.com/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
 
 		add_banner_quiet('firefox','data_custom/causes/firefox.gif','Firefox','Firefox',0,'http://www.mozilla.com/firefox/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);

@@ -32,9 +32,9 @@ class Module_forums
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham'; 
+		$info['author']='Chris Graham';
 		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL; 
+		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;

@@ -531,7 +531,7 @@ class Hook_addon_registry_core_form_interfaces
 	*/
 	function tpl_preview__form_screen_2()
 	{
-		require_lang('comcode'); 
+		require_lang('comcode');
 		require_lang('dates');
 
 		$fields	= new ocp_tempcode();

@@ -81,7 +81,7 @@ function StrToNum($Str, $Check, $Magic)
 	for ($i = 0; $i < $length; $i++)
 	{
 		$Check *= $Magic; 	
-		//If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31), 
+		//If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31),
 		//  the result of converting to integer is undefined
 		//  refer to http://www.php.net/manual/en/language.types.integer.php
 		if ($Check >= $Int32Unit)
@@ -90,7 +90,7 @@ function StrToNum($Str, $Check, $Magic)
 			//if the check less than -2^31
 			$Check = ($Check < -2147483648) ? ($Check + $Int32Unit) : $Check;
 		}
-		$Check += ord($Str[$i]); 
+		$Check += ord($Str[$i]);
 	}
 	return $Check;
 }
@@ -125,8 +125,8 @@ function CheckHash($Hashnum)
 	{
 		$Re = intval($HashStr[$i]);
 		if (1 === ($Flag % 2))
-		{			  
-			$Re += $Re;	 
+		{
+			$Re += $Re;
 			$Re = intval($Re / 10) + ($Re % 10);
 		}
 		$CheckByte += $Re;

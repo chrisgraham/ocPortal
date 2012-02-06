@@ -31,7 +31,7 @@ class filecache
 	{
 		$myfile=@fopen(get_custom_file_base().'/persistant_cache/'.md5($key).'.gcd','rb');
 		if ($myfile===false) return NULL;
-		if (!is_null($min_cache_date)) // Code runs here as we know file exists at this point 
+		if (!is_null($min_cache_date)) // Code runs here as we know file exists at this point
 		{
 			if (filemtime(get_custom_file_base().'/persistant_cache/'.md5($key).'.gcd')<$min_cache_date)
 			{

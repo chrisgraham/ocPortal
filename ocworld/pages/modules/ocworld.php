@@ -33,7 +33,7 @@ class Module_ocworld
 	{
 		$info=array();
 		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts'; 
+		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=3;
@@ -523,7 +523,7 @@ class Module_ocworld
 		}
 
 		// Management
-		if ($command=='additem') 
+		if ($command=='additem')
 		{
 			require_code('ocworld_action');
 
@@ -537,7 +537,7 @@ class Module_ocworld
 			$urls=get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
 			add_item_wrap($member_id,$name,post_param_integer('cost',0),post_param_integer('not_infinite',0),post_param_integer('bribable',0),post_param_integer('healthy',0),$urls[0],post_param_integer('max_per_player',-1),post_param_integer('replicateable',0),post_param('description'));
 		}
-		if ($command=='additemcopy') 
+		if ($command=='additemcopy')
 		{
 			require_code('ocworld_action');
 
@@ -610,7 +610,7 @@ class Module_ocworld
 			$urls3=get_url('lobby_pic_url','lobby_pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
 			add_realm_wrap($member_id,$name,post_param('troll_name'),post_param('jail_name'),post_param('jail_text'),$urls1[0],post_param('jail_house_name'),post_param('jail_house_text'),$urls2[0],post_param('lobby_name'),post_param('lobby_text'),$urls3[0],$qa,post_param_integer('private',0));
 		}
-		if ($command=='addportal') 
+		if ($command=='addportal')
 		{
 			require_code('ocworld_action');
 
@@ -624,7 +624,7 @@ class Module_ocworld
 
 			add_portal_wrap($member_id,$name,post_param('text'),post_param_integer('end_location_realm',-1),post_param_integer('end_location_x',-1),post_param_integer('end_location_y',-1));
 		}
-		if ($command=='deleteitem') 
+		if ($command=='deleteitem')
 		{
 			require_code('ocworld_action');
 
@@ -760,7 +760,7 @@ class Module_ocworld
 			}
 			edit_realm_wrap($member_id,$name,post_param('troll_name'),$qa,post_param_integer('private',0),grab_new_owner('new_owner'));
 		}
-		if ($command=='editportal') 
+		if ($command=='editportal')
 		{
 			require_code('ocworld_action');
 

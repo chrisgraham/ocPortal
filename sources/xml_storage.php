@@ -381,7 +381,7 @@ function import_from_xml($xml_data,$delete_missing_rows=false)
  * @param  object			The XML parser object
  * @param  array			Existing data in table
  * @param  array			Field meta data for all fields
- * @param  array			Meta data about table IDs 
+ * @param  array			Meta data about table IDs
  * @param  array			The record details being imported
  * @param  array			The insert IDs thus far
  * @param  ?AUTO_LINK	The ID of the auto-inserted parent to this row (NULL: N/A)

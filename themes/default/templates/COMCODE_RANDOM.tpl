@@ -13,7 +13,7 @@
 	}
 	var comcoderandom=document.getElementById('comcoderandom{$GET%,RAND_ID_RANDOM}');
 	setInnerHTML(comcoderandom,use);
-//]]></script> 
+//]]></script>
 <noscript>
 	{FULL*}
 </noscript>

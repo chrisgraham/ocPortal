@@ -180,7 +180,7 @@ function do_work()
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
-	// download categories under a subcategory 
+	// download categories under a subcategory
 	require_code('downloads2');
 	$subcat_id=add_download_category(random_line(),db_get_first_id(),random_text(),'');
 	for ($i=$GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)');$i<$num_wanted;$i++)

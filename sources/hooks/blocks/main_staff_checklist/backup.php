@@ -20,7 +20,7 @@
 
 class Hook_checklist_backup
 {
- 
+
 	/**
 	 * Standard modular run function.
 	 *

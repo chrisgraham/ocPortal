@@ -4,4 +4,4 @@
 
 <select name="user" id="user{$GET,rndx}">
 	{CONTENT}
-</select>  
+</select>

@@ -222,7 +222,7 @@ class Hook_criticise_mysql_fields
 			}
 		}
 		
-		if ($sql=='') 
+		if ($sql=='')
 			return do_lang_tempcode('NO_MYSQL_QUERY_CHANGES_MADE');
 		
 		return do_lang_tempcode('MYSQL_QUERY_CHANGES_MADE',escape_html($sql));

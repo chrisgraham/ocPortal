@@ -405,7 +405,7 @@ function findTagsInEditor(editor,element)
 		if (!comcodes[i].onmouseout)
 		{
 			comcodes[i].orig_title=comcodes[i].title;
-			comcodes[i].onmouseout=function(event) { 
+			comcodes[i].onmouseout=function(event) {
 				if (!event) event=editor.window.$.event;
 
 				var eventCopy={};
@@ -889,4 +889,4 @@ function setSelectionRange(input,selectionStart,selectionEnd)
 		range.select();
 	} else input.focus();
 }
-	  
+

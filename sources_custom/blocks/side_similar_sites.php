@@ -84,7 +84,7 @@ class Block_side_similar_sites
 		require_code('files');
 		$googleBaseUrl = "http://ajax.googleapis.com/ajax/services/search/web";
 		$googleBaseQuery = "?v=1.0&rsz=large&q=";
-		$googleFullUrl = $googleBaseUrl . $googleBaseQuery . $searchURL . "%20" . $searchTerms; 
+		$googleFullUrl = $googleBaseUrl . $googleBaseQuery . $searchURL . "%20" . $searchTerms;
 		
 		$returnGoogleSearch = http_download_file($googleFullUrl);
 

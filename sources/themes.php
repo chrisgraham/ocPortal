@@ -154,7 +154,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		}
 
 		foreach ($priorities as $i=>$priority)
-		{  
+		{
 			if ($priority===NULL) continue;
 			
 			if (($priority[2]=='images_custom') && ($priority[1]!='')) // Likely won't auto find

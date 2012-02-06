@@ -183,9 +183,9 @@ function force_httpauth()
 {
 	if ((!isset($_SERVER['PHP_AUTH_USER'])) || ($_SERVER['PHP_AUTH_USER']==''))
 	{
-		header('WWW-Authenticate: Basic realm="'.urlencode(get_site_name()).'"'); 
+		header('WWW-Authenticate: Basic realm="'.urlencode(get_site_name()).'"');
 		$GLOBALS['HTTP_STATUS_CODE']='401';
-		header('HTTP/1.0 401 Unauthorized'); 
+		header('HTTP/1.0 401 Unauthorized');
 		exit();
 	}
 	if (isset($_SERVER['PHP_AUTH_PW'])) // Ah, route as a normal login if we can then

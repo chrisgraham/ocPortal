@@ -927,7 +927,7 @@ function toggleSectionInline(id,type,pic,itm,noAnimate)
 		{
 			itm.style.visibility='hidden';
 			itm.style.width=findWidth(itm,true,true,true)+'px';
-			itm.style.position='absolute'; /* So things do not just around now it is visible */ 
+			itm.style.position='absolute'; /* So things do not just around now it is visible */
 			if (pic)
 			{
 				pic.src="{$IMG,exp_con}".replace(/^http:/,window.location.protocol);
@@ -1119,7 +1119,7 @@ function illustrateFrameLoad(pf,frame)
 		}
 		var the_frame=window.frames[frame];
 		window.setTimeout( // Stupid workaround for Google Chrome not loading an image on unload even if in cache
-			function() { 
+			function() {
 				if (the_frame.document && the_frame.document.getElementById('loading_image'))
 				{
 					var i_new=document.createElement('img');
@@ -1971,8 +1971,8 @@ function getInnerHTML(element,outerToo) {
 				for (var a=0,attr=srcDomNode.attributes.length;a<attr;a++) {
 					var aName=srcDomNode.attributes[a].name,aValue=cleaned_attributes[aName];
 					if (
-						(aValue!==null) && 
-						(aName!='complete') && 
+						(aValue!==null) &&
+						(aName!='complete') &&
 						(aName!='simulated_events') && // ocp, expando
 						(((aName.substr(0,2)!='on') && (aName!='cite') && (aName!='nofocusrect') && (aName!='width') && (aName!='height') && (aName!='cache') && (aName!='dataFld') && (aName!='dataFormatAs') && (aName!='dataSrc') && (aName!='implementation') && (aName!='style')) || (aValue!='null')) &&
 						((aName!='start') || (aValue!='fileopen')) &&

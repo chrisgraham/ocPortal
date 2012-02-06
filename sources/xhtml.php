@@ -413,12 +413,12 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 		// Check if the counter has reached the minimum length yet, then wait for the tag_counter to become 0, and chop the string there
 		$ord=ord($current_char);
 		if (
-				(!$in_tag) && 
-				(!$in_entity) && 
-				(!(($ord>=192) && ($ord<=223))) && 
+				(!$in_tag) &&
+				(!$in_entity) &&
+				(!(($ord>=192) && ($ord<=223))) &&
 				(($literal_pos?$i:$c)>=$end_pos) &&
 				(
-					($grammar_completeness_tolerance==0.0) || 
+					($grammar_completeness_tolerance==0.0) ||
 					(!_smart_grammar_says_continue($end_pos,$grammar_completeness_tolerance,$i,$html,$length))
 				) ||
 				($i==$total_length_minus_one)

@@ -221,7 +221,7 @@ Need some help? [url="Try the translation forum"]http://ocportal.com/forum/forum
 2) Extract all the files to a single directory (the download from Launchpad uses subdirectories, but ocPortal wants all the [tt].po[/tt] files together). You only need to extract the files relating to your language but it won't matter if you extract all languages as ocPortal can still find the right ones.
 3) If there are any [tt].ini[/tt] files with the same name as [tt].po[/tt] files you are about to place, they will need removing. [tt].ini[/tt] files take precedence so would block [tt].po[/tt] files from working. If the [tt].ini[/tt] files have stuff not in the [tt].po[/tt] files you should step back and export them to [tt].po[/tt] and into Launchpad, and restart the downloading process once they've merged back in.
 4) Copy the [tt].po[/tt] files to the usual language directory, i.e. [tt]lang_custom/XX[/tt], where XX-is the two-letter-codename for the language. So, for example you should have a [tt]lang_custom/XX/global-XX.po[/tt] file. More details are in the [url="Launchpad FAQ"]http://ocportal.com/forum/topicview/misc/internationalisation/launchpad_help_faq_and.htm[/url].
-5) You may need to create some extra language directories for Comcode pages and template cacheing if you are not on a SuExec server -- basically anywhere where ocPortal has an [tt]EN[/tt] directory create a directory for your language pack's 2-letter-codename too. 
+5) You may need to create some extra language directories for Comcode pages and template cacheing if you are not on a SuExec server -- basically anywhere where ocPortal has an [tt]EN[/tt] directory create a directory for your language pack's 2-letter-codename too.
 
 [title="3"]Language packs[/title]
 
@@ -247,9 +247,9 @@ If this confuses you, put the [tt]side_language[/tt] block onto one of your pane
 
 If you're having problems getting things working a good early diagnosis step is to check what your site is trying to do. If you look at your page source from inside your web browser, you will see something like the following near the top of the code:
 [code]
-<html id="main_website_html" xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN" dir="ltr"> 
-<head profile="http://www.w3.org/2003/g/data-view http://dublincore.org/documents/dcq-html/ http://gmpg.org/xfn/11 http://www.w3.org/2006/03/hcard"> 
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" /> 
+<html id="main_website_html" xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN" dir="ltr">
+<head profile="http://www.w3.org/2003/g/data-view http://dublincore.org/documents/dcq-html/ http://gmpg.org/xfn/11 http://www.w3.org/2006/03/hcard">
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
 [/code]
 
 Here you can see the site is running for you with the language "EN" which is specifying a charset of "ISO-8859-1" and a text direction of "ltr" (left to right).

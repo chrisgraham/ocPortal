@@ -915,7 +915,7 @@ class Module_cms_calendar extends standard_aed_module
 		if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
 			$ical_url=$_FILES['file_novalidate']['tmp_name'];
 
-		if (is_null($ical_url)) 
+		if (is_null($ical_url))
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
 		ical_import($ical_url);

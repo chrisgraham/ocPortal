@@ -33,7 +33,7 @@ class Module_tickets
 	{
 		$info=array();
 		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts'; 
+		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=5;
@@ -199,7 +199,7 @@ class Module_tickets
 		
 		// We read in all data for efficiency
 		if (is_null($category_data))
-			$category_data=$GLOBALS['SITE_DB']->query_select('ticket_types c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.ticket_type=t.id',array('ticket_type AS id','text_original AS title')); 
+			$category_data=$GLOBALS['SITE_DB']->query_select('ticket_types c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.ticket_type=t.id',array('ticket_type AS id','text_original AS title'));
 
 		// This is where we start
 		if (is_null($parent_pagelink))

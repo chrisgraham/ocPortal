@@ -208,7 +208,7 @@ function nice_get_lang_files($lang=NULL)
 				if (array_key_exists($key,$criticise_map)) $num_translated++;
 			}
 
-			$lang_files->attach(form_input_list_entry($lang_file,false,do_lang_tempcode('TRANSLATION_PROGRESS',escape_html($lang_file),escape_html(number_format($num_translated)),escape_html(number_format($num_english)))));
+			$lang_files->attach(form_input_list_entry($lang_file,false,do_lang_tempcode('TRANSLATION_PROGRESS',escape_html($lang_file),escape_html(integer_format($num_translated)),escape_html(integer_format($num_english)))));
 		} else
 		{
 			$lang_files->attach(form_input_list_entry($lang_file,false,$lang_file));

@@ -450,7 +450,7 @@ class Database_Static_oracle
 			return $this->db_get_query_rows($stmt);
 		}
 	
-		if ($get_insert_id) 
+		if ($get_insert_id)
 		{
 			if (strtoupper(substr($query,0,7))=='UPDATE ') return NULL;
 	

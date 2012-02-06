@@ -608,7 +608,7 @@ class Module_cms_news extends standard_aed_module
 			$rss_url=$_FILES['file_novalidate']['tmp_name'];
 		}
 		
-		if (is_null($rss_url)) 
+		if (is_null($rss_url))
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 		
 		$rss=new rss($rss_url,true);

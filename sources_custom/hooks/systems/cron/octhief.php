@@ -204,7 +204,7 @@ class Hook_cron_octhief
 
 			$members_to_steal_ids=array_rand($members, $octhief_number);
 
-			if($octhief_number == 1) 
+			if($octhief_number == 1)
 				$members_to_steal_ids=array('0'=>$members_to_steal_ids);
 
 			foreach ($members_to_steal_ids as $member_rand_key)

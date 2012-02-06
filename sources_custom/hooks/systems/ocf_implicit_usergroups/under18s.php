@@ -22,7 +22,7 @@ class Hook_implicit_usergroups_under18s
 
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds the group ID it is bound to.
-	 * 
+	 *
 	 * @return GROUP		The ID of the usergroup.
 	 */
 	function get_bound_group_id()
@@ -38,7 +38,7 @@ class Hook_implicit_usergroups_under18s
 	
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds all members in the group.
-	 * 
+	 *
 	 * @return ?array		The list of members as a map between member ID and member row (NULL: unsupported by hook).
 	 */
 	function get_member_list()
@@ -48,7 +48,7 @@ class Hook_implicit_usergroups_under18s
 	
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds all members in the group.
-	 * 
+	 *
 	 * @return ?array		The list of members (NULL: unsupported by hook).
 	 */
 	function get_member_list_count()
@@ -58,7 +58,7 @@ class Hook_implicit_usergroups_under18s
 	
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds whether the member is within the implicit usergroup.
-	 * 
+	 *
 	 * @param  MEMBER		The member ID.
 	 * @return boolean	Whether they are.
 	 */

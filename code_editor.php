@@ -491,7 +491,7 @@ window.alert('Access denied. You probably should have specified FTP details.');
 END;
 					return;
 				}
-				if (fwrite($myfile,$file)===false) 
+				if (fwrite($myfile,$file)===false)
 				{
 					fclose($myfile);
 					echo <<<END

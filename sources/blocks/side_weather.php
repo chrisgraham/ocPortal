@@ -28,7 +28,7 @@ class Block_side_weather
 	function info()
 	{
 		$info=array();
-		$info['author']='Manuprathap'; 
+		$info['author']='Manuprathap';
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;

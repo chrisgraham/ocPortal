@@ -10,7 +10,7 @@
 #####################################################
 # eliza.php- Final Project: Eliza program written in PHP
 #
-# The purpose of this program is to mimick the 
+# The purpose of this program is to mimick the
 # infamous Eliza program that was created some
 # time ago.
 #
@@ -302,7 +302,7 @@ class Hook_chat_bot_octavius
 			$string = trim($string);
 			// remove puncuation from string
 			$string = ereg_replace('[!?,.]','',$string);
-		    // split the string up into seperate words   
+		    // split the string up into seperate words
 		    $wordarray = explode(" ",$string);
 		    while ($v < count($wordarray)){
 		        if(eregi($wordarray[$v]."$",$kwarray[$y])){

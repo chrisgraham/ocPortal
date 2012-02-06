@@ -6,7 +6,7 @@
 #page_running_admin_realtime_rain
 {
 	background:#3A3A3A; /* {$,wizard, 100% #3A3A3A} */
-	overflow: hidden; /*Needed for IE7*/ 
+	overflow: hidden; /*Needed for IE7*/
 }
 #page_running_admin_realtime_rain .breadcrumbs
 {

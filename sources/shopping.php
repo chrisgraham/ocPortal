@@ -93,7 +93,7 @@ function update_cart($product_det)
 /**
  * Remove from cart.
  *
- * @param  array	Products to remove 
+ * @param  array	Products to remove
 */
 function remove_from_cart($product_to_remove)
 {	
@@ -139,7 +139,7 @@ function log_cart_actions($action)
 
 /**
  *	Delete incomplete orders of current session of logged in user.
- * 
+ *
 */
 function delete_incomplete_orders()
 {
@@ -150,7 +150,7 @@ function delete_incomplete_orders()
 /**
  * Show cart image
  *
- * @return tempcode 
+ * @return tempcode
 */
 function show_cart_image()
 {
@@ -222,7 +222,7 @@ function update_stock($order_id)
 	$row	=	$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$order_id),'',1);
 	
 	foreach($row as $ordered_items)
-	{ 
+	{
 		$hook	=	$ordered_items['p_type'];	
 
 		require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($hook));
@@ -236,7 +236,7 @@ function update_stock($order_id)
 
 /**
 * Payment step.
-* 
+*
 * @return tempcode	The result of execution.
 */
 function payment_form()
@@ -390,7 +390,7 @@ function get_order_tax_opt_out_status()
 
 	$row	=	$GLOBALS['SITE_DB']->query_select('shopping_order',array('tax_opted_out'),array('c_member'=>get_member(),'session_id'=>get_session_id()),'ORDER BY add_date DESC',1);
 
-	if(!array_key_exists(0,$row)) 
+	if(!array_key_exists(0,$row))
 		return 0;
 	else
 		return $row[0]['tax_opted_out'];
@@ -405,7 +405,7 @@ function get_current_order_id()
 {	
 	$row	=	$GLOBALS['SITE_DB']->query_select('shopping_order',array('id'),array('c_member'=>get_member(),'session_id'=>get_session_id()),'ORDER BY add_date DESC',1);
 
-	if(!array_key_exists(0,$row)) 
+	if(!array_key_exists(0,$row))
 		return 0;
 	else
 		return $row[0]['id'];

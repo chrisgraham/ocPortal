@@ -4589,7 +4589,7 @@ function zend_version()
  * @return ~integer  Which column on the current line the parser is currently at. (false: error)
  */
 function xml_get_current_column_number($parser)
-{		 
+{
 	return 0;
 }
 

@@ -6,7 +6,7 @@
 
 <p>
 	{!POINTSTORE_INTRO}
-</p> 
+</p>
 
 <p>
 	{!POINTSTORE_ITEMS}

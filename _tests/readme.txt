@@ -25,7 +25,7 @@ At the time of writing there is only one test, unit_tests/forum.php, which serve
 The testing framework is built around SimpleTest (http://www.simpletest.org/), so all their API can be used. We have extended it a little bit, so:
  - you can call up page-links
  - any pages loaded up are saved as HTML so you can check them via other means also (e.g. passing through an HTML validator, or checking them manually for aesthetic issues).
- - you can make ocPortal think you are a logged in administrator 
+ - you can make ocPortal think you are a logged in administrator
  - there is some standard setUp/tearDown code should use for any test, to make sure ocPortal starts in a good state for testing (currently it just makes sure the site is not closed)
 Read about the SimpleTest API on their website to understand what things like assertTrue mean, and what tools you have at your disposal.
 

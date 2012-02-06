@@ -137,7 +137,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		{
 			$poster_name_if_guest=do_lang('GUEST');
 		}
-		else 
+		else
 		{
 			$poster_name_if_guest=$GLOBALS['OCF_DRIVER']->get_username($poster);
 			if (is_null($poster_name_if_guest)) $poster_name_if_guest=do_lang('UNKNOWN');

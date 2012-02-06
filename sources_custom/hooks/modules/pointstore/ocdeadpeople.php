@@ -75,19 +75,19 @@ class Hook_pointstore_ocdeadpeople
 			$get_cure=true;
 			$get_immunization=true;
 
-			if(isset($member_rows[0]['sick']) && $member_rows[0]['sick']==1 && $member_rows[0]['cure']==0) 
+			if(isset($member_rows[0]['sick']) && $member_rows[0]['sick']==1 && $member_rows[0]['cure']==0)
 			{
 				$get_cure=true;
 				$get_immunization=false;
-			}elseif(isset($member_rows[0]['sick']) && $member_rows[0]['sick']==0 && $member_rows[0]['immunisation']==0) 
+			}elseif(isset($member_rows[0]['sick']) && $member_rows[0]['sick']==0 && $member_rows[0]['immunisation']==0)
 			{
 				$get_cure=false;
 				$get_immunization=true;
-			} elseif(!isset($member_rows[0])) 
+			} elseif(!isset($member_rows[0]))
 			{
 				$get_cure=false;
 				$get_immunization=true;
-			} elseif(isset($member_rows[0]['sick']) && ($member_rows[0]['cure']==1 || $member_rows[0]['immunisation']==1)) 
+			} elseif(isset($member_rows[0]['sick']) && ($member_rows[0]['cure']==1 || $member_rows[0]['immunisation']==1))
 			{
 				//skip this disease - because user has been immunizated or has been cured
 				$get_cure=false;
@@ -122,7 +122,7 @@ class Hook_pointstore_ocdeadpeople
 			}
 		}
 
-		if($counter==0) 
+		if($counter==0)
 			$fields.='<tr><td colspan="4">'.do_lang('NO_ENTRIES_TO_DISPLAY').'</td></tr>';
 		$fields.='</table>';
 
@@ -185,11 +185,11 @@ class Hook_pointstore_ocdeadpeople
 		
 		// Actuate
 		require_code('points2');
-		if($get_immunization==1) 
+		if($get_immunization==1)
 		{
 			charge_member(get_member(),$amount,do_lang('IMMUNIZATION_PURCHASED'));
 		}
-		else 
+		else
 		{
 			charge_member(get_member(),$amount,do_lang('CURE_PURCHASED'));
 		}
@@ -198,12 +198,12 @@ class Hook_pointstore_ocdeadpeople
 		{
 			$GLOBALS['SITE_DB']->query_insert('members_diseases',array('user_id'=>$member_id,'disease_id'=>$disease_id,'sick'=>strval($sick),'cure'=>strval($cure),'immunisation'=>strval($immunization)));
 		}
-		else 
+		else
 		{
 			$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>$member_id,'disease_id'=>$disease_id,'sick'=>strval($sick),'cure'=>strval($cure),'immunisation'=>strval($immunization)),array('user_id'=>$member_id,'disease_id'=>$disease_id),'',1);
 		}
 
-		if($get_immunization==1) 
+		if($get_immunization==1)
 		{
 			// Show message
 			$result=do_lang_tempcode('IMMUNIZATION_CONGRATULATIONS');

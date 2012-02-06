@@ -43,8 +43,8 @@ class Module_admin_awards extends standard_aed_module
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham'; 
-		$info['organisation']='ocProducts'; 
+		$info['author']='Chris Graham';
+		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['update_require_upgrade']=1;

@@ -32,7 +32,7 @@ class Hook_stats_chat
 
 		require_code('chat_stats');
 		require_lang('chat');
-  
+
 		$bits=new ocp_tempcode();
 		if (get_option('chat_show_stats_count_users',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'904a46b83a84728243f3fd655705cc04','KEY'=>do_lang_tempcode('COUNT_CHATTERS'),'VALUE'=>integer_format(get_num_chatters()))));
 		if (get_option('chat_show_stats_count_rooms',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'adf12b729fd23b6fa7115758a64155c6','KEY'=>do_lang_tempcode('ROOMS'),'VALUE'=>integer_format(get_num_chatrooms()))));

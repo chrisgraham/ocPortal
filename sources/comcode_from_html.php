@@ -282,7 +282,12 @@ function semihtml_to_comcode($semihtml)
 		{
 			$semihtml=preg_replace('#<div [^>]*class="attachment_left"[^>]*>\s*<img src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'&amp;for_session=[\w\d]+" /></div>#i','[attachment_safe'.$comcode_to.' type="inline_left"]${1}[/attachment_safe]',$semihtml);
 			$semihtml=preg_replace('#<div [^>]*class="attachment_right"[^>]*>\s*<img src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'&amp;for_session=[\w\d]+" /></div>#i','[attachment_safe'.$comcode_to.' type="inline_right"]${1}[/attachment_safe]',$semihtml);
-			$semihtml=preg_replace('#(<a [^>]*>)?\s*<img [^>]*[^>]*src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'&amp;for_session=[\w\d]+" [^>]*title="([^"]*)" [^>]*/?'.'>\s*(</a>)?#i','[attachment_safe'.$comcode_to.' type="inline" description="${3}"]${2}[/attachment_safe]',$semihtml);
+			$regexp='#';
+			$regexp.=($comcode_to==' thumb="1"')?'(<a [^>]*>)?\s*':'()';
+			$regexp.='<img [^>]*[^>]*src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'&amp;for_session=[\w\d]+" [^>]*title="([^"]*)" [^>]*/?'.'>\s*';
+			$regexp.=($comcode_to==' thumb="1"')?'(</a>)?':'()';
+			$regexp.='#i';
+			$semihtml=preg_replace($regexp,'[attachment_safe'.$comcode_to.' type="inline" description="${3}"]${2}[/attachment_safe]',$semihtml);
 		}
 	}
 	$semihtml=preg_replace('#&amp;keep_session=[\d]*(&amp;for_session=[\w\d]*)?#','',$semihtml); // This is useful for generally stripping sensitive information anyway. Should be null-op if anti-leech was on, but worth doing just-in-case.
@@ -296,7 +301,7 @@ function semihtml_to_comcode($semihtml)
 	// And use same method to protect our code tags
 /*	foreach (array_keys($GLOBALS['CODE_TAGS']) as $code_tag)
 		$semihtml=preg_replace_callback('#(\['.$code_tag.'[^\]]*\])(.*)(\[/'.$code_tag.'\])#siU','_codetag_protect',$semihtml);
-Actually no, we don't want this. These tags are typed potentially to show HTML and thus the entities must get decoded 
+Actually no, we don't want this. These tags are typed potentially to show HTML and thus the entities must get decoded
 */
 
 	// Cleanup from certain word processors

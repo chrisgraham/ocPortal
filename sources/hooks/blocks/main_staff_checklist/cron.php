@@ -20,7 +20,7 @@
 
 class Hook_checklist_cron
 {
- 
+
 	/**
 	 * Standard modular run function.
 	 *

@@ -57,7 +57,7 @@ function chat_load(room_id)
 	if (window.location.href.indexOf('keep_chattest')==-1) begin_chatting(room_id);
 	
 	text_colour=document.getElementById('text_colour');
-	if (text_colour) text_colour.style.color=text_colour.value; 
+	if (text_colour) text_colour.style.color=text_colour.value;
 
 	var event = YAHOO.util.Event;
 

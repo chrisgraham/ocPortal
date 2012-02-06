@@ -163,7 +163,7 @@ hr { /* Fixes difference with Opera */
 	text-align: left;
 }
 
-/*input[type="text"],textarea {  So Comcode can be typed 
+/*input[type="text"],textarea {  So Comcode can be typed
 	unicode-bidi: bidi-override;
 	direction: ltr;
 }*/
@@ -1791,14 +1791,14 @@ a.poster_member:link, a.poster_member:active, a.poster_member:visited, a.poster_
 	border-left: 0;
 	border-right: 0;
 	display: block;
-	background-color: #f0f3f9; /* {$,wizard, 75% ocf_row2 + 25% W/B }*/ 
+	background-color: #f0f3f9; /* {$,wizard, 75% ocf_row2 + 25% W/B }*/
 	margin-bottom: 7px;
 	text-decoration: none;
 	padding: 2px 2px;
 }
 
 a.poster_member:hover {
-	border-color: #072d65; /* {$,wizard, 100% bordcolor}*/  
+	border-color: #072d65; /* {$,wizard, 100% bordcolor}*/
 	background-color: #f5f8fb; /* {$,wizard, 50% ocf_row2 + 50% W/B }*/ /*50% white over medborder color*/
 }
 

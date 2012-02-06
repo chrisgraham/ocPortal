@@ -340,7 +340,7 @@ class Hook_ipb2 extends Hook_ipb_base
 				if ($first_post)
 				{
 					$title=@html_entity_decode($row['mt_title'],ENT_QUOTES,get_charset());
-				} else 
+				} else
 				{
 					$title='';
 					if (get_param_integer('keep_import_test',0)==1) continue;

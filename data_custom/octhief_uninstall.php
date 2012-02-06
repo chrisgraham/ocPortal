@@ -49,7 +49,7 @@ require_code('database_action');
 require_code('config2');
 require_code('menus2');
 
-require_code('developer_tools');  
+require_code('developer_tools');
 require_code('database_action');
 
 destrictify();

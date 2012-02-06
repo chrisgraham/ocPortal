@@ -351,10 +351,11 @@ function comcode_convert_script()
 		echo '<request><result>';
 		echo xmlentities($out);
 		echo '</result></request>';
-	}/* else don't uncomment due to XSS potential
+	} else
 	{
+		header('Content-type: text/plain; charset='.get_charset());
 		echo $out;
-	}*/
+	}
 }
 
 /**

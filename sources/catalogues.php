@@ -696,7 +696,7 @@ function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_subm
 	}
 	$query.=' ORDER BY c_add_date DESC';
 	$rows=$GLOBALS['SITE_DB']->query($query,100/*reasonable limit*/);
-	if (count($rows)==100) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL',escape_html(number_format(100))),'warn');
+	if (count($rows)==100) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL',escape_html(integer_format(100))),'warn');
 	$out=new ocp_tempcode();
 	foreach ($rows as $row)
 	{
@@ -901,7 +901,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 			$temp_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title'),array('c_name'=>$catalogue_name,'cc_parent_id'=>NULL),'ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
 			if (get_page_name()=='cms_catalogues')
 			{
-				if (count($temp_rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(number_format(300))),'warn');
+				if (count($temp_rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 			}
 			$children=array();
 			foreach ($temp_rows as $row)
@@ -936,14 +936,14 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 	$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title'),array('cc_parent_id'=>$category_id),'',300/*reasonable limit to stop it dying*/);
 	if (get_page_name()=='cms_catalogues')
 	{
-		if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(number_format(300))),'warn');
+		if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 	}
 	$where=array('cc_id'=>$category_id);
 	if (!is_null($submitter)) $where['ce_submitter']=$submitter;
 	$erows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter'),$where,'ORDER BY ce_add_date DESC',1000/*reasonable limit*/);
 	if (get_page_name()=='cms_catalogues')
 	{
-		if (count($erows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(number_format(300))),'warn');
+		if (count($erows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 	}
 	$children[0]['entries']=array();
 	foreach ($erows as $row)
@@ -1001,7 +1001,7 @@ function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filt
 	
 	$tree=array();
 	$temp_rows=$GLOBALS['SITE_DB']->query('SELECT id,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND cc_parent_id IS NULL ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
-	if (count($temp_rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(number_format(300))),'warn');
+	if (count($temp_rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 	foreach ($temp_rows as $row)
 	{
 		$category_id=$row['id'];
@@ -1084,7 +1084,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$tree=NULL,$ti
 	}
 	if (get_page_name()=='cms_catalogues')
 	{
-		if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(number_format(300))),'warn');
+		if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 	}
 	global $M_SORT_KEY;
 	$M_SORT_KEY='text_original';

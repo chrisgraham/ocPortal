@@ -90,7 +90,7 @@ function get_ocworld_prices_default()
 function get_loc_details($member_id,$null_ok=false)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('w_members',array('location_realm','location_x','location_y'),array('id'=>$member_id),'',1);
-	if (!array_key_exists(0,$rows)) 
+	if (!array_key_exists(0,$rows))
 	{
 		if ($null_ok) return NULL;
 		warn_exit(do_lang_tempcode('MISSING_RESOURCE'));

@@ -109,8 +109,8 @@ var Drag = {
 	{
 		document.onmousemove = null;
 		document.onmouseup	= null;
-		Drag.obj.root.onDragEnd(	parseInt(Drag.obj.root.style[Drag.obj.hmode ? "left" : "right"]), 
-									parseInt(Drag.obj.root.style[Drag.obj.vmode ? "top" : "bottom"]));
+		Drag.obj.root.onDragEnd(	parseInt(Drag.obj.root.style[Drag.obj.hmode ? "left" : "right"]),
+											parseInt(Drag.obj.root.style[Drag.obj.vmode ? "top" : "bottom"]));
 		Drag.obj = null;
 	},
 

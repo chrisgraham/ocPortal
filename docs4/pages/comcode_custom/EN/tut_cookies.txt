@@ -60,7 +60,7 @@ If the problem is number 1, then you can adjust the browser settings to reenable
 
 [title="2"]Privacy[/title]
 
-Cookies can only be read by the site that created them, or a site 'underneath' the site that created them. This prevents other websites from stealing cookies. 
+Cookies can only be read by the site that created them, or a site 'underneath' the site that created them. This prevents other websites from stealing cookies.
 
 When cookies were fairly new, there was a lot of controversy about their ability to track users browsing 'all around the web'. This is not really the case, due to sites only being able to read their own cookies; however, for affiliated companies, such as advertising companies, it is true that cookies could be placed in banners such that any site showing a banner could aid the banner company in tracking every website the banner viewer visited on their network. Therefore as more paranoid users may feel the need to disable their cookies, ocPortal does not require them: session details may be relayed by URL in ocPortal. The obvious disadvantage is that automatic login is not possible in this situation, and there is an additional disadvantage that Javascript will be thought to be disabled, as ocPortal needs to use cookies to detect it. The first problem may be ameliorated by the web browser 'auto-fill' feature, which can be used to automatically remember how forms, such as login forms, were filled in.
 

@@ -82,7 +82,7 @@ class points_test_set extends ocp_test_case
 	{
 		$browser = new SimpleBrowser();
 		$browser->get(get_base_url().'/site/index.php?page=pointstore&type=misc');
-		$title1=$browser->getTitle(); 
+		$title1=$browser->getTitle();
 		$this->assertTrue($title1=="Login &ndash; OcPortal 4.2");
 	}
 

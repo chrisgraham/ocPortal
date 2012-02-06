@@ -37,8 +37,8 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham'; 
-		$info['organisation']='ocProducts'; 
+		$info['author']='Chris Graham';
+		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=3;

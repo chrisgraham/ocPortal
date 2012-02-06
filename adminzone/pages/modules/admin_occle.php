@@ -33,8 +33,8 @@ class Module_admin_occle
 	{
 		$info=array();
 		$info['author']='Philip Withnall';
-		$info['organisation']='ocProducts'; 
-		$info['hacked_by']=NULL; 
+		$info['organisation']='ocProducts';
+		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['update_require_upgrade']=1;

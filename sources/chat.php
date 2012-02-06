@@ -1354,7 +1354,7 @@ function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_
 
 	$response_text='';
 
-	// This deals with the [private="user"]message[/private] tag. 
+	// This deals with the [private="user"]message[/private] tag.
 
 	// Are we the sender, or the receiver?
 	$from=$GLOBALS['FORUM_DRIVER']->get_member_from_username($pm_user);

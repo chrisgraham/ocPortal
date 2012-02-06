@@ -353,7 +353,7 @@ class Database_Static_postgresql
 			return $this->db_get_query_rows($results);
 		}
 	
-		if ($get_insert_id) 
+		if ($get_insert_id)
 		{
 			if (strtoupper(substr($query,0,7))=='UPDATE ') return NULL;
 	

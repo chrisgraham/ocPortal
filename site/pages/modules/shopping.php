@@ -451,7 +451,7 @@ class Module_shopping
 
 	/**
 	* Function to empty shopping cart
-	*  
+	*
 	* @return tempcode		The UI
 	*/
 	function empty_cart()
@@ -486,7 +486,7 @@ class Module_shopping
 
 	/**
 	 * Finish step.
-	 * 
+	 *
 	 * @return tempcode	The result of execution.
 	*/
 	function finish()

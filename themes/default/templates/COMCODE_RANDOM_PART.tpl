@@ -1,1 +1,1 @@
-parts[{NUM}]='{VAL;~}';																																				  
+parts[{NUM}]='{VAL;~}';

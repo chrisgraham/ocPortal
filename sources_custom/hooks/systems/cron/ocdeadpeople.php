@@ -90,7 +90,7 @@ class Hook_cron_ocdeadpeople
 						if($member_rows[0]['immunisation']==1)
 							$has_immunization=true;
 					}
- 
+
 					if (!$has_immunization)
 					{
 						//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');

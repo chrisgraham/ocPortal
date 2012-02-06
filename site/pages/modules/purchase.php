@@ -287,8 +287,6 @@ class Module_purchase
 	 */
 	function message($title)
 	{
-//		$this->ensure_in();
-
 		require_code('form_templates');
 
 		$text=new ocp_tempcode();
@@ -300,17 +298,25 @@ class Module_purchase
 			$this->ensure_in();
 			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE'));
 		}
-			
-		if(method_exists($object,'product_info'))
-			$text->attach($object->product_info(get_param_integer('product'),$title));
-		else
-			$text->attach(paragraph($object->get_message(get_param('product'))));
 
+		// Work out what next step is
 		$licence=method_exists($object,'get_agreement')?$object->get_agreement(get_param('product')):'';
 		$fields=method_exists($object,'get_needed_fields')?$object->get_needed_fields(get_param('product')):NULL;
 		if ((!is_null($fields)) && ($fields->is_empty())) $fields=NULL;
-
 		$url=build_url(array('page'=>'_SELF','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','product'=>get_param('product'),'id'=>get_param_integer('id',-1)),'_SELF',NULL,true);
+
+		if (method_exists($object,'product_info'))
+		{
+			$text->attach($object->product_info(get_param_integer('product'),$title));
+		} else
+		{
+			if (!method_exists($object,'get_message'))
+			{
+				// Ah, not even a message to show - jump ahead
+				return redirect_screen($title,$url,'');
+			}
+			$text->attach(paragraph($object->get_message(get_param('product'))));
+		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PURCHASING'))));
 
@@ -325,8 +331,6 @@ class Module_purchase
 	 */
 	function licence($title)
 	{
-//		$this->ensure_in();
-
 		require_lang('installer');
 
 		require_code('form_templates');
@@ -355,8 +359,6 @@ class Module_purchase
 	 */
 	function details($title)
 	{
-//		$this->ensure_in();
-
 		require_code('form_templates');
 
 		$object=find_product(get_param('product'));
@@ -380,8 +382,6 @@ class Module_purchase
 	 */
 	function pay($title)
 	{
-//		$this->ensure_in();
-
 		$product=get_param('product');
 		$object=find_product($product);
 		if ((method_exists($object,'is_available')) && (!$object->is_available($product,get_member())))

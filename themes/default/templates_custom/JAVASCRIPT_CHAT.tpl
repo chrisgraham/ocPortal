@@ -45,7 +45,7 @@ function chat_load(room_id)
 
 	      chatMessageHandler(null,msg);
 
-	    }, 
+	    },
        new Xmpp4Js.PacketFilter.PacketTypeFilter( "groupchat" )
 	);
 
@@ -91,8 +91,8 @@ function xmpp_connect(username,password,onLoginCompleted)
 	extProvider.register( Xmpp4Js.Ext.MucUser.XMLNS, Xmpp4Js.Ext.MucUser );
 	extProvider.register( Xmpp4Js.Ext.Error.XMLNS, Xmpp4Js.Ext.Error );
 
-	var sp = new Xmpp4Js.Packet.StanzaProvider();  
-	sp.registerDefaultProviders();  
+	var sp = new Xmpp4Js.Packet.StanzaProvider();
+	sp.registerDefaultProviders();
 
 	window.con = new Xmpp4Js.Connection( {
 	   transport: {

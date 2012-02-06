@@ -201,7 +201,7 @@ function check_js($data,$raw_errors=false)
 	}
 
 	unset($GLOBALS['JS_LEX_TOKENS']);
- 
+
 	$errors=array();
 	if ($raw_errors)
 	{

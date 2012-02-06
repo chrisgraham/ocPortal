@@ -23,7 +23,7 @@ Fonts have always been a tricky area in computing, as the actual font typeface i
 Fortunately there are three things that improve on this situation:
  - there are certain common fonts and 'font families' that are available for almost all web browsers to use. However, it is beyond the scope of this tutorial which fonts these actually are and there is a degree of ambiguity as to whether a font is 'common enough' for usage (see http://web.mit.edu/jmorzins/www/fonts.html for more information)
  - CSS (the technology used to stylise web documents) supports a fall-back mechanism for the specification of what font to use
- - [url="Google Web Fonts"]http://www.google.com/webfonts[/url] provides a compatibility layer to smooth over external font support in different web browsers, and access to free fonts 
+ - [url="Google Web Fonts"]http://www.google.com/webfonts[/url] provides a compatibility layer to smooth over external font support in different web browsers, and access to free fonts
 
 If you can't be constrained with the limitations of web fonts, read the "Achieving advanced designs with the custom graphics block" section of this tutorial.
 

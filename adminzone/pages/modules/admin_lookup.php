@@ -32,9 +32,9 @@ class Module_admin_lookup
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham'; 
-		$info['organisation']='ocProducts'; 
-		$info['hacked_by']=NULL; 
+		$info['author']='Chris Graham';
+		$info['organisation']='ocProducts';
+		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
@@ -187,7 +187,7 @@ class Module_admin_lookup
 			if (addon_installed('authors'))
 			{
 				$author_url=($name==do_lang('UNKNOWN'))?NULL:build_url(array('page'=>'authors','author'=>$name),get_module_zone('authors'));
-			} else 
+			} else
 			{
 				$author_url=NULL;
 			}

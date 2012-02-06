@@ -1738,7 +1738,7 @@ class Module_admin_themes
 		$theme=get_param('theme','');
 		if ($theme=='') return $this->choose_theme($title,true);
 		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
-		 
+
 		require_code('themes3');
 		regen_theme_images($theme);
 		if ($theme!='default') regen_theme_images('default',NULL,$theme);

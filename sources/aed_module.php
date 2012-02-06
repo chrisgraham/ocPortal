@@ -526,7 +526,7 @@ class standard_aed_module
 		if (!is_object($this->add_text)) $this->add_text=make_string_tempcode($this->add_text);
 		if ($this->user_facing)
 		{
-			if ($this->care_please) $this->add_text->attach(paragraph(do_lang_tempcode('CARE_PLEASE')));
+			if (($this->care_please) && (do_lang('CARE_PLEASE')!='')) $this->add_text->attach(paragraph(do_lang_tempcode('CARE_PLEASE')));
 			if (addon_installed('points'))
 			{
 				$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>get_self_url(true,true)),get_module_zone('login'));

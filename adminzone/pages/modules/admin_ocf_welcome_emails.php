@@ -39,7 +39,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 	function info()
 	{
 		$info=array();
-		$info['author']='Chris Graham'; 
+		$info['author']='Chris Graham';
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;

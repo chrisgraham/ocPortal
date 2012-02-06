@@ -35,7 +35,7 @@ Post moderation actions are:
  - validation posts
 
 [exp_thumb="Mass moderation of posts is performed by selecting posts and then choosing an action" float="right"]mod_posts[/exp_thumb]
-The 'split posts from' feature moves posts out of the current topic and into a new one. 
+The 'split posts from' feature moves posts out of the current topic and into a new one.
 
 The 'merge posts into' feature moves posts out of the current topic and into an existing one.
 

@@ -76,7 +76,7 @@ function get_dropbox_dir()
 	if (file_exists(get_file_base().'/sources_custom/DropboxConnection.php'))
 		require(get_file_base().'/sources_custom/DropboxConnection.php');
 
-	//remove "/" at the end of $sub_dir if any 
+	//remove "/" at the end of $sub_dir if any
 	while (preg_match('/\/$/', $sub_dir))
 	{
 		$sub_dir=substr($sub_dir,0,mb_strlen($sub_dir)-1);
@@ -86,7 +86,7 @@ function get_dropbox_dir()
 	try
 	{
 		$db_connection = new DropboxConnection($dbemail, $dbpassword);
-		$directories=$db_connection->getdirs($dbdir."/".$sub_dir); 
+		$directories=$db_connection->getdirs($dbdir."/".$sub_dir);
 
 		if (isset($sub_dir))
 		{
@@ -95,9 +95,9 @@ function get_dropbox_dir()
 			$parent_dir='';
 			for ($x=0;$x<count($parent_dir_array)-1;$x++)
 			{
-				$parent_dir.=$parent_dir_array[$x] . "/"; 
+				$parent_dir.=$parent_dir_array[$x] . "/";
 			}
- 			 
+ 			
 			echo "<a href='".find_script('dropbox_list')."?sub_dir=".$parent_dir."&hash=".$hash."'>../</a><br>";
 		}
  		
@@ -106,7 +106,7 @@ function get_dropbox_dir()
 			echo "DIR - <a href='".find_script('dropbox_list')."?hash=".$hash."&sub_dir=".$sub_dir . "/".$directory."'>" . $directory . "</a><br>";
 		}
 		
-		$files=$db_connection->getfiles($dbdir."/".$sub_dir); 
+		$files=$db_connection->getfiles($dbdir."/".$sub_dir);
 
 		foreach ($files as $file)
 		{

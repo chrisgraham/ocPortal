@@ -75,7 +75,7 @@ class Block_side_last_fm
 		{
 			$out = '<div style="overflow: auto; width: '.$width.'!important; height: '.$height.'!important;">';
 		}
-		else 
+		else
 		{
 			$out = '<div style="overflow: auto; width: '.$width.'!important;">';
 		}

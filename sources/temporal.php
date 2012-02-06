@@ -781,7 +781,7 @@ function get_input_date($stub,$get_also=false)
 	return _get_input_date($stub,$get_also);
 }
 
-/* 
+/*
   Based on tzphp 0.1.3 - A small php library for looking up time in remote timezones.
   Copyright (C) 2005 Donald Becker
 

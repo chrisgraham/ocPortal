@@ -70,7 +70,7 @@ class Block_main_ebay
 
 		$out='';
 
-		if($type == 'seller') 
+		if($type == 'seller')
 		{
 			//ebay seller: yourrightchoice
 			$out.='<object width="'.$width.'" height="'.$height.'"><param name="movie" value="http://togo.ebay.'.$domain.'/togo/seller.swf" /><param name="flashvars" value="base=http://togo.ebay.'.$domain.'/togo/'.$lang.'&seller='.$seller.'" /><embed src="http://togo.ebay.'.$domain.'/togo/seller.swf" type="application/x-shockwave-flash" width="'.$width.'" height="'.$height.'" flashvars="base=http://togo.ebay.'.$domain.'/togo/'.$lang.'&seller='.$seller.'"></embed></object>';

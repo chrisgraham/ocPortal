@@ -20,7 +20,7 @@
 
 class Hook_checklist_open_site
 {
- 
+
 	/**
 	 * Standard modular run function.
 	 *

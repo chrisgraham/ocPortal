@@ -37,7 +37,7 @@ There are a number of ways to punish members who do not follow site policy, incl
  - Reducing a member in rank
 
 Since ocPortal version 4, all the various punishment tools are made available on one screen (OCF only). This screen can be accessed from members' post ("Punish member" button) or from any member-profile screen.
- 
+
 As all these methods work on members, but not users in general (i.e. not guest users), you may wish to consider making it a requirement for all users to join in order to participate on the website. In other words, you may wish to remove permission for guests to make submissions.
 [html]</div>[/html]
 [title="2"]Probation[/title]

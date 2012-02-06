@@ -341,7 +341,7 @@ class Module_admin_addons
 				$name=$passed;
 
 				if (
-					(!file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php')) && 
+					(!file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php')) &&
 					(is_null($GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$name))))
 				)
 					continue;

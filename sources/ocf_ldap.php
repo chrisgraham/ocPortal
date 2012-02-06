@@ -419,7 +419,7 @@ function ocf_get_all_ldap_groups()
 /**
  * Find the ocPortal-ID for a named LDAP usergroup.
  *
- * @param  string	The usergroup. 
+ * @param  string	The usergroup.
  * @return ?GROUP	The ocPortal-ID (NULL: none).
  */
 function ocf_group_ldapcn_to_ocfid($cn)

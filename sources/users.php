@@ -373,7 +373,7 @@ function enforce_sessioned_url($url)
 /**
  * Find what sessions are expired and delete them, and recover an existing one for $member if there is one.
  *
- * @param  ?MEMBER		User to get a current session for (NULL: do not try, which guarantees a return result of NULL also) 
+ * @param  ?MEMBER		User to get a current session for (NULL: do not try, which guarantees a return result of NULL also)
  * @return ?AUTO_LINK	The session id we rebound to (NULL: did not rebind)
  */
 function delete_expired_sessions_or_recover($member=NULL)
@@ -484,7 +484,7 @@ function ocp_eatcookie($name)
 }
 
 /**
- * Get the value of a special 'ocp_' custom profile field.
+ * Get the value of a special 'ocp_' custom profile field. For OCF it can also do it for a pure field title, e.g. "Example Field".
  *
  * @param  ID_TEXT		The CPF name stem
  * @param  ?MEMBER		Member to lookup for (NULL: current member)

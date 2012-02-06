@@ -26,7 +26,7 @@ addEventListenerAbstract(window,'real_load',function () {
 		overflow : false,
 		// this function is called after content is columnized
 		doneFunc : function() {},
-		// if the content should be columnized into a 
+		// if the content should be columnized into a
 		// container node other than it's own node
 		target : false,
 		// re-columnizing when images reload might make things
@@ -61,7 +61,7 @@ addEventListenerAbstract(window,'real_load',function () {
 		var adjustment = 0;
 		
 		$cache.append($(this).contents().clone(true));
-	    
+	
 	    // images loading after dom load
 	    // can screw up the column heights,
 	    // so recolumnize after images load
@@ -84,7 +84,7 @@ addEventListenerAbstract(window,'real_load',function () {
 		    	}
 	    	}
 	    }
-	    
+
 		$inBox.empty();
 		
 		columnizeIt();
@@ -215,7 +215,7 @@ addEventListenerAbstract(window,'real_load',function () {
 			if($pullOutHere.children().length != 0) {
 				var $cloneMe = $pullOutHere.children(":first"); // From
 				var $clone = $cloneMe.clone(true); // To
-				if($clone.prop("nodeType") == 1 && (options.explicitBreaks || !$clone.hasClass("dontend"))) { 
+				if($clone.prop("nodeType") == 1 && (options.explicitBreaks || !$clone.hasClass("dontend"))) {
 					$putInHere.append($clone);
 					var dontsplit=$cloneMe.hasClass("dontsplit");
 					if((options.explicitBreaks) && ($clone.hasClass('force-break'))) { // Explicit break

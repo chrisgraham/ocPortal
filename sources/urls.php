@@ -629,7 +629,7 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 function url_is_local($url)
 {
 	if (preg_match('#^[^:\{%]*$#',$url)!=0) return true;
-	return (strpos($url,'://')===false) && (substr($url,0,1)!='{') && (substr($url,0,7)!='mailto:') && (substr($url,0,5)!='data:') && (substr($url,0,1)!='%') && (strpos($url,'{$BASE_URL')===false) && (strpos($url,'{$FIND_SCRIPT')===false);
+	return (((strpos($value,'.php')!==false) || (strpos($value,'.htm')!==false) || (substr($value,0,1)=='#') || (substr($value,0,13)=='{$FIND_SCRIPT') || (substr($value,0,10)=='{$BASE_URL') || (substr(strtolower($value),0,11)=='javascript:') || (substr($value,0,4)=='tel:') || (substr($value,0,7)=='mailto:') || (substr($value,0,7)=='http://') || (substr($value,0,8)=='https://') || (substr($value,0,3)=='../') || (substr($value,0,7)=='sftp://') || (substr($value,0,6)=='ftp://'))) && (strpos($value,'<')===false);
 }
 
 /**

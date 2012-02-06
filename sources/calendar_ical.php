@@ -318,7 +318,7 @@ function get_event_data_ical($calendar_nodes)
 					case 'INTERVAL':
 						$rec_patern=' 1';
 
-						for ($i = 1; $i < intval(end($matches)); $i++) 
+						for ($i = 1; $i < intval(end($matches)); $i++)
 						{
 							$rec_patern.='0';
 						}

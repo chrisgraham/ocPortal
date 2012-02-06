@@ -30,7 +30,7 @@ class Block_main_facebook_facepile
 		$info=array();
 		$info['author']='Naveen';
 		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL; 
+		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;

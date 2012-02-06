@@ -25,7 +25,7 @@ Other examples:
 
 ([i]If you have a web designer such as ocProducts, you will want to ask them to perform these steps for you, if they haven't already done them[/i])
 
-Launchpad is an online system were multiple users can translate the same software, which can then be used by everyone. We would recommend downloading the translation from Launchpad first before working on the translation on your site. Some translations of the software may not be complete and it would be of a benefit to the whole community if any software translations were completed on Launchpad instead of locally. 
+Launchpad is an online system were multiple users can translate the same software, which can then be used by everyone. We would recommend downloading the translation from Launchpad first before working on the translation on your site. Some translations of the software may not be complete and it would be of a benefit to the whole community if any software translations were completed on Launchpad instead of locally.
 To download and install the Launchpad translations you can follow the following step by step process:[list="1"]
 [*]Go to https://translations.launchpad.net/ocportal/+translations.
 [*]Register as a member if you already do not have an account or log in.
@@ -57,7 +57,7 @@ If the downloaded translation from Launchpad is not fully complete you may need 
 
 This will take you to a page which displays the language strings which are used on the current page. Some of these are re-used across different pages, so changing them on one page will affect any other page that uses them. Thus you will not need to change them for every page separately. For example the word "Members" may appear on several pages, and once it has been translated once it should not need translating any more for the software.
 
-There is another option, within the Admin Zone menu under the Style tab, entitled "Translate/re-phrase the software" which allows you to go in and manually edit the various full language files for every language you have installed. 
+There is another option, within the Admin Zone menu under the Style tab, entitled "Translate/re-phrase the software" which allows you to go in and manually edit the various full language files for every language you have installed.
 
 [i]A developer such as ocProducts can set up your site so that you get a Google Translate button next to each language string on these translation screens, and it takes under a second for each item to translate. If you don't have such a button on your site, enquire with the web developer.[/i]
 

@@ -285,7 +285,7 @@ class Module_admin_ecommerce extends standard_aed_module
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT'))));
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_trigger'),'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'_trigger','redirect'=>get_param('redirect',NULL)),'_SELF');
 		$text=do_lang('MANUAL_TRANSACTION_TEXT');
 		$submit_name=do_lang('MANUAL_TRANSACTION');
 		
@@ -391,6 +391,9 @@ class Module_admin_ecommerce extends standard_aed_module
 		}
 
 		handle_confirmed_transaction($purchase_id,$_item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id);
+
+		$url=get_param('redirect',NULL);
+		if (!is_null($url)) return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 
 		return inform_screen($title,do_lang_tempcode('SUCCESS'));
 	}

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>themes/default/templates/ADDITIONAL.tpl</string>
+	<string>sources/hooks/systems/ecommerce_via/paypal.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -64,7 +64,7 @@
 			<key>filename</key>
 			<string>code_editor.php</string>
 			<key>lastUsed</key>
-			<date>2011-09-05T09:14:10Z</date>
+			<date>2012-02-05T01:56:50Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -240,7 +240,7 @@
 			<key>filename</key>
 			<string>rootkit_detection.php</string>
 			<key>lastUsed</key>
-			<date>2011-04-26T20:38:00Z</date>
+			<date>2012-02-05T02:00:35Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -471,6 +471,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>cms/pages/modules/cms_catalogues.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>335</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>311</integer>
+		</dict>
 		<key>collaboration/index.php</key>
 		<dict>
 			<key>caret</key>
@@ -625,33 +639,35 @@
 			<key>firstVisibleLine</key>
 			<integer>2083</integer>
 		</dict>
-		<key>docs4/pages/comcode_custom/EN/tut_adv_configuration.txt</key>
+		<key>docs4/pages/comcode_custom/EN/tut_comcode.txt</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>15</integer>
+				<integer>2</integer>
 				<key>line</key>
-				<integer>375</integer>
+				<integer>38</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>368</integer>
-		</dict>
-		<key>docs4/pages/comcode_custom/EN/tut_censor.txt</key>
-		<dict>
-			<key>caret</key>
+			<integer>15</integer>
+			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>38</integer>
 			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>3</integer>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>38</integer>
+			</dict>
 		</dict>
 		<key>docs4/pages/comcode_custom/EN/tut_correspondance.txt</key>
 		<dict>
@@ -789,20 +805,6 @@
 				<integer>9</integer>
 				<key>line</key>
 				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>lang/EN/permissions.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>15</integer>
-				<key>line</key>
-				<integer>18</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -965,20 +967,6 @@
 			<key>firstVisibleLine</key>
 			<integer>8</integer>
 		</dict>
-		<key>sources/database/mysql.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>173</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>102</integer>
-		</dict>
 		<key>sources/database/shared/mysql.php</key>
 		<dict>
 			<key>caret</key>
@@ -1078,20 +1066,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>42</integer>
-		</dict>
-		<key>sources/hooks/modules/admin_import/ipb2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>43</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_import_types/iotds.php</key>
 		<dict>
@@ -1611,6 +1585,36 @@
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
 		</dict>
+		<key>sources/hooks/systems/ecommerce_via/paypal.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>148</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>123</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>289</integer>
+			</dict>
+		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
 			<key>caret</key>
@@ -1667,20 +1671,6 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
-		<key>sources/ocf_join.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>54</integer>
-				<key>line</key>
-				<integer>216</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>216</integer>
-		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -1695,6 +1685,20 @@
 			<key>firstVisibleLine</key>
 			<integer>81</integer>
 		</dict>
+		<key>sources/seo2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>57</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>26</integer>
+		</dict>
 		<key>sources/sms.php</key>
 		<dict>
 			<key>caret</key>
@@ -1708,6 +1712,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>55</integer>
+		</dict>
+		<key>sources/urls.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>632</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>606</integer>
 		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
@@ -1809,50 +1827,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/css_custom/openid.css</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>4</integer>
-				<key>line</key>
-				<integer>2</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/ADDITIONAL.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>7</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-		</dict>
 		<key>themes/default/templates/ATOM_ENTRY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -1901,20 +1875,6 @@
 			<dict>
 				<key>column</key>
 				<integer>114</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/BREADCRUMB_ESCAPED.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
 				<key>line</key>
 				<integer>0</integer>
 			</dict>
@@ -2041,6 +2001,20 @@
 				<integer>1</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/COMCODE_PAGE_SCREEN.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1</integer>
+		</dict>
 		<key>themes/default/templates/COMCODE_REAL_TABLE_START_SUMMARY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2157,6 +2131,36 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>0</integer>
+			</dict>
+		</dict>
+		<key>themes/default/templates/FORM_SCREEN_INPUT_CAPTCHA.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>12</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>13</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>12</integer>
 			</dict>
 		</dict>
 		<key>themes/default/templates/FORM_SCREEN_INPUT_LIST_ENTRY.tpl</key>
@@ -2707,20 +2711,6 @@
 			<key>firstVisibleLine</key>
 			<integer>15</integer>
 		</dict>
-		<key>themes/default/templates_custom/JAVASCRIPT_COLUMNS.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>464</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>29</integer>
-		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_JQUERY_FLIP.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2866,11 +2856,15 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>themes/default/templates/ADDITIONAL.tpl</string>
+		<string>themes/default/templates/COMCODE_PAGE_SCREEN.tpl</string>
+		<string>docs4/pages/comcode_custom/EN/tut_comcode.txt</string>
+		<string>sources/seo2.php</string>
+		<string>cms/pages/modules/cms_catalogues.php</string>
+		<string>sources/hooks/systems/ecommerce_via/paypal.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{709, 221}, {1148, 940}}</string>
+	<string>{{545, 99}, {1148, 940}}</string>
 </dict>
 </plist>

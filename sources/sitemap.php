@@ -332,7 +332,7 @@ function sitemaps_xml_finished()
 
 	// End of file
 	$blob='
-</urlset> 
+</urlset>
 	';
 	fwrite($SITEMAPS_OUT_FILE,$blob);
 

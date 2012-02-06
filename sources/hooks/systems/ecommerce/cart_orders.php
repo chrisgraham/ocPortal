@@ -111,7 +111,7 @@ class Hook_cart_orders
 
 	/**
 	 * Function to return dispatch type of product. (this hook represents a cart order, so find all of it's sub products's dispatch type and decide cart order product's dispatch type - automatic or manual
-	 *	 
+	 *
 	 * @param  SHORT_TEXT	Item ID
 	 * @return SHORT_TEXT 	Dispatch type
 	*/

@@ -297,7 +297,7 @@ END;
 	 */
 	function import_pages($db,$table_prefix,$old_base_dir)
 	{
-		foreach (array('','/site') as $zone) 
+		foreach (array('','/site') as $zone)
 		{
 			$c_dir=get_custom_file_base().$zone.'/pages/comcode_custom/'.get_site_default_lang().'/';
 			$comcode_pages_title=do_lang('COMCODE_PAGES');

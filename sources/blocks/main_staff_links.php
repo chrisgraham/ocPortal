@@ -26,7 +26,7 @@ class Block_main_staff_links
 		$info=array();
 		$info['author']='Jack Franklin';
 		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL; 
+		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=3;
 		$info['locked']=false;

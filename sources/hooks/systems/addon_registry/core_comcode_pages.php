@@ -163,6 +163,7 @@ class Hook_addon_registry_core_comcode_pages
 		return array(
 			lorem_globalise(
 				do_lorem_template('COMCODE_PAGE_SCREEN',array(
+					'BEING_INCLUDED'=>false,
 					'SUBMITTER'=>placeholder_id(),
 					'TAGS'=>lorem_word_html(),
 					'WARNING_DETAILS'=>'',

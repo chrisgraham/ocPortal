@@ -424,7 +424,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 		list($found,)=find_product_row($product,true,false);
 		if (!is_null($found))
 		{
-			$item_name=$found[3];
+			$item_name=$found[4];
 		}
 	} else
 	{
@@ -755,7 +755,7 @@ function make_cart_payment_button($order_id,$currency)
 
 	$object=object_factory('Hook_'.$via);
 
-	if (!method_exists($object,'make_cart_transaction_button')) 
+	if (!method_exists($object,'make_cart_transaction_button'))
 	{
 		$amount	=	$GLOBALS['SITE_DB']->query_value('shopping_order','tot_price',array('id'=>$order_id));
 		return $object->make_transaction_button($order_id,do_lang('CART_ORDER',$order_id),$order_id,$amount,$currency);

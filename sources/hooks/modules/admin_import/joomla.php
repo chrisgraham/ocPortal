@@ -63,7 +63,7 @@ class Hook_joomla
 		$rows=array();
 		do
 		{
-			$rows=$db->query('SELECT * FROM '.$table_prefix.'users ORDER BY id',200,$row_start); 
+			$rows=$db->query('SELECT * FROM '.$table_prefix.'users ORDER BY id',200,$row_start);
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('member',strval($row['id']))) continue;
@@ -79,13 +79,13 @@ class Hook_joomla
 				$is_super_admin=($user_type=='Administrator')?1:0;
 				$is_super_moderator=($user_type=='Universal Moderator')?1:0;
 				if (count($group_id) > 0)
-				{     
+				{
 					$gid=$group_id[0]['id'];
 					if (count($id_new) == 0)
-					{                   
+					{
 						$avatar_max_width=100;
 						$avatar_max_height=100;
-						if (import_check_if_imported('id',strval($gid))) continue;                  
+						if (import_check_if_imported('id',strval($gid))) continue;
 						$_id_new=ocf_make_group($user_type,0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$avatar_max_width,$avatar_max_height,30000);
 						$id_new=array(array('id'=>$_id_new));
 					}
@@ -100,7 +100,7 @@ class Hook_joomla
 					$primary_group=$id_new[0]['id'];
 					$custom_fields=array();
 					$datetimearr = explode(' ', $row['registerDate']);
-					$datearr = explode('-', $datetimearr[0]); 
+					$datearr = explode('-', $datetimearr[0]);
 					$timearr = explode(':', $datetimearr[1]);
 					$date = $datearr[2];
 					$month = $datearr[1];
@@ -110,7 +110,7 @@ class Hook_joomla
 					$sec = $timearr[2];
 					$register_date = mktime($hour, $min, $sec, $month, $date, $year);
 					$datetimearr = explode(' ', $row['lastvisitDate']);
-					$datearr = explode('-', $datetimearr[0]); 
+					$datearr = explode('-', $datetimearr[0]);
 					$timearr = explode(':', $datetimearr[1]);
 					$date = $datearr[2];
 					$month = $datearr[1];
@@ -128,7 +128,7 @@ class Hook_joomla
 		}
 		while (count($rows)>0);
 	}
-   
+
 	/**
 	 * Standard import function.
 	 *
@@ -187,7 +187,7 @@ class Hook_joomla
 				$message=html_to_comcode($row['message']);
 				$id_new=ocf_make_topic($forum_id,$subject,'',1,($row['state']==1)?0:1,0,0,0,$pt_from,$pt_to,false,0);
 				$datetimearr = explode(' ', $row['date_time']);
-				$datearr = explode('-', $datetimearr[0]); 
+				$datearr = explode('-', $datetimearr[0]);
 				$timearr = explode(':', $datetimearr[1]);
 				$date = intval($datearr[2]);
 				$month = intval($datearr[1]);
@@ -234,14 +234,14 @@ class Hook_joomla
 				$id=$cat_id[0]['id'];
 			}
 			$rows=$db->query("SELECT * FROM ".$table_prefix."weblinks WHERE catid=".strval($category['id'])." AND title NOT LIKE '%joomla%' AND url NOT IN ('http://www.ohloh.net/p/joomla', 'http://www.opensourcematters.org')");
-			$i=0;     
+			$i=0;
 			foreach ($rows as $row)
 			{				
 				$url=$row['url'];
 				$query="SELECT CE.id FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."catalogue_entries AS CE INNER JOIN  ".$GLOBALS['SITE_DB']->get_table_prefix()."catalogue_efv_short AS CES ON CES.ce_id=CE.id AND CES.cv_value='".db_escape_string($url)."' AND CE.c_name='links' AND CE.cc_id=$id";
-				$link_id=$GLOBALS['SITE_DB']->query($query);   
+				$link_id=$GLOBALS['SITE_DB']->query($query);
 				if (count($link_id) == 0)
-				{ 
+				{
 					$data[$i]['title']=$row['title'];
 					$data[$i]['url']=$row['url'];
 					$data[$i]['description']=$row['description'];
@@ -252,9 +252,9 @@ class Hook_joomla
 					$data[$i]['date']=time();
 					$i++;
 				}
-			}  
+			}
 			foreach ($data as $row)
-			{               
+			{
 				$member=get_member();
 				$map=array($fields[0]=>$row['title'],$fields[1]=>$row['url'],$fields[2]=>$row['description']);
 				$new_id=actual_add_catalogue_entry($id,$row['validated'],'',1,1,1,$map,$row['date'],$member);			
@@ -306,13 +306,13 @@ class Hook_joomla
 					$faq_id=array();
 				}
 				if (count($faq_id) == 0)
-				{ 
+				{
 					$introtext = html_to_comcode($row['introtext']);
 					$map=array($fields[0]=>$row['title'],$fields[1]=>$introtext,$fields[2]=>strval($i));
 					actual_add_catalogue_entry($id,1,'',1,1,1,$map);
-				}            
+				}
 			}
-		} 
+		}
 	}
 
 
@@ -330,14 +330,14 @@ class Hook_joomla
 		$categories=$db->query("SELECT id,title,description,image FROM " .$table_prefix."sections WHERE title='News'");
 		foreach ($categories as $category)
 		{
-			$title=$category['title'];  
+			$title=$category['title'];
 			$cat_id = $GLOBALS['SITE_DB']->query_select('news_categories',array('id'),array('nc_title'=>$title),'',1);
 			if (count($cat_id) == 0)
 			{
 				$cat_title=$category['title'];
 				$category_id=$GLOBALS['SITE_DB']->query("SELECT N.id FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."translate  AS T INNER JOIN  ".$GLOBALS['SITE_DB']->get_table_prefix()."news_categories AS N ON T.id=N.nc_title AND " .db_string_equal_to('T.text_original',$cat_title));
 				if (count($category_id) == 0)
-				{  
+				{
 					$desc=html_to_comcode($category['description']);
 					$id=add_news_category($category['title'],$category['image'],$desc,NULL,NULL);
 				} else
@@ -351,11 +351,11 @@ class Hook_joomla
 
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'content WHERE sectionid='.strval($category['id']));
 			foreach ($rows as $row)
-			{               
+			{
 				$val=$row['title'];
 				$news_id=$GLOBALS['SITE_DB']->query("SELECT N.id FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."translate  AS T INNER JOIN  ".$GLOBALS['SITE_DB']->get_table_prefix()."news AS N ON T.id=N.title AND ".db_string_equal_to('T.text_original',$val)." AND news_category=".strval($id)." AND news_category<>''");
 				if (count($news_id) == 0)
-				{      
+				{
 					$title =$row['title'];
 					$news=html_to_comcode($row['introtext']);
 					$author=$db->query_value_null_ok('users','name',array('id'=>$row['created_by']));
@@ -376,7 +376,7 @@ class Hook_joomla
 					$main_news_category=$id;
 					$news_category=NULL;
 					$datetimearr = explode(' ', $row['created']);
-					$datearr = explode('-', $datetimearr[0]); 
+					$datearr = explode('-', $datetimearr[0]);
 					$timearr = explode(':', $datetimearr[1]);
 					$date = intval($datearr[2]);
 					$month = intval($datearr[1]);
@@ -388,7 +388,7 @@ class Hook_joomla
 					$submitter=import_id_remap_get('member',strval($row['created_by']));
 					$views=$row['hits'];
 					$datetimearr = explode(' ', $row['modified']);
-					$datearr = explode('-', $datetimearr[0]); 
+					$datearr = explode('-', $datetimearr[0]);
 					$timearr = explode(':', $datetimearr[1]);
 					$date = intval($datearr[2]);
 					$month = intval($datearr[1]);
@@ -404,7 +404,7 @@ class Hook_joomla
 					sync_file(get_custom_file_base().'/themes/default/images_custom/newscats');
 					$newimagepath=get_custom_file_base().'/themes/default/images_custom/newscats/'.rawurldecode($row['images']);
 					$oldimagepath = $old_base_dir."/images/stories/".rawurldecode($row['images']);
-					@copy($oldimagepath, $newimagepath);                   
+					@copy($oldimagepath, $newimagepath);
 					fix_permissions($newimagepath);
 					sync_file($newimagepath);
 					add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,$submitter,$views,$edit_date,$nid,$image);
@@ -442,7 +442,7 @@ class Hook_joomla
 
 			$category_exist=$GLOBALS['SITE_DB']->query_value_null_ok('banner_types','id',array('id'=>$category['title']));
 			if (is_null($category_exist))
-				add_banner_type($cat_title,1,160,600,70,1);     
+				add_banner_type($cat_title,1,160,600,70,1);
 
 			$rows=$db->query("SELECT b.publish_down ,b.bid,c.title,b.name, b.clickurl, b.imageurl,b.date,bc.contact,bc.extrainfo,bc.email,b.showBanner,b.clicks,b.impmade FROM ".$table_prefix."banner b INNER JOIN " . $table_prefix."bannerclient bc ON b.cid=bc.cid INNER JOIN ".$table_prefix."categories c ON b.catid=c.id AND c.title='".db_escape_string($cat_title)."' AND c.title <> ''");
 			foreach ($rows as $row)
@@ -456,7 +456,7 @@ class Hook_joomla
 						$newimagepath=get_custom_file_base().'/uploads/banners/'.rawurldecode($row['imageurl']);
 						$newimage = $row['imageurl'];
 						$oldimagepath = $old_base_dir."/images/banners/".rawurldecode($row['imageurl']);
-						@copy($oldimagepath, $newimagepath);                   
+						@copy($oldimagepath, $newimagepath);
 					} else
 					{
 						$newimage='';
@@ -474,7 +474,7 @@ class Hook_joomla
 					$desc=html_to_comcode($desc);
 					add_banner($name,$image_url,'',$caption,$campaignremaining,$url,10,$desc,$type,$end_date,$member,1,$cat_title,NULL,0,0,$row['clicks'],0,$row['impmade']);
 				}
-			}               
+			}
 		}
 		$row_start=0;
 		$rows=array();
@@ -493,7 +493,7 @@ class Hook_joomla
 				$primary_group=get_first_default_group();
 				$custom_fields=array();
 				$datetimearr = explode(' ', $row['registerDate']);
-				$datearr = explode('-', $datetimearr[0]); 
+				$datearr = explode('-', $datetimearr[0]);
 				$timearr = explode(':', $datetimearr[1]);
 				$date = $datearr[2];
 				$month = $datearr[1];
@@ -504,7 +504,7 @@ class Hook_joomla
 				$register_date = mktime($hour, $min, $sec, $month, $date, $year);
 
 				$datetimearr = explode(' ', $row['lastvisitDate']);
-				$datearr = explode('-', $datetimearr[0]); 
+				$datearr = explode('-', $datetimearr[0]);
 				$timearr = explode(':', $datetimearr[1]);
 				$date = $datearr[2];
 				$month = $datearr[1];
@@ -553,16 +553,16 @@ class Hook_joomla
 				{
 					$optionlist[$i]['text'] = $option['text'];
 					$optionlist[$i]['hits'] = $option['hits'];
-					$num_options++; 
+					$num_options++;
 				} else
 				{
 					$optionlist[$i]['text'] = $option['text'];
 					$optionlist[$i]['hits'] = $option['hits'];
             }
 				$i++;
-			} 
+			}
 			$datetimearr = explode(' ', $row['checked_out_time']);
-			$datearr = explode('-', $datetimearr[0]); 
+			$datearr = explode('-', $datetimearr[0]);
 			$timearr = explode(':', $datetimearr[1]);
 			$date = intval($datearr[2]);
 			$month = intval($datearr[1]);

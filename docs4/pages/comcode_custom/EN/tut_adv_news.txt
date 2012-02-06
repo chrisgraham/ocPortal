@@ -20,7 +20,7 @@ To create a 'blog', a member only needs to choose to add news, and select their 
 Since version 4.2 there is a blogs CMS interface separate to the news CMS interface. This is provided for two reasons:
 1) as a niceity so that you don't need to explain 'blogs are news' to your users
 2) so you can lock down access, so that members may submit to blogs but not website news
-The presence of the blogs CMS interface does not stop you using the regular news CMS interface to submit blog posts. 
+The presence of the blogs CMS interface does not stop you using the regular news CMS interface to submit blog posts.
 [html]</div>[/html]
 
 [title="2"]Advanced filtering[/title]

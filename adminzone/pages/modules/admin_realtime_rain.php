@@ -33,8 +33,8 @@ class Module_admin_realtime_rain
 	{
 		$info=array();
 		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts'; 
-		$info['hacked_by']=NULL; 
+		$info['organisation']='ocProducts';
+		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;

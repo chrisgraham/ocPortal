@@ -124,7 +124,7 @@ function resizeEmbeddedFrame()
 [/html]
 [/code]
 
-The draw-back on relying on this auto-resizing method is that it is somewhat computationally intensive on users' web browsers (doing a check twice a second). It is likely that users will not notice, however. When ocPortal does iframes it actually ties in a bit of code to anything that would change the frame height, to make it resize on demand, rather than routine checking -- but this is not really very easy to do if you are working with someone else's code. 
+The draw-back on relying on this auto-resizing method is that it is somewhat computationally intensive on users' web browsers (doing a check twice a second). It is likely that users will not notice, however. When ocPortal does iframes it actually ties in a bit of code to anything that would change the frame height, to make it resize on demand, rather than routine checking -- but this is not really very easy to do if you are working with someone else's code.
 
 [title="3"]Naturally[/title]
 

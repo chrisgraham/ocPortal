@@ -16,7 +16,7 @@ OCF emoticons are tied into the theme image system, although you are unlikely to
 Images are associated with the 'code' that is typed to place the emoticon. You may have multiple codes per image, by using a single image in multiple emoticons: the interface allows you to select from existing images when you add. It is possible to bulk import emoticons from zip files.
 
 Emoticons are given a relevancy level, which determines which areas they are listed for use in. The relevancy levels are described in the interface.
-You can also determine whether an emoticon can be used as a 'topic emoticon' (an emoticon placed next to a topic on the forum). It is best to only use standard sized emoticons as topic emoticons. 
+You can also determine whether an emoticon can be used as a 'topic emoticon' (an emoticon placed next to a topic on the forum). It is best to only use standard sized emoticons as topic emoticons.
 [html]</div>[/html]
 [block]main_emoticon_codes[/block]
 

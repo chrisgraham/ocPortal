@@ -2,5 +2,4 @@
 
 <script type="text/javascript">// <![CDATA[
 	window.setInterval(function() { resizeFrame('forumframe'); },500);
-//]]></script> 
-
+//]]></script>

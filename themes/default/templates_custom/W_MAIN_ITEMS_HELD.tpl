@@ -3,5 +3,5 @@
 
 	<select name="item" id="item">
 		{CONTENT}
-	</select>  
+	</select>
 {+END}

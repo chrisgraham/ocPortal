@@ -117,7 +117,7 @@ function cleanup_member_timeouts()
 						$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_update('f_members',array('m_primary_group'=>get_first_default_group()),array('id'=>$member_id),'',1);
 						$GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED=array();
 					}
-					$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1); 
+					$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1);
 				}
 				
 				global $USERS_GROUPS_CACHE,$GROUP_MEMBERS_CACHE;

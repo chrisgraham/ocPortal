@@ -331,6 +331,9 @@ class Module_cms_catalogues extends standard_aed_module
 			$NON_CANONICAL_PARAMS[]='category_id_suggest';
 		}
 
+		$this->add_text=do_lang('CATALOGUE_'.$catalogue_name.'_ADD_TEXT',escape_html(get_base_url()),NULL,NULL,NULL,false);
+		$this->edit_text=do_lang('CATALOGUE_'.$catalogue_name.'_EDIT_TEXT',escape_html(get_base_url()),NULL,NULL,NULL,false);
+
 		// Standard fields
 		// ===============
 
@@ -427,8 +430,14 @@ class Module_cms_catalogues extends standard_aed_module
 			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
 		if ((has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require_b)) || (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require)))
+		{
 			if (addon_installed('unvalidated'))
+			{
+				if (count($field_groups)!=1)
+					$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SETTINGS'))));
 				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
+			}
+		}
 
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
@@ -759,7 +768,7 @@ class Module_cms_catalogues extends standard_aed_module
 		if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
 			$csv_name=$_FILES['file_novalidate']['tmp_name'];
 		
-		if (is_null($csv_name)) 
+		if (is_null($csv_name))
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
 		$fixed_contents=unixify_line_format(file_get_contents($csv_name));
@@ -794,7 +803,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 		//$count=0;
 		$root_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','id',array('cc_parent_id'=>NULL));
-		while (($data=fgetcsv($handle,100000,$del))!==false) 
+		while (($data=fgetcsv($handle,100000,$del))!==false)
 		{
 			if ($data===array(NULL)) continue; // blank line
 			$this->import_csv_lines($catalogue_name,$data,$root_cat,$fields,$categories,$csv_field_titles,$catalog_root);
@@ -892,7 +901,7 @@ class Module_cms_catalogues extends standard_aed_module
 				$map[$field['id']]=$field['cf_default'];
 			}			
 		}
- 
+
 		if ($match_flag)
 			$id=actual_add_catalogue_entry($catid,1,'',1,1,1,$map);
 		else

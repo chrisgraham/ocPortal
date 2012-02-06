@@ -186,7 +186,7 @@ Yes. You need to enable the 'Show forum within website' option from the Admin Zo
 [b]Can I share login between the portal and my forum if I am using a forum driver?[/b]
 ocPortal uses the forum for authentication, but users may have difficulty sharing cookies between the forum and the portal.
 
-It is recommended that you set the cookie names to be different between the portal and forum, making them run on separate cookies. The disadvantage to this is only minor, whilst you are a lot less likely to suffer from cookie conflict issues. 
+It is recommended that you set the cookie names to be different between the portal and forum, making them run on separate cookies. The disadvantage to this is only minor, whilst you are a lot less likely to suffer from cookie conflict issues.
 
 [b]Why does my cookie integration not work?[/b]
 There are many factors to cookie integration, and it is renowned to be problematic. These problems include: strange and inconsistent browser/privacy behaviour, the trickiness of getting exactly matching and correct paths and domains, the change of format between forum versions, secondary usage to forum session cookies, and old cookies masking new cookies. Due to all these problems, we cannot provide personal support for cookie integration except on a commercial basis.
@@ -239,7 +239,7 @@ PHP[1] Out of memory (allocated 6815744) (tried to allocate 311296 bytes)
 [/code]
 then this is telling you PHP [i]actually[/i] has a memory limit of approximately 6815744+311296 bytes (about 7MB).
 
-It may be possible to get ocPortal to raise the memory limit for you. Our default [tt]recommended.htaccess[/tt] file does this -- try renaming it to [tt].htaccess[/tt] to activate it. If you get the problem during the quick installer and thus don't have this file yet, you can find it in the manual installer package. 
+It may be possible to get ocPortal to raise the memory limit for you. Our default [tt]recommended.htaccess[/tt] file does this -- try renaming it to [tt].htaccess[/tt] to activate it. If you get the problem during the quick installer and thus don't have this file yet, you can find it in the manual installer package.
 If renaming the [tt]recommended.htaccess[/tt] file results in "Internal Server Error" error messages, see the "I've renamed recommended.htaccess to .htaccess, but why ocPortal won't load anymore" answer below.
 If you are not successful in raising the memory limit you will need to contact the web host to ask them to do it, as on some hosts the limit is locked down at a server level.
 

@@ -21,7 +21,7 @@
 /**
  * Adds the specified content (image, video, gallery, etc.) to the
  * specified workflow.
- * 
+ *
  * @param  SHORT_TEXT		The content-meta-aware name that applies to this content.
  * @param  SHORT_TEXT		The ID of this content. Must be a string. Integers will be extracted from the string if needed.
  * @param  ?AUTO_LINK		The translation table ID of the desired workflow. -1 is none, defaults to NULL (NULL: system default)
@@ -230,7 +230,7 @@ function add_requirement_to_workflow($requirement_id,$workflow_id,$position=NULL
  * Approves the given point for the given piece of content. The optional
  * user argument will be set as the approver (ie. the one to blame if
  * this approval is in error) , otherwise the current user will be set.
- * 
+ *
  * @param  AUTO_LINK		The *workflow content* ID (NOT the gallery, category, etc. ID!)
  * @param  AUTO_LINK		The approval point name (translation table ID)
  * @param  ?MEMBER		The user ID to use as the approver, (NULL: for current user)
@@ -309,7 +309,7 @@ function build_new_workflow($id, $name, $requirements, $default=false)
  * will thus remain live. Those not completely through will not have
  * theirs set yet and will thus remain unvalidated and not live.
  * NOTE: Approval points can be reused, so they will stay behind.
- * 
+ *
  * @param  AUTO_LINK		The ID of the workflow to delete
  */
 function delete_workflow($id)
@@ -354,7 +354,7 @@ function delete_workflow($id)
  * will be unaffected, whilst those not-yet-approved will first be
  * approved, then have the requirement removed. This is to prevent any
  * content asking to be approved on a point which doesn't exist.
- * 
+ *
  * @param  AUTO_LINK		The workflow approval point name (translation table ID)
  */
 function delete_approval_point($name)
@@ -402,7 +402,7 @@ function delete_approval_point($name)
 
 /**
  * Returns all of the workflows which are currently defined.
- * 
+ *
  * @return array		The workflows which are defined. Empty if none are defined.
  */
 function get_all_workflows()
@@ -419,7 +419,7 @@ function get_all_workflows()
 /**
  * Returns all of the approval point which are currently defined. Indices are
  * IDs, values are names.
- * 
+ *
  * @return array		The approval points which are defined. Empty if none are defined.
  */
 function get_all_approval_points()
@@ -438,7 +438,7 @@ function get_all_approval_points()
  * Get the system's default workflow. If there is only one workflow this
  * will return it, otherwise (multiple with no default specified, or no
  * workflows at all) it will give NULL.
- * 
+ *
  * @return ?AUTO_LINK		The ID of the default workflow. (NULL: if none set)
  */
 function get_default_workflow()
@@ -479,7 +479,7 @@ function get_default_workflow()
 
 /**
  * Get the workflow content ID for the given piece of content.
- * 
+ *
  * @param  string		The type of the source (eg. download, gallery, etc.)
  * @param  string		The ID of the specific piece of content (if numeric, pass as a string anyway)
  * @return AUTO_LINK	The workflow_content_id
@@ -498,7 +498,7 @@ function get_workflow_content_id($source_type,$source_id)
 /**
  * Gets an array of the approval point IDs required by the given
  * workflow ID
- * 
+ *
  * @param  AUTO_LINK		The ID of the workflow
  * @return array			The IDs of the approval points for the workflow, in workflow order
  */
@@ -522,7 +522,7 @@ function get_requirements_for_workflow($workflow_id)
 
 /**
  * Gets the position of the given requirement in the given workflow.
- * 
+ *
  * @param  AUTO_LINK		The ID of the approval point
  * @param  AUTO_LINK		The ID of the workflow
  * @return ?integer		The position of the approval point in this case (NULL: if not found)
@@ -542,7 +542,7 @@ function get_requirement_position($requirement_id, $workflow_id)
 
 /**
  * Gets an array of the group IDs allowed to approve the given point
- * 
+ *
  * @param  AUTO_LINK		The ID of the approval point
  * @param  boolean		Should we only return groups which are validated? (default: true)
  * @return array			The IDs of the groups allowed to signoff on it
@@ -564,7 +564,7 @@ function get_groups_for_point($approval_id,$only_validated=true)
 
 /**
  * Find out who submitted a piece of content from a workflow.
- * 
+ *
  * @param  AUTO_LINK		The workflow content ID
  * @return ?MEMBER		The submitter (NULL: if unknown)
  */
@@ -588,7 +588,7 @@ function get_submitter_of_workflow_content($content_id)
 
 /**
  * Get the tempcode for viewing/editing the workflow status of the given content
- * 
+ *
  * @param  AUTO_LINK	The ID of this content in the workflow_content table
  * @return tempcode	The form for this content
  */
@@ -944,7 +944,7 @@ function get_workflow_form($workflow_content_id)
 
 /**
  * Handler for workflow form submission.
- * 
+ *
  * @return tempcode		Either an error page or a success message
  */
 function workflow_update_handler()
@@ -1206,7 +1206,7 @@ function workflow_update_handler()
 	}
 	
 	// We need to act if the validation status is different to the total
-	// completion of the workflow 
+	// completion of the workflow
 	if (($content_is_validated[0][$content_validated_field]==1)!=$all_points_approved)
 	{
 		$success_message = $all_points_approved? do_lang('APPROVAL_COMPLETE') : do_lang('APPROVAL_REVOKED');

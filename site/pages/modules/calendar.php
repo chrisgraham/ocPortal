@@ -1559,7 +1559,7 @@ class Module_calendar
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>get_param_integer('id')),'_SELF'); // id being the event ID
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-			 
+
 	/**
 	 * Declare interests for event types.
 	 *

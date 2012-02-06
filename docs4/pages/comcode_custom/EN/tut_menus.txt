@@ -60,7 +60,7 @@ These two statements may confuse you, but I thought it was important at this poi
 
 [exp_thumb="Adding a new menu" float="right"]menus_add_link[/exp_thumb]
 The easiest way to add a new managed menu is to edit a panel page so as to include a 'side_stored_menu' block that uses a menu with a code-name of what you want to create. You can use the 'Add block' button to help you do this. When you view the saved panel ocPortal will detect the menu is missing, and place a link to create the menu there instead of the menu itself (in much the same way it detects a missing page and allows the creation of a new Comcode page). It is important to [b]not[/b] click to add a new menu from the Comcode page preview, unless you open the add link in a new window/tab: this is because the Comcode page editing will not have been confirmed, hence making you repeat the page editing process.
-  
+
 The easiest way to edit a managed menu is to click the 'edit menu' link shown underneath, much like when clicking the 'edit page' link to edit the panel page.
 
 [title="3"]Adding a new top (horizontal) menu[/title]
@@ -104,7 +104,7 @@ In the form part of the interface there are the following fields:
 
 Entry points are described in full in the 'Site structure' tutorial, but basically they are ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:type=ad[/tt]' is the entry point to a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
 
-Don't worry too much about entry point syntax as ocPortal will automatically convert any local URLs that you paste. 
+Don't worry too much about entry point syntax as ocPortal will automatically convert any local URLs that you paste.
 
 To copy an entry point to a branch you need to:
  - select the caption field of an item in the menu (this will cause an editing form to become available for that menu item)

@@ -183,7 +183,7 @@ function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_obje
 		'NUM_WARNINGS'=>$num_warnings,
 		'GALLERIES'=>$galleries,
 		'DATE_OF_BIRTH'=>$dob,
-		'AGE'=>is_null($age)?NULL:number_format($age),
+		'AGE'=>is_null($age)?NULL:integer_format($age),
 	));
 }
 

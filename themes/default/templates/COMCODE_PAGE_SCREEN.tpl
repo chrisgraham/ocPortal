@@ -1,6 +1,6 @@
-{+START,IF,{$NOT,{$IN_STR,{NAME},panel_}}}{+START,IF_EMPTY,{$TRIM,{CONTENT}}}
+{+START,IF,{$NOT,{BEING_INCLUDED}}}{+START,IF,{$NOT,{$IN_STR,{NAME},panel_}}}{+START,IF_EMPTY,{$TRIM,{CONTENT}}}
 	<p class="nothing_here">{!NO_PAGE_OUTPUT}</p>
-{+END}{+END}
+{+END}{+END}{+END}
 
 {+START,IF,{$OR,{$NEQ,{NAME},panel_top,panel_left,panel_right},{$IS_NON_EMPTY,{$TRIM,{CONTENT}}}}}
 	{WARNING_DETAILS}
@@ -20,7 +20,7 @@
 		</div>
 	{+END}{+END}
 
-	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF,{$NEQ,{$SUBSTR,{NAME},0,6},rules,start,panel_}}{$BLOCK,failsafe=1,block=main_screen_actions}{+END}{+END}
+	{+START,IF,{$NOT,{$_GET,wide_high}}}{+START,IF,{$NOT,{BEING_INCLUDED}}}{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF,{$NEQ,{$SUBSTR,{NAME},0,6},rules,start,panel_}}{$BLOCK,failsafe=1,block=main_screen_actions}{+END}{+END}{+END}{+END}
 
 	{+START,IF_NON_EMPTY,{EDIT_URL}}
 		{+START,IF,{$EQ,{NAME},panel_left,panel_right}}
@@ -32,16 +32,14 @@
 		{+START,IF,{$EQ,{NAME},panel_top,panel_bottom}}
 			<a class="edit_menu_link_inline" href="{EDIT_URL*}"><img class="comcode_button" title="{!EDIT_PAGE}" alt="{!EDIT_PAGE}" src="{$IMG*,comcode}" /></a>
 		{+END}
-	{+END}
 
-	{+START,IF_NON_EMPTY,{EDIT_URL}}
-		{+START,IF,{$NOT,{$IN_STR,{NAME},panel_}}}
-			{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
+		{+START,IF,{$NEQ,{NAME},panel_left,panel_right,panel_top,panel_bottom}}
+			{+START,IF,{$NOT,{BEING_INCLUDED}}}{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}{+END}
 
-			<br />
+			{+START,IF,{$NOT,{BEING_INCLUDED}}}<br />{+END}
 			{+START,INCLUDE,STAFF_ACTIONS}
 				1_URL={EDIT_URL*}
-				1_TITLE={!EDIT_PAGE}
+				1_TITLE={$?,{BEING_INCLUDED},&uarr; {!EDIT},{!EDIT_PAGE}}
 				1_ACCESSKEY=q
 				1_REL=edit
 				2_URL={$?,{$GET,has_comcode_page_children_block},{ADD_CHILD_URL*}}

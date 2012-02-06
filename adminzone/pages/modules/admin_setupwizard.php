@@ -33,7 +33,7 @@ class Module_admin_setupwizard
 	{
 		$info=array();
 		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts'; 
+		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['version']=2;

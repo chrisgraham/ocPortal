@@ -72,7 +72,7 @@ However, if you are using tree match specifiers then these will be written again
 
 A blank filter will match [i]nothing[/i]. If you want to match everything you must write a filter as "[tt]*[/tt]".
 
-ocFilter precedence is not based on order, it is based on the rule "pick out what is accepted then remove what is avoided". In other words, the filter first works out what IDs pass (e.g. "*" or "5" or "1-30" or "bar*") and then removes and IDs that have been explicitly marked as 'avoid' (e.g. "!3" or "foo~"). 
+ocFilter precedence is not based on order, it is based on the rule "pick out what is accepted then remove what is avoided". In other words, the filter first works out what IDs pass (e.g. "*" or "5" or "1-30" or "bar*") and then removes and IDs that have been explicitly marked as 'avoid' (e.g. "!3" or "foo~").
 
 [title="2"]Finding IDs[/title]
 

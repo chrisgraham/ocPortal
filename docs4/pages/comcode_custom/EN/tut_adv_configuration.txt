@@ -39,7 +39,7 @@ There is also a concept of a 'hacked' module (a module modified as a part of an 
 
 [title="2"]Supplementary features[/title]
 
-For licensing reasons there are some minor features ocProducts cannot include in the standard ocPortal. 
+For licensing reasons there are some minor features ocProducts cannot include in the standard ocPortal.
 You can get the following addons:
  - [url="An improved Admin Zone search"]http://ocportal.com/site/downloads/entry/243.htm[/url]
  - [url="An icon pack"]http://ocportal.com/site/downloads/entry/244.htm[/url]
@@ -142,7 +142,7 @@ ocPortal supports clean URLs in Apache. These clean URLs can improve your search
  - Apache (using mod_rewrite, and our rules in [tt]recommended.htaccess[/tt])
  - Litespeed Server (as above)
  - IIS7 (due to the rules in our [tt]web.config[/tt])
- - IIS6 and below, if the IIRF extension is installed (details below) 
+ - IIS6 and below, if the IIRF extension is installed (details below)
  - HipHop PHP
 
 [title="3"]Apache[/title]

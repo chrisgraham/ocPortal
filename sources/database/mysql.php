@@ -254,7 +254,7 @@ class Database_Static_mysql extends Database_super_mysql
 			return $this->db_get_query_rows($results);
 		}
 
-		if ($get_insert_id) 
+		if ($get_insert_id)
 		{
 			if (strtoupper(substr($query,0,7))=='UPDATE ') return mysql_affected_rows($db);
 			$ins=mysql_insert_id($db);

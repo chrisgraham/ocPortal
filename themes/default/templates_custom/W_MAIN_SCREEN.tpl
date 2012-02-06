@@ -51,7 +51,7 @@
 							&nbsp;
 						</td>
 						<td>
-							{+START,IF,{HAS_RIGHT_ROOM}} 
+							{+START,IF,{HAS_RIGHT_ROOM}}
 								<div style="text-align: left">
 									&nbsp;<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="right" /><input class="buttonhyperlink" type="submit" value="{RIGHT_ROOM}" /></form>&nbsp;&rarr;
 								</div>
@@ -69,7 +69,7 @@
 						</td>
 						<td>
 							<div style="text-align: center">
-								{+START,IF,{HAS_DOWN_ROOM}} 
+								{+START,IF,{HAS_DOWN_ROOM}}
 								<div>
 									<form target="_self" class="inline" method="post" action="{$PAGE_LINK*,_SELF:_SELF}"><input type="hidden" name="type" value="down" /><input class="buttonhyperlink" type="submit" value="{DOWN_ROOM}" /></form><br />
 									<div class="ocw_arrow">

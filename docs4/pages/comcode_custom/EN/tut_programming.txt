@@ -89,7 +89,7 @@ Whenever the variable is used, the global line must be used to identify what the
 [title="2"]IF statements[/title]
 
 An IF statement checks if a condition is true, and if it is true then it will execute the command after it. Conditions are based upon the notion of an 'expression': basically this is like a mathematical expression, whereby 'operators' are used to compare variables and function output (functions are described later).
-This true/false stuff is called boolean logic. Operators used in boolean expressions (as used for an IF condition) include: 
+This true/false stuff is called boolean logic. Operators used in boolean expressions (as used for an IF condition) include:
  - == (is equal to)
  - != (not equal to)
  - === (equal in both value and type)
@@ -399,7 +399,6 @@ Arrays come very useful when using foreach loops.
 
 Arrays can have 'elements' (values located by the value key) added, edited, and deleted.
 To add a value to a map, you may just assign it in the same way you refer to an element. To add a value to a list you may do as illustrated in this example:  $hello[]=5;
-To delete from an array, you 
 
 PHP has many commands and functions to work with arrays, such as array_key_exists.
 

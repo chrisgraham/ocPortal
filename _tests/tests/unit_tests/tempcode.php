@@ -289,7 +289,7 @@ class tempcode_test_set extends ocp_test_case
 	</tr> 
 	<tr> 
 		<td>$GT,2,1</td> 
-		<td>0</td> 
+		<td>0</td>
 	</tr> 
 </tbody></table> 
 

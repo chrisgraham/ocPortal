@@ -337,4 +337,22 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 	return $groups;
 }
 
+/**
+ * Get the ID for a usergroup if we only know the title. Warning: Only use this with custom code, never core code! It assumes a single language and that usergroups aren't renamed.
+ *
+ * @param  SHORT_TEXT	The title.
+ * @return ?AUTO_LINK	The ID (NULL: could not find).
+ */
+function find_usergroup_id($title)
+{
+	$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+	foreach ($usergroups as $id=>$usergroup)
+	{
+		if ($usergroup==$title)
+		{
+			return $id;
+		}
+	}
+	return NULL;
+}
 
