@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/hooks/systems/ecommerce_via/paypal.php</string>
+	<string>data_custom/addons-sheet.csv</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -443,6 +443,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>adminzone/pages/modules/admin_ecommerce.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>397</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>363</integer>
+		</dict>
 		<key>adminzone/pages/modules/admin_ocf_groups.php</key>
 		<dict>
 			<key>caret</key>
@@ -582,6 +596,34 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
+		</dict>
+		<key>data_custom/addon_files.txt</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>54</integer>
+				<key>line</key>
+				<integer>2299</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>2279</integer>
+		</dict>
+		<key>data_custom/addons-sheet.csv</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>580</integer>
+				<key>line</key>
+				<integer>177</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>128</integer>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -881,6 +923,20 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
+		<key>site/pages/modules/catalogues.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>14</integer>
+				<key>line</key>
+				<integer>933</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>929</integer>
+		</dict>
 		<key>site/pages/modules/pointstore.php</key>
 		<dict>
 			<key>caret</key>
@@ -953,6 +1009,20 @@
 				<integer>89</integer>
 			</dict>
 		</dict>
+		<key>sources/catalogues.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>114</integer>
+				<key>line</key>
+				<integer>1086</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1061</integer>
+		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
 			<key>caret</key>
@@ -997,6 +1067,20 @@
 				<integer>200</integer>
 			</dict>
 		</dict>
+		<key>sources/ecommerce.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>22</integer>
+				<key>line</key>
+				<integer>426</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>401</integer>
+		</dict>
 		<key>sources/form_templates.php</key>
 		<dict>
 			<key>caret</key>
@@ -1010,6 +1094,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>326</integer>
+		</dict>
+		<key>sources/hooks/blocks/main_staff_checklist/unvalidated.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>49</integer>
+				<key>line</key>
+				<integer>40</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>15</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1487,6 +1585,20 @@
 			<key>firstVisibleLine</key>
 			<integer>36</integer>
 		</dict>
+		<key>sources/hooks/systems/addon_registry/unvalidated.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>54</integer>
+		</dict>
 		<key>sources/hooks/systems/addon_registry/wordfilter.php</key>
 		<dict>
 			<key>caret</key>
@@ -1584,36 +1696,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
-		</dict>
-		<key>sources/hooks/systems/ecommerce_via/paypal.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>148</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>123</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>289</integer>
-			</dict>
 		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
@@ -2856,15 +2938,18 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>themes/default/templates/COMCODE_PAGE_SCREEN.tpl</string>
-		<string>docs4/pages/comcode_custom/EN/tut_comcode.txt</string>
-		<string>sources/seo2.php</string>
-		<string>cms/pages/modules/cms_catalogues.php</string>
-		<string>sources/hooks/systems/ecommerce_via/paypal.php</string>
+		<string>site/pages/modules/catalogues.php</string>
+		<string>sources/catalogues.php</string>
+		<string>sources/ecommerce.php</string>
+		<string>adminzone/pages/modules/admin_ecommerce.php</string>
+		<string>data_custom/addon_files.txt</string>
+		<string>data_custom/addons-sheet.csv</string>
+		<string>sources/hooks/blocks/main_staff_checklist/unvalidated.php</string>
+		<string>sources/hooks/systems/addon_registry/unvalidated.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{545, 99}, {1148, 940}}</string>
+	<string>{{528, 141}, {1148, 939}}</string>
 </dict>
 </plist>
