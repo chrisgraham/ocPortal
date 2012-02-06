@@ -1,0 +1,36 @@
+<?php /*
+
+ ocPortal
+ Copyright (c) ocProducts, 2004-2012
+
+ See text/EN/licence.txt for full licencing information.
+
+*/
+
+/**
+ * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright	ocProducts Ltd
+ * @package		classifieds
+ */
+
+require_lang('classifieds');
+
+if (!isset($map['param'])) $map['param']='classifieds';
+$catalogue_name=$map['param'];
+
+$show_free=((isset($map['show_free'])) && ($map['show_free']=='1'));
+
+$prices=$GLOBALS['SITE_DB']->query_select('classifieds_prices',array('*'),array('c_catalogue_name'=>$catalogue_name),'ORDER BY c_price');
+
+$data=array();
+foreach ($prices as $price)
+{
+	if ((!$show_free) && ($price['c_price']==0.0)) continue;
+
+	$data[]=array(
+		'PRICE'=>float_format($price['c_price'],2),
+		'LABEL'=>get_translated_text($price['c_label']),
+	);
+}
+
+echo static_evaluate_tempcode(do_template('CLASSIFIEDS',array('DATA'=>$data)));

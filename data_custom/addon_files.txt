@@ -2311,3 +2311,18 @@ columns
 
 # # themes/default/css_custom/columns.css
 # # themes/default/templates_custom/JAVASCRIPT_COLUMNS.tpl
+
+classified_ads
+--------------
+
+# # adminzone/pages/minimodules_custom/admin_classifieds.php
+# # lang_custom/EN/classifieds.ini
+# # site/pages/modules_custom/classifieds.php
+# # sources_custom/classifieds.php
+# # sources_custom/hooks/modules/members/classifieds.php
+# # sources_custom/hooks/systems/cron/classifieds.php
+# # sources_custom/hooks/systems/do_next_menus/classifieds.php
+# # sources_custom/hooks/systems/ecommerce/classifieds.php
+# # sources_custom/hooks/systems/notifications/classifieds.php
+# # sources_custom/miniblocks/main_classifieds_prices.php
+# # themes/default/images_custom/bigicons/classifieds.png

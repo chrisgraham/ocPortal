@@ -74,7 +74,7 @@ and
 The above example creates a flip between text A and text B, taking 400ms. This is designed to use short messages or one word answers. If you want to change any of the standard CSS for this addon you can edit the flip.css file. Note: flip uses jQuery for the flip effect, so this example bundles jQuery and shows how it can be used.","Javascript enabled",,"Graphical","Based on open code posted without a license","Luca Manno",
 "XMPPchat","Chris Graham","This addon replaces the standard ocPortal chat room with any Jabber chatrooms running on your server. Usage Instructions:
 1) You will need a dedicated server; we assume it is Linux and Apache.
-2) We assume ocPortal is installed to use MySQL. 
+2) We assume ocPortal is installed to use MySQL.
 3) We assume that users are set up with standard ocPortal password hashing, or md5 hashing, or plain passwords, or vbulletin hashing.
 4) Install ejabberd on on your server (it supports builtin BOSH connections -- which are needed for our web interface). Make sure it's not version 1, that has problems.
 5) It is important mod_http_bind has been enabled on your ejabberd configuration, as well as mod_muc (they are by default).
@@ -175,3 +175,4 @@ You need to add this code into your [tt]HEADER.tpl[/tt]:
 {$CSS_INCLUDE,columns}
 {$JAVASCRIPT_INCLUDE,javascript_columns}[/code]
 ",,,"Graphical","Creative Commons Attribution 3.0","Based on the code of Adam Wulf",
+"Classified Ads","Chris Graham","This addon lets you set up price scales for placing entries ('adverts') in catalogues. The scales allow you to define discounts to customers buying longer listing periods. You can set up a free period if you wish to. Customers are given a control panel (the classifieds module) that shows their listings and allows renewal. E-mails are sent the day before an ad expires. Fully integrated with catalogues, eCommerce, and OCF member accounts.","OCF, Catalogues, eCommerce",,"New Features","Licensed on the same terms as ocPortal","Icon by Andrey Kem",
