@@ -383,10 +383,7 @@ class Module_admin_import
 		foreach ($_import_list as $import)
 		{
 			if (is_null($import)) continue;
-			if (!array_key_exists($import,$lang_array)) // Shouldn't happen, but a failsafe
-			{
-				$lang_array[$import]=$import;
-			}
+			if (!array_key_exists($import,$lang_array)) continue;
 			if (is_null($lang_array[$import])) continue;
 
 			$text=do_lang((strtolower($lang_array[$import])!=$lang_array[$import])?$lang_array[$import]:strtoupper($lang_array[$import]));
@@ -584,6 +581,15 @@ class Module_admin_import
 		$_import_list[]='ocf_switch';
 		$all_skipped=true;
 
+		$lang_array=array();
+		$hooks=find_all_hooks('modules','admin_import_types');
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/modules/admin_import_types/'.filter_naughty_harsh($hook));
+			$_hook=object_factory('Hook_admin_import_types_'.filter_naughty_harsh($hook));
+			$lang_array+=$_hook->run();
+		}
+
 		foreach ($_import_list as $import)
 		{
 			$import_this=either_param_integer('import_'.$import,0);
@@ -594,7 +600,7 @@ class Module_admin_import
 				{
 					foreach ($info['dependencies'][$import] as $_dependency)
 					{
-						if (!array_key_exists($_dependency,$parts_done))
+						if ((!array_key_exists($_dependency,$parts_done)) && (isset($lang_array[$_dependency])))
 						{
 							$dependency=$_dependency;
 						}

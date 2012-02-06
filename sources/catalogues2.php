@@ -715,6 +715,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	$fields=collapse_2d_complexity('id','cf_type',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
 
 	require_code('comcode_check');
+	require_code('fields');
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$imap=array('c_name'=>$catalogue_name,'ce_edit_date'=>$edit_date,'cc_id'=>$category_id,'ce_last_moved'=>time(),'ce_submitter'=>$submitter,'ce_add_date'=>$time,'ce_views'=>$views,'ce_views_prior'=>$views,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks);
@@ -731,7 +732,6 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 			check_comcode($val);
 	}
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_entries',$imap,true);
-	require_code('fields');
 	$title=NULL;
 	foreach ($map as $field_id=>$val)
 	{

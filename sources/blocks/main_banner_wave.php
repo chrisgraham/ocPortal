@@ -48,7 +48,7 @@ class Block_main_banner_wave
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'extra\',$map)?$map[\'extra\']:\'\',array_key_exists(\'max\',$map)?intval($map[\'max\']):100)';
-		$info['ttl']=60*24*7;
+		$info['ttl']=5; // due to shuffle, can't cache long
 		return $info;
 	}
 

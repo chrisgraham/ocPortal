@@ -274,7 +274,7 @@ function nice_get_banner_types($it=NULL)
  * @param  ID_TEXT		The name of the banner for the site that will get the return-hit
  * @param  URLPATH		The URL to the banner's target
  * @param  ID_TEXT		The banner type
- * @return tempcode
+ * @return tempcode		The rendered banner
  */
 function show_banner($name,$title_text,$caption,$img_url,$source,$url,$b_type)
 {

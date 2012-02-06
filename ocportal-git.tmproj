@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>data_custom/addons-sheet.csv</string>
+	<string>sources/catalogues2.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -602,28 +602,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>54</integer>
+				<integer>64</integer>
 				<key>line</key>
-				<integer>2299</integer>
+				<integer>2292</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>2279</integer>
-		</dict>
-		<key>data_custom/addons-sheet.csv</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>580</integer>
-				<key>line</key>
-				<integer>177</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>128</integer>
+			<integer>2281</integer>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -1023,6 +1009,20 @@
 			<key>firstVisibleLine</key>
 			<integer>1061</integer>
 		</dict>
+		<key>sources/catalogues2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>734</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>701</integer>
+		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
 			<key>caret</key>
@@ -1095,20 +1095,6 @@
 			<key>firstVisibleLine</key>
 			<integer>326</integer>
 		</dict>
-		<key>sources/hooks/blocks/main_staff_checklist/unvalidated.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>49</integer>
-				<key>line</key>
-				<integer>40</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>15</integer>
-		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
 			<key>caret</key>
@@ -1164,6 +1150,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>42</integer>
+		</dict>
+		<key>sources/hooks/modules/admin_import/ocp_merge.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>18</integer>
+				<key>line</key>
+				<integer>219</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>196</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>2281</integer>
+			</dict>
 		</dict>
 		<key>sources/hooks/modules/admin_import_types/iotds.php</key>
 		<dict>
@@ -1584,20 +1600,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>36</integer>
-		</dict>
-		<key>sources/hooks/systems/addon_registry/unvalidated.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>79</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>54</integer>
 		</dict>
 		<key>sources/hooks/systems/addon_registry/wordfilter.php</key>
 		<dict>
@@ -2779,6 +2781,20 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates_custom/CLASSIFIED_ADVERTS_SCREEN.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>62</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>12</integer>
+		</dict>
 		<key>themes/default/templates_custom/GALLERY_VIDEO.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2938,14 +2954,8 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>site/pages/modules/catalogues.php</string>
-		<string>sources/catalogues.php</string>
-		<string>sources/ecommerce.php</string>
-		<string>adminzone/pages/modules/admin_ecommerce.php</string>
-		<string>data_custom/addon_files.txt</string>
-		<string>data_custom/addons-sheet.csv</string>
-		<string>sources/hooks/blocks/main_staff_checklist/unvalidated.php</string>
-		<string>sources/hooks/systems/addon_registry/unvalidated.php</string>
+		<string>sources/hooks/modules/admin_import/ocp_merge.php</string>
+		<string>sources/catalogues2.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

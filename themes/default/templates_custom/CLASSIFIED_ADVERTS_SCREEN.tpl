@@ -46,8 +46,13 @@
 					{+START,LOOP,TRANSACTION_DETAILS}
 						<p class="mini_indent">
 							<span class="right">{STATUS*} ({$?,{$IS_EMPTY,{T_VIA}},{!ecommerce:MANUAL_TRANSACTION},{T_VIA*}})</span>
-							<strong>{$DATE_AND_TIME*,0,1,0,{T_TIME}}</strong>, {ITEM_TITLE*} @ {AMOUNT*} {T_CURRENCY*}{+START,IF_NON_EMPTY,{PENDING_REASON}{REASON}}:<br />{PENDING_REASON*}{REASON*}{+END}
+							<strong>{$DATE_AND_TIME*,0,1,0,{T_TIME}}</strong>, {ITEM_TITLE*} @ {AMOUNT*} {T_CURRENCY*}
 						</p>
+						{+START,IF_NON_EMPTY,{PENDING_REASON}{REASON}{T_MEMO}}
+							<p class="standard_indent">
+								<span class="field_name">{!DETAILS}</span>: {PENDING_REASON*}{REASON*}{T_MEMO*}
+							</p>
+						{+END}
 					{+END}
 				</td>
 			</tr>

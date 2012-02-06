@@ -53,7 +53,7 @@ class Module_classifieds
 			$GLOBALS['SITE_DB']->create_table('classifieds_prices',array(
 				'id'=>'*AUTO',
 				'c_catalogue_name'=>'ID_TEXT',
-				//'c_category_id'=>'?AUTO_LINK',	Possible future expansion
+				//'c_category_id'=>'?AUTO_LINK',
 				'c_days'=>'INTEGER',
 				'c_label'=>'SHORT_TRANS',
 				'c_price'=>'REAL',
