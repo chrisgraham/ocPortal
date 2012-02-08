@@ -120,7 +120,7 @@ class Hook_fields_multilist
 		$list=explode('|',$default);
 		$_list=new ocp_tempcode();
 		$exploded=explode(chr(10),$actual_value);
-		if (($field['cf_required']==0) || ($actual_value=='') || (is_null($actual_value)))
+		if (($field['cf_required']==0) && (($actual_value=='') || (is_null($actual_value))))
 			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
 		foreach ($list as $l)
 		{

@@ -186,7 +186,7 @@ function setup_sp_override_selector(name,default_access,sp,title,all_global)
 
 function permission_repeating(button,name)
 {
-	old_permission_copying=window.permission_copying;
+	var old_permission_copying=window.permission_copying;
 	
 	var tr=button.parentNode.parentNode;
 	var trs=tr.parentNode.getElementsByTagName('tr');

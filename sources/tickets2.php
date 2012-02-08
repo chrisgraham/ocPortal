@@ -192,8 +192,9 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 	$filtered_topics=array();
 	foreach ($topics as $topic)
 	{
+		$fp=$topic['firstpost'];
 		unset($topic['firstpost']); // To stop Tempcode randomly making serialization sometimes change such that the refresh_if_changed is triggered
-		if ((is_null($ticket_type)) || (strpos($topic['firstpost']->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type))!==false))
+		if ((is_null($ticket_type)) || (strpos($fp->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type))!==false))
 		{
 			$filtered_topics[]=$topic;
 		}

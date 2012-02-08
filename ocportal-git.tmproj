@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/catalogues2.php</string>
+	<string>sources/hooks/systems/profiles_tabs/edit.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -166,7 +166,7 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2012-01-19T13:41:45Z</date>
+			<date>2012-02-07T18:25:10Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -498,6 +498,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>311</integer>
+		</dict>
+		<key>cms/pages/modules/cms_downloads.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>364</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>345</integer>
 		</dict>
 		<key>collaboration/index.php</key>
 		<dict>
@@ -1009,20 +1023,6 @@
 			<key>firstVisibleLine</key>
 			<integer>1061</integer>
 		</dict>
-		<key>sources/catalogues2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>734</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>701</integer>
-		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
 			<key>caret</key>
@@ -1150,36 +1150,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>42</integer>
-		</dict>
-		<key>sources/hooks/modules/admin_import/ocp_merge.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>219</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>196</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>2281</integer>
-			</dict>
 		</dict>
 		<key>sources/hooks/modules/admin_import_types/iotds.php</key>
 		<dict>
@@ -1699,6 +1669,20 @@
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
 		</dict>
+		<key>sources/hooks/systems/fields/multilist.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>123</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>103</integer>
+		</dict>
 		<key>sources/hooks/systems/meta/events.php</key>
 		<dict>
 			<key>caret</key>
@@ -1727,6 +1711,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>sources/hooks/systems/profiles_tabs/edit.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>71</integer>
+				<key>line</key>
+				<integer>103</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>61</integer>
+		</dict>
 		<key>sources/hooks/systems/snippets/index.html</key>
 		<dict>
 			<key>caret</key>
@@ -1754,6 +1752,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
+		</dict>
+		<key>sources/ocf_members_action2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>911</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>892</integer>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -1797,19 +1809,19 @@
 			<key>firstVisibleLine</key>
 			<integer>55</integer>
 		</dict>
-		<key>sources/urls.php</key>
+		<key>sources/tickets2.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>20</integer>
 				<key>line</key>
-				<integer>632</integer>
+				<integer>166</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>606</integer>
+			<integer>157</integer>
 		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
@@ -2333,6 +2345,36 @@
 			<key>firstVisibleLine</key>
 			<integer>83</integer>
 		</dict>
+		<key>themes/default/templates/JAVASCRIPT_PERMISSIONS.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>203</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>163</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>203</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>203</integer>
+			</dict>
+		</dict>
 		<key>themes/default/templates/MENU_BRANCH_popup.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2471,6 +2513,20 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>28</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/OCF_MEMBER_PROFILE_SCREEN.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>39</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -2954,12 +3010,17 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/hooks/modules/admin_import/ocp_merge.php</string>
-		<string>sources/catalogues2.php</string>
+		<string>cms/pages/modules/cms_downloads.php</string>
+		<string>sources/tickets2.php</string>
+		<string>themes/default/templates/JAVASCRIPT_PERMISSIONS.tpl</string>
+		<string>themes/default/templates/OCF_MEMBER_PROFILE_SCREEN.tpl</string>
+		<string>sources/ocf_members_action2.php</string>
+		<string>sources/hooks/systems/profiles_tabs/edit.php</string>
+		<string>sources/hooks/systems/fields/multilist.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{528, 141}, {1148, 939}}</string>
+	<string>{{674, 109}, {1148, 939}}</string>
 </dict>
 </plist>

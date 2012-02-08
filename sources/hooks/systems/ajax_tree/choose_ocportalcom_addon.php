@@ -69,20 +69,30 @@ class Hook_choose_ocportalcom_addon
 	 * @param  ?ID_TEXT		The ID to do under (NULL: root) - not always supported
 	 * @param  array			Options being passed through
 	 * @param  ?ID_TEXT		The ID to select by default (NULL: none)
+	 * @param  string			Prefix titles with this
 	 * @return tempcode		The nice list
 	 */
-	function simple($id,$options,$it=NULL)
+	function simple($id,$options,$it=NULL,$prefix='')
 	{
-		unset($options);
-
 		$file=$this->get_file($id);
-		$matches=array();
-		$num_matches=preg_match_all('#<entry id="(\d+)" title="([^"]+)"#',$file,$matches);
+
 		$list=new ocp_tempcode();
-		$list=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
+		if (is_null($id)) // Root, needs an NA option
+			$list->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
+
+		$matches=array();
+
+		$num_matches=preg_match_all('#<entry id="(\d+)"[^<>]* title="([^"]+)"#',$file,$matches);
 		for ($i=0;$i<$num_matches;$i++)
 		{
-			$list->attach(form_input_list_entry('http://ocportal.com/dload.php?id='.$matches[1][$i],false,$matches[2][$i]));
+			$list->attach(form_input_list_entry('http://ocportal.com/dload.php?id='.$matches[1][$i],false,$prefix.$matches[2][$i]));
+		}
+
+		$num_matches=preg_match_all('#<category id="(\d+)" title="([^"]+)"#',$file,$matches);
+		for ($i=0;$i<$num_matches;$i++)
+		{
+			$list2=$this->simple($matches[1][$i],$options,$it,$matches[2][$i].' > ');
+			$list->attach($list2);
 		}
 		return $list;
 	}

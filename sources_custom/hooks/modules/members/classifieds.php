@@ -30,6 +30,8 @@ class Hook_members_classifieds
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
+		$result=array();
+
 		if (($member_id==get_member()) || (has_specific_permission(get_member(),'assume_any_member')))
 			$result[]=array('content',do_lang('CLASSIFIED_ADVERTS'),build_url(array('page'=>'classifieds','type'=>'adverts','member_id'=>$member_id),get_module_zone('classifieds')));
 

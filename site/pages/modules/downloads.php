@@ -104,7 +104,7 @@ class Module_downloads
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($id),'group_id'=>$group_id));
-		
+
 			$GLOBALS['SITE_DB']->create_index('download_categories','child_find',array('parent_id'));
 
 			$GLOBALS['SITE_DB']->create_table('download_downloads',array(

@@ -27,13 +27,13 @@
 		if (window.location.hash.replace(/^#/,'')!='')
 		{
 			var tab=window.location.hash.replace(/^#/,'').replace(/^tab\_\_/,'');
-			if (document.getElementById('g_'+tab))
-				select_tab('g',tab);
 			if (tab.indexOf('__')!=-1)
 			{
 				if (document.getElementById('g_'+tab.substr(0,tab.indexOf('__'))))
 					select_tab('g',tab.substr(0,tab.indexOf('__')));
 			}
+			if (document.getElementById('g_'+tab))
+				select_tab('g',tab);
 		}
 	} );
 //]]></script>

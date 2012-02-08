@@ -905,6 +905,10 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		$login_url=$_login_url->evaluate();
 		mail_wrap(do_lang('VALIDATED_MEMBER_SUBJECT',get_site_name(),NULL,get_lang($member_id)),do_lang('MEMBER_VALIDATED',get_site_name(),$username,$login_url,get_lang($member_id)),array($email_address),$username);
 	}
+
+	// Decache from run-time cache
+	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
+	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
 }
 
 /**
@@ -1324,6 +1328,7 @@ function ocf_member_choose_title($new_title,$member_id=NULL)
 
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
+	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
 }
 
 /**
@@ -1350,6 +1355,7 @@ function ocf_member_choose_signature($new_signature,$member_id=NULL)
 
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
+	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
 }
 
 /**
@@ -1428,6 +1434,7 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
+	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
 }
 
 /**
@@ -1512,5 +1519,6 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
+	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
 }
 

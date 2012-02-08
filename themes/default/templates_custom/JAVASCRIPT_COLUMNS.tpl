@@ -247,13 +247,19 @@ addEventListenerAbstract(window,'real_load',function () {
 			}
 		}
 		
-		function checkDontEndColumnOnConstraints(dom) {
-			if(dom.nodeType != 1) {
-				return (dom.nodeType == 3) && (dom.nodeValue.replace(/\s/g,'') == '');
+		function cantEndOn(dom,lookingDeep) {
+			if (!lookingDeep) {
+				if(dom.nodeType != 1) {
+					var isBlankTextNode = (dom.nodeType == 3) && (dom.nodeValue.replace(/\s/g,'') == '');
+					return isBlankTextNode;
+				}
 			}
+
 			if($(dom).hasClass("dontend")) return true;
+
+			// Need to look deeper?
 			if(dom.childNodes.length == 0) return false;
-			return checkDontEndColumnOnConstraints(dom.childNodes[dom.childNodes.length-1]);
+			return cantEndOn(dom.childNodes[dom.childNodes.length-1],true);
 		}
 		
 		function columnizeIt() {
@@ -326,7 +332,7 @@ addEventListenerAbstract(window,'real_load',function () {
 
 					if (!options.explicitBreaks) {
 						// Any "dontend" stuff needs to be yonked off our current column and put back onto the start of $destroyable. Loop whilst we need to keep doing this.
-						while(checkDontEndColumnOnConstraints($col.contents(":last").length != 0 && $col.contents(":last").get(0))) {
+						while($col.contents(":last").length != 0 && cantEndOn($col.contents(":last").get(0))) {
 							var $lastKid = $col.contents(":last");
 							$lastKid.remove();
 							$destroyable.prepend($lastKid);

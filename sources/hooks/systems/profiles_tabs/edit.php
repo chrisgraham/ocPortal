@@ -61,6 +61,10 @@ class Hook_Profiles_Tabs_edit
 		$tabs=array();
 
 		$hooks=find_all_hooks('systems','profiles_tabs_edit');
+		if (isset($hooks['settings'])) // Editing must go first, so changes reflect in the renders of the tabs
+		{
+			$hooks=array('settings'=>$hooks['settings'])+$hooks;
+		}
 		foreach (array_keys($hooks) as $hook)
 		{
 			require_code('hooks/systems/profiles_tabs_edit/'.$hook);
@@ -97,7 +101,7 @@ class Hook_Profiles_Tabs_edit
 			if (isset($tab[5])) $hidden->attach($tab[5]);
 			$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_FIELDS'=>$tab[1],'TAB_TEXT'=>$tab[2],'TAB_FIRST'=>$i==0,'TAB_LAST'=>!array_key_exists($i+1,$tabs));
 		}
-		$url=build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,false,'tab__edit');
+		$url=build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,false/*,'tab__edit'  confusing, esp if was not on settings edit tab initially*/);
 
 		$content=do_template('OCF_MEMBER_PROFILE_EDIT',array('JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'URL'=>$url,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'AUTOCOMPLETE'=>false,'SKIP_VALIDATION'=>true,'TABS'=>$_tabs));
 

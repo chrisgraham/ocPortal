@@ -10,7 +10,7 @@ You are in the welcome zone. Proceed to the [page="site:start"]main website[/pag
 
 [surround="accessibility_hidden"]
 If you are a screen reader user, and use JAWS, please visit the Keymap page in the site footer to get important instructions for making JAWS more accessible with the {$SITE_NAME} website.
-The short cut key is Alt+3 for IE users, or Alt+Shift+3 for Firefox users.
+The short cut key is Alt+O for IE users, or Alt+Shift+O for Firefox users.
 [/surround]
 {+END}
 {+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
