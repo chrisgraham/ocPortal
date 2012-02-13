@@ -267,7 +267,6 @@ class Hook_addon_registry_core_ocf
 			'sources/ocf_topics_action2.php',
 			'site/pages/modules/groups.php',
 			'site/pages/modules/members.php',
-			'site/pages/modules/contactmember.php',
 			'site/pages/modules/onlinemembers.php',
 			'sources/hooks/modules/admin_occle_fs/members.php',
 			'sources/hooks/systems/awards/member.php',

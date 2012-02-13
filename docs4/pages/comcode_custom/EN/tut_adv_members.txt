@@ -16,7 +16,7 @@ It is possible that some reassignments will not be possible, in which case, reco
 [exp_thumb="Adding a custom profile field" float="right"]adv_members_cpf[/exp_thumb]
 {!ocf:DOC_CUSTOM_PROFILE_FIELDS}
 
-Add Custom Profile Fields from the Setup section of the Admin Zone, under the Custom Profile Fields icon.
+You can manage Custom Profile Fields from: Admin Zone > Tools > Members > the Custom Profile Fields icon.
 
 [box="Lists" type="light"]For a list-type CPF, define the list by placing a '|' separated list in the default value field (e.g. "This|That|Other"). The first value in the list will be the default.[/box]
 [html]</div>[/html]

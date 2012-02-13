@@ -161,9 +161,9 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 		{
 			if (($entry=='.') || ($entry=='..')) continue;
 			
-			if ((($all_files) || (!is_special_file($entry,true))) && ($entry!='backups'))
+			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
+			if ((($all_files) || (!should_ignore_file($_subpath))) && ($entry!='backups'))
 			{
-				$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full)) continue;
 				if (is_dir($full))
@@ -225,9 +225,9 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
 			
 			if ($tick) @print(' ');
 			
-			if ((($all_files) || (!is_special_file($entry,true))) && ($entry!='backups'))
+			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
+			if ((($all_files) || (!should_ignore_file($_subpath))) && ($entry!='backups'))
 			{
-				$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full)) continue;
 				if (is_dir($full))

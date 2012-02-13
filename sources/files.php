@@ -25,6 +25,17 @@ function init__files()
 {
 	global $DOWNLOAD_LEVEL;
 	$DOWNLOAD_LEVEL=0;
+
+	define('IGNORE_DEFAULTS',0);
+	// -
+	define('IGNORE_ACCESS_CONTROLLERS',1);
+	define('IGNORE_CUSTOM_DIR_CONTENTS',2);
+	define('IGNORE_HIDDEN_FILES',4);
+	define('IGNORE_EDITFROM_FILES',8);
+	define('IGNORE_REVISION_FILES',16);
+	define('IGNORE_CUSTOM_ZONES',32);
+	define('IGNORE_THEMES',64);
+	define('IGNORE_CUSTOM_DIR_CONTENTS_CASUAL_OVERRIDE',128);
 }
 
 /**
@@ -157,15 +168,190 @@ function better_parse_ini_file($filename,$file=NULL)
 }
 
 /**
- * Find whether a file should be ignored.
+ * Find whether a file is known to be something that should/could be there but isn't an ocPortal distribution file, or for some other reason should be ignored.
  *
- * @param  string			Filename
- * @param  boolean		Whether to include special ocPortal control files, index.html and .htaccess (which normally are skipped)
+ * @param  string			File path
+ * @param  integer		Bitmask of extra stuff to ignore (see IGNORE_* constants)
  * @return boolean		Whether it should be ignored
  */
-function is_special_file($file,$include_controls=false)
+function should_ignore_file($filepath,$bitmask=0)
 {
-	return (!(($file!='.') && ($file!='..') && ($file!='__MACOSX') && (substr($file,-4)!='.lcd') && (substr($file,-4)!='.gcd') && ($file!='.bash_history') && ($file!='Thumbs.db:encryptable') && ($file!='Thumbs.db') && (preg_match('#^\..*\.(png|gif|jpeg|jpg)$#i',$file)==0) && ($file!='.DS_Store') && (($file!='index.html') || ($include_controls)) && ($file!='.svn') && ($file!='.git') && ($file!='BingSiteAuth.xml') && ($file!='nbproject') && ($file!='web.config') && ($file!='manifest.xml') && ($file!='parameters.xml') && ($file!='WEB-INF') && (($file!='.htaccess') || ($include_controls)) && ($file!='CVS') && (substr($file,0,5)!='_vti_')));
+	// Normalise
+	$filepath=strtolower($filepath);
+	if (strpos($filepath,'/')!==false)
+	{
+		$dir=dirname($filepath);
+		$filename=basename($filepath);
+	} else
+	{
+		$dir='';
+		$filename=$filepath;
+	}
+
+	$ignore_filenames=array(
+		'.'=>'.*',
+		'..'=>'.*',
+		'__macosx'=>'.*',
+		'.bash_history'=>'.*',
+		'thumbs.db:encryptable'=>'.*',
+		'thumbs.db'=>'.*',
+		'.ds_store'=>'.*',
+		'.svn'=>'.*',
+		'.git'=>'.*',
+		'cvs'=>'.*',
+		'web-inf'=>'.*',
+		'bingsiteauth.xml'=>'',
+		'parameters.xml'=>'',
+		'manifest.xml'=>'',
+		'web.config'=>'',
+		'nbproject'=>'',
+		'no_mem_cache'=>'',
+		'php.ini'=>'.*',
+		'.htpasswd'=>'.*',
+		'closed.html'=>'',
+		'iirf.ini'=>'',
+		'robots.txt'=>'',
+		'data.ocp'=>'',
+		'install_ok'=>'',
+		'install_locked'=>'',
+		'install.php'=>'',
+		'install.sql'=>'',
+		'install1.sql'=>'',
+		'install2.sql'=>'',
+		'install3.sql'=>'',
+		'install4.sql'=>'',
+		'user.sql'=>'',
+		'postinstall.sql'=>'',
+		'restore.php'=>'',
+		'info.php.template'=>'',
+		'make_files-output-log.html'=>'',
+		'400.shtml'=>'',
+		'500.shtml'=>'',
+		'404.shtml'=>'',
+		'403.shtml'=>'',
+		'theme.ini'=>'themes/[^/]*',
+		'old'=>'.*',
+		'uploads'=>'',
+		'gibb'=>'.*',
+		'gibberish'=>'.*',
+		'.gitignore'=>'',
+		'.project'=>'',
+		'if_hosted_service.txt'=>'',
+		'subs.inc'=>'',
+		'docs'=>'data/images',
+
+		// Non-bundled addon stuff that we can't detect automatically
+		'_tests'=>'',
+		'killjunk.sh'=>'',
+		'transcoder'=>'',
+		'facebook_connect.php'=>'',
+
+		// Bundled stuff that is not in *_custom dir yet is volatile
+		'map.ini'=>'themes',
+		'info.php'=>'',
+		'ocp_sitemap.xml'=>'',
+	);
+	if (($bitmask & IGNORE_ACCESS_CONTROLLERS)!=0)
+	{
+		$ignore_filenames+=array(
+			'.htaccess'=>'.*',
+			'index.html'=>'.*',
+		);
+	}
+
+	$ignore_extensions=array(
+		'tar'=>'(imports|exports)/.*',
+		'gz'=>'(imports|exports)/.*',
+		'lcd'=>'lang_cached/.*',
+		'gcd'=>'persistant_cache/.*',
+		'tcp'=>'themes/[^/]*/templates_cached/.*',
+		'tcd'=>'themes/[^/]*/templates_cached/.*',
+		'css'=>'themes/[^/]*/templates_cached/.*',
+		'js'=>'themes/[^/]*/templates_cached/.*',
+		'log'=>'.*',
+		'clpprj'=>'',
+		'tmproj'=>'',
+		'zpj'=>'',
+		'o'=>'',
+		'scm'=>'',
+		'heap'=>'',
+		'sch'=>'',
+		'dll'=>'',
+		'fcgi'=>'',
+	);
+	if (($bitmask & IGNORE_EDITFROM_FILES)!=0)
+	{
+		$ignore_extensions+=array(
+			'editfrom'=>'.*',
+		);
+	}
+
+	$ignore_filename_patterns=array(
+		'\..*\.(png|gif|jpeg|jpg)'=>'.*', // Image meta data file, e.g. ".example.png"
+		'\_vti\_.*'=>'.*', // Frontpage
+	);
+	if (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS)!=0)
+	{
+		$ignore_filename_patterns+=array(
+			'.*\_custom'=>'.*',
+			'.*'=>'.*\_custom(/.*)?',
+		);
+	}
+	elseif (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS_CASUAL_OVERRIDE)!=0)
+	{
+		$ignore_filename_patterns+=array(
+			'(comcode|html|lang|templates|images)\_custom'=>'.*',
+			'.*'=>'(^|/)(lang|templates|images)\_custom(/.*)?',
+		);
+	}
+	if (($bitmask & IGNORE_HIDDEN_FILES)!=0)
+	{
+		$ignore_filename_patterns+=array(
+			'\..*'=>'.*',
+		);
+	}
+	if (($bitmask & IGNORE_REVISION_FILES)!=0)
+	{
+		$ignore_filename_patterns+=array(
+			'.*\.\d+'=>'.*',
+		);
+	}
+
+	if (isset($ignore_filenames[$filename]))
+	{
+		if (preg_match('#^'.$ignore_filenames[$filename].'$#',$dir)!=0) return true; // Check dir context
+	}
+
+	$extension=get_file_extension($filename);
+	if (isset($ignore_extensions[$extension]))
+	{
+		if (preg_match('#^'.$ignore_extensions[$extension].'$#',$dir)!=0) return true; // Check dir context
+	}
+	foreach ($ignore_filename_patterns as $filename_pattern=>$dir_pattern)
+	{
+		if (preg_match('#^'.$filename_pattern.'$#',$filename)!=0)
+		{
+			if (preg_match('#^'.$dir_pattern.'$#',$dir)!=0) return true; // Check dir context
+		}
+	}
+
+	if (($dir!='') && (file_exists(get_file_base().'/'.$filepath.'/sources_custom'))) // ocPortal dupe (e.g. backup) install
+	{
+		return true;
+	}
+
+	if (($bitmask & IGNORE_THEMES)!=0)
+	{
+		if ((preg_match('#^themes($|/)#',$dir)!=0) && (!in_array($filename,array('default','index.html','map.ini')))) return true;
+	}
+
+	if (($bitmask & IGNORE_CUSTOM_ZONES)!=0)
+	{
+		if ((file_exists(get_file_base().$filepath.'/index.php')) && (file_exists(get_file_base().$filepath.'/pages')) && (!in_array($filename,array('adminzone','collaboration','cms','forum','site'))))
+			return true;
+	}
+
+	return false;
 }
 
 /**

@@ -75,6 +75,7 @@ class Hook_addon_registry_ocf_contactmember
 		return array(
 
 			'site/pages/modules/contactmember.php',
+			'sources/hooks/systems/addon_registry/ocf_contactmember.php',
 		);
 	}
 

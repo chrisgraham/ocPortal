@@ -36,7 +36,7 @@ class Hook_do_next_menus_language
 		while (false!==($file=readdir($_dir)))
 		{
 			if ($file==fallback_lang()) continue;
-			if ((!is_special_file($file)) && (strlen($file)<=5))
+			if ((!should_ignore_file('lang/'.$file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file)<=5))
 				if (is_dir(get_file_base().'/lang/'.$file)) $has_langs=true;
 		}
 		closedir($_dir);
@@ -48,7 +48,7 @@ class Hook_do_next_menus_language
 				while (false!==($file=readdir($_dir)))
 				{
 					if ($file==fallback_lang()) continue;
-					if ((!is_special_file($file)) && (strlen($file)<=5))
+					if ((!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file)<=5))
 						if (is_dir(get_custom_file_base().'/lang_custom/'.$file)) $has_langs=true;
 				}
 				closedir($_dir);
@@ -59,7 +59,7 @@ class Hook_do_next_menus_language
 				while (false!==($file=readdir($_dir)))
 				{
 					if ($file==fallback_lang()) continue;
-					if ((!is_special_file($file)) && (strlen($file)<=5)) $has_langs=true;
+					if ((!should_ignore_file('lang_custom/'.$file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file)<=5)) $has_langs=true;
 				}
 				closedir($_dir);
 			}

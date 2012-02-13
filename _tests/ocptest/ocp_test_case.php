@@ -20,11 +20,11 @@
 
 function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false)
 {
-	global $OCPORTAL_PATH;
+	global $ocPortal_path;
 
 	if (($file=='.') || ($file=='..')) return true;
 
-	if (is_dir($OCPORTAL_PATH.$dir.$file))
+	if (is_dir($ocPortal_path.$dir.$file))
 	{
 		// Wrong lang packs
 		if (($dir!='lang/') && (((strlen($file)==2) && (strtoupper($file)==$file) && (strtolower($file)!=$file)) || ($file=='EN_us') || ($file=='ZH-TW') || ($file=='ZH-CN')) && ($file!='EN'))
@@ -33,7 +33,7 @@ function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false
 		}
 		
 		// Wrong zones
-		if ((file_exists($OCPORTAL_PATH.$dir.$file.'/index.php')) && (file_exists($OCPORTAL_PATH.$dir.$file.'/pages')) && (!in_array($file,array('adminzone','collaboration','cms','forum','site'))))
+		if ((file_exists($ocPortal_path.$dir.$file.'/index.php')) && (file_exists($ocPortal_path.$dir.$file.'/pages')) && (!in_array($file,array('adminzone','collaboration','cms','forum','site','personalzone'))))
 		{
 			return true;
 		}
@@ -51,8 +51,8 @@ function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false
 		if ($dir=='themes/default/images_custom/') return true;
 	}
 
-	$bad_root_files=array('transcoder','killjunk.sh','restore.php','subs.inc','nbproject','_tests','info-override.php','make_files-output-log.html','manifest.xml','parameters.xml','BingSiteAuth.xml','ocportal.heap','ocportal.sch','libocportal_u.dll','gc.log','.bash_history','ocportal.fcgi','.htaccess','info.php.template','install1.sql','install2.sql','install3.sql','install4.sql','user.sql','postinstall.sql','install.sql','install.php','no_mem_cache','install_ok','install_locked','registered.php','ocp.zpj','.project');
-	if ((!$allow_other_addons) && ($file=='Gibb') || ($file=='ocworld') || ($file=='Gibberish') || ($file=='.svn') || ($file=='.git') || ($file=='myocp') || ($file=='docsformer') || ($file=='if_hosted_service.txt') || ($file=='Thumbs.db') || ($file=='Thumbs.db:encryptable') || ($file=='.DS_Store') || (!$allow_other_addons) && (substr($file,-4)=='.tar') || (substr($file,-7)=='.tmproj') || (substr($file,-3)=='.gz') || (substr($file,-2)=='.o') || (substr($file,-4)=='.scm') || ($file=='php.ini') || ($file=='CVS') || ($file=='WEB-INF') || (substr($file,0,5)=='_vti_')) return true;
+	$bad_root_files=array('facebook_connect.php','.gitignore','transcoder','killjunk.sh','restore.php','subs.inc','nbproject','_tests','info-override.php','make_files-output-log.html','manifest.xml','parameters.xml','BingSiteAuth.xml','ocportal.heap','ocportal.sch','libocportal_u.dll','gc.log','.bash_history','ocportal.fcgi','.htaccess','info.php.template','install1.sql','install2.sql','install3.sql','install4.sql','user.sql','postinstall.sql','install.sql','install.php','no_mem_cache','install_ok','install_locked','registered.php','ocp.zpj','.project');
+	if (((!$allow_other_addons) && ($file=='Gibb')) || ($file=='Gibberish') || ($file=='ocworld') || ($file=='.svn') || ($file=='.git') || ($file=='myocp') || ($file=='docsformer') || ($file=='if_hosted_service.txt') || ($file=='Thumbs.db') || ($file=='Thumbs.db:encryptable') || ($file=='.DS_Store') || (!$allow_other_addons) && (substr($file,-4)=='.tar') || (substr($file,-7)=='.clpprj') || (substr($file,-7)=='.tmproj') || (substr($file,-3)=='.gz') || (substr($file,-2)=='.o') || (substr($file,-4)=='.scm') || ($file=='php.ini') || ($file=='CVS') || ($file=='WEB-INF') || (substr($file,0,5)=='_vti_')) return true;
 
 	if ($dir=='')
 	{
@@ -61,16 +61,17 @@ function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false
 	else
 	{
 		if (($dir=='uploads/website_specific/') && ($file!='index.html')) return true;
-		if (($dir=='uploads/') && (strpos($file,'_addon')!==false)) return true;
+		if (($dir=='uploads/') && ((strpos($file,'addon_')!==false) || (strpos($file,'_addon')!==false))) return true;
 		if ($dir=='data/images/docs/') return true;
 		if ($dir=='data/images/ocproducts/') return true;
+		if (($file=='ocp_sitemap.xml') && ($upgrading)) return true;
 		if (($dir=='data/modules/admin_stats/') && (substr($file,-4)=='.xml')) return true;
 		if (
 			(
 				(substr($dir,0,8)=='uploads/')
-				|| (substr($dir,0,8)=='exports/')
-				|| (substr($dir,0,8)=='imports/')
-				|| ((strpos($dir,'_custom')!==false) && ($dir!='sources/hooks/blocks/main_custom_gfx/'))
+				 || (substr($dir,0,8)=='exports/')
+				 || (substr($dir,0,8)=='imports/')
+				 || ((strpos($dir,'_custom')!==false) && ($dir!='sources/hooks/blocks/main_custom_gfx/'))
 			)
 			&& (!$is_dir)
 			&& ($file!='index.html')
@@ -85,9 +86,9 @@ function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false
 			&& (($file!='write.log') || ($upgrading))
 			&& (($file!='output.log') || ($upgrading))
 			&& (($file!='download_tree_made.htm') || ($upgrading))
-			&& (($file!='seedy_tree_made.htm') || ($upgrading))
+			&& (($file!='cedi_tree_made.htm') || ($upgrading))
 		)
-			return true;
+		 return true;
 		if ($dir=='data/areaedit/plugins/SpellChecker/aspell/') return true;
 		if ((($dir=='themes/default/templates_cached/EN/') || ($dir=='lang_cached/EN/') || ($dir=='persistant_cache/')) && ($file!='index.html') && ($file!='.htaccess')) return true;
 		if ((($dir=='themes/default/templates_cached/') || ($dir=='lang_cached/')) && ($file!='index.html') && ($file!='.htaccess') && ($file!='EN')) return true;

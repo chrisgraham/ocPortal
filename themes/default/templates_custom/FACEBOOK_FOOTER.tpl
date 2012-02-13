@@ -1,5 +1,5 @@
+<div id="fb-root"></div>
 {+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
-   <div id="fb-root"></div>
  	<script type="text/javascript">
 		window.fbAsyncInit=function() {
 			FB.init({

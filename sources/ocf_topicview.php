@@ -256,6 +256,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 			}
 
 			decache('_new_pp',array(get_member()));
+			decache('side_ocf_personal_topics',array(get_member());
 		}
 		//  Check validated
 		if ($topic_info['t_validated']==0)

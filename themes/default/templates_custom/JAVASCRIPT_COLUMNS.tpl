@@ -14,6 +14,7 @@ addEventListenerAbstract(window,'real_load',function () {
 
  $.fn.columnize = function(options) {
 
+	var $inBox = options.target ? $(options.target) : $(this);
 
 	var defaults = {
 		// optional # of columns instead of width
@@ -41,26 +42,34 @@ addEventListenerAbstract(window,'real_load',function () {
 		// column widths, but will take slightly longer
 		accuracy : false,
 		// if we need a 'force-break' class set
-		explicitBreaks : $(this).find('.force-break').length!=0,
+		explicitBreaks : $inBox.find('.force-break').length!=0
 	};
 	var options = $.extend(defaults, options);
 
 	if (!options.explicitBreaks) {
-		$(this).find('h1, h2, h3, h4, h5, h6').addClass('dontend');
+		$inBox.find('h1, h2, h3, h4, h5, h6').addClass('dontend');
 	}
-	$(this).find('table, thead, tbody, tfoot, colgroup, caption, label, legend, script, style, textarea, button, object, embed, tr, th, td, li, h1, h2, h3, h4, h5, h6, form').addClass('dontsplit');
-	$(this).find('br').addClass('removeiflast').addClass('removeiffirst');
+	$inBox.find('table, thead, tbody, tfoot, colgroup, caption, label, legend, script, style, textarea, button, object, embed, tr, th, td, li, h1, h2, h3, h4, h5, h6, form').addClass('dontsplit');
+	$inBox.find('br').addClass('removeiflast').addClass('removeiffirst');
+
+	// Take out DOM nodes that can't be copied/medled-with. We'll put them back at the end of the process.
+	var protectMe = [];
+	$inBox.find(".protectme").each(function(index, node) {
+		protectMe.push(node);
+		var temp = document.createElement('div');
+		temp.className = 'protectme protectMe_'+(protectMe.length-1);
+		node.parentNode.replaceChild(temp, node);
+	} );
 
 	return this.each(function() {
-		var $inBox = options.target ? $(options.target) : $(this);
-		var maxHeight = $(this).height();
+		var maxHeight = $inBox.height();
 		var $cache = $('<div></div>'); // this is where we'll put the real content
 		var lastWidth = 0;
 		var columnizing = false;
 		
 		var adjustment = 0;
 		
-		$cache.append($(this).contents().clone(true));
+		$cache.append($inBox.contents().clone(true));
 	
 	    // images loading after dom load
 	    // can screw up the column heights,
@@ -68,7 +77,7 @@ addEventListenerAbstract(window,'real_load',function () {
 	    if(!options.ignoreImageLoading && !options.target) {
 	    	if(!$inBox.data("imageLoaded")) {
 		    	$inBox.data("imageLoaded", true);
-		    	if($(this).find("img").length > 0) {
+		    	if($inBox.find("img").length > 0) {
 		    		// only bother if there are
 		    		// actually images...
 			    	var func = function($inBox,$cache) { return function() {
@@ -77,9 +86,9 @@ addEventListenerAbstract(window,'real_load',function () {
 					    	$inBox.empty().append($cache.children().clone(true));
 					    	$inBox.columnize(options);
 				    	}
-			    	}}($(this), $cache);
-				    $(this).find("img").one("load", func);
-				    $(this).find("img").one("abort", func);
+			    	}}($inBox, $cache);
+				    $inBox.find("img").one("load", func);
+				    $inBox.find("img").one("abort", func);
 				    return;
 		    	}
 	    	}
@@ -131,7 +140,8 @@ addEventListenerAbstract(window,'real_load',function () {
 				return false; // Will need to go down to split recursively
 			} else{
 				while($parentColumn.height() < height && $pullOutHere[0].childNodes.length != 0 ) {
-					$putInHere.append($pullOutHere[0].childNodes[0]); // Because we're not cloning, jquery will actually move the element
+					var next = $pullOutHere[0].childNodes[0];
+					$putInHere.append(next); // Because we're not cloning, jquery will actually move the element
 				}
 			}
 			if($putInHere[0].childNodes.length == 0) return false;
@@ -423,7 +433,6 @@ addEventListenerAbstract(window,'real_load',function () {
 						}
 					});
 				}
-				$inBox.append($("<br style='clear:both;'>"));
 			}
 			for (var i = 0; i < numCols; i++) {
 				var $col = $inBox.children().eq(i);
@@ -459,6 +468,12 @@ addEventListenerAbstract(window,'real_load',function () {
 				}
 				while (runOn.length!=0);
 			}
+
+			$inBox.find('.protectme').each(function(index, node) {
+				var reference = protectMe[node.className.substr(node.className.lastIndexOf('_')+1)];
+				node.parentNode.replaceChild(reference, node);
+			});
+
 			$inBox.data("columnizing", false);
 
 			if(options.overflow) {

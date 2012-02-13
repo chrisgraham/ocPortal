@@ -222,7 +222,7 @@ function get_directory_contents($path,$rel_path='',$special_too=false,$recurse=t
 	{
 		if (!$special_too)
 		{
-			if (is_special_file($file)) continue;
+			if (should_ignore_file($rel_path.(($rel_path=='')?'':'/').$file,IGNORE_ACCESS_CONTROLLERS)) continue;
 		} elseif (($file=='.') || ($file=='..')) continue;
 
 		if ((is_file($path.'/'.$file)) || (!$recurse))

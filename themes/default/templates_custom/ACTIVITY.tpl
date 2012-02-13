@@ -15,10 +15,10 @@
 
 	<!--
 	{+START,IF_EMPTY,{MEMPIC}}
-		<img src="{$THUMBNAIL*,{$IMG,ocf_default_avatars/default_set/ocp_fanatic},36x36,avatar_normalise,,,pad,both,#FFFFFF00}" />
+		<img src="{$THUMBNAIL*,{$IMG,ocf_default_avatars/default_set/ocp_fanatic},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
 	{+END}
 	{+START,IF_NON_EMPTY,{MEMPIC}}
-		<img src="{$THUMBNAIL*,{MEMPIC},36x36,avatar_normalise,,,pad,both,#FFFFFF00}" />
+		<img src="{$THUMBNAIL*,{MEMPIC},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
 	{+END}
 	-->
 </div>

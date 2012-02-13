@@ -13,20 +13,26 @@
  * @package	core
  */
 
-function diff_simple($old_file,$new_file)
+function diff_simple($old_file,$new_file,$unified=false)
 {
-	return _diff_simple(file($old_file),file($new_file));
+	return _diff_simple(file($old_file),file($new_file),$unified);
 }
 
-function diff_simple_2($old_contents,$new_contents)
+function diff_simple_2($old_contents,$new_contents,$unified=false)
 {
-	return _diff_simple(($old_contents=='')?array():explode($old_contents,chr(10)),($new_contents=='')?array():explode($new_contents,chr(10)));
+	return _diff_simple(($old_contents=='')?array():explode(chr(10),$old_contents),($new_contents=='')?array():explode(chr(10),$new_contents),$unified);
 }
 
-function _diff_simple($old,$new)
+function _diff_simple($old,$new,$unified=false)
 {
 	$diff=new Text_Diff($old,$new);
-	$renderer=new Text_Diff_Renderer_inline();
+	if ($unified)
+	{
+		$renderer=new Text_Diff_Renderer_unified();
+	} else
+	{
+		$renderer=new Text_Diff_Renderer_inline();
+	}
 	$diff_html=$rendered_diff=$renderer->render($diff);
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($diff_html);
 	return $diff_html;
@@ -1734,12 +1740,12 @@ class Text_Diff_Renderer_unified extends Text_Diff_Renderer {
 	 /**
 	  * Number of leading context "lines" to preserve.
 	  */
-	 var $_leading_context_lines=4;
+	 var $_leading_context_lines=2;
 
 	 /**
 	  * Number of trailing context "lines" to preserve.
 	  */
-	 var $_trailing_context_lines=4;
+	 var $_trailing_context_lines=2;
 
 	 function _blockHeader($xbeg, $xlen, $ybeg, $ylen)
 	 {

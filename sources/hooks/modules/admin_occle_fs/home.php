@@ -40,7 +40,7 @@ class Hook_home
 			$dh=opendir($path);
 			while (($file=readdir($dh))!==false)
 			{
-				if (!is_special_file($file))
+				if (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS))
 				{
 					if (is_dir($path.$file)) $listing[$file]=array();
 					else $listing[]=$file;

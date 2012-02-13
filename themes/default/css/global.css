@@ -361,6 +361,10 @@ form { /* For IE6 */
 	zoom: 1;
 }
 
+.breadcrumbs abbr {
+	white-space: nowrap;
+}
+
 .breadcrumbs_always {
 	font-weight: bold;
 }

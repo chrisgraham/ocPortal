@@ -348,7 +348,7 @@ function _get_all_image_ids_type(&$ids,$dir,$type,$recurse)
 	{
 		while (false!==($file=readdir($_dir)))
 		{
-			if (!is_special_file($file))
+			if (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS))
 			{
 				if (!is_dir($dir.'/'.$file))
 				{
@@ -408,7 +408,7 @@ function get_image_paths($base_url,$base_path)
 	{
 		while (false!==($file=readdir($handle)))
 		{
-			if (!is_special_file($file))
+			if (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS))
 			{
 				$this_path=$base_path.$file;
 				if (is_file($this_path))
@@ -451,7 +451,7 @@ function get_all_image_codes($base_path,$search_under,$recurse=true)
 	{
 		while (false!==($file=readdir($handle)))
 		{
-			if (!is_special_file($file))
+			if (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS))
 			{
 				$full_path=$base_path.'/'.$search_under.'/'.$file;
 				if (is_file($full_path))

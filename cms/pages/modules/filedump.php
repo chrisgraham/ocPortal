@@ -190,7 +190,7 @@ class Module_filedump
 		$deletable=array();
 		while (false!==($file=readdir($handle)))
 		{
-			if (!is_special_file($file))
+			if (!should_ignore_file('uploads/filedump'.$place.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES))
 			{
 				$directory[$i]=!is_file(get_custom_file_base().'/uploads/filedump'.$place.$file);
 				$filename[$i]=$directory[$i]?($file.'/'):$file;

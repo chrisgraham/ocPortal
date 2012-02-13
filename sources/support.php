@@ -1378,6 +1378,9 @@ function browser_matches($code)
 	$is_ie_old=((strpos($browser,'msie 6')!==false) || (strpos($browser,'msie 5')!==false)) && ($is_ie);
 	$is_ie_decent=(!$is_ie_old) && (strpos($browser,'msie 7')===false) && $is_ie;
 	$is_ie5=(strpos($browser,'msie 5')!==false) && ($is_ie);
+	$is_ie6=(strpos($browser,'msie 6')!==false) && ($is_ie);
+	$is_ie7=(strpos($browser,'msie 7')!==false) && ($is_ie);
+	$is_ie8=(strpos($browser,'msie 8')!==false) && ($is_ie);
 	$is_ie9=(strpos($browser,'msie 8')===false) && ($is_ie_decent);
 	$is_ie_new=(!$is_ie_old) && ($is_ie);
 	$is_iceweasel=(strpos($browser,'iceweasel')!==false);
@@ -1428,6 +1431,12 @@ function browser_matches($code)
 		case 'ie6':
 		case 'ie_old':
 			$BROWSER_MATCHES_CACHE[$code]=$is_ie_old;
+			return $BROWSER_MATCHES_CACHE[$code];
+		case 'ie7':
+			$BROWSER_MATCHES_CACHE[$code]=$is_ie7;
+			return $BROWSER_MATCHES_CACHE[$code];
+		case 'ie8':
+			$BROWSER_MATCHES_CACHE[$code]=$is_ie8;
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'ie7+':
 		case 'ie_new':

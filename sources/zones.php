@@ -611,7 +611,7 @@ function find_all_hooks($type,$entry)
  *
  * @param  ID_TEXT		The block name
  * @param  ?array			The block parameter map (NULL: no parameters)
- * @param  ?integer		The TTL to use (NULL: block default)
+ * @param  ?integer		The TTL to use in minutes (NULL: block default)
  * @return tempcode		The generated tempcode
  */
 function do_block($codename,$map=NULL,$ttl=NULL)

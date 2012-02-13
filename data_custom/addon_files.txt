@@ -26,7 +26,7 @@ ocbanter
 
 ocdeadpeople
 ------------
-# # sources/hooks/systems/notifications/got_disease.php
+# # sources_custom/hooks/systems/notifications/got_disease.php
 # # adminzone/pages/modules_custom/admin_ocdeadpeople.php
 # # lang_custom/EN/ocdeadpeople.ini
 # # sources_custom/hooks/modules/pointstore/ocdeadpeople.php
@@ -39,7 +39,7 @@ ocdeadpeople
 
 ocgiftgiver
 -----------
-# # sources/hooks/systems/notifications/gift.php
+# # sources_custom/hooks/systems/notifications/gift.php
 # # adminzone/pages/modules_custom/admin_ocgifts.php
 # # lang_custom/EN/ocgifts.ini
 # # sources_custom/hooks/modules/members/gifts.php
@@ -239,7 +239,6 @@ facebook_support
 # # themes/default/templates_custom/BLOCK_MAIN_FACEBOOK_FACEPILE.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_FACEBOOK_LIKE.tpl
 # # themes/default/templates_custom/BLOCK_MAIN_FACEBOOK_COMMENTS.tpl
-# # themes/default/images_custom/facebook.png
 # # sources_custom/blocks/side_facebook_activity.php
 # # sources_custom/blocks/main_facebook_facepile.php
 # # sources_custom/blocks/main_facebook_like.php
@@ -1916,6 +1915,8 @@ addon_publish
 
 # # data_custom/publish_addons_as_downloads.php
 # # data_custom/build_addons.php
+# # sources_custom/dump_addons.php
+# # adminzone/pages/minimodules_custom/admin_generate_adhoc_upgrade.php
 
 release_compile
 ---------------
@@ -1985,7 +1986,7 @@ activity_feed
 # # sources_custom/hooks/systems/syndication/index.html
 # # sources_custom/hooks/systems/profiles_tabs/activities.php
 # # sources_custom/hooks/systems/profiles_tabs/posts.php
-# # uploads/avatar_normalise/index.html
+# # uploads/addon_avatar_normalise/index.html
 # # uploads/addon_icon_normalise/index.html
 
 under18s
@@ -2008,7 +2009,7 @@ utf8
 workflows
 ---------
 
-# # sources/hooks/systems/notifications/workflow_step.php
+# # sources_custom/hooks/systems/notifications/workflow_step.php
 # # lang_custom/EN/workflows.ini
 # # cms/pages/modules_custom/cms_galleries.php
 # # adminzone/pages/modules_custom/admin_workflow.php
@@ -2018,9 +2019,8 @@ workflows
 # # sources_custom/hooks/systems/do_next_menus/workflows.php
 # # sources_custom/hooks/modules/admin_unvalidated/images.php
 # # sources_custom/hooks/modules/admin_unvalidated/videos.php
-# # themes/default/templates_custom/FORM_SCREEN_INPUT_TICK.tpl
 # # themes/default/templates_custom/FORM_SCREEN_INPUT_VARIOUS_TICKS.tpl
-# # themes/default/images_custom/bigicons/workflows.php
+# # themes/default/images_custom/bigicons/workflows.png
 # # site/pages/modules_custom/galleries.php
 # # adminzone/pages/modules_custom/admin_unvalidated.php
 
@@ -2036,8 +2036,8 @@ gallery_carousel
 referrals
 ---------
 
-# # sources/hooks/systems/notifications/referral.php
-# # sources/hooks/systems/notifications/referral_staff.php
+# # sources_custom/hooks/systems/notifications/referral.php
+# # sources_custom/hooks/systems/notifications/referral_staff.php
 # # text_custom/referrals.txt
 # # data_custom/referrer_report.php
 # # lang_custom/EN/referrals.ini
@@ -2272,8 +2272,8 @@ cleanup_repository
 booking
 -------
 
-# # sources/hooks/systems/notifications/booking_customer.php
-# # sources/hooks/systems/notifications/booking_inform_staff.php
+# # sources_custom/hooks/systems/notifications/booking_customer.php
+# # sources_custom/hooks/systems/notifications/booking_inform_staff.php
 # # cms/pages/modules_custom/cms_booking.php
 # # sources_custom/booking.php
 # # sources_custom/booking2.php

@@ -1305,7 +1305,7 @@ class virtual_bash
 			while (($file=readdir($dh))!==false)
 			{
 				if ($file==$script_name) return $dir.$script_name;
-				if ((is_dir($dir.$file)) && ($file!='.') && (!is_special_file($file)))
+				if ((is_dir($dir.$file)) && ($file!='.') && (!should_ignore_file('data/modules/admin_occle/'.$file,IGNORE_ACCESS_CONTROLLERS)))
 				{
 					$return=$this->_find_script_file($script_name,$dir.$file.'/');
 					if ($return) return $return;

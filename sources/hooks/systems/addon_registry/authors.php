@@ -76,7 +76,6 @@ class Hook_addon_registry_authors
 
 			'sources/hooks/systems/meta/authors.php',
 			'sources/hooks/systems/addon_registry/authors.php',
-			'sources/hooks/systems/addon_registry/core_authors.php',
 			'AUTHOR_MANAGE_SCREEN.tpl',
 			'AUTHOR_SCREEN.tpl',
 			'AUTHOR_POPUP_WINDOW_DEFINED.tpl',

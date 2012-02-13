@@ -84,6 +84,7 @@ class Hook_addon_registry_core_notifications
 			'themes/default/images/EN/page/enable_notifications.png',
 			'themes/default/images/EN/pageitem/disable_notifications.png',
 			'themes/default/images/EN/pageitem/enable_notifications.png',
+			'sources/hooks/systems/profiles_tabs_edit/notifications.php',
 		);
 	}
 

@@ -62,15 +62,32 @@ function setFieldError(theElement,errorMsg)
 		}
 		if (errorElement)
 		{
+			// Make error message visible, if there's an error
 			errorElement.style.display=(errorMsg=='')?'none':'block';
+
+			// Changed error message
 			if (getInnerHTML(errorElement)!=escape_html(errorMsg))
 			{
 				setInnerHTML(errorElement,'');
-				if (errorMsg!='')
+				if (errorMsg!='') // If there actually an error
 				{
+					// Need to switch tab?
+					var p=errorElement;
+					while (p)
+					{
+						p=p.parentNode;
+						if ((p) && (p.id) && (p.id.substr(0,2)=='g_') && (p.style.display=='none'))
+						{
+							select_tab('g',p.id.substr(2,p.id.length-2));
+							break;
+						}
+					}
+
+					// Set error message
 					var msgNode=document.createTextNode(errorMsg);
 					errorElement.appendChild(msgNode);
 
+					// Fade in
 					if (typeof window.nereidFade!='undefined')
 					{
 						setOpacity(errorElement,0.0);

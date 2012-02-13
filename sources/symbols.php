@@ -1456,7 +1456,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'BROWSER_MATCHES':
 				if (isset($param[0]))
 				{
-					$value=browser_matches($param[0])?'1':'0';
+					$q=false;
+					foreach (explode('|',$param[0]) as $browser)
+					{
+						$q=browser_matches($browser);
+						if ($q) break;
+					}
+					$value=$q?'1':'0';
 				}
 				break;
 

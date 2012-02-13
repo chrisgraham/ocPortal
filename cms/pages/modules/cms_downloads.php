@@ -367,7 +367,7 @@ class Module_cms_downloads extends standard_aed_module
 		{
 			while (($entry=readdir($dh))!==false)
 			{
-				if (!is_special_file($entry))
+				if (!should_ignore_file($entry,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES))
 				{
 					$full_path=$server_path.'/'.$entry;
 					$full_url=$server_url.'/'.rawurlencode($entry);

@@ -188,11 +188,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 							$_file=preg_replace('#\..*\.#','.',basename($entry['path']));
 
 							if (!check_extension($_file,false,NULL,true)) continue;
-							$path_parts=explode('/',$entry['path']);
-							foreach ($path_parts as $path_part)
-							{
-								if ((is_special_file($path_part)) || (substr($path_part,0,1)=='.')) continue 2;
-							}
+							if (should_ignore_file($entry['path'],IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES)) continue;
 
 							$place=get_custom_file_base().'/uploads/attachments/'.$_file;
 							$i=2;

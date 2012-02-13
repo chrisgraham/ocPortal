@@ -106,7 +106,7 @@ class Module_admin_bulkupload
 		{
 			while (false!==($file=readdir($handle)))
 			{
-				if (!is_special_file($file))
+				if (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES))
 				{
 					if (is_file($path.'/'.$file))
 					{

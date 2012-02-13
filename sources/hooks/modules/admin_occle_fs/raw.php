@@ -40,7 +40,7 @@ class Hook_raw
 			$dh=opendir($path);
 			while (($file=readdir($dh))!==false)
 			{
-				if (!is_special_file($file))
+				if ($file[0]!='.')
 				{
 					if (is_dir($path.$file)) $listing[$file]=array();
 					else $listing[]=$file;

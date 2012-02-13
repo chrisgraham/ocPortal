@@ -882,7 +882,7 @@ function check_perms()
 					$dh=@opendir(get_file_base().'/'.$_chmod);
 					if ($dh!==false)
 					{
-						while (($file=readdir($dh))!==false) if (!is_special_file($file)) $array[]=$_chmod.'/'.$file;
+						while (($file=readdir($dh))!==false) if (!should_ignore_file($_chmod.'/'.$file)) $array[]=$_chmod.'/'.$file;
 						closedir($dh);
 					}
 				}
@@ -891,7 +891,7 @@ function check_perms()
 				$dh=@opendir(get_file_base().'/'.$chmod);
 				if ($dh!==false)
 				{
-					while (($file=readdir($dh))!==false) if (!is_special_file($file)) $array[]=$chmod.'/'.$file;
+					while (($file=readdir($dh))!==false) if (!should_ignore_file($chmod.'/'.$file)) $array[]=$chmod.'/'.$file;
 					closedir($dh);
 				}
 			}
@@ -955,7 +955,7 @@ function fix_perms()
 					$dh=@opendir(get_file_base().'/'.$_chmod);
 					if ($dh!==false)
 					{
-						while (($file=readdir($dh))!==false) if (!is_special_file($file)) $array[]=$_chmod.'/'.$file;
+						while (($file=readdir($dh))!==false) if (!should_ignore_file($_chmod.'/'.$file)) $array[]=$_chmod.'/'.$file;
 						closedir($dh);
 					}
 				}
@@ -964,7 +964,7 @@ function fix_perms()
 				$dh=@opendir(get_file_base().'/'.$chmod);
 				if ($dh!==false)
 				{
-					while (($file=readdir($dh))!==false) if (!is_special_file($file)) $array[]=$chmod.'/'.$file;
+					while (($file=readdir($dh))!==false) if (!should_ignore_file($_chmod.'/'.$file)) $array[]=$chmod.'/'.$file;
 					closedir($dh);
 				}
 			}
@@ -1059,7 +1059,7 @@ function check_excess_perms($array,$rel='')
 			
 			$is_dir=@is_dir($dir.$file);
 
-			if ((is_special_file($file)) && ($is_dir)) continue;
+			if ((should_ignore_file($dir.$file)) && ($is_dir)) continue;
 
 			if ((is_writable_wrap($dir.$file)) && ((!function_exists('posix_getuid')) || (fileowner($dir.$file)!=posix_getuid())) && (!in_array($rel.(($rel=='')?'':'/').$file,$array)))
 			{
@@ -1098,16 +1098,13 @@ function check_outdated($dir,$rela,&$master_data,&$hook_files,$allow_merging)
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if (is_special_file($file)) continue;
-			if ($file=='comcode_custom') continue;
-			if ($file=='text_custom') continue;
+			if (should_ignore_file($rela.$file,IGNORE_CUSTOM_DIR_CONTENTS)) continue;
 			if ($file=='files.dat') continue;
-			if ($file=='map.ini') continue;
 			if ($file=='files_previous.dat') continue;
 
 			$is_dir=@is_dir($dir.$file);
 	
-			if (($is_dir) && (is_readable($dir.$file)) && ($file!='uploads') && (!file_exists($dir.$file.'/sources_custom'))) // Don't check ocPortal dupe (e.g. backup) installs
+			if (($is_dir) && (is_readable($dir.$file)))
 			{
 				list($_outdated__outdated_original_and_override,$_outdated__possibly_outdated_override,$_outdated__missing_original_but_has_override,$_outdated__uninstalled_addon_but_has_override)=check_outdated($dir.$file.'/',$rela.$file.'/',$master_data,$hook_files,$allow_merging);
 				$outdated__outdated_original_and_override.=$_outdated__outdated_original_and_override;
@@ -1224,8 +1221,7 @@ function check_alien($old_files,$files,$dir,$rela='')
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if (is_special_file($file)) continue;
-			if (!(($file!='uploads') && ($file!='no_mem_cache') && ($file!='php.ini') && ($file!='favicon.ico') && ($file!='.htpasswd') && ($file!='closed.html') && ($file!='Iirf.ini') && ($file!='robots.txt') && ($file!='data.ocp') && ($file!='400.shtml') && ($file!='500.shtml') && ($file!='404.shtml') && ($file!='403.shtml') && ($file!='registered.php') && ($file!='map.ini') && ($file!='old') && ($file!='theme.ini') && ($file!='exports') && ($file!='templates_cached') && ($file!='imports') && ($file!='persistant_cache') && ($file!='lang_cached'))) continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_THEMES)) continue;
 			if ($rela.$file=='data/images') continue;
 			if ($rela.$file=='data/areaedit/plugins/SpellChecker/aspell') continue;
 	
@@ -1236,7 +1232,7 @@ function check_alien($old_files,$files,$dir,$rela='')
 	
 			if ($is_dir)
 			{
-				if (((strpos($file,'_custom')===false) && (($rela!='themes/') || ($file=='default'))) && (!file_exists($dir.$file.'/info.php')))
+				if ((strpos($file,'_custom')===false) && (!file_exists($dir.$file.'/info.php')))
 				{
 					if (($rela=='') && (!file_exists($dir.$file.'/pages'))) // Scan to make sure it's not some other system placed under the webroot
 					{

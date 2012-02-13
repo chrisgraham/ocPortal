@@ -606,7 +606,7 @@ class Module_admin_addons
 			{
 				if (($dir=='') && ($file=='_tests')) continue;
 
-				if (($file!='.') && (preg_match('#^.*\.\d+$#',$file)==0) && ($dir.'/'.$file!='/themes/default/css') && ($dir.'/'.$file!='/data/areaedit') && ($file!='..') && (((substr($file,-4)!='.css') && (substr($file,-3)!='.js')) || (strpos($dir,'/templates_cached/')===false)) && ((($file!='templates_cached')) || (substr($dir,0,7)=='themes/')) && (substr($file,-9)!='.editfrom') && (!is_integer(substr($file,strpos($file,'.')+1))) && (substr($file,-4)!='.tcp') && (substr($file,-4)!='.inc') && (!is_special_file($file,true)) && ($file!='lang_cached') && ($file!='uploads') && (!(($file=='info.php') && ($dir==''))))
+				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file),IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES)
 				{
 					$temp[$file]=1;
 				}

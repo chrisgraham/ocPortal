@@ -74,6 +74,7 @@ class Hook_addon_registry_points
 	{
 		return array(
 
+			'POINTS_PROFILE.tpl',
 			'sources/hooks/systems/notifications/received_points.php',
 			'sources/hooks/systems/notifications/receive_points_staff.php',
 			'sources/hooks/systems/config_default/leaderboard_start_date.php',

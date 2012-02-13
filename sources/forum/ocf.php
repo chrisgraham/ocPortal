@@ -1185,6 +1185,8 @@ class forum_driver_ocf extends forum_driver_base
 	
 		// Password
 		$password_hashed_salted=$this->get_member_row_field($id,'m_pass_hash_salted');
+		$password_compat_scheme=$this->get_member_row_field($id,'m_password_compat_scheme');
+		if ($password_compat_scheme=='plain') $password_hashed_salted=md5($password_hashed_salted); // can't do direct representation for this, would be a plain text cookie; so in forum_authorise_login we expect it to be md5'd and compare thusly (as per non-cookie call to that function)
 		ocp_setcookie(get_pass_cookie(),$password_hashed_salted);
 		$_COOKIE[get_pass_cookie()]=$password_hashed_salted;
 	}

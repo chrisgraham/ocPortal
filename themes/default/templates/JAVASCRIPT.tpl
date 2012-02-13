@@ -2099,7 +2099,7 @@ function Load(xmlString) {
 function Copy(domNode,xmlDoc,level) {
 	if (typeof level=="undefined") level=1;
 	if (level>1) {
-		if (xmlDoc.nodeName.toUpperCase()=='SCRIPT')
+		if ((xmlDoc.nodeName.toUpperCase()=='SCRIPT') && (!xmlDoc.src))
 		{
 			var text=(xmlDoc.nodeValue?xmlDoc.nodeValue:(xmlDoc.textContent?xmlDoc.textContent:(xmlDoc.text?xmlDoc.text:"")));
 			try
@@ -2191,11 +2191,14 @@ function setInnerHTML(element,tHTML,append) {
 				element.innerHTML=tHTML;
 				for (var i=0;i<scripts.length;i++)
 				{
-					text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
-					window.setTimeout( function(text) { return function() {
-						if (!window.js_runs_test) // If JS was not run by the above op
-							eval(text);
-					} }(text) , 0); // Delayed so we know DOM has loaded
+					if (!scripts[i].src) // i.e. if it is inline JS
+					{
+						text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
+						window.setTimeout( function(text) { return function() {
+							if (!window.js_runs_test) // If JS was not run by the above op
+								eval(text);
+						} }(text) , 0); // Delayed so we know DOM has loaded
+					}
 				}
 			}
 			window.setTimeout( function() { fixImagesIn(element); } , 500); // Delayed so that the image dimensions can load up

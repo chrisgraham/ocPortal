@@ -1,11 +1,11 @@
 .re_body .column_wrapper, .re_body .column_wrapper_2 {
 	visibility: hidden;
-	width: 955px;
-	overflow: scroll;
+	width: 950px;
+	/*overflow-x: scroll; If you want this the visibility: hidden must be removed*/
 }
 
 .re_body .column_wrapper .column {
-	width: 279px; /*280 wraps on IE9*/
+	width: 283px;
 	visibility: visible;
 }
 
