@@ -1158,6 +1158,7 @@ ocbrowserbookmarks
 ------------------
 
 # # adminzone/pages/minimodules_custom/admin_generate_bookmarks.php
+# # sources_custom/hooks/systems/do_next_menus/ocbrowserbookmarks.php
 
 ocwhitelist
 -----------
@@ -1903,12 +1904,14 @@ db_schema
 # # adminzone/pages/minimodules_custom/sql_schema_generate_by_addon.php
 # # adminzone/pages/minimodules_custom/sql_show_tables_by_addon.php
 # # sources_custom/relations.php
+# # sources_custom/hooks/systems/do_next_menus/db_schema.php
 
 xml_db_manage
 -------------
 
 # # adminzone/pages/minimodules_custom/xml_dump.php
 # # data_custom/xml_db_import.php
+# # sources_custom/hooks/systems/do_next_menus/xml_db_manage.php
 
 addon_publish
 --------------
@@ -1917,6 +1920,7 @@ addon_publish
 # # data_custom/build_addons.php
 # # sources_custom/dump_addons.php
 # # adminzone/pages/minimodules_custom/admin_generate_adhoc_upgrade.php
+# # sources_custom/hooks/systems/do_next_menus/addon_publish.php
 
 release_compile
 ---------------
@@ -2262,6 +2266,7 @@ theme_debug
 
 # # pages/minimodules_custom/EN/theme_debug.php
 # # adminzone/pages/minimodules_custom/fix_partial_themewizard_css.php
+# # sources_custom/hooks/systems/do_next_menus/theme_debug.php
 
 cleanup_repository
 ------------------

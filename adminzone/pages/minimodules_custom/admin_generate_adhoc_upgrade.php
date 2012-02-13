@@ -9,7 +9,7 @@ $cutoff_days=post_param_integer('cutoff_days',intval(ceil((time()-filemtime(get_
 $type=get_param('type','misc');
 
 echo '
-	<p>This system will generate a TAR archive to upgrade a site. You choose which addons to include, and the date to get changed files from (both may be auto-detected from the install location).</p>
+	<p>This system will generate a TAR archive to upgrade a site to the files in this ocPortal installation. You choose which addons to include (both bundled and non-bundled are supported), and the date to get changed files from (both may be auto-detected from the install location).</p>
 ';
 
 $addons=get_addon_structure();
@@ -215,7 +215,7 @@ if ($type=='go')
 						if (($probe_dir=='') || (@file_get_contents($probe_dir.'/'.$file)!==file_get_contents(get_file_base().'/'.$file)))
 						{
 							$new_filename=$file;
-							if (preg_match('#^(lang)\_custom/#',$file)!=0)
+							if ((preg_match('#^(lang)\_custom/#',$file)!=0) && (($probe_dir=='') || (file_exists($probe_dir.'/'.$file))))
 								$new_filename.='.quarantine';
 							tar_add_file($tar,$new_filename,get_file_base().'/'.$file,fileperms(get_file_base().'/'.$file),filemtime(get_file_base().'/'.$file),true);
 						}

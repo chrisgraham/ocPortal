@@ -164,6 +164,12 @@ links__CATALOGUE_ENTRY=Link: {1}
 
 If you have the language cache enabled then you will need to empty the language cache before these changes will show up.
 
+You can also add descriptions to the add and edit screens for catalogues by creating new strings like:
+[codebox]
+CATALOGUE_<catalogue-name>_ADD_TEXT=Shown on add screen.
+CATALOGUE_<catalogue-name>_EDIT_TEXT=Shown on edit screen.
+[/codebox]
+
 [staff_note]
 [title="3"]eCommerce catalogues[/title]
 
