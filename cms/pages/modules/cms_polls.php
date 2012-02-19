@@ -373,7 +373,7 @@ class Module_cms_polls extends standard_aed_module
 
 		$current=post_param_integer('validated',0);
 
-		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('poll','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('poll','is_current',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
 				syndicate_described_activity('polls:ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls');

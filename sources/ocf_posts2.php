@@ -50,9 +50,9 @@ function ocf_show_isolated_post($row,$use_post_title=false)
 	// Avatar
 	if (is_guest($row['p_poster']))
 	{
-		if (($row['p_poster_name_if_guest']==do_lang('SYSTEM')) && (addon_installed('ocf_member_avatars')))
+		if ($row['p_poster_name_if_guest']==do_lang('SYSTEM'))
 		{
-			$avatar=find_theme_image('ocf_default_avatars/default_set/ocp_fanatic');
+			$avatar=find_theme_image('ocf_default_avatars/default_set/ocp_fanatic',true);
 		}
 	}
 	if ($avatar!='')

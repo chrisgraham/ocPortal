@@ -303,7 +303,9 @@ function comcode_helper_script()
 			$params=$tag_list[$tag];
 			if ($tag=='include')
 			{
-				$fields->attach(form_input_page_link(do_lang_tempcode('PAGE'),'','tag_contents','',true,NULL,'comcode'));
+				$default_embed=array_key_exists('',$defaults)?($defaults['']):get_param('default','');
+				if (strpos($default_embed,':')===false) $default_embed=':'.$default_embed;
+				$fields->attach(form_input_page_link(do_lang_tempcode('PAGE'),'','tag_contents',$default_embed,true,NULL,'comcode'));
 				$done_tag_contents=true;
 			}
 			elseif ($tag=='concepts')
@@ -412,7 +414,11 @@ function comcode_helper_script()
 						$is_advanced=(strpos($descriptiont,do_lang('BLOCK_IND_ADVANCED'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_ADVANCED'),'',$descriptiont));
 
-						if (($tag=='attachment') && ($param=='thumb_url'))
+						if (($tag=='page') && ($param=='param') && (substr_count($default,':')==1))
+						{
+							$fields->attach(form_input_page_link($parameter_name,protect_from_escaping($descriptiont),$param,$default,true,NULL));
+						} else
+						if (($tag=='attachment') && ($param=='thumb_url') && (addon_installed('filedump')))
 						{
 							$field=form_input_tree_list(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_thumb_url'),'thumb_url','','choose_filedump_file',array('only_images'=>true),false,$default,false);
 							$fields_advanced->attach($field);
@@ -498,7 +504,7 @@ function comcode_helper_script()
 		{
 			$javascript.="document.getElementById('type').onchange=function() { document.getElementById('_safe').checked=(this.options[this.selectedIndex].value=='inline'); };";
 
-			if ($default_embed!='')
+			if (($default_embed!='') || (!addon_installed('filedump')))
 			{
 				$hidden->attach(form_input_hidden('tag_contents',$default_embed));
 				$tag_description=new ocp_tempcode();

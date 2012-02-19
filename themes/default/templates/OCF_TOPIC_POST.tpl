@@ -94,7 +94,7 @@
 		</div>
 	</td>
 </tr>
-{+START,IF,{$NEQ,{ID},{TOPIC_FIRST_POST_ID},}}
+{+START,IF,{$NAND,{$EQ,{ID},},{$EQ,{ID},{TOPIC_FIRST_POST_ID}}}}
 	<tr>
 		<td class="{CLASS*}">
 			{EMPHASIS*} {+START,IF_EMPTY,{EMPHASIS}}

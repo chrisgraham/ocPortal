@@ -1100,7 +1100,7 @@ class Module_cms_comcode_pages
 		$_new['html']=$_new['tempcode']->evaluate();
 		if ((substr($file,0,1)!='_') && (substr($file,0,6)!='panel_') && (trim($_new['html'])!=''))
 		{
-			if (strpos($_new['html'],'<h1')===false)
+			if ((strpos($_new['html'],'<h1')===false) && (strpos($_new['comcode'],'[title]')===false) && (strpos($_new['comcode'],'[title="1"]')===false))
 			{
 				attach_message(do_lang_tempcode('NO_LEVEL_1_HEADERS'),'warn');
 			}

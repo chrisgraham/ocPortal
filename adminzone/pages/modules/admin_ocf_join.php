@@ -543,9 +543,15 @@ class Module_admin_ocf_join
 			'ID'=>'id',
 			'Username'=>'m_username',
 			'E-mail address'=>'m_email_address',
-			'Password'=>'m_pass_hash_salted/m_pass_salt/m_password_compat_scheme',
+			'Password'=>'m_pass_hash_salted/m_pass_salt/m_password_compat_scheme'
+		);
+		if (addon_installed('ocf_member_avatars')) $headings+=array(
 			'Avatar'=>'#m_avatar_url',
+		);
+		if (addon_installed('ocf_member_photos')) $headings+=array(
 			'Photo'=>'#m_photo_url',
+		);
+		$headings+=array(
 			'Signature'=>'*m_signature',
 			'Validated'=>'!m_validated',
 			'Join time'=>'&m_join_time',

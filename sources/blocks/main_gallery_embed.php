@@ -229,7 +229,7 @@ class Block_main_gallery_embed
 		$root=get_param('root','root');
 		$results_browser=results_browser(do_lang('ENTRY'),$cat,$start,'mge_start',$max,'mge_max',$total_videos+$total_images,$root,'misc',true,false,10,$_selectors);
 
-		$tpl=do_template('BLOCK_MAIN_GALLERY_EMBED',array('_GUID'=>'b7b969c8fe8c398dd6e3af7ee06717ea','BLOCK_PARAMS'=>block_params_arr_to_str($map),'RESULTS_BROWSER'=>$results_browser,'TITLE'=>$title,'CAT'=>$cat,'IMAGES'=>$entries,'MAX'=>strval($max),'ZONE'=>$zone,'TOTAL_VIDEOS'=>strval($total_videos),'TOTAL_IMAGES'=>strval($total_images),'TOTAL'=>strval($total_videos+$total_images)));
+		$tpl=do_template('BLOCK_MAIN_GALLERY_EMBED',array('_GUID'=>'b7b969c8fe8c398dd6e3af7ee06717ea','DAYS'=>$_days,'SORT'=>$sort,'BLOCK_PARAMS'=>block_params_arr_to_str($map),'RESULTS_BROWSER'=>$results_browser,'TITLE'=>$title,'CAT'=>$cat,'IMAGES'=>$entries,'MAX'=>strval($max),'ZONE'=>$zone,'TOTAL_VIDEOS'=>strval($total_videos),'TOTAL_IMAGES'=>strval($total_images),'TOTAL'=>strval($total_videos+$total_images)));
 		return $tpl;
 	}
 

@@ -96,6 +96,8 @@ class Hook_fields_reference
 	{
 		if (is_object($ev)) return $ev;
 
+		if ($ev=='') return new ocp_tempcode();
+
 		require_code('content');
 		
 		list($title)=content_get_details('catalogue_entry',$ev);

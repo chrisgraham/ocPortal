@@ -71,11 +71,9 @@ function block_params_str_to_arr($_map)
  */
 function block_signature_check($allowed,$used)
 {
-	if (count($allowed)!=count($used)) return false;
-	
 	foreach ($used as $key=>$val)
 	{
-		if (preg_match('#^'.$allowed[$key].'$#',$val)==0) return false;
+		if ((!isset($allowed[$key])) || (preg_match('#^'.$allowed[$key].'$#',$val)==0))
 	}
 
 	return true;

@@ -180,13 +180,7 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 	$allow_emails=post_param_integer('allow_emails',0); // For default privacy, default off
 	$allow_emails_from_staff=post_param_integer('allow_emails_from_staff',0); // For default privacy, default off
 	require_code('ocf_groups');
-	if (get_value('sep_cpf_join_setting')==='1')
-	{
-		$custom_fields=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true),NULL,NULL,NULL,NULL,NULL,NULL,0,true);
-	} else
-	{
-		$custom_fields=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true),NULL,NULL,NULL,1);
-	}
+	$custom_fields=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true),NULL,NULL,NULL,NULL,NULL,NULL,0,true);
 	$actual_custom_fields=ocf_read_in_custom_fields($custom_fields);
 	$groups=ocf_get_all_default_groups(true);
 	$additional_group=post_param_integer('additional_group',-1);
@@ -603,29 +597,17 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 
 	if (is_null($groups)) $groups=is_null($member_id)?ocf_get_all_default_groups(true):$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
 
-	if (get_value('sep_cpf_join_setting')==='1')
-	{
-		$_custom_fields=ocf_get_all_custom_fields_match(
-			$groups,
-			($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'view_any_profile_field')))?NULL:1, // public view
-			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
-			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
-			NULL,
-			NULL,
-			NULL,
-			0,
-			$mini_mode?true:NULL // show on join form
-		);
-	} else
-	{
-		$_custom_fields=ocf_get_all_custom_fields_match(
-			$groups,
-			($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'view_any_profile_field')))?NULL:1, // public view
-			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
-			($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
-			$mini_mode?1:NULL // required
-		);
-	}
+	$_custom_fields=ocf_get_all_custom_fields_match(
+		$groups,
+		($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'view_any_profile_field')))?NULL:1, // public view
+		($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
+		($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
+		NULL,
+		NULL,
+		NULL,
+		0,
+		$mini_mode?true:NULL // show on join form
+	);
 	$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
 	$field_groups=array();
 	require_code('fields');
@@ -875,6 +857,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			{
 				if (get_page_name()!='admin_ocf_join')
 				{
+					require_code('notifications');
 					dispatch_notification('ocf_password_changed',NULL,do_lang('PASSWORD_CHANGED_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($member_id),NULL,2);
 				}
 			}
@@ -1055,12 +1038,8 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 		'cf_order'=>$order,
 		'cf_only_group'=>$only_group,
 		'cf_type'=>$type,
+		'cf_show_on_join_form'=>$show_on_join_form
 	);
-
-	if (get_value('sep_cpf_join_setting')==='1')
-	{
-		$map['cf_show_on_join_form']=$show_on_join_form;
-	}
 
 	$GLOBALS['FORUM_DB']->query_update('f_custom_fields',$map,array('id'=>$id),'',1);
 

@@ -76,7 +76,7 @@ function _deldir_contents($dir,$default_preserve=false,$just_files=false)
 			{
 				if ($entryname=='index.html') continue;
 				if ($entryname[0]=='.') continue;
-				if (in_array(str_replace(get_file_base().'/','',$dir).'/'.$entryname,array('uploads/banners/advertise_here.png','uploads/banners/donate.png','uploads/banners/hosting.png','themes/map.ini','themes/default')))
+				if (in_array(str_replace(get_file_base().'/','',$dir).'/'.$entryname,array('uploads/banners/advertise_here.png','uploads/banners/donate.png','themes/map.ini','themes/default')))
 					continue;
 			}
 			if ((is_dir($dir.'/'.$entryname)) && ($entryname!='.') && ($entryname!='..'))

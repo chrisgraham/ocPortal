@@ -34,7 +34,7 @@ function do_netlink($redir_url='')
 		if ((strpos($redir_url,chr(10))!==false) || (strpos($redir_url,chr(13))!==false))
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 		header('Location: '.$redir_url);
-		return do_template('HTML_REFRESH',array('_GUID'=>'34bf050272e3ed0f0be6a3f3206b36b9','URL'=>$redir_url));
+		exit();
 	}
 
 	// Ok we're displaying a netlink, which will be dumped right into the body of the reading site

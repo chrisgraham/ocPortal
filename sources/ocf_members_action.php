@@ -459,12 +459,9 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 		'cf_show_in_posts'=>$show_in_posts,
 		'cf_show_in_post_previews'=>$show_in_post_previews,
 		'cf_order'=>$order,
-		'cf_only_group'=>$only_group
+		'cf_only_group'=>$only_group,
+		'cf_show_on_join_form'=>$show_on_join_form
 	);
-	if (get_value('sep_cpf_join_setting')==='1')
-	{
-		$map['cf_show_on_join_form']=$show_on_join_form;
-	}
 	$id=$GLOBALS['FORUM_DB']->query_insert('f_custom_fields',$map+array('cf_encrypted'=>$encrypted),true,true);
 	if (is_null($id)) $id=$GLOBALS['FORUM_DB']->query_insert('f_custom_fields',$map,true); // Still upgrading, cf_encrypted does not exist yet
 

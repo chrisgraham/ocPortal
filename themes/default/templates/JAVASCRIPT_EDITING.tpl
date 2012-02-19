@@ -37,7 +37,8 @@ function toggle_wysiwyg(name)
 			function(saving_cookies)
 			{
 				_toggle_wysiwyg(name,saving_cookies);
-			}
+			},
+			'{!REMEMBER_SETTING;}'
 		);
 		return false;
 	}
@@ -74,7 +75,7 @@ function _toggle_wysiwyg(name,saving_cookies)
 			}
 		}
 
-		if (all_empty)
+		if (all_empty{+START,IF,{$NOT,{$CONFIG_OPTION,eager_wysiwyg}}} || true{+END})
 		{
 			disable_wysiwyg(forms,so,so2,true);
 		} else

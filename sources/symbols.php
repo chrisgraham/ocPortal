@@ -228,7 +228,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IMG':
 				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0))
 				{
-					$value=find_theme_image($param[0],false,false,array_key_exists(2,$param)?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
+					$value=find_theme_image($param[0],((isset($param[3])) && ($param[3]=='1')),false,(array_key_exists(2,$param) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 				}
 				break;
 
@@ -304,16 +304,29 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$block_constraints=block_params_arr_to_str($_block_constraints);
 
 					// Store permissions
-					$GLOBALS['SITE_DB']->query_delete('temp_block_permissions',array(
+					$_auth_key=$GLOBALS['SITE_DB']->query_select('temp_block_permissions',array('id','p_time'),array(
 						'p_session_id'=>get_session_id(),
 						'p_block_constraints'=>$block_constraints,
 					),'',1);
-					$auth_key=$GLOBALS['SITE_DB']->query_insert('temp_block_permissions',array(
-						'p_session_id'=>get_session_id(),
-						'p_block_constraints'=>$block_constraints,
-						'p_time'=>time(),
-					),true);
-				
+					if (!array_key_exists(0,$_auth_key))
+					{
+						$auth_key=$GLOBALS['SITE_DB']->query_insert('temp_block_permissions',array(
+							'p_session_id'=>get_session_id(),
+							'p_block_constraints'=>$block_constraints,
+							'p_time'=>time(),
+						),true);
+					} else
+					{
+						$auth_key=$_auth_key[0]['id'];
+						if (time()-$_auth_key[0]['p_time']>100)
+						{
+							$GLOBALS['SITE_DB']->query_update('temp_block_permissions',array('p_time'=>time()),array(
+								'p_session_id'=>get_session_id(),
+								'p_block_constraints'=>$block_constraints,
+							),'',1);
+						}
+					}
+			
 					$keep=symbol_tempcode('KEEP');
 					$value=find_script('snippet').'?snippet=block&auth_key='.urlencode(strval($auth_key)).'&block_map='.urlencode($param[0]).$keep->evaluate();
 				}

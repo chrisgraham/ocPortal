@@ -559,7 +559,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 	if ($semiparse_mode) // We have got to this point because we want to provide a special 'button' editing representation for these tags
 	{
-		$non_text_tags=array('section_controller','big_tab_controller','currency','block','contents','concepts','attachment','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
+		$non_text_tags=array('section_controller','big_tab_controller','currency','block','contents','concepts','flash','menu','email','reference','upload','page','exp_thumb','exp_ref','thumb','snapback','post','thread','topic','include','random','jumping','shocker'); // Also in JAVASCRIPT_EDITING.tpl
+		if (addon_installed('filedump')) $non_text_tags[]='attachment';
 		if (in_array($tag,$non_text_tags))
 		{
 			$params='';
@@ -888,6 +889,12 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if ($wml)
 			{
 				$temp_tpl=$embed;
+				break;
+			}
+
+			if (($semiparse_mode) && ($embed->evaluate()=='')) // This is probably some signal like a break, so show it in Comcode form
+			{
+				$temp_tpl=make_string_tempcode('<kbd class="ocp_keep" title="no_parse">[surround="'.comcode_escape(array_key_exists('param',$attributes)?$attributes['param']:'float_surrounder').'"]'.$embed->evaluate().'[/surround]</kbd>');
 				break;
 			}
 

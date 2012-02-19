@@ -51,17 +51,6 @@ class Hook_sw_banners
 		
 		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 
-		if (post_param_integer('have_default_banners_hosting',0)==0)
-		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'hosting'));
-			if (!is_null($test))
-			{
-				require_code('banners2');
-				delete_banner('hosting');
-				foreach (array_keys($usergroups) as $id)
-					$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'hosting-submit','zone_name'=>'site','group_id'=>$id));
-			}
-		}
 		if (post_param_integer('have_default_banners_donation',0)==0)
 		{
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'donate'));

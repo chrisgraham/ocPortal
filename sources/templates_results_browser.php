@@ -90,7 +90,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 		// Link to first
 		if ($start>0)
 		{
-			$url_array=array('page'=>'_SELF','start'=>NULL);
+			$url_array=array('page'=>'_SELF',$start_name=>NULL);
 			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
 			$part->attach(do_template('RESULTS_BROWSER_CONTINUE_FIRST',array('TITLE'=>$title,'P'=>strval(1),'FIRST_URL'=>$cat_url)));
 		}

@@ -197,7 +197,7 @@ class Module_awards
 		foreach ($rows as $myrow)
 		{
 			require_code('content');
-			list(,,,$award_content_row)=content_get_details($myrow['content_id'],$info);
+			$award_content_row=content_get_row($myrow['content_id'],$info);
 
 			if (!is_null($award_content_row))
 			{

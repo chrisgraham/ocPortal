@@ -1,4 +1,0 @@
-[title]Submit site for hosting[/title]
-
-[b]This is a default {$BRAND_NAME} page and should be edited as necessary.[/b]
-

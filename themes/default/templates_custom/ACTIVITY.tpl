@@ -14,9 +14,9 @@
 	{+END}
 
 	<!--
-	{+START,IF_EMPTY,{MEMPIC}}
-		<img src="{$THUMBNAIL*,{$IMG,ocf_default_avatars/default_set/ocp_fanatic},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
-	{+END}
+	{+START,IF_EMPTY,{MEMPIC}}{+START,IF_NON_EMPTY,{$IMG,ocf_default_avatars/default_set/ocp_fanatic,0,,1}}
+		<img src="{$THUMBNAIL*,{$IMG,ocf_default_avatars/default_set/ocp_fanatic,0,,1},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
+	{+END}{+END}
 	{+START,IF_NON_EMPTY,{MEMPIC}}
 		<img src="{$THUMBNAIL*,{MEMPIC},36x36,addon_avatar_normalise,,,pad,both,#FFFFFF00}" />
 	{+END}

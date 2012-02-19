@@ -258,13 +258,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array('g_is_presented_at_install'=>1));
 		if (!is_null($test)) $additional_group=$test;
 	}
-	if (get_value('sep_cpf_join_setting')==='1')
-	{
-		$custom_fields=ocf_get_all_custom_fields_match($groups,NULL,NULL,NULL,NULL,NULL,NULL,0,true);
-	} else
-	{
-		$custom_fields=ocf_get_all_custom_fields_match($groups,NULL,NULL,NULL,1);
-	}
+	$custom_fields=ocf_get_all_custom_fields_match($groups,NULL,NULL,NULL,NULL,NULL,NULL,0,true);
 	$actual_custom_fields=ocf_read_in_custom_fields($custom_fields);
 
 	// Check that the given address isn't already used (if one_per_email_address on)

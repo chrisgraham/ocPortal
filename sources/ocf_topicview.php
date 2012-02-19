@@ -172,13 +172,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		}
 
 		// Any custom fields to show?
-		if (get_value('sep_cpf_join_setting')==='1')
-		{
-			$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,NULL,NULL,0,true);
-		} else
-		{
-			$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,1);
-		}
+		$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,NULL,NULL,0,true);
 
 		// Usergroup
 		$post['primary_group']=$primary_group;
@@ -204,7 +198,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 	}
 	elseif ($_postdetails['p_poster']==$GLOBALS['OCF_DRIVER']->get_guest_id())
 	{
-		if (($_postdetails['p_poster_name_if_guest']==do_lang('SYSTEM')) && (addon_installed('ocf_member_avatars')))
+		if ($_postdetails['p_poster_name_if_guest']==do_lang('SYSTEM'))
 		{
 			$post['poster_avatar']=find_theme_image('ocf_default_avatars/default_set/ocp_fanatic',true);
 		}

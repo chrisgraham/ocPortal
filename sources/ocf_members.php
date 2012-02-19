@@ -139,10 +139,7 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
 		if (!is_null($show_in_posts)) $where.=' AND cf_show_in_posts='.strval((integer)$show_in_posts);
 		if (!is_null($show_in_post_previews)) $where.=' AND cf_show_in_post_previews='.strval((integer)$show_in_post_previews);
 		if ($special_start==1) $where.=' AND tx.text_original LIKE \''.db_encode_like('ocp_%').'\'';
-		if (get_value('sep_cpf_join_setting')==='1')
-		{
-			if (!is_null($show_on_join_form)) $where.=' AND cf_show_on_join_form='.strval((integer)$show_on_join_form);
-		}
+		if (!is_null($show_on_join_form)) $where.=' AND cf_show_on_join_form='.strval((integer)$show_on_join_form);
 
 		global $TABLE_LANG_FIELDS;
 		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate tx ON (tx.id=f.cf_name AND '.db_string_equal_to('tx.language',get_site_default_lang()).') '.$where.' ORDER BY cf_order',NULL,NULL,false,false,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['f_custom_fields']:array());

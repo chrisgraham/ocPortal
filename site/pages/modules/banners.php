@@ -67,7 +67,6 @@ class Module_banners
 
 		deldir_contents(get_custom_file_base().'/uploads/banners',true);
 
-		delete_menu_item_simple('_SELF:hosting-submit');
 		//delete_menu_item_simple('_SEARCH:donate');
 	}
 	
@@ -112,17 +111,14 @@ class Module_banners
 			$GLOBALS['SITE_DB']->create_index('banners','bvalidated',array('validated'));
 
 			$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>'','name'=>'advertise_here','the_type'=>2,'img_url'=>'data/images/advertise_here.png','caption'=>lang_code_to_default_content('ADVERTISE_HERE',true,1),'campaign_remaining'=>0,'site_url'=>get_base_url().'/site/index.php?page=advertise','hits_from'=>0,'views_from'=>0,'hits_to'=>0,'views_to'=>0,'importance_modulus'=>10,'notes'=>'Provided as default. This is a default banner (it shows when others are not available).','validated'=>1,'add_date'=>time(),'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'b_type'=>'','expiry_date'=>NULL,'edit_date'=>NULL));
-			$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>'','name'=>'hosting','the_type'=>0,'img_url'=>'data/images/hosting.png','caption'=>lang_code_to_default_content('HOSTING',true,1),'campaign_remaining'=>0,'site_url'=>get_base_url().'/site/index.php?page=hosting-submit','hits_from'=>0,'views_from'=>0,'hits_to'=>0,'views_to'=>0,'importance_modulus'=>32,'notes'=>'Provided as default.','validated'=>1,'add_date'=>time(),'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'b_type'=>'','expiry_date'=>NULL,'edit_date'=>NULL));
 			$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>'','name'=>'donate','the_type'=>0,'img_url'=>'data/images/donate.png','caption'=>lang_code_to_default_content('DONATION',true,1),'campaign_remaining'=>0,'site_url'=>get_base_url().'/site/index.php?page=donate','hits_from'=>0,'views_from'=>0,'hits_to'=>0,'views_to'=>0,'importance_modulus'=>30,'notes'=>'Provided as default.','validated'=>1,'add_date'=>time(),'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'b_type'=>'','expiry_date'=>NULL,'edit_date'=>NULL));
 			$banner_a='advertise_here';
-			$banner_b='hosting';
 			$banner_c='donate';
 		
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 			{
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'banners','category_name'=>$banner_a,'group_id'=>$group_id));
-				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'banners','category_name'=>$banner_b,'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'banners','category_name'=>$banner_c,'group_id'=>$group_id));
 			}
 
@@ -135,7 +131,6 @@ class Module_banners
 
 			add_config_option('ADD_BANNER','points_ADD_BANNER','integer','return addon_installed(\'points\')?\'0\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
-			add_menu_item_simple('collab_website',NULL,'HOSTING','_SELF:hosting-submit');
 			//add_menu_item_simple('main_website',NULL,'DONATE','_SEARCH:donate');
 		}
 

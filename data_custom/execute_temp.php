@@ -67,36 +67,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$myfile=fopen(get_file_base().'/data_custom/notifications.csv','rt');
-	fgetcsv($myfile);
-	$addons=array();
-	$addons_custom=array();
-	while (($row=fgetcsv($myfile))!==false)
-	{
-		$addon=$row[0];
-		$hook=$row[3];
-		if (strpos($row[1],'_custom')===false)
-			$addons[$addon][]=$hook;
-		else
-			$addons_custom[$addon][]=$hook;
-	}
-	foreach ($addons as $addon=>$hooks)
-	{
-		echo 'sources/hooks/systems/addon_registry/'.$addon.'.php'."\n";
-		foreach ($hooks as $hook)
-		{
-			echo "			'sources/hooks/systems/notifications/".$hook.".php',"."\n";
-		}
-		echo "\n\n";
-	}
-	foreach ($addons_custom as $addon=>$hooks)
-	{
-		echo $addon."\n".'========'."\n";
-		foreach ($hooks as $hook)
-		{
-			echo "# # sources/hooks/systems/notifications/".$hook.".php"."\n";
-		}
-		echo "\n\n";
-	}
-	fclose($myfile);
+	require_code('images');
+	convert_image(get_custom_file_base().'/uploads/galleries/test.jpeg',get_custom_file_base().'/uploads/galleries/test2.jpeg',-1,-1,2048,false,NULL,true);
 }

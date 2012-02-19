@@ -124,10 +124,8 @@ class Hook_addon_registry_banners
 			'sources/hooks/systems/content_meta_aware/banner_type.php',
 			'data/images/advertise_here.png',
 			'data/images/donate.png',
-			'data/images/hosting.png',
 			'site/pages/comcode/EN/advertise.txt',
 			'site/pages/comcode/EN/donate.txt',
-			'site/pages/comcode/EN/hosting-submit.txt',
 		);
 	}
 

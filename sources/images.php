@@ -817,7 +817,14 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	}
 	elseif (($ext2=='jpg') || ($ext2=='jpeg'))
 	{
-		$test=@imagejpeg($dest,$to);
+		$jpeg_quality=get_value('jpeg_quality');
+		if ($jpeg_quality!==NULL)
+		{
+			$test=@imagejpeg($dest,$to,intval($jpeg_quality));
+		} else
+		{
+			$test=@imagejpeg($dest,$to);
+		}
 		if (!$test)
 		{
 			if ($exit_on_error) warn_exit(do_lang_tempcode('ERROR_IMAGE_SAVE',@strval($php_errormsg)));

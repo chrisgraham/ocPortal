@@ -451,7 +451,7 @@ function ModalWindow()
 				case "iframe":
 					var iframe = this.element("iframe", {
 						'frameBorder': "0",
-						'scrolling': (this.scrollbars === false)?"no":"auto",
+						'scrolling': "no",
 						'title': "",
 						'name': "overlay_iframe",
 						'id': "overlay_iframe",
@@ -495,6 +495,9 @@ function ModalWindow()
 						if ((iframe) && (iframe.contentWindow) && (iframe.contentWindow.document) && (iframe.contentWindow.document.body))
 						{
 							iframe.contentWindow.document.body.style.background='transparent';
+
+							// Allow scrolling, if we want it
+							iframe.scrolling=(_this.scrollbars === false)?"no":"auto";
 
 							// Remove fixed width
 							var body_inner=iframe.contentWindow.document.getElementById('body_inner');

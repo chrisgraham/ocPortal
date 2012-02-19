@@ -402,12 +402,9 @@ function delete_expired_sessions_or_recover($member=NULL)
 		// Get back to prior session if there was one
 		if ($member!==NULL)
 		{
-			if (get_value('allowed_shared_usernames')!=='1') // Only if we're not allowing multiple people to share the same username
+			if (($row['the_user']==$member) && ((get_option('ip_strict_for_sessions')=='0') || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
 			{
-				if (($row['the_user']==$member) && ((get_option('ip_strict_for_sessions')=='0') || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
-				{
-					$new_session=$_session;
-				}
+				$new_session=$_session;
 			}
 		}
 	}

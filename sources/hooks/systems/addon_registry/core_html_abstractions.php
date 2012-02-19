@@ -75,7 +75,6 @@ class Hook_addon_registry_core_html_abstractions
 		return array(
 
 			'sources/hooks/systems/addon_registry/core_html_abstractions.php',
-			'HTML_REFRESH.tpl',
 			'JS_REFRESH.tpl',
 			'META_REFRESH_LINE.tpl',
 			'ANCHOR.tpl',
@@ -110,7 +109,6 @@ class Hook_addon_registry_core_html_abstractions
 				'META_REFRESH_LINE.tpl'=>'meta_refresh_line',
 				'HYPERLINK_POPUP_WINDOW.tpl'=>'hyperlink_popup_window',
 				'BASIC_HTML_WRAP.tpl'=>'basic_html_wrap',
-				'HTML_REFRESH.tpl'=>'html_refresh',
 				'FLOATER.tpl'=>'floater',
 				'HYPERLINK.tpl'=>'hyperlink',
 				'HYPERLINK_BUTTON.tpl'=>'hyperlink_button',
@@ -248,23 +246,6 @@ class Hook_addon_registry_core_html_abstractions
 				do_lorem_template('BASIC_HTML_WRAP',array(
 					'TITLE'=>lorem_phrase(),
 					'CONTENT'=>lorem_phrase(),
-						)
-			),NULL,'',true),
-		);
-	}
-	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
-	function tpl_preview__html_refresh()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('HTML_REFRESH',array(
-					'URL'=>placeholder_url(),
 						)
 			),NULL,'',true),
 		);

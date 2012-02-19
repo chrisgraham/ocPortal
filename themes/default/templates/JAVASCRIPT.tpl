@@ -1837,7 +1837,7 @@ function addEventListenerAbstract(element,the_event,func,capture)
 {
 	if(element)
 	{
-		if ((element==window) && (the_event=='load') && (pageLoaded))
+		if ((element==window) && ((the_event=='load') || (the_event=='real_load')) && (pageLoaded))
 		{
 			func();
 			return true;

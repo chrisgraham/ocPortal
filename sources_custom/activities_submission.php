@@ -21,6 +21,7 @@
 function activities_addon_syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too)
 {
 	require_code('activities');
+	require_lang('activities');
 
 	if ((get_db_type()=='xml') && (get_param_integer('keep_testing_logging',0)!=1)) return;
 

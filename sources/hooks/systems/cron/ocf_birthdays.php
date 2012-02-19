@@ -31,6 +31,7 @@ class Hook_cron_ocf_birthdays
 		{
 			set_long_value('last_birthday_day',$this_birthday_day);
 
+			require_code('ocf_general');
 			$_birthdays=ocf_find_birthdays();
 			$birthdays=new ocp_tempcode();
 			foreach ($_birthdays as $_birthday)

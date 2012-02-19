@@ -4,16 +4,18 @@
 
 {$CSS_INCLUDE,quizzes}
 
-{+START,BOX,,,curved}
-	<div{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
-		{START_TEXT}
-	</div>
+{+START,IF_NON_EMPTY,{START_TEXT}}
+	{+START,BOX,,,curved}
+		<div{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
+			{START_TEXT}
+		</div>
+	{+END}
+
+	<hr class="spaced_rule" />
 {+END}
 
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,quiz,{ID}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}<br />{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
-
-<hr class="spaced_rule" />
 
 {+START,IF_NON_EMPTY,{TIMEOUT}}
 	<script type="text/javascript">// <![CDATA[

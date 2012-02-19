@@ -139,10 +139,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_FIELD_TYPE'),'type',$type_list));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('REQUIRED'),do_lang_tempcode('DESCRIPTION_REQUIRED'),'required',$required==1));
-		if (get_value('sep_cpf_join_setting')==='1')
-		{
-			$fields->attach(form_input_tick(do_lang_tempcode('SHOW_ON_JOIN_FORM'),do_lang_tempcode('DESCRIPTION_SHOW_ON_JOIN_FORM'),'show_on_join_form',$show_on_join_form==1));
-		}
+		$fields->attach(form_input_tick(do_lang_tempcode('SHOW_ON_JOIN_FORM'),do_lang_tempcode('DESCRIPTION_SHOW_ON_JOIN_FORM'),'show_on_join_form',$show_on_join_form==1));
 		$orderlist=new ocp_tempcode();
 		$num_cpfs=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','COUNT(*)');
 		if ($name=='') $num_cpfs++;
@@ -213,8 +210,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			do_lang_tempcode('PUBLIC_VIEW'),
 			do_lang_tempcode('REQUIRED'),
 		);
-		if (get_value('sep_cpf_join_setting')==='1')
-			$fh[]=do_lang_tempcode('SHOW_ON_JOIN_FORM');
+		$fh[]=do_lang_tempcode('SHOW_ON_JOIN_FORM');
 		//$fh[]=do_lang_tempcode('SHOW_IN_POSTS');
 		//$fh[]=do_lang_tempcode('SHOW_IN_POST_PREVIEWS');
 		$fh[]=do_lang_tempcode('ORDER');
@@ -286,8 +282,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			$fr[]=($row['cf_owner_set']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$fr[]=($row['cf_public_view']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$fr[]=($row['cf_required']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
-			if (get_value('sep_cpf_join_setting')==='1')
-				$fr[]=($row['cf_show_on_join_form']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
+			$fr[]=($row['cf_show_on_join_form']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			//$fr[]=($row['cf_show_in_posts']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			//$fr[]=($row['cf_show_in_post_previews']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$fr[]=protect_from_escaping($orderer);
@@ -341,20 +336,14 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		$show_in_post_previews=$myrow['cf_show_in_post_previews'];
 		$order=$myrow['cf_order'];
 		$only_group=$myrow['cf_only_group'];
-		if (get_value('sep_cpf_join_setting')==='1')
+		if (!array_key_exists('cf_show_on_join_form',$myrow))
 		{
-			if (!array_key_exists('cf_show_on_join_form',$myrow))
-			{
-				$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_show_on_join_form','BINARY',0);
-				$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields SET cf_show_on_join_form=cf_required');
-				$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('*'),array('id'=>intval($id)));
-				$myrow=$rows[0];
-			}
-			$show_on_join_form=$myrow['cf_show_on_join_form'];
-		} else
-		{
-			$show_on_join_form=0;
+			$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_show_on_join_form','BINARY',0);
+			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields SET cf_show_on_join_form=cf_required');
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('*'),array('id'=>intval($id)));
+			$myrow=$rows[0];
 		}
+		$show_on_join_form=$myrow['cf_show_on_join_form'];
 
 		$fields=$this->get_form_fields($name,$description,$default,$public_view,$owner_view,$owner_set,$encrypted,$type,$required,$show_on_join_form,$show_in_posts,$show_in_post_previews,$order,$only_group,$myrow['cf_locked']);
 

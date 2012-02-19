@@ -432,43 +432,57 @@ function delete_quiz($id)
  */
 function get_quizz_data_for_csv($quiz_id)
 {
-	$questions_row	=	$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
+	$questions_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
 
-	//Create header array
-	$header				=	array(do_lang('MEMBER_NAME'), do_lang('MEMBER_EMAIL'));
-	$data					=	array();
-	$question_ids		=	array();
-	$member_answers	=	array();
+	$csv_data=array();
 
-	foreach($questions_row as $qstn_id=>$question)
-		$question_ids[$question['id']]	=	$question['q_question_text'];
+	// Create header array
+	$header=array(do_lang('MEMBER_NAME'),do_lang('MEMBER_EMAIL'));
 
-	//Store all entries and member answers of this quiz in to an array		
-	$answers_row	=	$GLOBALS['SITE_DB']->query('SELECT t1.*,t2.q_member,t3.q_answer_text FROM '.get_table_prefix().'quiz_entry_answer t1,'.get_table_prefix().'quiz_entries t2,'.get_table_prefix().'quiz_question_answers as t3 WHERE t2.id=t1.q_entry AND t1.q_answer=t3.id AND t2.q_quiz='.strval($quiz_id).' ORDER BY q_order');
-
-	$answers=array();
-
-	foreach($answers_row as $id=>$answer_entry)
+	// Get all entries and member answers of this quiz in to an array
+	$member_answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_entry_answer t1 JOIN '.get_table_prefix().'quiz_entries t2 ON t2.id=t1.q_entry JOIN '.get_table_prefix().'quiz_questions t3 ON t3.id=t1.q_question',array('t2.id AS entry_id','q_question','q_member','q_answer'),array('t2.q_quiz'=>$quiz_id),'ORDER BY q_order');
+	$member_answers=array();
+	foreach ($member_answer_rows as $id=>$answer_entry)
 	{
-		$answers[$answer_entry['q_member']][$answer_entry['q_question']]	=	get_translated_text($answer_entry['q_answer_text']);
+		$member_entry_key=strval($answer_entry['q_member']).'_'.strval($answer_entry['entry_id']);
+		$question_id=$answer_entry['q_question'];
+		if (!isset($member_answers[$member_entry_key][$question_id])) $member_answers[$member_entry_key][$question_id]=array();
+		$member_answers[$member_entry_key][$question_id]=$answer_entry['q_answer'];
 	}
-	
-	foreach($answers as $member=>$answer)
-	{
-		$member_name		=	$GLOBALS['FORUM_DRIVER']->_get_username($member);
-		$member_email		=	$GLOBALS['FORUM_DRIVER']->_get_member_email_address($member);
 
-		$member_ans			=	array('Member'=>$member_name,'Email'=>$member_email);
-		foreach($question_ids as $qstn_id=>$qstn_text)
+	// Proper answers, for non-free-form questions
+	$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers a JOIN '.get_table_prefix().'quiz_questions q ON q.id=a.q_question',array('q_answer_text','q_question','a.id'),array('q_quiz'=>$quiz_id),'ORDER BY id');
+
+	// Loop over it all
+	foreach ($member_answers as $member_bits=>$member_answers)
+	{
+		list($member,)=explode('_',$member_bits);
+		$member_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
+		$member_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
+
+		$member_answers_csv=array('Member'=>$member_name,'Email'=>$member_email);
+		foreach ($questions_rows as $i=>$question_row)
 		{
-			$member_ans[get_translated_text($qstn_text)]	=	array_key_exists($qstn_id,$answer)?$answer[$qstn_id]:'';
+			$member_answer=array_key_exists($question_row['id'],$member_answers)?$member_answers[$question_row['id']]:'';
+
+			if (is_numeric($member_answer))
+			{
+				foreach ($answer_rows as $question_answer_row)
+				{
+					if (($question_answer_row['id']==intval($member_answer)) && ($question_answer_row['q_question']==$question_row['id']))
+					{
+						$member_answer=get_translated_text($question_answer_row['q_answer_text']);
+					}
+				}
+			}
+
+			$member_answers_csv[integer_format($i+1).') '.get_translated_text($question_row['q_question_text'])]=$member_answer;
 		}
 
-		$data[]				=	$member_ans;
+		$csv_data[]=$member_answers_csv;
 	}
-	//echo "<pre>";print_r($answers);exit();
 
-	return $data;
+	return $csv_data;
 }
 
 /**

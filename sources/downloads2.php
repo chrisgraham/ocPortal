@@ -405,6 +405,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 				case 'html':
 				case 'xml':
 				case 'doc':
+				case 'xls':
 					break; // Continue through to download good stuff
 
 				default:
@@ -592,6 +593,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 			$mash=str_replace('&apos;','\'',str_replace(' false ',' ',str_replace(' true ',' ',@html_entity_decode(preg_replace('#\<[^\<\>]*\>#',' ',$data),ENT_QUOTES,get_charset()))));
 			$mash=preg_replace('#Error : Bad \w+#','',$mash);
 			break;
+		case 'xls':
 		case 'doc':
 		case 'ppt':
 		case 'hlp':
@@ -603,10 +605,12 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 			// Now try and extract strings
 			$matches=array();
 			$count=preg_match_all('#([a-zA-Z0-9\'\-\x91\x92\x93\x94\s]+)#',$data,$matches);
+			$min_length=10;
+			if ($extension=='xls') $min_length=4;
 			for ($i=0;$i<$count;$i++)
 			{
 				$x=$matches[1][$i];
-				if ((strlen($x)>10) && ($x!=strtoupper($x)) && ($x!='Microsoft Word Document') && ($x!='WordDocument') && ($x!='SummaryInformation') && ($x!='DocumentSummaryInformation'))
+				if ((strlen($x)>$min_length) && ($x!=strtoupper($x)) && ($x!='Microsoft Word Document') && ($x!='WordDocument') && ($x!='SummaryInformation') && ($x!='DocumentSummaryInformation'))
 					$mash.=' '.$matches[1][$i];
 			}
 			break;

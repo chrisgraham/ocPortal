@@ -117,13 +117,13 @@ if ($type=='auto_probe')
 						if (substr($file,-4)=='.php')
 						{
 							$matches=array();
-							if (preg_match('#\n(\t*)function install\([^\n]*\)\n\\1\{\n(.*)\n\\1\}#sU',$old,$matches)!=0)
+							if (preg_match('#\n(\t*)function install(\_ocf)?\([^\n]*\)\n\\1\{\n(.*)\n\\1\}#sU',$old,$matches)!=0)
 							{
-								$old_install_code=$matches[2];
+								$old_install_code=$matches[3];
 								$new_install_code='';
-								if (preg_match('#\n(\t*)function install\([^\n]*\)\n\\1\{\n(.*)\n\\1\}#sU',$new,$matches)!=0)
+								if (preg_match('#\n(\t*)function install(\_ocf)?\([^\n]*\)\n\\1\{\n(.*)\n\\1\}#sU',$new,$matches)!=0)
 								{
-									$new_install_code=$matches[2];
+									$new_install_code=$matches[3];
 								}
 								if ($new_install_code!=$old_install_code)
 								{

@@ -52,6 +52,43 @@ function show_block_html(new_html,target_div,append)
 	setInnerHTML(target_div,new_html,append);
 }
 
+function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params)
+{
+	var _links=get_elements_by_class_name(block,'ajax_block_wrapper_links');
+	var links=[];
+	for (var i=0;i<_links.length;i++)
+	{
+		var more_links=_links[i].getElementsByTagName('a');
+		for (var j=0;j<more_links.length;j++)
+		{
+			links.push(more_links[j]);
+		}
+	}
+	for (var i=0;i<links.length;i++)
+	{
+		links[i].href;
+		links[i].onclick=function()
+		{
+			var url_stub='';
+			for (var j=0;j<look_for.length;j++)
+			{
+				var matches=this.href.match(new RegExp('[&\?]'+look_for[j]+'=([^&]*)'));
+				if (matches)
+				{
+					url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
+					url_stub+=look_for[j]+='='+matches[1];
+				}
+			}
+			for (var j in extra_params)
+			{
+				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
+				url_stub+=j+'='+window.encodeURIComponent(extra_params[j]);
+			}
+			return call_block(url_stem+url_stub,'',block,false);
+		}
+	}
+}
+
 /* Calls up a URL to check something, giving any 'feedback' as an error (or if just 'false' then returning false with no message) */
 function do_ajax_field_test(url,post)
 {

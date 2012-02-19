@@ -390,10 +390,10 @@ function install_ocf($upgrade_from=NULL)
 	if ((!is_null($upgrade_from)) && ($upgrade_from<8.0))
 	{
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_allow_emails_from_staff','BINARY');
+		$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_show_on_join_form','BINARY');
+		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields SET cf_show_on_join_form=cf_required');
 		delete_config_option('send_staff_message_post_validation');
 
-		$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_tracking');
-		$GLOBALS['FORUM_DB']->drop_if_exists('f_topic_tracking');
 		require_code('notifications');
 		$start=0;
 		do
@@ -415,6 +415,9 @@ function install_ocf($upgrade_from=NULL)
 			}
 		}
 		while (count($rows)==100);
+
+		$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_tracking');
+		$GLOBALS['FORUM_DB']->drop_if_exists('f_topic_tracking');
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<4.2))
 	{

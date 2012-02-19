@@ -446,7 +446,7 @@ class Module_admin_quiz
 			if (is_object($member_url)) $member_url=$member_url->evaluate();
 		}
 
-		return do_template('VIEW_SPACE_SCREEN',array('_GUID'=>'02b4dd6d52feaf3844e631e56395c4da','TITLE'=>$title,'TEXT'=>do_lang_tempcode('SURVEY_WAS_ENTERED_AS_FOLLOWS',escape_html($username),escape_html($member_url),escape_html($member_id)),'FIELDS'=>$fields));
+		return do_template('VIEW_SPACE_SCREEN',array('_GUID'=>'02b4dd6d52feaf3844e631e56395c4da','TITLE'=>$title,'TEXT'=>do_lang_tempcode('SURVEY_WAS_ENTERED_AS_FOLLOWS',escape_html($username),escape_html($member_url),escape_html($date)),'FIELDS'=>$fields));
 	}
 
 }

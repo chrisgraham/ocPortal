@@ -586,7 +586,7 @@ function placeholder_emoticons()
  */
 function placeholder_avatar()
 {
-	return find_theme_image('ocf_default_avatars/default_set/airplane');
+	return find_theme_image('ocf_default_avatars/default_set/ocp_fanatic',true);
 }
 
 /**
@@ -876,7 +876,7 @@ function is_plain_text_template($temp_name)
 			substr($temp_name,-13) === '_FCOMCODEPAGE' ||
 			substr($temp_name,0,14)=='TRACKBACK_XML_' ||
 			$temp_name=='NEWSLETTER_DEFAULT' ||
-			$temp_name=='HTML_REFRESH' || $temp_name=='OPENSEARCH' ||
+			$temp_name=='OPENSEARCH' ||
 			substr($temp_name,0,5)=='OPML_' ||
 			substr($temp_name,0,5)=='ATOM_' || substr($temp_name,0,4)=='RSS_' ||
 			in_array($temp_name, get_text_templates())
