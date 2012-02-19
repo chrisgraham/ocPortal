@@ -45,7 +45,7 @@ class Hook_sw_ocf_forum
 		if (count($test)!=0)
 			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_FULL_EMOTICON_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_FULL_EMOTICON_SET'),'have_default_full_emoticon_set',array_key_exists('have_default_full_emoticon_set',$field_defaults)?($field_defaults['have_default_full_emoticon_set']=='1'):true));
 
-		$fields_l=array('im_aim','im_msn','im_yahoo','im_skype','interests','location','occupation');
+		$fields_l=array('im_aim','im_msn','im_jabber','im_yahoo','im_skype','interests','location','occupation','sn_google','sn_facebook','sn_twitter');
 		foreach ($fields_l as $field)
 		{
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));

@@ -530,10 +530,14 @@ function install_ocf($upgrade_from=NULL)
 
 		ocf_make_boiler_custom_field('SELF_DESCRIPTION');
 		//ocf_make_boiler_custom_field('im_aim');
-		ocf_make_boiler_custom_field('im_msn');
+		//ocf_make_boiler_custom_field('im_msn');
 		//ocf_make_boiler_custom_field('im_yahoo');
 		//ocf_make_boiler_custom_field('im_icq');
+		//ocf_make_boiler_custom_field('im_jabber');
 		ocf_make_boiler_custom_field('im_skype');
+		ocf_make_boiler_custom_field('sn_facebook');
+		ocf_make_boiler_custom_field('sn_google');
+		ocf_make_boiler_custom_field('sn_twitter');
 		ocf_make_boiler_custom_field('interests');
 		ocf_make_boiler_custom_field('location');
 		ocf_make_boiler_custom_field('occupation');
