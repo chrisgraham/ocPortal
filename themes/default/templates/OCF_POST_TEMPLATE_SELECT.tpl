@@ -2,5 +2,5 @@
 <select tabindex="{TABINDEX*}" id="post_template" name="post_template">
 	{LIST}
 </select>
-<input class="button_pageitem" type="submit" value="{!USE}" onclick="var element=form.elements['post']; var ins=form.elements['post_template'].value; insertTextbox(form.elements['post'],ins.replace(/\\n/g,'\n'),null,true,escape_html(ins).replace(/\\n/g,'xxxx&lt;br /&gt;')); return false;" />
+<input class="button_pageitem" type="submit" value="{!USE}" onclick="var element=form.elements['post']; var ins=form.elements['post_template'].value; insertTextbox(form.elements['post'],ins.replace(/\\n/g,'\n'),null,true,escape_html(ins).replace(/\\n/g,'&lt;br /&gt;')); return false;" />
 

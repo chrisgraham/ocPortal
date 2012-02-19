@@ -1293,7 +1293,8 @@ class forum_driver_ocf extends forum_driver_base
 			{
 				require_code('ocf_members_action');
 				require_code('ocf_members_action2');
-				if (trim(post_param('email_address',''))=='')
+				$completion_form_submitted=(trim(post_param('email_address',''))!='');
+				if ((!$completion_form_submitted) && (get_value('no_finish_profile')!=='1')) // UI
 				{
 					@ob_end_clean();
 					if (!function_exists('do_header')) require_code('site');

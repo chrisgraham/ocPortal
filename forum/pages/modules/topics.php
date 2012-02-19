@@ -1179,6 +1179,12 @@ class Module_topics
 			$idlist=ocfilter_to_idlist_using_db($template['t_forum_multi_code'],'id','f_forums','f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
 			if (in_array($forum_id,$idlist))
 			{
+				if (strpos($template['t_text'],'{')!==false)
+				{
+					require_code('tempcode_compiler');
+					$e=template_to_tempcode($template['t_text']);
+					$template['t_text']=$e->evaluate();
+				}
 				$apply[]=array($template['t_title'],$template['t_text'],$template['t_use_default_forums']);
 			}
 		}
