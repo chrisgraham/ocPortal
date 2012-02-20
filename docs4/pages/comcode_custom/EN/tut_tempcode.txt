@@ -619,6 +619,10 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<td>{$AWARD_ID,2}</td>
 		<td>Find the content ID assigned to the given award</td>
 	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$NOTIFICATIONS_ENABLED,download,3}</td>
+		<td>Find whether notifications are enabled for something</td>
+	</tr>
 </table>
 [/html]
 

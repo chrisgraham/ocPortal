@@ -35,7 +35,16 @@
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
 		<div class="non_accessibility_redundancy">
 			<div class="float_surrounder">
-				{BUTTONS}
+				<div class="ocf_screen_buttons">
+					{+START,IF_PASSED,ID}
+						{+START,INCLUDE,NOTIFICATION_BUTTONS}
+							NOTIFICATIONS_TYPE=ocf_forum
+							NOTIFICATIONS_ID={ID}
+							NOTIFICATIONS_PAGELINK={$PAGE_LINK,forum:topics:toggle_notifications_forum}
+						{+END}
+					{+END}
+					{BUTTONS}
+				</div>
 			</div>
 		</div>
 	{+END}
@@ -50,7 +59,16 @@
 {+START,IF_EMPTY,{TOPIC_WRAPPER}}
 	{+START,IF,{$VALUE_OPTION,disable_forum_dupe_buttons}}
 		<div class="float_surrounder">
-			{BUTTONS}
+			<div class="ocf_screen_buttons">
+				{+START,IF_PASSED,ID}
+					{+START,INCLUDE,NOTIFICATION_BUTTONS}
+						NOTIFICATIONS_TYPE=ocf_forum
+						NOTIFICATIONS_ID={ID}
+						NOTIFICATIONS_PAGELINK={$PAGE_LINK,forum:topics:toggle_notifications_forum}
+					{+END}
+				{+END}
+				{BUTTONS}
+			</div>
 		</div>
 	{+END}
 {+END}

@@ -76,6 +76,7 @@ class Hook_addon_registry_core_notifications
 
 			'sources/hooks/systems/addon_registry/core_notifications.php',
 			'sources/notifications.php',
+			'sources/notifications2.php',
 			'lang/EN/notifications.ini',
 			'sources/hooks/systems/cron/notification_digests.php',
 			'sources/hooks/systems/notifications/.htaccess',
@@ -85,6 +86,12 @@ class Hook_addon_registry_core_notifications
 			'themes/default/images/EN/pageitem/disable_notifications.png',
 			'themes/default/images/EN/pageitem/enable_notifications.png',
 			'sources/hooks/systems/profiles_tabs_edit/notifications.php',
+			'themes/default/css/notifications.css',
+			'JAVASCRIPT_NOTIFICATIONS.tpl',
+			'NOTIFICATIONS_MANAGE.tpl',
+			'NOTIFICATIONS_MANAGE_ADVANCED.tpl',
+			'NOTIFICATION_TYPES.tpl',
+			'NOTIFICATION_BUTTONS.tpl',
 		);
 	}
 

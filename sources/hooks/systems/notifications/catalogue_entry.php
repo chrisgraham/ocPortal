@@ -36,7 +36,17 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['catalogue_entry']=array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_catalogue_entry'));
+		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
+		foreach ($catalogues as $catalogue)
+		{
+			$catalogue_name=$catalogue['c_name'];
+			$nl=do_lang('NOTIFICATION_TYPE_catalogue_entry__'.$catalogue_name,NULL,NULL,NULL,NULL,false);
+			if (is_null($nl))
+			{
+				$nl=do_lang('NOTIFICATION_TYPE_catalogue_entry',get_translated_text($catalogue['c_title']));
+			}
+			$list['catalogue_entry__'.$catalogue_name]=array(do_lang('menus:CONTENT'),$nl);
+		}
 		return $list;
 	}
 

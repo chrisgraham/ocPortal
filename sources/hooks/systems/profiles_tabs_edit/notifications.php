@@ -47,10 +47,129 @@ class Hook_Profiles_Tabs_Edit_notifications
 
 		$order=100;
 
+		require_css('notifications');
+		require_code('notifications');
+		require_code('notifications2');
+
 		// UI fields
 		$fields=new ocp_tempcode();
 
-		$text=make_string_tempcode('TODO');
+		$__notification_types=array(
+			A_INSTANT_EMAIL=>'INSTANT_EMAIL',
+			A_INSTANT_PT=>'INSTANT_PT',
+			A_INSTANT_SMS=>'INSTANT_SMS',
+			A_DAILY_EMAIL_DIGEST=>'DAILY_EMAIL_DIGEST',
+			A_WEEKLY_EMAIL_DIGEST=>'WEEKLY_EMAIL_DIGEST',
+			A_MONTHLY_EMAIL_DIGEST=>'MONTHLY_EMAIL_DIGEST',
+		);
+		$_notification_types=array();
+		foreach ($__notification_types as $possible=>$ntype)
+		{
+			if (_notification_setting_available($possible,$member_id_of))
+			{
+				$_notification_types[$possible]=$ntype;
+			}
+		}
+
+		$notification_categories=array();
+		$hooks=find_all_hooks('systems','notifications');
+		foreach (array_keys($hooks) as $hook)
+		{
+			require_code('hooks/systems/notifications/'.$hook);
+			$ob=object_factory('Hook_Notification_'.$hook);
+			$_notification_codes=$ob->list_handled_codes();
+			foreach ($_notification_codes as $notification_code=>$notification_details)
+			{
+				if ($ob->member_could_potentially_enable($notification_code,$member_id_of))
+				{
+					$current_setting=notifications_setting($notification_code,NULL,$member_id_of);
+					$allowed_setting=$ob->allowed_settings($notification_code);
+
+					$notification_types=array();
+					foreach ($_notification_types as $possible=>$ntype)
+					{
+						$available=(($possible & $allowed_setting) != 0);
+						$notification_types[]=array(
+							'NTYPE'=>$ntype,
+							'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
+							'CHECKED'=>(post_param_integer('notification_'.$notification_code.'_'.$ntype,0)==1) || (($possible & $current_setting) != 0),
+							'RAW'=>strval($possible),
+							'AVAILABLE'=>$available,
+						);
+					}
+
+					if (!isset($notification_categories[$notification_details[0]]))
+					{
+						$notification_categories[$notification_details[0]]=array(
+							'NOTIFICATION_CATEGORY'=>$notification_details[0],
+							'NOTIFICATION_CODES'=>array(),
+						);
+					}
+					$notification_categories[$notification_details[0]]['NOTIFICATION_CODES'][]=array(
+						'NOTIFICATION_CODE'=>$notification_code,
+						'NOTIFICATION_LABEL'=>$notification_details[1],
+						'NOTIFICATION_TYPES'=>$notification_types,
+					);
+				}
+			}
+		}
+
+		// Sort labels
+		global $M_SORT_KEY;
+		$M_SORT_KEY='NOTIFICATION_LABEL';
+		ksort($notification_categories);
+		foreach (array_keys($notification_categories) as $i)
+		{
+			usort($notification_categories[$i]['NOTIFICATION_CODES'],'multi_sort');
+		}
+
+		// Save
+		if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST')
+		{
+			foreach ($notification_categories as $notification_category)
+			{
+				foreach ($notification_category['NOTIFICATION_CODES'] as $notification_code)
+				{
+					foreach ($notification_code['NOTIFICATION_TYPES'] as $notification_type)
+					{
+						$ntype=$notification_type['NTYPE'];
+						$new_setting=A_NA;
+						if (post_param_integer('notification_'.$notification_code['NOTIFICATION_CODE'].'_'.$ntype,0)==1)
+						{
+							$new_setting=$new_setting | intval($notification_type['RAW']);
+						}
+				
+						enable_notifications($notification_code['NOTIFICATION_CODE'],NULL,$member_id_of,$new_setting);
+					}
+				}
+			}
+		}
+
+		// Main UI...
+
+		$notification_types_titles=array();
+		foreach ($_notification_types as $possible=>$ntype)
+		{
+			$notification_types_titles[]=array(
+				'NTYPE'=>$ntype,
+				'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
+				'RAW'=>strval($possible),
+			);
+		}
+
+		$css_path=get_custom_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_cached/'.user_lang().'/global.css';
+		$color='FF00FF';
+		if (file_exists($css_path))
+		{
+			$tmp_file=file_get_contents($css_path);
+			$matches=array();
+			if (preg_match('#\nth[\s,][^\}]*\sbackground-color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
+			{
+				$color=$matches[1];
+			}
+		}
+
+		$text=do_template('NOTIFICATIONS_MANAGE',array('COLOR'=>$color,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_CATEGORIES'=>$notification_categories));
 
 		$javascript='';
 

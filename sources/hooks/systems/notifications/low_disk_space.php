@@ -24,7 +24,7 @@ class Hook_Notification_low_disk_space extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['low_disk_space']=array(do_lang('ERROR_OCCURRED'),do_lang('NOTIFICATION_TYPE_low_disk_space'));
+		$list['low_disk_space']=array(do_lang('ERRORS'),do_lang('NOTIFICATION_TYPE_low_disk_space'));
 		return $list;
 	}
 

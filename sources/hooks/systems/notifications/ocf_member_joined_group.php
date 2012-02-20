@@ -58,3 +58,5 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 		return $members;
 	}
 }
+
+//TODO: Categories

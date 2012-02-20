@@ -142,7 +142,6 @@ class Hook_addon_registry_ocf_forum
 			'OCF_WHISPER_CHOICE_SCREEN.tpl',
 			'OCF_WRAPPER.tpl',
 			'BLOCK_SIDE_OCF_PERSONAL_TOPICS.tpl',
-			'OCF_SCREEN_BUTTON_WRAP.tpl',
 			'OCF_TOPIC_POST_LAST_EDITED.tpl',
 			'OCF_FORUM_LIST_LINE.tpl',
 			'OCF_FORUM_TOPIC_LIST_LINE.tpl',
@@ -300,7 +299,6 @@ class Hook_addon_registry_ocf_forum
 				'OCF_BIRTHDAY_LINK.tpl'=>'ocf_topic_wrap',
 				'OCF_STATS.tpl'=>'ocf_wrapper',
 				'OCF_WRAPPER.tpl'=>'ocf_wrapper',
-				'OCF_SCREEN_BUTTON_WRAP.tpl'=>'ocf_screen_button_wrap',
 				'OCF_FORUM_INTRO_QUESTION_SCREEN.tpl'=>'ocf_forum_intro_question_screen',
 				'OCF_FORUM_LATEST.tpl'=>'ocf_forum',
 				'OCF_FORUM_IN_CATEGORY.tpl'=>'ocf_forum',
@@ -684,31 +682,6 @@ class Hook_addon_registry_ocf_forum
 	*
 	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	*/
-	function tpl_preview__ocf_screen_button_wrap()
-	{
-		require_css('ocf');
-		
-		$b=new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$b->attach(do_lorem_template('SCREEN_BUTTON',array('REL'=>lorem_word(),'IMMEDIATE'=>true,'URL'=>placeholder_url(),'IMG'=>placeholder_img_code('page'),'TITLE'=>lorem_word())));
-		}
-
-		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_SCREEN_BUTTON_WRAP',array(
-					'SCREEN_BUTTONS'=>$b,
-						)
-			),NULL,'',true),
-		);
-	}
-	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
 	function tpl_preview__ocf_forum_intro_question_screen()
 	{
 		require_css('ocf');
@@ -739,12 +712,11 @@ class Hook_addon_registry_ocf_forum
 		
 		require_lang('ocf');
 		//buttons
-		$b=new ocp_tempcode();
+		$buttons=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$b->attach(do_lorem_template('SCREEN_BUTTON',array('REL'=>lorem_word(),'URL'=>placeholder_url(),'IMG'=>placeholder_img_code('page'),'TITLE'=>lorem_word(),'IMMEDIATE'=>false)));
+			$buttons->attach(do_lorem_template('SCREEN_BUTTON',array('REL'=>lorem_word(),'URL'=>placeholder_url(),'IMG'=>placeholder_img_code('page'),'TITLE'=>lorem_word(),'IMMEDIATE'=>false)));
 		}
-		$buttons = do_lorem_template('OCF_SCREEN_BUTTON_WRAP',array('SCREEN_BUTTONS'=>$b));
 
 		
 		//topics
@@ -1081,13 +1053,11 @@ class Hook_addon_registry_ocf_forum
 			}
 			
 			//buttons
-			$b = new ocp_tempcode();
+			$buttons = new ocp_tempcode();
 			foreach (placeholder_array(1) as $k=>$v)
 			{
-				$b->attach(do_lorem_template('SCREEN_BUTTON',array('REL'=>lorem_word(),'IMMEDIATE'=>NULL,'URL'=>placeholder_url(),'IMG'=>placeholder_img_code('page'),'TITLE'=>lorem_word())));
+				$buttons->attach(do_lorem_template('SCREEN_BUTTON',array('REL'=>lorem_word(),'IMMEDIATE'=>NULL,'URL'=>placeholder_url(),'IMG'=>placeholder_img_code('page'),'TITLE'=>lorem_word())));
 			}
-
-			$buttons = do_lorem_template('OCF_SCREEN_BUTTON_WRAP',array('SCREEN_BUTTONS'=>$b));
 
 			//posts
 			$posts = new ocp_tempcode();
@@ -1116,12 +1086,11 @@ class Hook_addon_registry_ocf_forum
 			$rank_images = do_lorem_template('OCF_RANK_IMAGE',array('GROUP_NAME'=>lorem_phrase(),'USERNAME'=>lorem_word(),'IMG'=>placeholder_img_code(''),'IS_LEADER'=>lorem_phrase()));
 
 			//buttons
-			$b = new ocp_tempcode();
+			$buttons = new ocp_tempcode();
 			foreach (placeholder_array(1) as $k=>$v)
 			{
-				$b->attach(do_lorem_template('SCREEN_ITEM_BUTTON',array('REL'=>lorem_word(),'IMMEDIATE'=>'','URL'=>placeholder_url(),'IMG'=>placeholder_img_code('pageitem'),'TITLE'=>lorem_word())));
+				$buttons->attach(do_lorem_template('SCREEN_ITEM_BUTTON',array('REL'=>lorem_word(),'IMMEDIATE'=>'','URL'=>placeholder_url(),'IMG'=>placeholder_img_code('pageitem'),'TITLE'=>lorem_word())));
 			}
-			$buttons = do_lorem_template('OCF_SCREEN_BUTTON_WRAP',array('SCREEN_BUTTONS'=>$b));
 
 
 			$posts->attach(do_lorem_template('OCF_TOPIC_POST',array('ID'=>placeholder_random(),'TOPIC_FIRST_POST_ID'=>placeholder_random(),'TOPIC_FIRST_POSTER'=>lorem_phrase(),'POST_ID'=>placeholder_random(),'URL'=>placeholder_url(),'CLASS'=>lorem_phrase(),'EMPHASIS'=>lorem_phrase(),'FIRST_UNREAD'=>$first_unread,'POSTER_TITLE'=>lorem_word(),'POST_TITLE'=>lorem_word(),'POST_DATE_RAW'=>placeholder_date_raw(),'POST_DATE'=>placeholder_time(),'POST'=>lorem_phrase(),'TOPIC_ID'=>placeholder_id(),'LAST_EDITED_RAW'=>lorem_phrase(),'LAST_EDITED'=>$last_edited,'POSTER_ID'=>placeholder_id(),'POSTER'=>$poster,'POSTER_DETAILS'=>$poster_details,'POST_AVATAR'=>$post_avatar,'RANK_IMAGES'=>$rank_images,'BUTTONS'=>$buttons,'SIGNATURE'=>lorem_phrase(),'UNVALIDATED'=>lorem_phrase(),'DESCRIPTION'=>lorem_phrase())));

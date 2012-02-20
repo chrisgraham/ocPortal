@@ -3,7 +3,14 @@
 {+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
 	<div class="non_accessibility_redundancy">
 		<div class="float_surrounder results_browser_spacing">
-			{SCREEN_BUTTONS}
+			<div class="ocf_screen_buttons">
+				{+START,INCLUDE,NOTIFICATION_BUTTONS}
+					NOTIFICATIONS_TYPE=ocf_topic
+					NOTIFICATIONS_ID={ID}
+					NOTIFICATIONS_PAGELINK={$PAGE_LINK,forum:topics:toggle_notifications_topic}
+				{+END}
+				{SCREEN_BUTTONS}
+			</div>
 		</div>
 	</div>
 {+END}
@@ -120,7 +127,14 @@
 {+END}
 
 <div class="float_surrounder results_browser_spacing">
-	{SCREEN_BUTTONS}
+	<div class="ocf_screen_buttons">
+		{+START,INCLUDE,NOTIFICATION_BUTTONS}
+			NOTIFICATIONS_TYPE=ocf_topic
+			NOTIFICATIONS_ID={ID}
+			NOTIFICATIONS_PAGELINK={$PAGE_LINK,forum:topics:toggle_notifications_topic}
+		{+END}
+		{SCREEN_BUTTONS}
+	</div>
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
 		<div class="non_accessibility_redundancy">

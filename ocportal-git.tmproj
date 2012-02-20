@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>cms/pages/modules/cms_catalogues.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -516,20 +514,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>cms/pages/modules/cms_catalogues.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>904</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>968</integer>
 		</dict>
 		<key>cms/pages/modules/cms_quiz.php</key>
 		<dict>
@@ -1828,36 +1812,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
-		</dict>
-		<key>sources/ocf_install.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>326</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>300</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>325</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>326</integer>
-			</dict>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -3188,18 +3142,6 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>adminzone/pages/modules/admin_quiz.php</string>
-		<string>cms/pages/modules/cms_quiz.php</string>
-		<string>sources/blocks/main_rss.php</string>
-		<string>themes/default/templates/JAVASCRIPT.tpl</string>
-		<string>themes/default/templates/MENU_EDITOR_BRANCH.tpl</string>
-		<string>themes/default/templates/MENU_EDITOR_BRANCH_WRAP.tpl</string>
-		<string>themes/default/templates/JAVASCRIPT_MENU_EDITOR.tpl</string>
-		<string>sources/hooks/modules/admin_import/joomla.php</string>
-		<string>cms/pages/modules/cms_catalogues.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

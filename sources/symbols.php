@@ -837,6 +837,15 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=$_value->evaluate();
 				break;
 
+			case 'NOTIFICATIONS_ENABLED':
+				$value='';
+				if (array_key_exists(0,$param))
+				{
+					require_code('notifications');
+					$value=notifications_enabled(array_key_exists(1,$param)?$param[1]:get_page_name(),$param[0])?'1':'0';
+				}
+				break;
+
 			case 'DOCUMENT_HELP':
 				global $DOCUMENT_HELP,$HELPER_PANEL_TUTORIAL;
 				$value=$DOCUMENT_HELP;

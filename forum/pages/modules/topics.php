@@ -107,10 +107,8 @@ class Module_topics
 			'new_post',
 			'new_pt',
 			'_add_reply',
-			'enable_notifications_topic',
-			'disable_notifications_topic',
-			'enable_notifications_forum',
-			'disable_notifications_forum',
+			'toggle_notifications_topic',
+			'toggle_notifications_forum',
 			'vote_poll',
 			'add_poll',
 			'_add_poll',
@@ -280,41 +278,14 @@ class Module_topics
 	// ===========
 
 	/**
-	 * The actualiser to track a forum.
+	 * The actualiser to toggle notifications for a forum.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function enable_notifications_forum() // Type
+	function toggle_notifications_forum() // Type
 	{
-		require_code('ocf_forums_action2');
-
-		$forum_id=get_param_integer('id');
-		require_code('notifications');
-		enable_notifications('ocf_forum',strval($forum_id));
-
-		$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-		breadcrumb_add_segment($tree,do_lang_tempcode('TRACK_FORUM'));
-
-		return $this->redirect_to_forum('ENABLE_NOTIFICATIONS',$forum_id,do_lang_tempcode('NOW_ENABLED_NOTIFICATIONS_FORUM'));
-	}
-
-	/**
-	 * The actualiser to untrack a forum.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function disable_notifications_forum() // Type
-	{
-		require_code('ocf_forums_action2');
-
-		$forum_id=get_param_integer('id');
-		require_code('notifications');
-		disable_notifications('ocf_forum',strval($forum_id));
-
-		$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-		breadcrumb_add_segment($tree,do_lang_tempcode('UNTRACK_FORUM'));
-
-		return $this->redirect_to_forum('DISABLE_NOTIFICATIONS',$forum_id,do_lang_tempcode('NOW_DISABLED_NOTIFICATIONS_FORUM'));
+		require_code('notifications2');
+		return notifications_ui('ocf_forum','NOW_ENABLED_NOTIFICATIONS_FORUM','NOW_DISABLED_NOTIFICATIONS_FORUM');
 	}
 
 	// =================
@@ -2100,31 +2071,14 @@ END;
 	}
 
 	/**
-	 * The actualiser to track a topic.
+	 * The actualiser to toggle notifications for a topic.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function enable_notifications_topic() // Type
+	function toggle_notifications_topic() // Type
 	{
-		$topic_id=get_param_integer('id');
-		require_code('notifications');
-		enable_notifications('ocf_topic',strval($topic_id));
-	
-		return $this->redirect_to('ENABLE_NOTIFICATIONS',$topic_id,do_lang_tempcode('NOW_ENABLED_NOTIFICATIONS_TOPIC'));
-	}
-
-	/**
-	 * The actualiser to untrack a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function disable_notifications_topic() // Type
-	{
-		$topic_id=get_param_integer('id');
-		require_code('notifications');
-		disable_notifications('ocf_topic',strval($topic_id));
-
-		return $this->redirect_to('DISABLE_NOTIFICATIONS',$topic_id,do_lang_tempcode('NOW_DISABLED_NOTIFICATIONS_TOPIC'));
+		require_code('notifications2');
+		return notifications_ui('ocf_topic','NOW_ENABLED_NOTIFICATIONS_TOPIC','NOW_DISABLED_NOTIFICATIONS_TOPIC');
 	}
 
 	/**

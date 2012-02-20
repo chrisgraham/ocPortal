@@ -36,7 +36,7 @@ class Hook_Notification_error_occurred_rss extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['error_occurred_rss']=array(do_lang('ERROR_OCCURRED'),do_lang('NOTIFICATION_TYPE_error_occurred_rss'));
+		$list['error_occurred_rss']=array(do_lang('ERRORS'),do_lang('NOTIFICATION_TYPE_error_occurred_rss'));
 		return $list;
 	}
 

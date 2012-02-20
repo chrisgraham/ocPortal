@@ -215,7 +215,7 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 }
 
 /**
- * Remove a member from a certain.
+ * Remove a member from a certain usergroup.
  *
  * @param  GROUP		The usergroup to remove from.
  * @param  ?MEMBER	The member leaving (NULL: current member).
@@ -233,7 +233,7 @@ function ocf_member_leave_group($group_id,$member_id=NULL)
 }
 
 /**
- * Add a member to a certain.
+ * Add a member to a certain usergroup.
  *
  * @param  MEMBER	The member.
  * @param  GROUP	The usergroup.
@@ -252,13 +252,16 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 		'gm_validated'=>$validated
 	),false,true); // Allow failure, if member is already in (handy for importers)
 
-	require_code('notifications');
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-	$group_name=ocf_get_group_name($id);
-	$subject=do_lang('MJG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username,$group_name);
-	$group_url=build_url(array('page'=>'groups','type'=>'view','id'=>$id),get_module_zone('groups'),NULL,false,false,true);
-	$mail=do_lang('MJG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($group_name),$group_url));
-	dispatch_notification('ocf_member_joined_group',strval($id),$subject,$mail);
+	if (ocf_get_group_property($id,'hidden')==0)
+	{
+		require_code('notifications');
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+		$group_name=ocf_get_group_name($id);
+		$subject=do_lang('MJG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username,$group_name);
+		$group_url=build_url(array('page'=>'groups','type'=>'view','id'=>$id),get_module_zone('groups'),NULL,false,false,true);
+		$mail=do_lang('MJG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($group_name),$group_url));
+		dispatch_notification('ocf_member_joined_group',strval($id),$subject,$mail);
+	}
 }
 
 /**

@@ -242,19 +242,6 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 
 	// Buttons
 	$button_array=array();
-	if (array_key_exists('notifications_enabled',$details))
-	{
-		if (get_value('disable_enable_notifications_forum')!=='1')
-		{
-			$enable_notifications_url=build_url(array('page'=>'topics','type'=>'enable_notifications_forum','id'=>$id),get_module_zone('topics'));
-			$button_array[]=array('immediate'=>true,'rel'=>'enable-notifications','title'=>do_lang_tempcode('ENABLE_NOTIFICATIONS'),'url'=>$enable_notifications_url,'img'=>'enable_notifications');
-		}
-	}
-	elseif (array_key_exists('notifications_disabled',$details))
-	{
-		$disable_notifications_url=build_url(array('page'=>'topics','type'=>'disable_notifications_forum','id'=>$id),get_module_zone('topics'));
-		$button_array[]=array('immediate'=>true,'rel'=>'disable-notifications','title'=>do_lang_tempcode('DISABLE_NOTIFICATIONS'),'url'=>$disable_notifications_url,'img'=>'disable_notifications');
-	}
 	if (!is_guest())
 	{
 		if ((get_value('disable_mark_forum_read')!=='1') && (count($details['topics'])!=0))
@@ -888,14 +875,6 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		}
 	}
 
-	require_code('notifications');
-	if (!notifications_enabled('ocf_forum',strval($forum_id),$member_id))
-	{
-		$out['notifications_enabled']=1;
-	} else
-	{
-		$out['notifications_disabled']=1;
-	}
 	if (ocf_may_post_topic($forum_id,$member_id)) $out['may_post_topic']=1;
 	if (ocf_may_moderate_forum($forum_id,$member_id))
 	{

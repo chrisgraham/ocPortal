@@ -408,8 +408,7 @@ function ocf_screen_button_wrap($buttons)
 	{
 		$b->attach(do_template('SCREEN_BUTTON',array('_GUID'=>'bdd441c40c5b03134ce6541335fece2c','REL'=>array_key_exists('rel',$button)?$button['rel']:NULL,'IMMEDIATE'=>$button['immediate'],'URL'=>$button['url'],'IMG'=>$button['img'],'TITLE'=>$button['title'])));
 	}
-
-	return do_template('OCF_SCREEN_BUTTON_WRAP',array('_GUID'=>'f04bcbf576341eb5a303230e58d77b8d','SCREEN_BUTTONS'=>$b));
+	return $b;
 }
 
 

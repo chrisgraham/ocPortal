@@ -1,0 +1,50 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.notifications_form h2 {
+	text-align: left;
+	text-decoration: none;
+	border: 0;
+}
+
+.notifications_form td {
+	text-align: center;
+}
+
+/* Advanced screens */
+
+.notifications_advanced_chooser_cat_type {  
+	list-style-type: none;  
+	font-weight: bold;  
+	font-style: normal;  
+	margin-left: 0;  
+	padding-left: 0; 
+}
+
+.notifications_advanced_chooser_cat_type li {
+	margin-left: 0;  
+	padding-left: 0; 
+}
+
+.notifications_advanced_chooser_cat, .cat_chooser_subcat {
+	font-weight: normal;
+	font-style: normal;
+	display: block;
+	overflow: hidden;
+	outline: 0;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+.notifications_advanced_chooser_cat li, .cat_chooser_subcat li {
+	display: block; 
+	margin: 0 0 0 20px;
+	padding-left: 0;
+	min-width: 236px;
+} 
+
+.notifications_advanced_subcat_check {
+	font-weight: bold;
+}

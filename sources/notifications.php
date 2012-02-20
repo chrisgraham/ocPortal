@@ -178,7 +178,7 @@ class Notification_dispatcher
 
 		if ($GLOBALS['DEBUG_MODE'])
 		{
-			if ((strpos($this->message,'keep_devtest')!==false) && ((strpos(ocp_srv('HTTP_REFERER'),'keep_devtest')===false) || (strpos($this->message,ocp_srv('HTTP_REFERER'))===false))) // Bad URL - it has to be general, not session-specific
+			if ((strpos($this->message,'keep_devtest')!==false) && (strpos($this->message,running_script('index')?static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true)):get_self_url_easy())===false) && ((strpos(ocp_srv('HTTP_REFERER'),'keep_devtest')===false) || (strpos($this->message,ocp_srv('HTTP_REFERER'))===false))) // Bad URL - it has to be general, not session-specific
 				fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		}
 
@@ -304,7 +304,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 			$possible_settings=array();
 			foreach (array(A_INSTANT_SMS,A_INSTANT_EMAIL,A_DAILY_EMAIL_DIGEST,A_WEEKLY_EMAIL_DIGEST,A_MONTHLY_EMAIL_DIGEST,A_INSTANT_PT) as $possible_setting)
 			{
-				if (_notification_setting_available($possible_setting))
+				if (_notification_setting_available($possible_setting,$to_member_id))
 					$possible_settings[$possible_setting]=0;
 			}
 			foreach ($notifications_enabled as $ml)
@@ -329,7 +329,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 
 	// Send according to the listen setting...
 
-	if (_notification_setting_available(A_INSTANT_SMS))
+	if (_notification_setting_available(A_INSTANT_SMS,$to_member_id))
 	{
 		if ($setting & A_INSTANT_SMS !=0)
 		{
@@ -345,7 +345,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 		}
 	}
 
-	if (_notification_setting_available(A_INSTANT_EMAIL))
+	if (_notification_setting_available(A_INSTANT_EMAIL,$to_member_id))
 	{
 		if ($setting & A_INSTANT_EMAIL !=0)
 		{
@@ -363,7 +363,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 		}
 	}
 
-	if (_notification_setting_available(A_DAILY_EMAIL_DIGEST))
+	if (_notification_setting_available(A_DAILY_EMAIL_DIGEST,$to_member_id))
 	{
 		if (($setting & A_DAILY_EMAIL_DIGEST !=0) || ($setting & A_WEEKLY_EMAIL_DIGEST !=0) || ($setting & A_MONTHLY_EMAIL_DIGEST !=0))
 		{
@@ -390,7 +390,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 		}
 	}
 
-	if (_notification_setting_available(A_INSTANT_PT))
+	if (_notification_setting_available(A_INSTANT_PT,$to_member_id))
 	{
 		if ($setting & A_INSTANT_PT !=0)
 		{
@@ -427,13 +427,17 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
  * @param  ID_TEXT		The notification code to use
  * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
  * @param  ?MEMBER		The member being signed up (NULL: current member)
+ * @param  ?integer		Setting to use (NULL: default)
  */
-function enable_notifications($notification_code,$notification_category,$member_id=NULL)
+function enable_notifications($notification_code,$notification_category,$member_id=NULL,$setting=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	$ob=_get_notification_ob_for_code($notification_code);
-	$default_setting=$ob->get_default_auto_setting($notification_code,$notification_category);
+	if (is_null($setting))
+	{
+		$ob=_get_notification_ob_for_code($notification_code);
+		$setting=$ob->get_default_auto_setting($notification_code,$notification_category);
+	}
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
@@ -446,7 +450,7 @@ function enable_notifications($notification_code,$notification_category,$member_
 		'l_member_id'=>$member_id,
 		'l_notification_code'=>$notification_code,
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
-		'l_setting'=>$default_setting,
+		'l_setting'=>$setting,
 	));
 }
 
@@ -471,7 +475,7 @@ function disable_notifications($notification_code,$notification_category,$member
 }
 
 /**
- * Find whether notifications are enabled for a member on a notification type+category.
+ * Find whether notifications are enabled for a member on a notification type+category. Does not check security (must go through notification object for that).
  *
  * @param  ID_TEXT		The notification code to check
  * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
@@ -479,6 +483,19 @@ function disable_notifications($notification_code,$notification_category,$member
  * @return boolean		Whether they are
  */
 function notifications_enabled($notification_code,$notification_category,$member_id=NULL)
+{
+	return (notifications_setting($notification_code,$notification_category,$member_id)!=A_NA);
+}
+
+/**
+ * Find how notifications are enabled for a member on a notification type+category. Does not check security (must go through notification object for that).
+ *
+ * @param  ID_TEXT		The notification code to check
+ * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
+ * @param  ?MEMBER		The member being de-signed up (NULL: current member)
+ * @return integer		How they are
+ */
+function notifications_setting($notification_code,$notification_category,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
@@ -497,7 +514,12 @@ function notifications_enabled($notification_code,$notification_category,$member
 			'l_code_category'=>'',
 		));
 	}
-	return (!is_null($test)) && ($test!=A_NA);
+	if (is_null($test))
+	{
+		$ob=_get_notification_ob_for_code($notification_code);
+		$test=$ob->get_initial_setting($notification_code,$notification_category);
+	}
+	return $test;
 }
 
 /**
@@ -713,7 +735,7 @@ class Hook_Notification
 	 * @param  ID_TEXT		Notification code
 	 * @param  MEMBER			Member to check against
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
-	 * @return boolean		Whether they are
+	 * @return boolean		Whether they have
 	 */
 	function member_have_enabled($notification_code,$member_id,$category=NULL)
 	{
