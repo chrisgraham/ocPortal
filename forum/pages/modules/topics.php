@@ -285,7 +285,7 @@ class Module_topics
 	function toggle_notifications_forum() // Type
 	{
 		require_code('notifications2');
-		return notifications_ui('ocf_forum','NOW_ENABLED_NOTIFICATIONS_FORUM','NOW_DISABLED_NOTIFICATIONS_FORUM');
+		return notifications_ui_advanced('ocf_topic',do_lang_tempcode('NOW_ENABLED_NOTIFICATIONS_FORUM'),do_lang_tempcode('NOW_DISABLED_NOTIFICATIONS_FORUM'));
 	}
 
 	// =================
@@ -2023,8 +2023,14 @@ END;
 
 		if (($new_topic) && ($forum_id==-1))
 		{
+			require_code('notifications');
+
+			enable_notifications('ocf_topic',strval($topic_id),get_member()); // from
+			enable_notifications('ocf_topic',strval($topic_id),$member_id); // to
 			foreach ($invited_members as $invited_member)
 			{
+				enable_notifications('ocf_topic',strval($topic_id),$invited_member);
+
 				ocf_invite_to_pt(intval($invited_member),$topic_id);
 			}
 		}
@@ -2078,7 +2084,7 @@ END;
 	function toggle_notifications_topic() // Type
 	{
 		require_code('notifications2');
-		return notifications_ui('ocf_topic','NOW_ENABLED_NOTIFICATIONS_TOPIC','NOW_DISABLED_NOTIFICATIONS_TOPIC');
+		return notifications_ui_advanced('ocf_topic',do_lang_tempcode('NOW_ENABLED_NOTIFICATIONS_TOPIC'),do_lang_tempcode('NOW_DISABLED_NOTIFICATIONS_TOPIC'));
 	}
 
 	/**
@@ -2921,6 +2927,8 @@ END;
 
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
+		require_code('notifications');
+		enable_notifications('ocf_topic',strval($topic_id),$member_id);
 		ocf_invite_to_pt($member_id,$topic_id);
 
 		return $this->redirect_to('EDIT_TOPIC',$topic_id);

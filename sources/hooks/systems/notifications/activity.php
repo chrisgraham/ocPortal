@@ -16,6 +16,49 @@
 class Hook_Notification_activity extends Hook_Notification
 {
 	/**
+	 * Find whether a handled notification code supports categories.
+	 * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @return boolean		Whether it does
+	 */
+	function supports_categories($notification_code)
+	{
+		return true;
+	}
+
+	/**
+	 * Standard function to create the standardised category tree
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
+	 * @return array 			Tree structure
+	 */
+	function create_category_tree($notification_code,$id)
+	{
+		$pagelinks=array();
+
+		$types=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member())); // Only show options for friends to simplify
+		$types2=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code'=>$notification_code,'l_member_id'=>get_member())); // Already monitoring members who may not be friends
+		foreach ($types2 as $type)
+		{
+			$types[]=array('member_liked'=>intval($type['l_code_category']));
+		}
+		foreach ($types as $type)
+		{
+			$pagelinks[$type['id']]=array(
+				'id'=>$type['id'],
+				'title'=>$GLOBALS['FORUM_DRIVER']->get_username($type['member_liked']),
+			);
+		}
+		global $M_SORT_KEY;
+		$M_SORT_KEY='title';
+		usort($pagelinks,'multi_sort');
+
+		return array_values($pagelinks);
+	}
+
+	/**
 	 * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
 	 *
 	 * @param  ID_TEXT		Notification code

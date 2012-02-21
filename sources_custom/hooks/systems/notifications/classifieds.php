@@ -24,9 +24,11 @@ class Hook_Notification_classifieds extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$test=$GLOBALS['SITE_DB']->query_value('classifieds_prices','COUNT(*)');
-		if ($test>0)
-			$list['classifieds']=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_classifieds'));
+		$catalogues=$GLOBALS['SITE_DB']->query_select('classifieds_prices',array('DISTINCT c_catalogue_name'));
+		foreach ($catalogues as $catalogue)
+		{
+			$list['classifieds__'.$catalogue['c_name']]=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_classifieds'));
+		}
 		return $list;
 	}
 

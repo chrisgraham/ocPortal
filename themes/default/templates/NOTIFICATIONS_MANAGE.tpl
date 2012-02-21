@@ -8,6 +8,7 @@
 		{+START,LOOP,NOTIFICATION_TYPES_TITLES}
 			<col style="width: 40px" />
 		{+END}
+		<col style="width: 100px" />
 	</colgroup>
 
 	<thead>
@@ -17,13 +18,14 @@
 				<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
 			</th>
 		{+END}
+		<th></th>
 	</thead>
 
 	<tbody>
-		{+START,LOOP,NOTIFICATION_CATEGORIES}
+		{+START,LOOP,NOTIFICATION_SECTIONS}
 			<tr>
-				<th colspan="{$ADD*,{NOTIFICATION_TYPES_TITLES},1}">
-					<h2>{NOTIFICATION_CATEGORY*}</h2>
+				<th colspan="{$ADD*,{NOTIFICATION_TYPES_TITLES},2}">
+					<h2>{NOTIFICATION_SECTION*}</h2>
 				</th>
 			</tr>
 
@@ -32,6 +34,12 @@
 					<th class="de_th">{NOTIFICATION_LABEL*}</th>
 
 					{+START,INCLUDE,NOTIFICATION_TYPES}{+END}
+					
+					<td>
+						{+START,IF,{SUPPORTS_CATEGORIES}}
+							<a href="{$PAGE_LINK*,_SEARCH:notifications:advanced:notification_code={NOTIFICATION_CODE}:redirect={$SELF_URL&}}"></a>
+						{+END}
+					</td>
 				</tr>
 			{+END}
 		{+END}

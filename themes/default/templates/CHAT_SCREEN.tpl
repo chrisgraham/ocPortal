@@ -117,3 +117,8 @@ addEventListenerAbstract(window,'real_load',function () {
 		{+END}
 	</ul>
 {+END}
+
+{+START,INCLUDE,NOTIFICATION_BUTTONS}
+	NOTIFICATIONS_TYPE=member_entered_chatroom
+	NOTIFICATIONS_ID={ID}
+{+END}

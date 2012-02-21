@@ -16,6 +16,44 @@
 class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 {
 	/**
+	 * Find whether a handled notification code supports categories.
+	 * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @return boolean		Whether it does
+	 */
+	function supports_categories($notification_code)
+	{
+		return true;
+	}
+
+	/**
+	 * Standard function to create the standardised category tree
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
+	 * @return array 			Tree structure
+	 */
+	function create_category_tree($notification_code,$id)
+	{
+		$pagelinks=array();
+
+		$types=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'));
+		foreach ($types as $type)
+		{
+			$pagelinks[]=array(
+				'id'=>$type['id'],
+				'title'=>get_translated_text($type['g_name'],$GLOBALS['FORUM_DB']),
+			);
+		}
+		global $M_SORT_KEY;
+		$M_SORT_KEY='title';
+		usort($pagelinks,'multi_sort');
+
+		return $pagelinks;
+	}
+
+	/**
 	 * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
 	 *
 	 * @param  ID_TEXT		Notification code
@@ -58,5 +96,3 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 		return $members;
 	}
 }
-
-//TODO: Categories

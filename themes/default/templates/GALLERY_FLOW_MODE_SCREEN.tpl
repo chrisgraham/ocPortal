@@ -67,6 +67,11 @@
 		</p>
 	{+END}
 
+	{+START,INCLUDE,NOTIFICATION_BUTTONS}
+		NOTIFICATIONS_TYPE=gallery_entry
+		NOTIFICATIONS_ID={CAT}
+	{+END}
+
 	<br />
 
 	<div class="float_surrounder lined_up_boxes">

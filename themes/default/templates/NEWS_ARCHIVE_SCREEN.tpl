@@ -30,6 +30,13 @@
 
 {BROWSE}
 
+{+START,IF_PASSED,CAT}
+	{+START,INCLUDE,NOTIFICATION_BUTTONS}
+		NOTIFICATIONS_TYPE=news_entry
+		NOTIFICATIONS_ID={CAT}
+	{+END}
+{+END}
+
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,INCLUDE,STAFF_ACTIONS}
 	1_URL={SUBMIT_URL*}

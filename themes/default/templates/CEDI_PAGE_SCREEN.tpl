@@ -76,6 +76,11 @@
 {+END}
 
 <div class="button_panel button_panel_spaced">
+	{+START,INCLUDE,NOTIFICATION_BUTTONS}
+		NOTIFICATIONS_TYPE=cedi
+		NOTIFICATIONS_ID={ID}
+	{+END}
+
 	{MENU}
 </div>
 

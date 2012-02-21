@@ -9,6 +9,11 @@
 	<p class="nothing_here">{!NO_ENTRIES}</p>
 {+END}
 
+{+START,INCLUDE,NOTIFICATION_BUTTONS}
+	NOTIFICATIONS_TYPE=filedump
+	NOTIFICATIONS_ID={PLACE}
+{+END}
+
 <br />
 
 <div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>

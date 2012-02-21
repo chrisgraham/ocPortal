@@ -298,7 +298,7 @@ class Module_filedump
 			$create_folder_form=new ocp_tempcode();
 		}
 
-		return do_template('FILE_DUMP_SCREEN',array('_GUID'=>'3f49a8277a11f543eff6488622949c84','TITLE'=>$title,'FILES'=>$files,'UPLOAD_FORM'=>$upload_form,'CREATE_FOLDER_FORM'=>$create_folder_form));
+		return do_template('FILE_DUMP_SCREEN',array('_GUID'=>'3f49a8277a11f543eff6488622949c84','TITLE'=>$title,'PLACE'=>$place,'FILES'=>$files,'UPLOAD_FORM'=>$upload_form,'CREATE_FOLDER_FORM'=>$create_folder_form));
 	}
 
 	/**

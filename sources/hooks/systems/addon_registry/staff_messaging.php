@@ -154,7 +154,7 @@ class Hook_addon_registry_staff_messaging
 					'COMMENT_DETAILS'=>$comment_details,
 					'MESSAGE'=>lorem_phrase(),
 					'NOTIFICATIONS_ENABLED'=>lorem_phrase(),
-					'NOTIFICATION_CHANGE_URL'=>placeholder_url(),
+					'TYPE'=>placeholder_id(),
 					'FIRST_POST'=>lorem_paragraph_html(),
 						)
 			),NULL,'',true),

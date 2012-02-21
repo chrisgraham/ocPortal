@@ -24,9 +24,11 @@ class Hook_Notification_catalogue_view_reports extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT c_send_view_reports FROM '.get_table_prefix().'catalogues WHERE '.db_string_not_equal_to('c_send_view_reports',''));
-		if (!is_null($test))
-			$list['catalogue_view_reports']=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_catalogue_view_reports'));
+		$catalogues=$GLOBALS['SITE_DB']->query_select('SELECT c_name FROM '.get_table_prefix().'catalogues WHERE '.db_string_not_equal_to('c_send_view_reports',''));
+		foreach ($catalogues as $catalogue)
+		{
+			$list['catalogue_view_reports__'.$catalogue['c_name']]=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_catalogue_view_reports'));
+		}
 		return $list;
 	}
 

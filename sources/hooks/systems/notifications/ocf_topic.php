@@ -16,6 +16,63 @@
 class Hook_Notification_ocf_topic extends Hook_Notification
 {
 	/**
+	 * Find whether a handled notification code supports categories.
+	 * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @return boolean		Whether it does
+	 */
+	function supports_categories($notification_code)
+	{
+		return true;
+	}
+
+	/**
+	 * Standard function to create the standardised category tree
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
+	 * @return array 			Tree structure
+	 */
+	function create_category_tree($notification_code,$id)
+	{
+		require_code('ocf_forums2');
+
+		if (is_null($id))
+		{
+			$total=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','COUNT(*)');
+			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
+		}
+
+		$_pagelinks=ocf_get_forum_tree_secure(NULL,$id,true,NULL);
+		$pagelinks=array();
+		foreach ($_pagelinks as $p)
+		{
+			$p['id']='forum:'.strval($p['id']);
+			$pagelinks[]=$p;
+		}
+		if (is_null($id))
+		{
+			$types2=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code'=>'ocf_topic','l_member_id'=>get_member())); // Already monitoring members who may not be friends
+			foreach ($types2 as $type)
+			{
+				if (!is_numeric($type['l_code_category']))
+				{
+					$title=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_cache_first_post_title',array('id'=>intval($type['id'])));
+					if (!is_null($title))
+					{
+						$pagelinks[]=array(
+							'id'=>$type['id'],
+							'title'=>$title,
+						);
+					}
+				}
+			}
+		}
+		return $pagelinks;
+	}
+
+	/**
 	 * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
 	 *
 	 * @param  ID_TEXT		Notification code
@@ -64,6 +121,34 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 	}
 
 	/**
+	 * Find whether someone has permisson to view any notifications (yes) and possibly if they actually are.
+	 *
+	 * @param  ?ID_TEXT		Notification code (NULL: don't check if they are)
+	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
+	 * @param  MEMBER			Member to check against
+	 * @return boolean		Whether they do
+	 */
+	function _is_member($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id)
+	{
+		if (is_null($only_if_enabled_on__notification_code)) return true;
+
+		if (is_numeric($only_if_enabled_on__category)) // Also merge in people monitoring forum
+		{
+			$forum_details=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id','t_pt_from','t_pt_to'),array('id'=>intval($only_if_enabled_on__category)));
+			$forum_id=$forum_details[0]['t_forum_id'];
+
+			if (is_null($forum_id))
+			{
+				require_code('ocf_topics');
+				if (!(($forum_details[0]['t_pt_from']==$member_id) || ($forum_details[0]['t_pt_to']==$member_id) || (ocf_has_special_pt_access(intval($only_if_enabled_on__category),$member_id)) || (!has_specific_permission($member_id,'view_other_pt'))))
+					return false;
+			}
+		}
+
+		return notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id);
+	}
+
+	/**
 	 * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
 	 *
 	 * @param  ID_TEXT		Notification code
@@ -75,7 +160,32 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 	 */
 	function list_members_who_have_enabled($notification_code,$category=NULL,$to_member_ids=NULL,$start=0,$max=300)
 	{
+		if ((!is_numeric($category)) && (!is_null($category))) warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // We should never be accessing as forum:<id>, that is used only behind the scenes
+
 		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
+
+		if (is_numeric($category)) // Also merge in people monitoring forum
+		{
+			$forum_details=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id','t_pt_from','t_pt_to'),array('id'=>intval($category)));
+			$forum_id=$forum_details[0]['t_forum_id'];
+
+			if (!is_null($forum_id))
+			{
+				$members2=$this->_all_members_who_have_enabled($notification_code,'forum:'.strval($forum_id),$to_member_ids,$start,$max);
+				$members=array_merge($members,$members2);
+			} else
+			{
+				require_code('ocf_topics');
+				$members_new=$members;
+				foreach ($members as $member_id=>$setting)
+				{
+					if (($forum_details[0]['t_pt_from']==$member_id) || ($forum_details[0]['t_pt_to']==$member_id) || (ocf_has_special_pt_access(intval($category),$member_id)) || (!has_specific_permission($member_id,'view_other_pt')))
+						$members_new[$member_id]=$setting;
+				}
+				$members=$members_new;
+			}
+		}
+
 		$members=$this->_all_members_who_have_enabled_with_zone_access($members,'forum',$notification_code,$category,$to_member_ids,$start,$max);
 		$members=$this->_all_members_who_have_enabled_with_category_access($members,'forum',$notification_code,$category,$to_member_ids,$start,$max);
 

@@ -121,7 +121,7 @@ class Hook_cron_catalogue_view_reports
 					if (is_null($subject_tag)) $subject_tag=do_lang('DEFAULT__CATALOGUE_VIEW_REPORT_SUBJECT',comcode_escape($catalogue_title),comcode_escape(get_site_name()),NULL,get_lang($member_id));
 
 					// Send actual notification
-					dispatch_notification('catalogue_view_reports',$catalogue['c_name'],$subject_tag,$mail,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
+					dispatch_notification('catalogue_view_reports__'.$catalogue['c_name'],NULL,$subject_tag,$mail,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 				}
 				
 				$start+=2000;

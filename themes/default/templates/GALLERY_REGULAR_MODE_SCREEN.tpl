@@ -41,6 +41,11 @@
 		</div>
 	{+END}
 
+	{+START,INCLUDE,NOTIFICATION_BUTTONS}
+		NOTIFICATIONS_TYPE=gallery_entry
+		NOTIFICATIONS_ID={CAT}
+	{+END}
+
 	{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
 	{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}

@@ -38,9 +38,9 @@
 				<div class="ocf_screen_buttons">
 					{+START,IF_PASSED,ID}
 						{+START,INCLUDE,NOTIFICATION_BUTTONS}
-							NOTIFICATIONS_TYPE=ocf_forum
-							NOTIFICATIONS_ID={ID}
-							NOTIFICATIONS_PAGELINK={$PAGE_LINK,forum:topics:toggle_notifications_forum}
+							NOTIFICATIONS_TYPE=ocf_topic
+							NOTIFICATIONS_ID=forum:{ID}
+							NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum
 						{+END}
 					{+END}
 					{BUTTONS}
@@ -62,9 +62,9 @@
 			<div class="ocf_screen_buttons">
 				{+START,IF_PASSED,ID}
 					{+START,INCLUDE,NOTIFICATION_BUTTONS}
-						NOTIFICATIONS_TYPE=ocf_forum
-						NOTIFICATIONS_ID={ID}
-						NOTIFICATIONS_PAGELINK={$PAGE_LINK,forum:topics:toggle_notifications_forum}
+						NOTIFICATIONS_TYPE=ocf_topic
+						NOTIFICATIONS_ID=forum:{ID}
+						NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum
 					{+END}
 				{+END}
 				{BUTTONS}

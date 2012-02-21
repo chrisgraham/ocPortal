@@ -16,6 +16,41 @@
 class Hook_Notification_catalogue_entry extends Hook_Notification
 {
 	/**
+	 * Find whether a handled notification code supports categories.
+	 * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @return boolean		Whether it does
+	 */
+	function supports_categories($notification_code)
+	{
+		return true;
+	}
+
+	/**
+	 * Standard function to create the standardised category tree
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
+	 * @return array 			Tree structure
+	 */
+	function create_category_tree($notification_code,$id)
+	{
+		require_code('catalogues');
+
+		$name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>intval($id)));
+
+		if (is_null($id))
+		{
+			$total=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','COUNT(*)',array('c_name'=>$name));
+			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
+		}
+
+		$pagelinks=get_catalogue_category_tree($name,is_null($id)?NULL:intval($id),NULL,NULL,1);
+		return $pagelinks;
+	}
+
+	/**
 	 * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
 	 *
 	 * @param  ID_TEXT		Notification code

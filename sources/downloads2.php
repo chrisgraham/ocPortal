@@ -700,7 +700,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 		$subject=do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
 		$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);
 		$mail=do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('download',strval($id),$subject,$mail);
+		dispatch_notification('download',strval($category_id),$subject,$mail);
 	}
 
 	log_it('ADD_DOWNLOAD',strval($id),$name);
@@ -788,7 +788,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 		require_code('notifications');
 		$subject=do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
 		$mail=do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('download',strval($id),$subject,$mail);
+		dispatch_notification('download',strval($category_id),$subject,$mail);
 	}
 
 	log_it('EDIT_DOWNLOAD',strval($id),get_translated_text($myrow['name']));

@@ -115,7 +115,7 @@ function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,
 	$mail=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL':'POST_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($url),array(comcode_escape($sender_username),$post,$topic_title));
 
 	require_code('notifications');
-	dispatch_notification($is_pt?'ocf_pt':'ocf_topic',strval($topic_id),$subject,$mail);
+	dispatch_notification('ocf_topic',strval($topic_id),$subject,$mail,is_null($limit_to)?NULL:array($limit_to));
 }
 
 /**

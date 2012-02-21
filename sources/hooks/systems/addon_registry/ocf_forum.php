@@ -76,7 +76,6 @@ class Hook_addon_registry_ocf_forum
 
 			'sources/hooks/systems/notifications/ocf_topic_invite.php',
 			'sources/hooks/systems/notifications/ocf_new_pt.php',
-			'sources/hooks/systems/notifications/ocf_pt.php',
 			'sources/hooks/systems/notifications/ocf_topic.php',
 			'sources/hooks/systems/notifications/ocf_password_changed.php',
 			'themes/default/images/bigicons/forums.png',

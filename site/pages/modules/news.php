@@ -595,7 +595,7 @@ class Module_news
 			$submit_url=build_url($map,get_module_zone('cms_news'));
 		} else $submit_url=new ocp_tempcode();
 
-		return do_template('NEWS_ARCHIVE_SCREEN',array('_GUID'=>'228918169ab1db445ee0c2d71f85983c','SUBMIT_URL'=>$submit_url,'BLOGGER'=>is_null($blogger)?NULL:strval($blogger),'BLOG'=>$blog===1,'TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
+		return do_template('NEWS_ARCHIVE_SCREEN',array('_GUID'=>'228918169ab1db445ee0c2d71f85983c','CAT'=>is_numeric($filter)?$filter:NULL,'SUBMIT_URL'=>$submit_url,'BLOGGER'=>is_null($blogger)?NULL:strval($blogger),'BLOG'=>$blog===1,'TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
 	}
 
 	/**

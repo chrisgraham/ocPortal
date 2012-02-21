@@ -501,7 +501,7 @@ function get_gallery_tree($category_id='root',$tree='',$gallery_info=NULL,$do_st
 			}
 
 			if ($levels!==0)
-			$children=array_merge($children,$child_children);
+				$children=array_merge($children,$child_children);
 		}
 	}
 	if (($sub) && (array_key_exists(0,$children)))

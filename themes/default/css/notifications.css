@@ -15,20 +15,7 @@
 
 /* Advanced screens */
 
-.notifications_advanced_chooser_cat_type {  
-	list-style-type: none;  
-	font-weight: bold;  
-	font-style: normal;  
-	margin-left: 0;  
-	padding-left: 0; 
-}
-
-.notifications_advanced_chooser_cat_type li {
-	margin-left: 0;  
-	padding-left: 0; 
-}
-
-.notifications_advanced_chooser_cat, .cat_chooser_subcat {
+.notifications_advanced_chooser_cat {
 	font-weight: normal;
 	font-style: normal;
 	display: block;
@@ -38,13 +25,9 @@
 	padding-left: 0;
 }
 
-.notifications_advanced_chooser_cat li, .cat_chooser_subcat li {
+.notifications_advanced_chooser_cat li {
 	display: block; 
 	margin: 0 0 0 20px;
 	padding-left: 0;
 	min-width: 236px;
 } 
-
-.notifications_advanced_subcat_check {
-	font-weight: bold;
-}

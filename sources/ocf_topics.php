@@ -186,6 +186,13 @@ function ocf_has_special_pt_access($topic_id,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_special_pt_access','s_topic_id',array('s_member_id'=>$member_id,'s_topic_id'=>$topic_id));
-	return !is_null($test);
+	static $special_pt_access_cache=array();
+
+	if (!array_key_exists($topic_id,$special_pt_access_cache))
+		$special_pt_access_cache[$topic_id]=$GLOBALS['FORUM_DB']->query_select('f_special_pt_access',array('s_member_id'),array('s_topic_id'=>$topic_id));
+	foreach ($special_pt_access_cache[$topic_id] as $t)
+	{
+		if ($t['s_member_id']==$member_id) return true;
+	}
+	return false;
 }

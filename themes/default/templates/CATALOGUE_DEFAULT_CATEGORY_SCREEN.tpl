@@ -39,6 +39,11 @@
 
 {+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
+{+START,INCLUDE,NOTIFICATION_BUTTONS}
+	NOTIFICATIONS_TYPE=catalogue_entry__{CATALOGUE}
+	NOTIFICATIONS_ID={ID}
+{+END}
+
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,INCLUDE,STAFF_ACTIONS}
 	1_URL={ADD_LINK*}

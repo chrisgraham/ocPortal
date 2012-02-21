@@ -52,18 +52,6 @@ class Block_main_contact_us
 
 		$type=array_key_exists('param',$map)?$map['param']:do_lang('GENERAL');
 
-		if (has_actual_page_access(get_member(),'admin_messaging'))
-		{
-			if (post_param_integer('enable_notifications',0)==1)
-			{
-				enable_notifications('messaging',$type,get_member());
-			}
-			elseif (post_param_integer('disable_notifications',0)==1)
-			{
-				disable_notifications('messaging',$type,get_member());
-			}
-		}
-
 		$id=uniqid('');
 		$_self_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$id,'message_type'=>$type),get_module_zone('admin_messaging'));
 		$self_url=$_self_url->evaluate();
@@ -134,10 +122,9 @@ class Block_main_contact_us
 				if (has_actual_page_access(get_member(),'admin_messaging'))
 				{
 					$notifications_enabled=notifications_enabled('messaging','type',get_member());
-					$notification_change_url=get_self_url();
 				}
 
-				$out=do_template('BLOCK_MAIN_CONTACT_US',array('_GUID'=>'fd269dce5ff984ee558e9052fa0150b0','COMMENT_DETAILS'=>$comment_details,'MESSAGE'=>$message,'NOTIFICATIONS_ENABLED'=>$notifications_enabled,'NOTIFICATION_CHANGE_URL'=>$notification_change_url));
+				$out=do_template('BLOCK_MAIN_CONTACT_US',array('_GUID'=>'fd269dce5ff984ee558e9052fa0150b0','COMMENT_DETAILS'=>$comment_details,'MESSAGE'=>$message,'NOTIFICATIONS_ENABLED'=>$notifications_enabled,'TYPE'=>$type));
 			} else $out=new ocp_tempcode();
 		} else $out=new ocp_tempcode();
 

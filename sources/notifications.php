@@ -570,6 +570,40 @@ class Hook_Notification
 	}
 
 	/**
+	 * Standard function to create the standardised category tree. This base version will do it based on seeing what is already being monitored, i.e. so you can unmonitor them. It assumes monitoring is initially set from the frontend via the monitor button.
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
+	 * @param  boolean		Whether to list anything monitored by any member (useful if you are calling this because you can't naturally enumerate what can be monitored)
+	 * @return array 			Tree structure
+	 */
+	function create_category_tree($notification_code,$id,$for_any_member=false)
+	{
+		$pagelinks=array();
+
+		$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+
+		$map=array('l_notification_code'=>$notification_code);
+		if (!$for_any_member)
+		{
+			$map['l_member_id']=get_member();
+		}
+		$types=$db->query_select('notifications_enabled',array('DISTINCT l_code_category'),$map); // Already monitoring members who may not be friends
+		foreach ($types as $type)
+		{
+			$pagelinks[]=array(
+				'id'=>$type['l_code_category'],
+				'title'=>$type['l_code_category'],
+			);
+		}
+		global $M_SORT_KEY;
+		$M_SORT_KEY='title';
+		usort($pagelinks,'multi_sort');
+
+		return $pagelinks;
+	}
+
+	/**
 	 * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
 	 *
 	 * @param  ID_TEXT		Notification code
@@ -737,7 +771,7 @@ class Hook_Notification
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
 	 * @return boolean		Whether they have
 	 */
-	function member_have_enabled($notification_code,$member_id,$category=NULL)
+	function member_has_enabled($notification_code,$member_id,$category=NULL)
 	{
 		return $this->_is_member($notification_code,$category,$member_id);
 	}
@@ -870,7 +904,7 @@ class Hook_Notification__Staff extends Hook_Notification
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
 	 * @return boolean		Whether they are
 	 */
-	function member_have_enabled($notification_code,$member_id,$category=NULL)
+	function member_has_enabled($notification_code,$member_id,$category=NULL)
 	{
 		return $this->_is_staff($notification_code,$category,$member_id);
 	}

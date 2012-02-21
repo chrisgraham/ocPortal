@@ -1235,7 +1235,7 @@ function workflow_update_handler()
 	//inspect($emails);
 	$subject=do_lang('APPROVAL_EMAIL_SUBJECT',/*TODO: Should pass title in, for unique email subject line*/NULL,NULL,NULL,get_site_default_lang());
 	$body=do_lang('APPROVAL_EMAIL_BODY',post_param('http_referer',ocp_srv('HTTP_REFERER')),$status_list,$workflow_notes,get_site_default_lang());
-	dispatch_notification('workflow_step',strval($workflow_id),$subject,$body,$send_to_members);
+	dispatch_notification('workflow_step',NULL/*strval($workflow_id)*/,$subject,$body,$send_to_members);
 
 	// Finally return a success message
 	$return_url = strip_tags(post_param('return_url'));

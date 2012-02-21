@@ -243,7 +243,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			$post_text=get_translated_text($lang_id,$GLOBALS['FORUM_DB'],get_site_default_lang());
 			$mail=do_lang('POST_REQUIRING_VALIDATION_MAIL',comcode_escape($url),comcode_escape($poster_name_if_guest),$post_text);
 			require_code('notifications');
-			mail_wrap('validation','ocf_forum:'.strval($forum_id),$subject,$mail);
+			dispatch_notification('needs_validation',NULL/*'ocf_forum:'.strval($forum_id)*/,$subject,$mail);
 		}
 	} else
 	{
@@ -251,8 +251,19 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		{
 			if ($send_notification)
 			{
+				$post_comcode=get_translated_text($lang_id,$GLOBALS['FORUM_DB']);
+
 				require_code('ocf_posts_action2');
-				ocf_send_topic_notification($url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,get_translated_text($lang_id,$GLOBALS['FORUM_DB']),$topic_title,$intended_solely_for,$is_pt);
+				ocf_send_topic_notification($url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,$post_comcode,$topic_title,$intended_solely_for,$is_pt);
+
+				// Send a notification for the inline PP
+				if (!is_null($intended_solely_for))
+				{
+					require_code('notifications');
+					$msubject=do_lang('NEW_PERSONAL_POST_SUBJECT',$topic_title,NULL,NULL,get_lang($intended_solely_for));
+					$mmessage=do_lang('NEW_PERSONAL_POST_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($anonymous?db_get_first_id():$poster)),comcode_escape($topic_title),array(comcode_escape($url),$post_comcode),get_lang($intended_solely_for));
+					dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($intended_solely_for),$anonymous?db_get_first_id():$poster);
+				}
 			}
 		}
 	}

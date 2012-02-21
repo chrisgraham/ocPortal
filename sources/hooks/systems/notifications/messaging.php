@@ -16,6 +16,31 @@
 class Hook_Notification_messaging extends Hook_Notification__Staff
 {
 	/**
+	 * Find whether a handled notification code supports categories.
+	 * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @return boolean		Whether it does
+	 */
+	function supports_categories($notification_code)
+	{
+		return true;
+	}
+
+	/**
+	 * Standard function to create the standardised category tree. This base version will do it based on seeing what is already being monitored, i.e. so you can unmonitor them. It assumes monitoring is initially set from the frontend via the monitor button.
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
+	 * @param  boolean		Whether to list anything monitored by any member (useful if you are calling this because you can't naturally enumerate what can be monitored)
+	 * @return array 			Tree structure
+	 */
+	function create_category_tree($notification_code,$id)
+	{
+		return $this->create_category_tree($notification_code,$id,true);
+	}
+
+	/**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *

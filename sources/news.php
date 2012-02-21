@@ -388,12 +388,12 @@ function dispatch_news_notification($id,$title,$main_news_category)
 	{
 		$subject=do_lang('BLOG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$title);
 		$mail=do_lang('BLOG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate()));
-		dispatch_notification('blog_post',strval($id),$subject,$mail);
+		dispatch_notification('news_entry',strval($main_news_category),$subject,$mail);
 	} else
 	{
 		$subject=do_lang('NEWS_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$title);
 		$mail=do_lang('NEWS_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array($self_url->evaluate()));
-		dispatch_notification('news_entry',strval($id),$subject,$mail);
+		dispatch_notification('news_entry',strval($main_news_category),$subject,$mail);
 	}
 }
 

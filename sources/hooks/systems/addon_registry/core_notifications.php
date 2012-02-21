@@ -89,9 +89,12 @@ class Hook_addon_registry_core_notifications
 			'themes/default/css/notifications.css',
 			'JAVASCRIPT_NOTIFICATIONS.tpl',
 			'NOTIFICATIONS_MANAGE.tpl',
-			'NOTIFICATIONS_MANAGE_ADVANCED.tpl',
+			'NOTIFICATIONS_MANAGE_SCREEN.tpl',
+			'NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl',
+			'NOTIFICATIONS_TREE.tpl',
 			'NOTIFICATION_TYPES.tpl',
 			'NOTIFICATION_BUTTONS.tpl',
+			'site/pages/modules/notifications.php',
 		);
 	}
 
