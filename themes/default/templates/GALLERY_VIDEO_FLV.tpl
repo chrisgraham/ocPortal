@@ -7,6 +7,9 @@
 {+START,IF,{$VALUE_OPTION,html5}}
 	<meta itemprop="width" content="{WIDTH*}" />
 	<meta itemprop="height" content="{HEIGHT*}" />
+	<meta itemprop="duration" content="T{LENGTH*}S" />
+	<meta itemprop="thumbnailURL" content="{THUMB_URL*}" />
+	<meta itemprop="embedURL" content="{$GET*,flv_url}" />
 {+END}
 
 <div class="xhtml_validator_off">
