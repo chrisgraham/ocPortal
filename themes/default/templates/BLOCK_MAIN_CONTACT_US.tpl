@@ -8,7 +8,7 @@
 	{COMMENT_DETAILS}
 
 	{+START,IF_PASSED,NOTIFICATIONS_ENABLED}
-		<div class="posting_form_wrap_buttons">
+		<div class="right">
 			{+START,INCLUDE,NOTIFICATION_BUTTONS}
 				NOTIFICATIONS_TYPE=messaging
 				NOTIFICATIONS_ID={TYPE}

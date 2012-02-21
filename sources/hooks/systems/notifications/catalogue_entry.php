@@ -38,7 +38,7 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 	{
 		require_code('catalogues');
 
-		$name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>intval($id)));
+		$name=substr($notification_code,strlen('catalogue_entry__'));
 
 		if (is_null($id))
 		{

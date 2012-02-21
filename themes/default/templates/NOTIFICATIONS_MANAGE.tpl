@@ -35,9 +35,9 @@
 
 					{+START,INCLUDE,NOTIFICATION_TYPES}{+END}
 					
-					<td>
+					<td class="associated_details">
 						{+START,IF,{SUPPORTS_CATEGORIES}}
-							<a href="{$PAGE_LINK*,_SEARCH:notifications:advanced:notification_code={NOTIFICATION_CODE}:redirect={$SELF_URL&}}"></a>
+							[ <a href="{$PAGE_LINK*,_SEARCH:notifications:advanced:notification_code={NOTIFICATION_CODE}}">{!ADVANCED}</a> ]
 						{+END}
 					</td>
 				</tr>

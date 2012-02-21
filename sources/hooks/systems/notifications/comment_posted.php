@@ -28,6 +28,40 @@ class Hook_Notification_comment_posted extends Hook_Notification
 	}
 
 	/**
+	 * Standard function to create the standardised category tree
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
+	 * @return array 			Tree structure
+	 */
+	function create_category_tree($notification_code,$id)
+	{
+		$categories=parent::create_category_tree($notification_code,$id);
+
+		// See if we can get better titles
+		require_code('feedback');
+		foreach ($categories as $i=>$c)
+		{
+			$matches=array();
+			if (preg_match('#^([^\_]*)\_(.*)$#',$c['id'],$matches)!=0)
+			{
+				$details=get_details_behind_feedback_code($matches[1],$matches[2]);
+				$new_title=$details[0];
+				if (!is_null($new_title))
+				{
+					$categories[$i]['title']=$new_title;
+				}
+			}
+		}
+		
+		global $M_SORT_KEY;
+		$M_SORT_KEY='title';
+		usort($categories,'multi_sort');
+		
+		return $categories;
+	}
+
+	/**
 	 * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
 	 *
 	 * @param  ID_TEXT		Notification code

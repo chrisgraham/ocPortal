@@ -120,5 +120,7 @@ addEventListenerAbstract(window,'real_load',function () {
 
 {+START,INCLUDE,NOTIFICATION_BUTTONS}
 	NOTIFICATIONS_TYPE=member_entered_chatroom
-	NOTIFICATIONS_ID={ID}
+	NOTIFICATIONS_ID={ROOM_ID}
+	BREAK=1
+	RIGHT=1
 {+END}

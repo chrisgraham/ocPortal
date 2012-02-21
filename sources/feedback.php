@@ -99,8 +99,16 @@ function embed_feedback_systems($page_name,$id,$allow_rating,$allow_comments,$al
 	$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field($submitter,'m_auto_monitor_contrib_content');
 	if ($auto_monitor_contrib_content==1)
 	{
-		require_code('notifications');
-		enable_notifications('comment_posted',$page_name.'_'.$id,$submitter);
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('notifications_enabled','l_setting',array(
+			'l_member_id'=>$submitter,
+			'l_notification_code'=>'comment_posted',
+			'l_code_category'=>$page_name.'_'.$id,
+		));
+		if (is_null($test))
+		{
+			require_code('notifications');
+			enable_notifications('comment_posted',$page_name.'_'.$id,$submitter);
+		}
 	}
 
 	do_rating($allow_rating==1,$page_name,$id,$self_url,$self_title);

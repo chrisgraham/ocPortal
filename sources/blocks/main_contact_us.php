@@ -121,6 +121,7 @@ class Block_main_contact_us
 				$notification_change_url=NULL;
 				if (has_actual_page_access(get_member(),'admin_messaging'))
 				{
+					require_code('notifications');
 					$notifications_enabled=notifications_enabled('messaging','type',get_member());
 				}
 

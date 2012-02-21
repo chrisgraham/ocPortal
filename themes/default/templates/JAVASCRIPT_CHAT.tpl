@@ -799,7 +799,7 @@ function find_im_convo_room_ids()
 	return rooms;
 }
 
-function close_chat_conversation(ob)
+function close_chat_conversation(ob,room_id)
 {
 	generate_question_ui(
 		'{!WANT_TO_DOWNLOAD_LOGS^;*}',
@@ -812,9 +812,9 @@ function close_chat_conversation(ob)
 			{
 				if (logs.toLowerCase()=='{!YES^;*}'.toLowerCase())
 				{
-					window.open('{$FIND_SCRIPT*;,dllogs}?room={ROOM_ID*;}{$KEEP^;*}');
+					window.open('{$FIND_SCRIPT*;,dllogs}?room='+room_id+'{$KEEP^;*}');
 				}
-				deinvolve_im({ROOM_ID*},logs=='{!YES^;*}',true);
+				deinvolve_im(room_id,logs=='{!YES^;*}',true);
 				window.setTimeout(function() { if (document.body.className.indexOf('sitewide_im_popup_body')!=-1) window.close(); } ,1000);
 			}
 		}

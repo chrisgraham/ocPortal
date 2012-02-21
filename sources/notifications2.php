@@ -55,6 +55,8 @@ function notifications_ui($member_id_of)
 {
 	require_css('notifications');
 	require_code('notifications');
+	require_lang('notifications');
+	require_javascript('javascript_notifications');
 
 	if (is_guest($member_id_of)) access_denied('NOT_AS_GUEST');
 
@@ -62,6 +64,8 @@ function notifications_ui($member_id_of)
 	$fields=new ocp_tempcode();
 
 	$_notification_types=_get_available_notification_types($member_id_of);
+
+	$statistical_notification_type=_find_member_statistical_notification_type($member_id_of);
 
 	$notification_sections=array();
 	$hooks=find_all_hooks('systems','notifications');
@@ -76,6 +80,7 @@ function notifications_ui($member_id_of)
 			if ($ob->member_could_potentially_enable($notification_code,$member_id_of))
 			{
 				$current_setting=notifications_setting($notification_code,NULL,$member_id_of);
+				if ($current_setting==A__STATISTICAL) $current_setting=$statistical_notification_type;
 				$allowed_setting=$ob->allowed_settings($notification_code);
 
 				$notification_types=array();
@@ -85,7 +90,7 @@ function notifications_ui($member_id_of)
 					$notification_types[]=array(
 						'NTYPE'=>$ntype,
 						'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
-						'CHECKED'=>(post_param_integer('notification_'.$notification_code.'_'.$ntype,0)==1) || (($possible & $current_setting) != 0),
+						'CHECKED'=>(post_param_integer('notification_'.$notification_code.'_'.$ntype,(($possible & $current_setting) != 0)?1:0)==1),
 						'RAW'=>strval($possible),
 						'AVAILABLE'=>$available,
 					);
@@ -176,8 +181,11 @@ function notifications_ui($member_id_of)
  */
 function notifications_ui_advanced($notification_code,$enable_message=NULL,$disable_message=NULL)
 {
+	require_css('notifications');
 	require_code('notifications');
 	require_lang('notifications');
+	require_javascript('javascript_notifications');
+	require_javascript('javascript_notifications');
 
 	$ob=_get_notification_ob_for_code($notification_code);
 	$info_details=$ob->list_handled_codes();
@@ -198,7 +206,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	{
 		if (notifications_enabled($notification_code,$notification_category))
 		{
-			disable_notifications($notification_code,$notification_category);
+			enable_notifications($notification_code,$notification_category,NULL,A_NA);
 			attach_message($disable_message,'inform');
 		} else
 		{
@@ -207,17 +215,19 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 		}
 	} else
 	{
-		if (count($_POST)!=0) // If we've just saved
+		if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST') // If we've just saved
 		{
+			enable_notifications($notification_code,NULL,NULL,A_NA); // Make it clear we've overridden the general value by doing this
+
 			$new_setting=A_NA;
-			foreach (array_keys($_notification_types) as $possible)
+			foreach ($_notification_types as $possible=>$ntype)
 			{
-				if (post_param_integer('notification_'.$notification_code.'_'.strval($possible),0)==1)
+				if (post_param_integer('notification_'.$notification_code.'_'.$ntype,0)==1)
 				{
 					$new_setting=$new_setting | $possible;
 				}
 			}
-			
+		
 			foreach (array_keys($_POST) as $key)
 			{
 				$matches=array();
@@ -225,6 +235,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 				{
 					$notification_category=$matches[1];
 					$save_setting=(post_param_integer($key,0)==1)?$new_setting:A_NA;
+
 					enable_notifications($notification_code,$notification_category,NULL,$save_setting);
 				}
 			}
@@ -240,6 +251,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 
 	$current_setting=$db->query_value_null_ok_full('SELECT l_setting FROM '.$db->get_table_prefix().'notifications_enabled WHERE l_member_id='.strval(get_member()).' AND '.db_string_equal_to('l_notification_code',$notification_code).' AND '.db_string_not_equal_to('l_code_category',''));
 	if (is_null($current_setting)) $current_setting=A_NA;
+	if ($current_setting==A__STATISTICAL) $current_setting=_find_member_statistical_notification_type(get_member());
 
 	$notification_types=array();
 	foreach ($_notification_types as $possible=>$ntype)
@@ -251,7 +263,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 			$notification_types[]=array(
 				'NTYPE'=>$ntype,
 				'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
-				'CHECKED'=>(post_param_integer('notification_'.$notification_code.'_'.$ntype,0)==1) || (($possible & $current_setting) != 0),
+				'CHECKED'=>(post_param_integer('notification_'.$notification_code.'_'.$ntype,(($possible & $current_setting) != 0)?1:0)==1),
 				'RAW'=>strval($possible),
 				'AVAILABLE'=>true,
 			);
@@ -262,7 +274,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 
 	return do_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN',array(
 		'TITLE'=>$title,
-		'ACTION_URL'=>get_self_url(),
+		'ACTION_URL'=>get_self_url(false,false,array('id'=>NULL)),
 		'NOTIFICATION_TYPES'=>$notification_types,
 		'TREE'=>$tree,
 		'NOTIFICATION_CODE'=>$notification_code,

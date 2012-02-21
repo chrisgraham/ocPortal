@@ -44,26 +44,28 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 		}
 
-		$_pagelinks=ocf_get_forum_tree_secure(NULL,$id,true,NULL);
+		$_pagelinks=ocf_get_forum_tree_secure(NULL,$id,false,NULL,'',NULL,NULL,false,1);
+
 		$pagelinks=array();
 		foreach ($_pagelinks as $p)
 		{
 			$p['id']='forum:'.strval($p['id']);
+			$p['title']=do_lang('A_FORUM',$p['title']);
 			$pagelinks[]=$p;
 		}
-		if (is_null($id))
+		if (is_null($id)) // On root level add monitored topics too
 		{
-			$types2=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code'=>'ocf_topic','l_member_id'=>get_member())); // Already monitoring members who may not be friends
+			$types2=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code'=>'ocf_topic','l_member_id'=>get_member()));
 			foreach ($types2 as $type)
 			{
-				if (!is_numeric($type['l_code_category']))
+				if (is_numeric($type['l_code_category']))
 				{
-					$title=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_cache_first_post_title',array('id'=>intval($type['id'])));
+					$title=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_cache_first_title',array('id'=>intval($type['l_code_category'])));
 					if (!is_null($title))
 					{
 						$pagelinks[]=array(
-							'id'=>$type['id'],
-							'title'=>$title,
+							'id'=>$type['l_code_category'],
+							'title'=>do_lang('A_TOPIC',$title),
 						);
 					}
 				}

@@ -7,7 +7,7 @@
 				{+START,INCLUDE,NOTIFICATION_BUTTONS}
 					NOTIFICATIONS_TYPE=ocf_topic
 					NOTIFICATIONS_ID={ID}
-					NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_topic
+					NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_topic:{ID}
 				{+END}
 				{SCREEN_BUTTONS}
 			</div>
@@ -17,7 +17,7 @@
 
 {POLL}
 
-{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,topic,{$_GET,id}}}
+{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,topic,{ID}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}<br />{+END}
 
 {+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
@@ -131,7 +131,7 @@
 		{+START,INCLUDE,NOTIFICATION_BUTTONS}
 			NOTIFICATIONS_TYPE=ocf_topic
 			NOTIFICATIONS_ID={ID}
-			NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_topic
+			NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_topic:{ID}
 		{+END}
 		{SCREEN_BUTTONS}
 	</div>

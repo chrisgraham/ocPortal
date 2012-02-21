@@ -122,7 +122,16 @@
 			<br />
 		{+END}
 
-		{BUTTONS}
+		<div class="ocf_screen_buttons">
+			{+START,IF_PASSED,ID}
+				{+START,INCLUDE,NOTIFICATION_BUTTONS}
+					NOTIFICATIONS_TYPE=ocf_topic
+					NOTIFICATIONS_ID=forum:{ID}
+					NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
+				{+END}
+			{+END}
+			{BUTTONS}
+		</div>
 
 		{+START,IF_PASSED,ID}
 			{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}

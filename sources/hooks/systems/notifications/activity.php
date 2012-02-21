@@ -46,10 +46,15 @@ class Hook_Notification_activity extends Hook_Notification
 		}
 		foreach ($types as $type)
 		{
-			$pagelinks[$type['id']]=array(
-				'id'=>$type['id'],
-				'title'=>$GLOBALS['FORUM_DRIVER']->get_username($type['member_liked']),
-			);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($type['member_liked']);
+			
+			if (!is_null($username))
+			{
+				$pagelinks[$type['member_liked']]=array(
+					'id'=>$type['member_liked'],
+					'title'=>$username,
+				);
+			}
 		}
 		global $M_SORT_KEY;
 		$M_SORT_KEY='title';

@@ -38,7 +38,9 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 	{
 		$pagelinks=array();
 
-		$types=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'));
+		$map=array();
+		if (!has_specific_permission(get_member(),'see_hidden_groups')) $map['g_hidden']=0;
+		$types=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map);
 		foreach ($types as $type)
 		{
 			$pagelinks[]=array(
@@ -92,6 +94,22 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 	{
 		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
 		$members=$this->_all_members_who_have_enabled_with_page_access($members,'groups',$notification_code,$category,$to_member_ids,$start,$max);
+
+		if (is_numeric($category)) // Also merge in people monitoring forum
+		{
+			$hidden=$GLOBALS['FORUM_DB']->query_value('f_groups','g_hidden',array('id'=>intval($category)));
+
+			if ($hidden==1)
+			{
+				$members_new=$members;
+				foreach ($members as $member_id=>$setting)
+				{
+					if (!has_specific_permission($member_id,'see_hidden_groups'))
+						$members_new[$member_id]=$setting;
+				}
+				$members=$members_new;
+			}
+		}
 
 		return $members;
 	}

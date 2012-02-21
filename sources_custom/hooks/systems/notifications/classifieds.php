@@ -27,7 +27,7 @@ class Hook_Notification_classifieds extends Hook_Notification
 		$catalogues=$GLOBALS['SITE_DB']->query_select('classifieds_prices',array('DISTINCT c_catalogue_name'));
 		foreach ($catalogues as $catalogue)
 		{
-			$list['classifieds__'.$catalogue['c_name']]=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_classifieds'));
+			$list['classifieds__'.$catalogue['c_catalogue_name']]=array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_classifieds'));
 		}
 		return $list;
 	}

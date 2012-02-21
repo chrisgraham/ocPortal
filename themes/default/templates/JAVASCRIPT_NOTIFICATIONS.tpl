@@ -2,7 +2,7 @@
 
 function advanced_notifications_check_sensible(form)
 {
-	var checkboxes=get_elements_by_class_name(form,'notifications_types').getElementsByTagName('input');
+	var checkboxes=get_elements_by_class_name(form,'notifications_types')[0].getElementsByTagName('input');
 	var checked=false;
 	for (var i=0;i<checkboxes.length;i++)
 	{
@@ -41,7 +41,7 @@ function advanced_notifications_check_all(button)
 			{
 				for (var i=0;i<form.elements.length;i++)
 				{
-					if (form.elements[i].type=='checkbox')
+					if ((form.elements[i].type=='checkbox') && (form.elements[i].name.indexOf('category')!=-1))
 						form.elements[i].checked=enable;
 				}
 				button.value=btntxt;

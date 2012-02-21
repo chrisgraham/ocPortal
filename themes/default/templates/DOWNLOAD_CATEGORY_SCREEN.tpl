@@ -40,6 +40,8 @@
 {+START,INCLUDE,NOTIFICATION_BUTTONS}
 	NOTIFICATIONS_TYPE=download
 	NOTIFICATIONS_ID={ID}
+	BREAK=1
+	RIGHT=1
 {+END}
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}

@@ -263,6 +263,43 @@ function _notification_setting_available($setting,$member_id=NULL)
 }
 
 /**
+ * Find what a member usually receives notifications on.
+ *
+ * @param  MEMBER			Member to send to
+ * @return integer		Normal setting
+ */
+function _find_member_statistical_notification_type($to_member_id)
+{
+	$notifications_enabled=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_setting'),array('l_member_id'=>$to_member_id),'',100/*within reason*/);
+	if (count($notifications_enabled)==0) // Default to e-mail
+	{
+		$setting=A_INSTANT_EMAIL;
+	} else
+	{
+		$possible_settings=array();
+		foreach (array(A_INSTANT_SMS,A_INSTANT_EMAIL,A_DAILY_EMAIL_DIGEST,A_WEEKLY_EMAIL_DIGEST,A_MONTHLY_EMAIL_DIGEST,A_INSTANT_PT) as $possible_setting)
+		{
+			if (_notification_setting_available($possible_setting,$to_member_id))
+				$possible_settings[$possible_setting]=0;
+		}
+		foreach ($notifications_enabled as $ml)
+		{
+			foreach (array_keys($possible_settings) as $possible_setting)
+			{
+				if ($ml['l_setting'] & $possible_setting != 0)
+				{
+					$possible_settings[$possible_setting]++;
+				}
+			}
+		}
+		arsort($possible_settings);
+		reset($possible_settings);
+		$setting=key($possible_settings);
+	}
+	return $setting;
+}
+
+/**
  * Send out a notification to a member.
  *
  * @param  MEMBER			Member to send to
@@ -295,32 +332,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 	// If none-specified, we'll need to be clever now
 	if ($setting==A__STATISTICAL)
 	{
-		$notifications_enabled=$db->query_select('notifications_enabled',array('l_setting'),array('l_member_id'=>$to_member_id),'',100/*within reason*/);
-		if (count($notifications_enabled)==0) // Default to e-mail
-		{
-			$setting=A_INSTANT_EMAIL;
-		} else
-		{
-			$possible_settings=array();
-			foreach (array(A_INSTANT_SMS,A_INSTANT_EMAIL,A_DAILY_EMAIL_DIGEST,A_WEEKLY_EMAIL_DIGEST,A_MONTHLY_EMAIL_DIGEST,A_INSTANT_PT) as $possible_setting)
-			{
-				if (_notification_setting_available($possible_setting,$to_member_id))
-					$possible_settings[$possible_setting]=0;
-			}
-			foreach ($notifications_enabled as $ml)
-			{
-				foreach (array_keys($possible_settings) as $possible_setting)
-				{
-					if ($ml['l_setting'] & $possible_setting != 0)
-					{
-						$possible_settings[$possible_setting]++;
-					}
-				}
-			}
-			arsort($possible_settings);
-			reset($possible_settings);
-			$setting=key($possible_settings);
-		}
+		$setting=_find_member_statistical_notification_type($to_member_id);
 	}
 
 	$needs_manual_cc=true;
@@ -455,7 +467,7 @@ function enable_notifications($notification_code,$notification_category,$member_
 }
 
 /**
- * Disable notifications for a member on a notification type+category.
+ * Disable notifications for a member on a notification type+category. Chances are you don't want to call this, you want to call enable_notifications with $setting=A_NA. That'll stop the default coming back.
  *
  * @param  ID_TEXT		The notification code to use
  * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
@@ -506,6 +518,7 @@ function notifications_setting($notification_code,$notification_category,$member
 		'l_notification_code'=>$notification_code,
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	));
+
 	if ((is_null($test)) && (!is_null($notification_category)))
 	{
 		$test=$db->query_value_null_ok('notifications_enabled','l_setting',array(
@@ -574,10 +587,22 @@ class Hook_Notification
 	 *
 	 * @param  ID_TEXT		Notification code
 	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
+	 * @return array 			Tree structure
+	 */
+	function create_category_tree($notification_code,$id)
+	{
+		return $this->_create_category_tree($notification_code,$id,false);
+	}
+
+	/**
+	 * Standard function to create the standardised category tree. This base version will do it based on seeing what is already being monitored, i.e. so you can unmonitor them. It assumes monitoring is initially set from the frontend via the monitor button.
+	 *
+	 * @param  ID_TEXT		Notification code
+	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
 	 * @param  boolean		Whether to list anything monitored by any member (useful if you are calling this because you can't naturally enumerate what can be monitored)
 	 * @return array 			Tree structure
 	 */
-	function create_category_tree($notification_code,$id,$for_any_member=false)
+	function _create_category_tree($notification_code,$id,$for_any_member=false)
 	{
 		$pagelinks=array();
 
@@ -591,10 +616,13 @@ class Hook_Notification
 		$types=$db->query_select('notifications_enabled',array('DISTINCT l_code_category'),$map); // Already monitoring members who may not be friends
 		foreach ($types as $type)
 		{
-			$pagelinks[]=array(
-				'id'=>$type['l_code_category'],
-				'title'=>$type['l_code_category'],
-			);
+			if ($type['l_code_category']!='')
+			{
+				$pagelinks[]=array(
+					'id'=>$type['l_code_category'],
+					'title'=>$type['l_code_category'],
+				);
+			}
 		}
 		global $M_SORT_KEY;
 		$M_SORT_KEY='title';
