@@ -1,5 +1,5 @@
 <p>
-	{!NOTIFICATIONS_INTRO}
+	{$?,{$MATCH_KEY_MATCH,_SEARCH:admin_notifications},{!NOTIFICATIONS_DEFINE_LOCKDOWN},{!NOTIFICATIONS_INTRO}}
 </p>
 
 <div class="wide_table"><table class="wide_table solidborder notifications_form">

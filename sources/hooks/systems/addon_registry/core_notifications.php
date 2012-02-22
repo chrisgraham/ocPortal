@@ -95,6 +95,9 @@ class Hook_addon_registry_core_notifications
 			'NOTIFICATION_TYPES.tpl',
 			'NOTIFICATION_BUTTONS.tpl',
 			'site/pages/modules/notifications.php',
+			'adminzone/pages/modules/admin_notifications.php',
+			'sources/hooks/systems/do_next_menus/notifications.php',
+			'themes/default/images/bigicons/notifications.png',
 		);
 	}
 
@@ -161,6 +164,7 @@ class Hook_addon_registry_core_notifications
 		$out=do_lorem_template('NOTIFICATIONS_MANAGE_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'INTERFACE'=>$interface,
+			'ACTION_URL'=>get_self_url(),
 		));
 		
 		return array(

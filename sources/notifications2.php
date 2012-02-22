@@ -21,10 +21,10 @@
 /**
  * Get a map of notification types available to our member.
  *
- * @param  MEMBER			Member this is for
+ * @param  ?MEMBER		Member this is for (NULL: just check globally)
  * @return array			Map of notification types (integer code to language string code)
  */
-function _get_available_notification_types($member_id_of)
+function _get_available_notification_types($member_id_of=NULL)
 {
 	$__notification_types=array(
 		A_INSTANT_EMAIL=>'INSTANT_EMAIL',
@@ -67,10 +67,14 @@ function notifications_ui($member_id_of)
 
 	$statistical_notification_type=_find_member_statistical_notification_type($member_id_of);
 
+	$lockdown=collapse_2d_complexity('l_notification_code','l_setting',$GLOBALS['SITE_DB']->query_select('notification_lockdown',array('*')));
+
 	$notification_sections=array();
 	$hooks=find_all_hooks('systems','notifications');
 	foreach (array_keys($hooks) as $hook)
 	{
+		if (array_key_exists($hook,$lockdown)) continue;
+
 		if ((substr($hook,0,4)=='ocf_') && (get_forum_type()!='ocf')) continue;
 		require_code('hooks/systems/notifications/'.$hook);
 		$ob=object_factory('Hook_Notification_'.$hook);
@@ -186,6 +190,11 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	require_lang('notifications');
 	require_javascript('javascript_notifications');
 	require_javascript('javascript_notifications');
+
+	$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
+		'l_notification_code'=>$notification_code,
+	));
+	if (!is_null($test)) warn_exit(do_lang_tempcode('NOTIFICATION_CODE_LOCKED_DOWN'));
 
 	$ob=_get_notification_ob_for_code($notification_code);
 	$info_details=$ob->list_handled_codes();

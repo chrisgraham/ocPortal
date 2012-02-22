@@ -59,7 +59,8 @@ function init__notifications()
 	// And...
 	define('A__ALL',0xFFFFFF);
 	// And...
-	define('A__STATISTICAL',-1); // This is magic, it will choose whatever the user probably wants, based on their existing settings
+	define('A__STATISTICAL',-0x1); // This is magic, it will choose whatever the user probably wants, based on their existing settings
+	define('A__CHOICE',-0x2); // Never stored in DB, used as a flag inside admin_notifications module
 }
 
 /**
@@ -522,6 +523,11 @@ function notifications_setting($notification_code,$notification_category,$member
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
+	$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
+		'l_notification_code'=>$notification_code,
+	));
+	if (!is_null($test)) return $test;
+
 	$test=$db->query_value_null_ok('notifications_enabled','l_setting',array(
 		'l_member_id'=>$member_id,
 		'l_notification_code'=>$notification_code,
@@ -850,14 +856,24 @@ class Hook_Notification
 
 		$db=(substr($only_if_enabled_on__notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
-		if (($has_by_default) && (get_forum_type()=='ocf') && (db_has_subqueries($db->connection_read))) // Can only enumerate and join on a local OCF forum
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
+			'l_notification_code'=>$only_if_enabled_on__notification_code,
+		));
+		if ((!is_null($test)) && (get_forum_type()=='ocf'))
 		{
-			$query_stub='SELECT m.id AS l_member_id,'.strval($initial_setting).' AS l_setting FROM '.$db->get_table_prefix().'f_members m WHERE '.str_replace('l_member_id','id',$clause_3).' AND ';
-			$query_stem='NOT EXISTS(SELECT * FROM '.$db->get_table_prefix().'notifications_enabled l WHERE m.id=l.l_member_id AND '.$clause_1.' AND '.$clause_2.' AND '.$clause_3.' AND l_setting='.strval(A_NA).')';
+			$query_stub='SELECT m.id AS l_member_id,'.strval($initial_setting).' AS l_setting FROM '.$db->get_table_prefix().'f_members m WHERE '.str_replace('l_member_id','id',$clause_3);
+			$query_stem='';
 		} else
 		{
-			$query_stub='SELECT l_member_id,l_setting FROM '.$db->get_table_prefix().'notifications_enabled WHERE ';
-			$query_stem=$clause_1.' AND '.$clause_2.' AND l_setting<>'.strval(A_NA);
+			if (($has_by_default) && (get_forum_type()=='ocf') && (db_has_subqueries($db->connection_read))) // Can only enumerate and join on a local OCF forum
+			{
+				$query_stub='SELECT m.id AS l_member_id,'.strval($initial_setting).' AS l_setting FROM '.$db->get_table_prefix().'f_members m WHERE '.str_replace('l_member_id','id',$clause_3).' AND ';
+				$query_stem='NOT EXISTS(SELECT * FROM '.$db->get_table_prefix().'notifications_enabled l WHERE m.id=l.l_member_id AND '.$clause_1.' AND '.$clause_2.' AND '.$clause_3.' AND l_setting='.strval(A_NA).')';
+			} else
+			{
+				$query_stub='SELECT l_member_id,l_setting FROM '.$db->get_table_prefix().'notifications_enabled WHERE ';
+				$query_stem=$clause_1.' AND '.$clause_2.' AND l_setting<>'.strval(A_NA);
+			}
 		}
 
 		$results=$db->query($query_stub.$query_stem,$max,$start);
@@ -1003,42 +1019,3 @@ class Hook_Notification__Staff extends Hook_Notification
 		return (($test) && (has_specific_permission($member_id,'may_enable_staff_notifications')));
 	}
 }
-
-/*
-
-TODO, Frontend...
-
-Convert tracking addon to official notifications feature, and overhaul UI - will be a member setting notifications tab. messaging.ini / notifications.ini --> integrate
-# # lang_custom/EN/notifications.ini
-# # personalzone/pages/modules_custom/notifications.php
-# # sources_custom/hooks/modules/notifications/catalogues.php
-# # sources_custom/hooks/modules/notifications/cedi.php
-# # sources_custom/hooks/modules/notifications/downloads.php
-# # sources_custom/hooks/modules/notifications/galleries.php
-# # sources_custom/hooks/systems/symbols/IS_TRACKED.php
-# # sources_custom/hooks/systems/upon_query/notifications_catalogues.php
-# # sources_custom/hooks/systems/upon_query/notifications_cedi.php
-# # sources_custom/hooks/systems/upon_query/notifications_downloads.php
-# # sources_custom/hooks/systems/upon_query/notifications_galleries.php
-# # sources_custom/notifications.php
-# # themes/default/css_custom/notifications.css
-# # themes/default/templates_custom/JAVASCRIPT_NOTIFICATIONS.tpl
-# # themes/default/templates_custom/NOTIFICATIONS.tpl
-# # themes/default/templates_custom/NOTIFICATIONS_BUTTONS.tpl
-# # themes/default/templates_custom/NOTIFICATIONS_SCREEN.tpl
-# # themes/default/templates_custom/CEDI_PAGE_SCREEN.tpl
-# # themes/default/templates_custom/GALLERY_REGULAR_MODE_SCREEN.tpl
-# # themes/default/templates_custom/GALLERY_FLOW_MODE_SCREEN.tpl
-# # themes/default/templates_custom/DOWNLOAD_CATEGORY_SCREEN.tpl
-# # themes/default/templates_custom/CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl
-# # cms/pages/modules_custom/cms_cedi.php
-# # site/pages/modules_custom/cedi.php
-
-Explain people want SMS and e-mail notifications, not just SMS notifications
-UI must not show options unavailable to them.
-
-Put "get notifications"/"stop notifications" buttons all over ocPortal where categories passed to notifications not null (used to be called track buttons)
-
-Write tests
-
-*/

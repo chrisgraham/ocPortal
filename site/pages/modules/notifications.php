@@ -82,7 +82,11 @@ class Module_notifications
 		
 		$interface=notifications_ui(get_member());
 		
-		return do_template('NOTIFICATIONS_MANAGE_SCREEN',array('TITLE'=>$title,'INTERFACE'=>$interface));
+		return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
+			'TITLE'=>$title,
+			'INTERFACE'=>$interface,
+			'ACTION_URL'=>get_self_url(),
+		));
 	}
 
 	/**
