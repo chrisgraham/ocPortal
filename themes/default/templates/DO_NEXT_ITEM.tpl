@@ -26,23 +26,25 @@
 				var as=document.getElementById('donext_item_{$GET*,rand_donextitem}').getElementsByTagName('a');
 				for (var i=0;i<as.length;i++)
 				{
-					var _this=this;
-					addEventListenerAbstract(as[i],'click',function(event) {
-						test=window.fauxmodal_confirm(
-							'{!KEEP_ADDING_QUESTION;}',
-							function(test)
-							{
-								if (test)
+					as[i].onclick=function(_this) {
+						return function(event) {
+							if (typeof event.preventDefault!='undefined') event.preventDefault();
+							cancelBubbling(event);
+							test=window.fauxmodal_confirm(
+								'{!KEEP_ADDING_QUESTION;}',
+								function(test)
 								{
-									_this.href+=(_this.href.indexOf('?')!=-1)?'&':'?';
-									_this.href+='{AUTO_ADD*}=1';
+									if (test)
+									{
+										_this.href+=(_this.href.indexOf('?')!=-1)?'&':'?';
+										_this.href+='{AUTO_ADD*}=1';
+									}
+									click_link(_this);
 								}
-								click_link(_this);
-							}
-						);
-						if (typeof event.preventDefault!='undefined') event.preventDefault();
-						return false;
-					} );
+							);
+							return false;
+						};
+					} (as[i]);
 				}
 			} );
 		//]]></script>
