@@ -317,6 +317,7 @@ class Hook_addon_registry_ocf_forum
 				'OCF_TOPIC_POLL_ANSWER_RADIO.tpl'=>'ocf_topic_wrap',
 				'OCF_TOPIC_POLL.tpl'=>'ocf_topic_wrap',
 				'OCF_TOPIC_WRAP.tpl'=>'ocf_topic_wrap',
+				'NOTIFICATION_BUTTONS.tpl'=>'ocf_topic_wrap',
 				'OCF_TOPIC_POLL_VIEW_RESULTS.tpl'=>'ocf_topic_voted_wrap',
 				'TOPIC_LIST.tpl'=>'topic_list',
 				'OCF_PT_FILTERS.tpl'=>'ocf_forum',

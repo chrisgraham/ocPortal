@@ -1,10 +1,15 @@
 {+START,LOOP,NOTIFICATION_TYPES}
 	<td>
-		{+START,IF,{AVAILABLE}}
-			<div>
-				<label for="notification_{NOTIFICATION_CODE*}_{NTYPE*}">{LABEL*}</label>
-				<input title="{LABEL*}" {+START,IF,{CHECKED}}checked="checked" {+END}id="notification_{NOTIFICATION_CODE*}_{NTYPE*}" name="notification_{NOTIFICATION_CODE*}_{NTYPE*}" type="checkbox" value="1" />
-			</div>
-		{+END}
+		<div>
+			<label for="notification_{SCOPE*}_{NTYPE*}">{LABEL*}</label>
+
+			{+START,IF,{AVAILABLE}}
+				<input title="{LABEL*}" {+START,IF,{CHECKED}}checked="checked" {+END}id="notification_{SCOPE*}_{NTYPE*}" name="notification_{SCOPE*}_{NTYPE*}" type="checkbox" value="1" />
+			{+END}
+
+			{+START,IF,{$NOT,{AVAILABLE}}}
+				<input title="{LABEL*}" disabled="disabled" id="notification_{SCOPE*}_{NTYPE*}" name="notification_{SCOPE*}_{NTYPE*}" type="checkbox" value="1" />
+			{+END}
+		</div>
 	</td>
 {+END}

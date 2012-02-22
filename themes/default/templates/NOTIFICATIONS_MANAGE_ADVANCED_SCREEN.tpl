@@ -7,22 +7,28 @@
 <form method="post" action="{ACTION_URL*}">
 	<div>
 		{+START,IF_NON_EMPTY,{$TRIM,{TREE}}}
-			{+START,BOX,{!ENABLE_NOTIFICATIONS_USING}:,,med}
-				<div class="notifications_types">
-					{+START,INCLUDE,NOTIFICATION_TYPES}{+END}
-				</div>
-			{+END}
+			<div class="wide_table"><table class="wide_table solidborder notifications_form">
+				<colgroup>
+					<col style="width: 100%" />
+					{+START,LOOP,NOTIFICATION_TYPES_TITLES}
+						<col style="width: 40px" />
+					{+END}
+				</colgroup>
 
-			<br />
+				<thead>
+					<th></th>
+					{+START,LOOP,NOTIFICATION_TYPES_TITLES}
+						<th>
+							<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
+						</th>
+					{+END}
+				</thead>
 
-			{+START,BOX,{!CATEGORIES_TO_ENABLE_NOTIFICATIONS}:,,light}
-				{TREE}
+				<tbody>
+					{TREE}
+				</tbody>
+			</table></div>
 
-				<p>
-					<input class="button_pageitem" type="button" id="check_uncheck" value="{!NOTIFICATIONS_CHECK_ALL}" onclick="advanced_notifications_check_all(this)" />
-				</p>
-			{+END}
-		
 			<p class="proceed_button">
 				<input type="submit" class="button_page" value="{!SAVE}" />
 			</p>

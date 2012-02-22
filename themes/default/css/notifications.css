@@ -24,34 +24,3 @@
 
 /* Advanced screens */
 
-.notifications_types {
-	overflow: hidden;
-	outline: 0;
-	width: 100%;
-}
-
-.notifications_types div {
-	margin-right: 2em;
-	float: left;
-}
-
-.notifications_advanced_chooser_cat {
-	font-weight: normal;
-	font-style: normal;
-	display: block;
-	overflow: hidden;
-	outline: 0;
-	margin-left: 0;
-	padding-left: 0;
-}
-
-.notifications_advanced_chooser_cat li {
-	display: block; 
-	margin-left: 0;
-	padding-left: 0;
-	min-width: 236px;
-} 
-
-.notifications_advanced_chooser_cat li .notifications_advanced_chooser_cat li {
-	margin-left: 20px;
-}

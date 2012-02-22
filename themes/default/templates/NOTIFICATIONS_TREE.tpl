@@ -1,13 +1,16 @@
-{+START,IF_NON_EMPTY,{NOTIFICATION_CATEGORIES}}
-	<ul class="notifications_advanced_chooser_cat cat_chooser">
-		{+START,LOOP,NOTIFICATION_CATEGORIES}
-			<li>
-				<label>
-					<input type="checkbox" id="notification_{NOTIFICATION_CODE*}_category_{NOTIFICATION_CATEGORY*}" name="notification_{NOTIFICATION_CODE*}_category_{NOTIFICATION_CATEGORY*}" value="1"{+START,IF,{CHECKED}} checked="checked"{+END} />
-					{CATEGORY_TITLE*}
-				</label>
-				{CHILDREN}
-			</li>
-		{+END}
-	</ul>
+{+START,LOOP,NOTIFICATION_CATEGORIES}
+	<tr class="notification_code">
+		<th class="de_th" style="padding-left: {$MULT*,{DEPTH},20}px">
+			<input type="hidden" id="notification_{NOTIFICATION_CODE*}_category_{NOTIFICATION_CATEGORY*}" name="notification_{NOTIFICATION_CODE*}_category_{NOTIFICATION_CATEGORY*}" value="1" />
+			{CATEGORY_TITLE*}
+
+			{+START,IF_NON_EMPTY,{$TRIM,{CHILDREN}}}
+				<span class="associated_link_to_small">[<a onclick="advanced_notifications_copy_under(this.parentNode.parentNode.parentNode,{NUM_CHILDREN%}); return false;" href="#">{!NOTIFICATIONS_COPY_UNDER}</a>]</span>
+			{+END}
+		</th>
+
+		{+START,INCLUDE,NOTIFICATION_TYPES}{+END}
+	</tr>
+
+	{CHILDREN}
 {+END}

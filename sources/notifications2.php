@@ -93,6 +93,7 @@ function notifications_ui($member_id_of)
 						'CHECKED'=>(post_param_integer('notification_'.$notification_code.'_'.$ntype,(($possible & $current_setting) != 0)?1:0)==1),
 						'RAW'=>strval($possible),
 						'AVAILABLE'=>$available,
+						'SCOPE'=>$notification_code,
 					);
 				}
 
@@ -218,24 +219,23 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 		{
 			enable_notifications($notification_code,NULL,NULL,A_NA); // Make it clear we've overridden the general value by doing this
 
-			$new_setting=A_NA;
-			foreach ($_notification_types as $possible=>$ntype)
-			{
-				if (post_param_integer('notification_'.$notification_code.'_'.$ntype,0)==1)
-				{
-					$new_setting=$new_setting | $possible;
-				}
-			}
-		
 			foreach (array_keys($_POST) as $key)
 			{
 				$matches=array();
 				if (preg_match('#^notification\_'.preg_quote($notification_code).'\_category\_(.*)#',$key,$matches)!=0)
 				{
 					$notification_category=$matches[1];
-					$save_setting=(post_param_integer($key,0)==1)?$new_setting:A_NA;
 
-					enable_notifications($notification_code,$notification_category,NULL,$save_setting);
+					$new_setting=A_NA;
+					foreach ($_notification_types as $possible=>$ntype)
+					{
+						if (post_param_integer('notification_'.strval($notification_category).'_'.$ntype,0)==1)
+						{
+							$new_setting=$new_setting | $possible;
+						}
+					}
+
+					enable_notifications($notification_code,$notification_category,NULL,$new_setting);
 				}
 			}
 
@@ -248,33 +248,35 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 		}
 	}
 
-	$current_setting=$db->query_value_null_ok_full('SELECT l_setting FROM '.$db->get_table_prefix().'notifications_enabled WHERE l_member_id='.strval(get_member()).' AND '.db_string_equal_to('l_notification_code',$notification_code).' AND '.db_string_not_equal_to('l_code_category',''));
-	if (is_null($current_setting)) $current_setting=A_NA;
-	if ($current_setting==A__STATISTICAL) $current_setting=_find_member_statistical_notification_type(get_member());
+	$tree=_notifications_build_category_tree($_notification_types,$notification_code,$ob,NULL);
 
-	$notification_types=array();
+	$notification_types_titles=array();
 	foreach ($_notification_types as $possible=>$ntype)
 	{
-		$allowed=$ob->allowed_settings($notification_code);
+		$notification_types_titles[]=array(
+			'NTYPE'=>$ntype,
+			'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
+			'RAW'=>strval($possible),
+		);
+	}
 
-		if (($allowed & $possible) != 0)
+	$css_path=get_custom_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_cached/'.user_lang().'/global.css';
+	$color='FF00FF';
+	if (file_exists($css_path))
+	{
+		$tmp_file=file_get_contents($css_path);
+		$matches=array();
+		if (preg_match('#\nth[\s,][^\}]*\sbackground-color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 		{
-			$notification_types[]=array(
-				'NTYPE'=>$ntype,
-				'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
-				'CHECKED'=>(post_param_integer('notification_'.$notification_code.'_'.$ntype,(($possible & $current_setting) != 0)?1:0)==1),
-				'RAW'=>strval($possible),
-				'AVAILABLE'=>true,
-			);
+			$color=$matches[1];
 		}
 	}
 
-	$tree=_notifications_build_category_tree($notification_code,$ob,NULL);
-
 	return do_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN',array(
 		'TITLE'=>$title,
+		'COLOR'=>$color,
 		'ACTION_URL'=>get_self_url(false,false,array('id'=>NULL)),
-		'NOTIFICATION_TYPES'=>$notification_types,
+		'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,
 		'TREE'=>$tree,
 		'NOTIFICATION_CODE'=>$notification_code,
 	));
@@ -283,31 +285,59 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 /**
  * Build a tree UI for all categories available.
  *
+ * @param  array			Notification types
  * @param  ID_TEXT		The notification code to work with
  * @param  object			Notificiation hook object
  * @param  ?ID_TEXT		Category we're looking under (NULL: root)
+ * @param  integer		Recursion depth
  * @return tempcode		UI
  */
-function _notifications_build_category_tree($notification_code,$ob,$id)
+function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0)
 {
 	$_notification_categories=$ob->create_category_tree($notification_code,$id);
 	
+	$statistical_notification_type=_find_member_statistical_notification_type(get_member());
+
 	$notification_categories=array();
 	foreach ($_notification_categories as $c)
 	{
-		if ((!array_key_exists('num_children',$c)) && (array_key_exists('child_count',$c))) $c['num_children']=$c['child_count'];
-		if ((!array_key_exists('num_children',$c)) && (array_key_exists('children',$c))) $c['num_children']=count($c['children']);
-
 		$notification_category=(is_integer($c['id'])?strval($c['id']):$c['id']);
 
+		$current_setting=notifications_setting($notification_code,$notification_category);
+		if ($current_setting==A__STATISTICAL) $current_setting=_find_member_statistical_notification_type(get_member());
+
+		$notification_types=array();
+		foreach ($_notification_types as $possible=>$ntype)
+		{
+			$current_setting=notifications_setting($notification_code,$notification_category);
+			if ($current_setting==A__STATISTICAL) $current_setting=$statistical_notification_type;
+			$allowed_setting=$ob->allowed_settings($notification_code);
+
+			$available=(($possible & $allowed_setting) != 0);
+
+			$notification_types[]=array(
+				'NTYPE'=>$ntype,
+				'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
+				'CHECKED'=>(post_param_integer('notification_'.$notification_category.'_'.$ntype,(($possible & $current_setting) != 0)?1:0)==1),
+				'RAW'=>strval($possible),
+				'AVAILABLE'=>$available,
+				'SCOPE'=>$notification_category,
+			);
+		}
+
+		if ((!array_key_exists('num_children',$c)) && (array_key_exists('child_count',$c))) $c['num_children']=$c['child_count'];
+		if ((!array_key_exists('num_children',$c)) && (array_key_exists('children',$c))) $c['num_children']=count($c['children']);
 		$children=new ocp_tempcode();
 		if ((array_key_exists('num_children',$c)) && ($c['num_children']!=0))
 		{
-			$children=_notifications_build_category_tree($notification_code,$ob,$notification_category);
+			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1);
 		}
 
 		$notification_categories[]=array(
+			'NUM_CHILDREN'=>strval(array_key_exists('num_children',$c)?$c['num_children']:0),
+			'DEPTH'=>strval($depth),
 			'NOTIFICATION_CATEGORY'=>$notification_category,
+			'NOTIFICATION_TYPES'=>$notification_types,
 			'CATEGORY_TITLE'=>$c['title'],
 			'CHECKED'=>notifications_enabled($notification_code,$notification_category)!=A_NA,
 			'CHILDREN'=>$children,
