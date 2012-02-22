@@ -40,7 +40,7 @@
 						{+START,INCLUDE,NOTIFICATION_BUTTONS}
 							NOTIFICATIONS_TYPE=ocf_topic
 							NOTIFICATIONS_ID=forum:{ID}
-							NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forumforum%3A{ID}
+							NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
 						{+END}
 					{+END}
 					{BUTTONS}

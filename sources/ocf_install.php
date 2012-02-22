@@ -717,6 +717,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_groups','is_super_admin',array('g_is_super_admin'));
 		$GLOBALS['FORUM_DB']->create_index('f_groups','is_super_moderator',array('g_is_super_moderator'));
 		$GLOBALS['FORUM_DB']->create_index('f_groups','is_default',array('g_is_default'));
+		$GLOBALS['FORUM_DB']->create_index('f_groups','hidden',array('g_hidden'));
 		$GLOBALS['FORUM_DB']->create_index('f_groups','is_presented_at_install',array('g_is_presented_at_install'));
 		$GLOBALS['FORUM_DB']->create_index('f_groups','gorder',array('g_order','id'));
 

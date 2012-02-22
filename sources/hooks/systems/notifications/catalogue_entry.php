@@ -47,7 +47,12 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 		}
 
 		$pagelinks=get_catalogue_category_tree($name,is_null($id)?NULL:intval($id),NULL,NULL,1);
-		return $pagelinks;
+		$filtered=array();
+		foreach ($pagelinks as $p)
+		{
+			if (strval($p['id'])!==$id) $filtered[]=$p;
+		}
+		return $filtered;
 	}
 
 	/**

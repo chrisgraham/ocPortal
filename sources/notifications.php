@@ -48,14 +48,14 @@ function init__notifications()
 	// Notifications will be sent to one of the following if not to a specific list of member IDs
 	define('A_TO_ANYONE_ENABLED',NULL);
 	
-	define('A_NA',0x0); // Not applicable
+	define('A_NA',0x0); // Not applicable				(0 in decimal)
 	//
-	define('A_INSTANT_EMAIL',0x2);
-	define('A_DAILY_EMAIL_DIGEST',0x4);
-	define('A_WEEKLY_EMAIL_DIGEST',0x8);
-	define('A_MONTHLY_EMAIL_DIGEST',0x10);
-	define('A_INSTANT_SMS',0x20);
-	define('A_INSTANT_PT',0x40); // Private topic
+	define('A_INSTANT_EMAIL',0x2); //					(2 in decimal)
+	define('A_DAILY_EMAIL_DIGEST',0x4); //				(4 in decimal)
+	define('A_WEEKLY_EMAIL_DIGEST',0x8); //			(8 in decimal)
+	define('A_MONTHLY_EMAIL_DIGEST',0x10); //			(16 in decimal)
+	define('A_INSTANT_SMS',0x20); //						(32 in decimal)
+	define('A_INSTANT_PT',0x40); // Private topic	(64 in decimal)
 	// And...
 	define('A__ALL',0xFFFFFF);
 	// And...
@@ -226,6 +226,9 @@ class Notification_dispatcher
  */
 function _notification_setting_available($setting,$member_id=NULL)
 {
+	static $nsa_cache=array();
+	if (isset($nsa_cache[$setting][$member_id])) return $nsa_cache[$setting][$member_id];
+
 	$system_wide=false;
 	$for_member=false;
 	switch ($setting)
@@ -259,7 +262,9 @@ function _notification_setting_available($setting,$member_id=NULL)
 			if ($system_wide && !is_null($member_id)) $for_member=has_specific_permission($member_id,'use_pt');
 			break;
 	}
-	return $system_wide && (is_null($member_id) || $for_member);
+	$ret=$system_wide && (is_null($member_id) || $for_member);
+	$nsa_cache[$setting][$member_id]=$ret;
+	return $ret;
 }
 
 /**
@@ -270,6 +275,9 @@ function _notification_setting_available($setting,$member_id=NULL)
  */
 function _find_member_statistical_notification_type($to_member_id)
 {
+	static $cache=array();
+	if (isset($cache[$to_member_id])) return $cache[$to_member_id];
+
 	$notifications_enabled=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_setting'),array('l_member_id'=>$to_member_id),'',100/*within reason*/);
 	if (count($notifications_enabled)==0) // Default to e-mail
 	{
@@ -296,6 +304,7 @@ function _find_member_statistical_notification_type($to_member_id)
 		reset($possible_settings);
 		$setting=key($possible_settings);
 	}
+	$cache[$to_member_id]=$setting;
 	return $setting;
 }
 
@@ -989,7 +998,7 @@ class Hook_Notification__Staff extends Hook_Notification
 	 */
 	function _is_staff($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id)
 	{
-		$test=notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id);
+		$test=is_null($only_if_enabled_on__notification_code)?true:notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id);
 
 		return (($test) && (has_specific_permission($member_id,'may_enable_staff_notifications')));
 	}

@@ -42,9 +42,13 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 		{
 			$total=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','COUNT(*)');
 			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
+		} else
+		{
+			if (substr($id,0,6)!='forum:') warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			$id=substr($id,6);
 		}
 
-		$_pagelinks=ocf_get_forum_tree_secure(NULL,$id,false,NULL,'',NULL,NULL,false,1);
+		$_pagelinks=ocf_get_forum_tree_secure(NULL,is_null($id)?NULL:intval($id),false,NULL,'',NULL,NULL,false,1);
 
 		$pagelinks=array();
 		foreach ($_pagelinks as $p)

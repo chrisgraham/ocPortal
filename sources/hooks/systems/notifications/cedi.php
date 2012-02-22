@@ -45,8 +45,13 @@ class Hook_Notification_cedi extends Hook_Notification
 		}
 
 		static $cedi_seen=array();
-		$pagelinks=get_cedi_page_tree($cedi_seen,is_null($id)?NULL:intval($id),NULL,NULL,false,false,1);
-		return $pagelinks;
+		$pagelinks=get_cedi_page_tree($cedi_seen,is_null($id)?NULL:intval($id),NULL,NULL,false,false,is_null($id)?0:1);
+		$filtered=array();
+		foreach ($pagelinks as $p)
+		{
+			if (strval($p['id'])!==$id) $filtered[]=$p;
+		}
+		return $filtered;
 	}
 
 	/**

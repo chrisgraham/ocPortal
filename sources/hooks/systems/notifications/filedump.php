@@ -39,13 +39,11 @@ class Hook_Notification_filedump extends Hook_Notification
 		require_code('files2');
 
 		$path=get_custom_file_base().'/uploads/filedump';
-		$rel_path='';
 		if (!is_null($id))
 		{
 			$path.='/'.$id;
-			$rel_path.=$id;
 		}
-		$files=get_directory_contents($path,$rel_path,false,false);
+		$files=get_directory_contents($path,'',false,false);
 
 		if (count($files)>30) return array(); // Too many, so don't show
 
@@ -55,9 +53,9 @@ class Hook_Notification_filedump extends Hook_Notification
 			if (is_dir($path.'/'.$file))
 			{
 				$pagelinks[]=array(
-					'id'=>$file,
+					'id'=>(($id=='')?'':($id.'/')).$file,
 					'title'=>$file,
-					'child_count'=>count($this->create_category_tree($notification_code,$file)),
+					'child_count'=>count($this->create_category_tree($notification_code,(($id=='')?'':($id.'/')).$file)),
 				);
 			}
 		}

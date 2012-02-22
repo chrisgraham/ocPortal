@@ -44,8 +44,14 @@ class Hook_Notification_gallery_entry extends Hook_Notification
 			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 		}
 
-		$pagelinks=get_gallery_tree($id,'',NULL,true,NULL,false,false,true,false,1);
-		return $pagelinks;
+		$pagelinks=get_gallery_tree($id,'',NULL,true,NULL,false,false,true,false,is_null($id)?0:1);
+		$filtered=array();
+		foreach ($pagelinks as $p)
+		{
+			if ($p['id']!==$id) $filtered[]=$p;
+		}
+
+		return $filtered;
 	}
 
 	/**

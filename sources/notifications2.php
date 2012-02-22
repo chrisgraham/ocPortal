@@ -129,17 +129,16 @@ function notifications_ui($member_id_of)
 		{
 			foreach ($notification_section['NOTIFICATION_CODES'] as $notification_code)
 			{
+				$new_setting=A_NA;
 				foreach ($notification_code['NOTIFICATION_TYPES'] as $notification_type)
 				{
 					$ntype=$notification_type['NTYPE'];
-					$new_setting=A_NA;
 					if (post_param_integer('notification_'.$notification_code['NOTIFICATION_CODE'].'_'.$ntype,0)==1)
 					{
 						$new_setting=$new_setting | intval($notification_type['RAW']);
 					}
-			
-					enable_notifications($notification_code['NOTIFICATION_CODE'],NULL,$member_id_of,$new_setting);
 				}
+				enable_notifications($notification_code['NOTIFICATION_CODE'],NULL,$member_id_of,$new_setting);
 			}
 		}
 	}
@@ -296,6 +295,9 @@ function _notifications_build_category_tree($notification_code,$ob,$id)
 	$notification_categories=array();
 	foreach ($_notification_categories as $c)
 	{
+		if ((!array_key_exists('num_children',$c)) && (array_key_exists('child_count',$c))) $c['num_children']=$c['child_count'];
+		if ((!array_key_exists('num_children',$c)) && (array_key_exists('children',$c))) $c['num_children']=count($c['children']);
+
 		$notification_category=(is_integer($c['id'])?strval($c['id']):$c['id']);
 
 		$children=new ocp_tempcode();
