@@ -3765,9 +3765,18 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	opacity: 1.0;
 }
 
+*>.edit_menu_link_inline {
+	display: none;
+}
+
+*:hover>.edit_menu_link_inline {
+	display: block;
+}
+
 .edit_menu_link_inline {
 	position: absolute;
 	right: 1px;
+	z-index: 10000;
 }
 
 /*
