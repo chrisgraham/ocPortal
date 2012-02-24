@@ -519,7 +519,8 @@ function install_ocf($upgrade_from=NULL)
 			'cf_show_in_post_previews'=>'BINARY',
 			'cf_order'=>'INTEGER',
 			'cf_only_group'=>'LONG_TEXT',
-			'cf_encrypted'=>'BINARY'
+			'cf_encrypted'=>'BINARY',
+			'cf_show_on_join_form'=>'BINARY',
 		));
 
 		// These don't need to be filled in. We just use default from custom field if they aren't
