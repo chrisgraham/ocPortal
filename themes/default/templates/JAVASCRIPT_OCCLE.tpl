@@ -157,10 +157,10 @@ function occle_command_response(ajax_result_frame,ajax_result)
 			child_node=stdhtml.childNodes[i];
 			new_child=carefulImportNode(child_node);
 			cloned_node=new_child.cloneNode(true);
-			if (typeof past_command.insertAdjacentHTML!='undefined')
+			/*if (typeof past_command.insertAdjacentHTML!='undefined')		Stopped working in Chrome :S
 			{
 				past_command.insertAdjacentHTML("beforeEnd",(typeof cloned_node.xml!='undefined')?cloned_node.xml:getInnerHTML(cloned_node,true));
-			} else
+			} else*/
 			{
 				past_command.appendChild(cloned_node);
 			}

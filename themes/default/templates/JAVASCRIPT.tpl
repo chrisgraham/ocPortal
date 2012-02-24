@@ -316,7 +316,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 		if (button_set.length>4) height+=5*(button_set.length-4);
 
 		{$,Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups don't know if they run on HTTPS if behind a transparent reverse proxy}
-		var url=maintain_theme_in_link('{$PREG_REPLACE,^https,http,{$FIND_SCRIPT;,question_ui}}?message='+window.encodeURIComponent(message)+'&image_set='+window.encodeURIComponent(image_set.join(','))+'&button_set='+window.encodeURIComponent(button_set.join(','))+'&window_title='+window.encodeURIComponent(window_title)+keep_stub());
+		var url=maintain_theme_in_link('{$FIND_SCRIPT;,question_ui}?message='+window.encodeURIComponent(message)+'&image_set='+window.encodeURIComponent(image_set.join(','))+'&button_set='+window.encodeURIComponent(button_set.join(','))+'&window_title='+window.encodeURIComponent(window_title)+keep_stub());
 		window.faux_showModalDialog(
 			url,
 			null,

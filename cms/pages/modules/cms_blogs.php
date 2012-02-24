@@ -359,8 +359,6 @@ class Module_cms_blogs extends standard_aed_module
 		if (($url!='') && (function_exists('imagecreatefromstring')))
 			convert_image(get_base_url().'/'.$url,get_file_base().'/uploads/grepimages/'.basename(rawurldecode($url)),-1,-1,intval(get_option('thumb_width')),true,NULL,false,true);
 
-		$this->donext_type=$main_news_category;
-
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?time():$schedule;
 		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')) && (!is_null($schedule)) && ($schedule>time()))
@@ -377,9 +375,11 @@ class Module_cms_blogs extends standard_aed_module
 		$time=$add_time;
 		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
 
+		$main_news_category=$GLOBALS['SITE_DB']->query_value('news','news_category',array('id'=>$id));
+		$this->donext_type=$main_news_category;
+
 		if ($validated==1)
 		{
-			$main_news_category=$GLOBALS['SITE_DB']->query_value('news','news_category',array('id'=>$id));
 			$is_blog=true;
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
@@ -523,9 +523,9 @@ class Module_cms_blogs extends standard_aed_module
 					is_null($id)?NULL:array('news',array('type'=>'view','id'=>$id,'blog'=>1),get_module_zone('news')),							// View this
 					array('news',array('type'=>'misc','blog'=>1),get_module_zone('news')),									 // View archive
 					NULL,	  // Add to category
-					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'cms_news'):NULL,					  // Add one category
-					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'cms_news'):NULL,					  // Edit one category
-					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'_ec','id'=>$cat),'cms_news'):NULL,			 // Edit this category
+					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
+					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+					is_null($cat)?NULL:has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
 					NULL																						 // View this category
 		);
 	}

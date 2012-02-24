@@ -1213,7 +1213,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$https=$CURRENTLY_HTTPS;
 		if ($https===NULL)
 		{
-			if (get_option('enable_https',true)=='0')
+			if ((get_option('enable_https',true)=='0') || (!running_script('index')))
 			{
 				$https=false;
 			} else
@@ -1270,7 +1270,6 @@ function get_base_url($https=NULL,$zone_for=NULL)
 	if ($https)
 	{
 		$base_url='https://'.preg_replace('#^\w*://#','',$base_url);
-		substr($base_url,strlen('http://'));
 		if ((!$VIRTUALISED_ZONES) || ($zone_for===NULL)) $BASE_URL_HTTPS=$base_url;
 	} elseif ((!$VIRTUALISED_ZONES) || ($zone_for===NULL)) $BASE_URL_HTTP=$base_url;
 
@@ -1636,7 +1635,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-	$is_cached=($CACHE_TEMPLATES) && (@filesize($js_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($js_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached))
 	{
@@ -1824,7 +1823,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-	$is_cached=($CACHE_TEMPLATES) && (@filesize($css_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($css_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
 	{

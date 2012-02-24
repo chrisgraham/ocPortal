@@ -861,7 +861,7 @@ class Hook_Notification
 		));
 		if ((!is_null($test)) && (get_forum_type()=='ocf'))
 		{
-			$query_stub='SELECT m.id AS l_member_id,'.strval($initial_setting).' AS l_setting FROM '.$db->get_table_prefix().'f_members m WHERE '.str_replace('l_member_id','id',$clause_3);
+			$query_stub='SELECT m.id AS l_member_id,'.strval($test).' AS l_setting FROM '.$db->get_table_prefix().'f_members m WHERE '.str_replace('l_member_id','id',$clause_3);
 			$query_stem='';
 		} else
 		{

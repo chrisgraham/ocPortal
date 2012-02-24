@@ -100,8 +100,6 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 function js_compile($j,$js_cache_path,$minify=true)
 {
 	require_lang('javascript');
-	$js_file=@fopen($js_cache_path,'wt');
-	if ($js_file===false) intelligent_write_error($js_cache_path);
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
 	$temp_keep_markers=$KEEP_MARKERS;
 	$temp_show_edit_links=$SHOW_EDIT_LINKS;
@@ -145,6 +143,8 @@ function js_compile($j,$js_cache_path,$minify=true)
 	if ($minify)
 		$out=js_minify($out);
 	$contents='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
+	$js_file=@fopen($js_cache_path,'wt');
+	if ($js_file===false) intelligent_write_error($js_cache_path);
 	if (fwrite($js_file,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($js_file);
 	fix_permissions($js_cache_path);
