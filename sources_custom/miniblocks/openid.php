@@ -15,7 +15,7 @@ echo '
 		txt: {
 		  label: "Enter your {username} for <b>{provider}<\/b>",
 		  username: "username",
-		  title: "Select where you\"d like to log in from.",
+		  title: "Select where you\'d like to log in from.",
 		  sign: "log in"
 		}
 	  });

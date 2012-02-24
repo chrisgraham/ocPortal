@@ -6,7 +6,7 @@ var AJAX_TIMEOUTS=[];
 
 var block_data_cache={};
 
-function call_block(url,new_params,target_div,append)
+function call_block(url,new_params,target_div,append,callback)
 {
 	if (typeof block_data_cache[url]=='undefined') block_data_cache[url]=getInnerHTML(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_params if returning to fresh state
 
@@ -32,19 +32,20 @@ function call_block(url,new_params,target_div,append)
 	}
 
 	// Make AJAX call
-	var func=function(raw_ajax_result) { _call_block(raw_ajax_result,ajax_url,target_div,append) };
+	var func=function(raw_ajax_result) { _call_block(raw_ajax_result,ajax_url,target_div,append,callback); };
 	func.accept_raw_response=true;
 	load_XML_doc(ajax_url,func);
 	
 	return false;
 }
 
-function _call_block(raw_ajax_result,ajax_url,target_div,append)
+function _call_block(raw_ajax_result,ajax_url,target_div,append,callback)
 {
 	target_div.style.position=target_div.orig_position;
 	var new_html=raw_ajax_result.responseText;
 	block_data_cache[ajax_url]=new_html;
 	show_block_html(new_html,target_div,append);
+	if (callback) callback();
 }
 
 function show_block_html(new_html,target_div,append)

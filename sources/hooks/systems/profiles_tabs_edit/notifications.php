@@ -38,7 +38,7 @@ class Hook_Profiles_Tabs_Edit_notifications
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order
+	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order (NULL: not rendered after all)
 	 */
 	function render_tab($member_id_of,$member_id_viewing)
 	{
@@ -50,6 +50,7 @@ class Hook_Profiles_Tabs_Edit_notifications
 		require_code('notifications2');
 
 		$text=notifications_ui($member_id_of);
+		if ($text->is_empty()) return NULL;
 
 		$javascript='';
 

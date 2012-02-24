@@ -96,6 +96,8 @@ class Hook_Profiles_Tabs_edit
 		$_tabs=array();
 		foreach ($tabs as $i=>$tab)
 		{
+			if (is_null($tab)) continue;
+
 			$javascript.=$tab[3];
 
 			if (isset($tab[5])) $hidden->attach($tab[5]);

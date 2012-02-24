@@ -22,7 +22,7 @@ function open_link_as_overlay(ob,width,height)
 {
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		if (!width) width=800;
-		if (!height) height=550;
+		if (!height) height=520;
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
 		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,'_top');
 		return false;

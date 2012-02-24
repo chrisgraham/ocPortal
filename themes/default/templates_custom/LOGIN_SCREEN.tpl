@@ -79,7 +79,7 @@
 				</div>
 			</div>
 
-			<div class="proceed_button">
+			<div style="padding: 0; margin: 0" class="proceed_button">
 				<input class="button_page" type="submit" value="{!_LOGIN}" />
 			</div>
 		</div>

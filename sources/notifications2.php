@@ -64,6 +64,7 @@ function notifications_ui($member_id_of)
 	$fields=new ocp_tempcode();
 
 	$_notification_types=_get_available_notification_types($member_id_of);
+	if (count($_notification_types)==0) return new ocp_tempcode();
 
 	$statistical_notification_type=_find_member_statistical_notification_type($member_id_of);
 
@@ -117,6 +118,7 @@ function notifications_ui($member_id_of)
 			}
 		}
 	}
+	if (count($notification_sections)==0) return new ocp_tempcode();
 
 	// Sort labels
 	global $M_SORT_KEY;
