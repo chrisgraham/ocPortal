@@ -97,8 +97,8 @@ function cal_servertime_to_usertime($time_raw,$timezone,$do_timezone_conv)
  * @param  ?integer		The year the event ends at (NULL: not a multi day event)
  * @param  ?integer		The month the event ends at (NULL: not a multi day event)
  * @param  ?integer		The day the event ends at (NULL: not a multi day event)
- * @param  ?integer		The hour the event ends at (NULL: not a multi day event)
- * @param  ?integer		The minute the event ends at (NULL: not a multi day event)
+ * @param  ?integer		The hour the event ends at (NULL: not a multi day event / all day event)
+ * @param  ?integer		The minute the event ends at (NULL: not a multi day event / all day event)
  * @param  string			The event recurrence
  * @param  ?integer		The number of recurrences (NULL: none/infinite)
  * @param  ?TIME			The timestamp that found times must exceed. In user-time (NULL: now)
@@ -161,10 +161,15 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	do
 	{
 		$a=cal_servertime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
+		if ((is_null($start_hour)) && (is_null($end_day))) // All day event with no end date, should be same as start date
+		{
+			$end_day=$start_day;
+			$end_month=$start_month;
+			$end_year=$start_year;
+		}
 		$b=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
-
 		$starts_within=(($a>=$period_start) && ($a<$period_end));
-		$ends_within=(($b>$period_start) && ($b<$period_end));
+		$ends_within=(($b>$period_start) && ($b<=$period_end));
 		$spans=(($a<$period_start) && ($b>$period_end));
 		if (($starts_within || $ends_within || $spans) && (in_array($mask[$i%$mask_len],array('1','y'))))
 		{
@@ -474,7 +479,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	{
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
 
-		$their_times=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
+		$their_times=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
 
 		// Now search every combination to see if we can get a hit
 		foreach ($their_times as $their)

@@ -248,7 +248,7 @@ If this confuses you, put the [tt]side_language[/tt] block onto one of your pane
 If you're having problems getting things working a good early diagnosis step is to check what your site is trying to do. If you look at your page source from inside your web browser, you will see something like the following near the top of the code:
 [code]
 <html id="main_website_html" xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN" dir="ltr">
-<head profile="http://www.w3.org/2003/g/data-view http://dublincore.org/documents/dcq-html/ http://gmpg.org/xfn/11 http://www.w3.org/2006/03/hcard">
+<head profile="http://www.w3.org/2003/g/data-view http://dublincore.org/documents/dcq-html/ http://gmpg.org/xfn/11 http://www.w3.org/2006/03/hcard http://microformats.org/profile/hcalendar">
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
 [/code]
 

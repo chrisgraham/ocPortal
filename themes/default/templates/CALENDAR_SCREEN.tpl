@@ -84,20 +84,31 @@
 						{+START,IF_NON_EMPTY,{TIME}}
 							<tr>
 								<th>{!TIME}</th>
-								<td>
-									{+START,IF,{$VALUE_OPTION,html5}}
-										<time class="dtstart" datetime="{TIME_VCAL*}" itemprop="startDate">{TIME*}</time>
-									{+END}
-									{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-										<abbr class="dtstart" title="{TIME_VCAL*}">{TIME*}</abbr>
-									{+END}
-								</td>
+								<td>{TIME*}</td>
 							</tr>
 						{+END}
 						{+START,IF_NON_EMPTY,{DAY}}
 						<tr>
 							<th>{!DATE}</th>
-							<td>{DAY*}</td>
+							<td>
+								{+START,IF,{$VALUE_OPTION,html5}}
+									<time class="dtstart" datetime="{TIME_VCAL*}" itemprop="startDate">{DAY*}</time>
+								{+END}
+								{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
+									<abbr class="dtstart" title="{TIME_VCAL*}">{DAY*}</abbr>
+								{+END}
+
+								{+START,IF_PASSED,TO_DAY}
+									&ndash;
+									
+									{+START,IF,{$VALUE_OPTION,html5}}
+										<time class="dtend" datetime="{TO_TIME_VCAL*}" itemprop="endDate">{TO_DAY*}</time>
+									{+END}
+									{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
+										<abbr class="dtend" title="{TO_TIME_VCAL*}">{TO_DAY*}</abbr>
+									{+END}
+								{+END}
+							</td>
 						</tr>
 						{+END}
 						{+START,IF_PASSED,TIMEZONE}

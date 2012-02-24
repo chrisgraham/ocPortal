@@ -212,6 +212,9 @@ class Block_side_calendar
 			$happening=$happenings[$hap_i];
 
 			list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
+
+			if ($real_from!=$from) continue; // We won't render continuations
+
 			$__day=date('Y-m-d',$from);
 			$bits=explode('-',$__day);
 			$day_start=mktime(12,0,0,intval($bits[1]),intval($bits[2]),intval($bits[0]));
@@ -232,7 +235,20 @@ class Block_side_calendar
 			{
 				$view_url=$e_id;
 			}
-			$days[$day_start]['EVENTS'][]=array('DESCRIPTION'=>get_translated_tempcode($event['e_content']),'TIMESTAMP'=>strval($real_from),'TIME'=>($real_from!=$from)?do_lang('EVENT_CONTINUES'):get_timezoned_time($real_from),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','TITLE'=>$title,'VIEW_URL'=>$view_url,'ICON'=>$icon);
+			$days[$day_start]['EVENTS'][]=array(
+				'DESCRIPTION'=>get_translated_tempcode($event['e_content']),
+				'TIMESTAMP'=>strval($real_from),
+				'TIME'=>($real_from!=$from)?do_lang('EVENT_CONTINUES'):(is_null($event['e_start_hour'])?do_lang_tempcode('ALL_DAY_EVENT'):make_string_tempcode(get_timezoned_time($real_from))),
+				'TIME_RAW'=>strval($real_from),
+				'TO_DAY'=>is_null($real_to)?NULL:get_timezoned_date($real_to,!is_null($event['e_start_hour'])),
+				'TO_DAY_RAW'=>strval($real_to),
+				'TIME_VCAL'=>date('Ymd',$real_from)."T".date('His',$real_from),
+				'TO_TIME_VCAL'=>is_null($real_to)?NULL:(date('Ymd',$real_to)."T".date('His',$real_to)),
+				'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS',
+				'TITLE'=>$title,
+				'VIEW_URL'=>$view_url,
+				'ICON'=>$icon,
+			);
 
 			$test=date('d',$to);
 			$test2=date('d',$from);

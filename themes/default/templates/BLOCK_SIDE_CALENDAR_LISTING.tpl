@@ -17,7 +17,7 @@
 
 				<tbody>
 					{+START,LOOP,EVENTS}
-						<tr>
+						<tr class="vevent">
 							<th>
 								{+START,IF_PASSED,ICON}{+START,IF_PASSED,T_TITLE}
 									<img src="{$IMG*,{ICON}}" title="{T_TITLE*}" alt="{T_TITLE*}" />
@@ -25,11 +25,24 @@
 							</th>
 
 							<td>
-								{TIME*}
+								{+START,IF,{$VALUE_OPTION,html5}}
+									<time class="dtstart" datetime="{TIME_VCAL*}" itemprop="startDate">{TIME*}</time>
+								{+END}
+								{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
+									<abbr class="dtstart" title="{TIME_VCAL*}">{TIME*}</abbr>
+								{+END}
 							</td>
 	
-							<td>
-								<a href="{VIEW_URL*}">{TITLE*}</a>
+							<td class="summary">
+								<a href="{VIEW_URL*}" class="url">{TITLE*}</a>
+								{+START,IF_PASSED,TO_DAY}
+									{+START,IF,{$VALUE_OPTION,html5}}
+										<span class="associated_details">({!EVENT_ENDS_ON,<time class="dtend" datetime="{TO_TIME_VCAL*}" itemprop="endDate">{TO_DAY*}</time>})</span>
+									{+END}
+									{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
+										<span class="associated_details">({!EVENT_ENDS_ON,<abbr class="dtend" title="{TO_TIME_VCAL*}">{TO_DAY*}</abbr>})</span>
+									{+END}
+								{+END}
 							</td>
 						</tr>
 					{+END}

@@ -9,7 +9,7 @@ Copyright ocProducts Limited
 -->
 
 <html id="main_website_html" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="{$LANG*}" lang="{$LANG*}" dir="{!dir}">
-<head{+START,IF,{$NOT,{$VALUE_OPTION,html5}}} profile="http://www.w3.org/2003/g/data-view http://dublincore.org/documents/dcq-html/ http://gmpg.org/xfn/11 http://www.w3.org/2006/03/hcard"{+END}>
+<head{+START,IF,{$NOT,{$VALUE_OPTION,html5}}} profile="http://www.w3.org/2003/g/data-view http://dublincore.org/documents/dcq-html/ http://gmpg.org/xfn/11 http://www.w3.org/2006/03/hcard http://microformats.org/profile/hcalendar"{+END}>
 	{$,The character set of the page}
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={CHARSET}" />
 

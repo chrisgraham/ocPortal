@@ -569,7 +569,7 @@ class Module_cms_calendar extends standard_aed_module
 			$delete_fields=form_input_radio(do_lang_tempcode('ACTION'),do_lang_tempcode('DESCRIPTION_FIX_PAST_RECURRENCES'),$radios);
 		} else $delete_fields=new ocp_tempcode();
 
-		return array($fields[0],$fields[1],$delete_fields,'',true,$content,$fields[2],$parsed);
+		return array($fields[0],$fields[1],$delete_fields,'',true,$content,$fields[6],$parsed);
 	}
 
 	/**

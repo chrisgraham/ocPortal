@@ -160,6 +160,10 @@
 =========================
 */
 
+abbr.dtstart, abbr.dtend {
+	border-bottom: 0;
+}
+
 .top_navigation {
 	border-collapse: collapse;
 	margin-left: 1px;

@@ -1403,6 +1403,15 @@ class Module_calendar
 			$explode=explode('-',$day);
 			if (count($explode)==3)
 			{
+				if (is_null($event['e_start_hour'])) // All day event
+				{
+					if (is_null($event['e_end_year']))
+					{
+						$event['e_end_day']=$event['e_start_day'];
+						$event['e_end_month']=$event['e_start_month'];
+						$event['e_end_year']=$event['e_start_year'];
+					}
+				}
 				if (!is_null($event['e_end_year']))
 				{
 					$event['e_end_year']+=intval($explode[0])-$event['e_start_year'];
@@ -1414,14 +1423,20 @@ class Module_calendar
 				$event['e_start_day']=intval($explode[2]);
 			}
 		}
-		$day_formatted=locale_filter(date(do_lang('calendar_date'),mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year'])));
+		$day_formatted=locale_filter(date(do_lang('calendar_date'),mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']))); // This is done in the events own timezone as not a full time just a date
 		$time_raw=mktime(is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
 		$from=cal_servertime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 		if (!is_null($event['e_end_year']))
 		{
 			$to=cal_servertime_to_usertime(mktime(is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			$to_day_formatted=locale_filter(date(do_lang('calendar_date'),mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']))); // This is done in the events own timezone as not a full time just a date
 			$time2=date_range($from,$to,!is_null($event['e_start_hour']));
-		} else $time2=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$from));
+		} else
+		{
+			$time2=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$from));
+			$to_day_formatted=NULL;
+			$to=NULL;
+		}
 
 		$priority=$event['e_priority'];
 		$is_public=($event['e_is_public']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
@@ -1460,7 +1475,40 @@ class Module_calendar
 			'description'=>get_translated_text($event['e_content']),
 		);
 
-		$map=array('_GUID'=>'602e6f86f586ef0a24efed950eafd426','ID'=>strval($id),'TAGS'=>get_loaded_tags('calendar'),'WARNING_DETAILS'=>$warning_details,'SUBMITTER'=>strval($event['e_submitter']),'ADD_DATE'=>get_timezoned_date($event['e_add_date']),'ADD_DATE_RAW'=>strval($event['e_add_date']),'EDIT_DATE_RAW'=>is_null($event['e_edit_date'])?'':strval($event['e_edit_date']),'VIEWS'=>integer_format($event['e_views']),'LOGO'=>$event['t_logo'],'DAY'=>$day_formatted,'RECURRENCE'=>$recurrence,'IS_PUBLIC'=>$is_public,'PRIORITY'=>strval($priority),'PRIORITY_LANG'=>$priority_lang,'TYPE'=>$type,'TIME'=>$time2,'TIME_RAW'=>strval($time_raw),'TIME_VCAL'=>date('Ymd',$time_raw)."T".date('His',$time_raw),'EDIT_URL'=>$edit_url,'SUBSCRIPTIONS'=>$_subscriptions,'SUBSCRIBE_URL'=>$subscribe_url,'TITLE'=>$title,'_TITLE'=>get_translated_text($event['e_title']),'BACK_URL'=>$back_url,'CONTENT'=>$content,'SUBSCRIBED'=>$subscribed,'RATING_DETAILS'=>$rating_details,'TRACKBACK_DETAILS'=>$trackback_details,'COMMENT_DETAILS'=>$comment_details);
+		$map=array(
+			'TITLE'=>$title,
+			'_TITLE'=>get_translated_text($event['e_title']),
+			'ID'=>strval($id),
+			'TAGS'=>get_loaded_tags('calendar'),
+			'WARNING_DETAILS'=>$warning_details,
+			'SUBMITTER'=>strval($event['e_submitter']),
+			'ADD_DATE'=>get_timezoned_date($event['e_add_date']),
+			'ADD_DATE_RAW'=>strval($event['e_add_date']),
+			'EDIT_DATE_RAW'=>is_null($event['e_edit_date'])?'':strval($event['e_edit_date']),
+			'VIEWS'=>integer_format($event['e_views']),
+			'LOGO'=>$event['t_logo'],
+			'DAY'=>$day_formatted,
+			'TO_DAY'=>$to_day_formatted,
+			'RECURRENCE'=>$recurrence,
+			'IS_PUBLIC'=>$is_public,
+			'PRIORITY'=>strval($priority),
+			'PRIORITY_LANG'=>$priority_lang,
+			'TYPE'=>$type,
+			'TIME'=>$time2,
+			'TIME_RAW'=>strval($time_raw),
+			'TIME_VCAL'=>date('Ymd',$time_raw)."T".date('His',$time_raw),
+			'TO_TIME_VCAL'=>is_null($to)?NULL:(date('Ymd',$to)."T".date('His',$to)),
+			'EDIT_URL'=>$edit_url,
+			'SUBSCRIPTIONS'=>$_subscriptions,
+			'SUBSCRIBE_URL'=>$subscribe_url,
+			'BACK_URL'=>$back_url,
+			'CONTENT'=>$content,
+			'SUBSCRIBED'=>$subscribed,
+			'RATING_DETAILS'=>$rating_details,
+			'TRACKBACK_DETAILS'=>$trackback_details,
+			'COMMENT_DETAILS'=>$comment_details,
+			'_GUID'=>'602e6f86f586ef0a24efed950eafd426',
+		);
 
 		if ($event['e_do_timezone_conv']==0)
 		{
