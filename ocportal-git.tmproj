@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>sources/hooks/systems/profiles_tabs_edit/notifications.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -945,20 +943,6 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
-		<key>site/pages/modules/notifications.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>27</integer>
-				<key>line</key>
-				<integer>86</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>14</integer>
-		</dict>
 		<key>site/pages/modules/pointstore.php</key>
 		<dict>
 			<key>caret</key>
@@ -1719,34 +1703,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>sources/hooks/systems/profiles_tabs/edit.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>31</integer>
-				<key>line</key>
-				<integer>98</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>57</integer>
-		</dict>
-		<key>sources/hooks/systems/profiles_tabs_edit/notifications.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>37</integer>
-				<key>line</key>
-				<integer>52</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>12</integer>
-		</dict>
 		<key>sources/hooks/systems/snippets/index.html</key>
 		<dict>
 			<key>caret</key>
@@ -1774,34 +1730,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
-		</dict>
-		<key>sources/notifications.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>260</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>235</integer>
-		</dict>
-		<key>sources/notifications2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>53</integer>
-				<key>line</key>
-				<integer>66</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>27</integer>
 		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
@@ -3076,14 +3004,6 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>sources/notifications.php</string>
-		<string>site/pages/modules/notifications.php</string>
-		<string>sources/hooks/systems/profiles_tabs_edit/notifications.php</string>
-		<string>sources/notifications2.php</string>
-		<string>sources/hooks/systems/profiles_tabs/edit.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

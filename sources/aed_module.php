@@ -74,6 +74,8 @@ class standard_aed_module
 	var $edit_one_label=NULL;
 	var $edit_this_cat_label=NULL;
 	var $edit_one_cat_label=NULL;
+	var $entries_title=NULL;
+	var $categories_title=NULL;
 	var $do_next_description=NULL;
 	var $appended_actions_already=false;
 	var $select_name_description=NULL;
@@ -346,7 +348,10 @@ class standard_aed_module
 					$this->extra_donext_entries,
 					$this->extra_donext_categories,
 					$this->extra_donext_whatever,
-					$this->extra_donext_whatever_title
+					$this->extra_donext_whatever_title,
+					NULL,
+					$this->entries_title,
+					$this->categories_title
 		);
 	}
 
