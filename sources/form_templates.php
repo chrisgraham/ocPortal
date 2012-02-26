@@ -1330,9 +1330,10 @@ function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$nu
  * @param  ?boolean		Whether this is rendered in pink as a required field (NULL: depend on $null_ok)
  * @param  boolean		Whether to input date for this field (if false, will just do time)
  * @param  ?ID_TEXT		Timezone to input in (NULL: current user's timezone)
+ * @param  boolean		Convert $default_time to $timezone
  * @return tempcode		The input field
  */
-function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true,$timezone=NULL)
+function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
 {
 	if (is_null($required)) $required=!$null_ok;
 
@@ -1378,10 +1379,10 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		$_default_time=filter_form_field_default($stub,is_null($default_time)?'':strval($default_time));
 		$default_time=($_default_time=='')?NULL:intval($_default_time);
 
-		if (!is_null($default_time))
+		if ((!is_null($default_time)) && ($handle_timezone))
 		{
-			$default_time=tz_time($default_time,$timezone);
 			if (is_null($timezone)) $timezone=get_users_timezone();
+			$default_time=tz_time($default_time,$timezone);
 		}
 
 		$default_minute=is_null($default_time)?NULL:intval(date('i',$default_time));

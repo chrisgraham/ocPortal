@@ -65,7 +65,7 @@ class Hook_fields_just_time
 		unset($field);
 		if (!is_null($required))
 		{
-			if (($required) && ($default=='')) $default=date('H:i:s',servertime_to_usertime());
+			if (($required) && ($default=='')) $default=date('H:i:s',utctime_to_usertime());
 		}
 		return array('short_unescaped',$default,'short');
 	}

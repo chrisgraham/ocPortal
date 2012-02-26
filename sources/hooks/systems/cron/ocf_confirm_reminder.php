@@ -41,7 +41,7 @@ class Hook_cron_ocf_confirm_reminder
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 		foreach ($rows as $row)
 		{
-			$coppa=(get_option('is_on_coppa')=='1') && (servertime_to_usertime(time()-mktime(0,0,0,$row['m_dob_month'],$row['m_dob_day'],$row['m_dob_year']))/31536000.0<13.0);
+			$coppa=(get_option('is_on_coppa')=='1') && (utctime_to_usertime(time()-mktime(0,0,0,$row['m_dob_month'],$row['m_dob_day'],$row['m_dob_year']))/31536000.0<13.0);
 			if (!$coppa)
 			{
 				$zone=get_module_zone('join');

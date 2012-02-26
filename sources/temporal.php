@@ -34,6 +34,30 @@ function init__temporal()
  */
 function initialise_timezone_data()
 {
+	/*
+	Main array format:
+
+	0 - seconds
+	1 - minutes
+	2 - hour
+	3 - day of the month
+	4 - month of the year, starting with 0 for January
+	5 - Years since 1900
+	6 - Day of the week
+	7 - Day of the year
+	9 - Is daylight savings time in effect
+
+	Surrounding array format:
+
+	Offset in minutes
+	DST start
+	DST offset from main offset
+	DST end
+	Standard offset from main offset
+
+	DST transition times are very rough unfortunately (comes from tzphp)
+	*/
+
 	global $TZ_ZONE_DATA;
 	$TZ_ZONE_DATA = array(
 		'Africa/Abidjan' => array(0, array(0,0,0,0,0,0,0,0), 0, array(0,0,0,0,0,0,0,0), 0),
@@ -322,49 +346,50 @@ function initialise_timezone_data()
 		'Australia/Melbourne' => array(600, array(0,0,2,5,2,0,0,0), 0, array(0,0,2,5,9,0,0,0), 60),
 		'Australia/Perth' => array(480, array(0,0,0,0,0,0,0,0), 0, array(0,0,0,0,0,0,0,0), 0),
 		'Australia/Sydney' => array(600, array(0,0,2,5,2,0,0,0), 0, array(0,0,2,5,9,0,0,0), 60),
-		'Europe/Amsterdam' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Andorra' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Athens' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Belgrade' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Berlin' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Brussels' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Bucharest' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Budapest' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Chisinau' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Copenhagen' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Dublin' => array(0, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Gibraltar' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Helsinki' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Istanbul' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Kaliningrad' => array(120, array(0,0,2,5,9,0,0,0), 0, array(0,0,2,5,2,0,0,0), 60),
-		'Europe/Kiev' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Lisbon' => array(0, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/London' => array(0, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Luxembourg' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Madrid' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Malta' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Minsk' => array(120, array(0,0,2,5,9,0,0,0), 0, array(0,0,2,5,2,0,0,0), 60),
-		'Europe/Monaco' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Moscow' => array(180, array(0,0,2,5,9,0,0,0), 0, array(0,0,2,5,2,0,0,0), 60),
-		'Europe/Oslo' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Paris' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Prague' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Riga' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Rome' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Samara' => array(240, array(0,0,2,5,9,0,0,0), 0, array(0,0,2,5,2,0,0,0), 60),
-		'Europe/Simferopol' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Sofia' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Stockholm' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Tallinn' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Tirane' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Uzhgorod' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Vaduz' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Vienna' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Vilnius' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Volgograd' => array(180, array(0,0,2,5,9,0,0,0), 0, array(0,0,2,5,2,0,0,0), 60),
-		'Europe/Warsaw' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Zaporozhye' => array(120, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
-		'Europe/Zurich' => array(60, array(0,0,1,5,2,0,0,0), 60, array(0,0,1,5,9,0,0,0), 0),
+		'Europe/Amsterdam' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Andorra' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Athens' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Belgrade' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Berlin' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Brussels' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Bucharest' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Budapest' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Chisinau' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Copenhagen' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Dublin' => array(0, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Gibraltar' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Helsinki' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Istanbul' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Kaliningrad' => array(120, array(0,0,2,25,9,0,0,0), 0, array(0,0,2,25,2,0,0,0), 60),
+		'Europe/Kiev' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Lisbon' => array(0, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/London' => array(0, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'UTC' => array(0, array(0,0,1,25,2,0,0,0), 0, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Luxembourg' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Madrid' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Malta' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Minsk' => array(120, array(0,0,2,25,9,0,0,0), 0, array(0,0,2,25,2,0,0,0), 60),
+		'Europe/Monaco' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Moscow' => array(180, array(0,0,2,25,9,0,0,0), 0, array(0,0,2,25,2,0,0,0), 60),
+		'Europe/Oslo' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Paris' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Prague' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Riga' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Rome' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Samara' => array(240, array(0,0,2,25,9,0,0,0), 0, array(0,0,2,25,2,0,0,0), 60),
+		'Europe/Simferopol' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Sofia' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Stockholm' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Tallinn' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Tirane' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Uzhgorod' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Vaduz' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Vienna' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Vilnius' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Volgograd' => array(180, array(0,0,2,25,9,0,0,0), 0, array(0,0,2,25,2,0,0,0), 60),
+		'Europe/Warsaw' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Zaporozhye' => array(120, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
+		'Europe/Zurich' => array(60, array(0,0,1,25,2,0,0,0), 60, array(0,0,1,25,9,0,0,0), 0),
 		'Indian/Antananarivo' => array(180, array(0,0,0,0,0,0,0,0), 0, array(0,0,0,0,0,0,0,0), 0),
 		'Indian/Chagos' => array(360, array(0,0,0,0,0,0,0,0), 0, array(0,0,0,0,0,0,0,0), 0),
 		'Indian/Christmas' => array(420, array(0,0,0,0,0,0,0,0), 0, array(0,0,0,0,0,0,0,0), 0),
@@ -479,7 +504,7 @@ function get_server_timezone()
 		if (isset($TZ_ZONE_DATA[$SERVER_TIMEZONE])) return $SERVER_TIMEZONE;
 	}
 	
-	return 'Europe/London';
+	return 'UTC';
 }
 
 /**
@@ -618,7 +643,7 @@ function convert_timezone_offset_to_formal_timezone($offset)
  * @param  ?MEMBER		Member for which the date is being rendered (NULL: current member)
  * @return TIME			Output timestamp
  */
-function servertime_to_usertime($timestamp=NULL,$member=NULL)
+function utctime_to_usertime($timestamp=NULL,$member=NULL)
 {
 	if (is_null($timestamp)) $timestamp=time();
 
@@ -628,14 +653,14 @@ function servertime_to_usertime($timestamp=NULL,$member=NULL)
 }
 
 /**
- * Convert a user timestamp to a UTC timestamp. This is not a function to use much- you probably want servertime_to_usertime.
+ * Convert a user timestamp to a UTC timestamp. This is not a function to use much- you probably want utctime_to_usertime.
  * What complicate understanding of matters is that "user time" is not the timestamp that would exist on a user's PC, as all timestamps are meant to be stored in UTC. "user time" is offsetted to compensate, a virtual construct.
  *
  * @param  ?TIME			Input timestamp (NULL: now)
  * @param  ?MEMBER		Member for which the date is being rendered (NULL: current member)
  * @return TIME			Output timestamp
  */
-function usertime_to_servertime($timestamp=NULL,$member=NULL)
+function usertime_to_utctime($timestamp=NULL,$member=NULL)
 {
 	if (is_null($timestamp)) $timestamp=time();
 
@@ -672,14 +697,14 @@ function my_strftime($format,$timestamp=NULL)
  * @param  ?MEMBER		Member for which the date is being rendered (NULL: current member)
  * @return string			Formatted time
  */
-function get_timezoned_date($timestamp,$include_time=true,$verbose=false,$gmt_time=false,$avoid_contextual_dates=false,$member=NULL)
+function get_timezoned_date($timestamp,$include_time=true,$verbose=false,$utc_time=false,$avoid_contextual_dates=false,$member=NULL)
 {
 	if (is_null($member)) $member=get_member();
 //if (!is_integer($timestamp)) debug_print_backtrace();
 
 	// Work out timezone
-	$usered_timestamp=$gmt_time?$timestamp:servertime_to_usertime($timestamp,$member);
-	$usered_now_timestamp=$gmt_time?time():servertime_to_usertime(time(),$member);
+	$usered_timestamp=$utc_time?$timestamp:utctime_to_usertime($timestamp,$member);
+	$usered_now_timestamp=$utc_time?time():utctime_to_usertime(time(),$member);
 
 	if ($usered_timestamp<0)
 	{
@@ -755,14 +780,14 @@ function locale_filter($ret)
  * @param  boolean		Whether to work in UTC time
  * @return string			Formatted time
  */
-function get_timezoned_time($timestamp,$avoid_contextual_dates=false,$member=NULL,$gmt_time=false)
+function get_timezoned_time($timestamp,$avoid_contextual_dates=false,$member=NULL,$utc_time=false)
 {
 	if (is_null($member)) $member=get_member();
 	
 	if (get_option('use_contextual_dates')=='0') $avoid_contextual_dates=true;
 	
 	$date_string=do_lang('date_withinday');
-	$usered_timestamp=$gmt_time?$timestamp:servertime_to_usertime($timestamp,$member);
+	$usered_timestamp=$utc_time?$timestamp:utctime_to_usertime($timestamp,$member);
 	$ret=my_strftime($date_string,$usered_timestamp);
 
 	return locale_filter($ret);
@@ -907,7 +932,10 @@ function tz_localtime($time, $zone)
 	global $TZ_ZONE_DATA;
 
 	// If zone doesnt exist, return local time
-	if(!isset($TZ_ZONE_DATA[$zone])) return localtime($time);
+	if(!isset($TZ_ZONE_DATA[$zone]))
+	{
+		return localtime($time);
+	}
 
 	// Adjust for initial offset
 	$rtime = $time + ($TZ_ZONE_DATA[$zone][0] * 60);
@@ -1044,6 +1072,7 @@ function get_timezone_list()
       'Africa/El_Aaiun'=>'(UTC) El Aaiun, St. Helena',
       'Atlantic/Madeira'=>'(UTC) Madeira',
       'Europe/London'=>'(UTC) Belfast, Dublin, Edinburgh, Lisbon, London',
+      'UTC'=>'(UTC) No daylight saving',
       'Africa/Abidjan'=>'(UTC) Abidjan, Accra, Bamako, Banjul, Bissau, Conakry',
       'Africa/Dakar'=>'(UTC) Dakar, Danmarkshavn, Freetown, Lome, Nouakchott, Ouagadougou',
       'Africa/Sao_Tome'=>'(UTC) Sao Tome',

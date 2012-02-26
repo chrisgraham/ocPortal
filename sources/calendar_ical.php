@@ -283,7 +283,7 @@ function get_event_data_ical($calendar_nodes)
 	$end_day=NULL;
 	$end_hour=NULL;
 	$end_minute=NULL;
-	$timezone='Europe/London';
+	$timezone='UTC';
 	$validated=NULL;
 	$allow_rating=NULL;
 	$allow_comments=NULL;

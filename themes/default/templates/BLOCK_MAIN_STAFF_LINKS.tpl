@@ -1,5 +1,5 @@
 <div class="form_ajax_target">
-	{+START,BOX,{!EXTERNAL_LINKS},,,tray_open,,,1,<a title="{!EDIT}: {!EXTERNAL_LINKS}" href="#" class="topleftlink" id="editlinks" onclick="return switcheroo(linkslist\,editlinksform);">{!EDIT}</a>}
+	{+START,BOX,{!EXTERNAL_LINKS},,,tray_open,,,1,<a title="{!EDIT}: {!EXTERNAL_LINKS}" href="#" class="topleftlink" id="editlinks" onclick="var linkslist = document.getElementById('stafflinkslist'); var editlinksform = next(linkslist); return switcheroo(linkslist\,editlinksform);">{!EDIT}</a>}
 		<div class="wide_table_wrap">
 			{+START,IF,{$JS_ON}}
 				<ol id="stafflinkslist">
@@ -22,28 +22,31 @@
 			require_javascript('javascript_ajax');
 			require_javascript('javascript_validation');
 
-			function next(elem) {
-				do {
+			function next(elem)
+			{
+				do
+				{
 					elem = elem.nextSibling;
-				} while (elem && elem.nodeType != 1);
+				}
+				while (elem && elem.nodeType != 1);
+
 				return elem;
 			};
 
 			function switcheroo(hide, show)
 			{
-				if(hide.style.display == 'none')
+				if (hide.style.display == 'none')
 				{
 					hide.style.display = 'block';
 					show.style.display = 'none';
-				} else {
+				} else
+				{
 					hide.style.display = 'none';
 					show.style.display = 'block';
 				}
 
 				return false;
 			};
-			var linkslist = document.getElementById("stafflinkslist");
-			var editlinksform = next(linkslist);
 		//]]></script>
 	{+END}
 </div>

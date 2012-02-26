@@ -47,6 +47,12 @@
 				{+START,IF,{$VALUE_OPTION,html5}}<meta itemprop="interactionCount" content="UserComments:{$META_DATA*,numcomments}" />{+END}
 			
 				{COMMENTS`}
+
+				{+START,INCLUDE,NOTIFICATION_BUTTONS}
+					NOTIFICATIONS_TYPE=comment_posted
+					NOTIFICATIONS_ID={TYPE}_{ID}
+					BUTTON_TYPE=pageitem
+				{+END}
 			</div>
 		
 			{+START,IF_PASSED,RESULTS_BROWSER}
@@ -66,10 +72,5 @@
 	{$,If has commenting permission}
 	{+START,IF_NON_EMPTY,{FORM}}
 		{FORM}
-	{+END}
-
-	{+START,INCLUDE,NOTIFICATION_BUTTONS}
-		NOTIFICATIONS_TYPE=comment_posted
-		NOTIFICATIONS_ID={TYPE}_{ID}
 	{+END}
 </div>

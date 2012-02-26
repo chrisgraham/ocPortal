@@ -1759,7 +1759,7 @@ class Module_topics
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_add_reply'),'_SELF');
 
-		$posting_form=get_posting_form(do_lang('REPORT_POST'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,NULL,'',NULL,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''));
+		$posting_form=get_posting_form(do_lang('REPORT_POST'),$post->evaluate(),$post_url,$hidden_fields,$specialisation,NULL,'',NULL,NULL,$this->_post_javascript().(function_exists('captcha_ajax_check')?captcha_ajax_check():''),NULL,true,false);
 
 		$title=get_page_title('REPORT_POST');
 		return do_template('POSTING_SCREEN',array('_GUID'=>'eee64757e66fed702f74fecf8d595260','TITLE'=>$title,'TEXT'=>$text,'POSTING_FORM'=>$posting_form));

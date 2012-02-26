@@ -118,8 +118,8 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	$fields->attach(form_input_line(do_lang_tempcode('CARDHOLDER_NAME'),do_lang_tempcode('DESCRIPTION_CARDHOLDER_NAME'),'name',ecommerce_test_mode()?$GLOBALS['FORUM_DRIVER']->get_username(get_member()):get_ocp_cpf('TODO'),true));
 	$fields->attach(form_input_list(do_lang_tempcode('CARD_TYPE'),'','card_type',$object->nice_get_card_types(ecommerce_test_mode()?'Visa':get_ocp_cpf('payment_type'))));
 	$fields->attach(form_input_line(do_lang_tempcode('CARD_NUMBER'),do_lang_tempcode('DESCRIPTION_CARD_NUMBER'),'card_number',ecommerce_test_mode()?'4444333322221111':get_ocp_cpf('payment_card_number'),true));
-	$fields->attach(form_input_line(do_lang_tempcode('CARD_START_DATE'),do_lang_tempcode('DESCRIPTION_CARD_START_DATE'),'start_date',ecommerce_test_mode()?date('m/y',servertime_to_usertime(time()-60*60*24*365)):get_ocp_cpf('payment_card_start_date'),true));
-	$fields->attach(form_input_line(do_lang_tempcode('CARD_EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_CARD_EXPIRY_DATE'),'expiry_date',ecommerce_test_mode()?date('m/y',servertime_to_usertime(time()+60*60*24*365)):get_ocp_cpf('payment_card_expiry_date'),true));
+	$fields->attach(form_input_line(do_lang_tempcode('CARD_START_DATE'),do_lang_tempcode('DESCRIPTION_CARD_START_DATE'),'start_date',ecommerce_test_mode()?date('m/y',utctime_to_usertime(time()-60*60*24*365)):get_ocp_cpf('payment_card_start_date'),true));
+	$fields->attach(form_input_line(do_lang_tempcode('CARD_EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_CARD_EXPIRY_DATE'),'expiry_date',ecommerce_test_mode()?date('m/y',utctime_to_usertime(time()+60*60*24*365)):get_ocp_cpf('payment_card_expiry_date'),true));
 	$fields->attach(form_input_integer(do_lang_tempcode('CARD_ISSUE_NUMBER'),do_lang_tempcode('DESCRIPTION_CARD_ISSUE_NUMBER'),'issue_number',intval(get_ocp_cpf('payment_card_issue_number')),false));
 	$fields->attach(form_input_line(do_lang_tempcode('CARD_CV2'),do_lang_tempcode('DESCRIPTION_CARD_CV2'),'cv2',ecommerce_test_mode()?'123':get_ocp_cpf('payment_card_cv2'),true));
 

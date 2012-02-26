@@ -37,19 +37,19 @@ class Hook_stats_calendar
 		if (get_option('calendar_show_stats_count_events_this_week',true)=='1')
 		{
 			require_code('calendar');
-			$events=calendar_matches($GLOBALS['FORUM_DRIVER']->get_guest_id(),true,servertime_to_usertime(time()),servertime_to_usertime(time()+60*60*24*7));
+			$events=calendar_matches($GLOBALS['FORUM_DRIVER']->get_guest_id(),true,utctime_to_usertime(time()),utctime_to_usertime(time()+60*60*24*7));
 			$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('EVENTS_THIS_WEEK'),'VALUE'=>integer_format(count($events)))));
 		}
 		if (get_option('calendar_show_stats_count_events_this_month',true)=='1')
 		{
 			require_code('calendar');
-			$events=calendar_matches($GLOBALS['FORUM_DRIVER']->get_guest_id(),true,servertime_to_usertime(time()),servertime_to_usertime(time()+60*60*24*31));
+			$events=calendar_matches($GLOBALS['FORUM_DRIVER']->get_guest_id(),true,utctime_to_usertime(time()),utctime_to_usertime(time()+60*60*24*31));
 			$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('EVENTS_THIS_MONTH'),'VALUE'=>integer_format(count($events)))));
 		}
 		if (get_option('calendar_show_stats_count_events_this_year',true)=='1')
 		{
 			require_code('calendar');
-			$events=calendar_matches($GLOBALS['FORUM_DRIVER']->get_guest_id(),true,servertime_to_usertime(time()),servertime_to_usertime(time()+60*60*24*365));
+			$events=calendar_matches($GLOBALS['FORUM_DRIVER']->get_guest_id(),true,utctime_to_usertime(time()),utctime_to_usertime(time()+60*60*24*365));
 			$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('EVENTS_THIS_YEAR'),'VALUE'=>integer_format(count($events)))));
 		}
 		if ($bits->is_empty()) return new ocp_tempcode();

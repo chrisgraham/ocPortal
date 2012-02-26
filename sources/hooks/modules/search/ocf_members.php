@@ -232,8 +232,8 @@ class Hook_search_ocf_members
 			$bits=explode('-',$age_range);
 			if (count($bits)==2)
 			{
-				$lower=strval(intval(date('Y',servertime_to_usertime()))-intval($bits[0]));
-				$upper=strval(intval(date('Y',servertime_to_usertime()))-intval($bits[1]));
+				$lower=strval(intval(date('Y',utctime_to_usertime()))-intval($bits[0]));
+				$upper=strval(intval(date('Y',utctime_to_usertime()))-intval($bits[1]));
 
 				$where_clause.=' AND ';
 				$where_clause.='(m_dob_year<'.$lower.' OR m_dob_year='.$lower.' AND (m_dob_month<'.date('m').' OR m_dob_month='.date('m').' AND m_dob_day<='.date('d').'))';

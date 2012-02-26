@@ -155,7 +155,8 @@ function initialise_error_mechanism()
 			if ((typeof window.done_one_error=='undefined') || (!window.done_one_error))
 			{
 				window.done_one_error=true;
-				window.fauxmodal_alert('{!JAVASCRIPT_ERROR^;}\n\n'+code+': '+msg+'\n'+file,null,'{!ERROR_OCCURRED^;}');
+				var alert='{!JAVASCRIPT_ERROR^;}\n\n'+code+': '+msg+'\n'+file;
+				window.fauxmodal_alert(alert,null,'{!ERROR_OCCURRED^;}');
 			}
 			return false;
 		};

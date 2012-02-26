@@ -78,11 +78,11 @@ class Block_side_news_archive
 		$first=$rows[0]['date_and_time'];
 		$last=$rows[count($rows)-1]['date_and_time'];
 
-		$current_month=intval(date('m',servertime_to_usertime($first)));
-		$current_year=intval(date('Y',servertime_to_usertime($first)));
+		$current_month=intval(date('m',utctime_to_usertime($first)));
+		$current_year=intval(date('Y',utctime_to_usertime($first)));
 
-		$last_month=intval(date('m',servertime_to_usertime($last)));
-		$last_year=intval(date('Y',servertime_to_usertime($last)));
+		$last_month=intval(date('m',utctime_to_usertime($last)));
+		$last_year=intval(date('Y',utctime_to_usertime($last)));
 
 		$years=array();
 		$years[$current_year]=array('YEAR'=>strval($current_year),'TIMES'=>array());
@@ -94,8 +94,8 @@ class Block_side_news_archive
 
 		while (true)
 		{
-			$period_start=usertime_to_servertime(mktime(0,0,0,$current_month,0,$current_year));
-			$period_end=usertime_to_servertime(mktime(0,0,0,$current_month+1,0,$current_year))-1;
+			$period_start=usertime_to_utctime(mktime(0,0,0,$current_month,0,$current_year));
+			$period_end=usertime_to_utctime(mktime(0,0,0,$current_month+1,0,$current_year))-1;
 
 			while ($rows[$offset]['date_and_time']<$period_start)
 			{

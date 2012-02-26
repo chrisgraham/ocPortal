@@ -140,11 +140,11 @@ class Module_admin_backup
 		{
 			$text=do_lang_tempcode('NO_LAST_BACKUP');
 		}
-		elseif (date('Y/m/d',servertime_to_usertime($last_backup))==date('Y/m/d',servertime_to_usertime()))
+		elseif (date('Y/m/d',utctime_to_usertime($last_backup))==date('Y/m/d',utctime_to_usertime()))
 		{
 			$text=do_lang_tempcode('LAST_BACKUP_TODAY');
 		}
-		elseif (date('Y/m/d',servertime_to_usertime($last_backup))==date('Y/m/d',servertime_to_usertime(time()-60*60*24)))
+		elseif (date('Y/m/d',utctime_to_usertime($last_backup))==date('Y/m/d',utctime_to_usertime(time()-60*60*24)))
 		{
 			$text=do_lang_tempcode('LAST_BACKUP_YESTERDAY');
 		} else
@@ -320,7 +320,7 @@ class Module_admin_backup
 		$b_type=post_param('b_type','full');
 		if ($b_type=='full')
 		{
-			$file='Backup_full_'.date('Y-m-d',servertime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_full_'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||
@@ -331,7 +331,7 @@ class Module_admin_backup
 		}
 		elseif ($b_type=='incremental')
 		{
-			$file='Backup_incremental'.date('Y-m-d',servertime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_incremental'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||
@@ -342,7 +342,7 @@ class Module_admin_backup
 		}
 		elseif ($b_type=='sql')
 		{
-			$file='Backup_database'.date('Y-m-d',servertime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
+			$file='Backup_database'.date('Y-m-d',utctime_to_usertime()).'__'.uniqid(''); // The last bit is unfortunate, but we need to stop URL guessing
 			/*if (
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file)) ||
 				 (file_exists(get_custom_file_base().'/exports/backups/'.$file.'.txt')) ||

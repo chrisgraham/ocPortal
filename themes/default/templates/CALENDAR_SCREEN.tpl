@@ -52,6 +52,9 @@
 		1_TITLE={!EDIT}
 		1_ACCESSKEY=q
 		1_REL=edit
+
+		{$,Do not auto-redirect back to here as recurrences may break so URL hints may no longer be valid}
+		1_NOREDIRECT=1
 	{+END}
 
 	<br />
@@ -98,7 +101,7 @@
 									<abbr class="dtstart" title="{TIME_VCAL*}">{DAY*}</abbr>
 								{+END}
 
-								{+START,IF_PASSED,TO_DAY}
+								{+START,IF_PASSED,TO_DAY}{+START,IF,{$NEQ,{TO_DAY},{DAY}}}
 									&ndash;
 									
 									{+START,IF,{$VALUE_OPTION,html5}}
@@ -107,7 +110,7 @@
 									{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
 										<abbr class="dtend" title="{TO_TIME_VCAL*}">{TO_DAY*}</abbr>
 									{+END}
-								{+END}
+								{+END}{+END}
 							</td>
 						</tr>
 						{+END}
@@ -164,9 +167,9 @@
 		</div>
 	{+END}
 
+	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}
+
 	<p>
 		<a href="{BACK_URL*}"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></a>
 	</p>
 </div>
-
-{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}

@@ -93,7 +93,7 @@ class Hook_admin_stats_ocf_demographics
 			$demographics[strval($i).'-'.strval($i+4)]=0;
 		}
 		$demographics['100+']=0;
-		list($current_day,$current_month,$current_year)=explode(' ',date('j m Y',servertime_to_usertime(time())));
+		list($current_day,$current_month,$current_year)=explode(' ',date('j m Y',utctime_to_usertime(time())));
 		foreach ($rows as $i=>$row)
 		{
 			$day=1;

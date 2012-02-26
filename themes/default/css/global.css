@@ -986,6 +986,10 @@ h3.standardbox_title_classic {
 	padding: 0;
 }
 
+.overlay .dottedborder_huge_a, .overlay .dottedborder_barrier_a_nonrequired, .overlay .dottedborder_barrier_b_nonrequired, .overlay .dottedborder_divider, .overlay .dottedborder_divider_continue, .overlay .no_stbox_padding .forcedottedborder, .overlay .dottedborder {
+	border: 0;
+}
+
 .no_stbox_padding .dottedborder {
 	border: 0;
 }

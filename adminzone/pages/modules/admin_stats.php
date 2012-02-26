@@ -261,7 +261,7 @@ class Module_admin_stats
 		require_code('form_templates');
 
 		$fields=new ocp_tempcode();
-		$month_start=servertime_to_usertime(mktime(0,0,0,intval(date('m')),1,intval(date('Y'))));
+		$month_start=utctime_to_usertime(mktime(0,0,0,intval(date('m')),1,intval(date('Y'))));
 		$prior_month=intval(date('m'))-1;
 		$prior_year=intval(date('Y'));
 		if ($prior_month==0)
@@ -269,7 +269,7 @@ class Module_admin_stats
 			$prior_month=12;
 			$prior_year--;
 		}
-		$prior_month_start=servertime_to_usertime(mktime(0,0,0,$prior_month,1,$prior_year));
+		$prior_month_start=utctime_to_usertime(mktime(0,0,0,$prior_month,1,$prior_year));
 		$first_stat=$stats_table?$GLOBALS['SITE_DB']->query_value_null_ok('stats','MIN(date_and_time)'):NULL;
 		if (is_null($first_stat))
 		{
@@ -281,7 +281,7 @@ class Module_admin_stats
 			$year_start=intval(date('Y',$first_stat));
 			$years_ahead=intval(date('Y'))-$year_start;
 		}
-		if (servertime_to_usertime($first_stat)>$month_start)
+		if (utctime_to_usertime($first_stat)>$month_start)
 		{
 			$prior_month_start=$first_stat;
 			$month_start=time();

@@ -87,7 +87,7 @@ function content_get_details($content_type,$content_id)
 	$db=$GLOBALS[(substr($cma_info['table'],0,2)=='f_')?'FORUM_DB':'SITE_DB'];
 
 	$content_row=content_get_row($content_id,$cma_info);
-	if (is_null($content_row)) return array(NULL,NULL,NULL,NULL);
+	if (is_null($content_row)) return array(NULL,NULL,NULL,NULL,NULL,NULL);
 
 	if (is_null($cma_info['title_field']))
 	{

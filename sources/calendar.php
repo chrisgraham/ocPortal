@@ -77,9 +77,9 @@ function date_from_week_of_year($year,$week)
  * @param  boolean		Whether the time should be presented in the viewer's own timezone
  * @return TIME			Altered timestamp
  */
-function cal_servertime_to_usertime($time_raw,$timezone,$do_timezone_conv)
+function cal_utctime_to_usertime($time_raw,$timezone,$do_timezone_conv)
 {
-	if ($do_timezone_conv) $timezone=get_users_timezone(); // Instead of given timezone
+	if (!$do_timezone_conv) return $time_raw;
 
 	return tz_time($time_raw,$timezone);
 }
@@ -109,8 +109,8 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 {
 	if ($recurrences===0) return array();
 
-	if (is_null($period_start)) $period_start=servertime_to_usertime(time());
-	if (is_null($period_end)) $period_end=servertime_to_usertime(time()+60*60*24*360*20);
+	if (is_null($period_start)) $period_start=utctime_to_usertime(time());
+	if (is_null($period_end)) $period_end=utctime_to_usertime(time()+60*60*24*360*20);
 
 	$times=array();
 	$i=0;
@@ -131,7 +131,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	$dif_day=0;
 	$dif_month=0;
 	$dif_year=0;
-	$dif=servertime_to_usertime()-servertime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year));
+	$dif=utctime_to_usertime()-utctime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year));
 	switch ($recurrence) // If a long way out of range, accelerate forward before steadedly looping forward till we might find a match (doesn't jump fully forward, due to possibility of timezones complicating things)
 	{
 		case 'daily':
@@ -160,14 +160,55 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 
 	do
 	{
-		$a=cal_servertime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
+		/*
+		Consider this scenario...
+
+		An event ends at end of 1/1/2012 (23:59), which is 22:59 in UTC if they are in +1 timezone
+
+		Therefore the event, which is stored in UTC, needs a server time of 22:59 before going through cal_utctime_to_usertime
+
+		The server already has the day stored UTC which may be different to the day stored for the +1 timezone (in fact either the start or end day will be stored differently, assuming there is an end day)
+		*/
+
+		$_a=mktime(
+			is_null($start_hour)?find_timezone_start_hour(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,false):$start_hour,
+			is_null($start_minute)?find_timezone_start_minute(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,false):$start_minute,
+			0,
+			$start_month,
+			$start_day,
+			$start_year
+		);
+		$a=cal_utctime_to_usertime(
+			$_a,
+			NULL,
+			$do_timezone_conv==1
+		);
 		if ((is_null($start_hour)) && (is_null($end_day))) // All day event with no end date, should be same as start date
 		{
 			$end_day=$start_day;
 			$end_month=$start_month;
 			$end_year=$start_year;
 		}
-		$b=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
+		//exit('!'.(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour).':'.(is_null($end_hour)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_hour));
+		if (is_null($end_year))
+		{
+			$b=NULL;
+		} else
+		{
+			$_b=mktime(
+				is_null($end_hour)?find_timezone_end_hour(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,false):$end_hour,
+				is_null($end_minute)?find_timezone_end_minute(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,false):$end_minute,
+				0,
+				$end_month,
+				$end_day,
+				$end_year
+			);
+			$b=cal_utctime_to_usertime(
+				$_b,
+				NULL,
+				$do_timezone_conv==1
+			);
+		}
 		$starts_within=(($a>=$period_start) && ($a<$period_end));
 		$ends_within=(($b>$period_start) && ($b<=$period_end));
 		$spans=(($a<$period_start) && ($b>$period_end));
@@ -241,7 +282,7 @@ function regenerate_event_reminder_jobs($id,$force=false)
 		if ($event['e_type']==db_get_first_id()) // Add system command job if necessary
 		{
 			$GLOBALS['SITE_DB']->query_insert('calendar_jobs',array(
-				'j_time'=>usertime_to_servertime($recurrences[0][0]),
+				'j_time'=>usertime_to_utctime($recurrences[0][0]),
 				'j_reminder_id'=>NULL,
 				'j_member_id'=>NULL,
 				'j_event_id'=>$id
@@ -258,7 +299,7 @@ function regenerate_event_reminder_jobs($id,$force=false)
 				foreach ($reminders as $reminder)
 				{
 					$GLOBALS['SITE_DB']->query_insert('calendar_jobs',array(
-						'j_time'=>usertime_to_servertime($recurrences[0][0])-$reminder['n_seconds_before'],
+						'j_time'=>usertime_to_utctime($recurrences[0][0])-$reminder['n_seconds_before'],
 						'j_reminder_id'=>$reminder['id'],
 						'j_member_id'=>$reminder['n_member_id'],
 						'j_event_id'=>$event['id']
@@ -320,8 +361,8 @@ function date_range($from,$to,$do_time=true)
  */
 function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter=NULL,$do_rss=true)
 {
-	if (is_null($period_start)) $period_start=servertime_to_usertime(time());
-	if (is_null($period_end)) $period_end=servertime_to_usertime(time()+60*60*24*360*20);
+	if (is_null($period_start)) $period_start=utctime_to_usertime(time());
+	if (is_null($period_end)) $period_end=utctime_to_usertime(time()+60*60*24*360*20);
 
 	$matches=array();
 	$where='';
@@ -450,7 +491,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 							if (array_key_exists($item['category'],$event_types))
 								$event['t_logo']=$event_types[$item['category']];
 						}
-						$from=servertime_to_usertime($item['clean_add_date']);
+						$from=utctime_to_usertime($item['clean_add_date']);
 						if (($from>=$period_start) && ($from<$period_end))
 						{
 							$event+=array('e_start_year'=>date('Y',$from),'e_start_month'=>date('m',$from),'e_start_day'=>date('D',$from),'e_start_hour'=>date('H',$from),'e_start_minute'=>date('i',$from),'e_end_year'=>NULL,'e_end_month'=>NULL,'e_end_day'=>NULL,'e_end_hour'=>NULL,'e_end_minute'=>NULL);

@@ -186,7 +186,15 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 					if ((bits[0]=='dialogWidth') || (bits[0]=='width'))
 						width=window.parseInt(bits[1].replace(/px$/,''));
 					if ((bits[0]=='dialogHeight') || (bits[0]=='height'))
-						height=window.parseInt(bits[1].replace(/px$/,''));
+					{
+						if (bits[1]=='100%')
+						{
+							height = getWindowHeight() - 200;
+						} else
+						{
+							height=window.parseInt(bits[1].replace(/px$/,''));
+						}
+					}
 					if (((bits[0]=='resizable') || (bits[0]=='scrollbars')) && scrollbars!==true)
 						scrollbars=((bits[1]=='yes') || (bits[1]=='1'))/*if either resizable or scrollbars set we go for scrollbars*/;
 					if (bits[0]=='unadorned') unadorned=((bits[1]=='yes') || (bits[1]=='1'));
@@ -495,6 +503,9 @@ function ModalWindow()
 						if ((iframe) && (iframe.contentWindow) && (iframe.contentWindow.document) && (iframe.contentWindow.document.body))
 						{
 							iframe.contentWindow.document.body.style.background='transparent';
+
+							if (iframe.contentWindow.document.body.className.indexOf('overlay')==-1)
+								iframe.contentWindow.document.body.className+=' overlay';
 
 							// Allow scrolling, if we want it
 							iframe.scrolling=(_this.scrollbars === false)?"no":"auto";

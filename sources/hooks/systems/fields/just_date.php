@@ -65,7 +65,7 @@ class Hook_fields_just_date
 		unset($field);
 		if (!is_null($required))
 		{
-			if (($required) && ($default=='')) $default=date('Y-m-d',servertime_to_usertime());
+			if (($required) && ($default=='')) $default=date('Y-m-d',utctime_to_usertime());
 		}
 		return array('short_unescaped',$default,'short');
 	}

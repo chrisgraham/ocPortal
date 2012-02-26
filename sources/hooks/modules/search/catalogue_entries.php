@@ -126,7 +126,7 @@ class Hook_search_catalogue_entries
 					if (!is_guest())
 					{
 						$dob_year=intval($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_dob_year'));
-						if ($dob_year!=0) $special=integer_format(intval(date('Y',servertime_to_usertime(time())))-$dob_year); // number_format'ing this is kind of funny actually
+						if ($dob_year!=0) $special=integer_format(intval(date('Y',utctime_to_usertime(time())))-$dob_year); // number_format'ing this is kind of funny actually
 					}
 					$extra='_ranged';
 				}

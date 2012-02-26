@@ -138,15 +138,15 @@ class Block_main_news
 					switch ($historic)
 					{
 						case 'month':
-							if ((date('m',servertime_to_usertime($row['date_and_time']))==date('m',servertime_to_usertime())) && (date('Y',servertime_to_usertime($row['date_and_time']))!=date('Y',servertime_to_usertime()))) $ok=true;
+							if ((date('m',utctime_to_usertime($row['date_and_time']))==date('m',utctime_to_usertime())) && (date('Y',utctime_to_usertime($row['date_and_time']))!=date('Y',utctime_to_usertime()))) $ok=true;
 							break;
 
 						case 'week':
-							if ((date('W',servertime_to_usertime($row['date_and_time']))==date('W',servertime_to_usertime())) && (date('Y',servertime_to_usertime($row['date_and_time']))!=date('Y',servertime_to_usertime()))) $ok=true;
+							if ((date('W',utctime_to_usertime($row['date_and_time']))==date('W',utctime_to_usertime())) && (date('Y',utctime_to_usertime($row['date_and_time']))!=date('Y',utctime_to_usertime()))) $ok=true;
 							break;
 
 						case 'day':
-							if ((date('d',servertime_to_usertime($row['date_and_time']))==date('d',servertime_to_usertime())) && (date('m',servertime_to_usertime($row['date_and_time']))==date('m',servertime_to_usertime())) && (date('Y',servertime_to_usertime($row['date_and_time']))!=date('Y',servertime_to_usertime()))) $ok=true;
+							if ((date('d',utctime_to_usertime($row['date_and_time']))==date('d',utctime_to_usertime())) && (date('m',utctime_to_usertime($row['date_and_time']))==date('m',utctime_to_usertime())) && (date('Y',utctime_to_usertime($row['date_and_time']))!=date('Y',utctime_to_usertime()))) $ok=true;
 							break;
 					}
 					if ($ok)

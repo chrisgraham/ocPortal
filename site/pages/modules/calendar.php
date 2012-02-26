@@ -20,7 +20,7 @@
 
 /*
 Note that all this code operates in "user time". That is, the timestamps being banded around are not as the server would recognise them, because they encode offsets to match the users timezone settings.
-time() should never be called here, either explicitly, or implictly by not giving the date function a second argument. Instead, servertime_to_usertime() should be used to get the timestamp.
+time() should never be called here, either explicitly, or implictly by not giving the date function a second argument. Instead, utctime_to_usertime() should be used to get the timestamp.
 Any times that go-in-to or come-in-from the calendar backend API are also in "user time".
 To complicate matters further "user time" is not the timestamp that would exist on a user's PC, as all timestamps are meant to be stored in GMT. "user time" is offsetted to compensate, a virtual construct.
 */
@@ -447,15 +447,15 @@ class Module_calendar
 		switch ($view)
 		{
 			case 'day': // Like a diary
-				$id=get_param('id',date('Y-m-d',servertime_to_usertime()));
-				if (strpos($id,'-')===false) $id=date('Y-m-d',servertime_to_usertime()); // The id was actually a filter, will need to use default date/time
-				$self_encompassing=($id==date('Y-m-d',servertime_to_usertime()));
+				$id=get_param('id',date('Y-m-d',utctime_to_usertime()));
+				if (strpos($id,'-')===false) $id=date('Y-m-d',utctime_to_usertime()); // The id was actually a filter, will need to use default date/time
+				$self_encompassing=($id==date('Y-m-d',utctime_to_usertime()));
 				$date=$id;
 				$explode=explode('-',$id);
 				if (count($explode)!=3) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 				$main=$this->view_calendar_view_day($id,$date,$explode,$member_id,$filter);
 				$timestamp=mktime(0,0,0,intval($explode[1]),intval($explode[2]),intval($explode[0]));
-				$back=get_week_number_for(servertime_to_usertime($timestamp));
+				$back=get_week_number_for(utctime_to_usertime($timestamp));
 				$back_view='week';
 				$previous_timestamp=mktime(0,0,0,intval($explode[1]),intval($explode[2]),intval($explode[0]))-60*60*24;
 				$previous=date('Y-m-d',$previous_timestamp);
@@ -464,8 +464,8 @@ class Module_calendar
 				$title=get_page_title('CALENDAR_SPECIFIC',true,array(escape_html(locale_filter(date(do_lang('calendar_date_verbose'),$timestamp)))));
 				break;
 			case 'week': // Like a compressed diary
-				$id=get_param('id',get_week_number_for(servertime_to_usertime()));
-				$self_encompassing=($id==get_week_number_for(servertime_to_usertime()));
+				$id=get_param('id',get_week_number_for(utctime_to_usertime()));
+				$self_encompassing=($id==get_week_number_for(utctime_to_usertime()));
 				$explode=explode('-',$id);
 				if (count($explode)!=2) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 				list($start_month,$start_day,$start_year)=date_from_week_of_year(intval($explode[0]),intval($explode[1]));
@@ -481,8 +481,8 @@ class Module_calendar
 				$title=get_page_title('CALENDAR_SPECIFIC_WEEK',true,array(escape_html($explode[0]),escape_html($explode[1]),escape_html(locale_filter(date('M',$timestamp)))));
 				break;
 			case 'month': // Like a main calendar page
-				$id=get_param('id',date('Y-m',servertime_to_usertime()));
-				$self_encompassing=($id==date('Y-m',servertime_to_usertime()));
+				$id=get_param('id',date('Y-m',utctime_to_usertime()));
+				$self_encompassing=($id==date('Y-m',utctime_to_usertime()));
 				$date=$id.'-01';
 				$explode=explode('-',$id);
 				if (count($explode)!=2) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -668,6 +668,7 @@ class Module_calendar
 				} else
 				{
 					$to_h=intval(date('H',$to));
+					if (date('i',$to)!='0') $to_h++;
 				}
 			} else $to_h=$from_h;
 
@@ -742,7 +743,7 @@ class Module_calendar
 						$and_filter=$this->get_and_filter();
 						$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>date('Y-m-d H:i:s',$timestamp),'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL),get_module_zone('cms_calendar'));
 					} else $add_url=new ocp_tempcode();
-					$_streams->attach(do_template('CALENDAR_DAY_STREAM_HOUR',array('_GUID'=>'93a8fb53183a4225ec3bf7f2ea07cfc5','CURRENT'=>date('Y-m-d H',servertime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'PRIORITY'=>$priority,'DOWN'=>$down,'ENTRY'=>$entry)));
+					$_streams->attach(do_template('CALENDAR_DAY_STREAM_HOUR',array('_GUID'=>'93a8fb53183a4225ec3bf7f2ea07cfc5','CURRENT'=>date('Y-m-d H',utctime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'PRIORITY'=>$priority,'DOWN'=>$down,'ENTRY'=>$entry)));
 				}
 			}
 
@@ -908,7 +909,7 @@ class Module_calendar
 						$and_filter=$this->get_and_filter();
 						$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>date('Y-m-d H:i:s',$timestamp),'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL),get_module_zone('cms_calendar'));
 					} else $add_url=new ocp_tempcode();
-					$days->attach(do_template('CALENDAR_WEEK_HOUR_DAY',array('_GUID'=>'e001b4b2ea1995760ef0d4460d93b2e1','CURRENT'=>date('Y-m-d H',servertime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'DOWN'=>strval($down+1),'DAY'=>$day,'HOUR'=>$hour,'CLASS'=>$class,'ENTRIES'=>$entries)));
+					$days->attach(do_template('CALENDAR_WEEK_HOUR_DAY',array('_GUID'=>'e001b4b2ea1995760ef0d4460d93b2e1','CURRENT'=>date('Y-m-d H',utctime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'DOWN'=>strval($down+1),'DAY'=>$day,'HOUR'=>$hour,'CLASS'=>$class,'ENTRIES'=>$entries)));
 				}
 			}
 
@@ -1423,19 +1424,21 @@ class Module_calendar
 				$event['e_start_day']=intval($explode[2]);
 			}
 		}
-		$day_formatted=locale_filter(date(do_lang('calendar_date'),mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']))); // This is done in the events own timezone as not a full time just a date
-		$time_raw=mktime(is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
-		$from=cal_servertime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+		$time_raw=mktime(is_null($event['e_start_hour'])?find_timezone_start_hour(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],false):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],false):$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
+		$from=cal_utctime_to_usertime($time_raw,NULL,$event['e_do_timezone_conv']==1);
+		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
 		if (!is_null($event['e_end_year']))
 		{
-			$to=cal_servertime_to_usertime(mktime(is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'],$event['e_do_timezone_conv']==1);
-			$to_day_formatted=locale_filter(date(do_lang('calendar_date'),mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']))); // This is done in the events own timezone as not a full time just a date
+			$to_raw=mktime(is_null($event['e_end_hour'])?find_timezone_end_hour(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],false):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],false):$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']);
+			$to=cal_utctime_to_usertime($to_raw,NULL,$event['e_do_timezone_conv']==1);
+			$to_day_formatted=locale_filter(date(do_lang('calendar_date'),$to));
 			$time2=date_range($from,$to,!is_null($event['e_start_hour']));
 		} else
 		{
+			$to_raw=NULL;
 			$time2=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$from));
-			$to_day_formatted=NULL;
 			$to=NULL;
+			$to_day_formatted=NULL;
 		}
 
 		$priority=$event['e_priority'];
@@ -1497,7 +1500,7 @@ class Module_calendar
 			'TIME'=>$time2,
 			'TIME_RAW'=>strval($time_raw),
 			'TIME_VCAL'=>date('Ymd',$time_raw)."T".date('His',$time_raw),
-			'TO_TIME_VCAL'=>is_null($to)?NULL:(date('Ymd',$to)."T".date('His',$to)),
+			'TO_TIME_VCAL'=>is_null($to_raw)?NULL:(date('Ymd',$to_raw)."T".date('His',$to_raw)),
 			'EDIT_URL'=>$edit_url,
 			'SUBSCRIPTIONS'=>$_subscriptions,
 			'SUBSCRIBE_URL'=>$subscribe_url,
@@ -1577,7 +1580,7 @@ class Module_calendar
 		if (array_key_exists(0,$recurrences))
 		{
 			$GLOBALS['SITE_DB']->query_insert('calendar_jobs',array(
-				'j_time'=>usertime_to_servertime($recurrences[0][0])-$seconds_before,
+				'j_time'=>usertime_to_utctime($recurrences[0][0])-$seconds_before,
 				'j_reminder_id'=>$rem_id,
 				'j_member_id'=>get_member(),
 				'j_event_id'=>get_param_integer('id')

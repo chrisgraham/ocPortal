@@ -873,6 +873,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>lang/EN/fields.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>13</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>lang/EN/quotes.ini</key>
 		<dict>
 			<key>caret</key>
@@ -929,6 +943,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>pages/modules/recommend.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>229</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>204</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>229</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>38</integer>
+				<key>line</key>
+				<integer>229</integer>
+			</dict>
+		</dict>
 		<key>parameters.xml</key>
 		<dict>
 			<key>caret</key>
@@ -984,6 +1028,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>21</integer>
+		</dict>
+		<key>sources/blocks/side_calendar.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>215</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>203</integer>
 		</dict>
 		<key>sources/blocks/side_rss.php</key>
 		<dict>
@@ -1072,20 +1130,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>401</integer>
-		</dict>
-		<key>sources/form_templates.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>338</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>326</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1915,6 +1959,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/default/templates/CALENDAR_SCREEN.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>170</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>124</integer>
+		</dict>
 		<key>themes/default/templates/CALENDAR_WEEK_HOUR_DAY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2310,36 +2368,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>83</integer>
-		</dict>
-		<key>themes/default/templates/MENU_BRANCH_popup.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>222</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>137</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>222</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
 		</dict>
 		<key>themes/default/templates/MENU_BRANCH_select.tpl</key>
 		<dict>
@@ -3007,6 +3035,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{741, 239}, {1148, 939}}</string>
+	<string>{{731, 124}, {1148, 939}}</string>
 </dict>
 </plist>

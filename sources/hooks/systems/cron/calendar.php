@@ -40,13 +40,13 @@ class Hook_cron_calendar
 			foreach ($jobs as $job)
 			{
 				$recurrences=find_periods_recurrence($job['e_timezone'],1,$job['e_start_year'],$job['e_start_month'],$job['e_start_day'],is_null($job['e_start_hour'])?find_timezone_start_hour($job['e_timezone'],$job['e_start_year'],$job['e_start_month'],$job['e_start_day']):$job['e_start_hour'],is_null($job['e_start_minute'])?find_timezone_start_minute($job['e_timezone'],$job['e_start_year'],$job['e_start_month'],$job['e_start_day']):$job['e_start_minute'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],is_null($job['e_end_hour'])?find_timezone_end_hour($job['e_timezone'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day']):$job['e_end_hour'],is_null($job['e_end_minute'])?find_timezone_end_minute($job['e_timezone'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day']):$job['e_end_minute'],$job['e_recurrence'],min(1,$job['e_recurrences']));
-	
+
 				// Dispatch
 				if (is_null($job['j_reminder_id'])) // It's code/URL
 				{
 	//				if (!has_actual_page_access($job['e_submitter'],'admin_occle')) continue; // Someone was admin but isn't anymore 			Actually, really ex-admins could have placed lots of other kinds of traps. It's the responsibility of the staff to check this on a wider basis. There's no use creating tangental management complexity for just one case.
 					if ($job['e_type']!=db_get_first_id()) continue; // Very strange
-	
+
 					$job_text=get_translated_text($job['e_content']);
 					if (substr($job_text,0,7)=='http://') // It's URL
 					{
@@ -65,7 +65,7 @@ class Hook_cron_calendar
 								if ($to_echo===false) fatal_exit(@strval($php_errormsg));
 							} else
 							{
-								$GLOBALS['event_timestamp']=array_key_exists(0,$recurrences)?usertime_to_servertime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$job['e_start_day'],$job['e_start_year']);
+								$GLOBALS['event_timestamp']=array_key_exists(0,$recurrences)?usertime_to_utctime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$job['e_start_day'],$job['e_start_year']);
 								// OcCLE code
 								require_code('occle');
 								$temp=new virtual_bash($job_text);
@@ -81,7 +81,7 @@ class Hook_cron_calendar
 					// Send notification
 					if (!has_category_access($job['n_member_id'],'calendar',strval($job['e_type']))) continue;
 					$title=get_translated_text($job['e_title']);
-					$timestamp=array_key_exists(0,$recurrences)?usertime_to_servertime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$job['e_start_day'],$job['e_start_year']);
+					$timestamp=array_key_exists(0,$recurrences)?usertime_to_utctime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$job['e_start_day'],$job['e_start_year']);
 					$date=get_timezoned_date($timestamp,true,false,false,false,$job['n_member_id']);
 					$_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$job['j_event_id']),get_module_zone('calendar'),NULL,false,false,true);
 					$url=$_url->evaluate();
@@ -96,7 +96,7 @@ class Hook_cron_calendar
 				if (array_key_exists(1,$recurrences))
 				{
 					$GLOBALS['SITE_DB']->query_insert('calendar_jobs',array(
-						'j_time'=>usertime_to_servertime($recurrences[1][0])-$job['n_seconds_before'],
+						'j_time'=>usertime_to_utctime($recurrences[1][0])-$job['n_seconds_before'],
 						'j_reminder_id'=>$job['j_reminder_id'],
 						'j_member_id'=>$job['j_member_id'],
 						'j_event_id'=>$job['j_event_id']

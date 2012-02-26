@@ -24,7 +24,7 @@
 								{+END}{+END}
 							</th>
 
-							<td>
+							<td{+START,IF,{$EQ,{TIME},{!ALL_DAY_EVENT}}} style="display: none"{+END}>
 								{+START,IF,{$VALUE_OPTION,html5}}
 									<time class="dtstart" datetime="{TIME_VCAL*}" itemprop="startDate">{TIME*}</time>
 								{+END}
@@ -33,15 +33,17 @@
 								{+END}
 							</td>
 	
-							<td class="summary">
+							<td class="summary"{+START,IF,{$EQ,{TIME},{!ALL_DAY_EVENT}}} colspan="2"{+END}>
 								<a href="{VIEW_URL*}" class="url">{TITLE*}</a>
 								{+START,IF_PASSED,TO_DAY}
-									{+START,IF,{$VALUE_OPTION,html5}}
-										<span class="associated_details">({!EVENT_ENDS_ON,<time class="dtend" datetime="{TO_TIME_VCAL*}" itemprop="endDate">{TO_DAY*}</time>})</span>
-									{+END}
-									{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-										<span class="associated_details">({!EVENT_ENDS_ON,<abbr class="dtend" title="{TO_TIME_VCAL*}">{TO_DAY*}</abbr>})</span>
-									{+END}
+									<span{+START,IF,{$EQ,{FROM_DAY},{TO_DAY}}} style="display: none"{+END}>
+										{+START,IF,{$VALUE_OPTION,html5}}
+											<span class="associated_details">({!EVENT_ENDS_ON,<time class="dtend" datetime="{TO_TIME_VCAL*}" itemprop="endDate">{TO_DAY*}</time>})</span>
+										{+END}
+										{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
+											<span class="associated_details">({!EVENT_ENDS_ON,<abbr class="dtend" title="{TO_TIME_VCAL*}">{TO_DAY*}</abbr>})</span>
+										{+END}
+									</span>
 								{+END}
 							</td>
 						</tr>

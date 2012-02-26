@@ -267,6 +267,7 @@ function load_html_edit(posting_form,ajax_copy)
 function areaedit_init(element)
 {
 	var pageStyleSheets=[];
+	if (!document) return;
 	var linked_sheets=document.getElementsByTagName('link');
 	for (var counter=0;counter<linked_sheets.length;counter++)
 	{
@@ -335,6 +336,7 @@ function areaedit_init(element)
 		{+END}
 		toolbar : toolbar
 	} );
+	if (!editor) return; // Not supported on this platform
 
 	linked_sheets=document.getElementsByTagName('style');
 	var css='';

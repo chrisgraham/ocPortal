@@ -92,10 +92,17 @@ function notifications_ui($member_id_of)
 				foreach ($_notification_types as $possible=>$ntype)
 				{
 					$available=(($possible & $allowed_setting) != 0);
+					if (count($_POST)!=0)
+					{
+						$checked=post_param_integer('notification_'.$notification_code.'_'.$ntype,0);
+					} else
+					{
+						$checked=(($possible & $current_setting) != 0)?1:0;
+					}
 					$notification_types[]=array(
 						'NTYPE'=>$ntype,
 						'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
-						'CHECKED'=>(post_param_integer('notification_'.$notification_code.'_'.$ntype,(($possible & $current_setting) != 0)?1:0)==1),
+						'CHECKED'=>($checked==1),
 						'RAW'=>strval($possible),
 						'AVAILABLE'=>$available,
 						'SCOPE'=>$notification_code,
@@ -130,7 +137,7 @@ function notifications_ui($member_id_of)
 	}
 
 	// Save
-	if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST')
+	if (count($_POST)!=0)
 	{
 		foreach ($notification_sections as $notification_section)
 		{
@@ -226,7 +233,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 		}
 	} else
 	{
-		if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST') // If we've just saved
+		if (count($_POST)!=0) // If we've just saved
 		{
 			enable_notifications($notification_code,NULL,NULL,A_NA); // Make it clear we've overridden the general value by doing this
 
@@ -326,10 +333,18 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 
 			$available=(($possible & $allowed_setting) != 0);
 
+			if (count($_POST)!=0)
+			{
+				$checked=post_param_integer('notification_'.$notification_category.'_'.$ntype,0);
+			} else
+			{
+				$checked=(($possible & $current_setting) != 0)?1:0;
+			}
+
 			$notification_types[]=array(
 				'NTYPE'=>$ntype,
 				'LABEL'=>do_lang_tempcode('ENABLE_NOTIFICATIONS_'.$ntype),
-				'CHECKED'=>(post_param_integer('notification_'.$notification_category.'_'.$ntype,(($possible & $current_setting) != 0)?1:0)==1),
+				'CHECKED'=>($checked==1),
 				'RAW'=>strval($possible),
 				'AVAILABLE'=>$available,
 				'SCOPE'=>$notification_category,

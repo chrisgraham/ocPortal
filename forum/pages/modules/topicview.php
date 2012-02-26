@@ -188,7 +188,7 @@ class Module_topicview
 					$action_url=build_url(array('page'=>'topics','type'=>'report_post','id'=>$_postdetails['id']),get_module_zone('topics'));
 					$_title=do_lang_tempcode('REPORT_POST');
 					$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-					$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'f81cbe84f524b4ed9e089c6e89a7c717','REL'=>'report','IMMEDIATE'=>false,'IMG'=>'report_post','TITLE'=>$_title,'URL'=>$action_url)));
+					$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'f81cbe84f524b4ed9e089c6e89a7c717','REL'=>'report','IMMEDIATE'=>false,'IMG'=>'report_post','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>'return open_link_as_overlay(this,null,\'100%\');')));
 				}
 				if ((array_key_exists('may_warn_members',$topic_info)) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (addon_installed('ocf_warnings')))
 				{

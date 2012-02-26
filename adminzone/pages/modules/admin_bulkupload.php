@@ -73,7 +73,7 @@ class Module_admin_bulkupload
 			$post_url=build_url(array('page'=>'_SELF'),'_SELF');
 			$text=paragraph(do_lang_tempcode('BULK_UPLOAD_HELP'));
 			$submit_name=do_lang_tempcode('BULK_UPLOAD');
-			$fields=form_input_line(do_lang_tempcode('DIRECTORY'),do_lang_tempcode('DIRECTORY_BULK'),'parameter','uploads/attachments/'.date('Y-m-d',servertime_to_usertime()),true);
+			$fields=form_input_line(do_lang_tempcode('DIRECTORY'),do_lang_tempcode('DIRECTORY_BULK'),'parameter','uploads/attachments/'.date('Y-m-d',utctime_to_usertime()),true);
 
 			return do_template('FORM_SCREEN',array('_GUID'=>'77a2ca460745145d8a1d18cf24971fea','SKIP_VALIDATION'=>true,'HIDDEN'=>'','FIELDS'=>$fields,'URL'=>$post_url,'TITLE'=>$title,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
 		} else

@@ -398,7 +398,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	}
 	
 	// DOB
-	$default_time=is_null($dob_month)?NULL:usertime_to_servertime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
+	$default_time=is_null($dob_month)?NULL:usertime_to_utctime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
 	if (get_option('no_dob_ask')!='1')
 	{
 		$fields->attach(form_input_date(do_lang_tempcode((get_value('dob_optional')==='1')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));

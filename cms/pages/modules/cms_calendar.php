@@ -276,7 +276,7 @@ class Module_cms_calendar extends standard_aed_module
 	 * @param  LONG_TEXT			Notes
 	 * @return array				A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields)
 	 */
-	function get_form_fields($type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=1,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='')
+	function get_form_fields($type=NULL,$start_year=NULL,$start_month=NULL,$start_day=NULL,$start_hour=NULL,$start_minute=NULL,$title='',$content='',$recurrence='none',$recurrences=NULL,$seg_recurrences=0,$is_public=1,$priority=3,$end_year=NULL,$end_month=NULL,$end_day=NULL,$end_hour=NULL,$end_minute=NULL,$timezone=NULL,$do_timezone_conv=0,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='')
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -344,8 +344,8 @@ class Module_cms_calendar extends standard_aed_module
 
 		// Dates
 		$fields->attach(form_input_tick(do_lang_tempcode('ALL_DAY_EVENT'),do_lang_tempcode('DESCRIPTION_ALL_DAY_EVENT'),'all_day_event',is_null($start_hour)));
-		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute('Europe/London',$start_year,$start_month,$start_day):$start_minute,is_null($start_hour)?find_timezone_start_hour('Europe/London',$start_year,$start_month,$start_day):$start_hour,$start_month,$start_day,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,is_null($start_hour)?'Europe/London':$timezone));
-		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute('Europe/London',$end_year,$end_month,$end_day):$end_minute,is_null($end_hour)?find_timezone_end_hour('Europe/London',$end_year,$end_month,$end_day):$end_hour,$end_month,$end_day,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,is_null($end_hour)?'Europe/London':$timezone));
+		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,$start_month,$start_day,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
+		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,$end_month,$end_day,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
 
 		if ($validated==0) $validated=get_param_integer('validated',0);
 		if (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
@@ -682,8 +682,8 @@ class Module_cms_calendar extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
-				$from=cal_servertime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
-				$to=is_null($end_year)?mixed():cal_servertime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
+				$from=cal_utctime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,false):$start_hour,is_null($start_minute)?find_timezone_start_minute(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year,false),NULL,$do_timezone_conv==1);
+				$to=is_null($end_year)?mixed():cal_utctime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,false):$end_hour,is_null($end_minute)?find_timezone_end_minute(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year,false),NULL,$do_timezone_conv==1);
 
 				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 			}
@@ -738,16 +738,16 @@ class Module_cms_calendar extends standard_aed_module
 		if (($delete_status=='3') && (!fractional_edit()))
 		{
 			// Fix past occurences
-			$past_times=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],servertime_to_usertime(mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year'])),servertime_to_usertime(time()));
+			$past_times=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],utctime_to_usertime(mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year'])),utctime_to_usertime(time()));
 			foreach ($past_times as $past_time)
 			{
-				list($start_year,$start_month,$start_day,$start_hour,$start_minute)=explode('-',date('Y-m-d-h-i',usertime_to_servertime($past_time[0])));
+				list($start_year,$start_month,$start_day,$start_hour,$start_minute)=explode('-',date('Y-m-d-h-i',usertime_to_utctime($past_time[0])));
 				if (is_null($past_time[1]))
 				{
 					list($end_year,$end_month,$end_day,$end_hour,$end_minute)=array(NULL,NULL,NULL,NULL,NULL);
 				} else
 				{
-					$explode=explode('-',date('Y-m-d-h-i',usertime_to_servertime($past_time[1])));
+					$explode=explode('-',date('Y-m-d-h-i',usertime_to_utctime($past_time[1])));
 					$end_year=intval($explode[0]);
 					$end_month=intval($explode[1]);
 					$end_day=intval($explode[2]);
@@ -811,8 +811,8 @@ class Module_cms_calendar extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
-				$from=cal_servertime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
-				$to=is_null($end_year)?NULL:cal_servertime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
+				$from=cal_utctime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
+				$to=is_null($end_year)?NULL:cal_utctime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
 
 				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 			}

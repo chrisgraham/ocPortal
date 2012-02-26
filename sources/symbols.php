@@ -1423,7 +1423,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$timestamp=isset($param[1])?intval($param[1]):time();
 					$value=locale_filter(my_strftime($param[0],$timestamp));
-					if ($value==$param[0]) $value=date($param[0],servertime_to_usertime($timestamp));
+					if ($value==$param[0]) $value=date($param[0],utctime_to_usertime($timestamp));
 				} else $value=strval(time());
 				break;
 

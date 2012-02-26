@@ -47,7 +47,7 @@ class Block_side_calendar
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:NULL,array_key_exists(\'filter\',$map)?explode(",",$map[\'filter\']):NULL,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'calendar\'),date(\'d\',servertime_to_usertime()),array_key_exists(\'days\',$map)?$map[\'days\']:\'30\',array_key_exists(\'param\',$map)?$map[\'param\']:\'year\',date(\'Y-m\',servertime_to_usertime()))';
+		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:NULL,array_key_exists(\'filter\',$map)?explode(",",$map[\'filter\']):NULL,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'calendar\'),date(\'d\',utctime_to_usertime()),array_key_exists(\'days\',$map)?$map[\'days\']:\'30\',array_key_exists(\'param\',$map)?$map[\'param\']:\'year\',date(\'Y-m\',utctime_to_usertime()))';
 		$info['ttl']=60*24;
 		return $info;
 	}
@@ -65,9 +65,9 @@ class Block_side_calendar
 		require_lang('dates');
 		require_css('calendar');
 
-		$year=intval(date('Y',servertime_to_usertime()));
-		$month=intval(date('m',servertime_to_usertime()));
-		$day=intval(date('d',servertime_to_usertime()));
+		$year=intval(date('Y',utctime_to_usertime()));
+		$month=intval(date('m',utctime_to_usertime()));
+		$day=intval(date('d',utctime_to_usertime()));
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('calendar');
 
@@ -165,20 +165,20 @@ class Block_side_calendar
 				if (!array_key_exists($j,$entries))
 				{
 					$class='free_time';
-					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_FREE',array('_GUID'=>'d9ac194adf9fef87f3ee0161f0582b88','CURRENT'=>date('Y-m-d',servertime_to_usertime())==$date,'DAY_URL'=>$day_url,'DATE'=>$date_formatted,'DAY'=>strval($j),'CLASS'=>$class)));
+					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_FREE',array('_GUID'=>'d9ac194adf9fef87f3ee0161f0582b88','CURRENT'=>date('Y-m-d',utctime_to_usertime())==$date,'DAY_URL'=>$day_url,'DATE'=>$date_formatted,'DAY'=>strval($j),'CLASS'=>$class)));
 				}
 				elseif (is_array($entries[$j]))
 				{
 					$class='single';
 					$events_and_priority_lang=do_lang_tempcode('TOTAL_EVENTS_AND_HIGHEST_PRIORITY','1',do_lang_tempcode('PRIORITY_'.strval($priorities[$j])));
-					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array_merge(array('CURRENT'=>date('Y-m-d',servertime_to_usertime())==$date,'DAY_URL'=>$day_url,'DATE'=>$date_formatted,'DAY'=>strval($j),'CLASS'=>$class,'COUNT'=>'1','EVENTS_AND_PRIORITY_LANG'=>$events_and_priority_lang),$entries[$j])));
+					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array_merge(array('CURRENT'=>date('Y-m-d',utctime_to_usertime())==$date,'DAY_URL'=>$day_url,'DATE'=>$date_formatted,'DAY'=>strval($j),'CLASS'=>$class,'COUNT'=>'1','EVENTS_AND_PRIORITY_LANG'=>$events_and_priority_lang),$entries[$j])));
 				}
 				else
 				{
 					$class='multiple';
 					$e_count=integer_format($entries[$j]);
 					$events_and_priority_lang=do_lang_tempcode('TOTAL_EVENTS_AND_HIGHEST_PRIORITY',make_string_tempcode($e_count),do_lang_tempcode('PRIORITY_'.strval($priorities[$j])));
-					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array('_GUID'=>'2190cdba146d5d18c01033fd0d9a09a1','CURRENT'=>date('Y-m-d',servertime_to_usertime())==$date,'DAY_URL'=>$day_url,'DATE'=>$date_formatted,'TITLE'=>'','TIME'=>'','URL'=>'','ID'=>'','PRIORITY'=>strval($priorities[$j]),'DAY'=>strval($j),'ICON'=>'','COUNT'=>$e_count,'EVENTS_AND_PRIORITY_LANG'=>$events_and_priority_lang)));
+					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array('_GUID'=>'2190cdba146d5d18c01033fd0d9a09a1','CURRENT'=>date('Y-m-d',utctime_to_usertime())==$date,'DAY_URL'=>$day_url,'DATE'=>$date_formatted,'TITLE'=>'','TIME'=>'','URL'=>'','ID'=>'','PRIORITY'=>strval($priorities[$j]),'DAY'=>strval($j),'ICON'=>'','COUNT'=>$e_count,'EVENTS_AND_PRIORITY_LANG'=>$events_and_priority_lang)));
 				}
 
 				if ($dotw==6)
@@ -240,7 +240,8 @@ class Block_side_calendar
 				'TIMESTAMP'=>strval($real_from),
 				'TIME'=>($real_from!=$from)?do_lang('EVENT_CONTINUES'):(is_null($event['e_start_hour'])?do_lang_tempcode('ALL_DAY_EVENT'):make_string_tempcode(get_timezoned_time($real_from))),
 				'TIME_RAW'=>strval($real_from),
-				'TO_DAY'=>is_null($real_to)?NULL:get_timezoned_date($real_to,!is_null($event['e_start_hour'])),
+				'FROM_DAY'=>get_timezoned_date($real_from,!is_null($event['e_start_hour'])),
+				'TO_DAY'=>is_null($real_to)?NULL:get_timezoned_date($real_to,!is_null($event['e_end_hour']),false,true),
 				'TO_DAY_RAW'=>strval($real_to),
 				'TIME_VCAL'=>date('Ymd',$real_from)."T".date('His',$real_from),
 				'TO_TIME_VCAL'=>is_null($real_to)?NULL:(date('Ymd',$real_to)."T".date('His',$real_to)),

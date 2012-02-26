@@ -19,70 +19,82 @@
  */
 
 /**
- * Find first hour in day for a timezone for someone observing in GMT.
+ * Find first hour in day for a timezone.
  *
  * @param  ID_TEXT			Timezone
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
- * @param  boolean			Invert reference point
+ * @param  boolean			True: Year/Month/Day is for someone viewing from UTC (i.e. already correct). False: Get a recompensator that can go into mktime.
  * @return integer			Hour
  */
-function find_timezone_start_hour($timezone,$year,$month,$day,$invert=true)
+function find_timezone_start_hour($timezone,$year,$month,$day,$observed_from_utc=true)
 {
-	$ret=intval(date('H',tz_time(mktime(0,0,0,$month,$day,$year),$timezone)));
-	if ($invert) $ret=-$ret;
+	$t1=mktime(0,0,0,$month,$day,$year);
+	$t2=tz_time($t1,$timezone);
+	if ($observed_from_utc) $t2-=2*($t2-$t1);
+	$ret=intval(date('H',$t2));
+	if (!$observed_from_utc) $ret=23-$ret; // Invert from what we expected, may be negative, designed to be fed into mktime to shift dates
 	return $ret;
 }
 
 /**
- * Find first minute in day for a timezone for someone observing in GMT. Usually 0, but some timezones have 30 min offsets.
+ * Find first minute in day for a timezone. Usually 0, but some timezones have 30 min offsets.
  *
  * @param  ID_TEXT			Timezone
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
- * @param  boolean			Invert reference point
+ * @param  boolean			True: Year/Month/Day is for someone viewing from UTC (i.e. already correct). False: Get a recompensator that can go into mktime.
  * @return integer			Hour
  */
-function find_timezone_start_minute($timezone,$year,$month,$day,$invert=true)
+function find_timezone_start_minute($timezone,$year,$month,$day,$observed_from_utc=true)
 {
-	$ret=intval(date('i',tz_time(mktime(0,0,0,$month,$day,$year),$timezone)));
-	if ($invert) $ret=-$ret;
+	$t1=mktime(0,0,0,$month,$day,$year);
+	$t2=tz_time($t1,$timezone);
+	if ($observed_from_utc) $t2-=2*($t2-$t1);
+	$ret=intval(date('i',$t2));
+	if (!$observed_from_utc) $ret=60-$ret; // Invert from what we expected, may be negative, designed to be fed into mktime to shift dates
 	return $ret;
 }
 
 /**
- * Find last hour in day for a timezone for someone observing in GMT.
+ * Find last hour in day for a timezone.
  *
  * @param  ID_TEXT			Timezone
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
- * @param  boolean			Invert reference point
+ * @param  boolean			True: Year/Month/Day is for someone viewing from UTC (i.e. already correct). False: Get a recompensator that can go into mktime.
  * @return integer			Hour
  */
-function find_timezone_end_hour($timezone,$year,$month,$day,$invert=true)
+function find_timezone_end_hour($timezone,$year,$month,$day,$observed_from_utc=true)
 {
-	$ret=intval(date('H',tz_time(mktime(23,59,0,$month,$day,$year),$timezone)));
-	if ($invert) $ret=23-$ret;
+	$t1=mktime(23,59,0,$month,$day,$year);
+	$t2=tz_time($t1,$timezone);
+	if ($observed_from_utc) $t2-=2*($t2-$t1);
+	$ret=intval(date('H',$t2));
+	if (!$observed_from_utc) $ret=23-$ret; // Invert from what we expected, may be negative, designed to be fed into mktime to shift dates
 	return $ret;
 }
 
 /**
- * Find last minute in day for a timezone for someone observing in GMT. Usually 59, but some timezones have 30 min offsets.
+ * Find last minute in day for a timezone. Usually 59, but some timezones have 30 min offsets.
  *
  * @param  ID_TEXT			Timezone
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
- * @param  boolean			Invert reference point
+ * @param  boolean			True: Year/Month/Day is for someone viewing from UTC (i.e. already correct). False: Get a recompensator that can go into mktime.
  * @return integer			Hour
  */
-function find_timezone_end_minute($timezone,$year,$month,$day,$invert=true)
+function find_timezone_end_minute($timezone,$year,$month,$day,$observed_from_utc=true)
 {
-	$ret=intval(date('i',tz_time(mktime(23,59,0,$month,$day,$year),$timezone)));
-	if ($invert) $ret=59-$ret;
+	$t1=mktime(23,59,0,$month,$day,$year);
+	$t2=tz_time($t1,$timezone);
+	if ($observed_from_utc) $t2-=2*($t2-$t1);
+	$ret=intval(date('i',$t2));
+	if (!$observed_from_utc) $ret=60-$ret; // Invert from what we expected, may be negative, designed to be fed into mktime to shift dates
 	return $ret;
 }
 
@@ -124,17 +136,24 @@ function _get_input_date($stub,$get_also=false)
 
 	if (!checkdate($month,$day,$year)) warn_exit(do_lang_tempcode('INVALID_DATE_GIVEN'));
 
-	if (!is_null($hour))
+	if (is_null($hour))
 	{
-		$time=mktime($hour,$minute,0,$month,$day,$year);
-		if (($year>=1970) || (@strftime('%Y',@mktime(0,0,0,1,1,1963))=='1963')) // Only try and do timezone conversion if we can do proper maths this far back
+		if (strpos($stub,'end')!==false)
 		{
-			$amount_forward=tz_time($time,$timezone)-$time;
-			$time=$time-$amount_forward;
+			$hour=23;
+			$minute=59;
+		} else
+		{
+			$hour=0;
+			$minute=0;
 		}
-	} else
+	}
+
+	$time=mktime($hour,$minute,0,$month,$day,$year);
+	if (($year>=1970) || (@strftime('%Y',@mktime(0,0,0,1,1,1963))=='1963')) // Only try and do timezone conversion if we can do proper maths this far back
 	{
-		$time=mktime(0,0,0,$month,$day,$year);
+		$amount_forward=tz_time($time,$timezone)-$time;
+		$time=$time-$amount_forward;
 	}
 
 	return $time;
