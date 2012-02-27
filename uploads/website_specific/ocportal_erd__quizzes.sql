@@ -1,4 +1,4 @@
-		CREATE TABLE ocp6_quiz_member_last_visit
+		CREATE TABLE ocp_quiz_member_last_visit
 		(
 			id integer auto_increment NULL,
 			v_time integer unsigned NOT NULL,
@@ -7,7 +7,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_quizzes
+		CREATE TABLE ocp_quizzes
 		(
 			id integer auto_increment NULL,
 			q_timeout integer NOT NULL,
@@ -30,7 +30,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_quiz_questions
+		CREATE TABLE ocp_quiz_questions
 		(
 			id integer auto_increment NULL,
 			q_long_input_field tinyint(1) NOT NULL,
@@ -42,7 +42,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_quiz_question_answers
+		CREATE TABLE ocp_quiz_question_answers
 		(
 			id integer auto_increment NULL,
 			q_question integer NOT NULL,
@@ -53,7 +53,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_quiz_winner
+		CREATE TABLE ocp_quiz_winner
 		(
 			q_quiz integer NULL,
 			q_entry integer NULL,
@@ -61,7 +61,7 @@
 			PRIMARY KEY (q_quiz,q_entry)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_quiz_entries
+		CREATE TABLE ocp_quiz_entries
 		(
 			id integer auto_increment NULL,
 			q_time integer unsigned NOT NULL,
@@ -71,7 +71,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_quiz_entry_answer
+		CREATE TABLE ocp_quiz_entry_answer
 		(
 			id integer auto_increment NULL,
 			q_entry integer NOT NULL,
@@ -80,7 +80,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_f_members
+		CREATE TABLE ocp_f_members
 		(
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
@@ -93,7 +93,7 @@
 			m_cache_num_posts integer NOT NULL,
 			m_cache_warnings integer NOT NULL,
 			m_join_time integer unsigned NOT NULL,
-			m_timezone_offset integer NOT NULL,
+			m_timezone_offset varchar(255) NOT NULL,
 			m_primary_group integer NOT NULL,
 			m_last_visit_time integer unsigned NOT NULL,
 			m_last_submit_time integer unsigned NOT NULL,
@@ -109,10 +109,11 @@
 			m_photo_url varchar(255) NOT NULL,
 			m_photo_thumb_url varchar(255) NOT NULL,
 			m_views_signatures tinyint(1) NOT NULL,
-			m_track_contributed_topics tinyint(1) NOT NULL,
+			m_auto_monitor_contrib_content tinyint(1) NOT NULL,
 			m_language varchar(80) NOT NULL,
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
+			m_allow_emails_from_staff tinyint(1) NOT NULL,
 			m_notes longtext NOT NULL,
 			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
@@ -125,7 +126,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_translate
+		CREATE TABLE ocp_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -137,7 +138,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_newsletters
+		CREATE TABLE ocp_newsletters
 		(
 			id integer auto_increment NULL,
 			title integer NOT NULL,
@@ -145,7 +146,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_f_groups
+		CREATE TABLE ocp_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -178,89 +179,89 @@
 		) TYPE=InnoDB;
 
 
-		CREATE INDEX `quiz_member_last_visit.v_member_id` ON ocp6_quiz_member_last_visit(v_member_id);
-		ALTER TABLE ocp6_quiz_member_last_visit ADD FOREIGN KEY `quiz_member_last_visit.v_member_id` (v_member_id) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `quiz_member_last_visit.v_member_id` ON ocp_quiz_member_last_visit(v_member_id);
+		ALTER TABLE ocp_quiz_member_last_visit ADD FOREIGN KEY `quiz_member_last_visit.v_member_id` (v_member_id) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `quiz_member_last_visit.v_quiz_id` ON ocp6_quiz_member_last_visit(v_quiz_id);
-		ALTER TABLE ocp6_quiz_member_last_visit ADD FOREIGN KEY `quiz_member_last_visit.v_quiz_id` (v_quiz_id) REFERENCES ocp6_quizzes (id);
+		CREATE INDEX `quiz_member_last_visit.v_quiz_id` ON ocp_quiz_member_last_visit(v_quiz_id);
+		ALTER TABLE ocp_quiz_member_last_visit ADD FOREIGN KEY `quiz_member_last_visit.v_quiz_id` (v_quiz_id) REFERENCES ocp_quizzes (id);
 
-		CREATE INDEX `quizzes.q_name` ON ocp6_quizzes(q_name);
-		ALTER TABLE ocp6_quizzes ADD FOREIGN KEY `quizzes.q_name` (q_name) REFERENCES ocp6_translate (id);
+		CREATE INDEX `quizzes.q_name` ON ocp_quizzes(q_name);
+		ALTER TABLE ocp_quizzes ADD FOREIGN KEY `quizzes.q_name` (q_name) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `quizzes.q_start_text` ON ocp6_quizzes(q_start_text);
-		ALTER TABLE ocp6_quizzes ADD FOREIGN KEY `quizzes.q_start_text` (q_start_text) REFERENCES ocp6_translate (id);
+		CREATE INDEX `quizzes.q_start_text` ON ocp_quizzes(q_start_text);
+		ALTER TABLE ocp_quizzes ADD FOREIGN KEY `quizzes.q_start_text` (q_start_text) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `quizzes.q_end_text` ON ocp6_quizzes(q_end_text);
-		ALTER TABLE ocp6_quizzes ADD FOREIGN KEY `quizzes.q_end_text` (q_end_text) REFERENCES ocp6_translate (id);
+		CREATE INDEX `quizzes.q_end_text` ON ocp_quizzes(q_end_text);
+		ALTER TABLE ocp_quizzes ADD FOREIGN KEY `quizzes.q_end_text` (q_end_text) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `quizzes.q_submitter` ON ocp6_quizzes(q_submitter);
-		ALTER TABLE ocp6_quizzes ADD FOREIGN KEY `quizzes.q_submitter` (q_submitter) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `quizzes.q_submitter` ON ocp_quizzes(q_submitter);
+		ALTER TABLE ocp_quizzes ADD FOREIGN KEY `quizzes.q_submitter` (q_submitter) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `quizzes.q_tied_newsletter` ON ocp6_quizzes(q_tied_newsletter);
-		ALTER TABLE ocp6_quizzes ADD FOREIGN KEY `quizzes.q_tied_newsletter` (q_tied_newsletter) REFERENCES ocp6_newsletters (id);
+		CREATE INDEX `quizzes.q_tied_newsletter` ON ocp_quizzes(q_tied_newsletter);
+		ALTER TABLE ocp_quizzes ADD FOREIGN KEY `quizzes.q_tied_newsletter` (q_tied_newsletter) REFERENCES ocp_newsletters (id);
 
-		CREATE INDEX `quizzes.q_end_text_fail` ON ocp6_quizzes(q_end_text_fail);
-		ALTER TABLE ocp6_quizzes ADD FOREIGN KEY `quizzes.q_end_text_fail` (q_end_text_fail) REFERENCES ocp6_translate (id);
+		CREATE INDEX `quizzes.q_end_text_fail` ON ocp_quizzes(q_end_text_fail);
+		ALTER TABLE ocp_quizzes ADD FOREIGN KEY `quizzes.q_end_text_fail` (q_end_text_fail) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `quiz_questions.q_quiz` ON ocp6_quiz_questions(q_quiz);
-		ALTER TABLE ocp6_quiz_questions ADD FOREIGN KEY `quiz_questions.q_quiz` (q_quiz) REFERENCES ocp6_quizzes (id);
+		CREATE INDEX `quiz_questions.q_quiz` ON ocp_quiz_questions(q_quiz);
+		ALTER TABLE ocp_quiz_questions ADD FOREIGN KEY `quiz_questions.q_quiz` (q_quiz) REFERENCES ocp_quizzes (id);
 
-		CREATE INDEX `quiz_questions.q_question_text` ON ocp6_quiz_questions(q_question_text);
-		ALTER TABLE ocp6_quiz_questions ADD FOREIGN KEY `quiz_questions.q_question_text` (q_question_text) REFERENCES ocp6_translate (id);
+		CREATE INDEX `quiz_questions.q_question_text` ON ocp_quiz_questions(q_question_text);
+		ALTER TABLE ocp_quiz_questions ADD FOREIGN KEY `quiz_questions.q_question_text` (q_question_text) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `quiz_question_answers.q_question` ON ocp6_quiz_question_answers(q_question);
-		ALTER TABLE ocp6_quiz_question_answers ADD FOREIGN KEY `quiz_question_answers.q_question` (q_question) REFERENCES ocp6_quiz_questions (id);
+		CREATE INDEX `quiz_question_answers.q_question` ON ocp_quiz_question_answers(q_question);
+		ALTER TABLE ocp_quiz_question_answers ADD FOREIGN KEY `quiz_question_answers.q_question` (q_question) REFERENCES ocp_quiz_questions (id);
 
-		CREATE INDEX `quiz_question_answers.q_answer_text` ON ocp6_quiz_question_answers(q_answer_text);
-		ALTER TABLE ocp6_quiz_question_answers ADD FOREIGN KEY `quiz_question_answers.q_answer_text` (q_answer_text) REFERENCES ocp6_translate (id);
+		CREATE INDEX `quiz_question_answers.q_answer_text` ON ocp_quiz_question_answers(q_answer_text);
+		ALTER TABLE ocp_quiz_question_answers ADD FOREIGN KEY `quiz_question_answers.q_answer_text` (q_answer_text) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `quiz_question_answers.q_explanation` ON ocp6_quiz_question_answers(q_explanation);
-		ALTER TABLE ocp6_quiz_question_answers ADD FOREIGN KEY `quiz_question_answers.q_explanation` (q_explanation) REFERENCES ocp6_translate (id);
+		CREATE INDEX `quiz_question_answers.q_explanation` ON ocp_quiz_question_answers(q_explanation);
+		ALTER TABLE ocp_quiz_question_answers ADD FOREIGN KEY `quiz_question_answers.q_explanation` (q_explanation) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `quiz_winner.q_quiz` ON ocp6_quiz_winner(q_quiz);
-		ALTER TABLE ocp6_quiz_winner ADD FOREIGN KEY `quiz_winner.q_quiz` (q_quiz) REFERENCES ocp6_quizzes (id);
+		CREATE INDEX `quiz_winner.q_quiz` ON ocp_quiz_winner(q_quiz);
+		ALTER TABLE ocp_quiz_winner ADD FOREIGN KEY `quiz_winner.q_quiz` (q_quiz) REFERENCES ocp_quizzes (id);
 
-		CREATE INDEX `quiz_winner.q_entry` ON ocp6_quiz_winner(q_entry);
-		ALTER TABLE ocp6_quiz_winner ADD FOREIGN KEY `quiz_winner.q_entry` (q_entry) REFERENCES ocp6_quiz_entries (id);
+		CREATE INDEX `quiz_winner.q_entry` ON ocp_quiz_winner(q_entry);
+		ALTER TABLE ocp_quiz_winner ADD FOREIGN KEY `quiz_winner.q_entry` (q_entry) REFERENCES ocp_quiz_entries (id);
 
-		CREATE INDEX `quiz_entries.q_member` ON ocp6_quiz_entries(q_member);
-		ALTER TABLE ocp6_quiz_entries ADD FOREIGN KEY `quiz_entries.q_member` (q_member) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `quiz_entries.q_member` ON ocp_quiz_entries(q_member);
+		ALTER TABLE ocp_quiz_entries ADD FOREIGN KEY `quiz_entries.q_member` (q_member) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `quiz_entries.q_quiz` ON ocp6_quiz_entries(q_quiz);
-		ALTER TABLE ocp6_quiz_entries ADD FOREIGN KEY `quiz_entries.q_quiz` (q_quiz) REFERENCES ocp6_quizzes (id);
+		CREATE INDEX `quiz_entries.q_quiz` ON ocp_quiz_entries(q_quiz);
+		ALTER TABLE ocp_quiz_entries ADD FOREIGN KEY `quiz_entries.q_quiz` (q_quiz) REFERENCES ocp_quizzes (id);
 
-		CREATE INDEX `quiz_entry_answer.q_entry` ON ocp6_quiz_entry_answer(q_entry);
-		ALTER TABLE ocp6_quiz_entry_answer ADD FOREIGN KEY `quiz_entry_answer.q_entry` (q_entry) REFERENCES ocp6_quiz_entries (id);
+		CREATE INDEX `quiz_entry_answer.q_entry` ON ocp_quiz_entry_answer(q_entry);
+		ALTER TABLE ocp_quiz_entry_answer ADD FOREIGN KEY `quiz_entry_answer.q_entry` (q_entry) REFERENCES ocp_quiz_entries (id);
 
-		CREATE INDEX `quiz_entry_answer.q_question` ON ocp6_quiz_entry_answer(q_question);
-		ALTER TABLE ocp6_quiz_entry_answer ADD FOREIGN KEY `quiz_entry_answer.q_question` (q_question) REFERENCES ocp6_quiz_questions (id);
+		CREATE INDEX `quiz_entry_answer.q_question` ON ocp_quiz_entry_answer(q_question);
+		ALTER TABLE ocp_quiz_entry_answer ADD FOREIGN KEY `quiz_entry_answer.q_question` (q_question) REFERENCES ocp_quiz_questions (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp6_f_members(m_primary_group);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp6_f_groups (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp6_f_members(m_signature);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp6_f_members(m_pt_rules_text);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `translate.source_user` ON ocp6_translate(source_user);
-		ALTER TABLE ocp6_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
+		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `newsletters.title` ON ocp6_newsletters(title);
-		ALTER TABLE ocp6_newsletters ADD FOREIGN KEY `newsletters.title` (title) REFERENCES ocp6_translate (id);
+		CREATE INDEX `newsletters.title` ON ocp_newsletters(title);
+		ALTER TABLE ocp_newsletters ADD FOREIGN KEY `newsletters.title` (title) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `newsletters.description` ON ocp6_newsletters(description);
-		ALTER TABLE ocp6_newsletters ADD FOREIGN KEY `newsletters.description` (description) REFERENCES ocp6_translate (id);
+		CREATE INDEX `newsletters.description` ON ocp_newsletters(description);
+		ALTER TABLE ocp_newsletters ADD FOREIGN KEY `newsletters.description` (description) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp6_f_groups(g_name);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp6_f_groups(g_group_leader);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp6_f_groups(g_title);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp6_f_groups(g_promotion_target);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp6_f_groups (id);
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);

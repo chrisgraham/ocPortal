@@ -1,4 +1,4 @@
-		CREATE TABLE ocp6_galleries
+		CREATE TABLE ocp_galleries
 		(
 			name varchar(80) NULL,
 			description integer NOT NULL,
@@ -18,10 +18,12 @@
 			notes longtext NOT NULL,
 			is_member_synched tinyint(1) NOT NULL,
 			flow_mode_interface tinyint(1) NOT NULL,
+			gallery_views integer NOT NULL,
+			g_owner integer NOT NULL,
 			PRIMARY KEY (name)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_images
+		CREATE TABLE ocp_images
 		(
 			id integer auto_increment NULL,
 			cat varchar(80) NOT NULL,
@@ -37,10 +39,11 @@
 			add_date integer unsigned NOT NULL,
 			edit_date integer unsigned NOT NULL,
 			image_views integer NOT NULL,
+			title integer NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_videos
+		CREATE TABLE ocp_videos
 		(
 			id integer auto_increment NULL,
 			cat varchar(80) NOT NULL,
@@ -59,10 +62,25 @@
 			video_width integer NOT NULL,
 			video_height integer NOT NULL,
 			video_length integer NOT NULL,
+			title integer NOT NULL,
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_translate
+		CREATE TABLE ocp_video_transcoding
+		(
+			t_id varchar(80) NULL,
+			t_error longtext NOT NULL,
+			t_url varchar(255) NOT NULL,
+			t_table varchar(80) NOT NULL,
+			t_url_field varchar(80) NOT NULL,
+			t_orig_filename_field varchar(80) NOT NULL,
+			t_width_field varchar(80) NOT NULL,
+			t_height_field varchar(80) NOT NULL,
+			t_output_filename varchar(80) NOT NULL,
+			PRIMARY KEY (t_id)
+		) TYPE=InnoDB;
+
+		CREATE TABLE ocp_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -74,7 +92,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_f_members
+		CREATE TABLE ocp_f_members
 		(
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
@@ -87,7 +105,7 @@
 			m_cache_num_posts integer NOT NULL,
 			m_cache_warnings integer NOT NULL,
 			m_join_time integer unsigned NOT NULL,
-			m_timezone_offset integer NOT NULL,
+			m_timezone_offset varchar(255) NOT NULL,
 			m_primary_group integer NOT NULL,
 			m_last_visit_time integer unsigned NOT NULL,
 			m_last_submit_time integer unsigned NOT NULL,
@@ -103,10 +121,11 @@
 			m_photo_url varchar(255) NOT NULL,
 			m_photo_thumb_url varchar(255) NOT NULL,
 			m_views_signatures tinyint(1) NOT NULL,
-			m_track_contributed_topics tinyint(1) NOT NULL,
+			m_auto_monitor_contrib_content tinyint(1) NOT NULL,
 			m_language varchar(80) NOT NULL,
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
+			m_allow_emails_from_staff tinyint(1) NOT NULL,
 			m_notes longtext NOT NULL,
 			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
@@ -119,7 +138,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_f_groups
+		CREATE TABLE ocp_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -152,56 +171,65 @@
 		) TYPE=InnoDB;
 
 
-		CREATE INDEX `galleries.description` ON ocp6_galleries(description);
-		ALTER TABLE ocp6_galleries ADD FOREIGN KEY `galleries.description` (description) REFERENCES ocp6_translate (id);
+		CREATE INDEX `galleries.description` ON ocp_galleries(description);
+		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.description` (description) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `galleries.teaser` ON ocp6_galleries(teaser);
-		ALTER TABLE ocp6_galleries ADD FOREIGN KEY `galleries.teaser` (teaser) REFERENCES ocp6_translate (id);
+		CREATE INDEX `galleries.teaser` ON ocp_galleries(teaser);
+		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.teaser` (teaser) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `galleries.fullname` ON ocp6_galleries(fullname);
-		ALTER TABLE ocp6_galleries ADD FOREIGN KEY `galleries.fullname` (fullname) REFERENCES ocp6_translate (id);
+		CREATE INDEX `galleries.fullname` ON ocp_galleries(fullname);
+		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.fullname` (fullname) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `galleries.parent_id` ON ocp6_galleries(parent_id);
-		ALTER TABLE ocp6_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp6_galleries (name);
+		CREATE INDEX `galleries.parent_id` ON ocp_galleries(parent_id);
+		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp_galleries (name);
 
-		CREATE INDEX `images.cat` ON ocp6_images(cat);
-		ALTER TABLE ocp6_images ADD FOREIGN KEY `images.cat` (cat) REFERENCES ocp6_galleries (name);
+		CREATE INDEX `galleries.g_owner` ON ocp_galleries(g_owner);
+		ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.g_owner` (g_owner) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `images.comments` ON ocp6_images(comments);
-		ALTER TABLE ocp6_images ADD FOREIGN KEY `images.comments` (comments) REFERENCES ocp6_translate (id);
+		CREATE INDEX `images.cat` ON ocp_images(cat);
+		ALTER TABLE ocp_images ADD FOREIGN KEY `images.cat` (cat) REFERENCES ocp_galleries (name);
 
-		CREATE INDEX `images.submitter` ON ocp6_images(submitter);
-		ALTER TABLE ocp6_images ADD FOREIGN KEY `images.submitter` (submitter) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `images.comments` ON ocp_images(comments);
+		ALTER TABLE ocp_images ADD FOREIGN KEY `images.comments` (comments) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `videos.cat` ON ocp6_videos(cat);
-		ALTER TABLE ocp6_videos ADD FOREIGN KEY `videos.cat` (cat) REFERENCES ocp6_galleries (name);
+		CREATE INDEX `images.submitter` ON ocp_images(submitter);
+		ALTER TABLE ocp_images ADD FOREIGN KEY `images.submitter` (submitter) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `videos.comments` ON ocp6_videos(comments);
-		ALTER TABLE ocp6_videos ADD FOREIGN KEY `videos.comments` (comments) REFERENCES ocp6_translate (id);
+		CREATE INDEX `images.title` ON ocp_images(title);
+		ALTER TABLE ocp_images ADD FOREIGN KEY `images.title` (title) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `videos.submitter` ON ocp6_videos(submitter);
-		ALTER TABLE ocp6_videos ADD FOREIGN KEY `videos.submitter` (submitter) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `videos.cat` ON ocp_videos(cat);
+		ALTER TABLE ocp_videos ADD FOREIGN KEY `videos.cat` (cat) REFERENCES ocp_galleries (name);
 
-		CREATE INDEX `translate.source_user` ON ocp6_translate(source_user);
-		ALTER TABLE ocp6_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `videos.comments` ON ocp_videos(comments);
+		ALTER TABLE ocp_videos ADD FOREIGN KEY `videos.comments` (comments) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp6_f_members(m_primary_group);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp6_f_groups (id);
+		CREATE INDEX `videos.submitter` ON ocp_videos(submitter);
+		ALTER TABLE ocp_videos ADD FOREIGN KEY `videos.submitter` (submitter) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp6_f_members(m_signature);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp6_translate (id);
+		CREATE INDEX `videos.title` ON ocp_videos(title);
+		ALTER TABLE ocp_videos ADD FOREIGN KEY `videos.title` (title) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp6_f_members(m_pt_rules_text);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp6_translate (id);
+		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
+		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp6_f_groups(g_name);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp6_f_groups(g_group_leader);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp6_f_groups(g_title);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp6_f_groups(g_promotion_target);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp6_f_groups (id);
+		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
+
+		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+
+		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
+
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);

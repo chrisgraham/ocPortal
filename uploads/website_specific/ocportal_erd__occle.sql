@@ -1,4 +1,4 @@
-		CREATE TABLE ocp6_occlechat
+		CREATE TABLE ocp_occlechat
 		(
 			id integer auto_increment NULL,
 			c_message longtext NOT NULL,

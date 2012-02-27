@@ -32,7 +32,6 @@ class Hook_do_next_menus_referrals
 		require_lang('referrals');
 		return array(
 			array('usage','referrals',array('admin_referrals',array('type'=>'misc'),'adminzone'),do_lang_tempcode('REFERRALS'),('DOC_REFERRALS')),
-			array('setup','referrals',array('referrals',array('type'=>'misc'),'adminzone'),do_lang_tempcode('REFERRALS'),('DOC_REFERRALS')),
 		);
 	}
 

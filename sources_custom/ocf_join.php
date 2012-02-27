@@ -310,7 +310,7 @@ function referrer_report_script($ret=false)
 		$start
 	);
 	$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().$table.' WHERE '.$where);
-	if (count($referrals)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+	if (count($referrals)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 	foreach ($referrals as $ref)
 	{
 		$data_row=array();

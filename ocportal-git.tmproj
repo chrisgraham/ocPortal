@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>sources/calendar.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -503,6 +505,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>cms/pages/modules/cms_calendar.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>690</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>655</integer>
+		</dict>
 		<key>cms/pages/modules/cms_quiz.php</key>
 		<dict>
 			<key>caret</key>
@@ -987,6 +1003,20 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
+		<key>site/pages/modules/calendar.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>670</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>828</integer>
+		</dict>
 		<key>site/pages/modules/pointstore.php</key>
 		<dict>
 			<key>caret</key>
@@ -1036,12 +1066,12 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>215</integer>
+				<integer>216</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>203</integer>
+			<integer>211</integer>
 		</dict>
 		<key>sources/blocks/side_rss.php</key>
 		<dict>
@@ -1071,6 +1101,66 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>89</integer>
+			</dict>
+		</dict>
+		<key>sources/calendar.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>182</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>86</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>182</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>7</integer>
+				<key>line</key>
+				<integer>182</integer>
+			</dict>
+		</dict>
+		<key>sources/calendar_ical.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>13</integer>
+				<key>line</key>
+				<integer>285</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>260</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>285</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>285</integer>
 			</dict>
 		</dict>
 		<key>sources/cedi_stats.php</key>
@@ -1122,14 +1212,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>22</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>426</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>401</integer>
+		</dict>
+		<key>sources/form_templates.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1366</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1330</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1705,6 +1809,20 @@
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
 		</dict>
+		<key>sources/hooks/systems/cron/calendar.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>48</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>16</integer>
+		</dict>
 		<key>sources/hooks/systems/fields/reference.php</key>
 		<dict>
 			<key>caret</key>
@@ -1803,6 +1921,34 @@
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
 		</dict>
+		<key>sources/temporal.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>986</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>755</integer>
+		</dict>
+		<key>sources/temporal2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>33</integer>
+				<key>line</key>
+				<integer>56</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>51</integer>
+		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
 			<key>caret</key>
@@ -1874,6 +2020,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
+		</dict>
+		<key>themes/default/css/calendar.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>94</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>87</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>20</integer>
+				<key>line</key>
+				<integer>95</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>94</integer>
+			</dict>
 		</dict>
 		<key>themes/default/css_custom/columns.css</key>
 		<dict>
@@ -3032,6 +3208,19 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>sources/calendar.php</string>
+		<string>themes/default/css/calendar.css</string>
+		<string>cms/pages/modules/cms_calendar.php</string>
+		<string>site/pages/modules/calendar.php</string>
+		<string>sources/hooks/systems/cron/calendar.php</string>
+		<string>sources/temporal2.php</string>
+		<string>sources/temporal.php</string>
+		<string>sources/blocks/side_calendar.php</string>
+		<string>sources/calendar_ical.php</string>
+		<string>sources/form_templates.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

@@ -635,6 +635,8 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 		if (!has_specific_permission(get_member(),'comment',get_page_name())) return false;
 	}
 
+	if (running_script('preview')) return false;
+
 	$forum_tie=(get_option('is_on_strong_forum_tie')=='1');
 
 	if (addon_installed('captcha'))
@@ -741,7 +743,7 @@ function do_comments($allow_comments,$type,$id,$self_url,$self_title,$forum=NULL
 
 		// Activity
 		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$type,$id))
-			syndicate_described_activity('ADDED_COMMENT_ON',$self_title,'','',url_to_pagelink($self_url),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
+			syndicate_described_activity('ADDED_COMMENT_ON',$self_title,'','',url_to_pagelink($self_url->evaluate()),'','',convert_ocportal_type_codes('feedback_type_code',$type,'addon_name'));
 	}
 
 	if (($post!='') && ($forum_tie) && (!$no_success_message))

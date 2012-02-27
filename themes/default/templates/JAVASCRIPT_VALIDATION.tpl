@@ -76,9 +76,9 @@ function setFieldError(theElement,errorMsg)
 					while (p)
 					{
 						p=p.parentNode;
-						if ((p) && (p.id) && (p.id.substr(0,2)=='g_') && (p.style.display=='none'))
+						if ((p) && (typeof p.getAttribute!='undefined') && (p.getAttribute('id')) && (p.getAttribute('id').substr(0,2)=='g_') && (p.style.display=='none'))
 						{
-							select_tab('g',p.id.substr(2,p.id.length-2));
+							select_tab('g',p.getAttribute('id').substr(2,p.id.length-2));
 							break;
 						}
 					}

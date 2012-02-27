@@ -1,4 +1,4 @@
-		CREATE TABLE ocp6_theme_images
+		CREATE TABLE ocp_theme_images
 		(
 			id varchar(255) NULL,
 			theme varchar(40) NULL,

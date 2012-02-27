@@ -1,4 +1,4 @@
-		CREATE TABLE ocp6_trans_expecting
+		CREATE TABLE ocp_trans_expecting
 		(
 			id varchar(80) NULL,
 			e_purchase_id varchar(80) NOT NULL,
@@ -13,7 +13,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_transactions
+		CREATE TABLE ocp_transactions
 		(
 			id varchar(80) NULL,
 			purchase_id varchar(80) NOT NULL,
@@ -30,7 +30,7 @@
 			PRIMARY KEY (id,t_time)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_subscriptions
+		CREATE TABLE ocp_subscriptions
 		(
 			id integer auto_increment NULL,
 			s_type_code varchar(80) NOT NULL,
@@ -45,7 +45,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_f_usergroup_subs
+		CREATE TABLE ocp_f_usergroup_subs
 		(
 			id integer auto_increment NULL,
 			s_title integer NOT NULL,
@@ -62,7 +62,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_invoices
+		CREATE TABLE ocp_invoices
 		(
 			id integer auto_increment NULL,
 			i_type_code varchar(80) NOT NULL,
@@ -75,7 +75,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_f_members
+		CREATE TABLE ocp_f_members
 		(
 			id integer auto_increment NULL,
 			m_username varchar(80) NOT NULL,
@@ -88,7 +88,7 @@
 			m_cache_num_posts integer NOT NULL,
 			m_cache_warnings integer NOT NULL,
 			m_join_time integer unsigned NOT NULL,
-			m_timezone_offset integer NOT NULL,
+			m_timezone_offset varchar(255) NOT NULL,
 			m_primary_group integer NOT NULL,
 			m_last_visit_time integer unsigned NOT NULL,
 			m_last_submit_time integer unsigned NOT NULL,
@@ -104,10 +104,11 @@
 			m_photo_url varchar(255) NOT NULL,
 			m_photo_thumb_url varchar(255) NOT NULL,
 			m_views_signatures tinyint(1) NOT NULL,
-			m_track_contributed_topics tinyint(1) NOT NULL,
+			m_auto_monitor_contrib_content tinyint(1) NOT NULL,
 			m_language varchar(80) NOT NULL,
 			m_ip_address varchar(40) NOT NULL,
 			m_allow_emails tinyint(1) NOT NULL,
+			m_allow_emails_from_staff tinyint(1) NOT NULL,
 			m_notes longtext NOT NULL,
 			m_zone_wide tinyint(1) NOT NULL,
 			m_highlighted_name tinyint(1) NOT NULL,
@@ -120,7 +121,7 @@
 			PRIMARY KEY (id)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_translate
+		CREATE TABLE ocp_translate
 		(
 			id integer auto_increment NULL,
 			language varchar(5) NULL,
@@ -132,7 +133,7 @@
 			PRIMARY KEY (id,language)
 		) TYPE=InnoDB;
 
-		CREATE TABLE ocp6_f_groups
+		CREATE TABLE ocp_f_groups
 		(
 			id integer auto_increment NULL,
 			g_name integer NOT NULL,
@@ -165,53 +166,53 @@
 		) TYPE=InnoDB;
 
 
-		CREATE INDEX `trans_expecting.e_member_id` ON ocp6_trans_expecting(e_member_id);
-		ALTER TABLE ocp6_trans_expecting ADD FOREIGN KEY `trans_expecting.e_member_id` (e_member_id) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `trans_expecting.e_member_id` ON ocp_trans_expecting(e_member_id);
+		ALTER TABLE ocp_trans_expecting ADD FOREIGN KEY `trans_expecting.e_member_id` (e_member_id) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `subscriptions.s_member_id` ON ocp6_subscriptions(s_member_id);
-		ALTER TABLE ocp6_subscriptions ADD FOREIGN KEY `subscriptions.s_member_id` (s_member_id) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `subscriptions.s_member_id` ON ocp_subscriptions(s_member_id);
+		ALTER TABLE ocp_subscriptions ADD FOREIGN KEY `subscriptions.s_member_id` (s_member_id) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `f_usergroup_subs.s_title` ON ocp6_f_usergroup_subs(s_title);
-		ALTER TABLE ocp6_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_title` (s_title) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_usergroup_subs.s_title` ON ocp_f_usergroup_subs(s_title);
+		ALTER TABLE ocp_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_title` (s_title) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_usergroup_subs.s_description` ON ocp6_f_usergroup_subs(s_description);
-		ALTER TABLE ocp6_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_description` (s_description) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_usergroup_subs.s_description` ON ocp_f_usergroup_subs(s_description);
+		ALTER TABLE ocp_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_description` (s_description) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_usergroup_subs.s_group_id` ON ocp6_f_usergroup_subs(s_group_id);
-		ALTER TABLE ocp6_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_group_id` (s_group_id) REFERENCES ocp6_f_groups (id);
+		CREATE INDEX `f_usergroup_subs.s_group_id` ON ocp_f_usergroup_subs(s_group_id);
+		ALTER TABLE ocp_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_group_id` (s_group_id) REFERENCES ocp_f_groups (id);
 
-		CREATE INDEX `f_usergroup_subs.s_mail_start` ON ocp6_f_usergroup_subs(s_mail_start);
-		ALTER TABLE ocp6_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_mail_start` (s_mail_start) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_usergroup_subs.s_mail_start` ON ocp_f_usergroup_subs(s_mail_start);
+		ALTER TABLE ocp_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_mail_start` (s_mail_start) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_usergroup_subs.s_mail_end` ON ocp6_f_usergroup_subs(s_mail_end);
-		ALTER TABLE ocp6_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_mail_end` (s_mail_end) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_usergroup_subs.s_mail_end` ON ocp_f_usergroup_subs(s_mail_end);
+		ALTER TABLE ocp_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_mail_end` (s_mail_end) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_usergroup_subs.s_mail_uhoh` ON ocp6_f_usergroup_subs(s_mail_uhoh);
-		ALTER TABLE ocp6_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_mail_uhoh` (s_mail_uhoh) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_usergroup_subs.s_mail_uhoh` ON ocp_f_usergroup_subs(s_mail_uhoh);
+		ALTER TABLE ocp_f_usergroup_subs ADD FOREIGN KEY `f_usergroup_subs.s_mail_uhoh` (s_mail_uhoh) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `invoices.i_member_id` ON ocp6_invoices(i_member_id);
-		ALTER TABLE ocp6_invoices ADD FOREIGN KEY `invoices.i_member_id` (i_member_id) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `invoices.i_member_id` ON ocp_invoices(i_member_id);
+		ALTER TABLE ocp_invoices ADD FOREIGN KEY `invoices.i_member_id` (i_member_id) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `f_members.m_primary_group` ON ocp6_f_members(m_primary_group);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp6_f_groups (id);
+		CREATE INDEX `f_members.m_primary_group` ON ocp_f_members(m_primary_group);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_primary_group` (m_primary_group) REFERENCES ocp_f_groups (id);
 
-		CREATE INDEX `f_members.m_signature` ON ocp6_f_members(m_signature);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_members.m_signature` ON ocp_f_members(m_signature);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_signature` (m_signature) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_members.m_pt_rules_text` ON ocp6_f_members(m_pt_rules_text);
-		ALTER TABLE ocp6_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_members.m_pt_rules_text` ON ocp_f_members(m_pt_rules_text);
+		ALTER TABLE ocp_f_members ADD FOREIGN KEY `f_members.m_pt_rules_text` (m_pt_rules_text) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `translate.source_user` ON ocp6_translate(source_user);
-		ALTER TABLE ocp6_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `translate.source_user` ON ocp_translate(source_user);
+		ALTER TABLE ocp_translate ADD FOREIGN KEY `translate.source_user` (source_user) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `f_groups.g_name` ON ocp6_f_groups(g_name);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_groups.g_name` ON ocp_f_groups(g_name);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_name` (g_name) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_groups.g_group_leader` ON ocp6_f_groups(g_group_leader);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp6_f_members (id);
+		CREATE INDEX `f_groups.g_group_leader` ON ocp_f_groups(g_group_leader);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
 
-		CREATE INDEX `f_groups.g_title` ON ocp6_f_groups(g_title);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp6_translate (id);
+		CREATE INDEX `f_groups.g_title` ON ocp_f_groups(g_title);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_title` (g_title) REFERENCES ocp_translate (id);
 
-		CREATE INDEX `f_groups.g_promotion_target` ON ocp6_f_groups(g_promotion_target);
-		ALTER TABLE ocp6_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp6_f_groups (id);
+		CREATE INDEX `f_groups.g_promotion_target` ON ocp_f_groups(g_promotion_target);
+		ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_promotion_target` (g_promotion_target) REFERENCES ocp_f_groups (id);
