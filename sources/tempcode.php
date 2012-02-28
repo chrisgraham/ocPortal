@@ -726,7 +726,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				$block_parts=explode('=',$_param,2);
 				if (!isset($block_parts[1]))
 				{
-					$LOADED_BLOCKS[serialize($param)]=new ocp_tempcode();
+					$LOADED_BLOCKS[serialize($param)]=do_lang_tempcode('INTERNAL_ERROR');
 					return;
 				}
 				list($key,$val)=$block_parts;

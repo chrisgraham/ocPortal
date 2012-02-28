@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/calendar.php</string>
+	<string>themes/default/templates/JAVASCRIPT.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -505,20 +505,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>cms/pages/modules/cms_calendar.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>690</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>655</integer>
-		</dict>
 		<key>cms/pages/modules/cms_quiz.php</key>
 		<dict>
 			<key>caret</key>
@@ -1003,20 +989,6 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
-		<key>site/pages/modules/calendar.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>670</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>828</integer>
-		</dict>
 		<key>site/pages/modules/pointstore.php</key>
 		<dict>
 			<key>caret</key>
@@ -1059,20 +1031,6 @@
 			<key>firstVisibleLine</key>
 			<integer>21</integer>
 		</dict>
-		<key>sources/blocks/side_calendar.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>216</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>211</integer>
-		</dict>
 		<key>sources/blocks/side_rss.php</key>
 		<dict>
 			<key>caret</key>
@@ -1101,66 +1059,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>89</integer>
-			</dict>
-		</dict>
-		<key>sources/calendar.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>5</integer>
-				<key>line</key>
-				<integer>182</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>86</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>182</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>7</integer>
-				<key>line</key>
-				<integer>182</integer>
-			</dict>
-		</dict>
-		<key>sources/calendar_ical.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>285</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>260</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>285</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>15</integer>
-				<key>line</key>
-				<integer>285</integer>
 			</dict>
 		</dict>
 		<key>sources/cedi_stats.php</key>
@@ -1220,20 +1118,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>401</integer>
-		</dict>
-		<key>sources/form_templates.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1366</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1330</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1809,20 +1693,6 @@
 			<key>firstVisibleLine</key>
 			<integer>1</integer>
 		</dict>
-		<key>sources/hooks/systems/cron/calendar.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>48</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>16</integer>
-		</dict>
 		<key>sources/hooks/systems/fields/reference.php</key>
 		<dict>
 			<key>caret</key>
@@ -1921,34 +1791,6 @@
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
 		</dict>
-		<key>sources/temporal.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>986</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>755</integer>
-		</dict>
-		<key>sources/temporal2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>33</integer>
-				<key>line</key>
-				<integer>56</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>51</integer>
-		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
 			<key>caret</key>
@@ -2020,36 +1862,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
-		</dict>
-		<key>themes/default/css/calendar.css</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>15</integer>
-				<key>line</key>
-				<integer>94</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>87</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>95</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>15</integer>
-				<key>line</key>
-				<integer>94</integer>
-			</dict>
 		</dict>
 		<key>themes/default/css_custom/columns.css</key>
 		<dict>
@@ -2385,6 +2197,36 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/FOOTER.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>86</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>46</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>86</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>86</integer>
+			</dict>
+		</dict>
 		<key>themes/default/templates/FORM_SCREEN_INPUT_CAPTCHA.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2487,6 +2329,50 @@
 				<integer>2</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/JAVASCRIPT.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>139</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>125</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>138</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>139</integer>
+			</dict>
+		</dict>
+		<key>themes/default/templates/JAVASCRIPT_EDITING.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>11</integer>
+				<key>line</key>
+				<integer>317</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>313</integer>
+		</dict>
 		<key>themes/default/templates/JAVASCRIPT_GALLERIES.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2544,6 +2430,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>83</integer>
+		</dict>
+		<key>themes/default/templates/JAVASCRIPT_POSTING.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>607</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>602</integer>
 		</dict>
 		<key>themes/default/templates/MENU_BRANCH_select.tpl</key>
 		<dict>
@@ -2768,29 +2668,29 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>138</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>97</integer>
+				<integer>164</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>70</integer>
+			<integer>126</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>133</integer>
+				<integer>8</integer>
 				<key>line</key>
-				<integer>97</integer>
+				<integer>164</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>138</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>97</integer>
+				<integer>164</integer>
 			</dict>
 		</dict>
 		<key>themes/default/templates/STANDARDBOX_invisible.tpl</key>
@@ -3210,16 +3110,11 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/calendar.php</string>
-		<string>themes/default/css/calendar.css</string>
-		<string>cms/pages/modules/cms_calendar.php</string>
-		<string>site/pages/modules/calendar.php</string>
-		<string>sources/hooks/systems/cron/calendar.php</string>
-		<string>sources/temporal2.php</string>
-		<string>sources/temporal.php</string>
-		<string>sources/blocks/side_calendar.php</string>
-		<string>sources/calendar_ical.php</string>
-		<string>sources/form_templates.php</string>
+		<string>themes/default/templates/JAVASCRIPT.tpl</string>
+		<string>themes/default/templates/FOOTER.tpl</string>
+		<string>themes/default/templates/POSTING_FORM.tpl</string>
+		<string>themes/default/templates/JAVASCRIPT_EDITING.tpl</string>
+		<string>themes/default/templates/JAVASCRIPT_POSTING.tpl</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

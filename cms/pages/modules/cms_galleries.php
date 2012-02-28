@@ -1078,7 +1078,7 @@ class Module_cms_galleries extends standard_aed_module
 				syndicate_described_activity('galleries:ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
 		}
 
-		edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords'),post_param('meta_description'));
+		edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords',''),post_param('meta_description',''));
 
 		if ((has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))) && (post_param_integer('rep_image',0)==1))
 		{
@@ -1497,7 +1497,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 				syndicate_described_activity('galleries:ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
 		}
 
-		edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords'),post_param('meta_description'));
+		edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords',''),post_param('meta_description',''));
 	}
 
 	/**

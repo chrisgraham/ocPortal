@@ -87,6 +87,7 @@ class Module_admin_notifications
 		require_javascript('javascript_notifications');
 		require_code('notifications');
 		require_code('notifications2');
+		require_all_lang();
 
 		$_notification_types=array(
 			A__CHOICE=>'_CHOICE',

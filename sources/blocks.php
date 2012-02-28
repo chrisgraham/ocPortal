@@ -74,6 +74,9 @@ function block_signature_check($allowed,$used)
 	foreach ($used as $key=>$val)
 	{
 		if ((!isset($allowed[$key])) || (preg_match('#^'.$allowed[$key].'$#',$val)==0))
+		{
+			return false;
+		}
 	}
 
 	return true;

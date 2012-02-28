@@ -361,7 +361,7 @@ class Module_cms_quiz extends standard_aed_module
 				syndicate_described_activity('quiz:ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes');
 		}
 
-		edit_quiz($id,$name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),post_param('meta_keywords'),post_param('meta_description'),post_param_integer('points_for_passing',0),$tied_newsletter);
+		edit_quiz($id,$name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),post_param('meta_keywords',''),post_param('meta_description',''),post_param_integer('points_for_passing',0),$tied_newsletter);
 	}
 
 	/**

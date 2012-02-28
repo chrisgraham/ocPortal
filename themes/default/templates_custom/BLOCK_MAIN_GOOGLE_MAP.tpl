@@ -4,7 +4,7 @@
 {+END}
 <script type="text/javascript">// <![CDATA[
 	var data_map;
-	function google_map_users_initialize()
+	function google_map_initialize()
 	{
 		var bounds = new google.maps.LatLngBounds();
 		var center = new google.maps.LatLng({$?,{$IS_EMPTY,{LATITUDE}},0.0,{LATITUDE}},{$?,{$IS_EMPTY,{LONGITUDE}},0.0,{LONGITUDE}});
@@ -125,7 +125,7 @@
 			\});
 		}
 	}
-	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=true"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
+	google.load("maps", "3",  {callback: google_map_initialize, other_params:"sensor=true"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
 //]]></script>
 
 {+START,BOX,{TITLE*}}

@@ -79,12 +79,12 @@ function toggle_slideshow_timer()
 	}
 }
 
-function stop_slideshow_timer()
+function stop_slideshow_timer(message)
 {
 	if (!message) message='{!STOPPED;}';
 	var changer=document.getElementById('changer_wrap');
 	if (changer) setInnerHTML(changer,message);
-	window.clearInterval(slideshow_timer);
+	if (slideshow_timer) window.clearInterval(slideshow_timer);
 	slideshow_timer=null;
 	document.getElementById('gallery_entry_screen').style.cursor='';
 }
@@ -126,9 +126,13 @@ function slideshow_ensure_loaded(slide,immediate)
 		return;
 	}
 	
-	if (slide==slideshow_current_position+1)
+	if ((slide==slideshow_current_position-1) || (slide==slideshow_current_position+1))
 	{
-		var url=document.getElementById('next_slide').value;
+		var url;
+		if (slide==slideshow_current_position+1)
+			url=document.getElementById('next_slide').value;
+		if (slide==slideshow_current_position-1)
+			url=document.getElementById('previous_slide').value;
 		
 		if (immediate)
 		{
@@ -158,11 +162,25 @@ function slideshow_show_slide(slide)
 	{
 		var slideshow_from=document.getElementById('slideshow_from');
 
+		var fadeElement_old=get_elements_by_class_name(document.body,'scale_down')[0];
+		fadeElement_old.style.position='absolute';
+		var left_pos=findWidth(fadeElement_old.parentNode)/2-findWidth(fadeElement_old)/2;
+		fadeElement_old.style.left=left_pos+'px';
+
 		setInnerHTML(document.getElementById('gallery_entry_screen'),slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/gi,''));
+
+		var fadeElement=get_elements_by_class_name(document.body,'scale_down')[0];
+		setOpacity(fadeElement,0);
+		fadeElement.parentNode.insertBefore(fadeElement_old,fadeElement);
+		nereidFade(fadeElement,100.0,30,10);
+		setOpacity(fadeElement_old,1.0);
+		nereidFade(fadeElement_old,0.0,30,-10,true);
 
 		document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same
 
 		slideshow_current_position=slide;
+		
+		if (typeof window.show_slide_callback!='undefined') show_slide_callback();
 	}
 	
 	start_slideshow_timer();

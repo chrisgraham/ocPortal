@@ -326,7 +326,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 							),'',1);
 						}
 					}
-			
+				
 					$keep=symbol_tempcode('KEEP');
 					$value=find_script('snippet').'?snippet=block&auth_key='.urlencode(strval($auth_key)).'&block_map='.urlencode($param[0]).$keep->evaluate();
 				}
@@ -1981,6 +1981,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value=$EXTRA_SYMBOLS[$name]['ob']->run($param);
 					break;
 				}
+				if (defined($name))
+				{
+					$value=constant($name);
+					break;
+				}
 				$value='';
 				require_code('site');
 				attach_message(do_lang_tempcode('MISSING_SYMBOL',escape_html($name)),'warn');
@@ -2078,7 +2083,15 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$var=$param[0]->evaluate();
-					$TEMPCODE_SETGET[$var]=$param[1]->evaluate();
+					$set_val='';
+					$i=1;
+					while (isset($param[$i]))
+					{
+						if ($i!=1) $set_val.=',';
+						$set_val.=$param[1]->evaluate();
+						$i++;
+					}
+					$TEMPCODE_SETGET[$var]=$set_val;
 				}
 				break;
 

@@ -35,7 +35,7 @@ class Block_main_gallery_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','select','video_select','zone','max','title','sort','days');
+		$info['parameters']=array('param','select','video_select','zone','max','title','sort','days','render_if_empty');
 		return $info;
 	}
 	
@@ -47,7 +47,7 @@ class Block_main_gallery_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],get_param_integer(\'mge_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
+		$info['cache_on']='array(array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],get_param_integer(\'mge_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -93,7 +93,7 @@ class Block_main_gallery_embed
 		if (!is_null($days)) $where_sup.=' AND add_date>='.strval(time()-$days*60*60*24);
 
 		$sort=array_key_exists('sort',$map)?$map['sort']:'add_date DESC';
-		if (($sort!='random ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC')) $sort='add_date DESC';
+		if (($sort!='random ASC') && ($sort!='fixed_random ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC')) $sort='add_date DESC';
 		list($_sort,$_dir)=explode(' ',$sort,2);
 
 		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup);
@@ -128,6 +128,9 @@ class Block_main_gallery_embed
 			if ($_sort=='compound_rating')
 			{
 				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=e.id) AS compound_rating';
+			} elseif ($_sort=='fixed_random')
+			{
+				$rating_sort=',(MOD(id,3.142)) AS fixed_random';
 			} else
 			{
 				$rating_sort='';
@@ -136,6 +139,9 @@ class Block_main_gallery_embed
 			if ($_sort=='compound_rating')
 			{
 				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=e.id) AS compound_rating';
+			} elseif ($_sort=='fixed_random')
+			{
+				$rating_sort=',(MOD(id,3.142)) AS fixed_random';
 			} else
 			{
 				$rating_sort='';
@@ -214,13 +220,16 @@ class Block_main_gallery_embed
 			if ($i==$start+$max) break;
 		}
 
-		if ($entries->is_empty())
+		if ((!isset($map['render_if_empty'])) || ($map['render_if_empty']!='1'))
 		{
-			if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
+			if ($entries->is_empty())
 			{
-				$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
-			} else $submit_url=new ocp_tempcode();
-			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'bf84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>do_lang_tempcode('GALLERY'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),'SUBMIT_URL'=>$submit_url));
+				if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
+				{
+					$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
+				} else $submit_url=new ocp_tempcode();
+				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'bf84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>do_lang_tempcode('GALLERY'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),'SUBMIT_URL'=>$submit_url));
+			}
 		}
 
 		// Results browser
@@ -229,7 +238,7 @@ class Block_main_gallery_embed
 		$root=get_param('root','root');
 		$results_browser=results_browser(do_lang('ENTRY'),$cat,$start,'mge_start',$max,'mge_max',$total_videos+$total_images,$root,'misc',true,false,10,$_selectors);
 
-		$tpl=do_template('BLOCK_MAIN_GALLERY_EMBED',array('_GUID'=>'b7b969c8fe8c398dd6e3af7ee06717ea','DAYS'=>$_days,'SORT'=>$sort,'BLOCK_PARAMS'=>block_params_arr_to_str($map),'RESULTS_BROWSER'=>$results_browser,'TITLE'=>$title,'CAT'=>$cat,'IMAGES'=>$entries,'MAX'=>strval($max),'ZONE'=>$zone,'TOTAL_VIDEOS'=>strval($total_videos),'TOTAL_IMAGES'=>strval($total_images),'TOTAL'=>strval($total_videos+$total_images)));
+		$tpl=do_template('BLOCK_MAIN_GALLERY_EMBED',array('_GUID'=>'b7b969c8fe8c398dd6e3af7ee06717ea','IMAGE_SELECT'=>$map['select'],'VIDEO_SELECT'=>$map['video_select'],'DAYS'=>$_days,'SORT'=>$sort,'BLOCK_PARAMS'=>block_params_arr_to_str($map),'RESULTS_BROWSER'=>$results_browser,'TITLE'=>$title,'CAT'=>$cat,'IMAGES'=>$entries,'MAX'=>strval($max),'ZONE'=>$zone,'TOTAL_VIDEOS'=>strval($total_videos),'TOTAL_IMAGES'=>strval($total_images),'TOTAL'=>strval($total_videos+$total_images)));
 		return $tpl;
 	}
 

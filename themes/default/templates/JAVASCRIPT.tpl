@@ -136,7 +136,7 @@ function scriptLoadStuff()
 	{$,Autosaving}
 	if ((typeof window.want_form_saving!='undefined') && (window.want_form_saving))
 	{
-		window.setTimeout(init_form_saving,4000);
+		window.setTimeout(function() { if (typeof init_form_saving!='undefined') init_form_saving(); },4000);
 	}
 
 	if (typeof window.scriptLoadStuffB!='undefined') window.scriptLoadStuffB();

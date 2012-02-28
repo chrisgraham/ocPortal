@@ -57,6 +57,7 @@ function notifications_ui($member_id_of)
 	require_code('notifications');
 	require_lang('notifications');
 	require_javascript('javascript_notifications');
+	require_all_lang();
 
 	if (is_guest($member_id_of)) access_denied('NOT_AS_GUEST');
 
@@ -199,6 +200,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	require_lang('notifications');
 	require_javascript('javascript_notifications');
 	require_javascript('javascript_notifications');
+	require_all_lang();
 
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
 		'l_notification_code'=>$notification_code,

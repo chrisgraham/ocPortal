@@ -165,7 +165,7 @@ class Block_main_google_map
 			}
 		}
 
-		$hooks_to_use=explode(',',array_key_exists('extra_sources',$map)?$map['extra_sources']:'');
+		$hooks_to_use=explode('|',array_key_exists('extra_sources',$map)?$map['extra_sources']:'');
 		$hooks=find_all_hooks('blocks','main_google_map');
 		foreach (array_keys($hooks) as $hook)
 		{

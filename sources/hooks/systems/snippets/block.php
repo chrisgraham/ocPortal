@@ -28,8 +28,8 @@ class Hook_block
 	 */
 	function run()
 	{
-		$sup=get_param('block_map_sup','');
-		$_map=get_param('block_map');
+		$sup=get_param('block_map_sup','',true);
+		$_map=get_param('block_map',false,true);
 		if ($sup!='') $_map.=','.$sup;
 
 		require_code('blocks');

@@ -269,11 +269,21 @@ function store_exif($content_type,$content_id,$exif,$map=NULL)
 
 	require_code('catalogues2');
 
-	$catalogue_entry_id=actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
-
-	$GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
-		'catalogue_entry_id'=>$catalogue_entry_id,
+	$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entry_linkage','catalogue_entry_id',array(
 		'content_type'=>$content_type,
 		'content_id'=>$content_id,
 	));
+	if (is_null($test))
+	{
+		$catalogue_entry_id=actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
+
+		$GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
+			'catalogue_entry_id'=>$catalogue_entry_id,
+			'content_type'=>$content_type,
+			'content_id'=>$content_id,
+		));
+	} else
+	{
+		// Cannot handle this
+	}
 }
