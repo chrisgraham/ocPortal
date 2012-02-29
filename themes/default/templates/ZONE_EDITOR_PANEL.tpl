@@ -49,7 +49,7 @@
 			{+START,IF_NON_EMPTY,{COMCODE_EDITOR}}
 				<div>
 					<div class="post_special_options">
-						<div class="float_surrounder">
+						<div class="float_surrounder"{$?,{$VALUE_OPTION,html5}, role="toolbar"}>
 							{COMCODE_EDITOR}
 						</div>
 					</div>

@@ -297,7 +297,12 @@ function comcode_convert_script()
 	} else
 	{
 		if (either_param_integer('lax',0)==1) $GLOBALS['LAX_COMCODE']=true;
-		$tpl=comcode_to_tempcode($data,get_member(),false,60,NULL,NULL,either_param_integer('semihtml',0)==1/*true*/,false,get_param_integer('is_semihtml',0)==1,false);
+		if (either_param_integer('is_semihtml',0)==1)
+		{
+			require_code('comcode_from_html');
+			$data=semihtml_to_comcode($data);
+		}
+		$tpl=comcode_to_tempcode($data,get_member(),false,60,NULL,NULL,either_param_integer('semihtml',0)==1/*true*/,false,false,false);
 		$evaluated=$tpl->evaluate();
 		$out='';
 		if ($evaluated!='')
