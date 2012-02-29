@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>themes/default/templates/GALLERY_NAV.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -1947,20 +1945,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates/CALENDAR_SCREEN.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>170</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>124</integer>
-		</dict>
 		<key>themes/default/templates/CALENDAR_WEEK_HOUR_DAY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2064,20 +2048,6 @@
 				<key>line</key>
 				<integer>1</integer>
 			</dict>
-		</dict>
-		<key>themes/default/templates/COMCODE_PAGE_SCREEN.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>23</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1</integer>
 		</dict>
 		<key>themes/default/templates/COMCODE_REAL_TABLE_START_SUMMARY.tpl</key>
 		<dict>
@@ -2269,50 +2239,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates/GALLERY_NAV.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/INFORM_SCREEN.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>2</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>2</integer>
-			</dict>
-		</dict>
 		<key>themes/default/templates/JAVASCRIPT_GALLERIES.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2401,120 +2327,6 @@
 				<integer>8</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates/MENU_EDITOR_BRANCH.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/MENU_EDITOR_BRANCH_WRAP.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>115</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>110</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>128</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-		</dict>
-		<key>themes/default/templates/MENU_SPACER_embossed.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/MENU_SPACER_popup.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/MENU_SPACER_select.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>36</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/MENU_SPACER_top.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/MENU_SPACER_tree.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>themes/default/templates/OCF_GROUP_DIRECTORY_SCREEN.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2557,36 +2369,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>1</integer>
-			</dict>
-		</dict>
-		<key>themes/default/templates/POSTING_FIELD.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>137</integer>
-				<key>line</key>
-				<integer>63</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>30</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>132</integer>
-				<key>line</key>
-				<integer>63</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>137</integer>
-				<key>line</key>
-				<integer>63</integer>
 			</dict>
 		</dict>
 		<key>themes/default/templates/STANDARDBOX_invisible.tpl</key>
@@ -3004,10 +2786,6 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>themes/default/templates/GALLERY_NAV.tpl</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

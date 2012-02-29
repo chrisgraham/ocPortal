@@ -245,6 +245,7 @@ facebook_support
 # # sources_custom/blocks/main_facebook_comments.php
 # # sources_custom/facebook_connect.php
 # # sources_custom/hooks/systems/symbols/FB_CONNECT_UID.php
+# # sources_custom/hooks/systems/symbols/FB_CONNECT_ACCESS_TOKEN.php
 # # sources_custom/hooks/systems/symbols/USER_FB_CONNECT.php
 # # sources_custom/hooks/systems/symbols/FB_CONNECT_LOGGED_OUT.php
 # # sources_custom/users.php

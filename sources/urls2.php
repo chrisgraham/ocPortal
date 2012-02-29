@@ -513,7 +513,7 @@ function _choose_moniker($page,$type,$moniker_src,$no_exists_check_for=NULL)
 	}
 	$moniker=preg_replace('#\-+#','-',$moniker);
 	$moniker=rtrim($moniker,'-');
-	if ($moniker=='') $moniker='-';
+	if ($moniker=='') $moniker='untitled';
 
 	// Check it does not already exist
 	$moniker_origin=$moniker;

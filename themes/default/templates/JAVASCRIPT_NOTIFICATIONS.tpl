@@ -22,7 +22,7 @@ function advanced_notifications_copy_under(row,num_children)
 function handle_notification_type_tick(ob,row,value)
 {
 	var elements=row.getElementsByTagName('input');
-	if ((value==-1) || (value==-2))
+	if ((value==-1) || (value==-2)) // Statistical/disallowed (from admin_notifications lock-down) will unselect all else
 	{
 		for (var i=0;i<elements.length;i++)
 		{
@@ -33,7 +33,10 @@ function handle_notification_type_tick(ob,row,value)
 		}
 	} else
 	{
-		elements[0].checked=false;
-		elements[1].checked=false;
+		if ((typeof elements[0]!='undefined') && (elements[0].name.indexOf('CHOICE')!=-1))
+			elements[0].checked=false;
+
+		if ((typeof elements[1]!='undefined') && (elements[1].name.indexOf('STATISTICAL')!=-1))
+			elements[1].checked=false;
 	}
 }

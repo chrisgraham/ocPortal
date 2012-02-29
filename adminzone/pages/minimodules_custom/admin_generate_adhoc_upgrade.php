@@ -1,16 +1,20 @@
 <?php
 
 $title=get_page_title('Generate an upgrade',false);
-$title->evaluate_echo();
 
 $auto_probe=array();
 $cutoff_days=post_param_integer('cutoff_days',intval(ceil((time()-filemtime(get_file_base().'/sources/version.php'))/60/60/24)));
 
 $type=get_param('type','misc');
 
-echo '
-	<p>This system will generate a TAR archive to upgrade a site to the files in this ocPortal installation. You choose which addons to include (both bundled and non-bundled are supported), and the date to get changed files from (both may be auto-detected from the install location).</p>
-';
+if ($type!='go')
+{
+	$title->evaluate_echo();
+
+	echo '
+		<p>This system will generate a TAR archive to upgrade a site to the files in this ocPortal installation. You choose which addons to include (both bundled and non-bundled are supported), and the date to get changed files from (both may be auto-detected from the install location).</p>
+	';
+}
 
 $addons=get_addon_structure();
 
@@ -202,6 +206,8 @@ if ($type=='go')
 
 	$probe_dir=post_param('probe_dir','');
 
+	$done=array();
+
 	foreach ($addons['non_bundled']+$addons['bundled'] as $addon=>$files)
 	{
 		if (post_param_integer('addon_'.$addon,0)==1)
@@ -217,7 +223,11 @@ if ($type=='go')
 							$new_filename=$file;
 							if ((preg_match('#^(lang)\_custom/#',$file)!=0) && (($probe_dir=='') || (file_exists($probe_dir.'/'.$file))))
 								$new_filename.='.quarantine';
-							tar_add_file($tar,$new_filename,get_file_base().'/'.$file,fileperms(get_file_base().'/'.$file),filemtime(get_file_base().'/'.$file),true);
+							if (!isset($done[$new_filename]))
+							{
+								tar_add_file($tar,$new_filename,get_file_base().'/'.$file,fileperms(get_file_base().'/'.$file),filemtime(get_file_base().'/'.$file),true);
+								$done[$new_filename]=true;
+							}
 						}
 					}
 				}
