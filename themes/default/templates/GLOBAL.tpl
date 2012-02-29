@@ -26,12 +26,12 @@
 
 		<div class="top_level_wrap">
 			{+START,IF,{$NEQ,{$GET,left_width},0,auto}}
-				<div id="panel_left" style="width: {$GET,left_width}" class="global_side">
+				<div id="panel_left" style="width: {$GET,left_width}" class="global_side"{$?,{$VALUE_OPTION,html5}, role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar"}>
 					{$GET,panel_left}
 				</div>
 			{+END}
 			{+START,IF,{$NEQ,{$GET,right_width},0,auto}}
-				<div id="panel_right" style="width: {$GET,right_width}" class="global_side">{+START,IF,{$GET,helper_panel}}{+START,IF_EMPTY,{$GET,panel_right}}<div class="global_helper_panel_wrap">{+END}{+END}
+				<div id="panel_right" style="width: {$GET,right_width}" class="global_side"{$?,{$VALUE_OPTION,html5}, role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar"}>{+START,IF,{$GET,helper_panel}}{+START,IF_EMPTY,{$GET,panel_right}}<div class="global_helper_panel_wrap">{+END}{+END}
 					{$GET,panel_right}
 					{+START,IF,{$GET,helper_panel}}{+START,IF_EMPTY,{$GET,panel_right}}
 						{+START,IF,{$NOT,{$HIDE_HELP_PANEL}}}
@@ -41,7 +41,7 @@
 						<a id="helper_panel_toggle" href="#" onclick="return help_panel(true);"><img title="{!HELP_OR_ADVICE}: {!SHOW}" alt="{!HELP_OR_ADVICE}: {!SHOW}" src="{$IMG*,help_panel_show}" /></a>
 						{+END}
 					
-						<div id="helper_panel_contents"{+START,IF,{$HIDE_HELP_PANEL}} style="display: none"{+END}>
+						<div id="helper_panel_contents"{+START,IF,{$HIDE_HELP_PANEL}} style="display: none"{$?,{$VALUE_OPTION,html5}, aria-expanded="false"}{+END}>
 							<h2>{!HELP_OR_ADVICE}</h2>
 
 							<div class="global_helper_panel">
@@ -80,13 +80,13 @@
 					{+END}{+END}
 				</div>{+START,IF,{$GET,helper_panel}}{+START,IF_EMPTY,{$GET,panel_right}}</div>{+END}{+END}
 			{+END}
-			<{$?,{$VALUE_OPTION,html5},article,div} id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle dequirk" style="width: {$GET,middle_width}{+START,IF,{$NEQ,{$GET,left_width},0}}; padding-{!en_left}: 10px; margin-{!en_left}: {$GET,left_width}{+END}{+START,IF,{$NEQ,{$GET,right_width},0}}; padding-{!en_right}: 10px; margin-{!en_right}: {$GET,right_width}{+END}">
+			<{$?,{$VALUE_OPTION,html5},article,div}{$?,{$VALUE_OPTION,html5}, role="main article"} id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle dequirk" style="width: {$GET,middle_width}{+START,IF,{$NEQ,{$GET,left_width},0}}; padding-{!en_left}: 10px; margin-{!en_left}: {$GET,left_width}{+END}{+START,IF,{$NEQ,{$GET,right_width},0}}; padding-{!en_right}: 10px; margin-{!en_right}: {$GET,right_width}{+END}">
 				<div id="global_middle_ph">
 					{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}
-						<div class="breadcrumbs breadcrumbs_always">
+						<{$?,{$VALUE_OPTION,html5},nav,div} class="breadcrumbs breadcrumbs_always"{$?,{$VALUE_OPTION,html5}, itemprop="breadcrumb" role="navigation"}>
 							<img class="breadcrumbs_img" src="{$IMG*,treenav}" title="{!YOU_ARE_HERE}" alt="{!YOU_ARE_HERE}" />
 							{BREADCRUMBS}
-						</div>
+						</{$?,{$VALUE_OPTION,html5},nav,div}>
 					{+END}{+END}
 
 					<a name="maincontent" id="maincontent"></a>
@@ -95,7 +95,7 @@
 			</{$?,{$VALUE_OPTION,html5},article,div}>
 		</div>
 		{+START,IF_NON_EMPTY,{$TRIM,{$GET,panel_bottom}}}
-			<div id="panel_bottom">
+			<div id="panel_bottom"{$?,{$VALUE_OPTION,html5}, role="complementary"}>
 				{$GET,panel_bottom}
 			</div>
 		{+END}
@@ -122,10 +122,10 @@
 			</div>
 		{+END}{+END}
 		<div class="top_level_wrap">
-			<div id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle dequirk">
-				<div id="global_middle_ph">
+			<div id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle dequirk"{$?,{$VALUE_OPTION,html5}, role="main article"}>
+				<{$?,{$VALUE_OPTION,html5},article,div} id="global_middle_ph">
 					{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}
-						<{$?,{$VALUE_OPTION,html5},nav,div} class="breadcrumbs breadcrumbs_always"{$?,{$VALUE_OPTION,html5}, itemprop="breadcrumb"}>
+						<{$?,{$VALUE_OPTION,html5},nav,div} class="breadcrumbs breadcrumbs_always"{$?,{$VALUE_OPTION,html5}, itemprop="breadcrumb" role="navigation"}>
 							{BREADCRUMBS}
 						</{$?,{$VALUE_OPTION,html5},nav,div}>
 						<br />
@@ -133,23 +133,23 @@
 
 					<a name="maincontent" id="maincontent"> </a>
 					{MIDDLE}
-				</div>
+				</{$?,{$VALUE_OPTION,html5},article,div}>
 			</div>
 			<div class="float_surrounder">
 				{+START,IF,{$NEQ,{$GET,left_width},0,auto}}
-					<div id="panel_left" class="global_side"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/WPSideBar"}>
+					<div id="panel_left" class="global_side"{$?,{$VALUE_OPTION,html5}, role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar"}>
 						{$GET,panel_left}
 					</div>
 				{+END}
 				{+START,IF,{$NEQ,{$GET,right_width},0,auto}}
-					<div id="panel_right" class="global_side"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/WPSideBar"}>{+START,IF,{$GET,helper_panel}}{+START,IF_EMPTY,{$GET,panel_right}}<div class="global_helper_panel_wrap">{+END}{+END}
+					<div id="panel_right" class="global_side"{$?,{$VALUE_OPTION,html5}, role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar"}>{+START,IF,{$GET,helper_panel}}{+START,IF_EMPTY,{$GET,panel_right}}<div class="global_helper_panel_wrap">{+END}{+END}
 						{$GET,panel_right}
 					</div>
 				{+END}
 			</div>
 		</div>
 		{+START,IF_NON_EMPTY,{$GET,panel_bottom}}
-			<div id="panel_bottom">
+			<div id="panel_bottom"{$?,{$VALUE_OPTION,html5}, role="complementary"}>
 				{$GET,panel_bottom}
 			</div>
 		{+END}

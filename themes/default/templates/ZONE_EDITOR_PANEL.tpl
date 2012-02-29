@@ -1,21 +1,21 @@
 <!-- Tab buttons -->
 <div class="float_surrounder">
-	<div class="ze_tabs">
+	<div class="ze_tabs"{$?,{$VALUE_OPTION,html5}, role="tablist"}>
 		{+START,IF_PASSED,PREVIEW}
-			<a title="{!PREVIEW}: {ID*}" href="#" id="view_tab_{ID*}" class="ze_tab ze_tab_first ze_tab_selected" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="select_ze_tab('{ID*;}','view'); reload_preview('{ID*;}'); return false;">
+			<a{$?,{$VALUE_OPTION,html5}, aria-controls="view_{ID*}" role="tab"} title="{!PREVIEW}: {ID*}" href="#" id="view_tab_{ID*}" class="ze_tab ze_tab_first ze_tab_selected" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="select_ze_tab('{ID*;}','view'); reload_preview('{ID*;}'); return false;">
 				{!PREVIEW}
 			</a>
 		{+END}
 		{+START,IF_PASSED,COMCODE}
-			<a title="{!EDIT}: {ID*}" href="#" id="edit_tab_{ID*}" class="ze_tab{+START,IF_NON_PASSED,PREVIEW} ze_tab_first{+END}" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="select_ze_tab('{ID*;}','edit'); return false;">
+			<a{$?,{$VALUE_OPTION,html5}, aria-controls="edit_{ID*}" role="tab"} title="{!EDIT}: {ID*}" href="#" id="edit_tab_{ID*}" class="ze_tab{+START,IF_NON_PASSED,PREVIEW} ze_tab_first{+END}" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="select_ze_tab('{ID*;}','edit'); return false;">
 				{!EDIT}
 			</a>
 		{+END}
-		<a title="{!DETAILS}: {ID*}" href="#" id="info_tab_{ID*}" class="ze_tab{+START,IF_NON_PASSED,SETTINGS} ze_tab_last{+END}{+START,IF_NON_PASSED,PREVIEW}{+START,IF_NON_PASSED,COMCODE} ze_tab_first{+END}{+END}" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="select_ze_tab('{ID*;}','info'); return false;">
+		<a{$?,{$VALUE_OPTION,html5}, aria-controls="info_{ID*}" role="tab"} title="{!DETAILS}: {ID*}" href="#" id="info_tab_{ID*}" class="ze_tab{+START,IF_NON_PASSED,SETTINGS} ze_tab_last{+END}{+START,IF_NON_PASSED,PREVIEW}{+START,IF_NON_PASSED,COMCODE} ze_tab_first{+END}{+END}" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="select_ze_tab('{ID*;}','info'); return false;">
 			{!DETAILS}
 		</a>
 		{+START,IF_PASSED,SETTINGS}
-			<a title="{!SETTINGS}: {ID*}" href="#" id="settings_tab_{ID*}" class="ze_tab ze_tab_last" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="select_ze_tab('{ID*;}','settings'); return false;">
+			<a{$?,{$VALUE_OPTION,html5}, aria-controls="settings_{ID*}" role="tab"} title="{!SETTINGS}: {ID*}" href="#" id="settings_tab_{ID*}" class="ze_tab ze_tab_last" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="select_ze_tab('{ID*;}','settings'); return false;">
 				{!SETTINGS}
 			</a>
 		{+END}
@@ -25,7 +25,7 @@
 <!-- Actual tab' contents follows -->
 
 {+START,IF_PASSED,PREVIEW}
-	<div id="view_{ID*}" style="display: block">
+	<div id="view_{ID*}" style="display: block"{$?,{$VALUE_OPTION,html5}, aria-labeledby="view_tab_{ID*}" role="tabpanel"}>
 		{+START,IF_EMPTY,{PREVIEW}}
 			<p class="nothing_here">{!NONE}</p>
 		{+END}
@@ -37,7 +37,7 @@
 {+END}
 
 {+START,IF_PASSED,COMCODE}
-	<div id="edit_{ID*}" style="{+START,IF_NON_PASSED,PREVIEW}display: block{+END}{+START,IF_PASSED,PREVIEW}display: none{+END}">
+	<div id="edit_{ID*}" style="{+START,IF_NON_PASSED,PREVIEW}display: block{+END}{+START,IF_PASSED,PREVIEW}display: none{+END}"{$?,{$VALUE_OPTION,html5}, aria-labeledby="edit_tab_{ID*}" role="tabpanel"}>
 		<form title="{ID*}: {!COMCODE}" action="index.php" method="post">
 			<p><label for="edit_{ID*}_textarea">{!COMCODE}</label> <a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img class="comcode_button" alt="{!COMCODE_MESSAGE,Comcode}" src="{$IMG*,comcode}" title="{!COMCODE_MESSAGE,Comcode}" /></a>
 			{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
@@ -71,7 +71,7 @@
 	</div>
 {+END}
 
-<div id="info_{ID*}" style="{+START,IF_NON_PASSED,PREVIEW}display: block{+END}{+START,IF_PASSED,PREVIEW}display: none{+END}">
+<div id="info_{ID*}" style="{+START,IF_NON_PASSED,PREVIEW}display: block{+END}{+START,IF_PASSED,PREVIEW}display: none{+END}"{$?,{$VALUE_OPTION,html5}, aria-labeledby="info_tab_{ID*}" role="tabpanel"}>
 	<p>
 		<span class="field_name">{!PAGE_TYPE}:</span><br />
 		{TYPE*}
@@ -107,7 +107,7 @@
 </div>
 
 {+START,IF_PASSED,SETTINGS}
-	<div id="settings_{ID*}" style="display: none">
+	<div id="settings_{ID*}" style="display: none"{$?,{$VALUE_OPTION,html5}, aria-labeledby="settings_tab_{ID*}" role="tabpanel"}>
 		<form title="{ID*}: {!SETTINGS}" id="middle_fields" action="index.php">
 			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 				<colgroup>

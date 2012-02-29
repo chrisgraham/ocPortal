@@ -36,7 +36,7 @@
 
 <h2>{!NEW}</h2>
 
-<ul class="actions_list">
+<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
 	<li>&raquo; <a href="{$PAGE_LINK*,adminzone:admin_themewizard:misc}">{!THEMEWIZARD}</a></li>
 	<li>&raquo; <a href="{$PAGE_LINK*,adminzone:admin_themes:add_theme}">{!ADD_THEME}</a> ({!EMPTY})</li>
 </ul>

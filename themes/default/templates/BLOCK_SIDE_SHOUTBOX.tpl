@@ -1,4 +1,4 @@
-<div class="standardbox_classic">
+<div class="standardbox_classic"{$?,{$VALUE_OPTION,html5}, role="marquee"}>
 	{MESSAGES}
 
 	<form title="{!SHOUTBOX}" onsubmit="if (checkFieldForBlankness(this.elements['shoutbox_message'],event)) { disable_button_just_clicked(this); return true; } return false;" target="_self" action="{URL*}" method="post">

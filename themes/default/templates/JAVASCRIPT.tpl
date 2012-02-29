@@ -187,7 +187,7 @@ function staff_unload_action()
 	div.style.position='absolute';
 	div.style.zIndex=10000;
 	div.style.textAlign='center';
-	setInnerHTML(div,'<span style="width: 10em; display: inline-block" class="lightborder"><h2>{!LOADING^;}</h2><img id="loading_image" alt="" src="'+'{$IMG;,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
+	setInnerHTML(div,'<span{$?,{$VALUE_OPTION,html5}, aria-busy="true"} style="width: 10em; display: inline-block" class="lightborder"><h2>{!LOADING^;}</h2><img id="loading_image" alt="" src="'+'{$IMG;,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
 	window.setTimeout( function() { if (document.getElementById('loading_image')) document.getElementById('loading_image').src+=''; } , 100); // Stupid workaround for Google Chrome not loading an image on unload even if in cache
 	document.body.appendChild(div);
 	if (typeof window.scrollTo!='undefined') window.scrollTo(0,0);
@@ -492,6 +492,7 @@ function help_panel(show)
 		{
 			middles[i].style.margin{$WCASE,{!en_right}}='275px';
 		}
+		itm.helper_panel_contents('aria-expanded','true');
 		helper_panel_contents.style.display='block';
 		if (typeof window.nereidFade!='undefined')
 		{
@@ -528,6 +529,7 @@ function _hide_help_panel(middles,panel_right,global_message,helper_panel_conten
 	{
 		middles[i].style.margin{$WCASE,{!en_right}}='16px';
 	}
+	itm.helper_panel_contents('aria-expanded','false');
 	helper_panel_contents.style.display='none';
 	SetCookie('hide_help_panel','1',100);
 	helper_panel_toggle.onclick=function() { return help_panel(true); };
@@ -900,6 +902,12 @@ function select_tab(id,tab)
 	return false;
 }
 
+function set_display_with_aria(element,mode)
+{
+	element.style.display=mode;
+	element.setAttribute('aria-hidden',(mode=='none')?'true':'false');
+}
+
 {$,Draw functionality}
 function hideTag(element,noAnimate)
 {
@@ -920,6 +928,8 @@ function toggleSectionInline(id,type,pic,itm,noAnimate)
 	if (!itm) itm=document.getElementById(id);
 	if (!pic) pic=document.getElementById('e_'+id);
 	if ((pic) && (pic.src=="{$IMG,exp_con}".replace(/^http:/,window.location.protocol))) return;
+
+	itm.setAttribute('aria-expanded',(type=='none')?'false':'true');
 
 	if (itm.style.display=='none')
 	{
@@ -1102,7 +1112,7 @@ function illustrateFrameLoad(pf,frame)
 		var body=de.getElementsByTagName('body');
 		if (body.length==0)
 		{
-			setInnerHTML(de,'<head>'+head+'<\/head><body class="re_body"><div class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div><\/body>');
+			setInnerHTML(de,'<head>'+head+'<\/head><body{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="re_body"><div class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div><\/body>');
 		} else
 		{
 			body[0].className='re_body';
@@ -1116,7 +1126,7 @@ function illustrateFrameLoad(pf,frame)
 
 			if (de.getElementsByTagName('style').length==0) {$,The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice}
 				setInnerHTML(head_element,head);
-			setInnerHTML(body[0],'<div class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div>');
+			setInnerHTML(body[0],'<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div>');
 		}
 		var the_frame=window.frames[frame];
 		window.setTimeout( // Stupid workaround for Google Chrome not loading an image on unload even if in cache
@@ -1472,6 +1482,7 @@ function activateTooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lig
 	} else
 	{
 		tooltipElement=document.createElement("div");
+		tooltipElement.role='tooltip';
 		tooltipElement.style.display='none';
 		tooltipElement.className="ocp_tooltip";
 		if (ac.className.substr(0,3)=='tt_') tooltipElement.className+=' '+ac.className;

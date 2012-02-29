@@ -270,6 +270,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 
 			// Do any children
 			new_html=document.createElement('div');
+			new_html.role='treeitem';
 			new_html.id=this.name+'tree_list_c_'+node.getAttribute('id');
 			new_html.style.display=((!initially_expanded) || (node.getAttribute('has_children')!='true'))?'none':'block';
 			new_html.style.padding{$WCASE,{!en_left}}='15px';
@@ -486,7 +487,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 			var url='{$BASE_URL_NOHTTP;}/'+this.object.hook+'&id='+window.encodeURIComponent(real_clicked_id)+'&options='+this.object.options+'&default='+window.encodeURIComponent(element.value);
 			var ob=this.object;
 			load_XML_doc(url,function (ajax_result_frame,ajax_result) { setInnerHTML(html_node,''); ob.response(ajax_result_frame,ajax_result,clicked_id); });
-			setInnerHTML(html_node,'<div><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> {!LOADING^;}</div>');
+			setInnerHTML(html_node,'<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"}><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> {!LOADING^;}</div>');
 			var container=document.getElementById('tree_list__root_'+ob.name);
 			if ((automated) && (container) && (container.style.overflowY=='auto'))
 			{

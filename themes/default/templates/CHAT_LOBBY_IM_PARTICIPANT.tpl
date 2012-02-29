@@ -7,7 +7,7 @@
 </div>
 <div class="associated_details">
 	{!ACTIONS}:
-	<ul class="actions_list_super_compact">
+	<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list_super_compact">
 		<li id="buddy__{ID*}">
 			&raquo; <a onclick="this.style.display='none';" target="_blank" title="{!MAKE_BUDDY}: {!LINK_NEW_WINDOW}" href="{MAKE_BUDDY_URL*}">{!MAKE_BUDDY}</a>
 		</li>

@@ -5,7 +5,7 @@
 <br />
 
 <p>{!ACTIONS}:</p>
-<ul class="actions_list">
+<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
 	<li class="actions_list_strong">
 		&raquo; <a href="{ADD_WARNING_URL*}">{!ADD_WARNING}</a>
 	</li>

@@ -378,6 +378,7 @@ function ModalWindow()
 		initBox: function() {
 			this.box = this.element("div", {
 				'class': 'medborder medborder_box overlay',
+				'role': 'dialog',
 				'styles' : {
 					'position': browser_matches('ie_old')?"absolute":"fixed",
 					'zIndex': this.topWindow.overlay_zIndex++,

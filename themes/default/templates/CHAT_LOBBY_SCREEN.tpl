@@ -7,10 +7,10 @@
 {+START,BOX,{!ROOMS_LOBBY_TITLE}}
 	<div class="float_surrounder">
 		{+START,IF_NON_EMPTY,{ADD_ROOM_URL}{PRIVATE_ROOM}{BLOCKING_LINK}{MOD_LINK}{SETEFFECTS_LINK}}
-			<{$?,{$VALUE_OPTION,html5},nav,div} class="chat_actions">
+			<{$?,{$VALUE_OPTION,html5},nav,div} class="chat_actions"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 				<h2>{!ADVANCED_ACTIONS}</h2>
 			
-				<ul class="actions_list spaced_list">
+				<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list spaced_list">
 					{+START,IF_NON_EMPTY,{ADD_ROOM_URL}}
 						<li>&raquo; <a href="{ADD_ROOM_URL*}" rel="add">{!ADD_CHATROOM}</a></li>
 					{+END}

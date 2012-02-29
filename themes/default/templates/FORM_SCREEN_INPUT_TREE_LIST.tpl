@@ -1,5 +1,5 @@
 <input style="display: none" type="text" class="input_line{REQUIRED*} hidden_but_needed" id="{NAME*}" name="{NAME*}" value="{DEFAULT*}" onchange="var ob=document.getElementById('{NAME*;}_mirror'); if (ob) { ob.parentNode.style.display=(this.selected_title=='')?'none':'block'; setInnerHTML(ob,escape_html(this.selected_title)); }" />
-<div class="get_gallery_tree" id="tree_list__root_{NAME*}">
+<div class="get_gallery_tree" id="tree_list__root_{NAME*}"{$?,{$VALUE_OPTION,html5}, role="tree"}>
 	<!-- List put in here -->
 </div>
 <script type="text/javascript">// <![CDATA[

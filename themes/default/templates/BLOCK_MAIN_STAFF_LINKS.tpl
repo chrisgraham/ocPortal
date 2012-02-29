@@ -1,5 +1,5 @@
 <div class="form_ajax_target">
-	{+START,BOX,{!EXTERNAL_LINKS},,,tray_open,,,1,<a title="{!EDIT}: {!EXTERNAL_LINKS}" href="#" class="topleftlink" id="editlinks" onclick="var linkslist = document.getElementById('stafflinkslist'); var editlinksform = next(linkslist); return switcheroo(linkslist\,editlinksform);">{!EDIT}</a>}
+	{+START,BOX,{!EXTERNAL_LINKS},,,tray_open,,,1,<a title="{!EDIT}: {!EXTERNAL_LINKS}" href="#" class="topleftlink" id="editlinks" onclick="var linkslist=document.getElementById('stafflinkslist'); var editlinksform=next(linkslist); return switcheroo(linkslist\,editlinksform);">{!EDIT}</a>}
 		<div class="wide_table_wrap">
 			{+START,IF,{$JS_ON}}
 				<ol id="stafflinkslist">
@@ -8,7 +8,7 @@
 					{+END}
 				</ol>
 			{+END}
-			<form title="{!EDIT}: {!LINKS}" action="{URL*}" method="post" {+START,IF,{$JS_ON}} style="display: none;" {+END}>
+			<form title="{!EDIT}: {!LINKS}" action="{URL*}" method="post" {+START,IF,{$JS_ON}} style="display: none"{$?,{$VALUE_OPTION,html5}, aria-hidden="true"}{+END}>
 				<div class="constrain_field"><label for="stafflinksedit" class="accessibility_hidden">{!EDIT}</label><textarea cols="100" rows="30" id="stafflinksedit" name="stafflinksedit" class="wide_field">{+START,LOOP,UNFORMATTEDLINKS}{LINKS*}
 
 {+END}</textarea></div>
@@ -26,23 +26,23 @@
 			{
 				do
 				{
-					elem = elem.nextSibling;
+					elem=elem.nextSibling;
 				}
-				while (elem && elem.nodeType != 1);
+				while (elem && elem.nodeType!=1);
 
 				return elem;
 			};
 
 			function switcheroo(hide, show)
 			{
-				if (hide.style.display == 'none')
+				if (hide.style.display=='none')
 				{
-					hide.style.display = 'block';
-					show.style.display = 'none';
+					set_display_with_aria(hide,'block');
+					set_display_with_aria(show,'none');
 				} else
 				{
-					hide.style.display = 'none';
-					show.style.display = 'block';
+					set_display_with_aria(hide,'none');
+					set_display_with_aria(show,'block');
 				}
 
 				return false;

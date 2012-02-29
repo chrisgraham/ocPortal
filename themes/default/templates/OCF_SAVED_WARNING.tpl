@@ -2,7 +2,7 @@
 	<h3>
 		{TITLE*}
 	</h3>
-	<ul class="actions_list">
+	<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
 		<li>
 			&raquo;
 			<form title="{!LOAD} {$STRIP_TAGS,{TITLE|}}" action="#" method="post" class="inline" onsubmit="var explanation=opener.document.getElementById('explanation'); var message=opener.document.getElementById('message'); explanation.value='{EXPLANATION*^;}'; message.value='{MESSAGE*^;}'; if (typeof window.faux_close!='undefined') window.faux_close(); else window.close();">

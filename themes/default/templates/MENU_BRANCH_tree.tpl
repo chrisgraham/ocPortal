@@ -12,7 +12,7 @@
 		{+END}
 	{+END}
 	{+START,IF_NON_EMPTY,{CHILDREN}}
-		<ul id="{MENU|*;}_{RANDOM*}" style="display: {DISPLAY*}">
+		<ul{$?,{$VALUE_OPTION,html5}, aria-haspopup="true"} id="{MENU|*;}_{RANDOM*}" style="display: {DISPLAY*}">
 			{CHILDREN}
 		</ul>
 	{+END}

@@ -1,6 +1,6 @@
 {TITLE}
 
-<p>
+<p{$?,{$VALUE_OPTION,html5}, role="alert"}>
 	{MESSAGE*}
 </p>
 

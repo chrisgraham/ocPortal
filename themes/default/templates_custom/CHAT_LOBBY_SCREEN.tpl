@@ -2,14 +2,14 @@
 
 <h2>{!SELECT_ROOM}</h2>
 
-<ul class="actions_list" id="rooms">
-	<li><img class="inline_image_2" src="{$IMG*,bottom/loading}" title="{!LOADING}" alt="{!LOADING}" /> {!LOADING}</li>
+<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list" id="rooms">
+	<li><img{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="inline_image_2" src="{$IMG*,bottom/loading}" title="{!LOADING}" alt="{!LOADING}" /> {!LOADING}</li>
 </ul>
 
 {+START,IF_NON_EMPTY,{SETEFFECTS_LINK}}
 	<h2>{!ADVANCED_ACTIONS}</h2>
 
-	<ul class="actions_list">
+	<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
 		<li>&raquo; {SETEFFECTS_LINK}</li>
 	</ul>
 {+END}

@@ -25,7 +25,7 @@
 			<p>
 				{!AUTHOR_FUNCTIONS,{AUTHOR*}}&hellip;
 			</p>
-			<ul class="actions_list_compact"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+			<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list_compact"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
 				{URL_DETAILS}
 				{FORUM_DETAILS}
 				{POINT_DETAILS}

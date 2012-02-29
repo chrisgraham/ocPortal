@@ -8,7 +8,7 @@
 	{$TRIM,{CONTENT}}
 
 	{+START,IF,{SHOW_AS_EDIT}}{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
-		<div class="edited edited_block">
+		<div class="edited edited_block"{$?,{$VALUE_OPTION,html5}, role="note"}>
 			<img alt="" title="" src="{$IMG*,edited}" />
 			{!EDITED}
 			{+START,IF,{$VALUE_OPTION,html5}}

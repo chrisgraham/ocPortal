@@ -55,7 +55,7 @@
 						<div class="float_surrounder_hidden">
 							{+START,IF,{$NOT,{$MOBILE}}}
 								{+START,IF,{$JS_ON}}
-									<div class="float_surrounder_hidden">
+									<div class="float_surrounder_hidden"{$?,{$VALUE_OPTION,html5}, role="toolbar"}>
 										<div id="post_special_options2" style="display: none">
 											{COMCODE_EDITOR_SMALL}
 										</div>

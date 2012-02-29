@@ -2,7 +2,7 @@
 
 {$SET,countdown_id,countdown_{$RAND}}
 
-<span id="{$GET,countdown_id}">{LANG}</span>
+<span id="{$GET,countdown_id}"{$?,{$VALUE_OPTION,html5}, role="timer"}>{LANG}</span>
 
 <script type="text/javascript">// <![CDATA[
 	window.setInterval(function()

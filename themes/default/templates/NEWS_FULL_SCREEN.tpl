@@ -7,7 +7,7 @@
 
 	<div class="medborder medborder_detailhead_wrap">
 		<div class="float_surrounder">
-			<div class="medborder_detailhead">
+			<div class="medborder_detailhead"{$?,{$VALUE_OPTION,html5}, role="contentinfo"}>
 				{+START,IF,{$INLINE_STATS}}{!VIEWS,{VIEWS*}}<br />{+END}
 				{+START,IF,{$VALUE_OPTION,html5}}
 					{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{DATE*}</time>}
@@ -35,7 +35,7 @@
 
 	<hr class="spaced_rule" />
 
-	<{$?,{$VALUE_OPTION,html5},aside,div}>
+	<{$?,{$VALUE_OPTION,html5},aside,div}{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 		{+START,BOX,,,med}
 			<p>
 				{$?,{BLOG},{!BLOG_NEWS_UNDER_THESE},{!NEWS_UNDER_THESE}}
@@ -91,7 +91,7 @@
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={_TITLE}}{+END}{+END}
 
 	{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
-		<div class="edited edited_block">
+		<div class="edited edited_block"{$?,{$VALUE_OPTION,html5}, role="note"}>
 			<img alt="" title="" src="{$IMG*,edited}" />
 			{!EDITED}
 			{+START,IF,{$VALUE_OPTION,html5}}

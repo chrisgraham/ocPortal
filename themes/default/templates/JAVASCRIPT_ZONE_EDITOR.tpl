@@ -200,7 +200,7 @@ function reload_preview(id)
 	var edit_element=document.getElementById('edit_'+id+'_textarea');
 	if (!edit_element) return; // Nothing interatively edited
 
-	setInnerHTML(element,'<div class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" /> {!LOADING^;}</div>');
+	setInnerHTML(element,'<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" /> {!LOADING^;}</div>');
 
 	window.loading_preview_of=id;
 

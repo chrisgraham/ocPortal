@@ -149,14 +149,14 @@
 		{COMMENT_DETAILS}
 	</div>
 
-	<!--<p class="standard_meta_block">
+	<!--<p class="standard_meta_block"{$?,{$VALUE_OPTION,html5}, role="contentinfo"}>
 		{+START,IF,{$VALUE_OPTION,html5}}{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}{+END}{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}{!ADDED,{ADD_DATE*}}{+END}{+START,IF,{$INLINE_STATS}}. {!VIEWS,{VIEWS*}}{+END}
 	</p>-->
 
 	{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 
 	{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
-		<div class="edited edited_block">
+		<div class="edited edited_block"{$?,{$VALUE_OPTION,html5}, role="note"}>
 			<img alt="" title="" src="{$IMG*,edited}" /> {!EDITED}
 			{+START,IF,{$VALUE_OPTION,html5}}
 				<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}">{$DATE*,{EDIT_DATE_RAW}}</time>

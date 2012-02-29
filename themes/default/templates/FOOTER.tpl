@@ -65,7 +65,7 @@
 		<div class="global_copyright">
 			{$,Uncomment to show user's time {$DATE} {$TIME}}
 			{$COPYRIGHT`}
-			<{$?,{$VALUE_OPTION,html5},nav,div} class="global_minilinks">
+			<{$?,{$VALUE_OPTION,html5},nav,div} class="global_minilinks"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 				<span class="accessibility_hidden"><a accesskey="1" href="{$PAGE_LINK*,:}">{$SITE_NAME*}</a> <span class="linkcolor">&middot;</span></span>
 				<span class="accessibility_hidden"><a accesskey="0" href="{$PAGE_LINK*,:keymap}">{!KEYBOARD_MAP}</a> <span class="linkcolor">&middot;</span></span>
 				{+START,IF,{$CONFIG_OPTION,bottom_show_sitemap_button}}<a accesskey="3" rel="site_map" href="{$PAGE_LINK*,_SEARCH:sitemap}">{!SITE_MAP}</a> <span class="linkcolor">&middot;</span>{+END}

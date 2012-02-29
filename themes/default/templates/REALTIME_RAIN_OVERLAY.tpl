@@ -16,7 +16,7 @@
 			<div id="bubbles_go_here">
 			</div>
 
-			<div id="loading_icon" class="ajax_tree_list_loading"><img src="{$IMG*,bottom/loading}" alt="{!LOADING}" title="{!LOADING}" /></div>
+			<div id="loading_icon" class="ajax_tree_list_loading"><img{$?,{$VALUE_OPTION,html5}, aria-busy="true"} src="{$IMG*,bottom/loading}" alt="{!LOADING}" title="{!LOADING}" /></div>
 		</div>
 
 		<div id="timer-outer"><div id="timer-inner" onmouseover="setOpacity(this,1.0);" onmouseout="setOpacity(this,0.7);">

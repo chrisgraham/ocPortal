@@ -1,4 +1,4 @@
-{+START,IF,{$NOT,{$GET,in_panel}}}<div class="centered_inline_block"><div class="inline_block">{+END}{+START,BOX,{TITLE*},,{$?,{$GET,in_panel},panel,light},,,<a accesskey="4" href="{FULL_LINK*}" title="{!MORE_OPTIONS}: {!SEARCH_TITLE}">{!MORE_OPTIONS}</a>}
+{+START,IF,{$NOT,{$GET,in_panel}}}<div class="centered_inline_block"{$?,{$VALUE_OPTION,html5}, role="search"}><div class="inline_block">{+END}{+START,BOX,{TITLE*},,{$?,{$GET,in_panel},panel,light},,,<a accesskey="4" href="{FULL_LINK*}" title="{!MORE_OPTIONS}: {!SEARCH_TITLE}">{!MORE_OPTIONS}</a>}
 	<form title="{TITLE*}" onsubmit="if (typeof this.elements['content']=='undefined') { disable_button_just_clicked(this); return true; } if (checkFieldForBlankness(this.elements['content'],event)) { return true; } return false;" action="{$URL_FOR_GET_FORM*,{URL}}" method="get">
 		{$HIDDENS_FOR_GET_FORM,{URL}}
 

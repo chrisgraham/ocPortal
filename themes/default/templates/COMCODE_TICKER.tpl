@@ -1,7 +1,7 @@
 {$SET,RAND_ID_TICKER,rand{$RAND}}
 
 {$JAVASCRIPT_INCLUDE,javascript_dyn_comcode}
-<div id="ticktickticker{$GET%,RAND_ID_TICKER}">&nbsp;</div>
+<div{$?,{$VALUE_OPTION,html5}, role="marquee"} id="ticktickticker{$GET%,RAND_ID_TICKER}">&nbsp;</div>
 <script type="text/javascript">// <![CDATA[
 addEventListenerAbstract(window,'load',function () {
 	var ticktickticker=document.getElementById('ticktickticker{$GET%,RAND_ID_TICKER}');

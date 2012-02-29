@@ -1,4 +1,4 @@
-<div class="standardbox_classic">
+<div class="standardbox_classic"{$?,{$VALUE_OPTION,html5}, role="marquee"}>
 	{MESSAGES}
 
 	<form target="_self" action="{URL*}&amp;posted=1" method="post">

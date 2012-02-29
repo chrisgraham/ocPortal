@@ -1,4 +1,4 @@
-<div class="spaced">
+<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="spaced">
 	<div class="ajax_tree_list_loading">
 		<img id="loading_image" class="inline_image_2" src="{$IMG*,bottom/loading}" alt="{!LOADING^;}" />
 		{!LOADING}

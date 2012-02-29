@@ -1,4 +1,4 @@
-<{$?,{$VALUE_OPTION,html5},aside,div} class="medborder_box medborder" id="screen_actions_outer"><div id="screen_actions">
+<{$?,{$VALUE_OPTION,html5},aside,div}{$?,{$VALUE_OPTION,html5}, role="navigation"} class="medborder_box medborder" id="screen_actions_outer"><div id="screen_actions">
 	<div>{$BLOCK,block=main_facebook_like}</div>
 	<div class="print"><a class="link_exempt" rel="print" target="_blank" title="{!PRINT_THIS_SCREEN}: {!LINK_NEW_WINDOW}" href="{PRINT_URL*}"></a></div>
 	<div class="recommend"><a onclick="return open_link_as_overlay(this,null,'100%');" class="link_exempt" target="_blank" title="{!OCP_RECOMMEND}: {!LINK_NEW_WINDOW}" href="{RECOMMEND_URL*}"></a></div>

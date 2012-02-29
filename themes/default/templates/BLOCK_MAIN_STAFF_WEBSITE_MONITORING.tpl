@@ -34,7 +34,7 @@
 			</tbody>
 		</table></div>
 
-		<form title="{!SITE_WATCHLIST}: {!EDIT}" {+START,IF,{$JS_ON}} style="display: none;" {+END}action="{URL*}" method="post" id="watchlistform">
+		<form title="{!SITE_WATCHLIST}: {!EDIT}" {+START,IF,{$JS_ON}} style="display: none"{$?,{$VALUE_OPTION,html5}, aria-hidden="true"}{+END}action="{URL*}" method="post" id="watchlistform">
 			<div class="constrain_field">
 				<label for="watchlistsites" class="accessibility_hidden">{!EDIT}</label>
 				<textarea class="wide_field" id="watchlistsites" name="watchlistsites" rows="10" cols="90">{+START,LOOP,SITEURLS}{_loop_key*}={_loop_var*}
@@ -52,16 +52,17 @@
 
 			function intoeditmode()
 			{
-				var watchlistform = document.getElementById('watchlistform');
-				var show = document.getElementById('watchlistshow');
+				var watchlistform=document.getElementById('watchlistform');
+				var show=document.getElementById('watchlistshow');
 
-				if(watchlistform.style.display == 'none')
+				if (watchlistform.style.display=='none')
 				{
-					watchlistform.style.display = 'block';
-					show.style.display = 'none';
-				} else {
-					watchlistform.style.display = 'none';
-					show.style.display = 'block';
+					set_display_with_aria(watchlistform,'block');
+					set_display_with_aria(show,'none');
+				} else
+				{
+					set_display_with_aria(watchlistform,'none');
+					set_display_with_aria(show,'block');
 				}
 				return false;
 			}

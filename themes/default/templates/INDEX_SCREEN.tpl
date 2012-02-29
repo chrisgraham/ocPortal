@@ -7,7 +7,7 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{CONTENT}}
-<ul class="actions_list"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
 	{CONTENT}
 </ul>
 {+END}

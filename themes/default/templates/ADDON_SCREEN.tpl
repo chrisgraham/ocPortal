@@ -63,7 +63,7 @@
 
 <h2>{!ACTIONS}</h2>
 
-<ul class="actions_list spaced_list">
+<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list spaced_list">
 	<li>
 		&raquo; <a href="{$PAGE_LINK*,_SELF:_SELF:type=addon_import}">{!IMPORT_ADDON}</a> ({!IMPORT_ADDON_2})
 	</li>

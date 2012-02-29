@@ -41,7 +41,7 @@
 		</div>
 	</div>
 
-	{+START,IF,{$INLINE_STATS}}<p class="standard_meta_block">{!VIEWS,{VIEWS*}}</p>{+END}
+	{+START,IF,{$INLINE_STATS}}<p class="standard_meta_block"{$?,{$VALUE_OPTION,html5}, role="contentinfo"}>{!VIEWS,{VIEWS*}}</p>{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}
 </div>

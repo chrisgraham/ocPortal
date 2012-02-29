@@ -2,16 +2,16 @@
 	{TITLE}
 
 	<div>
-		<div class="float_surrounder"><div class="tabs">
+		<div class="float_surrounder"><div class="tabs"{$?,{$VALUE_OPTION,html5}, role="tablist"}>
 			{+START,LOOP,TABS}
-				<a href="#" id="t_{TAB_CODE*}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="select_tab('g','{TAB_CODE*}'); return false;">
+				<a{$?,{$VALUE_OPTION,html5}, aria-controls="g_{TAB_CODE*}" role="tab"} href="#" id="t_{TAB_CODE*}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="select_tab('g','{TAB_CODE*}'); return false;">
 					{TAB_TITLE*}
 				</a>
 			{+END}
 		</div></div>
 		<div class="tab_surround">
 			{+START,LOOP,TABS}
-				<div id="g_{TAB_CODE*}" style="display: {$?,{$OR,{TAB_FIRST},{$NOT,{$JS_ON}}},block,none}">
+				<div{$?,{$VALUE_OPTION,html5}, aria-labeledby="t_{TAB_CODE*}" role="tabpanel"}id="g_{TAB_CODE*}" style="display: {$?,{$OR,{TAB_FIRST},{$NOT,{$JS_ON}}},block,none}">
 					<a name="tab__{TAB_CODE*}" id="tab__{TAB_CODE*}"></a>
 
 					{TAB_CONTENT}

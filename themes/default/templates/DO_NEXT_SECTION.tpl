@@ -2,7 +2,7 @@
 <hr class="spaced_rule" />
 {+END}
 
-<{$?,{$VALUE_OPTION,html5},nav,div} class="do_next_section_wrap">
+<{$?,{$VALUE_OPTION,html5},nav,div} class="do_next_section_wrap"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 	<!-- Layout table needed to ensure perfect alignment (height indeterminate) -->
 	<table summary="" class="do_next_section">
 		<colgroup>

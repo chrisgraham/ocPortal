@@ -8,7 +8,7 @@
 <div class="menu_editor_page docked" id="menu_editor_wrap">
 	<form title="" action="{URL*}" method="post">
 		<!-- In separate form due to mod_security -->
-		<textarea cols="30" rows="3" style="display: none" name="template" id="template">{CHILD_BRANCH_TEMPLATE*}</textarea>
+		<textarea{$?,{$VALUE_OPTION,html5}, aria-hidden="true"} cols="30" rows="3" style="display: none" name="template" id="template">{CHILD_BRANCH_TEMPLATE*}</textarea>
 	</form>
 
 	<form title="{!PRIMARY_PAGE_FORM}" id="edit_form" action="{URL*}" method="post">

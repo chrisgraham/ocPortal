@@ -21,7 +21,7 @@
 			<script type="text/javascript">// <![CDATA[
 				var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
 	
-				var actions_tpl='{!ACTIONS;}:<ul class="actions_list">[1]<\/ul>';
+				var actions_tpl='{!ACTIONS;}:<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">[1]<\/ul>';
 				var actions_tpl_item='<li>&raquo; <a href="[2]">[1]<\/a><br /><\/li>';
 	
 				var info_tpl='<br /><br /><div class="wide_table_wrap"><table class="solidborder wide_table" summary="{!MAP_TABLE;}"><colgroup><col style="width: 100px" /><\/colgroup><tbody>[1]<\/tbody><\/table><\/div>';

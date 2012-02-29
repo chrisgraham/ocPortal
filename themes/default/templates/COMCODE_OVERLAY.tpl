@@ -13,7 +13,7 @@ addEventListenerAbstract(window,'load',function () {
 } );
 //]]></script>
 
-<div class="comcode_overlay" id="{$GET%,RAND_ID_OVERLAY}" style="display: none; position: absolute; left: {X*}px; top: {Y*}px; width: {WIDTH*}px; height: {HEIGHT*}px">
+<div{$?,{$VALUE_OPTION,html5}, role="dialog"} class="comcode_overlay" id="{$GET%,RAND_ID_OVERLAY}" style="display: none; position: absolute; left: {X*}px; top: {Y*}px; width: {WIDTH*}px; height: {HEIGHT*}px">
 	<div class="comcode_overlay_main">
 		{EMBED}
 	</div>

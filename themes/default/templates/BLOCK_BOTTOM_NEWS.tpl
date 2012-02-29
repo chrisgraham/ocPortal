@@ -9,7 +9,7 @@
 
 {$SET,bottom_news_id,{$RAND}}
 
-<div id="ticktickticker_news{$GET%,bottom_news_id}">&nbsp;</div>
+<div{$?,{$VALUE_OPTION,html5}, role="marquee"} id="ticktickticker_news{$GET%,bottom_news_id}">&nbsp;</div>
 <script type="text/javascript">// <![CDATA[
 	(function() {
 		var ticktickticker=document.getElementById('ticktickticker_news{$GET%,bottom_news_id}');

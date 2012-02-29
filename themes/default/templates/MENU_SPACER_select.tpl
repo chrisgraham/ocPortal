@@ -2,5 +2,5 @@
 	<option>&nbsp;</option>
 {+END}
 {+START,IF,{$NOT,{$JS_ON}}}
-	<li class="menu_spacer">&nbsp;</li>
+	<li{$?,{$VALUE_OPTION,html5}, role="separator"} class="menu_spacer">&nbsp;</li>
 {+END}

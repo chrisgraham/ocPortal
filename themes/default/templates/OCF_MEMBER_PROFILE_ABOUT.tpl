@@ -24,7 +24,7 @@
 					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!CONTACT}</a>
 				</h3>
 
-				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: block">
+				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: block"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 					<ul>
 						{ACTIONS_contact}
 						{$GET,messenger_fields}
@@ -40,7 +40,7 @@
 					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!CONTENT}</a>
 				</h3>
 
-				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}">
+				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 					<ul>
 						{ACTIONS_content}
 					</ul>
@@ -55,7 +55,7 @@
 					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!ACCOUNT}</a>
 				</h3>
 
-				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}">
+				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 					<ul>
 						{ACTIONS_views}
 						{ACTIONS_profile}
@@ -71,7 +71,7 @@
 					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!USAGE}</a>
 				</h3>
 
-				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}">
+				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 					<ul>
 						{ACTIONS_usage}
 					</ul>
@@ -82,7 +82,7 @@
 
 	<div class="ocf_profile_main">
 		{+START,IF,{$NOT,{VIEW_PROFILES}}}
-			<p class="important_notification">
+			<p class="important_notification"{$?,{$VALUE_OPTION,html5}, role="alert"}>
 				{!ACCESS_DENIED}
 			</p>
 		{+END}

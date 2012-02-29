@@ -71,6 +71,8 @@ function setFieldError(theElement,errorMsg)
 				setInnerHTML(errorElement,'');
 				if (errorMsg!='') // If there actually an error
 				{
+					theElement.setAttribute('aria-invalid','true');
+
 					// Need to switch tab?
 					var p=errorElement;
 					while (p)
@@ -86,6 +88,7 @@ function setFieldError(theElement,errorMsg)
 					// Set error message
 					var msgNode=document.createTextNode(errorMsg);
 					errorElement.appendChild(msgNode);
+					errorElement.setAttribute('role','alert');
 
 					// Fade in
 					if (typeof window.nereidFade!='undefined')
@@ -93,6 +96,10 @@ function setFieldError(theElement,errorMsg)
 						setOpacity(errorElement,0.0);
 						nereidFade(errorElement,100,30,4);
 					}
+				} else
+				{
+					theElement.setAttribute('aria-invalid','false');
+					errorElement.setAttribute('role','');
 				}
 			}
 		}

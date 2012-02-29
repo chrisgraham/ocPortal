@@ -15,7 +15,7 @@
 		</div>
 	{+END}
 	{+START,IF_NON_PASSED,WEBSERVICE_RESULT}
-		<div class="site_special_message ssm_warn">
+		<div class="site_special_message ssm_warn"{$?,{$VALUE_OPTION,html5}, role="alert"}>
 			<div class="site_special_message_inner">
 				{+START,BOX,,,curved}
 					{TEXT*}

@@ -829,7 +829,7 @@ function deinvolve_im(room,logs,is_not_window)
 		if (typeof body[0]!='undefined')
 		{
 			setOpacity(body[0],0.2);
-			setInnerHTML(body[0],'<div class="spaced"><div class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div>');
+			setInnerHTML(body[0],'<div class="spaced"><div{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> {!LOADING^;}<\/div><\/div>');
 		}
 	}
 

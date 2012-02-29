@@ -69,9 +69,9 @@
 				</div>
 			</div>
 
-			<{$?,{$VALUE_OPTION,html5},nav,div}{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {MAX_AVATAR_HEIGHT|}px"{+END} class="ocf_member_column ocf_member_column_d">
+			<{$?,{$VALUE_OPTION,html5},nav,div}{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {MAX_AVATAR_HEIGHT|}px"{+END} class="ocf_member_column ocf_member_column_d"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 				<span class="ocf_member_column_title">{!VIEW}:</span>
-				<ul class="actions_list_compact">
+				<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list_compact">
 					<li>&raquo; <a href="{PERSONAL_TOPIC_URL*}">{!PERSONAL_TOPICS}{+START,IF_NON_EMPTY,{PT_EXTRA}} <span class="ocf_member_column_pts">{PT_EXTRA}</span>{+END}</a></li>
 					<li>&raquo; <a href="{NEW_POSTS_URL*}">{!POSTS_SINCE_LAST_VISIT}</a></li>
 					<li>&raquo; <a href="{UNREAD_TOPICS_URL*}">{!TOPICS_UNREAD}</a></li>

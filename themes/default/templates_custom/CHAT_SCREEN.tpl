@@ -40,7 +40,7 @@
 <div class="messages_window"><div id="messages_window">&nbsp;</div></div>
 
 <p>
-	{!USERS_IN_ROOM} <span id="chat_members_update"><img class="inline_image_2" src="{$IMG*,bottom/loading}" title="{!LOADING}" alt="{!LOADING}" /> {!LOADING}</span>
+	{!USERS_IN_ROOM} <span id="chat_members_update"><img{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="inline_image_2" src="{$IMG*,bottom/loading}" title="{!LOADING}" alt="{!LOADING}" /> {!LOADING}</span>
 </p>
 
 <script type="text/javascript">
@@ -83,7 +83,7 @@ addEventListenerAbstract(window,'load',function () {
 
 {+START,IF_NON_EMPTY,{LINKS}}
 	<p>{!ACTIONS}:</p>
-	<ul class="actions_list">
+	<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
 		{+START,LOOP,LINKS}
 			{+START,IF_NON_EMPTY,{_loop_var}}
 			<li>&raquo; {_loop_var}</li>

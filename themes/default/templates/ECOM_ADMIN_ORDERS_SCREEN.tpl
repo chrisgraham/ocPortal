@@ -29,7 +29,7 @@
 <p>
 	{!ACTIONS}:
 </p>
-<ul class="actions_list">
+<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
 	<li class="actions_list_strong">
 		&raquo; <a href="{$PAGE_LINK*,_SELF:_SELF:type=order_export}">{!EXPORT_ORDER_LIST}</a>
 	</li>

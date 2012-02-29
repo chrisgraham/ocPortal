@@ -125,12 +125,12 @@
 		</div>
 
 		<!--<br />
-		<p class="standard_meta_block">
+		<p class="standard_meta_block"{$?,{$VALUE_OPTION,html5}, role="contentinfo"}>
 			{+START,IF,{$INLINE_STATS}}{!VIEWS,{VIEWS*}}{+END}
 		</p>-->
 
 		{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
-			<div class="edited edited_block">
+			<div class="edited edited_block"{$?,{$VALUE_OPTION,html5}, role="note"}>
 				<img alt="" title="" src="{$IMG*,edited}" />
 				{!EDITED}
 				{+START,IF,{$VALUE_OPTION,html5}}

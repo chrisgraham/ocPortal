@@ -1,4 +1,4 @@
-<div id="comments_wrapper">
+<div id="comments_wrapper"{$?,{$VALUE_OPTION,html5}, role="complementary"}>
 	<br />
 
 	{+START,IF_EMPTY,{COMMENTS}}

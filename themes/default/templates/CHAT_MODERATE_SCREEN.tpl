@@ -15,7 +15,7 @@
 {+START,IF_NON_EMPTY,{LINKS}}
    <hr class="spaced_rule" />
    <p>{!ACTIONS}:</p>
-   <ul class="actions_list">
+   <ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
       {+START,LOOP,LINKS}
          <li>&raquo; {_loop_var}</li>
       {+END}
