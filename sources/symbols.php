@@ -1064,8 +1064,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value=function_exists('get_value')?get_value($param[0]):'';
 					if (is_null($value))
 					{
-						$value=isset($param[1])?$param[1]:'';
-						if (($param[0]=='textmate') && ((ocp_srv('HTTP_HOST')=='localhost') && (strpos(ocp_srv('HTTP_USER_AGENT'),'Macintosh')!==false))) $value='1';
+						$value=function_exists('get_long_value')?get_long_value($param[0]):'';
+						if (is_null($value))
+						{
+							$value=isset($param[1])?$param[1]:'';
+							if (($param[0]=='textmate') && ((ocp_srv('HTTP_HOST')=='localhost') && (strpos(ocp_srv('HTTP_USER_AGENT'),'Macintosh')!==false))) $value='1';
+						}
 					}
 				}
 				break;
