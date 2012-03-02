@@ -43,7 +43,8 @@ function init__facebook_connect()
 	$FACEBOOK_CONNECT=mixed();
 	$appid=get_option('facebook_appid',true);
 	if (is_null($appid)) return;
-	$appsecret=get_option('facebook_secret_code');
+	$appsecret=get_option('facebook_secret_code',true);
+	if (is_null($appid)) return;
 	if (($appsecret!='') && ($appid!=''))
 		$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 }

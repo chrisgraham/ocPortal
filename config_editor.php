@@ -106,12 +106,15 @@ function ce_do_footer()
 END;
 global $SITE_INFO;
 if (array_key_exists('base_url',$SITE_INFO))
+{
+$_base_url=htmlentities($SITE_INFO['base_url']);
 echo <<<END
 		<hr />
 		<p>
-		&raquo; <a href="{$SITE_INFO['base_url']}/adminzone/index.php">Go to Admin Zone</a>
+		&raquo; <a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a>
 		</p>
 END;
+}
 echo <<<END
 	</div></body>
 </html>
@@ -269,13 +272,15 @@ vb_version*/
 		}
 		$type='TEXT';
 		if (strpos($key,'password')!==false) $type='password';
+		$_key=htmlentities($key);
+		$_val=htmlentities($val);
 		echo <<<END
 		<tr>
 			<th>
-				{$key}
+				{$_key}
 			</th>
 			<td>
-				<input type="{$type}" name="{$key}" value="{$val}" size="50" />
+				<input type="{$type}" name="{$_key}" value="{$_val}" size="50" />
 			</td>
 			<td>
 				{$notes}
@@ -290,7 +295,7 @@ END;
 				&raquo; Confirm password
 			</th>
 			<td>
-				<input type="{$type}" name="confirm_admin_password" value="{$val}" size="50" />
+				<input type="{$type}" name="confirm_admin_password" value="{$_val}" size="50" />
 			</td>
 			<td>
 			</td>
@@ -298,12 +303,13 @@ END;
 END;
 		}
 	}
+	$_given_password=htmlentities($given_password);
 	echo <<<END
 	</table>
 	<p class="proceed_button">
 		<input type="submit" value="Edit" />
 	</p>
-	<input type="hidden" name="given_password" value="{$given_password}" />
+	<input type="hidden" name="given_password" value="{$_given_password}" />
 END;
 }
 
@@ -417,7 +423,7 @@ function do_set()
 	co_sync_file($info_file);
 
 	echo '<hr /><p>Edited configuration. If you wish to continue editing you must <a href="config_editor.php">login again.</a></p>';
-	echo '<hr /><p>The info.php file was backed up at '.$path.'</p>';
+	echo '<hr /><p>The info.php file was backed up at '.htmlentities($path).'</p>';
 }
 
 /**

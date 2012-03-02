@@ -14,6 +14,7 @@ function call_block(url,new_params,target_div,append,callback)
 	if (typeof block_data_cache[ajax_url]!='undefined')
 	{
 		show_block_html(block_data_cache[ajax_url],target_div,append);
+		if (callback) callback();
 		return;
 	}
 

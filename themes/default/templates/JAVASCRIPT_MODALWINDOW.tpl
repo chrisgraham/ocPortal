@@ -18,13 +18,14 @@ It provides a function to open an image link as a 'lightbox' (we use the term li
 
 var overlay_zIndex=1000;
 
-function open_link_as_overlay(ob,width,height)
+function open_link_as_overlay(ob,width,height,target)
 {
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		if (!width) width=800;
 		if (!height) height=520;
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
-		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,'_top');
+		if (!target) target='_top';
+		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,target);
 		return false;
 	{+END}
 

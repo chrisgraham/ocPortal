@@ -485,6 +485,7 @@ class standard_aed_module
 		if (!is_null(get_param('auto__add_one',NULL))) $map['auto__add_one']=get_param('auto__add_one');
 		if (!is_null(get_param('auto__add_one_category',NULL))) $map['auto__add_one_category']=get_param('auto__add_one_category');
 		if (!is_null(get_param('redirect',NULL))) $map['redirect']=get_param('redirect');
+		if (!is_null(get_param('continue',NULL))) $map['continue']=get_param('continue');
 		if ((!is_null($this->upload)) || ($this->possibly_some_kind_of_upload)) $map['uploading']=1;
 		$post_url=build_url($map,'_SELF');
 
@@ -812,6 +813,7 @@ class standard_aed_module
 		$map=array('page'=>'_SELF','type'=>$next_type);
 		if (either_param('catalogue_name','')!='') $map['catalogue_name']=either_param('catalogue_name');
 		if (!is_null(get_param('redirect',NULL))) $map['redirect']=get_param('redirect');
+		if (!is_null(get_param('continue',NULL))) $map['continue']=get_param('continue');
 
 		$description=($this->select_name_description!='')?do_lang_tempcode($this->select_name_description):new ocp_tempcode();
 		if (method_exists($this,'nice_get_radio_entries')) // For picture selection lists only
@@ -920,6 +922,7 @@ class standard_aed_module
 		$map=array('page'=>'_SELF','type'=>'__e'.$this->type_code,'id'=>$id);
 		if (get_param('catalogue_name','')!='') $map['catalogue_name']=get_param('catalogue_name');
 		if (!is_null(get_param('redirect',NULL))) $map['redirect']=get_param('redirect');
+		if (!is_null(get_param('continue',NULL))) $map['continue']=get_param('continue');
 		if ((!is_null($this->upload)) || ($this->possibly_some_kind_of_upload)) $map['uploading']=1;
 		$post_url=build_url($map,'_SELF');
 

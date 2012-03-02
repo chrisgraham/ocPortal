@@ -179,9 +179,9 @@ function code_editor_do_login()
 	code_editor_do_header('gui');
 	if (array_key_exists('path',$_GET))
 	{
-		echo '<input type="hidden" name="path" value="'.($_GET['path']).'" />';
+		echo '<input type="hidden" name="path" value="'.code_editor_escape_html($_GET['path']).'" />';
 		echo '<input type="hidden" name="path_new" value="" />';
-		if (array_key_exists('line',$_GET)) echo '<input type="hidden" name="line" value="'.$_GET['line'].'" />';
+		if (array_key_exists('line',$_GET)) echo '<input type="hidden" name="line" value="'.code_editor_escape_html($_GET['line']).'" />';
 	}
 	global $SITE_INFO;
 	$ftp_domain=array_key_exists('ftp_domain',$SITE_INFO)?$SITE_INFO['ftp_domain']:'localhost';
@@ -211,6 +211,9 @@ function code_editor_do_login()
 	<h1 class="main_page_title">ocPortal Code Editor</h1>
 END;
 	if (@$_POST['given_password']) echo '<p><strong>Invalid password</strong></p>';
+	$_ftp_domain=code_editor_escape_html($ftp_domain);
+	$_ftp_folder=code_editor_escape_html($ftp_folder);
+	$_ftp_username=code_editor_escape_html($ftp_username);
 	echo <<<END
 	<p>
 		<label for="given_password">Master Password: <input type="password" name="given_password" id="given_password" /></label>
@@ -218,9 +221,9 @@ END;
 	<hr />
 	<p>If you need to edit original ocPortal files (rather than overriding or making custom ones), then you probably need to enter FTP details below. This will allow this editor to save via FTP, and if no username is given, it will try and save directly.</p>
 	<table>
-		<tr><th>FTP Host</th><td><input size="50" type="text" name="ftp_domain" value="{$ftp_domain}" /></td></tr>
-		<tr><th>FTP Path</th><td><input size="50" type="text" name="ftp_folder" value="{$ftp_folder}" /></td></tr>
-		<tr><th>FTP Username</th><td><input size="50" type="text" name="ftp_username" value="{$ftp_username}" /></td></tr>
+		<tr><th>FTP Host</th><td><input size="50" type="text" name="ftp_domain" value="{$_ftp_domain}" /></td></tr>
+		<tr><th>FTP Path</th><td><input size="50" type="text" name="ftp_folder" value="{$_ftp_folder}" /></td></tr>
+		<tr><th>FTP Username</th><td><input size="50" type="text" name="ftp_username" value="{$_ftp_username}" /></td></tr>
 		<tr><th>FTP Password</th><td><input size="50" type="password" name="ftp_password" /></td></tr>
 	</table>
 	<p>
@@ -231,10 +234,13 @@ END;
 		&raquo; <a title="ocProducts programming tutorial (this link will open in a new window)" target="_blank" href="http://ocportal.com/docs/pg/tut_programming">Read the ocProducts programming tutorial</a>
 END;
 if (array_key_exists('base_url',$SITE_INFO))
+{
+$_base_url=code_editor_escape_html($SITE_INFO['base_url']);
 echo <<<END
 		<br />
-		&raquo; <a href="{$SITE_INFO['base_url']}/adminzone/index.php">Go to Admin Zone</a>
+		&raquo; <a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a>
 END;
+}
 echo <<<END
 	</p>
 END;
@@ -288,7 +294,7 @@ function do_get_path($given_password)
 	if (is_string($test))
 	{
 		echo '<h1 class="main_page_title">An FTP error occurred</h1>';
-		echo '<p>'.htmlentities($test).'</p>';
+		echo '<p>'.code_editor_escape_html($test).'</p>';
 		return;
 	}
 
@@ -298,8 +304,10 @@ function do_get_path($given_password)
 	$paths=implode('',$files);
 foreach ($_POST as $key=>$val)
 {
+$_key=code_editor_escape_html($key);
+$_val=code_editor_escape_html($val);
 echo <<<END
-<input type="hidden" name="{$key}" value="{$val}" />
+<input type="hidden" name="{$_key}" value="{$_val}" />
 END;
 }
 	echo <<<END
@@ -410,16 +418,19 @@ function do_page($given_password,$path)
 		$contents=@file_get_contents($path);
 		$lines=substr_count($contents,chr(10))+1;
 		$line=(array_key_exists('line',$_POST)?intval($_POST['line']):(array_key_exists('line',$_POST)?intval($_POST['line']):0));
+		$_path=code_editor_escape_html($path);
 echo <<<END
-<h1 class="main_page_title">ocPortal <a onclick="window.back(); return false;" href="code_editor.php">Code Editor</a>: Editing {$path}</h1>
-<input type="hidden" name="path" value="{$path}" />
+<h1 class="main_page_title">ocPortal <a onclick="window.back(); return false;" href="code_editor.php">Code Editor</a>: Editing {$_path}</h1>
+<input type="hidden" name="path" value="{$_path}" />
 END;
 foreach ($_POST as $key=>$val)
 {
 if (($key!='path') && ($key!='path_new'))
 {
+$_key=code_editor_escape_html($key);
+$_val=code_editor_escape_html($val);
 echo <<<END
-<input type="hidden" name="{$key}" value="{$val}" />
+<input type="hidden" name="{$_key}" value="{$_val}" />
 END;
 }
 }
@@ -583,9 +594,9 @@ END;
 		ce_sync_file($save_path.'.editfrom');
 
 		if (!isset($_POST['delete']))
-			$message="Saved {$save_path} (and if applicable, placed a backup in its directory)!";
+			$message="Saved ".code_editor_escape_html($save_path)." (and if applicable, placed a backup in its directory)!";
 		else
-			$message="Deleted {$save_path}. You may edit to recreate the file if you wish however.";
+			$message="Deleted ".code_editor_escape_html($save_path).". You may edit to recreate the file if you wish however.";
 		echo <<<END
 <script language="Javascript" type="text/javascript">
 window.alert('{$message}');

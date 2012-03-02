@@ -945,6 +945,7 @@ function toggleSectionInline(id,type,pic,itm,noAnimate)
 	{+END}
 
 	if (!itm) itm=document.getElementById(id);
+	if (!itm) return;
 	if (!pic) pic=document.getElementById('e_'+id);
 	if ((pic) && (pic.src=="{$IMG,exp_con}".replace(/^http:/,window.location.protocol))) return;
 
@@ -1968,8 +1969,13 @@ function keep_stub(starting_query_string) {$,Skip param to make always start wit
 
 {$,XHTML equivalents for HTML manipulation functions}
 
-function getInnerHTML(element,outerToo) {
+function getOuterHTML(element)
+{
+	return getInnerHTML(element,true);
+}
 
+function getInnerHTML(element,outerToo)
+{
 	// recursively copy the DOM into a string
 	function Copy(srcDomNode, level) {
 		var out='';
@@ -2202,8 +2208,27 @@ function Copy(domNode,xmlDoc,level) {
 	}
 }
 
+function setOuterHTML(element,tHTML)
+{
+	setInnerHTML(element,tHTML);
+	var p=element.parentNode;
+	var c=element.childNodes;
+	for (var i=c.length-1;i>=0;i--)
+	{
+		if (element.nextSibling)
+		{
+			p.insertBefore(c[i],element.nextSibling);
+		} else
+		{
+			p.appendChild(c[i]);
+		}
+	}
+	p.removeChild(element);
+}
+
 {$,Note that embedded Javascript IS run unlike the normal .innerHTML - in fact we go to effort to guarantee it - even onload attached Javascript}
-function setInnerHTML(element,tHTML,append) {
+function setInnerHTML(element,tHTML,append)
+{
 	{$,Parser hint: .innerHTML okay}
 	if ((document.write) && (typeof element.innerHTML!="undefined") && (!document.xmlVersion))
 	{
@@ -2217,8 +2242,12 @@ function setInnerHTML(element,tHTML,append) {
 			{
 				window.js_runs_test=false;
 				var scripts=element.getElementsByTagName('script'),text;
+				var r_id;
 				if (scripts.length>0)
-					tHTML+='<script type="text/javascript">window.js_runs_test=true;</script>';
+				{
+					tHTML+='<script id="'+r_id+'" type="text/javascript">window.js_runs_test=true;</script>';
+					r_id='js_'+Math.rand();
+				}
 				element.innerHTML=tHTML;
 				for (var i=0;i<scripts.length;i++)
 				{
@@ -2227,7 +2256,13 @@ function setInnerHTML(element,tHTML,append) {
 						text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
 						window.setTimeout( function(text) { return function() {
 							if (!window.js_runs_test) // If JS was not run by the above op
+							{
 								eval(text);
+							} else
+							{
+								var r=document.getElementById(r_id);
+								r.parentNode.removeChild(r);
+							}
 						} }(text) , 0); // Delayed so we know DOM has loaded
 					}
 				}

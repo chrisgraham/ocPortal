@@ -29,7 +29,7 @@ class Block_main_google_map
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('title','region','cluster','filter_term','filter_category','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude','star_entry','filter_hours','max_results','extra_sources');
+		$info['parameters']=array('filter_rating','title','region','cluster','filter_term','filter_category','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude','star_entry','filter_hours','max_results','extra_sources');
 		return $info;
 	}
 	
@@ -71,6 +71,7 @@ class Block_main_google_map
 		$max_results=((array_key_exists('max_results',$map)) && ($map['max_results']!=''))?intval($map['max_results']):1000;
 		$icon=array_key_exists('icon',$map)?$map['icon']:'';
 		if (!array_key_exists('filter_category',$map)) $map['filter_category']='';
+		if (!array_key_exists('filter_rating',$map)) $map['filter_rating']='';
 		if (!array_key_exists('filter_term',$map)) $map['filter_term']='';
 		if (!array_key_exists('filter_hours',$map)) $map['filter_hours']='';
 
@@ -89,6 +90,10 @@ class Block_main_google_map
 			if ($map['filter_hours']!='')
 			{
 				$query.=' AND ce_add_date>'.strval(time()-60*60*intval($map['filter_hours']));
+			}
+			if ($map['filter_rating']!='')
+			{
+				$query.=' AND (SELECT AVG(rating) FROM rating WHERE '.db_string_equal_to('rating_for_type','catalogue_entry').' AND rating_for_id=id)>'.strval(intval($map['filter_rating']));
 			}
 
 			// Info about our catalogue

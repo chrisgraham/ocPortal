@@ -147,6 +147,7 @@ function init__site()
 	}
 
 	// SEO redirection
+	require_code('urls');
 	if (can_try_mod_rewrite())
 	{
 		$ruri=ocp_srv('REQUEST_URI');

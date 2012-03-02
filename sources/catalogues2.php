@@ -55,7 +55,7 @@ function catalogue_file_script()
 	}
 
 	$file=filter_naughty(get_param('file',false,true));
-	$_full=get_custom_file_base().'/uploads/catalogues/'.rawurldecode($file);
+	$_full=get_custom_file_base().'/uploads/catalogues/'.filter_naughty(rawurldecode($file));
 	if (!file_exists($_full)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$size=filesize($_full);
 
