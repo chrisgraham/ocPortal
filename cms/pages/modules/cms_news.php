@@ -579,6 +579,9 @@ class Module_cms_news extends standard_aed_module
 
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'rss_feed_url','',false));
 
+		$fields->attach(form_input_tick(do_lang_tempcode('AUTO_VALIDATE_ALL_POSTS'),do_lang_tempcode('DESCRIPTION_VALIDATE_ALL_POSTS'),'auto_validate',true));
+		$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'),'download_images',true));
+
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('lang',$lang));
 		handle_max_file_size($hidden);
@@ -613,6 +616,9 @@ class Module_cms_news extends standard_aed_module
 		if (is_null($rss_url))
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 		
+		$is_validated=post_param_integer('auto_validate',0);
+		$download_images=post_param_integer('download_images',0);
+
 		$rss=new rss($rss_url,true);
 
 		if (!is_null($rss->error))
@@ -656,7 +662,16 @@ class Module_cms_news extends standard_aed_module
 			// Add news
 			$ts=array_key_exists('clean_add_date',$item)?$item['clean_add_date']:(array_key_exists('add_date',$item)?strtotime($item['add_date']):time());
 			if ($ts===false) $ts=time(); // Seen in error email, it's if the add date won't parse by PHP
-			add_news($item['title'],array_key_exists('news',$item)?html_to_comcode($item['news']):'',array_key_exists('author',$item)?$item['author']:$GLOBALS['FORUM_DRIVER']->get_username(get_member()),0,1,1,1,'',array_key_exists('news_article',$item)?html_to_comcode($item['news_article']):'',$cat_id,NULL,$ts,$submitter,0,time(),NULL,'');
+			
+			$news=array_key_exists('news',$item)?html_to_comcode($item['news']):'';
+			$news_article=array_key_exists('news_article',$item)?html_to_comcode($item['news_article']):'';
+			if ($download_images==1)
+			{
+				$this->_grab_images($news);
+				$this->_grab_images($news_article);
+			}
+
+			add_news($item['title'],$news,array_key_exists('author',$item)?$item['author']:$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$is_validated,1,1,1,'',$news_article,$cat_id,NULL,$ts,$submitter,0,time(),NULL,'');
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_NEWS'))));
@@ -666,6 +681,28 @@ class Module_cms_news extends standard_aed_module
 			@unlink($rss_url);
 	
 		return inform_screen($title,do_lang_tempcode('IMPORT_NEWS_DONE'));
+	}
+
+	/**
+	 * Download remote images in some HTML and replace with local references under uploads/website_specific.
+	 *
+	 * @param  string			HTML
+	 */
+	function _grab_images(&$data)
+	{
+		require_code('files');
+		$num_matches=preg_match_all('#<img[^<>]*\ssrc=["\']([^\'"]*://[^\'"]*)["\']#i',$data,$matches);
+		for ($i=0;$i<$num_matches;$i++)
+		{
+			$url=$matches[1][$i];
+			$target_path=get_custom_file_base().'/uploads/website_specific/'.basename($url);
+			$target_url=get_custom_base_url().'/uploads/website_specific/'.basename($url);
+			$target_handle=fopen($target_path,'wb') OR intelligent_write_error($target_path);
+			$result=http_download_file($url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$target_handle);
+			fclose($target_handle);
+			if (!is_null($result))
+				$data=str_replace($url,$target_url,$data);
+		}
 	}
 
 }

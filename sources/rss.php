@@ -182,6 +182,15 @@ class rss
 				$this->error=do_lang('RSS_XML_ERROR',xml_error_string(xml_get_error_code($xml_parser)),strval(xml_get_current_line_number($xml_parser)));
 			}
 			@xml_parser_free($xml_parser);
+
+			$new_items=array();
+			foreach ($this->gleamed_items as $i)
+			{
+				if ((!isset($i['bogus'])) || (!$i['bogus']))
+					$new_items[]=$i;
+			}
+
+			$this->gleamed_items=$new_items;
 		}
 	}
 
@@ -619,6 +628,14 @@ class rss
 									{
 										require_code('xhtml');
 										$current_item['news_article']=xhtmlise_html($current_item['news_article']);
+									}
+									break;
+								case $prefix.'CATEGORY':
+									if ($data!='')
+										$current_item['category']=$data;
+									if ((array_key_exists('TERM',$attributes)) && (strpos($attributes['TERM'],'post')===false))
+									{
+										$current_item['bogus']=true;
 									}
 									break;
 							}
