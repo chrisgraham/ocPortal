@@ -180,7 +180,8 @@ class Database_Static_mysql extends Database_super_mysql
 		if ($mres===NULL) $mres=function_exists('mysql_real_escape_string');
 		if (($mres) && (isset($GLOBALS['SITE_DB']->connection_read[0])) && (!is_bool($GLOBALS['SITE_DB']->connection_read[0])))
 			return mysql_real_escape_string($string,$GLOBALS['SITE_DB']->connection_read[0]);
-		return mysql_escape_string($string);
+		if (!function_exists('mysql_escape_string')) return addslashes($string);
+		return @mysql_escape_string($string);
 	}
 
 	/**
