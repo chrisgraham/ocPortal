@@ -142,7 +142,14 @@ function js_compile($j,$js_cache_path,$minify=true)
 	$success_status=($num_msgs_before==$num_msgs_after);
 	if ($minify)
 		$out=js_minify($out);
-	$contents='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
+
+	if ($out=='')
+	{
+		$contents=$out;
+	} else
+	{
+		$contents='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
+	}
 	$js_file=@fopen($js_cache_path,'wt');
 	if ($js_file===false) intelligent_write_error($js_cache_path);
 	if (fwrite($js_file,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
@@ -259,7 +266,10 @@ function _css_compile($theme,$c,$fullpath,$minify=true)
 	$SHOW_EDIT_LINKS=$show_edit_links;
 	if ($c!='no_cache')
 	{
-		$out='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE CSS FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A CSS_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
+		if ($out!='')
+		{
+			$out='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE CSS FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A CSS_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
+		}
 	}
 	if ($num_msgs_after>$num_msgs_before) // Was an error (e.g. missing theme image), so don't cache so that the error will be visible on refresh and hence debugged
 	{

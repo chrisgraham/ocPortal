@@ -1653,6 +1653,9 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 		require_code('css_and_js');
 		js_compile($j,$js_cache_path,$minify);
 	}
+
+	if (filesize($js_cache_path)==0) return '';
+
 	return $js_cache_path;
 }
 
@@ -1841,6 +1844,8 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 		require_code('css_and_js');
 		css_compile($theme,$c,$fullpath,$css_cache_path,$minify);
 	}
+
+	if (filesize($css_cache_path)==0) return '';
 
 	return $css_cache_path;
 }
