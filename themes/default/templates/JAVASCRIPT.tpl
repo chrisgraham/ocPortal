@@ -209,7 +209,14 @@ function staff_unload_action()
 	setInnerHTML(div,'<span{$?,{$VALUE_OPTION,html5}, aria-busy="true"} style="width: 10em; display: inline-block" class="lightborder"><h2>{!LOADING^;}</h2><img id="loading_image" alt="" src="'+'{$IMG;,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
 	window.setTimeout( function() { if (document.getElementById('loading_image')) document.getElementById('loading_image').src+=''; } , 100); // Stupid workaround for Google Chrome not loading an image on unload even if in cache
 	document.body.appendChild(div);
-	if (typeof window.scrollTo!='undefined') window.scrollTo(0,0);
+	if (typeof window.scrollTo!='undefined')
+	{
+		try
+		{
+			window.scrollTo(0,0);
+		}
+		catch (e) {};
+	}
 	
 	addEventListenerAbstract(window,'pageshow',undo_staff_unload_action);
 	addEventListenerAbstract(window,'keydown',undo_staff_unload_action);
@@ -1172,7 +1179,7 @@ function illustrateFrameLoad(pf,frame)
 function smoothScroll(destY,expectedScrollY,dir,eventAfter)
 {
 	{+START,IF,{$VALUE_OPTION,disable_animations}}
-		window.scrollTo(0,destY);
+		if (typeof window.scrollTo!='undefined') window.scrollTo(0,destY);
 		return;
 	{+END}
 	
