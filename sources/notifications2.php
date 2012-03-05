@@ -259,6 +259,8 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 				}
 			}
 
+			attach_message(do_lang_tempcode('SUCCESS'),'inform');
+
 			// Redirect them back
 			$redirect=get_param('redirect',NULL);
 			if (!is_null($redirect))
