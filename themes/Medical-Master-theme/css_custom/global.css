@@ -318,6 +318,16 @@ form { /* For IE6 */
 	padding: 5px;
 }
 
+.fp_col_block {
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 48%;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		margin: 0.5em 0;
+		width: 100%;
+	{+END}
+}
+
 .fake_middle_continuation {
 	padding: 1px; /* {$,Needed to force border draw of inner-contents} */
 }
@@ -624,13 +634,13 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 	width: 100%;
 }
 
-.standardbox_links_classic a:link, .standardbox_title_panel a:link, .standardbox a:link, .standardbox_main_classic a:link {
+a:link {
 	color: #14798b; /* {$,wizard, 73% (seed sat_to 85) + 27% !W/B} */
 }
-.standardbox_links_classic a:visited, .standardbox_title_panel a:visited, .standardbox a:visited, .standardbox_main_classic a:visited {
+a:visited {
 	color: #136f80; /* {$,wizard, 67% (seed sat_to 85) + 33% !W/B} */
 }
-.standardbox_links_classic a:hover, .standardbox_title_panel a:hover, .standardbox a:hover, .standardbox_main_classic a:hover {
+a:hover {
 	color: #9C202F; /*{$,wizard, 100% a.hover}*/
 }
 
@@ -737,6 +747,16 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 
 .medborder_detailhead a:hover {
 	color: #9C202F; /*{$,wizard, 100% a.hover}*/
+}
+
+.global_side .medborder_detailhead_wrap {
+	padding: 0;
+}
+
+.global_side .medborder_detailhead {
+	border-bottom: 0;
+	padding-left: 0;
+	padding-top: 5px;
 }
 
 .global_side .medborder_box {
@@ -1187,9 +1207,6 @@ hr.long_break {
 .community_block_tagline a{
 	text-decoration:none;
 	color:#3DC1D9 !important;
-}
-.global_side .community_block_tagline {
-	font-size: 0.9em;
 }
 
 .community_block_tagline_splitter {
