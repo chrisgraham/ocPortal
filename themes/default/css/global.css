@@ -1188,6 +1188,16 @@ h3.standardbox_title_classic {
 	color: #9C202F; /* {$,wizard, 100% a.hover}*/
 }
 
+.global_side .medborder_detailhead_wrap {
+	padding: 0;
+}
+
+.global_side .medborder_detailhead {
+	border-bottom: 0;
+	padding-left: 0;
+	padding-top: 5px;
+}
+
 .medborder_box {
 	{+START,IF,{$MOBILE}}
 		padding: 2px;
@@ -1483,17 +1493,17 @@ table.scrollable_inside {
 	padding: 1px;
 }
 
-ul.compact_list {
+ul.compact_list, ol.compact_list {
 	margin: 0;
 	padding: 0;
 }
 
-ul.compact_list li {
+ul.compact_list li, ol.compact_list li {
 	margin: 0 0 0 17px;
 	padding: 0;
 }
 
-ul.spaced_list, .spaced_list ul {
+ul.spaced_list, .spaced_list ul, ol.spaced_list, .spaced_list ol {
 	margin: 0;
 	padding: 0 !important;
 	list-style-type: square;
@@ -1831,11 +1841,12 @@ input.buttonhyperlink {
 }
 
 /* {$,Makes a link tag (a) look like it's not anything special (we use these tags as tab points sometimes)} */
+.non_link,
 .non_link:link,
 .non_link:visited,
 .non_link:hover,
 .non_link:active {
-	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
+	color: #0d1522 !important; /* {$,wizard, 20% seed + 80% !W/B} */
 	text-decoration: none;
 	cursor: default;
 }
