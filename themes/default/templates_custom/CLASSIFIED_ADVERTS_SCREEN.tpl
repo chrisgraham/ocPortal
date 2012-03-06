@@ -60,3 +60,9 @@
 	{+END}
 </table>
 
+{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
+	<br />
+	<div class="float_surrounder">
+		{RESULTS_BROWSER}
+	</div>
+{+END}

@@ -129,6 +129,13 @@ class Module_classifieds
 
 		enforce_personal_access($member_id);
 
+		$start=get_param_integer('start',0);
+		$max=get_param_integer('max',30);
+
+		require_code('templates_results_browser');
+
+		$max_rows=$GLOBALS['SITE_DB']->query_value('catalogue_entries e JOIN '.get_table_prefix().'classifieds_prices c ON c.c_catalogue_name=e.c_name','COUNT(*)',array('ce_submitter'=>$member_id));
+
 		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries e JOIN '.get_table_prefix().'classifieds_prices c ON c.c_catalogue_name=e.c_name',array('e.*'),array('ce_submitter'=>$member_id),'GROUP BY e.id ORDER BY ce_add_date DESC');
 		if (count($rows)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -193,6 +200,9 @@ class Module_classifieds
 				'NUM_VIEWS'=>integer_format($row['ce_views']),
 			);
 		}
+
+		$results_browser=results_browser(do_lang('_CLASSIFIED_ADVERTS'),NULL,$start,'start',$max,'max',$max_rows,NULL,NULL,true);
+
 		return do_template('CLASSIFIED_ADVERTS_SCREEN',array('TITLE'=>$title,'ADS'=>$ads));
 	}
 
