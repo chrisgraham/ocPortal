@@ -245,7 +245,7 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	$sections->attach(_do_next_section($category_passed_2,is_null($categories_title)?do_lang_tempcode('CATEGORIES'):$categories_title));
 
 	// Additional section stuff
-	if (!is_null($additional_extras)) $sections->attach(_do_next_section($additional_extras,make_string_tempcode($additional_title)));
+	if (!is_null($additional_extras)) $sections->attach(_do_next_section($additional_extras,is_object($additional_title)?$additional_title:make_string_tempcode($additional_title)));
 
 	if ((is_null($main)) && (get_option('global_donext_icons')=='1')) // What-next
 	{
