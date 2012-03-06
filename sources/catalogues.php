@@ -587,17 +587,20 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			if (($view_type=='PAGE') || (($field['cf_put_in_category']==1) && ($view_type=='CATEGORY')) || (($field['cf_put_in_search']==1) && ($view_type=='SEARCH')))
 			{
 				$use_ev_enhanced=$use_ev;
-				if (($view_type!='PAGE') && ($i==0) && (($field['cf_type']=='short_trans') || ($field['cf_type']=='short_text')))
+				/*if (($view_type!='PAGE') && ($i==0) && (($field['cf_type']=='short_trans') || ($field['cf_type']=='short_text')))
 				{
 					foreach ($fields as $field_temp)
 					{
 						if ((array_key_exists('effective_value',$field_temp)) && ($field_temp['cf_type']=='url') && (!((($field_temp['cf_put_in_category']==1) && ($view_type=='CATEGORY')) || (($field_temp['cf_put_in_search']==1) && ($view_type=='SEARCH')))) && ($field_temp['cf_visible']==1))
 						{
-							$use_ev_enhanced=hyperlink($field_temp['effective_value'],$use_ev,true);
-							break;
+							if ($field_temp['effective_value']!='')
+							{
+								$use_ev_enhanced=hyperlink($field_temp['effective_value'],$use_ev,true);
+								break;
+							}
 						}
 					}
-				}
+				}*/
 
 				if (($field['cf_visible']==1) || ($i==0))
 				{

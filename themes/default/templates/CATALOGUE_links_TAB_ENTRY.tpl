@@ -1,3 +1,5 @@
+{$SET,FIELD_1_PLAIN,{FIELD_1_PLAIN}}
+
 <tr>
 	{FIELDS_TABLE}
 </tr>
