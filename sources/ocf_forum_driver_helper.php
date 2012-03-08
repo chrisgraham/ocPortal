@@ -427,7 +427,9 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 function _helper_get_post_remaining_details($this_ref,$topic_id,$post_ids)
 {
 	$count=0;
-	return _helper_get_forum_topic_posts($this_ref,$topic_id,$count,NULL,0,false,false,false,$post_ids);
+	$ret=_helper_get_forum_topic_posts($this_ref,$topic_id,$count,NULL,0,false,false,false,$post_ids);
+	if (is_integer($ret)) return array();
+	return $ret;
 }
 
 /**

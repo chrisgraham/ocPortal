@@ -1,68 +1,66 @@
 <div id="comments_wrapper"{$?,{$VALUE_OPTION,html5}, role="complementary"}>
 	<br />
 
-	{+START,IF_EMPTY,{COMMENTS}}
-		<p class="nothing_here">{!NO_COMMENTS}</p>
+	{+START,SET,REVIEWS_TITLE}
+		{!_REVIEWS,{$META_DATA*,numcomments}}:&nbsp;
+
+		{$SET,rating_loop,0}
+		{+START,LOOP,REVIEW_TITLES}
+			{+START,IF_NON_EMPTY,{REVIEW_RATING}}
+				{+START,IF_EMPTY,{REVIEW_TITLE}}
+					{+START,WHILE,{$LT,{$GET,rating_loop},{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}}}
+						<img src="{$IMG*,rating}" title="" alt="{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}" />
+						{$INC,rating_loop}
+					{+END}
+				{+END}
+			{+END}
+		{+END}
+		{+START,IF,{$EQ,{$GET,rating_loop},0}}
+			{!UNRATED}
+		{+END}
+
+		<span class="reviews_average">&nbsp;({!AVERAGE})</span>
 	{+END}
 
-	{+START,IF_NON_EMPTY,{COMMENTS}}
-		{+START,SET,REVIEWS_TITLE}
-			{!_REVIEWS,{$META_DATA*,numcomments}}:&nbsp;
+	{+START,SET,COMMENT_BOX_TITLE}
+		<span class="right">
+			{+START,INCLUDE,NOTIFICATION_BUTTONS}
+				NOTIFICATIONS_TYPE=comment_posted
+				NOTIFICATIONS_ID={TYPE}_{ID}
+				BUTTON_TYPE=pageitem
+			{+END}
+		</span>
+		{$?,{$IS_NON_EMPTY,{REVIEW_TITLES}},{$GET,REVIEWS_TITLE},{!COMMENTS}}
+	{+END}
 
-			{$SET,rating_loop,0}
-			{+START,LOOP,REVIEW_TITLES}
-				{+START,IF_NON_EMPTY,{REVIEW_RATING}}
-					{+START,IF_EMPTY,{REVIEW_TITLE}}
+	{+START,BOX,{$GET,COMMENT_BOX_TITLE}}
+		{+START,LOOP,REVIEW_TITLES}
+			{+START,IF_NON_EMPTY,{REVIEW_RATING}}
+				{+START,IF_NON_EMPTY,{REVIEW_TITLE}}
+					<p>
+						<strong>{REVIEW_TITLE*}:</strong>
+						{$SET,rating_loop,0}
 						{+START,WHILE,{$LT,{$GET,rating_loop},{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}}}
 							<img src="{$IMG*,rating}" title="" alt="{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}" />
 							{$INC,rating_loop}
 						{+END}
-					{+END}
+					</p>
 				{+END}
 			{+END}
-			{+START,IF,{$EQ,{$GET,rating_loop},0}}
-				{!UNRATED}
-			{+END}
-
-			<span class="reviews_average">&nbsp;({!AVERAGE})</span>
 		{+END}
 
-		{+START,SET,COMMENT_BOX_TITLE}
-			<span class="right">
-				{+START,INCLUDE,NOTIFICATION_BUTTONS}
-					NOTIFICATIONS_TYPE=comment_posted
-					NOTIFICATIONS_ID={TYPE}_{ID}
-					BUTTON_TYPE=pageitem
-				{+END}
-			</span>
-			{$?,{$IS_NON_EMPTY,{REVIEW_TITLES}},{$GET,REVIEWS_TITLE},{!COMMENTS}}
-		{+END}
+		<div class="comment_wrapper">
+			{+START,IF,{$VALUE_OPTION,html5}}<meta itemprop="interactionCount" content="UserComments:{$META_DATA*,numcomments}" />{+END}
 
-		{+START,BOX,{$GET,COMMENT_BOX_TITLE}}
-			{+START,LOOP,REVIEW_TITLES}
-				{+START,IF_NON_EMPTY,{REVIEW_RATING}}
-					{+START,IF_NON_EMPTY,{REVIEW_TITLE}}
-						<p>
-							<strong>{REVIEW_TITLE*}:</strong>
-							{$SET,rating_loop,0}
-							{+START,WHILE,{$LT,{$GET,rating_loop},{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}}}
-								<img src="{$IMG*,rating}" title="" alt="{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}" />
-								{$INC,rating_loop}
-							{+END}
-						</p>
-					{+END}
-				{+END}
+			{COMMENTS`}
+
+			{+START,IF_EMPTY,{$TRIM,{COMMENTS}}}
+				<p class="nothing_here">{!NO_COMMENTS}</p>
 			{+END}
+		</div>
 
-			<div class="comment_wrapper">
-				{+START,IF,{$VALUE_OPTION,html5}}<meta itemprop="interactionCount" content="UserComments:{$META_DATA*,numcomments}" />{+END}
-			
-				{COMMENTS`}
-			</div>
-
-			{+START,IF_PASSED,RESULTS_BROWSER}
-				{RESULTS_BROWSER}
-			{+END}
+		{+START,IF_PASSED,RESULTS_BROWSER}
+			{RESULTS_BROWSER}
 		{+END}
 	{+END}
 
@@ -76,6 +74,7 @@
 
 	{$,If has commenting permission}
 	{+START,IF_NON_EMPTY,{FORM}}
+		<br />
 		{+START,IF_PASSED,COMMENTS}<a name="last_comment" id="last_comment" rel="docomment"></a>{+END}
 		{FORM}
 	{+END}

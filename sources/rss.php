@@ -633,7 +633,7 @@ class rss
 								case $prefix.'CATEGORY':
 									if ($data!='')
 										$current_item['category']=$data;
-									if ((array_key_exists('TERM',$attributes)) && (strpos($attributes['TERM'],'post')===false))
+									if ((array_key_exists('TERM',$attributes)) && (strpos($attributes['TERM'],'post')===false) && (strpos($attributes['TERM'],'://')!==false))
 									{
 										$current_item['bogus']=true;
 									}

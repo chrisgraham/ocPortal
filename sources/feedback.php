@@ -305,7 +305,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 			'ID'=>$content_id,
 			'URL'=>$rate_url,
 			'TITLES'=>$titles,
-			'_RATING'=>$_rating[0]['RATING'],
+			'_RATING'=>is_null($_rating[0]['RATING'])?'0':$_rating[0]['RATING'],
 			'SIMPLISTIC'=>count($titles)==1,
 		));
 		return array(
