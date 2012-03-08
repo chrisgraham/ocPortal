@@ -447,7 +447,7 @@ class comcode_xml_to_tempcode
 						$this_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 						if (!is_null($this_member_id))
 						{
-							$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($this_member_id,false,true);
+							$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
 							if ((get_forum_type()=='ocf') && ($username_info))
 							{
 								require_lang('ocf');

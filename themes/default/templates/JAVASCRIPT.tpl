@@ -593,7 +593,11 @@ function window_r(expr)
 	win.document.open();
 	win.document.write('<pre>'+((window.format_r)?format_r(expr):expr)+'</pre>');
 	win.document.close()
-	win.focus();
+	try
+	{
+		win.focus();
+	}
+	catch (e) {};
 }
 
 function escape_html(value)
@@ -788,14 +792,14 @@ function get_base_url()
 {$,Enforcing a session using AJAX}
 function confirm_session(callback)
 {
-	if (typeof window.load_XML_doc=='undefined') return;
+	if (typeof window.do_ajax_request=='undefined') return;
 
 	var url='{$FIND_SCRIPT_NOHTTP;,confirm_session}'+keep_stub(true);
 
 	// First see if session already established
 	var ret=null;
 	require_javascript("javascript_ajax");
-	if (typeof window.load_XML_doc!='undefined') ret=load_XML_doc(url+keep_stub(true),false);
+	if (typeof window.do_ajax_request!='undefined') ret=do_ajax_request(url+keep_stub(true),false);
 	if (!ret) return;
 
 	if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
@@ -832,7 +836,7 @@ function _confirm_session(callback,username,url)
 		{
 			if (promptt!==null)
 			{
-				var ret=load_XML_doc(url,false,'login_username='+window.encodeURIComponent(username)+'&password='+window.encodeURIComponent(promptt));
+				var ret=do_ajax_request(url,false,'login_username='+window.encodeURIComponent(username)+'&password='+window.encodeURIComponent(promptt));
 
 				if (ret && ret.responseText==='') // Blank means success, no error - so we can call callback
 					callback(true);
@@ -846,7 +850,7 @@ function _confirm_session(callback,username,url)
 }
 
 {$,Dynamic inclusion}
-function load_snippet(code,post)
+function load_snippet(code,post,callback)
 {
 	var title=getInnerHTML(document.getElementsByTagName('title')[0]);
 	var metas=document.getElementsByTagName('link');
@@ -859,11 +863,12 @@ function load_snippet(code,post)
 	}
 	if (!url) url=window.location.href;
 	var html;
-	if (typeof window.load_XML_doc!='undefined')
+	if (typeof window.do_ajax_request!='undefined')
 	{
 		var url2="{$FIND_SCRIPT_NOHTTP#,snippet}?snippet="+code+"&url="+window.encodeURIComponent(url)+'&title='+window.encodeURIComponent(title)+keep_stub();
-		html=load_XML_doc(maintain_theme_in_link(url2),null,post);
+		html=do_ajax_request(maintain_theme_in_link(url2),callback,post);
 	}
+	if (callback) return null;
 	return html.responseText;
 }
 function require_css(sheet)
@@ -1179,7 +1184,11 @@ function illustrateFrameLoad(pf,frame)
 function smoothScroll(destY,expectedScrollY,dir,eventAfter)
 {
 	{+START,IF,{$VALUE_OPTION,disable_animations}}
-		if (typeof window.scrollTo!='undefined') window.scrollTo(0,destY);
+		try
+		{
+			window.scrollTo(0,destY);
+		}
+		catch (e) {};
 		return;
 	{+END}
 	
@@ -1193,11 +1202,19 @@ function smoothScroll(destY,expectedScrollY,dir,eventAfter)
 	var dist=dir*17;
 	if (((dir==1) && (scrollY+dist>=destY)) || ((dir==-1) && (scrollY+dist<=destY)) || ((destY-scrollY)*dir>2000))
 	{
-		if (typeof window.scrollTo!='undefined') window.scrollTo(0,destY);
+		try
+		{
+			window.scrollTo(0,destY);
+		}
+		catch (e) {};
 		if (eventAfter) eventAfter();
 		return;
 	}
-	window.scrollBy(0,dist);
+	try
+	{
+		window.scrollBy(0,dist);
+	}
+	catch (e) {}; // May be stopped by popup blocker
 
 	if (typeof window.scrollY=='undefined') scrollY=document.documentElement.scrollTop; /*IE6*/ else scrollY=window.scrollY;
 	window.setTimeout(function() { smoothScroll(destY,scrollY,dir,eventAfter); } , 30);
@@ -1660,7 +1677,7 @@ function resizeFrame(name,minHeight)
 				frame_element.style.height=((h>=minHeight)?h:minHeight)+'px';
 				if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
 				frame_element.scrolling='no';
-				frame_window.onscroll=function(event) { if (!event) event=window.event; if (event==null) return false; if (typeof frame_window.scrollTo!='undefined') frame_window.scrollTo(0,0); return cancelBubbling(event); }; {$,Needed for Opera}
+				frame_window.onscroll=function(event) { if (!event) event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancelBubbling(event); }; {$,Needed for Opera}
 			}
 		}
 	}
@@ -2242,39 +2259,44 @@ function setInnerHTML(element,tHTML,append)
 		var clone=element.cloneNode(true);
 		try
 		{
+			var scripts_jump=0;
 			if (append)
 			{
+				scripts_jump=element.getElementsByTagName('script').length;
 				element.innerHTML+=tHTML;
 			} else
 			{
-				window.js_runs_test=false;
-				var scripts=element.getElementsByTagName('script'),text;
-				var r_id;
-				if (scripts.length>0)
-				{
-					tHTML+='<script id="'+r_id+'" type="text/javascript">window.js_runs_test=true;</script>';
-					r_id='js_'+Math.rand();
-				}
 				element.innerHTML=tHTML;
-				for (var i=0;i<scripts.length;i++)
-				{
-					if (!scripts[i].src) // i.e. if it is inline JS
-					{
-						text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
-						window.setTimeout( function(text) { return function() {
-							if (!window.js_runs_test) // If JS was not run by the above op
-							{
-								eval(text);
-							} else
-							{
-								var r=document.getElementById(r_id);
-								r.parentNode.removeChild(r);
-							}
-						} }(text) , 0); // Delayed so we know DOM has loaded
-					}
-				}
 			}
+
+			if (tHTML.toLowerCase().indexOf('<script')!=-1)
+			{
+				window.js_runs_test=false;
+				var r_id='js_'+Math.random();
+				tHTML+='<script id="'+r_id+'" type="text/javascript">window.js_runs_test=true;</script>';
+
+				window.setTimeout(function() {
+					if (!window.js_runs_test) // If JS was not run by the above op
+					{
+						var scripts=element.getElementsByTagName('script');
+						for (var i=scripts_jump;i<scripts.length;i++)
+						{
+							if (!scripts[i].src) // i.e. if it is inline JS
+							{
+								var text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
+								eval(text);
+							}
+						}
+					} else
+					{
+						var r=document.getElementById(r_id);
+						r.parentNode.removeChild(r);
+					}
+				}, 0); // Delayed so we know DOM has loaded
+			}
+
 			window.setTimeout( function() { fixImagesIn(element); } , 500); // Delayed so that the image dimensions can load up
+
 			return;
 		}
 		catch(ignore) {};
@@ -2308,6 +2330,97 @@ function carefulImportNode(node)
 	try {	imported=(document.importNode)?document.importNode(node,true):null; } catch (e) {};
 	if (!imported) imported=node;
 	return imported;
+}
+
+function apply_rating_highlight_and_ajax_code(initial_rating,content_type,id,type,rating,content_url,content_title,initialisation_phase)
+{
+	var i,bit;
+	for (i=1;i<=10;i++)
+	{
+		bit=document.getElementById('rating_bar_'+i+'__'+content_type+'__'+type+'__'+id);
+		if (!bit) continue;
+
+		{+START,IF,{$NOT,{$VALUE_OPTION,likes}}}
+			setOpacity(bit,(rating>=i)?1.0:0.2);
+		{+END}
+		{+START,IF,{$VALUE_OPTION,likes}}
+			setOpacity(bit,(rating==i)?1.0:0.2);
+		{+END}
+
+		if (initialisation_phase)
+		{
+			bit.onmouseover=function(i) { return function()
+			{
+				apply_rating_highlight_and_ajax_code(initial_rating,content_type,id,type,i,content_url,content_title,false);
+			} }(i);
+			bit.onmouseout=function(i) { return function()
+			{
+				apply_rating_highlight_and_ajax_code(initial_rating,content_type,id,type,initial_rating,content_url,content_title,false);
+			} }(i);
+
+			bit.onclick=function(i) {
+				return function()	{
+					var template='';
+					var replace_spot=bit;
+					while (replace_spot)
+					{
+						replace_spot=replace_spot.parentNode;
+						if (replace_spot.className.match(/^RATING_BOX( |$)/))
+						{
+							template='RATING_BOX';
+							break;
+						}
+						if (replace_spot.className.match(/^RATING_INLINE_STATIC( |$)/))
+						{
+							template='RATING_INLINE_STATIC';
+							break;
+						}
+						if (replace_spot.className.match(/^RATING_INLINE_DYNAMIC( |$)/))
+						{
+							template='RATING_INLINE_DYNAMIC';
+							break;
+						}
+					}
+					var snippet_request='rating&type='+window.encodeURIComponent(type)+'&id='+window.encodeURIComponent(id)+'&content_type='+window.encodeURIComponent(content_type)+'&template='+window.encodeURIComponent(template)+'&content_url='+window.encodeURIComponent(content_url)+'&content_title='+window.encodeURIComponent(content_title);
+					var message=load_snippet(snippet_request,'rating='+window.encodeURIComponent(i),function(ajax_result) {
+						var message=ajax_result.responseText;
+						setInnerHTML((template=='')?bit.parentNode.parentNode.parentNode.parentNode:replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
+					});
+				}
+			}(i);
+		}
+	}
+}
+
+function click_link(link)
+{
+	var cancelled=false;
+
+	var backup=link.onclick;
+
+	link.onclick=function(e) { if (!e) e=window.event; cancelBubbling(e); };
+
+	if ((typeof document.createEvent!='undefined') && (document.createEvent))
+	{
+		var event=document.createEvent('MouseEvents');
+		event.initMouseEvent('click',true,true,window,
+			0,0,0,0,0,
+			false,false,false,false,
+			0,null
+		);
+		cancelled=!link.dispatchEvent(event);
+	}
+	else if (typeof link.fireEvent!='undefined')
+	{
+		cancelled=!link.fireEvent('onclick');
+	}
+	link.onclick=backup;
+
+	if (!cancelled)
+	{
+		if (link.getAttribute('target')) window.open(link.href,link.getAttribute('target'));
+		window.location=link.href;
+	}
 }
 
 function replace_comments_form_with_ajax(options,hash)
@@ -2347,113 +2460,97 @@ function replace_comments_form_with_ajax(options,hash)
 				if (comments_form.elements[i].name)
 					post+='&'+comments_form.elements[i].name+'='+window.encodeURIComponent(cleverFindValue(comments_form,comments_form.elements[i]));
 			}
-
-			var ajax_result=load_XML_doc('{$FIND_SCRIPT;,post_comment}'+keep_stub(true),null,post);
-
-			if (ajax_result.responseText!='')
-			{
-				// Display
-				setInnerHTML(comments_wrapper,ajax_result.responseText);
-
-				// Collapse, so user can see what happening
-				toggleSectionInline('comments_outer','block');
-
-				// Set fade for posts not shown before
-				var known_posts=get_elements_by_class_name(comments_wrapper,'post');
-				for (var i=0;i<known_posts.length;i++)
+			do_ajax_request('{$FIND_SCRIPT;,post_comment}'+keep_stub(true),function(ajax_result) {
+				if (ajax_result.responseText!='')
 				{
-					if (!known_times.inArray(known_posts[i].className.replace(/^post /,'')))
-					{
-						setOpacity(known_posts[i],0.0);
-						nereidFade(known_posts[i],100,20,5);
-					}
-				}
+					// Display
+					setInnerHTML(comments_wrapper,ajax_result.responseText);
 
-				// And re-attach this code (got killed by setInnerHTML)
-				replace_comments_form_with_ajax(options,hash);
-			} else // Error: do a normal post so error can be seen
-			{
-				comments_form.submit();
-				return true;
-			}
+					// Collapse, so user can see what happening
+					toggleSectionInline('comments_posting_form_outer','block');
+
+					// Set fade for posts not shown before
+					var known_posts=get_elements_by_class_name(comments_wrapper,'post');
+					for (var i=0;i<known_posts.length;i++)
+					{
+						if (!known_times.inArray(known_posts[i].className.replace(/^post /,'')))
+						{
+							setOpacity(known_posts[i],0.0);
+							nereidFade(known_posts[i],100,20,5);
+						}
+					}
+
+					// And re-attach this code (got killed by setInnerHTML)
+					replace_comments_form_with_ajax(options,hash);
+				} else // Error: do a normal post so error can be seen
+				{
+					comments_form.submit();
+				}
+			},post);
 
 			return false;
 		};
 	}
 }
 
-function apply_rating_highlight_and_ajax_code(type,id,root_type,rating,self_url,self_title,initialisation_phase)
+function threaded_reply(ob,id)
 {
-	var i,bit;
-	for (i=1;i<=10;i++)
+	var form=document.getElementById('comments_form');
+
+	var parent_id_field;
+	if (typeof form.elements['parent_id']=='undefined')
 	{
-		bit=document.getElementById('rating_bar_'+i+'__'+type+'__'+id);
-		if (!bit) continue;
-
-		setOpacity(bit,(rating==i)?1.0:0.2);
-
-		if (initialisation_phase)
-		{
-			bit.onmouseover=function(i) { return function()
-			{
-				apply_rating_highlight_and_ajax_code(type,id,root_type,i,self_url,self_title,false);
-			} }(i);
-
-			bit.onclick=function(i) {
-				return function()	{
-					var template='';
-					var replace_spot=bit;
-					while (replace_spot)
-					{
-						replace_spot=replace_spot.parentNode;
-						if (replace_spot.className.match(/^RATING_BOX( |$)/))
-						{
-							template='RATING_BOX';
-							break;
-						}
-						if (replace_spot.className.match(/^RATING_INLINE( |$)/))
-						{
-							template='RATING_INLINE';
-							break;
-						}
-					}
-					var message=load_snippet('rating&type='+window.encodeURIComponent(type)+'&id='+window.encodeURIComponent(id)+'&root_type='+window.encodeURIComponent(root_type)+'&template='+window.encodeURIComponent(template)+'&self_url='+window.encodeURIComponent(self_url)+'&self_title='+window.encodeURIComponent(self_title),'rating='+window.encodeURIComponent(i));
-					setInnerHTML((template=='')?bit.parentNode.parentNode.parentNode.parentNode:replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
-				}
-			}(i);
-		}
+		parent_id_field=document.createElement('input');
+		parent_id_field.type='hidden';
+		parent_id_field.name='parent_id';
+		form.appendChild(parent_id_field);
+	} else
+	{
+		parent_id_field=form.elements['parent_id'];
+		document.getElementById('post_action_link_'+parent_id_field.value).style.fontStyle='normal';
 	}
+	parent_id_field.value=id;
+
+	ob.style.fontStyle='italic';
+
+	smoothScroll(findPosY(form));
+
+	if (document.getElementById('comments_posting_form_outer').style.display=='none')
+		toggleSectionInline('comments_posting_form_outer','block');
+
+	return false;
 }
 
-function click_link(link)
+function threaded_load_more(ob,ids,id)
 {
-	var cancelled=false;
+	load_snippet('comments&id='+window.encodeURIComponent(id)+'&ids='+window.encodeURIComponent(ids)+'&serialized_options='+window.encodeURIComponent(window.comments_serialized_options)+'&hash='+window.encodeURIComponent(window.comments_hash),null,function(ajax_result) {
+		var wrapper;
+		if (id!='')
+		{
+			wrapper=document.getElementById('post_children_'+id);
+		} else
+		{
+			wrapper=ob.parentNode;
+		}
+		ob.parentNode.removeChild(ob);
 
-	var backup=link.onclick;
+		setInnerHTML(wrapper,ajax_result.responseText,true);
 
-	link.onclick=function(e) { if (!e) e=window.event; cancelBubbling(e); };
+		window.setTimeout(function() {
+			if (typeof window.nereidFade!='undefined')
+			{
+				var _ids=ids.split(',');
+				for (var i=0;i<_ids.length;i++)
+				{
+					var element=document.getElementById('post_'+_ids[i]);
+					setOpacity(element,0);
+					nereidFade(element,100,30,10);
+				}
+			}
+		},0);
+	});
 
-	if (typeof document.createEvent!='undefined')
-	{
-		var event=document.createEvent('MouseEvents');
-		event.initMouseEvent('click',true,true,window,
-			0,0,0,0,0,
-			false,false,false,false,
-			0,null
-		);
-		cancelled=!link.dispatchEvent(event);
-	}
-	else if (typeof link.fireEvent!='undefined')
-	{
-		cancelled=!link.fireEvent('onclick');
-	}
-	link.onclick=backup;
-
-	if (!cancelled)
-	{
-		if (link.getAttribute('target')) window.open(link.href,link.getAttribute('target'));
-		window.location=link.href;
-	}
+	return false;
 }
 
 {+START,INCLUDE,JAVASCRIPT_MODALWINDOW}{+END}

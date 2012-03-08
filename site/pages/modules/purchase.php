@@ -238,7 +238,7 @@ class Module_purchase
 
 		/*if (is_guest())
 		{
-			$register=$GLOBALS['FORUM_DRIVER']->join_link();
+			$register=$GLOBALS['FORUM_DRIVER']->join_url();
 			if (is_object($register)) $register=$register->evaluate();
 			$_redirect=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 			$redirect=$_redirect->evaluate();

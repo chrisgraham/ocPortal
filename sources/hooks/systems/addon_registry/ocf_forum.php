@@ -1004,7 +1004,7 @@ class Hook_addon_registry_ocf_forum
 
 			$results_browser = placeholder_result_browser();
 
-			$quick_reply = do_lorem_template('COMMENTS',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST'=>lorem_paragraph_html(),'USE_CAPTCHA'=>false,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>false,'POST_WARNING'=>'','COMMENT_TEXT'=>'','EM'=>placeholder_emoticon_chooser(),'EXPAND_TYPE'=>'expand','DISPLAY'=>'','MORE_URL'=>placeholder_url(),'FIRST_POST_URL'=>placeholder_url(),'COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_word(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
+			$quick_reply = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST'=>lorem_paragraph_html(),'USE_CAPTCHA'=>false,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>false,'POST_WARNING'=>'','COMMENT_TEXT'=>'','EM'=>placeholder_emoticon_chooser(),'EXPAND_TYPE'=>'expand','DISPLAY'=>'','MORE_URL'=>placeholder_url(),'FIRST_POST_URL'=>placeholder_url(),'COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_word(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
 
 			$poll = new ocp_tempcode();
 			$num_choices = do_lorem_template('PARAGRAPH',array('TEXT'=>lorem_phrase(),'CLASS'=>lorem_word()));

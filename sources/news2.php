@@ -29,7 +29,7 @@ function import_wordpress_db()
 	$is_validated=post_param_integer('wp_auto_validate',0);
 	$to_own_account=post_param_integer('wp_add_to_own',0);	
 
-	//Create members
+	// Create members
 	require_code('ocf_members_action');
 	require_code('ocf_groups');
 
@@ -40,50 +40,50 @@ function import_wordpress_db()
 	
 	$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 
-	foreach($data as $values)
+	foreach ($data as $values)
 	{
-		if(get_forum_type()=='ocf')
+		if (get_forum_type()=='ocf')
 		{
 			$member_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$values['user_login']));
 
-			if(is_null($member_id))
+			if (is_null($member_id))
 			{
 				if (post_param_integer('wp_import_wordpress_users',0)==1)
 				{
 					$member_id=ocf_make_member($values['user_login'],$values['user_pass'],'',NULL,NULL,NULL,NULL,array(),NULL,$def_grp_id,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,'',1,1,'',NULL,'',false,'wordpress');
 				} else
 				{
-					$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username('admin');	//Set admin as owner
+					$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username('admin');	// Set admin as owner
 					if (is_null($member_id)) $member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id()+1;
 				}
 			}
 		}
 		else
-			$member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id(); //Guest user
+			$member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // Guest user
 
-		//If post should go to own account
-		if($to_own_account==1)	$member_id=get_member();			
+		// If post should go to own account
+		if ($to_own_account==1)	$member_id=get_member();			
 		
-		if(array_key_exists('POSTS',$values))
+		if (array_key_exists('POSTS',$values))
 		{
-			//Create posts in blog
-			foreach($values['POSTS'] as $post_id=>$post)
+			// Create posts in blog
+			foreach ($values['POSTS'] as $post_id=>$post)
 			{	
-				if(array_key_exists('category',$post))
+				if (array_key_exists('category',$post))
 				{	
 					$cat_id=array();
-					foreach($post['category'] as $cat_code=>$category)
+					foreach ($post['category'] as $cat_code=>$category)
 					{	
 						$cat_code=NULL;
-						if($category=='Uncategorized')	continue;	//Skip blank category creation
-						foreach($NEWS_CATS as $id=>$existing_cat)
+						if ($category=='Uncategorized')	continue;	// Skip blank category creation
+						foreach ($NEWS_CATS as $id=>$existing_cat)
 						{
 							if (get_translated_text($existing_cat['nc_title'])==$category)
 							{
 								$cat_code=$id;
 							}
 						}
-						if(is_null($cat_code))	//Cound not find existing category, create new
+						if (is_null($cat_code))	// Cound not find existing category, create new
 						{
 							$cat_code=add_news_category($category,'newscats/community',$category);
 							$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'));	
@@ -95,27 +95,27 @@ function import_wordpress_db()
 
 				$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$member_id));
 	
-				if($post['post_type']=='post')	//Posts
+				if ($post['post_type']=='post') // Posts
 				{
 					$id=add_news($post['post_title'],html_to_comcode($post['post_content']),NULL,$is_validated,1,($post['comment_status']=='closed')?0:1,1,'',html_to_comcode($post['post_content']),$owner_category_id,$cat_id,NULL,$member_id,0,time(),NULL,'');
 				}
-				elseif($post['post_type']=='page' )	// page/articles
+				elseif ($post['post_type']=='page') // Page/articles
 				{
-					//If dont have permission to write comcode page, skip the post
+					// If dont have permission to write comcode page, skip the post
 					if (!has_submit_permission('high',get_member(),get_ip_address(),NULL,NULL))	continue;
 					
 					require_code('comcode');
-					//Save articles as new comcode pages
+					// Save articles as new comcode pages
 					$zone=filter_naughty(post_param('zone','site'));
 					$lang=filter_naughty(post_param('lang','EN'));
-					$file=preg_replace('/[^A-Za-z0-9]/','_',$post['post_title']);	//Filter non alphanumeric charactors
+					$file=preg_replace('/[^A-Za-z0-9]/','_',$post['post_title']); // Filter non alphanumeric charactors
 					$parent_page=post_param('parent_page','');
 					$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$file.'.txt');
 
-					//Check existancy of new page
+					// Check existancy of new page
 					$submiter=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 	
-					if(!is_null($submiter)) continue; //Skip existing titled articles	- may need change
+					if (!is_null($submiter)) continue; // Skip existing titled articles	- may need change
 				
 					require_code('submit');
 					give_submit_points('COMCODE_PAGE_ADD');
@@ -149,25 +149,39 @@ function import_wordpress_db()
 					require_code('permissions2');
 					set_page_permissions_from_environment($zone,$file);
 				}
-	
-				$self_url=get_self_url();
-				$self_title=$post['post_title'];
-				$home_link=is_null($self_title)?new ocp_tempcode():hyperlink($self_url,escape_html($self_title));
-	
-				//Add comments
-				if(post_param_integer('wp_import_blog_comments',0)==1)
+
+				$content_url=build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news'),NULL,false,false,true);
+				$content_title=$post['post_title'];
+
+				// Add comments
+				if (post_param_integer('wp_import_blog_comments',0)==1)
 				{
-					if(array_key_exists('COMMENTS',$post))
+					if (array_key_exists('COMMENTS',$post))
 					{
 						$submitter=NULL;
-						foreach($post['COMMENTS'] as $comment)
+						foreach ($post['COMMENTS'] as $comment)
 						{
 							$submitter=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$comment['comment_author']));
-		
-							if(is_null($submitter))	$submitter=1;	//If comment is done by a nonmember, assign comment to guest account
-							
+
+							if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // If comment is made by a non-member, assign comment to guest account
+
 							$forum=(is_null(get_value('comment_forum__news')))?get_option('comments_forum_name'):get_value('comment_forum__news');
-							$result=$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum,$post['post_title'],$submitter,$comment['comment_content'],'',$home_link,NULL,NULL,1,1,false,array($post['post_title'],do_lang('COMMENT').': #news_'.strval($id),is_object($self_url)?$self_url->evaluate():$self_url));
+
+							$result=$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+								$forum,
+								'news_'.strval($id),
+								$submitter,
+								$post['post_title'],
+								$comment['comment_content'],
+								$content_title,
+								do_lang('COMMENT'),
+								$content_url,
+								NULL,
+								NULL,
+								1,
+								1,
+								false
+							);
 						}
 					}
 				}
@@ -190,33 +204,33 @@ function get_wordpress_data()
 	$db_passwrod=post_param('wp_db_password');
 	$db_table_prefix=post_param('wp_table_prefix');
 
-	//Create db driver
+	// Create DB connection
 	$db=new database_driver($db_name,$host_name,$db_user,$db_passwrod,$db_table_prefix);
 
 	$row=$db->query('SELECT * FROM '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_users');
 
 	$data=array();
-	foreach($row as $users)
+	foreach ($row as $users)
 	{
 		$user_id=$users['ID'];
 		$data[$user_id]=$users;
-		//Fetch user posts
-		$row1=$db->query('SELECT * FROM '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_posts WHERE post_author='.strval($user_id).' AND (post_type=\'post\' OR post_type=\'page\')');	
-		foreach($row1 as $posts)
+		// Fetch user posts
+		$row1=$db->query('SELECT * FROM '.$db_table_prefix.'_posts WHERE post_author='.strval($user_id).' AND (post_type=\'post\' OR post_type=\'page\')');	
+		foreach ($row1 as $posts)
 		{
 			$post_id=$posts['ID'];
 			$data[$user_id]['POSTS'][$post_id]=$posts;
 
-			//get categories
-			$row3=$db->query('SELECT t1.slug,t1.name FROM '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_terms t1,'.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_term_relationships t2 WHERE t1.term_id=t2.term_taxonomy_id AND t2.object_id='.strval($post_id));
+			// Get categories
+			$row3=$db->query('SELECT t1.slug,t1.name FROM '.$db_table_prefix.'_terms t1,'.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_term_relationships t2 WHERE t1.term_id=t2.term_taxonomy_id AND t2.object_id='.strval($post_id));
 
-			foreach($row3 as $categories)
+			foreach ($row3 as $categories)
 			{
 				$data[$user_id]['POSTS'][$post_id]['category'][$categories['slug']]=$categories['name'];
 			}
-			//Comments
-			$row2=$db->query('SELECT * FROM '.db_escape_string($db_name).'.'.db_escape_string($db_table_prefix).'_comments WHERE comment_post_ID='.strval($post_id).' AND comment_approved=1');
-			foreach($row2 as $comments)
+			// Comments
+			$row2=$db->query('SELECT * FROM '.$db_table_prefix.'_comments WHERE comment_post_ID='.strval($post_id).' AND comment_approved=1');
+			foreach ($row2 as $comments)
 			{
 				$comment_id=$comments['comment_ID'];
 				$data[$user_id]['POSTS'][$post_id]['COMMENTS'][$comment_id]=$comments;

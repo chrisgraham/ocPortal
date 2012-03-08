@@ -109,7 +109,7 @@ function update_ticket_type_lead_times()
 			if (($topic['num']<2) || (($topic['firstusername']==do_lang('SYSTEM')) && ($topic['num']<3)))
 				continue;
 
-			$ticket_id=($topic['description']=='')?sanitise_topic_title($topic['title']):sanitise_topic_description($topic['description']);
+			$ticket_id=extract_topic_identifier($topic['description']);
 			$_forum=1; $_topic_id=1; $_ticket_type=1; // These will be returned by reference
 			$posts=get_ticket_posts($ticket_id,$_forum,$_topic_id,$_ticket_type);
 
@@ -215,7 +215,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type)
 {
 	$ticket=$GLOBALS['SITE_DB']->query_select('tickets',NULL,array('ticket_id'=>$ticket_id),'',1,NULL,true);
-	if (count($ticket)==1)
+	if (count($ticket)==1) // We know about it, so grab details from tickets table
 	{
 		$ticket_type=$ticket[0]['ticket_type'];
 		if (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type)))
@@ -224,21 +224,15 @@ function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type)
 		$forum=$ticket[0]['forum_id'];
 		$topic_id=$ticket[0]['topic_id'];
 		$count=0;
-		return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$ticket_id,$ticket_id,$count);
+		return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$ticket_id),$count);
 	}
 
 	// It must be an old-style ticket, residing in the root ticket forum
 	$forum=get_ticket_forum_id();
-	$topic_id=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($ticket_id,get_option('ticket_forum_name'));
+	$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('ticket_forum_name'),$ticket_id);
 	$ticket_type=NULL;
 	$count=0;
-	$ret=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$ticket_id,'',$count);
-	if (!is_array($ret)) // Or maybe it's just the 'tickets' row is missing, due to some mid-way error
-	{
-		$count=0;
-		$ret=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$ticket_id,$ticket_id,$count);
-	}
-	return $ret;
+	return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$ticket_id),$count);
 }
 
 /**
@@ -260,18 +254,34 @@ function delete_ticket_by_topic_id($topic_id)
  * @param  integer		The ticket type
  * @param  LONG_TEXT		The post title
  * @param  LONG_TEXT		The post content in Comcode format
- * @param  tempcode		The home link
  * @param  string			The home URL
  * @param  boolean		Whether the reply is staff only (invisible to ticket owner, only on OCF)
  * @return boolean		Success?
  */
-function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$home_link,$ticket_url,$staff_only=false)
+function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_url,$staff_only=false)
 {
 	// Get the forum ID first
 	$fid=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','forum_id',array('ticket_id'=>$ticket_id));
 	if (is_null($fid)) $fid=get_ticket_forum_id($member,$ticket_type);
 
-	$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($fid,$ticket_id,$member,$post,$title,$home_link,NULL,NULL,1,1,false,array($title,do_lang('SUPPORT_TICKET').': #'.$ticket_id,$ticket_url,$staff_only));
+	$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+		$fid,
+		$ticket_id,
+		$member,
+		$title,
+		$post,
+		$title,
+		do_lang('SUPPORT_TICKET'),
+		$ticket_url,
+		NULL,
+		NULL,
+		1,
+		1,
+		false,
+		'',
+		NULL,
+		$staff_only
+	);
 	$topic_id=$GLOBALS['LAST_TOPIC_ID'];
 	$is_new=$GLOBALS['LAST_TOPIC_IS_NEW'];
 	if ($is_new)
@@ -302,6 +312,8 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 	$new_ticket=($ticket_type_if_new!=-1);
 
 	$ticket_type_id=$GLOBALS['SITE_DB']->query_value('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+
+	$ticket_type_text=mixed();
 
 	if (($uid!=get_member()) && (!is_guest($uid)))
 	{

@@ -1,5 +1,5 @@
 {+START,BOX,,,light}
-	<div class="post time_{TIME_RAW*}"{$?,{$VALUE_OPTION,html5}, itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review"}>
+	<div id="post_{ID*}" class="post time_{TIME_RAW*}"{$?,{$VALUE_OPTION,html5}, itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review"}>
 		{+START,IF_NON_EMPTY,{TITLE}}<h3 class="post_title">{TITLE*}</h3>{+END}
 		{+START,IF_NON_EMPTY,{$AVATAR,{POSTER_ID}}}
 			<img class="post_avatar" src="{$AVATAR*,{POSTER_ID}}" alt="{!AVATAR}" title="" />
@@ -16,11 +16,18 @@
 			</span>
 
 			{+START,IF_NON_EMPTY,{EDIT_URL}}
-				<span class="post_edit_link">(<a href="{EDIT_URL*}">{!EDIT}</a>)</span>
+				<span class="post_action_link">(<a href="{EDIT_URL*}">{!EDIT}</a>)</span>
 			{+END}
-			{+START,IF,{$HAS_JS}}{+START,IF_PASSED,POST_COMCODE}
-				<span class="post_edit_link">(<a onclick="document.getElementById('post').focus(); document.getElementById('post').value='[quote=\'{POSTER_NAME*;}\']{POST_COMCODE*;}[/quote]\n\n'; return false;" href="#last_comment">{!ocf:QUOTE_POST}</a>)</span>
-			{+END}{+END}
+
+			{+START,IF_NON_PASSED,CHILDREN}
+				{+START,IF,{$HAS_JS}}{+START,IF_PASSED,POST_COMCODE}
+					<span class="post_action_link">(<a onclick="document.getElementById('post').focus(); document.getElementById('post').value='[quote=\'{POSTER_NAME*;}\']{POST_COMCODE*;}[/quote]\n\n'; return false;" href="#last_comment">{!ocf:QUOTE_POST}</a>)</span>
+				{+END}{+END}
+			{+END}
+
+			{+START,IF_PASSED,RATING}
+				<span class="post_action_link">{RATING}</span>
+			{+END}
 
 			{+START,LOOP,INDIVIDUAL_REVIEW_RATINGS}
 				{+START,IF_PASSED,REVIEW_RATING}
@@ -46,6 +53,22 @@
 		<div{+START,IF,{HIGHLIGHT}} class="highlighted_post"{+END}{$?,{$VALUE_OPTION,html5}, itemprop="reviewBody"}>
 			{POST}
 		</div>
+
+		{+START,IF_PASSED,CHILDREN}
+			<p class="post_subline">
+				{+START,IF,{$HAS_JS}}{+START,IF_PASSED,POST_COMCODE}
+					<span class="post_action_link">(<a id="post_action_link_{ID*}" onclick="return threaded_reply(this,'{ID;}');" href="#last_comment">{!ocf:REPLY}</a>)</span>
+				{+END}{+END}
+			</p>
+		{+END}
+
+		{+START,IF_PASSED,CHILDREN}
+			<div id="post_children_{ID*}" class="post_thread_children">
+				{CHILDREN}
+			</div>
+		{+END}
+		{+START,INCLUDE,POST_CHILD_LOAD_LINK}{+END}
 	</div>
 {+END}
+
 <br />

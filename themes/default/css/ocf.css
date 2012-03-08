@@ -224,10 +224,13 @@
 
 .ocf_post_details_date {
 	float: {!en_left};
-	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 25em;
-	{+END}
 	padding-{!en_left}: 4px;
+}
+
+.ocf_post_details_rating {
+	float: {!en_left};
+	padding-{!en_left}: 20px;
+	white-space: nowrap;
 }
 
 .ocf_post_details_unvalidated {

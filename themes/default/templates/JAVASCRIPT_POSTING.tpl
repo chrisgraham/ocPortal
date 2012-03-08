@@ -641,7 +641,7 @@ function init_form_saving()
 
 			if ((cookie_value!='') && (cookie_value!='0'))
 			{
-				result=load_XML_doc('{$FIND_SCRIPT;,autosave}?type=retrieve'+keep_stub(),false,'key='+window.encodeURIComponent(cookie_name));
+				result=do_ajax_request('{$FIND_SCRIPT;,autosave}?type=retrieve'+keep_stub(),false,'key='+window.encodeURIComponent(cookie_name));
 				if ((result) && (result.responseText) && (posting_form.elements[i].value.length<result.responseText.length))
 				{
 					fields_to_do[name]=result.responseText;
@@ -711,7 +711,7 @@ function handle_form_saving(event,target,force)
 	var value=getTextbox(target)+String.fromCharCode(event.keyCode?event.keyCode:event.charCode);
 	SetCookie(encodeURIComponent(cookie_name),'1',1);
 	require_javascript('javascript_ajax');
-	load_XML_doc('{$FIND_SCRIPT_NOHTTP;,autosave}?type=store'+keep_stub(),function() { },'key='+window.encodeURIComponent(cookie_name)+'&value='+window.encodeURIComponent(value));
+	do_ajax_request('{$FIND_SCRIPT_NOHTTP;,autosave}?type=store'+keep_stub(),function() { },'key='+window.encodeURIComponent(cookie_name)+'&value='+window.encodeURIComponent(value));
 
 	window.last_autosave=this_date;
 }

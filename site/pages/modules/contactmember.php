@@ -122,7 +122,7 @@ class Module_contactmember
 		$redirect=get_param('redirect','');
 		if ($redirect=='')
 		{
-			$redirect=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id,false,true);
+			$redirect=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 			if (is_object($redirect)) $redirect=$redirect->evaluate();
 		}
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual','id'=>$member_id,'redirect'=>$redirect),'_SELF');

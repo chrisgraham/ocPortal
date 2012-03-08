@@ -34,7 +34,7 @@ function realms()
 			$url='';
 		} else
 		{
-			$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($myrow['owner'],false,true);
+			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['owner'],false,true);
 		}
 		if ($myrow['r_private']==1) $pp=do_lang_tempcode('W_PRIVATE_REALM'); else $pp=do_lang_tempcode('W_PUBLIC_REALM');
 		$rooms=$GLOBALS['SITE_DB']->query_value('w_rooms','COUNT(*)',array('location_realm'=>$myrow['id']));
@@ -223,7 +223,7 @@ function output_room_screen($member_id)
 			$style='ocw_other_member';
 		}
 
-		if ($id<0) $member_url=''; else $member_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($id,false,true);
+		if ($id<0) $member_url=''; else $member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 
 		$members->attach(do_template('W_MAIN_MEMBER',array('_GUID'=>'83d9f930b68d4988b009b3c06ef783e9','HEALTH'=>integer_format($health),'ID'=>strval($id),'MEMBER_URL'=>$member_url,'STYLE'=>$style,'NAME'=>$name,'AUX'=>$aux)));
 	}

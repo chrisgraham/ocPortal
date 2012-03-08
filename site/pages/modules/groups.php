@@ -381,7 +381,7 @@ class Module_groups
 			$primary_members=new ocp_tempcode();
 			foreach ($_primary_members as $i=>$primary_member)
 			{
-				$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($primary_member['gm_member_id'],false,true);
+				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($primary_member['gm_member_id'],false,true);
 				$temp=do_template('OCF_VIEW_GROUP_MEMBER',array('_GUID'=>'b96b674ac713e9790ecb78c15af1baab','NAME'=>$primary_member['m_username'],'URL'=>$url));
 				$primary_members->attach(results_entry(array($temp)));
 			}
@@ -403,13 +403,13 @@ class Module_groups
 			$m_username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($secondary_member['gm_member_id'],'m_username');
 			if ($secondary_member['gm_validated']==1)
 			{
-				$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($secondary_member['gm_member_id'],false,true);
+				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($secondary_member['gm_member_id'],false,true);
 				$remove_url=build_url(array('page'=>'_SELF','type'=>'remove_from','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
 				$temp=do_template('OCF_VIEW_GROUP_MEMBER'.(ocf_may_control_group($id,get_member())?'_SECONDARY':''),array('REMOVE_URL'=>$remove_url,'NAME'=>$m_username,'URL'=>$url));
 				$secondary_members->attach(results_entry(array($temp)));
 			} elseif (!$add_url->is_empty())
 			{
-				$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($secondary_member['gm_member_id'],false,true);
+				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($secondary_member['gm_member_id'],false,true);
 				$accept_url=build_url(array('page'=>'_SELF','type'=>'accept','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
 				$decline_url=build_url(array('page'=>'_SELF','type'=>'decline','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
 				$temp=do_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE',array('_GUID'=>'16e93cf50a14e3b6a3bdf31525fd5e7f','ACCEPT_URL'=>$accept_url,'DECLINE_URL'=>$decline_url,'NAME'=>$m_username,'URL'=>$url));
@@ -599,7 +599,7 @@ class Module_groups
 				{
 					$leader_username=$GLOBALS['FORUM_DRIVER']->get_username($_leader);
 					if (is_null($leader_username)) $leader_username=do_lang('UNKNOWN');
-					$leader_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($_leader,false,true);
+					$leader_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($_leader,false,true);
 					$text=do_lang_tempcode('ABOUT_TO_APPLY_LEADER',escape_html($name),escape_html($leader_username),escape_html($leader_url));
 				}
 			}

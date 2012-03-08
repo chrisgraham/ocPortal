@@ -56,12 +56,12 @@ function form_submission(command)
 	//Catch the data being submitted by the form, and send it through XMLHttpRequest if possible. Stop the form submission if this is achieved.
 	//var command=document.getElementById("occle_command").value;
 
-	if ((window.ajax_supported) && (window.load_XML_doc) && (ajax_supported()))
+	if ((window.ajax_supported) && (window.do_ajax_request) && (ajax_supported()))
 	{
 		//Send it through XMLHttpRequest, and append the results.
 		document.getElementById("occle_command").focus();
 		document.getElementById("occle_command").disabled=true;
-		load_XML_doc("{$BASE_URL_NOHTTP#}/data/occle.php"+keep_stub(true),occle_command_response,"command="+window.encodeURIComponent(command));
+		do_ajax_request("{$BASE_URL_NOHTTP#}/data/occle.php"+keep_stub(true),occle_command_response,"command="+window.encodeURIComponent(command));
 		window.disable_timeout=window.setTimeout( function() {
 			document.getElementById("occle_command").disabled=false;
 			document.getElementById("occle_command").focus();

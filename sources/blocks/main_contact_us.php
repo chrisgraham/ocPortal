@@ -94,7 +94,7 @@ class Block_main_contact_us
 			// Comment posts
 			$forum=get_option('messaging_forum_name');
 			$count=0;
-			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$type.'_'.$id,'',$count);
+			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$type.'_'.$id),$count);
 
 			if ($_comments!==-1)
 			{
@@ -115,7 +115,7 @@ class Block_main_contact_us
 					}
 				} else $use_captcha=false;
 
-				$comment_details=do_template('COMMENTS',array('JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'EMAIL_OPTIONAL'=>$email_optional,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$box_title));
+				$comment_details=do_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'EMAIL_OPTIONAL'=>$email_optional,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$box_title));
 
 				$notifications_enabled=NULL;
 				$notification_change_url=NULL;

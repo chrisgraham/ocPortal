@@ -618,7 +618,7 @@ class Hook_phpbb3
 				$rules=do_lang('FORUM_PASSWORD_TO_INTRO_QUESTION');
 			}
 
-			$id_new=ocf_make_forum($name,$description,$category_id,NULL,$parent_forum,$position,$post_count_increment,0,$rules,$answer,$row['forum_link']);
+			$id_new=ocf_make_forum($name,$description,$category_id,NULL,$parent_forum,$position,$post_count_increment,0,$rules,$answer,$row['forum_url']);
 
 			$permissions=$db->query('SELECT * FROM '.$table_prefix.'acl_groups WHERE forum_id='.strval((integer)$row['forum_id']));
 			foreach ($permissions as $p)

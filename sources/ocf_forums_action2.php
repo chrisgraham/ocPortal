@@ -76,9 +76,10 @@ function ocf_delete_category($category_id,$target_category_id)
  * @param  SHORT_TEXT	The answer to the question (blank: no specific answer.. if there's a 'question', it just requires a click-through).
  * @param  SHORT_TEXT	Either blank for no redirection, the ID of another forum we are mirroring, or a URL to redirect to.
  * @param  ID_TEXT		The order the topics are shown in, by default.
+ * @param  BINARY			Whether the forum is threaded.
  * @param  boolean		Whether to force forum rules to be re-agreed to, if they've just been changed.
  */
-function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection='',$order='last_post',$reset_intro_acceptance=false)
+function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection='',$order='last_post',$is_threaded=0,$reset_intro_acceptance=false)
 {
 	if ($category_id==-1) $category_id=NULL;
 	if ($new_parent==-1) $new_parent=NULL;
@@ -114,6 +115,7 @@ function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$p
 		'f_post_count_increment'=>$post_count_increment,
 		'f_redirection'=>$redirection,
 		'f_order'=>$order,
+		'f_is_threaded'=>$is_threaded,
 	),array('id'=>$forum_id),'',1);
 
 	if ($old_name!=$name)

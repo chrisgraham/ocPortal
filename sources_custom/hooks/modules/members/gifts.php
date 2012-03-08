@@ -55,7 +55,7 @@ class Hook_members_gifts
 				if($gift['is_anonymous']==0)
 				{
 					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_user_id']);
-					$sender_link=$GLOBALS['FORUM_DRIVER']->member_profile_link($gift['from_user_id']);
+					$sender_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_user_id']);
 					$gift_explanation=do_lang('GIFT_EXPLANATION1',$sender_name,$gift_info[0]['name'],$sender_link);
 				} else
 				{

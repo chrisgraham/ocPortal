@@ -98,9 +98,10 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
  * @param  boolean		Whether to skip post checks
  * @param  boolean		Whether this is for a new Private Topic
  * @param  boolean		Whether to explicitly insert the Comcode with admin privileges
+ * @param  ?AUTO_LINK	Parent post ID (NULL: none-threaded/root-of-thread)
  * @return AUTO_LINK		The ID of the new post.
  */
-function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false,$insert_comcode_as_admin=false)
+function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false,$insert_comcode_as_admin=false,$parent_id=NULL)
 {
 	if (is_null($poster)) $poster=get_member();
 
@@ -206,7 +207,8 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		'p_last_edit_time'=>$last_edit_time,
 		'p_last_edit_by'=>$last_edit_by,
 		'p_intended_solely_for'=>$intended_solely_for,
-		'p_skip_sig'=>$skip_sig
+		'p_skip_sig'=>$skip_sig,
+		'p_parent_id'=>$parent_id
 	);
 	if (!is_null($id)) $map['id']=$id;
 	$post_id=$GLOBALS['FORUM_DB']->query_insert('f_posts',$map,true);

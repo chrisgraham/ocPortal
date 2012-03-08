@@ -62,7 +62,7 @@
  */
 function fb()
 {
-  $instance =& FirePHP::getInstance(true);
+  $instance = @FirePHP::getInstance(true);
 
   $args = func_get_args();
   return call_user_func_array(array(&$instance,'fb'),$args);
@@ -79,7 +79,7 @@ class FB
    * @return void
    */
   function setEnabled($Enabled) {
-    $instance =& FirePHP::getInstance(true);
+    $instance = @FirePHP::getInstance(true);
     $instance->setEnabled($Enabled);
   }
 
@@ -90,7 +90,7 @@ class FB
    * @return boolean TRUE if enabled
    */
   function getEnabled() {
-    $instance =& FirePHP::getInstance(true);
+    $instance = @FirePHP::getInstance(true);
     return $instance->getEnabled();
   }  
 
@@ -105,7 +105,7 @@ class FB
    * @return void
    */
   function setObjectFilter($Class, $Filter) {
-    $instance =& FirePHP::getInstance(true);
+    $instance = @FirePHP::getInstance(true);
     $instance->setObjectFilter($Class, $Filter);
   }
 
@@ -117,7 +117,7 @@ class FB
    * @return void
    */
   function setOptions($Options) {
-    $instance =& FirePHP::getInstance(true);
+    $instance = @FirePHP::getInstance(true);
     $instance->setOptions($Options);
   }
 
@@ -128,7 +128,7 @@ class FB
    * @return array The options
    */
   function getOptions() {
-    $instance =& FirePHP::getInstance(true);
+    $instance = @FirePHP::getInstance(true);
     return $instance->getOptions();
   }
 
@@ -141,7 +141,7 @@ class FB
    */
   function send()
   {
-    $instance =& FirePHP::getInstance(true);
+    $instance = @FirePHP::getInstance(true);
     $args = func_get_args();
     return call_user_func_array(array(&$instance,'fb'),$args);
   }
@@ -158,7 +158,7 @@ class FB
    * @return true
    */
   function group($Name, $Options=null) {
-    $instance =& FirePHP::getInstance(true);
+    $instance = @FirePHP::getInstance(true);
     return $instance->group($Name, $Options);
   }
 

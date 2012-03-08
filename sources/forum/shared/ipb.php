@@ -197,7 +197,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	/**
 	 * Pin a topic.
 	 *
-	 * @param  AUTO_LINK		The topic id
+	 * @param  AUTO_LINK		The topic ID
 	 */
 	function pin_topic($id)
 	{
@@ -254,7 +254,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the members home
 	 */
-	function member_home_link($id)
+	function member_home_url($id)
 	{
 		unset($id);
 		return get_forum_base_url().'/index.php?act=UserCP&CODE=00';
@@ -266,7 +266,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the member profile
 	 */
-	function _member_profile_link($id)
+	function _member_profile_url($id)
 	{
 		return get_forum_base_url().'/index.php?showuser='.strval($id);
 	}
@@ -276,7 +276,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the registration page
 	 */
-	function _join_link()
+	function _join_url()
 	{
 		return get_forum_base_url().'/index.php?act=Reg&CODE=00';
 	}
@@ -286,7 +286,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the members-online page
 	 */
-	function _online_link()
+	function _online_members_url()
 	{
 		return get_forum_base_url().'/index.php?act=Online&CODE=listall';
 	}
@@ -297,7 +297,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the private/personal message page
 	 */
-	function _member_pm_link($id)
+	function _member_pm_url($id)
 	{
 		return get_forum_base_url().'/index.php?act=Msg&CODE=04&MID='.strval($id);
 	}
@@ -305,19 +305,19 @@ class forum_driver_ipb_shared extends forum_driver_base
 	/**
 	 * Get a URL to the specified forum.
 	 *
-	 * @param  integer		The forum id
+	 * @param  integer		The forum ID
 	 * @return URLPATH		The URL to the specified forum
 	 */
-	function _forum_link($id)
+	function _forum_url($id)
 	{
 		return get_forum_base_url().'/index.php?showforum='.strval($id);
 	}
 	
 	/**
-	 * Get the forum id from a forum name.
+	 * Get the forum ID from a forum name.
 	 *
 	 * @param  SHORT_TEXT	The forum name
-	 * @return integer		The forum id
+	 * @return integer		The forum ID
 	 */
 	function forum_id_from_name($forum_name)
 	{
@@ -325,37 +325,30 @@ class forum_driver_ipb_shared extends forum_driver_base
 	}
 	
 	/**
-	 * Get the topic id from a topic name in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
+	 * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
 	 *
-	 * @param  SHORT_TEXT	The topic name
-	 * @param string			  The forum id
-	 * @param  SHORT_TEXT	The topic description
-	 * @return integer		The topic id
+	 * @param  string			The forum name / ID
+	 * @param  SHORT_TEXT	The topic identifier
+	 * @return integer		The topic ID
 	 */
-	function get_tid_from_topic($topic,$forum,$description='')
+	function find_topic_id_for_topic_identifier($forum,$topic_identifier)
 	{
-		if (function_exists('sanitise_topic_title')) $topic=sanitise_topic_title($topic);
-		if (function_exists('sanitise_topic_description')) $description=sanitise_topic_description($description);
-
-		if (is_integer($forum)) $fid=$forum;
-		else $fid=$this->forum_id_from_name($forum);
-		$query='SELECT tid FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$fid);
-		if ($description!='')
-			$query.=' AND ('.db_string_equal_to('description',$description).' OR description LIKE \'%: #'.db_encode_like($description).'\')';
-		else
-			$query.=' AND ('.db_string_equal_to('title',$topic).' OR title LIKE \'% (#'.db_encode_like($topic).')\')';
+		if (is_integer($forum)) $forum_id=$forum;
+		else $forum_id=$this->forum_id_from_name($forum);
+		$query='SELECT tid FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$forum_id);
+		$query.=' AND ('.db_string_equal_to('description',$topic_identifier).' OR description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
 		return $this->connection->query_value_null_ok_full($query);
 	}
 
 	/**
-	 * Get a URL to the specified topic id. Most forums don't require the second parameter, but some do, so it is required in the interface.
+	 * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
 	 *
-	 * @param  integer		The topic id
-	 * @param string			The forum id
+	 * @param  integer		The topic ID
+	 * @param string			The forum ID
 	 * @return URLPATH		The URL to the topic
 	 */
-	function topic_link($id,$forum)
+	function topic_url($id,$forum)
 	{
 		unset($forum);
 		return get_forum_base_url().'/index.php?showtopic='.strval($id).'&view=getnewpost';
@@ -365,10 +358,10 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 * Get a URL to the specified post id.
 	 *
 	 * @param  integer		The post id
-	 * @param string			The forum id
+	 * @param string			The forum ID
 	 * @return URLPATH		The URL to the post
 	 */
-	function post_link($id,$forum)
+	function post_url($id,$forum)
 	{
 		unset($forum);
 		$topic_id=$this->connection->query_value_null_ok('posts','topic_id',array('pid'=>$id));

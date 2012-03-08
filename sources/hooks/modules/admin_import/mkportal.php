@@ -462,7 +462,7 @@ END;
 		$forum_name=get_option('comments_forum_name');
 		
 		ocf_over_msn(); //used to fixed the correct forum prefix
-		$cf=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
+		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 		ocf_over_local(); //used to fixed the correct forum prefix
 		
 		/* old import reviews code, as part of the news. NOTE: now they are imported as catalogues entries
@@ -489,7 +489,7 @@ END;
 
 			// Comments
 			$comments=$db->query('SELECT * FROM '.$table_prefix.'reviews_comments WHERE id='.strval($row['review_id']).' ORDER BY data');
-			if (!is_null($cf))
+			if (!is_null($forum_id))
 			{
 				foreach ($comments as $comment)
 				{
@@ -501,10 +501,19 @@ END;
 
 					$title='';
 					$post=$comment['testo'];
-					$home_link=hyperlink(build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news')),escape_html($row['title']));
+					$content_url=build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news'));
 
 					ocf_over_msn(); //used to fixed the correct forum prefix
-					$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'news_'.strval($new_id),$member,html_to_comcode($post),$title,$home_link,$comment['data']);
+					$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+						$forum_name,
+						'news_'.strval($new_id),
+						$member,
+						$title,
+						html_to_comcode($post),
+						$row['title'],
+						do_lang('COMMENT'),
+						$content_url->evaluate()
+					);
 					ocf_over_local(); //used to fixed the correct forum prefix
 				}
 			}
@@ -560,7 +569,7 @@ END;
 
 				// Comments
 				$comments=$db->query('SELECT * FROM '.$table_prefix.'blog_commenti WHERE id_blog='.strval($blog_post['id']).' ORDER BY data');
-				if (!is_null($cf))
+				if (!is_null($forum_id))
 				{
 					foreach ($comments as $comment)
 					{
@@ -571,10 +580,19 @@ END;
 
 						$title='';
 						$post=$comment['commento'];
-						$home_link=hyperlink(build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news')),escape_html($row['titolo']));
+						$content_url=build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news'));
 
 						ocf_over_msn(); //used to fixed the correct forum prefix
-						$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'news_'.strval($new_id),$member,html_to_comcode($post),$title,$home_link,$comment['data'],$comment['home']);
+						$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+							$forum_name,
+							'news_'.strval($new_id),
+							$member,
+							$title,
+							html_to_comcode($post),
+							$row['titolo'],
+							do_lang('COMMENT'),
+							$content_url->evaluate()
+						);
 						ocf_over_local(); //used to fixed the correct forum prefix
 					}
 				}
@@ -738,7 +756,7 @@ END;
 
 			// Comments
 			$comments=$db->query('SELECT * FROM '.$table_prefix.'news_comments WHERE identry='.strval($row['id']).' ORDER BY data');
-			if (!is_null($cf))
+			if (!is_null($forum_id))
 			{
 				foreach ($comments as $comment)
 				{
@@ -749,10 +767,19 @@ END;
 
 					$title='';
 					$post=$comment['testo'];
-					$home_link=hyperlink(build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news')),escape_html($row['titolo']));
+					$content_url=build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news'));
 
 					ocf_over_msn(); //used to fixed the correct forum prefix
-					$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'news_'.strval($new_id),$member,html_to_comcode($post),$title,$home_link,$comment['data']);
+					$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+						$forum_name,
+						'news_'.strval($new_id),
+						$member,
+						$title,
+						html_to_comcode($post),
+						$row['titolo'],
+						do_lang('COMMENT'),
+						$content_url->evaluate()
+					);
 					ocf_over_local(); //used to fixed the correct forum prefix
 				}
 			}
@@ -877,12 +904,12 @@ END;
 			$forum_name=get_option('comments_forum_name');
 
 			ocf_over_msn(); //used to fixed the correct forum prefix
-			$cf=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
+			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 			ocf_over_local(); //used to fixed the correct forum prefix
 
 			// Comments
 			$comments=$db->query('SELECT * FROM '.$table_prefix.'download_comments WHERE identry='.strval($row['id']).' ORDER BY data');
-			if (!is_null($cf))
+			if (!is_null($forum_id))
 			{
 				foreach ($comments as $comment)
 				{
@@ -892,9 +919,18 @@ END;
 					ocf_over_local(); //used to fixed the correct forum prefix
 					$title='';
 					$post=$comment['testo'];
-					$home_link=hyperlink(build_url(array('page'=>'downloads','id'=>$new_id,'type'=>'view'),get_module_zone('downloads')),escape_html($row['name']));
+					$content_url=build_url(array('page'=>'downloads','id'=>$new_id,'type'=>'view'),get_module_zone('downloads'));
 					ocf_over_msn(); //used to fixed the correct forum prefix
-					$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'downloads_'.strval($new_id),$member,html_to_comcode($post),$title,$home_link,$comment['data']);
+					$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+						$forum_name,
+						'downloads_'.strval($new_id),
+						$member,
+						$title,
+						html_to_comcode($post),
+						$row['name'],
+						do_lang('COMMENT'),
+						$content_url->evaluate()
+					);
 					ocf_over_local(); //used to fixed the correct forum prefix
 				}
 			}
@@ -1032,7 +1068,7 @@ END;
 		$forum_name=get_option('comments_forum_name');
 
 		ocf_over_msn(); //used to fixed the correct forum prefix
-		$cf=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
+		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 		ocf_over_local(); //used to fixed the correct forum prefix
 
 		//now we need to import the images
@@ -1080,7 +1116,7 @@ END;
 
 			//import comments for image
 			$comments=$db->query('SELECT * FROM '.$table_prefix.'gallery_comments WHERE identry='.strval($row['id']).' ORDER BY data');
-			if (!is_null($cf))
+			if (!is_null($forum_id))
 			{
 				foreach ($comments as $comment)
 				{
@@ -1088,9 +1124,18 @@ END;
 					if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 					$title='';
 					$post=$comment['testo'];
-					$home_link=hyperlink(build_url(array('page'=>'galleries','id'=>$id_new,'type'=>'view'),get_module_zone('galleries')),escape_html($row['titolo']));
+					$content_url=build_url(array('page'=>'galleries','id'=>$id_new,'type'=>'view'),get_module_zone('galleries'));
 					ocf_over_msn(); //used to fixed the correct forum prefix
-					$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'galleries_'.strval($id_new),$member,html_to_comcode($post),$title,$home_link,$comment['data']);
+					$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+						$forum_name,
+						'galleries_'.strval($id_new),
+						$member,
+						$title,
+						html_to_comcode($post),
+						$row['titolo'],
+						do_lang('COMMENT'),
+						$content_url->evaluate()
+					);
 					ocf_over_local(); //used to fixed the correct forum prefix
 				}
 			}
@@ -1551,7 +1596,7 @@ END;
 		$forum_name=get_option('comments_forum_name');
 		
 		ocf_over_msn(); //used to fixed the correct forum prefix
-		$cf=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
+		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 		ocf_over_local(); //used to fixed the correct forum prefix
 		
 		//get specific reviews fields
@@ -1640,7 +1685,7 @@ END;
 
 				// Comments
 				$comments=$db->query('SELECT * FROM '.$table_prefix.'reviews_comments WHERE id='.strval($row['review_id']).' ORDER BY data');
-				if (!is_null($cf))
+				if (!is_null($forum_id))
 				{
 					foreach ($comments as $comment)
 					{
@@ -1652,10 +1697,19 @@ END;
 
 						$title=$row['review_title'];
 						$post=$comment['testo'];
-						$home_link=hyperlink(build_url(array('page'=>'catalogues','id'=>$new_id,'type'=>'view'),get_module_zone('catalogues')),escape_html($row['review_title']));
+						$content_url=build_url(array('page'=>'catalogues','id'=>$new_id,'type'=>'view'),get_module_zone('catalogues'));
 
 						ocf_over_msn(); //used to fixed the correct forum prefix
-						$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'reviews_'.strval($new_id),$member,html_to_comcode($post),$title,$home_link,$comment['data']);
+						$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+							$forum_name,
+							'reviews_'.strval($new_id),
+							$member,
+							$title,
+							html_to_comcode($post),
+							$row['review_title'],
+							do_lang('COMMENT'),
+							$content_url->evaluate()
+						);
 						ocf_over_local(); //used to fixed the correct forum prefix
 					}
 				}

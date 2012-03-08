@@ -166,7 +166,7 @@ class Hook_phpnuke
 		$com=$rows[0]['pollcomm'];
 	
 		$forum_name=get_option('comments_forum_name');
-		$cf=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
+		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 	
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'poll_desc');
 		foreach ($rows as $row)
@@ -196,14 +196,24 @@ class Hook_phpnuke
 
 			// Poll comments
 			$comments=$db->query('SELECT * FROM '.$table_prefix.'pollcomments WHERE pollID='.strval($row['pollID']).' ORDER BY date');
-			if (!is_null($cf)) foreach ($comments as $comment)
+			if (!is_null($forum_id)) foreach ($comments as $comment)
 			{
 				$member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($comment['name']);
 				if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 				$title=$comment['subject'];
 				$post=$comment['comment'];
-				$home_link=hyperlink(build_url(array('page'=>'polls','id'=>$id,'type'=>'view'),get_module_zone('polls')),escape_html($row['pollTitle']));
-				$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'polls_'.strval($id),$member,'[html]'.$post.'[/html]',$title,$home_link,$this->mysql_time_to_timestamp($comment['date']),$comment['host_name']);
+				$content_url=build_url(array('page'=>'polls','id'=>$id,'type'=>'view'),get_module_zone('polls'));
+				$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+					$forum_name,
+					'polls_'.strval($id),
+					$member,
+					$title,
+					'[html]'.$post.'[/html]',
+					$row['pollTitle'],
+					do_lang('COMMENT'),
+					$content_url->evaluate(),
+					$this->mysql_time_to_timestamp($comment['date'])
+				);
 			}
 		}
 	}
@@ -240,7 +250,7 @@ class Hook_phpnuke
 		$com=$rows[0]['articlecomm'];
 	
 		$forum_name=get_option('comments_forum_name');
-		$cf=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
+		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 	
 		// Reviews (imports into 'technology')
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'reviews');
@@ -260,14 +270,24 @@ class Hook_phpnuke
 
 			// Comments
 			$comments=$db->query('SELECT * FROM '.$table_prefix.'reviews_comments WHERE rid='.strval($row['id']).' ORDER BY date');
-			if (!is_null($cf)) foreach ($comments as $comment)
+			if (!is_null($forum_id)) foreach ($comments as $comment)
 			{
 				$member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($comment['userid']);
 				if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 				$title='';
 				$post=$comment['comment'];
-				$home_link=hyperlink(build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news')),escape_html($row['title']));
-				$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'news_'.strval($new_id),$member,'[html]'.$post.'[/html]',$title,$home_link,$this->mysql_time_to_timestamp($comment['date']));
+				$content_url=build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news'));
+				$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+					$forum_name,
+					'news_'.strval($new_id),
+					$member,
+					$title,
+					'[html]'.$post.'[/html]',
+					$row['title'],
+					do_lang('COMMENT'),
+					$content_url->evaluate(),
+					$this->mysql_time_to_timestamp($comment['date'])
+				);
 			}
 		}
 	
@@ -280,14 +300,24 @@ class Hook_phpnuke
 
 			// Comments
 			$comments=$db->query('SELECT * FROM '.$table_prefix.'journal_comments WHERE rid='.$row['rid'].' ORDER BY date');
-			if (!is_null($cf)) foreach ($comments as $comment)
+			if (!is_null($forum_id)) foreach ($comments as $comment)
 			{
 				$member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($comment['aid']);
 				if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 				$title='';
 				$post=$comment['comment'];
-				$home_link=hyperlink(build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news')),escape_html($row['title']));
-				$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'news_'.strval($new_id),$member,'[html]'.$post.'[/html]',$title,$home_link,$this->mysql_time_to_timestamp($comment['date']),$comment['host_name']);
+				$content_url=build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news'));
+				$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+					$forum_name,
+					'news_'.strval($new_id),
+					$member,
+					$title,
+					'[html]'.$post.'[/html]',
+					$row['title'],
+					do_lang('COMMENT'),
+					$content_url->evaluate(),
+					$this->mysql_time_to_timestamp($comment['date'])
+				);
 			}
 		}
 	
@@ -329,14 +359,24 @@ class Hook_phpnuke
 
 			// Comments
 			$comments=$db->query('SELECT * FROM '.$table_prefix.'comments WHERE sid='.$row['sid'].' ORDER BY date');
-			if (!is_null($cf)) foreach ($comments as $comment)
+			if (!is_null($forum_id)) foreach ($comments as $comment)
 			{
 				$member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($comment['name']);
 				if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 				$title=$comment['subject'];
 				$post=$comment['comment'];
-				$home_link=hyperlink(build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news')),escape_html($row['title']));
-				$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum_name,'news_'.strval($new_id),$member,'[html]'.$post.'[/html]',$title,$home_link,$this->mysql_time_to_timestamp($comment['date']));
+				$content_url=build_url(array('page'=>'news','id'=>$new_id,'type'=>'view'),get_module_zone('news'));
+				$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+					$forum_name,
+					'news_'.strval($new_id),
+					$member,
+					$title,
+					'[html]'.$post.'[/html]',
+					$row['title'],
+					do_lang('COMMENT'),
+					$content_url->evaluate(),
+					$this->mysql_time_to_timestamp($comment['date'])
+				);
 			}
 	
 			// Rating

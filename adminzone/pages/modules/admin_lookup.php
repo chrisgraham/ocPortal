@@ -195,7 +195,7 @@ class Module_admin_lookup
 			{
 				$search_url=($name==do_lang('UNKNOWN'))?NULL:build_url(array('page'=>'search','type'=>'results','content'=>'','author'=>$name,'days'=>'-1','sort'=>'add_date','direction'=>'DESC'),get_module_zone('search'));
 			} else $search_url=NULL;
-			$profile_url=(is_guest($id))?NULL:$GLOBALS['FORUM_DRIVER']->member_profile_link($id,false,true);
+			$profile_url=(is_guest($id))?NULL:$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 			if (addon_installed('actionlog'))
 			{
 				$action_log_url=(is_guest($id))?NULL:build_url(array('page'=>'admin_actionlog','type'=>'list','id'=>$id),get_module_zone('admin_actionlog'));

@@ -32,21 +32,21 @@ class Hook_rating
 
 		// Has there actually been any rating?
 		$rating=post_param_integer('rating');
-		$type=get_param('root_type');
-		$type2=get_param('type');
-		if ($type2!='') $type.='_'.$type2;
-		$id=get_param('id');
+		$content_type=get_param('content_type');
+		$type=get_param('type');
+		if ($type!='') $content_type.='_'.$type;
+		$content_id=get_param('id');
 
-		$self_url=get_param('self_url');
-		$title=get_param('self_title');
+		$content_url=get_param('content_url',false,true);
+		$content_title=get_param('content_title',false,true);
 
 		require_code('feedback');
-		do_specific_rating($rating,get_page_name(),get_member(),$type,$type2,$id,$self_url,$title);
+		actualise_specific_rating($rating,get_page_name(),get_member(),$content_type,$type,$content_id,$content_url,$content_title);
 
 		$template=get_param('template');
-		if (($type2=='') && ($template!=''))
+		if (($type=='') && ($template!=''))
 		{
-			return display_rating($self_url,$title,$type,$id,$template);
+			return display_rating($content_url,$content_title,$content_type,$content_id,$template);
 		}
 
 		return do_lang_tempcode('THANKYOU_FOR_RATING_SHORT');

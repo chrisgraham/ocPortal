@@ -1,8 +1,5 @@
-<br />
-
 {+START,IF_NON_EMPTY,{COMMENT_URL}}
-{+START,IF_PASSED,COMMENTS}<a name="last_comment" id="last_comment" rel="docomment"></a>{+END}
-<form title="{TITLE*}" id="comments_form" onsubmit="return ({+START,IF_PASSED,MORE_URL}(this.getAttribute('action')=='{MORE_URL*}') || {+END}(checkFieldForBlankness(this.elements['post'],event)){+START,IF,{$AND,{GET_EMAIL},{$NOT,{EMAIL_OPTIONAL}}}} &amp;&amp; (checkFieldForBlankness(this.elements['email'],event)){+END});" action="{COMMENT_URL*}{+START,IF_PASSED,COMMENTS}#last_comment{+END}" method="post" enctype="multipart/form-data">
+<form{$?,{$VALUE_OPTION,html5}, role="form"} title="{TITLE*}" id="comments_form" onsubmit="return ({+START,IF_PASSED,MORE_URL}(this.getAttribute('action')=='{MORE_URL*}') || {+END}(checkFieldForBlankness(this.elements['post'],event)){+START,IF,{$AND,{GET_EMAIL},{$NOT,{EMAIL_OPTIONAL}}}} &amp;&amp; (checkFieldForBlankness(this.elements['email'],event)){+END});" action="{COMMENT_URL*}{+START,IF_PASSED,COMMENTS}#last_comment{+END}" method="post" enctype="multipart/form-data">
 <input type="hidden" name="_comment_form_post" value="1" />
 {+END}
 
@@ -10,8 +7,18 @@
 	<input type="hidden" name="comcode__post" value="1" />
 
 	<div class="standardbox_wrap_classic">
-		<div class="toggler_main hide_button_spacing" id="comments_outer" style="{$JS_ON,display: {DISPLAY*},}">
-			<div class="comments_inner">
+		{+START,IF_NON_EMPTY,{TITLE}}
+			<div class="standardbox_classic">
+				<h3 class="standardbox_title_classic toggle_div_title">
+					{TITLE*}
+					{+START,IF_PASSED,EXPAND_TYPE}
+						&nbsp; <a class="hide_button hide_button_spacing" href="#" onclick="event.returnValue=false; toggleSectionInline('comments_posting_form_outer','block'); return false;"><img id="e_comments_posting_form_outer" alt="{$?,{$EQ,{EXPAND_TYPE},contract},{!CONTRACT},{!EXPAND}}" title="{$?,{$EQ,{EXPAND_TYPE},contract},{!CONTRACT},{!EXPAND}}" src="{$IMG*,{EXPAND_TYPE*}}" /></a>
+					{+END}
+				</h3>
+			</div>
+		{+END}
+		<div class="toggler_main{+START,IF_PASSED,EXPAND_TYPE} hide_button_spacing{+END}" id="comments_posting_form_outer" style="{$JS_ON,display: {DISPLAY*},}">
+			<div class="comments_posting_form_inner">
 				{+START,IF,{$MOBILE}}
 					<div class="contact-form">
 						<ul>
@@ -182,7 +189,7 @@
 									{!POST_COMMENT}:
 
 									{+START,IF_NON_EMPTY,{FIRST_POST}{COMMENT_TEXT}}
-										<div class="comments_links">
+										<div class="comments_posting_form_links">
 											(
 											{+START,IF_NON_EMPTY,{FIRST_POST}}
 												<a class="non_link" title="{!ocf:FIRST_POST}: {!LINK_NEW_WINDOW}" target="_blank" href="{FIRST_POST_URL*}" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onblur="this.onmouseout(event);" onfocus="this.onmouseover(event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{FIRST_POST^;~*}','30%',null,null,false,true);">{!ocf:FIRST_POST}</a>
@@ -196,6 +203,21 @@
 											{+END}
 											)
 										</div>
+									{+END}
+
+									{+START,IF,{$JS_ON}}
+										{+START,IF,{$CONFIG_OPTION,is_on_emoticon_choosers}}
+											<br />
+											{+START,BOX,,,med}
+												<div class="comments_posting_form_emoticons">
+													{EM}
+
+													{+START,IF,{$OCF}}
+														<p>[ <a tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'site_emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a> ]</p>
+													{+END}
+												</div>
+											{+END}
+										{+END}
 									{+END}
 								</th>
 
@@ -212,7 +234,7 @@
 					</table></div>
 				{+END}
 
-				<div class="comments_end">
+				<div class="comments_posting_form_end">
 					{+START,IF_PASSED,USE_CAPTCHA}
 						{+START,IF,{USE_CAPTCHA}}
 							<div class="comments_captcha">
@@ -222,7 +244,7 @@
 										<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} id="captcha" style="width:100px; height: 52px" title="{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}" src="{$FIND_SCRIPT*,securityimage}{$KEEP*,1,1}">{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}</iframe>
 									{+END}
 									{+START,IF,{$NOT,{$VALUE_OPTION,css_captcha_only}}}
-										<img id="captcha" class="no_alpha" title="{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}" alt="{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}" src="{$FIND_SCRIPT*,securityimage}{$KEEP*,1,1}" />
+										<img class="no_alpha" id="captcha" title="{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}" alt="{!CONTACT_STAFF_TO_JOIN_IF_IMPAIRED}" src="{$FIND_SCRIPT*,securityimage}{$KEEP*,1,1}" />
 									{+END}
 									<input maxlength="6" size="6" class="input_text_required" value="" type="text" id="security_image" name="security_image" /><br />
 								{+END}
@@ -241,7 +263,7 @@
 								&nbsp;
 							{+END}
 						{+END}
-						<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; form.setAttribute('target','_top'); if (form.old_action) form.setAttribute('action',form.old_action); if (form.onsubmit()) { disable_button_just_clicked(document.getElementById('submit_button')); form.submit(); }" tabindex="4" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{TITLE*}{+END}</strong></button>
+						<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; form.setAttribute('target','_top'); if (form.old_action) form.setAttribute('action',form.old_action); if (form.onsubmit()) { disable_button_just_clicked(document.getElementById('submit_button')); form.submit(); }" tabindex="4" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
 					</div>
 				</div>
 			</div>
@@ -285,6 +307,7 @@
 					var url='{$FIND_SCRIPT;,snippet}?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['security_image'].value);
 					if (!do_ajax_field_test(url))
 					{
+						document.getElementById('captcha').src+='&'; // Force it to reload latest captcha
 						document.getElementById('submit_button').disabled=false;
 						return false;
 					}

@@ -54,9 +54,10 @@ function ocf_make_category($title,$description,$expanded_by_default=1)
  * @param  SHORT_TEXT	The answer to the question (blank: no specific answer.. if there's a 'question', it just requires a click-through).
  * @param  SHORT_TEXT	Either blank for no redirection, the ID of another forum we are mirroring, or a URL to redirect to.
  * @param  ID_TEXT		The order the topics are shown in, by default.
+ * @param  BINARY			Whether the forum is threaded.
  * @return AUTO_LINK		The ID of the newly created forum.
  */
-function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_forum,$position=1,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post')
+function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_forum,$position=1,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post',$is_threaded=0)
 {
 	if ($category_id==-1) $category_id=NULL;
 	if ($parent_forum==-1) $parent_forum=NULL;
@@ -87,6 +88,7 @@ function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_
 		'f_cache_last_member_id'=>NULL,
 		'f_redirection'=>$redirection,
 		'f_order'=>$order,
+		'f_is_threaded'=>$is_threaded,
 	),true);
 
 	// Set permissions

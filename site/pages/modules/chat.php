@@ -467,7 +467,7 @@ class Module_chat
 			$post_url_add_buddy=new ocp_tempcode();
 			$post_url_remove_buddies=new ocp_tempcode();
 		}
-		$online_url=$GLOBALS['FORUM_DRIVER']->online_link();
+		$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url();
 		$can_im=has_specific_permission(get_member(),'start_im');
 		$buddies=array();
 		$buddy_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>$member_id),'ORDER BY date_and_time',100);
@@ -486,15 +486,15 @@ class Module_chat
 			$username=array_key_exists($buddy['member_liked'],$buddy_active)?$buddy_active[$buddy['member_liked']]:$GLOBALS['FORUM_DRIVER']->get_username($buddy['member_liked']);
 			if (!is_null($username))
 			{
-				$member_profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_link($buddy['member_liked'],true,true);
-				$buddies[]=array('DATE_AND_TIME_RAW'=>strval($buddy['date_and_time']),'DATE_AND_TIME'=>get_timezoned_date($buddy['date_and_time'],false),'MEMBER_PROFILE_LINK'=>$member_profile_link,'MEMBER_ID'=>strval($buddy['member_liked']),'USERNAME'=>$username,'ONLINE_TEXT'=>$online_text);
+				$member_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($buddy['member_liked'],true,true);
+				$buddies[]=array('DATE_AND_TIME_RAW'=>strval($buddy['date_and_time']),'DATE_AND_TIME'=>get_timezoned_date($buddy['date_and_time'],false),'MEMBER_PROFILE_LINK'=>$member_profile_url,'MEMBER_ID'=>strval($buddy['member_liked']),'USERNAME'=>$username,'ONLINE_TEXT'=>$online_text);
 			}
 		}
 		$messages_php=find_script('messages');
 		$im_area_template=do_template('CHAT_LOBBY_IM_AREA',array('_GUID'=>'cd230527da03caa596135f74647b2ca7','MESSAGES_PHP'=>$messages_php,'ROOM_ID'=>'__room_id__'));
 		$make_buddy_url=build_url(array('page'=>'_SELF','type'=>'buddy_add','member_id'=>'__id__'),'_SELF');
 		$block_member_url=build_url(array('page'=>'_SELF','type'=>'blocking_add','member_id'=>'__id__'),'_SELF');
-		$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link(-100,true,true);
+		$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url(-100,true,true);
 		if (is_object($profile_url)) $profile_url=$profile_url->evaluate();
 		$profile_url=str_replace('-100','__id__',$profile_url);
 		$im_participant_template=do_template('CHAT_LOBBY_IM_PARTICIPANT',array('_GUID'=>'9a36efe3a449dabac6ef9866d1f6f48a','PROFILE_URL'=>$profile_url,'ID'=>'__id__','ROOM_ID'=>'__room_id__','USERNAME'=>'__username__','ONLINE'=>'__online__','AVATAR_URL'=>'__avatar_url__','MAKE_BUDDY_URL'=>$make_buddy_url,'BLOCK_MEMBER_URL'=>$block_member_url));
@@ -1015,7 +1015,7 @@ class Module_chat
 				$mutual_label=do_lang('MUTUAL_FRIEND');
 				$box=ocf_show_member_box($f_id,false,NULL,NULL,true,($f_id==get_member() || $member_id==get_member())?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL);
 				if ($box->is_empty()) continue;
-				$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_link($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
+				$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
 				$buddies[]=$friend_map;
 			}
 		}

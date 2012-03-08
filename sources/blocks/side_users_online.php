@@ -124,7 +124,7 @@ class Block_side_users_online
 				{
 					$colour=(get_forum_type()=='ocf')?get_group_colour(ocf_get_member_primary_group($member)):NULL;
 					$done_members[$member]=1;
-					$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member,true,true);
+					$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
 					$out->attach(do_template('BLOCK_SIDE_USERS_ONLINE_USER',array(
 						'_GUID'=>'a0b55810fe2f306c2886ec0c4cd8e8fd',
 						'URL'=>$url,
@@ -158,7 +158,7 @@ class Block_side_users_online
 				foreach ($_birthdays as $_birthday)
 				{
 					$colour=get_group_colour(ocf_get_member_primary_group($_birthday['id']));
-					$birthday=do_template('OCF_USER_MEMBER',array('_GUID'=>'b2d355ff45f4b4170b937ef0753e6a78','COLOUR'=>$colour,'AGE'=>array_key_exists('age',$_birthday)?integer_format($_birthday['age']):NULL,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_link($_birthday['id'],false,true),'USERNAME'=>$_birthday['username']));
+					$birthday=do_template('OCF_USER_MEMBER',array('_GUID'=>'b2d355ff45f4b4170b937ef0753e6a78','COLOUR'=>$colour,'AGE'=>array_key_exists('age',$_birthday)?integer_format($_birthday['age']):NULL,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($_birthday['id'],false,true),'USERNAME'=>$_birthday['username']));
 					$birthdays->attach($birthday);
 				}
 				if (!$birthdays->is_empty()) $birthdays=do_template('OCF_BIRTHDAYS',array('_GUID'=>'080ed2e74efd6410bd6b83ec01962c04','BIRTHDAYS'=>$birthdays));

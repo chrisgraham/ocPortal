@@ -198,7 +198,7 @@ class Notification_dispatcher
 
 			$message=do_lang('MESSAGING_NOTIFICATION_WRAPPER',$message,$message_url->evaluate());
 
-			do_comments(true,'notification',$this->id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true);
+			actualise_post_comment(true,'notification',$this->id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true);
 		}
 
 		$start=0;

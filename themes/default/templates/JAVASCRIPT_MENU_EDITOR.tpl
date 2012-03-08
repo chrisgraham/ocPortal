@@ -491,7 +491,7 @@ function delete_menu_branch(ob)
 										post+=name+'='+window.encodeURIComponent(value);
 									}
 								}
-								load_XML_doc('{$FIND_SCRIPT_NOHTTP;,menu_management}'+'?id='+window.encodeURIComponent(id)+'&menu='+window.encodeURIComponent(result)+keep_stub(),null,post);
+								do_ajax_request('{$FIND_SCRIPT_NOHTTP;,menu_management}'+'?id='+window.encodeURIComponent(id)+'&menu='+window.encodeURIComponent(result)+keep_stub(),null,post);
 								deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
 							}
 						}

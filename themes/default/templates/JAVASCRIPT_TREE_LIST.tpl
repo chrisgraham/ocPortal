@@ -22,7 +22,7 @@ function htmlentities(string)
 
 var tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_nodes_selectable,use_server_id)
 {
-	if (typeof window.load_XML_doc=='undefined') return;
+	if (typeof window.do_ajax_request=='undefined') return;
 
 	if (!multi_selection) multi_selection=false;
 
@@ -38,7 +38,7 @@ var tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_no
 	setInnerHTML(element,'<div class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> {!LOADING^;}</div>');
 
 	// Initial rendering
-	load_XML_doc('{$BASE_URL_NOHTTP;}/'+hook+'&id='+window.encodeURIComponent(root_id)+'&options='+options+'&default='+window.encodeURIComponent(document.getElementById(name).value),this,false);
+	do_ajax_request('{$BASE_URL_NOHTTP;}/'+hook+'&id='+window.encodeURIComponent(root_id)+'&options='+options+'&default='+window.encodeURIComponent(document.getElementById(name).value),this,false);
 }
 
 tree_list.prototype.tree_list_data='';
@@ -455,7 +455,7 @@ function find_overlapping_selectable(element,node,name)
 
 tree_list.prototype.handle_tree_click=function(event,automated) // Not called as a method
 {
-	if (typeof window.load_XML_doc=='undefined') return false;
+	if (typeof window.do_ajax_request=='undefined') return false;
 
 	var element=document.getElementById(this.object.name);
 	if (element.disabled) return false;
@@ -486,7 +486,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 		{
 			var url='{$BASE_URL_NOHTTP;}/'+this.object.hook+'&id='+window.encodeURIComponent(real_clicked_id)+'&options='+this.object.options+'&default='+window.encodeURIComponent(element.value);
 			var ob=this.object;
-			load_XML_doc(url,function (ajax_result_frame,ajax_result) { setInnerHTML(html_node,''); ob.response(ajax_result_frame,ajax_result,clicked_id); });
+			do_ajax_request(url,function (ajax_result_frame,ajax_result) { setInnerHTML(html_node,''); ob.response(ajax_result_frame,ajax_result,clicked_id); });
 			setInnerHTML(html_node,'<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"}><img class="inline_image_2" src="'+'{$IMG*,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" alt="" /> {!LOADING^;}</div>');
 			var container=document.getElementById('tree_list__root_'+ob.name);
 			if ((automated) && (container) && (container.style.overflowY=='auto'))

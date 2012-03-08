@@ -2529,27 +2529,27 @@ ul.sitemap li li {
 	border: 0;
 }
 
-#comments_outer .attachments {
+#comments_posting_form_outer .attachments {
 	text-align: {!en_left};
 	padding: 5px;
 }
 
-.comments_inner {
+.comments_posting_form_inner {
 	text-align: {!en_left};
 	padding: 0px;
 	margin: 0 auto;
 	width: 525px;
 }
 
-.comments_inner textarea {
+.comments_posting_form_inner textarea {
 	overflow: auto;
 }
 
-.comments_inner table {
+.comments_posting_form_inner table {
 	border-collapse: collapse;
 }
 
-.comments_end {
+.comments_posting_form_end {
 	margin-left: 160px;
 	margin-top: 1em;
 }
@@ -2566,7 +2566,7 @@ ul.sitemap li li {
 	text-align: center;
 }
 
-.comments_inner th {
+.comments_posting_form_inner th {
 	font-weight: normal;
 	padding: 3px 15px 3px 0;
 	border-right: 0px solid #edc49f; /* {$,wizard, 100% medborder.border} */
@@ -2574,11 +2574,11 @@ ul.sitemap li li {
 	font-size: 0.9em !important;
 }
 
-.comments_inner td {
+.comments_posting_form_inner td {
 	padding-left: 0px;
 }
 
-.comments_emoticons {
+.comments_posting_form_emoticons {
 	float: {!en_left};
 	width: 120px;
 	padding-{!en_right}: 5px;
@@ -2587,11 +2587,11 @@ ul.sitemap li li {
 	font-size: 0.8em;
 }
 
-.comments_emoticons p {
+.comments_posting_form_emoticons p {
 	margin-bottom: 0;
 }
 
-.comments_links {
+.comments_posting_form_links {
 	text-align: right;
 	font-size: 0.85em;
 	font-weight: normal;

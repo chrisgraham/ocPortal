@@ -72,7 +72,7 @@ function get_more_events(from,to)
 	to=Math.round(to);
 
 	var url="{$BASE_URL_NOHTTP#}/data/realtime_rain.php?from="+window.encodeURIComponent(from)+"&to="+window.encodeURIComponent(to)+keep_stub();
-	load_XML_doc(url,received_events);
+	do_ajax_request(url,received_events);
 }
 
 function received_events(ajax_result_frame,ajax_result)

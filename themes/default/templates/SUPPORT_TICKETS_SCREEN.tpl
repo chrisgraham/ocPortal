@@ -6,7 +6,7 @@
 
 {+START,IF,{$NOT,{$IS_GUEST}}}
 <div class="medborder medborder_box br_space">
-	<form class="float_surrounder" id="ticket_type_form" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" method="get" onsubmit="window.scrollTo(0,0);">
+	<form class="float_surrounder" id="ticket_type_form" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" method="get" onsubmit="try { window.scrollTo(0,0); } catch(e) {};">
 		{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},ticket_type,wide_high,zone,utheme}
 		<span class="field_name"><label for="ticket_type">{!TICKET_TYPE}</label></span>:
 		<select id="ticket_type" name="ticket_type" class="input_list_required">

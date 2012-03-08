@@ -63,7 +63,7 @@ function update_ajax_member_list(target,special,delayed,e)
 	var url='{$BASE_URL_NOHTTP}/data/namelike.php?id='+encodeURIComponent(v);
 	if (special) url=url+'&special='+special;
 
-	if (typeof window.load_XML_doc!='undefined') load_XML_doc(url+keep_stub(),update_ajax_member_list_response);
+	if (typeof window.do_ajax_request!='undefined') do_ajax_request(url+keep_stub(),update_ajax_member_list_response);
 }
 
 function update_ajax_member_list_response(result,list_contents)

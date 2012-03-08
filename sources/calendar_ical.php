@@ -97,7 +97,7 @@ function output_ical()
 			echo "DESCRIPTION:".ical_escape($description)."\n";
 
 			if (!is_guest($event['e_submitter']))
-				echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_link($event['e_submitter'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($event['e_submitter']))."\n";
+				echo "ORGANIZER;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($event['e_submitter'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($event['e_submitter']))."\n";
 			echo "CATEGORIES:".ical_escape($categories[$event['e_type']])."\n";
 			echo "CLASS:".(($event['e_is_public']==1)?'PUBLIC':'PRIVATE')."\n";
 			echo "STATUS:".(($event['validated']==1)?'CONFIRMED':'TENTATIVE')."\n";
@@ -112,7 +112,7 @@ function output_ical()
 			do
 			{
 				$count=0;
-				$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,'events_'.strval($event['id']),'',$count,1000,$start);
+				$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,'events_'.strval($event['id'])),$count,1000,$start);
 				if (is_array($_comments))
 				{
 					foreach ($_comments as $comment)
@@ -184,7 +184,7 @@ function output_ical()
 				if ($attendee['n_member_id']!=get_member())
 				{
 					if (!is_guest($event['n_member_id']))
-						echo "ATTENDEE;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($attendee['n_member_id'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_link($attendee['n_member_id'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($attendee['n_member_id']))."\n";
+						echo "ATTENDEE;CN=".ical_escape($GLOBALS['FORUM_DRIVER']->get_username($attendee['n_member_id'])).";DIR=".ical_escape($GLOBALS['FORUM_DRIVER']->member_profile_url($attendee['n_member_id'])).":MAILTO:".ical_escape($GLOBALS['FORUM_DRIVER']->get_member_email_address($attendee['n_member_id']))."\n";
 				} else
 				{
 					echo "BEGIN:VALARM\n";

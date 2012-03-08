@@ -33,9 +33,7 @@ function call_block(url,new_params,target_div,append,callback)
 	}
 
 	// Make AJAX call
-	var func=function(raw_ajax_result) { _call_block(raw_ajax_result,ajax_url,target_div,append,callback); };
-	func.accept_raw_response=true;
-	load_XML_doc(ajax_url,func);
+	do_ajax_request(ajax_url,function(raw_ajax_result) { _call_block(raw_ajax_result,ajax_url,target_div,append,callback); });
 	
 	return false;
 }
@@ -97,7 +95,7 @@ function do_ajax_field_test(url,post)
 	if (!ajax_supported()) return true;
 
 	if (typeof window.keep_stub!='undefined') url=url+keep_stub();
-	var xmlhttp=load_XML_doc(url,null,post);
+	var xmlhttp=do_ajax_request(url,null,post);
 	if ((xmlhttp.responseText!='') && (xmlhttp.responseText.replace(/[ \t\n\r]/g,'')!='0'/*some cache layers may change blank to zero*/))
 	{
 		if (xmlhttp.responseText!='false')
@@ -132,7 +130,7 @@ function ajax_form_submit(event,form,block_name,map)
 	{
 		post+='&'+form.elements[i].name+'='+window.encodeURIComponent(cleverFindValue(form,form.elements[i]));
 	}
-	var request=load_XML_doc(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}'+keep_stub(true)),null,post);
+	var request=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}'+keep_stub(true)),null,post);
 
 	if ((request.responseText!='') && (request.responseText!=''))
 	{
@@ -170,7 +168,7 @@ function ajax_supported()
 	return false;
 }
 
-function load_XML_doc(url,callback__method,post) // Note: 'post' is not an array, it's a string (a=b)
+function do_ajax_request(url,callback__method,post) // Note: 'post' is not an array, it's a string (a=b)
 {
 	var synchronous=!callback__method;
 
@@ -245,7 +243,10 @@ function process_request_changes()
 			if ((result.status) && (result.status==200) || (result.status==500) || (result.status==400) || (result.status==401))
 			{
 				//Process the result
-				if ((AJAX_METHODS[i]) && (typeof AJAX_METHODS[i].accept_raw_response!='undefined')) return AJAX_METHODS[i](result);
+				if ((AJAX_METHODS[i]) && (!result.responseXML/*Not payload handler and not stack trace*/))
+				{
+					return AJAX_METHODS[i](result);
+				}
 				var xml=handle_errors_in_result(result);
 				if (xml)
 				{

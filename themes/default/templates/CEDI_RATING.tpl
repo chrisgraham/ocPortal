@@ -17,6 +17,6 @@
 	{+END}
 
 	<span class="associated_details"><em>{!VOTES,{NUM_RATINGS*}}</em></span>
-	<span class="cedi_rating_inside">{RATING_INSIDE}</span>
+	<span class="cedi_rating_inside">{RATING_FORM}</span>
 </div>
 

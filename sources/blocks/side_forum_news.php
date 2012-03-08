@@ -105,7 +105,7 @@ class Block_side_forum_news
 				$forum_ids[$forum_id]=$forum_name;
 				if (is_null($archive_url))
 				{
-					$archive_url=$GLOBALS['FORUM_DRIVER']->forum_link($forum_id); // First forum will count as archive
+					$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id); // First forum will count as archive
 					if (get_forum_type()=='ocf')
 					{
 						$submit_url=build_url(array('page'=>'topics','type'=>'new_topic','id'=>$forum_id),get_module_zone('topics'));
@@ -132,12 +132,12 @@ class Block_side_forum_news
 
 				foreach ($topics as $topic)
 				{
-					$topic_link=$GLOBALS['FORUM_DRIVER']->topic_link($topic['id'],$forum_name);
+					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name);
 					$title=$topic['title'];
 					$date=get_timezoned_date($topic[$date_key],false);
 	//				$username=$topic['lastusername'];
 
-					$out->attach(do_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY',array('_GUID'=>'4b7f4ce27cf683710fc9958e9606291c','REPLIES'=>strval($topic['num']),'FIRSTTIME'=>strval($topic['firsttime']),'LASTTIME'=>strval($topic['lasttime']),'CLOSED'=>strval($topic['closed']),'FIRSTUSERNAME'=>$topic['firstusername'],'LASTUSERNAME'=>$topic['lastusername'],'FIRSTMEMBERID'=>strval($topic['firstmemberid']),'LASTMEMBERID'=>strval($topic['lastmemberid']),'_DATE'=>strval($topic[$date_key]),'DATE'=>$date,'FULL_URL'=>$topic_link,'NEWS_TITLE'=>escape_html($title))));
+					$out->attach(do_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY',array('_GUID'=>'4b7f4ce27cf683710fc9958e9606291c','REPLIES'=>strval($topic['num']),'FIRSTTIME'=>strval($topic['firsttime']),'LASTTIME'=>strval($topic['lasttime']),'CLOSED'=>strval($topic['closed']),'FIRSTUSERNAME'=>$topic['firstusername'],'LASTUSERNAME'=>$topic['lastusername'],'FIRSTMEMBERID'=>strval($topic['firstmemberid']),'LASTMEMBERID'=>strval($topic['lastmemberid']),'_DATE'=>strval($topic[$date_key]),'DATE'=>$date,'FULL_URL'=>$topic_url,'NEWS_TITLE'=>escape_html($title))));
 				}
 			}
 

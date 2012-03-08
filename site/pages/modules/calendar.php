@@ -518,7 +518,7 @@ class Module_calendar
 				if (count($explode)!=1) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 				$main=$this->view_calendar_view_year($id,$date,$explode,$member_id,$filter);
 				$timestamp=mktime(0,0,0,1,1,intval($id));
-				$back_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id);
+				$back_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id);
 				$previous_timestamp=mktime(0,0,0,1,1,intval($explode[0])-1);
 				$previous=date('Y',$previous_timestamp);
 				$next_timestamp=mktime(0,0,0,1,1,intval($explode[0])+1);
@@ -1347,7 +1347,7 @@ class Module_calendar
 					$username=$GLOBALS['FORUM_DRIVER']->get_username($subscription['n_member_id']);
 					if (!is_null($username))
 					{
-						$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($subscription['n_member_id'],false,true);
+						$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($subscription['n_member_id'],false,true);
 						$subscribed->attach(do_template('CALENDAR_SCREEN_SUBSCRIPTION',array('_GUID'=>'c756b8b3f0c57494fd46a94e9abce029','MEMBER_URL'=>$member_url,'USERNAME'=>$username)));
 					}
 				}

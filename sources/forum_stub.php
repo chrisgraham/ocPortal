@@ -52,7 +52,7 @@ class forum_driver_base
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
 	 * @return mixed			The URL
 	 */
-	function member_profile_link($id,$definitely_profile=false,$tempcode_okay=false)
+	function member_profile_url($id,$definitely_profile=false,$tempcode_okay=false)
 	{
 		if ((!$definitely_profile) && ($id!=$this->get_guest_id()) && (addon_installed('chat')))
 		{
@@ -65,7 +65,7 @@ class forum_driver_base
 			}
 		}
 
-		$url=$this->_member_profile_link($id,$tempcode_okay);
+		$url=$this->_member_profile_url($id,$tempcode_okay);
 		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
 		{
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
@@ -89,7 +89,7 @@ class forum_driver_base
 		if ($_username=='') $_username=$this->get_username($id);
 		if (is_null($_username))
 			return do_lang_tempcode('UNKNOWN');
-		$url=$this->member_profile_link($id,$definitely_profile,true);
+		$url=$this->member_profile_url($id,$definitely_profile,true);
 		return hyperlink($url,$_username,false,true);
 	}
 
@@ -98,9 +98,9 @@ class forum_driver_base
 	 *
 	 * @return mixed			The URL
 	 */
-	function join_link()
+	function join_url()
 	{
-		$url=$this->_join_link();
+		$url=$this->_join_url();
 		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1')) $url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
@@ -110,9 +110,9 @@ class forum_driver_base
 	 *
 	 * @return mixed			The URL
 	 */
-	function online_link()
+	function online_members_url()
 	{
-		$url=$this->_online_link();
+		$url=$this->_online_members_url();
 		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1')) $url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
@@ -123,9 +123,9 @@ class forum_driver_base
 	 * @param  MEMBER			The forum member
 	 * @return mixed			The URL
 	 */
-	function member_pm_link($id)
+	function member_pm_url($id)
 	{
-		$url=$this->_member_pm_link($id);
+		$url=$this->_member_pm_url($id);
 		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1')) $url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
 	}
@@ -137,9 +137,9 @@ class forum_driver_base
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL
 	 */
-	function forum_link($id,$tempcode_okay=false)
+	function forum_url($id,$tempcode_okay=false)
 	{
-		$url=$this->_forum_link($id,$tempcode_okay);
+		$url=$this->_forum_url($id,$tempcode_okay);
 		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
 		return $url;
@@ -439,6 +439,29 @@ class forum_driver_base
 			//set_value('num_new_forum_posts',$value);
 		}
 		return intval($value);
+	}
+
+	/**
+	 * Find whether a forum is threaded.
+	 *
+	 * @param  integer		The topic ID
+	 * @return boolean		Whether it is
+	 */
+	function topic_is_threaded($topic_id)
+	{
+		return false;
+	}
+
+	/**
+	 * Load extra details for a list of posts. Does not need to return anything if forum driver doesn't support partial post loading (which is only useful for threaded topic partial-display).
+	 *
+	 * @param  AUTO_LINK		Topic the posts come from
+	 * @param  array			List of post IDs
+	 * @return array			Extra details
+	 */
+	function get_post_remaining_details($topic_id,$post_ids)
+	{
+		return array();
 	}
 
 }

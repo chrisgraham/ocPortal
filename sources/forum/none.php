@@ -331,7 +331,7 @@ class forum_driver_none extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the members home
 	 */
-	function member_home_link($id)
+	function member_home_url($id)
 	{
 		unset($id);
 		return get_base_url();
@@ -369,7 +369,7 @@ class forum_driver_none extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the member profile
 	 */
-	function _member_profile_link($id)
+	function _member_profile_url($id)
 	{
 		if (!addon_installed('authors')) return get_base_url();
 		
@@ -388,7 +388,7 @@ class forum_driver_none extends forum_driver_base
 	 * @param  SHORT_TEXT	The username
 	 * @return URLPATH		The URL to the member profile
 	 */
-	function member_profile_link_name($name)
+	function member_profile_url_name($name)
 	{
 		if (!addon_installed('authors')) return get_base_url();
 		
@@ -406,7 +406,7 @@ class forum_driver_none extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the registration page
 	 */
-	function _join_link()
+	function _join_url()
 	{
 		return 'index.php';
 	}
@@ -416,7 +416,7 @@ class forum_driver_none extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the members-online page
 	 */
-	function _online_link()
+	function _online_members_url()
 	{
 		return '';
 	}
@@ -427,7 +427,7 @@ class forum_driver_none extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the private/personal message page
 	 */
-	function _member_pm_link($id)
+	function _member_pm_url($id)
 	{
 		unset($id);
 		return 'mailto:'.get_option('staff_address');
@@ -436,20 +436,20 @@ class forum_driver_none extends forum_driver_base
 	/**
 	 * Get a URL to the specified forum.
 	 *
-	 * @param  integer		The forum id
+	 * @param  integer		The forum ID
 	 * @return URLPATH		The URL to the specified forum
 	 */
-	function _forum_link($id)
+	function _forum_url($id)
 	{
 		unset($id);
 		return '';
 	}
 
 	/**
-	 * Get the forum id from a forum name.
+	 * Get the forum ID from a forum name.
 	 *
 	 * @param  SHORT_TEXT	The forum name
-	 * @return integer		The forum id
+	 * @return integer		The forum ID
 	 */
 	function forum_id_from_name($forum_name)
 	{
@@ -458,67 +458,64 @@ class forum_driver_none extends forum_driver_base
 	}
 
 	/**
-	 * Get the topic id from a topic name in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
+	 * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
 	 *
-	 * @param  SHORT_TEXT	The topic name
-	 * @param string			  The forum id
-	 * @return integer		The topic id
+	 * @param  string			The forum name / ID
+	 * @param  SHORT_TEXT	The topic identifier
+	 * @return ?integer		The topic ID (NULL: not found)
 	 */
-	function get_tid_from_topic($topic,$forum)
+	function find_topic_id_for_topic_identifier($forum,$topic_identifier)
 	{
-		unset($topic);
-		unset($forum);
-		return 0;
+		return NULL;
 	}
 
 	/**
 	 * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
 	 * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
-	 * Note that $post should be in HTML, and some forums do not store posts as HTML. This is unfortunate, but there are some limits to just how far you can reasonably integrate with all these different forum systems without making a programatic mess.
 	 *
 	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic name
-	 * @param  MEMBER			The member id
-	 * @param  tempcode		The post content
+	 * @param  SHORT_TEXT	The topic identifier (usually <content-type>_<content-id>)
+	 * @param  MEMBER			The member ID
 	 * @param  LONG_TEXT		The post title
-	 * @param  tempcode		The content title the topic is related to
+	 * @param  LONG_TEXT		The post content in Comcode format
+	 * @param  string			The topic title; must be same as content title if this is for a comment topic
+	 * @param  string			This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
+	 * @param  ?URLPATH		URL to the content (NULL: do not make spacer post)
 	 * @param  ?TIME			The post time (NULL: use current time)
 	 * @param  ?IP				The post IP address (NULL: use current members IP address)
+	 * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+	 * @param  ?BINARY		Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+	 * @param  boolean		Whether to skip post checks
+	 * @param  SHORT_TEXT	The name of the poster
+	 * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
+	 * @param  boolean		Whether the reply is only visible to staff
+	 * @return array			Topic ID (may be NULL), and whether a hidden post has been made
 	 */
-	function make_post_forum_topic($forum_name,$topic_name,$member,$post,$title,$topic_for,$time=NULL,$ip=NULL)
+	function make_post_forum_topic($forum_name,$topic_identifier,$member_id,$post_title,$_post,$content_title,$topic_identifier_encapsulation_prefix,$content_url=NULL,$time=NULL,$ip=NULL,$validated=NULL,$topic_validated=1,$skip_post_checks=false,$poster_name_if_guest='',$parent_id=NULL,$staff_only=false)
 	{
-		unset($forum_name);
-		unset($topic_name);
-		unset($member);
-		unset($post);
-		unset($title);
-		unset($topic_for);
-		unset($time);
-		unset($ip);
+		return array(NULL,false);
 	}
 
 	/**
 	 * Get an array of maps for the topic in the given forum.
 	 *
-	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic name
+	 * @param  integer		The topic ID
 	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
 	 */
-	function get_forum_topic_posts($forum_name,$topic_name)
+	function get_forum_topic_posts($topic_id)
 	{
-		unset($forum_name);
-		unset($topic_name);
+		unset($topic_id);
 		return (-1);
 	}
 
 	/**
-	 * Get a URL to the specified topic id. Most forums don't require the second parameter, but some do, so it is required in the interface.
+	 * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
 	 *
-	 * @param  integer		The topic id
-	 * @param string			  The forum id
+	 * @param  integer		The topic ID
+	 * @param string			  The forum ID
 	 * @return URLPATH		The URL to the topic
 	 */
-	function topic_link($id,$forum)
+	function topic_url($id,$forum)
 	{
 		unset($forum);
 		$url=build_url(array('page'=>'news','id'=>$id),get_module_zone('news'));
@@ -529,10 +526,10 @@ class forum_driver_none extends forum_driver_base
 	 * Get a URL to the specified post id.
 	 *
 	 * @param  integer		The post id
-	 * @param string			  The forum id
+	 * @param string			  The forum ID
 	 * @return URLPATH		The URL to the post
 	 */
-	function post_link($id,$forum)
+	function post_url($id,$forum)
 	{
 		unset($forum);
 		$url=build_url(array('page'=>'news','id'=>$id),get_module_zone('news'));
@@ -541,7 +538,7 @@ class forum_driver_none extends forum_driver_base
 
 	/**
 	 * Get an array of topics in the given forum. Each topic is an array with the following attributes:
-	 * - id, the topic id
+	 * - id, the topic ID
 	 * - title, the topic title
 	 * - lastusername, the username of the last poster
 	 * - lasttime, the timestamp of the last reply
@@ -549,11 +546,11 @@ class forum_driver_none extends forum_driver_base
 	 * - firsttitle, the title of the first post
 	 * - firstpost, the first post (only set if $show_first_posts was true)
 	 *
-	 * @param  SHORT_TEXT	The topic name
+	 * @param  SHORT_TEXT	The forum name
 	 * @param  integer		The limit
 	 * @param  integer		The start position
 	 * @param  integer		The total rows (not a parameter: returns by reference)
-	 * @param  SHORT_TEXT	The topic name filter
+	 * @param  SHORT_TEXT	The topic title filter
 	 * @param  boolean		Whether to show the first posts
 	 * @param  string			The date key to sort by
 	 * @set    lasttime firsttime
@@ -561,11 +558,11 @@ class forum_driver_none extends forum_driver_base
 	 * @param  SHORT_TEXT	The topic description filter
 	 * @return ?array			The array of topics (NULL: error)
 	 */
-	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_name='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
+	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
 		unset($name);
 		unset($limit);
-		unset($filter_topic_name);
+		unset($filter_topic_title);
 		unset($show_first_posts);
 		unset($date_key);
 		unset($hot);

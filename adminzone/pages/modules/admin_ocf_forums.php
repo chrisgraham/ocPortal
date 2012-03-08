@@ -124,9 +124,10 @@ class Module_admin_ocf_forums extends standard_aed_module
 	 * @param  LONG_TEXT		Answer to the introductory question (or blank if it was just an 'ok')
 	 * @param  SHORT_TEXT	Redirection code (blank implies a normal forum, not a redirector)
 	 * @param  ID_TEXT		The order the topics are shown in, by default.
+	 * @param  BINARY			Whether the forum is threaded.
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function get_form_fields($id=NULL,$name='',$description='',$category_id=NULL,$parent_forum=NULL,$position=NULL,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post')
+	function get_form_fields($id=NULL,$name='',$description='',$category_id=NULL,$parent_forum=NULL,$position=NULL,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post',$is_threaded=0)
 	{
 		if (is_null($category_id))
 		{
@@ -179,6 +180,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 		$list->attach(form_input_list_entry('first_post',$order=='first_post',do_lang_tempcode('FORUM_ORDER_BY_FIRST_POST')));
 		$list->attach(form_input_list_entry('title',$order=='title',do_lang_tempcode('FORUM_ORDER_BY_TITLE')));
 		$fields->attach(form_input_list(do_lang_tempcode('TOPIC_ORDER'),do_lang_tempcode('DESCRIPTION_TOPIC_ORDER'),'order',$list));
+		$fields->attach(form_input_tick(do_lang_tempcode('IS_THREADED'),do_lang_tempcode('DESCRIPTION_IS_THREADED'),'is_threaded',$is_threaded==1));
 
 		// Permissions
 		$fields->attach($this->get_permission_fields(is_null($id)?NULL:strval($id),NULL,is_null($id)));
@@ -422,7 +424,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 				$_edit_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$f['the_page']),get_module_zone('admin_config'));
 				$edit_url=$_edit_url->evaluate();
 				$edit_url.='#group_'.$f['section'];
-				attach_message(do_lang_tempcode('CANNOT_DELETE_FORUM_OPTION',escape_html($edit_url),escape_html(do_lang_tempcode($f['human_name']))),'warn');
+				attach_message(do_lang_tempcode('CANNOT_DELETE_FORUM_OPTION',escape_html($edit_url),escape_html(do_lang_tempcode($f['human_name']))),'inform');
 				return false;
 			}
 		}
@@ -442,7 +444,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields($r['id'],$r['f_name'],get_translated_text($r['f_description'],$GLOBALS['FORUM_DB']),$r['f_category_id'],$r['f_parent_forum'],$r['f_position'],$r['f_post_count_increment'],$r['f_order_sub_alpha'],get_translated_text($r['f_intro_question'],$GLOBALS['FORUM_DB']),$r['f_intro_answer'],$r['f_redirection'],$r['f_order']);
+		$fields=$this->get_form_fields($r['id'],$r['f_name'],get_translated_text($r['f_description'],$GLOBALS['FORUM_DB']),$r['f_category_id'],$r['f_parent_forum'],$r['f_position'],$r['f_post_count_increment'],$r['f_order_sub_alpha'],get_translated_text($r['f_intro_question'],$GLOBALS['FORUM_DB']),$r['f_intro_answer'],$r['f_redirection'],$r['f_order'],$r['f_is_threaded']);
 
 		$delete_fields=new ocp_tempcode();
 		if (intval($id)!=db_get_first_id())
@@ -468,7 +470,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 
 		$parent_forum=post_param_integer('parent_forum',-1);
 		$name=post_param('name');
-		$id=strval(ocf_make_forum($name,post_param('description'),post_param_integer('category_id'),NULL,$parent_forum,post_param_integer('position'),post_param_integer('post_count_increment',0),post_param_integer('order_sub_alpha',0),post_param('intro_question'),post_param('intro_answer'),post_param('redirection'),post_param('order')));
+		$id=strval(ocf_make_forum($name,post_param('description'),post_param_integer('category_id'),NULL,$parent_forum,post_param_integer('position'),post_param_integer('post_count_increment',0),post_param_integer('order_sub_alpha',0),post_param('intro_question'),post_param('intro_answer'),post_param('redirection'),post_param('order'),post_param_integer('is_threaded',0)));
 
 		// Warning if there is full access to this forum, but not to the parent
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
@@ -526,7 +528,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 	 */
 	function edit_actualisation($id)
 	{
-		ocf_edit_forum(intval($id),post_param('name'),post_param('description',STRING_MAGIC_NULL),post_param_integer('category_id',INTEGER_MAGIC_NULL),post_param_integer('parent_forum',INTEGER_MAGIC_NULL),post_param_integer('position',INTEGER_MAGIC_NULL),post_param_integer('post_count_increment',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('order_sub_alpha',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param('intro_question',STRING_MAGIC_NULL),post_param('intro_answer',STRING_MAGIC_NULL),post_param('redirection',STRING_MAGIC_NULL),post_param('order',STRING_MAGIC_NULL),post_param_integer('reset_intro_acceptance',0)==1);
+		ocf_edit_forum(intval($id),post_param('name'),post_param('description',STRING_MAGIC_NULL),post_param_integer('category_id',INTEGER_MAGIC_NULL),post_param_integer('parent_forum',INTEGER_MAGIC_NULL),post_param_integer('position',INTEGER_MAGIC_NULL),post_param_integer('post_count_increment',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('order_sub_alpha',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param('intro_question',STRING_MAGIC_NULL),post_param('intro_answer',STRING_MAGIC_NULL),post_param('redirection',STRING_MAGIC_NULL),post_param('order',STRING_MAGIC_NULL),post_param_integer('is_threaded',0),post_param_integer('reset_intro_acceptance',0)==1);
 
 		if (!fractional_edit())
 		{

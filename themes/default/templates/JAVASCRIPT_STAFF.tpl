@@ -117,7 +117,7 @@ function scriptLoadStuffStaff()
 									{
 										link.is_over=true;
 
-										var request=load_XML_doc(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub(false)),function(ajax_result_frame,ajax_result) {
+										var request=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub(false)),function(ajax_result_frame,ajax_result) {
 											if (ajax_result)
 											{
 												link.rendered_tooltip=getInnerHTML(ajax_result);

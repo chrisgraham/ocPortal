@@ -25,6 +25,11 @@
 					{!POST_DATE,{POST_DATE*}}
 				{+END}
 			</div>
+			{+START,IF_PASSED,RATING}
+				<div class="ocf_post_details_rating">
+					{RATING}
+				</div>
+			{+END}
 			{+START,IF_NON_EMPTY,{UNVALIDATED}}
 				<div class="ocf_post_details_unvalidated">
 					{UNVALIDATED*}
@@ -97,7 +102,9 @@
 {+START,IF,{$NAND,{$EQ,{ID},},{$EQ,{ID},{TOPIC_FIRST_POST_ID}}}}
 	<tr>
 		<td class="{CLASS*}">
-			{EMPHASIS*} {+START,IF_EMPTY,{EMPHASIS}}
+			{EMPHASIS*}
+
+			{+START,IF_EMPTY,{EMPHASIS}}
 				<div class="ocf_post_empty">
 					<a href="#"><img title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,top}" /></a>
 				</div>

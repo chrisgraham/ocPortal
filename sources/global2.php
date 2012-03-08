@@ -1320,6 +1320,12 @@ function either_param($name,$default=false)
 {
 	$a=__param(array_merge($_POST,$_GET),$name,$default,false,NULL);
 	if ($a===NULL) return NULL;
+
+	if ($a!==$default) // Check input field security
+	{
+		require_code('input_filter');
+		check_input_field($name,$a);
+	}
 	return function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($a):$a;
 }
 
@@ -1404,11 +1410,27 @@ function get_param($name,$default=false,$no_security=false)
 	if ($a===$default) return $a;
 
 	// Security check
-	if (($name!='s_message') && ($name!='preview_url') && ($name!='redirect') && ($name!='redirect_passon') && ($name!='url') && (!$no_security))
+	$is_url=($name=='preview_url') || ($name=='redirect') || ($name=='redirect_passon') || ($name=='url');
+	if (($name!='s_message') && (!$is_url) && (!$no_security))
 	{
-		if (((isset($a[100])) && (strpos(substr($a,10),'::slash::slash:')===false) && (strpos(substr($a,10),'://')===false) && (strpos(substr($a,10),'::slash::slash:')===false)) || (preg_match('#\n|\000|<|(".*[=<>])|\.\./#m',$a)!=0))
+		if (((isset($a[100])) && (strpos(substr($a,10),'::slash::slash:')===false) && (strpos(substr($a,10),'://')===false) && (strpos(substr($a,10),'::slash::slash:')===false)) || (preg_match('#\n|\000|<|(".*[=<>])|\.\./|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0))
 		{
 			log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
+		}
+	} else
+	{
+		if ($is_url)
+		{
+			if (preg_match('#\n|\000|<|(".*[=<>])|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0)
+			{
+				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
+			}
+			
+			$bu=get_base_url();
+			if ((looks_like_url($a)) && (substr($a,0,strlen($bu))!=$bu)) // Don't allow external redirections
+			{
+				$a=get_base_url();
+			}
 		}
 	}
 

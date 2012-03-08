@@ -51,7 +51,8 @@ class comment_test_set extends ocp_test_case
 				'p_last_edit_time'=>NULL,
 				'p_last_edit_by'=>NULL,
 				'p_intended_solely_for'=>NULL,
-				'p_skip_sig'=>0
+				'p_skip_sig'=>0,
+				'p_parent_id'=>NULL
 			);
 			$this->post_id=$GLOBALS['FORUM_DB']->query_insert('f_posts',$map,true);
 		}

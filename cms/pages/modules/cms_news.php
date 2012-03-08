@@ -691,6 +691,7 @@ class Module_cms_news extends standard_aed_module
 	function _grab_images(&$data)
 	{
 		require_code('files');
+		$matches=array();
 		$num_matches=preg_match_all('#<img[^<>]*\ssrc=["\']([^\'"]*://[^\'"]*)["\']#i',$data,$matches);
 		for ($i=0;$i<$num_matches;$i++)
 		{

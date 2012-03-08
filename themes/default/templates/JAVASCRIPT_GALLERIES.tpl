@@ -136,12 +136,10 @@ function slideshow_ensure_loaded(slide,immediate)
 		
 		if (immediate)
 		{
-			_slideshow_read_in_slide(load_XML_doc(url,null,null),slide);
+			_slideshow_read_in_slide(do_ajax_request(url,null,null),slide);
 		} else
 		{
-			var func=function(ajax_result_raw) { _slideshow_read_in_slide(ajax_result_raw,slide) };
-			func.accept_raw_response=true;
-			load_XML_doc(url,func,null);
+			do_ajax_request(url,function(ajax_result_raw) { _slideshow_read_in_slide(ajax_result_raw,slide) },null);
 		}
 	} else
 	{

@@ -134,7 +134,7 @@ function ocf_member_external_linker_ask($username,$type,$email_address='',$dob_d
 		$username=get_username_from_human_name($username);
 	}
 
-	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email_address,1,$dob_day,$dob_month,$dob_year,$timezone,NULL,NULL,1,1,0,NULL,$language,1,1,1,NULL,$username,0,$type);
+	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email_address,1,$dob_day,$dob_month,$dob_year,$timezone,NULL,NULL,1,0,NULL,$language,1,1,1,NULL,$username,0,$type);
 	$hidden->attach(build_keep_post_fields());
 	$hidden->attach(form_input_hidden('finishing_profile','1'));
 

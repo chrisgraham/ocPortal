@@ -197,7 +197,7 @@ function do_work()
 		give_award(db_get_first_id(),strval($content_id),$time-$i);
 	}
 	$content_id=db_get_first_id();
-	$home_link=build_url(array('page'=>'downloads','type'=>'entry','id'=>$content_id),'site');
+	$content_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$content_id),'site');
 	for ($j=$GLOBALS['SITE_DB']->query_value('trackbacks','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		// trackbacks
@@ -213,17 +213,13 @@ function do_work()
 			get_member(),
 			random_text(),
 			random_line(),
-			$home_link,
+			'',
+			do_lang('COMMENT'),
+			$content_url->evaluate(),
 			NULL,
 			NULL,
 			1,
-			1,
-			false,
-			array(
-				'downloads_'.strval($content_id),
-				do_lang('COMMENT').': #downloads_'.strval($content_id),
-				is_object($home_link)?$home_link->evaluate():$home_link),
-			''
+			1
 		);
 	}
 	echo 'done download stuff'.chr(10);
@@ -404,7 +400,7 @@ function do_work()
 	require_code('tickets2');
 	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_value('f_topics','COUNT(*)'))/2.0);$i<$num_wanted;$i++)
 	{
-		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid(''),db_get_first_id(),random_line(),random_text(),new ocp_tempcode(),'');
+		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid(''),db_get_first_id(),random_line(),random_text(),'','');
 	}
 	echo 'done tickets stuff'.chr(10);
 

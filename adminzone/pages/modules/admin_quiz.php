@@ -260,7 +260,7 @@ class Module_admin_quiz
 		foreach ($winners as $i=>$winner)
 		{
 			$member_id=$GLOBALS['SITE_DB']->query_value('quiz_entries','q_member',array('id'=>$winner['q_entry']));
-			$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id,false,true);
+			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 			switch ($i)
 			{
 				case 0:
@@ -442,7 +442,7 @@ class Module_admin_quiz
 		$member_url=get_base_url();
 		if (!is_guest($member_id))
 		{
-			$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id,false,true);
+			$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 			if (is_object($member_url)) $member_url=$member_url->evaluate();
 		}
 

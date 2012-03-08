@@ -27,13 +27,13 @@
  * @param  ?MEMBER		Only emoticons the given member can see (NULL: don't care)
  * @return array			The map
  */
-function _helper_apply_emoticons($this_ref,$member=NULL)
+function _helper_apply_emoticons($this_ref,$member_id=NULL)
 {
 	global $IN_MINIKERNEL_VERSION;
 	if ($IN_MINIKERNEL_VERSION==1) return array();
 
 	$extra='';
-	if (is_null($member))
+	if (is_null($member_id))
 	{
 		global $EMOTICON_CACHE,$EMOTICON_LEVELS;
 		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
@@ -64,25 +64,27 @@ function _helper_apply_emoticons($this_ref,$member=NULL)
 /**
  * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
  * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
- * Note that $post should be in HTML, and some forums do not store posts as HTML. This is unfortunate, but there are some limits to just how far you can reasonably integrate with all these different forum systems without making a programatic mess.
  *
  * @param  object			Link to the real forum driver
  * @param  SHORT_TEXT	The forum name
- * @param  SHORT_TEXT	The topic name
- * @param  MEMBER			The member id
- * @param  LONG_TEXT		The post content in Comcode format
+ * @param  SHORT_TEXT	The topic identifier (usually <content-type>_<content-id>)
+ * @param  MEMBER			The member ID
  * @param  LONG_TEXT		The post title
- * @param  tempcode		The content title the topic is related to
+ * @param  LONG_TEXT		The post content in Comcode format
+ * @param  string			The topic title; must be same as content title if this is for a comment topic
+ * @param  string			This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
+ * @param  ?URLPATH		URL to the content (NULL: do not make spacer post)
  * @param  ?TIME			The post time (NULL: use current time)
  * @param  ?IP				The post IP address (NULL: use current members IP address)
  * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
  * @param  ?BINARY		Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
  * @param  boolean		Whether to skip post checks
- * @param  array			Array of extra information for the topic ($topic_title,$topic_description,$description_link,$staff_only) (NULL: no extra information)
  * @param  SHORT_TEXT	The name of the poster
- * @return boolean		Whether a hidden post has been made
+ * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
+ * @param  boolean		Whether the reply is only visible to staff
+ * @return array			Topic ID (may be NULL), and whether a hidden post has been made
  */
-function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member,$post,$title,$topic_for,$time,$ip,$validated,$topic_validated,$skip_post_checks,$extra_info,$poster_name_if_guest)
+function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only)
 {
 	if (is_null($time)) $time=time();
 	if (is_null($ip)) $ip=get_ip_address();
@@ -104,22 +106,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
 	}
 	else $forum_id=(integer)$forum_name;
 
-	$description='';
-	$description_link='';
-	$staff_only=false;
-	$_topic_name=$topic_name;
-	if (!is_null($extra_info))
-	{
-		$topic_name=$extra_info[0];
-		$description=$extra_info[1];
-		$description_link=$extra_info[2];
-		if (array_key_exists(3,$extra_info)) $staff_only=$extra_info[3];
-	}
-	$topic_id=$this_ref->get_tid_from_topic($topic_name,$forum_name,$description);
-
-	// For backwards-compatibility, try retrieving the topic ID using the original topic name
-	if (is_null($topic_id))
-		$topic_id=$this_ref->get_tid_from_topic($_topic_name,$forum_name);
+	$topic_id=$this_ref->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
 
 	$update_caching=false;
 	$support_attachments=false;
@@ -134,12 +121,15 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
 		$is_starter=true;
 
 		require_code('ocf_topics_action');
-		$topic_id=ocf_make_topic($forum_id,$description,'',$topic_validated,1,0,0,0,NULL,NULL,false,0,NULL,$description_link);
-//		if ($post=='') // We only use spacer posts in 4.2+ if we have an empty post and need to create a new spacer topic		UPDATE: Actually we still need this link so always make it
+		$topic_id=ocf_make_topic($forum_id,$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'',$topic_validated,1,0,0,0,NULL,NULL,false,0,NULL,$content_url);
+
+		// Make spacer post
+		if (!is_null($content_url))
 		{
-			$spacer_title=$topic_name;
-			$spacer_post='[semihtml]'.do_lang('SPACER_POST',$topic_for->evaluate(),'','',get_site_default_lang()).'[/semihtml]';
-			ocf_make_post($topic_id,$spacer_title,$spacer_post,0,true,1,0,do_lang('SYSTEM'),$ip,$time,db_get_first_id(),NULL,NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$topic_name);
+			$spacer_title=$content_title;
+			$home_link=hyperlink($content_url,escape_html($content_title));
+			$spacer_post='[semihtml]'.do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()).'[/semihtml]';
+			ocf_make_post($topic_id,$spacer_title,$spacer_post,0,true,1,0,do_lang('SYSTEM'),$ip,$time,db_get_first_id(),NULL,NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,false,false,false);
 			$is_starter=false;
 		}
 
@@ -149,11 +139,11 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
 		$is_starter=false;
 		$is_new=false;
 	}
-	if ($post=='') return false;
-	ocf_check_post($post,$topic_id,$member);
+	if ($post=='') return array(NULL,false);
+	ocf_check_post($post,$topic_id,$member_id);
 	$poster_name=$poster_name_if_guest;
-	if ($poster_name=='') $poster_name=$this_ref->get_username($member);
-	$post_id=ocf_make_post($topic_id,$title,$post,0,$is_starter,$validated,0,$poster_name,$ip,$time,$member,($staff_only?$GLOBALS['FORUM_DRIVER']->get_guest_id():NULL),NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$topic_name,0,NULL,false,$skip_post_checks);
+	if ($poster_name=='') $poster_name=$this_ref->get_username($member_id);
+	$post_id=ocf_make_post($topic_id,$post_title,$post,0,$is_starter,$validated,0,$poster_name,$ip,$time,$member_id,($staff_only?$GLOBALS['FORUM_DRIVER']->get_guest_id():NULL),NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,$skip_post_checks,false,false,$parent_id);
 	$GLOBALS['LAST_POST_ID']=$post_id;
 	$GLOBALS['LAST_TOPIC_ID']=$topic_id;
 	$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
@@ -161,16 +151,16 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
 	if ($is_new)
 	{
 		// Broken cache now for the rest of this page view - fix by flushing
-		global $TOPIC_NAMES_TO_IDS;
-		$TOPIC_NAMES_TO_IDS=array();
+		global $TOPIC_IDENTIFIERS_TO_IDS;
+		$TOPIC_IDENTIFIERS_TO_IDS=array();
 	}
 
 	// Send out notifications
 	$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
 	$url=$_url->evaluate();
-	ocf_send_topic_notification($url,$topic_id,$forum_id,$member,!$is_new,$post,$topic_name);
+	ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title);
 
-	$result=false;
+	$is_hidden=false;
 	if ((!running_script('stress_test_loader')) && (get_page_name()!='admin_import'))
 	{
 		$validated_actual=$this_ref->connection->query_value('f_posts','p_validated',array('id'=>$post_id));
@@ -178,21 +168,16 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
 		{
 			require_code('site');
 			attach_message(do_lang_tempcode('SUBMIT_UNVALIDATED'),'inform');
-			$result=true;
+			$is_hidden=true;
 		}
 	}
 
-	// Is the user gonna automatically enable notifications for this?
-	$auto_monitor_contrib_content=$this_ref->get_member_row_field($member,'m_auto_monitor_contrib_content');
-	if (($auto_monitor_contrib_content==1) && (has_category_access($member,'forums',strval($forum_id))))
-		enable_notifications('ocf_topic',strval($topic_id),$member);
-
-	return $result;
+	return array($topic_id,$is_hidden);
 }
 
 /**
  * Get an array of topics in the given forum. Each topic is an array with the following attributes:
- * - id, the topic id
+ * - id, the topic ID
  * - title, the topic title
  * - lastusername, the username of the last poster
  * - lasttime, the timestamp of the last reply
@@ -205,7 +190,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
  * @param  integer		The limit
  * @param  integer		The start position
  * @param  integer		The total rows (not a parameter: returns by reference)
- * @param  SHORT_TEXT	The topic name filter
+ * @param  SHORT_TEXT	The topic title filter
  * @param  SHORT_TEXT	The topic description filter
  * @param  boolean		Whether to show the first posts
  * @param  string			The date key to sort by
@@ -213,7 +198,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_name,$member
  * @param  boolean		Whether to limit to hot topics
  * @return ?array			The array of topics (NULL: error/none)
  */
-function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$filter_topic_name,$filter_topic_description,$show_first_posts,$date_key,$hot)
+function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$filter_topic_title,$filter_topic_description,$show_first_posts,$date_key,$hot)
 {
 	if (is_integer($name)) $id_list='t_forum_id='.strval((integer)$name);
 	elseif (!is_array($name))
@@ -240,15 +225,15 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	global $SITE_INFO;
 	if (!(((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old')))))
 	{
-		if (($filter_topic_name=='') && ($filter_topic_description==''))
+		if (($filter_topic_title=='') && ($filter_topic_description==''))
 		{
 			$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics WHERE ('.$id_list.')'.$topic_filter_sup;
 		} else
 		{
 			$query='';
 			$topic_filters=array();
-			if ($filter_topic_name!='')
-				$topic_filters[]='t_cache_first_title LIKE \''.db_encode_like($filter_topic_name).'\'';
+			if ($filter_topic_title!='')
+				$topic_filters[]='t_cache_first_title LIKE \''.db_encode_like($filter_topic_title).'\'';
 			if ($filter_topic_description!='')
 				$topic_filters[]='t_description LIKE \''.db_encode_like($filter_topic_description).'\'';
 			foreach ($topic_filters as $topic_filter)
@@ -260,8 +245,8 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	} else
 	{
 		$topic_filter='';
-		if ($filter_topic_name!='')
-			$topic_filter.='t_cache_first_title LIKE \''.db_encode_like($filter_topic_name).'\'';
+		if ($filter_topic_title!='')
+			$topic_filter.='t_cache_first_title LIKE \''.db_encode_like($filter_topic_title).'\'';
 		if ($filter_topic_description!='')
 			$topic_filter.=' OR t_description LIKE \''.db_encode_like($filter_topic_description).'\'';
 		if ($topic_filter!='')
@@ -288,7 +273,9 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['closed']=1-$r['t_is_open'];
 		$out[$i]['forum_id']=$r['t_forum_id'];
 
-		$fp_rows=$this_ref->connection->query('SELECT p_title,text_parsed,t.id,p_poster,p_poster_name_if_guest FROM '.$this_ref->connection->get_table_prefix().'f_posts p LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE p_validated=1 AND p_topic_id='.strval((integer)$out[$i]['id']).' '.not_like_spacer_posts('t.text_original').' ORDER BY p_time,p.id',1);
+		$select='p.p_title,t.text_parsed,t.id,p.p_poster,p.p_poster_name_if_guest';
+		$where='p_validated=1 AND p_topic_id='.strval((integer)$out[$i]['id']).' '.not_like_spacer_posts('t.text_original');
+		$fp_rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY p_time,p.id',1);
 		if (!array_key_exists(0,$fp_rows))
 		{
 			unset($out[$i]);
@@ -334,35 +321,59 @@ function not_like_spacer_posts($field)
  * Get an array of maps for the topic in the given forum.
  *
  * @param  object			Link to the real forum driver
- * @param  SHORT_TEXT	The forum name
- * @param  SHORT_TEXT	The topic name
- * @param  SHORT_TEXT	The topic description. If this is non-blank, this is used for the search rather than the title
+ * @param  integer		The topic ID
  * @param  integer		The comment count will be returned here by reference
  * @param  ?integer		Maximum comments to returned (NULL: no limit)
  * @param  integer		Comment to start at
  * @param  boolean		Whether to mark the topic read
  * @param  boolean		Whether to show in reverse
+ * @param  boolean		Whether to only load minimal details if it is a threaded topic
+ * @param  ?array			List of post IDs to load (NULL: no filter)
  * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
  */
-function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_description,&$count,$max,$start,$mark_read=true,$reverse=false)
+function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL)
 {
-	if (!is_integer($forum_name))
-	{
-		$forum_id=$this_ref->forum_id_from_name($forum_name);
-		if (is_null($forum_id)) return (-1);
-	}
-	else $forum_id=(integer)$forum_name;
-
-	$topic_id=$this_ref->get_tid_from_topic($topic_name,$forum_id,$topic_description);
 	if (is_null($topic_id)) return (-2);
 
 	require_code('ocf_topics');
 
-	$where=ocf_get_topic_where($topic_id);
+	$is_threaded=$this_ref->topic_is_threaded($topic_id);
+
+	$extra_where='';
+	if (!is_null($post_ids))
+	{
+		if (count($post_ids)==0) return array();
+		$extra_where=' AND (';
+		foreach ($post_ids as $i=>$id)
+		{
+			if ($i!=0) $extra_where.=' OR ';
+			$extra_where.='p.id='.strval($id);
+		}
+		$extra_where.=')';
+	}
+
+	$where='('.ocf_get_topic_where($topic_id).')'.not_like_spacer_posts('t.text_original').$extra_where;
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_value_null_ok('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
-	$order=$reverse?'p_time DESC,p.id DESC':'p_time,p.id';
-	$rows=$this_ref->connection->query('SELECT p.id,p_title,text_parsed,p_post,p_poster,p_time,p_intended_solely_for,p_poster_name_if_guest FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE ('.$where.')'.not_like_spacer_posts('t.text_original').' ORDER BY '.$order,$max,$start);
-	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE ('.$where.')'.not_like_spacer_posts('t.text_original'));
+
+	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
+	if (($is_threaded) && (db_has_subqueries($this_ref->connection->connection_read)))
+	{
+		$order=($reverse?'compound_rating ASC':'compound_rating DESC').','.$order;
+	}
+
+	if (($light_if_threaded) && ($is_threaded))
+	{
+		$select='p.id,p.p_parent_id,p.p_intended_solely_for';
+	} else
+	{
+		$select='p.id,p.p_parent_id,p.p_title,t.text_parsed,p.p_post,p.p_poster,p.p_intended_solely_for,p.p_time,p.p_poster_name_if_guest';
+	}
+	if (($is_threaded) && (db_has_subqueries($this_ref->connection->connection_read)))
+	{
+		$select.=',(SELECT AVG(rating) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id) AS compound_rating';
+	}
+	$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY '.$order,$max,$start);
+	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where);
 
 	$out=array();
 	foreach ($rows as $myrow)
@@ -371,22 +382,26 @@ function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_
 		{
 			$temp=array();
 			$temp['id']=$myrow['id'];
-			$temp['title']=$myrow['p_title'];
-			$message=new ocp_tempcode();
-			if ((get_page_name()=='search') || (is_null($myrow['text_parsed'])) || ($myrow['text_parsed']=='') || ($myrow['p_post']==0))
+			$temp['parent_id']=$myrow['p_parent_id'];
+			if ((!$light_if_threaded) || (!$is_threaded))
 			{
-				$message=get_translated_tempcode($myrow['p_post'],$GLOBALS['FORUM_DB']);
-			} else
-			{
-				if (!$message->from_assembly($myrow['text_parsed'],true))
+				$temp['title']=$myrow['p_title'];
+				$message=new ocp_tempcode();
+				if ((get_page_name()=='search') || (is_null($myrow['text_parsed'])) || ($myrow['text_parsed']=='') || ($myrow['p_post']==0))
+				{
 					$message=get_translated_tempcode($myrow['p_post'],$GLOBALS['FORUM_DB']);
+				} else
+				{
+					if (!$message->from_assembly($myrow['text_parsed'],true))
+						$message=get_translated_tempcode($myrow['p_post'],$GLOBALS['FORUM_DB']);
+				}
+				$temp['message']=$message;
+				$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);
+				$temp['user']=$myrow['p_poster'];
+				if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];
+				$temp['date']=$myrow['p_time'];
+				$temp['p_intended_solely_for']=$myrow['p_intended_solely_for'];
 			}
-			$temp['message']=$message;
-			$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);
-			$temp['user']=$myrow['p_poster'];
-			if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];
-			$temp['date']=$myrow['p_time'];
-			$temp['p_intended_solely_for']=$myrow['p_intended_solely_for'];
 
 			$out[]=$temp;
 		}
@@ -399,6 +414,20 @@ function _helper_get_forum_topic_posts($this_ref,$forum_name,$topic_name,$topic_
 	}
 
 	return $out;
+}
+
+/**
+ * Load extra details for a list of posts. Does not need to return anything if forum driver doesn't support partial post loading (which is only useful for threaded topic partial-display).
+ *
+ * @param  object			Link to the real forum driver
+ * @param  AUTO_LINK		Topic the posts come from
+ * @param  array			List of post IDs
+ * @return array			Extra details
+ */
+function _helper_get_post_remaining_details($this_ref,$topic_id,$post_ids)
+{
+	$count=0;
+	return _helper_get_forum_topic_posts($this_ref,$topic_id,$count,NULL,0,false,false,false,$post_ids);
 }
 
 /**

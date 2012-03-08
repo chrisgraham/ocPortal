@@ -494,7 +494,7 @@ class Module_admin_ocf_join
 		{
 			if (is_guest($id)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-			$_lurkers[]=array('ID'=>strval($id),'USERNAME'=>$username,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_link($id,false,true));
+			$_lurkers[]=array('ID'=>strval($id),'USERNAME'=>$username,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true));
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'__delurk'),'_SELF');

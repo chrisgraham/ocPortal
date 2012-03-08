@@ -105,7 +105,7 @@ function init__comcode_text()
 
 	// We're not allowed to specify any of these as entities
 	global $POTENTIAL_JS_NAUGHTY_ARRAY;
-	$POTENTIAL_JS_NAUGHTY_ARRAY=array('j'=>1,'a'=>1,'v'=>1,'s'=>1,'c'=>1,'r'=>1,'i'=>1,'p'=>1,'t'=>1,'J'=>1,'A'=>1,'V'=>1,'S'=>1,'C'=>1,'R'=>1,'I'=>1,'P'=>1,'T'=>1,' '=>1,"\t"=>1,"\n"=>1,"\r"=>1,':'=>1,'/'=>1,'*'=>1,'\\'=>1);
+	$POTENTIAL_JS_NAUGHTY_ARRAY=array('d'=>1,/*'a'=>1,'t'=>1,'a'=>1,*/'j'=>1,'a'=>1,'v'=>1,'s'=>1,'c'=>1,'r'=>1,'i'=>1,'p'=>1,'t'=>1,'J'=>1,'A'=>1,'V'=>1,'S'=>1,'C'=>1,'R'=>1,'I'=>1,'P'=>1,'T'=>1,' '=>1,"\t"=>1,"\n"=>1,"\r"=>1,':'=>1,'/'=>1,'*'=>1,'\\'=>1);
 	$POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)]=1;
 
 	// Hehe
@@ -802,7 +802,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											$tag_output->attach($continuation);
 											$continuation='';
 
-											$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($this_member_id,false,true);
+											$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
 											if ((get_forum_type()=='ocf') && ($username_info))
 											{
 												require_lang('ocf');

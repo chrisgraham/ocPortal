@@ -7,7 +7,7 @@ function make_tooltip_func(op)
 		if (!tpl_descrips[op])
 		{
 			var getDescrip=function() {
-				var loaded_result=load_XML_doc(url+'?theme='+window.encodeURIComponent(window.current_theme)+'&id='+window.encodeURIComponent(op)+keep_stub());
+				var loaded_result=do_ajax_request(url+'?theme='+window.encodeURIComponent(window.current_theme)+'&id='+window.encodeURIComponent(op)+keep_stub());
 				if (!loaded_result) return '';
 				tpl_descrips[op]=loaded_result.responseText;
 				return '<div class="whitespace">'+escape_html(tpl_descrips[op])+'</div>';
@@ -223,7 +223,7 @@ function load_contextual_css_editor(file)
 	set_up_parent_page_highlighting();
 	
 	// Set up background compiles
-	if (typeof window.load_XML_doc!='undefined')
+	if (typeof window.do_ajax_request!='undefined')
 	{
 		var textarea=document.getElementById('css');
 		var last_css=textarea.value;
@@ -236,7 +236,7 @@ function load_contextual_css_editor(file)
 				if (new_value!=last_css)
 				{
 					var url="{$BASE_URL_NOHTTP#}/data/snippet.php?snippet=css_compile"+keep_stub();
-					load_XML_doc(url,receive_compiled_css,'css='+window.encodeURIComponent(new_value));
+					do_ajax_request(url,receive_compiled_css,'css='+window.encodeURIComponent(new_value));
 				}
 				last_css=new_value;
 			}
@@ -382,7 +382,11 @@ function do_editarea_search(regexp)
 	ecw.document.getElementById('area_search').value=regexp;
 	ecw.editArea.execCommand('area_search');
 	ecw.editArea.execCommand('hidden_search');
-	window.scrollTo(0,findPosY(document.getElementById('css').parentNode));
+	try
+	{
+		window.scrollTo(0,findPosY(document.getElementById('css').parentNode));
+	}
+	catch (e) {};
 
 	// Force scroll to bottom, so scrolls up when searching and shows result without scrolling back down
 	ecw.document.getElementById('result').scrollTop=ecw.document.getElementById('result').scrollHeight;

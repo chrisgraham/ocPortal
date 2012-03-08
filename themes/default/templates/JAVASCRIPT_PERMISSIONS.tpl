@@ -75,7 +75,7 @@ function show_permission_setting(ob,event)
 		}
 
 		var url='{$FIND_SCRIPT_NOHTTP;,find_permissions}?serverid='+window.encodeURIComponent(serverid)+'&x='+window.encodeURIComponent(ob.name);
-		var ret=load_XML_doc(url+keep_stub(),false);
+		var ret=do_ajax_request(url+keep_stub(),false);
 		if (!ret) return;
 		ob.full_setting=ret.responseText;
 	}
@@ -461,7 +461,7 @@ function update_permission_box(setting)
 function set_permissions(setting)
 {
 	if (typeof window.site_tree=='undefined') return;
-	if (typeof window.load_XML_doc=='undefined') return;
+	if (typeof window.do_ajax_request=='undefined') return;
 
 	if (setting.value=='')
 	{
@@ -538,7 +538,7 @@ function set_permissions(setting)
 		}
 
 		// Send AJAX request
-		if (set_request!='') load_XML_doc("{$BASE_URL_NOHTTP#}/data/site_tree.php?set_perms=1"+keep_stub(),null,set_request);
+		if (set_request!='') do_ajax_request("{$BASE_URL_NOHTTP#}/data/site_tree.php?set_perms=1"+keep_stub(),null,set_request);
 	}
 	window.fauxmodal_alert('{!PERMISSIONS_TREE_EDITOR_SAVED^;}');
 }

@@ -96,7 +96,7 @@ class Hook_Profiles_Tabs_friends
 					$mutual_label=do_lang('MUTUAL_FRIEND');
 					$box=ocf_show_member_box($f_id,false,NULL,NULL,true,($f_id==$member_id_viewing || $member_id_of==$member_id_viewing)?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL);
 					if ($box->is_empty()) continue;
-					$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_link($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
+					$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
 					if ($appears_twice) // Mutual friendship
 					{
 						$friends_a[]=$friend_map;

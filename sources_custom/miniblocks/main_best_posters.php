@@ -16,7 +16,7 @@
 			$av_post_length=$_member['avg'];
 			
 			$_avatar_url=escape_html($GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member));
-			$link=$GLOBALS['FORUM_DRIVER']->member_profile_link($member,false,true);
+			$link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
 			if (is_object($link)) $link=$link->evaluate();
 			$_link=escape_html($link);
 			$_avatar=($_avatar_url!='')?('<img alt="Avatar" src="'.$_avatar_url.'" />'):'';

@@ -279,7 +279,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 
 		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_forum_id'=>$to),array('t_forum_id'=>$from));
 
-		// Update forum ids' for posts
+		// Update forum IDs' for posts
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_cache_forum_id'=>$to),array('p_cache_forum_id'=>$from));
 
 		$or_list_2=str_replace('id','p_topic_id',$or_list);
@@ -292,14 +292,14 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 		if (($topic_info[0]['t_forum_id']!=$from) || ((($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topics[0])) && (!has_specific_permission(get_member(),'view_other_pt')) && (is_null($topic_info[0]['t_forum_id']))))
 			access_denied('I_ERROR');
 		if ($topic_info[0]['t_validated']==1) $topic_count++;
-		$topic_name=$topic_info[0]['t_cache_first_title'];
+		$topic_title=$topic_info[0]['t_cache_first_title'];
 		$post_count=$topic_info[0]['t_cache_num_posts'];
 		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_pt_from'=>NULL,'t_pt_to'=>NULL,'t_forum_id'=>$to),array('t_forum_id'=>$from,'id'=>$topics[0]),'',1); // Extra where constraint for added security
-		log_it('MOVE_TOPICS',$topic_name,$topics[0]);
+		log_it('MOVE_TOPICS',$topic_title,$topics[0]);
 		$or_list='id='.strval($topics[0]);
 		$or_list_2='p_topic_id='.strval($topics[0]);
 
-		// Update forum ids' for posts
+		// Update forum IDs' for posts
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_cache_forum_id'=>$to),array('p_topic_id'=>$topics[0]));
 	}
 	else // Unknown number
@@ -333,7 +333,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 
 		$post_count=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT SUM(t_cache_num_posts) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list);
 
-		// Update forum ids' for posts
+		// Update forum IDs' for posts
 		$or_list_2=str_replace('id','p_topic_id',$or_list);
 		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval((integer)$to).' WHERE '.$or_list_2);
 	}
@@ -389,13 +389,13 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 			if ($_topic['t_cache_last_time']<time()-60*60*24*14) continue;
 
 			$topic_id=$_topic['id'];
-			$topic_name=$_topic['t_cache_first_title'];
+			$topic_title=$_topic['t_cache_first_title'];
 
-			suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$topic_name);
+			suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$topic_title);
 
 			// Now lets inform people tracking the topic that it has moved
-			$subject=do_lang('TOPIC_MOVE_MAIL_SUBJECT',get_site_name(),$topic_name);
-			$mail=do_lang('TOPIC_MOVE_MAIL',comcode_escape(get_site_name()),comcode_escape($topic_name),array(comcode_escape($forum_name)));
+			$subject=do_lang('TOPIC_MOVE_MAIL_SUBJECT',get_site_name(),$topic_title);
+			$mail=do_lang('TOPIC_MOVE_MAIL',comcode_escape(get_site_name()),comcode_escape($topic_title),array(comcode_escape($forum_name)));
 			dispatch_notification('ocf_topic',strval($topic_id),$subject,$mail);
 		}
 	}
@@ -430,17 +430,17 @@ function ocf_invite_to_pt($member_id,$topic_id)
 	));
 
 	$current_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-	$_topic_link=build_url(array('page'=>'topicview','type'=>'view','id'=>$topic_id),get_module_zone('topicview'),NULL,false,false,true);
-	$topic_link=$_topic_link->evaluate();
-	$topic_name=$topic_info[0]['t_cache_first_title'];
+	$_topic_url=build_url(array('page'=>'topicview','type'=>'view','id'=>$topic_id),get_module_zone('topicview'),NULL,false,false,true);
+	$topic_url=$_topic_url->evaluate();
+	$topic_title=$topic_info[0]['t_cache_first_title'];
 
 	require_code('ocf_posts_action');
 	$post=do_lang('INVITED_TO_PT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$current_username);
 	ocf_make_post($topic_id,'',$post,0,false,1,1,do_lang('SYSTEM'),NULL,NULL,db_get_first_id(),NULL,NULL,NULL,false);
 
 	require_code('notifications');
-	$subject=do_lang('INVITED_TO_TOPIC_SUBJECT',get_site_name(),$topic_name,get_lang($member_id));
-	$mail=do_lang('INVITED_TO_TOPIC_BODY',get_site_name(),comcode_escape($topic_name),array(comcode_escape($current_username),$topic_link),get_lang($member_id));
+	$subject=do_lang('INVITED_TO_TOPIC_SUBJECT',get_site_name(),$topic_title,get_lang($member_id));
+	$mail=do_lang('INVITED_TO_TOPIC_BODY',get_site_name(),comcode_escape($topic_title),array(comcode_escape($current_username),$topic_url),get_lang($member_id));
 	dispatch_notification('ocf_topic_invite',NULL,$subject,$mail,array($member_id));
 }
 
@@ -464,7 +464,7 @@ function send_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$
 
 	require_code('notifications');
 	$msubject=do_lang('NEW_PERSONAL_TOPIC_SUBJECT',$subject,NULL,NULL,get_lang($to_id));
-	$mmessage=do_lang('NEW_PERSONAL_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_link($topic_id)),$post_comcode),get_lang($to_id));
+	$mmessage=do_lang('NEW_PERSONAL_TOPIC_MESSAGE',comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($from_id)),comcode_escape($subject),array(comcode_escape($GLOBALS['FORUM_DRIVER']->topic_url($topic_id)),$post_comcode),get_lang($to_id));
 	dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($to_id),$from_id);
 
 	if ($mark_unread)
@@ -495,9 +495,7 @@ function handle_topic_ticket_reply($forum_id,$topic_id,$topic_title,$post)
 			if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 			$topic_description=$topic_info[0]['t_description'];
-			$ticket_id=sanitise_topic_description($topic_description);
-			if ($ticket_id==$topic_description) // Failure (old-style topic)
-				$ticket_id=sanitise_topic_title($topic_title);
+			$ticket_id=extract_topic_identifier($topic_description);
 			$home_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$ticket_id),'site',NULL,false,true);
 
 			send_ticket_email($ticket_id,$topic_title,$post,$home_url->evaluate(),'',-1);

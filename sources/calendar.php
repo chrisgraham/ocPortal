@@ -73,7 +73,7 @@ function date_from_week_of_year($year,$week)
  * Put a timestamp into the correct timezone for being reported onto the calendar.
  *
  * @param  TIME			Timestamp
- * @param  ID_TEXT		The timezone for the event (NULL: current user's timezone)
+ * @param  ?ID_TEXT		The timezone for the event (NULL: current user's timezone)
  * @param  boolean		Whether the time should be presented in the viewer's own timezone
  * @return TIME			Altered timestamp
  */

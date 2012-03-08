@@ -33,13 +33,13 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 				if (!event) event=window.event;
 				if ((enter_pressed(event)) && (this.value!=''))
 				{
-					if (typeof window.load_XML_doc=='undefined')
+					if (typeof window.do_ajax_request=='undefined')
 					{
 						window.setTimeout(function () { input.onkeypress(event); } ,100);
 						return false;
 					}
 
-					var response=load_XML_doc(input.form.action,false,input.name+'='+window.encodeURIComponent(input.value));
+					var response=do_ajax_request(input.form.action,false,input.name+'='+window.encodeURIComponent(input.value));
 					input.form.parentNode.removeChild(input.form);
 					object.onclick=object.old_onclick;
 					object.onkeypress=object.old_onkeypress;
@@ -56,7 +56,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 						}
 
 						var session_test_url='{$FIND_SCRIPT_NOHTTP;,confirm_session}';
-						var session_test_ret=load_XML_doc(session_test_url+keep_stub(true));
+						var session_test_ret=do_ajax_request(session_test_url+keep_stub(true));
 
 						if ((session_test_ret.responseText!='') && (session_test_ret.responseText!=Null)) // If it failed, see if it is due to a non-confirmed session
 						{

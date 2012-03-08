@@ -70,7 +70,7 @@ function begin_chatting(room_id)
 {
 	window.load_from_room_id=room_id;
 	
-	if ((window.chat_check) && (window.load_XML_doc)) chat_check(true,0); else window.setTimeout(begin_chatting,500);
+	if ((window.chat_check) && (window.do_ajax_request)) chat_check(true,0); else window.setTimeout(begin_chatting,500);
 
 	if (typeof window.play_chat_sound!='undefined') play_chat_sound('you_connect');
 }
@@ -223,7 +223,7 @@ function doInput_new_room(field_name)
 function chat_post(event,current_room_id,field_name,font_name,font_colour)
 {
 	// Catch the data being submitted by the form, and send it through XMLHttpRequest if possible. Stop the form submission if this is achieved.
-	if ((window.load_XML_doc) && (window.ajax_supported) && (ajax_supported()))
+	if ((window.do_ajax_request) && (window.ajax_supported) && (ajax_supported()))
 	{
 		var element=document.getElementById(field_name);
 		cancelBubbling(event,element);
@@ -237,7 +237,7 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 			var url="{$FIND_SCRIPT,messages}?action=post";
 			element.disabled=true;
 			top_window.currently_sending_message=true;
-			var result=load_XML_doc(maintain_theme_in_link(url)+top_window.keep_stub(false),null,"room_id="+window.encodeURIComponent(current_room_id)+"&message="+window.encodeURIComponent(message_text)+"&font="+window.encodeURIComponent(font_name)+"&colour="+window.encodeURIComponent(font_colour)+"&message_id="+window.encodeURIComponent(top_window.last_message_id)+"&event_id="+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false));
+			var result=do_ajax_request(maintain_theme_in_link(url)+top_window.keep_stub(false),null,"room_id="+window.encodeURIComponent(current_room_id)+"&message="+window.encodeURIComponent(message_text)+"&font="+window.encodeURIComponent(font_name)+"&colour="+window.encodeURIComponent(font_colour)+"&message_id="+window.encodeURIComponent(top_window.last_message_id)+"&event_id="+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false));
 			top_window.currently_sending_message=false;
 			element.disabled=false;
 
@@ -287,7 +287,7 @@ function chat_check(backlog,message_id,event_id)
 	if (!event_id) event_id=-1; // Means, we don't want to look at events, but the server will give us a null event
 
 	// Check for new messages on the server the new or old way
-	if ((window.ajax_supported) && (ajax_supported()) && (window.load_XML_doc))
+	if ((window.ajax_supported) && (ajax_supported()) && (window.do_ajax_request))
 	{
 		// AJAX!
 		window.setTimeout("chat_check_timeout("+backlog+","+message_id+","+event_id+");",11000);
@@ -304,7 +304,7 @@ function chat_check(backlog,message_id,event_id)
 				url="{$FIND_SCRIPT*,messages}?action=new&room_id="+window.encodeURIComponent(load_from_room_id)+"&message_id="+window.encodeURIComponent(message_id)+"&event_id="+window.encodeURIComponent(event_id);
 			}
 			if (window.location.href.indexOf('no_reenter_message=1')!=-1) url=url+'&no_reenter_message=1';
-			load_XML_doc(maintain_theme_in_link(url+keep_stub(false)),chat_check_response,false);
+			do_ajax_request(maintain_theme_in_link(url+keep_stub(false)),chat_check_response,false);
 			return false;
 		}
 		return null;
@@ -741,7 +741,7 @@ function _start_im(people)
 	div.className='loading_overlay';
 	setInnerHTML(div,'{!LOADING^;}');
 	document.body.appendChild(div);
-	var result=load_XML_doc(maintain_theme_in_link("{$FIND_SCRIPT*,messages}?action=start_im&people="+people+"&message_id="+window.encodeURIComponent(top_window.last_message_id)+"&event_id="+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false)));
+	var result=do_ajax_request(maintain_theme_in_link("{$FIND_SCRIPT*,messages}?action=start_im&people="+people+"&message_id="+window.encodeURIComponent(top_window.last_message_id)+"&event_id="+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false)));
 	var responses=result.responseXML.getElementsByTagName('result');
 	if (responses[0])
 	{
@@ -760,7 +760,7 @@ function invite_im(people)
 		window.fauxmodal_alert('{!NO_IM_ACTIVE^;}');
 	} else
 	{
-		load_XML_doc("{$FIND_SCRIPT*,messages}?action=invite_im&room_id="+window.encodeURIComponent(room_id)+"&people="+people+keep_stub(false));
+		do_ajax_request("{$FIND_SCRIPT*,messages}?action=invite_im&room_id="+window.encodeURIComponent(room_id)+"&people="+people+keep_stub(false));
 	}
 }
 
@@ -847,7 +847,7 @@ function deinvolve_im(room,logs,is_not_window)
 
 	window.setTimeout(function() // Give time for any logs to download
 	{
-		load_XML_doc("{$FIND_SCRIPT*,messages}?action=deinvolve_im&room_id="+window.encodeURIComponent(room)+top_window.keep_stub(false));
+		do_ajax_request("{$FIND_SCRIPT*,messages}?action=deinvolve_im&room_id="+window.encodeURIComponent(room)+top_window.keep_stub(false));
 
 		if (tabs)
 		{
@@ -925,7 +925,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 		chat_select_tab(new_div);
 
 		// Tell server we've joined
-		load_XML_doc(url,handle_signals,false);
+		do_ajax_request(url,handle_signals,false);
 	} else
 	{
 		// Open popup
@@ -958,7 +958,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 					catch (e) {};
 
 					// Tell server we've joined
-					load_XML_doc(url,handle_signals,false);
+					do_ajax_request(url,handle_signals,false);
 				},4000);
 			}
 		},1000);

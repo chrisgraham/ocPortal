@@ -1561,7 +1561,7 @@ Element.Methods = {
   scrollTo: function(element) {
     element = $(element);
     var pos = Position.cumulativeOffset(element);
-    window.scrollTo(pos[0], pos[1]);
+    try { window.scrollTo(pos[0], pos[1]); } catch (e) {};
     return element;
   },
 

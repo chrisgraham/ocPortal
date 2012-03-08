@@ -4,7 +4,7 @@
 		
 		{+START,IF,{$DEV_MODE}}
 			<script type="text/javascript">// <![CDATA[
-				{+START,IF,{$IS_NON_EMPTY,{ERROR_MESSAGES_DURING_OUTPUT}}}window.scrollTo(0,1000000);{+END}
+				{+START,IF,{$IS_NON_EMPTY,{ERROR_MESSAGES_DURING_OUTPUT}}}try { window.scrollTo(0,1000000); } catch (e) {};{+END}
 				window.fauxmodal_alert('{!PLEASE_REVIEW_ERRORS_AT_BOTTOM;}'); // Before Firefox dies with an XHTML error, let the developer see what is wrong
 			//]]></script>
 		{+END}
@@ -53,7 +53,7 @@
 	scriptLoadStuff();
 	if (typeof window.scriptPageRendered!='undefined') scriptPageRendered();
 
-	{+START,IF,{$EQ,{$_GET,wide_print},1}}window.print();{+END}
+	{+START,IF,{$EQ,{$_GET,wide_print},1}}try { window.print(); } catch (e) {};{+END}
 //]]></script>
 {$EXTRA_FOOT}
 </div></body>

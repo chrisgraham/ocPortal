@@ -353,7 +353,7 @@ class Hook_search_ocf_members
 				$num_galleries=$GLOBALS['SITE_DB']->query('SELECT COUNT(*) AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member_'.strval($member_id).'_%').'\'');
 			}
 			$_lines+=array(
-								do_lang('USERNAME')=>hyperlink($GLOBALS['OCF_DRIVER']->member_profile_link($member_id,false,true),$username,false,true),
+								do_lang('USERNAME')=>hyperlink($GLOBALS['OCF_DRIVER']->member_profile_url($member_id,false,true),$username,false,true),
 								do_lang('JOIN_DATE')=>escape_html(get_timezoned_date($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_join_time'),false)),
 						);
 			if ((get_option('show_gallery_counts')=='1') && (addon_installed('galleries')))

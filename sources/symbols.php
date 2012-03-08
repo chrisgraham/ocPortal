@@ -646,7 +646,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'MEMBER_PROFILE_LINK':
-				$value=$GLOBALS['FORUM_DRIVER']->member_profile_link(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member(),false,true);
+				$value=$GLOBALS['FORUM_DRIVER']->member_profile_url(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member(),false,true);
 				if (is_null($value)) $value='';
 				break;
 
@@ -1857,7 +1857,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if (get_option('is_on_comments')=='1')
 					{
 						$count=0;
-						$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts(get_option('comments_forum_name'),$param[0].'_'.$param[1],$param[0].'_'.$param[1],$count,0,0,false);
+						$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$param[0].'_'.$param[1]),$count,0,0,false);
 						$_value=do_lang_tempcode('_COMMENTS',integer_format(0));
 						if (is_array($_comments)) $_value=do_lang_tempcode('_COMMENTS',escape_html(integer_format($count)));
 						$value=$_value->evaluate();
@@ -1946,7 +1946,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$value=isset($rating['_RATING'][0]['RATING'])?$rating['_RATING'][0]['RATING']:'';
 					} else
 					{
-						$value=do_template('RATING_INLINE',$rating);
+						$value=do_template('RATING_INLINE_STATIC',$rating);
 					}
 					if (is_object($value)) $value=$value->evaluate();
 				}

@@ -157,7 +157,7 @@ class Module_login
 		
 		breadcrumb_set_parents(array());
 
-		return do_template('LOGIN_SCREEN',array('_GUID'=>'0940dbf2c42493c53b7e99eb50ca51f1','EXTRA'=>$extra,'USERNAME'=>$username,'JOIN_LINK'=>$GLOBALS['FORUM_DRIVER']->join_link(),'TITLE'=>$title,'LOGIN_URL'=>$login_url,'PASSION'=>$passion));
+		return do_template('LOGIN_SCREEN',array('_GUID'=>'0940dbf2c42493c53b7e99eb50ca51f1','EXTRA'=>$extra,'USERNAME'=>$username,'JOIN_LINK'=>$GLOBALS['FORUM_DRIVER']->join_url(),'TITLE'=>$title,'LOGIN_URL'=>$login_url,'PASSION'=>$passion));
 	}
 	
 	/**

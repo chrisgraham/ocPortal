@@ -138,7 +138,7 @@ function get_page_title($title,$dereference_lang=true,$params=NULL,$user_online_
  * @param  ?string		The access key to use (NULL: none)
  * @param  ?tempcode		Data to post (NULL: an ordinary link)
  * @param  ?string		Rel (link type) (NULL: no special type)
- * @param  ID_TEXT		Open in overlay with the default link/form target being as follows (e.g. _top or _self) (NULL: an ordinary link)
+ * @param  ?ID_TEXT		Open in overlay with the default link/form target being as follows (e.g. _top or _self) (NULL: an ordinary link)
  * @return tempcode		The generated hyperlink
  */
 function hyperlink($url,$caption,$external=false,$escape=false,$title='',$accesskey=NULL,$post_data=NULL,$rel=NULL,$overlay=NULL)

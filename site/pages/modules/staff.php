@@ -180,7 +180,7 @@ class Module_staff
 		}
 		$email_address=obfuscate_email_address($GLOBALS['FORUM_DRIVER']->pname_email($row_staff));
 		$name=$GLOBALS['FORUM_DRIVER']->pname_name($row_staff);
-		$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($id,false,true);
+		$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 
 		$all_link=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 

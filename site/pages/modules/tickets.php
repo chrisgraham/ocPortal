@@ -233,7 +233,7 @@ class Module_tickets
 				$entry_data=get_tickets($member_id,intval($parent_attributes['defaultb']));
 				foreach ($entry_data as $row)
 				{
-					$ticket_id=($row['description']=='')?sanitise_topic_title($row['title']):sanitise_topic_description($row['description']);
+					$ticket_id=extract_topic_identifier($row['description']);
 
 					$pagelink=$pagelink_stub.'ticket:'.$ticket_id;
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['firsttime'],$row['lasttime'],0.2,$row['firsttitle'])); // Callback
@@ -338,7 +338,7 @@ class Module_tickets
 				{
 					if (($topic['closed']) && (has_specific_permission(get_member(),'support_operator')) && (count($tickets)>3)) continue; // Staff don't see closed tickets
 
-					$ticket_id=((!array_key_exists('description',$topic)) || ($topic['description']==''))?sanitise_topic_title($topic['title']):sanitise_topic_description($topic['description']);
+					$ticket_id=extract_topic_identifier($topic['description']);
 
 					$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$ticket_id),'_SELF');
 					$_title=$topic['firsttitle'];
@@ -346,7 +346,7 @@ class Module_tickets
 					$member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($topic['lastusername']);
 					if (!is_null($member))
 					{
-						$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_link($member,false,true);
+						$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
 						$last_poster=$topic['lastusername'];
 					} else
 					{
@@ -459,7 +459,7 @@ class Module_tickets
 
 				if (is_null($_comments)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 				if (has_specific_permission(get_member(),'support_operator'))
-					$staff_details=make_string_tempcode($GLOBALS['FORUM_DRIVER']->topic_link($topic_id,escape_html(get_option('ticket_forum_name'))));
+					$staff_details=make_string_tempcode($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,escape_html(get_option('ticket_forum_name'))));
 				else $staff_details=new ocp_tempcode();
 				$comments=new ocp_tempcode();
 				foreach ($_comments as $i=>$comment)
@@ -491,7 +491,7 @@ class Module_tickets
 						$poster_link='';
 					} else
 					{
-						$poster_link=$GLOBALS['FORUM_DRIVER']->member_profile_link($comment['user'],false,true);
+						$poster_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($comment['user'],false,true);
 					}
 					if (((is_string($comment['message'])) && ($comment['message']!='')) || ((is_object($comment['message'])) && (!$comment['message']->is_really_empty())))
 					{
@@ -542,7 +542,7 @@ class Module_tickets
 						generate_captcha();
 					}
 				} else $use_captcha=false;
-				$comment_box=do_template('COMMENTS',array('_GUID'=>'aaa32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'ATTACHMENTS'=>$attachments,'ATTACH_SIZE_FIELD'=>$attach_size_field,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>is_guest(),'EMAIL_OPTIONAL'=>((is_guest()) && ($ticket_type_details['guest_emails_mandatory'])),'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST')));
+				$comment_box=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'aaa32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'ATTACHMENTS'=>$attachments,'ATTACH_SIZE_FIELD'=>$attach_size_field,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>is_guest(),'EMAIL_OPTIONAL'=>((is_guest()) && ($ticket_type_details['guest_emails_mandatory'])),'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST')));
 			} else
 			{
 				$comment_box=new ocp_tempcode();
@@ -562,7 +562,7 @@ class Module_tickets
 				{
 					foreach ($tickets_of_member as $topic)
 					{
-						$ticket_id=($topic['description']=='')?sanitise_topic_title($topic['title']):sanitise_topic_description($topic['description']);
+						$ticket_id=extract_topic_identifier($topic['description']);
 
 						if ($id!=$ticket_id)
 						{
@@ -575,7 +575,7 @@ class Module_tickets
 								$profile_link='';
 							} else
 							{
-								$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_link($ticket_owner,false,true);
+								$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($ticket_owner,false,true);
 							}
 							$last_poster=$topic['lastusername'];
 							$unclosed=(!$GLOBALS['FORUM_DRIVER']->is_staff($topic['lastmemberid']));
@@ -622,7 +622,7 @@ class Module_tickets
 		$tickets=get_tickets(get_member(),NULL);
 		foreach ($tickets as $ticket)
 		{
-			$ticket_id=($ticket['description']=='')?sanitise_topic_title($ticket['title']):sanitise_topic_description($ticket['description']);
+			$ticket_id=extract_topic_identifier($ticket['description']);
 			if ($ticket_id==$id)
 			{
 				if ($ticket['closed']==0) $action='OPEN_TICKET';
@@ -659,7 +659,6 @@ class Module_tickets
 		// Update
 		$_home_url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id,'redirect'=>NULL),'_SELF',NULL,false,true,true);
 		$home_url=$_home_url->evaluate();
-		$home_link=hyperlink($home_url,escape_html($_title));
 		$email='';
 		if ($ticket_type!=-1)
 		{
@@ -701,7 +700,7 @@ class Module_tickets
 				enforce_captcha();
 			}
 		}
-		ticket_add_post(get_member(),$id,$ticket_type,$_title,$post,$home_link,$home_url,$staff_only);
+		ticket_add_post(get_member(),$id,$ticket_type,$_title,$post,$home_url,$staff_only);
 
 		// Find true ticket title
 		$_forum=1; $_topic_id=1; $_ticket_type=1; // These will be returned by reference

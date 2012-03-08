@@ -81,15 +81,15 @@ class Block_side_ocf_personal_topics
 		$out=new ocp_tempcode();
 		foreach ($rows as $topic)
 		{
-			$topic_link=build_url(array('page'=>'topicview','id'=>$topic['id'],'type'=>'findpost'),get_module_zone('topicview'));
-			$topic_link->attach('#post_'.strval($topic['id']));
+			$topic_url=build_url(array('page'=>'topicview','id'=>$topic['id'],'type'=>'findpost'),get_module_zone('topicview'));
+			$topic_url->attach('#post_'.strval($topic['id']));
 			$title=$topic['t_cache_first_title'];
 			$date=get_timezoned_date($topic['t_cache_last_time'],true);
 			$username=$topic['t_cache_last_username'];
-			$member_link=$GLOBALS['OCF_DRIVER']->member_profile_link($topic['t_cache_last_member_id'],false,true);
+			$member_link=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['t_cache_last_member_id'],false,true);
 			$num_posts=$topic['t_cache_num_posts'];
 	
-			$out->attach(do_template('TOPIC_LIST',array('_GUID'=>'55ae21a9f8d67ba6237c118a18b9657b','USER_LINK'=>$member_link,'TOPIC_LINK'=>$topic_link,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic['t_cache_last_time']),'USERNAME'=>$username,'NUM_POSTS'=>integer_format($num_posts))));
+			$out->attach(do_template('TOPIC_LIST',array('_GUID'=>'55ae21a9f8d67ba6237c118a18b9657b','USER_LINK'=>$member_link,'TOPIC_LINK'=>$topic_url,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic['t_cache_last_time']),'USERNAME'=>$username,'NUM_POSTS'=>integer_format($num_posts))));
 		}
 		$send_url=build_url(array('page'=>'topics','type'=>'new_pt','redirect'=>SELF_REDIRECT),get_module_zone('topics'));
 		if (!ocf_may_make_personal_topic()) $send_url=new ocp_tempcode();

@@ -192,7 +192,7 @@ function ze_animate_to(ob,amount,towards_expanded,now)
 
 function reload_preview(id)
 {
-	if (typeof window.load_XML_doc=='undefined') return;
+	if (typeof window.do_ajax_request=='undefined') return;
 	if (typeof window.merge_text_nodes=='undefined') return;
 
 	var element=document.getElementById('view_'+id);
@@ -206,7 +206,7 @@ function reload_preview(id)
 
 	var data='';
 	data+=getTextbox(edit_element);
-	load_XML_doc('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?fix_bad_html=1&css=1&javascript=1&from_html=0&is_semihtml='+(isWYSIWYGField(edit_element)?'1':'0')+'&panel='+(((id=='panel_left') || (id=='panel_right'))?'1':'0')+keep_stub(),reloaded_preview,(isWYSIWYGField(edit_element)?'data__is_wysiwyg=1&':'')+'data='+window.encodeURIComponent(data));
+	do_ajax_request('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?fix_bad_html=1&css=1&javascript=1&from_html=0&is_semihtml='+(isWYSIWYGField(edit_element)?'1':'0')+'&panel='+(((id=='panel_left') || (id=='panel_right'))?'1':'0')+keep_stub(),reloaded_preview,(isWYSIWYGField(edit_element)?'data__is_wysiwyg=1&':'')+'data='+window.encodeURIComponent(data));
 }
 
 function reloaded_preview(ajax_result_frame,ajax_result)

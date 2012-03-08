@@ -143,8 +143,8 @@ class Module_supermembers
 				$author_url=build_url(array('page'=>'authors','type'=>'misc','id'=>$name),get_module_zone('authors'));
 			} else $author_url=new ocp_tempcode();
 			$points_url=addon_installed('points')?build_url(array('page'=>'points','type'=>'member','id'=>$id),get_module_zone('points')):new ocp_tempcode();
-			$pm_url=$GLOBALS['FORUM_DRIVER']->member_pm_link($id);
-			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($id,false,true);
+			$pm_url=$GLOBALS['FORUM_DRIVER']->member_pm_url($id);
+			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 	
 			// Template
 			$groups_current->attach(do_template('SUPERMEMBERS_SCREEN_ENTRY',array('_GUID'=>'7fdddfe09a33a36762c281e8993327e3','NAME'=>$name,'DAYS'=>integer_format($days),'PROFILE_URL'=>$profile_url,'AUTHOR_URL'=>$author_url,'POINTS_URL'=>$points_url,'PM_URL'=>$pm_url,'SKILLS'=>$skills)));

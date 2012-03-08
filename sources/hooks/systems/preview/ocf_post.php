@@ -114,7 +114,7 @@ class Hook_Preview_ocf_post
 			$poster_details=ocf_show_member_box($post_owner,false,NULL,NULL,false);
 			$poster_username=$GLOBALS['FORUM_DRIVER']->get_username($post_owner);
 			if (is_null($poster_username)) $poster_username=do_lang('UNKNOWN');
-			$poster=do_template('OCF_POSTER_MEMBER',array('_GUID'=>'976a6ceb631bbdcdd950b723cb5d2487','ONLINE'=>true,'ID'=>strval($post_owner),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_link($post_owner,false,true),'POSTER_USERNAME'=>$poster_username));
+			$poster=do_template('OCF_POSTER_MEMBER',array('_GUID'=>'976a6ceb631bbdcdd950b723cb5d2487','ONLINE'=>true,'ID'=>strval($post_owner),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post_owner,false,true),'POSTER_USERNAME'=>$poster_username));
 		} else
 		{
 			$poster_details=new ocp_tempcode();
@@ -138,7 +138,7 @@ class Hook_Preview_ocf_post
 
 		if (get_param('type')=='edit_post')
 		{
-			$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('LAST_EDIT_DATE_RAW'=>strval(time()),'LAST_EDIT_DATE'=>get_timezoned_date(time(),true),'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_link(get_member(),false,true),'LAST_EDIT_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
+			$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('LAST_EDIT_DATE_RAW'=>strval(time()),'LAST_EDIT_DATE'=>get_timezoned_date(time(),true),'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'LAST_EDIT_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
 		} else $last_edited=new ocp_tempcode();
 
 		$post=do_template('OCF_TOPIC_POST',array('_GUID'=>'354473f96b4f7324d2a9c476ff78f0d7','POST_ID'=>'','TOPIC_FIRST_POST_ID'=>'','TOPIC_FIRST_POSTER'=>strval(get_member()),'POST_TITLE'=>$post_title,'CLASS'=>$class,'EMPHASIS'=>$emphasis,'FIRST_UNREAD'=>'','TOPIC_ID'=>'','ID'=>'','POST_DATE'=>$post_date,'UNVALIDATED'=>$unvalidated,'URL'=>'','POSTER'=>$poster,'POST_AVATAR'=>$post_avatar,'POSTER_TITLE'=>$poster_title,'RANK_IMAGES'=>$rank_images,'POST'=>$post_html,'LAST_EDITED'=>$last_edited,'SIGNATURE'=>$signature,'BUTTONS'=>'','POSTER_ID'=>strval($post_owner)));

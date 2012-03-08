@@ -180,7 +180,7 @@ function closed_site()
 		}
 		if (is_object($redirect)) $redirect=$redirect->evaluate();
 		$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
-		$join_url=(get_forum_type()=='none')?'':$GLOBALS['FORUM_DRIVER']->join_link();
+		$join_url=(get_forum_type()=='none')?'':$GLOBALS['FORUM_DRIVER']->join_url();
 		$echo->attach(do_template('CLOSED_SITE',array('_GUID'=>'4e753c50eca7c98344d2107fc18c4554','CLOSED'=>comcode_to_tempcode(get_option('closed'),NULL,true),'LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url)));
 		$echo->attach(do_footer());
 		$echo->handle_symbol_preprocessing();

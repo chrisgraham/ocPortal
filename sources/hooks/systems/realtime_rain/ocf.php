@@ -54,7 +54,7 @@ class Hook_realtime_rain_ocf
 						'TIMESTAMP'=>strval($timestamp),
 						'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),
 						'TICKER_TEXT'=>NULL,
-						'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id,false,true),
+						'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true),
 						'IS_POSITIVE'=>true,
 						'IS_NEGATIVE'=>false,
 
@@ -91,7 +91,7 @@ class Hook_realtime_rain_ocf
 						'TIMESTAMP'=>strval($timestamp),
 						'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),
 						'TICKER_TEXT'=>$ticker_text,
-						'URL'=>$GLOBALS['FORUM_DRIVER']->post_link($row['id'],$row['p_cache_forum_id']),
+						'URL'=>$GLOBALS['FORUM_DRIVER']->post_url($row['id'],$row['p_cache_forum_id']),
 						'IS_POSITIVE'=>false,
 						'IS_NEGATIVE'=>false,
 

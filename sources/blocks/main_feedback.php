@@ -63,7 +63,7 @@ class Block_main_feedback
 		{
 			if (!has_no_forum())
 			{
-				$hidden=do_comments(true,$type,$id,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,($is_occle_talking) || (get_option('captcha_on_feedback')=='0'),1,false,true,true);
+				$hidden=actualise_post_comment(true,$type,$id,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,($is_occle_talking) || (get_option('captcha_on_feedback')=='0'),1,false,true,true);
 				if (array_key_exists('title',$_POST))
 				{
 					$redirect=get_param('redirect',NULL);
@@ -104,7 +104,7 @@ class Block_main_feedback
 		// Comment posts
 		$forum=get_option('comments_forum_name');
 		$count=0;
-		$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$type.'_'.$id,'',$count);
+		$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$type.'_'.$id),'',$count);
 		if ($_comments!==-1)
 		{
 			$em=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
@@ -122,7 +122,7 @@ class Block_main_feedback
 					generate_captcha();
 				}
 			} else $use_captcha=false;
-			$comment_details=do_template('COMMENTS',array('_GUID'=>'4ca32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'POST_WARNING'=>get_param('post_warning',''),'COMMENT_TEXT'=>'','GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>do_lang_tempcode('FEEDBACK')));
+			$comment_details=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'4ca32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'POST_WARNING'=>get_param('post_warning',''),'COMMENT_TEXT'=>'','GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>do_lang_tempcode('FEEDBACK')));
 		} else $comment_details=new ocp_tempcode();
 
 		$out->attach($comment_details);

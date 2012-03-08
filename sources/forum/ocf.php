@@ -34,9 +34,10 @@ function init__forum__ocf()
 	global $LAST_POST_ID,$LAST_TOPIC_ID;
 	$LAST_POST_ID=NULL;
 	$LAST_TOPIC_ID=NULL;
-	global $TOPIC_NAMES_TO_IDS,$FORUM_NAMES_TO_IDS;
-	$TOPIC_NAMES_TO_IDS=array();
+	global $TOPIC_IDENTIFIERS_TO_IDS,$FORUM_NAMES_TO_IDS,$TOPIC_IS_THREADED;
+	$TOPIC_IDENTIFIERS_TO_IDS=array();
 	$FORUM_NAMES_TO_IDS=array();
+	$TOPIC_IS_THREADED=array();
 }
 
 class forum_driver_ocf extends forum_driver_base
@@ -186,35 +187,34 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
 	 * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
-	 * Note that $post should be in HTML, and some forums do not store posts as HTML. This is unfortunate, but there are some limits to just how far you can reasonably integrate with all these different forum systems without making a programatic mess.
 	 *
 	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic name
-	 * @param  MEMBER			The member id
-	 * @param  LONG_TEXT		The post content in Comcode format
+	 * @param  SHORT_TEXT	The topic identifier (usually <content-type>_<content-id>)
+	 * @param  MEMBER			The member ID
 	 * @param  LONG_TEXT		The post title
-	 * @param  tempcode		The content title the topic is related to
+	 * @param  LONG_TEXT		The post content in Comcode format
+	 * @param  string			The topic title; must be same as content title if this is for a comment topic
+	 * @param  string			This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
+	 * @param  ?URLPATH		URL to the content (NULL: do not make spacer post)
 	 * @param  ?TIME			The post time (NULL: use current time)
 	 * @param  ?IP				The post IP address (NULL: use current members IP address)
 	 * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
 	 * @param  ?BINARY		Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
 	 * @param  boolean		Whether to skip post checks
-	 * @param  ?array			Array of extra information for the topic ($topic_title,$topic_description,$description_link,$staff_only) (NULL: no extra information)
-	 * @param  string			Guest username
-	 * @return boolean		Whether a hidden post has been made
+	 * @param  SHORT_TEXT	The name of the poster
+	 * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
+	 * @param  boolean		Whether the reply is only visible to staff
+	 * @return array			Topic ID (may be NULL), and whether a hidden post has been made
 	 */
-	function make_post_forum_topic($forum_name,$topic_name,$member,$post,$title,$topic_for,$time=NULL,$ip=NULL,$validated=NULL,$topic_validated=1,$skip_post_checks=false,$extra_info=NULL,$poster_name_if_guest='')
+	function make_post_forum_topic($forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url=NULL,$time=NULL,$ip=NULL,$validated=NULL,$topic_validated=1,$skip_post_checks=false,$poster_name_if_guest='',$parent_id=NULL,$staff_only=false)
 	{
-// 		echo "<pre>";
-// 		print_r(func_get_args());exit();
-
 		require_code('ocf_forum_driver_helper');
-		return _helper_make_post_forum_topic($this,$forum_name,$topic_name,$member,$post,$title,$topic_for,$time,$ip,$validated,$topic_validated,$skip_post_checks,$extra_info,$poster_name_if_guest);
+		return _helper_make_post_forum_topic($this,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only);
 	}
 
 	/**
 	 * Get an array of topics in the given forum. Each topic is an array with the following attributes:
-	 * - id, the topic id
+	 * - id, the topic ID
 	 * - title, the topic title
 	 * - lastusername, the username of the last poster
 	 * - lasttime, the timestamp of the last reply
@@ -226,7 +226,7 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  integer		The limit
 	 * @param  integer		The start position
 	 * @param  integer		The total rows (not a parameter: returns by reference)
-	 * @param  SHORT_TEXT	The topic name filter
+	 * @param  SHORT_TEXT	The topic title filter
 	 * @param  boolean		Whether to show the first posts
 	 * @param  string			The date key to sort by
 	 * @set    lasttime firsttime
@@ -234,29 +234,57 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  SHORT_TEXT	The topic description filter
 	 * @return ?array			The array of topics (NULL: error/none)
 	 */
-	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_name='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
+	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
 		require_code('ocf_forum_driver_helper');
-		return _helper_show_forum_topics($this,$name,$limit,$start,$max_rows,$filter_topic_name,$filter_topic_description,$show_first_posts,$date_key,$hot);
+		return _helper_show_forum_topics($this,$name,$limit,$start,$max_rows,$filter_topic_title,$filter_topic_description,$show_first_posts,$date_key,$hot);
 	}
 
 	/**
 	 * Get an array of maps for the topic in the given forum.
 	 *
-	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic name
-	 * @param  SHORT_TEXT	The topic description. If this is non-blank, this is used for the search rather than the title
+	 * @param  integer		The topic ID
 	 * @param  integer		The comment count will be returned here by reference
 	 * @param  integer		Maximum comments to returned
 	 * @param  integer		Comment to start at
 	 * @param  boolean		Whether to mark the topic read
 	 * @param  boolean		Whether to show in reverse
+	 * @param  boolean		Whether to only load minimal details if it is a threaded topic
+	 * @param  ?array			List of post IDs to load (NULL: no filter)
 	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
 	 */
-	function get_forum_topic_posts($forum_name,$topic_name,$topic_description,&$count,$max=100,$start=0,$mark_read=true,$reverse=false)
+	function get_forum_topic_posts($topic_id,&$count,$max=100,$start=0,$mark_read=true,$reverse=false,$light_if_threaded=false,$posts=NULL)
 	{
 		require_code('ocf_forum_driver_helper');
-		return _helper_get_forum_topic_posts($this,$forum_name,$topic_name,$topic_description,$count,$max,$start,$mark_read,$reverse);
+		return _helper_get_forum_topic_posts($this,$topic_id,$count,$max,$start,$mark_read,$reverse,$light_if_threaded,$posts);
+	}
+
+	/**
+	 * Load extra details for a list of posts. Does not need to return anything if forum driver doesn't support partial post loading (which is only useful for threaded topic partial-display).
+	 *
+	 * @param  AUTO_LINK		Topic the posts come from
+	 * @param  array			List of post IDs
+	 * @return array			Extra details
+	 */
+	function get_post_remaining_details($topic_id,$post_ids)
+	{
+		require_code('ocf_forum_driver_helper');
+		return _helper_get_post_remaining_details($this,$topic_id,$post_ids);
+	}
+
+	/**
+	 * Find whether a forum is threaded.
+	 *
+	 * @param  integer		The topic ID
+	 * @return boolean		Whether it is
+	 */
+	function topic_is_threaded($topic_id)
+	{
+		global $TOPIC_IS_THREADED;
+		if (array_key_exists($topic_id,$TOPIC_IS_THREADED)) return $TOPIC_IS_THREADED[$topic_id]==1;
+
+		$TOPIC_IS_THREADED[$topic_id]=$this->connection->query_value_null_ok('f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id','f_is_threaded',array('t.id'=>$topic_id));
+		return $TOPIC_IS_THREADED[$topic_id]==1;
 	}
 
 	/**
@@ -274,7 +302,7 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Pin a topic.
 	 *
-	 * @param  AUTO_LINK		The topic id
+	 * @param  AUTO_LINK		The topic ID
 	 */
 	function pin_topic($id)
 	{
@@ -466,7 +494,7 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the members home
 	 */
-	function member_home_link($id)
+	function member_home_url($id)
 	{
 		$_url=build_url(array('page'=>'members','type'=>'view','id'=>$id),get_module_zone('members'),NULL,false,false,false,'tab__edit');
 		$url=$_url->evaluate();
@@ -481,7 +509,7 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
 	 * @return mixed			The URL to the member profile
 	 */
-	function _member_profile_link($id,$tempcode_okay=false)
+	function _member_profile_url($id,$tempcode_okay=false)
 	{
 		if (get_value('username_profile_links')=='1')
 		{
@@ -503,7 +531,7 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  SHORT_TEXT	The username
 	 * @return URLPATH		The URL to the member profile
 	 */
-	function member_profile_link_name($name)
+	function member_profile_url_name($name)
 	{
 		$_url=build_url(array('page'=>'members','type'=>'view','id'=>$this->get_member_from_username($name)));
 		$url=$_url->evaluate();
@@ -516,7 +544,7 @@ class forum_driver_ocf extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the registration page
 	 */
-	function _join_link()
+	function _join_url()
 	{
 		$page='_SELF';
 		if (count($_POST)!=0) $page='';
@@ -536,7 +564,7 @@ class forum_driver_ocf extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the members-online page
 	 */
-	function _online_link()
+	function _online_members_url()
 	{
 		$_url=build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers'));
 		$url=$_url->evaluate();
@@ -550,7 +578,7 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the private/personal message page
 	 */
-	function _member_pm_link($id)
+	function _member_pm_url($id)
 	{
 		$_url=build_url(array('page'=>'topics','type'=>'new_pt','id'=>$id),get_module_zone('topics'));
 		$url=$_url->evaluate();
@@ -561,11 +589,11 @@ class forum_driver_ocf extends forum_driver_base
 	/**
 	 * Get a URL to the specified forum.
 	 *
-	 * @param  integer		The forum id
+	 * @param  integer		The forum ID
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL to the specified forum
 	 */
-	function _forum_link($id,$tempcode_okay=false)
+	function _forum_url($id,$tempcode_okay=false)
 	{
 		$view_map=array('page'=>'forumview');
 		if ($id!=db_get_first_id()) $view_map['id']=$id;
@@ -577,60 +605,74 @@ class forum_driver_ocf extends forum_driver_base
 	}
 
 	/**
-	 * Get the forum id from a forum name.
+	 * Get the forum ID from a forum name.
 	 *
 	 * @param  SHORT_TEXT	The forum name
-	 * @return integer		The forum id
+	 * @return integer		The forum ID
 	 */
 	function forum_id_from_name($forum_name)
 	{
 		global $FORUM_NAMES_TO_IDS;
 		if (array_key_exists($forum_name,$FORUM_NAMES_TO_IDS)) return $FORUM_NAMES_TO_IDS[$forum_name];
-		$result=is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('f_forums','id',array('f_name'=>$forum_name));
+
+		if (is_numeric($forum_name))
+		{
+			$result=intval($forum_name);
+		} else
+		{
+			$_result=$this->connection->query_select('f_forums',array('id','f_is_threaded'),array('f_name'=>$forum_name),'',1);
+			$result=mixed();
+			if (array_key_exists(0,$_result))
+			{
+				$result=$_result[0]['id'];
+			}
+		}
+
 		$FORUM_NAMES_TO_IDS[$forum_name]=$result;
 		return $result;
 	}
-	
+
 	/**
-	 * Get the topic id from a topic name in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
+	 * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
 	 *
-	 * @param  SHORT_TEXT	The topic name
-	 * @param  string			The forum id
-	 * @param  SHORT_TEXT	The topic description. If this is non-blank, this is used for the search rather than the title
-	 * @return integer		The topic id
+	 * @param  string			The forum name / ID
+	 * @param  SHORT_TEXT	The topic identifier
+	 * @return integer		The topic ID
 	 */
-	function get_tid_from_topic($topic,$forum,$description='')
+	function find_topic_id_for_topic_identifier($forum,$topic_identifier)
 	{
-		if (function_exists('sanitise_topic_title')) $topic=sanitise_topic_title($topic);
-		if (function_exists('sanitise_topic_description')) $description=sanitise_topic_description($description);
+		$key=serialize(array($forum,$topic_identifier));
 
-		$key=serialize(array($topic,$forum,$description));
-
-		global $TOPIC_NAMES_TO_IDS;
-		if (array_key_exists($key,$TOPIC_NAMES_TO_IDS)) return $TOPIC_NAMES_TO_IDS[$key];
+		global $TOPIC_IDENTIFIERS_TO_IDS;
+		if (array_key_exists($key,$TOPIC_IDENTIFIERS_TO_IDS)) return $TOPIC_IDENTIFIERS_TO_IDS[$key];
 		$result=is_numeric($forum)?intval($forum):$this->connection->query_value_null_ok('f_forums','id',array('f_name'=>$forum));
 
-		if (is_integer($forum)) $fid=$forum;
-		else $fid=$this->forum_id_from_name($forum);
-		if ($description=='')
-			$query='SELECT id FROM '.$this->connection->get_table_prefix().'f_topics WHERE t_forum_id='.strval((integer)$fid).' AND ('.db_string_equal_to('t_cache_first_title',$topic).' OR t_cache_first_title LIKE \'% (#'.db_encode_like($topic).')\')';
-		else
-			$query='SELECT id FROM '.$this->connection->get_table_prefix().'f_topics WHERE t_forum_id='.strval((integer)$fid).' AND ('.db_string_equal_to('t_description',$description).' OR t_description LIKE \'%: #'.db_encode_like($description).'\')';
+		if (is_integer($forum)) $forum_id=$forum;
+		else $forum_id=$this->forum_id_from_name($forum);
+		$query='SELECT t.id,f_is_threaded FROM '.$this->connection->get_table_prefix().'f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id WHERE t_forum_id='.strval((integer)$forum_id).' AND ('.db_string_equal_to('t_description',$topic_identifier).' OR t_description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
-		$result=$this->connection->query_value_null_ok_full($query);
-		$TOPIC_NAMES_TO_IDS[$key]=$result;
-		return $result;
+		$_result=$this->connection->query($query,1);
+		if (array_key_exists(0,$_result))
+		{
+			$TOPIC_IDENTIFIERS_TO_IDS[$key]=$_result[0]['id'];
+			global $TOPIC_IS_THREADED;
+			$TOPIC_IS_THREADED[$_result[0]['id']]=$_result[0]['f_is_threaded'];
+		} else
+		{
+			$TOPIC_IDENTIFIERS_TO_IDS[$key]=NULL;
+		}
+		return $TOPIC_IDENTIFIERS_TO_IDS[$key];
 	}
 
 	/**
-	 * Get a URL to the specified topic id. Most forums don't require the second parameter, but some do, so it is required in the interface.
+	 * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
 	 *
-	 * @param  integer		The topic id
-	 * @param  string			The forum id
+	 * @param  integer		The topic ID
+	 * @param  string			The forum ID
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL to the topic
 	 */
-	function topic_link($id,$forum='',$tempcode_okay=false)
+	function topic_url($id,$forum='',$tempcode_okay=false)
 	{
 		if (is_null($id)) return ''; // Should not happen, but if it does, this is how we should handle it.
 
@@ -646,11 +688,11 @@ class forum_driver_ocf extends forum_driver_base
 	 * Get a URL to the specified post id.
 	 *
 	 * @param  integer		The post id
-	 * @param  string			The forum id
+	 * @param  string			The forum ID
 	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
 	 * @return mixed			The URL to the post
 	 */
-	function post_link($id,$forum,$tempcode_okay=false)
+	function post_url($id,$forum,$tempcode_okay=false)
 	{
 		if (is_null($id)) return ''; // Should not happen, but if it does, this is how we should handle it.
 

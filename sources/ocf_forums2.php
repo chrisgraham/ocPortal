@@ -50,11 +50,11 @@ function ocf_nice_get_topic_tree($it=NULL)
 	$out=''; // XHTMLXHTML
 	foreach ($tree as $forum)
 	{
-		foreach ($forum['entries'] as $tid=>$ttitle)
+		foreach ($forum['entries'] as $topic_id=>$ttitle)
 		{
-			$selected=($tid==$it);
+			$selected=($topic_id==$it);
 			$line=do_template('OCF_FORUM_TOPIC_LIST_LINE',array('_GUID'=>'d58e4176ef0efefa85c83a8b9fa2de51','PRE'=>$forum['tree'],'TOPIC_TITLE'=>$ttitle));
-			$out.='<option value="'.strval($tid).'"'.($selected?'selected="selected"':'').'>'.$line->evaluate().'</option>';
+			$out.='<option value="'.strval($topic_id).'"'.($selected?'selected="selected"':'').'>'.$line->evaluate().'</option>';
 		}
 	}
 

@@ -78,9 +78,9 @@ class Block_main_rating
 		{
 			decache('main_rating');
 		}
-		do_rating(true,'block_main_rating',$id,$self_url,$self_title);
+		actualise_rating(true,'block_main_rating',$id,$self_url,$self_title);
 	
-		return get_rating_details($self_url,$self_title,'block_main_rating',$id,true);
+		return get_rating_box($self_url,$self_title,'block_main_rating',$id,true);
 	}
 
 }

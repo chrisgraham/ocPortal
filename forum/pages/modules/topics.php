@@ -1462,18 +1462,18 @@ class Module_topics
 	 *
 	 * @param  AUTO_LINK		The forum for breadcrumbing
 	 * @param  AUTO_LINK		The topic for breadcrumbing
-	 * @param  string			The topic name
+	 * @param  string			The topic title
 	 * @param  string			The action currently being done
 	 */
-	function handle_topic_breadcrumbs($forum_id,$topic_id,$topic_name,$doing)
+	function handle_topic_breadcrumbs($forum_id,$topic_id,$topic_title,$doing)
 	{
 		if (is_null($forum_id))
 		{
-			breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PERSONAL_TOPICS')),array('_SEARCH:topicview:id='.strval($topic_id),$topic_name)));
+			breadcrumb_set_parents(array(array('_SEARCH:forumview:pt',do_lang_tempcode('PERSONAL_TOPICS')),array('_SEARCH:topicview:id='.strval($topic_id),$topic_title)));
 		} else
 		{
 			$tree=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-			breadcrumb_add_segment($tree,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_name),array('',$doing)));
+			breadcrumb_add_segment($tree,array(array('_SEARCH:topicview:id='.strval($topic_id),$topic_title),array('',$doing)));
 		}
 	}
 
@@ -1491,6 +1491,7 @@ class Module_topics
 		$NON_CANONICAL_PARAMS[]='intended_solely_for';
 
 		$topic_id=get_param_integer('id');
+		$parent_id=get_param_integer('parent_id',NULL);
 		$intended_solely_for=get_param_integer('intended_solely_for',-1);
 		$post=post_param('post',NULL); // Copy existing post into box (from quick reply 'more options' button)
 		if (is_null($post))
@@ -1508,9 +1509,9 @@ class Module_topics
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$forum_id=$topic_info[0]['t_forum_id'];
-		$topic_name=$topic_info[0]['t_cache_first_title'];
-		if ($topic_name=='') $topic_name=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_title',array('p_topic_id'=>$topic_id));
-		if (is_null($topic_name)) $topic_name='';
+		$topic_title=$topic_info[0]['t_cache_first_title'];
+		if ($topic_title=='') $topic_title=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_title',array('p_topic_id'=>$topic_id));
+		if (is_null($topic_title)) $topic_title='';
 		if (!is_null($forum_id))
 		{
          if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
@@ -1525,7 +1526,7 @@ class Module_topics
 				access_denied('SPECIFIC_PERMISSION','view_other_pt');
 			}
 		}
-		$this->handle_topic_breadcrumbs($forum_id,$topic_id,$topic_name,do_lang_tempcode('ADD_POST'));
+		$this->handle_topic_breadcrumbs($forum_id,$topic_id,$topic_title,do_lang_tempcode('ADD_POST'));
 
 		if ($topic_info[0]['t_is_open']==0)
 		{
@@ -1540,7 +1541,7 @@ class Module_topics
 		$hidden_fields->attach(form_input_hidden('topic_id',strval($topic_id)));
 		$hidden_fields->attach(form_input_hidden('from_url',get_self_url(true,false,array('type'=>get_param('type','misc')))));
 
-		$map=array('page'=>'_SELF','type'=>'_add_reply');
+		$map=array('page'=>'_SELF','type'=>'_add_reply','parent_id'=>$parent_id);
 		$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
 		$post_url=build_url($map,'_SELF');
@@ -1643,7 +1644,7 @@ class Module_topics
 			require_code('ocf_forums2');
 
 			$specialisation2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('TOPIC_MODERATION'))));
-			$specialisation2->attach(form_input_line(do_lang_tempcode('TITLE'),'','new_title',$topic_name,false));
+			$specialisation2->attach(form_input_line(do_lang_tempcode('TITLE'),'','new_title',$topic_title,false));
 			$specialisation2->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'),do_lang_tempcode('DESCRIPTION_DESTINATION_FORUM'),'to',NULL,'choose_forum',array(),false,is_null($forum_id)?'':strval($forum_id)));
 			$options=array(
 								array(do_lang_tempcode('OPEN'),'open',$topic_info[0]['t_is_open']==1,do_lang_tempcode('DESCRIPTION_OPEN')),
@@ -1678,7 +1679,7 @@ class Module_topics
 		if (is_object($post)) $post=$post->evaluate();
 		$posting_form=get_posting_form(do_lang('ADD_POST'),$post,$post_url,$hidden_fields,$specialisation,NULL,$topic_posts->evaluate(),$specialisation2,NULL,$this->_post_javascript());
 
-		$title=get_page_title('_ADD_POST',true,array(escape_html($topic_name)));
+		$title=get_page_title('_ADD_POST',true,array(escape_html($topic_title)));
 
 		if (post_param_integer('add_poll',0)==1)
 		{
@@ -1718,7 +1719,7 @@ class Module_topics
 		if (is_null($_postdetails))
 		{
 			$__post=get_translated_text($post_info[0]['p_post'],$GLOBALS['FORUM_DB']);
-			$post=do_template('OCF_REPORTED_POST_FCOMCODE',array('_GUID'=>'e0f65423f3cb7698d5f04431dbe52ddb','POST_ID'=>strval($post_id),'MEMBER'=>$member,'TOPIC_NAME'=>$topic_info[0]['t_cache_first_title'],'POST'=>$__post,'POSTER'=>$poster));
+			$post=do_template('OCF_REPORTED_POST_FCOMCODE',array('_GUID'=>'e0f65423f3cb7698d5f04431dbe52ddb','POST_ID'=>strval($post_id),'MEMBER'=>$member,'TOPIC_TITLE'=>$topic_info[0]['t_cache_first_title'],'POST'=>$__post,'POSTER'=>$poster));
 		} else $post=make_string_tempcode($_postdetails);
 
 		$hidden_fields=new ocp_tempcode();
@@ -1787,6 +1788,7 @@ class Module_topics
 		$topic_id=either_param_integer('topic_id',-1); // Posting into an existing topic?
 		$forum_id=post_param_integer('forum_id',-1); // New topic in existing forum? (NB: -2 represents reported posts forum)
 		$member_id=post_param_integer('member_id',-1); // Send TOPIC to specific member? Could be Private Topic (topic_id==-1, forum_id==-1), or personal post (topic_id!=-1, forum_id==-1)
+		$parent_id=get_param_integer('parent_id',NULL);
 		if ($member_id==-1)
 		{
 			$member_username=post_param('to_member_id_0','');
@@ -1988,7 +1990,7 @@ END;
 			}
 		}
 
-		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1,$forum_id==-1);
+		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1,$forum_id==-1,false,$parent_id);
 
 		if (!is_null($forum_id))
 		{
@@ -2212,7 +2214,7 @@ END;
 				{
 					if (!$stuff->is_empty()) $stuff->attach(do_lang_tempcode('LIST_SEP'));
 
-					$url=$GLOBALS['FORUM_DRIVER']->post_link($post['id'],$post['p_topic_id']);
+					$url=$GLOBALS['FORUM_DRIVER']->post_url($post['id'],$post['p_topic_id']);
 
 					if ($post['p_title']!='')
 					{
@@ -3401,7 +3403,7 @@ END;
 		if (!is_null($topic_id))
 		{
 			$title=get_page_title('REDIRECTING');
-			$url=$GLOBALS['FORUM_DRIVER']->topic_link($topic_id);
+			$url=$GLOBALS['FORUM_DRIVER']->topic_url($topic_id);
 			require_code('site2');
 			assign_refresh($url,0.0);
 			return do_template('REDIRECT_SCREEN',array('_GUID'=>'f457a6d28fd6e494662e5b82e80e9fa2','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING_TO_BIRTHDAY_TOPIC')));

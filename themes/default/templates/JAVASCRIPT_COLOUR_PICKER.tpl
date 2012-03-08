@@ -1526,7 +1526,11 @@ YAHOO.util.Color = function() {
                             container.showEvent.subscribe(function() {
                                 // this.pickerSlider.thumb.resetConstraints();
                                 // this.hueSlider.thumb.resetConstraints();
+										try
+										{
                                 this.pickerSlider.focus();
+										}
+										catch (e) {};
                             }, this, true);
                         }
                     }

@@ -1449,7 +1449,7 @@ input.input_box_label_within {
 	color: #fff;
 }
 
-.toggler_main th, .toggler_main table th.de_th, .comments_links {
+.toggler_main th, .toggler_main table th.de_th, .comments_posting_form_links {
 	color: #fff;
 }
 
@@ -1775,7 +1775,7 @@ a.poster_member:hover {
 	margin: 0 auto;
 }
 
-.comments_inner .wide_table_wrap {
+.comments_posting_form_inner .wide_table_wrap {
 	overflow-x: visible;
 	overflow-y: visible;
 }
@@ -2931,7 +2931,7 @@ ul.sitemap li li {
 	border: 0;
 }
 
-#comments_outer .attachments {
+#comments_posting_form_outer .attachments {
 	text-align: {!en_left};
 	padding: 5px;
 }
@@ -2944,10 +2944,10 @@ ul.sitemap li li {
 	.contact-form li span b { font-size: 0.75em; }
 	.contact-form li .text-input { float: left; width: 265px; border: 1px solid #052549; height: 24px; } /* {$,wizard, 100% bordcolor}*/
 	.contact-form li .text-input1 { float: left; width: 265px; border: 1px solid #052549; height: 156px; } /* {$,wizard, 100% bordcolor}*/
-	.comments_outer .button_pageitem { float: left; }
+	.comments_posting_form_outer .button_pageitem { float: left; }
 {+END}
 
-.comments_inner {
+.comments_posting_form_inner {
 	text-align: {!en_left};
 	padding: 0px;
 	margin: 0 auto;
@@ -2958,11 +2958,11 @@ ul.sitemap li li {
 	{+END}
 }
 
-.comments_inner table {
+.comments_posting_form_inner table {
 	border-collapse: collapse;
 }
 
-.comments_end {
+.comments_posting_form_end {
 	{+START,IF,{$MOBILE}}
 		margin: 4px 20px 10px 0px;
 		padding: 0;
@@ -2977,15 +2977,15 @@ ul.sitemap li li {
 	{+END}
 }
 
-.comments_end .proceed_button {
+.comments_posting_form_end .proceed_button {
 	width: 100%;
 }
 
-.comments_end .proceed_button button {
+.comments_posting_form_end .proceed_button button {
 	float: none;
 }
 
-.comments_end .button_pageitem {
+.comments_posting_form_end .button_pageitem {
 	border: 1px solid #fff;
 	background: #BD630F;
 }
@@ -3002,17 +3002,17 @@ ul.sitemap li li {
 	text-align: center;
 }
 
-.comments_inner th {
+.comments_posting_form_inner th {
 	font-weight: bold !important;
 	padding: 3px 15px 3px 0;
 	border-right: 1px solid #FFF2DF; /* {$,wizard, 100% medborder.border} */
 }
 
-.comments_inner td {
+.comments_posting_form_inner td {
 	padding-left: 15px;
 }
 
-.comments_emoticons {
+.comments_posting_form_emoticons {
 	float: {!en_left};
 	width: 120px;
 	padding-{!en_right}: 5px;
@@ -3021,12 +3021,12 @@ ul.sitemap li li {
 	font-size: 0.8em;
 }
 
-.comments_emoticons img {border:none;}
-.comments_emoticons p {
+.comments_posting_form_emoticons img {border:none;}
+.comments_posting_form_emoticons p {
 	margin-bottom: 0;
 }
 
-.comments_links {
+.comments_posting_form_links {
 	text-align: right;
 	font-size: 0.85em;
 	font-weight: normal;

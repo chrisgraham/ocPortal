@@ -261,7 +261,8 @@ class Module_cms_ocf_groups extends standard_aed_module
 			$forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array('f_name'=>$_forum));
 			if (is_null($forum)) $forum=$GLOBALS['FORUM_DB']->query_value('f_forums','MIN(id)');
 		}
-		$forum_id=ocf_make_forum($name,do_lang('FORUM_FOR_CLUB',$name),$cat,$access_mapping,$forum);
+		$is_threaded=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_is_threaded',array('id'=>$forum));
+		$forum_id=ocf_make_forum($name,do_lang('FORUM_FOR_CLUB',$name),$cat,$access_mapping,$forum,1,1,0,'','','','last_post',$is_threaded);
 		$this->_set_permissions($id,$forum_id);
 
 		require_code('ocf_groups_action2');

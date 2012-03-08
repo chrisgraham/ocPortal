@@ -42,6 +42,12 @@ class Hook_cron_newsletter_periodic
 		}
 	}
 
+	/**
+	 * Send a periodic newsletter.
+	 *
+	 * @param  array			Details of periodic newsletter
+	 * @return ?TIME			Time was sent (NULL: not sent)
+	 */
 	function newsletter_periodic_handle($periodic_row)
 	{
 		// If we're here then we have a periodic newsletter along with details of

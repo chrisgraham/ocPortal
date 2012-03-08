@@ -82,7 +82,7 @@ class Block_side_personal_stats
 				// Member profile view link
 				if (get_option('ocf_show_profile_link')=='1')
 				{
-					$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member,true,true);
+					$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
 					$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'2c8648c953c802a9de41c3adeef0e97f','NAME'=>do_lang_tempcode('MY_PROFILE'),'URL'=>$url,'REL'=>'me')));
 				}
 			}
@@ -211,8 +211,8 @@ class Block_side_personal_stats
 			$this_url=$_this_url->evaluate();
 			$login_url=build_url(array('page'=>'login','type'=>'login','redirect'=>$this_url),get_module_zone('login'));
 			$full_link=build_url(array('page'=>'login','type'=>'misc','redirect'=>$this_url),get_module_zone('login'));
-			$join_link=(get_forum_type()!='none')?$GLOBALS['FORUM_DRIVER']->join_link():'';
-			return do_template('BLOCK_SIDE_PERSONAL_STATS_NO',array('_GUID'=>'32aade68b98dfd191f0f84c6648f7dde','TITLE'=>$title,'FULL_LINK'=>$full_link,'JOIN_LINK'=>$join_link,'LOGIN_URL'=>$login_url));
+			$join_url=(get_forum_type()!='none')?$GLOBALS['FORUM_DRIVER']->join_url():'';
+			return do_template('BLOCK_SIDE_PERSONAL_STATS_NO',array('_GUID'=>'32aade68b98dfd191f0f84c6648f7dde','TITLE'=>$title,'FULL_LINK'=>$full_link,'JOIN_LINK'=>$join_url,'LOGIN_URL'=>$login_url));
 		}
 	}
 

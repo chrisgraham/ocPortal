@@ -112,7 +112,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 									'_GUID'=>'39r932rwefldjfldjlf',
 									/*'COLOUR'=>$colour,*/
 									'USERNAME'=>$subforum['last_username'],
-									'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_link($subforum['last_member_id'],false,true)
+									'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($subforum['last_member_id'],false,true)
 								));
 							} else $poster=protect_from_escaping(escape_html($subforum['last_username']));
 						} else
@@ -269,7 +269,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	}
 	if ($type=='pt')
 	{
-		//$archive_url=$GLOBALS['FORUM_DRIVER']->forum_link(db_get_first_id());
+		//$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id());
 		//$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('ROOT_FORUM'),'url'=>$archive_url,'img'=>'forum');
 	}
 	if (array_key_exists('may_post_topic',$details))
@@ -525,7 +525,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 				$poster=do_template('OCF_USER_MEMBER',array(
 					/*'COLOUR'=>$colour,*/
 					'USERNAME'=>$topic['last_username'],
-					'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_link($topic['last_member_id'],false,true)
+					'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($topic['last_member_id'],false,true)
 				));
 			} else $poster=protect_from_escaping(escape_html($topic['last_username']));
 		} else
@@ -562,7 +562,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 
 	if ($topic['first_member_id']!=$GLOBALS['OCF_DRIVER']->get_guest_id())
 	{
-		$poster_profile_url=$GLOBALS['OCF_DRIVER']->member_profile_link($topic['first_member_id'],false,true);
+		$poster_profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['first_member_id'],false,true);
 		//$colour=get_group_colour(ocf_get_member_primary_group($topic['first_member_id']));
 		$poster=do_template('OCF_USER_MEMBER',array(
 										/*'COLOUR'=>$colour,*/
@@ -581,7 +581,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 		$colour=get_group_colour(ocf_get_member_primary_group($with));
 		$b=do_template('OCF_USER_MEMBER',array(
 										'COLOUR'=>$colour,
-										'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_link($with,false,true),
+										'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($with,false,true),
 										'USERNAME'=>$with_username
 									));
 		$poster=do_template('OCF_PT_BETWEEN',array('_GUID'=>'619cd7076c4baf7b26cb3149694af929','A'=>$poster,'B'=>$b));

@@ -283,11 +283,11 @@ class Hook_addon_registry_polls
 		$trackback_details = do_lorem_template('TRACKBACK_WRAPPER',array('TRACKBACKS'=>$trackbacks,'TRACKBACK_PAGE'=>placeholder_id(),'TRACKBACK_ID'=>placeholder_id(),'TRACKBACK_TITLE'=>lorem_phrase()));
 
 		$rating_details = do_lorem_template('RATING',array('NUM_RATINGS'=>placeholder_id(),
-					'RATING_INSIDE'=>lorem_word()));
+					'RATING_FORM'=>lorem_word()));
 
 		$tpl_post = do_lorem_template('POST',array('POSTER_ID'=>placeholder_id(),'EDIT_URL'=>placeholder_url(),'INDIVIDUAL_REVIEW_RATINGS'=>placeholder_array(),'HIGHLIGHT'=>lorem_word(),'TITLE'=>lorem_phrase(),'TIME_RAW'=>placeholder_date_raw(),'TIME'=>placeholder_date(),'POSTER_LINK'=>placeholder_url(),'POSTER_NAME'=>lorem_phrase(),'POST'=>lorem_phrase()));
 		$comments = $tpl_post->evaluate();
-		$comment_details = do_lorem_template('COMMENTS_WRAPPER',array('TYPE'=>lorem_word(),'ID'=>placeholder_id(),'REVIEW_TITLES'=>array(),'STAFF_FORUM_LINK'=>placeholder_url(),'FORM'=>placeholder_form(),'COMMENTS'=>$comments));
+		$comment_details = do_lorem_template('COMMENTS_WRAPPER',array('TYPE'=>lorem_word(),'ID'=>placeholder_id(),'REVIEW_TITLES'=>array(),'AUTHORISED_FORUM_LINK'=>placeholder_url(),'FORM'=>placeholder_form(),'COMMENTS'=>$comments));
 
 		$poll_details = do_lorem_template('BLOCK_MAIN_POLL_IFRAME',array('RAND'=>placeholder_random(),'PARAM'=>"-1",'ZONE'=>lorem_word()));
 

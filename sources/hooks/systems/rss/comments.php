@@ -79,7 +79,7 @@ class Hook_rss_comments
 		$start=0;
 		do
 		{
-			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$full_title,$full_title,$count,min($max,1000),$start);
+			$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$full_title),$count,min($max,1000),$start);
 			if (is_array($_comments))
 			{
 				$_comments=array_reverse($_comments);

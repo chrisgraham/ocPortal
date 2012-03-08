@@ -27,7 +27,18 @@
 			<span class="reviews_average">&nbsp;({!AVERAGE})</span>
 		{+END}
 
-		{+START,BOX,{$?,{$IS_NON_EMPTY,{REVIEW_TITLES}},{$GET,REVIEWS_TITLE},{!COMMENTS}}}
+		{+START,SET,COMMENT_BOX_TITLE}
+			<span class="right">
+				{+START,INCLUDE,NOTIFICATION_BUTTONS}
+					NOTIFICATIONS_TYPE=comment_posted
+					NOTIFICATIONS_ID={TYPE}_{ID}
+					BUTTON_TYPE=pageitem
+				{+END}
+			</span>
+			{$?,{$IS_NON_EMPTY,{REVIEW_TITLES}},{$GET,REVIEWS_TITLE},{!COMMENTS}}
+		{+END}
+
+		{+START,BOX,{$GET,COMMENT_BOX_TITLE}}
 			{+START,LOOP,REVIEW_TITLES}
 				{+START,IF_NON_EMPTY,{REVIEW_RATING}}
 					{+START,IF_NON_EMPTY,{REVIEW_TITLE}}
@@ -47,14 +58,8 @@
 				{+START,IF,{$VALUE_OPTION,html5}}<meta itemprop="interactionCount" content="UserComments:{$META_DATA*,numcomments}" />{+END}
 			
 				{COMMENTS`}
-
-				{+START,INCLUDE,NOTIFICATION_BUTTONS}
-					NOTIFICATIONS_TYPE=comment_posted
-					NOTIFICATIONS_ID={TYPE}_{ID}
-					BUTTON_TYPE=pageitem
-				{+END}
 			</div>
-		
+
 			{+START,IF_PASSED,RESULTS_BROWSER}
 				{RESULTS_BROWSER}
 			{+END}
@@ -62,15 +67,23 @@
 	{+END}
 
 	{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
-	{+START,IF_NON_EMPTY,{STAFF_FORUM_LINK}}
+	{+START,IF_NON_EMPTY,{AUTHORISED_FORUM_LINK}}
 		{+START,INCLUDE,STAFF_ACTIONS}
-			1_URL={STAFF_FORUM_LINK*}
+			1_URL={AUTHORISED_FORUM_LINK*}
 			1_TITLE={!VIEW_COMMENT_TOPIC}
 		{+END}
 	{+END}
 
 	{$,If has commenting permission}
 	{+START,IF_NON_EMPTY,{FORM}}
+		{+START,IF_PASSED,COMMENTS}<a name="last_comment" id="last_comment" rel="docomment"></a>{+END}
 		{FORM}
 	{+END}
+
+	{+START,IF_PASSED,SERIALIZED_OPTIONS}{+START,IF_PASSED,HASH}
+		<script type="text/javascript">// <![CDATA[
+			window.comments_serialized_options='{SERIALIZED_OPTIONS;}';
+			window.comments_hash='{HASH;}';
+		//]]></script>
+	{+END}{+END}
 </div>

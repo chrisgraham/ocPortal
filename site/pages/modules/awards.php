@@ -153,7 +153,7 @@ class Module_awards
 						$awardee=strval($myrow['member_id']);
 						$awardee_username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
 						if (is_null($awardee_username)) $awardee_username=do_lang('UNKNOWN');
-						$awardee_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($myrow['member_id'],false,true);
+						$awardee_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['member_id'],false,true);
 					}
 
 					$rendered=do_template('AWARDED_CONTENT',array('_GUID'=>'1a2a5b6e9b53a99e303b7ed17070cea9','AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time']),'CONTENT'=>$rendered_content));
@@ -213,7 +213,7 @@ class Module_awards
 					$awardee=strval($myrow['member_id']);
 					$awardee_username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
 					if (is_null($awardee_username)) $awardee_username=do_lang('UNKNOWN');
-					$awardee_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($myrow['member_id'],false,true);
+					$awardee_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['member_id'],false,true);
 				}
 
 				$content->attach(do_template('AWARDED_CONTENT',array('_GUID'=>'1a2a5b6e9b53a99e303b7ed17070cea9','AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time'],false,false,false,true),'CONTENT'=>$rendered_content)));

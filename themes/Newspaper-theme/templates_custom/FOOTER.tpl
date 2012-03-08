@@ -24,7 +24,7 @@
 		scriptLoadStuff();
 		if (typeof window.scriptPageRendered!='undefined') scriptPageRendered();
 
-		{+START,IF,{$EQ,{$_GET,wide_print},1}}window.print();{+END}
+		{+START,IF,{$EQ,{$_GET,wide_print},1}}try { window.print(); } catch (e) {};{+END}
 	//]]></script>
 	{$EXTRA_FOOT}
 </body>

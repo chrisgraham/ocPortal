@@ -50,7 +50,7 @@ class Hook_checklist_reported_posts
 	
 		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('ORDER_STATUS'=>$img));
 
-		$url=$GLOBALS['FORUM_DRIVER']->forum_link($forum_id);
+		$url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id);
 
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('REPORTED_POSTS_FORUM'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
 		return array(array($tpl,NULL,$outstanding,NULL));

@@ -32,7 +32,6 @@ class Hook_Notification_messaging extends Hook_Notification__Staff
 	 *
 	 * @param  ID_TEXT		Notification code
 	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
-	 * @param  boolean		Whether to list anything monitored by any member (useful if you are calling this because you can't naturally enumerate what can be monitored)
 	 * @return array 			Tree structure
 	 */
 	function create_category_tree($notification_code,$id)

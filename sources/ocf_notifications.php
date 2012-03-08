@@ -149,11 +149,11 @@ function generate_notifications($cache_identifier)
 		}
 		$time_raw=$unread_pp['p_time'];
 		$time=get_timezoned_date($unread_pp['p_time']);
-		$topic=$GLOBALS['OCF_DRIVER']->post_link($unread_pp['id'],NULL);
+		$topic=$GLOBALS['OCF_DRIVER']->post_url($unread_pp['id'],NULL);
 		$post=get_translated_tempcode($unread_pp['p_post'],$GLOBALS['FORUM_DB']);
 		$description=$unread_pp['t_description'];
 		if ($description!='') $description=' ('.$description.')';
-		$profile_link=$GLOBALS['OCF_DRIVER']->member_profile_link((is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id']))?$unread_pp['p_poster']:$unread_pp['t_cache_first_member_id'],false,true);
+		$profile_link=$GLOBALS['OCF_DRIVER']->member_profile_url((is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id']))?$unread_pp['p_poster']:$unread_pp['t_cache_first_member_id'],false,true);
 		$redirect=get_self_url(true,true);
 		$ignore_url=build_url(array('page'=>'topics','type'=>'mark_read_topic','id'=>$unread_pp['p_topic_id'],'redirect'=>$redirect),get_module_zone('topics'));
 		$ignore_url_2=build_url(array('page'=>'topics','type'=>'mark_read_topic','id'=>$unread_pp['p_topic_id'],'redirect'=>$redirect,'ajax'=>1),get_module_zone('topics'));

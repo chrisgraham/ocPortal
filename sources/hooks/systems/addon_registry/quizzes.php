@@ -230,7 +230,7 @@ class Hook_addon_registry_quizzes
 	*/
 	function tpl_preview__quiz_screen()
 	{
-		//This is for getting the load_XML_doc() javascript function.
+		//This is for getting the do_ajax_request() javascript function.
 		require_javascript('javascript_ajax');
 
 		$warning_details = do_lorem_template('WARNING_TABLE',array('WARNING'=>lorem_phrase()));

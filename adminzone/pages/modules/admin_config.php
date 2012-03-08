@@ -71,6 +71,7 @@ class Module_admin_config
 										'java_upload','java_ftp_host','java_username','java_password','java_ftp_path','filesystem_caching',
 										'check_broken_urls','advanced_admin_cache','collapse_user_zones','google_analytics','fixed_width','show_screen_actions','show_content_tagging','show_content_tagging_inline',
 										'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support','mail_queue','mail_queue_debug',
+										'comments_to_show_in_thread','max_thread_depth',
 										);
 
 		foreach ($config_options as $option)
@@ -246,6 +247,8 @@ class Module_admin_config
 		{
 			add_config_option('MAIL_QUEUE','mail_queue','tick','return \'1\';','SITE','EMAIL');
 			add_config_option('MAIL_QUEUE_DEBUG','mail_queue_debug','tick','return \'0\';','SITE','EMAIL');
+			add_config_option('COMMENTS_TO_SHOW_IN_THREAD','comments_to_show_in_thread','integer','return \'200\';','FEATURE','USER_INTERACTION');
+			add_config_option('max_thread_depth','max_thread_depth','integer','return \'6\';','FEATURE','USER_INTERACTION');
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<12))
 		{

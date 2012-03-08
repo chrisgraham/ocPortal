@@ -25,7 +25,7 @@
 			}
 			post+=form.elements[i].name+'='+window.encodeURIComponent(value)+'&';
 		}
-		setInnerHTML(document.getElementById('price'),escape_html(load_XML_doc('{$FIND_SCRIPT;,booking_price_ajax}'+keep_stub(true),null,post).responseText));
+		setInnerHTML(document.getElementById('price'),escape_html(do_ajax_request('{$FIND_SCRIPT;,booking_price_ajax}'+keep_stub(true),null,post).responseText));
 	}
 //]]></script>
 

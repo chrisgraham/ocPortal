@@ -78,7 +78,7 @@ class Module_leader_board
 			foreach ($rows as $member=>$points)
 			{
 				$points_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
-				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member,false,true);
+				$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,false,true);
 				$name=$GLOBALS['FORUM_DRIVER']->get_username($member);
 				if (is_null($name)) $name=do_lang('UNKNOWN');
 				$week_tpl->attach(do_template('POINTS_LEADERBOARD_ROW',array('_GUID'=>'6d323b4b5abea0e82a14cb4745c4af4f','POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'POINTS'=>integer_format($points),'NAME'=>$name,'ID'=>strval($member))));

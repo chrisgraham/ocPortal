@@ -102,7 +102,11 @@ function window_ob(expr)
   win.document.open();
   win.document.write('<pre>' + getObjectProperties(expr) + '</pre>');
   win.document.close()
-  win.focus();
+  try
+  {
+    win.focus();
+  }
+  catch (e) {};
 }
 
 function print_ob(expr)

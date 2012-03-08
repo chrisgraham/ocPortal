@@ -36,7 +36,7 @@ class Hook_cron_ocf_birthdays
 			$birthdays=new ocp_tempcode();
 			foreach ($_birthdays as $_birthday)
 			{
-				$member_link=$GLOBALS['OCF_DRIVER']->member_profile_link($_birthday['id'],false,false);
+				$member_link=$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'],false,false);
 				$username=$_birthday['username'];
 				$birthday_link=build_url(array('page'=>'topics','type'=>'birthday','id'=>$_birthday['username']),get_module_zone('topics'));
 

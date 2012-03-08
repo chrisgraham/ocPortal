@@ -19,6 +19,24 @@
  */
 
 /**
+ * Check an input field isn't 'evil'.
+ *
+ * @param  string			The name of the parameter
+ * @param  string			The value retrieved
+ */
+function check_input_field($name,$val)
+{
+	if ((preg_match('#^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#i',$val)!=0) && ($name!='value')/*Don't want autosave triggering this*/)
+	{
+		log_hack_attack_and_exit('SCRIPT_URL_HACK_2',$val);
+	}
+	if (((!function_exists('is_guest')) || (is_guest())) && (strpos($val,'[link')!==false) && (strpos($val,'<a ')!==false))
+	{
+		log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
+	}
+}
+
+/**
  * Check a posted field isn't 'evil'.
  *
  * @param  string			The name of the parameter
@@ -27,14 +45,8 @@
  */
 function check_posted_field($name,$val)
 {
-	if ((preg_match('#^\s*j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:#i',$val)!=0) && ($name!='value')/*Don't want autosave triggering this*/)
-	{
-		log_hack_attack_and_exit('SCRIPT_URL_HACK_2',$val);
-	}
-	if (((!function_exists('is_guest')) || (is_guest())) && (strpos($val,'[link')!==false) && (strpos($val,'<a ')!==false))
-	{
-		log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
-	}
+	check_input_field($name,$val);
+
 	$true_referer=(substr(ocp_srv('HTTP_REFERER'),0,7)=='http://') || (substr(ocp_srv('HTTP_REFERER'),0,8)=='https://');
 	$canonical_referer=preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',ocp_srv('HTTP_REFERER')))));
 	$canonical_baseurl=preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',get_base_url()))));

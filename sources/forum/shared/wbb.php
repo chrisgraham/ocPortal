@@ -226,7 +226,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	/**
 	 * Pin a topic.
 	 *
-	 * @param  AUTO_LINK		The topic id
+	 * @param  AUTO_LINK		The topic ID
 	 */
 	function pin_topic($id)
 	{
@@ -296,7 +296,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the members home
 	 */
-	function member_home_link($id)
+	function member_home_url($id)
 	{
 		unset($id);
 		return get_forum_base_url().'/usercp.php';
@@ -334,7 +334,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the member profile
 	 */
-	function _member_profile_link($id)
+	function _member_profile_url($id)
 	{
 		return get_forum_base_url().'/profile.php?userid='.strval($id);
 	}
@@ -344,7 +344,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the registration page
 	 */
-	function _join_link()
+	function _join_url()
 	{
 		return get_forum_base_url().'/register.php';
 	}
@@ -354,7 +354,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 *
 	 * @return URLPATH		The URL to the members-online page
 	 */
-	function _online_link()
+	function _online_members_url()
 	{
 		return get_forum_base_url().'/wiw.php';
 	}
@@ -365,7 +365,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 * @param  MEMBER			The member id
 	 * @return URLPATH		The URL to the private/personal message page
 	 */
-	function _member_pm_link($id)
+	function _member_pm_url($id)
 	{
 		return get_forum_base_url().'/pms.php?action=newpm&userid='.strval($id);
 	}
@@ -373,19 +373,19 @@ class forum_driver_wbb_shared extends forum_driver_base
 	/**
 	 * Get a URL to the specified forum.
 	 *
-	 * @param  integer		The forum id
+	 * @param  integer		The forum ID
 	 * @return URLPATH		The URL to the specified forum
 	 */
-	function _forum_link($id)
+	function _forum_url($id)
 	{
 		return get_forum_base_url().'/board.php?boardid='.strval($id);
 	}
 
 	/**
-	 * Get the forum id from a forum name.
+	 * Get the forum ID from a forum name.
 	 *
 	 * @param  SHORT_TEXT	The forum name
-	 * @return integer		The forum id
+	 * @return integer		The forum ID
 	 */
 	function forum_id_from_name($forum_name)
 	{
@@ -393,67 +393,70 @@ class forum_driver_wbb_shared extends forum_driver_base
 	}
 	
 	/**
-	 * Get the topic id from a topic name in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
+	 * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
 	 *
-	 * @param  SHORT_TEXT	The topic name
-	 * @param string			The forum id
-	 * @return integer		The topic id
+	 * @param  string			The forum name / ID
+	 * @param  SHORT_TEXT	The topic identifier
+	 * @return integer		The topic ID
 	 */
-	function get_tid_from_topic($topic,$forum)
+	function find_topic_id_for_topic_identifier($forum,$topic_identifier)
 	{
-		if (function_exists('sanitise_topic_title')) $topic=sanitise_topic_title($topic);
-
-		if (is_integer($forum)) $fid=$forum;
-		else $fid=$this->forum_id_from_name($forum);
-		return $this->connection->query_value_null_ok_full('SELECT threadid FROM '.$this->connection->get_table_prefix().'threads WHERE boardid='.strval((integer)$fid).' AND ('.db_string_equal_to('topic',$topic).' OR topic LIKE \'% (#'.db_encode_like($topic).')\')');
+		if (is_integer($forum)) $forum_id=$forum;
+		else $forum_id=$this->forum_id_from_name($forum);
+		return $this->connection->query_value_null_ok_full('SELECT threadid FROM '.$this->connection->get_table_prefix().'threads WHERE boardid='.strval((integer)$forum_id).' AND ('.db_string_equal_to('topic',$topic_identifier).' OR topic LIKE \'% (#'.db_encode_like($topic_identifier).')\')');
 	}
 
 	/**
 	 * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
 	 * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
-	 * Note that $post should be in HTML, and some forums do not store posts as HTML. This is unfortunate, but there are some limits to just how far you can reasonably integrate with all these different forum systems without making a programatic mess.
 	 *
 	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic name
-	 * @param  MEMBER			The member id
-	 * @param  LONG_TEXT		The post content in Comcode format
+	 * @param  SHORT_TEXT	The topic identifier (usually <content-type>_<content-id>)
+	 * @param  MEMBER			The member ID
 	 * @param  LONG_TEXT		The post title
-	 * @param  tempcode		The content title the topic is related to
+	 * @param  LONG_TEXT		The post content in Comcode format
+	 * @param  string			The topic title; must be same as content title if this is for a comment topic
+	 * @param  string			This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
+	 * @param  ?URLPATH		URL to the content (NULL: do not make spacer post)
 	 * @param  ?TIME			The post time (NULL: use current time)
 	 * @param  ?IP				The post IP address (NULL: use current members IP address)
+	 * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+	 * @param  ?BINARY		Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+	 * @param  boolean		Whether to skip post checks
+	 * @param  SHORT_TEXT	The name of the poster
+	 * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
+	 * @param  boolean		Whether the reply is only visible to staff
+	 * @return array			Topic ID (may be NULL), and whether a hidden post has been made
 	 */
-	function make_post_forum_topic($forum_name,$topic_name,$member,$post,$title,$_topic_for,$time=NULL,$ip=NULL)
+	function make_post_forum_topic($forum_name,$topic_identifier,$member,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url=NULL,$time=NULL,$ip=NULL,$validated=NULL,$topic_validated=1,$skip_post_checks=false,$poster_name_if_guest='',$parent_id=NULL,$staff_only=false)
 	{
-		/*if (is_object($topic_for)) */$topic_for=$_topic_for->evaluate();
-
 		if (is_null($time)) $time=time();
 		if (is_null($ip)) $ip=get_ip_address();
-		if (!is_integer($forum_name))
-		{
-			$cf=$this->forum_id_from_name($forum_name);
-			if (is_null($cf)) warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
-		}
-		else $cf=(integer)$forum_name;
+		$forum_id=$this->forum_id_from_name($forum_name);
+		if (is_null($forum_id)) warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
 		$username=$this->get_username($member);
-		$tid=$this->get_tid_from_topic($topic_name,$forum_name);
-		if (is_null($tid))
+		$topic_id=$this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
+		if (is_null($topic_id))
 		{
-			$tid=$this->connection->query_insert('threads',array('topic'=>$topic_name,'starttime'=>$time,'boardid'=>$cf,'closed'=>0,'starter'=>$username,'starterid'=>$member,'lastposter'=>$username,'lastposttime'=>$time,'visible'=>1),true);
-			$this->connection->query_insert('posts',array('threadid'=>$tid,'username'=>do_lang('SYSTEM','','','',get_site_default_lang()),'userid'=>0,'posttopic'=>'','posttime'=>$time,'message'=>do_lang('SPACER_POST',$topic_for,'','',get_site_default_lang()),'allowsmilies'=>1,'ipaddress'=>'127.0.0.1','visible'=>1));
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'boards SET threadcount=(threadcount+1), postcount=(postcount+1) WHERE boardid='.strval((integer)$cf),1);
+			$topic_id=$this->connection->query_insert('threads',array('topic'=>$content_title.', '.$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'starttime'=>$time,'boardid'=>$forum_id,'closed'=>0,'starter'=>$username,'starterid'=>$member,'lastposter'=>$username,'lastposttime'=>$time,'visible'=>1),true);
+			$home_link=hyperlink($content_url,escape_html($content_title));
+			$this->connection->query_insert('posts',array('threadid'=>$topic_id,'username'=>do_lang('SYSTEM','','','',get_site_default_lang()),'userid'=>0,'posttopic'=>'','posttime'=>$time,'message'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()),'allowsmilies'=>1,'ipaddress'=>'127.0.0.1','visible'=>1));
+			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'boards SET threadcount=(threadcount+1), postcount=(postcount+1) WHERE boardid='.strval((integer)$forum_id),1);
 		}
-		if ($post=='') return;
-		$this->connection->query_insert('posts',array('threadid'=>$tid,'username'=>$username,'userid'=>$member,'posttopic'=>$title,'posttime'=>$time,'message'=>$post,'allowsmilies'=>1,'ipaddress'=>$ip,'visible'=>1));
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'boards SET lastthreadid='.strval((integer)$tid).', postcount=(postcount+1), lastposttime='.strval($time).', lastposterid='.strval((integer)$member).', lastposter=\''.db_escape_string($username).'\' WHERE boardid=\''.strval((integer)$cf).'\'',1);
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'threads SET replycount=(replycount+1), lastposttime='.strval($time).', lastposterid='.strval((integer)$member).', lastposter=\''.db_escape_string($username).'\' WHERE threadid='.strval((integer)$tid),1);
+
+		if ($post=='') return array($topic_id,false);
+
+		$this->connection->query_insert('posts',array('threadid'=>$topic_id,'username'=>$username,'userid'=>$member,'posttopic'=>$post_title,'posttime'=>$time,'message'=>$post,'allowsmilies'=>1,'ipaddress'=>$ip,'visible'=>1));
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'boards SET lastthreadid='.strval((integer)$topic_id).', postcount=(postcount+1), lastposttime='.strval($time).', lastposterid='.strval((integer)$member).', lastposter=\''.db_escape_string($username).'\' WHERE boardid=\''.strval((integer)$forum_id).'\'',1);
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'threads SET replycount=(replycount+1), lastposttime='.strval($time).', lastposterid='.strval((integer)$member).', lastposter=\''.db_escape_string($username).'\' WHERE threadid='.strval((integer)$topic_id),1);
+
+		return array($topic_id,false);
 	}
 
 	/**
 	 * Get an array of maps for the topic in the given forum.
 	 *
-	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic name
-	 * @param  SHORT_TEXT	The topic description. If this is non-blank, this is used for the search rather than the title
+	 * @param  integer		The topic ID
 	 * @param  integer		The comment count will be returned here by reference
 	 * @param  integer		Maximum comments to returned
 	 * @param  integer		Comment to start at
@@ -461,15 +464,8 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 * @param  boolean		Whether to show in reverse
 	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
 	 */
-	function get_forum_topic_posts($forum_name,$topic_name,$topic_description,&$count,$max=100,$start=0,$mark_read=true,$reverse=false)
+	function get_forum_topic_posts($topic_id,&$count,$max=100,$start=0,$mark_read=true,$reverse=false)
 	{
-		if (!is_integer($forum_name))
-		{
-			$cf=$this->forum_id_from_name($forum_name);
-			if (is_null($cf)) return (-1);
-		}
-		else $cf=(integer)$forum_name;
-		$topic_id=$this->get_tid_from_topic($topic_name,$cf);
 		if (is_null($topic_id)) return (-2);
 		$order=$reverse?'posttime DESC':'posttime';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE threadid='.strval((integer)$topic_id).' AND message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
@@ -495,13 +491,13 @@ class forum_driver_wbb_shared extends forum_driver_base
 	}
 	
 	/**
-	 * Get a URL to the specified topic id. Most forums don't require the second parameter, but some do, so it is required in the interface.
+	 * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
 	 *
-	 * @param  integer		The topic id
-	 * @param string			The forum id
+	 * @param  integer		The topic ID
+	 * @param string			The forum ID
 	 * @return URLPATH		The URL to the topic
 	 */
-	function topic_link($id,$forum)
+	function topic_url($id,$forum)
 	{
 		unset($forum);
 		return get_forum_base_url().'/thread.php?threadid='.strval($id);
@@ -511,10 +507,10 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 * Get a URL to the specified post id.
 	 *
 	 * @param  integer		The post id
-	 * @param string			The forum id
+	 * @param string			The forum ID
 	 * @return URLPATH		The URL to the post
 	 */
-	function post_link($id,$forum)
+	function post_url($id,$forum)
 	{
 		unset($forum);
 		return get_forum_base_url().'/thread.php?postid='.strval($id).'#post'.strval($id);
@@ -522,7 +518,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 
 	/**
 	 * Get an array of topics in the given forum. Each topic is an array with the following attributes:
-	 * - id, the topic id
+	 * - id, the topic ID
 	 * - title, the topic title
 	 * - lastusername, the username of the last poster
 	 * - lasttime, the timestamp of the last reply
@@ -534,7 +530,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 * @param  integer		The limit
 	 * @param  integer		The start position
 	 * @param  integer		The total rows (not a parameter: returns by reference)
-	 * @param  SHORT_TEXT	The topic name filter
+	 * @param  SHORT_TEXT	The topic title filter
 	 * @param  boolean		Whether to show the first posts
 	 * @param  string			The date key to sort by
 	 * @set    lasttime firsttime
@@ -542,7 +538,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 * @param  SHORT_TEXT	The topic description filter
 	 * @return ?array			The array of topics (NULL: error)
 	 */
-	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_name='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
+	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
 		if (is_integer($name)) $id_list='boardid='.strval((integer)$name);
 		elseif (!is_array($name))
@@ -561,7 +557,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 			if ($id_list=='') return NULL;
 		}
 
-		$topic_filter=($filter_topic_name!='')?('AND topic LIKE \''.db_encode_like($filter_topic_name).'\''):'';
+		$topic_filter=($filter_topic_title!='')?('AND topic LIKE \''.db_encode_like($filter_topic_title).'\''):'';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'threads WHERE ('.$id_list.') '.$topic_filter.' ORDER BY '.(($date_key=='lasttime')?'lastposttime':'starttime').' DESC',$limit,$start);
 		$max_rows=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'threads WHERE ('.$id_list.') '.$topic_filter);
 		$out=array();
@@ -571,7 +567,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 			$out[$i]['id']=$r['threadid'];
 			$out[$i]['num']=$r['replycount']+1;
 			$out[$i]['title']=$r['topic'];
-			$out[$i]['description']='';
+			$out[$i]['description']=$r['topic'];
 			$out[$i]['firstusername']=$r['starter'];
 			$out[$i]['lastusername']=$r['lastposter'];
 			$out[$i]['firsttime']=$r['starttime'];

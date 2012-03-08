@@ -281,9 +281,9 @@ class Module_points
 		
 		if (get_forum_type()=='ocf')
 		{
-			$url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id_of,true,true);
+			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,true,true);
 			if (is_object($url)) $url=$url->evaluate();
-			return redirect_screen($title,$url.'#tab__points',do_lang_tempcode('REDIRECTING'));
+			return redirect_screen($title,$url.'#tab__points','');
 		}
 
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter='.strval($member_id_of);

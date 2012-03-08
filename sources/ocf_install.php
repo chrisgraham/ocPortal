@@ -391,6 +391,8 @@ function install_ocf($upgrade_from=NULL)
 	{
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_allow_emails_from_staff','BINARY');
 		$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_show_on_join_form','BINARY');
+		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_is_threaded','BINARY',0);
+		$GLOBALS['FORUM_DB']->add_table_field('f_posts','p_parent','?AUTO_LINK',NULL);
 		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields SET cf_show_on_join_form=cf_required');
 		delete_config_option('send_staff_message_post_validation');
 
@@ -775,7 +777,8 @@ function install_ocf($upgrade_from=NULL)
 			'f_cache_last_member_id'=>'?USER',
 			'f_cache_last_forum_id'=>'?AUTO_LINK',
 			'f_redirection'=>'SHORT_TEXT',
-			'f_order'=>'ID_TEXT'
+			'f_order'=>'ID_TEXT',
+			'f_is_threaded'=>'BINARY',
 		));
 		$GLOBALS['FORUM_DB']->create_index('f_forums','cache_num_posts',array('f_cache_num_posts')); // Used to find active forums
 		$GLOBALS['FORUM_DB']->create_index('f_forums','subforum_parenting',array('f_parent_forum'));
@@ -790,7 +793,7 @@ function install_ocf($upgrade_from=NULL)
 		//ocf_make_forum(do_lang('_FEEDBACK'),'',$category_id,$typical_access,$root_forum);	We already have a feedback page
 		ocf_make_forum(do_lang('REPORTED_POSTS_FORUM'),'',$category_id_staff,$staff_access,$root_forum);
 		$trash_forum_id=ocf_make_forum(do_lang('TRASH'),'',$category_id_staff,$staff_access,$root_forum);
-		ocf_make_forum(do_lang('COMMENT_FORUM_NAME'),'',$category_id,$typical_access,$root_forum);
+		ocf_make_forum(do_lang('COMMENT_FORUM_NAME'),'',$category_id,$typical_access,$root_forum,1,1,0,'','','','last_post',1);
 		if (addon_installed('tickets'))
 		{
 			require_lang('tickets');
@@ -863,7 +866,8 @@ function install_ocf($upgrade_from=NULL)
 			'p_last_edit_time'=>'?TIME',
 			'p_last_edit_by'=>'?USER',
 			'p_is_emphasised'=>'BINARY',
-			'p_skip_sig'=>'BINARY'
+			'p_skip_sig'=>'BINARY',
+			'p_parent_id'=>'?AUTO_LINK'
 		));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','p_validated',array('p_validated'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','in_topic',array('p_topic_id','p_time','id'));

@@ -507,8 +507,8 @@ class Module_cedi
 			$post_date=get_timezoned_date($myrow['date_and_time']);
 
 			// Rating
-			do_rating(true,'seedy_post',strval($post_id),build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title);
-			$rating_array=get_rating_simple_array(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title,'seedy_post',strval($post_id),'CEDI_RATING_INSIDE');
+			actualise_rating(true,'seedy_post',strval($post_id),build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title);
+			$rating_array=get_rating_simple_array(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title,'seedy_post',strval($post_id),'CEDI_RATING_FORM');
 			if (!is_null($rating_array))
 			{
 				$rating=do_template('CEDI_RATING',$rating_array);
@@ -526,7 +526,7 @@ class Module_cedi
 				$move_url=build_url(array('page'=>'_SELF','type'=>'move','id'=>$chain,'post_id'=>$post_id),'_SELF');
 				$extra->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'b4325cd1bac924cc83771d4c3c41be8b','REL'=>'move','IMMEDIATE'=>false,'URL'=>$move_url,'TITLE'=>do_lang_tempcode('MOVE'),'IMG'=>'move')));
 			} else $extra=new ocp_tempcode();
-			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_link($poster,false,true);
+			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($poster,false,true);
 			$rate_url=get_self_url(true);
 			$posts->attach(do_template('CEDI_POST',array('_GUID'=>'a29b107abfaf7689c8392676c63093f5','INCLUDE_EXPANSION'=>$include_expansion_here,'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),'STAFF_ACCESS'=>$staff_access,'RATE_URL'=>$rate_url.'#post_'.strval($post_id),'RATING'=>$rating,'ID'=>strval($myrow['id']),'POSTER_URL'=>$poster_url,'POSTER'=>$username,'POST_DATE_RAW'=>strval($post_date_raw),'POST_DATE'=>$post_date,'POST'=>$post,'BUTTONS'=>$extra)));
 

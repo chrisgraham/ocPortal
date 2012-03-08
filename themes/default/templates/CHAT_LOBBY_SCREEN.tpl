@@ -73,7 +73,7 @@
 						function begin_im_chatting()
 						{
 							window.load_from_room_id=-1;
-							if ((window.chat_check) && (window.load_XML_doc)) chat_check(true,0); else window.setTimeout(begin_im_chatting,500);
+							if ((window.chat_check) && (window.do_ajax_request)) chat_check(true,0); else window.setTimeout(begin_im_chatting,500);
 						}
 						begin_im_chatting();
 					// ]]>

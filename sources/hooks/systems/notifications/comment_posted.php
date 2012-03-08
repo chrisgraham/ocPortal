@@ -110,7 +110,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
 	 */
 	function list_members_who_have_enabled($notification_code,$category=NULL,$to_member_ids=NULL,$start=0,$max=300)
 	{
-		$_members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
+		list($_members,$maybe_more)=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
 		if (!is_null($category)) // Check permissions for content
 		{
 			list($type_id,$id)=explode('_',$category,2);
@@ -122,6 +122,6 @@ class Hook_Notification_comment_posted extends Hook_Notification
 			}
 		} else $members=$_members;
 
-		return $members;
+		return array($members,$maybe_more);
 	}
 }

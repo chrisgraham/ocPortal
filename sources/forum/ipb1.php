@@ -223,51 +223,55 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	/**
 	 * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
 	 * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
-	 * Note that $post should be in HTML, and some forums do not store posts as HTML. This is unfortunate, but there are some limits to just how far you can reasonably integrate with all these different forum systems without making a programatic mess.
 	 *
 	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic name
-	 * @param  MEMBER			The member id
-	 * @param  LONG_TEXT		The post content in Comcode format
+	 * @param  SHORT_TEXT	The topic identifier (usually <content-type>_<content-id>)
+	 * @param  MEMBER			The member ID
 	 * @param  LONG_TEXT		The post title
-	 * @param  tempcode		The content title the topic is related to
+	 * @param  LONG_TEXT		The post content in Comcode format
+	 * @param  string			The topic title; must be same as content title if this is for a comment topic
+	 * @param  string			This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
+	 * @param  ?URLPATH		URL to the content (NULL: do not make spacer post)
 	 * @param  ?TIME			The post time (NULL: use current time)
 	 * @param  ?IP				The post IP address (NULL: use current members IP address)
+	 * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+	 * @param  ?BINARY		Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+	 * @param  boolean		Whether to skip post checks
+	 * @param  SHORT_TEXT	The name of the poster
+	 * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
+	 * @param  boolean		Whether the reply is only visible to staff
+	 * @return array			Topic ID (may be NULL), and whether a hidden post has been made
 	 */
-	function make_post_forum_topic($forum_name,$topic_name,$member,$_postdetails,$title,$_topic_for,$time=NULL,$ip=NULL)
+	function make_post_forum_topic($forum_name,$topic_identifier,$member,$post_title,$_post,$content_title,$topic_identifier_encapsulation_prefix,$content_url=NULL,$time=NULL,$ip=NULL,$validated=NULL,$topic_validated=1,$skip_post_checks=false,$poster_name_if_guest='',$parent_id=NULL,$staff_only=false)
 	{
-		$__post=comcode_to_tempcode($_postdetails);
+		$__post=comcode_to_tempcode($_post);
 		$post=$__post->evaluate();
-		/*if (is_object($topic_for)) */$topic_for=$_topic_for->evaluate();
 
 		if (is_null($time)) $time=time();
 		if (is_null($ip)) $ip=get_ip_address();
-		if (!is_integer($forum_name))
-		{
-			$cf=$this->forum_id_from_name($forum_name);
-			if (is_null($cf)) warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
-		}
-		else $cf=(integer)$forum_name;
+		$forum_id=$this->forum_id_from_name($forum_name);
+		if (is_null($forum_id)) warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
 		$username=$this->get_username($member);
-		$tid=$this->get_tid_from_topic($topic_name,$forum_name);
-		if (is_null($tid))
+		$topic_id=$this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
+		if (is_null($topic_id))
 		{
-			$tid=$this->connection->query_insert('topics',array('title'=>$this->ipb_escape($topic_name),'state'=>'open','posts'=>1,'starter_id'=>$member,'start_date'=>$time,'icon_id'=>0,'starter_name'=>$username,'poll_state'=>0,'last_vote'=>0,'forum_id'=>$cf,'approved'=>1,'author_mode'=>1),true);
-			$this->connection->query_insert('posts',array('author_id'=>0,'author_name'=>do_lang('SYSTEM','','','',get_site_default_lang()),'ip_address'=>'127.0.0.1','post_date'=>$time,'icon_id'=>0,'post'=>do_lang('SPACER_POST',$topic_for,'','',get_site_default_lang()),'queued'=>0,'topic_id'=>$tid,'forum_id'=>$cf,'attach_id'=>'','attach_hits'=>0,'attach_type'=>'','attach_file'=>'','post_title'=>'','new_topic'=>1));
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET topics=(topics+1) WHERE id='.strval((integer)$cf),1);
+			$topic_id=$this->connection->query_insert('topics',array('title'=>$this->ipb_escape($content_title.', '.$topic_identifier_encapsulation_prefix.': #'.$topic_identifier),'state'=>'open','posts'=>1,'starter_id'=>$member,'start_date'=>$time,'icon_id'=>0,'starter_name'=>$username,'poll_state'=>0,'last_vote'=>0,'forum_id'=>$forum_id,'approved'=>1,'author_mode'=>1),true);
+			$home_link=hyperlink($content_url,escape_html($content_title));
+			$this->connection->query_insert('posts',array('author_id'=>0,'author_name'=>do_lang('SYSTEM','','','',get_site_default_lang()),'ip_address'=>'127.0.0.1','post_date'=>$time,'icon_id'=>0,'post'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()),'queued'=>0,'topic_id'=>$topic_id,'forum_id'=>$forum_id,'attach_id'=>'','attach_hits'=>0,'attach_type'=>'','attach_file'=>'','post_title'=>'','new_topic'=>1));
+			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET topics=(topics+1) WHERE id='.strval((integer)$forum_id),1);
 		}
-		if ($post=='') return;
-		$this->connection->query_insert('posts',array('author_id'=>$member,'author_name'=>$this->ipb_escape($username),'ip_address'=>$ip,'post_date'=>$time,'icon_id'=>0,'post'=>$post,'queued'=>0,'topic_id'=>$tid,'forum_id'=>$cf,'attach_id'=>'','attach_hits'=>0,'attach_type'=>'','attach_file'=>'','post_title'=>$this->ipb_escape($title),'new_topic'=>0));
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET posts=(posts+1), last_post='.strval($time).', last_poster_id='.strval((integer)$member).', last_poster_name=\''.db_escape_string($this->ipb_escape($username)).'\', last_id='.strval((integer)$tid).', last_title=\''.db_escape_string($this->ipb_escape($title)).'\' WHERE id='.strval((integer)$cf),1);
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET posts=(posts+1), last_post='.strval($time).', last_poster_id='.strval((integer)$member).', last_poster_name=\''.db_escape_string($this->ipb_escape($username)).'\' WHERE tid='.strval((integer)$tid),1);
+		if ($post=='') return array($topic_id,false);
+		$this->connection->query_insert('posts',array('author_id'=>$member,'author_name'=>$this->ipb_escape($username),'ip_address'=>$ip,'post_date'=>$time,'icon_id'=>0,'post'=>$post,'queued'=>0,'topic_id'=>$topic_id,'forum_id'=>$forum_id,'attach_id'=>'','attach_hits'=>0,'attach_type'=>'','attach_file'=>'','post_title'=>$this->ipb_escape($post_title),'new_topic'=>0));
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET posts=(posts+1), last_post='.strval($time).', last_poster_id='.strval((integer)$member).', last_poster_name=\''.db_escape_string($this->ipb_escape($username)).'\', last_id='.strval((integer)$topic_id).', last_title=\''.db_escape_string($this->ipb_escape($post_title)).'\' WHERE id='.strval((integer)$forum_id),1);
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET posts=(posts+1), last_post='.strval($time).', last_poster_id='.strval((integer)$member).', last_poster_name=\''.db_escape_string($this->ipb_escape($username)).'\' WHERE tid='.strval((integer)$topic_id),1);
+
+		return array($topic_id,false);
 	}
 
 	/**
 	 * Get an array of maps for the topic in the given forum.
 	 *
-	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic name
-	 * @param  SHORT_TEXT	The topic description. If this is non-blank, this is used for the search rather than the title
+	 * @param  integer		The topic ID
 	 * @param  integer		The comment count will be returned here by reference
 	 * @param  integer		Maximum comments to returned
 	 * @param  integer		Comment to start at
@@ -275,15 +279,8 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 * @param  boolean		Whether to show in reverse
 	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
 	 */
-	function get_forum_topic_posts($forum_name,$topic_name,$topic_description,&$count,$max=100,$start=0,$mark_read=true,$reverse=false)
+	function get_forum_topic_posts($topic_id,&$count,$max=100,$start=0,$mark_read=true,$reverse=false)
 	{
-		if (!is_integer($forum_name))
-		{
-			$cf=$this->forum_id_from_name($forum_name);
-			if (is_null($cf)) return (-1);
-		}
-		else $cf=(integer)$forum_name;
-		$topic_id=$this->get_tid_from_topic($topic_name,$cf);
 		if (is_null($topic_id)) return (-2);
 		$order=$reverse?'post_date DESC':'post_date';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
@@ -306,7 +303,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	
 	/**
 	 * Get an array of topics in the given forum. Each topic is an array with the following attributes:
-	 * - id, the topic id
+	 * - id, the topic ID
 	 * - title, the topic title
 	 * - lastusername, the username of the last poster
 	 * - lasttime, the timestamp of the last reply
@@ -318,7 +315,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 * @param  integer		The limit
 	 * @param  integer		The start position
 	 * @param  integer		The total rows (not a parameter: returns by reference)
-	 * @param  SHORT_TEXT	The topic name filter
+	 * @param  SHORT_TEXT	The topic title filter
 	 * @param  boolean		Whether to show the first posts
 	 * @param  string			The date key to sort by
 	 * @set    lasttime firsttime
@@ -326,7 +323,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 * @param  SHORT_TEXT	The topic description filter
 	 * @return ?array			The array of topics (NULL: error)
 	 */
-	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_name='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
+	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
 		if (is_integer($name)) $id_list='forum_id='.strval((integer)$name);
 		elseif (!is_array($name))
@@ -345,7 +342,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 			if ($id_list=='') return NULL;
 		}
 
-		$topic_filter=($filter_topic_name!='')?'AND title LIKE \''.db_encode_like($this->ipb_escape($filter_topic_name)).'\'':'';
+		$topic_filter=($filter_topic_title!='')?'AND title LIKE \''.db_encode_like($this->ipb_escape($filter_topic_title)).'\'':'';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter.' ORDER BY '.(($date_key=='lasttime')?'last_post':'start_date').' DESC',$limit,$start);
 		$max_rows=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter);
 		$out=array();
@@ -355,7 +352,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 			$out[$i]['id']=$r['tid'];
 			$out[$i]['num']=$r['posts'];
 			$out[$i]['title']=$this->ipb_unescape($r['title']);
-			$out[$i]['description']='';
+			$out[$i]['description']=$this->ipb_unescape($r['title']);
 			$out[$i]['firstusername']=$this->ipb_unescape($r['starter_name']);
 			$out[$i]['lastusername']=$this->ipb_unescape($r['last_poster_name']);
 			$out[$i]['firstmemberid']=$r['starter_id'];

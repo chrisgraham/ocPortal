@@ -833,9 +833,9 @@ class Module_galleries
 
 				// Some extra variables relating to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
-				$entry_rating_details=get_rating_details(get_self_url(true),$entry_title,'videos',strval($row['id']),$row['allow_rating']==1);
-				$entry_comment_details=get_comment_details('videos',$row['allow_comments']==1,strval($row['id']),false,get_value('comment_forum__videos'),NULL,NULL,false,false,$row['submitter'],$row['allow_comments']==2);
-				$entry_trackback_details=get_trackback_details('videos',strval($row['id']),$row['allow_trackbacks']==1);
+				$entry_rating_details=get_rating_box(get_self_url(true),$entry_title,'videos',strval($row['id']),$row['allow_rating']==1);
+				$entry_comment_details=get_comments('videos',$row['allow_comments']==1,strval($row['id']),false,get_value('comment_forum__videos'),NULL,NULL,false,false,$row['submitter'],$row['allow_comments']==2);
+				$entry_trackback_details=get_trackbacks('videos',strval($row['id']),$row['allow_trackbacks']==1);
 				$entry_add_date_raw=is_null($row['add_date'])?'':strval($row['add_date']);
 				$entry_edit_date_raw=is_null($row['edit_date'])?'':strval($row['edit_date']);
 				$entry_views=integer_format($row['video_views']);
@@ -877,9 +877,9 @@ class Module_galleries
 
 				// Some extra variables relatin to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
-				$entry_rating_details=get_rating_details(get_self_url(true),$entry_title,'images',strval($row['id']),$row['allow_rating']==1);
-				$entry_comment_details=get_comment_details('images',$row['allow_comments']==1,strval($row['id']),false,get_value('comment_forum__images'),NULL,NULL,false,false,$row['submitter'],$row['allow_comments']==2);
-				$entry_trackback_details=get_trackback_details('images',strval($row['id']),$row['allow_trackbacks']==1);
+				$entry_rating_details=get_rating_box(get_self_url(true),$entry_title,'images',strval($row['id']),$row['allow_rating']==1);
+				$entry_comment_details=get_comments('images',$row['allow_comments']==1,strval($row['id']),false,get_value('comment_forum__images'),NULL,NULL,false,false,$row['submitter'],$row['allow_comments']==2);
+				$entry_trackback_details=get_trackbacks('images',strval($row['id']),$row['allow_trackbacks']==1);
 				$entry_add_date_raw=is_null($row['add_date'])?'':strval($row['add_date']);
 				$entry_edit_date_raw=is_null($row['edit_date'])?'':strval($row['edit_date']);
 				$entry_views=integer_format($row['image_views']);

@@ -98,7 +98,7 @@ class Block_main_comments
 		{
 			decache('main_comments');
 		}
-		$hidden=$submitted?do_comments(true,'block_main_comments',$map['page'].'_'.$map['param'].$extra,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,false,NULL,get_page_name()=='guestbook'):false;
+		$hidden=$submitted?actualise_post_comment(true,'block_main_comments',$map['page'].'_'.$map['param'].$extra,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,false,NULL,get_page_name()=='guestbook'):false;
 
 		$out=new ocp_tempcode();
 
@@ -123,7 +123,7 @@ class Block_main_comments
 		$reverse=((array_key_exists('reverse',$map)) && ($map['reverse']=='1'));
 		$allow_reviews=((!array_key_exists('reviews',$map)) || ($map['reviews']=='1'));
 
-		$out->attach(get_comment_details('block_main_comments',true,$map['page'].'_'.$map['param'].$extra,$invisible_if_no_comments,array_key_exists('forum',$map)?$map['forum']:NULL,NULL,NULL,get_page_name()=='guestbook',$reverse,NULL,$allow_reviews));
+		$out->attach(get_comments('block_main_comments',true,$map['page'].'_'.$map['param'].$extra,$invisible_if_no_comments,array_key_exists('forum',$map)?$map['forum']:NULL,NULL,NULL,get_page_name()=='guestbook',$reverse,NULL,$allow_reviews));
 		return $out;
 	}
 

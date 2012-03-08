@@ -133,11 +133,11 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
             }
             $time_raw=$unread_pp['p_time'];
             $time=do_timezoned_date($unread_pp['p_time']);
-            $topic=$GLOBALS['OCF_DRIVER']->post_link($unread_pp['id'],NULL);
+            $topic=$GLOBALS['OCF_DRIVER']->post_url($unread_pp['id'],NULL);
             $post=ocf_clean_post_for_tooltip(text_lookup_comcode($unread_pp['p_post'],$GLOBALS['FORUM_DB']));
             $description=$unread_pp['t_description'];
             if ($description!='') $description=' ('.$description.')';
-            $profile_link=$GLOBALS['OCF_DRIVER']->member_profile_link($unread_pp['p_poster']);
+            $profile_link=$GLOBALS['OCF_DRIVER']->member_profile_url($unread_pp['p_poster']);
             $redirect_url=get_self_url(true,true);
             $ignore_url=build_url(array('page'=>'topics','type'=>'mark_read_topic','id'=>$unread_pp['p_topic_id'],'redirect'=>$redirect_url),get_module_zone('topics'));
             $notifications->attach(do_template('OCF_NOTIFICATION',array('_GUID'=>'3b224ea3f4da2f8f869a505b9756970a','ID'=>strval($unread_pp['id']),'U_TITLE'=>$u_title,'IGNORE_URL'=>$ignore_url,'REPLY_URL'=>$reply_url,'TOPIC_URL'=>$topic,'POST'=>$post,'DESCRIPTION'=>$description,'TIME'=>$time,'TIME_RAW'=>strval($time_raw),'BY'=>$by,'PROFILE_LINK'=>$profile_link,'TYPE'=>$type)));
@@ -160,7 +160,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
       {
          $member_info=ocf_read_in_member_profile(get_member(),true);
 
-         $profile_url=$GLOBALS['OCF_DRIVER']->member_profile_link(get_member());
+         $profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url(get_member());
 
          $zone_chooser=get_zone_chooser(true);
 
@@ -201,8 +201,8 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
          $this_url=$_this_url->evaluate();
          $login_url=build_url(array('page'=>'login','type'=>'login','redirect'=>$this_url),get_module_zone('login'));
          $full_link=build_url(array('page'=>'login','type'=>'misc','redirect_passon'=>$this_url),get_module_zone('login'));
-         $join_link=build_url(array('page'=>'join'),get_module_zone('join'));
-         $head=do_template('OCF_GUEST_BAR',array('NAVIGATION'=>get_zone_chooser(true),'LOGIN_URL'=>$login_url,'JOIN_LINK'=>$join_link,'FULL_LINK'=>$full_link));
+         $join_url=build_url(array('page'=>'join'),get_module_zone('join'));
+         $head=do_template('OCF_GUEST_BAR',array('NAVIGATION'=>get_zone_chooser(true),'LOGIN_URL'=>$login_url,'JOIN_LINK'=>$join_url,'FULL_LINK'=>$full_link));
       }
    } else $head=new ocp_tempcode();
 
@@ -227,7 +227,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
             continue;
          }
          if (is_null($username)) continue;
-         $url=$GLOBALS['OCF_DRIVER']->member_profile_link($member);
+         $url=$GLOBALS['OCF_DRIVER']->member_profile_url($member);
          $pgid=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_primary_group');
          $users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'a9cb1af2a04b14edd70749c944495bff','COLOUR'=>$all_colours[$pgid],'PROFILE_URL'=>$url,'USERNAME'=>$username)));
       }
@@ -242,7 +242,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
       $birthdays=new ocp_tempcode();
       foreach ($_birthdays as $_birthday)
       {
-         $birthday=do_template('OCF_USER_MEMBER',array('_GUID'=>'a98959187d37d80e134d47db7e3a52fa','PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_link($_birthday['id']),'USERNAME'=>$_birthday['username']));
+         $birthday=do_template('OCF_USER_MEMBER',array('_GUID'=>'a98959187d37d80e134d47db7e3a52fa','PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id']),'USERNAME'=>$_birthday['username']));
          if (array_key_exists('age',$_birthday)) $birthday->attach(' ('.$_birthday['age'].')');
          $birthdays->attach($birthday);
       }
@@ -259,7 +259,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 
       $foot=do_template('OCF_STATS',array(
          '_GUID'=>'sdflkdlfd303frksdf',
-         'NEWEST_MEMBER_PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_link($stats['newest_member_id']),
+         'NEWEST_MEMBER_PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($stats['newest_member_id']),
          'NEWEST_MEMBER_USERNAME'=>$stats['newest_member_username'],
          'NUM_MEMBERS'=>number_format($stats['num_members']),
          'NUM_TOPICS'=>number_format($stats['num_topics']),

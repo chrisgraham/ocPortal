@@ -26,6 +26,7 @@
 			<div id="error_ticket_type" style="display: none" class="input_error_here">&nbsp;</div>
 		{+END}
 
+		<br />
 		{COMMENTS}
 
 		{+START,IF_NON_EMPTY,{STAFF_DETAILS}}

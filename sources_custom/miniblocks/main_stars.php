@@ -21,7 +21,7 @@ foreach ($gifts as $gift)
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 	if (!is_null($username))
 	{
-		$link=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id);
+		$link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id);
 		$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_signature'),$GLOBALS['FORUM_DB']);
 		$points=$gift['cnt'];

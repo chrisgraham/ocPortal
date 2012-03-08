@@ -171,9 +171,9 @@ class Module_admin_messaging
 
 		// Filter/read comments
 		require_code('feedback');
-		do_comments(true,$message_type,$id,build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF'),NULL,$forum);
+		actualise_post_comment(true,$message_type,$id,build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF'),NULL,$forum);
 		$count=0;
-		$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($forum,$message_type.'_'.$id,$message_type.'_'.$id,$count);
+		$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$message_type.'_'.$id),$count);
 		if ((is_array($_comments)) && (array_key_exists(0,$_comments)))
 		{
 			$message_title=$_comments[0]['title'];
@@ -195,19 +195,19 @@ class Module_admin_messaging
 			}
 			$_comments[0]=NULL;
 		} else warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$comment_details=get_comment_details($message_type,true,$id,false,$forum,NULL,$_comments,true);
+		$comment_details=get_comments($message_type,true,$id,false,$forum,NULL,$_comments,true);
 
 		// Find who's read this
 		$whos_read=array();
 		if (get_forum_type()=='ocf')
 		{
 			// Read - who has, and when
-			$topic_id=$GLOBALS['FORUM_DRIVER']->get_tid_from_topic($message_type.'_'.$id,$forum);
+			$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$message_type.'_'.$id);
 			$rows=$GLOBALS['FORUM_DB']->query_select('f_read_logs',array('l_member_id','l_time'),array('l_topic_id'=>$topic_id));
 			foreach ($rows as $row)
 			{
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($row['l_member_id']);
-				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_link($row['l_member_id'],false,true);
+				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['l_member_id'],false,true);
 				$date=get_timezoned_date($row['l_time']);
 				$whos_read[]=array('USERNAME'=>$username,'MEMBER_LINK'=>$member_link,'DATE'=>$date);
 			}
@@ -234,7 +234,12 @@ class Module_admin_messaging
 		// Save as responsibility taken
 		$forum=get_option('messaging_forum_name');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$GLOBALS['FORUM_DRIVER']->make_post_forum_topic($forum,$message_type.'_'.$id,get_member(),do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY',$username),'',new ocp_tempcode());
+		$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+			$forum,
+			$message_type.'_'.$id,
+			get_member(),
+			do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY',$username)
+		);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:view:'.$id.':message_type='.$message_type,do_lang_tempcode('VIEW'))));
 		breadcrumb_set_self(do_lang_tempcode('_TAKE_RESPONSIBILITY'));

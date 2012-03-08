@@ -122,7 +122,7 @@ class Block_main_leader_board
 			if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($member))) continue;
 	
 			$points_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
-			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member,true,true);
+			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
 			$name=$GLOBALS['FORUM_DRIVER']->get_username($member);
 			if (is_null($name)) continue;
 			

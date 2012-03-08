@@ -130,7 +130,7 @@ class Module_warnings extends standard_aed_module
 		$results_table=results_table(do_lang_tempcode('PUNITIVE_HISTORY'),0,'start',1000000,'max',$max_rows,$fields_title,$out,NULL,NULL,NULL,NULL,paragraph(do_lang_tempcode('PUNITIVE_HISTORY_TEXT'),'4t4ygyerhrth4'));
 
 		$add_warning_url=build_url(array('page'=>'_SELF','type'=>'ad','id'=>$member_id,'redirect'=>get_self_url(true)),'_SELF');
-		$view_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id,false,true);
+		$view_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 		$edit_profile_url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_module_zone('members'),NULL,false,false,false,'tab__edit');
 
 		return do_template('OCF_WARNING_HISTORY_SCREEN',array('_GUID'=>'4444beed9305f0460a6c00e6c87d4208','TITLE'=>$title,'MEMBER_ID'=>strval($member_id),'EDIT_PROFILE_URL'=>$edit_profile_url,'VIEW_PROFILE_URL'=>$view_profile_url,'ADD_WARNING_URL'=>$add_warning_url,'RESULTS_TABLE'=>$results_table));
@@ -316,7 +316,7 @@ class Module_warnings extends standard_aed_module
 			$rules_url=$_rules_url->evaluate();
 			$_history_url=build_url(array('page'=>'_SELF','type'=>'history','id'=>$member_id),'_SELF');
 			$history_url=$_history_url->evaluate();
-			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id,false,true);
+			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 			if (is_object($profile_url)) $profile_url=$profile_url->evaluate();
 			$this->add_text=do_lang_tempcode('HAS_ALREADY_X_WARNINGS',escape_html($username),integer_format($num_warnings),array(escape_html(get_site_name()),escape_html($rules_url),escape_html($history_url),escape_html($profile_url)));
 		}

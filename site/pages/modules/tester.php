@@ -288,10 +288,10 @@ class Module_tester
 
 		$self_url=get_self_url();
 		$forum=get_option('tester_forum_name');
-		do_comments(true,'bug_report',strval($id),$self_url,$self_title,$forum);
+		actualise_post_comment(true,'bug_report',strval($id),$self_url,$self_title,$forum);
 
 		$comment_text=str_replace('{1}',$test,get_option('bug_report_text'));
-		$comments=get_comment_details('bug_report',true,strval($id),false,$forum,$comment_text);
+		$comments=get_comments('bug_report',true,strval($id),false,$forum,$comment_text);
 
 		return do_template('TESTER_REPORT',array('_GUID'=>'0c223a0a29a2c5289d71fbb69b0fe40d','TITLE'=>$title,'TEST'=>$test,'COMMENTS'=>$comments));
 	}

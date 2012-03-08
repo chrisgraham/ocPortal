@@ -386,13 +386,13 @@ It is advisable that you use the "block construction assistant" (linked to via t
 
 <tr>
 	<th class="code_parameter_name">Parameter 'page'</th>
-	<td>Advanced feature. If specified, this overrides the page name part of the comment topic name. You may leave this blank as usually the name of the page you place this on will be used and will do just fine.</td>
+	<td>Advanced feature. If specified, this overrides the page name part of the comment topic identifier. You may leave this blank as usually the name of the page you place this on will be used and will do just fine.</td>
 
 </tr>
 
 <tr>
 	<th class="code_parameter_name">Parameter 'extra_param_from'</th>
-	<td>Advanced feature. The name of the URL parameter to use as an additional comment topic name specifier (e.g. &quot;comment_type&quot;). You may leave this blank.</td>
+	<td>Advanced feature. The name of the URL parameter to use as an additional comment topic identifier (e.g. &quot;comment_type&quot;). You may leave this blank.</td>
 </tr>
 
 <tr>

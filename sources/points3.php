@@ -44,7 +44,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
 	$title=get_page_title('_POINTS',true,array(escape_html($name)));
 
-	$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_link($member_id_of,false,true);
+	$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,false,true);
 
 	// Show stats about $member_id_of
 	$post_count=$GLOBALS['FORUM_DRIVER']->get_post_count($member_id_of);

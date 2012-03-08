@@ -72,7 +72,7 @@
 					try
 					{
 						navigator.geolocation.getCurrentPosition(function(position) {
-							load_XML_doc('{SET_COORD_URL;}'+position.coords.latitude+'_'+position.coords.longitude+keep_stub());
+							do_ajax_request('{SET_COORD_URL;}'+position.coords.latitude+'_'+position.coords.longitude+keep_stub());
 							var initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 							map.setCenter(initialLocation);
 
@@ -125,7 +125,7 @@
 			return function ()
 			{
 				{$,Dynamically load a specific members details only when their marker is clicked.}
-				var reply = load_XML_doc("{$BASE_URL}/data_custom/get_member_tooltip.php?member=" + argMember+keep_stub());
+				var reply = do_ajax_request("{$BASE_URL}/data_custom/get_member_tooltip.php?member=" + argMember+keep_stub());
 				var content = reply.responseXML.documentElement.getElementsByTagName('result')[0].firstChild.nodeValue;
 				if (content != "")
 				{
