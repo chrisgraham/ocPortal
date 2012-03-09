@@ -594,17 +594,14 @@ class rss
 										$current_item['full_url']=array_key_exists('HREF',$attributes)?$attributes['HREF']:$data;
 									}
 									break;
+								case $prefix.'MODIFIED':
 								case $prefix.'UPDATED':
 									$a=cleanup_date($data);
-									$current_item['add_date']=$a[0];
-									if (array_key_exists(1,$a)) $current_item['clean_add_date']=$a[1];
+									$current_item['edit_date']=$a[0];
+									if (array_key_exists(1,$a)) $current_item['clean_edit_date']=$a[1];
 									break;
+								case $prefix.'PUBLISHED':
 								case $prefix.'ISSUED':
-									$a=cleanup_date($data);
-									$current_item['add_date']=$a[0];
-									if (array_key_exists(1,$a)) $current_item['clean_add_date']=$a[1];
-									break;
-								case $prefix.'MODIFIED':
 									$a=cleanup_date($data);
 									$current_item['add_date']=$a[0];
 									if (array_key_exists(1,$a)) $current_item['clean_add_date']=$a[1];
@@ -631,11 +628,27 @@ class rss
 									}
 									break;
 								case $prefix.'CATEGORY':
+									if (($data=='') && (array_key_exists('TERM',$attributes))) $data=$attributes['TERM'];
 									if ($data!='')
-										$current_item['category']=$data;
+									{
+										if (array_key_exists('category',$current_item))
+										{
+											if (!array_key_exists('extra_categories',$current_item)) $current_item['extra_categories']=array();
+											$current_item['extra_categories'][]=$data;
+										} else
+										{
+											$current_item['category']=$data;
+										}
+									}
 									if ((array_key_exists('TERM',$attributes)) && (strpos($attributes['TERM'],'post')===false) && (strpos($attributes['TERM'],'://')!==false))
 									{
 										$current_item['bogus']=true;
+									}
+									break;
+								case 'HTTP://SEARCH.YAHOO.COM/MRSS/:THUMBNAIL':
+									if (array_key_exists('URL',$attributes))
+									{
+										$current_item['rep_image']=$attributes['URL'];
 									}
 									break;
 							}
