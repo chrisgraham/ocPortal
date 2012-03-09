@@ -10,7 +10,7 @@
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
 					{+START,LOOP,WIDTHS}
-						<col style="width: {_loop_var}px" />
+						<col style="width: {_loop_var}{+START,IF,{$NOT,{$IN_STR,{_loop_var},px,%}}}px{+END}" />
 					{+END}
 				</colgroup>
 			{+END}

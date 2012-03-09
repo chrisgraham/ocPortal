@@ -2,7 +2,7 @@
 	{$HIDDENS_FOR_GET_FORM,{URL}}
 
 	<div>
-		<input class="search-box" onkeyup="update_ajax_search_list(this);" type="text" id="search_content" name="content" value="" />
+		<input class="search-box" onkeyup="update_ajax_search_list(this,event);" type="text" id="search_content" name="content" value="" />
 
 		<span class="search-but"><input type="submit" value="GO" /></span>
 

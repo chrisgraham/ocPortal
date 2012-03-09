@@ -48,7 +48,7 @@
 .main-content .content-part {margin-top:10px; }
 .main-content img { margin-right: 10px; float: left; }
 
-.col1 .main-content1 { width:310px; padding:15px 0 0 0; float:left; border-right:1px solid #BFEBF2; }
+.col1 .main-content1 { width:305px; padding:15px 5px 0 0; float:left; border-right:1px solid #BFEBF2; }
 .col1 .main-content1 .header-part {color:#666; font-weight:normal; font-size:1.05em; padding:10px 0; margin:0;}
 
 .col1 .main-content1 ul, .col1 .main-content2 ul, .col2 .main-content2 ul{ margin:1em 0; padding:0;}
@@ -59,7 +59,7 @@
 .col1 .main-content2 .header-part  {color:#666; font-weight:normal; font-size:1.05em; padding:10px 0; margin:0;}
 
 .more a { line-height:1.65em; padding:1px 3px; }
-.more a, input.more {font-size:0.80em; background:url('{$IMG,read-more-but}') no-repeat 0 0 #d0ffff; text-decoration:none; color:#1D8496; float:right; display:block;}
+.more a, input.more {min-width: 65px; text-align: center; font-size:0.80em; background:url('{$IMG,read-more-but}') no-repeat 0 0 #d0ffff; text-decoration:none; color:#1D8496; float:right; display:block;}
 .more a:hover, input.more:hover {background:url('{$IMG,read-more-but}') no-repeat 0 bottom; }
 .login .button_panel { font-size: 0.8em; }
 
@@ -545,6 +545,7 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 	border: 0px solid #086273; /* {$,wizard, 100% bordcolor}*/
 	border-top: 0px;
 	border-bottom: 0px;
+	padding: 0 15px;
 }
 
 .tabletitle_internal {
@@ -1403,7 +1404,7 @@ input.buttonhyperlink {
 	text-align: center;
 }
 
-.wide_field, .wide_button {
+.wide_field {
 	width: 100%;
 }
 
@@ -2997,7 +2998,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 }
 
 #screen_actions div {
-	margin-{!en_right}: 20px;
+	margin-{!en_right}: 15px;
 	padding-{!en_left}: 20px;
 	background-repeat: no-repeat;
 	float: {!en_left};

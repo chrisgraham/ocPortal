@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>themes/default/templates/COMMENTS_WRAPPER.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -489,20 +487,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>cms/pages/modules/cms_news.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>19</integer>
-				<key>line</key>
-				<integer>693</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>638</integer>
-		</dict>
 		<key>cms/pages/modules/cms_quiz.php</key>
 		<dict>
 			<key>caret</key>
@@ -858,20 +842,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>lang/EN/global.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>923</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>874</integer>
 		</dict>
 		<key>lang/EN/quotes.ini</key>
 		<dict>
@@ -1701,20 +1671,6 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
-		<key>sources/news2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>152</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>127</integer>
-		</dict>
 		<key>sources/ocf_forum_driver_helper.php</key>
 		<dict>
 			<key>caret</key>
@@ -1742,20 +1698,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>81</integer>
-		</dict>
-		<key>sources/rss.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>135</integer>
-				<key>line</key>
-				<integer>635</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>610</integer>
 		</dict>
 		<key>sources/seo2.php</key>
 		<dict>
@@ -1872,20 +1814,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
-		</dict>
-		<key>themes/Medical-Master-theme/css_custom/global.css</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1296</integer>
 		</dict>
 		<key>themes/Medical-Master-theme/templates_custom/STANDARDBOX_classic.tpl</key>
 		<dict>
@@ -2237,20 +2165,6 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates/COMMENTS_WRAPPER.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>76</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>themes/default/templates/ECOM_CANCEL_BUTTON_VIA_SECPAY.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2481,36 +2395,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>1</integer>
-			</dict>
-		</dict>
-		<key>themes/default/templates/RATING_FORM.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>98</integer>
-				<key>line</key>
-				<integer>26</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>91</integer>
-				<key>line</key>
-				<integer>26</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>98</integer>
-				<key>line</key>
-				<integer>26</integer>
 			</dict>
 		</dict>
 		<key>themes/default/templates/STANDARDBOX_invisible.tpl</key>
@@ -2900,18 +2784,6 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>sources/rss.php</string>
-		<string>sources/topics.php</string>
-		<string>sources/ocf_forum_driver_helper.php</string>
-		<string>sources/feedback.php</string>
-		<string>themes/default/templates/COMMENTS_WRAPPER.tpl</string>
-		<string>lang/EN/global.ini</string>
-		<string>themes/default/templates/RATING_FORM.tpl</string>
-		<string>sources/news2.php</string>
-		<string>cms/pages/modules/cms_news.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
