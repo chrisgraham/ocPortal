@@ -646,7 +646,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	if ($feedback_details)
 	{
 		list($map['RATING_DETAILS'],$map['COMMENT_DETAILS'],$map['TRACKBACK_DETAILS'])=embed_feedback_systems(
-			get_page_name(),
+			'catalogues__'.$catalogue_name,
 			strval($id),
 			$entry['allow_rating'],
 			$entry['allow_comments'],

@@ -1,30 +1,25 @@
-{+START,IF,{$NOT,{$VALUE_OPTION,likes}}}
-	{+START,IF_NON_EMPTY,{ERROR}}
-		{ERROR}
-	{+END}
-{+END}
-
 {+START,IF_EMPTY,{ERROR}}
-	<a name="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}_jump" id="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}_jump" rel="dorating"></a>
 	<form title="{!RATE}" onsubmit="if (this.elements[0].selectedIndex==0) { window.fauxmodal_alert('{!IMPROPERLY_FILLED_IN=;}'); return false; } else return true;" action="{URL*}" method="post">
-		{+START,LOOP,TITLES}
+		{+START,LOOP,ALL_RATING_CRITERIA}
+			<a name="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}_jump" id="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}_jump" rel="dorating"></a>
 			{+START,IF,{$NOT,{$JS_ON}}}{+START,IF_EMPTY,{TITLE}}<div class="accessibility_hidden">{+END}<label accesskey="r" for="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}"><strong>{+START,IF_EMPTY,{TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}:{+END}</strong></label>{+START,IF_EMPTY,{TITLE}}</div>{+END}{+END}
+			{+START,IF,{$JS_ON}}{+START,IF_EMPTY,{TITLE}}<div class="accessibility_hidden">{+END}<strong>{+START,IF_EMPTY,{TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}:{+END}</strong>{+START,IF_EMPTY,{TITLE}}</div>{+END}{+END}
 			<div class="rating_inner">
 				{+START,IF,{$JS_ON}}
 					{$JAVASCRIPT_INCLUDE,javascript_ajax}
 
 					{$,Like/dislike}
-					{+START,IF,{$VALUE_OPTION,likes}}
+					{+START,IF,{LIKES}}
 						<img id="rating_bar_1__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,dislike}" /><img id="rating_bar_10__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,like}" />
 					{+END}
 
 					{$,Star ratings}
-					{+START,IF,{$NOT,{$VALUE_OPTION,likes}}}
+					{+START,IF,{$NOT,{LIKES}}}
 						<img id="rating_bar_2__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_4__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_6__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_8__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_10__{CONTENT_TYPE*}__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" />
 					{+END}
 
 					<script type="text/javascript">// <![CDATA[
-						apply_rating_highlight_and_ajax_code({_RATING%},'{CONTENT_TYPE%}','{ID%}','{TYPE%}',{_RATING%},'{CONTENT_URL;/}','{CONTENT_TITLE;/}',true);
+						apply_rating_highlight_and_ajax_code({LIKES}==1,{RATING%},'{CONTENT_TYPE%}','{ID%}','{TYPE%}',{RATING%},'{CONTENT_URL;/}','{CONTENT_TITLE;/}',true);
 					//]]></script>
 				{+END}
 

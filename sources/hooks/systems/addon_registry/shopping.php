@@ -634,9 +634,7 @@ class Hook_addon_registry_shopping
 						));
 		$cart_logo = do_lorem_template('CART_LOGO',array('URL'=>placeholder_url(),'TITLE'=>lorem_phrase()),NULL,false);
 
-		$_rating=array();
-		$_rating[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"));
-		$rating_inside	=	do_lorem_template('RATING_FORM',array('TYPE'=>'','CONTENT_TYPE'=>'seedy','ID'=>placeholder_id(),'URL'=>placeholder_url(),'TITLES'=>$_rating,'SIMPLISTIC'=>true));
+		$rating_inside	=	new ocp_tempcode();
 
 		$entry = do_lorem_template('CATALOGUE_products_ENTRY',array(
 					'FIELD_0'=>lorem_phrase(),
@@ -701,17 +699,16 @@ class Hook_addon_registry_shopping
 		require_lang('catalogues');
 		require_css('catalogues');
 
-		$_rating=array();
-		$_rating[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"));
+		$all_rating_criteria=array();
+		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'TYPE'=>lorem_word());
 		
 		$line = new ocp_tempcode();
 		foreach(placeholder_array(1) as $v)
 		{
-		$rating_inside	=	do_lorem_template('RATING_FORM',array('TYPE'=>lorem_word(),'CONTENT_TYPE'=>'seedy','ID'=>placeholder_random_id(),'URL'=>placeholder_url(),'TITLES'=>$_rating,'SIMPLISTIC'=>true));
 		$line->attach(do_lorem_template('CATALOGUE_products_LINE',array(
 					'FIELD_0'=>lorem_phrase(),
 					'FIELD_7_THUMB'=>lorem_phrase(),
-					'RATING'=>$rating_inside,
+					'RATING'=>new ocp_tempcode(),
 					'FIELD_2'=>placeholder_number(),
 					'ADD_TO_CART'=>placeholder_url(),
 					'VIEW_URL'=>placeholder_url(),

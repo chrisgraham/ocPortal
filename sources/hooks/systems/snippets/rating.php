@@ -34,7 +34,6 @@ class Hook_rating
 		$rating=post_param_integer('rating');
 		$content_type=get_param('content_type');
 		$type=get_param('type');
-		if ($type!='') $content_type.='_'.$type;
 		$content_id=get_param('id');
 
 		$content_url=get_param('content_url',false,true);
@@ -44,7 +43,7 @@ class Hook_rating
 		actualise_specific_rating($rating,get_page_name(),get_member(),$content_type,$type,$content_id,$content_url,$content_title);
 
 		$template=get_param('template');
-		if (($type=='') && ($template!=''))
+		if ($template!='')
 		{
 			return display_rating($content_url,$content_title,$content_type,$content_id,$template);
 		}

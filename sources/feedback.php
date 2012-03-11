@@ -19,6 +19,26 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__feedback()
+{
+	if (!defined('MAX_LIKES_TO_SHOW'))
+	{
+		define('MAX_LIKES_TO_SHOW',20);
+	}
+
+	if (!defined('RATING_TYPE_star_choice'))
+	{
+		define('RATING_TYPE_star_choice',0);
+		define('RATING_TYPE_like_dislike',1);
+	}
+
+	global $RATINGS_STRUCTURE;
+	$RATINGS_STRUCTURE=array();
+}
+
+/**
  * Find who submitted a piece of feedbackable content.
  *
  * @param  ID_TEXT		Content type
@@ -174,14 +194,13 @@ function post_comment_script()
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  boolean		Whether this resource allows rating (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
- * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
  * @return tempcode		Tempcode for complete rating box
  */
-function get_rating_box($content_url,$content_title,$content_type,$content_id,$allow_rating,$extra_ratings=NULL)
+function get_rating_box($content_url,$content_title,$content_type,$content_id,$allow_rating)
 {
 	if ($allow_rating)
 	{
-		return display_rating($content_url,$content_title,$content_type,$content_id,'RATING_BOX',$extra_ratings);
+		return display_rating($content_url,$content_title,$content_type,$content_id,'RATING_BOX');
 	}
 
 	return new ocp_tempcode();
@@ -195,12 +214,11 @@ function get_rating_box($content_url,$content_title,$content_type,$content_id,$a
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  ID_TEXT		The template to use to display the rating box
- * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
  * @return tempcode		Tempcode for complete trackback box
  */
-function display_rating($content_url,$content_title,$content_type,$content_id,$display_tpl='RATING_INLINE_STATIC',$extra_ratings=NULL)
+function display_rating($content_url,$content_title,$content_type,$content_id,$display_tpl='RATING_INLINE_STATIC')
 {
-	$rating_data=get_rating_simple_array($content_url,$content_title,$content_type,$content_id,'RATING_FORM',$extra_ratings);
+	$rating_data=get_rating_simple_array($content_url,$content_title,$content_type,$content_id,'RATING_FORM');
 
 	if (is_null($rating_data))
 		return new ocp_tempcode();
@@ -216,78 +234,88 @@ function display_rating($content_url,$content_title,$content_type,$content_id,$d
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  ID_TEXT		The template to use to display the rating box
- * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
  * @return ?array			Current rating information (ready to be passed into a template). RATING is the rating (out of 10), NUM_RATINGS s the number of ratings so far, RATING_FORM is the tempcode of the rating box (NULL: rating disabled)
  */
-function get_rating_simple_array($content_url,$content_title,$content_type,$content_id,$form_tpl='RATING_FORM',$extra_ratings=NULL)
+function get_rating_simple_array($content_url,$content_title,$content_type,$content_id,$form_tpl='RATING_FORM')
 {
-	$liked_by=mixed();
-
 	if (get_option('is_on_rating')=='1')
 	{
-		// Ratings
-		$num_ratings=$GLOBALS['SITE_DB']->query_value('rating','COUNT(*)',array('rating_for_type'=>$content_type,'rating_for_id'=>$content_id));
-		if ((!is_null($num_ratings)) && ($num_ratings>0))
-		{
-			$_rating=array();
-			$rating=$GLOBALS['SITE_DB']->query_value('rating','SUM(rating)',array('rating_for_type'=>$content_type,'rating_for_id'=>$content_id));
+		$liked_by=mixed();
 
-			if ($num_ratings<20)
+		// Work out structure first
+		global $RATINGS_STRUCTURE;
+		$all_rating_criteria=array();
+		if (array_key_exists($content_type,$RATINGS_STRUCTURE))
+		{
+			$likes=($RATINGS_STRUCTURE[$content_type][0]==RATING_TYPE_like_dislike);
+			foreach ($RATINGS_STRUCTURE[$content_type][1] as $r=>$t)
 			{
-				$_liked_by=$GLOBALS['SITE_DB']->query_select('rating',array('rating_member'),array('rating_for_type'=>$content_type,'rating_for_id'=>$content_id,'rating'=>10));
-				$liked_by=array();
-				foreach ($_liked_by as $l)
+				$rating_for_type=$content_type;
+				if ($r!='') $rating_for_type.='_'.$r;
+				$all_rating_criteria[$rating_for_type]=array('TITLE'=>$t,'TYPE'=>$r,'RATING'=>'0');
+			}
+		} else
+		{
+			$likes=(get_value('likes')==='1');
+			$all_rating_criteria['']=array('TITLE'=>'','TYPE'=>'','NUM_RATINGS'=>'0','RATING'=>'0');
+		}
+
+		// Fill in structure
+		$has_ratings=false;
+		$overall_num_ratings=0;
+		$overall_rating=0.0;
+		foreach ($all_rating_criteria as $i=>$rating_criteria)
+		{
+			$rating_for_type=$content_type;
+			if ($rating_criteria['TYPE']!='') $rating_for_type.='_'.$rating_criteria['TYPE'];
+
+			$_num_ratings=$GLOBALS['SITE_DB']->query_select('rating',array('COUNT(*) AS cnt','SUM(rating) AS compound_rating'),array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id),'',1);
+			$num_ratings=$_num_ratings[0]['cnt'];
+			if ($num_ratings>0)
+			{
+				$rating=$_num_ratings[0]['compound_rating'];
+				$overall_num_ratings=max($overall_num_ratings,$num_ratings);
+
+				if (($num_ratings<MAX_LIKES_TO_SHOW) && ($likes)) // Show likes
 				{
-					$username=$GLOBALS['FORUM_DRIVER']->get_username($l['rating_member']);
-					if (!is_null($username))
+					if (is_null($liked_by)) $liked_by=array();
+					if (count($liked_by)<MAX_LIKES_TO_SHOW)
 					{
-						$liked_by[]=array(
-							'MEMBER_ID'=>strval($l['rating_member']),
-							'USERNAME'=>$username,
-						);
+						$_liked_by=$GLOBALS['SITE_DB']->query_select('rating',array('rating_member'),array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating'=>10));
+						foreach ($_liked_by as $l)
+						{
+							$username=$GLOBALS['FORUM_DRIVER']->get_username($l['rating_member']);
+							if (!is_null($username))
+							{
+								$liked_by[]=array(
+									'MEMBER_ID'=>strval($l['rating_member']),
+									'USERNAME'=>$username,
+								);
+								if (count($liked_by)==MAX_LIKES_TO_SHOW) break;
+							}
+						}
 					}
 				}
-			}
 
-			$calculated_rating=intval(round($rating/floatval($num_ratings)));
+				$calculated_rating=intval(round($rating/floatval($num_ratings)));
+				$overall_rating+=$calculated_rating;
 
-			$_rating[]=array('TITLE'=>is_null($extra_ratings)?'':do_lang('GENERAL'),'RATING'=>make_string_tempcode(integer_format($calculated_rating)));
+				$all_rating_criteria[$i]=array('NUM_RATINGS'=>integer_format($num_ratings),'RATING'=>make_string_tempcode(strval($calculated_rating)))+$all_rating_criteria[$i];
 
-			$GLOBALS['META_DATA']+=array(
-				'rating'=>strval($calculated_rating),
-			);
-
-			if (!is_null($extra_ratings))
-			{
-				foreach ($extra_ratings as $stem)
-				{
-					$_num_ratings=$GLOBALS['SITE_DB']->query_value('rating','COUNT(*)',array('rating_for_type'=>$content_type.'_'.$stem,'rating_for_id'=>$content_id));
-					if ($_num_ratings==0) $_num_ratings=1;
-					$rating=$GLOBALS['SITE_DB']->query_value('rating','SUM(rating)',array('rating_for_type'=>$content_type.'_'.$stem,'rating_for_id'=>$content_id));
-					$_rating[]=array('TITLE'=>$stem,'RATING'=>make_string_tempcode(integer_format(intval(round($rating/$_num_ratings)))));
-				}
-			}
-		} else $_rating=NULL;
-
-		// The possible rating criteria
-		$titles=array(array('TITLE'=>'','TYPE'=>''));
-		if (!is_null($extra_ratings))
-		{
-			$titles=array(array('TITLE'=>do_lang('GENERAL'),'TYPE'=>''));
-			foreach ($extra_ratings as $type)
-			{
-				$titles[]=array('TITLE'=>$type,'TYPE'=>$type);
+				$GLOBALS['META_DATA']['rating'.(($rating_criteria['TYPE']=='')?'':('_'.$rating_criteria['TYPE']))]=strval($calculated_rating);
+				
+				$has_ratings=true;
 			}
 		}
 
 		// Work out possible errors that mighr prevent rating being allowed
-		$error='';
-		$rate_url='';
+		$error=new ocp_tempcode();
+		$rate_url=new ocp_tempcode();
 		if (!has_specific_permission(get_member(),'rate',get_page_name()))
 		{
 			$error=do_lang_tempcode('RATE_DENIED');
 		}
-		elseif (already_rated($content_type,$content_id))
+		elseif (already_rated(array_keys($all_rating_criteria),$content_id))
 		{
 			$error=do_lang_tempcode('NORATE');
 		} else
@@ -296,26 +324,24 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 		}
 
 		// Templating
-		$rating_form=do_template($form_tpl,array(
+		$tpl_params=array(
 			'CONTENT_URL'=>$content_url,
 			'CONTENT_TITLE'=>$content_title,
 			'ERROR'=>$error,
-			'TYPE'=>'',
 			'CONTENT_TYPE'=>$content_type,
 			'ID'=>$content_id,
 			'URL'=>$rate_url,
-			'TITLES'=>$titles,
-			'_RATING'=>is_null($_rating[0]['RATING'])?'0':$_rating[0]['RATING'],
-			'SIMPLISTIC'=>count($titles)==1,
-		));
-		return array(
-			'ERROR'=>$error,
-			'CONTENT_TYPE'=>$content_type,
-			'ID'=>$content_id,
-			'_RATING'=>$_rating,
-			'NUM_RATINGS'=>integer_format($num_ratings),
-			'RATING_FORM'=>$rating_form,
+			'ALL_RATING_CRITERIA'=>$all_rating_criteria,
+			'OVERALL_NUM_RATINGS'=>integer_format($overall_num_ratings),
+			'OVERALL_RATING'=>make_string_tempcode(strval(intval($overall_rating/floatval(count($all_rating_criteria))))),
+			'HAS_RATINGS'=>$has_ratings,
+			'SIMPLISTIC'=>(count($all_rating_criteria)==1),
+			'LIKES'=>$likes,
 			'LIKED_BY'=>$liked_by,
+		);
+		$rating_form=do_template($form_tpl,$tpl_params);
+		return $tpl_params+array(
+			'RATING_FORM'=>$rating_form,
 		);
 	}
 	return NULL;
@@ -324,15 +350,22 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 /**
  * Find whether you have rated the specified resource before.
  *
- * @param  ID_TEXT		The type (download, etc) that this rating is for
+ * @param  array			List of types (download, etc) that this rating is for. All need to be rated for it to return true.
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @return boolean		Whether the resource has already been rated
  */
-function already_rated($content_type,$content_id)
+function already_rated($content_types,$content_id)
 {
 	$more=(!is_guest())?' OR rating_member='.strval((integer)get_member()):'';
-	$has_rated=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT rating FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$content_type).' AND '.db_string_equal_to('rating_for_id',$content_id).' AND (rating_ip=\''.get_ip_address().'\''.$more.')');
-	return (!is_null($has_rated));
+	$for_types='';
+	foreach ($content_types as $content_type)
+	{
+		if ($for_types!='') $for_types.=' OR ';
+		$for_types.=db_string_equal_to('rating_for_type',$content_type);
+	}
+	$has_rated=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'rating WHERE ('.$for_types.') AND '.db_string_equal_to('rating_for_id',$content_id).' AND (rating_ip=\''.get_ip_address().'\''.$more.')');
+
+	return ($has_rated==count($content_types));
 }
 
 /**
@@ -344,16 +377,22 @@ function already_rated($content_type,$content_id)
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
  * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
- * @param  ?array			List of extra rating type steams (e.g. Quality would lookup download_Quality) (NULL: none).
  */
-function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$content_title,$extra_ratings=NULL)
+function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$content_title)
 {
 	if ((get_option('is_on_rating')=='0') || (!$allow_rating)) return;
 
-	if (is_null($extra_ratings)) $extra_ratings=array();
-	$extra_ratings[]='';
+	global $RATINGS_STRUCTURE;
+	$all_rating_criteria=array();
+	if (array_key_exists($content_type,$RATINGS_STRUCTURE))
+	{
+		$all_rating_criteria=array_keys($RATINGS_STRUCTURE[$content_type][1]);
+	} else
+	{
+		$all_rating_criteria[]='';
+	}
 
-	foreach ($extra_ratings as $type)
+	foreach ($all_rating_criteria as $type)
 	{
 		// Has there actually been any rating?
 		$rating=post_param_integer('rating__'.$content_type.'__'.$type.'__'.$content_id,NULL);
@@ -391,13 +430,15 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 {
 	if (($rating>10) || ($rating<1)) log_hack_attack_and_exit('VOTE_CHEAT');
 
-	if (!has_specific_permission($member_id,'rate',$page_name)) return;
-	if (already_rated($content_type.(($type=='')?'':('_'.$type)),$content_id)) return;
+	$rating_for_type=$content_type.(($type=='')?'':('_'.$type));
 
-	$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$content_type.(($type=='')?'':('_'.$type)),'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
+	if (!has_specific_permission($member_id,'rate',$page_name)) return;
+	if (already_rated(array($rating_for_type),$content_id)) return;
+
+	$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
 
 	// Top rating / liked
-	if (/*(get_value('likes')==='1') && */($rating==10) && ($type==''))
+	if (($rating==10) && ($type==''))
 	{
 		list(,$submitter,,$safe_content_url)=get_details_behind_feedback_code($content_type,$content_id);
 		if ((!is_null($submitter)) && (!is_guest($submitter)))
@@ -582,9 +623,16 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		if ((get_forum_type()=='ocf') && (!is_null($GLOBALS['LAST_POST_ID'])))
 		{
 			$extra_review_ratings=array();
-			$extra_review_ratings[]='';
+			global $REVIEWS_STRUCTURE;
+			if (array_key_exists($content_type,$REVIEWS_STRUCTURE))
+			{
+				$reviews_rating_criteria=$REVIEWS_STRUCTURE[$content_type];
+			} else
+			{
+				$reviews_rating_criteria[]='';
+			}
 
-			foreach ($extra_review_ratings as $rating_type)
+			foreach ($reviews_rating_criteria as $rating_type)
 			{
 				// Has there actually been any rating?
 				$rating=post_param_integer('review_rating',NULL);

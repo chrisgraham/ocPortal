@@ -34,14 +34,14 @@ class OCP_Topic
 	var $is_threaded=NULL;
 	var $topic_id=NULL;
 	var $error=false;
-	var $review_titles=array();
+	var $reviews_rating_criteria=array();
 
 	/**
 	 * Constructor.
 	 */
 	function OCP_Topic()
 	{
-		$this->set_review_titles(array(''));
+		$this->set_reviews_rating_criteria(array(''));
 	}
 
 	/**
@@ -89,7 +89,14 @@ class OCP_Topic
 			require_javascript('javascript_thumbnails');
 
 			// Prepare review titles
-			$this->set_review_titles(array(''));
+			global $REVIEWS_STRUCTURE;
+			if (array_key_exists($content_type,$REVIEWS_STRUCTURE))
+			{
+				$this->set_reviews_rating_criteria($REVIEWS_STRUCTURE[$content_type]);
+			} else
+			{
+				$this->set_reviews_rating_criteria(array(''));
+			}
 
 			// Load up reviews
 			if ((get_forum_type()=='ocf') && ($allow_reviews))
@@ -131,15 +138,15 @@ class OCP_Topic
 			}
 			
 			// Existing review ratings
-			$review_titles=array();
+			$reviews_rating_criteria=array();
 			if ((get_forum_type()=='ocf') && ($allow_reviews))
 			{
-				foreach ($this->review_titles as $review_title)
+				foreach ($this->reviews_rating_criteria as $review_title)
 				{
 					$_rating=$GLOBALS['SITE_DB']->query_value('review_supplement','AVG(r_rating)',array('r_rating_type'=>$review_title,'r_topic_id'=>$topic_id));
 					$rating=mixed();
 					$rating=is_null($_rating)?NULL:$_rating;
-					$review_titles[]=array('REVIEW_TITLE'=>$review_title,'REVIEW_RATING'=>make_string_tempcode(is_null($rating)?'':float_format($rating)));
+					$reviews_rating_criteria[]=array('REVIEW_TITLE'=>$review_title,'REVIEW_RATING'=>make_string_tempcode(is_null($rating)?'':float_format($rating)));
 					if (!is_null($rating))
 					{
 						$GLOBALS['META_DATA']+=array(
@@ -175,7 +182,7 @@ class OCP_Topic
 				'RESULTS_BROWSER'=>$results_browser,
 				'TYPE'=>$content_type,
 				'ID'=>$content_id,
-				'REVIEW_TITLES'=>$review_titles,
+				'REVIEW_RATING_CRITERIA'=>$reviews_rating_criteria,
 				'FORUM_LINK'=>$forum_url,
 				'AUTHORISED_FORUM_LINK'=>$authorised_forum_url,
 				'FORM'=>$form,
@@ -223,7 +230,7 @@ class OCP_Topic
 				return new ocp_tempcode();
 
 			// Prepare review titles
-			$this->set_review_titles(array(''));
+			$this->set_reviews_rating_criteria(array(''));
 
 			// Load up reviews
 			if ((get_forum_type()=='ocf') && ($allow_reviews))
@@ -308,13 +315,13 @@ class OCP_Topic
 	}
 
 	/**
-	 * Set the particular review titles (different criteria) we'll be dealing with.
+	 * Set the particular review criteria we'll be dealing with.
 	 *
-	 * @param  array			Review titles
+	 * @param  array			Review criteria
 	 */
-	function set_review_titles($review_titles)
+	function set_reviews_rating_criteria($reviews_rating_criteria)
 	{
-		$this->review_titles=$review_titles;
+		$this->reviews_rating_criteria=$reviews_rating_criteria;
 	}
 
 	/**
@@ -686,10 +693,10 @@ class OCP_Topic
 			$join_bits=do_template('JOIN_OR_LOGIN',array('LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
 		}
 
-		$review_titles=array();
-		foreach ($this->review_titles as $review_title)
+		$reviews_rating_criteria=array();
+		foreach ($this->reviews_rating_criteria as $review_title)
 		{
-			$review_titles[]=array(
+			$reviews_rating_criteria[]=array(
 				'REVIEW_TITLE'=>$review_title,
 			);
 		}
@@ -703,7 +710,7 @@ class OCP_Topic
 			'REVIEWS'=>$allow_reviews,
 			'TYPE'=>$type,
 			'ID'=>$id,
-			'REVIEW_TITLES'=>$review_titles,
+			'REVIEW_RATING_CRITERIA'=>$reviews_rating_criteria,
 			'USE_CAPTCHA'=>$use_captcha,
 			'GET_EMAIL'=>false,
 			'EMAIL_OPTIONAL'=>true,

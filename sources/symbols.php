@@ -1943,7 +1943,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$rating=get_rating_simple_array(array_key_exists(2,$param)?$param[2]:get_self_url(true),array_key_exists(3,$param)?$param[3]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1]);
 					if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
 					{
-						$value=isset($rating['_RATING'][0]['RATING'])?$rating['_RATING'][0]['RATING']:'';
+						$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
 					} else
 					{
 						$value=do_template('RATING_INLINE_STATIC',$rating);

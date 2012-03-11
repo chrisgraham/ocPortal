@@ -2332,7 +2332,7 @@ function carefulImportNode(node)
 	return imported;
 }
 
-function apply_rating_highlight_and_ajax_code(initial_rating,content_type,id,type,rating,content_url,content_title,initialisation_phase)
+function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,id,type,rating,content_url,content_title,initialisation_phase)
 {
 	var i,bit;
 	for (i=1;i<=10;i++)
@@ -2340,22 +2340,23 @@ function apply_rating_highlight_and_ajax_code(initial_rating,content_type,id,typ
 		bit=document.getElementById('rating_bar_'+i+'__'+content_type+'__'+type+'__'+id);
 		if (!bit) continue;
 
-		{+START,IF,{$NOT,{$VALUE_OPTION,likes}}}
-			setOpacity(bit,(rating>=i)?1.0:0.2);
-		{+END}
-		{+START,IF,{$VALUE_OPTION,likes}}
+		if (likes)
+		{
 			setOpacity(bit,(rating==i)?1.0:0.2);
-		{+END}
+		} else
+		{
+			setOpacity(bit,(rating>=i)?1.0:0.2);
+		}
 
 		if (initialisation_phase)
 		{
 			bit.onmouseover=function(i) { return function()
 			{
-				apply_rating_highlight_and_ajax_code(initial_rating,content_type,id,type,i,content_url,content_title,false);
+				apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,id,type,i,content_url,content_title,false);
 			} }(i);
 			bit.onmouseout=function(i) { return function()
 			{
-				apply_rating_highlight_and_ajax_code(initial_rating,content_type,id,type,initial_rating,content_url,content_title,false);
+				apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,id,type,initial_rating,content_url,content_title,false);
 			} }(i);
 
 			bit.onclick=function(i) {

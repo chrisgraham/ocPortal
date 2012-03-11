@@ -46,8 +46,8 @@
 								</li>
 							{+END}
 
-							{+START,IF_PASSED,REVIEW_TITLES}{+START,IF_PASSED,TYPE}{+START,IF_PASSED,ID}
-								{+START,LOOP,REVIEW_TITLES}
+							{+START,IF_PASSED,REVIEW_RATING_CRITERIA}{+START,IF_PASSED,TYPE}{+START,IF_PASSED,ID}
+								{+START,LOOP,REVIEW_RATING_CRITERIA}
 									<li>
 										<label for="review_rating__{TYPE*|}__{ID*|}">{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}</label>
 										<select id="review_rating__{TYPE*|}__{ID*|}" name="review_rating">
@@ -128,8 +128,8 @@
 								</tr>
 							{+END}
 
-							{+START,IF_PASSED,REVIEW_TITLES}{+START,IF_PASSED,TYPE}{+START,IF_PASSED,ID}
-								{+START,LOOP,REVIEW_TITLES}
+							{+START,IF_PASSED,REVIEW_RATING_CRITERIA}{+START,IF_PASSED,TYPE}{+START,IF_PASSED,ID}
+								{+START,LOOP,REVIEW_RATING_CRITERIA}
 									<tr>
 										<th class="de_th">
 											{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}

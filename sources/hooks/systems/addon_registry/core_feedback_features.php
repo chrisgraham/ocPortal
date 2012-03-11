@@ -143,7 +143,7 @@ class Hook_addon_registry_core_feedback_features
 				'TRACKBACK_XML.tpl'=>'trackback_xml_wrapper',
 				'TRACKBACK_WRAPPER.tpl'=>'trackback_wrapper',
 				'TRACKBACK_XML_LISTING.tpl'=>'trackback_xml_listing',
-				'RATING_FORM.tpl'=>'rating_inside',
+				'RATING_FORM.tpl'=>'rating',
 				'RATING_INLINE_STATIC.tpl'=>'rating_inline_static',
 				'RATING_INLINE_DYNAMIC.tpl'=>'rating_inline_dynamic',
 				'EMOTICON_CLICK_CODE.tpl'=>'comments',
@@ -305,13 +305,13 @@ class Hook_addon_registry_core_feedback_features
 	*/
 	function tpl_preview__rating()
 	{
-		$_rating=array();
-		$_rating[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"));
-		$rating_form	=	do_lorem_template('RATING_FORM',array('TYPE'=>'','CONTENT_TYPE'=>'downloads','ID'=>placeholder_id(),'URL'=>placeholder_url(),'TITLES'=>$_rating,'SIMPLISTIC'=>true,'_RATING'=>'0','ERROR'=>'',));
+		$all_rating_criteria=array();
+		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
+		$rating_form	=	do_lorem_template('RATING_FORM',array('LIKES'=>true,'CONTENT_TYPE'=>'downloads','ID'=>placeholder_id(),'URL'=>placeholder_url(),'ALL_RATING_CRITERIA'=>$all_rating_criteria,'HAS_RATINGS'=>true,'OVERALL_NUM_RATINGS'=>placeholder_number(),'SIMPLISTIC'=>true,'ERROR'=>'',));
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('RATING_BOX',array('CONTENT_TYPE'=>'downloads','ID'=>placeholder_id(),'_RATING'=>$_rating,'NUM_RATINGS'=>"10",'RATING_FORM'=>$rating_form,'ERROR'=>'',
+				do_lorem_template('RATING_BOX',array('LIKES'=>true,'CONTENT_TYPE'=>'downloads','ID'=>placeholder_id(),'HAS_RATINGS'=>true,'ALL_RATING_CRITERIA'=>$all_rating_criteria,'NUM_RATINGS'=>"10",'RATING_FORM'=>$rating_form,'ERROR'=>'',
 						)
 			),NULL,'',true),
 		);
@@ -343,12 +343,12 @@ class Hook_addon_registry_core_feedback_features
 		{
 			$use_captcha=false;
 		}
-		$form=do_lorem_template('COMMENTS_POSTING_FORM',array('FIRST_POST_URL'=>'','JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST'=>lorem_paragraph_html(),'TYPE'=>'downloads','ID'=>placeholder_id(),'REVIEW_TITLES'=>$review_titles,'USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>do_lang('POST_WARNING'),'COMMENT_TEXT'=>get_option('comment_text'),'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_word(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
+		$form=do_lorem_template('COMMENTS_POSTING_FORM',array('FIRST_POST_URL'=>'','JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST'=>lorem_paragraph_html(),'TYPE'=>'downloads','ID'=>placeholder_id(),'REVIEW_RATING_CRITERIA'=>$review_titles,'USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>do_lang('POST_WARNING'),'COMMENT_TEXT'=>get_option('comment_text'),'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_word(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
 
 		$out=do_lorem_template('COMMENTS_WRAPPER',array(
 			'TYPE'=>lorem_phrase(),
 			'ID'=>placeholder_id(),
-			'REVIEW_TITLES'=>$review_titles,
+			'REVIEW_RATING_CRITERIA'=>$review_titles,
 			'AUTHORISED_FORUM_LINK'=>placeholder_url(),
 			'FORM'=>$form,
 			'COMMENTS'=>$comments,
@@ -415,71 +415,35 @@ class Hook_addon_registry_core_feedback_features
 	*
 	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	*/
-	function tpl_preview__rating_inside()
-	{
-		$titles = array();
-		foreach(placeholder_array(1) as $k=>$v)
-		{
-			$titles[] = array('TITLE'=>lorem_word(), 'TYPE'=>"$k");
-		}
-		return array(
-			lorem_globalise(
-				do_lorem_template('RATING_FORM',array(
-					'TYPE'=>'',
-					'CONTENT_TYPE'=>lorem_word(),
-					'ID'=>placeholder_id(),
-					'URL'=>placeholder_url(),
-					'TITLES'=>$titles,
-					'SIMPLISTIC'=>false,
-					'ERROR'=>'',
-					)
-			),NULL,'',true),
-		);
-	}
-	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
 	function tpl_preview__rating_inline_static()
 	{
 		require_lang('catalogues');
-		$ratings = array();
+		$all_rating_criteria = array();
 		foreach(placeholder_array() as $v)
 		{
-			$ratings[] = array('TITLE'=>lorem_word(), 'RATING'=>"3");
+			$all_rating_criteria[] = array('TITLE'=>lorem_word(),'RATING'=>"3",'NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
 		}
-		$rating_inside = new ocp_tempcode();
-		$titles = array();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$titles[] = array('TITLE'=>lorem_word(),'TYPE'=>lorem_word());
-		}
-		foreach(placeholder_array() as $v)
-		{
-			$rating_inside->attach(do_lorem_template('RATING_FORM',array(
-				'TYPE'=>'',
-				'CONTENT_TYPE'=>lorem_word(),
-				'ID'=>placeholder_id(),
-				'URL'=>placeholder_url(),
-				'TITLES'=>$titles,
-				'SIMPLISTIC'=>false,
-				'ERROR'=>'',
-					)
-				)
-			);
-		}
+		$rating_form = do_lorem_template('RATING_FORM',array(
+			'CONTENT_TYPE'=>lorem_word(),
+			'ID'=>placeholder_id(),
+			'URL'=>placeholder_url(),
+			'LIKES'=>true,
+			'ALL_RATING_CRITERIA'=>$all_rating_criteria,
+			'HAS_RATINGS'=>true,
+			'SIMPLISTIC'=>false,
+			'ERROR'=>'',
+		));
 		return array(
 			lorem_globalise(
 				do_lorem_template('RATING_INLINE_STATIC',array(
 					'CONTENT_TYPE'=>lorem_word(),
 					'ID'=>placeholder_id(),
-					'_RATING'=>$ratings,
-					'NUM_RATINGS'=>placeholder_number(),
-					'RATING_FORM'=>$rating_inside,
+					'ALL_RATING_CRITERIA'=>$all_rating_criteria,
+					'HAS_RATINGS'=>true,
+					'OVERALL_NUM_RATINGS'=>placeholder_number(),
+					'RATING_FORM'=>$rating_form,
 					'ERROR'=>'',
+					'LIKES'=>false,
 					)
 			),NULL,'',true),
 		);
@@ -494,40 +458,33 @@ class Hook_addon_registry_core_feedback_features
 	function tpl_preview__rating_inline_dynamic()
 	{
 		require_lang('catalogues');
-		$ratings = array();
+		$all_rating_criteria = array();
 		foreach(placeholder_array() as $v)
 		{
-			$ratings[] = array('TITLE'=>lorem_word(), 'RATING'=>"3");
+			$all_rating_criteria[] = array('TITLE'=>lorem_word(), 'RATING'=>"3",'OVERALL_NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
 		}
-		$rating_form = new ocp_tempcode();
-		$titles = array();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$titles[] = array('TITLE'=>lorem_word(),'TYPE'=>lorem_word());
-		}
-		foreach(placeholder_array() as $v)
-		{
-			$rating_form->attach(do_lorem_template('RATING_FORM',array(
-				'TYPE'=>'',
+		$rating_form = do_lorem_template('RATING_FORM',array(
 				'CONTENT_TYPE'=>lorem_word(),
 				'ID'=>placeholder_id(),
 				'URL'=>placeholder_url(),
-				'TITLES'=>$titles,
+				'ALL_RATING_CRITERIA'=>$all_rating_criteria,
+				'HAS_RATINGS'=>true,
 				'SIMPLISTIC'=>false,
 				'ERROR'=>'',
-					)
-				)
-			);
-		}
+				'LIKES'=>true,
+		));
 		return array(
 			lorem_globalise(
 				do_lorem_template('RATING_INLINE_DYNAMIC',array(
 					'CONTENT_TYPE'=>lorem_word(),
 					'ID'=>placeholder_id(),
-					'_RATING'=>$ratings,
+					'ALL_RATING_CRITERIA'=>$all_rating_criteria,
+					'HAS_RATINGS'=>true,
 					'NUM_RATINGS'=>placeholder_number(),
+					'OVERALL_NUM_RATINGS'=>placeholder_number(),
 					'RATING_FORM'=>$rating_form,
 					'ERROR'=>'',
+					'LIKES'=>false,
 					)
 			),NULL,'',true),
 		);

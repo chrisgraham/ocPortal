@@ -1,6 +1,6 @@
 <div class="left">
-	{+START,IF_PASSED,_RATING}
-		{+START,LOOP,_RATING}
+	{+START,IF,{HAS_RATINGS}}
+		{+START,LOOP,ALL_RATING_CRITERIA}
 			{+START,IF_NON_EMPTY,{TITLE}}
 				<strong>{TITLE*}:</strong><br />
 			{+END}

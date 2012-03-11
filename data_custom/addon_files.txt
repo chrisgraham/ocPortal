@@ -2336,3 +2336,8 @@ classified_ads
 # # themes/default/templates_custom/CLASSIFIED_ADVERTS_SCREEN.tpl
 # # themes/default/templates_custom/CLASSIFIEDS_PRICING_SCREEN.tpl
 # # themes/default/templates_custom/CLASSIFIEDS.tpl
+
+custom_ratings
+--------------
+
+# # sources_custom/feedback.php

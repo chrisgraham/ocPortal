@@ -1,22 +1,35 @@
 <div class="RATING_BOX standardbox_spaced">
 	{+START,BOX,{!RATING},,med}
 		<div class="rating_inner"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/AggregateRating"}>
-			{+START,IF_PASSED,_RATING}
-				{+START,LOOP,_RATING}
+			{+START,IF,{HAS_RATINGS}}
+				{+START,LOOP,ALL_RATING_CRITERIA}
 					{+START,INCLUDE,RATING_DISPLAY_SHARED}{+END}
-					<br />
+
+					{+START,IF,{$OR,{LIKES},{$IS_EMPTY,{$TRIM,{RATING_FORM}}}}}
+						<br />
+					{+END}
 				{+END}
 			{+END}
 
-			{+START,IF_NON_PASSED,_RATING}
-				{!UNRATED}&nbsp;<br />
+			{+START,IF,{$NOT,{HAS_RATINGS}}}
+				<em>{!UNRATED}</em>
 			{+END}
 
-			{!VOTES,{NUM_RATINGS*}}
+			{+START,IF,{HAS_RATINGS}}
+				{!VOTES,{OVERALL_NUM_RATINGS*}}
+			{+END}
 		</div>
-		
-		<br />
-		
+
+		{$,We do not show errors for likes as it is too informal to go into details}
+		{+START,IF,{$NOT,{LIKES}}}
+			{+START,IF_NON_EMPTY,{ERROR}}
+				{ERROR}
+			{+END}
+		{+END}
+
+		{+START,IF_EMPTY,{ERROR}}
+			<br />
+		{+END}
 		{RATING_FORM}
 	{+END}
 </div>

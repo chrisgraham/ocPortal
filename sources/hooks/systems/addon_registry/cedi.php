@@ -211,11 +211,11 @@ class Hook_addon_registry_cedi
 
 		$extra->attach(do_lorem_template('SCREEN_ITEM_BUTTON',array('REL'=>'move','IMMEDIATE'=>false,'URL'=>placeholder_url(),'TITLE'=>do_lang_tempcode('MOVE'),'IMG'=>'move')));
 
-		$_rating=array();
-		$_rating[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"));
-		$rating_inside	=	do_lorem_template('RATING_FORM',array('TYPE'=>'','CONTENT_TYPE'=>'seedy','ID'=>placeholder_id(),'URL'=>placeholder_url(),'TITLES'=>$_rating,'SIMPLISTIC'=>true,'_RATING'=>'0'));
+		$all_rating_criteria=array();
+		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
+		$rating_inside	=	do_lorem_template('RATING_FORM',array('LIKES'=>true,'CONTENT_TYPE'=>'seedy','ID'=>placeholder_id(),'URL'=>placeholder_url(),'ALL_RATING_CRITERIA'=>$all_rating_criteria,'OVERALL_NUM_RATINGS'=>placeholder_number(),'HAS_RATINGS'=>true,'SIMPLISTIC'=>true));
 
-		$rating_details = do_lorem_template('CEDI_RATING',array('NUM_RATINGS'=>placeholder_number(),'RATING_FORM'=>$rating_inside));
+		$rating_details = do_lorem_template('CEDI_RATING',array('NUM_RATINGS'=>placeholder_number(),'RATING_FORM'=>$rating_inside,'ALL_RATING_CRITERIA'=>$all_rating_criteria,'HAS_RATINGS'=>true));
 
 		$posts	=	do_lorem_template('CEDI_POST',array(
 					'INCLUDE_EXPANSION'=>lorem_phrase(),
@@ -292,11 +292,6 @@ class Hook_addon_registry_cedi
 		require_javascript('javascript_validation');
 		require_lang('comcode');
 
-		$inside = do_lorem_template('CEDI_RATING_FORM', array(
-			'TITLE'=>lorem_word(),
-			'SIMPLISTIC'=>true,
-		));
-
 		$posting_form = do_lorem_template('POSTING_FORM',array(
 					'TABINDEX_PF'=>placeholder_number(),
 					'JAVASCRIPT'=>'',
@@ -317,7 +312,6 @@ class Hook_addon_registry_cedi
 					'CONTINUE_URL'=>placeholder_url(),
 					'ATTACHMENTS'=>lorem_phrase(),
 					'SPECIALISATION'=>placeholder_fields(),
-					'SPECIALISATION2'=>$inside,
 						)
 			);
 

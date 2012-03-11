@@ -176,3 +176,4 @@ You need to add this code into your [tt]HEADER.tpl[/tt]:
 {$JAVASCRIPT_INCLUDE,javascript_columns}[/code]
 ",,,"Graphical","Creative Commons Attribution 3.0","Based on the code of Adam Wulf",
 "Classified Ads","Chris Graham","This addon lets you set up price scales for placing entries ('adverts') in catalogues. The scales allow you to define discounts to customers buying longer listing periods. You can set up a free period if you wish to. Customers are given a control panel (the classifieds module) that shows their listings and allows renewal. E-mails are sent the day before an ad expires. Fully integrated with catalogues, eCommerce, and OCF member accounts.","OCF, Catalogues, eCommerce",,"New Features","Licensed on the same terms as ocPortal","Icon by Andrey Kem",
+"Custom ratings","Chris Graham","Example of more complex rating configuration.",,,"Development","Licensed on the same terms as ocPortal",,

@@ -251,11 +251,7 @@ class Hook_addon_registry_iotds
 		}
 		$trackback_details = do_lorem_template('TRACKBACK_WRAPPER',array('TRACKBACKS'=>$trackbacks,'TRACKBACK_PAGE'=>placeholder_id(),'TRACKBACK_ID'=>placeholder_id(),'TRACKBACK_TITLE'=>lorem_phrase()));
 
-		$_rating=array();
-		$_rating[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"));
-		$rating_inside	=	do_lorem_template('RATING_FORM',array('TYPE'=>'','CONTENT_TYPE'=>'iotds','ID'=>placeholder_id(),'URL'=>placeholder_url(),'TITLES'=>$_rating,'SIMPLISTIC'=>true));
-
-		$rating_details = do_lorem_template('RATING',array('NUM_RATINGS'=>placeholder_number(),'RATING_FORM'=>$rating_inside));
+		$rating_details = new ocp_tempcode();
 
 		$review_titles=array();
 		$review_titles[]=array('REVIEW_TITLE'=>lorem_word(),'REVIEW_RATING'=>make_string_tempcode(float_format(10.0)));
@@ -267,9 +263,9 @@ class Hook_addon_registry_iotds
 			$comments.=$tpl_post->evaluate();
 		}
 
-		$form=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST_URL'=>placeholder_url(),'FIRST_POST'=>lorem_paragraph_html(),'TYPE'=>'downloads','ID'=>placeholder_id(),'REVIEW_TITLES'=>$review_titles,'USE_CAPTCHA'=>true,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>do_lang('POST_WARNING'),'COMMENT_TEXT'=>get_option('comment_text'),'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_word(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
+		$form=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST_URL'=>placeholder_url(),'FIRST_POST'=>lorem_paragraph_html(),'TYPE'=>'downloads','ID'=>placeholder_id(),'REVIEW_RATING_CRITERIA'=>$review_titles,'USE_CAPTCHA'=>true,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>do_lang('POST_WARNING'),'COMMENT_TEXT'=>get_option('comment_text'),'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_word(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
 
-		$comment_details = do_lorem_template('COMMENTS_WRAPPER',array('TYPE'=>lorem_phrase(),'ID'=>placeholder_id(),'REVIEW_TITLES'=>$review_titles,'AUTHORISED_FORUM_LINK'=>placeholder_url(),'FORM'=>$form,'COMMENTS'=>$comments));
+		$comment_details = do_lorem_template('COMMENTS_WRAPPER',array('TYPE'=>lorem_phrase(),'ID'=>placeholder_id(),'REVIEW_RATING_CRITERIA'=>$review_titles,'AUTHORISED_FORUM_LINK'=>placeholder_url(),'FORM'=>$form,'COMMENTS'=>$comments));
 
 		return array(
 			lorem_globalise(

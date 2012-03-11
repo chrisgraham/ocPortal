@@ -1,9 +1,9 @@
-{+START,IF_PASSED,ERROR}
+{+START,IF_NON_EMPTY,{ERROR}}
 	{ERROR}
 {+END}
 
-{+START,IF_NON_PASSED,ERROR}
-	{+START,LOOP,TITLES}
+{+START,IF_EMPTY,{ERROR}}
+	{+START,LOOP,ALL_RATING_CRITERIA}
 		{+START,IF_EMPTY,{TITLE}}<span class="accessibility_hidden">{+END}<label accesskey="r" for="rating__{TYPE*}__{ID*}"><strong>{+START,IF_EMPTY,{TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}:{+END}</strong></label>{+START,IF_EMPTY,{TITLE}}</span>{+END}
 		<select id="rating__{TYPE*}__{ID*}" name="rating__{TYPE*}__{ID*}">
 			<option value="10">5</option>
