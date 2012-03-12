@@ -58,7 +58,7 @@ class Module_admin_ocgifts extends standard_aed_module
 	{
 		if (is_null($upgrade_from))
 		{
-			$GLOBALS['FORUM_DB']->create_table('ocgifts',array(
+			$GLOBALS['SITE_DB']->create_table('ocgifts',array(
 				'id'=>'*AUTO',
 				'name'=>'SHORT_TEXT',
 				'image'=>'SHORT_TEXT',
@@ -91,10 +91,10 @@ class Module_admin_ocgifts extends standard_aed_module
 			$default_gifts[]=array('name'=>'A Santa hat','image'=>'uploads/ocgifts_addon/Santa_Hat.jpg','price'=>10,'enabled'=>1);
 			foreach ($default_gifts as $dg)
 			{
-				$GLOBALS['FORUM_DB']->query_insert('ocgifts',$dg+array('category'=>do_lang('DEFAULT')));
+				$GLOBALS['SITE_DB']->query_insert('ocgifts',$dg+array('category'=>do_lang('DEFAULT')));
 			}
 
-			$GLOBALS['FORUM_DB']->create_table('members_gifts',array(
+			$GLOBALS['SITE_DB']->create_table('members_gifts',array(
 				'id'=>'*AUTO',
 				'to_user_id'=>'USER',
 				'from_user_id'=>'USER',
@@ -108,10 +108,10 @@ class Module_admin_ocgifts extends standard_aed_module
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
-			$GLOBALS['FORUM_DB']->add_table_field('ocgifts','category','SHORT_TEXT',do_lang('GENERAL'));
+			$GLOBALS['SITE_DB']->add_table_field('ocgifts','category','SHORT_TEXT',do_lang('GENERAL'));
 
-			$GLOBALS['FORUM_DB']->alter_table_field('members_gifts','annonymous','BINARY','is_anonymous');
-			$GLOBALS['FORUM_DB']->alter_table_field('members_gifts','topic_id','?AUTO_LINK');
+			$GLOBALS['SITE_DB']->alter_table_field('members_gifts','annonymous','BINARY','is_anonymous');
+			$GLOBALS['SITE_DB']->alter_table_field('members_gifts','topic_id','?AUTO_LINK');
 		}
 	}
 
@@ -120,8 +120,8 @@ class Module_admin_ocgifts extends standard_aed_module
 	 */
 	function uninstall()
 	{
-		$GLOBALS['FORUM_DB']->drop_if_exists('ocgifts');
-		$GLOBALS['FORUM_DB']->drop_if_exists('members_gifts');
+		$GLOBALS['SITE_DB']->drop_if_exists('ocgifts');
+		$GLOBALS['SITE_DB']->drop_if_exists('members_gifts');
 
 		//deldir_contents(get_custom_file_base().'/uploads/ocgifts_addon',true);
 	}
@@ -196,7 +196,7 @@ class Module_admin_ocgifts extends standard_aed_module
 		$id=get_param_integer('id',NULL);
 		if($id!==NULL)
 		{
-			$rows=$GLOBALS['FORUM_DB']->query_select('ocgifts',array('*'),array('id'=>$id));
+			$rows=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$id));
 
 			if(isset($rows[0]['id']) && $rows[0]['id']>0)
 			{
@@ -249,7 +249,7 @@ class Module_admin_ocgifts extends standard_aed_module
 	{
 		$fields=new ocp_tempcode();
 
-		$rows=$GLOBALS['FORUM_DB']->query_select('ocgifts',array('*'),NULL);
+		$rows=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),NULL);
 
 		foreach ($rows as $row)
 		{
@@ -268,7 +268,7 @@ class Module_admin_ocgifts extends standard_aed_module
 	 */
 	function fill_in_edit_form($id)
 	{
-		$rows=$GLOBALS['FORUM_DB']->query_select('ocgifts',array('*'),array('id'=>intval($id)));
+		$rows=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>intval($id)));
 		if (!array_key_exists(0,$rows))
 		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -312,7 +312,7 @@ class Module_admin_ocgifts extends standard_aed_module
 
 		$url=$urls[0];
 
-		$id=$GLOBALS['FORUM_DB']->query_insert('ocgifts',array('name'=>$name,'image'=>$url,'price'=>$price,'enabled'=>$enabled,'category'=>$category),true);
+		$id=$GLOBALS['SITE_DB']->query_insert('ocgifts',array('name'=>$name,'image'=>$url,'price'=>$price,'enabled'=>$enabled,'category'=>$category),true);
 
 		return strval($id);
 	}
@@ -344,7 +344,7 @@ class Module_admin_ocgifts extends standard_aed_module
 
 		$url=$urls[0];
 
-		$GLOBALS['FORUM_DB']->query_update('ocgifts',array('name'=>$name,'image'=>$url,'price'=>$price,'enabled'=>$enabled,'category'=>$category),array('id'=>intval($id)),'',1);
+		$GLOBALS['SITE_DB']->query_update('ocgifts',array('name'=>$name,'image'=>$url,'price'=>$price,'enabled'=>$enabled,'category'=>$category),array('id'=>intval($id)),'',1);
 
 		return NULL;
 	}

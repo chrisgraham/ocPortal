@@ -56,7 +56,7 @@ class Hook_pointstore_ocdeadpeople
 		$fields='<table style="width: 100%" cellspacing="0" cellpadding="0" border="1"><tr style="border: 1px solid #ccc; background-color: #E3EAF6;"><th colspan="2">Disease</th><th width="33%">Cure</th><th width="33%">Immunisation</th></tr>';
 
 		$member_id=get_member();
-		$rows=$GLOBALS['FORUM_DB']->query_select('diseases',array('*'),NULL);
+		$rows=$GLOBALS['SITE_DB']->query_select('diseases',array('*'),NULL);
 		$counter=0;
 		foreach($rows as $disease)
 		{
@@ -70,7 +70,7 @@ class Hook_pointstore_ocdeadpeople
 			$immunization_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'immunization'=>1),'_SEARCH');
 			$immunization_url=$immunization_url->evaluate();
 
-			$member_rows=$GLOBALS['FORUM_DB']->query_select('members_diseases',array('*'),array('user_id'=>$member_id,'disease_id'=>$disease['id']));
+			$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$member_id,'disease_id'=>$disease['id']));
 
 			$get_cure=true;
 			$get_immunization=true;
@@ -150,7 +150,7 @@ class Hook_pointstore_ocdeadpeople
 		$cure=($get_cure==1)?1:0;
 		$immunization=($get_immunization==1)?1:0;
 
-		$member_rows=$GLOBALS['FORUM_DB']->query_select('members_diseases',array('*'),array('user_id'=>$member_id,'disease_id'=>$disease_id));
+		$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$member_id,'disease_id'=>$disease_id));
 		
 		$insert=true;
 
@@ -164,7 +164,7 @@ class Hook_pointstore_ocdeadpeople
 			//we should insert a new db member disease record
 		}
 
-		$rows=$GLOBALS['FORUM_DB']->query_select('diseases',array('*'),array('id'=>$disease_id));
+		$rows=$GLOBALS['SITE_DB']->query_select('diseases',array('*'),array('id'=>$disease_id));
 
 		$cure_price=(isset($rows[0]['cure_price']) && (intval($rows[0]['cure_price'])>0))?intval($rows[0]['cure_price']):0;
 		$immunization_price=(isset($rows[0]['immunisation_price']) && (intval($rows[0]['immunisation_price'])>0))?intval($rows[0]['immunisation_price']):0;

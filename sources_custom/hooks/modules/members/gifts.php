@@ -40,14 +40,14 @@ class Hook_members_gifts
 	function get_sections($member_id)
 	{
 		require_lang('ocgifts');
-		$rows=$GLOBALS['FORUM_DB']->query_select('members_gifts',array('*'),array('to_user_id'=>$member_id),'',NULL,0,true);
+		$rows=$GLOBALS['SITE_DB']->query_select('members_gifts',array('*'),array('to_user_id'=>$member_id),'',NULL,0,true);
 		if (is_null($rows)) return array();
 		
 		$gifts=array();
 		
 		foreach($rows as $gift)
 		{
-			$gift_info=$GLOBALS['FORUM_DB']->query_select('ocgifts',array('*'),array('id'=>$gift['gift_id']));
+			$gift_info=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift['gift_id']));
 			if (strlen($gift_info[0]['name'])>0)
 			{
 				$gift_url='';

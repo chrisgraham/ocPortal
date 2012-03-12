@@ -633,7 +633,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 			if ($fm) $map=array_merge($map,array('post_attachment'=>0,'post_edit_user'=>NULL,'post_icon'=>0,'post_bluecard'=>NULL,'rating_rank_id'=>0,'user_avatar'=>NULL,'user_avatar_type'=>0,'urgent_post'=>0));
 			$post_id=$this->connection->query_insert('posts',$map,true);
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_first_post_id='.strval((integer)$post_id).' WHERE topic_id='.strval((integer)$topic_id),1);
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_topics=(forum_topics+1),forum_posts=(forum_posts+1) WHERE forum_id='.strval((integer)$forum_id),1);
+			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_topics_real=(forum_topics_real+1),forum_topics=(forum_topics+1),forum_posts=(forum_posts+1) WHERE forum_id='.strval((integer)$forum_id),1);
 		}
 
 		if ($post=='') return array($topic_id,false);
@@ -724,7 +724,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	{
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
-		return $this->connection->query_value_null_ok_full('SELECT topic_id FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$forum_id).' AND ('.db_string_equal_to('topic_title',$topic_identifier).' OR topic_title LIKE \'% (#'.db_encode_like($topic_identifier).')\')');
+		return $this->connection->query_value_null_ok_full('SELECT topic_id FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$forum_id).' AND ('.db_string_equal_to('topic_title',$topic_identifier).' OR topic_title LIKE \'%: #'.db_encode_like($topic_identifier).'\')');
 	}
 
 	/**
@@ -1169,7 +1169,10 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function get_topics()
 	{
-		return $this->connection->query_value('topics','COUNT(*)');
+		static $num_topics=NULL;
+		if (is_null($num_topics))
+			$num_topics=$this->connection->query_value('topics','COUNT(*)');
+		return $num_topics;
 	}
 	
 	/**
@@ -1179,7 +1182,10 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function get_num_forum_posts()
 	{
-		return $this->connection->query_value('posts','COUNT(*)');
+		static $num_posts=NULL;
+		if (is_null($num_posts))
+			$num_posts=$this->connection->query_value('posts','COUNT(*)');
+		return $num_posts;
 	}
 	
 	/**

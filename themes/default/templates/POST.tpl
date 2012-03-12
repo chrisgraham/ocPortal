@@ -13,8 +13,8 @@
 			{+END}
 			<div class="post_subline">
 				{+START,IF_NON_PASSED,POSTER}
-					{+START,IF_NON_EMPTY,{POSTER_URL}}{!BY_SIMPLE,<a class="post_poster" href="{POSTER_URL*}">{POSTER_NAME*}</a>}{+END}
-					{+START,IF_EMPTY,{POSTER_URL}}{!BY_SIMPLE,{POSTER_NAME*}}{+END},
+					{+START,IF_NON_EMPTY,{POSTER_URL}}{!BY_SIMPLE,<a class="post_poster" href="{POSTER_URL*}">{POSTER_NAME*}</a>},{+END}
+					{+START,IF_EMPTY,{POSTER_URL}}{!BY_SIMPLE,{POSTER_NAME*}},{+END}
 				{+END}
 				{$,OCF style...}
 				{+START,IF_PASSED,POSTER}

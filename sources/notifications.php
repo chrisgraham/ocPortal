@@ -522,32 +522,41 @@ function notifications_setting($notification_code,$notification_category,$member
 {
 	if (is_null($member_id)) $member_id=get_member();
 
+	$specific_where=array(
+		'l_member_id'=>$member_id,
+		'l_notification_code'=>$notification_code,
+		'l_code_category'=>is_null($notification_category)?'':$notification_category,
+	);
+
+	static $notification_setting_cache=array();
+	if (isset($notification_setting_cache[serialize($specific_where)]))
+		return $notification_setting_cache[serialize($specific_where)];
+
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
 		'l_notification_code'=>$notification_code,
 	));
-	if (!is_null($test)) return $test;
-
-	$test=$db->query_value_null_ok('notifications_enabled','l_setting',array(
-		'l_member_id'=>$member_id,
-		'l_notification_code'=>$notification_code,
-		'l_code_category'=>is_null($notification_category)?'':$notification_category,
-	));
-
-	if ((is_null($test)) && (!is_null($notification_category)))
-	{
-		$test=$db->query_value_null_ok('notifications_enabled','l_setting',array(
-			'l_member_id'=>$member_id,
-			'l_notification_code'=>$notification_code,
-			'l_code_category'=>'',
-		));
-	}
 	if (is_null($test))
 	{
-		$ob=_get_notification_ob_for_code($notification_code);
-		$test=$ob->get_initial_setting($notification_code,$notification_category);
+		$test=$db->query_value_null_ok('notifications_enabled','l_setting',$specific_where);
+
+		if ((is_null($test)) && (!is_null($notification_category)))
+		{
+			$test=$db->query_value_null_ok('notifications_enabled','l_setting',array(
+				'l_member_id'=>$member_id,
+				'l_notification_code'=>$notification_code,
+				'l_code_category'=>'',
+			));
+		}
+		if (is_null($test))
+		{
+			$ob=_get_notification_ob_for_code($notification_code);
+			$test=$ob->get_initial_setting($notification_code,$notification_category);
+		}
 	}
+
+	$notification_setting_cache[serialize($specific_where)]=$test;
 	return $test;
 }
 

@@ -14,6 +14,8 @@
 
 /*
 
+This is an ocPortal sub-system (not specifically OCF!) for both threaded and non-threaded topic rendering.
+
 API interfaces with...
  Feedback system (calls 'render_as_comment_topic' method which knows about content types and content IDs)
   Or can be called standalone using topic IDs
@@ -311,6 +313,7 @@ class OCP_Topic
 			if (is_null($post)) continue;
 
 			if (!isset($post['parent_id'])) $post['parent_id']=NULL;
+			if (!isset($post['id'])) $post['id']=mt_rand(0,mt_getrandmax());
 
 			$post_key='post_'.strval($post['id']);
 			$all_posts_ordered[$post_key]=$post;
@@ -748,9 +751,15 @@ class OCP_Topic
 				}
 			}
 
-			require_code('feedback');
-			actualise_rating(true,'post',strval($post['id']),get_self_url(),$post['title']);
-			$rating=display_rating(get_self_url(),$post['title'],'post',strval($post['id']),'RATING_INLINE_DYNAMIC');
+			if (get_forum_type()=='ocf')
+			{
+				require_code('feedback');
+				actualise_rating(true,'post',strval($post['id']),get_self_url(),$post['title']);
+				$rating=display_rating(get_self_url(),$post['title'],'post',strval($post['id']),'RATING_INLINE_DYNAMIC');
+			} else
+			{
+				$rating=new ocp_tempcode();
+			}
 
 			if (array_key_exists('intended_solely_for',$post))
 			{

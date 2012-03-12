@@ -14,7 +14,7 @@
 		</div>
 	{+END}
 
-	{+START,IF,{$NEQ,{$CPF_VALUE,m_password_compat_scheme},facebook}}
+	{+START,IF,{$OCF}}{+START,IF,{$NEQ,{$CPF_VALUE,m_password_compat_scheme},facebook}}
 		{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
 			<p class="community_block_tagline">
 				<span xmlns:fb="http://api.facebook.com/1.0/">
@@ -22,5 +22,5 @@
 				</span>
 			</p>
 		{+END}
-	{+END}
+	{+END}{+END}
 {+END}

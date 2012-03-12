@@ -60,14 +60,14 @@ class Hook_pointstore_ocgifts
 			$map=array('category'=>$category);
 		}
 
-		$max_rows=$GLOBALS['FORUM_DB']->query_value('ocgifts','COUNT(*)',$map);
+		$max_rows=$GLOBALS['SITE_DB']->query_value('ocgifts','COUNT(*)',$map);
 
 		$max=get_param_integer('max',20);
 		$start=get_param_integer('start',0);
 		require_code('templates_results_browser');
 		$results_browser=results_browser(do_lang_tempcode('OCGIFTS_TITLE'),get_param('id'),$start,'start',$max,'max',$max_rows,NULL,NULL,true,true);
 
-		$rows=$GLOBALS['FORUM_DB']->query_select('ocgifts g',array('*','(SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'members_gifts m WHERE m.gift_id=g.id) AS popularity'),$map,'ORDER BY popularity DESC',$max,$start);
+		$rows=$GLOBALS['SITE_DB']->query_select('ocgifts g',array('*','(SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_gifts m WHERE m.gift_id=g.id) AS popularity'),$map,'ORDER BY popularity DESC',$max,$start);
 		$username=get_param('username','');
 		$gifts=array();
 		foreach($rows as $gift)
@@ -89,7 +89,7 @@ class Hook_pointstore_ocgifts
 			);
 		}
 		
-		$categories=collapse_1d_complexity('category',$GLOBALS['FORUM_DB']->query_select('ocgifts',array('DISTINCT category'),NULL,'ORDER BY category'));
+		$categories=collapse_1d_complexity('category',$GLOBALS['SITE_DB']->query_select('ocgifts',array('DISTINCT category'),NULL,'ORDER BY category'));
 
 		return do_template('POINTSTORE_OCGIFTS_GIFTS',array('TITLE'=>$title,'GIFTS'=>$gifts,'RESULTS_BROWSER'=>$results_browser,'CATEGORY'=>$category,'CATEGORIES'=>$categories));
 	}
@@ -144,7 +144,7 @@ class Hook_pointstore_ocgifts
 			$to_member_id=$member_row[0]['id'];		
 			$anonymous=post_param_integer('anonymous',0);
 
-			$gift_row=$GLOBALS['FORUM_DB']->query_select('ocgifts',array('*'),array('id'=>$gift_id) );
+			$gift_row=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift_id) );
 
 			if(isset($gift_row[0]['id']) && $gift_row[0]['id']>0)
 			{

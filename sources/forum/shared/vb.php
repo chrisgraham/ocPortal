@@ -324,7 +324,7 @@ class forum_driver_vb_shared extends forum_driver_base
 	{
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
-		return $this->connection->query_value_null_ok_full('SELECT threadid FROM '.$this->connection->get_table_prefix().'thread WHERE forumid='.strval((integer)$forum_id).' AND ('.db_string_equal_to('title',$topic_identifier).' OR title LIKE \'% (#'.db_encode_like($topic_identifier).')\')');
+		return $this->connection->query_value_null_ok_full('SELECT threadid FROM '.$this->connection->get_table_prefix().'thread WHERE forumid='.strval((integer)$forum_id).' AND ('.db_string_equal_to('title',$topic_identifier).' OR title LIKE \'%: #'.db_encode_like($topic_identifier).'\')');
 	}
 
 	/**

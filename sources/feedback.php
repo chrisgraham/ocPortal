@@ -116,18 +116,21 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$content_url,$content_title,$forum)
 {
 	// Sign up original poster for notifications
-	$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field($submitter,'m_auto_monitor_contrib_content');
-	if ($auto_monitor_contrib_content==1)
+	if (get_forum_type()=='ocf')
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('notifications_enabled','l_setting',array(
-			'l_member_id'=>$submitter,
-			'l_notification_code'=>'comment_posted',
-			'l_code_category'=>$page_name.'_'.$content_id,
-		));
-		if (is_null($test))
+		$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field($submitter,'m_auto_monitor_contrib_content');
+		if ($auto_monitor_contrib_content==1)
 		{
-			require_code('notifications');
-			enable_notifications('comment_posted',$page_name.'_'.$content_id,$submitter);
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('notifications_enabled','l_setting',array(
+				'l_member_id'=>$submitter,
+				'l_notification_code'=>'comment_posted',
+				'l_code_category'=>$page_name.'_'.$content_id,
+			));
+			if (is_null($test))
+			{
+				require_code('notifications');
+				enable_notifications('comment_posted',$page_name.'_'.$content_id,$submitter);
+			}
 		}
 	}
 
@@ -617,9 +620,12 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		else $forum_id=(integer)$forum;
 
 		// Is the user gonna automatically enable notifications for this?
-		$auto_monitor_contrib_content=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_auto_monitor_contrib_content');
-		if (($auto_monitor_contrib_content==1) && (has_category_access(get_member(),'forums',strval($forum_id))))
-			enable_notifications('ocf_topic',strval($topic_id),get_member());
+		if (get_forum_type()=='ocf')
+		{
+			$auto_monitor_contrib_content=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_auto_monitor_contrib_content');
+			if (($auto_monitor_contrib_content==1) && (has_category_access(get_member(),'forums',strval($forum_id))))
+				enable_notifications('ocf_topic',strval($topic_id),get_member());
+		}
 
 		if ((get_forum_type()=='ocf') && (!is_null($GLOBALS['LAST_POST_ID'])))
 		{
@@ -666,9 +672,12 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		dispatch_notification('comment_posted',$content_type.'_'.$content_id,$subject,$message_raw);
 
 		// Is the user gonna automatically enable notifications for this?
-		$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(),'m_auto_monitor_contrib_content');
-		if ($auto_monitor_contrib_content==1)
-			enable_notifications('comment_posted',$content_type.'_'.$content_id);
+		if (get_forum_type()=='ocf')
+		{
+			$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(),'m_auto_monitor_contrib_content');
+			if ($auto_monitor_contrib_content==1)
+				enable_notifications('comment_posted',$content_type.'_'.$content_id);
+		}
 
 		// Activity
 		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))

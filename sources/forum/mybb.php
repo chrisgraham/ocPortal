@@ -594,7 +594,7 @@ class forum_driver_mybb extends forum_driver_base
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
 
-		return $this->connection->query_value_null_ok_full('SELECT tid FROM '.$this->connection->get_table_prefix().'threads WHERE fid='.(string)intval($forum_id).' AND ('.db_string_equal_to('subject',$topic_identifier).' OR subject LIKE \'% (#'.db_encode_like($topic_identifier).')\')');
+		return $this->connection->query_value_null_ok_full('SELECT tid FROM '.$this->connection->get_table_prefix().'threads WHERE fid='.(string)intval($forum_id).' AND ('.db_string_equal_to('subject',$topic_identifier).' OR subject LIKE \'%: #'.db_encode_like($topic_identifier).'\')');
 	}
 
 	/**

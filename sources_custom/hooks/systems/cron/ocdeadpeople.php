@@ -30,7 +30,7 @@ class Hook_cron_ocdeadpeople
 		foreach ($diseases_to_spread as $disease)
 		{
 			//select infected by the disease members
-			$sick_by_disease_members=$GLOBALS['FORUM_DB']->query('SELECT user_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'members_diseases WHERE sick=1 AND disease_id='.strval($disease['id']).' ',NULL, NULL,true);
+			$sick_by_disease_members=$GLOBALS['SITE_DB']->query('SELECT user_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_diseases WHERE sick=1 AND disease_id='.strval($disease['id']).' ',NULL, NULL,true);
 			if (is_null($sick_by_disease_members)) return;
 
 			$sick_members=array();
@@ -79,7 +79,7 @@ class Hook_cron_ocdeadpeople
 
 				if(isset($friends_healthy[$to_infect]) && ($friends_healthy[$to_infect]!=0))
 				{
-					$member_rows=$GLOBALS['FORUM_DB']->query_select('members_diseases',array('*'),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']));
+					$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']));
 					
 					$insert=true;
 					$has_immunization=false;
@@ -119,7 +119,7 @@ class Hook_cron_ocdeadpeople
 			//proceed with infecting random not immunalized member
 
 			//get immunalized members first
-			$immunalized_members_rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'members_diseases WHERE disease_id='.strval($disease['id']).' AND immunisation =1',NULL,NULL,true);
+			$immunalized_members_rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_diseases WHERE disease_id='.strval($disease['id']).' AND immunisation =1',NULL,NULL,true);
 
 			$immunalized_members=array();
 			foreach($immunalized_members_rows as  $im_member)
@@ -135,12 +135,12 @@ class Hook_cron_ocdeadpeople
 
 			$avoid_members=(strlen($avoid_members)==0)?'0':$avoid_members;
 
-			$random_member=$GLOBALS['FORUM_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE  id <> '.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND id NOT IN ('.$avoid_members.')  ORDER BY RAND( ) ',1, NULL,true);
+			$random_member=$GLOBALS['SITE_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE  id <> '.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND id NOT IN ('.$avoid_members.')  ORDER BY RAND( ) ',1, NULL,true);
 
 			//if there is a rondomly selected members that can be infected, otherwise all of the members are already infected or immunalized
 			if(isset($random_member[0]['id']) && $random_member[0]['id']>0)
 			{
-				$member_rows=$GLOBALS['FORUM_DB']->query_select('members_diseases',array('*'),array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id']));
+				$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id']));
 				
 				$insert=true;
 				if (isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']>0)
