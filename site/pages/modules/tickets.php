@@ -409,26 +409,33 @@ class Module_tickets
 		{
 			$_temp=explode('_',$id);
 			$ticket_owner=intval($_temp[0]);
+			$ticket_id=$_temp[1];
 
 			if (is_guest()) access_denied('NOT_AS_GUEST');
 			$this->check_id($id);
 		} else
 		{
 			$ticket_owner=get_member();
+			$ticket_id=uniqid('');
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SUPPORT_TICKETS'))));
 
 		$poster='';
 		$new=true;
+		$serialized_options=mixed();
+		$hash=mixed();
 		if ((!is_guest()) || (is_null($id))) // If this isn't a guest posting their ticket
 		{
 			$member=get_member();
 			$new=is_null($id);
 
+			$num_to_show_limit=get_param_integer('max_comments',intval(get_option('comments_to_show_in_thread')));
+			$start=get_param_integer('start_comments',0);
+
 			if ($new)
 			{
-				$id=strval($member).'_'.uniqid('');
+				$id=strval($member).'_'.$ticket_id;
 				$title=get_page_title('ADD_TICKET');
 			} else
 			{
@@ -437,7 +444,7 @@ class Module_tickets
 				$ticket_type_details=get_ticket_type($ticket_type);
 
 				$forum=1; $topic_id=1; $_ticket_type=1; // These will be returned by reference
-				$_comments=get_ticket_posts($id,$forum,$topic_id,$_ticket_type);
+				$_comments=get_ticket_posts($id,$forum,$topic_id,$_ticket_type,$start,$num_to_show_limit);
 				if ((!is_array($_comments)) || (!array_key_exists(0,$_comments))) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 				$ticket_title=$_comments[0]['title'];
@@ -461,42 +468,24 @@ class Module_tickets
 				if (has_specific_permission(get_member(),'support_operator'))
 					$staff_details=make_string_tempcode($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,escape_html(get_option('ticket_forum_name'))));
 				else $staff_details=new ocp_tempcode();
-				$comments=new ocp_tempcode();
-				foreach ($_comments as $i=>$comment)
+
+				require_code('topics');
+				$renderer=new OCP_Topic();
+				$renderer->_inject_posts_for_scoring_algorithm($_comments);
+				$renderer->topic_id=$topic_id;
+
+				// Posts
+				$max_thread_depth=get_param_integer('max_thread_depth',intval(get_option('max_thread_depth')));
+				list($comments,$serialized_options,$hash)=$renderer->render_posts($num_to_show_limit,$max_thread_depth,true,$ticket_owner,array(),$forum);
+
+				// Pagination
+				$results_browser=NULL;
+				if (!$renderer->is_threaded)
 				{
-					$_comments_forum=get_option('comments_forum_name');
-					if (is_numeric($_comments_forum))
+					if ($renderer->total_posts>$num_to_show_limit)
 					{
-						$comments_forum=intval($_comments_forum);
-					} else
-					{
-						$comments_forum=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($_comments_forum);
-					}
-
-					$edit_post_url=new ocp_tempcode();
-					require_code('ocf_posts');
-					require_code('ocf_forums');
-					if ((get_forum_type()=='ocf') && ((has_category_access(get_member(),'forums',strval($forum))) || ($forum==$comments_forum)) && (ocf_may_edit_post_by($comment['user'],$forum)))
-					{
-						$edit_post_url=build_url(array('page'=>'topics','type'=>'edit_post','id'=>$comment['id'],'redirect'=>get_self_url(true)),get_module_zone('topics'));
-					}
-
-					$datetime_raw=$comment['date'];
-					$datetime=get_timezoned_date($comment['date']);
-					if ($i==0) $poster=strval($comment['user']);
-					$poster_name=$GLOBALS['FORUM_DRIVER']->get_username($comment['user']);
-					if (is_null($poster_name))
-					{
-						$poster_name=do_lang('UNKNOWN');
-						$poster_link='';
-					} else
-					{
-						$poster_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($comment['user'],false,true);
-					}
-					if (((is_string($comment['message'])) && ($comment['message']!='')) || ((is_object($comment['message'])) && (!$comment['message']->is_really_empty())))
-					{
-						$tpl_post=do_template('POST',array('_GUID'=>'320e095890f2a7dbae19b8c550273944','POSTER_ID'=>strval($comment['user']),'EDIT_URL'=>$edit_post_url,'HIGHLIGHT'=>is_ticket_post_staff_only($comment),'TITLE'=>$comment['title'],'TIME'=>$datetime,'TIME_RAW'=>strval($datetime_raw),'POSTER_LINK'=>$poster_link,'POSTER_NAME'=>$poster_name,'POST'=>$comment['message']));
-						$comments->attach($tpl_post);
+						require_code('templates_results_browser');
+						$results_browser=results_browser(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',$renderer->total_posts,NULL,NULL,true);
 					}
 				}
 
@@ -530,7 +519,8 @@ class Module_tickets
 				require_javascript('javascript_editing');
 				require_javascript('javascript_validation');
 				require_javascript('javascript_posting');
-				require_javascript('javascript_editing');
+				require_javascript('javascript_swfupload');
+				require_css('swfupload');
 				require_code('form_templates');
 				list($attachments,$attach_size_field)=(get_forum_type()=='ocf')?get_attachments('post'):array(NULL,NULL);
 				if (addon_installed('captcha'))
@@ -542,10 +532,10 @@ class Module_tickets
 						generate_captcha();
 					}
 				} else $use_captcha=false;
-				$comment_box=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'aaa32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'ATTACHMENTS'=>$attachments,'ATTACH_SIZE_FIELD'=>$attach_size_field,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>is_guest(),'EMAIL_OPTIONAL'=>((is_guest()) && ($ticket_type_details['guest_emails_mandatory'])),'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST')));
+				$comment_form=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'aaa32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'ATTACHMENTS'=>$attachments,'ATTACH_SIZE_FIELD'=>$attach_size_field,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>is_guest(),'EMAIL_OPTIONAL'=>((is_guest()) && ($ticket_type_details['guest_emails_mandatory'])),'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST')));
 			} else
 			{
-				$comment_box=new ocp_tempcode();
+				$comment_form=new ocp_tempcode();
 			}
 
 			$post_url=build_url(array('page'=>'_SELF','id'=>$id,'type'=>'post','redirect'=>get_param('redirect',NULL)),'_SELF');
@@ -597,9 +587,34 @@ class Module_tickets
 				$toggle_ticket_closed_url=build_url(array('page'=>'_SELF','type'=>'toggle_ticket_closed','id'=>$id),'_SELF');
 			}
 
-			return do_template('SUPPORT_TICKET_SCREEN',array('_GUID'=>'d21a9d161008c6c44fe7309a14be2c5b','TOGGLE_TICKET_CLOSED_URL'=>$toggle_ticket_closed_url,'CLOSED'=>is_null($our_topic)?'0':strval($our_topic['closed']),'OTHER_TICKETS'=>$other_tickets,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($ticket_owner),'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'NEW'=>$new,'TICKET_PAGE_TEXT'=>$ticket_page_text,'TYPES'=>$types,'STAFF_ONLY'=>$staff_only,'POSTER'=>$poster,'TITLE'=>$title,'COMMENTS'=>$comments,'COMMENT_BOX'=>$comment_box,'STAFF_DETAILS'=>$staff_details,'URL'=>$post_url));
+			$map=array('page'=>'_SELF','type'=>'ticket');
+			if (get_param('default','')!='') $map['default']=get_param('default');
+			$add_ticket_url=build_url($map,'_SELF');
 
-		} else // Guest has posted ticket succesfully. Actually, this code problem never runs (as they in fact see a separate screen from do_update_ticket), but it's here as a fail safe.
+			return do_template('SUPPORT_TICKET_SCREEN',array(
+				'_GUID'=>'d21a9d161008c6c44fe7309a14be2c5b',
+				'SERIALIZED_OPTIONS'=>$serialized_options,
+				'HASH'=>$hash,
+				'TOGGLE_TICKET_CLOSED_URL'=>$toggle_ticket_closed_url,
+				'CLOSED'=>is_null($our_topic)?'0':strval($our_topic['closed']),
+				'OTHER_TICKETS'=>$other_tickets,
+				'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($ticket_owner),
+				'PING_URL'=>$ping_url,
+				'WARNING_DETAILS'=>$warning_details,
+				'NEW'=>$new,
+				'TICKET_PAGE_TEXT'=>$ticket_page_text,
+				'TYPES'=>$types,
+				'STAFF_ONLY'=>$staff_only,
+				'POSTER'=>$poster,
+				'TITLE'=>$title,
+				'COMMENTS'=>$comments,
+				'COMMENT_FORM'=>$comment_form,
+				'STAFF_DETAILS'=>$staff_details,
+				'URL'=>$post_url,
+				'ADD_TICKET_URL'=>$add_ticket_url,
+			));
+
+		} else // Guest has posted ticket successfully. Actually, this code problem never runs (as they in fact see a separate screen from do_update_ticket), but it's here as a fail safe.
 		{
 			return inform_screen($title,do_lang_tempcode('SUCCESS'));
 		}

@@ -7,5 +7,7 @@
 		&nbsp;
 	{+END}
 
+	{$SET,block_embedded_forms,1}
 	{RATING_FORM}
+	{$SET,block_embedded_forms,0}
 </span>

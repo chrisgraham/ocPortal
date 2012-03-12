@@ -99,16 +99,16 @@
 		</div>
 	</td>
 </tr>
-{+START,IF,{$NAND,{$EQ,{ID},},{$EQ,{ID},{TOPIC_FIRST_POST_ID}}}}
+{+START,IF,{$NOR,{$EQ,{ID},},{$EQ,{ID},{TOPIC_FIRST_POST_ID}}}}
 	<tr>
 		<td class="{CLASS*}">
 			{EMPHASIS*}
 
-			{+START,IF_EMPTY,{EMPHASIS}}
+			{+START,IF_EMPTY,{EMPHASIS}}{+START,IF_NON_EMPTY,{ID}}
 				<div class="ocf_post_empty">
 					<a href="#"><img title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,top}" /></a>
 				</div>
-			{+END}
+			{+END}{+END}
 		</td>
 		<td class="ocf_post_buttons ocf_post1">
 			{BUTTONS}

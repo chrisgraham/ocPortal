@@ -29,19 +29,32 @@ The non-threaded ocf_forum view has its own rendering.
 
 class OCP_Topic
 {
-	var $all_posts_ordered=NULL;
-	var $total_posts=NULL;
-	var $is_threaded=NULL;
-	var $topic_id=NULL;
-	var $error=false;
+	// Settable...
+	//Influences comment form
 	var $reviews_rating_criteria=array();
+	//Influences spacer post detection (usually only on first render, and only in the OCF topicview)
+	var $first_post_id=NULL;
+	var $topic_description=NULL;
+	var $topic_description_link=NULL;
+	var $topic_info=NULL;
+
+	// Will be filled up during processing
+	var $all_posts_ordered=NULL;
+	var $is_threaded=NULL;
+	var $topic_id=NULL; // May need setting, if posts were loaded in manually rather than letting the class load them; may be left as NULL but functionality degrades somewhat
+	var $reverse=false;
+
+	// Will be filled up like 'return results'
+	var $error=false;
+	var $replied=false;
+	var $total_posts=NULL;
+	var $topic_title=NULL;
 
 	/**
 	 * Constructor.
 	 */
 	function OCP_Topic()
 	{
-		$this->set_reviews_rating_criteria(array(''));
 	}
 
 	/**
@@ -84,18 +97,19 @@ class OCP_Topic
 			if ((count($this->all_posts_ordered)==0) && ($invisible_if_no_comments))
 				return new ocp_tempcode();
 
-			require_javascript('javascript_ajax');
-			require_javascript('javascript_more');
-			require_javascript('javascript_thumbnails');
+			$may_reply=has_specific_permission(get_member(),'comment',get_page_name());
 
 			// Prepare review titles
 			global $REVIEWS_STRUCTURE;
-			if (array_key_exists($content_type,$REVIEWS_STRUCTURE))
+			if ($allow_reviews)
 			{
-				$this->set_reviews_rating_criteria($REVIEWS_STRUCTURE[$content_type]);
-			} else
-			{
-				$this->set_reviews_rating_criteria(array(''));
+				if (array_key_exists($content_type,$REVIEWS_STRUCTURE))
+				{
+					$this->set_reviews_rating_criteria($REVIEWS_STRUCTURE[$content_type]);
+				} else
+				{
+					$this->set_reviews_rating_criteria(array(''));
+				}
 			}
 
 			// Load up reviews
@@ -110,7 +124,7 @@ class OCP_Topic
 			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 
 			// Posts
-			$posts=$this->render_posts($num_to_show_limit,$max_thread_depth,$highlight_by_user,$all_individual_review_ratings,$forum_id);
+			list($posts,$serialized_options,$hash)=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
 
 			// Pagination
 			$results_browser=NULL;
@@ -128,7 +142,7 @@ class OCP_Topic
 			$this->inject_meta_data();
 
 			// Make-a-comment form
-			if (has_specific_permission(get_member(),'comment',get_page_name()))
+			if ($may_reply)
 			{
 				$post_url=get_self_url();
 				$form=$this->get_posting_form($content_type,$content_id,$allow_reviews,$post_url,$post_warning);
@@ -166,16 +180,6 @@ class OCP_Topic
 				$authorised_forum_url='';
 			}
 
-			if (is_null($preloaded_comments))
-			{
-				$serialized_options=serialize(array($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum_name,$post_warning,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews));
-				$hash=md5($serialized_options);
-			} else
-			{
-				$serialized_options=mixed();
-				$hash=mixed();
-			}
-
 			// Show it all
 			return do_template('COMMENTS_WRAPPER',array(
 				'_GUID'=>'a89cacb546157d34vv0994ef91b2e707',
@@ -196,25 +200,21 @@ class OCP_Topic
 	/**
 	 * Render posts from a comment topic (usually tied into AJAX, to get iterative results).
 	 *
-	 * @param  ID_TEXT		Content type to show topic for
-	 * @param  ID_TEXT		Content ID of content type to show topic for
+	 * @param  AUTO_LINK		The topic ID
 	 * @param  boolean		Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
 	 * @param  boolean		Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
 	 * @param  ?string		The name of the forum to use (NULL: default comment forum)
-	 * @param  ?string		The default post to use (NULL: standard courtesy warning)
 	 * @param  ?mixed			The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
-	 * @param  boolean		Whether to skip permission checks
 	 * @param  boolean		Whether to reverse the posts
+	 * @param  boolean		Whether the current user may reply to the topic (influences what buttons show)
 	 * @param  ?MEMBER		User to highlight the posts of (NULL: none)
 	 * @param  boolean		Whether to allow ratings along with the comment (like reviews)
 	 * @param  array			List of post IDs to load
 	 * @param  AUTO_LINK		Parent node being loaded to
 	 * @return tempcode		The tempcode for the comment topic
 	 */
-	function render_posts_from_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum_name,$post_warning,$preloaded_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews,$posts,$parent_id)
+	function render_posts_from_comment_topic($topic_id,$allow_comments,$invisible_if_no_comments,$forum_name,$preloaded_comments,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id)
 	{
-		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum_name,$content_type.'_'.$content_id);
-
 		// Settings we need
 		$max_thread_depth=intval(get_option('max_thread_depth'));
 		$num_to_show_limit=NULL;
@@ -244,7 +244,8 @@ class OCP_Topic
 			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 
 			// Posts
-			return $this->render_posts($num_to_show_limit,$max_thread_depth,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_id,true);
+			$rendered=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_id,true);
+			return $rendered[0];
 		}
 		
 		return new ocp_tempcode();
@@ -258,11 +259,13 @@ class OCP_Topic
 	 * @param  integer		Pagination start if non-threaded
 	 * @param  boolean		Whether to show in reverse date order
 	 * @param  ?array			List of post IDs to load (NULL: no filter)
+	 * @param  boolean		Whether to allow spacer posts to flow through the renderer
 	 * @return boolean		Success status
 	 */
-	function load_from_topic($topic_id,$num_to_show_limit,$start=0,$reverse=false,$posts=NULL)
+	function load_from_topic($topic_id,$num_to_show_limit,$start=0,$reverse=false,$posts=NULL,$load_spacer_posts_too=false)
 	{
 		$this->topic_id=$topic_id;
+		$this->reverse=$reverse;
 
 		$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
 
@@ -276,7 +279,8 @@ class OCP_Topic
 			true,
 			($reverse && !$this->is_threaded),
 			true,
-			$posts
+			$posts,
+			$load_spacer_posts_too
 		);
 
 		if ($posts!==-1)
@@ -329,14 +333,15 @@ class OCP_Topic
 	 *
 	 * @param  ?integer		Number of posts to show initially (NULL: no limit)
 	 * @param  integer		Maximum thread depth
+	 * @param  boolean		Whether the current user may reply to the topic (influences what buttons show)
 	 * @param  ?MEMBER		User to highlight the posts of (NULL: none)
 	 * @param  array			Review ratings rows
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  AUTO_LINK		ID of forum this topic in in
 	 * @param  boolean		Whether to just render everything as flat (used when doing AJAX post loading)
-	 * @return tempcode		Rendered topic
+	 * @return array			Tuple: Rendered topic, serialized options to render more posts, secure hash of serialized options to prevent tampering
 	 */
-	function render_posts($num_to_show_limit,$max_thread_depth,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_post_id=NULL,$maybe_missing_links=false)
+	function render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_post_id=NULL,$maybe_missing_links=false)
 	{
 		require_code('feedback');
 
@@ -344,7 +349,7 @@ class OCP_Topic
 		$queue=$this->all_posts_ordered;
 		if ((!is_null($parent_post_id)) && (!$maybe_missing_links))
 			$queue=$this->_grab_at_and_underneath($parent_post_id,$queue);
-		if (is_null($num_to_show_limit))
+		if ((is_null($num_to_show_limit)) || (!$this->is_threaded))
 		{
 			$posts=$queue;
 			$queue=array();
@@ -353,7 +358,24 @@ class OCP_Topic
 			$posts=$this->_decide_what_to_render($num_to_show_limit,$queue);
 		}
 
-		$posts=$this->_grab_full_post_details($posts);
+		require_javascript('javascript_ajax');
+		require_javascript('javascript_more');
+		require_javascript('javascript_thumbnails');
+
+		// Precache member/group details in one fell swoop
+		if (get_forum_type()=='ocf')
+		{
+			require_code('ocf_topicview');
+			$members=array();
+			foreach ($posts as $_postdetails)
+			{
+				$members[$_postdetails['p_poster']]=1;
+			}
+			ocf_cache_member_details(array_keys($members));
+		}
+
+		if (!is_null($this->topic_id)) // If FALSE then Posts will have been passed in manually as full already anyway
+			$posts=$this->_grab_full_post_details($posts);
 
 		if ($maybe_missing_links)
 		{
@@ -363,7 +385,7 @@ class OCP_Topic
 			$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts,$queue,$max_thread_depth);
 		}
 
-		$ret=$this->_render_post_tree($tree,$highlight_by_user,$all_individual_review_ratings,$forum_id);
+		$ret=$this->_render_post_tree($tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
 
 		$other_ids=mixed();
 		if ($this->is_threaded)
@@ -376,7 +398,17 @@ class OCP_Topic
 		}
 		$ret->attach(do_template('POST_CHILD_LOAD_LINK',array('OTHER_IDS'=>$other_ids,'ID'=>'','CHILDREN'=>(count($other_ids)==0)?'':'1')));
 
-		return $ret;
+		if (!is_null($this->topic_id))
+		{
+			$serialized_options=serialize(array($this->topic_id,true,false,strval($forum_id),$this->reverse,$may_reply,$highlight_by_user,count($all_individual_review_ratings)!=0));
+			$hash=md5($serialized_options);
+		} else
+		{
+			$serialized_options=mixed();
+			$hash=mixed();
+		}
+
+		return array($ret,$serialized_options,$hash);
 	}
 
 	/**
@@ -393,9 +425,24 @@ class OCP_Topic
 		{
 			$next=reset($queue);
 
+			if ($next['p_poster']==get_member())
+				$this->replied=true;
+
 			$post_id=$next['id'];
 			$this->_grab_at_and_above_and_remove($post_id,$queue,$posts);
 		}
+
+		// Any posts by current member must be grabbed too, and also first post
+		foreach ($queue as $i=>$q)
+		{
+			if (($q['p_poster']==get_member()) || ($q['id']===$this->first_post_id))
+			{
+				$this->replied=true;
+				$posts['post_'.strval($q['id'])]=$q;
+				unset($queue[$i]);
+			}
+		}
+
 		return $posts;
 	}
 
@@ -542,21 +589,28 @@ class OCP_Topic
 	 * Render posts.
 	 *
 	 * @param  array			Tree structure of posts
+	 * @param  boolean		Whether the current user may reply to the topic (influences what buttons show)
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  array			Review ratings rows
 	 * @param  AUTO_LINK		ID of forum this topic in in
 	 * @return array			Rendered tree structure
 	 */
-	function _render_post_tree($tree,$highlight_by_user,$all_individual_review_ratings,$forum_id)
+	function _render_post_tree($tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id)
 	{
 		list($rendered,)=$tree;
 		$sequence=new ocp_tempcode();
 		foreach ($rendered as $post)
 		{
+			if (get_forum_type()=='ocf')
+			{
+				require_code('ocf_topicview');
+				$post+=ocf_get_details_to_show_post($post);
+			}
+
 			// Misc details
 			$datetime_raw=$post['date'];
 			$datetime=get_timezoned_date($post['date']);
-			$poster_link=is_guest($post['user'])?new ocp_tempcode():$GLOBALS['FORUM_DRIVER']->member_profile_url($post['user'],false,true);
+			$poster_url=is_guest($post['user'])?new ocp_tempcode():$GLOBALS['FORUM_DRIVER']->member_profile_url($post['user'],false,true);
 			$poster_name=array_key_exists('username',$post)?$post['username']:$GLOBALS['FORUM_DRIVER']->get_username($post['user']);
 			if (is_null($poster_name)) $poster_name=do_lang('UNKNOWN');
 			$highlight=($highlight_by_user===$post['user']);
@@ -575,11 +629,108 @@ class OCP_Topic
 			}
 
 			// Edit URL
-			$edit_post_url=new ocp_tempcode();
-			require_code('ocf_posts');
-			if ((get_forum_type()=='ocf') && (ocf_may_edit_post_by($post['user'],$forum_id)))
+			$emphasis=new ocp_tempcode();
+			$buttons=new ocp_tempcode();
+			$last_edited=new ocp_tempcode();
+			$last_edited_raw='';
+			$unvalidated=new ocp_tempcode();
+			$poster=mixed();
+			$poster_details=new ocp_tempcode();
+			$is_spacer_post=false;
+			if (get_forum_type()=='ocf')
 			{
-				$edit_post_url=build_url(array('page'=>'topics','type'=>'edit_post','id'=>$post['id'],'redirect'=>get_self_url(true)),get_module_zone('topics'));
+				// Spacer post fiddling
+				if ((!is_null($this->first_post_id)) && (!is_null($this->topic_title)) && (!is_null($this->topic_description)) && (!is_null($this->topic_description_link)))
+				{
+					$is_spacer_post=(($post['id']==$this->first_post_id) && (substr($post['message_comcode'],0,strlen('[semihtml]'.do_lang('SPACER_POST_MATCHER')))=='[semihtml]'.do_lang('SPACER_POST_MATCHER')));
+
+					if ($is_spacer_post)
+					{
+						$c_prefix=do_lang('COMMENT').': #';
+						if ((substr($this->topic_description,0,strlen($c_prefix))==$c_prefix) && ($this->topic_description_link!=''))
+						{
+							list($linked_type,$linked_id)=explode('_',substr($this->topic_description,strlen($c_prefix)),2);
+							$linked_url=$this->topic_description_link;
+						}
+
+						require_code('ocf_posts');
+						list($new_description,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
+						//if (!is_null($new_description)) $this->topic_description=$new_description;	Actually, it's a bit redundant
+						if (!is_null($new_post))
+						{
+							$post['message']=$new_post;
+						}
+						$highlight=false;
+
+						$this->topic_title=do_lang('SPACER_TOPIC_TITLE_WRAP',$this->topic_title);
+						$post['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$post['title']);
+					}
+				}
+
+				// Misc meta details for post
+				$emphasis=ocf_get_post_emphasis($post);
+				$unvalidated=($post['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode();
+				if (array_key_exists('last_edit_time',$post))
+				{
+					$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('LAST_EDIT_DATE_RAW'=>is_null($post['last_edit_time'])?'':strval($post['last_edit_time']),'LAST_EDIT_DATE'=>$post['last_edit_time_string'],'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['last_edit_by'],false,true),'LAST_EDIT_USERNAME'=>$post['last_edit_by_username']));
+					$last_edited_raw=(is_null($post['last_edit_time'])?'':strval($post['last_edit_time']));
+				}
+
+				// Post buttons
+				if (!$is_spacer_post)
+				{
+					if (!is_null($this->topic_id))
+					{
+						if (is_null($this->topic_info))
+						{
+							$this->topic_info=ocf_read_in_topic($this->topic_id,0,0,false);
+						}
+						$buttons=ocf_render_post_buttons($this->topic_info,$post,$may_reply);
+					}
+				}
+
+				// OCF renderings of poster
+				static $hooks=NULL;
+				if (is_null($hooks)) $hooks=find_all_hooks('modules','topicview');
+				static $hook_objects=NULL;
+				if (is_null($hook_objects))
+				{
+					$hook_objects=array();
+					foreach (array_keys($hooks) as $hook)
+					{
+						require_code('hooks/modules/topicview/'.filter_naughty_harsh($hook));
+						$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
+						if (is_null($object)) continue;
+						$hook_objects[$hook]=$object;
+					}
+				}
+				if (!$is_spacer_post)
+				{
+					if (!is_guest($post['poster']))
+					{
+						require_code('ocf_members2');
+						$poster_details=ocf_show_member_box($post,false,$hooks,$hook_objects,false);
+					} else
+					{
+						$custom_fields=new ocp_tempcode();
+						if (array_key_exists('ip_address',$post))
+						{
+							$custom_fields->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($post['ip_address']))));
+							$poster_details=do_template('OCF_GUEST_DETAILS',array('CUSTOM_FIELDS'=>$custom_fields));
+						} else
+						{
+							$poster_details=new ocp_tempcode();
+						}
+					}
+				}
+				if (!is_guest($post['poster']))
+				{
+					$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>member_is_online($post['poster']),'ID'=>strval($post['poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['poster'],false,true),'POSTER_USERNAME'=>$post['poster_username']));
+				} else
+				{
+					$ip_link=((array_key_exists('ip_address',$post)) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$post['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
+					$poster=do_template('OCF_POSTER_GUEST',array('IP_LINK'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$post['poster_username']));
+				}
 			}
 
 			// Child posts
@@ -593,7 +744,7 @@ class OCP_Topic
 				}
 				if ($this->is_threaded)
 				{
-					$children=$this->_render_post_tree($post['children'],$highlight_by_user,$all_individual_review_ratings,$forum_id);
+					$children=$this->_render_post_tree($post['children'],$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
 				}
 			}
 
@@ -601,24 +752,38 @@ class OCP_Topic
 			actualise_rating(true,'post',strval($post['id']),get_self_url(),$post['title']);
 			$rating=display_rating(get_self_url(),$post['title'],'post',strval($post['id']),'RATING_INLINE_DYNAMIC');
 
+			if (array_key_exists('intended_solely_for',$post))
+			{
+				decache('side_ocf_personal_topics',array(get_member()));
+				decache('_new_pp',array(get_member()));
+			}
+
 			// Render
 			$sequence->attach(do_template('POST',array(
 				'_GUID'=>'eb7df038959885414e32f58e9f0f9f39',
-				'POSTER_ID'=>strval($post['user']),
-				'EDIT_URL'=>$edit_post_url,
 				'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,
 				'HIGHLIGHT'=>$highlight,
 				'TITLE'=>$post['title'],
 				'TIME_RAW'=>strval($datetime_raw),
 				'TIME'=>$datetime,
-				'POSTER_LINK'=>$poster_link,
+				'POSTER_ID'=>strval($post['user']),
+				'POSTER_URL'=>$poster_url,
 				'POSTER_NAME'=>$poster_name,
+				'POSTER'=>$poster,
+				'POSTER_DETAILS'=>$poster_details,
 				'ID'=>strval($post['id']),
 				'POST'=>$post['message'],
 				'POST_COMCODE'=>isset($post['message_comcode'])?$post['message_comcode']:NULL,
 				'CHILDREN'=>$children,
 				'OTHER_IDS'=>(count($other_ids)==0)?NULL:$other_ids,
 				'RATING'=>$rating,
+				'EMPHASIS'=>$emphasis,
+				'BUTTONS'=>$buttons,
+				'LAST_EDITED_RAW'=>$last_edited_raw,
+				'LAST_EDITED'=>$last_edited,
+				'TOPIC_ID'=>is_null($this->topic_id)?'':strval($this->topic_id),
+				'UNVALIDATED'=>$unvalidated,
+				'IS_SPACER_POST'=>$is_spacer_post,
 			)));
 		}
 
@@ -663,6 +828,8 @@ class OCP_Topic
 
 		require_javascript('javascript_editing');
 		require_javascript('javascript_validation');
+		require_javascript('javascript_swfupload');
+		require_css('swfupload');
 
 		$em=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
 

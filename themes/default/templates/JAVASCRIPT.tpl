@@ -2462,7 +2462,7 @@ function replace_comments_form_with_ajax(options,hash)
 					post+='&'+comments_form.elements[i].name+'='+window.encodeURIComponent(cleverFindValue(comments_form,comments_form.elements[i]));
 			}
 			do_ajax_request('{$FIND_SCRIPT;,post_comment}'+keep_stub(true),function(ajax_result) {
-				if (ajax_result.responseText!='')
+				if ((ajax_result.responseText!='') && (ajax_result.status!=500))
 				{
 					// Display
 					setInnerHTML(comments_wrapper,ajax_result.responseText);
@@ -2508,11 +2508,12 @@ function threaded_reply(ob,id)
 	} else
 	{
 		parent_id_field=form.elements['parent_id'];
-		document.getElementById('post_action_link_'+parent_id_field.value).style.fontStyle='normal';
+		if (typeof window.last_reply_to!='undefined') setOpacity(window.last_reply_to,1.0);
 	}
+	window.last_reply_to=ob;
 	parent_id_field.value=id;
 
-	ob.style.fontStyle='italic';
+	setOpacity(ob,0.4);
 
 	smoothScroll(findPosY(form));
 

@@ -115,7 +115,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 	$post=array('id'=>$_postdetails['id'],
 					'topic_id'=>$_postdetails['p_topic_id'],
 					'title'=>$_postdetails['p_title'],
-					'post'=>$_postdetails['trans_post'],
+					'post'=>$_postdetails['message'],
 					'time'=>$_postdetails['p_time'],
 					'time_string'=>get_timezoned_date($_postdetails['p_time']),
 					'validated'=>$_postdetails['p_validated'],
@@ -125,9 +125,9 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 					'has_history'=>!is_null($_postdetails['h_post_id'])
 	);
 
-	if (array_key_exists('post_original',$_postdetails))
+	if (array_key_exists('message_comcode',$_postdetails))
 	{
-		$post['post_original']=$_postdetails['post_original'];
+		$post['message_comcode']=$_postdetails['message_comcode'];
 	}
 
 	// Edited?
@@ -205,6 +205,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 	}
 
 	// Do we have any special controls over this post?
+	require_code('ocf_posts');
 	if (ocf_may_edit_post_by($_postdetails['p_poster'],$forum_id)) $post['may_edit']=true;
 	if ((ocf_may_delete_post_by($_postdetails['p_poster'],$forum_id)) && (!$only_post)) $post['may_delete']=true;
 
@@ -228,7 +229,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 {
 	if (!is_null($topic_id))
 	{
-		$_topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
+		$_topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f ON f.id=t.t_forum_id',array('t.*','f.f_is_threaded'),array('t.id'=>$topic_id),'',1);
 		if (!array_key_exists(0,$_topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$topic_info=$_topic_info[0];
 
@@ -260,20 +261,23 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		}
 
 		// Some general info
-		$out=array('num_views'=>$topic_info['t_num_views'],
-						'num_posts'=>$topic_info['t_cache_num_posts'],
-						'validated'=>$topic_info['t_validated'],
-						'title'=>$topic_info['t_cache_first_title'],
-						'description'=>$topic_info['t_description'],
-						'description_link'=>$topic_info['t_description_link'],
-						'emoticon'=>$topic_info['t_emoticon'],
-						'forum_id'=>$topic_info['t_forum_id'],
-						'first_post'=>$topic_info['t_cache_first_post'],
-						'first_poster'=>$topic_info['t_cache_first_member_id'],
-						'first_post_id'=>$topic_info['t_cache_first_post_id'],
-						'pt_from'=>$topic_info['t_pt_from'],
-						'pt_to'=>$topic_info['t_pt_to'],
-						'is_open'=>$topic_info['t_is_open']);
+		$out=array(
+			'num_views'=>$topic_info['t_num_views'],
+			'num_posts'=>$topic_info['t_cache_num_posts'],
+			'validated'=>$topic_info['t_validated'],
+			'title'=>$topic_info['t_cache_first_title'],
+			'description'=>$topic_info['t_description'],
+			'description_link'=>$topic_info['t_description_link'],
+			'emoticon'=>$topic_info['t_emoticon'],
+			'forum_id'=>$topic_info['t_forum_id'],
+			'first_post'=>$topic_info['t_cache_first_post'],
+			'first_poster'=>$topic_info['t_cache_first_member_id'],
+			'first_post_id'=>$topic_info['t_cache_first_post_id'],
+			'pt_from'=>$topic_info['t_pt_from'],
+			'pt_to'=>$topic_info['t_pt_to'],
+			'is_open'=>$topic_info['t_is_open'],
+			'is_threaded'=>is_null($topic_info['f_is_threaded'])?false:$topic_info['f_is_threaded'],
+		);
 
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$topic_info['t_cache_first_time']),
@@ -299,7 +303,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		
 		// Post query
 		$where=ocf_get_topic_where($topic_id);
-		$query='SELECT p.*,t.text_parsed AS _trans_post,t.text_original AS post_original,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
+		$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
 	} else
 	{
 		$out=array('num_views'=>0,
@@ -315,125 +319,81 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 						'first_post_id'=>NULL,
 						'pt_from'=>NULL,
 						'pt_to'=>NULL,
-						'is_open'=>1);
+						'is_open'=>1,
+						'is_threaded'=>0);
 						
 		// Post query
 		$where='p_intended_solely_for='.strval(get_member());
-		$query='SELECT p.*,t.text_parsed AS _trans_post,t.text_original AS post_original,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
+		$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
 	}
 
 	// Posts
-	$_postdetailss=$GLOBALS['FORUM_DB']->query($query,$max,$start);
-	if (($start==0) && (count($_postdetailss)<$max)) $out['max_rows']=$max; // We know that they're all on this screen
-	else $out['max_rows']=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$where);
-	$posts=array();
-	// Precache member/group details in one fell swoop
-	$members=array();
-	foreach ($_postdetailss as $_postdetails)
+	if ($out['is_threaded']==0)
 	{
-		$members[$_postdetails['p_poster']]=1;
-		if ($out['title']=='') $out['title']=$_postdetails['p_title'];
-	}
-	$member_or_list='';
-	foreach (array_keys($members) as $member)
-	{
-		if ($member_or_list!='') $member_or_list.=' OR ';
-		$member_or_list.='m.id='.strval((integer)$member);
-	}
-	if ($member_or_list!='')
-	{
-		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.*,text_parsed AS signature FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND m.m_signature=t.id WHERE '.$member_or_list);
-		global $TABLE_LANG_FIELDS;
-		$member_rows_2=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f WHERE '.str_replace('m.id','mf_member_id',$member_or_list),NULL,NULL,false,false,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['f_member_custom_fields']:array());
-		$member_rows_3=$GLOBALS['FORUM_DB']->query('SELECT gm_group_id,gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members WHERE gm_validated=1 AND ('.str_replace('m.id','gm_member_id',$member_or_list).')');
-		global $MEMBER_CACHE_FIELD_MAPPINGS,$GROUP_MEMBERS_CACHE,$SIGNATURES_CACHE;
-		$found_groups=array();
-		foreach ($member_rows as $row)
+		$_postdetailss=$GLOBALS['FORUM_DB']->query($query,$max,$start);
+		if (($start==0) && (count($_postdetailss)<$max)) $out['max_rows']=$max; // We know that they're all on this screen
+		else $out['max_rows']=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$where);
+		$posts=array();
+		// Precache member/group details in one fell swoop
+		$members=array();
+		foreach ($_postdetailss as $_postdetails)
 		{
-			$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
-	
-			if (!ocf_is_ldap_member($row['id']))
+			$members[$_postdetails['p_poster']]=1;
+			if ($out['title']=='') $out['title']=$_postdetails['p_title'];
+		}
+		ocf_cache_member_details(array_keys($members));
+		foreach ($_postdetailss as $i=>$_postdetails)
+		{
+			if (is_null($_postdetails['message_comcode'])) $_postdetails['message_comcode']=get_translated_text($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
+
+			$linked_type='';
+			$linked_id='';
+			$linked_url='';
+
+			// If it's a spacer post, see if we can detect it better
+			$is_spacer_post=(($i==0) && (substr($_postdetails['message_comcode'],0,strlen('[semihtml]'.do_lang('SPACER_POST_MATCHER')))=='[semihtml]'.do_lang('SPACER_POST_MATCHER')));
+			if ($is_spacer_post)
 			{
-				// Primary
-				$pg=$GLOBALS['OCF_DRIVER']->get_member_row_field($row['id'],'m_primary_group');
-				$found_groups[$pg]=1;
-				$GROUP_MEMBERS_CACHE[$row['id']][false][false]=array($pg=>1);
+				$c_prefix=do_lang('COMMENT').': #';
+				if ((substr($out['description'],0,strlen($c_prefix))==$c_prefix) && ($out['description_link']!=''))
+				{
+					list($linked_type,$linked_id)=explode('_',substr($out['description'],strlen($c_prefix)),2);
+					$linked_url=$out['description_link'];
+					$out['description']='';
+				}
 			}
-	
-			// Signature
-			if ((get_page_name()!='search') && (!is_null($row['signature'])) && ($row['signature']!='') && ($row['m_signature']!=0))
+
+			// Load post
+			if ((get_page_name()=='search') || (is_null($_postdetails['text_parsed'])) || ($_postdetails['text_parsed']=='') || ($_postdetails['p_post']==0))
 			{
-				$SIGNATURES_CACHE[$row['id']]=new ocp_tempcode();
-				if (!$SIGNATURES_CACHE[$row['id']]->from_assembly($row['signature'],true))
-					unset($SIGNATURES_CACHE[$row['id']]);
-			}
-		}
-		foreach ($member_rows_2 as $row)
-		{
-			$MEMBER_CACHE_FIELD_MAPPINGS[$row['mf_member_id']]=$row;
-		}
-		foreach ($member_rows_3 as $row)
-		{
-			if (!ocf_is_ldap_member($row['gm_member_id']))
+				$_postdetails['message']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
+			} else
 			{
-				$GROUP_MEMBERS_CACHE[$row['gm_member_id']][false][false][$row['gm_group_id']]=1;
-				$found_groups[$row['gm_group_id']]=1;
+				$_postdetails['message']=new ocp_tempcode();
+				if (!$_postdetails['message']->from_assembly($_postdetails['text_parsed'],true))
+					$_postdetails['message']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
 			}
+
+			// Spacer posts may have a better first post put in place
+			if ($is_spacer_post)
+			{
+				require_code('ocf_posts');
+				list($new_description,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
+				//if (!is_null($new_description)) $out['description']=$new_description;	Actually, it's a bit redundant
+				if (!is_null($new_post)) $_postdetails['message']=$new_post;
+
+				$out['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$out['title']);
+				$_postdetails['p_title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$_postdetails['p_title']);
+			}
+
+			// Put together
+			$collated_post_details=ocf_get_details_to_show_post($_postdetails,($start==0) && (count($_postdetailss)==1));
+			$collated_post_details['is_spacer_post']=$is_spacer_post;
+			$posts[]=$collated_post_details;
 		}
 
-		ocf_ensure_groups_cached(array_keys($found_groups));
+		$out['posts']=$posts;
 	}
-	foreach ($_postdetailss as $i=>$_postdetails)
-	{
-		if (is_null($_postdetails['post_original'])) $_postdetails['post_original']=get_translated_text($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
-
-		$linked_type='';
-		$linked_id='';
-		$linked_url='';
-
-		// If it's a spacer post, see if we can detect it better
-		$is_spacer_post=(($i==0) && (substr($_postdetails['post_original'],0,strlen('[semihtml]'.do_lang('SPACER_POST_MATCHER')))=='[semihtml]'.do_lang('SPACER_POST_MATCHER')));
-		if ($is_spacer_post)
-		{
-			$c_prefix=do_lang('COMMENT').': #';
-			if ((substr($out['description'],0,strlen($c_prefix))==$c_prefix) && ($out['description_link']!=''))
-			{
-				list($linked_type,$linked_id)=explode('_',substr($out['description'],strlen($c_prefix)),2);
-				$linked_url=$out['description_link'];
-				$out['description']='';
-			}
-		}
-
-		// Load post
-		if ((get_page_name()=='search') || (is_null($_postdetails['_trans_post'])) || ($_postdetails['_trans_post']=='') || ($_postdetails['p_post']==0))
-		{
-			$_postdetails['trans_post']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
-		} else
-		{
-			$_postdetails['trans_post']=new ocp_tempcode();
-			if (!$_postdetails['trans_post']->from_assembly($_postdetails['_trans_post'],true))
-				$_postdetails['trans_post']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
-		}
-
-		// Spacer posts may have a better first post put in place
-		if ($is_spacer_post)
-		{
-			require_code('ocf_posts');
-			list($new_description,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
-			//if (!is_null($new_description)) $out['description']=$new_description;	Actually, it's a bit redundant
-			if (!is_null($new_post)) $_postdetails['trans_post']=$new_post;
-
-			$out['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$out['title']);
-			$_postdetails['p_title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$_postdetails['p_title']);
-		}
-
-		// Put together
-		$collated_post_details=ocf_get_details_to_show_post($_postdetails,($start==0) && (count($_postdetailss)==1));
-		$collated_post_details['is_spacer_post']=$is_spacer_post;
-		$posts[]=$collated_post_details;
-	}
-
-	$out['posts']=$posts;
 
 	// Any special topic/for-any-post-in-topic controls?
 	if (!is_null($topic_id))
@@ -445,6 +405,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		if (ocf_may_report_post()) $out['may_report_posts']=true;
 		if (ocf_may_make_personal_topic()) $out['may_pt_members']=true;
 		if (ocf_may_edit_topics_by($forum_id,get_member(),$topic_info['t_cache_first_member_id'])) $out['may_edit_topic']=true;
+		require_code('ocf_moderation');
+		require_code('ocf_forums');
 		if (ocf_may_warn_members()) $out['may_warn_members']=true;
 		if (ocf_may_delete_topics_by($forum_id,get_member(),$topic_info['t_cache_first_member_id'])) $out['may_delete_topic']=true;
 		if (ocf_may_perform_multi_moderation($forum_id)) $out['may_multi_moderate']=true;
@@ -495,4 +457,190 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 	return $out;
 }
 
+/**
+ * Mass-load details for a list of members into memory, to reduce queries when we access it later.
+ *
+ * @param  array			List of members.
+ */
+function ocf_cache_member_details($members)
+{
+	$member_or_list='';
+	foreach ($members as $member)
+	{
+		if ($member_or_list!='') $member_or_list.=' OR ';
+		$member_or_list.='m.id='.strval((integer)$member);
+	}
+	if ($member_or_list!='')
+	{
+		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.*,text_parsed AS signature FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND m.m_signature=t.id WHERE '.$member_or_list);
+		global $TABLE_LANG_FIELDS;
+		$member_rows_2=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f WHERE '.str_replace('m.id','mf_member_id',$member_or_list),NULL,NULL,false,false,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['f_member_custom_fields']:array());
+		$member_rows_3=$GLOBALS['FORUM_DB']->query('SELECT gm_group_id,gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members WHERE gm_validated=1 AND ('.str_replace('m.id','gm_member_id',$member_or_list).')');
+		global $MEMBER_CACHE_FIELD_MAPPINGS,$GROUP_MEMBERS_CACHE,$SIGNATURES_CACHE;
+		$found_groups=array();
+		foreach ($member_rows as $row)
+		{
+			$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
 
+			if (!ocf_is_ldap_member($row['id']))
+			{
+				// Primary
+				$pg=$GLOBALS['OCF_DRIVER']->get_member_row_field($row['id'],'m_primary_group');
+				$found_groups[$pg]=1;
+				$GROUP_MEMBERS_CACHE[$row['id']][false][false]=array($pg=>1);
+			}
+
+			// Signature
+			if ((get_page_name()!='search') && (!is_null($row['signature'])) && ($row['signature']!='') && ($row['m_signature']!=0))
+			{
+				$SIGNATURES_CACHE[$row['id']]=new ocp_tempcode();
+				if (!$SIGNATURES_CACHE[$row['id']]->from_assembly($row['signature'],true))
+					unset($SIGNATURES_CACHE[$row['id']]);
+			}
+		}
+		foreach ($member_rows_2 as $row)
+		{
+			$MEMBER_CACHE_FIELD_MAPPINGS[$row['mf_member_id']]=$row;
+		}
+		foreach ($member_rows_3 as $row)
+		{
+			if (!ocf_is_ldap_member($row['gm_member_id']))
+			{
+				$GROUP_MEMBERS_CACHE[$row['gm_member_id']][false][false][$row['gm_group_id']]=1;
+				$found_groups[$row['gm_group_id']]=1;
+			}
+		}
+
+		ocf_ensure_groups_cached(array_keys($found_groups));
+	}
+}
+
+/**
+ * Get buttons for showing under a post.
+ *
+ * @param  array			Map of topic info.
+ * @param  array			Map of post info.
+ * @param  boolean		Whether the current member may reply to the topic
+ * @return tempcode		The buttons.
+ */
+function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
+{
+	require_code('ocf_members2');
+	$buttons=new ocp_tempcode();
+	if ((array_key_exists('may_validate_posts',$topic_info)) && ((($topic_info['validated']==0) && ($_postdetails['id']==$topic_info['first_post_id'])) || ($_postdetails['validated']==0)))
+	{
+		$map=array('page'=>'topics','type'=>'validate_post','id'=>$_postdetails['id']);
+		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
+		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+		$action_url=build_url($map,get_module_zone('topics'));
+		$_title=do_lang_tempcode('VALIDATE_POST');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'712fdaee35f378e37b007f3a73246690','REL'=>'validate','IMMEDIATE'=>true,'IMG'=>'validate','TITLE'=>$_title,'URL'=>$action_url)));
+	}
+	if (($may_reply) && (is_null(get_bot_type())))
+	{
+		$map=array('page'=>'topics','type'=>'new_post','id'=>$_postdetails['topic_id'],'quote'=>$_postdetails['id']);
+		if (array_key_exists('intended_solely_for',$_postdetails))
+		{
+			$map['intended_solely_for']=$_postdetails['poster'];
+		}
+		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
+		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+		$action_url=build_url($map,get_module_zone('topics'));
+		$_title=do_lang_tempcode(($topic_info['is_threaded']==1)?'REPLY':'QUOTE_POST');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+		$javascript=NULL;
+
+		if ((array_key_exists('message_comcode',$_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (!array_key_exists('intended_solely_for',$map)))
+		{
+			if ($topic_info['is_threaded']==1)
+			{
+				$javascript='return threaded_reply(this,\''.strval($_postdetails['id']).'\');';
+			} else
+			{
+				$javascript='var post=document.getElementById(\'post\'); if (!post) return true; var y=findPosY(post); if (y==0) return true; post.value+=((post.value==\'\')?\'\':\'\n\n\')+\'[quote="'.addslashes($_postdetails['poster_username']).'"]'.str_replace(chr(10),'\n',addslashes($_postdetails['message_comcode'])).'[/quote]\n\'; smoothScroll(y); post.focus(); return false;';
+			}
+		}
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'reply':'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
+	}
+	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])))
+	{
+		$action_url=build_url(array('page'=>'points','type'=>'member','id'=>$_postdetails['poster']),get_module_zone('points'));
+		$_title=do_lang_tempcode('POINTS_THANKS');
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'a66f98cb4d56bd0d64e9ecc44d357141','IMMEDIATE'=>false,'IMG'=>'points','TITLE'=>$_title,'URL'=>$action_url)));
+	}
+	if ((array_key_exists('may_pt_members',$topic_info)) && ($may_reply) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (ocf_may_whisper($_postdetails['poster'])) && (get_option('overt_whisper_suggestion')=='1'))
+	{
+		$whisper_type=(get_value('no_inline_pp_advertise')==='1')?'new_pt':'whisper';
+		$action_url=build_url(array('page'=>'topics','type'=>$whisper_type,'id'=>$_postdetails['topic_id'],'quote'=>$_postdetails['id'],'intended_solely_for'=>$_postdetails['poster']),get_module_zone('topics'));
+		$_title=do_lang_tempcode('WHISPER');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply contact','IMMEDIATE'=>false,'IMG'=>(get_value('no_inline_pp_advertise')==='1')?'send_message':'whisper','TITLE'=>$_title,'URL'=>$action_url)));
+	}
+	if ((array_key_exists('may_report_posts',$topic_info)) && (addon_installed('ocf_reported_posts')) && (is_null(get_bot_type())))
+	{
+		$action_url=build_url(array('page'=>'topics','type'=>'report_post','id'=>$_postdetails['id']),get_module_zone('topics'));
+		$_title=do_lang_tempcode('REPORT_POST');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'f81cbe84f524b4ed9e089c6e89a7c717','REL'=>'report','IMMEDIATE'=>false,'IMG'=>'report_post','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>'return open_link_as_overlay(this,null,\'100%\');')));
+	}
+	if (array_key_exists('may_edit',$_postdetails))
+	{
+		$map=array('page'=>'topics','type'=>'edit_post','id'=>$_postdetails['id']);
+		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
+		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+		$edit_url=build_url($map,get_module_zone('topics'));
+		$_title=do_lang_tempcode('EDIT_POST');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'f341cfc94b3d705437d43e89f572bff6','REL'=>'edit','IMMEDIATE'=>false,'IMG'=>'edit','TITLE'=>$_title,'URL'=>$edit_url)));
+	}
+	if (array_key_exists('may_delete',$_postdetails))
+	{
+		$map=array('page'=>'topics','type'=>'delete_post','id'=>$_postdetails['id']);
+		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
+		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+		$delete_url=build_url($map,get_module_zone('topics'));
+		$_title=do_lang_tempcode('DELETE_POST');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'8bf6d098ddc217eef75718464dc03d41','REL'=>'delete','IMMEDIATE'=>false,'IMG'=>'delete','TITLE'=>$_title,'URL'=>$delete_url)));
+	}
+	if ((array_key_exists('may_warn_members',$topic_info)) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (addon_installed('ocf_warnings')))
+	{
+		$redir_url=get_self_url(true);
+		$redir_url.='#post_'.strval($_postdetails['id']);
+		$action_url=build_url(array('page'=>'warnings','type'=>'ad','id'=>$_postdetails['poster'],'post_id'=>$_postdetails['id'],'redirect'=>$redir_url),get_module_zone('warnings'));
+		$_title=do_lang_tempcode('WARN_MEMBER');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'punish','TITLE'=>$_title,'URL'=>$action_url)));
+	}
+	if ((has_specific_permission(get_member(),'view_content_history')) && ($_postdetails['has_history']))
+	{
+		$action_url=build_url(array('page'=>'admin_ocf_history','type'=>'misc','post_id'=>$_postdetails['id']),'adminzone');
+		$_title=do_lang_tempcode('POST_HISTORY');
+		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'a66f98cb4d56bd0d64e9ecc44d357141','REL'=>'history','IMMEDIATE'=>false,'IMG'=>'history','TITLE'=>$_title,'URL'=>$action_url)));
+	}
+	return $buttons;
+}
+
+/**
+ * Get post emphasis Tempcode.
+ *
+ * @param  array			Map of post info.
+ * @return tempcode		The tempcode.
+ */
+function ocf_get_post_emphasis($_postdetails)
+{
+	$emphasis=new ocp_tempcode();
+	if ($_postdetails['is_emphasised'])
+	{
+		$emphasis=do_lang_tempcode('IMPORTANT');
+	}
+	elseif (array_key_exists('intended_solely_for',$_postdetails))
+	{
+		$pp_to_username=$GLOBALS['FORUM_DRIVER']->get_username($_postdetails['intended_solely_for']);
+		if (is_null($pp_to_username)) $pp_to_username=do_lang('UNKNOWN');
+		$emphasis=do_lang('PP_TO',$pp_to_username);
+	}
+	return $emphasis;
+}

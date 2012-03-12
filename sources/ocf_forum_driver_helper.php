@@ -329,9 +329,10 @@ function not_like_spacer_posts($field)
  * @param  boolean		Whether to show in reverse
  * @param  boolean		Whether to only load minimal details if it is a threaded topic
  * @param  ?array			List of post IDs to load (NULL: no filter)
+ * @param  boolean		Whether to load spacer posts
  * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
  */
-function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL)
+function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL,$load_spacer_posts_too=false)
 {
 	if (is_null($topic_id)) return (-2);
 
@@ -352,7 +353,11 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 		$extra_where.=')';
 	}
 
-	$where='('.ocf_get_topic_where($topic_id).')'.not_like_spacer_posts('t.text_original').$extra_where;
+	$where='('.ocf_get_topic_where($topic_id).')';
+	if (!$load_spacer_posts_too)
+		$where.=not_like_spacer_posts('t.text_original');
+	$where.=$extra_where;
+	if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_value_null_ok('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
 
 	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
@@ -363,16 +368,16 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 
 	if (($light_if_threaded) && ($is_threaded))
 	{
-		$select='p.id,p.p_parent_id,p.p_intended_solely_for';
+		$select='p.id,p.p_parent_id,p.p_intended_solely_for,p.p_poster';
 	} else
 	{
-		$select='p.id,p.p_parent_id,p.p_title,t.text_parsed,p.p_post,p.p_poster,p.p_intended_solely_for,p.p_time,p.p_poster_name_if_guest';
+		$select='p.*,h.h_post_id,text_parsed,text_original';
 	}
 	if (($is_threaded) && (db_has_subqueries($this_ref->connection->connection_read)))
 	{
 		$select.=',(SELECT AVG(rating) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id) AS compound_rating';
 	}
-	$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY '.$order,$max,$start);
+	$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start);
 	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where);
 
 	$out=array();
@@ -380,8 +385,9 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	{
 		if ((is_null($myrow['p_intended_solely_for'])) || ($myrow['p_intended_solely_for']==get_member()) || (($myrow['p_intended_solely_for']==$this_ref->get_guest_id()) && ($this_ref->is_staff(get_member()))))
 		{
-			$temp=array();
-			$temp['id']=$myrow['id'];
+			$temp=$myrow; // Takes all OCF properties
+
+			// Then sanitised for normal forum driver API too (involves repetition)
 			$temp['parent_id']=$myrow['p_parent_id'];
 			if ((!$light_if_threaded) || (!$is_threaded))
 			{
@@ -400,7 +406,6 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 				$temp['user']=$myrow['p_poster'];
 				if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];
 				$temp['date']=$myrow['p_time'];
-				$temp['p_intended_solely_for']=$myrow['p_intended_solely_for'];
 			}
 
 			$out[]=$temp;
@@ -427,7 +432,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 function _helper_get_post_remaining_details($this_ref,$topic_id,$post_ids)
 {
 	$count=0;
-	$ret=_helper_get_forum_topic_posts($this_ref,$topic_id,$count,NULL,0,false,false,false,$post_ids);
+	$ret=_helper_get_forum_topic_posts($this_ref,$topic_id,$count,NULL,0,false,false,false,$post_ids,true);
 	if (is_integer($ret)) return array();
 	return $ret;
 }

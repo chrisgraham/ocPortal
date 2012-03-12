@@ -125,7 +125,6 @@ class Hook_addon_registry_core_abstract_components
 				'CATEGORY_ENTRY.tpl'=>'category_list',
 				'CATEGORY_LIST.tpl'=>'category_list',
 				'IMG_THUMB.tpl'=>'img_thumb',
-				'POST.tpl'=>'post',
 				'POST_CHILD_LOAD_LINK.tpl'=>'post',
 				'CROP_TEXT_MOUSE_OVER.tpl'=>'crop_text_mouse_over',
 				'SCREEN_BUTTON.tpl'=>'screen_button',
@@ -337,31 +336,6 @@ class Hook_addon_registry_core_abstract_components
 					'JS_TOOLTIP'=>lorem_phrase(),
 					'CAPTION'=>lorem_phrase(),
 					'URL'=>placeholder_image_url(),
-						)
-			),NULL,'',true),
-		);
-	}
-	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
-	function tpl_preview__post()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('POST',array(
-					'POSTER_ID'=>placeholder_id(),
-					'EDIT_URL'=>placeholder_url(),
-					'HIGHLIGHT'=>lorem_phrase(),
-					'TITLE'=>lorem_word(),
-					'TIME'=>placeholder_time(),
-					'TIME_RAW'=>placeholder_time(),
-					'POSTER_LINK'=>placeholder_url(),
-					'POSTER_NAME'=>lorem_word(),
-					'POST'=>lorem_phrase(),
 						)
 			),NULL,'',true),
 		);

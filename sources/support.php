@@ -648,9 +648,20 @@ function array_peek($array,$depth_down=1)
 }
 
 /**
+ * Make a value suitable for use in an XML ID.
+ *
+ * @param  string			The value to escape
+ * @return string			The escaped value
+ */
+function fix_id($param)
+{
+	return str_replace('[','_opensquare_',str_replace(']','_closesquare_',str_replace('&#039;','_apostophe_',str_replace('\'','_apostophe_',str_replace('-','_minus_',str_replace(' ','_space_',str_replace('+','_plus_',str_replace('*','_star_',str_replace('/','__',$param)))))))));
+}
+
+/**
  * See if the current URL matches the given ocPortal match tags.
  *
- * @param  string		Match tags
+ * @param  string			Match tags
  * @param  boolean		Check against POSTed data too
  * @return boolean		Whether there is a match
  */

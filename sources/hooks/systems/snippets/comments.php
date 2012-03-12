@@ -34,7 +34,7 @@ class Hook_comments
 		$hash=get_param('hash');
 		if (md5($serialized_options)!=$hash) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		list($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum,$post_warning,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews)=unserialize($serialized_options);
+		list($topic_id,$allow_comments,$invisible_if_no_comments,$forum,$reverse,$may_reply,$highlight_by_user,$allow_reviews)=unserialize($serialized_options);
 
 		$posts=array_map('intval',explode(',',get_param('ids',false,true)));
 
@@ -43,7 +43,7 @@ class Hook_comments
 
 		require_code('topics');
 		$renderer=new OCP_Topic();
-		return $renderer->render_posts_from_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum,$post_warning,NULL,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews,$posts,$parent_id);
+		return $renderer->render_posts_from_comment_topic($topic_id,$allow_comments,$invisible_if_no_comments,$forum,NULL,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id);
 	}
 
 }

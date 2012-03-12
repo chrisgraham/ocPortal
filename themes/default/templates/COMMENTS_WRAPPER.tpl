@@ -60,7 +60,9 @@
 		</div>
 
 		{+START,IF_PASSED,RESULTS_BROWSER}
-			{RESULTS_BROWSER}
+			<div class="float_surrounder">
+				{RESULTS_BROWSER}
+			</div>
 		{+END}
 	{+END}
 

@@ -1813,7 +1813,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'FIX_ID':
 				if (isset($param[0]))
 				{
-					$value=str_replace('[','_opensquare_',str_replace(']','_closesquare_',str_replace('&#039;','_apostophe_',str_replace('\'','_apostophe_',str_replace('-','_minus_',str_replace(' ','_space_',str_replace('+','_plus_',str_replace('*','_star_',str_replace('/','__',$param[0])))))))));
+					$value=fix_id($param[0]);
 					if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
 				}
 				break;

@@ -148,6 +148,7 @@ class Hook_addon_registry_core_feedback_features
 				'RATING_INLINE_DYNAMIC.tpl'=>'rating_inline_dynamic',
 				'EMOTICON_CLICK_CODE.tpl'=>'comments',
 				'COMMENT_AJAX_HANDLER.tpl'=>'comments',
+				'POST.tpl'=>'post',
 			);
 	}
 
@@ -328,9 +329,33 @@ class Hook_addon_registry_core_feedback_features
 		$review_titles=array();
 		$review_titles[]=array('REVIEW_TITLE'=>lorem_phrase(),'REVIEW_RATING'=>make_string_tempcode(float_format(10.0)));
 		$comments='';
-		foreach(placeholder_array() as $comment)
+		foreach(placeholder_array() as $i=>$comment)
 		{
-			$tpl_post=do_lorem_template('POST',array('POSTER_ID'=>placeholder_id(),'EDIT_URL'=>placeholder_url(),'INDIVIDUAL_REVIEW_RATINGS'=>array(),'HIGHLIGHT'=>true,'TITLE'=>lorem_word(),'TIME_RAW'=>placeholder_time(),'TIME'=>placeholder_time(),'POSTER_LINK'=>placeholder_url(),'POSTER_NAME'=>lorem_word(),'POST'=>lorem_phrase()));
+			$tpl_post=do_lorem_template('POST',array(
+				'INDIVIDUAL_REVIEW_RATINGS'=>array(),
+				'HIGHLIGHT'=>($i==1),
+				'TITLE'=>lorem_word(),
+				'TIME_RAW'=>placeholder_time(),
+				'TIME'=>placeholder_time(),
+				'POSTER_ID'=>placeholder_id(),
+				'POSTER_URL'=>placeholder_url(),
+				'POSTER_NAME'=>lorem_word(),
+				'POSTER'=>NULL,
+				'POSTER_DETAILS'=>new ocp_tempcode(),
+				'ID'=>placeholder_id(),
+				'POST'=>lorem_phrase(),
+				'POST_COMCODE'=>lorem_phrase(),
+				'CHILDREN'=>lorem_phrase(),
+				'OTHER_IDS'=>NULL,
+				'RATING'=>new ocp_tempcode(),
+				'EMPHASIS'=>new ocp_tempcode(),
+				'BUTTONS'=>new ocp_tempcode(),
+				'LAST_EDITED_RAW'=>'',
+				'LAST_EDITED'=>new ocp_tempcode(),
+				'UNVALIDATED'=>new ocp_tempcode(),
+				'TOPIC_ID'=>placeholder_id(),
+				'IS_SPACER_POST'=>false,
+			));
 
 			$comments.=$tpl_post->evaluate();
 		}

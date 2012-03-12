@@ -257,11 +257,6 @@ class Hook_addon_registry_iotds
 		$review_titles[]=array('REVIEW_TITLE'=>lorem_word(),'REVIEW_RATING'=>make_string_tempcode(float_format(10.0)));
 
 		$comments = '';
-		foreach(placeholder_array() as $comment)
-		{
-			$tpl_post=do_lorem_template('POST',array('POSTER_ID'=>placeholder_id(),'EDIT_URL'=>placeholder_url(),'INDIVIDUAL_REVIEW_RATINGS'=>array(),'HIGHLIGHT'=>true,'TITLE'=>lorem_word(),'TIME_RAW'=>placeholder_time(),'TIME'=>placeholder_time(),'POSTER_LINK'=>placeholder_url(),'POSTER_NAME'=>lorem_word(),'POST'=>lorem_phrase()));
-			$comments.=$tpl_post->evaluate();
-		}
 
 		$form=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST_URL'=>placeholder_url(),'FIRST_POST'=>lorem_paragraph_html(),'TYPE'=>'downloads','ID'=>placeholder_id(),'REVIEW_RATING_CRITERIA'=>$review_titles,'USE_CAPTCHA'=>true,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>true,'POST_WARNING'=>do_lang('POST_WARNING'),'COMMENT_TEXT'=>get_option('comment_text'),'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_word(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
 

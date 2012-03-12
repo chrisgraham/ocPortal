@@ -175,13 +175,8 @@ class Hook_addon_registry_tickets
 		}
 
 		$comments = new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$tpl_post = do_lorem_template('POST',array('POSTER_ID'=>placeholder_id(),'EDIT_URL'=>placeholder_url(),'HIGHLIGHT'=>lorem_word(),'TITLE'=>lorem_phrase(),'TIME'=>placeholder_date(),'TIME_RAW'=>placeholder_date_raw(),'POSTER_LINK'=>placeholder_url(),'POSTER_NAME'=>lorem_phrase(),'POST'=>lorem_sentence()));
-			$comments->attach($tpl_post);
-		}
 
-		$comment_box = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST_URL'=>placeholder_url(),'FIRST_POST'=>lorem_paragraph_html(),'USE_CAPTCHA'=>false,'ATTACHMENTS'=>lorem_phrase(),'ATTACH_SIZE_FIELD'=>lorem_phrase(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>lorem_word(),'EMAIL_OPTIONAL'=>lorem_word(),'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>lorem_phrase(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
+		$comment_form = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'FIRST_POST_URL'=>placeholder_url(),'FIRST_POST'=>lorem_paragraph_html(),'USE_CAPTCHA'=>false,'ATTACHMENTS'=>lorem_phrase(),'ATTACH_SIZE_FIELD'=>lorem_phrase(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>lorem_word(),'EMAIL_OPTIONAL'=>lorem_word(),'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>lorem_phrase(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true));
 
 		return array(
 			lorem_globalise(
@@ -199,7 +194,7 @@ class Hook_addon_registry_tickets
 					'POSTER'=>lorem_phrase(),
 					'TITLE'=>lorem_title(),
 					'COMMENTS'=>$comments,
-					'COMMENT_BOX'=>$comment_box,
+					'COMMENT_FORM'=>$comment_form,
 					'STAFF_DETAILS'=>placeholder_url(),
 					'URL'=>placeholder_url(),
 				)

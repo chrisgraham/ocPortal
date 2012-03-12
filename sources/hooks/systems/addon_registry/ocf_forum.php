@@ -228,6 +228,7 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/EN/page/quick_reply.png',
 			'themes/default/images/EN/page/reply.png',
 			'themes/default/images/EN/pageitem/quote.png',
+			'themes/default/images/EN/pageitem/reply.png',
 			'themes/default/images/EN/pageitem/whisper.png',
 			'themes/default/images/EN/pageitem/send_message.png',
 			'themes/default/images/menu_items/forum_navigation/forums.png',
@@ -1096,7 +1097,7 @@ class Hook_addon_registry_ocf_forum
 			$posts->attach(do_lorem_template('OCF_TOPIC_POST',array('ID'=>placeholder_random(),'TOPIC_FIRST_POST_ID'=>placeholder_random(),'TOPIC_FIRST_POSTER'=>lorem_phrase(),'POST_ID'=>placeholder_random(),'URL'=>placeholder_url(),'CLASS'=>lorem_phrase(),'EMPHASIS'=>lorem_phrase(),'FIRST_UNREAD'=>$first_unread,'POSTER_TITLE'=>lorem_word(),'POST_TITLE'=>lorem_word(),'POST_DATE_RAW'=>placeholder_date_raw(),'POST_DATE'=>placeholder_time(),'POST'=>lorem_phrase(),'TOPIC_ID'=>placeholder_id(),'LAST_EDITED_RAW'=>lorem_phrase(),'LAST_EDITED'=>$last_edited,'POSTER_ID'=>placeholder_id(),'POSTER'=>$poster,'POSTER_DETAILS'=>$poster_details,'POST_AVATAR'=>$post_avatar,'RANK_IMAGES'=>$rank_images,'BUTTONS'=>$buttons,'SIGNATURE'=>lorem_phrase(),'UNVALIDATED'=>lorem_phrase(),'DESCRIPTION'=>lorem_phrase())));
 		}
 
-		$topic_tpl = do_lorem_template('OCF_TOPIC_WRAP',array('ID'=>placeholder_id(),'TITLE'=>lorem_phrase(),'WARNING_DETAILS'=>$warning_details,'MAX'=>lorem_phrase(),'ACTION_URL'=>placeholder_url(),'NUM_GUESTS'=>placeholder_number(),'NUM_MEMBERS'=>placeholder_number(),'MEMBERS_VIEWING'=>$members_viewing,'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>placeholder_options(),'MARKED_POST_ACTIONS'=>placeholder_options(),'QUICK_REPLY'=>$quick_reply,'TREE'=>lorem_phrase(),'POLL'=>$poll,'SCREEN_BUTTONS'=>$buttons,'POSTS'=>$posts,'MAY_CHANGE_MAX'=>lorem_word(),'LAST_POSTER'=>placeholder_random()));
+		$topic_tpl = do_lorem_template('OCF_TOPIC_WRAP',array('THREADED'=>false,'ID'=>placeholder_id(),'TITLE'=>lorem_phrase(),'WARNING_DETAILS'=>$warning_details,'MAX'=>lorem_phrase(),'ACTION_URL'=>placeholder_url(),'NUM_GUESTS'=>placeholder_number(),'NUM_MEMBERS'=>placeholder_number(),'MEMBERS_VIEWING'=>$members_viewing,'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>placeholder_options(),'MARKED_POST_ACTIONS'=>placeholder_options(),'QUICK_REPLY'=>$quick_reply,'TREE'=>lorem_phrase(),'POLL'=>$poll,'SCREEN_BUTTONS'=>$buttons,'POSTS'=>$posts,'MAY_CHANGE_MAX'=>lorem_word(),'LAST_POSTER'=>placeholder_random()));
 
 		//Wrap the content
 		$notifications = do_lorem_template('OCF_NOTIFICATION',array('ADDITIONAL_POSTS'=>placeholder_number(),'_ADDITIONAL_POSTS'=>lorem_phrase(),'ID'=>placeholder_random(),'U_TITLE'=>lorem_word(),'IGNORE_URL'=>placeholder_url(),'IGNORE_URL_2'=>placeholder_url(),'REPLY_URL'=>placeholder_url(),'TOPIC_URL'=>placeholder_url(),'POST'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph_html(),'TIME'=>placeholder_time(),'TIME_RAW'=>placeholder_date_raw(),'BY'=>lorem_phrase(),'PROFILE_LINK'=>placeholder_url(),'TYPE'=>lorem_phrase()));

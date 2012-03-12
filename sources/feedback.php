@@ -257,7 +257,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 		} else
 		{
 			$likes=(get_value('likes')==='1');
-			$all_rating_criteria['']=array('TITLE'=>'','TYPE'=>'','NUM_RATINGS'=>'0','RATING'=>'0');
+			$all_rating_criteria[$content_type]=array('TITLE'=>'','TYPE'=>'','NUM_RATINGS'=>'0','RATING'=>'0');
 		}
 
 		// Fill in structure
@@ -354,18 +354,18 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @return boolean		Whether the resource has already been rated
  */
-function already_rated($content_types,$content_id)
+function already_rated($rating_for_types,$content_id)
 {
 	$more=(!is_guest())?' OR rating_member='.strval((integer)get_member()):'';
 	$for_types='';
-	foreach ($content_types as $content_type)
+	foreach ($rating_for_types as $rating_for_type)
 	{
 		if ($for_types!='') $for_types.=' OR ';
-		$for_types.=db_string_equal_to('rating_for_type',$content_type);
+		$for_types.=db_string_equal_to('rating_for_type',$rating_for_type);
 	}
 	$has_rated=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'rating WHERE ('.$for_types.') AND '.db_string_equal_to('rating_for_id',$content_id).' AND (rating_ip=\''.get_ip_address().'\''.$more.')');
 
-	return ($has_rated==count($content_types));
+	return ($has_rated==count($rating_for_types));
 }
 
 /**
@@ -491,6 +491,7 @@ function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no
 
 		require_code('topics');
 		$renderer=new OCP_Topic();
+
 		return $renderer->render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum,$post_warning,$_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews);
 	}
 	
@@ -635,7 +636,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 			foreach ($reviews_rating_criteria as $rating_type)
 			{
 				// Has there actually been any rating?
-				$rating=post_param_integer('review_rating',NULL);
+				$rating=post_param_integer('review_rating__'.fix_id($rating_type),NULL);
 
 				if (!is_null($rating))
 				{

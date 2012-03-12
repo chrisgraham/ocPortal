@@ -57,7 +57,16 @@ class Hook_Preview_comments
 		$poster_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$title=post_param('title','');
 		$post=comcode_to_tempcode(post_param('post'));
-		$tpl=do_template('POST',array('INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,'HIGHLIGHT'=>$highlight,'TITLE'=>$title,'TIME_RAW'=>strval($datetime_raw),'TIME'=>$datetime,'POSTER_LINK'=>$poster_link,'POSTER_NAME'=>$poster_name,'POST'=>$post));
+		$tpl=do_template('POST',array(
+			'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,
+			'HIGHLIGHT'=>$highlight,
+			'TITLE'=>$title,
+			'TIME_RAW'=>strval($datetime_raw),
+			'TIME'=>$datetime,
+			'POSTER_LINK'=>$poster_link,
+			'POSTER_NAME'=>$poster_name,
+			'POST'=>$post,
+		));
 		return array($tpl,NULL);
 	}
 

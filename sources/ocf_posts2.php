@@ -138,6 +138,7 @@ function ocf_show_isolated_post($row,$use_post_title=false)
 		$emphasis=do_lang('PP_TO',$pp_to_username);
 	}
 
+	require_code('feedback');
 	actualise_rating(true,'post',strval($row['id']),get_self_url(),$row['p_title']);
 	$rating=display_rating(get_self_url(),$row['p_title'],'post',strval($row['id']),'RATING_INLINE_DYNAMIC');
 

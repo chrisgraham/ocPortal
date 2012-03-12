@@ -210,9 +210,11 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
  * @param  AUTO_LINK		Return location for the forum ID
  * @param  AUTO_LINK		Return location for the topic ID
  * @param  integer		Return location for the ticket type
+ * @param  integer		Start offset in pagination
+ * @param  ?integer		Max per page in pagination (NULL: no limit)
  * @return mixed			The array of maps (Each map is: title, message, member, date) (NULL: no such ticket)
  */
-function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type)
+function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type,$start=0,$max=NULL)
 {
 	$ticket=$GLOBALS['SITE_DB']->query_select('tickets',NULL,array('ticket_id'=>$ticket_id),'',1,NULL,true);
 	if (count($ticket)==1) // We know about it, so grab details from tickets table
@@ -224,7 +226,7 @@ function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type)
 		$forum=$ticket[0]['forum_id'];
 		$topic_id=$ticket[0]['topic_id'];
 		$count=0;
-		return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$ticket_id),$count);
+		return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$ticket_id),$count,$max,$start,false);
 	}
 
 	// It must be an old-style ticket, residing in the root ticket forum

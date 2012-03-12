@@ -49,8 +49,8 @@
 							{+START,IF_PASSED,REVIEW_RATING_CRITERIA}{+START,IF_PASSED,TYPE}{+START,IF_PASSED,ID}
 								{+START,LOOP,REVIEW_RATING_CRITERIA}
 									<li>
-										<label for="review_rating__{TYPE*|}__{ID*|}">{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}</label>
-										<select id="review_rating__{TYPE*|}__{ID*|}" name="review_rating">
+										<label for="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}">{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}</label>
+										<select id="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" name="review_rating">
 											<option value="">{!NA}</option>
 											<option value="10">*****</option>
 											<option value="8">****</option>
@@ -137,39 +137,37 @@
 
 										<td>
 											{+START,IF,{$JS_ON}}
-												<img id="rating_bar_1__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_2__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_3__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_4__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="rating_bar_5__{TYPE*}__{ID*}" alt="" src="{$IMG*,rating}" />
+												<img id="review_bar_1__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_2__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_3__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_4__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" /><img id="review_bar_5__{TYPE*}__{$FIX_ID,{REVIEW_TITLE}}__{ID*}" alt="" src="{$IMG*,rating}" />
 												<script type="text/javascript">// <![CDATA[
-													function rating_highlight__{TYPE%}__{ID%}(rating,first_time)
+													function new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(review,first_time)
 													{
-														if (rating=='') rating=0;
-
 														var i,bit;
 														for (i=1;i<=5;i++)
 														{
-															bit=document.getElementById('rating_bar_'+i+'__{TYPE%}__{ID%}');
-															setOpacity(bit,(rating/2>=i)?1.0:0.2);
+															bit=document.getElementById('review_bar_'+i+'__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}');
+															setOpacity(bit,((review!=0) && (review/2>=i))?1.0:0.2);
 															if (first_time) bit.onmouseover=function(i) { return function()
 															{
-																rating_highlight__{TYPE%}__{ID%}(i*2,false);
+																new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(i*2,false);
 															} }(i);
 															if (first_time) bit.onmouseout=function(i) { return function()
 															{
-																rating_highlight__{TYPE%}__{ID%}(document.getElementById('review_rating__{TYPE%}__{ID%}').value,false);
+																new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(window.parseInt(document.getElementById('review_rating__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}').value),false);
 															} }(i);
 															if (first_time) bit.onclick=function(i) { return function()
 															{
-																document.getElementById('review_rating__{TYPE%}__{ID%}').value=i*2;
+																document.getElementById('review_rating__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}').value=i*2;
 															} }(i);
 														}
 													}
-													rating_highlight__{TYPE%}__{ID%}(0,true);
+													new_review_highlight__{TYPE%}__{$FIX_ID,{REVIEW_TITLE}}__{ID%}(0,true);
 												//]]></script>
-												<input id="review_rating__{TYPE*|}__{ID*|}" type="hidden" name="review_rating" value="" />
+												<input id="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" type="hidden" name="review_rating__{$FIX_ID,{REVIEW_TITLE}}" value="" />
 											{+END}
 
 											{+START,IF,{$NOT,{$JS_ON}}}
-												<label class="accessibility_hidden" for="review_rating__{TYPE*|}__{ID*|}">{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}</label>
-												<select id="review_rating__{TYPE*|}__{ID*|}" name="review_rating">
+												<label class="accessibility_hidden" for="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}">{+START,IF_EMPTY,{REVIEW_TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{REVIEW_TITLE}}{REVIEW_TITLE*}:{+END}</label>
+												<select id="review_rating__{TYPE*|}__{$FIX_ID,{REVIEW_TITLE}}__{ID*|}" name="review_rating">
 													<option value="">{!NA}</option>
 													<option value="10">*****</option>
 													<option value="8">****</option>
@@ -234,7 +232,11 @@
 					</table></div>
 				{+END}
 
+				{$GET,EXTRA_COMMENTS_FIELDS_2}
+
 				<div class="comments_posting_form_end">
+					{$GET,EXTRA_COMMENTS_FIELDS_1}
+
 					{+START,IF_PASSED,USE_CAPTCHA}
 						{+START,IF,{USE_CAPTCHA}}
 							<div class="comments_captcha">

@@ -1265,13 +1265,15 @@ class Module_topics
 			{
 				$hidden_fields->attach(form_input_hidden('member_id',strval($member_id)));
 			}
+			$threade=false;
 		} else
 		{
 			$hidden_fields->attach(form_input_hidden('forum_id',strval($forum_id)));
+			$threaded=($GLOBALS['FORUM_DB']->query_value('f_forums','f_is_threaded',array('id'=>$forum_id))==1);
 		}
 		
 		// Description
-		if (get_option('is_on_topic_descriptions')=='1')
+		if ((get_option('is_on_topic_descriptions')=='1') && (!$threaded))
 			$specialisation->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),'','description',post_param('description',''),false,2));
 
 		// Set up some post details
@@ -1491,7 +1493,7 @@ class Module_topics
 		$NON_CANONICAL_PARAMS[]='intended_solely_for';
 
 		$topic_id=get_param_integer('id');
-		$parent_id=get_param_integer('parent_id',NULL);
+		$parent_id=either_param_integer('parent_id',NULL);
 		$intended_solely_for=get_param_integer('intended_solely_for',-1);
 		$post=post_param('post',NULL); // Copy existing post into box (from quick reply 'more options' button)
 		if (is_null($post))
@@ -2537,7 +2539,7 @@ END;
 
 		// Certain aspects relating to the posting system
 		$specialisation=new ocp_tempcode();
-		if ((get_option('is_on_post_titles')=='1') || ($post_details[0]['p_title']!='') || ($post_id==$topic_info[0]['t_cache_first_post_id']))
+		if (((get_option('is_on_post_titles')=='1') || ($post_details[0]['p_title']!='') || ($post_id==$topic_info[0]['t_cache_first_post_id'])))
 			$specialisation->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',post_param('title',$post_details[0]['p_title']),false,1));
 		$specialisation->attach(form_input_line(do_lang_tempcode('REASON'),'','reason','',false,2));
 		if (ocf_may_moderate_forum($forum_id,get_member()))
@@ -2753,7 +2755,7 @@ END;
 		// Certain aspects relating to the posting system
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),'','title',$topic_info[0]['t_cache_first_title'],false));
-		if (get_option('is_on_topic_descriptions')=='1')
+		if ((get_option('is_on_topic_descriptions')=='1') && (!$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id)))
 			$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),'','description',$topic_info[0]['t_description'],false));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
 		if (get_option('is_on_topic_emoticons')=='1')
@@ -2763,9 +2765,9 @@ END;
 		if (ocf_may_moderate_forum($forum_id,get_member()))
 		{
 			$moderation_options=array(
-								array(do_lang_tempcode('OPEN'),'open',$topic_info[0]['t_is_open']==1,do_lang_tempcode('DESCRIPTION_OPEN')),
-								array(do_lang_tempcode('PINNED'),'pinned',$topic_info[0]['t_pinned']==1,do_lang_tempcode('DESCRIPTION_PINNED')),
-						);
+				array(do_lang_tempcode('OPEN'),'open',$topic_info[0]['t_is_open']==1,do_lang_tempcode('DESCRIPTION_OPEN')),
+				array(do_lang_tempcode('PINNED'),'pinned',$topic_info[0]['t_pinned']==1,do_lang_tempcode('DESCRIPTION_PINNED')),
+			);
 			if (addon_installed('unvalidated'))
 			{
 				if ($topic_info[0]['t_validated']==0)
