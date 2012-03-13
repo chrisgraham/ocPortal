@@ -1997,7 +1997,7 @@ END;
 		if (!is_null($forum_id))
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forumview')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',strval($forum_id))))
-				syndicate_described_activity($first_post?'ocf:ADD_TOPIC':'ocf:ADD_POST_IN',$first_post?$title:$topic_title,'','','_SEARCH:topicview:misc:'.strval($topic_id).'#post_'.strval($post_id),'','','ocf_forum');
+				syndicate_described_activity($first_post?'ocf:ACTIVITY_ADD_TOPIC':'ocf:ACTIVITY_ADD_POST_IN',$first_post?$title:$topic_title,'','','_SEARCH:topicview:misc:'.strval($topic_id).'#post_'.strval($post_id),'','','ocf_forum');
 		}
 
 		require_code('fields');

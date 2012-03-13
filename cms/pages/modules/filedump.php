@@ -487,7 +487,7 @@ class Module_filedump
 			log_it('FILEDUMP_UPLOAD',$file,$place);
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),get_page_name(),get_zone_name()))
-				syndicate_described_activity('filedump:FILEDUMP_UPLOAD',$place.'/'.$file,'','','','','','filedump');
+				syndicate_described_activity('filedump:ACTIVITY_FILEDUMP_UPLOAD',$place.'/'.$file,'','','','','','filedump');
 
 			return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
 		} else warn_exit(do_lang_tempcode('OVERWRITE_ERROR'));

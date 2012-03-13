@@ -296,7 +296,7 @@ class Module_cms_iotds extends standard_aed_module
 		if ($validated==1)
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
-				syndicate_described_activity('iotds:ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
+				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
 		}
 
 		$current=post_param_integer('validated',0);
@@ -353,7 +353,7 @@ class Module_cms_iotds extends standard_aed_module
 		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('iotd','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
-				syndicate_described_activity('iotds:ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
+				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
 		}
 
 		edit_iotd($id,$title,post_param('caption'),$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes);

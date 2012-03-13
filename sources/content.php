@@ -103,9 +103,21 @@ function content_get_details($content_type,$content_id)
 			$content_title=$cma_info['title_field_dereference']?get_translated_text($_content_title,$db):$_content_title;
 		}
 	}
+
 	if (isset($cma_info['submitter_field']))
 	{
-		$submitter_id=$content_row[$cma_info['submitter_field']];
+		if (strpos($cma_info['submitter_field'],':')!==false)
+		{
+			$bits=explode(':',$cma_info['submitter_field']);
+			$matches=array();
+			if (preg_match('#'.$bits[1].'#',$content_row[$bits[0]],$matches)!=0)
+			{
+				$submitter_id=intval($matches[1]);
+			} else $submitter_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+		} else
+		{
+			$submitter_id=$content_row[$cma_info['submitter_field']];
+		}
 	} else
 	{
 		$submitter_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();

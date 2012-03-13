@@ -571,7 +571,7 @@ class Module_cms_catalogues extends standard_aed_module
 			{
 				$title=array_shift($map);
 				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
-				syndicate_described_activity('catalogues:CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
+				syndicate_described_activity('catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
 			}
 		}
 
@@ -609,7 +609,7 @@ class Module_cms_catalogues extends standard_aed_module
 			{
 				$title=array_shift($map);
 				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
-				syndicate_described_activity('catalogues:CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
+				syndicate_described_activity('catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
 			}
 		}
 

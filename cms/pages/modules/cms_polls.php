@@ -319,7 +319,7 @@ class Module_cms_polls extends standard_aed_module
 		if ($current==1)
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
-				syndicate_described_activity('polls:ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls');
+				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls');
 		}
 
 		return strval($id);
@@ -376,7 +376,7 @@ class Module_cms_polls extends standard_aed_module
 		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('poll','is_current',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
-				syndicate_described_activity('polls:ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls');
+				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls');
 		}
 
 		edit_poll(intval($id),$question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes);

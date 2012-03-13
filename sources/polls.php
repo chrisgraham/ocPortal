@@ -397,7 +397,7 @@ function set_poll($id)
 	log_it('CHOOSE_POLL',strval($id),get_translated_text($question));
 
 	if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
-		syndicate_described_activity('polls:CHOOSE_POLL',get_translated_text($question),'','','_SEARCH:polls:view:'.strval($id),'','','polls');
+		syndicate_described_activity('polls:ACTIVITY_CHOOSE_POLL',get_translated_text($question),'','','_SEARCH:polls:view:'.strval($id),'','','polls');
 
 	if ((!is_guest($submitter)) && (addon_installed('points')))
 	{

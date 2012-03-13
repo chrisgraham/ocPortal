@@ -11,7 +11,7 @@
 		</div></div>
 		<div class="tab_surround">
 			{+START,LOOP,TABS}
-				<div{$?,{$VALUE_OPTION,html5}, aria-labeledby="t_{TAB_CODE*}" role="tabpanel"}id="g_{TAB_CODE*}" style="display: {$?,{$OR,{TAB_FIRST},{$NOT,{$JS_ON}}},block,none}">
+				<div{$?,{$VALUE_OPTION,html5}, aria-labeledby="t_{TAB_CODE*}" role="tabpanel"} id="g_{TAB_CODE*}" style="display: {$?,{$OR,{TAB_FIRST},{$NOT,{$JS_ON}}},block,none}">
 					<a name="tab__{TAB_CODE*}" id="tab__{TAB_CODE*}"></a>
 
 					{TAB_CONTENT}

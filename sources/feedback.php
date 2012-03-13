@@ -43,7 +43,7 @@ function init__feedback()
  *
  * @param  ID_TEXT		Content type
  * @param  ID_TEXT		Content ID
- * @return array			A tuple: Content title (NULL: unknown), Submitter (NULL: unknown), URL (for use within current browser session), URL (for use in emails / sharing)
+ * @return array			A tuple: Content title (NULL: unknown), Submitter (NULL: unknown), URL (for use within current browser session), URL (for use in emails / sharing), Content meta aware info array
  */
 function get_details_behind_feedback_code($content_type,$content_id)
 {
@@ -55,11 +55,11 @@ function get_details_behind_feedback_code($content_type,$content_id)
 		require_code('hooks/systems/content_meta_aware/'.$cma_hook);
 		$cma_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
 		$info=$cma_ob->info();
-		list($content_title,$submitter_id,,,$content_url,$content_url_email_safe)=content_get_details($cma_hook,$content_id);
-		return array($content_title,$submitter_id,$content_url,$content_url_email_safe);
+		list($content_title,$submitter_id,$cma_info,,$content_url,$content_url_email_safe)=content_get_details($cma_hook,$content_id);
+		return array($content_title,$submitter_id,$content_url,$content_url_email_safe,$cma_info);
 	}
 
-	return array(NULL,NULL,NULL,NULL);
+	return array(NULL,NULL,NULL,NULL,NULL);
 }
 
 /**
@@ -443,7 +443,8 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 	// Top rating / liked
 	if (($rating==10) && ($type==''))
 	{
-		list(,$submitter,,$safe_content_url)=get_details_behind_feedback_code($content_type,$content_id);
+		list(,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
+
 		if ((!is_null($submitter)) && (!is_guest($submitter)))
 		{
 			// Give points
@@ -459,10 +460,24 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 			$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$content_title);
 			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($content_title),array(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url));
 			dispatch_notification('like',NULL,$subject,$mail,array($submitter));
+		}
 
-			// Put on activity wall / whatever
-			if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
-				syndicate_described_activity('LIKES',$content_title,'','',url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'));
+		// Put on activity wall / whatever
+		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
+		{
+			if ((!is_null($submitter)) && (!is_guest($submitter)) && (addon_installed('chat')) && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_liked',array('member_liked'=>get_member(),'member_likes'=>$submitter)))))
+			{
+				$also_involving=$submitter;
+			} else
+			{
+				$also_involving=mixed(); // NULL
+			}
+			$content_type_title=$content_type;
+			if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
+			{
+				$content_type_title=do_lang($cma_info['content_type_label']);
+			}
+			syndicate_described_activity(((is_null($also_involving)) || (is_guest($also_involving)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES',$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
 		}
 	}
 
@@ -679,9 +694,25 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 				enable_notifications('comment_posted',$content_type.'_'.$content_id);
 		}
 
+		list(,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
+
 		// Activity
 		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
-			syndicate_described_activity('ADDED_COMMENT_ON',$content_title,'','',url_to_pagelink(is_object($content_url)?$content_url->evaluate():$content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'));
+		{
+			if ((!is_null($submitter)) && (!is_guest($submitter)) && (addon_installed('chat')) && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_liked',array('member_liked'=>get_member(),'member_likes'=>$submitter)))))
+			{
+				$also_involving=$submitter;
+			} else
+			{
+				$also_involving=mixed(); // NULL
+			}
+			$content_type_title=$content_type;
+			if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
+			{
+				$content_type_title=do_lang($cma_info['content_type_label']);
+			}
+			syndicate_described_activity(((is_null($also_involving)) || (is_guest($also_involving)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON',$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($content_url)?$content_url->evaluate():$content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
+		}
 	}
 
 	if (($post!='') && ($forum_tie) && (!$no_success_message))

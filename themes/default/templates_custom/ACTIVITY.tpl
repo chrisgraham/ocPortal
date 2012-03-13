@@ -38,6 +38,6 @@
 
 	<div class="activities-content">
 		{$,The main message}
-		{BITS}
+		{!ACTIVITY_HAS,<a href="{MEMBER_URL*}">{USERNAME*}</a>,{$LCASE,{$SUBSTR,{BITS},0,1}}{$SUBSTR,{BITS},1}}
 	</div>
 </div>

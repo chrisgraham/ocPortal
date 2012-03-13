@@ -34,7 +34,7 @@
 			</tbody>
 		</table></div>
 
-		<form title="{!SITE_WATCHLIST}: {!EDIT}" {+START,IF,{$JS_ON}} style="display: none"{$?,{$VALUE_OPTION,html5}, aria-hidden="true"}{+END}action="{URL*}" method="post" id="watchlistform">
+		<form title="{!SITE_WATCHLIST}: {!EDIT}"{+START,IF,{$JS_ON}} style="display: none"{$?,{$VALUE_OPTION,html5}, aria-hidden="true"}{+END} action="{URL*}" method="post" id="watchlistform">
 			<div class="constrain_field">
 				<label for="watchlistsites" class="accessibility_hidden">{!EDIT}</label>
 				<textarea class="wide_field" id="watchlistsites" name="watchlistsites" rows="10" cols="90">{+START,LOOP,SITEURLS}{_loop_key*}={_loop_var*}

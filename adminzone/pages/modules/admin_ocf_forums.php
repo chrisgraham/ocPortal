@@ -516,7 +516,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 		$this->set_permissions($id);
 		
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forumview')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',$id)))
-			syndicate_described_activity('ocf:ADD_FORUM',$name,'','','_SEARCH:news:view:'.$id,'','','ocf_forum');
+			syndicate_described_activity('ocf:ACTIVITY_ADD_FORUM',$name,'','','_SEARCH:forumview:misc:'.$id,'','','ocf_forum');
 
 		return $id;
 	}

@@ -728,6 +728,8 @@ class Module_quiz
 			{
 				$result->attach(paragraph(do_lang_tempcode('TEST_PASS'),'4tfdhdhghh'));
 				$result2->attach(do_lang_tempcode('MAIL_TEST_PASS'));
+
+				syndicate_described_activity('quiz:ACTIVITY_PASSED_TEST',get_translated_text($quiz['q_name']),'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 			}
 			elseif ($maximum_percentage<$quiz['q_percentage'])
 			{
@@ -747,6 +749,8 @@ class Module_quiz
 		elseif ($quiz['q_type']=='COMPETITION')
 		{
 			$result=comcode_to_tempcode($_corrections->evaluate());
+
+			syndicate_described_activity('quiz:ACTIVITY_ENTERED_COMPETITION',get_translated_text($quiz['q_name']),'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 		} else
 		{
 			$result=paragraph(do_lang_tempcode('SURVEY_THANKYOU'),'4rtyrthgf');
@@ -755,6 +759,8 @@ class Module_quiz
 
 			// Send mail of answers to the staff
 			dispatch_notification('quiz_results',strval($id),$mail_title,$_answers->evaluate(get_site_default_lang()));
+
+			syndicate_described_activity('quiz:ACTIVITY_FILLED_SURVEY',get_translated_text($quiz['q_name']),'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 		}
 
 		// Store results for entry

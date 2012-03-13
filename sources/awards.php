@@ -82,7 +82,7 @@ function give_award($award_id,$content_id,$time=NULL)
 	if ((array_key_exists('submitter_field',$info)) && (!is_null($info['submitter_field'])))
 	{
 		require_code('content');
-		list($content_title,,,$content)=content_get_details($awards[0]['a_content_type'],$content_id);
+		list($content_title,$member_id,,$content)=content_get_details($awards[0]['a_content_type'],$content_id);
 
 		if (is_null($content)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE',escape_html($awards[0]['a_content_type'].':'.$content_id)));
 
@@ -96,19 +96,8 @@ function give_award($award_id,$content_id,$time=NULL)
 			$category_id=$content[$info['category_field']];
 		}
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'awards')) && (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$permission_type_code,$category_id))))
-			syndicate_described_activity('awards:GIVE_AWARD',$award_title,$content_title,'','_SEARCH:awards:award:'.strval($award_id),'','','awards');
-
-		if (strpos($info['submitter_field'],':')!==false)
 		{
-			$bits=explode(':',$info['submitter_field']);
-			$matches=array();
-			if (preg_match('#'.$bits[1].'#',$content[$bits[0]],$matches)!=0)
-			{
-				$member_id=intval($matches[1]);
-			} else $member_id=NULL;
-		} else
-		{
-			$member_id=$content[$info['submitter_field']];
+			syndicate_described_activity(((is_null($member_id)) || (is_guest($member_id)))?'awards:_ACTIVITY_GIVE_AWARD':'awards:ACTIVITY_GIVE_AWARD',$award_title,$content_title,'','_SEARCH:awards:award:'.strval($award_id),'','','awards',1,NULL,false,$member_id);
 		}
 	} else $member_id=NULL;
 	if (is_null($member_id)) $member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();

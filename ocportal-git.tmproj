@@ -177,6 +177,8 @@
 			<date>2008-11-09T22:20:00Z</date>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>lang</string>
 			<key>regexFolderFilter</key>
@@ -185,6 +187,8 @@
 			<string>lang</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>lang_custom</string>
 			<key>regexFolderFilter</key>
@@ -486,36 +490,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>cms/pages/modules/cms_quiz.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>297</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>275</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>298</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>297</integer>
-			</dict>
 		</dict>
 		<key>collaboration/index.php</key>
 		<dict>
@@ -1657,20 +1631,6 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
-		<key>sources/ocf_forum_driver_helper.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>430</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>406</integer>
-		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -2653,36 +2613,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates_custom/JAVASCRIPT_SWFUPLOAD.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>1223</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1201</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>1223</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>1223</integer>
-			</dict>
-		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_XMPP_CRYPTO.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2743,6 +2673,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{733, 86}, {1136, 939}}</string>
+	<string>{{466, 239}, {1154, 939}}</string>
 </dict>
 </plist>

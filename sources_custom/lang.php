@@ -178,10 +178,11 @@ if (!function_exists('_do_lang'))
 		}
 
 		// Put in parameters
+		static $non_plural_non_vowel=array('1','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z');
 		$looked_up=$LANGUAGE[$lang][$codename];
 		if ($looked_up===NULL) return NULL; // Learning cache pool has told us this string definitely does not exist
 		$out=str_replace('\n',"\n",$looked_up);
-		$pluralised=strpos($out,'|')!==false;
+		$plural_or_vowel_check=strpos($out,'|')!==false;
 		if ($XSS_DETECT) ocp_mark_as_escaped($out);
 		if ($token1!==NULL)
 		{
@@ -200,15 +201,17 @@ if (!function_exists('_do_lang'))
 					{
 						if ($out[$at-2]=='1') $ret->attach($token1);
 						elseif ($out[$at-2]=='2') $ret->attach($token2);
-						elseif (($pluralised) && (substr($out[$at-2],0,2)=='1|'))
+						elseif (($plural_or_vowel_check) && (substr($out[$at-2],0,2)=='1|'))
 						{
 							$exploded=explode('|',$out[$at-2]);
-							$ret->attach(($token1->evaluate()=='1')?$exploded[1]:$exploded[2]);
+							$_token=$token1->evaluate();
+							$ret->attach((in_array(is_numeric($_token)?$_token:strtolower(substr($_token,0,1)),$non_plural_non_vowel))?$exploded[1]:$exploded[2]);
 						}
-						elseif (($pluralised) && (substr($out[$at-2],0,2)=='2|'))
+						elseif (($plural_or_vowel_check) && (substr($out[$at-2],0,2)=='2|'))
 						{
 							$exploded=explode('|',$out[$at-2]);
-							$ret->attach(($token2->evaluate()=='1')?$exploded[1]:$exploded[2]);
+							$_token=$token2->evaluate();
+							$ret->attach((in_array(is_numeric($_token)?$_token:strtolower(substr($_token,0,1)),$non_plural_non_vowel))?$exploded[1]:$exploded[2]);
 						}
 					}
 					$ret->attach($bit[0]);
@@ -218,7 +221,7 @@ if (!function_exists('_do_lang'))
 			} elseif ($token1!==NULL)
 			{
 				$out=str_replace('{1}',$token1,$out);
-				if ($pluralised) $out=preg_replace('#\{1\|(.*)\|(.*)\}#U',($token1=='1')?'\\1':'\\2',$out);
+				if ($plural_or_vowel_check) $out=preg_replace('#\{1\|(.*)\|(.*)\}#U',(in_array(is_numeric($token1)?$token1:strtolower(substr($token1,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
 				if (($XSS_DETECT) && (ocp_is_escaped($token1))) ocp_mark_as_escaped($out);
 			}
 
@@ -226,7 +229,7 @@ if (!function_exists('_do_lang'))
 			{
 				if ($XSS_DETECT) $escaped=ocp_is_escaped($out);
 				$out=str_replace('{2}',$token2,$out);
-				if ($pluralised) $out=preg_replace('#\{2\|(.*)\|(.*)\}#U',($token2=='1')?'\\1':'\\2',$out);
+				if ($plural_or_vowel_check) $out=preg_replace('#\{2\|(.*)\|(.*)\}#U',(in_array(is_numeric($token2)?$token2:strtolower(substr($token2,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
 				if (($XSS_DETECT) && (ocp_is_escaped($token2)) && ($escaped)) ocp_mark_as_escaped($out);
 
 				if ($token3!==NULL)
@@ -237,7 +240,7 @@ if (!function_exists('_do_lang'))
 					{
 						if ($XSS_DETECT) $escaped=ocp_is_escaped($out);
 						$out=str_replace('{'.strval($i).'}',$token,$out);
-						if ($pluralised) $out=preg_replace('#\{'.strval($i).'\|(.*)\|(.*)\}#U',($token=='1')?'\\1':'\\2',$out);
+						if ($plural_or_vowel_check) $out=preg_replace('#\{'.strval($i).'\|(.*)\|(.*)\}#U',(in_array(is_numeric($token)?$token:strtolower(substr($token,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
 						if (($XSS_DETECT) && (ocp_is_escaped($token)) && ($escaped)) ocp_mark_as_escaped($out);
 						$i++;
 					}

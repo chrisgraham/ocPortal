@@ -1567,15 +1567,25 @@ class Module_calendar
 
 		$seconds_before=intval(floatval(post_param('hours_before'))*3600.0);
 
+		$id=get_param_integer('id'); // The event ID
+		$events=$GLOBALS['SITE_DB']->query_select('calendar_events',array('*'),array('id'=>get_param_integer('id')),'',1);
+		$event=$events[0];
+
 		$rem_id=$GLOBALS['SITE_DB']->query_insert('calendar_reminders',array(
-			'e_id'=>get_param_integer('id'), // id being the event ID
+			'e_id'=>$id,
 			'n_member_id'=>get_member(),
 			'n_seconds_before'=>$seconds_before
 		),true);
 
+		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($event['e_type']))))
+		{
+			$from=cal_utctime_to_usertime(mktime(is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']),$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			$to=is_null($event['e_end_year'])?mixed():cal_utctime_to_usertime(mktime(is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'],$event['e_do_timezone_conv']==1);
+
+			syndicate_described_activity('calendar:ACTIVITY_SUBSCRIBED_EVENT',get_translated_text($event['e_title']),date_range($from,$to,!is_null($event['e_start_hour'])),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
+		}
+
 		// Add next reminder to job system
-		$events=$GLOBALS['SITE_DB']->query_select('calendar_events',array('*'),array('id'=>get_param_integer('id')),'',1);
-		$event=$events[0];
 		$recurrences=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?0:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],$event['e_recurrence'],min(1,$event['e_recurrences']));
 		if (array_key_exists(0,$recurrences))
 		{

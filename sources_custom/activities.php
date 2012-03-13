@@ -88,7 +88,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 			foreach ($member_ids as $member_id)
 			{
 				if ($whereville!='') $whereville.=' AND ';
-				$_whereville='a_member_id='.strval($member_id);
+				$_whereville='(a_member_id='.strval($member_id).' OR a_also_involving='.strval($member_id).')';
 
 				// If the chat addon is installed then there may be 'friends-only'
 				// posts, which we may need to filter out. Otherwise we don't need
@@ -103,7 +103,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 						else
 							$friends_check_where='(member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).')';
 
-						$view_private=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT member_likes FROM chat_buddies WHERE '.$friends_check_where);
+						$view_private=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT member_likes FROM '.get_table_prefix().'chat_buddies WHERE '.$friends_check_where);
 					}
 
 					if (is_null($view_private)) //If not friended by this person, the view is filtered.
@@ -301,15 +301,18 @@ function render_activity($row)
 	}
 
 	// Render primary language string
+	$extra_lang_string_params=array(
+		$label[3],
+		escape_html($link[1]->evaluate()),
+		escape_html($link[2]->evaluate()),
+		escape_html($link[3]->evaluate())
+	);
+	if (!is_null($row['a_also_involving']))
+		$extra_lang_string_params[]=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['a_also_involving'],true);
 	$message->attach(do_lang_tempcode($row['a_language_string_code'],
 		$label[1],
 		$label[2],
-		array(
-			$label[3],
-			escape_html($link[1]->evaluate()),
-			escape_html($link[2]->evaluate()),
-			escape_html($link[3]->evaluate())
-		)
+		$extra_lang_string_params
 	));
 
 	// Lang string may not use all params, so add extras on if were unused

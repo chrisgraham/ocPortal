@@ -339,8 +339,8 @@ class OCP_Topic
 	 * @param  boolean		Whether the current user may reply to the topic (influences what buttons show)
 	 * @param  ?MEMBER		User to highlight the posts of (NULL: none)
 	 * @param  array			Review ratings rows
-	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  AUTO_LINK		ID of forum this topic in in
+	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  boolean		Whether to just render everything as flat (used when doing AJAX post loading)
 	 * @return array			Tuple: Rendered topic, serialized options to render more posts, secure hash of serialized options to prevent tampering
 	 */

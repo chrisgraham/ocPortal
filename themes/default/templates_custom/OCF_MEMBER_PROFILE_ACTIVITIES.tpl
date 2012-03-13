@@ -1,10 +1,10 @@
 {+START,IF,{$EQ,{MEMBER_ID},{$USER}}}
-	{$BLOCK,block=main_activities_state,member={MEMBER_ID},mode=all,param=}
+	{$BLOCK,block=main_activities_state,member={MEMBER_ID},mode=some_members,param=}
 
 	<hr class="spaced_rule" />
 {+END}
 
-{$BLOCK,block=main_activities,member={MEMBER_ID},mode=all,param=}
+{$BLOCK,block=main_activities,member={MEMBER_ID},mode=some_members,param=}
 
 {+START,IF_NON_EMPTY,{SYNDICATIONS}}
 	<hr class="spaced_rule" />
