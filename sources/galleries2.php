@@ -476,6 +476,7 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	decache('main_image_fader');
 
 	require_lang('galleries');
+	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'images',strval($id),$self_url,do_lang('VIEW_IMAGE','','','',get_site_default_lang()),get_value('comment_forum__images'));
 }
 
@@ -748,6 +749,7 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	decache('main_gallery_embed');
 
 	require_lang('galleries');
+	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'videos',strval($id),$self_url,do_lang('VIEW_VIDEO','','','',get_site_default_lang()),get_value('comment_forum__videos'));
 }
 
@@ -1052,6 +1054,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	decache('main_root_galleries');
 	decache('side_root_galleries');
 
+	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'galleries',$name,build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),$fullname,get_value('comment_forum__galleries'));
 }
 

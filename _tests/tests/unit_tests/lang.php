@@ -70,7 +70,7 @@ class lang_test_set extends ocp_test_case
 				if($file!='upgrade.ini' && $key!='NO_PHP_IN_TEMPLATES' && $key!='WHAT_TO_EXPECT' && $key!='DESCRIPTION_INCLUDE_OCP_ADVERT' && $key!='INCLUDE_OCP_ADVERT' && $key!='UNINSTALL_WARNING' && $key!='OCP_CHAT_EXTRA' && (strpos($key,'SETUP_WIZARD')===false) && $file!='lang.ini' && $file!='recommend.ini' && $file!='version.ini' && $file!='tips.ini' && $file!='debrand.ini' && $file!='import.ini' && $file!='installer.ini' && $file!='occle.ini' && $file!='addons.ini' && $this->str_ipos($string,'ocPortal')!==false)
 					$this->assertTrue(false,'The word \'ocPortal\' was used in '.$file.'. This should probably be changed to \'the software\'.');
 
-				if(preg_match('#([^A-Za-z"]+)comcode([^A-Za-z"]+)#',$string)!=0) $this->assertTrue(false,'The term \'comcode\' was used in '.$file.'. This should be changed to \'Comcode\'.');
+				if(preg_match('#([^A-Za-z"\_]+)comcode([^A-Za-z"]+)#',$string)!=0) $this->assertTrue(false,'The term \'comcode\' was used in '.$file.'. This should be changed to \'Comcode\'.');
 				if(strpos($string,'seedy')!==false) $this->assertTrue(false,'The term \'seedy\' was used in '.$file.'. This should be changed to \'SEEDY\'.');
 				if(strpos($string,'admin centre')!==false) $this->assertTrue(false,'The phrase \'admin centre\' was used in '.$file.'. This should be changed to \'Admin Zone\'.');
 

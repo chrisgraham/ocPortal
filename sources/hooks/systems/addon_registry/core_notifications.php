@@ -86,7 +86,7 @@ class Hook_addon_registry_core_notifications
 			'themes/default/images/EN/pageitem/disable_notifications.png',
 			'themes/default/images/EN/pageitem/enable_notifications.png',
 			'sources/hooks/systems/profiles_tabs_edit/notifications.php',
-			'themes/default/css/notifications.css',
+			'notifications.css',
 			'JAVASCRIPT_NOTIFICATIONS.tpl',
 			'NOTIFICATIONS_MANAGE.tpl',
 			'NOTIFICATIONS_MANAGE_SCREEN.tpl',

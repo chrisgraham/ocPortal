@@ -8,7 +8,7 @@
 
 <div class="float_surrounder">
 	<div style="float: {!en_left};">
-		<form onsubmit="return false;" action="#" method="post" style="display: inline;">
+		<form title="{!MESSAGE}" onsubmit="return false;" action="#" method="post" style="display: inline;">
 			<div style="display: inline;">
 				<p style="display: none;"><label for="post">{!MESSAGE}</label></p>
 				<textarea class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,'{ROOM_ID*}','post'); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="42" rows="1"></textarea>
@@ -16,7 +16,7 @@
 		</form>
 	</div>
 	<div class="left">
-		<form action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
+		<form title="{SUBMIT_VALUE*}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
 			<input type="button" name="post_now" onclick="return chat_post(event,'{ROOM_ID*}','post');" value="{SUBMIT_VALUE*}" />
 		</form>
 		&nbsp;
@@ -30,7 +30,7 @@
 </div>
 
 <div style="display: {$JS_ON,none,block}" id="chat_comcode_panel">
-	<form action="{OPTIONS_URL*}" method="post" class="inline">
+	<form title="{!SOUND_EFFECTS}" action="{OPTIONS_URL*}" method="post" class="inline">
 		<div>
 			<label for="play_sound">{!SOUND_EFFECTS}</label> <input type="checkbox" id="play_sound" name="play_sound" checked="checked" />
 		</div>

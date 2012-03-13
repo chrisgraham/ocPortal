@@ -35,7 +35,7 @@ class template_test_set extends ocp_test_case
 		$this->assertTrue('test_template'==$GLOBALS['FORUM_DB']->query_value('f_post_templates','t_title ',array('id'=>$this->template_id)));
 	}
 
-	function testEditNewscategory()
+	function testEditPostTemplate()
 	{
 		// Test the forum edits
 		ocf_edit_post_template($this->template_id,'test_template2','test','+1',1);

@@ -21,7 +21,7 @@
 		{!LOGIN_TEXT,<a href="{JOIN_LINK*}"><strong>{!JOIN_HERE}</strong></a>}
 	{+END}
 
-	<form onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete">
+	<form title="{!_LOGIN}" onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete">
 		<div>
 			{PASSION}
 

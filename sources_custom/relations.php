@@ -186,10 +186,10 @@ function get_tables_by_addon()
 function get_table_descriptions()
 {
 	$table_descriptions=array(
-		'adminlogs'=>'Stores logs of actions performed on the website',
-		'attachment_refs'=>'Stores references of what content uses what attachments (it allows attachment permissions to work, as it tells ocPortal what \'owner\' content to verify permissions against)',
+		'adminlogs'=>'stores logs of actions performed on the website',
+		'attachment_refs'=>'stores references of what content uses what attachments (it allows attachment permissions to work, as it tells ocPortal what \'owner\' content to verify permissions against)',
 		'attachments'=>'attachments referenced by Comcode (images, downloads, videos, etc)',
-		'autosave'=>'Stores unsaved form data in case of browser crashes, called by AJAX',
+		'autosave'=>'stores unsaved form data in case of browser crashes, called by AJAX',
 		'blocks'=>'a registry of all installed blocks',
 		'cache'=>'data cacheing, especially block cacheing',
 		'cache_on'=>'a registry of what cacheable things are cached by what parameters',
@@ -213,6 +213,7 @@ function get_table_descriptions()
 		'messages_to_render'=>'stores messages that have been queued up for display on a members browser (e.g. if they have just been redirected after completing something, so a status message will be queued for display after they\'ve been redirected)',
 		'modules'=>'registry of all installed modules',
 		'msp'=>'defines what members have what privileges (rarely used, no admin UI)',
+		'notifications_enabled'=>'what notifications members receive',
 		'rating'=>'stores ratings for all kinds of content (rating_for_type determines what kind of content, rating_for_id determines what ID of content within that type)',
 		'review_supplement'=>'stores reviews for all kinds of content',
 		'security_images'=>'stores CAPTCHA image expectations, so ocPortal can check what they entered against what they were asked to enter',
@@ -370,6 +371,25 @@ function get_relation_map()
 		'tickets.forum_id'=>'f_forums.id',
 		'poll_votes.v_poll_id'=>'poll.poll_id',
 		'reported_content.r_session_id'=>'sessions.id',
+		'bookable.calendar_type'=>'calendar_types.id',
+		'bookable_blacked_for.bookable_id'=>'bookable.id',
+		'bookable_blacked_for.blacked_id'=>'bookable_codes.code',
+		'bookable_codes.bookable_id'=>'bookable.id',
+		'bookable_supplement_for.bookable_id'=>'bookable.id',
+		'bookable_supplement_for.supplement_id'=>'bookable_supplement.id',
+		'booking.bookable_id'=>'bookable.id',
+		'booking.paid_trans_id'=>'transactions.id',
+		'booking_supplement.booking_id'=>'booking.id',
+		'booking_supplement.supplement_id'=>'bookable_supplement.id',
+		'catalogue_cat_treecache.cc_id'=>'catalogue_categories.id',
+		'catalogue_cat_treecache.cc_ancestor_id'=>'catalogue_categories.id',
+		'catalogue_childcountcache.cc_id'=>'catalogue_categories.id',
+		'catalogue_entry_linkage.catalogue_entry_id'=>'catalogue_entries.id',
+		'f_posts.p_parent_id'=>'f_posts.id',
+		'members_diseases.disease_id'=>'diseases.id',
+		'members_gifts.topic_id'=>'f_topics.id',
+		'members_gifts.gift_id'=>'gifts.id',
+		'temp_block_permissions.p_session_id'=>'sessions.id',
 	);
 	
 	return $relation_map;

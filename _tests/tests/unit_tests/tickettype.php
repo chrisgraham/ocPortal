@@ -35,7 +35,7 @@ class tickettype_test_set extends ocp_test_case
 		$this->assertTrue('platinum'==get_translated_text($this->tickettype_id));
 	}
 
-	function testEditNewscategory()
+	function testEditTicketType()
 	{
 		// Test the forum edits
 		$this->tickettype_id = $GLOBALS['SITE_DB']->query_value_null_ok('translate','id',array('text_original'=>"platinum"));

@@ -35,7 +35,7 @@ class Block_main_contact_catalogues
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('catalogue','to');
+		$info['parameters']=array('to','param');
 		return $info;
 	}
 	

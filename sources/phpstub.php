@@ -1486,9 +1486,10 @@ function imagefontwidth($font)
  *
  * @param  resource  The image handle.
  * @param  ?string	The filename (NULL: output to browser).
+ * @param  ?integer  Quality level (NULL: default).
  * @return boolean	Success status.
  */
-function imagejpeg($image,$filename=NULL)
+function imagejpeg($image,$filename=NULL,$quality=NULL)
 {
 	return true;
 }

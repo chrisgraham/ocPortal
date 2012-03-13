@@ -215,8 +215,8 @@ class Hook_addon_registry_chat
 	{
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS',array(
 			'MEMBER_ID'=>placeholder_id(),
-			'FRIENDS_A'=>placeholder_array(),
-			'FRIENDS_B'=>placeholder_array(),
+			'FRIENDS_A'=>array(),
+			'FRIENDS_B'=>array(array('USERNAME'=>lorem_phrase(),'URL'=>placeholder_url(),'USERGROUP'=>lorem_phrase())),
 			'ADD_FRIEND_URL'=>placeholder_url(),
 			'REMOVE_FRIEND_URL'=>placeholder_url(),
 			'ALL_BUDDIES_LINK'=>placeholder_url(),

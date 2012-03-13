@@ -173,6 +173,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 		if (is_numeric($category)) // Also merge in people monitoring forum
 		{
 			$forum_details=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id','t_pt_from','t_pt_to'),array('id'=>intval($category)));
+			if (!array_key_exists(0,$forum_details)) return array(array(),false); // Topic deleted already?
 			$forum_id=$forum_details[0]['t_forum_id'];
 
 			if (!is_null($forum_id))

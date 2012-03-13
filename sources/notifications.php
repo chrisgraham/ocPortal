@@ -855,6 +855,7 @@ class Hook_Notification
 		$clause_3='1=1';
 		if (!is_null($to_member_ids))
 		{
+			if (count($to_member_ids)==0) return array(array(),false);
 			$clause_3='(';
 			foreach ($to_member_ids as $member_id)
 			{

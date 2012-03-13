@@ -35,7 +35,7 @@ class welcome_emails_test_set extends ocp_test_case
 		$this->assertTrue('test_mail'==$GLOBALS['SITE_DB']->query_value('f_welcome_emails','w_name ',array('id'=>$this->email_id)));
 	}
 
-	function testEditNewscategory()
+	function testEditWelcomeEmail()
 	{
 		// Test the forum edits
 		ocf_edit_welcome_email($this->email_id,"test_mail1","test_subject1","test content1",1262671781,0);

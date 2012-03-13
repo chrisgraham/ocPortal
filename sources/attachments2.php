@@ -238,7 +238,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 							}
 
 							$description=do_lang('EXTRACTED_FILE');
-							if (count($path_parts)>1)
+							if (strpos($entry['path'],'/')!==false)
 							{
 								$description=do_lang('EXTRACTED_FILE_PATH',dirname($entry['path']));
 							}

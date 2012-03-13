@@ -1,7 +1,7 @@
 <div class="standardbox_classic"{$?,{$VALUE_OPTION,html5}, role="marquee"}>
 	{MESSAGES}
 
-	<form target="_self" action="{URL*}&amp;posted=1" method="post">
+	<form target="_self" action="{URL*}&amp;posted=1" method="post" title="{!SHOUTBOX}">
 		<div class="constrain_field">
 			<p class="accessibility_hidden"><label for="shoutbox_message">{!MESSAGE}</label></p>
 			<input value="" type="text" onfocus="if (this.value=='{!MESSAGE;}') this.value='';" id="shoutbox_message" name="shoutbox_message" alt="{!MESSAGE}" class="wide_field" />

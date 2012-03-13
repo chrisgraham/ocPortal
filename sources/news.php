@@ -366,6 +366,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 		}
 	}
 
+	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'news',strval($id),$self_url,$title,get_value('comment_forum__news'));
 }
 

@@ -35,7 +35,7 @@ class Block_main_countdown
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','precision');
+		$info['parameters']=array('param','precision','tailing');
 		return $info;
 	}
 	

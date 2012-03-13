@@ -809,6 +809,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 	decache('main_download_category');
 	decache('main_download_tease');
 
+	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'downloads',strval($id),$self_url,$name,get_value('comment_forum__downloads'));
 }
 

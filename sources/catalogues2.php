@@ -911,6 +911,7 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 		}
 	}
 
+	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'catalogues',strval($id),$self_url,$title,get_value('comment_forum__catalogues__'.$catalogue_name));
 }
 

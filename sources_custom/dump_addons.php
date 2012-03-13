@@ -25,25 +25,22 @@ function get_file_list_of_addons()
 	$text = file(get_file_base().'/data_custom/addon_files.txt',FILE_IGNORE_NEW_LINES);
 	// echo "<pre>";print_r($text);exit();
 	$key = '';
-	foreach($text as $i=>$val)
+	foreach ($text as $i=>$val)
 	{
-		if (strpos($val,'-') !== 0 && $val != '')
+		if (substr($val,0,3) == ' - ')
 		{
-			if (strpos($val,'#') !== false)
+			$path = substr($val,3);   // Remove ' - ' in every path
+			$files[] = $path;
+		}
+		elseif (@$text[$i+1][0]=='-') // New block of files
+		{
+			if (count($files)!=0)
 			{
-				$path = substr($val,4);   // Remove '# # ' in every path
-				$files[] = $path;
+				$file_list[$key] = $files;
+				$files = array();
 			}
-			elseif (@$text[$i+1][0]=='-') // New block of files
-			{
-				if (count($files)!=0)
-				{
-					$file_list[$key] = $files;
-					$files = array();
-				}
-				$key =strtolower($val);
-				$key = preg_replace('/[\s_]/','_',$key);
-			}
+			$key =strtolower($val);
+			$key = preg_replace('/[\s_]/','_',$key);
 		}
 	}
 	if (count($files)!=0)

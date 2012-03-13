@@ -34,7 +34,7 @@ class news_test_set extends ocp_test_case
 		$this->assertTrue('Today'==get_translated_text($GLOBALS['SITE_DB']->query_value('news','title ',array('id'=>$this->news_id))));
 	}
 
-	function testEditNewscategory()
+	function testEditNews()
 	{
 		// Test the forum edits
 		edit_news($id=$this->news_id,$title="Politics",$news = "teheyehehj ",$author="rolly",$validated=1,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes="yedd",$news_article="test article 22222222",$main_news_category=5,$news_category=NULL,$meta_keywords="",$meta_description="",$image="");

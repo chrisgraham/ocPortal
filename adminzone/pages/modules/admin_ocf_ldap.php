@@ -231,9 +231,6 @@ class Module_admin_ocf_ldap
 			if (post_param_integer('delete_member_'.strval($id),0)==1)
 			{
 				ocf_delete_member($id);
-			} else
-			{
-				ocf_update_member_tracking_group_change($id);
 			}
 		}
 

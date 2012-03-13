@@ -225,7 +225,7 @@ function init__validation2()
 	$enforce_font_list='((([A-Za-z]+)|("[A-Za-z ]+")|(\'[A-Za-z ]+\')),\s*)*'.$_enforce_font_list;
 	$enforce_functional_url='(url\(\'.+\'\)|url\(".+"\)|url\([^\(\);]+\))';
 	$enforce_functional_url_or_none='('.$enforce_functional_url.'|none)';
-	$enforce_border_style='(none|dotted|dashed|solid|double|groove|ridge|inset|outset)';
+	$enforce_border_style='(none|dotted|dashed|solid|double|groove|ridge|inset|outset|transparent)'; // 'transparent' not supported in IE6
 	$enforce_background_repeat='(repeat|repeat-x|repeat-y|no-repeat)';
 	$enforce_attachment='(scroll|fixed)';
 	$_enforce_background_position='(('.$enforce_length.'|top|center|bottom)|('.$enforce_length.'|left|center|right))';
@@ -297,7 +297,7 @@ function init__validation2()
 		'letter-spacing'=>$enforce_normal_or_length,
 		'line-height'=>$enforce_normal_or_length,
 		'list-style'=>'(('.$enforce_list_style_type.'|'.$enforce_list_style_position.'|'.$enforce_list_style_image.')( |$))+',
-		'list-style-image'=>$enforce_functional_url,
+		'list-style-image'=>'('.$enforce_functional_url.'|none)',
 		'list-style-position'=>$enforce_list_style_position,
 		'list-style-type'=>$enforce_list_style_type,
 		'margin'=>$enforce_potential_4d_length_auto,
@@ -335,6 +335,13 @@ function init__validation2()
 		'box-shadow'=>'('.$enforce_length.' '.$enforce_length.' '.$enforce_length.' '.$enforce_css_color.')', // CSS3
 		'text-shadow'=>'('.$enforce_length.' '.$enforce_length.' '.$enforce_length.' '.$enforce_css_color.')', // CSS3
 		'border-radius'=>'('.$enforce_length.' '.$enforce_length.' '.$enforce_length.' '.$enforce_length.')', // CSS3
+		'border-top-left-radius'=>$enforce_length, // CSS3
+		'border-top-right-radius'=>$enforce_length, // CSS3
+		'border-bottom-left-radius'=>$enforce_length, // CSS3
+		'border-bottom-right-radius'=>$enforce_length, // CSS3
+		'box-sizing'=>'(border-box|content-box|padding-box)', // CSS3
+		'transition-property'=>'\w+', // CSS3
+		'transition-duration'=>'\d[\d\.]*s', // CSS3
 
 		/* Purposely left out due to very poor browser support (not just IE not having it) */
 		/*
@@ -805,7 +812,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 	global $XML_CONSTRAIN,$TAG_STACK,$ATT_STACK,$TABS_SEEN,$KEYS_SEEN,$IDS_SO_FAR,$ANCESTER_BLOCK,$ANCESTER_INLINE,$EXPECTING_TAG,$OUT,$POS,$LAST_A_TAG,$TAG_RANGES;
 
 	// Dodgy mouse events.
-	if ((isset($attributes['onclick'])) && (!isset($attributes['onkeypress'])) && (!in_array($tag,array('a','input','textarea','select','button'))))
+	if ((isset($attributes['onclick'])) && (!isset($attributes['onkeypress'])) && (!isset($attributes['onkeydown'])) && (!isset($attributes['onkeyup'])) && (!in_array($tag,array('a','input','textarea','select','button'))))
 		$errors[]=array('WCAG_MOUSE_EVENT_UNMATCHED');
 	if ($GLOBALS['VALIDATION_MANUAL'])
 	{
@@ -1086,7 +1093,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 				if ((!isset($attributes['abbr'])) && (get_value('html5')!=='1'))
 				{
 					$content=trim(substr($OUT,$POS,strpos($OUT,'</th>',$POS)-$POS)); // This isn't perfect - In theory a th could contain a table itself: but it's not very semantic if it does
-					if (strlen(@html_entity_decode(strip_tags($content),ENT_QUOTES,get_charset()))>40) $errors[]=array('WCAG_TH_TOO_LONG');
+					if (strlen(trim(@html_entity_decode(strip_tags($content),ENT_QUOTES,get_charset())))>40) $errors[]=array('WCAG_TH_TOO_LONG');
 				}
 				break;
 

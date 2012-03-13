@@ -35,7 +35,7 @@ class chatroom_test_set extends ocp_test_case
 		$this->assertTrue('test_chat_room'==$GLOBALS['SITE_DB']->query_value('chat_rooms','room_name ',array('id'=>$this->chatroom_id)));
 	}
 
-	function testEditNewscategory()
+	function testEditChatroom()
 	{
 		// Test the forum edits
 		edit_chatroom($this->chatroom_id,'test message 1','test_chat_room1',4,'','2,3,4,5,6,7,8,9,10','','','EN');

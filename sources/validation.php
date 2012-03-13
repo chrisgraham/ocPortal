@@ -1392,7 +1392,7 @@ function _get_next_tag()
 
 						$FOUND_DOCTYPE=true;
 						$valid_doctypes=array(DOCTYPE_HTML,DOCTYPE_HTML_STRICT,DOCTYPE_XHTML,DOCTYPE_XHTML_STRICT,DOCTYPE_XHTML_NEW);
-						if (get_value('html5')==='1') $valid_doctypes[]=DOCTYPE_XHTML5;
+						/*if (get_value('html5')==='1') */$valid_doctypes[]=DOCTYPE_XHTML5;
 						$doc_type=preg_replace('#//EN"\s+"#','//EN" "',$doc_type);
 						if (!in_array('<'.$doc_type,$valid_doctypes))
 						{

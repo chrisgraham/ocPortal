@@ -91,7 +91,7 @@ class SimpleExpectation {
      *    @access public
      *    @static
      */
-    function isExpectation($expectation) {
+    static function isExpectation($expectation) {
         return is_object($expectation) &&
                 SimpleTestCompatibility::isA($expectation, 'SimpleExpectation');
     }
@@ -467,7 +467,7 @@ class ReferenceExpectation extends SimpleExpectation {
      *    @return boolean              True if correct.
      *    @access public
      */
-    function test(&$compare) {
+    function test($compare) {
         return SimpleTestCompatibility::isReference($this->_value, $compare);
     }
 

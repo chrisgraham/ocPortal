@@ -142,6 +142,7 @@ class Hook_addon_registry_points
 				'POINTS_SEARCH_SCREEN.tpl'=>'points_search_screen',
 				'POINTS_CHARGE.tpl'=>'points_screen',
 				'POINTS_GIVE.tpl'=>'points_screen',
+				'POINTS_PROFILE.tpl'=>'points_screen',
 				'POINTS_SCREEN.tpl'=>'points_screen',
 				'POINTS_TRANSACTIONS_WRAP.tpl'=>'points_screen',
 				);

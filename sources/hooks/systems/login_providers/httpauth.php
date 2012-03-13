@@ -94,7 +94,7 @@ class Hook_login_provider_httpauth
 					force_httpauth();
 				}
 
-				if ((get_value('force_admin_auth')==='1') && ($GLOBALS['FORUM_DRIVER']->is_super_admin($GLOBALS['FORUM_DRIVER']->get_member_from_username($_SERVER['PHP_AUTH_USER']))))
+				if ((function_exists('apache_request_headers')) && (get_value('force_admin_auth')==='1') && ($GLOBALS['FORUM_DRIVER']->is_super_admin($GLOBALS['FORUM_DRIVER']->get_member_from_username($_SERVER['PHP_AUTH_USER']))))
 				{
 					$headers=apache_request_headers();
 					if (!isset($headers['Authorization']))

@@ -12,6 +12,12 @@
 
 */
 
+/**
+ * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright	ocProducts Ltd
+ * @package		core_feedback_features
+ */
+
 /*
 
 This is an ocPortal sub-system (not specifically OCF!) for both threaded and non-threaded topic rendering.
@@ -596,7 +602,7 @@ class OCP_Topic
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  array			Review ratings rows
 	 * @param  AUTO_LINK		ID of forum this topic in in
-	 * @return array			Rendered tree structure
+	 * @return tempcode		Rendered tree structure
 	 */
 	function _render_post_tree($tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id)
 	{

@@ -268,6 +268,8 @@ class Hook_addon_registry_core_ocf
 			'site/pages/modules/groups.php',
 			'site/pages/modules/members.php',
 			'site/pages/modules/onlinemembers.php',
+			'sources/hooks/systems/profiles_tabs/.htaccess',
+			'sources/hooks/systems/profiles_tabs_edit/.htaccess',
 			'sources/hooks/modules/admin_occle_fs/members.php',
 			'sources/hooks/systems/awards/member.php',
 			'sources/hooks/systems/awards/group.php',

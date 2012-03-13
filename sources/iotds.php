@@ -81,6 +81,7 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 
 	decache('main_iotd');
 
+	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'videos',strval($id),build_url(array('page'=>'iotds','type'=>'view','id'=>$id),get_module_zone('iotds'),NULL,false,false,true),$title,get_value('comment_forum__iotds'));
 }
 

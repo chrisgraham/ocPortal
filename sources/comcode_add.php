@@ -417,8 +417,8 @@ function comcode_helper_script()
 						if (($tag=='page') && ($param=='param') && (substr_count($default,':')==1))
 						{
 							$fields->attach(form_input_page_link($parameter_name,protect_from_escaping($descriptiont),$param,$default,true,NULL));
-						} else
-						if (($tag=='attachment') && ($param=='thumb_url') && (addon_installed('filedump')))
+						}
+						elseif (($tag=='attachment') && ($param=='thumb_url') && (addon_installed('filedump')))
 						{
 							$field=form_input_tree_list(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_thumb_url'),'thumb_url','','choose_filedump_file',array('only_images'=>true),false,$default,false);
 							$fields_advanced->attach($field);

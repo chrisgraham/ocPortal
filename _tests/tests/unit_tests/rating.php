@@ -41,15 +41,6 @@ class rating_test_set extends ocp_test_case
 		$this->assertTrue(4==$rating);
 	}
 
-	function testEditNewscategory()
-	{
-		// Test the forum edits
-		edit_calendar_event($this->event_id,8,'',NULL,0,'test_event1','',3,1,2010,1,10,10,15,2010,1,19,0,0,NULL,1,'','',1,1,1,1,'');
-		// Test the forum was actually created
-		$this->assertTrue('test_event1'==get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_events','e_title ',array('id'=>$this->event_id))));
-	}
-	
-	
 	function tearDown()
 	{
 		delete_calendar_event($this->event_id);

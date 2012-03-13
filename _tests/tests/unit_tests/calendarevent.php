@@ -34,10 +34,10 @@ class calendarevent_test_set extends ocp_test_case
 		$this->assertTrue('test_event'==get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_events','e_title ',array('id'=>$this->event_id))));
 	}
 
-	function testEditNewscategory()
+	function testEditCalendarEvent()
 	{
 		// Test the forum edits
-		edit_calendar_event($this->event_id,8,'2',NULL,0,'test_event1','',3,1,2010,1,10,10,15,2010,NULL,1,1,19,NULL,1,'','',1,1,1,1,'');
+		edit_calendar_event($this->event_id,8,'2',NULL,0,'test_event1','',3,1,2010,1,10,10,15,2010,NULL,1,1,19,get_users_timezone(),1,'','',1,1,1,1,'');
 		// Test the forum was actually created
 		$this->assertTrue('test_event1'==get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_events','e_title ',array('id'=>$this->event_id))));
 	}

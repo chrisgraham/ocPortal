@@ -39,12 +39,6 @@ class rss_test_set extends ocp_test_case
 		$this->assertTrue('Atom-Powered Robots Run Amok'==$atomtitle);
 	}
 
-	function testEditNewscategory()
-	{
-		// Test the forum edits
-	}
-	
-	
 	function tearDown()
 	{
 		parent::tearDown();

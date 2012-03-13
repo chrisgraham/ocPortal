@@ -404,9 +404,9 @@ class Module_cms_comcode_pages
 			$where_map=array('language'=>$lang);
 			if (!has_specific_permission(get_member(),'edit_highrange_content'))
 				$where_map['submitter']=get_member();
-			$table='comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
-			$page_rows=$GLOBALS['SITE_DB']->query_select($table,array('c.*','cc_page_title'),$where_map,$group_by.' ORDER BY '.$orderer,$max,$start);
-			$max_rows=$GLOBALS['SITE_DB']->query_value($table,'COUNT(DISTINCT c.the_zone,c.the_page)',$where_map);
+			$ttable='comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
+			$page_rows=$GLOBALS['SITE_DB']->query_select($ttable,array('c.*','cc_page_title'),$where_map,$group_by.' ORDER BY '.$orderer,$max,$start);
+			$max_rows=$GLOBALS['SITE_DB']->query_value($ttable,'COUNT(DISTINCT c.the_zone,c.the_page)',$where_map);
 
 			$filesarray=array();
 			foreach ($page_rows as $row)
