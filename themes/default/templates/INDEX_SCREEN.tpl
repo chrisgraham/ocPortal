@@ -2,7 +2,7 @@
 
 {+START,IF_NON_EMPTY,{PRE}}
 	<div{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
-		{+START,IF,{$NOT,{$IN_STR,{PRE},<p>,<div>,<ul>,<ol>,<h2>,<h3>}}}<p>{+END}{PRE}{+START,IF,{$NOT,{$IN_STR,{PRE},<p>,<div>,<ul>,<ol>,<h2>,<h3>}}}</p>{+END}
+		{+START,IF,{$NOT,{$IN_STR,{PRE},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}<p>{+END}{PRE}{+START,IF,{$NOT,{$IN_STR,{PRE},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}</p>{+END}
 	</div>
 {+END}
 
@@ -18,6 +18,6 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{POST}}
-	{+START,IF,{$NOT,{$IN_STR,{POST},<p>,<div>,<ul>,<ol>,<h2>,<h3>}}}<p>{+END}{POST}{+START,IF,{$NOT,{$IN_STR,{POST},<p>,<div>,<ul>,<ol>,<h2>,<h3>}}}</p>{+END}
+	{+START,IF,{$NOT,{$IN_STR,{POST},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}<p>{+END}{POST}{+START,IF,{$NOT,{$IN_STR,{POST},<p>,<div>,<ul>,<ol>,<h2>,<h3>,<p ,<div ,<ul ,<ol ,<h2 ,<h3 }}}</p>{+END}
 {+END}
 

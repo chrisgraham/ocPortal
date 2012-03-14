@@ -4,10 +4,10 @@
 	{!DECIDE_PER_CATEGORY_NOTIFICATIONS}
 </p>
 
-<form method="post" action="{ACTION_URL*}">
+<form title="{!NOTIFICATIONS}" method="post" action="{ACTION_URL*}">
 	<div>
 		{+START,IF_NON_EMPTY,{$TRIM,{TREE}}}
-			<div class="wide_table"><table class="wide_table solidborder notifications_form">
+			<div class="wide_table"><table class="wide_table solidborder notifications_form" summary="{!COLUMNED_TABLE}">
 				<colgroup>
 					<col style="width: 100%" />
 					{+START,LOOP,NOTIFICATION_TYPES_TITLES}
@@ -16,12 +16,14 @@
 				</colgroup>
 
 				<thead>
-					<th></th>
-					{+START,LOOP,NOTIFICATION_TYPES_TITLES}
-						<th>
-							<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
-						</th>
-					{+END}
+					<tr>
+						<th></th>
+						{+START,LOOP,NOTIFICATION_TYPES_TITLES}
+							<th>
+								<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
+							</th>
+						{+END}
+					</tr>
 				</thead>
 
 				<tbody>

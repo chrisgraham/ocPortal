@@ -144,6 +144,7 @@ class Hook_addon_registry_tester
 	      ),NULL,'',true),
 	   );
 	}
+
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
@@ -178,7 +179,7 @@ class Hook_addon_registry_tester
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$a_test = do_lorem_template('TESTER_TEST_SET',array('TESTS'=>placeholder_array(), 'T_TEST'=>lorem_word()));
-			$tests = do_lorem_template('TESTER_GO_TEST',array('BUG_REPORT_URL'=>placeholder_url(),'TEST'=>$a_test,'ID'=>"$k",'VALUE'=>"$k"));
+			$tests = do_lorem_template('TESTER_GO_TEST',array('BUG_REPORT_URL'=>placeholder_url(),'TEST'=>$a_test,'ID'=>strval($k),'VALUE'=>strval($k)));
 
 			$sections->attach(do_lorem_template('TESTER_GO_SECTION',array('ID'=>placeholder_id(),'EDIT_TEST_SECTION_URL'=>placeholder_url(),'NOTES'=>lorem_phrase(),'SECTION'=>lorem_phrase(),'TESTS'=>$tests)));
 		}
@@ -196,6 +197,7 @@ class Hook_addon_registry_tester
 		   ),NULL,'',true),
 	   );
 	}
+
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
@@ -228,7 +230,7 @@ class Hook_addon_registry_tester
 		$tests = new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$tests->attach(do_lorem_template('TESTER_TEST_GROUP',array('ID'=>'edit_'."$k",'FIELDS'=>placeholder_fields())));
+			$tests->attach(do_lorem_template('TESTER_TEST_GROUP',array('ID'=>'edit_'.strval($k),'FIELDS'=>placeholder_fields())));
 		}
 
 		$add_template = do_lorem_template('TESTER_TEST_GROUP_NEW',array('ID'=>lorem_word(),'FIELDS'=>placeholder_fields()));

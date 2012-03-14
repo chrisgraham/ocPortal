@@ -87,6 +87,8 @@ class template_previews_test_set extends ocp_test_case
 
 			if (is_file(get_file_base().'/_tests/screens_tested/'.$function)) continue; // To make easier to debug through
 		
+			if (function_exists('set_time_limit')) @set_time_limit(0);
+
 			$DONE_HEADER=false;
 			$RECORDED_TEMPLATES_USED=array();
 			$out=render_screen_preview($template,$hook,$function);
@@ -138,7 +140,7 @@ class template_previews_test_set extends ocp_test_case
 	
 	function testRepeatConsistency()
 	{
-		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$HTTP_STATUS_CODE,$PREPROCESSABLE_SYMBOLS,$SHIFT_VARIABLES,$CYCLES,$TEMPCODE_SETGET,$LOADED_TPL_CACHE;
+		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$HTTP_STATUS_CODE,$PREPROCESSABLE_SYMBOLS,$SHIFT_VARIABLES,$CYCLES,$TEMPCODE_SETGET,$LOADED_TPL_CACHE,$META_DATA;
 		$NON_CACHEABLE_SYMBOLS=array('CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1);
 
 		global $HAS_KEEP_IN_URL;
@@ -153,7 +155,10 @@ class template_previews_test_set extends ocp_test_case
 			
 			if (is_file(get_file_base().'/_tests/screens_tested/consistency__'.$function)) continue; // To make easier to debug through
 
+			if (function_exists('set_time_limit')) @set_time_limit(0);
+
 			init__lorem();
+			$META_DATA=array();
 			$SHIFT_VARIABLES=array();
 			$CYCLES=array();
 			$TEMPCODE_SETGET=array();
@@ -161,6 +166,7 @@ class template_previews_test_set extends ocp_test_case
 			$out1=render_screen_preview($template,$hook,$function);
 			$_out1=$out1->evaluate();
 			init__lorem();
+			$META_DATA=array();
 			$SHIFT_VARIABLES=array();
 			$CYCLES=array();
 			$TEMPCODE_SETGET=array();
@@ -212,12 +218,14 @@ class template_previews_test_set extends ocp_test_case
 			
 			if (is_file(get_file_base().'/_tests/screens_tested/nonemissing__'.$function)) continue; // To make easier to debug through
 
+			if (function_exists('set_time_limit')) @set_time_limit(0);
+
 			$ATTACHED_MESSAGES=new ocp_tempcode();
 			$ATTACHED_MESSAGES_RAW=array();
 			$out1=render_screen_preview($template,$hook,$function);
 
 			$put_out=(!$ATTACHED_MESSAGES->is_empty()) || (count($ATTACHED_MESSAGES_RAW)>0);
-			$this->assertFalse($put_out,'Messages put out by '.$function);
+			$this->assertFalse($put_out,'Messages put out by '.$function.'  ('.strip_tags($ATTACHED_MESSAGES->evaluate()).')');
 			
 			if (!$put_out)
 			{

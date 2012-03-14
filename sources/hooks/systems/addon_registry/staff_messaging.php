@@ -109,12 +109,12 @@ class Hook_addon_registry_staff_messaging
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__messaging_message_screen()
 	{
 		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
@@ -137,13 +137,14 @@ class Hook_addon_registry_staff_messaging
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_main_contact_us()
 	{
 		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
@@ -160,13 +161,14 @@ class Hook_addon_registry_staff_messaging
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_main_contact_simple()
 	{
 		require_lang('ocf');

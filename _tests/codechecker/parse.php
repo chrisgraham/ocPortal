@@ -1549,7 +1549,10 @@ function handle_comment($comment)
 	{
 		$OK_EXTRA_FUNCTIONS=substr($comment[1],17);
 	}
-	if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found',$GLOBALS['i']);
-	if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found',$GLOBALS['i']);
-	if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found',$GLOBALS['i']);
+	if (isset($GLOBALS['TODO']))
+	{
+		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found',$GLOBALS['i']);
+		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found',$GLOBALS['i']);
+		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found',$GLOBALS['i']);
+	}
 }

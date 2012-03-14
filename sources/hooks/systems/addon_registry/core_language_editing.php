@@ -115,12 +115,12 @@ class Hook_addon_registry_core_language_editing
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__translate_language_criticise_screen()
 	{
 		$file		=	new ocp_tempcode();
@@ -145,20 +145,20 @@ class Hook_addon_registry_core_language_editing
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__translate_screen_content_screen()
 	{
 		require_lang('lang');
 		$lines	=	new ocp_tempcode();
-		foreach(placeholder_array() as $key=>$value)
+		foreach (placeholder_array() as $key=>$value)
 		{
 			$actions=do_lorem_template('TRANSLATE_ACTION',array('LANG_FROM'=>fallback_lang(),'LANG_TO'=>fallback_lang(),'NAME'=>'trans_'.strval($key),'OLD'=>$value));
-			$lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT',array('ID'=>strval($key),'NAME'=>lorem_phrase(),'OLD'=>$value,'CURRENT'=>$value,'ACTIONS'=>$actions,'PRIORITY'=>lorem_word())));
+			$lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT',array('ID'=>strval($key),'NAME'=>'trans_'.strval($key),'OLD'=>$value,'CURRENT'=>$value,'ACTIONS'=>$actions,'PRIORITY'=>lorem_word())));
 		}
 
 		return array(
@@ -181,17 +181,17 @@ class Hook_addon_registry_core_language_editing
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__translate_screen()
 	{
 		require_lang('lang');
 		$lines='';
-		foreach(placeholder_array() as $value)
+		foreach (placeholder_array() as $value)
 		{
 			$temp=do_lorem_template('TRANSLATE_LINE',array('TRANSLATE_AUTO'=>$value,'DESCRIPTION'=>lorem_sentence(),'NAME'=>placeholder_random(),'OLD'=>str_replace('\n',chr(10),$value),'CURRENT'=>$value,'ACTIONS'=>new ocp_tempcode()));
 			$lines.=$temp->evaluate();

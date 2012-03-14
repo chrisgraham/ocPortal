@@ -4,7 +4,7 @@
 
 		<div class="ocf_information_bar float_surrounder">
 			<div class="ocf_guest_column ocf_guest_column_a">
-				<form onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete inline">
+				<form title="{!_LOGIN}" onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete inline">
 					<div>
 						<div class="accessibility_hidden"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
 						<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
@@ -28,7 +28,7 @@
 					{+START,IF,{$EQ,{$PAGE},forumview}}
 						{+START,IF,{$EQ,{$_GET,type},pt}}
 							<div class="ocf_search_box">
-								<form action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_own_pt,1}}" method="get">
+								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_own_pt,1}}" method="get">
 									{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_own_pt,1}}
 
 									<div>
@@ -39,7 +39,7 @@
 						{+END}
 						{+START,IF,{$NEQ,{$_GET,type},pt}}
 							<div class="ocf_search_box">
-								<form action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}" method="get">
+								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}" method="get">
 									{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}
 
 									<div>
@@ -51,7 +51,7 @@
 					{+END}
 					{+START,IF,{$EQ,{$PAGE},topicview}}
 						<div class="ocf_search_box">
-							<form action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}" method="get">
+							<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}" method="get">
 								{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}
 
 								<div>

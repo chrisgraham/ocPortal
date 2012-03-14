@@ -3,10 +3,10 @@
 {$SET,rand_id,{$RAND}}
 
 <div class="xhtml_validator_off">
-	<{$?,{$EQ,{$SUBSTR,{A_URL},-4},.mp3},audio,video} width="{WIDTH*}" height="{HEIGHT*}" id="flv_container_{$GET%,rand_id}" poster="{$REPLACE,.webm,.jpg,{$REPLACE,.mp4,.jpg,{$REPLACE,.flv,.jpg,{$GET*.,flv_url}}}}">
+	<{$?,{$EQ,{$SUBSTR,{URL},-4},.mp3},audio,video} width="{WIDTH*}" height="{HEIGHT*}" id="flv_container_{$GET%,rand_id}" poster="{$REPLACE,.webm,.jpg,{$REPLACE,.mp4,.jpg,{$REPLACE,.flv,.jpg,{$GET*.,flv_url}}}}">
 		<source src="{$GET*,flv_url}" />
 		{!VIDEO}
-	</{$?,{$EQ,{$SUBSTR,{A_URL},-4},.mp3},audio,video}>
+	</{$?,{$EQ,{$SUBSTR,{URL},-4},.mp3},audio,video}>
 </div>
 
 <script type="text/javascript">// <![CDATA[

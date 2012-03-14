@@ -12,6 +12,7 @@
 
 		{+START,IF_EMPTY,{OVERRIDES}}
 			<label for="access_{GROUP_ID*}">
+				<div class="accessibility_hidden"><label for="access_{GROUP_ID*}">{PINTERFACE_VIEW*} ({GROUP_NAME*})</label></div>
 				<input id="access_{GROUP_ID*}" name="_ignore" type="checkbox" checked="checked" disabled="disabled" />
 				{PINTERFACE_VIEW*}
 			</label>
@@ -20,7 +21,8 @@
 
 	{+START,LOOP,OVERRIDES}
 		<td class="dottedborder_barrier_b_nonrequired">
-			<input name="_ignore" type="checkbox" checked="checked" disabled="disabled" />
+			<div class="accessibility_hidden"><label for="access_{GROUP_ID*}_{_loop_key*}">{!NA}</label></div>
+			<input name="_ignore" type="checkbox" id="access_{GROUP_ID*}_{_loop_key*}" checked="checked" disabled="disabled" />
 		</td>
 	{+END}
 

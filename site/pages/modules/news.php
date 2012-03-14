@@ -425,7 +425,7 @@ class Module_news
 		}
 		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		if ((has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
+		if ((($blogs!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
 		{
 			$map=array('page'=>($blogs===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;
@@ -588,7 +588,7 @@ class Module_news
 		}
 		breadcrumb_set_parents(array($first_bc));
 
-		if ((has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
+		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
 		{
 			$map=array('page'=>($blog===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;
@@ -723,7 +723,7 @@ class Module_news
 			$GLOBALS['SITE_DB']->query_update('news',array('news_views'=>$myrow['news_views']),array('id'=>$id),'',1);
 		}
 
-		if ((has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$myrow['news_category']))))
+		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$myrow['news_category']))))
 		{
 			$map=array('page'=>($blog===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;

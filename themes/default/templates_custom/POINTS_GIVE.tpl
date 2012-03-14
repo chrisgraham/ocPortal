@@ -10,7 +10,7 @@
 		{+END}
 	</p>
 
-	<form method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}">
+	<form title="{!GIVE_POINTS}" method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}">
 		<div>
 			<label for="give_reason_pre">
 				Their role

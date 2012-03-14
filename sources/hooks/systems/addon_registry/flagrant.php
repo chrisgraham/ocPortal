@@ -120,7 +120,7 @@ class Hook_addon_registry_flagrant
                          				  );
 
 		$out = new ocp_tempcode();
-		foreach(placeholder_array() as $key=>$value)
+		foreach (placeholder_array() as $key=>$value)
 		{
 			$text = do_lorem_template('FLAGRANT_STORE_LIST_LINE',array('MESSAGE'=>$value,'STATUS'=>do_lang('NEW')));
 		   $out->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('SELECTED'=>false,'DISABLED'=>false,'CLASS'=>'','NAME'=>strval($key),'TEXT'=>$text->evaluate())));

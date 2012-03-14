@@ -190,12 +190,12 @@ class Hook_addon_registry_core_menus
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__menu_editor_screen()
 	{
 		$branch=do_lorem_template('MENU_EDITOR_BRANCH',array('CLICKABLE_SECTIONS'=>'true','I'=>placeholder_id(),'CHILD_BRANCH_TEMPLATE'=>'','CHILD_BRANCHES'=>''));
@@ -222,13 +222,14 @@ class Hook_addon_registry_core_menus
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__page_link_chooser()
 	{
 		require_javascript('javascript_tree_list');
@@ -241,18 +242,19 @@ class Hook_addon_registry_core_menus
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_stored_menu__tree()
 	{
 		$child = new ocp_tempcode();
 		$content = new ocp_tempcode();
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_tree',array(
 					'RANDOM'=>placeholder_random(),
@@ -279,7 +281,7 @@ class Hook_addon_registry_core_menus
 						)
 				));
 		}
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_tree',array(
 				'RANDOM'=>placeholder_random(),
@@ -326,18 +328,19 @@ class Hook_addon_registry_core_menus
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_stored_menu__dropdown()
 	{
 		$child = new ocp_tempcode();
 		$content = new ocp_tempcode();
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_dropdown',array(
 					'RANDOM'=>placeholder_random(),
@@ -364,9 +367,9 @@ class Hook_addon_registry_core_menus
 						)
 				));
 
-			$child->attach(do_lorem_template('MENU_SPACER_dropdown',array()));
+			$child->attach(do_lorem_template('MENU_SPACER_dropdown',array('TOP_LEVEL'=>false,)));
 		}
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_dropdown',array(
 				'RANDOM'=>placeholder_random(),
@@ -411,18 +414,19 @@ class Hook_addon_registry_core_menus
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_stored_menu__embossed()
 	{
 		$child = new ocp_tempcode();
 		$content = new ocp_tempcode();
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_embossed',array(
 					'RANDOM'=>placeholder_random(),
@@ -449,7 +453,7 @@ class Hook_addon_registry_core_menus
 						)
 				));
 		}
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_embossed',array(
 				'RANDOM'=>placeholder_random(),
@@ -496,18 +500,19 @@ class Hook_addon_registry_core_menus
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_stored_menu__popup()
 	{
 		$child = new ocp_tempcode();
 		$content = new ocp_tempcode();
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_popup',array(
 					'RANDOM'=>placeholder_random(),
@@ -534,7 +539,7 @@ class Hook_addon_registry_core_menus
 						)
 				));
 		}
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_popup',array(
 				'RANDOM'=>placeholder_random(),
@@ -581,18 +586,19 @@ class Hook_addon_registry_core_menus
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_stored_menu__select()
 	{
 		$child = new ocp_tempcode();
 		$content = new ocp_tempcode();
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_select',array(
 					'RANDOM'=>placeholder_random(),
@@ -619,7 +625,7 @@ class Hook_addon_registry_core_menus
 						)
 				));
 		}
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_select',array(
 				'RANDOM'=>placeholder_random(),
@@ -666,18 +672,19 @@ class Hook_addon_registry_core_menus
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_stored_menu__top()
 	{
 		$child = new ocp_tempcode();
 		$content = new ocp_tempcode();
-		foreach(placeholder_array() as $v)
+		foreach (placeholder_array() as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_top',array(
 					'RANDOM'=>placeholder_random(),
@@ -704,7 +711,7 @@ class Hook_addon_registry_core_menus
 						)
 				));
 		}
-		foreach(placeholder_array(3) as $k=>$v)
+		foreach (placeholder_array(3) as $k=>$v)
 		{
 			if($k == 1)
 				$content->attach(do_lorem_template('MENU_SPACER_top',array()));
@@ -752,18 +759,19 @@ class Hook_addon_registry_core_menus
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_stored_menu__zone()
 	{
 		$child = new ocp_tempcode();
 		$content = new ocp_tempcode();
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$child->attach(do_lorem_template('MENU_BRANCH_zone',array(
 					'RANDOM'=>placeholder_random(),
@@ -790,7 +798,7 @@ class Hook_addon_registry_core_menus
 						)
 				));
 		}
-		foreach(placeholder_array(3) as $v)
+		foreach (placeholder_array(3) as $v)
 		{
 			$content->attach(do_lorem_template('MENU_BRANCH_zone',array(
 				'RANDOM'=>placeholder_random(),

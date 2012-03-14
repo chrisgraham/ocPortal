@@ -246,7 +246,7 @@ function staff_checklist_time_ago_and_due($seconds_ago,$recur_hours=NULL)
 	if (is_null($recur_hours))
 	{
 		$seconds_to_go=$seconds_ago; // Actually, if only one parameter given, meaning is different
-		$seconds_ago=NULL;
+		$seconds_ago=mixed();
 		if (is_null($seconds_to_go))
 		{
 			return array(do_lang_tempcode('DUE_NOT'),1000000);
@@ -260,7 +260,6 @@ function staff_checklist_time_ago_and_due($seconds_ago,$recur_hours=NULL)
 		{
 			$seconds_to_go=$recur_hours*60*60-$seconds_ago;
 		}
-		unset($recur_hours); // Not needed now
 	}
 
 	if ($seconds_to_go>0)

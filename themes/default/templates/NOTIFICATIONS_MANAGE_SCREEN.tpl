@@ -1,6 +1,6 @@
 {TITLE}
 
-<form method="post" action="{ACTION_URL*}">
+<form title="{!NOTIFICATIONS}" method="post" action="{ACTION_URL*}">
 	<div>
 		{INTERFACE}
 

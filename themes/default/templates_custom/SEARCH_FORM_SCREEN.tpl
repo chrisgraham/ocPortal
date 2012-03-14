@@ -43,7 +43,7 @@
 			{+END}
 		{+END}
 
-		<form action="{$URL_FOR_GET_FORM*,{URL}}" method="get" class="main_search_form">
+		<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{URL}}" method="get" class="main_search_form">
 			{$HIDDENS_FOR_GET_FORM,{URL}}
 
 			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
@@ -150,7 +150,7 @@
 {+START,IF,{$_GET,in_main_include_module}}
 	{$SET,URL,{$REPLACE,results,misc,{URL}}}
 	{+START,BOX,,,med}
-		<form action="{$URL_FOR_GET_FORM*,{$GET,URL}}" method="get" class="main_search_form">
+		<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$GET,URL}}" method="get" class="main_search_form">
 			{$HIDDENS_FOR_GET_FORM,{$GET,URL}}
 
 			<div class="search_fields float_surrounder">

@@ -1489,7 +1489,7 @@ function imagefontwidth($font)
  * @param  ?integer  Quality level (NULL: default).
  * @return boolean	Success status.
  */
-function imagejpeg($image,$filename=NULL)
+function imagejpeg($image,$filename=NULL,$quality=NULL)
 {
 	return true;
 }
@@ -3153,6 +3153,28 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
  * @return ~string	The output (false: error).
  */
 function shell_exec($command)
+{
+	return '';
+}
+
+/**
+ * Prepare a command path for a shell call to it.
+ *
+ * @param  string		The command.
+ * @return string		Escaped.
+ */
+function escapeshellcmd($arg)
+{
+	return '';
+}
+
+/**
+ * Prepare an argument for use literally in a command.
+ *
+ * @param  string		The argument.
+ * @return string		Escaped.
+ */
+function escapeshellarg($arg)
 {
 	return '';
 }

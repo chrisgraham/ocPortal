@@ -3,7 +3,7 @@
 {+START,SET,news_ticker_text}
 	{$SET,done_a_ticker,0}
 	{+START,LOOP,POSTS}
-		{+START,IF,{$GET,done_a_ticker}} &middot; {+END}<a title="{NEWS_TITLE}: {DATE*}" class="nvn" href="{FULL_URL*}">{NEWS_TITLE}</a>{$SET,done_a_ticker,1}
+		{+START,IF,{$GET,done_a_ticker}} &middot; {+END}<a title="{$STRIP_TAGS,{NEWS_TITLE}}: {DATE*}" class="nvn" href="{FULL_URL*}">{NEWS_TITLE}</a>{$SET,done_a_ticker,1}
 	{+END}
 {+END}
 

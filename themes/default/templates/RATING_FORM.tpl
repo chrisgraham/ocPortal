@@ -5,7 +5,7 @@
 		{+END}
 			{+START,LOOP,ALL_RATING_CRITERIA}
 				<a name="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}_jump" id="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}_jump" rel="dorating"></a>
-				{+START,IF,{$NOT,{$JS_ON}}}{+START,IF_EMPTY,{TITLE}}<div class="accessibility_hidden">{+END}<label accesskey="r" for="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}"><strong>{+START,IF_EMPTY,{TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}:{+END}</strong></label>{+START,IF_EMPTY,{TITLE}}</div>{+END}{+END}
+				{+START,IF,{$NOT,{$JS_ON}}}{+START,IF_EMPTY,{TITLE}}<div class="accessibility_hidden">{+END}<label {+START,IF_EMPTY,{TYPE}}accesskey="r" {+END}for="rating__{CONTENT_TYPE*}__{TYPE*}__{ID*}"><strong>{+START,IF_EMPTY,{TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}:{+END}</strong></label>{+START,IF_EMPTY,{TITLE}}</div>{+END}{+END}
 				{+START,IF,{$JS_ON}}{+START,IF_EMPTY,{TITLE}}<div class="accessibility_hidden">{+END}<strong>{+START,IF_EMPTY,{TITLE}}{!RATING}:{+END}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}:{+END}</strong>{+START,IF_EMPTY,{TITLE}}</div>{+END}{+END}
 				<div class="rating_inner">
 					{+START,IF,{$JS_ON}}

@@ -134,36 +134,36 @@ class Hook_addon_registry_core_fields
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__catalogue_multilist()
 	{
 		return array(
 			lorem_globalise(
 				do_lorem_template('CATALOGUE_DEFAULT_MULTILIST',array(
-					'ALL'=>array(array('HAS'=>true,'LABEL'=>lorem_phrase()),array('HAS'=>false,'LABEL'=>lorem_phrase()))
+					'ALL'=>array(array('HAS'=>true,'OPTION'=>lorem_phrase()),array('HAS'=>false,'OPTION'=>lorem_phrase()))
 						)
 			),NULL,'',true),
 		);
 	}
 	
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__catalogue_picture()
 	{
 		return array(
 			lorem_globalise(
 				do_lorem_template('CATALOGUE_DEFAULT_ENTRY_FIELD_PICTURE',array(
-					'ALL'=>array(array('URL'=>placeholder_url(), 'THUMB_URL'=>placeholder_image_url(),'I'=>"0"))
+					'URL'=>placeholder_url(),'THUMB_URL'=>placeholder_image_url(),'I'=>'0'
 						)
 			),NULL,'',true),
 		);

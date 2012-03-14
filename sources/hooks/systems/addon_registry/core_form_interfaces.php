@@ -419,12 +419,12 @@ class Hook_addon_registry_core_form_interfaces
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__form_screen_1()
 	{
 		require_lang('comcode');
@@ -453,7 +453,7 @@ class Hook_addon_registry_core_form_interfaces
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>lorem_phrase(),'THEME_ALSO_INCLUDE_PAGES'=>false)));
-		foreach(placeholder_array() as $key=>$value)
+		foreach (placeholder_array() as $key=>$value)
 		{
 			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('SELECTED'=>false,'DISABLED'=>false,'CLASS'=>'','NAME'=>placeholder_random_id(),'TEXT'=>lorem_phrase())));
 		}
@@ -488,7 +488,7 @@ class Hook_addon_registry_core_form_interfaces
 
 		$name = placeholder_random_id();
 		$time = do_lorem_template('FORM_SCREEN_INPUT_TIME',array('NULL_OK'=>'','DISABLED'=>'','TABINDEX'=>placeholder_number(),'MINUTES'=>placeholder_options(),'HOURS'=>placeholder_options(),'STUB'=>placeholder_random_id()));
-		$input = do_lorem_template('FORM_SCREEN_INPUT_DATE',array('NULL_OK'=>'','DISABLED'=>'','TABINDEX'=>placeholder_number(),'YEARS'=>placeholder_options(),'MONTHS'=>placeholder_options(),'DAYS'=>placeholder_options(),'STUB'=>$name,'NULL'=>'','TIME'=>$time));
+		$input = do_lorem_template('FORM_SCREEN_INPUT_DATE',array('UNLIMITED'=>false,'NULL_OK'=>'','DISABLED'=>'','TABINDEX'=>placeholder_number(),'YEARS'=>placeholder_options(),'MONTHS'=>placeholder_options(),'DAYS'=>placeholder_options(),'STUB'=>$name,'NULL'=>'','TIME'=>$time));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>true,'BORING_NAME'=>'','NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name = placeholder_random_id();
@@ -551,12 +551,12 @@ class Hook_addon_registry_core_form_interfaces
 		$input = new ocp_tempcode();
 		foreach (placeholder_array(1) as $k=>$v)
 		{
-			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_LINE_MULTI',array('CLASS'=>'','MAXLENGTH'=>'10','PRETTY_NAME'=>$v,'TABINDEX'=>placeholder_random_id(),'NAME_STUB'=>placeholder_random_id(),'I'=>"$k",'REQUIRED'=>'_required','DEFAULT'=>'')));
+			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_LINE_MULTI',array('CLASS'=>'','MAXLENGTH'=>'10','PRETTY_NAME'=>$v,'TABINDEX'=>placeholder_random_id(),'NAME_STUB'=>placeholder_random_id(),'I'=>strval($k),'REQUIRED'=>'_required','DEFAULT'=>'')));
 		}
 
 		foreach (placeholder_array(2) as $k=>$v)
 		{
-			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('PRETTY_NAME'=>lorem_word(),'TABINDEX'=>placeholder_number(),'NAME_STUB'=>placeholder_random_id(),'I'=>"$k",'REQUIRED'=>'_required','DEFAULT'=>'')));
+			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('PRETTY_NAME'=>lorem_word(),'TABINDEX'=>placeholder_number(),'NAME_STUB'=>placeholder_random_id(),'I'=>strval($k),'REQUIRED'=>'_required','DEFAULT'=>'')));
 		}
 		$name = placeholder_random_id();
 		$hidden = do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2',array('NAME'=>$name,'VALUE'=>lorem_phrase()));
@@ -605,7 +605,7 @@ class Hook_addon_registry_core_form_interfaces
 		$input = new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array('PRETTY_NAME'=>lorem_word(),'TABINDEX'=>placeholder_number(),'NEEDS_MATCH'=>true,'NAME_STUB'=>$name,'I'=>"$k",'REQUIRED'=>'','DEFAULT'=>'')));
+			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array('PRETTY_NAME'=>lorem_word(),'TABINDEX'=>placeholder_number(),'NEEDS_MATCH'=>true,'NAME_STUB'=>$name,'I'=>strval($k),'REQUIRED'=>'','DEFAULT'=>'')));
 		}
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>true,'BORING_NAME'=>placeholder_random_id(),'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
@@ -625,7 +625,7 @@ class Hook_addon_registry_core_form_interfaces
 			$out = array();
 			foreach ($_option[0] as $option)
 			{
-				$out[] = array('CHECKED'=>lorem_word(),'TABINDEX'=>placeholder_number(),'NAME'=>placeholder_random_id(),'PRETTY_NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence());
+				$out[] = array('DISABLED'=>false,'CHECKED'=>lorem_word(),'TABINDEX'=>placeholder_number(),'NAME'=>placeholder_random_id(),'PRETTY_NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence());
 			}
 
 			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_VARIOUS_TICKS',array('SECTION_TITLE'=>$_option[2],'EXPANDED'=>$_option[1],'SIMPLE_STYLE'=>false,'BRETHREN_COUNT'=>"3",'OUT'=>$out)));
@@ -651,12 +651,12 @@ class Hook_addon_registry_core_form_interfaces
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__posting_screen()
 	{
 		return array(
@@ -672,12 +672,12 @@ class Hook_addon_registry_core_form_interfaces
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__form_group()
 	{
 		return array(
@@ -689,13 +689,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__form_grouped()
 	{
 		return array(
@@ -712,12 +713,12 @@ class Hook_addon_registry_core_form_interfaces
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__form_field_set_grouper()
 	{
 		return array(
@@ -730,13 +731,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__preview_script_spelling()
 	{
 		return array(
@@ -748,13 +750,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__preview_script_keyword_density()
 	{
 		return array(
@@ -769,13 +772,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__preview_script_code()
 	{
 		return array(
@@ -787,13 +791,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__form_screen()
 	{
 		require_lang('comcode');
@@ -875,13 +880,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__html_edit()
 	{
 		return array(
@@ -891,13 +897,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__posting_form()
 	{
 		require_lang('comcode');
@@ -958,12 +965,12 @@ class Hook_addon_registry_core_form_interfaces
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__form_descrip_sep()
 	{
 		return array(
@@ -975,12 +982,12 @@ class Hook_addon_registry_core_form_interfaces
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__form_screen_input_permission()
 	{
 		require_lang('permissions');
@@ -991,7 +998,7 @@ class Hook_addon_registry_core_form_interfaces
 			$all_global = true;
 			foreach (placeholder_array() as $k=>$v)
 			{
-				$overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array('FORCE_PRESETS'=>false,'GROUP_NAME'=>lorem_phrase(),'VIEW_ACCESS'=>'','TABINDEX'=>placeholder_number(),'GROUP_ID'=>placeholder_random_id(),'SP'=>"$k",'ALL_GLOBAL'=>true,'TITLE'=>lorem_phrase(),'DEFAULT_ACCESS'=>'','CODE'=>'-1')));
+				$overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array('FORCE_PRESETS'=>false,'GROUP_NAME'=>lorem_phrase(),'VIEW_ACCESS'=>'','TABINDEX'=>placeholder_number(),'GROUP_ID'=>placeholder_random_id(),'SP'=>strval($k),'ALL_GLOBAL'=>true,'TITLE'=>lorem_phrase(),'DEFAULT_ACCESS'=>'','CODE'=>'-1')));
 			}
 
 			$permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION',array('FORCE_PRESETS'=>false,'GROUP_NAME'=>lorem_phrase(),'OVERRIDES'=>$overrides->evaluate()/*FUDGEFUDGE*/,'ALL_GLOBAL'=>true,'VIEW_ACCESS'=>'','TABINDEX'=>placeholder_number(),'GROUP_ID'=>placeholder_random_id(),'PINTERFACE_VIEW'=>'')));
@@ -1030,12 +1037,12 @@ class Hook_addon_registry_core_form_interfaces
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__preview_script()
 	{
 		return array(
@@ -1050,17 +1057,18 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__block_helper_block_group()
 	{
 		$links = new ocp_tempcode();
-		foreach(placeholder_array() as $v)
+		foreach (placeholder_array() as $v)
 		{
 			$links->attach(do_lorem_template('BLOCK_HELPER_BLOCK_CHOICE',array(
 					'USAGE'=>placeholder_array(),
@@ -1080,13 +1088,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__block_helper_start()
 	{
 		require_lang('comcode');
@@ -1100,13 +1109,14 @@ class Hook_addon_registry_core_form_interfaces
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__block_helper_done()
 	{
 		return array(
@@ -1117,6 +1127,7 @@ class Hook_addon_registry_core_form_interfaces
 					'BLOCK'=>lorem_phrase(),
 					'COMCODE_XML'=>lorem_phrase(),
 					'COMCODE'=>lorem_phrase(),
+					'COMCODE_SEMIHTML'=>lorem_phrase(),
 						)
 			),NULL,'',true),
 		);

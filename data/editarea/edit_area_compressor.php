@@ -307,7 +307,7 @@ class Compressor{
 			$header.=sprintf("javascript size: based files: %s => PHP COMPRESSION => %s ", $this->file_loaded_size, strlen($this->datas));
 			if($this->use_gzip)
 			{
-				$gzip_datas=  gzencode($this->datas);				
+				$gzip_datas=gzencode($this->datas,9);
 				$header.=sprintf("=> GZIP COMPRESSION => %s", strlen($gzip_datas));
 				$ratio = round(100.0 - floatval(strlen($gzip_datas)) / floatval($this->file_loaded_size) * 100.0);			
 			}else
@@ -324,7 +324,7 @@ class Compressor{
 		// generate gzip file and cahce it if using disk cache
 		if($this->use_gzip)
 		{
-			$this->gzip_datas= gzencode($this->datas);
+			$this->gzip_datas=gzencode($this->datas,9);
 			if($this->param['use_disk_cache'])
 				$this->file_put_contents($this->gzip_cache_file, $this->gzip_datas, $mtime);
 		}

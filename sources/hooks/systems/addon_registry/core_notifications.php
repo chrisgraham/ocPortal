@@ -118,12 +118,12 @@ class Hook_addon_registry_core_notifications
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__notifications_regular()
 	{
 		require_css('notifications');
@@ -144,16 +144,18 @@ class Hook_addon_registry_core_notifications
 			'LABEL'=>lorem_phrase(),
 			'RAW'=>placeholder_number(),
 		);
+		$notification_code_map=array(
+			'NOTIFICATION_CODE'=>placeholder_id(),
+			'NOTIFICATION_LABEL'=>lorem_phrase(),
+			'NOTIFICATION_TYPES'=>$notification_types,
+			'SUPPORTS_CATEGORIES'=>true,
+		);
+		do_lorem_template('NOTIFICATION_TYPES',$notification_code_map); // To make coverage test pass (is actually INCLUDE'd)
 		$notification_sections=array();
 		$notification_sections[lorem_phrase()]=array(
 			'NOTIFICATION_SECTION'=>lorem_phrase(),
 			'NOTIFICATION_CODES'=>array(
-				array(
-					'NOTIFICATION_CODE'=>placeholder_id(),
-					'NOTIFICATION_LABEL'=>lorem_phrase(),
-					'NOTIFICATION_TYPES'=>$notification_types,
-					'SUPPORTS_CATEGORIES'=>true,
-				),
+				$notification_code_map,
 			),
 		);
 		$interface=do_lorem_template('NOTIFICATIONS_MANAGE',array(
@@ -175,12 +177,12 @@ class Hook_addon_registry_core_notifications
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__notifications_advanced()
 	{
 		require_css('notifications');

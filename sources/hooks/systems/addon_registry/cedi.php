@@ -152,12 +152,12 @@ class Hook_addon_registry_cedi
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__cedi_manage_tree_screen()
 	{
 		return array(
@@ -173,13 +173,14 @@ class Hook_addon_registry_cedi
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__cedi_list_tree()
 	{
 		$depth = do_lorem_template('CEDI_LIST_TREE_DEPTH',array(
@@ -197,12 +198,12 @@ class Hook_addon_registry_cedi
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__cedi_page_screen()
 	{
 		require_lang('ocf');
@@ -213,7 +214,7 @@ class Hook_addon_registry_cedi
 
 		$all_rating_criteria=array();
 		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
-		$rating_inside	=	do_lorem_template('CEDI_RATING_FORM',array('LIKES'=>true,'CONTENT_TYPE'=>'seedy','ID'=>placeholder_id(),'URL'=>placeholder_url(),'ALL_RATING_CRITERIA'=>$all_rating_criteria,'OVERALL_NUM_RATINGS'=>placeholder_number(),'HAS_RATINGS'=>true,'SIMPLISTIC'=>true));
+		$rating_inside	=	do_lorem_template('CEDI_RATING_FORM',array('LIKES'=>true,'CONTENT_TYPE'=>'seedy','ID'=>placeholder_id(),'URL'=>placeholder_url(),'ALL_RATING_CRITERIA'=>$all_rating_criteria,'OVERALL_NUM_RATINGS'=>placeholder_number(),'HAS_RATINGS'=>true,'SIMPLISTIC'=>true,'ERROR'=>''));
 
 		$rating_details = do_lorem_template('CEDI_RATING',array('NUM_RATINGS'=>placeholder_number(),'RATING_FORM'=>$rating_inside,'ALL_RATING_CRITERIA'=>$all_rating_criteria,'HAS_RATINGS'=>true));
 
@@ -262,13 +263,14 @@ class Hook_addon_registry_cedi
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__cedi_changes_screen()
 	{
 		return array(
@@ -280,13 +282,14 @@ class Hook_addon_registry_cedi
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__cedi_post_screen()
 	{
 		require_javascript('javascript_validation');
@@ -312,6 +315,7 @@ class Hook_addon_registry_cedi
 					'CONTINUE_URL'=>placeholder_url(),
 					'ATTACHMENTS'=>lorem_phrase(),
 					'SPECIALISATION'=>placeholder_fields(),
+					'SPECIALISATION2'=>'',
 						)
 			);
 

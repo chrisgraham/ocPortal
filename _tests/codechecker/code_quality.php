@@ -41,6 +41,7 @@ if (isset($_SERVER['argv']))
 	if (array_key_exists('api',$_SERVER['argv'])) $GLOBALS['API']=1;
 	if (array_key_exists('mixed',$_SERVER['argv'])) $GLOBALS['MIXED']=1;
 	if (array_key_exists('pedantic',$_SERVER['argv'])) $GLOBALS['PEDANTIC']=1;
+	if (array_key_exists('todo',$_SERVER['argv'])) $GLOBALS['TODO']=1;
 	if (array_key_exists('security',$_SERVER['argv'])) $GLOBALS['SECURITY']=1;
 	if (array_key_exists('checks',$_SERVER['argv'])) $GLOBALS['CHECKS']=1;
 	if (array_key_exists('spelling',$_SERVER['argv'])) $GLOBALS['SPELLING']=1;
@@ -49,6 +50,7 @@ if (isset($_SERVER['argv']))
 if (array_key_exists('api',$_GET)) $GLOBALS['API']=1;
 if (array_key_exists('mixed',$_GET)) $GLOBALS['MIXED']=1;
 if (array_key_exists('pedantic',$_GET)) $GLOBALS['PEDANTIC']=1;
+/*if (array_key_exists('todo',$_GET)) */$GLOBALS['TODO']=1;	//NB: Test set skips these ones anyway
 if (array_key_exists('security',$_GET)) $GLOBALS['SECURITY']=1;
 if (array_key_exists('checks',$_GET)) $GLOBALS['CHECKS']=1;
 if (array_key_exists('spelling',$_GET)) $GLOBALS['SPELLING']=1;
@@ -1623,6 +1625,10 @@ function check_assignment($c,$c_pos,$function_guard='')
 function check_expression($e,$assignment=false,$equate_false=false,$function_guard='')
 {
 	$c_pos=$e[count($e)-1];
+	if ($e[0]=='CREATE_ARRAY')
+	{
+		return 'array';
+	}
 	if ($e[0]=='VARIABLE_REFERENCE')
 	{
 		$e=$e[1];

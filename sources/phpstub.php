@@ -3158,6 +3158,17 @@ function shell_exec($command)
 }
 
 /**
+ * Prepare a command path for a shell call to it.
+ *
+ * @param  string		The command.
+ * @return string		Escaped.
+ */
+function escapeshellcmd($arg)
+{
+	return '';
+}
+
+/**
  * Prepare an argument for use literally in a command.
  *
  * @param  string		The argument.

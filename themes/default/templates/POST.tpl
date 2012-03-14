@@ -5,7 +5,7 @@
 {+START,IF,{$NOT,{IS_SPACER_POST}}}
 	{+START,BOX,,,light}
 		<div id="post_{ID*}" class="post time_{TIME_RAW*}"{$?,{$VALUE_OPTION,html5}, itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review"}>
-			{+START,IF_NON_EMPTY,{ID}}<a name="post_{ID*}" id="post_{ID*}"></a>{+END}
+			{+START,IF_NON_EMPTY,{ID}}<a name="post_{ID*}"></a>{+END}
 
 			{+START,IF_NON_EMPTY,{TITLE}}<h3 class="post_title">{TITLE*}</h3>{+END}
 			{+START,IF_NON_EMPTY,{$AVATAR,{POSTER_ID}}}

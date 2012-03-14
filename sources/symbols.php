@@ -1834,7 +1834,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$db=$GLOBALS['SITE_DB'];
 					if ((isset($param[1])) && ($param[1]=='1')) $db=$GLOBALS['FORUM_DB'];
 					$_value=$db->query_value_null_ok('attachments','a_num_downloads',array('id'=>intval($param[0])));
-					$value=is_null($_value)?'':strval($_value);
+					$value=is_null($_value)?'?':strval($_value);
 				}
 				break;
 

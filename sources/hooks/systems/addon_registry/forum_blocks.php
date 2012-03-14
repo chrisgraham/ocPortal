@@ -117,7 +117,7 @@ class Hook_addon_registry_forum_blocks
 		require_lang('ocf');
 		//Create the 'BLOCK_MAIN_FORUM_TOPICS_TOPIC' template value
 		$out=new ocp_tempcode();
-		foreach(placeholder_array() as $k=>$v)
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$out->attach(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array('POST'=>lorem_paragraph(),'FORUM_ID'=>NULL,'FORUM_NAME'=>lorem_word(),'TOPIC_LINK'=>placeholder_url(),'TITLE'=>lorem_word(),'DATE'=>placeholder_time(),'DATE_RAW'=>placeholder_date_raw(),'USERNAME'=>lorem_word(),'MEMBER_ID'=>NULL,'NUM_POSTS'=>placeholder_number())));
 		}
@@ -138,19 +138,19 @@ class Hook_addon_registry_forum_blocks
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_side_forum_news()
 	{
 		require_lang('news');
 		require_lang('ocf');
 		//Create the 'BLOCK_SIDE_FORUM_NEWS_SUMMARY' template value
 		$out=new ocp_tempcode();
-		foreach(placeholder_array() as $k=>$v)
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$out->attach(do_lorem_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY',array('REPLIES'=>lorem_word(),'FIRSTTIME'=>lorem_word(),'LASTTIME'=>lorem_word(),'CLOSED'=>lorem_word(),'FIRSTUSERNAME'=>lorem_word(),'LASTUSERNAME'=>lorem_word(),'FIRSTMEMBERID'=>lorem_word(),'LASTMEMBERID'=>lorem_word(),'_DATE'=>placeholder_date_raw(),'DATE'=>placeholder_time(),'FULL_URL'=>placeholder_url(),'NEWS_TITLE'=>escape_html(lorem_word()))));
 		}
@@ -168,19 +168,20 @@ class Hook_addon_registry_forum_blocks
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_main_forum_news()
 	{
 		require_lang('news');
 		//Create the 'NEWS_PIECE_SUMMARY' template value
 		$out=new ocp_tempcode();
-		foreach(placeholder_array() as $k=>$v)
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$out->attach(do_lorem_template('NEWS_PIECE_SUMMARY',array('TRUNCATE'=>false,'BLOG'=>false,'FIRSTTIME'=>lorem_word(),'LASTTIME'=>lorem_word(),'CLOSED'=>lorem_word(),'FIRSTUSERNAME'=>lorem_word(),'LASTUSERNAME'=>lorem_word(),'FIRSTMEMBERID'=>lorem_word(),'LASTMEMBERID'=>lorem_word(),'ID'=>lorem_word(),'FULL_URL'=>placeholder_url(),'SUBMITTER'=>lorem_word(),'DATE'=>placeholder_time(),'DATE_RAW'=>placeholder_date_raw(),'NEWS_TITLE'=>lorem_word(),'CATEGORY'=>'','IMG'=>'','AUTHOR'=>lorem_word(),'AUTHOR_URL'=>placeholder_url(),'NEWS'=>lorem_paragraph())));
 		}

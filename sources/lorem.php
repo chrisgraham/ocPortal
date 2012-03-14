@@ -637,7 +637,7 @@ function placeholder_result_browser()
 	$selectors=new ocp_tempcode();
 	foreach (placeholder_array(11) as $k=>$v)
 	{
-			$selectors->attach(do_lorem_template('RESULTS_BROWSER_PER_PAGE_OPTION',array('SELECTED'=>true,'VALUE'=>"$k",'NAME'=>$v)));
+			$selectors->attach(do_lorem_template('RESULTS_BROWSER_PER_PAGE_OPTION',array('SELECTED'=>true,'VALUE'=>strval($k),'NAME'=>$v)));
 	}
 	$per_page = do_lorem_template('RESULTS_BROWSER_PER_SCREEN',array('HIDDEN'=>'','URL'=>placeholder_url(),'MAX_NAME'=>lorem_word(),'SELECTORS'=>$selectors,'RAND'=>placeholder_random()));
 
@@ -647,13 +647,13 @@ function placeholder_result_browser()
 	$part->attach(do_lorem_template('RESULTS_BROWSER_NEXT_LINK',array('REL'=>NULL,'TITLE'=>lorem_phrase(),'NUM_PAGES'=>placeholder_number(),'P'=>placeholder_number(),'URL'=>placeholder_url())));
 	$part->attach(do_lorem_template('RESULTS_BROWSER_CONTINUE_LAST',array('TITLE'=>lorem_phrase(),'P'=>placeholder_number(),'LAST_URL'=>placeholder_url())));
 	$pages=new ocp_tempcode();
-	foreach(placeholder_array() as $key=>$value)
+	foreach (placeholder_array() as $key=>$value)
 	{
 	   $pages->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('SELECTED'=>false,'DISABLED'=>false,'CLASS'=>'','NAME'=>strval($key),'TEXT'=>$value)));
 	}
 	$part->attach(do_lorem_template('RESULTS_BROWSER_LIST_PAGES',array('URL'=>placeholder_url(),'RAND'=>placeholder_random(),'HIDDEN'=>'','START_NAME'=>lorem_word(),'LIST'=>$pages)));
 
-	return do_lorem_template('RESULTS_BROWSER_WRAP',array('PER_PAGE'=>$per_page,'PART'=>$part));
+	return do_lorem_template('RESULTS_BROWSER_WRAP',array('TEXT_ID'=>lorem_phrase(),'PER_PAGE'=>$per_page,'PART'=>$part));
 }
 
 /**
@@ -895,7 +895,7 @@ function is_full_screen_template($temp_name=NULL,$tempcode=NULL)
 	if($temp_name===NULL)
 	{
 		$pos=strpos($tempcode->evaluate(),'<html');
-		return ($pos!==false) && ($pos<1000);
+		return ($pos!==false) && ($pos<400);
 	}
 
 	return ($temp_name=='HEADER' || $temp_name=='FOOTER' || $temp_name=='GLOBAL' || $temp_name=='RESTORE_WRAP' || $temp_name=='BASIC_HTML_WRAP' || $temp_name=='STYLED_HTML_WRAP' || $temp_name=='MAIL' || $temp_name=='CHAT_LOGS_SCREEN' || $temp_name=='POPUP_HTML_WRAP');

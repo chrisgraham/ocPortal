@@ -94,12 +94,12 @@ class Hook_addon_registry_ocf_reported_posts
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_reported_post_fcomcode()
 	{
 		require_lang('ocf');
@@ -109,9 +109,9 @@ class Hook_addon_registry_ocf_reported_posts
 				do_lorem_template('OCF_REPORTED_POST_FCOMCODE',array(
 					'POST_ID'=>placeholder_id(),
 					'MEMBER'=>lorem_phrase(),
-					'TOPIC_NAME'=>lorem_phrase(),
 					'POST'=>lorem_phrase(),
 					'POSTER'=>lorem_phrase(),
+					'TOPIC_TITLE'=>lorem_phrase(),
 						)
 			),NULL,'',true),
 		);

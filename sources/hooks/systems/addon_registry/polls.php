@@ -129,12 +129,12 @@ class Hook_addon_registry_polls
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__block_main_poll_iframe()
 	{
 		return array(
@@ -147,13 +147,14 @@ class Hook_addon_registry_polls
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__poll_rss_summary()
 	{
 		$_summary = do_lorem_template('POLL_RSS_SUMMARY',array('ANSWERS'=>placeholder_array()));
@@ -179,24 +180,26 @@ class Hook_addon_registry_polls
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__poll_answer()
 	{
 		return $this->poll('poll');
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__poll_answer_result()
 	{
 		return $this->poll('result');
@@ -218,25 +221,25 @@ class Hook_addon_registry_polls
 			case 'poll':
 				foreach (placeholder_array() as $k=>$v)
 				{
-					$tpl->attach(do_lorem_template('POLL_ANSWER',array('PID'=>placeholder_id(),'I'=>"$k",'CAST'=>"$k",'VOTE_URL'=>placeholder_url(),'ANSWER'=>lorem_phrase(),'ANSWER_PLAIN'=>lorem_phrase())));
+					$tpl->attach(do_lorem_template('POLL_ANSWER',array('PID'=>placeholder_id(),'I'=>strval($k),'CAST'=>strval($k),'VOTE_URL'=>placeholder_url(),'ANSWER'=>lorem_phrase(),'ANSWER_PLAIN'=>lorem_phrase())));
 				}
 				break;
 
 			case 'result':
 				foreach (placeholder_array() as $k=>$v)
 				{
-					$tpl->attach(do_lorem_template('POLL_ANSWER_RESULT',array('PID'=>placeholder_id(),'I'=>"$k",'VOTE_URL'=>placeholder_url(),'ANSWER'=>lorem_phrase(),'ANSWER_PLAIN'=>lorem_phrase(),'WIDTH'=>"$k",'VOTES'=>placeholder_number())));
+					$tpl->attach(do_lorem_template('POLL_ANSWER_RESULT',array('PID'=>placeholder_id(),'I'=>strval($k),'VOTE_URL'=>placeholder_url(),'ANSWER'=>lorem_phrase(),'ANSWER_PLAIN'=>lorem_phrase(),'WIDTH'=>strval($k),'VOTES'=>placeholder_number())));
 				}
 				break;
 
 			default:
 				foreach (placeholder_array() as $k=>$v)
 				{
-					$tpl->attach(do_lorem_template('POLL_ANSWER',array('PID'=>placeholder_id(),'I'=>"$k",'CAST'=>"$k",'VOTE_URL'=>placeholder_url(),'ANSWER'=>lorem_phrase(),'ANSWER_PLAIN'=>lorem_phrase())));
+					$tpl->attach(do_lorem_template('POLL_ANSWER',array('PID'=>placeholder_id(),'I'=>strval($k),'CAST'=>strval($k),'VOTE_URL'=>placeholder_url(),'ANSWER'=>lorem_phrase(),'ANSWER_PLAIN'=>lorem_phrase())));
 				}
 				foreach (placeholder_array() as $k=>$v)
 				{
-					$tpl->attach(do_lorem_template('POLL_ANSWER_RESULT',array('PID'=>placeholder_id(),'I'=>"$k",'VOTE_URL'=>placeholder_url(),'ANSWER'=>lorem_phrase(),'ANSWER_PLAIN'=>lorem_phrase(),'WIDTH'=>"$k",'VOTES'=>placeholder_number())));
+					$tpl->attach(do_lorem_template('POLL_ANSWER_RESULT',array('PID'=>placeholder_id(),'I'=>strval($k),'VOTE_URL'=>placeholder_url(),'ANSWER'=>lorem_phrase(),'ANSWER_PLAIN'=>lorem_phrase(),'WIDTH'=>strval($k),'VOTES'=>placeholder_number())));
 				}
 		}
 
@@ -247,13 +250,14 @@ class Hook_addon_registry_polls
 				$wrap_content,NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__poll_list_entry()
 	{
 		return array(
@@ -265,13 +269,14 @@ class Hook_addon_registry_polls
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__poll_screen()
 	{
 		require_lang('trackbacks');
@@ -282,9 +287,7 @@ class Hook_addon_registry_polls
 		}
 		$trackback_details = do_lorem_template('TRACKBACK_WRAPPER',array('TRACKBACKS'=>$trackbacks,'TRACKBACK_PAGE'=>placeholder_id(),'TRACKBACK_ID'=>placeholder_id(),'TRACKBACK_TITLE'=>lorem_phrase()));
 
-		$rating_details = do_lorem_template('RATING',array('NUM_RATINGS'=>placeholder_id(),
-					'RATING_FORM'=>lorem_word()));
-
+		$rating_details = '';
 		$comments = '';
 		$comment_details = do_lorem_template('COMMENTS_WRAPPER',array('TYPE'=>lorem_word(),'ID'=>placeholder_id(),'REVIEW_RATING_CRITERIA'=>array(),'AUTHORISED_FORUM_LINK'=>placeholder_url(),'FORM'=>placeholder_form(),'COMMENTS'=>$comments));
 

@@ -138,7 +138,7 @@ class Hook_addon_registry_core_feedback_features
 				'TRACKBACK_XML_WRAPPER.tpl'=>'trackback_xml_wrapper',
 				'COMMENTS_POSTING_FORM.tpl'=>'comments',
 				'RATING_BOX.tpl'=>'rating',
-				'RATING_DISPLAY_SHARED.tpl'=>'rating',
+				'RATING_DISPLAY_SHARED.tpl'=>'rating_display_shared',
 				'COMMENTS_WRAPPER.tpl'=>'comments_wrapper',
 				'TRACKBACK_XML.tpl'=>'trackback_xml_wrapper',
 				'TRACKBACK_WRAPPER.tpl'=>'trackback_wrapper',
@@ -148,17 +148,18 @@ class Hook_addon_registry_core_feedback_features
 				'RATING_INLINE_DYNAMIC.tpl'=>'rating_inline_dynamic',
 				'EMOTICON_CLICK_CODE.tpl'=>'comments',
 				'COMMENT_AJAX_HANDLER.tpl'=>'comments',
-				'POST.tpl'=>'post',
+				'POST.tpl'=>'comments_wrapper',
+				'POST_CHILD_LOAD_LINK.tpl'=>'comments_wrapper',
 			);
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__comments_default_text()
 	{
 		return array(
@@ -170,19 +171,19 @@ class Hook_addon_registry_core_feedback_features
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__trackback_delete_screen()
 	{
 		$trackbacks=new ocp_tempcode();
-		foreach(placeholder_array() as $k=>$value)
+		foreach (placeholder_array() as $k=>$value)
 		{
 			$trackbacks->attach(do_lorem_template('TRACKBACK',array(
-					'ID'=>"$k",
+					'ID'=>strval($k),
 					'TIME_RAW'=>placeholder_date_raw(),
 					'TIME'=>placeholder_number(),
 					'URL'=>placeholder_url(),
@@ -205,12 +206,12 @@ class Hook_addon_registry_core_feedback_features
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__trackback_xml_error()
 	{
 		return array(
@@ -221,13 +222,14 @@ class Hook_addon_registry_core_feedback_features
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__trackback_xml_wrapper()
 	{
 		$xml = do_lorem_template('TRACKBACK_XML',array(
@@ -244,13 +246,14 @@ class Hook_addon_registry_core_feedback_features
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__comments()
 	{
 		require_lang('comcode');
@@ -261,7 +264,7 @@ class Hook_addon_registry_core_feedback_features
 					'I'=>placeholder_number(),
 					'POSTING_FIELD_NAME'=>'',
 						)
-			);
+		);
 
 		$attachments=do_lorem_template('ATTACHMENTS',array(
 					'ATTACHMENT_TEMPLATE'=>$content,
@@ -271,82 +274,66 @@ class Hook_addon_registry_core_feedback_features
 					'MAX_ATTACHMENTS'=>placeholder_number(),
 					'NUM_ATTACHMENTS'=>placeholder_number(),
 						)
-			);
+		);
+
+		$ret=do_lorem_template('COMMENTS_POSTING_FORM',array(
+			'JOIN_BITS'=>lorem_phrase_html(),
+			'ATTACHMENTS'=>$attachments,
+			'ATTACH_SIZE_FIELD'=>'',
+			'POST_WARNING'=>lorem_phrase(),
+			'COMMENT_TEXT'=>lorem_sentence_html(),
+			'GET_EMAIL'=>lorem_word_html(),
+			'EMAIL_OPTIONAL'=>lorem_word_html(),
+			'GET_TITLE'=>true,
+			'EM'=>placeholder_emoticon_chooser(),
+			'DISPLAY'=>lorem_phrase(),
+			'COMMENT_URL'=>placeholder_url(),
+			'SUBMIT_NAME'=>lorem_word(),
+			'TITLE'=>lorem_word(),
+			'MAKE_POST'=>true,
+			'CREATE_TICKET_MAKE_POST'=>true,
+			'FIRST_POST'=>lorem_paragraph_html(),
+			'FIRST_POST_URL'=>placeholder_url(),
+		));
+
+		$ret->attach(do_lorem_template('COMMENT_AJAX_HANDLER',array('OPTIONS'=>'','HASH'=>'')));
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('COMMENTS_POSTING_FORM',array(
-					'JOIN_BITS'=>lorem_phrase_html(),
-					'ATTACHMENTS'=>$attachments,
-					'ATTACH_SIZE_FIELD'=>'',
-					'POST_WARNING'=>lorem_phrase(),
-					'COMMENT_TEXT'=>lorem_sentence_html(),
-					'GET_EMAIL'=>lorem_word_html(),
-					'EMAIL_OPTIONAL'=>lorem_word_html(),
-					'GET_TITLE'=>true,
-					'EM'=>placeholder_emoticon_chooser(),
-					'DISPLAY'=>lorem_phrase(),
-					'COMMENT_URL'=>placeholder_url(),
-					'SUBMIT_NAME'=>lorem_word(),
-					'TITLE'=>lorem_word(),
-					'MAKE_POST'=>true,
-					'CREATE_TICKET_MAKE_POST'=>true,
-					'FIRST_POST'=>lorem_paragraph_html(),
-					'FIRST_POST_URL'=>placeholder_url(),
-				)
-			),NULL,'',true),
+				$ret,NULL,'',true),
 		);
 	}
-	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
-	function tpl_preview__rating()
-	{
-		$all_rating_criteria=array();
-		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
-		$rating_form	=	do_lorem_template('RATING_FORM',array('LIKES'=>true,'CONTENT_TYPE'=>'downloads','ID'=>placeholder_id(),'URL'=>placeholder_url(),'ALL_RATING_CRITERIA'=>$all_rating_criteria,'HAS_RATINGS'=>true,'OVERALL_NUM_RATINGS'=>placeholder_number(),'SIMPLISTIC'=>true,'ERROR'=>'',));
 
-		return array(
-			lorem_globalise(
-				do_lorem_template('RATING_BOX',array('LIKES'=>true,'CONTENT_TYPE'=>'downloads','ID'=>placeholder_id(),'HAS_RATINGS'=>true,'ALL_RATING_CRITERIA'=>$all_rating_criteria,'NUM_RATINGS'=>"10",'RATING_FORM'=>$rating_form,'ERROR'=>'',
-						)
-			),NULL,'',true),
-		);
-	}
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__comments_wrapper()
 	{
 		$review_titles=array();
 		$review_titles[]=array('REVIEW_TITLE'=>lorem_phrase(),'REVIEW_RATING'=>make_string_tempcode(float_format(10.0)));
-		$comments='';
-		foreach(placeholder_array() as $i=>$comment)
+		$comments=new ocp_tempcode();
+		foreach (placeholder_array() as $i=>$comment)
 		{
-			$tpl_post=do_lorem_template('POST',array(
+			$map=array(
 				'INDIVIDUAL_REVIEW_RATINGS'=>array(),
 				'HIGHLIGHT'=>($i==1),
 				'TITLE'=>lorem_word(),
-				'TIME_RAW'=>placeholder_time(),
+				'TIME_RAW'=>placeholder_number(),
 				'TIME'=>placeholder_time(),
 				'POSTER_ID'=>placeholder_id(),
 				'POSTER_URL'=>placeholder_url(),
 				'POSTER_NAME'=>lorem_word(),
 				'POSTER'=>NULL,
 				'POSTER_DETAILS'=>new ocp_tempcode(),
-				'ID'=>placeholder_id(),
+				'ID'=>placeholder_id().strval($i),
 				'POST'=>lorem_phrase(),
 				'POST_COMCODE'=>lorem_phrase(),
 				'CHILDREN'=>lorem_phrase(),
-				'OTHER_IDS'=>NULL,
+				'OTHER_IDS'=>array(placeholder_id()),
 				'RATING'=>new ocp_tempcode(),
 				'EMPHASIS'=>new ocp_tempcode(),
 				'BUTTONS'=>new ocp_tempcode(),
@@ -355,9 +342,9 @@ class Hook_addon_registry_core_feedback_features
 				'UNVALIDATED'=>new ocp_tempcode(),
 				'TOPIC_ID'=>placeholder_id(),
 				'IS_SPACER_POST'=>false,
-			));
-
-			$comments.=$tpl_post->evaluate();
+			);
+			$comments->attach(do_lorem_template('POST',$map));
+			do_lorem_template('POST_CHILD_LOAD_LINK',$map); // INCLUDE'd in above, but test set needs to see it run direct
 		}
 
 		if (addon_installed('captcha'))
@@ -389,12 +376,12 @@ class Hook_addon_registry_core_feedback_features
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__trackback_wrapper()
 	{
 		return array(
@@ -408,13 +395,14 @@ class Hook_addon_registry_core_feedback_features
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__trackback_xml_listing()
 	{
 		$trackbacks=placeholder_array();
@@ -433,20 +421,41 @@ class Hook_addon_registry_core_feedback_features
 				$content,NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__rating()
+	{
+		$all_rating_criteria=array();
+		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
+		$rating_form	=	do_lorem_template('RATING_FORM',array('LIKES'=>true,'CONTENT_TYPE'=>'downloads','ID'=>placeholder_id(),'URL'=>placeholder_url(),'ALL_RATING_CRITERIA'=>$all_rating_criteria,'HAS_RATINGS'=>true,'OVERALL_NUM_RATINGS'=>placeholder_number(),'SIMPLISTIC'=>true,'ERROR'=>'',));
+
+		return array(
+			lorem_globalise(
+				do_lorem_template('RATING_BOX',array('OVERALL_NUM_RATINGS'=>placeholder_number(),'LIKES'=>true,'CONTENT_TYPE'=>'downloads','ID'=>placeholder_id(),'HAS_RATINGS'=>true,'ALL_RATING_CRITERIA'=>$all_rating_criteria,'NUM_RATINGS'=>"10",'RATING_FORM'=>$rating_form,'ERROR'=>'',
+						)
+			),NULL,'',true),
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__rating_inline_static()
 	{
-		require_lang('catalogues');
 		$all_rating_criteria = array();
-		foreach(placeholder_array() as $v)
+		foreach (placeholder_array() as $i=>$v)
 		{
-			$all_rating_criteria[] = array('TITLE'=>lorem_word(),'RATING'=>"3",'NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
+			$all_rating_criteria[] = array('TITLE'=>lorem_word(),'RATING'=>'3','OVERALL_NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word().strval($i));
 		}
 		$rating_form = do_lorem_template('RATING_FORM',array(
 			'CONTENT_TYPE'=>lorem_word(),
@@ -457,6 +466,7 @@ class Hook_addon_registry_core_feedback_features
 			'HAS_RATINGS'=>true,
 			'SIMPLISTIC'=>false,
 			'ERROR'=>'',
+			
 		));
 		return array(
 			lorem_globalise(
@@ -473,20 +483,20 @@ class Hook_addon_registry_core_feedback_features
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__rating_inline_dynamic()
 	{
-		require_lang('catalogues');
 		$all_rating_criteria = array();
-		foreach(placeholder_array() as $v)
+		foreach (placeholder_array() as $i=>$v)
 		{
-			$all_rating_criteria[] = array('TITLE'=>lorem_word(), 'RATING'=>"3",'OVERALL_NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
+			$all_rating_criteria[] = array('TITLE'=>lorem_word(),'RATING'=>'3','OVERALL_NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word().strval($i));
 		}
 		$rating_form = do_lorem_template('RATING_FORM',array(
 				'CONTENT_TYPE'=>lorem_word(),
@@ -501,6 +511,47 @@ class Hook_addon_registry_core_feedback_features
 		return array(
 			lorem_globalise(
 				do_lorem_template('RATING_INLINE_DYNAMIC',array(
+					'CONTENT_TYPE'=>lorem_word(),
+					'ID'=>placeholder_id(),
+					'ALL_RATING_CRITERIA'=>$all_rating_criteria,
+					'HAS_RATINGS'=>true,
+					'NUM_RATINGS'=>placeholder_number(),
+					'OVERALL_NUM_RATINGS'=>placeholder_number(),
+					'RATING_FORM'=>$rating_form,
+					'ERROR'=>'',
+					'LIKES'=>false,
+					)
+			),NULL,'',true),
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__rating_display_shared()
+	{
+		$all_rating_criteria = array();
+		foreach (placeholder_array() as $i=>$v)
+		{
+			$all_rating_criteria[] = array('TITLE'=>lorem_word(),'RATING'=>'3','OVERALL_NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word().strval($i));
+		}
+		$rating_form = do_lorem_template('RATING_FORM',array(
+				'CONTENT_TYPE'=>lorem_word(),
+				'ID'=>placeholder_id(),
+				'URL'=>placeholder_url(),
+				'ALL_RATING_CRITERIA'=>$all_rating_criteria,
+				'HAS_RATINGS'=>true,
+				'SIMPLISTIC'=>false,
+				'ERROR'=>'',
+				'LIKES'=>true,
+		));
+		return array(
+			lorem_globalise(
+				do_lorem_template('RATING_DISPLAY_SHARED',array(
 					'CONTENT_TYPE'=>lorem_word(),
 					'ID'=>placeholder_id(),
 					'ALL_RATING_CRITERIA'=>$all_rating_criteria,

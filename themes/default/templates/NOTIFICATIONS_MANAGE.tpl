@@ -2,7 +2,7 @@
 	{$?,{$MATCH_KEY_MATCH,_SEARCH:admin_notifications},{!NOTIFICATIONS_DEFINE_LOCKDOWN},{!NOTIFICATIONS_INTRO}}
 </p>
 
-<div class="wide_table"><table class="wide_table solidborder notifications_form">
+<div class="wide_table"><table class="wide_table solidborder notifications_form" summary="{!COLUMNED_TABLE}">
 	<colgroup>
 		<col style="width: 100%" />
 		{+START,LOOP,NOTIFICATION_TYPES_TITLES}
@@ -12,13 +12,15 @@
 	</colgroup>
 
 	<thead>
-		<th></th>
-		{+START,LOOP,NOTIFICATION_TYPES_TITLES}
-			<th>
-				<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
-			</th>
-		{+END}
-		<th></th>
+		<tr>
+			<th></th>
+			{+START,LOOP,NOTIFICATION_TYPES_TITLES}
+				<th>
+					<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{LABEL},UL_ESCAPED}{$KEEP*}" title="{LABEL*}" alt="{LABEL*}" />
+				</th>
+			{+END}
+			<th></th>
+		</tr>
 	</thead>
 
 	<tbody>

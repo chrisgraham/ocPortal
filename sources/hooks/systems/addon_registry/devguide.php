@@ -114,18 +114,18 @@ class Hook_addon_registry_devguide
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__php_function()
 	{
 		$parameters			=	new ocp_tempcode();
 		$full_parameters	=	new ocp_tempcode();
 
-		foreach(placeholder_array() as $value)
+		foreach (placeholder_array() as $value)
 		{
 			$parameters->attach(do_lorem_template('PHP_PARAMETER_LIST',array(
 									'TYPE'=>lorem_word_2(),
@@ -143,13 +143,13 @@ class Hook_addon_registry_devguide
 		}
 
 		$classes	=	new ocp_tempcode();
-		foreach(placeholder_array() as $k=>$value)
+		foreach (placeholder_array() as $k=>$value)
 		{
 			$function = do_lorem_template('PHP_FUNCTION',array(
 						'FILENAME'=>lorem_phrase(),
 						'CODE'=>lorem_phrase(),
 						'RETURN_TYPE'=>lorem_phrase(),
-						'FUNCTION'=>"$k",
+						'FUNCTION'=>strval($k),
 						'CLASS'=>lorem_word(),
 						'PARAMETERS'=>$parameters,
 						'DESCRIPTION'=>lorem_paragraph_html(),
@@ -163,12 +163,12 @@ class Hook_addon_registry_devguide
 						'FILENAME'=>lorem_word_html(),
 						'RETURN_TYPE'=>lorem_phrase(),
 						'CLASS'=>lorem_word_2(),
-						'FUNCTION'=>"$k",
+						'FUNCTION'=>strval($k),
 						'PARAMETERS'=>$parameters,
 					));
 
 			$classes->attach(do_lorem_template('PHP_CLASS',array(
-					'CLASS_NAME'=>lorem_word(),
+					'CLASS_NAME'=>lorem_word().strval($k),
 					'FUNCTION_SUMMARIES'=>$summary,
 					'FUNCTIONS'=>$function,
 						)
@@ -186,17 +186,17 @@ class Hook_addon_registry_devguide
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__block_main_block_help()
 	{
 		$parameters=new ocp_tempcode();
 
-		foreach(placeholder_array() as $value)
+		foreach (placeholder_array() as $value)
 		{
 			$parameters->attach(do_lorem_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER',array(
 					'NAME'=>lorem_word(),

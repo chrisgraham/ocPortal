@@ -32,7 +32,7 @@ class Hook_login_provider_httpauth
 		// NB: We do even if we already have a session, as parts of the site may be HTTP-auth, and others not - so we need to let it work as an override
 		if (get_forum_type()=='ocf')
 		{
-			if (get_value('ntlm')==='1') // Taken from http://www.wascou.org/wascou/Blogs/Xavier-GOULEY/Alternate-way-to-Kerberos-NTLM-auth-in-pure-PHP
+			if ((function_exists('apache_request_headers')) && (get_value('ntlm')==='1')) // Taken from http://www.wascou.org/wascou/Blogs/Xavier-GOULEY/Alternate-way-to-Kerberos-NTLM-auth-in-pure-PHP
 			{
 				$headers=apache_request_headers();
 				if(!isset($headers['Authorization'])) // step 1

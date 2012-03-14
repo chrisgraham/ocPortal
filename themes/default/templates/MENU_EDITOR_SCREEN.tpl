@@ -38,7 +38,7 @@
 
 		<div id="mini_form_hider" style="display: none" class="float_surrounder">
 			<div class="menu_editor_rh_side">
-				<img onclick="var e=document.getElementById('menu_editor_wrap'); if (e.className.indexOf(' docked')==-1) { e.className='menu_editor_page docked'; this.src='{$IMG;*,arrow_box_hover}'; } else { e.className='menu_editor_page'; this.src='{$IMG;*,arrow_box}'; }" class="dock_button" alt="" src="{$IMG*,arrow_box_hover}" />
+				<img onkeypress="this.onclick();" onclick="var e=document.getElementById('menu_editor_wrap'); if (e.className.indexOf(' docked')==-1) { e.className='menu_editor_page docked'; this.src='{$IMG;*,arrow_box_hover}'; } else { e.className='menu_editor_page'; this.src='{$IMG;*,arrow_box}'; }" class="dock_button" alt="" src="{$IMG*,arrow_box_hover}" />
 
 				<h2>{!CHOOSE_ENTRY_POINT}</h2>
 

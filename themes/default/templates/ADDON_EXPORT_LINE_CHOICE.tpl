@@ -1,4 +1,4 @@
-<form value="{!EXPORT_ADDON}" action="{URL*}" method="post">
+<form title="{!EXPORT_ADDON}" action="{URL*}" method="post">
 	<div>
 		{FILES}
 		<br />

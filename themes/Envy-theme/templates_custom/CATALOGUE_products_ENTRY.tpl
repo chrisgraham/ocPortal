@@ -5,7 +5,6 @@
 		<div class="float_surrounder">
 			<div class="product-view">
 				<div class="product-main-info">
-					
 					{+START,IF_NON_EMPTY,{FIELD_1}}
 						<p class="product-ids sku">{!PRODUCT_CODE} {FIELD_1}{$,Product code}</p>
 					{+END}

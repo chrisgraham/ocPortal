@@ -129,12 +129,12 @@ class Hook_addon_registry_core_validation
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__validate()
 	{
 		$display=new ocp_tempcode();
@@ -180,13 +180,14 @@ class Hook_addon_registry_core_validation
 		return array(lorem_globalise(
 			$display,NULL,'',true));
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__validate_error_screen()
 	{
 		$errors=new ocp_tempcode();
@@ -194,7 +195,7 @@ class Hook_addon_registry_core_validation
 		foreach (placeholder_array() as $key=>$_error)
 		{
 			$errors->attach(do_lorem_template('VALIDATE_ERROR',array(
-					'I'=>lorem_word(),
+					'I'=>lorem_word().strval($key),
 					'LINE'=>placeholder_number(),
 					'POS'=>placeholder_number(),
 					'ERROR'=>$_error,
@@ -204,7 +205,7 @@ class Hook_addon_registry_core_validation
 		foreach (placeholder_array() as $key=>$_error)
 		{
 			$errors->attach(do_lorem_template('VALIDATE_MARKER',array(
-					'I'=>lorem_word(),
+					'I'=>lorem_word().strval($key),
 					'ERROR'=>$_error,
 						)
 			));

@@ -101,12 +101,12 @@ class Hook_addon_registry_redirects_editor
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__redirecte_table_screen()
 	{
 		require_javascript('javascript_ajax');
@@ -114,7 +114,7 @@ class Hook_addon_registry_redirects_editor
 		$fields = new ocp_tempcode();
 		foreach (placeholder_array() as $i=>$row)
 		{
-			$fields->attach(do_lorem_template('REDIRECTE_TABLE_REDIRECT',array('I'=>"$i",'TO_ZONES'=>placeholder_options(),'FROM_ZONES'=>placeholder_options(),'FROM_PAGE'=>lorem_word(),'TO_PAGE'=>lorem_word_2(),'TICKED'=>true,'NAME'=>"is_transparent_$i")));
+			$fields->attach(do_lorem_template('REDIRECTE_TABLE_REDIRECT',array('I'=>strval($i),'TO_ZONES'=>placeholder_options(),'FROM_ZONES'=>placeholder_options(),'FROM_PAGE'=>lorem_word(),'TO_PAGE'=>lorem_word_2(),'TICKED'=>true,'NAME'=>"is_transparent_$i")));
 		}
 
 		$new = do_lorem_template('REDIRECTE_TABLE_REDIRECT',array('I'=>'new','TO_ZONES'=>placeholder_options(),'FROM_ZONES'=>placeholder_options(),'FROM_PAGE'=>'','TO_PAGE'=>'','TICKED'=>false,'NAME'=>'is_transparent_new'));

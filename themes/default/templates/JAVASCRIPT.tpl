@@ -2446,6 +2446,8 @@ function replace_comments_form_with_ajax(options,hash)
 				return true;
 			}
 
+			disable_button_just_clicked(document.getElementById('submit_button'));
+
 			// Note what posts are shown now
 			var known_posts=get_elements_by_class_name(comments_wrapper,'post');
 			var known_times=[];

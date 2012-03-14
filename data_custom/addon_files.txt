@@ -229,7 +229,6 @@ ebay_store
 
 facebook_support
 ----------------
- - sources/hooks/systems/login_providers/.htaccess
  - sources_custom/hooks/systems/login_providers/.htaccess
  - sources_custom/facebook/index.html
  - sources_custom/facebook/jsonwrapper/JSON/index.html

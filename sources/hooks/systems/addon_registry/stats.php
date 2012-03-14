@@ -180,7 +180,7 @@ class Hook_addon_registry_stats
 		}
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
 
-		$results_table = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		$results_table = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 		//results_table ends
 
 	   return array(
@@ -231,7 +231,7 @@ class Hook_addon_registry_stats
 		}
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
 
-		$list_views = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		$list_views = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 		//results_table ends
 
 	   return array(
@@ -283,19 +283,19 @@ class Hook_addon_registry_stats
 		foreach (placeholder_array() as $k=>$v)
 			$selectors->attach(do_lorem_template('RESULTS_BROWSER_SORTER',array('SELECTED'=>'','NAME'=>lorem_word(),'VALUE'=>lorem_word())));
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
-		$list_regionality = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		$list_regionality = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 
 		$selectors = new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 			$selectors->attach(do_lorem_template('RESULTS_BROWSER_SORTER',array('SELECTED'=>'','NAME'=>lorem_word(),'VALUE'=>lorem_word())));
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
-		$list_views = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		$list_views = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 
 		$selectors = new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 			$selectors->attach(do_lorem_template('RESULTS_BROWSER_SORTER',array('SELECTED'=>'','NAME'=>lorem_word(),'VALUE'=>lorem_word())));
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
-		$list_keywords = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		$list_keywords = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 
 		//results_table ends
 

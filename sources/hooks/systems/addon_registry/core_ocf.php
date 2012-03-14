@@ -359,12 +359,12 @@ class Hook_addon_registry_core_ocf
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__ocf_delurk_confirm()
 	{
 		return array(
@@ -379,17 +379,17 @@ class Hook_addon_registry_core_ocf
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_join_step1_screen()
 	{
 		$group_select	=	new ocp_tempcode();
 
-		foreach(placeholder_array() as $key=>$value)
+		foreach (placeholder_array() as $key=>$value)
 			$group_select->attach(form_input_list_entry(strval($key),false,$value));
 
 		return array(
@@ -404,13 +404,14 @@ class Hook_addon_registry_core_ocf
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_join_step2_screen()
 	{
 		require_lang('dates');
@@ -433,7 +434,7 @@ class Hook_addon_registry_core_ocf
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name=lorem_word().placeholder_random();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_DATE',array('NULL_OK'=>'','DISABLED'=>'','TABINDEX'=>placeholder_number(),'YEARS'=>placeholder_options(),'MONTHS'=>placeholder_options(),'DAYS'=>placeholder_options(),'STUB'=>$name,'NULL'=>'','TIME'=>''));
+		$input = do_lorem_template('FORM_SCREEN_INPUT_DATE',array('UNLIMITED'=>false,'NULL_OK'=>'','DISABLED'=>'','TABINDEX'=>placeholder_number(),'YEARS'=>placeholder_options(),'MONTHS'=>placeholder_options(),'DAYS'=>placeholder_options(),'STUB'=>$name,'NULL'=>'','TIME'=>''));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>true,'BORING_NAME'=>$name,'NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name=lorem_word().placeholder_random();
@@ -467,13 +468,14 @@ class Hook_addon_registry_core_ocf
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_auto_time_zone_entry()
 	{
 		return array(
@@ -489,13 +491,14 @@ class Hook_addon_registry_core_ocf
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_user_member()
 	{
 		return array(
@@ -510,13 +513,14 @@ class Hook_addon_registry_core_ocf
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_emoticon_table()
 	{
 		$content=new ocp_tempcode();
@@ -541,13 +545,14 @@ class Hook_addon_registry_core_ocf
 				$content,NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_member_directory_screen()
 	{
 		return array(
@@ -569,12 +574,12 @@ class Hook_addon_registry_core_ocf
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_member_profile_screen()
 	{
 		require_lang('news');
@@ -584,8 +589,8 @@ class Hook_addon_registry_core_ocf
 		$links	=	new ocp_tempcode();
 		foreach ($sections as $section_code=>$section_title)
 		{
-			$links->attach(do_lorem_template('OCF_MEMBER_ACTION',array('ID'=>"$i",'URL'=>placeholder_url(),'LANG'=>lorem_word(),'REL'=>'')));
-			$actions[$section_code]=do_lorem_template('OCF_MEMBER_ACTION',array('ID'=>"$i",'URL'=>placeholder_url(),'LANG'=>lorem_word(),'REL'=>'','NAME'=>$section_title,'VALUE'=>$links));
+			$links->attach(do_lorem_template('OCF_MEMBER_ACTION',array('ID'=>strval($i),'URL'=>placeholder_url(),'LANG'=>lorem_word(),'REL'=>'')));
+			$actions[$section_code]=do_lorem_template('OCF_MEMBER_ACTION',array('ID'=>strval($i),'URL'=>placeholder_url(),'LANG'=>lorem_word(),'REL'=>'','NAME'=>$section_title,'VALUE'=>$links));
 			$i++;
 		}
 
@@ -634,17 +639,22 @@ class Hook_addon_registry_core_ocf
 			'USERGROUP'=>lorem_word(),
 			'CLUBS'=>lorem_phrase(),
 		));
-		$tabs[]=array('TAB_TITLE'=>lorem_title(),'TAB_CONTENT'=>$tab_content,'TAB_FIRST'=>true,'TAB_LAST'=>false);
+		$tabs[]=array('TAB_CODE'=>placeholder_id().'0','TAB_TITLE'=>lorem_title(),'TAB_CONTENT'=>$tab_content,'TAB_FIRST'=>true,'TAB_LAST'=>false);
 		$tabs2=array();
-		$tabs2[]=array('TAB_TITLE'=>lorem_title(),'TAB_FIELDS'=>new ocp_tempcode(),'TAB_TEXT'=>lorem_paragraph(),'TAB_FIRST'=>true,'TAB_LAST'=>true);
+		$fields=new ocp_tempcode();
+		$name = placeholder_random_id();
+		$input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER',array('TABINDEX'=>placeholder_number(),'REQUIRED'=>'','NAME'=>$name,'DEFAULT'=>''));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>$name,'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
+		$tabs2[]=array('TAB_TITLE'=>lorem_title(),'TAB_FIELDS'=>$fields,'TAB_TEXT'=>lorem_paragraph(),'TAB_FIRST'=>true,'TAB_LAST'=>true);
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_EDIT',array(
 			'URL'=>placeholder_url(),
 			'SUBMIT_NAME'=>lorem_phrase(),
 			'AUTOCOMPLETE'=>false,
 			'SKIP_VALIDATION'=>true,
 			'TABS'=>$tabs2,
+			'HIDDEN'=>'',
 		));
-		$tabs[]=array('TAB_TITLE'=>lorem_title(),'TAB_CONTENT'=>$tab_content,'TAB_FIRST'=>false,'TAB_LAST'=>true);
+		$tabs[]=array('TAB_CODE'=>placeholder_id().'1','TAB_TITLE'=>lorem_title(),'TAB_CONTENT'=>$tab_content,'TAB_FIRST'=>false,'TAB_LAST'=>true);
 
 		return array(
 			lorem_globalise(
@@ -658,16 +668,16 @@ class Hook_addon_registry_core_ocf
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_members_online_screen()
 	{
 		$rows	=	new ocp_tempcode();
-		foreach(placeholder_array() as $key=>$value)
+		foreach (placeholder_array() as $key=>$value)
 		{
 			$rows->attach(do_lorem_template('OCF_MEMBER_ONLINE_ROW',array('IP'=>placeholder_ip(),'AT_URL'=>placeholder_url(),'LOCATION'=>lorem_word(),'MEMBER'=>placeholder_link(),'TIME'=>placeholder_time())));
 		}
@@ -681,13 +691,14 @@ class Hook_addon_registry_core_ocf
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_group_directory_screen()
 	{
 		$_rank = array(placeholder_array());
@@ -728,7 +739,7 @@ class Hook_addon_registry_core_ocf
 				$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>$v)));
 			}
 
-			$ranks[]=do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$rank,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>$results_browser,'WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+			$ranks[]=do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$rank,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>$results_browser,'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 		}
 
 		return array(
@@ -744,12 +755,12 @@ class Hook_addon_registry_core_ocf
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_view_group_screen()
 	{
 		$_primary_members =	placeholder_array();
@@ -773,7 +784,7 @@ class Hook_addon_registry_core_ocf
 		$fields_title = do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word()));
 		
 		//results_table
-		$primary_members = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$primary_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array()),NULL,false);
+		$primary_members = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$primary_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false);
 
 		$temp = new ocp_tempcode();
 		foreach (placeholder_array() as $i=>$v)
@@ -785,8 +796,8 @@ class Hook_addon_registry_core_ocf
 							)
 				);
 			$cells = do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>$temp),NULL,false);
-		/*	$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>"$i"),NULL,false));
-			$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>"$i"),NULL,false));*/
+		/*	$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));
+			$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));*/
 			$entries = do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES'=>$cells),NULL,false);
 
 			$_secondary_members->attach($entries);
@@ -796,7 +807,7 @@ class Hook_addon_registry_core_ocf
 		$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word_2())));*/
 
 		//results_table
-		$secondary_members = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$_secondary_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array()),NULL,false);
+		$secondary_members = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$_secondary_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false);
 
 		foreach (placeholder_array() as $i=>$v)
 		{
@@ -808,7 +819,7 @@ class Hook_addon_registry_core_ocf
 						)
 			);
 			$cells = do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>$temp),NULL,false);
-			//$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>"$i"),NULL,false));
+			//$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));
 			$entries = do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES'=>$cells),NULL,false);
 
 			$_prospective_members->attach($entries);
@@ -817,7 +828,7 @@ class Hook_addon_registry_core_ocf
 		//$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word_2())));
 
 		//results_table
-		$prospective_members = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$_prospective_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array()),NULL,false);
+		$prospective_members = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$_prospective_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false);
 		
 
 		return array(

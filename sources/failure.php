@@ -209,7 +209,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 
 	// Put into error log
 	if (get_param_integer('keep_fatalistic',0)==0)
-		@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline),0);
+		@error_log('PHP '.ucwords($type).':  '.$errstr.' in '.$errfile.' on line '.strval($errline).' @ '.get_self_url_easy(),0);
 
 	if (!$GLOBALS['SUPRESS_ERROR_DEATH']) // Don't display - die as normal
 	{
@@ -689,7 +689,7 @@ function _fatal_exit($text,$return=false)
 	$title=get_page_title('ERROR_OCCURRED');
 
 	if (get_param_integer('keep_fatalistic',0)==0)
-		@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text),0);
+		@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text).' @ '.get_self_url_easy(),0);
 
 	$trace=get_html_trace();
 

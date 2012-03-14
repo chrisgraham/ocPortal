@@ -1,4 +1,4 @@
-<div onclick="cancelBubbling(event);">
+<div onkeypress="return null;" onclick="cancelBubbling(event);">
 	{+START,IF,{SLIDESHOW}}
 		<label for="slideshow_from" class="slideshow_speed">
 			{!SPEED_IN_SECS}

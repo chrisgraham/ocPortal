@@ -167,7 +167,7 @@ class Hook_addon_registry_shopping
 				'CATALOGUE_products_ENTRY_FIELD.tpl'=>'field_map_products_entry_screen',
 				'CATALOGUE_products_ENTRY_SCREEN.tpl'=>'field_map_products_entry_screen',
 				'CATALOGUE_products_ENTRY.tpl'=>'field_map_products_entry_screen',
-				'CATALOGUE_products_ENTRY_EMBED.tpl'=>'field_map_products_entry_screen',
+				'CATALOGUE_products_ENTRY_EMBED.tpl'=>'list_catalogue_products',
 				'CATALOGUE_products_LINE.tpl'=>'list_catalogue_screen_products',
 				'CATALOGUE_products_LINE_WRAP.tpl'=>'list_catalogue_screen_products',
 				'CATALOGUE_ENTRY_ADD_TO_CART.tpl'=>'table_category_screen_products',
@@ -179,12 +179,12 @@ class Hook_addon_registry_shopping
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__shopping_cart_stage_pay()
 	{
 		return array(
@@ -195,13 +195,14 @@ class Hook_addon_registry_shopping
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__ecom_admin_orders_screen()
 	{
 		$results_browser = placeholder_result_browser();
@@ -231,7 +232,7 @@ class Hook_addon_registry_shopping
 		}
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
 
-		$results_table = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$order_entries,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>'','WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		$results_table = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$order_entries,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 
 		return array(
 			lorem_globalise(
@@ -284,16 +285,16 @@ class Hook_addon_registry_shopping
 
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
 
-		return do_lorem_template('RESULTS_'.$tplset.'TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$entries,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>placeholder_result_browser(),'WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		return do_lorem_template('RESULTS_'.$tplset.'TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$entries,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>placeholder_result_browser(),'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__ecom_admin_orders_details_screen()
 	{
 		$results_browser = placeholder_result_browser();
@@ -326,7 +327,7 @@ class Hook_addon_registry_shopping
 		}
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
 
-		$results_table = do_lorem_template('RESULTS_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$product_entries,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>'','WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		$results_table = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$product_entries,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 		//results_table ends
 
 		$order_actions	= do_lorem_template('ADMIN_ORDER_ACTIONS',array('ORDER_TITLE'=>lorem_phrase(),'ORDR_ACT_URL'=>placeholder_url(),'ORDER_STATUS'=>lorem_word()));
@@ -357,12 +358,12 @@ class Hook_addon_registry_shopping
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ecommerce_item_details()
 	{
 		return array(
@@ -375,16 +376,16 @@ class Hook_addon_registry_shopping
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ecom_cart_button_via_paypal()
 	{
 		$items = array();
-		foreach(placeholder_array() as $k=>$v)
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$items[] = array('PRODUCT_NAME'=>lorem_word(),'PRICE'=>placeholder_number(),'QUANTITY'=>placeholder_number());
 		}
@@ -404,12 +405,12 @@ class Hook_addon_registry_shopping
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__shopping_cart_screen()
 	{
 		//results_table starts
@@ -429,8 +430,8 @@ class Hook_addon_registry_shopping
 			$product_image = placeholder_image();
 			$product_link = placeholder_link();
 			$currency = lorem_word();
-			$edit_qnty = do_lorem_template('SHOPPING_ITEM_QUANTITY_FIELD',array('PRODUCT_ID'=>"$k",'QUANTITY'=>lorem_phrase()));
-			$del_item =	do_lorem_template('SHOPPING_ITEM_REMOVE_FIELD',array('PRODUCT_ID'=>"$k"));
+			$edit_qnty = do_lorem_template('SHOPPING_ITEM_QUANTITY_FIELD',array('PRODUCT_ID'=>strval($k),'QUANTITY'=>lorem_phrase()));
+			$del_item =	do_lorem_template('SHOPPING_ITEM_REMOVE_FIELD',array('PRODUCT_ID'=>strval($k)));
 
 			$values = array(
 								$product_image,
@@ -458,7 +459,7 @@ class Hook_addon_registry_shopping
 		}
 		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
 
-		$results_table = do_lorem_template('RESULTS_cart_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$shopping_cart,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array()),NULL,false,'RESULTS_TABLE');
+		$results_table = do_lorem_template('RESULTS_cart_TABLE',array('FIELDS_TITLE'=>$fields_title,'FIELDS'=>$shopping_cart,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>lorem_word(),'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
 		//results_table ends
 
 		$proceed_box = do_lorem_template('SHOPPING_CART_PROCEED',array('SUB_TOTAL'=>float_format(floatval(placeholder_number())),'SHIPPING_COST'=>float_format(floatval(placeholder_number())),'GRAND_TOTAL'=>float_format(floatval(placeholder_number())),'CHECKOUT_URL'=>placeholder_link(),'PROCEED'=>lorem_phrase(),'CURRENCY'=>lorem_word(),'PAYMENT_FORM'=>placeholder_form()));
@@ -484,17 +485,18 @@ class Hook_addon_registry_shopping
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ecom_orders_screen()
 	{
 		$orders = array();
-		foreach(placeholder_array() as $v)
+		foreach (placeholder_array() as $v)
 		{
 			$orders[] = array(
 				'ORDER_DET_URL'=>placeholder_url(),
@@ -515,17 +517,18 @@ class Hook_addon_registry_shopping
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ecom_orders_details_screen()
 	{
 		$orders = array();
-		foreach(placeholder_array() as $v)
+		foreach (placeholder_array() as $v)
 		{
 			$orders[] = array(
 				'PRODUCT_DET_URL'=>placeholder_url(),
@@ -596,17 +599,19 @@ class Hook_addon_registry_shopping
 					'EDIT_CATALOGUE'=>lorem_phrase(),
 					'BROWSER'=>$results_browser,
 					'TREE'=>lorem_phrase(),
+					'ID'=>placeholder_id(),
 						)
 			),NULL,'',true),
 		);
 	}
+
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__field_map_products_entry_screen()
 	{
 		require_lang('shopping');
@@ -618,7 +623,7 @@ class Hook_addon_registry_shopping
 		$fields = new ocp_tempcode();
 		$fields_table = new ocp_tempcode();
 
-		foreach(placeholder_array() as $v)
+		foreach (placeholder_array() as $v)
 		{
 			$_field = do_lorem_template('CATALOGUE_products_ENTRY_FIELD',array('ENTRYID'=>placeholder_random_id(),'CATALOGUE'=>lorem_phrase(),'TYPE'=>lorem_word(),'FIELD'=>lorem_word(),'FIELDID'=>placeholder_random_id(),'_FIELDID'=>placeholder_random_id(),'FIELDTYPE'=>lorem_word(),'VALUE_PLAIN'=>lorem_phrase(),'VALUE'=>lorem_phrase()),NULL,false,'CATALOGUE_DEFAULT_ENTRY_FIELD');
 			$fields->attach($_field);
@@ -650,26 +655,8 @@ class Hook_addon_registry_shopping
 					'CART_BUTTONS'=>$cart_link,
 					'CART_LINK'=>$cart_logo,
 					'FIELDS'=>$fields,
-						)
-			);
-
-		$entry->attach(do_lorem_template('CATALOGUE_products_ENTRY_EMBED',array(
-					'FIELD_0'=>lorem_phrase(),
-					'FIELD_1'=>lorem_phrase(),
-					'PRODUCT_CODE'=>placeholder_id(),
-					'FIELD_9'=>lorem_phrase(),
-					'FIELD_2'=>placeholder_number(),
-					'PRICE'=>placeholder_number(),
-					'RATING'=>$rating_inside,
-					'FIELD_7_THUMB'=>placeholder_image(),
-					'FIELD_7_PLAIN'=>placeholder_url(),
-					'MAP_TABLE'=>placeholder_table(),
-					'CART_BUTTONS'=>$cart_link,
-					'CART_LINK'=>$cart_logo,
-					'FIELDS'=>$fields,
-					'URL'=>placeholder_url(),
-						)
-			));
+				)
+		);
 
 		return array(
 			lorem_globalise(
@@ -687,13 +674,75 @@ class Hook_addon_registry_shopping
 		);
 	}
 
-/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__list_catalogue_products()
+	{
+		require_lang('shopping');
+		require_lang('catalogues');
+		require_lang('ecommerce');
+		require_css('catalogues');
+		require_lang('catalogues');
+
+		$fields = new ocp_tempcode();
+		$fields_table = new ocp_tempcode();
+
+		foreach (placeholder_array() as $v)
+		{
+			$_field = do_lorem_template('CATALOGUE_products_ENTRY_FIELD',array('ENTRYID'=>placeholder_random_id(),'CATALOGUE'=>lorem_phrase(),'TYPE'=>lorem_word(),'FIELD'=>lorem_word(),'FIELDID'=>placeholder_random_id(),'_FIELDID'=>placeholder_random_id(),'FIELDTYPE'=>lorem_word(),'VALUE_PLAIN'=>lorem_phrase(),'VALUE'=>lorem_phrase()),NULL,false,'CATALOGUE_DEFAULT_ENTRY_FIELD');
+			$fields->attach($_field);
+		}
+
+		$cart_link = do_lorem_template('CATALOGUE_ENTRY_ADD_TO_CART',array(
+					'OUT_OF_STOCK'=>lorem_phrase(),
+					'ACTION_URL'=>placeholder_url(),
+					'PRODUCT_ID'=>placeholder_id(),
+					'ALLOW_OPTOUT_TAX'=>lorem_phrase(),
+					'PURCHASE_ACTION_URL'=>placeholder_url(),
+					'CART_URL'=>placeholder_url(),
+						));
+		$cart_logo = do_lorem_template('CART_LOGO',array('URL'=>placeholder_url(),'TITLE'=>lorem_phrase()),NULL,false);
+
+		$rating_inside	=	new ocp_tempcode();
+
+		$entry=do_lorem_template('CATALOGUE_products_ENTRY_EMBED',array(
+					'FIELD_0'=>lorem_phrase(),
+					'FIELD_1'=>lorem_phrase(),
+					'PRODUCT_CODE'=>placeholder_id(),
+					'FIELD_9'=>lorem_phrase(),
+					'FIELD_2'=>placeholder_number(),
+					'PRICE'=>placeholder_number(),
+					'RATING'=>$rating_inside,
+					'FIELD_7_THUMB'=>placeholder_image(),
+					'FIELD_7_PLAIN'=>placeholder_url(),
+					'MAP_TABLE'=>placeholder_table(),
+					'CART_BUTTONS'=>$cart_link,
+					'CART_LINK'=>$cart_logo,
+					'FIELDS'=>$fields,
+					'URL'=>placeholder_url(),
+					'VIEW_URL'=>placeholder_url(),
+					)
+		);
+
+		return array(
+			lorem_globalise(
+				$entry
+			,NULL,'',true),
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__list_catalogue_screen_products()
 	{
 		require_lang('catalogues');
@@ -703,7 +752,7 @@ class Hook_addon_registry_shopping
 		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'TYPE'=>lorem_word());
 		
 		$line = new ocp_tempcode();
-		foreach(placeholder_array(1) as $v)
+		foreach (placeholder_array(1) as $v)
 		{
 		$line->attach(do_lorem_template('CATALOGUE_products_LINE',array(
 					'FIELD_0'=>lorem_phrase(),
@@ -747,12 +796,12 @@ class Hook_addon_registry_shopping
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__results_products_table()
 	{
 		require_css('catalogues');
@@ -763,6 +812,7 @@ class Hook_addon_registry_shopping
 					'FIELDS'=>lorem_phrase(),
 					'FIELDS_TITLE'=>lorem_phrase(),
 					'MESSAGE'=>lorem_phrase(),
+					'WIDTHS'=>array(placeholder_number()),
 						)
 			),NULL,'',true),
 		);

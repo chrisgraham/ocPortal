@@ -147,7 +147,7 @@ function pos_to_line_details($i,$absolute=false)
 	$pos=$j-strrpos(substr($TEXT,0,$j),chr(10));
 	$l_s=strrpos(substr($TEXT,0,$j+1),chr(10))+1;
 	if ($l_s==1) $l_s=0;
-	$full_line=htmlentities(substr($TEXT,$l_s,strpos($TEXT,chr(10),$j)-1-$l_s));
+	$full_line=@strval(htmlentities(substr($TEXT,$l_s,strpos($TEXT,chr(10),$j)-1-$l_s)));
 
 	return array($pos,$line,$full_line);
 }

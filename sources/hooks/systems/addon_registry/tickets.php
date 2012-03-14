@@ -156,6 +156,7 @@ class Hook_addon_registry_tickets
 			),NULL,'',true),
 		);
 	}
+
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
@@ -197,10 +198,12 @@ class Hook_addon_registry_tickets
 					'COMMENT_FORM'=>$comment_form,
 					'STAFF_DETAILS'=>placeholder_url(),
 					'URL'=>placeholder_url(),
+					'ADD_TICKET_URL'=>placeholder_url(),
 				)
 			),NULL,'',true)
 		);
 	}
+
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
@@ -221,6 +224,7 @@ class Hook_addon_registry_tickets
 			),NULL,'',true),
 		);
 	}
+
 	/**
 	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.

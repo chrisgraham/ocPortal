@@ -12,7 +12,7 @@
 
 <h2>{!SEARCH}</h2>
 
-<form target="_self" method="get" action="{SEARCH_URL*}" onsubmit="try { window.scrollTo(0,0); } catch(e) {};">
+<form title="{!SEARCH}" target="_self" method="get" action="{SEARCH_URL*}" onsubmit="try { window.scrollTo(0,0); } catch(e) {};">
 	<div>
 		{HIDDEN}
 

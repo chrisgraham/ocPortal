@@ -1099,7 +1099,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 
 			case 'a':
 				// Handle empty tag check for <a> (couldn't handle with normal case due to complexity)
-				if ((!isset($attributes['name'])) && (substr($OUT,$POS,4)=='</a>'))
+				if ((!isset($attributes['name'])) && (!isset($attributes['title'])) && (substr($OUT,$POS,4)=='</a>'))
 					$errors[]=array('XHTML_EMPTY_TAG',$tag);
 				break;
 
@@ -2087,7 +2087,7 @@ function _check_css_value($key,$value,$_i)
 		}
 	} else
 	{
-		if (($key=='font-size') && (substr($value,-2)=='px')) return array(0=>'CSS_PX_FONT','pos'=>$_i);
+		//if (($key=='font-size') && (substr($value,-2)=='px')) return array(0=>'CSS_PX_FONT','pos'=>$_i);
 	}
 
 	return $error;

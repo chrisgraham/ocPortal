@@ -128,7 +128,7 @@ class Hook_addon_registry_stats_block
 	{
 		$full_tpl = new ocp_tempcode();
 		$bits = new ocp_tempcode();
-		foreach(placeholder_array() as $v)
+		foreach (placeholder_array() as $v)
 		{
 			$bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>lorem_phrase(),'VALUE'=>placeholder_number())));
 		}
