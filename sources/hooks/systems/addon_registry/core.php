@@ -1716,6 +1716,7 @@ class Hook_addon_registry_core
 					'EMPTY2'=>'',
 					'NONEMPTY'=>lorem_word(),
 					'PASSED'=>lorem_word(),
+					'ARRAY'=>array(array('A'=>'','B'=>'','C'=>'')),
 						)
 			),NULL,'',true),
 		);

@@ -392,6 +392,12 @@ class OCP_Topic
 		} else
 		{
 			$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts,$queue,$max_thread_depth);
+			foreach ($queue as $orphaned_post) // E.g. if parent was deleted at some time
+			{
+				$orphaned_post['parent_id']=NULL;
+				$orphaned_post['children']=array();
+				$tree[0][]=$orphaned_post;
+			}
 		}
 
 		$ret=$this->_render_post_tree($tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);

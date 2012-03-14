@@ -37,7 +37,7 @@ class modularisation_test_set extends ocp_test_case
 		while (($file=readdir($dh))!==false)
 		{
 			if (substr($file,-4)!='.php') continue;
-			require_once(get_file_base().'/sources/hooks/systems/addon_registry/'.$file);
+			require_code('hooks/systems/addon_registry/'.basename($file,'.php'));
 			$ob=eval('return new Hook_addon_registry_'.basename($file,'.php').'();');
 			$addon_data[basename($file,'.php')]=$ob->get_file_list();
 		}

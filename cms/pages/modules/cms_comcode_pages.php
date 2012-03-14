@@ -885,15 +885,15 @@ class Module_cms_comcode_pages
 		} else $new_file=filter_naughty($file);
 		if ($file=='') $file=$new_file;
 
-		$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$file.'.txt');
+		require_code('type_validation');
+		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
-		if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');
+		$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$file.'.txt');
 
 		$renaming_page=($new_file!=$file);
 
 		if ($renaming_page)
 		{
-			require_code('type_validation');
 			if (!is_alphanumeric($new_file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 			$fullpath2=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$new_file.'.txt');
@@ -956,6 +956,8 @@ class Module_cms_comcode_pages
 			));
 		} else // Edit
 		{
+			if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');
+
 			require_code('submit');
 			$just_validated=(!content_validated('comcode_page',$zone.':'.$file)) && ($validated==1);
 			if ($just_validated)

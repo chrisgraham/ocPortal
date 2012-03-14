@@ -330,7 +330,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 	// Posts
 	if ($out['is_threaded']==0)
 	{
-		$_postdetailss=$GLOBALS['FORUM_DB']->query($query,$max,$start);
+		$_postdetailss=list_to_map('id',$GLOBALS['FORUM_DB']->query($query,$max,$start));
 		if (($start==0) && (count($_postdetailss)<$max)) $out['max_rows']=$max; // We know that they're all on this screen
 		else $out['max_rows']=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$where);
 		$posts=array();
@@ -372,6 +372,40 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 				$_postdetails['message']=new ocp_tempcode();
 				if (!$_postdetails['message']->from_assembly($_postdetails['text_parsed'],true))
 					$_postdetails['message']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
+			}
+
+			// Fake a quoted post? (kind of a nice 'tidy up' feature if a forum's threading has been turned off, leaving things for flat display)
+			if (!is_null($_postdetails['p_parent_id']))
+			{
+				$temp=$_postdetails['message'];
+				$_postdetails['message']=new ocp_tempcode();
+
+				$p=mixed(); // NULL
+				if (array_key_exists($_postdetails['p_parent_id'],$_postdetailss)) // Ah, we're already loading it on this page
+				{
+					$p=$_postdetailss[$_postdetails['p_parent_id']];
+
+					// Load post
+					if ((get_page_name()=='search') || (is_null($p['text_parsed'])) || ($p['text_parsed']=='') || ($p['p_post']==0))
+					{
+						$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
+					} else
+					{
+						$p['message']=new ocp_tempcode();
+						if (!$p['message']->from_assembly($p['text_parsed'],true))
+							$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
+					}
+				} else // Drat, we need to load it
+				{
+					$_p=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>$_postdetails['p_parent_id']),'',1);
+					if (array_key_exists(0,$_p))
+					{
+						$p=$_p[0];
+						$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
+					}
+				}
+				$_postdetails['message']=do_template('COMCODE_QUOTE_BY',array('SAIDLESS'=>false,'BY'=>$p['p_poster_name_if_guest'],'CONTENT'=>$p['message']));
+				$_postdetails['message']->attach($temp);
 			}
 
 			// Spacer posts may have a better first post put in place
