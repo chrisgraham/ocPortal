@@ -47,6 +47,16 @@ class Hook_Profiles_Tabs_Edit_notifications
 
 		$order=100;
 
+		if (strtoupper(ocp_srv('REQUEST_METHOD'))=='POST')
+		{
+			$auto_monitor_contrib_content=post_param_integer('auto_monitor_contrib_content',0);
+			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_auto_monitor_contrib_content'=>$auto_monitor_contrib_content),array('id'=>$member_id_of),'',1);
+
+			// Decache from run-time cache
+			unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id_of]);
+			unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id_of]);
+		}
+
 		require_code('notifications2');
 
 		$text=notifications_ui($member_id_of);

@@ -3,7 +3,6 @@
 /**
  * Request data for the activities activities feed
  */
-
 // Assume that our activity feed needs updating to start with
 window.latest_activity = 0;
 
@@ -60,7 +59,6 @@ function sUpdateGetData ()
 /**
  * Receive and parse data for the activities activities feed
  */
-
 function sUpdateShow(data, stat)
 {
 	if (ugdCanICant>1)

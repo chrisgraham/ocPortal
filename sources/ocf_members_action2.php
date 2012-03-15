@@ -488,7 +488,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				{
 					$hidden->attach(form_input_hidden('views_signatures','1'));
 				}
-				$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));
+				//$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));
 				$usergroup_list=new ocp_tempcode();
 				$lgroups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
 				foreach ($lgroups as $key=>$val)

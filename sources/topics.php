@@ -457,7 +457,16 @@ class OCP_Topic
 			if (($q['p_poster']==get_member()) || ($q['id']===$this->first_post_id))
 			{
 				$this->replied=true;
-				$posts['post_'.strval($q['id'])]=$q;
+				if ($q['id']===$this->first_post_id) // First post must go first
+				{
+					$posts_backup=$posts;
+					$posts=array();
+					$posts['post_'.strval($q['id'])]=$q;
+					$posts+=$posts_backup;
+				} else
+				{
+					$posts['post_'.strval($q['id'])]=$q;
+				}
 				unset($queue[$i]);
 			}
 		}
@@ -477,7 +486,16 @@ class OCP_Topic
 		if ((!isset($posts[$post_id])) && (isset($queue['post_'.strval($post_id)])))
 		{
 			$grabbed=$queue['post_'.strval($post_id)];
-			$posts['post_'.strval($post_id)]=$grabbed;
+			if ($post_id===$this->first_post_id) // First post must go first
+			{
+				$posts_backup=$posts;
+				$posts=array();
+				$posts['post_'.strval($post_id)]=$grabbed;
+				$posts+=$posts_backup;
+			} else
+			{
+				$posts['post_'.strval($post_id)]=$grabbed;
+			}
 			unset($queue['post_'.strval($post_id)]);
 			$parent=$grabbed['parent_id'];
 			if (!is_null($parent))
@@ -772,7 +790,7 @@ class OCP_Topic
 			{
 				require_code('feedback');
 				actualise_rating(true,'post',strval($post['id']),get_self_url(),$post['title']);
-				$rating=display_rating(get_self_url(),$post['title'],'post',strval($post['id']),'RATING_INLINE_DYNAMIC');
+				$rating=display_rating(get_self_url(),$post['title'],'post',strval($post['id']),'RATING_INLINE_DYNAMIC',$post['user']);
 			} else
 			{
 				$rating=new ocp_tempcode();

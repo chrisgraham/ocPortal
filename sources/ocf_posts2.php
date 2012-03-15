@@ -140,7 +140,7 @@ function ocf_show_isolated_post($row,$use_post_title=false)
 
 	require_code('feedback');
 	actualise_rating(true,'post',strval($row['id']),get_self_url(),$row['p_title']);
-	$rating=display_rating(get_self_url(),$row['p_title'],'post',strval($row['id']),'RATING_INLINE_DYNAMIC');
+	$rating=display_rating(get_self_url(),$row['p_title'],'post',strval($row['id']),'RATING_INLINE_DYNAMIC',$row['p_poster']);
 
 	// Render
 	return do_template('OCF_ISOLATED_POST',array('_GUID'=>'9456f4fe4b8fb1bf34f606fcb2bcc9d7','URL'=>$post_url,'ID'=>strval($row['id']),'TREE'=>$tree,'POST'=>do_template('OCF_TOPIC_POST',array(

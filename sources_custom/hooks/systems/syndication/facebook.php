@@ -107,7 +107,7 @@ class Hook_Syndication_facebook
 		require_code('facebook_connect');
 
 		// Prepare message
-		list($message)=render_activity($row);
+		list($message)=render_activity($row,false);
 		$name=$row['a_label_1'];
 		require_code('character_sets');
 		$name=convert_to_internal_encoding($name,get_charset(),'utf-8');

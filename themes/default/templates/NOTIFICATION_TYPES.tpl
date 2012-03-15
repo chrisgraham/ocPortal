@@ -1,5 +1,5 @@
 {+START,LOOP,NOTIFICATION_TYPES}
-	<td>
+	<td class="dottedborder_barrier_b_nonrequired">
 		<div>
 			<label for="notification_{SCOPE*}_{NTYPE*}">{LABEL*}</label>
 

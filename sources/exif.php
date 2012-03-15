@@ -34,8 +34,12 @@ function get_exif_data($path,$filename=NULL)
 
 	if (function_exists('exif_read_data'))
 	{
-		$exif=@exif_read_data($path,'ANY_TAG');
-		if ($exif!==false) $out+=$exif;
+		$meta_data=@exif_read_data($path,'ANY_TAG');
+
+		if ($meta_data!==false)
+		{
+			$out+=cleanup_exif($meta_data);
+		}
 	}
 
 	$caption=get_exif_image_caption($path,$filename);
@@ -93,7 +97,16 @@ function _get_simple_gps($exif)
 		if($pos !== false)
 		{
 			$temp = explode('/',$value);
-			$gps[$key] = floatval($temp[0]) / floatval($temp[1]);
+			if ((is_numeric($temp[0])) && (is_numeric($temp[1])))
+			{
+				if (floatval($temp[1])==0.0)
+				{
+					$gps[$key] = floatval($temp[0]);
+				} else
+				{
+					$gps[$key] = floatval($temp[0]) / floatval($temp[1]);
+				}
+			}
 		}
 	}
 
@@ -179,18 +192,23 @@ function get_exif_image_caption($path,$filename)
 	{
 		$meta_data=@exif_read_data($path);
 
-		$comments=isset($meta_data['ImageDescription'])?$meta_data['ImageDescription']:'';
-		if ($comments=='')
+		if ($meta_data!==false)
 		{
-			$comments=isset($meta_data['Comments'])?$meta_data['Comments']:'';
-		}
-		if ($comments=='')
-		{
-			$comments=isset($meta_data['Title'])?$meta_data['Title']:'';
-		}
-		if ($comments=='')
-		{
-			$comments=isset($meta_data['COMPUTED']['UserComment'])?$meta_data['COMPUTED']['UserComment']:'';
+			$meta_data=cleanup_exif($meta_data);
+
+			$comments=isset($meta_data['ImageDescription'])?$meta_data['ImageDescription']:'';
+			if ($comments=='')
+			{
+				$comments=isset($meta_data['Comments'])?$meta_data['Comments']:'';
+			}
+			if ($comments=='')
+			{
+				$comments=isset($meta_data['Title'])?$meta_data['Title']:'';
+			}
+			if ($comments=='')
+			{
+				$comments=isset($meta_data['COMPUTED']['UserComment'])?$meta_data['COMPUTED']['UserComment']:'';
+			}
 		}
 	}
 	if ($comments=='') //IF XMP and EXIF fail, attempt IPTC binary
@@ -286,4 +304,32 @@ function store_exif($content_type,$content_id,$exif,$map=NULL)
 	{
 		// Cannot handle this
 	}
+}
+
+/**
+ * Cleanup some EXIF, to the correct character set.
+ *
+ * @param  array		The EXIF data
+ * @return array		Cleaned up EXIF data
+ */
+function cleanup_exif($meta_data)
+{
+	require_code('character_sets');
+	$val=mixed();
+	foreach ($meta_data as $key=>$val)
+	{
+		if (is_string($val))
+		{
+			$val=preg_replace('#[[:cntrl:]]#','',$val);
+			$meta_data[$key]=convert_to_internal_encoding($val,'ISO-8859-1'/*EXIF uses this, is not really internationalised*/);
+		} elseif (is_array($val))
+		{
+			foreach ($val as $key2=>$val2)
+			{
+				$val2=preg_replace('#[[:cntrl:]]#','',$val2);
+				$meta_data[$key][$key2]=convert_to_internal_encoding($val2,'ISO-8859-1'/*EXIF uses this, is not really internationalised*/);
+			}
+		}
+	}
+	return $meta_data;
 }

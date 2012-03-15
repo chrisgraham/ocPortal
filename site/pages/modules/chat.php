@@ -914,9 +914,9 @@ class Module_chat
 		$url=get_param('redirect','');
 		if ($url=='')
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen($title,do_lang_tempcode('NOW_ADDED_AS_FRIEND',escape_html($username)));
 		}
-		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+		return redirect_screen($title,$url,do_lang_tempcode('NOW_ADDED_AS_FRIEND',escape_html($username)));
 	}
 
 	/**

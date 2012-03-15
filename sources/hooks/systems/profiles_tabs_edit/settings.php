@@ -152,7 +152,7 @@ class Hook_Profiles_Tabs_Edit_settings
 			{
 				$preview_posts=post_param_integer('preview_posts',0);
 				$zone_wide=post_param_integer('zone_wide',0);
-				$auto_monitor_contrib_content=post_param_integer('auto_monitor_contrib_content',0);
+				$auto_monitor_contrib_content=NULL;//post_param_integer('auto_monitor_contrib_content',0);	Moved to notifications tab
 				$views_signatures=post_param_integer('views_signatures',0);
 				$timezone=post_param('timezone',get_site_timezone());
 			}

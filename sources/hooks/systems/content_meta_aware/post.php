@@ -29,7 +29,7 @@ class Hook_content_meta_aware_post
 	function info()
 	{
 		return array(
-			'content_type_label'=>'FORUM_POST',
+			'content_type_label'=>'ocf:FORUM_POST',
 
 			'table'=>'f_posts',
 			'id_field'=>'id',

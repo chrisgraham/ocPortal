@@ -138,7 +138,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 	if ((!is_null(post_param('title',NULL))) || ($validated==1))
 		actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum);
 	//actualise_post_trackback($allow_trackbacks==1,$page_name,$content_id);
-	$rating_details=get_rating_box($content_url,$content_title,$page_name,$content_id,$allow_rating==1);
+	$rating_details=get_rating_box($content_url,$content_title,$page_name,$content_id,$allow_rating==1,$submitter);
 	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,false,$submitter,$allow_comments==2);
 	$trackback_details=get_trackbacks($page_name,$content_id,$allow_trackbacks==1);
 
@@ -197,13 +197,14 @@ function post_comment_script()
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  boolean		Whether this resource allows rating (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
+ * @param  ?MEMBER		Content owner (NULL: none)
  * @return tempcode		Tempcode for complete rating box
  */
-function get_rating_box($content_url,$content_title,$content_type,$content_id,$allow_rating)
+function get_rating_box($content_url,$content_title,$content_type,$content_id,$allow_rating,$submitter=NULL)
 {
 	if ($allow_rating)
 	{
-		return display_rating($content_url,$content_title,$content_type,$content_id,'RATING_BOX');
+		return display_rating($content_url,$content_title,$content_type,$content_id,'RATING_BOX',$submitter);
 	}
 
 	return new ocp_tempcode();
@@ -217,11 +218,12 @@ function get_rating_box($content_url,$content_title,$content_type,$content_id,$a
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  ID_TEXT		The template to use to display the rating box
+ * @param  ?MEMBER		Content owner (NULL: none)
  * @return tempcode		Tempcode for complete trackback box
  */
-function display_rating($content_url,$content_title,$content_type,$content_id,$display_tpl='RATING_INLINE_STATIC')
+function display_rating($content_url,$content_title,$content_type,$content_id,$display_tpl='RATING_INLINE_STATIC',$submitter=NULL)
 {
-	$rating_data=get_rating_simple_array($content_url,$content_title,$content_type,$content_id,'RATING_FORM');
+	$rating_data=get_rating_simple_array($content_url,$content_title,$content_type,$content_id,'RATING_FORM',$submitter);
 
 	if (is_null($rating_data))
 		return new ocp_tempcode();
@@ -237,9 +239,10 @@ function display_rating($content_url,$content_title,$content_type,$content_id,$d
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  ID_TEXT		The template to use to display the rating box
+ * @param  ?MEMBER		Content owner (NULL: none)
  * @return ?array			Current rating information (ready to be passed into a template). RATING is the rating (out of 10), NUM_RATINGS s the number of ratings so far, RATING_FORM is the tempcode of the rating box (NULL: rating disabled)
  */
-function get_rating_simple_array($content_url,$content_title,$content_type,$content_id,$form_tpl='RATING_FORM')
+function get_rating_simple_array($content_url,$content_title,$content_type,$content_id,$form_tpl='RATING_FORM',$submitter=NULL)
 {
 	if (get_option('is_on_rating')=='1')
 	{
@@ -314,7 +317,11 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 		// Work out possible errors that mighr prevent rating being allowed
 		$error=new ocp_tempcode();
 		$rate_url=new ocp_tempcode();
-		if (!has_specific_permission(get_member(),'rate',get_page_name()))
+		if (($submitter===get_member()) && (!is_guest()))
+		{
+			$error=do_lang_tempcode('RATE_DENIED_OWN');
+		}
+		elseif (!has_specific_permission(get_member(),'rate',get_page_name()))
 		{
 			$error=do_lang_tempcode('RATE_DENIED');
 		}
@@ -426,7 +433,7 @@ function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$
  * @param  ID_TEXT		The type (download, etc) that this rating is for
  * @param  ID_TEXT		The second level type (probably blank)
  * @param  ID_TEXT		The ID of the type that this rating is for
- * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
+ * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know)
  * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
  */
 function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$type,$content_id,$content_url,$content_title)
@@ -438,13 +445,15 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 	if (!has_specific_permission($member_id,'rate',$page_name)) return;
 	if (already_rated(array($rating_for_type),$content_id)) return;
 
+	list($_content_title,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
+	if (is_null($content_title)) $content_title=$_content_title;
+	if (($member_id===$submitter) && (!is_guest($member_id))) return;
+
 	$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
 
 	// Top rating / liked
 	if (($rating==10) && ($type==''))
 	{
-		list(,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
-
 		if ((!is_null($submitter)) && (!is_guest($submitter)))
 		{
 			// Give points
@@ -480,6 +489,8 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 			{
 				$content_type_title=do_lang($cma_info['content_type_label']);
 			}
+
+			if ($content_title=='') $content_title=do_lang('VIEW');
 			syndicate_described_activity(((is_null($also_involving)) || (is_guest($also_involving)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES',$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
 		}
 	}

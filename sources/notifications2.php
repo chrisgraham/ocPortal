@@ -83,6 +83,8 @@ function notifications_ui($member_id_of)
 		$_notification_codes=$ob->list_handled_codes();
 		foreach ($_notification_codes as $notification_code=>$notification_details)
 		{
+			if (array_key_exists($notification_code,$lockdown)) continue;
+
 			if ($ob->member_could_potentially_enable($notification_code,$member_id_of))
 			{
 				$current_setting=notifications_setting($notification_code,NULL,$member_id_of);
@@ -182,7 +184,13 @@ function notifications_ui($member_id_of)
 		}
 	}
 
-	return do_template('NOTIFICATIONS_MANAGE',array('COLOR'=>$color,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
+	$auto_monitor_contrib_content=mixed();
+	if (get_forum_type()=='ocf')
+	{
+		$auto_monitor_contrib_content=strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_auto_monitor_contrib_content'));
+	}
+
+	return do_template('NOTIFICATIONS_MANAGE',array('COLOR'=>$color,'AUTO_NOTIFICATION_CONTRIB_CONTENT'=>$auto_monitor_contrib_content,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
 }
 
 /**

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>lang/EN/notifications.ini</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -405,20 +407,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>adminzone/pages/modules/admin_config.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>251</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>225</integer>
-		</dict>
 		<key>adminzone/pages/modules/admin_ecommerce.php</key>
 		<dict>
 			<key>caret</key>
@@ -432,6 +420,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>363</integer>
+		</dict>
+		<key>adminzone/pages/modules/admin_notifications.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>178</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>136</integer>
 		</dict>
 		<key>adminzone/pages/modules/admin_quiz.php</key>
 		<dict>
@@ -781,6 +783,20 @@
 				<integer>13</integer>
 				<key>line</key>
 				<integer>3</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lang/EN/notifications.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>45</integer>
+				<key>line</key>
+				<integer>34</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -1601,6 +1617,50 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
+		<key>sources/notifications.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>37</integer>
+				<key>line</key>
+				<integer>956</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>933</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>956</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>41</integer>
+				<key>line</key>
+				<integer>956</integer>
+			</dict>
+		</dict>
+		<key>sources/notifications2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>42</integer>
+				<key>line</key>
+				<integer>85</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>46</integer>
+		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -2239,6 +2299,20 @@
 				<integer>8</integer>
 			</dict>
 		</dict>
+		<key>themes/default/templates/NOTIFICATIONS_MANAGE.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>107</integer>
+				<key>line</key>
+				<integer>20</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>3</integer>
+		</dict>
 		<key>themes/default/templates/OCF_GROUP_DIRECTORY_SCREEN.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2584,9 +2658,17 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>sources/notifications2.php</string>
+		<string>adminzone/pages/modules/admin_notifications.php</string>
+		<string>themes/default/templates/NOTIFICATIONS_MANAGE.tpl</string>
+		<string>lang/EN/notifications.ini</string>
+		<string>sources/notifications.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{618, 239}, {1154, 939}}</string>
+	<string>{{763, 45}, {1154, 939}}</string>
 </dict>
 </plist>

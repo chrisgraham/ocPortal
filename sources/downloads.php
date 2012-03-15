@@ -90,7 +90,7 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_sum
 	} else $imgcode=new ocp_tempcode();
 
 	require_code('feedback');
-	$rating=($row['allow_rating']==1)?display_rating($download_url,get_translated_text($row['name']),'downloads',strval($row['id'])):NULL;
+	$rating=($row['allow_rating']==1)?display_rating($download_url,get_translated_text($row['name']),'downloads',strval($row['id']),'RATING_INLINE_STATIC',$row['submitter']):NULL;
 	if (!is_null($rating))
 		if (trim($rating->evaluate())=='') $rating=NULL;
 

@@ -17,7 +17,7 @@
 		{
 			var my_id=parseInt(Math.random()*10000);
 			tick_pos[my_id]=400;
-			setInnerHTML(ticktickticker,'<div onmouseover="this.mouseisover=true;" onmouseout="this.mouseisover=false;" class="ticker" style="text-indent: 400px; width: 400px;" id="'+my_id+'"><span>{$GET/;~,news_ticker_text}<span><\/span><\/div>');
+			setInnerHTML(ticktickticker,'<div onmouseover="this.mouseisover=true;" onmouseout="this.mouseisover=false;" class="ticker" style="text-indent: 400px; width: 400px;" id="'+my_id+'"><span>{$GET/;~,news_ticker_text}<\/span><\/div>');
 			window.focused=true;
 			addEventListenerAbstract(window,"focus",function() { window.focused=true; });
 			addEventListenerAbstract(window,"blur",function() { window.focused=false; });

@@ -29,7 +29,7 @@ class Hook_content_meta_aware_topic
 	function info()
 	{
 		return array(
-			'content_type_label'=>'FORUM_TOPIC',
+			'content_type_label'=>'ocf:FORUM_TOPIC',
 
 			'table'=>'f_topics',
 			'id_field'=>'id',

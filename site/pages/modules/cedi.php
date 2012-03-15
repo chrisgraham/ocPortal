@@ -508,7 +508,7 @@ class Module_cedi
 
 			// Rating
 			actualise_rating(true,'seedy_post',strval($post_id),build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title);
-			$rating_array=get_rating_simple_array(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title,'seedy_post',strval($post_id),'CEDI_RATING_FORM');
+			$rating_array=get_rating_simple_array(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title,'seedy_post',strval($post_id),'CEDI_RATING_FORM',$poster);
 			if (!is_null($rating_array))
 			{
 				$rating=do_template('CEDI_RATING',$rating_array);

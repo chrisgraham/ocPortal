@@ -175,6 +175,7 @@ class Module_admin_notifications
 					'NOTIFICATION_LABEL'=>$notification_details[1],
 					'NOTIFICATION_TYPES'=>$notification_types,
 					'SUPPORTS_CATEGORIES'=>false,
+					'PRIVILEGED'=>!$ob->member_could_potentially_enable($ntype,$GLOBALS['FORUM_DRIVER']->get_guest_id()),
 				);
 			}
 		}
@@ -242,7 +243,7 @@ class Module_admin_notifications
 			);
 		}
 
-		$interface=do_template('NOTIFICATIONS_MANAGE',array('COLOR'=>$color,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
+		$interface=do_template('NOTIFICATIONS_MANAGE',array('SHOW_PRIVILEGES'=>true,'COLOR'=>$color,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
 
 		return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
 			'TITLE'=>$title,

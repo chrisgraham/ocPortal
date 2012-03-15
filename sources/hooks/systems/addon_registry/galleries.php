@@ -332,6 +332,9 @@ class Hook_addon_registry_galleries
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_GALLERIES',array(
 			'MEMBER_ID'=>placeholder_id(),
 			'GALLERIES'=>lorem_phrase(),
+			'ADD_GALLERY_URL'=>placeholder_url(),
+			'ADD_IMAGE_URL'=>placeholder_url(),
+			'ADD_VIDEO_URL'=>placeholder_url(),
 		));
 		return array(
 			lorem_globalise($tab_content,NULL,'',true),

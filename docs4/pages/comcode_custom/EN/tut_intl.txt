@@ -183,7 +183,7 @@ The normal Western European collation (used by English) is 'latin1_swedish_ci'. 
 [title="3"]GD fonts[/title]
 
 If you find that the vertical text shown on permission editing interfaces is incorrect, it may be due to an incompatibility between PHP and the free Bitstream fonts that ocPortal bundles.
-This is known to happen with Russian characters. The solution is to replace the [tt]data/fonts/Vera.ttf[/tt] file with [tt]Verdana.ttf[/tt] from your own computer. We would distribute this file with ocPortal, except we don't have a license to; however if you have a copy of Windows or Mac OS you should have your own licensed copy of this file.
+This is known to happen with Russian characters. The solution is to replace the [tt]data/fonts/FreeMonoBoldOblique.ttf[/tt] file with [tt]Courier New Bold Italic.ttf[/tt] from your own computer. We would distribute this file with ocPortal, except we don't have a license to; however if you have a copy of Windows or Mac OS you should have your own licensed copy of this file.
 This OcCLE command can also be used to grab it from a URL that works at the time of writing:
 [code]
 :file_put_contents(get_file_base().'/data/fonts/Vera.ttf',http_download_file('http://typo3.org/extensions/repository/fulllist/pdf_generator2_fonts/0.0.1/info/?tx_terfe_pi1%5BdownloadFile%5D=fonts%252Fverdana.ttf&cHash=909a78c3bd'));

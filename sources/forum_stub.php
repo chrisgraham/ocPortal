@@ -54,22 +54,24 @@ class forum_driver_base
 	 */
 	function member_profile_url($id,$definitely_profile=false,$tempcode_okay=false)
 	{
+		$url=mixed();
+
 		if ((!$definitely_profile) && ($id!=$this->get_guest_id()) && (addon_installed('chat')))
 		{
 			$username_click_im=get_option('username_click_im',true);
 			if ($username_click_im=='1')
 			{
 				$url=build_url(array('page'=>'chat','type'=>'misc','enter_im'=>$id),get_module_zone('chat'));
-				//if (is_object($url)) $url=$url->evaluate();
 				return $url;
 			}
 		}
 
 		$url=$this->_member_profile_url($id,$tempcode_okay);
+		if (($tempcode_okay) && (!is_object($url)))
+			$url=make_string_tempcode($url);
 		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
 		{
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
-			//if (is_object($url)) $url=$url->evaluate();
 		}
 		return $url;
 	}

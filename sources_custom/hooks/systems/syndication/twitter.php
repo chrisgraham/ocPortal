@@ -101,7 +101,7 @@ class Hook_Syndication_twitter
 		require_lang('twitter');
 		require_code('twitter');
 
-		list($message)=render_activity($row);
+		list($message)=render_activity($row,false);
 		$link=static_evaluate_tempcode(pagelink_to_tempcode($row['a_pagelink_1']));
 
 		// Shorten message for Twitter purposes

@@ -833,7 +833,7 @@ class Module_galleries
 
 				// Some extra variables relating to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
-				$entry_rating_details=get_rating_box(get_self_url(true),$entry_title,'videos',strval($row['id']),$row['allow_rating']==1);
+				$entry_rating_details=get_rating_box(get_self_url(true),$entry_title,'videos',strval($row['id']),$row['allow_rating']==1,$row['submitter']);
 				$entry_comment_details=get_comments('videos',$row['allow_comments']==1,strval($row['id']),false,get_value('comment_forum__videos'),NULL,NULL,false,false,$row['submitter'],$row['allow_comments']==2);
 				$entry_trackback_details=get_trackbacks('videos',strval($row['id']),$row['allow_trackbacks']==1);
 				$entry_add_date_raw=is_null($row['add_date'])?'':strval($row['add_date']);
@@ -877,7 +877,7 @@ class Module_galleries
 
 				// Some extra variables relatin to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
-				$entry_rating_details=get_rating_box(get_self_url(true),$entry_title,'images',strval($row['id']),$row['allow_rating']==1);
+				$entry_rating_details=get_rating_box(get_self_url(true),$entry_title,'images',strval($row['id']),$row['allow_rating']==1,$row['submitter']);
 				$entry_comment_details=get_comments('images',$row['allow_comments']==1,strval($row['id']),false,get_value('comment_forum__images'),NULL,NULL,false,false,$row['submitter'],$row['allow_comments']==2);
 				$entry_trackback_details=get_trackbacks('images',strval($row['id']),$row['allow_trackbacks']==1);
 				$entry_add_date_raw=is_null($row['add_date'])?'':strval($row['add_date']);
@@ -1028,7 +1028,7 @@ class Module_galleries
 			$this_full_url=$row_video['url'];
 			if (url_is_local($this_full_url)) $this_full_url=get_custom_base_url().'/'.$this_full_url;
 
-			$entry_rating_details=($row_video['allow_rating']==1)?display_rating(get_self_url(true),get_translated_text($row_video['title']),'videos',strval($row_video['id'])):NULL;
+			$entry_rating_details=($row_video['allow_rating']==1)?display_rating(get_self_url(true),get_translated_text($row_video['title']),'videos',strval($row_video['id']),'RATING_INLINE_STATIC',$row_video['submitter']):NULL;
 
 			$map=array('_GUID'=>'395f0aa1212e69da5752d228a6efe54d','RATING_DETAILS'=>$entry_rating_details,'DESCRIPTION'=>get_translated_tempcode($row_video['comments']),'CAT'=>$cat,'THUMB_URL'=>$thumb_url,'FULL_URL'=>$this_full_url,'ID'=>strval($row_video['id']),'VIEWS'=>strval($row_video['video_views']),'ADD_DATE_RAW'=>strval($row_video['add_date']),'EDIT_DATE_RAW'=>is_null($row_video['edit_date'])?'':strval($row_video['edit_date']),'SUBMITTER'=>strval($row_video['submitter']),'THUMB'=>$thumb,'VIEW_URL'=>$view_url,'VIDEO_DETAILS'=>show_video_details($row_video));
 			$entry=do_template('GALLERY_VIDEO',$map);
@@ -1048,7 +1048,7 @@ class Module_galleries
 				$this_full_url=get_custom_base_url().'/'.$this_full_url;
 			} else $file_size='';
 
-			$entry_rating_details=($row_image['allow_rating']==1)?display_rating(get_self_url(true),get_translated_text($row_image['title']),'images',strval($row_image['id'])):NULL;
+			$entry_rating_details=($row_image['allow_rating']==1)?display_rating(get_self_url(true),get_translated_text($row_image['title']),'images',strval($row_image['id']),'RATING_INLINE_STATIC',$row_image['submitter']):NULL;
 
 			$map=array('_GUID'=>'aa70f543297e25379c49fa25d6dbcac0','RATING_DETAILS'=>$entry_rating_details,'DESCRIPTION'=>get_translated_tempcode($row_image['comments']),'FILE_SIZE'=>$file_size,'CAT'=>$cat,'THUMB_URL'=>$thumb_url,'FULL_URL'=>$this_full_url,'ID'=>strval($row_image['id']),'VIEWS'=>strval($row_image['image_views']),'ADD_DATE_RAW'=>strval($row_image['add_date']),'EDIT_DATE_RAW'=>is_null($row_image['edit_date'])?'':strval($row_image['edit_date']),'SUBMITTER'=>strval($row_image['submitter']),'THUMB'=>$thumb,'VIEW_URL'=>$view_url);
 			$entry=do_template('GALLERY_IMAGE',$map);

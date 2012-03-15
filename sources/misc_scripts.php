@@ -30,7 +30,7 @@ function gd_text_script()
 
 	$font_size=array_key_exists('size',$_GET)?intval($_GET['size']):8;
 
-	$font=get_param('font',get_file_base().'/data/fonts/Vera.ttf');
+	$font=get_param('font',get_file_base().'/data/fonts/'.filter_naughty(get_param('font','FreeMonoBoldOblique')).'.ttf');
 
 	if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')===false) || (strlen($text)==0))
 	{

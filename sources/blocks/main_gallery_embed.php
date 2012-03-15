@@ -185,7 +185,7 @@ class Block_main_gallery_embed
 						$thumb_url=$row_image['thumb_url'];
 						if (url_is_local($thumb_url)) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 
-						$entry_rating_details=($row_image['allow_rating']==1)?display_rating($view_url,get_translated_text($row_image['title']),'images',strval($row_image['id'])):NULL;
+						$entry_rating_details=($row_image['allow_rating']==1)?display_rating($view_url,get_translated_text($row_image['title']),'images',strval($row_image['id']),'RATING_INLINE_STATIC',$row_image['submitter']):NULL;
 
 						$entry_map=array('_GUID'=>'043ac7d15ce02715ac02309f6e8340ff','RATING_DETAILS'=>$entry_rating_details,'DESCRIPTION'=>get_translated_tempcode($row_image['comments']),'ID'=>strval($row_image['id']),'FILE_SIZE'=>$file_size,'SUBMITTER'=>strval($row_image['submitter']),'FULL_URL'=>$full_url,'THUMB_URL'=>$thumb_url,'CAT'=>$cat,'THUMB'=>$thumb,'VIEW_URL'=>$view_url,'VIEWS'=>strval($row_image['image_views']),'ADD_DATE_RAW'=>strval($row_image['add_date']),'EDIT_DATE_RAW'=>is_null($row_image['edit_date'])?'':strval($row_image['edit_date']));
 						$entry=do_template('GALLERY_IMAGE',$entry_map);
@@ -206,7 +206,7 @@ class Block_main_gallery_embed
 						$thumb_url=$row_video['thumb_url'];
 						if (($thumb_url!='') && (url_is_local($thumb_url))) $thumb_url=get_custom_base_url().'/'.$thumb_url;
 
-						$entry_rating_details=($row_video['allow_rating']==1)?display_rating($view_url,get_translated_text($row_video['title']),'videos',strval($row_video['id'])):NULL;
+						$entry_rating_details=($row_video['allow_rating']==1)?display_rating($view_url,get_translated_text($row_video['title']),'videos',strval($row_video['id']),'RATING_INLINE_STATIC',$row_video['submitter']):NULL;
 
 						$entry_map=array('_GUID'=>'66b7fb4d3b61ef79d6803c170d102cbf','RATING_DETAILS'=>$entry_rating_details,'DESCRIPTION'=>get_translated_tempcode($row_video['comments']),'ID'=>strval($row_video['id']),'CAT'=>$cat,'THUMB'=>$thumb,'VIEW_URL'=>$view_url,'SUBMITTER'=>strval($row_video['submitter']),'FULL_URL'=>$full_url,'THUMB_URL'=>$thumb_url,'VIDEO_DETAILS'=>show_video_details($row_video),'VIEWS'=>strval($row_video['video_views']),'ADD_DATE_RAW'=>strval($row_video['add_date']),'EDIT_DATE_RAW'=>is_null($row_video['edit_date'])?'':strval($row_video['edit_date']));
 						$entry=do_template('GALLERY_VIDEO',$entry_map);

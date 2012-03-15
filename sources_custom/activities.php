@@ -271,14 +271,14 @@ function find_activities($viewer_id,$mode,$member_ids)
 	return array($proceed_selection,$whereville);
 }
 
-function render_activity($row)
+function render_activity($row,$use_inside_ocp=true)
 {
 	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 	// Details of member
 	$member_id=$row['a_member_id'];
 	$memberpic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-	$member_url=build_url(array('page'=>'members','type'=>'view','id'=>$member_id),get_page_zone('members'));
+	$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,$use_inside_ocp);
 
 	$datetime=$row['a_time'];
 
@@ -292,7 +292,7 @@ function render_activity($row)
 	for ($i=1;$i<=3;$i++)
 	{
 		$label[$i]=comcode_to_tempcode($row['a_label_'.strval($i)],$guest_id,false,NULL);
-		$link[$i]=($row['a_pagelink_'.strval($i)]=='')?new ocp_tempcode():pagelink_to_tempcode($row['a_pagelink_'.strval($i)],true);
+		$link[$i]=($row['a_pagelink_'.strval($i)]=='')?new ocp_tempcode():pagelink_to_tempcode($row['a_pagelink_'.strval($i)],!$use_inside_ocp);
 
 		if (($row['a_pagelink_'.strval($i)]!='') && (strpos($test,'{'.strval($i+3).'}')===false))
 		{
@@ -318,7 +318,7 @@ function render_activity($row)
 	// Lang string may not use all params, so add extras on if were unused
 	for ($i=1;$i<=3;$i++)
 	{
-		if ((strpos($test,'{'.strval($i).'}')===false) && ($row['a_label_'.strval($i)]!=''))
+		if ((strpos($test,'{1}')===false) && (strpos($test,'{2}')===false) && (strpos($test,'{3}')===false) && ($row['a_label_'.strval($i)]!=''))
 		{
 			if (!$message->is_empty())
 				$message->attach(': ');

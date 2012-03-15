@@ -254,7 +254,7 @@ class Module_topicview
 
 				require_code('feedback');
 				actualise_rating(true,'post',strval($_postdetails['id']),get_self_url(),$_postdetails['title']);
-				$rating=display_rating(get_self_url(),$_postdetails['title'],'post',strval($_postdetails['id']),'RATING_INLINE_DYNAMIC');
+				$rating=display_rating(get_self_url(),$_postdetails['title'],'post',strval($_postdetails['id']),'RATING_INLINE_DYNAMIC',$_postdetails['poster']);
 
 				$rendered_post=do_template('OCF_TOPIC_POST',array(
 							'_GUID'=>'sacd09wekfofpw2f',
