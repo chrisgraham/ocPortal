@@ -342,6 +342,7 @@ class Hook_addon_registry_core_feedback_features
 				'UNVALIDATED'=>new ocp_tempcode(),
 				'TOPIC_ID'=>placeholder_id(),
 				'IS_SPACER_POST'=>false,
+				'NUM_TO_SHOW_LIMIT'=>placeholder_number(),
 			);
 			$comments->attach(do_lorem_template('POST',$map));
 			do_lorem_template('POST_CHILD_LOAD_LINK',$map); // INCLUDE'd in above, but test set needs to see it run direct

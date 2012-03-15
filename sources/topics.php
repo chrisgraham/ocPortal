@@ -206,9 +206,10 @@ class OCP_Topic
 	}
 
 	/**
-	 * Render posts from a comment topic (usually tied into AJAX, to get iterative results).
+	 * Render posts from a topic (usually tied into AJAX, to get iterative results).
 	 *
 	 * @param  AUTO_LINK		The topic ID
+	 * @param  integer		Maximum to load if non-threaded
 	 * @param  boolean		Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
 	 * @param  boolean		Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
 	 * @param  ?string		The name of the forum to use (NULL: default comment forum)
@@ -221,11 +222,9 @@ class OCP_Topic
 	 * @param  AUTO_LINK		Parent node being loaded to
 	 * @return tempcode		The tempcode for the comment topic
 	 */
-	function render_posts_from_comment_topic($topic_id,$allow_comments,$invisible_if_no_comments,$forum_name,$preloaded_comments,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id)
+	function render_posts_from_topic($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum_name,$preloaded_comments,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id)
 	{
-		// Settings we need
-		$max_thread_depth=intval(get_option('max_thread_depth'));
-		$num_to_show_limit=NULL;
+		$max_thread_depth=get_param_integer('max_thread_depth',intval(get_option('max_thread_depth')));
 		$start=0;
 
 		// Load up posts from DB
@@ -251,9 +250,10 @@ class OCP_Topic
 
 			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 
-			// Posts
+			// Render
 			$rendered=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_id,true);
-			return $rendered[0];
+			$ret=$rendered[0];
+			return $ret;
 		}
 		
 		return new ocp_tempcode();
@@ -347,7 +347,7 @@ class OCP_Topic
 	 * @param  array			Review ratings rows
 	 * @param  AUTO_LINK		ID of forum this topic in in
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
-	 * @param  boolean		Whether to just render everything as flat (used when doing AJAX post loading)
+	 * @param  boolean		Whether to just render everything as flat (used when doing AJAX post loading). NOT actually used since we wrote better post-orphaning-fixing code.
 	 * @return array			Tuple: Rendered topic, serialized options to render more posts, secure hash of serialized options to prevent tampering
 	 */
 	function render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_post_id=NULL,$maybe_missing_links=false)
@@ -386,21 +386,25 @@ class OCP_Topic
 		if (!is_null($this->topic_id)) // If FALSE then Posts will have been passed in manually as full already anyway
 			$posts=$this->_grab_full_post_details($posts);
 
-		if ($maybe_missing_links)
+		$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts/*passed by reference*/,$queue,$max_thread_depth);
+		if (count($posts)!=0) // E.g. if parent was deleted at some time
 		{
-			$tree=array($posts,array());
-		} else
-		{
-			$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts,$queue,$max_thread_depth);
-			foreach ($queue as $orphaned_post) // E.g. if parent was deleted at some time
+			global $M_SORT_KEY;
+			$M_SORT_KEY='date';
+			usort($posts,'multi_sort');
+			while (count($posts)!=0)
 			{
+				$orphaned_post=array_shift($posts);
+
+				$tree2=$this->_arrange_posts_in_tree($orphaned_post['id'],$posts/*passed by reference*/,$queue,$max_thread_depth);
+
 				$orphaned_post['parent_id']=NULL;
-				$orphaned_post['children']=array();
+				$orphaned_post['children']=$tree2;
 				$tree[0][]=$orphaned_post;
 			}
 		}
 
-		$ret=$this->_render_post_tree($tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
+		$ret=$this->_render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
 
 		$other_ids=mixed();
 		if ($this->is_threaded)
@@ -411,11 +415,11 @@ class OCP_Topic
 				$other_ids[]=strval($u['id']);
 			}
 		}
-		$ret->attach(do_template('POST_CHILD_LOAD_LINK',array('OTHER_IDS'=>$other_ids,'ID'=>'','CHILDREN'=>(count($other_ids)==0)?'':'1')));
+		$ret->attach(do_template('POST_CHILD_LOAD_LINK',array('NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),'OTHER_IDS'=>$other_ids,'ID'=>'','CHILDREN'=>(count($other_ids)==0)?'':'1')));
 
 		if (!is_null($this->topic_id))
 		{
-			$serialized_options=serialize(array($this->topic_id,true,false,strval($forum_id),$this->reverse,$may_reply,$highlight_by_user,count($all_individual_review_ratings)!=0));
+			$serialized_options=serialize(array($this->topic_id,$num_to_show_limit,true,false,strval($forum_id),$this->reverse,$may_reply,$highlight_by_user,count($all_individual_review_ratings)!=0));
 			$hash=md5($serialized_options);
 		} else
 		{
@@ -550,7 +554,7 @@ class OCP_Topic
 	 * @param  integer		Current depth in recursion
 	 * @return array			Array structure of rendered posts
 	 */
-	function _arrange_posts_in_tree($post_id,$posts,$queue,$max_thread_depth,$depth=0)
+	function _arrange_posts_in_tree($post_id,&$posts,$queue,$max_thread_depth,$depth=0)
 	{
 		$rendered=array();
 		$non_rendered=array();
@@ -590,7 +594,7 @@ class OCP_Topic
 		foreach ($queue as $i=>$p)
 		{
 			unset($queue[$i]);
-			
+
 			if ($p['parent_id']===$post_id)
 			{
 				$non_rendered[]=$p;
@@ -603,6 +607,7 @@ class OCP_Topic
 	/**
 	 * Render posts.
 	 *
+	 * @param  integer		Maximum to load if non-threaded
 	 * @param  array			Tree structure of posts
 	 * @param  boolean		Whether the current user may reply to the topic (influences what buttons show)
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
@@ -610,7 +615,7 @@ class OCP_Topic
 	 * @param  AUTO_LINK		ID of forum this topic in in
 	 * @return tempcode		Rendered tree structure
 	 */
-	function _render_post_tree($tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id)
+	function _render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id)
 	{
 		list($rendered,)=$tree;
 		$sequence=new ocp_tempcode();
@@ -759,7 +764,7 @@ class OCP_Topic
 				}
 				if ($this->is_threaded)
 				{
-					$children=$this->_render_post_tree($post['children'],$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
+					$children=$this->_render_post_tree($num_to_show_limit,$post['children'],$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
 				}
 			}
 
@@ -805,6 +810,7 @@ class OCP_Topic
 				'TOPIC_ID'=>is_null($this->topic_id)?'':strval($this->topic_id),
 				'UNVALIDATED'=>$unvalidated,
 				'IS_SPACER_POST'=>$is_spacer_post,
+				'NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),
 			)));
 		}
 

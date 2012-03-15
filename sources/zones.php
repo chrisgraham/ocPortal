@@ -1033,6 +1033,7 @@ function extract_module_functions($path,$functions,$params=NULL)
 			}
 			$CLASS_CACHE[$path]=$new_classes;
 		}
+		if ((array_key_exists(0,$new_classes)) && ($new_classes[0]=='standard_aed_module')) array_shift($new_classes);
 		if (array_key_exists(0,$new_classes))
 		{
 			$c=$new_classes[0];

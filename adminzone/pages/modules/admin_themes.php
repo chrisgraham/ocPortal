@@ -1125,7 +1125,7 @@ class Module_admin_themes
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_themes';
 
 		// Searching for something, which will provide links that loop back to the proper version of this page
-		$search=get_param('search','');
+		$search=get_param('search','',true);
 		if ($search!='')
 		{
 			$filesarray=$this->get_template_files_array($theme);

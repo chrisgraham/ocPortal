@@ -431,7 +431,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 			$myfile2=fopen($tmp_file,'wb');
 			fwrite($myfile2,$data);
 			fclose($myfile2);
-			$myfile_zip=zip_open($tmp_file);
+			$myfile_zip=@zip_open($tmp_file);
 			if (!is_integer($myfile_zip))
 			{
 				while (($entry=(@zip_read($myfile_zip)))!==false) // Temporary file may be cleaned up before this can complete, hence @

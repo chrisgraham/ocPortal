@@ -121,7 +121,7 @@ class Module_admin_orders
 		
 		$filter		=	get_param('filter',NULL);
 
-		$search		=	get_param('search','');
+		$search		=	get_param('search','',true);
 
 		$cond		=	"WHERE 1=1";
 

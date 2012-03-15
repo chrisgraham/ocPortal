@@ -94,12 +94,19 @@ function zip_open($zip_file)
 		$config_url=$_config_url->evaluate();
 		$config_url.='#group_ARCHIVES';
 
-		warn_exit(do_lang_tempcode('NO_SHELL_ZIP_POSSIBLE2',escape_html($config_url)));
+		attach_message(do_lang_tempcode('NO_SHELL_ZIP_POSSIBLE2',escape_html($config_url)),'warn');
+
+		return constant('ZIPARCHIVE::ER_INTERNAL');
 	}
 
 	$res=-1; // any nonzero value
 	$unused_array_result=array();
-	if (strpos(@ini_get('disable_functions'),'exec')!==false) warn_exit(do_lang_tempcode('NO_SHELL_ZIP_POSSIBLE'));
+	if (strpos(@ini_get('disable_functions'),'exec')!==false)
+	{
+		attach_message(do_lang_tempcode('NO_SHELL_ZIP_POSSIBLE'),'warn');
+
+		return constant('ZIPARCHIVE::ER_INTERNAL');
+	}
 	exec($unzip_cmd,$unused_array_result,$res);
 	unset($unused_array_result);
 

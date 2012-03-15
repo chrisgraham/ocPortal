@@ -106,7 +106,7 @@ function _get_sql_keywords()
 		'LIKE','IF','NOT','IS','NULL','AND','OR','BETWEEN','IN','EXISTS',
 		'GROUP','BY','ORDER','ASC','DESC',
 		'JOIN','OUTER','INNER','LEFT','RIGHT','ON',
-		'COUNT','SUM','AVG','MAX','MIN',
+		'COUNT','SUM','AVG','COALESCE','MAX','MIN',
 		'LIMIT',
 		'+','-','*','/',
 		'<>','>','<','>=','<=','=',
@@ -2391,6 +2391,14 @@ class Database_Static_xml
 			{
 				switch ($token)
 				{
+					case 'COALESCE':
+						if (!$this->_parsing_expects($at,$tokens,')',$query)) return NULL;
+						$expr1=$this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok);
+						if (!$this->_parsing_expects($at,$tokens,',',$query)) return NULL;
+						$expr2=$this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok);
+						if (!$this->_parsing_expects($at,$tokens,')',$query)) return NULL;
+						$token=array('COALESCE',$expr1,$expr2);
+						break;
 					case 'DISTINCT':
 						$d=$this->_parsing_read($at,$tokens,$query);
 						if ($d=='(')
@@ -2907,6 +2915,11 @@ class Database_Static_xml
 				{
 					switch ($s_term[0])
 					{
+						case 'COALESCE':
+							$val=$this->_execute_expression($s_term[1],$set[0],$query);
+							if (is_null($val)) $val=$this->_execute_expression($s_term[2],$set[0],$query);
+							$rep[$chosen_param_name]=$val;
+							break;
 						case 'MAX':
 							$max=mixed();
 							foreach ($set as $set_item)

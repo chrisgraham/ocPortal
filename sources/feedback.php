@@ -448,11 +448,14 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 		if ((!is_null($submitter)) && (!is_guest($submitter)))
 		{
 			// Give points
-			if (addon_installed('points'))
+			if ($member_id!=$submitter)
 			{
-				require_code('points2');
-				require_lang('points');
-				system_gift_transfer(do_lang('CONTENT_LIKED'),intval(get_option('points_if_liked')),$submitter);
+				if (addon_installed('points'))
+				{
+					require_code('points2');
+					require_lang('points');
+					system_gift_transfer(do_lang('CONTENT_LIKED'),intval(get_option('points_if_liked')),$submitter);
+				}
 			}
 
 			// Notification

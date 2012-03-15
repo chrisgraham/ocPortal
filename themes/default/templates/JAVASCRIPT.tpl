@@ -2547,8 +2547,11 @@ function threaded_load_more(ob,ids,id)
 				for (var i=0;i<_ids.length;i++)
 				{
 					var element=document.getElementById('post_'+_ids[i]);
-					setOpacity(element,0);
-					nereidFade(element,100,30,10);
+					if (element)
+					{
+						setOpacity(element,0);
+						nereidFade(element,100,30,10);
+					}
 				}
 			}
 		},0);
