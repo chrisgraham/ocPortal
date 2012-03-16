@@ -101,6 +101,7 @@ class Hook_phpnuke
 	function import_banners($db,$table_prefix,$old_base_dir)
 	{
 		require_code('banners');
+		require_code('banners2');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'banner b LEFT JOIN '.$table_prefix.'bannerclient c ON b.cid=c.cid');
 		foreach ($rows as $row)
@@ -465,6 +466,7 @@ class Hook_phpnuke
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('authors','url',array('author'=>$row['name']));
 			if (is_null($test))
 			{
+				require_code('authors');
 				add_author($row['name'],$row['homepage'],NULL,'','');
 			} else
 			{

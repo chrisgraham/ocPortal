@@ -526,15 +526,26 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 	{
 		if ($cats!==NULL)
 		{
+			$okay=false;
 			for ($i=0;$i<intval(floor((float)count($cats)/2.0));$i++)
 			{
 				if (is_null($cats[$i*2])) continue;
 				if (isset($SPECIFIC_PERMISSION_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]))
 				{
 					$result=$SPECIFIC_PERMISSION_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]==1;
-					handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
-					return $result;
+					if (!$result)
+					{
+						handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+						return $result;
+					}
+					$okay=true;
 				}
+			}
+			if ($okay)
+			{
+				$result=$okay;
+				handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+				return $result;
 			}
 		}
 		if ($page!='')

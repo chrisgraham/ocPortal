@@ -1,5 +1,7 @@
 {$,Read the catalogue tutorial for information on custom catalogue layouts}
 
+{$SET,EDIT_URL,{EDIT_URL}}
+
 <tr>
 	{FIELDS_TABLE}
 	{+START,IF_NON_EMPTY,{VIEW_URL}}

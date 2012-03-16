@@ -570,7 +570,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		$html=unixify_line_format(file_array_get('themes/'.$theme.$path.$codename.$suffix));
 	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix,FILE_TEXT));
 
-	if (($GLOBALS['SEMI_DEBUG_MODE']) && (strpos($html,'.innerHTML')!==false) && (strpos($html,'Parser hint: .innerHTML okay')===false))
+	if (($GLOBALS['SEMI_DEBUG_MODE']) && (strpos($html,'.innerHTML')!==false) && (!running_script('install')) && (strpos($html,'Parser hint: .innerHTML okay')===false))
 	{
 		attach_message('Do not use the .innerHTML property in your Javascript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global setInnerHTML/getInnerHTML functions.','warn');
 	}

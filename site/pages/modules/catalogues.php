@@ -307,6 +307,7 @@ class Module_catalogues
 			// Links
 			$links_category=actual_add_catalogue('links',lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),2,1,'',0);
 			$fields=array(
+				// Name, Description, Type, Defines order, Required, Put in category
 				array('TITLE','DESCRIPTION_TITLE','short_trans',1,1,1),
 				array('URL','DESCRIPTION_URL','url',0,1,0),
 				array('DESCRIPTION','DESCRIPTION_DESCRIPTION','long_trans',0,0,1)
@@ -1041,19 +1042,19 @@ class Module_catalogues
 		$title=get_page_title($title_to_use,false);
 
 		//Link to add to catalogue category
-		if (has_actual_page_access(NULL,'cms_catalogues',NULL,array('catalogues_catalogue',$catalogue_name,'catalogues_category',$id),'submit_midrange_content'))
+		if (has_actual_page_access(NULL,'cms_catalogues',NULL,(get_value('disable_cat_cat_perms')==='1')?array('catalogues_catalogue',$catalogue_name):array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'submit_midrange_content'))
 		{
 			$add_link=build_url(array('page'=>'cms_catalogues','type'=>'add_entry','catalogue_name'=>$catalogue_name,'category_id'=>$id),get_module_zone('cms_catalogues'));
 		} else $add_link=new ocp_tempcode();
-		if (has_actual_page_access(NULL,'cms_catalogues',NULL,array('catalogues_catalogue',$catalogue_name,'catalogues_category',$id),'submit_cat_midrange_content'))
+		if (has_actual_page_access(NULL,'cms_catalogues',NULL,(get_value('disable_cat_cat_perms')==='1')?array('catalogues_catalogue',$catalogue_name):array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'submit_cat_midrange_content'))
 		{
 			$add_cat_url=build_url(array('page'=>'cms_catalogues','type'=>'add_category','catalogue_name'=>$catalogue_name,'parent_id'=>$id),get_module_zone('cms_catalogues'));
 		} else $add_cat_url=new ocp_tempcode();
-		if (has_actual_page_access(NULL,'cms_catalogues',NULL,array('catalogues_catalogue',$catalogue_name,'catalogues_category',$id),'edit_cat_midrange_content'))
+		if (has_actual_page_access(NULL,'cms_catalogues',NULL,(get_value('disable_cat_cat_perms')==='1')?array('catalogues_catalogue',$catalogue_name):array('catalogues_catalogue',$catalogue_name,'catalogues_category',strval($id)),'edit_cat_midrange_content'))
 		{
 			$edit_cat_url=build_url(array('page'=>'cms_catalogues','type'=>'_edit_category','catalogue_name'=>$catalogue_name,'id'=>$id),get_module_zone('cms_catalogues'));
 		} else $edit_cat_url=new ocp_tempcode();
-		if (has_actual_page_access(NULL,'cms_catalogues',NULL,array('catalogues_catalogue',$catalogue_name),'edit_cat_highrange_content'))
+		if (has_actual_page_access(NULL,'cms_catalogues',NULL,(get_value('disable_cat_cat_perms')==='1')?array('catalogues_catalogue',$catalogue_name):array('catalogues_catalogue',$catalogue_name),'edit_cat_highrange_content'))
 		{
 			$edit_catalogue_url=build_url(array('page'=>'cms_catalogues','type'=>'_edit_catalogue','id'=>$catalogue_name),get_module_zone('cms_catalogues'));
 		} else $edit_catalogue_url=new ocp_tempcode();
@@ -1244,9 +1245,12 @@ class Module_catalogues
 
 		$category_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title','cc_parent_id'),array('c_name'=>$catalogue_name));
 		$map=array();
-		foreach ($category_rows as $category)
+		foreach ($category_rows as $i=>$category)
 		{
-			if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category['id']))) continue;
+			if ($i!=0)
+			{
+				if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category['id']))) continue;
+			}
 
 			$id=$category['id'];
 

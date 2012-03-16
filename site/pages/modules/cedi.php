@@ -1086,7 +1086,10 @@ class Module_cedi
 		{
 			if ($i%100==0) echo escape_html(chr(10)); // Fixes weird CGI timeout (some servers only) if there's lots of data. Won't trigger quirks mode. 'escape_html' is just for the XSS detector.
 
-			if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'seedy_page',strval($page['id']))) continue;
+			if ($page['id']!=db_get_first_id())
+			{
+				if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'seedy_page',strval($page['id']))) continue;
+			}
 
 			$id=$page['id'];
 	

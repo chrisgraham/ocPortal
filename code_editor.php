@@ -139,15 +139,6 @@ echo '
 	</style>';
 	echo '
 		<script language="javascript" type="text/javascript" src="data/editarea/edit_area_full.js"></script>
-		<script type="text/javascript">// <![CDATA[
-		editAreaLoader.init({
-			id : "file"
-			,syntax: "php"
-			,start_highlight: true
-			,allow_resize: true
-			,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
-		});
-		//]]></script>
 		
 		<meta name="robots" content="noindex, nofollow" />
 		';
@@ -165,6 +156,19 @@ function code_editor_do_footer()
 {
 	echo <<<END
 </form>
+
+<script type="text/javascript">// <![CDATA[
+if (document.getElementById('file'))
+{
+	editAreaLoader.init({
+		id : "file"
+		,syntax: "php"
+		,start_highlight: true
+		,allow_resize: true
+		,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
+	});
+}
+//]]></script>
 
 </div></body>
 </html>
@@ -497,7 +501,14 @@ END;
 				{
 					echo <<<END
 <script language="Javascript" type="text/javascript">
-window.alert('Access denied. You probably should have specified FTP details.');
+var msg='Access denied. You probably should have specified FTP details.';
+if (window.alert!==null)
+{
+	window.alert(msg);
+} else
+{
+	console.log(msg+' (popup blocker stopping alert)');
+}
 </script>
 END;
 					return;
@@ -507,7 +518,14 @@ END;
 					fclose($myfile);
 					echo <<<END
 <script language="Javascript" type="text/javascript">
-window.alert('Could not write to file, out of disk space?');
+var msg='Could not write to file, out of disk space?';
+if (window.alert!==null)
+{
+	window.alert(msg);
+} else
+{
+	console.log(msg+' (popup blocker stopping alert)');
+}
 </script>
 END;
 					return;
@@ -525,7 +543,14 @@ END;
 					fclose($h);
 					echo <<<END
 <script language="Javascript" type="text/javascript">
-window.alert('Could not write to file, out of disk space?');
+var msg='Could not write to file, out of disk space?';
+if (window.alert!==null)
+{
+	window.alert(msg);
+} else
+{
+	console.log(msg+' (popup blocker stopping alert)');
+}
 </script>
 END;
 					return;
@@ -538,7 +563,14 @@ END;
 				{
 					echo <<<END
 <script language="Javascript" type="text/javascript">
-window.alert('Could not save via FTP ['.@strval($php_errormsg).'].');
+var msg='Could not save via FTP ['.@strval($php_errormsg).'].';
+if (window.alert!==null)
+{
+	window.alert(msg);
+} else
+{
+	console.log(msg+' (popup blocker stopping alert)');
+}
 </script>
 END;
 					return;
@@ -599,7 +631,14 @@ END;
 			$message="Deleted ".code_editor_escape_html($save_path).". You may edit to recreate the file if you wish however.";
 		echo <<<END
 <script language="Javascript" type="text/javascript">
-window.alert('{$message}');
+var msg='{$message}';
+if (window.alert!==null)
+{
+	window.alert(msg);
+} else
+{
+	console.log(msg+' (popup blocker stopping alert)');
+}
 </script>
 END;
 	}

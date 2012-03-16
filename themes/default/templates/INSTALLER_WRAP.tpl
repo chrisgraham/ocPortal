@@ -158,8 +158,19 @@
 		</div>
 		<br class="tiny_linebreak" />
 
+		<script type="text/javascript">// <![CDATA[
+		window.setTimeout(function() {
+			if (window.alert===null)
+			{
+				document.getElementById('extra_errors').innerHTML='<p><strong style="color: red">Your popup blocker is too aggressive</strong> (even error alerts cannot display). Please disable for the installer.</p>';
+			}
+		}, 0);
+		//]]></script>
+
 		<div class="installer_main_internal">
 			{+START,BOX,{!INSTALLER,ocPortal}: {!INSTALLER_STEP,{STEP},10}}
+				<div id="extra_errors"></div>
+
 				{CONTENT}
 			{+END}
 		</div>

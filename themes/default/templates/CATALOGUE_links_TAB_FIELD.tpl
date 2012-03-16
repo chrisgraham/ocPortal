@@ -7,10 +7,12 @@
 		{VALUE}
 	{+END}
 
-	{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,cms_catalogues}}{+START,IF,{$EQ,{FIELDID},0}}
-		<p class="associated_caption">
-			( <a href="{$PAGE_LINK*,_SEARCH:cms_catalogues:_ed:{ENTRYID}}">{!EDIT}</a> )
-		</p>
-	{+END}{+END}
+	{+START,IF,{$NEQ,{FIELDID},0}}
+		{+START,IF_NON_EMPTY,{$GET,EDIT_URL}}
+			<p class="associated_caption">
+				( <a href="{$GET*,EDIT_URL}">{!EDIT}</a> )
+			</p>
+		{+END}
+	{+END}
 </td>
 

@@ -762,7 +762,10 @@ class Module_downloads
 		$map=array();
 		foreach ($category_rows as $category)
 		{
-			if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category['id']))) continue;
+			if ($page['category']!=db_get_first_id())
+			{
+				if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category['id']))) continue;
+			}
 
 			$id=$category['id'];
 	

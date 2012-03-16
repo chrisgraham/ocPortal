@@ -32,7 +32,7 @@ class Hook_do_next_menus_cedi
 		if (!addon_installed('cedi')) return array();
 		
 		return array(
-			array('cms','cedi',array('cms_cedi',array('type'=>'misc'),get_module_zone('cms_cedi')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('CEDI'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('seedy_posts','COUNT(*)',NULL,'',true))))),('DOC_CEDI')),
+			array('cms','cedi',array('cms_cedi',array('type'=>'misc'),get_module_zone('cms_cedi')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('CEDI'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','COUNT(*)',NULL,'',true))))),('DOC_CEDI')),
 		);
 	}
 
