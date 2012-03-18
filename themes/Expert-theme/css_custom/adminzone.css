@@ -243,8 +243,34 @@ a.topleftlink:hover {
 	min-height: 400px;
 }
 
+.menu_editor_page.docked #mini_form_hider {
+	margin-top: 1em;
+	border-top: 3px dotted #4f0729 !important; /* {$,wizard, 61% seed + 39% W/B} */
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	background: #000000; /* {$,wizard, 100% W/B} */
+	font-size: 0.9em;
+}
+
+.docked .menu_edit_main {
+	padding-bottom: 30em;
+}
+
+.dock_button {
+	float: right;
+	padding: 5px;
+	cursor: pointer;
+}
+
 .menu_editor_lh_side {
 	margin-{!en_right}: 420px;
+}
+
+.menu_editor_page.docked .menu_editor_rh_side {
+	overflow-y: scroll;
+	max-height: 380px;
+	margin-right: 10px;
 }
 
 .menu_editor_rh_side {
@@ -414,6 +440,15 @@ a.topleftlink:hover {
 	float: {!en_left};
 	margin-{!en_right}: 5px;
 	max-width: 100%;
+}
+
+.dottedborder .css_colour_chooser_name {
+	width: 190px;
+}
+
+.dottedborder .css_colour_chooser {
+	width: 680px;
+	margin: 0;
 }
 
 .css_colour_strip {
@@ -626,7 +661,7 @@ a.ze_tab:link, a.ze_tab:visited, a.ze_tab:hover, a.ze_tab:active {
 
 .ze_tab {
 	float: {!en_left};
-	background: url('{$IMG,tab}') !important;
+	background: url('{$IMG;,tab}') !important;
 	padding: 3px 5px 0 5px !important;
 	height: 20px;
 	width: 4em;

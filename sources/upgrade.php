@@ -772,6 +772,7 @@ function up_do_header()
 	$charset=get_charset();
 	$lang=user_lang();
 
+	@ob_end_clean();
 	echo <<<END
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$lang}" lang="{$lang}">
@@ -1593,13 +1594,14 @@ function change_mysql_database_charset($new_charset,$db,$reencode=false)
  */
 function upgrade_themes()
 {
-	$test_run=(post_param_integer('live_run',0)==0);
+	$test_run=(get_param_integer('live_run',0)==0);
 
-	echo '<h2>Theme upgrade: '.($test_run?'test run':'live results').'</h2>';
+	$str='';
+
+	$str.='<h2>Theme upgrade: '.($test_run?'test run':'live results').'</h2>';
 
 	require_code('themes2');
 	$themes=find_all_themes();
-	$str='';
 	$has_errors=false;
 	foreach (array_keys($themes) as $theme)
 	{
@@ -1611,13 +1613,13 @@ function upgrade_themes()
 
 		foreach ($errors as $error)
 		{
-			echo '<p style="background: #DDD; margin: 1em; padding: 1em">&#x2717; '.$error->evaluate().'</p>';
+			$str.='<p style="background: #DDD; margin: 1em; padding: 1em">&#x2717; '.$error->evaluate().'</p>';
 			$has_errors=true;
 		}
 
 		foreach ($successes as $success)
 		{
-			echo '<p style="background: #DDD; margin: 1em; padding: 1em">&#x2713; '.$success->evaluate().'</p>';
+			$str.='<p style="background: #DDD; margin: 1em; padding: 1em">&#x2713; '.$success->evaluate().'</p>';
 		}
 	}
 
@@ -1625,11 +1627,11 @@ function upgrade_themes()
 	{
 		if ($has_errors)
 		{
-			echo '<p>'.do_lang('FU_THEME_ERRORS').'</p>';
+			$str.='<p>'.do_lang('FU_THEME_ERRORS').'</p>';
 		}
 
 		$l_theme_upgrade=fu_link('upgrader.php?type=theme_upgrade&live_run=1',do_lang('FU_THEME_UPGRADE_FINAL'));
-		echo $l_theme_upgrade;
+		$str.=$l_theme_upgrade;
 	}
 
 	return $str;
@@ -1794,24 +1796,24 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 		);
 
 		// NB: This UNIX command can work out what theme images are added...
-		// OLD=/Library/WebServer/Documents/test/themes/default/images ; NEW=/Library/WebServer/Documents/git/themes/default/images ; diff -r $OLD $NEW | grep "Only in $NEW" | grep -v .DS_Store | sed "s#Only in "$NEW"##g" | sed "s#: #/#g" | sed "s#^/##g" | sed "s#^EN/##g"
+		// OLD=/Library/WebServer/Documents/test/themes/default/images ; NEW=/Library/WebServer/Documents/git/themes/default/images ; diff -r $OLD $NEW | grep "Only in $NEW" | grep -v .DS_Store | sed "s#Only in "$NEW"##g" | sed "s#: #/#g" | sed "s#^/##g" | sed "s#^EN/##g" | sed "s#\.*$##"
 		// Obviously only theme-wizable images should go here
 		$theme_images_new=array(
-			'page/add_ticket.png',
-			'page/disable_notifications.png',
-			'page/enable_notifications.png',
-			'page/forum.png',
-			'page/send_message.png',
-			'pageitem/disable_notifications.png',
-			'pageitem/enable_notifications.png',
-			'pageitem/reply.png',
-			'pageitem/send_message.png',
+			'page/add_ticket',
+			'page/disable_notifications',
+			'page/enable_notifications',
+			'page/forum',
+			'page/send_message',
+			'pageitem/disable_notifications',
+			'pageitem/enable_notifications',
+			'pageitem/reply',
+			'pageitem/send_message',
 		);
 
-		$theme_image_renames=array(
-			'standardboxes/title_gradiant.png'=>'standardboxes/title_gradient.png',
-			'quote_gradiant.png'=>'quote_gradient.png',
-			'zone_gradiant.png'=>'zone_gradient.png',
+		$theme_images_renames=array(
+			'standardboxes/title_gradiant'=>'standardboxes/title_gradient',
+			'quote_gradiant'=>'quote_gradient',
+			'zone_gradiant'=>'zone_gradient',
 		);
 
 		$templates_replace=array(
@@ -2087,19 +2089,19 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 	}
 
 	// Theme images
-	if (!$test_run)
+	require_code('themes2');
+	$langs=array('EN'=>'lang');//find_all_langs();
+	require_code('abstract_file_manager');
+	foreach ($theme_images_renames as $old=>$new)
 	{
-		require_code('themes2');
-		$langs=find_all_langs();
-		require_code('abstract_file_manager');
-		foreach ($theme_images_renames as $old=>$new)
+		foreach (array_keys($langs) as $lang)
 		{
-			foreach (array_keys($langs) as $lang)
+			$path=urldecode(find_theme_image($old,true,true,$theme,$lang));
+			if ($path!='')
 			{
-				$path=urldecode(find_theme_image($old,true,true,$theme,$lang));
-				if ($path!='')
+				$new_path=str_replace('/'.$old,'/'.$new,$path);
+				if (!$test_run)
 				{
-					$new_path=str_replace('/'.$old,'/'.$new,$path);
 					afm_move($path,$new_path);
 					actual_edit_theme_image($old,$theme,$lang,$new,$new_path);
 
@@ -2107,22 +2109,28 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				}
 			}
 		}
-		if (addon_installed('themewizard'))
+	}
+	if (addon_installed('themewizard'))
+	{
+		foreach ($theme_images_new as $new)
 		{
-			foreach ($theme_images_new as $new)
+			foreach (array_keys($langs) as $lang)
 			{
-				foreach (array_keys($langs) as $lang)
+				$path=urldecode(find_theme_image($new,true,true,'default',$lang));
+				if ($path!='')
 				{
-					$path=urldecode(find_theme_image($new,true,true,'default',$lang));
-					if ($path!='')
+					$new_path=str_replace('themes/default/images/','themes/'.$theme.'/images/',$path);
+					if (!file_exists(get_custom_file_base().'/'.$new_path))
 					{
-						$new_path=str_replace('themes/default/images/','themes/'.$theme.'/images_custom/',$path);
-						if (!file_exists(get_custom_file_base().'/'.$new_path))
+						if (!$test_run)
 						{
-							afm_make_directory(dirname($new_path),true);
+							afm_make_directory(dirname($new_path),true,true);
+						}
 
-							$image=calculate_theme($seed,'default','equations',$new,$dark,$colours,$landscape,$lang);
-							if (!is_null($image))
+						$image=calculate_theme($seed,'default','equations',$new,$dark,$colours,$landscape,$lang);
+						if (!is_null($image))
+						{
+							if (!$test_run)
 							{
 								@imagepng($image,$new_path) OR intelligent_write_error($new_path);
 								imagedestroy($image);
@@ -2162,21 +2170,27 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 			}
 			if (array_key_exists($templates_file,$templates_rename))
 			{
-				@rename($templates_dir.$templates_file,$templates_dir.$templates_rename[$templates_file]) OR intelligent_write_error($templates_dir.$templates_rename[$templates_file]);
-				$successes[]=do_lang_tempcode('TEMPLATE_RENAMED',escape_html($templates_file),escape_html($templates_rename[$templates_file]));
+				if (!$test_run)
+				{
+					@rename($templates_dir.$templates_file,$templates_dir.$templates_rename[$templates_file]) OR intelligent_write_error($templates_dir.$templates_rename[$templates_file]);
+					$successes[]=do_lang_tempcode('TEMPLATE_RENAMED',escape_html($templates_file),escape_html($templates_rename[$templates_file]));
+				}
 				$templates_file=$templates_rename[$templates_file];
 			}
-			if (($templates_file_contents!=$orig_templates_file_contents) && (!$test_run))
+			if ($templates_file_contents!=$orig_templates_file_contents)
 			{
-				$successes[]=do_lang_tempcode('TEMPLATE_ALTERED',escape_html($templates_file));
+				if (!$test_run)
+				{
+					$successes[]=do_lang_tempcode('TEMPLATE_ALTERED',escape_html($templates_file));
 
-				// Save
-				$outfile=@fopen($templates_dir.$templates_file,'wb') OR intelligent_write_error($templates_dir.$templates_file);
-				fwrite($outfile,$templates_file_contents);
-				fclose($outfile);
+					// Save
+					$outfile=@fopen($templates_dir.$templates_file,'wb') OR intelligent_write_error($templates_dir.$templates_file);
+					fwrite($outfile,$templates_file_contents);
+					fclose($outfile);
+				}
 			}
 
-			if (array_key_exists($templates_file,$templates_borked))
+			if (in_array($templates_file,$templates_borked))
 			{
 				$errors[]=do_lang_tempcode('TEMPLATE_WILL_NEED_RESTORING',escape_html($templates_file));
 			}

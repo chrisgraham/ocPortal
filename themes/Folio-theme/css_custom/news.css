@@ -45,9 +45,9 @@
 }
 
 .news_goto a:link, .news_goto a:visited, .news_goto a:active {
-	min-width:90px; float:left; background:url('{$IMG,more-news-but}') no-repeat left top; height:15px; text-decoration:none; color:#fff; font-size:1.15em; padding:6px 5px 4px 5px; text-align:center; line-height:1.15em;
+	min-width:90px; float:left; background:url('{$IMG;,more-news-but}') no-repeat left top; height:15px; text-decoration:none; color:#fff; font-size:1.15em; padding:6px 5px 4px 5px; text-align:center; line-height:1.15em;
 }
-.news_goto a:hover {background:url('{$IMG,more-news-but}') no-repeat left bottom;}
+.news_goto a:hover {background:url('{$IMG;,more-news-but}') no-repeat left bottom;}
 .news_by {
 	text-align:left;
 	padding-bottom:5px;

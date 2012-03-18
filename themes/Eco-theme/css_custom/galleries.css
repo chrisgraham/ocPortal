@@ -80,8 +80,29 @@
 
 /* Viewing entries */
 
+#gallery_entry_screen {
+	width: 100%;
+	min-height: 100%;
+}
+
 .nav_mid {
 	margin-top: 0.5em;
+}
+
+.slideshow_speed {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.slideshow_speed input {
+	width: 3em;
+}
+
+#changer {
+	font-weight: bold;
+	font-family: Courier;
+	font-size: 1.2em;
 }
 
 /* side_root galleries block */
@@ -118,4 +139,11 @@
 .gallery_tease_pic_pic {
 	float: {!en_right};
 	text-align: {!en_right};
+}
+
+/* Miscellaneous media handling */
+
+.gallery_pdf {
+	width: 100%;
+	height: 600px;
 }

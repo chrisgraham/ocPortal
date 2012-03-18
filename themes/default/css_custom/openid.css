@@ -1,5 +1,5 @@
 #openid {
-  background: url({$IMG,openid/indicator}) center center no-repeat;
+  background: url({$IMG;,openid/indicator}) center center no-repeat;
   margin: 0 auto;
   width: 440px;
   height: 162px;
@@ -9,7 +9,7 @@
 #openid_inputarea {
   clear: both;
   display: none;
-  background: url({$IMG,openid/balloon}) no-repeat;
+  background: url({$IMG;,openid/balloon}) no-repeat;
   width: 410px;
   height: 48px;
   color: white;
@@ -42,7 +42,7 @@
 }
 
 .openid_large_btn, .openid_small_btn {
-  background: url({$IMG,openid/openid-icons}) no-repeat;
+  background: url({$IMG;,openid/openid-icons}) no-repeat;
   margin: 3px;
   float: left;
 }

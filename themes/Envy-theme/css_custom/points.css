@@ -74,6 +74,7 @@
 
 .points_give_choices .sub_option {
 	font-size: 0.9em;
+	white-space: nowrap;
 }
 
 .points_give_choices_line {

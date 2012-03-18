@@ -31,3 +31,5 @@
 {$BROWSER,safari,,input.buttonhyperlink \{ font-weight: bold; /* underline won't stick on most browsers so we'll bold instead */ \}}
 
 {$BROWSER,ie7+,{$BROWSER,ie8+,, .search_in_header .float_surrounder \{ width: auto !important; \} }}
+
+{$BROWSER,opera,,tt\, kbd\, samp \{ font-size: 1.25em; \}}

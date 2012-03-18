@@ -84,6 +84,8 @@
 
 .calendar_week_hour {
 	width: 90px;
+	height: 30px;
+	border: 1px solid #83b77b; /* {$,dottedborder.border, 95% (seed sat_to 33) + 5% !W/B}*/
 }
 
 /*
@@ -134,6 +136,10 @@
 ======Miscellaneous======
 =========================
 */
+
+abbr.dtstart, abbr.dtend {
+	border-bottom: 0;
+}
 
 .top_navigation {
 	border-collapse: collapse;

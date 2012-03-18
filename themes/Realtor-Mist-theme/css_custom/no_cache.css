@@ -27,3 +27,5 @@
 {$BROWSER,safari,,input.buttonhyperlink \{ font-weight: bold; /* underline won't stick on most browsers so we'll bold instead */ \}}
 
 #main_website { {$SET_RAND,background: url('{$IMG;,random-images/1}') no-repeat center top #1B1C17;,background: url('{$IMG;,random-images/2}') no-repeat center top #DCE5EC;,background: url('{$IMG;,random-images/3}') no-repeat center top #A9452E;,background: url('{$IMG;,random-images/4}') no-repeat center top #3A5238;} }
+
+{$BROWSER,opera,,tt\, kbd\, samp \{ font-size: 1.25em; \}}

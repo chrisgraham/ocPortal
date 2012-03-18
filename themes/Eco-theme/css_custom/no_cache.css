@@ -27,3 +27,5 @@
 {$BROWSER,ie_old,.arr \{ vertical-align: -20%; \} }
 
 {$BROWSER,ie_old, .global_helper_panel \{ height: 450px; \}, .global_helper_panel \{ min-height: 450px; \} }
+
+{$BROWSER,opera,,tt\, kbd\, samp \{ font-size: 1.25em; \}}

@@ -38,7 +38,7 @@
 .remove .remove_cross {
 	width: 14px;
 	height: 14px;
-	background: url('{$IMG,stop12}') transparent no-repeat;
+	background: url('{$IMG;,stop12}') transparent no-repeat;
 	font-size: 0;
 	color: transparent;
 	border: none;
@@ -47,12 +47,12 @@
 }
 
 .remove .remove_cross:hover {
-	background: url('{$IMG,stop12Hover}') transparent no-repeat;
+	background: url('{$IMG;,stop12Hover}') transparent no-repeat;
 	cursor: pointer;
 }
 
 .remove .remove_cross:active {
-	background: url('{$IMG,stop12Active}') transparent no-repeat;
+	background: url('{$IMG;,stop12Active}') transparent no-repeat;
 	cursor: pointer;
 }
 

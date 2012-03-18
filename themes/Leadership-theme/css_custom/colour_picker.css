@@ -52,7 +52,7 @@ version: 2.5.1
 	left:200px;
 	height:183px;
 	width:14px;
-	background:url({$IMG,colour_picker/hue_bg}) no-repeat; 
+	background:url({$IMG;,colour_picker/hue_bg}) no-repeat; 
 	top:4px; 
 }
 
@@ -64,12 +64,12 @@ version: 2.5.1
 	height:182px; 
 	width:182px; 
 	background-color:#F00; 
-	background-image: url({$IMG,colour_picker/picker_mask});
+	background-image: url({$IMG;,colour_picker/picker_mask});
 } 
 
 *html .yui-picker-bg {
 	background-image: none;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{$IMG,colour_picker/picker_mask}', sizingMethod='scale');
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{$IMG;,colour_picker/picker_mask}', sizingMethod='scale');
 }
 
 .yui-picker-mask { position:absolute; z-index: 1; top:0px; left:0px; } 
