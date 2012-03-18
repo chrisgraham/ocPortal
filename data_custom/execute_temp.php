@@ -67,4 +67,17 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	header('Content-type: text/html');
+	require_code('upgrade');
+	list($errors,$successes)=(upgrade_theme('Blog-theme',7.0,8.0,true));
+	foreach ($errors as $error)
+	{
+		echo '<p style="background: #DDD; margin: 1em; padding: 1em">&#x2717; '.$error->evaluate().'</p>';
+		$has_errors=true;
+	}
+
+	foreach ($successes as $success)
+	{
+		echo '<p style="background: #DDD; margin: 1em; padding: 1em">&#x2713; '.$success->evaluate().'</p>';
+	}
 }

@@ -1897,7 +1897,7 @@ th.meta_data_title {
 	text-align: center;
 }
 
-.gallery_media_full_expose img {
+.gallery_media_full_expose img, .img_thumb {
 	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 	-webkit-box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
 	-moz-box-shadow: 3px 3px 10px #6b81a1; /* {$,wizard, 100% medborder.border} */
@@ -2127,6 +2127,9 @@ th.meta_data_title {
 .radio_list_picture {
 	float: {!en_left};
 	white-space: nowrap;
+	padding: 3px;
+	min-width: 40px;
+	min-height: 40px;
 }
 
 .results_table {
