@@ -768,11 +768,17 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 		$num=count($new_children);
 		foreach ($new_children as $i=>$child)
 		{
-			$children->attach(do_template('MENU_BRANCH_'.filter_naughty_harsh($type),$child+array(
-				'POSITION'=>strval($i),
-				'LAST'=>$i==$num-1,
-				'BRETHREN_COUNT'=>strval($num),
-			),NULL,false,'MENU_BRANCH_tree'));
+			if (is_object($child))
+			{
+				$children->attach($child);
+			} else
+			{
+				$children->attach(do_template('MENU_BRANCH_'.filter_naughty_harsh($type),$child+array(
+					'POSITION'=>strval($i),
+					'LAST'=>$i==$num-1,
+					'BRETHREN_COUNT'=>strval($num),
+				),NULL,false,'MENU_BRANCH_tree'));
+			}
 		}
 		if ($children->is_empty()) return array(NULL,false); // Nothing here!
 		if ((!array_key_exists('expanded',$branch['modifiers'])) && (!$expand_this) && (!$current_page))

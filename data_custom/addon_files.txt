@@ -1316,7 +1316,6 @@ ocworld
 ocportal_tutorials
 ------------------
  - docs4/index.php
- - docs4/pages/.htaccess
  - docs4/pages/comcode/.htaccess
  - docs4/pages/comcode/EN/.htaccess
  - docs4/pages/comcode/EN/index.html
@@ -1394,7 +1393,6 @@ ocportal_tutorials
  - docs4/pages/comcode_custom/EN/tut_msn.txt
  - docs4/pages/comcode_custom/EN/tut_news.txt
  - docs4/pages/comcode_custom/EN/tut_newsletter.txt
- - docs4/pages/comcode_custom/EN/tut_newsletter.txt.1271328175
  - docs4/pages/comcode_custom/EN/tut_nuances.txt
  - docs4/pages/comcode_custom/EN/tut_occle.txt
  - docs4/pages/comcode_custom/EN/tut_optimisation.txt
@@ -1428,8 +1426,6 @@ ocportal_tutorials
  - docs4/pages/html/EN/.htaccess
  - docs4/pages/html/EN/index.html
  - docs4/pages/html/index.html
- - docs4/pages/html_custom/.htaccess
- - docs4/pages/html_custom/EN/.htaccess
  - docs4/pages/html_custom/EN/index.html
  - docs4/pages/html_custom/index.html
  - docs4/pages/index.html
@@ -1826,7 +1822,6 @@ ocportal_tutorials
  - data/images/docs/trace_menu.png
  - data/images/docs/trace_menu2.png
  - data/images/docs/uninstall_1.png
- - data/images/docs/wap_openwave.png
  - data/images/docs/webapp_architecture.png
  - data/images/docs/webapp_login.png
  - data/images/docs/windows_perm1.png

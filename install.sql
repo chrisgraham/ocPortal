@@ -1,24 +1,76 @@
-DROP TABLE IF EXISTS `ocp7_attachment_refs`;
+DROP TABLE IF EXISTS `ocp_addons`;
 
-CREATE TABLE `ocp7_attachment_refs` (
+CREATE TABLE `ocp_addons` (
+  `addon_name` varchar(255) NOT NULL,
+  `addon_author` varchar(255) NOT NULL,
+  `addon_organisation` varchar(255) NOT NULL,
+  `addon_version` varchar(255) NOT NULL,
+  `addon_description` longtext NOT NULL,
+  `addon_install_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`addon_name`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_addons_dependencies`;
+
+CREATE TABLE `ocp_addons_dependencies` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `r_referer_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_referer_id` varchar(80) COLLATE latin1_bin NOT NULL,
+  `addon_name` varchar(255) NOT NULL,
+  `addon_name_dependant_upon` varchar(255) NOT NULL,
+  `addon_name_incompatibility` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_addons_files`;
+
+CREATE TABLE `ocp_addons_files` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `addon_name` varchar(255) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_adminlogs`;
+
+CREATE TABLE `ocp_adminlogs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `the_type` varchar(80) NOT NULL,
+  `param_a` varchar(80) NOT NULL,
+  `param_b` varchar(255) NOT NULL,
+  `the_user` int(11) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `xas` (`the_user`),
+  KEY `ts` (`date_and_time`),
+  KEY `aip` (`ip`),
+  KEY `athe_type` (`the_type`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_attachment_refs`;
+
+CREATE TABLE `ocp_attachment_refs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `r_referer_type` varchar(80) NOT NULL,
+  `r_referer_id` varchar(80) NOT NULL,
   `a_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_attachments`;
+DROP TABLE IF EXISTS `ocp_attachments`;
 
-CREATE TABLE `ocp7_attachments` (
+CREATE TABLE `ocp_attachments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `a_member_id` int(11) NOT NULL,
   `a_file_size` int(11) DEFAULT NULL,
-  `a_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `a_description` varchar(255) COLLATE latin1_bin NOT NULL,
-  `a_thumb_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `a_original_filename` varchar(255) COLLATE latin1_bin NOT NULL,
+  `a_url` varchar(255) NOT NULL,
+  `a_description` varchar(255) NOT NULL,
+  `a_thumb_url` varchar(255) NOT NULL,
+  `a_original_filename` varchar(255) NOT NULL,
   `a_num_downloads` int(11) NOT NULL,
   `a_last_downloaded_time` int(11) DEFAULT NULL,
   `a_add_time` int(11) NOT NULL,
@@ -28,19 +80,136 @@ CREATE TABLE `ocp7_attachments` (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_blocks`;
+DROP TABLE IF EXISTS `ocp_authors`;
 
-CREATE TABLE `ocp7_blocks` (
-  `block_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `block_author` varchar(80) COLLATE latin1_bin NOT NULL,
-  `block_organisation` varchar(80) COLLATE latin1_bin NOT NULL,
-  `block_hacked_by` varchar(80) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_authors` (
+  `author` varchar(80) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `forum_handle` int(11) DEFAULT NULL,
+  `description` int(10) unsigned NOT NULL,
+  `skills` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`author`),
+  KEY `findmemberlink` (`forum_handle`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_autosave`;
+
+CREATE TABLE `ocp_autosave` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `a_member_id` int(11) NOT NULL,
+  `a_key` longtext NOT NULL,
+  `a_value` longtext NOT NULL,
+  `a_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `myautosaves` (`a_member_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_award_archive`;
+
+CREATE TABLE `ocp_award_archive` (
+  `a_type_id` int(11) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `content_id` varchar(80) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  PRIMARY KEY (`a_type_id`,`date_and_time`),
+  KEY `awardquicksearch` (`content_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_award_types`;
+
+CREATE TABLE `ocp_award_types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `a_title` int(10) unsigned NOT NULL,
+  `a_description` int(10) unsigned NOT NULL,
+  `a_points` int(11) NOT NULL,
+  `a_content_type` varchar(80) NOT NULL,
+  `a_hide_awardee` tinyint(1) NOT NULL,
+  `a_update_time_hours` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_award_types` values('1','94','95','0','download','1','168');
+
+DROP TABLE IF EXISTS `ocp_banner_clicks`;
+
+CREATE TABLE `ocp_banner_clicks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_date_and_time` int(10) unsigned NOT NULL,
+  `c_member_id` int(11) NOT NULL,
+  `c_ip_address` varchar(40) NOT NULL,
+  `c_source` varchar(80) NOT NULL,
+  `c_banner_id` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `clicker_ip` (`c_ip_address`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_banner_types`;
+
+CREATE TABLE `ocp_banner_types` (
+  `id` varchar(80) NOT NULL,
+  `t_is_textual` tinyint(1) NOT NULL,
+  `t_image_width` int(11) NOT NULL,
+  `t_image_height` int(11) NOT NULL,
+  `t_max_file_size` int(11) NOT NULL,
+  `t_comcode_inline` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `hottext` (`t_comcode_inline`)
+) ENGINE=MyISAM;
+
+insert into `ocp_banner_types` values('','0','468','60','80','0');
+
+DROP TABLE IF EXISTS `ocp_banners`;
+
+CREATE TABLE `ocp_banners` (
+  `name` varchar(80) NOT NULL,
+  `expiry_date` int(10) unsigned DEFAULT NULL,
+  `submitter` int(11) NOT NULL,
+  `img_url` varchar(255) NOT NULL,
+  `b_title_text` varchar(255) NOT NULL,
+  `the_type` tinyint(4) NOT NULL,
+  `caption` int(10) unsigned NOT NULL,
+  `campaign_remaining` int(11) NOT NULL,
+  `site_url` varchar(255) NOT NULL,
+  `hits_from` int(11) NOT NULL,
+  `views_from` int(11) NOT NULL,
+  `hits_to` int(11) NOT NULL,
+  `views_to` int(11) NOT NULL,
+  `importance_modulus` int(11) NOT NULL,
+  `notes` longtext NOT NULL,
+  `validated` tinyint(1) NOT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `edit_date` int(10) unsigned DEFAULT NULL,
+  `b_type` varchar(80) NOT NULL,
+  PRIMARY KEY (`name`),
+  KEY `banner_child_find` (`b_type`),
+  KEY `the_type` (`the_type`),
+  KEY `expiry_date` (`expiry_date`),
+  KEY `badd_date` (`add_date`),
+  KEY `topsites` (`hits_from`,`hits_to`),
+  KEY `campaign_remaining` (`campaign_remaining`),
+  KEY `bvalidated` (`validated`)
+) ENGINE=MyISAM;
+
+insert into `ocp_banners` values('advertise_here',null,'1','data/images/advertise_here.png','','2','142','0','http://chris4.com/git/site/index.php?page=advertise','0','0','0','0','10','Provided as default. This is a default banner (it shows when others are not available).','1','1332090674',null,''),
+ ('donate',null,'1','data/images/donate.png','','0','143','0','http://chris4.com/git/site/index.php?page=donate','0','0','0','0','30','Provided as default.','1','1332090674',null,'');
+
+DROP TABLE IF EXISTS `ocp_blocks`;
+
+CREATE TABLE `ocp_blocks` (
+  `block_name` varchar(80) NOT NULL,
+  `block_author` varchar(80) NOT NULL,
+  `block_organisation` varchar(80) NOT NULL,
+  `block_hacked_by` varchar(80) NOT NULL,
   `block_hack_version` int(11) DEFAULT NULL,
   `block_version` int(11) NOT NULL,
   PRIMARY KEY (`block_name`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_blocks` values('bottom_forum_news','Chris Graham','ocProducts','',null,'2'),
+insert into `ocp_blocks` values('bottom_forum_news','Chris Graham','ocProducts','',null,'2'),
  ('bottom_news','Chris Graham','ocProducts','',null,'2'),
  ('bottom_rss','Chris Graham','ocProducts','',null,'2'),
  ('main_as_zone_access','Chris Graham','ocProducts','',null,'2'),
@@ -51,6 +220,7 @@ insert into `ocp7_blocks` values('bottom_forum_news','Chris Graham','ocProducts'
  ('main_code_documentor','Chris Graham','ocProducts','',null,'2'),
  ('main_comcode_page_children','Chris Graham','ocProducts','',null,'2'),
  ('main_comments','Chris Graham','ocProducts','',null,'2'),
+ ('main_contact_catalogues','Chris Graham','ocProducts','',null,'2'),
  ('main_contact_simple','Chris Graham','ocProducts','',null,'2'),
  ('main_contact_us','Chris Graham','ocProducts','',null,'2'),
  ('main_content','Chris Graham','ocProducts','',null,'2'),
@@ -109,35 +279,595 @@ insert into `ocp7_blocks` values('bottom_forum_news','Chris Graham','ocProducts'
  ('side_printer_friendly','Chris Graham','ocProducts','',null,'2'),
  ('side_root_galleries','Chris Graham','ocProducts','',null,'2'),
  ('side_rss','Chris Graham','ocProducts','',null,'2'),
+ ('side_shoutbox','Chris Graham','ocProducts','',null,'3'),
  ('side_stats','Chris Graham','ocProducts','',null,'3'),
  ('side_stored_menu','Chris Graham','ocProducts','',null,'2'),
  ('side_tag_cloud','Chris Graham','ocProducts','',null,'3'),
  ('side_users_online','Chris Graham','ocProducts','',null,'3'),
- ('side_weather','Manuprathap','ocProducts','',null,'5'),
+ ('side_weather','Manuprathap','ocProducts','',null,'6'),
  ('side_zone_jump','Chris Graham','ocProducts','',null,'2');
 
-DROP TABLE IF EXISTS `ocp7_config`;
+DROP TABLE IF EXISTS `ocp_bookmarks`;
 
-CREATE TABLE `ocp7_config` (
-  `the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `human_name` varchar(80) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_bookmarks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `b_owner` int(11) NOT NULL,
+  `b_folder` varchar(255) NOT NULL,
+  `b_title` varchar(255) NOT NULL,
+  `b_page_link` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_cache`;
+
+CREATE TABLE `ocp_cache` (
+  `cached_for` varchar(80) NOT NULL,
+  `identifier` varchar(40) NOT NULL,
+  `the_value` longtext NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `the_theme` varchar(80) NOT NULL,
+  `lang` varchar(5) NOT NULL,
+  `langs_required` longtext NOT NULL,
+  PRIMARY KEY (`cached_for`,`identifier`,`the_theme`,`lang`),
+  KEY `cached_ford` (`date_and_time`),
+  KEY `cached_fore` (`cached_for`),
+  KEY `cached_forf` (`lang`),
+  KEY `cached_forg` (`identifier`),
+  KEY `cached_forh` (`the_theme`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_cache_on`;
+
+CREATE TABLE `ocp_cache_on` (
+  `cached_for` varchar(80) NOT NULL,
+  `cache_on` longtext NOT NULL,
+  `cache_ttl` int(11) NOT NULL,
+  PRIMARY KEY (`cached_for`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_cached_comcode_pages`;
+
+CREATE TABLE `ocp_cached_comcode_pages` (
+  `the_zone` varchar(80) NOT NULL,
+  `the_page` varchar(80) NOT NULL,
+  `string_index` int(10) unsigned NOT NULL,
+  `the_theme` varchar(80) NOT NULL,
+  `cc_page_title` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`the_zone`,`the_page`,`the_theme`),
+  KEY `ftjoin_ccpt` (`cc_page_title`),
+  KEY `ftjoin_ccsi` (`string_index`),
+  KEY `ccp_join` (`the_page`,`the_zone`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_cached_weather_codes`;
+
+CREATE TABLE `ocp_cached_weather_codes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `w_string` varchar(255) NOT NULL,
+  `w_code` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_calendar_events`;
+
+CREATE TABLE `ocp_calendar_events` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `e_submitter` int(11) NOT NULL,
+  `e_views` int(11) NOT NULL,
+  `e_title` int(10) unsigned NOT NULL,
+  `e_content` int(10) unsigned NOT NULL,
+  `e_add_date` int(10) unsigned NOT NULL,
+  `e_edit_date` int(10) unsigned DEFAULT NULL,
+  `e_recurrence` varchar(80) NOT NULL,
+  `e_recurrences` int(11) DEFAULT NULL,
+  `e_seg_recurrences` tinyint(1) NOT NULL,
+  `e_start_year` int(11) NOT NULL,
+  `e_start_month` int(11) NOT NULL,
+  `e_start_day` int(11) NOT NULL,
+  `e_start_hour` int(11) DEFAULT NULL,
+  `e_start_minute` int(11) DEFAULT NULL,
+  `e_end_year` int(11) DEFAULT NULL,
+  `e_end_month` int(11) DEFAULT NULL,
+  `e_end_day` int(11) DEFAULT NULL,
+  `e_end_hour` int(11) DEFAULT NULL,
+  `e_end_minute` int(11) DEFAULT NULL,
+  `e_timezone` varchar(80) NOT NULL,
+  `e_do_timezone_conv` tinyint(1) NOT NULL,
+  `e_is_public` tinyint(1) NOT NULL,
+  `e_priority` int(11) NOT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `allow_trackbacks` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  `e_type` int(11) NOT NULL,
+  `validated` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `e_views` (`e_views`),
+  KEY `ces` (`e_submitter`),
+  KEY `publicevents` (`e_is_public`),
+  KEY `e_type` (`e_type`),
+  KEY `eventat` (`e_start_year`,`e_start_month`,`e_start_day`,`e_start_hour`,`e_start_minute`),
+  KEY `e_add_date` (`e_add_date`),
+  KEY `validated` (`validated`),
+  KEY `ftjoin_etitle` (`e_title`),
+  KEY `ftjoin_econtent` (`e_content`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_calendar_interests`;
+
+CREATE TABLE `ocp_calendar_interests` (
+  `i_member_id` int(11) NOT NULL,
+  `t_type` int(11) NOT NULL,
+  PRIMARY KEY (`i_member_id`,`t_type`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_calendar_jobs`;
+
+CREATE TABLE `ocp_calendar_jobs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `j_time` int(10) unsigned NOT NULL,
+  `j_reminder_id` int(11) DEFAULT NULL,
+  `j_member_id` int(11) DEFAULT NULL,
+  `j_event_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `applicablejobs` (`j_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_calendar_reminders`;
+
+CREATE TABLE `ocp_calendar_reminders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `e_id` int(11) NOT NULL,
+  `n_member_id` int(11) NOT NULL,
+  `n_seconds_before` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_calendar_types`;
+
+CREATE TABLE `ocp_calendar_types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `t_title` int(10) unsigned NOT NULL,
+  `t_logo` varchar(255) NOT NULL,
+  `t_external_feed` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9;
+
+insert into `ocp_calendar_types` values('1','144','calendar/system_command',''),
+ ('2','145','calendar/general',''),
+ ('3','146','calendar/birthday',''),
+ ('4','147','calendar/public_holiday',''),
+ ('5','148','calendar/vacation',''),
+ ('6','149','calendar/appointment',''),
+ ('7','150','calendar/commitment',''),
+ ('8','151','calendar/anniversary','');
+
+DROP TABLE IF EXISTS `ocp_catalogue_cat_treecache`;
+
+CREATE TABLE `ocp_catalogue_cat_treecache` (
+  `cc_id` int(11) NOT NULL,
+  `cc_ancestor_id` int(11) NOT NULL,
+  PRIMARY KEY (`cc_id`,`cc_ancestor_id`),
+  KEY `cc_ancestor_id` (`cc_ancestor_id`)
+) ENGINE=MyISAM;
+
+insert into `ocp_catalogue_cat_treecache` values('1','1'),
+ ('2','2'),
+ ('4','4'),
+ ('5','5');
+
+DROP TABLE IF EXISTS `ocp_catalogue_categories`;
+
+CREATE TABLE `ocp_catalogue_categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_name` varchar(80) NOT NULL,
+  `cc_title` int(10) unsigned NOT NULL,
+  `cc_description` int(10) unsigned NOT NULL,
+  `rep_image` varchar(255) NOT NULL,
+  `cc_notes` longtext NOT NULL,
+  `cc_add_date` int(10) unsigned NOT NULL,
+  `cc_parent_id` int(11) DEFAULT NULL,
+  `cc_move_target` int(11) DEFAULT NULL,
+  `cc_move_days_lower` int(11) NOT NULL,
+  `cc_move_days_higher` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `catstoclean` (`cc_move_target`),
+  KEY `cataloguefind` (`c_name`),
+  KEY `cc_parent_id` (`cc_parent_id`),
+  KEY `ftjoin_cctitle` (`cc_title`),
+  KEY `ftjoin_ccdescrip` (`cc_description`)
+) ENGINE=MyISAM AUTO_INCREMENT=7;
+
+insert into `ocp_catalogue_categories` values('1','projects','162','163','','','1332090683',null,null,'30','60'),
+ ('2','hosted','190','191','','','1332090683',null,null,'30','60'),
+ ('3','links','196','197','','','1332090683',null,null,'30','60'),
+ ('4','faqs','214','215','','','1332090683',null,null,'30','60'),
+ ('5','contacts','246','247','','','1332090683',null,null,'30','60'),
+ ('6','products','258','259','','','1332090683',null,null,'30','60');
+
+DROP TABLE IF EXISTS `ocp_catalogue_childcountcache`;
+
+CREATE TABLE `ocp_catalogue_childcountcache` (
+  `cc_id` int(11) NOT NULL,
+  `c_num_rec_children` int(11) NOT NULL,
+  `c_num_rec_entries` int(11) NOT NULL,
+  PRIMARY KEY (`cc_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_efv_float`;
+
+CREATE TABLE `ocp_catalogue_efv_float` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cf_id` int(11) NOT NULL,
+  `ce_id` int(11) NOT NULL,
+  `cv_value` double DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fcv_value` (`cv_value`),
+  KEY `fcf_id` (`cf_id`),
+  KEY `fce_id` (`ce_id`),
+  KEY `cefv_f_combo` (`ce_id`,`cf_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_efv_integer`;
+
+CREATE TABLE `ocp_catalogue_efv_integer` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cf_id` int(11) NOT NULL,
+  `ce_id` int(11) NOT NULL,
+  `cv_value` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `itv_value` (`cv_value`),
+  KEY `icf_id` (`cf_id`),
+  KEY `ice_id` (`ce_id`),
+  KEY `cefv_i_combo` (`ce_id`,`cf_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_efv_long`;
+
+CREATE TABLE `ocp_catalogue_efv_long` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cf_id` int(11) NOT NULL,
+  `ce_id` int(11) NOT NULL,
+  `cv_value` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cefv_l_combo` (`ce_id`,`cf_id`),
+  KEY `lcf_id` (`cf_id`),
+  KEY `lce_id` (`ce_id`),
+  FULLTEXT KEY `lcv_value` (`cv_value`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_efv_long_trans`;
+
+CREATE TABLE `ocp_catalogue_efv_long_trans` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cf_id` int(11) NOT NULL,
+  `ce_id` int(11) NOT NULL,
+  `cv_value` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cefv_lt_combo` (`ce_id`,`cf_id`),
+  KEY `ltcf_id` (`cf_id`),
+  KEY `ltce_id` (`ce_id`),
+  KEY `ltcv_value` (`cv_value`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_efv_short`;
+
+CREATE TABLE `ocp_catalogue_efv_short` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cf_id` int(11) NOT NULL,
+  `ce_id` int(11) NOT NULL,
+  `cv_value` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cefv_s_combo` (`ce_id`,`cf_id`),
+  KEY `iscv_value` (`cv_value`),
+  KEY `scf_id` (`cf_id`),
+  KEY `sce_id` (`ce_id`),
+  FULLTEXT KEY `scv_value` (`cv_value`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_efv_short_trans`;
+
+CREATE TABLE `ocp_catalogue_efv_short_trans` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cf_id` int(11) NOT NULL,
+  `ce_id` int(11) NOT NULL,
+  `cv_value` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cefv_st_combo` (`ce_id`,`cf_id`),
+  KEY `stcf_id` (`cf_id`),
+  KEY `stce_id` (`ce_id`),
+  KEY `stcv_value` (`cv_value`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_entries`;
+
+CREATE TABLE `ocp_catalogue_entries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_name` varchar(80) NOT NULL,
+  `cc_id` int(11) NOT NULL,
+  `ce_submitter` int(11) NOT NULL,
+  `ce_add_date` int(10) unsigned NOT NULL,
+  `ce_edit_date` int(10) unsigned DEFAULT NULL,
+  `ce_views` int(11) NOT NULL,
+  `ce_views_prior` int(11) NOT NULL,
+  `ce_validated` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `allow_trackbacks` tinyint(1) NOT NULL,
+  `ce_last_moved` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ce_views` (`ce_views`),
+  KEY `ces` (`ce_submitter`),
+  KEY `ce_validated` (`ce_validated`),
+  KEY `ce_add_date` (`ce_add_date`),
+  KEY `ce_c_name` (`c_name`),
+  KEY `ce_cc_id` (`cc_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_entry_linkage`;
+
+CREATE TABLE `ocp_catalogue_entry_linkage` (
+  `catalogue_entry_id` int(11) NOT NULL,
+  `content_type` varchar(80) NOT NULL,
+  `content_id` varchar(80) NOT NULL,
+  PRIMARY KEY (`catalogue_entry_id`),
+  KEY `custom_fields` (`content_type`,`content_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_catalogue_fields`;
+
+CREATE TABLE `ocp_catalogue_fields` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_name` varchar(80) NOT NULL,
+  `cf_name` int(10) unsigned NOT NULL,
+  `cf_description` int(10) unsigned NOT NULL,
+  `cf_type` varchar(80) NOT NULL,
+  `cf_order` int(11) NOT NULL,
+  `cf_defines_order` tinyint(4) NOT NULL,
+  `cf_visible` tinyint(1) NOT NULL,
+  `cf_searchable` tinyint(1) NOT NULL,
+  `cf_default` longtext NOT NULL,
+  `cf_required` tinyint(1) NOT NULL,
+  `cf_put_in_category` tinyint(1) NOT NULL,
+  `cf_put_in_search` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=43;
+
+insert into `ocp_catalogue_fields` values('1','projects','154','155','short_trans','0','1','1','1','','1','1','1'),
+ ('2','projects','156','157','user','1','0','1','1','','1','1','1'),
+ ('3','projects','158','159','long_trans','2','0','1','1','','1','1','1'),
+ ('4','projects','160','161','integer','3','0','1','1','','1','1','1'),
+ ('5','modifications','168','169','short_trans','0','1','1','1','','1','1','1'),
+ ('6','modifications','170','171','picture','1','0','1','1','','0','1','1'),
+ ('7','modifications','172','173','short_trans','2','0','1','1','','1','1','1'),
+ ('8','modifications','174','175','url','3','0','1','1','','0','1','1'),
+ ('9','modifications','176','177','long_trans','4','0','1','1','','1','1','1'),
+ ('10','modifications','178','179','short_text','5','0','1','1','','1','1','1'),
+ ('11','hosted','184','185','short_trans','0','1','1','1','','1','1','1'),
+ ('12','hosted','186','187','url','1','0','1','1','','0','1','1'),
+ ('13','hosted','188','189','long_trans','2','0','1','1','','0','1','1'),
+ ('14','links','198','199','short_trans','0','1','1','1','','1','1','1'),
+ ('15','links','200','201','url','1','0','1','1','','1','0','1'),
+ ('16','links','202','203','long_trans','2','0','1','1','','0','1','1'),
+ ('17','faqs','208','209','short_trans','0','0','1','1','','1','1','1'),
+ ('18','faqs','210','211','long_trans','1','0','1','1','','1','1','1'),
+ ('19','faqs','212','213','auto_increment','2','1','0','1','','0','1','1'),
+ ('20','contacts','220','221','short_text','0','0','1','1','','1','1','1'),
+ ('21','contacts','222','223','short_text','1','1','1','1','','1','1','1'),
+ ('22','contacts','224','225','short_text','2','0','1','1','','1','1','1'),
+ ('23','contacts','226','227','short_text','3','0','1','1','','1','1','1'),
+ ('24','contacts','228','229','short_text','4','0','1','1','','1','1','1'),
+ ('25','contacts','230','231','short_text','5','0','1','1','','1','1','1'),
+ ('26','contacts','232','233','short_text','6','0','1','1','','1','1','1'),
+ ('27','contacts','234','235','short_text','7','0','1','1','','1','1','1'),
+ ('28','contacts','236','237','short_text','8','0','1','1','','1','1','1'),
+ ('29','contacts','238','239','short_text','9','0','1','1','','1','1','1'),
+ ('30','contacts','240','241','long_text','10','0','1','1','','1','1','1'),
+ ('31','contacts','242','243','long_text','11','0','1','1','','1','1','1'),
+ ('32','contacts','244','245','picture','12','0','1','1','','1','1','1'),
+ ('33','products','260','261','short_trans','0','1','1','1','','1','1','1'),
+ ('34','products','262','263','random','1','0','1','1','','1','1','1'),
+ ('35','products','264','265','float','2','0','1','1','','1','1','1'),
+ ('36','products','266','267','integer','3','0','1','0','','0','1','1'),
+ ('37','products','268','269','integer','4','0','0','0','','0','0','0'),
+ ('38','products','270','271','list','5','0','0','0','No|Yes','1','0','0'),
+ ('39','products','272','273','list','6','0','0','0','0%|5%|17.5%','1','0','0'),
+ ('40','products','274','275','picture','7','0','1','1','','0','1','1'),
+ ('41','products','276','277','float','8','0','0','0','','1','0','0'),
+ ('42','products','278','279','long_trans','9','0','1','1','','1','1','1');
+
+DROP TABLE IF EXISTS `ocp_catalogues`;
+
+CREATE TABLE `ocp_catalogues` (
+  `c_name` varchar(80) NOT NULL,
+  `c_title` int(10) unsigned NOT NULL,
+  `c_description` int(10) unsigned NOT NULL,
+  `c_display_type` tinyint(4) NOT NULL,
+  `c_is_tree` tinyint(1) NOT NULL,
+  `c_notes` longtext NOT NULL,
+  `c_add_date` int(10) unsigned NOT NULL,
+  `c_submit_points` int(11) NOT NULL,
+  `c_ecommerce` tinyint(1) NOT NULL,
+  `c_send_view_reports` varchar(80) NOT NULL,
+  PRIMARY KEY (`c_name`)
+) ENGINE=MyISAM;
+
+insert into `ocp_catalogues` values('projects','152','153','0','0','','1332090683','30','0','never'),
+ ('modifications','166','167','1','0','','1332090683','60','0','never'),
+ ('hosted','182','183','0','0','','1332090683','0','0','never'),
+ ('links','194','195','2','1','','1332090683','0','0','never'),
+ ('faqs','206','207','0','0','','1332090683','0','0','never'),
+ ('contacts','218','219','0','0','','1332090683','30','0','never'),
+ ('products','256','257','1','1','','1332090683','0','1','never');
+
+DROP TABLE IF EXISTS `ocp_chargelog`;
+
+CREATE TABLE `ocp_chargelog` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `reason` int(10) unsigned NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_chat_active`;
+
+CREATE TABLE `ocp_chat_active` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) NOT NULL,
+  `room_id` int(11) DEFAULT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `active_ordering` (`date_and_time`),
+  KEY `member_select` (`member_id`),
+  KEY `room_select` (`room_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_chat_blocking`;
+
+CREATE TABLE `ocp_chat_blocking` (
+  `member_blocker` int(11) NOT NULL,
+  `member_blocked` int(11) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`member_blocker`,`member_blocked`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_chat_buddies`;
+
+CREATE TABLE `ocp_chat_buddies` (
+  `member_likes` int(11) NOT NULL,
+  `member_liked` int(11) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`member_likes`,`member_liked`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_chat_events`;
+
+CREATE TABLE `ocp_chat_events` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `e_type_code` varchar(80) NOT NULL,
+  `e_member_id` int(11) NOT NULL,
+  `e_room_id` int(11) DEFAULT NULL,
+  `e_date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `event_ordering` (`e_date_and_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_chat_messages`;
+
+CREATE TABLE `ocp_chat_messages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `system_message` tinyint(1) NOT NULL,
+  `ip_address` varchar(40) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `the_message` int(10) unsigned NOT NULL,
+  `text_colour` varchar(255) NOT NULL,
+  `font_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ordering` (`date_and_time`),
+  KEY `room_id` (`room_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_chat_rooms`;
+
+CREATE TABLE `ocp_chat_rooms` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `room_name` varchar(255) NOT NULL,
+  `room_owner` int(11) DEFAULT NULL,
+  `allow_list` longtext NOT NULL,
+  `allow_list_groups` longtext NOT NULL,
+  `disallow_list` longtext NOT NULL,
+  `disallow_list_groups` longtext NOT NULL,
+  `room_language` varchar(5) NOT NULL,
+  `c_welcome` int(10) unsigned NOT NULL,
+  `is_im` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `room_name` (`room_name`),
+  KEY `is_im` (`is_im`,`room_name`),
+  KEY `first_public` (`is_im`,`id`),
+  KEY `allow_list` (`allow_list`(30))
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_chat_rooms` values('1','General chat',null,'','','','','EN','296','0');
+
+DROP TABLE IF EXISTS `ocp_chat_sound_effects`;
+
+CREATE TABLE `ocp_chat_sound_effects` (
+  `s_member` int(11) NOT NULL,
+  `s_effect_id` varchar(80) NOT NULL,
+  `s_url` varchar(255) NOT NULL,
+  PRIMARY KEY (`s_member`,`s_effect_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_comcode_pages`;
+
+CREATE TABLE `ocp_comcode_pages` (
+  `the_zone` varchar(80) NOT NULL,
+  `the_page` varchar(80) NOT NULL,
+  `p_parent_page` varchar(80) NOT NULL,
+  `p_validated` tinyint(1) NOT NULL,
+  `p_edit_date` int(10) unsigned DEFAULT NULL,
+  `p_add_date` int(10) unsigned NOT NULL,
+  `p_submitter` int(11) NOT NULL,
+  `p_show_as_edit` tinyint(1) NOT NULL,
+  PRIMARY KEY (`the_zone`,`the_page`),
+  KEY `p_submitter` (`p_submitter`),
+  KEY `p_add_date` (`p_add_date`),
+  KEY `p_validated` (`p_validated`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_config`;
+
+CREATE TABLE `ocp_config` (
+  `the_name` varchar(80) NOT NULL,
+  `human_name` varchar(80) NOT NULL,
   `c_set` tinyint(1) NOT NULL,
-  `config_value` longtext COLLATE latin1_bin NOT NULL,
-  `the_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `eval` varchar(255) COLLATE latin1_bin NOT NULL,
-  `the_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `section` varchar(80) COLLATE latin1_bin NOT NULL,
-  `explanation` varchar(80) COLLATE latin1_bin NOT NULL,
+  `config_value` longtext NOT NULL,
+  `the_type` varchar(80) NOT NULL,
+  `eval` varchar(255) NOT NULL,
+  `the_page` varchar(80) NOT NULL,
+  `section` varchar(80) NOT NULL,
+  `explanation` varchar(80) NOT NULL,
   `shared_hosting_restricted` tinyint(1) NOT NULL,
-  `c_data` varchar(255) COLLATE latin1_bin NOT NULL,
+  `c_data` varchar(255) NOT NULL,
   PRIMARY KEY (`the_name`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED','CONFIG_OPTION_encryption_key','0',''),
+insert into `ocp_config` values('encryption_key','ENCRYPTION_KEY','0','','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED','CONFIG_OPTION_encryption_key','0',''),
  ('decryption_key','DECRYPTION_KEY','0','','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED','CONFIG_OPTION_decryption_key','0',''),
  ('is_on_post_titles','IS_ON_POST_TITLES','0','','tick','return is_null($old=get_value(\'no_post_titles\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL','CONFIG_OPTION_is_on_post_titles','0',''),
  ('is_on_anonymous_posts','IS_ON_ANONYMOUS_POSTS','0','','tick','return is_null($old=get_value(\'ocf_no_anonymous_post\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL','CONFIG_OPTION_is_on_anonymous_posts','0',''),
- ('is_on_timezone_detection','IS_ON_TIMEZONE_DETECTION','0','','tick','return is_null($old=get_value(\'no_js_timezone_detect\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL','CONFIG_OPTION_is_on_timezone_detection','0',''),
+ ('is_on_timezone_detection','IS_ON_TIMEZONE_DETECTION','0','','tick','return is_null($old=get_value(\'no_js_timezone_detect\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL','CONFIG_OPTION_is_on_timezone_detection','0',''),
  ('is_on_topic_descriptions','IS_ON_TOPIC_DESCRIPTIONS','0','','tick','return is_null($old=get_value(\'no_topic_descriptions\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL','CONFIG_OPTION_is_on_topic_descriptions','0',''),
  ('is_on_topic_emoticons','IS_ON_TOPIC_EMOTICONS','0','','tick','return is_null($old=get_value(\'ocf_no_topic_emoticons\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL','CONFIG_OPTION_is_on_topic_emoticons','0',''),
  ('default_preview_guests','DEFAULT_PREVIEW_GUESTS','0','','tick','return is_null($old=get_value(\'no_default_preview_guests\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL','CONFIG_OPTION_default_preview_guests','0',''),
@@ -154,10 +884,9 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('prevent_shouting','PREVENT_SHOUTING','0','','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL','CONFIG_OPTION_prevent_shouting','0',''),
  ('restricted_usernames','RESTRICTED_USERNAMES','0','','line','return do_lang(\'GUEST\').\', \'.do_lang(\'STAFF\').\', \'.do_lang(\'ADMIN\').\', \'.do_lang(\'MODERATOR\').\', googlebot\';','SECTION_FORUMS','GENERAL','CONFIG_OPTION_restricted_usernames','0',''),
  ('require_new_member_validation','REQUIRE_NEW_MEMBER_VALIDATION','0','','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_require_new_member_validation','0',''),
- ('reported_posts_forum','REPORTED_POSTS_FORUM','0','','forum','return (has_no_forum()||(!addon_installed(\'ocf_reported_posts\')))?NULL:do_lang(\'REPORTED_POSTS_FORUM\');','SECTION_FORUMS','GENERAL','CONFIG_OPTION_reported_posts_forum','0',''),
+ ('reported_posts_forum','REPORTED_POSTS_FORUM','0','','forum','return (has_no_forum()||(!addon_installed(\'ocf_reported_posts\')))?NULL:do_lang(\'ocf:REPORTED_POSTS_FORUM\');','SECTION_FORUMS','GENERAL','CONFIG_OPTION_reported_posts_forum','0',''),
  ('one_per_email_address','ONE_PER_EMAIL_ADDRESS','0','','tick','return \'1\';','SECTION_FORUMS','GENERAL','CONFIG_OPTION_one_per_email_address','0',''),
  ('hot_topic_definition','HOT_TOPIC_DEFINITION','0','','integer','return has_no_forum()?NULL:\'20\';','SECTION_FORUMS','GENERAL','CONFIG_OPTION_hot_topic_definition','0',''),
- ('send_staff_message_post_validation','SEND_STAFF_MESSAGE_POST_VALIDATION','0','','tick','return \'1\';','SECTION_FORUMS','GENERAL','CONFIG_OPTION_send_staff_message_post_validation','0',''),
  ('minimum_password_length','MINIMUM_PASSWORD_LENGTH','0','','integer','return \'4\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_minimum_password_length','0',''),
  ('maximum_password_length','MAXIMUM_PASSWORD_LENGTH','0','','integer','return \'20\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_maximum_password_length','0',''),
  ('minimum_username_length','MINIMUM_USERNAME_LENGTH','0','','integer','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_minimum_username_length','0',''),
@@ -173,6 +902,9 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('skip_email_confirm_join','SKIP_EMAIL_CONFIRM_JOIN','0','','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_skip_email_confirm_join','0',''),
  ('no_dob_ask','NO_DOB_ASK','0','','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_no_dob_ask','0',''),
  ('allow_international','ALLOW_INTERNATIONAL','0','','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_allow_international','0',''),
+ ('allow_email_from_staff_disable','ALLOW_EMAIL_FROM_STAFF_DISABLE','0','','tick','return \'0\';','SECTION_FORUMS','GENERAL','CONFIG_OPTION_allow_email_from_staff_disable','0',''),
+ ('intro_forum_id','INTRO_FORUM_ID','0','','?forum','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_intro_forum_id','0',''),
+ ('signup_fullname','SIGNUP_FULLNAME','0','','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS','CONFIG_OPTION_signup_fullname','0',''),
  ('is_on_coppa','COPPA_ENABLED','0','','tick','return \'0\';','PRIVACY','GENERAL','CONFIG_OPTION_is_on_coppa','0',''),
  ('privacy_fax','FAX_NUMBER','0','','line','return \'\';','PRIVACY','GENERAL','CONFIG_OPTION_privacy_fax','0',''),
  ('privacy_postal_address','ADDRESS','0','','text','return \'\';','PRIVACY','GENERAL','CONFIG_OPTION_privacy_postal_address','0',''),
@@ -203,11 +935,10 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('smtp_from_address','EMAIL_ADDRESS','0','','line','return \'\';','SITE','SMTP','CONFIG_OPTION_smtp_from_address','1',''),
  ('use_security_images','USE_SECURITY_IMAGES','0','','tick','return \'1\';','SECURITY','GENERAL','CONFIG_OPTION_use_security_images','0',''),
  ('enable_https','HTTPS_SUPPORT','0','','tick','return \'0\';','SECURITY','GENERAL','CONFIG_OPTION_enable_https','1',''),
- ('send_error_emails','SEND_ERROR_EMAILS','0','','tick','return \'0\';','SITE','ADVANCED','CONFIG_OPTION_send_error_emails','0',''),
  ('send_error_emails_ocproducts','SEND_ERROR_EMAILS_OCPRODUCTS','0','','tick','return 1;','SITE','ADVANCED','CONFIG_OPTION_send_error_emails_ocproducts','1',''),
- ('detect_lang_forum','DETECT_LANG_FORUM','0','','tick','return (get_forum_type()==\'ocf\')?NULL:\'1\';','SITE','ADVANCED','CONFIG_OPTION_detect_lang_forum','0',''),
- ('detect_lang_browser','DETECT_LANG_BROWSER','0','','tick','return \'0\';','SITE','ADVANCED','CONFIG_OPTION_detect_lang_browser','0',''),
  ('low_space_check','LOW_DISK_SPACE_SUBJECT','0','','integer','return \'20\';','SITE','GENERAL','CONFIG_OPTION_low_space_check','0',''),
+ ('detect_lang_forum','DETECT_LANG_FORUM','0','','tick','return \'1\';','SITE','ADVANCED','CONFIG_OPTION_detect_lang_forum','0',''),
+ ('detect_lang_browser','DETECT_LANG_BROWSER','0','','tick','return \'0\';','SITE','ADVANCED','CONFIG_OPTION_detect_lang_browser','0',''),
  ('allow_audio_videos','ALLOW_AUDIO_VIDEOS','0','','tick','return \'1\';','SITE','ADVANCED','CONFIG_OPTION_allow_audio_videos','0',''),
  ('validation','VALIDATION','0','','tick','return \'0\';','SITE','VALIDATION','CONFIG_OPTION_validation','1',''),
  ('validation_xhtml','VALIDATION_XHTML','0','','tick','return \'1\';','SITE','VALIDATION','CONFIG_OPTION_validation_xhtml','1',''),
@@ -217,19 +948,19 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('validation_compat','VALIDATION_COMPAT','0','','tick','return \'0\';','SITE','VALIDATION','CONFIG_OPTION_validation_compat','1',''),
  ('validation_ext_files','VALIDATION_EXT_FILES','0','','tick','return \'0\';','SITE','VALIDATION','CONFIG_OPTION_validation_ext_files','1',''),
  ('max_download_size','MAX_SIZE','0','','integer','return \'20000\';','SITE','UPLOAD','CONFIG_OPTION_max_download_size','0',''),
+ ('sms_username','USERNAME','0','','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS','CONFIG_OPTION_sms_username','0',''),
+ ('sms_password','PASSWORD','0','','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS','CONFIG_OPTION_sms_password','0',''),
+ ('sms_api_id','API_ID','0','','integer','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS','CONFIG_OPTION_sms_api_id','0',''),
+ ('sms_low_limit','SMS_LOW_LIMIT','0','','integer','return addon_installed(\'sms\')?\'10\':NULL;','FEATURE','SMS','CONFIG_OPTION_sms_low_limit','0',''),
+ ('sms_high_limit','SMS_HIGH_LIMIT','0','','integer','return addon_installed(\'sms\')?\'20\':NULL;','FEATURE','SMS','CONFIG_OPTION_sms_high_limit','0',''),
+ ('sms_low_trigger_limit','SMS_LOW_TRIGGER_LIMIT','0','','integer','return addon_installed(\'sms\')?\'50\':NULL;','FEATURE','SMS','CONFIG_OPTION_sms_low_trigger_limit','0',''),
+ ('sms_high_trigger_limit','SMS_HIGH_TRIGGER_LIMIT','0','','integer','return addon_installed(\'sms\')?\'100\':NULL;','FEATURE','SMS','CONFIG_OPTION_sms_high_trigger_limit','0',''),
  ('allowed_post_submitters','ALLOWED_POST_SUBMITTERS','0','','text','return \'\';','SECURITY','ADVANCED','CONFIG_OPTION_allowed_post_submitters','1',''),
  ('is_on_strong_forum_tie','STRONG_FORUM_TIE','0','','tick','return \'0\';','FEATURE','USER_INTERACTION','CONFIG_OPTION_is_on_strong_forum_tie','1',''),
  ('is_on_preview_validation','VALIDATION_ON_PREVIEW','0','','tick','return \'1\';','SITE','VALIDATION','CONFIG_OPTION_is_on_preview_validation','1',''),
  ('show_inline_stats','SHOW_INLINE_STATS','0','','tick','return \'1\';','SITE','GENERAL','CONFIG_OPTION_show_inline_stats','0',''),
  ('simplified_donext','SIMPLIFIED_DONEXT','0','','tick','return \'0\';','SITE','ADVANCED','CONFIG_OPTION_simplified_donext','0',''),
  ('anti_leech','ANTI_LEECH','0','','tick','return \'0\';','SECURITY','GENERAL','CONFIG_OPTION_anti_leech','0',''),
- ('sms_username','USERNAME','0','','line','return \'\';','FEATURE','SMS','CONFIG_OPTION_sms_username','0',''),
- ('sms_password','PASSWORD','0','','line','return \'\';','FEATURE','SMS','CONFIG_OPTION_sms_password','0',''),
- ('sms_api_id','API_ID','0','','integer','return \'\';','FEATURE','SMS','CONFIG_OPTION_sms_api_id','0',''),
- ('sms_low_limit','SMS_LOW_LIMIT','0','','integer','return \'10\';','FEATURE','SMS','CONFIG_OPTION_sms_low_limit','0',''),
- ('sms_high_limit','SMS_HIGH_LIMIT','0','','integer','return \'20\';','FEATURE','SMS','CONFIG_OPTION_sms_high_limit','0',''),
- ('sms_low_trigger_limit','SMS_LOW_TRIGGER_LIMIT','0','','integer','return \'50\';','FEATURE','SMS','CONFIG_OPTION_sms_low_trigger_limit','0',''),
- ('sms_high_trigger_limit','SMS_HIGH_TRIGGER_LIMIT','0','','integer','return \'100\';','FEATURE','SMS','CONFIG_OPTION_sms_high_trigger_limit','0',''),
  ('ssw','SSW','0','','tick','return \'0\';','SITE','GENERAL','CONFIG_OPTION_ssw','0',''),
  ('bottom_show_admin_menu','ADMIN_MENU','0','','tick','return \'1\';','FEATURE','BOTTOM_LINKS','CONFIG_OPTION_bottom_show_admin_menu','0',''),
  ('bottom_show_top_button','TOP_LINK','0','','tick','return \'0\';','FEATURE','BOTTOM_LINKS','CONFIG_OPTION_bottom_show_top_button','0',''),
@@ -250,7 +981,7 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('panel_width_spaced','PANEL_WIDTH_SPACED','0','','line','return \'14.3em\';','THEME','GENERAL','CONFIG_OPTION_panel_width_spaced','0',''),
  ('root_zone_login_theme','ROOT_ZONE_LOGIN_THEME','0','','tick','return \'0\';','THEME','GENERAL','CONFIG_OPTION_root_zone_login_theme','0',''),
  ('use_custom_zone_menu','USE_CUSTOM_ZONE_MENU','0','','tick','return \'1\';','THEME','GENERAL','CONFIG_OPTION_use_custom_zone_menu','0',''),
- ('tray_support','TRAY_SUPPORT','0','','tick','return \'0\';','THEME','GENERAL','CONFIG_OPTION_tray_support','0',''),
+ ('tray_support','TRAY_SUPPORT','0','','tick','return \'1\';','THEME','GENERAL','CONFIG_OPTION_tray_support','0',''),
  ('show_docs','SHOW_DOCS','0','','tick','return \'1\';','SITE','ADVANCED','CONFIG_OPTION_show_docs','0',''),
  ('captcha_noise','CAPTCHA_NOISE','0','','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SITE','ADVANCED','CONFIG_OPTION_captcha_noise','0',''),
  ('captcha_on_feedback','CAPTCHA_ON_FEEDBACK','0','','tick','return addon_installed(\'captcha\')?\'0\':NULL;','SITE','ADVANCED','CONFIG_OPTION_captcha_on_feedback','0',''),
@@ -258,7 +989,7 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('ip_forwarding','IP_FORWARDING','0','','tick','return \'0\';','SITE','ENVIRONMENT','CONFIG_OPTION_ip_forwarding','0',''),
  ('force_meta_refresh','FORCE_META_REFRESH','0','','tick','return \'0\';','SITE','ENVIRONMENT','CONFIG_OPTION_force_meta_refresh','0',''),
  ('use_contextual_dates','USE_CONTEXTUAL_DATES','0','','tick','return \'1\';','SITE','ADVANCED','CONFIG_OPTION_use_contextual_dates','0',''),
- ('eager_wysiwyg','EAGER_WYSIWYG','0','','tick','return \'1\';','SITE','ADVANCED','CONFIG_OPTION_eager_wysiwyg','0',''),
+ ('eager_wysiwyg','EAGER_WYSIWYG','0','','tick','return \'0\';','SITE','ADVANCED','CONFIG_OPTION_eager_wysiwyg','0',''),
  ('website_email','WEBSITE_EMAIL','0','','line','$staff_address=get_option(\'staff_address\'); $website_email=\'website@\'.get_domain(); if (substr($staff_address,-strlen(get_domain())-1)==\'@\'.get_domain()) $website_email=$staff_address; return $website_email;','SITE','EMAIL','CONFIG_OPTION_website_email','0',''),
  ('enveloper_override','ENVELOPER_OVERRIDE','0','','tick','return \'0\';','SITE','EMAIL','CONFIG_OPTION_enveloper_override','0',''),
  ('bcc','BCC','0','','tick','return \'1\';','SITE','EMAIL','CONFIG_OPTION_bcc','0',''),
@@ -278,46 +1009,44 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('has_low_memory_limit','HAS_LOW_MEMORY_LIMIT','0','','tick','return is_null($old=get_value(\'has_low_memory_limit\'))?((ini_get(\'memory_limit\')==\'-1\' || ini_get(\'memory_limit\')==\'0\' || ini_get(\'memory_limit\')==\'\')?\'0\':NULL):$old;','SITE','ADVANCED','CONFIG_OPTION_has_low_memory_limit','0',''),
  ('is_on_comcode_page_children','IS_ON_COMCODE_PAGE_CHILDREN','0','','tick','return is_null($old=get_value(\'disable_comcode_page_children\'))?\'1\':invert_value($old);','SITE','ADVANCED','CONFIG_OPTION_is_on_comcode_page_children','0',''),
  ('global_donext_icons','GLOBAL_DONEXT_ICONS','0','','tick','return is_null($old=get_value(\'disable_donext_global\'))?\'1\':invert_value($old);','SITE','ADVANCED','CONFIG_OPTION_global_donext_icons','0',''),
- ('no_stats_when_closed','NO_STATS_WHEN_CLOSED','0','','tick','return \'0\';','SITE','CLOSED_SITE','CONFIG_OPTION_no_stats_when_closed','0',''),
+ ('no_stats_when_closed','NO_STATS_WHEN_CLOSED','0','','tick','return \'1\';','SITE','CLOSED_SITE','CONFIG_OPTION_no_stats_when_closed','0',''),
  ('no_bot_stats','NO_BOT_STATS','0','','tick','return \'0\';','SITE','GENERAL','CONFIG_OPTION_no_bot_stats','0',''),
- ('filesystem_caching','FILE_SYSTEM_CACHING','0','','tick','return (substr(ocp_srv(\'SERVER_SOFTWARE\'),0,10)==\'LiteSpeed\')?\'1\':\'0\';','SITE','CACHES','CONFIG_OPTION_filesystem_caching','0',''),
+ ('filesystem_caching','FILE_SYSTEM_CACHING','0','','tick','return \'0\';','SITE','CACHES','CONFIG_OPTION_filesystem_caching','0',''),
  ('java_upload','ENABLE_JAVA_UPLOAD','0','','tick','return \'0\';','SITE','JAVA_UPLOAD','CONFIG_OPTION_java_upload','0',''),
  ('java_ftp_host','JAVA_FTP_HOST','0','','line','return ocp_srv(\'HTTP_HOST\');','SITE','JAVA_UPLOAD','CONFIG_OPTION_java_ftp_host','0',''),
  ('java_username','JAVA_FTP_USERNAME','0','','line','return \'anonymous\';','SITE','JAVA_UPLOAD','CONFIG_OPTION_java_username','0',''),
  ('java_password','JAVA_FTP_PASSWORD','0','','line','return \'someone@example.com\';','SITE','JAVA_UPLOAD','CONFIG_OPTION_java_password','0',''),
  ('java_ftp_path','JAVA_FTP_PATH','0','','line','return \'/public_html/uploads/incoming/\';','SITE','JAVA_UPLOAD','CONFIG_OPTION_java_ftp_path','0',''),
- ('advanced_admin_cache','ADVANCED_ADMIN_CACHE','0','','tick','return (substr_count(get_base_url(),\'/\')==2)?\'1\':\'0\';','SITE','CACHES','CONFIG_OPTION_advanced_admin_cache','0',''),
+ ('advanced_admin_cache','ADVANCED_ADMIN_CACHE','0','','tick','return \'0\';','SITE','CACHES','CONFIG_OPTION_advanced_admin_cache','0',''),
  ('collapse_user_zones','COLLAPSE_USER_ZONES','0','','tick','return \'1\';','SITE','GENERAL','CONFIG_OPTION_collapse_user_zones','0',''),
  ('check_broken_urls','CHECK_BROKEN_URLS','0','','tick','return \'1\';','SITE','_COMCODE','CONFIG_OPTION_check_broken_urls','0',''),
  ('google_analytics','GOOGLE_ANALYTICS','0','','line','return \'\';','SITE','GENERAL','CONFIG_OPTION_google_analytics','0',''),
  ('fixed_width','FIXED_WIDTH','0','','tick','return \'1\';','THEME','GENERAL','CONFIG_OPTION_fixed_width','0',''),
- ('long_google_cookies','LONG_GOOGLE_COOKIES','0','','tick','return \'1\';','SITE','GENERAL','CONFIG_OPTION_long_google_cookies','0',''),
- ('remember_me_by_default','REMEMBER_ME_BY_DEFAULT','0','','tick','return \'1\';','SITE','GENERAL','CONFIG_OPTION_remember_me_by_default','0',''),
- ('detect_javascript','DETECT_JAVASCRIPT','0','','tick','return \'1\';','ADVANCED','GENERAL','CONFIG_OPTION_detect_javascript','0',''),
  ('show_content_tagging','SHOW_CONTENT_TAGGING','0','','tick','return \'0\';','THEME','GENERAL','CONFIG_OPTION_show_content_tagging','0',''),
  ('show_content_tagging_inline','SHOW_CONTENT_TAGGING_INLINE','0','','tick','return \'0\';','THEME','GENERAL','CONFIG_OPTION_show_content_tagging_inline','0',''),
  ('show_screen_actions','SHOW_SCREEN_ACTIONS','0','','tick','return \'0\';','THEME','GENERAL','CONFIG_OPTION_show_screen_actions','0',''),
  ('ocp_show_personal_sub_links','PERSONAL_SUB_LINKS','0','','tick','return \'1\';','BLOCKS','PERSONAL_BLOCK','CONFIG_OPTION_ocp_show_personal_sub_links','0',''),
+ ('long_google_cookies','LONG_GOOGLE_COOKIES','0','','tick','return \'0\';','SITE','GENERAL','CONFIG_OPTION_long_google_cookies','0',''),
+ ('remember_me_by_default','REMEMBER_ME_BY_DEFAULT','0','','tick','return \'0\';','SITE','GENERAL','CONFIG_OPTION_remember_me_by_default','0',''),
+ ('detect_javascript','DETECT_JAVASCRIPT','0','','tick','return \'0\';','SITE','ADVANCED','CONFIG_OPTION_detect_javascript','0',''),
+ ('mobile_support','MOBILE_SUPPORT','0','','tick','return \'1\';','SITE','GENERAL','CONFIG_OPTION_mobile_support','0',''),
+ ('mail_queue','MAIL_QUEUE','0','','tick','return \'1\';','SITE','EMAIL','CONFIG_OPTION_mail_queue','0',''),
+ ('mail_queue_debug','MAIL_QUEUE_DEBUG','0','','tick','return \'0\';','SITE','EMAIL','CONFIG_OPTION_mail_queue_debug','0',''),
+ ('comments_to_show_in_thread','COMMENTS_TO_SHOW_IN_THREAD','0','','integer','return \'200\';','FEATURE','USER_INTERACTION','CONFIG_OPTION_comments_to_show_in_thread','0',''),
+ ('max_thread_depth','MAX_THREAD_DEPTH','0','','integer','return \'6\';','FEATURE','USER_INTERACTION','CONFIG_OPTION_max_thread_depth','0',''),
  ('site_name','SITE_NAME','0','','line','return do_lang(\'UNNAMED\');','SITE','GENERAL','CONFIG_OPTION_site_name','0',''),
  ('site_scope','SITE_SCOPE','0','','transline','return \'???\';','SITE','GENERAL','CONFIG_OPTION_site_scope','0',''),
- ('description','DESCRIPTION','0','','transline','return \'???\';','SITE','GENERAL','CONFIG_OPTION_description','0',''),
+ ('description','DESCRIPTION','0','','transline','return \'\';','SITE','GENERAL','CONFIG_OPTION_description','0',''),
  ('copyright','COPYRIGHT','0','','transline','return \'Copyright &copy; \'.get_site_name().\' \'.date(\'Y\').\'\';','SITE','GENERAL','CONFIG_OPTION_copyright','0',''),
  ('welcome_message','WELCOME_MESSAGE','0','','transtext','return \'\';','SITE','GENERAL','CONFIG_OPTION_welcome_message','0',''),
  ('main_forum_name','MAIN_FORUM_NAME','0','','forum','return has_no_forum()?NULL:do_lang(\'DEFAULT_FORUM_TITLE\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','USER_INTERACTION','CONFIG_OPTION_main_forum_name','0',''),
  ('keywords','KEYWORDS','0','','line','return \'\';','SITE','GENERAL','CONFIG_OPTION_keywords','0',''),
- ('twitter_login','TWITTER_LOGIN','0','','line','return (!addon_installed(\'twitter\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION','CONFIG_OPTION_twitter_login','0',''),
- ('twitter_password','TWITTER_PASSWORD','0','','line','return (!addon_installed(\'twitter\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION','CONFIG_OPTION_twitter_password','0',''),
- ('facebook_api','FACEBOOK_API','0','','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION','CONFIG_OPTION_facebook_api','0',''),
- ('facebook_appid','FACEBOOK_APPID','0','','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION','CONFIG_OPTION_facebook_appid','0',''),
- ('facebook_secret_code','FACEBOOK_SECRET','0','','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION','CONFIG_OPTION_facebook_secret_code','0',''),
- ('facebook_uid','FACEBOOK_UID','0','','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION','CONFIG_OPTION_facebook_uid','0',''),
- ('facebook_target_ids','FACEBOOK_TARGET_IDS','0','','line','return (!addon_installed(\'facebook\'))?NULL:\'\';','FEATURE','SOCIAL_NETWORKING_INTEGRATION','CONFIG_OPTION_facebook_target_ids','0',''),
  ('gzip_output','GZIP_OUTPUT','0','','tick','return \'0\';','SITE','ADVANCED','CONFIG_OPTION_gzip_output','1',''),
  ('forum_in_portal','FORUM_IN_PORTAL','0','','tick','return has_no_forum()?NULL:\'0\';','SITE','ENVIRONMENT','CONFIG_OPTION_forum_in_portal','1',''),
  ('staff_address','EMAIL','0','','line','return \'staff@\'.get_domain();','SITE','EMAIL','CONFIG_OPTION_staff_address','0',''),
  ('is_on_gd','GD','0','','tick','return function_exists(\'imagetypes\')?\'1\':\'0\';','SITE','ENVIRONMENT','CONFIG_OPTION_is_on_gd','1',''),
  ('is_on_folder_create','FOLDER_CREATE','0','','tick','return \'1\';','SITE','ENVIRONMENT','CONFIG_OPTION_is_on_folder_create','1',''),
- ('site_closed','CLOSED_SITE','0','','tick','return \'0\';','SITE','CLOSED_SITE','CONFIG_OPTION_site_closed','0',''),
+ ('site_closed','CLOSED_SITE','0','','tick','return \'1\';','SITE','CLOSED_SITE','CONFIG_OPTION_site_closed','0',''),
  ('closed','MESSAGE','0','','transtext','return do_lang(\'BEING_INSTALLED\');','SITE','CLOSED_SITE','CONFIG_OPTION_closed','0',''),
  ('maximum_users','MAXIMUM_USERS','0','','integer','return \'100\';','SITE','CLOSED_SITE','CONFIG_OPTION_maximum_users','1',''),
  ('cc_address','CC_ADDRESS','0','','line','return \'\';','SITE','EMAIL','CONFIG_OPTION_cc_address','0',''),
@@ -335,12 +1064,12 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('system_flagrant','SYSTEM_FLAGRANT','0','','transline','return \'\';','SITE','GENERAL','CONFIG_OPTION_system_flagrant','0',''),
  ('messaging_forum_name','_MESSAGING_FORUM_NAME','0','','forum','return do_lang(\'MESSAGING_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','CONTACT_US_MESSAGING','CONFIG_OPTION_messaging_forum_name','0',''),
  ('occle_chat_announce','OCCLE_CHAT_ANNOUNCE','0','','tick','return \'0\';','SITE','ADVANCED','CONFIG_OPTION_occle_chat_announce','0',''),
- ('bottom_show_occle_button','OCCLE_BUTTON','0','','tick','return \'1\';','FEATURE','BOTTOM_LINKS','CONFIG_OPTION_bottom_show_occle_button','0',''),
+ ('bottom_show_occle_button','OCCLE_BUTTON','0','','tick','return (get_file_base()!=get_custom_file_base())?\'0\':\'1\';','FEATURE','BOTTOM_LINKS','CONFIG_OPTION_bottom_show_occle_button','0',''),
  ('ldap_is_enabled','LDAP_IS_ENABLED','0','','tick','return \'0\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_is_enabled','1',''),
  ('ldap_is_windows','LDAP_IS_WINDOWS','0','','tick','return (DIRECTORY_SEPARATOR==\'/\')?\'0\':\'1\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_is_windows','1',''),
  ('ldap_allow_joining','LDAP_ALLOW_JOINING','0','','tick','return \'0\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_allow_joining','1',''),
  ('ldap_hostname','LDAP_HOSTNAME','0','','line','return \'localhost\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_hostname','1',''),
- ('ldap_base_dn','LDAP_BASE_DN','0','','line','return \'dc=localhost\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_base_dn','1',''),
+ ('ldap_base_dn','LDAP_BASE_DN','0','','line','return \'dc=chris4,dc=com\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_base_dn','1',''),
  ('ldap_bind_rdn','USERNAME','0','','line','return (DIRECTORY_SEPARATOR==\'/\')?\'NotManager\':\'NotAdministrator\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_bind_rdn','1',''),
  ('ldap_bind_password','PASSWORD','0','','line','return \'\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_bind_password','1',''),
  ('windows_auth_is_enabled','WINDOWS_AUTHENTICATION','0','','tick','return \'0\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_windows_auth_is_enabled','0',''),
@@ -352,7 +1081,7 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('ldap_version','LDAP_VERSION','0','','integer','return \'3\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_version','0',''),
  ('ldap_group_class','LDAP_GROUP_CLASS','0','','line','return \'posixGroup\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_group_class','0',''),
  ('ldap_member_class','LDAP_MEMBER_CLASS','0','','line','return \'posixAccount\';','SECTION_FORUMS','LDAP','CONFIG_OPTION_ldap_member_class','0',''),
- ('bottom_show_realtime_rain_button','REALTIME_RAIN_BUTTON','0','','tick','return \'1\';','FEATURE','BOTTOM_LINKS','CONFIG_OPTION_bottom_show_realtime_rain_button','0',''),
+ ('bottom_show_realtime_rain_button','REALTIME_RAIN_BUTTON','0','','tick','return \'0\';','FEATURE','BOTTOM_LINKS','CONFIG_OPTION_bottom_show_realtime_rain_button','0',''),
  ('staff_text','PAGE_TEXT','0','','transtext','return do_lang(\'POST_STAFF\');','SECURITY','STAFF','CONFIG_OPTION_staff_text','0',''),
  ('is_on_staff_filter','MEMBER_FILTER','0','','tick','return \'0\';','SECURITY','STAFF','CONFIG_OPTION_is_on_staff_filter','1',''),
  ('is_on_sync_staff','SYNCHRONISATION','0','','tick','return \'0\';','SECURITY','STAFF','CONFIG_OPTION_is_on_sync_staff','1',''),
@@ -395,6 +1124,7 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('immediate_downloads','IMMEDIATE_DOWNLOADS','0','','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS','CONFIG_OPTION_immediate_downloads','0',''),
  ('download_gallery_root','DOWNLOAD_GALLERY_ROOT','0','','line','return is_null($old=get_value(\'download_gallery_root\'))?(addon_installed(\'galleries\')?\'root\':NULL):$old;','FEATURE','SECTION_DOWNLOADS','CONFIG_OPTION_download_gallery_root','0',''),
  ('points_ADD_IMAGE','ADD_IMAGE','0','','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_ADD_IMAGE','0',''),
+ ('points_ADD_VIDEO','ADD_VIDEO','0','','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_ADD_VIDEO','0',''),
  ('default_video_width','DEFAULT_VIDEO_WIDTH','0','','integer','return \'320\';','FEATURE','GALLERIES','CONFIG_OPTION_default_video_width','0',''),
  ('default_video_height','DEFAULT_VIDEO_HEIGHT','0','','integer','return \'240\';','FEATURE','GALLERIES','CONFIG_OPTION_default_video_height','0',''),
  ('maximum_image_size','MAXIMUM_IMAGE_SIZE','0','','integer','return \'1024\';','FEATURE','GALLERIES','CONFIG_OPTION_maximum_image_size','0',''),
@@ -405,16 +1135,19 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('galleries_show_stats_count_galleries','GALLERIES','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_galleries_show_stats_count_galleries','0',''),
  ('galleries_show_stats_count_images','IMAGES','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_galleries_show_stats_count_images','0',''),
  ('galleries_show_stats_count_videos','VIDEOS','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_galleries_show_stats_count_videos','0',''),
- ('show_empty_galleries','SHOW_EMPTY_GALLERIES','0','','tick','return \'0\';','FEATURE','GALLERIES','CONFIG_OPTION_show_empty_galleries','0',''),
+ ('show_empty_galleries','SHOW_EMPTY_GALLERIES','0','','tick','return \'1\';','FEATURE','GALLERIES','CONFIG_OPTION_show_empty_galleries','0',''),
  ('gallery_name_order','GALLERY_NAME_ORDER','0','','tick','return \'0\';','FEATURE','GALLERIES','CONFIG_OPTION_gallery_name_order','0',''),
  ('gallery_selectors','GALLERY_SELECTORS','0','','line','return is_null($old=get_value(\'gallery_selectors\'))?\'12,24,36,64,128\':$old;','FEATURE','GALLERIES','CONFIG_OPTION_gallery_selectors','0',''),
  ('reverse_thumb_order','REVERSE_THUMB_ORDER','0','','tick','return is_null($old=get_value(\'reverse_thumb_order\'))?\'0\':$old;','FEATURE','GALLERIES','CONFIG_OPTION_reverse_thumb_order','0',''),
  ('show_gallery_counts','SHOW_GALLERY_COUNTS','0','','tick','return is_null($old=get_value(\'show_gallery_counts\'))?((get_forum_type()==\'ocf\')?\'0\':NULL):$old;','FEATURE','GALLERIES','CONFIG_OPTION_show_gallery_counts','0',''),
- ('video_bitrate','VIDEO_BITRATE','0','','integer','return \'1000\';','FEATURE','GALLERIES','CONFIG_OPTION_video_bitrate','0',''),
- ('audio_bitrate','AUDIO_BITRATE','0','','integer','return \'192\';','FEATURE','GALLERIES','CONFIG_OPTION_audio_bitrate','0',''),
- ('ffmpeg_path','FFMPEG_PATH','0','','line','return \'\';','FEATURE','GALLERIES','CONFIG_OPTION_ffmpeg_path','0',''),
- ('video_width_setting','VIDEO_WIDTH_SETTING','0','','integer','return \'720\';','FEATURE','GALLERIES','CONFIG_OPTION_video_width_setting','0',''),
- ('video_height_setting','VIDEO_HEIGHT_SETTING','0','','integer','return \'480\';','FEATURE','GALLERIES','CONFIG_OPTION_video_height_setting','0',''),
+ ('video_bitrate','VIDEO_BITRATE','0','','integer','return \'1000\';','FEATURE','TRANSCODING','CONFIG_OPTION_video_bitrate','0',''),
+ ('audio_bitrate','AUDIO_BITRATE','0','','integer','return \'192\';','FEATURE','TRANSCODING','CONFIG_OPTION_audio_bitrate','0',''),
+ ('video_width_setting','VIDEO_WIDTH_SETTING','0','','integer','return \'720\';','FEATURE','TRANSCODING','CONFIG_OPTION_video_width_setting','0',''),
+ ('video_height_setting','VIDEO_HEIGHT_SETTING','0','','integer','return \'480\';','FEATURE','TRANSCODING','CONFIG_OPTION_video_height_setting','0',''),
+ ('transcoding_zencoder_api_key','TRANSCODING_ZENCODER_API_KEY','0','','line','return \'\';','FEATURE','TRANSCODING','CONFIG_OPTION_transcoding_zencoder_api_key','0',''),
+ ('transcoding_zencoder_ftp_path','TRANSCODING_ZENCODER_FTP_PATH','0','','line','return \'\';','FEATURE','TRANSCODING','CONFIG_OPTION_transcoding_zencoder_ftp_path','0',''),
+ ('transcoding_server','TRANSCODING_SERVER','0','','line','return \'\';','FEATURE','TRANSCODING','CONFIG_OPTION_transcoding_server','0',''),
+ ('ffmpeg_path','FFMPEG_PATH','0','','line','return \'\';','FEATURE','TRANSCODING','CONFIG_OPTION_ffmpeg_path','0',''),
  ('points_CHOOSE_IOTD','CHOOSE_IOTD','0','','integer','return addon_installed(\'points\')?\'35\':NULL;','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_CHOOSE_IOTD','0',''),
  ('points_ADD_IOTD','ADD_IOTD','0','','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_ADD_IOTD','0',''),
  ('iotd_update_time','IOTD_REGULARITY','0','','integer','return \'24\';','ADMIN','CHECK_LIST','CONFIG_OPTION_iotd_update_time','0',''),
@@ -425,12 +1158,13 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('news_show_stats_count_total_posts','TOTAL_NEWS_ENTRIES','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_news_show_stats_count_total_posts','0',''),
  ('news_show_stats_count_blogs','BLOGS','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_news_show_stats_count_blogs','0',''),
  ('newsletter_text','PAGE_TEXT','0','','transtext','return \'\';','FEATURE','NEWSLETTER','CONFIG_OPTION_newsletter_text','0',''),
- ('newsletter_title','TITLE','0','','line','return get_option(\'site_name\').\' \'.do_lang(\'NEWSLETTER\');','FEATURE','NEWSLETTER','CONFIG_OPTION_newsletter_title','0',''),
+ ('newsletter_title','TITLE','0','','line','return get_option(\'site_name\').\' \'.ocp_mb_strtolower(do_lang(\'NEWSLETTER\'));','FEATURE','NEWSLETTER','CONFIG_OPTION_newsletter_title','0',''),
  ('interest_levels','USE_INTEREST_LEVELS','0','','tick','return \'0\';','FEATURE','NEWSLETTER','CONFIG_OPTION_interest_levels','0',''),
  ('points_joining','JOINING','0','','integer','return \'40\';','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_joining','0',''),
  ('points_posting','MAKE_POST','0','','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_posting','0',''),
  ('points_rating','RATING','0','','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_rating','0',''),
  ('points_voting','VOTING','0','','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_voting','0',''),
+ ('points_if_liked','POINTS_IF_LIKED','0','','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_if_liked','0',''),
  ('points_show_personal_stats_points_left','COUNT_POINTS_LEFT','0','','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK','CONFIG_OPTION_points_show_personal_stats_points_left','0',''),
  ('points_show_personal_stats_points_used','COUNT_POINTS_USED','0','','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK','CONFIG_OPTION_points_show_personal_stats_points_used','0',''),
  ('points_show_personal_stats_gift_points_left','COUNT_GIFT_POINTS_LEFT','0','','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK','CONFIG_OPTION_points_show_personal_stats_gift_points_left','0',''),
@@ -493,6 +1227,8 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('points_COMCODE_PAGE_ADD','COMCODE_PAGE_ADD','0','','integer','return addon_installed(\'points\')?\'10\':NULL;','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_COMCODE_PAGE_ADD','0',''),
  ('store_revisions','STORE_REVISIONS','0','','tick','return \'1\';','ADMIN','COMCODE_PAGE_MANAGEMENT','CONFIG_OPTION_store_revisions','0',''),
  ('number_revisions_show','SHOW_REVISIONS','0','','integer','return \'5\';','ADMIN','COMCODE_PAGE_MANAGEMENT','CONFIG_OPTION_number_revisions_show','0',''),
+ ('filedump_show_stats_count_total_files','FILEDUMP_COUNT_FILES','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_filedump_show_stats_count_total_files','0',''),
+ ('filedump_show_stats_count_total_space','FILEDUMP_DISK_USAGE','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_filedump_show_stats_count_total_space','0',''),
  ('leaderboard_start_date','LEADERBOARD_START_DATE','0','','date','return strval(filemtime(get_file_base().\'/index.php\'));','POINTS','POINT_LEADERBOARD','CONFIG_OPTION_leaderboard_start_date','0',''),
  ('is_on_rss','ENABLE_RSS','0','','tick','return \'1\';','FEATURE','NEWS_AND_RSS','CONFIG_OPTION_is_on_rss','0',''),
  ('rss_update_time','UPDATE_TIME','0','','integer','return \'60\';','FEATURE','NEWS_AND_RSS','CONFIG_OPTION_rss_update_time','0',''),
@@ -517,21 +1253,84 @@ insert into `ocp7_config` values('encryption_key','ENCRYPTION_KEY','0','','line'
  ('usersonline_show_newest_member','SHOW_NEWEST_MEMBER','0','','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','USERS_ONLINE_BLOCK','CONFIG_OPTION_usersonline_show_newest_member','0',''),
  ('usersonline_show_birthdays','BIRTHDAYS','0','','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','USERS_ONLINE_BLOCK','CONFIG_OPTION_usersonline_show_birthdays','0',''),
  ('points_RECOMMEND_SITE','RECOMMEND_SITE','0','','integer','return addon_installed(\'points\')?\'350\':NULL;','POINTS','COUNT_POINTS_GIVEN','CONFIG_OPTION_points_RECOMMEND_SITE','0',''),
- ('filedump_show_stats_count_total_files','FILEDUMP_COUNT_FILES','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_filedump_show_stats_count_total_files','0',''),
- ('filedump_show_stats_count_total_space','FILEDUMP_DISK_USAGE','0','','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS','CONFIG_OPTION_filedump_show_stats_count_total_space','0',''),
  ('supermembers_text','PAGE_TEXT','0','','transtext','return do_lang(\'SUPERMEMBERS_TEXT\');','SECURITY','SUPER_MEMBERS','CONFIG_OPTION_supermembers_text','0','');
 
-DROP TABLE IF EXISTS `ocp7_db_meta`;
+DROP TABLE IF EXISTS `ocp_cron_caching_requests`;
 
-CREATE TABLE `ocp7_db_meta` (
-  `m_table` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_type` varchar(80) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_cron_caching_requests` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_codename` varchar(80) NOT NULL,
+  `c_map` longtext NOT NULL,
+  `c_timezone` varchar(80) NOT NULL,
+  `c_is_bot` tinyint(1) NOT NULL,
+  `c_in_panel` tinyint(1) NOT NULL,
+  `c_interlock` tinyint(1) NOT NULL,
+  `c_store_as_tempcode` tinyint(1) NOT NULL,
+  `c_lang` varchar(5) NOT NULL,
+  `c_theme` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `c_compound` (`c_codename`,`c_theme`,`c_lang`,`c_timezone`),
+  KEY `c_is_bot` (`c_is_bot`),
+  KEY `c_in_panel` (`c_in_panel`),
+  KEY `c_interlock` (`c_interlock`),
+  KEY `c_store_as_tempcode` (`c_store_as_tempcode`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_custom_comcode`;
+
+CREATE TABLE `ocp_custom_comcode` (
+  `tag_tag` varchar(80) NOT NULL,
+  `tag_title` int(10) unsigned NOT NULL,
+  `tag_description` int(10) unsigned NOT NULL,
+  `tag_replace` longtext NOT NULL,
+  `tag_example` longtext NOT NULL,
+  `tag_parameters` varchar(255) NOT NULL,
+  `tag_enabled` tinyint(1) NOT NULL,
+  `tag_dangerous_tag` tinyint(1) NOT NULL,
+  `tag_block_tag` tinyint(1) NOT NULL,
+  `tag_textual_tag` tinyint(1) NOT NULL,
+  PRIMARY KEY (`tag_tag`)
+) ENGINE=MyISAM;
+
+insert into `ocp_custom_comcode` values('facebook_video','96','97','{$SET,VIDEO,{$PREG_REPLACE,(http://.*\\?v=)?(\\w+)(.*)?,$\\{2\\},{content}}}<object width=\"640\" height=\"385\"><param name=\"movie\" value=\"http://www.facebook.com/v/{$GET*,VIDEO};hl=en_US\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"http://www.facebook.com/v/{$GET*,VIDEO};hl=en_US\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"640\" height=\"385\"></embed></object>','[facebook_video]http://www.facebook.com/video/video.php?v=10150307159560581[/facebook_video]','','1','0','1','0'),
+ ('youtube','98','99','{$SET,VIDEO,{$PREG_REPLACE,(http://.*\\?v=)?(http://youtu.be/)?([\\w\\-]+)(.*)?,$\\{3\\},{$STRIP_TAGS,{content}}}}<object width=\"480\" height=\"385\"><param name=\"movie\" value=\"http://www.youtube.com/v/{$GET*,VIDEO}?fs=1&amp;hl=en_US\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"http://www.youtube.com/v/{$GET*,VIDEO}?fs=1&amp;hl=en_US\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"480\" height=\"385\"></embed></object>','[youtube]http://www.youtube.com/watch?v=ZDFFHaz9GsY[/youtube]','','1','0','1','0');
+
+DROP TABLE IF EXISTS `ocp_customtasks`;
+
+CREATE TABLE `ocp_customtasks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tasktitle` varchar(255) NOT NULL,
+  `datetimeadded` int(10) unsigned NOT NULL,
+  `recurinterval` int(11) NOT NULL,
+  `recurevery` varchar(80) NOT NULL,
+  `taskisdone` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12;
+
+insert into `ocp_customtasks` values('1','Set up website configuration and structure','1332090723','0','',null),
+ ('2','Make \'favicon\' theme image','1332090723','0','',null),
+ ('3','Make \'appleicon\' (webclip) theme image','1332090723','0','',null),
+ ('4','Make/install custom theme','1332090723','0','',null),
+ ('5','Add your content','1332090723','0','',null),
+ ('6','[page=\"adminzone:admin_themes:edit_image:logo/trimmed-logo:theme=default\"]Customise your mail/RSS logo[/page]','1332090723','0','',null),
+ ('7','[page=\"adminzone:admin_themes:_edit_templates:theme=default:f0file=MAIL.tpl\"]Customise your \'MAIL\' template[/page]','1332090723','0','',null),
+ ('8','[url=\"P3P Wizard (set up privacy policy)\"]http://www.p3pwiz.com/[/url]','1332090723','0','',null),
+ ('9','[url=\"Submit to Google\"]http://www.google.com/addurl/[/url]','1332090723','0','',null),
+ ('10','[url=\"Submit to OpenDMOZ\"]http://www.dmoz.org/add.html[/url]','1332090723','0','',null),
+ ('11','[url=\"Submit to Bing\"]http://www.bing.com/webmaster/SubmitSitePage.aspx[/url]','1332090723','0','',null);
+
+DROP TABLE IF EXISTS `ocp_db_meta`;
+
+CREATE TABLE `ocp_db_meta` (
+  `m_table` varchar(80) NOT NULL,
+  `m_name` varchar(80) NOT NULL,
+  `m_type` varchar(80) NOT NULL,
   PRIMARY KEY (`m_table`,`m_name`),
   KEY `findtransfields` (`m_type`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_db_meta` values('translate','id','*AUTO'),
+insert into `ocp_db_meta` values('translate','id','*AUTO'),
  ('translate','language','*LANGUAGE_NAME'),
  ('translate','importance_level','SHORT_INTEGER'),
  ('translate','text_original','LONG_TEXT'),
@@ -642,14 +1441,17 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('f_custom_fields','cf_order','INTEGER'),
  ('f_custom_fields','cf_only_group','LONG_TEXT'),
  ('f_custom_fields','cf_encrypted','BINARY'),
+ ('f_custom_fields','cf_show_on_join_form','BINARY'),
  ('f_member_custom_fields','mf_member_id','*USER'),
- ('f_member_custom_fields','field_1','?LONG_TRANS'),
+ ('f_member_custom_fields','field_1','LONG_TRANS'),
  ('f_member_custom_fields','field_2','SHORT_TEXT'),
- ('f_member_custom_fields','field_3','SHORT_TEXT'),
- ('f_member_custom_fields','field_4','?LONG_TRANS'),
- ('f_member_custom_fields','field_5','SHORT_TEXT'),
- ('f_member_custom_fields','field_6','SHORT_TEXT'),
- ('f_member_custom_fields','field_7','?LONG_TRANS'),
+ ('f_member_custom_fields','field_3','LONG_TRANS'),
+ ('f_member_custom_fields','field_4','LONG_TRANS'),
+ ('f_member_custom_fields','field_5','LONG_TRANS'),
+ ('f_member_custom_fields','field_6','LONG_TRANS'),
+ ('f_member_custom_fields','field_7','SHORT_TEXT'),
+ ('f_member_custom_fields','field_8','SHORT_TEXT'),
+ ('f_member_custom_fields','field_9','LONG_TRANS'),
  ('f_invites','id','*AUTO'),
  ('f_invites','i_inviter','USER'),
  ('f_invites','i_email_address','SHORT_TEXT'),
@@ -685,10 +1487,11 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('f_members','m_photo_url','URLPATH'),
  ('f_members','m_photo_thumb_url','URLPATH'),
  ('f_members','m_views_signatures','BINARY'),
- ('f_members','m_auto_alert_contrib_content','BINARY'),
+ ('f_members','m_auto_monitor_contrib_content','BINARY'),
  ('f_members','m_language','ID_TEXT'),
  ('f_members','m_ip_address','IP'),
  ('f_members','m_allow_emails','BINARY'),
+ ('f_members','m_allow_emails_from_staff','BINARY'),
  ('f_members','m_notes','LONG_TEXT'),
  ('f_members','m_zone_wide','BINARY'),
  ('f_members','m_highlighted_name','BINARY'),
@@ -755,6 +1558,7 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('f_forums','f_cache_last_forum_id','?AUTO_LINK'),
  ('f_forums','f_redirection','SHORT_TEXT'),
  ('f_forums','f_order','ID_TEXT'),
+ ('f_forums','f_is_threaded','BINARY'),
  ('f_topics','id','*AUTO'),
  ('f_topics','t_pinned','BINARY'),
  ('f_topics','t_sunk','BINARY'),
@@ -798,6 +1602,7 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('f_posts','p_last_edit_by','?USER'),
  ('f_posts','p_is_emphasised','BINARY'),
  ('f_posts','p_skip_sig','BINARY'),
+ ('f_posts','p_parent_id','?AUTO_LINK'),
  ('f_special_pt_access','s_member_id','*USER'),
  ('f_special_pt_access','s_topic_id','*AUTO_LINK'),
  ('f_saved_warnings','s_title','*SHORT_TEXT'),
@@ -871,11 +1676,6 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('f_read_logs','l_member_id','*USER'),
  ('f_read_logs','l_topic_id','*AUTO_LINK'),
  ('f_read_logs','l_time','TIME'),
- ('f_forum_tracking','r_forum_id','*AUTO_LINK'),
- ('f_forum_tracking','r_member_id','*USER'),
- ('f_topic_tracking','r_topic_id','*AUTO_LINK'),
- ('f_topic_tracking','r_member_id','*USER'),
- ('f_topic_tracking','r_last_message_time','TIME'),
  ('menu_items','id','*AUTO'),
  ('menu_items','i_menu','ID_TEXT'),
  ('menu_items','i_order','INTEGER'),
@@ -946,12 +1746,6 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('member_category_access','module_the_name','*ID_TEXT'),
  ('member_category_access','category_name','*ID_TEXT'),
  ('member_category_access','member_id','*USER'),
- ('tracking','r_resource_type','*ID_TEXT'),
- ('tracking','r_resource_id','*ID_TEXT'),
- ('tracking','r_member_id','*USER'),
- ('tracking','r_notify_sms','BINARY'),
- ('tracking','r_notify_email','BINARY'),
- ('tracking','r_filter','LONG_TEXT'),
  ('autosave','id','*AUTO'),
  ('autosave','a_member_id','USER'),
  ('autosave','a_key','LONG_TEXT'),
@@ -981,9 +1775,9 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('sms_log','s_member_id','USER'),
  ('sms_log','s_time','TIME'),
  ('sms_log','s_trigger_ip','IP'),
- ('f_member_custom_fields','field_8','SHORT_TEXT'),
+ ('f_member_custom_fields','field_10','SHORT_TEXT'),
  ('logged_mail_messages','id','*AUTO'),
- ('logged_mail_messages','m_subject','SHORT_TEXT'),
+ ('logged_mail_messages','m_subject','LONG_TEXT'),
  ('logged_mail_messages','m_message','LONG_TEXT'),
  ('logged_mail_messages','m_to_email','LONG_TEXT'),
  ('logged_mail_messages','m_to_name','LONG_TEXT'),
@@ -999,6 +1793,7 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('logged_mail_messages','m_member_id','USER'),
  ('logged_mail_messages','m_url','LONG_TEXT'),
  ('logged_mail_messages','m_queued','BINARY'),
+ ('logged_mail_messages','m_template','ID_TEXT'),
  ('link_tracker','id','*AUTO'),
  ('link_tracker','c_date_and_time','TIME'),
  ('link_tracker','c_member_id','USER'),
@@ -1019,6 +1814,39 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('f_group_member_timeouts','member_id','*USER'),
  ('f_group_member_timeouts','group_id','*GROUP'),
  ('f_group_member_timeouts','timeout','TIME'),
+ ('temp_block_permissions','id','*AUTO'),
+ ('temp_block_permissions','p_session_id','AUTO_LINK'),
+ ('temp_block_permissions','p_block_constraints','LONG_TEXT'),
+ ('temp_block_permissions','p_time','TIME'),
+ ('cron_caching_requests','id','*AUTO'),
+ ('cron_caching_requests','c_codename','ID_TEXT'),
+ ('cron_caching_requests','c_map','LONG_TEXT'),
+ ('cron_caching_requests','c_timezone','ID_TEXT'),
+ ('cron_caching_requests','c_is_bot','BINARY'),
+ ('cron_caching_requests','c_in_panel','BINARY'),
+ ('cron_caching_requests','c_interlock','BINARY'),
+ ('cron_caching_requests','c_store_as_tempcode','BINARY'),
+ ('cron_caching_requests','c_lang','LANGUAGE_NAME'),
+ ('cron_caching_requests','c_theme','ID_TEXT'),
+ ('notifications_enabled','id','*AUTO'),
+ ('notifications_enabled','l_member_id','USER'),
+ ('notifications_enabled','l_notification_code','ID_TEXT'),
+ ('notifications_enabled','l_code_category','SHORT_TEXT'),
+ ('notifications_enabled','l_setting','INTEGER'),
+ ('digestives_tin','id','*AUTO'),
+ ('digestives_tin','d_subject','LONG_TEXT'),
+ ('digestives_tin','d_message','LONG_TEXT'),
+ ('digestives_tin','d_from_member_id','INTEGER'),
+ ('digestives_tin','d_to_member_id','USER'),
+ ('digestives_tin','d_priority','SHORT_INTEGER'),
+ ('digestives_tin','d_no_cc','BINARY'),
+ ('digestives_tin','d_date_and_time','TIME'),
+ ('digestives_tin','d_notification_code','ID_TEXT'),
+ ('digestives_tin','d_code_category','SHORT_TEXT'),
+ ('digestives_tin','d_frequency','INTEGER'),
+ ('digestives_consumed','c_member_id','*USER'),
+ ('digestives_consumed','c_frequency','*INTEGER'),
+ ('digestives_consumed','c_time','TIME'),
  ('rating','id','*AUTO'),
  ('rating','rating_for_type','ID_TEXT'),
  ('rating','rating_for_id','ID_TEXT'),
@@ -1086,6 +1914,8 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('usersubmitban_ip','ip','*IP'),
  ('usersubmitban_ip','i_descrip','LONG_TEXT'),
  ('usersubmitban_member','the_member','*USER'),
+ ('notification_lockdown','l_notification_code','*ID_TEXT'),
+ ('notification_lockdown','l_setting','INTEGER'),
  ('occlechat','id','*AUTO'),
  ('occlechat','c_message','LONG_TEXT'),
  ('occlechat','c_url','URLPATH'),
@@ -1187,23 +2017,22 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('calendar_events','e_content','LONG_TRANS'),
  ('calendar_events','e_add_date','TIME'),
  ('calendar_events','e_edit_date','?TIME'),
- ('calendar_events','e_geo_position','SHORT_TEXT'),
  ('calendar_events','e_recurrence','ID_TEXT'),
  ('calendar_events','e_recurrences','?INTEGER'),
  ('calendar_events','e_seg_recurrences','BINARY'),
  ('calendar_events','e_start_year','INTEGER'),
  ('calendar_events','e_start_month','INTEGER'),
  ('calendar_events','e_start_day','INTEGER'),
- ('calendar_events','e_start_hour','INTEGER'),
- ('calendar_events','e_start_minute','INTEGER'),
+ ('calendar_events','e_start_hour','?INTEGER'),
+ ('calendar_events','e_start_minute','?INTEGER'),
  ('calendar_events','e_end_year','?INTEGER'),
  ('calendar_events','e_end_month','?INTEGER'),
  ('calendar_events','e_end_day','?INTEGER'),
  ('calendar_events','e_end_hour','?INTEGER'),
  ('calendar_events','e_end_minute','?INTEGER'),
+ ('calendar_events','e_timezone','ID_TEXT'),
+ ('calendar_events','e_do_timezone_conv','BINARY'),
  ('calendar_events','e_is_public','BINARY'),
- ('calendar_events','e_groups_access','SHORT_TEXT'),
- ('calendar_events','e_groups_modify','SHORT_TEXT'),
  ('calendar_events','e_priority','INTEGER'),
  ('calendar_events','allow_rating','BINARY'),
  ('calendar_events','allow_comments','SHORT_INTEGER'),
@@ -1214,6 +2043,7 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('calendar_types','id','*AUTO'),
  ('calendar_types','t_title','SHORT_TRANS'),
  ('calendar_types','t_logo','SHORT_TEXT'),
+ ('calendar_types','t_external_feed','URLPATH'),
  ('calendar_reminders','id','*AUTO'),
  ('calendar_reminders','e_id','AUTO_LINK'),
  ('calendar_reminders','n_member_id','USER'),
@@ -1289,6 +2119,22 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('catalogue_efv_short','cf_id','AUTO_LINK'),
  ('catalogue_efv_short','ce_id','AUTO_LINK'),
  ('catalogue_efv_short','cv_value','SHORT_TEXT'),
+ ('catalogue_entry_linkage','catalogue_entry_id','*AUTO_LINK'),
+ ('catalogue_entry_linkage','content_type','ID_TEXT'),
+ ('catalogue_entry_linkage','content_id','ID_TEXT'),
+ ('catalogue_cat_treecache','cc_id','*AUTO_LINK'),
+ ('catalogue_cat_treecache','cc_ancestor_id','*AUTO_LINK'),
+ ('catalogue_childcountcache','cc_id','*AUTO_LINK'),
+ ('catalogue_childcountcache','c_num_rec_children','INTEGER'),
+ ('catalogue_childcountcache','c_num_rec_entries','INTEGER'),
+ ('catalogue_efv_float','id','*AUTO'),
+ ('catalogue_efv_float','cf_id','AUTO_LINK'),
+ ('catalogue_efv_float','ce_id','AUTO_LINK'),
+ ('catalogue_efv_float','cv_value','?REAL'),
+ ('catalogue_efv_integer','id','*AUTO'),
+ ('catalogue_efv_integer','cf_id','AUTO_LINK'),
+ ('catalogue_efv_integer','ce_id','AUTO_LINK'),
+ ('catalogue_efv_integer','cv_value','?INTEGER'),
  ('seedy_changes','id','*AUTO'),
  ('seedy_changes','the_action','ID_TEXT'),
  ('seedy_changes','the_page','AUTO_LINK'),
@@ -1315,7 +2161,7 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('seedy_posts','seedy_views','INTEGER'),
  ('seedy_posts','the_user','USER'),
  ('seedy_posts','edit_date','?TIME'),
- ('f_member_custom_fields','field_9','?INTEGER'),
+ ('f_member_custom_fields','field_11','SHORT_TEXT'),
  ('chat_rooms','id','*AUTO'),
  ('chat_rooms','room_name','SHORT_TEXT'),
  ('chat_rooms','room_owner','?INTEGER'),
@@ -1335,7 +2181,7 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('chat_messages','the_message','LONG_TRANS'),
  ('chat_messages','text_colour','SHORT_TEXT'),
  ('chat_messages','font_name','SHORT_TEXT'),
- ('f_member_custom_fields','field_10','?INTEGER'),
+ ('f_member_custom_fields','field_12','SHORT_TEXT'),
  ('chat_blocking','member_blocker','*USER'),
  ('chat_blocking','member_blocked','*USER'),
  ('chat_blocking','date_and_time','TIME'),
@@ -1412,6 +2258,8 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('galleries','notes','LONG_TEXT'),
  ('galleries','is_member_synched','BINARY'),
  ('galleries','flow_mode_interface','BINARY'),
+ ('galleries','gallery_views','INTEGER'),
+ ('galleries','g_owner','?AUTO_LINK'),
  ('images','id','*AUTO'),
  ('images','cat','ID_TEXT'),
  ('images','url','URLPATH'),
@@ -1426,6 +2274,7 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('images','add_date','TIME'),
  ('images','edit_date','?TIME'),
  ('images','image_views','INTEGER'),
+ ('images','title','SHORT_TRANS'),
  ('videos','id','*AUTO'),
  ('videos','cat','ID_TEXT'),
  ('videos','url','URLPATH'),
@@ -1443,6 +2292,16 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('videos','video_width','INTEGER'),
  ('videos','video_height','INTEGER'),
  ('videos','video_length','INTEGER'),
+ ('videos','title','SHORT_TRANS'),
+ ('video_transcoding','t_id','*ID_TEXT'),
+ ('video_transcoding','t_error','LONG_TEXT'),
+ ('video_transcoding','t_url','URLPATH'),
+ ('video_transcoding','t_table','ID_TEXT'),
+ ('video_transcoding','t_url_field','ID_TEXT'),
+ ('video_transcoding','t_orig_filename_field','ID_TEXT'),
+ ('video_transcoding','t_width_field','ID_TEXT'),
+ ('video_transcoding','t_height_field','ID_TEXT'),
+ ('video_transcoding','t_output_filename','ID_TEXT'),
  ('invoices','id','*AUTO'),
  ('invoices','i_type_code','ID_TEXT'),
  ('invoices','i_member_id','USER'),
@@ -1529,6 +2388,22 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('newsletter_drip_send','d_from_email','SHORT_TEXT'),
  ('newsletter_drip_send','d_from_name','SHORT_TEXT'),
  ('newsletter_drip_send','d_priority','SHORT_INTEGER'),
+ ('newsletter_drip_send','d_mail_template','ID_TEXT'),
+ ('newsletter_periodic','id','*AUTO'),
+ ('newsletter_periodic','np_message','LONG_TEXT'),
+ ('newsletter_periodic','np_subject','LONG_TEXT'),
+ ('newsletter_periodic','np_lang','LANGUAGE_NAME'),
+ ('newsletter_periodic','np_send_details','LONG_TEXT'),
+ ('newsletter_periodic','np_html_only','BINARY'),
+ ('newsletter_periodic','np_from_email','SHORT_TEXT'),
+ ('newsletter_periodic','np_from_name','SHORT_TEXT'),
+ ('newsletter_periodic','np_priority','SHORT_INTEGER'),
+ ('newsletter_periodic','np_csv_data','LONG_TEXT'),
+ ('newsletter_periodic','np_frequency','SHORT_TEXT'),
+ ('newsletter_periodic','np_day','SHORT_INTEGER'),
+ ('newsletter_periodic','np_in_full','BINARY'),
+ ('newsletter_periodic','np_template','ID_TEXT'),
+ ('newsletter_periodic','np_last_sent','TIME'),
  ('chargelog','id','*AUTO'),
  ('chargelog','user_id','USER'),
  ('chargelog','amount','INTEGER'),
@@ -1615,14 +2490,14 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('trans_expecting','e_time','TIME'),
  ('trans_expecting','e_length','?INTEGER'),
  ('trans_expecting','e_length_units','ID_TEXT'),
- ('f_member_custom_fields','field_11','SHORT_TEXT'),
- ('f_member_custom_fields','field_12','LONG_TEXT'),
  ('f_member_custom_fields','field_13','LONG_TEXT'),
- ('f_member_custom_fields','field_14','?INTEGER'),
+ ('f_member_custom_fields','field_14','SHORT_TEXT'),
  ('f_member_custom_fields','field_15','LONG_TEXT'),
- ('f_member_custom_fields','field_16','LONG_TEXT'),
- ('f_member_custom_fields','field_17','LONG_TEXT'),
- ('f_member_custom_fields','field_18','LONG_TEXT'),
+ ('f_member_custom_fields','field_16','SHORT_TEXT'),
+ ('f_member_custom_fields','field_17','SHORT_TEXT'),
+ ('f_member_custom_fields','field_18','SHORT_TEXT'),
+ ('f_member_custom_fields','field_19','SHORT_TEXT'),
+ ('f_member_custom_fields','field_20','SHORT_TEXT'),
  ('transactions','id','*ID_TEXT'),
  ('transactions','purchase_id','ID_TEXT'),
  ('transactions','status','SHORT_TEXT'),
@@ -1694,6 +2569,16 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('searches_logged','s_primary','SHORT_TEXT'),
  ('searches_logged','s_auxillary','LONG_TEXT'),
  ('searches_logged','s_num_results','INTEGER'),
+ ('shopping_order','id','*AUTO'),
+ ('shopping_order','c_member','INTEGER'),
+ ('shopping_order','session_id','INTEGER'),
+ ('shopping_order','add_date','TIME'),
+ ('shopping_order','tot_price','REAL'),
+ ('shopping_order','order_status','ID_TEXT'),
+ ('shopping_order','notes','LONG_TEXT'),
+ ('shopping_order','transaction_id','SHORT_TEXT'),
+ ('shopping_order','purchase_through','SHORT_TEXT'),
+ ('shopping_order','tax_opted_out','BINARY'),
  ('shopping_cart','id','*AUTO'),
  ('shopping_cart','session_id','INTEGER'),
  ('shopping_cart','ordered_by','*USER'),
@@ -1707,16 +2592,6 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('shopping_cart','product_type','SHORT_TEXT'),
  ('shopping_cart','product_weight','REAL'),
  ('shopping_cart','is_deleted','BINARY'),
- ('shopping_order','id','*AUTO'),
- ('shopping_order','c_member','INTEGER'),
- ('shopping_order','session_id','INTEGER'),
- ('shopping_order','add_date','TIME'),
- ('shopping_order','tot_price','REAL'),
- ('shopping_order','order_status','ID_TEXT'),
- ('shopping_order','notes','LONG_TEXT'),
- ('shopping_order','transaction_id','SHORT_TEXT'),
- ('shopping_order','purchase_through','SHORT_TEXT'),
- ('shopping_order','tax_opted_out','BINARY'),
  ('shopping_order_details','id','*AUTO'),
  ('shopping_order_details','order_id','?AUTO_LINK'),
  ('shopping_order_details','p_id','?AUTO_LINK'),
@@ -1741,13 +2616,13 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('shopping_order_addresses','address_zip','SHORT_TEXT'),
  ('shopping_order_addresses','address_country','SHORT_TEXT'),
  ('shopping_order_addresses','receiver_email','SHORT_TEXT'),
- ('f_member_custom_fields','field_19','SHORT_TEXT'),
- ('f_member_custom_fields','field_20','SHORT_TEXT'),
- ('f_member_custom_fields','field_21','LONG_TEXT'),
+ ('f_member_custom_fields','field_21','SHORT_TEXT'),
  ('f_member_custom_fields','field_22','SHORT_TEXT'),
- ('f_member_custom_fields','field_23','SHORT_TEXT'),
+ ('f_member_custom_fields','field_23','LONG_TEXT'),
  ('f_member_custom_fields','field_24','SHORT_TEXT'),
  ('f_member_custom_fields','field_25','SHORT_TEXT'),
+ ('f_member_custom_fields','field_26','SHORT_TEXT'),
+ ('f_member_custom_fields','field_27','LONG_TEXT'),
  ('subscriptions','id','*AUTO'),
  ('subscriptions','s_type_code','ID_TEXT'),
  ('subscriptions','s_member_id','USER'),
@@ -1789,7 +2664,6 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('ticket_types','ticket_type','*SHORT_TRANS'),
  ('ticket_types','guest_emails_mandatory','BINARY'),
  ('ticket_types','search_faq','BINARY'),
- ('ticket_types','send_sms_to','SHORT_TEXT'),
  ('ticket_types','cache_lead_time','?TIME'),
  ('comcode_pages','the_zone','*ID_TEXT'),
  ('comcode_pages','the_page','*ID_TEXT'),
@@ -1804,6 +2678,11 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('cached_comcode_pages','string_index','LONG_TRANS'),
  ('cached_comcode_pages','the_theme','*ID_TEXT'),
  ('cached_comcode_pages','cc_page_title','?SHORT_TRANS'),
+ ('filedump','id','*AUTO'),
+ ('filedump','name','ID_TEXT'),
+ ('filedump','path','URLPATH'),
+ ('filedump','description','SHORT_TRANS'),
+ ('filedump','the_member','USER'),
  ('leader_board','lb_member','*USER'),
  ('leader_board','lb_points','INTEGER'),
  ('leader_board','date_and_time','*TIME'),
@@ -1834,34 +2713,32 @@ insert into `ocp7_db_meta` values('translate','id','*AUTO'),
  ('sitewatchlist','id','*AUTO'),
  ('sitewatchlist','siteurl','URLPATH'),
  ('sitewatchlist','site_name','SHORT_TEXT'),
+ ('cached_weather_codes','id','*AUTO'),
+ ('cached_weather_codes','w_string','SHORT_TEXT'),
+ ('cached_weather_codes','w_code','INTEGER'),
  ('failedlogins','id','*AUTO'),
  ('failedlogins','failed_account','ID_TEXT'),
  ('failedlogins','date_and_time','TIME'),
  ('failedlogins','ip','IP'),
- ('filedump','id','*AUTO'),
- ('filedump','name','ID_TEXT'),
- ('filedump','path','URLPATH'),
- ('filedump','description','SHORT_TRANS'),
- ('filedump','the_member','USER'),
- ('f_member_custom_fields','field_26','?INTEGER'),
- ('f_member_custom_fields','field_27','?INTEGER'),
- ('f_member_custom_fields','field_28','?INTEGER'),
- ('f_member_custom_fields','field_29','?INTEGER'),
- ('f_member_custom_fields','field_30','?INTEGER'),
+ ('f_member_custom_fields','field_28','SHORT_TEXT'),
+ ('f_member_custom_fields','field_29','SHORT_TEXT'),
+ ('f_member_custom_fields','field_30','SHORT_TEXT'),
  ('f_member_custom_fields','field_31','SHORT_TEXT'),
  ('f_member_custom_fields','field_32','SHORT_TEXT'),
- ('f_member_custom_fields','field_33','SHORT_TEXT');
+ ('f_member_custom_fields','field_33','SHORT_TEXT'),
+ ('f_member_custom_fields','field_34','SHORT_TEXT'),
+ ('f_member_custom_fields','field_35','SHORT_TEXT');
 
-DROP TABLE IF EXISTS `ocp7_db_meta_indices`;
+DROP TABLE IF EXISTS `ocp_db_meta_indices`;
 
-CREATE TABLE `ocp7_db_meta_indices` (
-  `i_table` varchar(80) COLLATE latin1_bin NOT NULL,
-  `i_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `i_fields` varchar(80) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_db_meta_indices` (
+  `i_table` varchar(80) NOT NULL,
+  `i_name` varchar(80) NOT NULL,
+  `i_fields` varchar(80) NOT NULL,
   PRIMARY KEY (`i_table`,`i_name`,`i_fields`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
+insert into `ocp_db_meta_indices` values('adminlogs','aip','ip'),
  ('adminlogs','athe_type','the_type'),
  ('adminlogs','ts','date_and_time'),
  ('adminlogs','xas','the_user'),
@@ -1870,8 +2747,6 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('authors','findmemberlink','forum_handle'),
  ('autosave','myautosaves','a_member_id'),
  ('award_archive','awardquicksearch','content_id'),
- ('banner_clicks','clicker_ip','c_ip_address'),
- ('banner_types','hottext','t_comcode_inline'),
  ('banners','badd_date','add_date'),
  ('banners','banner_child_find','b_type'),
  ('banners','bvalidated','validated'),
@@ -1879,6 +2754,8 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('banners','expiry_date','expiry_date'),
  ('banners','the_type','the_type'),
  ('banners','topsites','hits_from,hits_to'),
+ ('banner_clicks','clicker_ip','c_ip_address'),
+ ('banner_types','hottext','t_comcode_inline'),
  ('cache','cached_ford','date_and_time'),
  ('cache','cached_fore','cached_for'),
  ('cache','cached_forf','lang'),
@@ -1888,10 +2765,10 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('cached_comcode_pages','ftjoin_ccpt','cc_page_title'),
  ('cached_comcode_pages','ftjoin_ccsi','string_index'),
  ('calendar_events','ces','e_submitter'),
+ ('calendar_events','eventat','e_start_year,e_start_month,e_start_day,e_start_hour,e_start_minute'),
  ('calendar_events','e_add_date','e_add_date'),
  ('calendar_events','e_type','e_type'),
  ('calendar_events','e_views','e_views'),
- ('calendar_events','eventat','e_start_year,e_start_month,e_start_day,e_start_hour,e_start_minute'),
  ('calendar_events','ftjoin_econtent','e_content'),
  ('calendar_events','ftjoin_etitle','e_title'),
  ('calendar_events','publicevents','e_is_public'),
@@ -1899,25 +2776,42 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('calendar_jobs','applicablejobs','j_time'),
  ('catalogue_categories','cataloguefind','c_name'),
  ('catalogue_categories','catstoclean','cc_move_target'),
+ ('catalogue_categories','cc_parent_id','cc_parent_id'),
  ('catalogue_categories','ftjoin_ccdescrip','cc_description'),
  ('catalogue_categories','ftjoin_cctitle','cc_title'),
+ ('catalogue_cat_treecache','cc_ancestor_id','cc_ancestor_id'),
+ ('catalogue_efv_float','cefv_f_combo','ce_id,cf_id'),
+ ('catalogue_efv_float','fce_id','ce_id'),
+ ('catalogue_efv_float','fcf_id','cf_id'),
+ ('catalogue_efv_float','fcv_value','cv_value'),
+ ('catalogue_efv_integer','cefv_i_combo','ce_id,cf_id'),
+ ('catalogue_efv_integer','ice_id','ce_id'),
+ ('catalogue_efv_integer','icf_id','cf_id'),
+ ('catalogue_efv_integer','itv_value','cv_value'),
  ('catalogue_efv_long','#lcv_value','cv_value'),
+ ('catalogue_efv_long','cefv_l_combo','ce_id,cf_id'),
  ('catalogue_efv_long','lce_id','ce_id'),
  ('catalogue_efv_long','lcf_id','cf_id'),
+ ('catalogue_efv_long_trans','cefv_lt_combo','ce_id,cf_id'),
  ('catalogue_efv_long_trans','ltce_id','ce_id'),
  ('catalogue_efv_long_trans','ltcf_id','cf_id'),
  ('catalogue_efv_long_trans','ltcv_value','cv_value'),
  ('catalogue_efv_short','#scv_value','cv_value'),
+ ('catalogue_efv_short','cefv_s_combo','ce_id,cf_id'),
  ('catalogue_efv_short','iscv_value','cv_value'),
  ('catalogue_efv_short','sce_id','ce_id'),
  ('catalogue_efv_short','scf_id','cf_id'),
+ ('catalogue_efv_short_trans','cefv_st_combo','ce_id,cf_id'),
  ('catalogue_efv_short_trans','stce_id','ce_id'),
  ('catalogue_efv_short_trans','stcf_id','cf_id'),
  ('catalogue_efv_short_trans','stcv_value','cv_value'),
+ ('catalogue_entries','ces','ce_submitter'),
+ ('catalogue_entries','ce_add_date','ce_add_date'),
  ('catalogue_entries','ce_cc_id','cc_id'),
+ ('catalogue_entries','ce_c_name','c_name'),
  ('catalogue_entries','ce_validated','ce_validated'),
  ('catalogue_entries','ce_views','ce_views'),
- ('catalogue_entries','ces','ce_submitter'),
+ ('catalogue_entry_linkage','custom_fields','content_type,content_id'),
  ('chat_active','active_ordering','date_and_time'),
  ('chat_active','member_select','member_id'),
  ('chat_active','room_select','room_id'),
@@ -1931,6 +2825,14 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('comcode_pages','p_add_date','p_add_date'),
  ('comcode_pages','p_submitter','p_submitter'),
  ('comcode_pages','p_validated','p_validated'),
+ ('cron_caching_requests','c_compound','c_codename,c_theme,c_lang,c_timezone'),
+ ('cron_caching_requests','c_interlock','c_interlock'),
+ ('cron_caching_requests','c_in_panel','c_in_panel'),
+ ('cron_caching_requests','c_is_bot','c_is_bot'),
+ ('cron_caching_requests','c_store_as_tempcode','c_store_as_tempcode'),
+ ('digestives_tin','d_date_and_time','d_date_and_time'),
+ ('digestives_tin','d_frequency','d_frequency'),
+ ('digestives_tin','d_to_member_id','d_to_member_id'),
  ('download_categories','child_find','parent_id'),
  ('download_categories','ftjoin_dccat','category'),
  ('download_categories','ftjoin_dcdescrip','description'),
@@ -1939,8 +2841,8 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('download_downloads','category_list','category_id'),
  ('download_downloads','ddl','download_licence'),
  ('download_downloads','dds','submitter'),
- ('download_downloads','download_views','download_views'),
  ('download_downloads','downloadauthor','author'),
+ ('download_downloads','download_views','download_views'),
  ('download_downloads','dvalidated','validated'),
  ('download_downloads','ftjoin_dcomments','comments'),
  ('download_downloads','ftjoin_ddescrip','description'),
@@ -1951,25 +2853,36 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('f_emoticons','relevantemoticons','e_relevance_level'),
  ('f_emoticons','topicemos','e_use_topics'),
  ('f_forums','cache_num_posts','f_cache_num_posts'),
- ('f_forums','f_position','f_position'),
  ('f_forums','findnamedforum','f_name'),
+ ('f_forums','f_position','f_position'),
  ('f_forums','subforum_parenting','f_parent_forum'),
- ('f_group_members','gm_group_id','gm_group_id'),
- ('f_group_members','gm_member_id','gm_member_id'),
- ('f_group_members','gm_validated','gm_validated'),
  ('f_groups','ftjoin_gname','g_name'),
  ('f_groups','ftjoin_gtitle','g_title'),
  ('f_groups','gorder','g_order,id'),
+ ('f_groups','hidden','g_hidden'),
  ('f_groups','is_default','g_is_default'),
  ('f_groups','is_presented_at_install','g_is_presented_at_install'),
  ('f_groups','is_private_club','g_is_private_club'),
  ('f_groups','is_super_admin','g_is_super_admin'),
  ('f_groups','is_super_moderator','g_is_super_moderator'),
- ('f_member_custom_fields','#mcf11','field_11'),
- ('f_member_custom_fields','#mcf12','field_12'),
+ ('f_group_members','gm_group_id','gm_group_id'),
+ ('f_group_members','gm_member_id','gm_member_id'),
+ ('f_group_members','gm_validated','gm_validated'),
+ ('f_members','#search_user','m_username'),
+ ('f_members','avatar_url','m_avatar_url'),
+ ('f_members','birthdays','m_dob_day,m_dob_month'),
+ ('f_members','external_auth_lookup','m_pass_hash_salted'),
+ ('f_members','ftjoin_msig','m_signature'),
+ ('f_members','menail','m_email_address'),
+ ('f_members','m_join_time','m_join_time'),
+ ('f_members','primary_group','m_primary_group'),
+ ('f_members','sort_post_count','m_cache_num_posts'),
+ ('f_members','user_list','m_username'),
+ ('f_members','whos_validated','m_validated'),
+ ('f_member_custom_fields','#mcf10','field_10'),
  ('f_member_custom_fields','#mcf13','field_13'),
+ ('f_member_custom_fields','#mcf14','field_14'),
  ('f_member_custom_fields','#mcf15','field_15'),
- ('f_member_custom_fields','#mcf16','field_16'),
  ('f_member_custom_fields','#mcf17','field_17'),
  ('f_member_custom_fields','#mcf18','field_18'),
  ('f_member_custom_fields','#mcf19','field_19'),
@@ -1980,52 +2893,41 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('f_member_custom_fields','#mcf23','field_23'),
  ('f_member_custom_fields','#mcf24','field_24'),
  ('f_member_custom_fields','#mcf25','field_25'),
- ('f_member_custom_fields','#mcf3','field_3'),
- ('f_member_custom_fields','#mcf31','field_31'),
- ('f_member_custom_fields','#mcf32','field_32'),
+ ('f_member_custom_fields','#mcf26','field_26'),
+ ('f_member_custom_fields','#mcf27','field_27'),
  ('f_member_custom_fields','#mcf33','field_33'),
- ('f_member_custom_fields','#mcf5','field_5'),
- ('f_member_custom_fields','#mcf6','field_6'),
+ ('f_member_custom_fields','#mcf34','field_34'),
+ ('f_member_custom_fields','#mcf35','field_35'),
+ ('f_member_custom_fields','#mcf7','field_7'),
  ('f_member_custom_fields','#mcf8','field_8'),
- ('f_members','#search_user','m_username'),
- ('f_members','avatar_url','m_avatar_url'),
- ('f_members','birthdays','m_dob_day,m_dob_month'),
- ('f_members','external_auth_lookup','m_pass_hash_salted'),
- ('f_members','ftjoin_msig','m_signature'),
- ('f_members','m_join_time','m_join_time'),
- ('f_members','menail','m_email_address'),
- ('f_members','primary_group','m_primary_group'),
- ('f_members','sort_post_count','m_cache_num_posts'),
- ('f_members','user_list','m_username'),
- ('f_members','whos_validated','m_validated'),
- ('f_post_history','phistorylookup','h_post_id'),
  ('f_posts','#p_title','p_title'),
  ('f_posts','deletebyip','p_ip_address'),
  ('f_posts','find_pp','p_intended_solely_for'),
  ('f_posts','in_topic','p_topic_id,p_time,id'),
+ ('f_posts','postsinforum','p_cache_forum_id'),
+ ('f_posts','posts_by','p_poster'),
+ ('f_posts','post_order_time','p_time,id'),
  ('f_posts','p_last_edit_time','p_last_edit_time'),
  ('f_posts','p_validated','p_validated'),
- ('f_posts','post_order_time','p_time,id'),
- ('f_posts','posts_by','p_poster'),
- ('f_posts','postsinforum','p_cache_forum_id'),
  ('f_posts','search_join','p_post'),
+ ('f_post_history','phistorylookup','h_post_id'),
  ('f_read_logs','erase_old_read_logs','l_time'),
  ('f_topics','#t_description','t_description'),
  ('f_topics','descriptionsearch','t_description'),
  ('f_topics','forumlayer','t_cache_first_title'),
  ('f_topics','in_forum','t_forum_id'),
  ('f_topics','ownedtopics','t_cache_first_member_id'),
+ ('f_topics','topic_order','t_cascading,t_pinned,t_cache_last_time'),
+ ('f_topics','topic_order_2','t_forum_id,t_cascading,t_pinned,t_sunk,t_cache_last_time'),
+ ('f_topics','topic_order_3','t_forum_id,t_cascading,t_pinned,t_cache_last_time'),
+ ('f_topics','topic_order_time','t_cache_last_time'),
+ ('f_topics','topic_order_time_2','t_cache_first_time'),
  ('f_topics','t_cascading','t_cascading'),
  ('f_topics','t_cascading_or_forum','t_cascading,t_forum_id'),
  ('f_topics','t_num_views','t_num_views'),
  ('f_topics','t_pt_from','t_pt_from'),
  ('f_topics','t_pt_to','t_pt_to'),
  ('f_topics','t_validated','t_validated'),
- ('f_topics','topic_order','t_cascading,t_pinned,t_cache_last_time'),
- ('f_topics','topic_order_2','t_forum_id,t_cascading,t_pinned,t_sunk,t_cache_last_time'),
- ('f_topics','topic_order_3','t_forum_id,t_cascading,t_pinned,t_cache_last_time'),
- ('f_topics','topic_order_time','t_cache_last_time'),
- ('f_topics','topic_order_time_2','t_cache_first_time'),
  ('f_warnings','warningsmemberid','w_member_id'),
  ('galleries','ftjoin_gdescrip','description'),
  ('galleries','ftjoin_gfullname','fullname'),
@@ -2042,9 +2944,9 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('hackattack','otherhacksby','ip'),
  ('images','category_list','cat'),
  ('images','ftjoin_icomments','comments'),
- ('images','i_validated','validated'),
  ('images','iadd_date','add_date'),
  ('images','image_views','image_views'),
+ ('images','i_validated','validated'),
  ('images','xis','submitter'),
  ('iotd','date_and_time','date_and_time'),
  ('iotd','ftjoin_icap','caption'),
@@ -2070,17 +2972,19 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('news','ftjoin_ititle','title'),
  ('news','ftjoin_nnews','news'),
  ('news','ftjoin_nnewsa','news_article'),
- ('news','headlines','date_and_time'),
+ ('news','headlines','date_and_time,id'),
  ('news','nes','submitter'),
- ('news','news_views','news_views'),
  ('news','newsauthor','author'),
+ ('news','news_views','news_views'),
  ('news','nvalidated','validated'),
- ('news_categories','ncs','nc_owner'),
- ('news_category_entries','news_entry_category','news_entry_category'),
  ('newsletter','code_confirm','code_confirm'),
  ('newsletter','welcomemails','join_time'),
  ('newsletter_drip_send','d_inject_time','d_inject_time'),
  ('newsletter_subscribe','peopletosendto','the_level'),
+ ('news_categories','ncs','nc_owner'),
+ ('news_category_entries','news_entry_category','news_entry_category'),
+ ('notifications_enabled','l_code_category','l_code_category'),
+ ('notifications_enabled','l_member_id','l_member_id,l_notification_code'),
  ('poll','date_and_time','date_and_time'),
  ('poll','ftjoin_po1','option1'),
  ('poll','ftjoin_po2','option2'),
@@ -2092,9 +2996,9 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('poll','padd_time','add_time'),
  ('poll','poll_views','poll_views'),
  ('poll','ps','submitter'),
- ('poll_votes','v_vote_for','v_vote_for'),
  ('poll_votes','v_voter_id','v_voter_id'),
  ('poll_votes','v_voter_ip','v_voter_ip'),
+ ('poll_votes','v_vote_for','v_vote_for'),
  ('quizzes','ftjoin_qstarttext','q_start_text'),
  ('quizzes','q_validated','q_validated'),
  ('rating','alt_key','rating_for_type,rating_for_id'),
@@ -2154,21 +3058,925 @@ insert into `ocp7_db_meta_indices` values('adminlogs','aip','ip'),
  ('values','date_and_time','date_and_time'),
  ('videos','category_list','cat'),
  ('videos','ftjoin_vcomments','comments'),
- ('videos','v_validated','validated'),
  ('videos','vadd_date','add_date'),
  ('videos','video_views','video_views'),
- ('videos','vs','submitter');
+ ('videos','vs','submitter'),
+ ('videos','v_validated','validated');
 
-DROP TABLE IF EXISTS `ocp7_group_category_access`;
+DROP TABLE IF EXISTS `ocp_digestives_consumed`;
 
-CREATE TABLE `ocp7_group_category_access` (
-  `module_the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `category_name` varchar(80) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_digestives_consumed` (
+  `c_member_id` int(11) NOT NULL,
+  `c_frequency` int(11) NOT NULL,
+  `c_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`c_member_id`,`c_frequency`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_digestives_tin`;
+
+CREATE TABLE `ocp_digestives_tin` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `d_subject` longtext NOT NULL,
+  `d_message` longtext NOT NULL,
+  `d_from_member_id` int(11) NOT NULL,
+  `d_to_member_id` int(11) NOT NULL,
+  `d_priority` tinyint(4) NOT NULL,
+  `d_no_cc` tinyint(1) NOT NULL,
+  `d_date_and_time` int(10) unsigned NOT NULL,
+  `d_notification_code` varchar(80) NOT NULL,
+  `d_code_category` varchar(255) NOT NULL,
+  `d_frequency` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `d_date_and_time` (`d_date_and_time`),
+  KEY `d_frequency` (`d_frequency`),
+  KEY `d_to_member_id` (`d_to_member_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_download_categories`;
+
+CREATE TABLE `ocp_download_categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `category` int(10) unsigned NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `notes` longtext NOT NULL,
+  `description` int(10) unsigned NOT NULL,
+  `rep_image` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `child_find` (`parent_id`),
+  KEY `ftjoin_dccat` (`category`),
+  KEY `ftjoin_dcdescrip` (`description`)
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_download_categories` values('1','301',null,'1332090691','','302','');
+
+DROP TABLE IF EXISTS `ocp_download_downloads`;
+
+CREATE TABLE `ocp_download_downloads` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` int(11) NOT NULL,
+  `name` int(10) unsigned NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `description` int(10) unsigned NOT NULL,
+  `author` varchar(80) NOT NULL,
+  `comments` int(10) unsigned NOT NULL,
+  `num_downloads` int(11) NOT NULL,
+  `out_mode_id` int(11) DEFAULT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `edit_date` int(10) unsigned DEFAULT NULL,
+  `validated` tinyint(1) NOT NULL,
+  `default_pic` int(11) NOT NULL,
+  `file_size` int(11) DEFAULT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `allow_trackbacks` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  `download_views` int(11) NOT NULL,
+  `download_cost` int(11) NOT NULL,
+  `download_submitter_gets_points` tinyint(1) NOT NULL,
+  `submitter` int(11) NOT NULL,
+  `original_filename` varchar(255) NOT NULL,
+  `rep_image` varchar(255) NOT NULL,
+  `download_licence` int(11) DEFAULT NULL,
+  `download_data_mash` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `download_views` (`download_views`),
+  KEY `category_list` (`category_id`),
+  KEY `recent_downloads` (`add_date`),
+  KEY `top_downloads` (`num_downloads`),
+  KEY `downloadauthor` (`author`),
+  KEY `dds` (`submitter`),
+  KEY `ddl` (`download_licence`),
+  KEY `dvalidated` (`validated`),
+  KEY `ftjoin_dname` (`name`),
+  KEY `ftjoin_ddescrip` (`description`),
+  KEY `ftjoin_dcomments` (`comments`),
+  FULLTEXT KEY `download_data_mash` (`download_data_mash`),
+  FULLTEXT KEY `original_filename` (`original_filename`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_download_licences`;
+
+CREATE TABLE `ocp_download_licences` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_title` varchar(255) NOT NULL,
+  `l_text` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_download_logging`;
+
+CREATE TABLE `ocp_download_logging` (
+  `id` int(11) NOT NULL,
+  `the_user` int(11) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`the_user`),
+  KEY `calculate_bandwidth` (`date_and_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_edit_pings`;
+
+CREATE TABLE `ocp_edit_pings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `the_page` varchar(80) NOT NULL,
+  `the_type` varchar(80) NOT NULL,
+  `the_id` varchar(80) NOT NULL,
+  `the_time` int(10) unsigned NOT NULL,
+  `the_member` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_categories`;
+
+CREATE TABLE `ocp_f_categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_title` varchar(255) NOT NULL,
+  `c_description` longtext NOT NULL,
+  `c_expanded_by_default` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3;
+
+insert into `ocp_f_categories` values('1','General','','1'),
+ ('2','Staff','','1');
+
+DROP TABLE IF EXISTS `ocp_f_custom_fields`;
+
+CREATE TABLE `ocp_f_custom_fields` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cf_locked` tinyint(1) NOT NULL,
+  `cf_name` int(10) unsigned NOT NULL,
+  `cf_description` int(10) unsigned NOT NULL,
+  `cf_default` longtext NOT NULL,
+  `cf_public_view` tinyint(1) NOT NULL,
+  `cf_owner_view` tinyint(1) NOT NULL,
+  `cf_owner_set` tinyint(1) NOT NULL,
+  `cf_type` varchar(80) NOT NULL,
+  `cf_required` tinyint(1) NOT NULL,
+  `cf_show_in_posts` tinyint(1) NOT NULL,
+  `cf_show_in_post_previews` tinyint(1) NOT NULL,
+  `cf_order` int(11) NOT NULL,
+  `cf_only_group` longtext NOT NULL,
+  `cf_encrypted` tinyint(1) NOT NULL,
+  `cf_show_on_join_form` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=36;
+
+insert into `ocp_f_custom_fields` values('1','0','14','15','','1','1','1','long_trans','0','0','0','0','','0','0'),
+ ('2','0','16','17','','1','1','1','short_text','0','0','0','1','','0','0'),
+ ('3','0','18','19','','1','1','1','long_trans','0','0','0','2','','0','0'),
+ ('4','0','20','21','','1','1','1','long_trans','0','0','0','3','','0','0'),
+ ('5','0','22','23','','1','1','1','long_trans','0','0','0','4','','0','0'),
+ ('6','0','24','25','','1','1','1','long_trans','0','0','0','5','','0','0'),
+ ('7','0','26','27','','1','1','1','short_text','0','0','0','6','','0','0'),
+ ('8','0','28','29','','1','1','1','short_text','0','0','0','7','','0','0'),
+ ('9','0','30','31','','0','0','0','long_trans','0','0','0','8','','0','0'),
+ ('10','1','92','93','','0','0','1','short_text','0','0','0','9','','0','0'),
+ ('11','1','284','285','0','0','0','0','integer','0','0','0','10','','0','0'),
+ ('12','1','297','298','0','0','0','0','integer','0','0','0','11','','0','0'),
+ ('13','1','323','324','AED|AFA|ALL|AMD|ANG|AOK|AON|ARA|ARP|ARS|AUD|AWG|AZM|BAM|BBD|BDT|BGL|BHD|BIF|BMD|BND|BOB|BOP|BRC|BRL|BRR|BSD|BTN|BWP|BYR|BZD|CAD|CDZ|CHF|CLF|CLP|CNY|COP|CRC|CSD|CUP|CVE|CYP|CZK|DJF|DKK|DOP|DZD|EEK|EGP|ERN|ETB|EUR|FJD|FKP|GBP|GEL|GHC|GIP|GMD|GNS|GQE|GTQ|GWP|GYD|HKD|HNL|HRD|HRK|HTG|HUF|IDR|ILS|INR|IQD|IRR|ISK|JMD|JOD|JPY|KES|KGS|KHR|KMF|KPW|KRW|KWD|KYD|KZT|LAK|LBP|LKR|LRD|LSL|LSM|LTL|LVL|LYD|MAD|MDL|MGF|MKD|MLF|MMK|MNT|MOP|MRO|MTL|MUR|MVR|MWK|MXN|MYR|MZM|NAD|NGN|NIC|NOK|NPR|NZD|OMR|PAB|PEI|PEN|PGK|PHP|PKR|PLN|PYG|QAR|ROL|RUB|RWF|SAR|SBD|SCR|SDD|SDP|SEK|SGD|SHP|SIT|SKK|SLL|SOS|SRG|STD|SUR|SVC|SYP|SZL|THB|TJR|TMM|TND|TOP|TPE|TRL|TTD|TWD|TZS|UAH|UAK|UGS|USD|UYU|UZS|VEB|VND|VUV|WST|XAF|XCD|XOF|XPF|YDD|YER|ZAL|ZAR|ZMK|ZWD','0','0','1','list','0','0','0','12','','0','0'),
+ ('14','1','325','326','','0','0','1','short_text','0','0','0','13','','1','0'),
+ ('15','1','327','328','American Express|Delta|Diners Card|JCB|Master Card|Solo|Switch|Visa','0','0','1','list','0','0','0','14','','1','0'),
+ ('16','1','329','330','','0','0','1','integer','0','0','0','15','','1','0'),
+ ('17','1','331','332','mm/yy','0','0','1','short_text','0','0','0','16','','1','0'),
+ ('18','1','333','334','mm/yy','0','0','1','short_text','0','0','0','17','','1','0'),
+ ('19','1','335','336','','0','0','1','short_text','0','0','0','18','','1','0'),
+ ('20','1','337','338','','0','0','1','short_text','0','0','0','19','','1','0'),
+ ('21','1','351','352','','0','0','0','short_text','0','0','0','20','','0','0'),
+ ('22','1','353','354','','0','0','0','short_text','0','0','0','21','','0','0'),
+ ('23','1','355','356','','0','0','0','long_text','0','0','0','22','','0','0'),
+ ('24','1','357','358','','0','0','0','short_text','0','0','0','23','','0','0'),
+ ('25','1','359','360','','0','0','0','short_text','0','0','0','24','','0','0'),
+ ('26','1','361','362','','0','0','0','short_text','0','0','0','25','','0','0'),
+ ('27','1','363','364','|AD|AE|AF|AG|AI|AL|AM|AN|AO|AQ|AR|AS|AT|AU|AW|AZ|BA|BB|BD|BE|BF|BG|BH|BI|BJ|BM|BN|BO|BR|BS|BT|BU|BV|BW|BY|BZ|CA|CC|CD|CF|CG|CH|CI|CK|CL|CM|CN|CO|CR|CS|CU|CV|CX|CY|CZ|DE|DJ|DK|DM|DO|DZ|EC|EE|EG|EH|ER|ES|ET|FI|FJ|FK|FM|FO|FR|GA|GB|GD|GE|GH|GI|GL|GM|GN|GQ|GR|GS|GT|GU|GW|GY|HK|HM|HN|HR|HT|HU|ID|IE|IL|IN|IO|IQ|IR|IS|IT|JM|JO|JP|KE|KG|KH|KI|KM|KN|KP|KR|KW|KY|KZ|LA|LB|LC|LI|LK|LR|LS|LT|LU|LY|MA|MC|MD|MG|MH|MK|ML|MM|MN|MO|MP|MR|MS|MT|MU|MV|MW|MX|MY|MZ|NA|NC|NE|NF|NG|NI|NL|NO|NP|NR|NU|NZ|OM|PA|PE|PF|PG|PH|PK|PL|PN|PR|PT|PW|PY|QA|RO|RU|RW|SA|SB|SC|SD|SE|SG|SH|SI|SJ|SK|SL|SM|SN|SO|SR|ST|SU|SV|SY|SZ|TC|TD|TG|TH|TJ|TK|TM|TN|TO|TP|TR|TT|TV|TW|TZ|UA|UG|UM|US|UY|UZ|VA|VC|VE|VG|VI|VN|VU|WF|WS|YD|YE|ZA|ZM|ZR|ZW','0','0','0','list','0','0','0','26','','0','0'),
+ ('28','1','387','388','0','0','0','0','integer','0','0','0','27','','0','0'),
+ ('29','1','389','390','0','0','0','0','integer','0','0','0','28','','0','0'),
+ ('30','1','391','392','0','0','0','0','integer','0','0','0','29','','0','0'),
+ ('31','1','393','394','0','0','0','0','integer','0','0','0','30','','0','0'),
+ ('32','1','395','396','0','0','0','0','integer','0','0','0','31','','0','0'),
+ ('33','1','397','398','','0','0','0','short_text','0','0','0','32','','0','0'),
+ ('34','1','399','400','','0','0','1','short_text','0','0','0','33','','0','0'),
+ ('35','1','401','402','','0','0','1','short_text','0','0','0','34','','0','0');
+
+DROP TABLE IF EXISTS `ocp_f_emoticons`;
+
+CREATE TABLE `ocp_f_emoticons` (
+  `e_code` varchar(80) NOT NULL,
+  `e_theme_img_code` varchar(255) NOT NULL,
+  `e_relevance_level` int(11) NOT NULL,
+  `e_use_topics` tinyint(1) NOT NULL,
+  `e_is_special` tinyint(1) NOT NULL,
+  PRIMARY KEY (`e_code`),
+  KEY `relevantemoticons` (`e_relevance_level`),
+  KEY `topicemos` (`e_use_topics`)
+) ENGINE=MyISAM;
+
+insert into `ocp_f_emoticons` values(':P','ocf_emoticons/cheeky','0','1','0'),
+ (':\'(','ocf_emoticons/cry','0','1','0'),
+ (':dry:','ocf_emoticons/dry','0','1','0'),
+ (':$','ocf_emoticons/blush','0','1','0'),
+ (';)','ocf_emoticons/wink','0','0','0'),
+ ('O_o','ocf_emoticons/blink','0','1','0'),
+ (':wub:','ocf_emoticons/wub','0','1','0'),
+ (':cool:','ocf_emoticons/cool','0','1','0'),
+ (':lol:','ocf_emoticons/lol','0','1','0'),
+ (':(','ocf_emoticons/sad','0','1','0'),
+ (':)','ocf_emoticons/smile','0','0','0'),
+ (':thumbs:','ocf_emoticons/thumbs','0','1','0'),
+ (':offtopic:','ocf_emoticons/offtopic','0','0','0'),
+ (':|','ocf_emoticons/mellow','0','0','0'),
+ (':ninja:','ocf_emoticons/ph34r','0','1','0'),
+ (':o','ocf_emoticons/shocked','0','1','0'),
+ (':rolleyes:','ocf_emoticons/rolleyes','1','1','0'),
+ (':D','ocf_emoticons/grin','1','1','0'),
+ ('^_^','ocf_emoticons/glee','1','1','0'),
+ ('(K)','ocf_emoticons/kiss','1','0','0'),
+ (':S','ocf_emoticons/confused','1','1','0'),
+ (':@','ocf_emoticons/angry','1','1','0'),
+ (':shake:','ocf_emoticons/shake','1','1','0'),
+ (':hand:','ocf_emoticons/hand','1','1','0'),
+ (':drool:','ocf_emoticons/drool','1','1','0'),
+ (':devil:','ocf_emoticons/devil','1','1','0'),
+ (':party:','ocf_emoticons/party','1','0','0'),
+ (':constipated:','ocf_emoticons/constipated','1','1','0'),
+ (':depressed:','ocf_emoticons/depressed','1','1','0'),
+ (':zzz:','ocf_emoticons/zzz','1','1','0'),
+ (':whistle:','ocf_emoticons/whistle','1','0','0'),
+ (':upsidedown:','ocf_emoticons/upsidedown','1','1','0'),
+ (':sick:','ocf_emoticons/sick','1','1','0'),
+ (':shutup:','ocf_emoticons/shutup','1','0','0'),
+ (':sarcy:','ocf_emoticons/sarcy','1','1','0'),
+ (':puppyeyes:','ocf_emoticons/puppyeyes','1','1','0'),
+ (':nod:','ocf_emoticons/nod','1','0','0'),
+ (':nerd:','ocf_emoticons/nerd','1','1','0'),
+ (':king:','ocf_emoticons/king','1','1','0'),
+ (':birthday:','ocf_emoticons/birthday','1','1','0'),
+ (':cyborg:','ocf_emoticons/cyborg','1','0','0'),
+ (':hippie:','ocf_emoticons/hippie','1','1','0'),
+ (':ninja2:','ocf_emoticons/ninja2','1','1','0'),
+ (':rockon:','ocf_emoticons/rockon','1','0','0'),
+ (':sinner:','ocf_emoticons/sinner','1','0','0'),
+ (':guitar:','ocf_emoticons/guitar','1','0','0'),
+ (':christmas:','ocf_emoticons/christmas','1','0','0');
+
+DROP TABLE IF EXISTS `ocp_f_forum_intro_ip`;
+
+CREATE TABLE `ocp_f_forum_intro_ip` (
+  `i_forum_id` int(11) NOT NULL,
+  `i_ip` varchar(40) NOT NULL,
+  PRIMARY KEY (`i_forum_id`,`i_ip`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_forum_intro_member`;
+
+CREATE TABLE `ocp_f_forum_intro_member` (
+  `i_forum_id` int(11) NOT NULL,
+  `i_member_id` int(11) NOT NULL,
+  PRIMARY KEY (`i_forum_id`,`i_member_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_forums`;
+
+CREATE TABLE `ocp_f_forums` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `f_name` varchar(255) NOT NULL,
+  `f_description` int(10) unsigned NOT NULL,
+  `f_category_id` int(11) DEFAULT NULL,
+  `f_parent_forum` int(11) DEFAULT NULL,
+  `f_position` int(11) NOT NULL,
+  `f_order_sub_alpha` tinyint(1) NOT NULL,
+  `f_post_count_increment` tinyint(1) NOT NULL,
+  `f_intro_question` int(10) unsigned NOT NULL,
+  `f_intro_answer` varchar(255) NOT NULL,
+  `f_cache_num_topics` int(11) NOT NULL,
+  `f_cache_num_posts` int(11) NOT NULL,
+  `f_cache_last_topic_id` int(11) DEFAULT NULL,
+  `f_cache_last_title` varchar(255) NOT NULL,
+  `f_cache_last_time` int(10) unsigned DEFAULT NULL,
+  `f_cache_last_username` varchar(255) NOT NULL,
+  `f_cache_last_member_id` int(11) DEFAULT NULL,
+  `f_cache_last_forum_id` int(11) DEFAULT NULL,
+  `f_redirection` varchar(255) NOT NULL,
+  `f_order` varchar(80) NOT NULL,
+  `f_is_threaded` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cache_num_posts` (`f_cache_num_posts`),
+  KEY `subforum_parenting` (`f_parent_forum`),
+  KEY `findnamedforum` (`f_name`),
+  KEY `f_position` (`f_position`)
+) ENGINE=MyISAM AUTO_INCREMENT=9;
+
+insert into `ocp_f_forums` values('1','Forum home','52',null,null,'1','0','1','53','','0','0',null,'',null,'',null,null,'','last_post','0'),
+ ('2','General chat','54','1','1','1','0','1','55','','0','0',null,'',null,'',null,null,'','last_post','0'),
+ ('3','Reported posts forum','56','2','1','1','0','1','57','','0','0',null,'',null,'',null,null,'','last_post','0'),
+ ('4','Trash','58','2','1','1','0','1','59','','0','0',null,'',null,'',null,null,'','last_post','0'),
+ ('5','Website comment topics','60','1','1','1','0','1','61','','0','0',null,'',null,'',null,null,'','last_post','1'),
+ ('6','Website support tickets','62','2','1','1','0','1','63','','0','0',null,'',null,'',null,null,'','last_post','0'),
+ ('7','Staff','64','2','1','1','0','1','65','','1','1','1','Welcome to the forums','1332090641','System','1','7','','last_post','0'),
+ ('8','Website \"Contact Us\" messages','136','2','1','1','0','1','137','','0','0',null,'',null,'',null,null,'','last_post','0');
+
+DROP TABLE IF EXISTS `ocp_f_group_member_timeouts`;
+
+CREATE TABLE `ocp_f_group_member_timeouts` (
+  `member_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `timeout` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`member_id`,`group_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_group_members`;
+
+CREATE TABLE `ocp_f_group_members` (
+  `gm_group_id` int(11) NOT NULL,
+  `gm_member_id` int(11) NOT NULL,
+  `gm_validated` tinyint(1) NOT NULL,
+  PRIMARY KEY (`gm_group_id`,`gm_member_id`),
+  KEY `gm_validated` (`gm_validated`),
+  KEY `gm_member_id` (`gm_member_id`),
+  KEY `gm_group_id` (`gm_group_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_groups`;
+
+CREATE TABLE `ocp_f_groups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `g_name` int(10) unsigned NOT NULL,
+  `g_is_default` tinyint(1) NOT NULL,
+  `g_is_presented_at_install` tinyint(1) NOT NULL,
+  `g_is_super_admin` tinyint(1) NOT NULL,
+  `g_is_super_moderator` tinyint(1) NOT NULL,
+  `g_group_leader` int(11) DEFAULT NULL,
+  `g_title` int(10) unsigned NOT NULL,
+  `g_promotion_target` int(11) DEFAULT NULL,
+  `g_promotion_threshold` int(11) DEFAULT NULL,
+  `g_flood_control_submit_secs` int(11) NOT NULL,
+  `g_flood_control_access_secs` int(11) NOT NULL,
+  `g_gift_points_base` int(11) NOT NULL,
+  `g_gift_points_per_day` int(11) NOT NULL,
+  `g_max_daily_upload_mb` int(11) NOT NULL,
+  `g_max_attachments_per_post` int(11) NOT NULL,
+  `g_max_avatar_width` int(11) NOT NULL,
+  `g_max_avatar_height` int(11) NOT NULL,
+  `g_max_post_length_comcode` int(11) NOT NULL,
+  `g_max_sig_length_comcode` int(11) NOT NULL,
+  `g_enquire_on_new_ips` tinyint(1) NOT NULL,
+  `g_rank_image` varchar(80) NOT NULL,
+  `g_hidden` tinyint(1) NOT NULL,
+  `g_order` int(11) NOT NULL,
+  `g_rank_image_pri_only` tinyint(1) NOT NULL,
+  `g_open_membership` tinyint(1) NOT NULL,
+  `g_is_private_club` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ftjoin_gname` (`g_name`),
+  KEY `ftjoin_gtitle` (`g_title`),
+  KEY `is_private_club` (`g_is_private_club`),
+  KEY `is_super_admin` (`g_is_super_admin`),
+  KEY `is_super_moderator` (`g_is_super_moderator`),
+  KEY `is_default` (`g_is_default`),
+  KEY `hidden` (`g_hidden`),
+  KEY `is_presented_at_install` (`g_is_presented_at_install`),
+  KEY `gorder` (`g_order`,`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=11;
+
+insert into `ocp_f_groups` values('1','32','0','0','0','0',null,'33',null,null,'5','0','25','1','70','50','100','100','30000','700','0','','0','0','1','0','0'),
+ ('2','34','0','0','1','0',null,'35',null,null,'0','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/admin','0','1','1','0','0'),
+ ('3','36','0','0','0','1',null,'37',null,null,'0','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/mod','0','2','1','0','0'),
+ ('4','38','0','0','0','0',null,'39',null,null,'0','0','25','1','70','50','100','100','30000','700','0','','0','3','1','0','0'),
+ ('5','40','0','0','0','0',null,'41',null,null,'5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/4','0','4','1','0','0'),
+ ('6','42','0','0','0','0',null,'43','5','10000','5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/3','0','5','1','0','0'),
+ ('7','44','0','0','0','0',null,'45','6','2500','5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/2','0','6','1','0','0'),
+ ('8','46','0','0','0','0',null,'47','7','400','5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/1','0','7','1','0','0'),
+ ('9','48','0','0','0','0',null,'49','8','100','5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/0','0','8','1','0','0'),
+ ('10','50','0','0','0','0',null,'51',null,null,'0','0','25','1','70','50','100','100','30000','700','0','','0','9','1','0','0');
+
+DROP TABLE IF EXISTS `ocp_f_invites`;
+
+CREATE TABLE `ocp_f_invites` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `i_inviter` int(11) NOT NULL,
+  `i_email_address` varchar(255) NOT NULL,
+  `i_time` int(10) unsigned NOT NULL,
+  `i_taken` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_member_cpf_perms`;
+
+CREATE TABLE `ocp_f_member_cpf_perms` (
+  `member_id` int(11) NOT NULL,
+  `field_id` int(11) NOT NULL,
+  `guest_view` tinyint(1) NOT NULL,
+  `member_view` tinyint(1) NOT NULL,
+  `friend_view` tinyint(1) NOT NULL,
+  `group_view` varchar(255) NOT NULL,
+  PRIMARY KEY (`member_id`,`field_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_member_custom_fields`;
+
+CREATE TABLE `ocp_f_member_custom_fields` (
+  `mf_member_id` int(11) NOT NULL,
+  `field_1` int(10) unsigned NOT NULL DEFAULT '0',
+  `field_2` varchar(255) NOT NULL DEFAULT '',
+  `field_3` int(10) unsigned NOT NULL DEFAULT '0',
+  `field_4` int(10) unsigned NOT NULL DEFAULT '0',
+  `field_5` int(10) unsigned NOT NULL DEFAULT '0',
+  `field_6` int(10) unsigned NOT NULL DEFAULT '0',
+  `field_7` varchar(255) NOT NULL DEFAULT '',
+  `field_8` varchar(255) NOT NULL DEFAULT '',
+  `field_9` int(10) unsigned NOT NULL DEFAULT '0',
+  `field_10` varchar(255) NOT NULL DEFAULT '',
+  `field_11` varchar(255) NOT NULL DEFAULT '',
+  `field_12` varchar(255) NOT NULL DEFAULT '',
+  `field_13` longtext NOT NULL,
+  `field_14` varchar(255) NOT NULL DEFAULT '',
+  `field_15` longtext NOT NULL,
+  `field_16` varchar(255) NOT NULL DEFAULT '',
+  `field_17` varchar(255) NOT NULL DEFAULT '',
+  `field_18` varchar(255) NOT NULL DEFAULT '',
+  `field_19` varchar(255) NOT NULL DEFAULT '',
+  `field_20` varchar(255) NOT NULL DEFAULT '',
+  `field_21` varchar(255) NOT NULL DEFAULT '',
+  `field_22` varchar(255) NOT NULL DEFAULT '',
+  `field_23` longtext NOT NULL,
+  `field_24` varchar(255) NOT NULL DEFAULT '',
+  `field_25` varchar(255) NOT NULL DEFAULT '',
+  `field_26` varchar(255) NOT NULL DEFAULT '',
+  `field_27` longtext NOT NULL,
+  `field_28` varchar(255) NOT NULL DEFAULT '',
+  `field_29` varchar(255) NOT NULL DEFAULT '',
+  `field_30` varchar(255) NOT NULL DEFAULT '',
+  `field_31` varchar(255) NOT NULL DEFAULT '',
+  `field_32` varchar(255) NOT NULL DEFAULT '',
+  `field_33` varchar(255) NOT NULL DEFAULT '',
+  `field_34` varchar(255) NOT NULL DEFAULT '',
+  `field_35` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`mf_member_id`),
+  FULLTEXT KEY `mcf2` (`field_2`),
+  FULLTEXT KEY `mcf7` (`field_7`),
+  FULLTEXT KEY `mcf8` (`field_8`),
+  FULLTEXT KEY `mcf10` (`field_10`),
+  FULLTEXT KEY `mcf13` (`field_13`),
+  FULLTEXT KEY `mcf14` (`field_14`),
+  FULLTEXT KEY `mcf15` (`field_15`),
+  FULLTEXT KEY `mcf17` (`field_17`),
+  FULLTEXT KEY `mcf18` (`field_18`),
+  FULLTEXT KEY `mcf19` (`field_19`),
+  FULLTEXT KEY `mcf20` (`field_20`),
+  FULLTEXT KEY `mcf21` (`field_21`),
+  FULLTEXT KEY `mcf22` (`field_22`),
+  FULLTEXT KEY `mcf23` (`field_23`),
+  FULLTEXT KEY `mcf24` (`field_24`),
+  FULLTEXT KEY `mcf25` (`field_25`),
+  FULLTEXT KEY `mcf26` (`field_26`),
+  FULLTEXT KEY `mcf27` (`field_27`),
+  FULLTEXT KEY `mcf33` (`field_33`),
+  FULLTEXT KEY `mcf34` (`field_34`),
+  FULLTEXT KEY `mcf35` (`field_35`)
+) ENGINE=MyISAM;
+
+insert into `ocp_f_member_custom_fields` values('1','69','','70','71','72','73','','','74','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+ ('2','77','','78','79','80','81','','','82','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+ ('3','85','','86','87','88','89','','','90','','','','','','','','','','','','','','','','','','','','','','','','','','');
+
+DROP TABLE IF EXISTS `ocp_f_member_known_login_ips`;
+
+CREATE TABLE `ocp_f_member_known_login_ips` (
+  `i_member_id` int(11) NOT NULL,
+  `i_ip` varchar(40) NOT NULL,
+  `i_val_code` varchar(255) NOT NULL,
+  PRIMARY KEY (`i_member_id`,`i_ip`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_members`;
+
+CREATE TABLE `ocp_f_members` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `m_username` varchar(80) NOT NULL,
+  `m_pass_hash_salted` varchar(255) NOT NULL,
+  `m_pass_salt` varchar(255) NOT NULL,
+  `m_theme` varchar(80) NOT NULL,
+  `m_avatar_url` varchar(255) NOT NULL,
+  `m_validated` tinyint(1) NOT NULL,
+  `m_validated_email_confirm_code` varchar(255) NOT NULL,
+  `m_cache_num_posts` int(11) NOT NULL,
+  `m_cache_warnings` int(11) NOT NULL,
+  `m_join_time` int(10) unsigned NOT NULL,
+  `m_timezone_offset` varchar(255) NOT NULL,
+  `m_primary_group` int(11) NOT NULL,
+  `m_last_visit_time` int(10) unsigned NOT NULL,
+  `m_last_submit_time` int(10) unsigned NOT NULL,
+  `m_signature` int(10) unsigned NOT NULL,
+  `m_is_perm_banned` tinyint(1) NOT NULL,
+  `m_preview_posts` tinyint(1) NOT NULL,
+  `m_dob_day` int(11) DEFAULT NULL,
+  `m_dob_month` int(11) DEFAULT NULL,
+  `m_dob_year` int(11) DEFAULT NULL,
+  `m_reveal_age` tinyint(1) NOT NULL,
+  `m_email_address` varchar(255) NOT NULL,
+  `m_title` varchar(255) NOT NULL,
+  `m_photo_url` varchar(255) NOT NULL,
+  `m_photo_thumb_url` varchar(255) NOT NULL,
+  `m_views_signatures` tinyint(1) NOT NULL,
+  `m_auto_monitor_contrib_content` tinyint(1) NOT NULL,
+  `m_language` varchar(80) NOT NULL,
+  `m_ip_address` varchar(40) NOT NULL,
+  `m_allow_emails` tinyint(1) NOT NULL,
+  `m_allow_emails_from_staff` tinyint(1) NOT NULL,
+  `m_notes` longtext NOT NULL,
+  `m_zone_wide` tinyint(1) NOT NULL,
+  `m_highlighted_name` tinyint(1) NOT NULL,
+  `m_pt_allow` varchar(255) NOT NULL,
+  `m_pt_rules_text` int(10) unsigned NOT NULL,
+  `m_max_email_attach_size_mb` int(11) NOT NULL,
+  `m_password_change_code` varchar(255) NOT NULL,
+  `m_password_compat_scheme` varchar(80) NOT NULL,
+  `m_on_probation_until` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_list` (`m_username`),
+  KEY `menail` (`m_email_address`),
+  KEY `external_auth_lookup` (`m_pass_hash_salted`),
+  KEY `sort_post_count` (`m_cache_num_posts`),
+  KEY `m_join_time` (`m_join_time`),
+  KEY `whos_validated` (`m_validated`),
+  KEY `birthdays` (`m_dob_day`,`m_dob_month`),
+  KEY `ftjoin_msig` (`m_signature`),
+  KEY `primary_group` (`m_primary_group`),
+  KEY `avatar_url` (`m_avatar_url`),
+  FULLTEXT KEY `search_user` (`m_username`)
+) ENGINE=MyISAM AUTO_INCREMENT=4;
+
+insert into `ocp_f_members` values('1','Guest','226f830908986be7514d75d37bb428ce','4f661710b40d1','','','1','','0','0','1332090640','UTC','1','1332090640','1332090640','67','0','1',null,null,null,'1','','','','','1','0','','192.168.1.64','1','1','','1','0','*','68','5','','',null),
+ ('2','admin','cbc2d72ac60f321e7fdcd08ab5adb37c','4f661710bbca2','','themes/default/images/ocf_default_avatars/default_set/cool_flare.png','1','','0','0','1332090640','UTC','2','1332090640','1332090640','75','0','0',null,null,null,'1','','','','','1','1','','192.168.1.64','1','1','','1','0','*','76','5','','',null),
+ ('3','test','76b5c7fc1ef42a0eab75edbe496b5010','4f661710bcc01','','','1','','0','0','1332090640','UTC','9','1332090640','1332090640','83','0','0',null,null,null,'1','','','','','1','0','','192.168.1.64','1','1','','1','0','*','84','5','','',null);
+
+DROP TABLE IF EXISTS `ocp_f_moderator_logs`;
+
+CREATE TABLE `ocp_f_moderator_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_the_type` varchar(80) NOT NULL,
+  `l_param_a` varchar(255) NOT NULL,
+  `l_param_b` varchar(255) NOT NULL,
+  `l_date_and_time` int(10) unsigned NOT NULL,
+  `l_reason` longtext NOT NULL,
+  `l_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_multi_moderations`;
+
+CREATE TABLE `ocp_f_multi_moderations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mm_name` int(10) unsigned NOT NULL,
+  `mm_post_text` longtext NOT NULL,
+  `mm_move_to` int(11) DEFAULT NULL,
+  `mm_pin_state` tinyint(1) DEFAULT NULL,
+  `mm_sink_state` tinyint(1) DEFAULT NULL,
+  `mm_open_state` tinyint(1) DEFAULT NULL,
+  `mm_forum_multi_code` varchar(255) NOT NULL,
+  `mm_title_suffix` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`,`mm_name`)
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_f_multi_moderations` values('1','66','','4','0','0','0','*','');
+
+DROP TABLE IF EXISTS `ocp_f_poll_answers`;
+
+CREATE TABLE `ocp_f_poll_answers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_poll_id` int(11) NOT NULL,
+  `pa_answer` varchar(255) NOT NULL,
+  `pa_cache_num_votes` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_poll_votes`;
+
+CREATE TABLE `ocp_f_poll_votes` (
+  `pv_poll_id` int(11) NOT NULL,
+  `pv_member_id` int(11) NOT NULL,
+  `pv_answer_id` int(11) NOT NULL,
+  PRIMARY KEY (`pv_poll_id`,`pv_member_id`,`pv_answer_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_polls`;
+
+CREATE TABLE `ocp_f_polls` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `po_question` varchar(255) NOT NULL,
+  `po_cache_total_votes` int(11) NOT NULL,
+  `po_is_private` tinyint(1) NOT NULL,
+  `po_is_open` tinyint(1) NOT NULL,
+  `po_minimum_selections` int(11) NOT NULL,
+  `po_maximum_selections` int(11) NOT NULL,
+  `po_requires_reply` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_post_history`;
+
+CREATE TABLE `ocp_f_post_history` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `h_create_date_and_time` int(10) unsigned NOT NULL,
+  `h_action_date_and_time` int(10) unsigned NOT NULL,
+  `h_owner_member_id` int(11) NOT NULL,
+  `h_alterer_member_id` int(11) NOT NULL,
+  `h_post_id` int(11) NOT NULL,
+  `h_topic_id` int(11) NOT NULL,
+  `h_before` longtext NOT NULL,
+  `h_action` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `phistorylookup` (`h_post_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_post_templates`;
+
+CREATE TABLE `ocp_f_post_templates` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `t_title` varchar(255) NOT NULL,
+  `t_text` longtext NOT NULL,
+  `t_forum_multi_code` varchar(255) NOT NULL,
+  `t_use_default_forums` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4;
+
+insert into `ocp_f_post_templates` values('1','Bug report','Version: ?\nSupport software environment (operating system, etc.):\n?\n\nAssigned to: ?\nSeverity: ?\nExample URL: ?\nDescription:\n?\n\nSteps for reproduction:\n?\n\n','','0'),
+ ('2','Task','Assigned to: ?\nPriority/Timescale: ?\nDescription:\n?\n\n','','0'),
+ ('3','Fault','Version: ?\nAssigned to: ?\nSeverity/Timescale: ?\nDescription:\n?\n\nSteps for reproduction:\n?\n\n','','0');
+
+DROP TABLE IF EXISTS `ocp_f_posts`;
+
+CREATE TABLE `ocp_f_posts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `p_title` varchar(255) NOT NULL,
+  `p_post` int(10) unsigned NOT NULL,
+  `p_ip_address` varchar(40) NOT NULL,
+  `p_time` int(10) unsigned NOT NULL,
+  `p_poster` int(11) NOT NULL,
+  `p_intended_solely_for` int(11) DEFAULT NULL,
+  `p_poster_name_if_guest` varchar(80) NOT NULL,
+  `p_validated` tinyint(1) NOT NULL,
+  `p_topic_id` int(11) NOT NULL,
+  `p_cache_forum_id` int(11) DEFAULT NULL,
+  `p_last_edit_time` int(10) unsigned DEFAULT NULL,
+  `p_last_edit_by` int(11) DEFAULT NULL,
+  `p_is_emphasised` tinyint(1) NOT NULL,
+  `p_skip_sig` tinyint(1) NOT NULL,
+  `p_parent_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `p_validated` (`p_validated`),
+  KEY `in_topic` (`p_topic_id`,`p_time`,`id`),
+  KEY `post_order_time` (`p_time`,`id`),
+  KEY `p_last_edit_time` (`p_last_edit_time`),
+  KEY `posts_by` (`p_poster`),
+  KEY `find_pp` (`p_intended_solely_for`),
+  KEY `search_join` (`p_post`),
+  KEY `postsinforum` (`p_cache_forum_id`),
+  KEY `deletebyip` (`p_ip_address`),
+  FULLTEXT KEY `p_title` (`p_title`)
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_f_posts` values('1','Welcome to the forums','91','127.0.0.1','1332090641','1',null,'System','1','1','7',null,null,'0','0',null);
+
+DROP TABLE IF EXISTS `ocp_f_read_logs`;
+
+CREATE TABLE `ocp_f_read_logs` (
+  `l_member_id` int(11) NOT NULL,
+  `l_topic_id` int(11) NOT NULL,
+  `l_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`l_member_id`,`l_topic_id`),
+  KEY `erase_old_read_logs` (`l_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_saved_warnings`;
+
+CREATE TABLE `ocp_f_saved_warnings` (
+  `s_title` varchar(255) NOT NULL,
+  `s_explanation` longtext NOT NULL,
+  `s_message` longtext NOT NULL,
+  PRIMARY KEY (`s_title`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_special_pt_access`;
+
+CREATE TABLE `ocp_f_special_pt_access` (
+  `s_member_id` int(11) NOT NULL,
+  `s_topic_id` int(11) NOT NULL,
+  PRIMARY KEY (`s_member_id`,`s_topic_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_topics`;
+
+CREATE TABLE `ocp_f_topics` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `t_pinned` tinyint(1) NOT NULL,
+  `t_sunk` tinyint(1) NOT NULL,
+  `t_cascading` tinyint(1) NOT NULL,
+  `t_forum_id` int(11) DEFAULT NULL,
+  `t_pt_from` int(11) DEFAULT NULL,
+  `t_pt_to` int(11) DEFAULT NULL,
+  `t_pt_from_category` varchar(255) NOT NULL,
+  `t_pt_to_category` varchar(255) NOT NULL,
+  `t_description` varchar(255) NOT NULL,
+  `t_description_link` varchar(255) NOT NULL,
+  `t_emoticon` varchar(255) NOT NULL,
+  `t_num_views` int(11) NOT NULL,
+  `t_validated` tinyint(1) NOT NULL,
+  `t_is_open` tinyint(1) NOT NULL,
+  `t_poll_id` int(11) DEFAULT NULL,
+  `t_cache_first_post_id` int(11) DEFAULT NULL,
+  `t_cache_first_time` int(10) unsigned DEFAULT NULL,
+  `t_cache_first_title` varchar(255) NOT NULL,
+  `t_cache_first_post` int(10) unsigned DEFAULT NULL,
+  `t_cache_first_username` varchar(80) NOT NULL,
+  `t_cache_first_member_id` int(11) DEFAULT NULL,
+  `t_cache_last_post_id` int(11) DEFAULT NULL,
+  `t_cache_last_time` int(10) unsigned DEFAULT NULL,
+  `t_cache_last_title` varchar(255) NOT NULL,
+  `t_cache_last_username` varchar(80) NOT NULL,
+  `t_cache_last_member_id` int(11) DEFAULT NULL,
+  `t_cache_num_posts` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `t_num_views` (`t_num_views`),
+  KEY `t_pt_to` (`t_pt_to`),
+  KEY `t_pt_from` (`t_pt_from`),
+  KEY `t_validated` (`t_validated`),
+  KEY `in_forum` (`t_forum_id`),
+  KEY `topic_order_time` (`t_cache_last_time`),
+  KEY `topic_order_time_2` (`t_cache_first_time`),
+  KEY `descriptionsearch` (`t_description`),
+  KEY `forumlayer` (`t_cache_first_title`),
+  KEY `t_cascading` (`t_cascading`),
+  KEY `t_cascading_or_forum` (`t_cascading`,`t_forum_id`),
+  KEY `topic_order` (`t_cascading`,`t_pinned`,`t_cache_last_time`),
+  KEY `topic_order_2` (`t_forum_id`,`t_cascading`,`t_pinned`,`t_sunk`,`t_cache_last_time`),
+  KEY `topic_order_3` (`t_forum_id`,`t_cascading`,`t_pinned`,`t_cache_last_time`),
+  KEY `ownedtopics` (`t_cache_first_member_id`),
+  FULLTEXT KEY `t_description` (`t_description`)
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_f_topics` values('1','0','0','0','7',null,null,'','','','','','0','1','1',null,'1','1332090641','Welcome to the forums','91','System','1','1','1332090641','Welcome to the forums','System','1','1');
+
+DROP TABLE IF EXISTS `ocp_f_usergroup_subs`;
+
+CREATE TABLE `ocp_f_usergroup_subs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `s_title` int(10) unsigned NOT NULL,
+  `s_description` int(10) unsigned NOT NULL,
+  `s_cost` varchar(255) NOT NULL,
+  `s_length` int(11) NOT NULL,
+  `s_length_units` varchar(255) NOT NULL,
+  `s_group_id` int(11) NOT NULL,
+  `s_enabled` tinyint(1) NOT NULL,
+  `s_mail_start` int(10) unsigned NOT NULL,
+  `s_mail_end` int(10) unsigned NOT NULL,
+  `s_mail_uhoh` int(10) unsigned NOT NULL,
+  `s_uses_primary` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_warnings`;
+
+CREATE TABLE `ocp_f_warnings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `w_member_id` int(11) NOT NULL,
+  `w_time` int(10) unsigned NOT NULL,
+  `w_explanation` longtext NOT NULL,
+  `w_by` int(11) NOT NULL,
+  `w_is_warning` tinyint(1) NOT NULL,
+  `p_silence_from_topic` int(11) DEFAULT NULL,
+  `p_silence_from_forum` int(11) DEFAULT NULL,
+  `p_probation` int(11) NOT NULL,
+  `p_banned_ip` varchar(40) NOT NULL,
+  `p_charged_points` int(11) NOT NULL,
+  `p_banned_member` tinyint(1) NOT NULL,
+  `p_changed_usergroup_from` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `warningsmemberid` (`w_member_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_f_welcome_emails`;
+
+CREATE TABLE `ocp_f_welcome_emails` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `w_name` varchar(255) NOT NULL,
+  `w_subject` int(10) unsigned NOT NULL,
+  `w_text` int(10) unsigned NOT NULL,
+  `w_send_time` int(11) NOT NULL,
+  `w_newsletter` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_feature_lifetime_monitor`;
+
+CREATE TABLE `ocp_feature_lifetime_monitor` (
+  `content_id` varchar(80) NOT NULL,
+  `block_cache_id` varchar(80) NOT NULL,
+  `run_period` int(11) NOT NULL,
+  `running_now` tinyint(1) NOT NULL,
+  `last_update` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`content_id`,`block_cache_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_filedump`;
+
+CREATE TABLE `ocp_filedump` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `description` int(10) unsigned NOT NULL,
+  `the_member` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_galleries`;
+
+CREATE TABLE `ocp_galleries` (
+  `name` varchar(80) NOT NULL,
+  `description` int(10) unsigned NOT NULL,
+  `teaser` int(10) unsigned NOT NULL,
+  `fullname` int(10) unsigned NOT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `rep_image` varchar(255) NOT NULL,
+  `parent_id` varchar(80) NOT NULL,
+  `watermark_top_left` varchar(255) NOT NULL,
+  `watermark_top_right` varchar(255) NOT NULL,
+  `watermark_bottom_left` varchar(255) NOT NULL,
+  `watermark_bottom_right` varchar(255) NOT NULL,
+  `accept_images` tinyint(1) NOT NULL,
+  `accept_videos` tinyint(1) NOT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `notes` longtext NOT NULL,
+  `is_member_synched` tinyint(1) NOT NULL,
+  `flow_mode_interface` tinyint(1) NOT NULL,
+  `gallery_views` int(11) NOT NULL,
+  `g_owner` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`),
+  KEY `watermark_top_left` (`watermark_top_left`),
+  KEY `watermark_top_right` (`watermark_top_right`),
+  KEY `watermark_bottom_left` (`watermark_bottom_left`),
+  KEY `watermark_bottom_right` (`watermark_bottom_right`),
+  KEY `gadd_date` (`add_date`),
+  KEY `parent_id` (`parent_id`),
+  KEY `ftjoin_gfullname` (`fullname`),
+  KEY `ftjoin_gdescrip` (`description`)
+) ENGINE=MyISAM;
+
+insert into `ocp_galleries` values('root','307','308','309','1332090696','','','','','','','1','1','1','1','','0','1','0',null);
+
+DROP TABLE IF EXISTS `ocp_gifts`;
+
+CREATE TABLE `ocp_gifts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `amount` int(11) NOT NULL,
+  `gift_from` int(11) NOT NULL,
+  `gift_to` int(11) NOT NULL,
+  `reason` int(10) unsigned NOT NULL,
+  `anonymous` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `giftsgiven` (`gift_from`),
+  KEY `giftsreceived` (`gift_to`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_group_category_access`;
+
+CREATE TABLE `ocp_group_category_access` (
+  `module_the_name` varchar(80) NOT NULL,
+  `category_name` varchar(80) NOT NULL,
   `group_id` int(11) NOT NULL,
   PRIMARY KEY (`module_the_name`,`category_name`,`group_id`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_group_category_access` values('banners','advertise_here','1'),
+insert into `ocp_group_category_access` values('banners','advertise_here','1'),
  ('banners','advertise_here','2'),
  ('banners','advertise_here','3'),
  ('banners','advertise_here','4'),
@@ -2188,16 +3996,6 @@ insert into `ocp7_group_category_access` values('banners','advertise_here','1'),
  ('banners','donate','8'),
  ('banners','donate','9'),
  ('banners','donate','10'),
- ('banners','hosting','1'),
- ('banners','hosting','2'),
- ('banners','hosting','3'),
- ('banners','hosting','4'),
- ('banners','hosting','5'),
- ('banners','hosting','6'),
- ('banners','hosting','7'),
- ('banners','hosting','8'),
- ('banners','hosting','9'),
- ('banners','hosting','10'),
  ('catalogues_catalogue','faqs','1'),
  ('catalogues_catalogue','faqs','2'),
  ('catalogues_catalogue','faqs','3'),
@@ -2347,35 +4145,25 @@ insert into `ocp7_group_category_access` values('banners','advertise_here','1'),
  ('forums','2','8'),
  ('forums','2','9'),
  ('forums','2','10'),
- ('forums','3','1'),
  ('forums','3','2'),
  ('forums','3','3'),
- ('forums','3','4'),
- ('forums','3','5'),
- ('forums','3','6'),
- ('forums','3','7'),
- ('forums','3','8'),
- ('forums','3','9'),
- ('forums','3','10'),
  ('forums','4','2'),
  ('forums','4','3'),
+ ('forums','5','1'),
  ('forums','5','2'),
  ('forums','5','3'),
- ('forums','6','1'),
+ ('forums','5','4'),
+ ('forums','5','5'),
+ ('forums','5','6'),
+ ('forums','5','7'),
+ ('forums','5','8'),
+ ('forums','5','9'),
+ ('forums','5','10'),
  ('forums','6','2'),
  ('forums','6','3'),
- ('forums','6','4'),
- ('forums','6','5'),
- ('forums','6','6'),
- ('forums','6','7'),
- ('forums','6','8'),
- ('forums','6','9'),
- ('forums','6','10'),
  ('forums','7','2'),
  ('forums','7','3'),
- ('forums','8','2'),
  ('forums','8','3'),
- ('forums','9','3'),
  ('galleries','root','1'),
  ('galleries','root','2'),
  ('galleries','root','3'),
@@ -2386,16 +4174,6 @@ insert into `ocp7_group_category_access` values('banners','advertise_here','1'),
  ('galleries','root','8'),
  ('galleries','root','9'),
  ('galleries','root','10'),
- ('news','0','1'),
- ('news','0','2'),
- ('news','0','3'),
- ('news','0','4'),
- ('news','0','5'),
- ('news','0','6'),
- ('news','0','7'),
- ('news','0','8'),
- ('news','0','9'),
- ('news','0','10'),
  ('news','1','1'),
  ('news','1','2'),
  ('news','1','3'),
@@ -2456,6 +4234,16 @@ insert into `ocp7_group_category_access` values('banners','advertise_here','1'),
  ('news','6','8'),
  ('news','6','9'),
  ('news','6','10'),
+ ('news','7','1'),
+ ('news','7','2'),
+ ('news','7','3'),
+ ('news','7','4'),
+ ('news','7','5'),
+ ('news','7','6'),
+ ('news','7','7'),
+ ('news','7','8'),
+ ('news','7','9'),
+ ('news','7','10'),
  ('seedy_page','1','1'),
  ('seedy_page','1','2'),
  ('seedy_page','1','3'),
@@ -2487,19 +4275,152 @@ insert into `ocp7_group_category_access` values('banners','advertise_here','1'),
  ('tickets','Other','9'),
  ('tickets','Other','10');
 
-DROP TABLE IF EXISTS `ocp7_gsp`;
+DROP TABLE IF EXISTS `ocp_group_page_access`;
 
-CREATE TABLE `ocp7_gsp` (
+CREATE TABLE `ocp_group_page_access` (
+  `page_name` varchar(80) NOT NULL,
+  `zone_name` varchar(80) NOT NULL,
   `group_id` int(11) NOT NULL,
-  `specific_permission` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `module_the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `category_name` varchar(80) COLLATE latin1_bin NOT NULL,
+  PRIMARY KEY (`page_name`,`zone_name`,`group_id`)
+) ENGINE=MyISAM;
+
+insert into `ocp_group_page_access` values('admin_addons','adminzone','1'),
+ ('admin_addons','adminzone','2'),
+ ('admin_addons','adminzone','3'),
+ ('admin_addons','adminzone','4'),
+ ('admin_addons','adminzone','5'),
+ ('admin_addons','adminzone','6'),
+ ('admin_addons','adminzone','7'),
+ ('admin_addons','adminzone','8'),
+ ('admin_addons','adminzone','9'),
+ ('admin_addons','adminzone','10'),
+ ('admin_emaillog','adminzone','1'),
+ ('admin_emaillog','adminzone','2'),
+ ('admin_emaillog','adminzone','3'),
+ ('admin_emaillog','adminzone','4'),
+ ('admin_emaillog','adminzone','5'),
+ ('admin_emaillog','adminzone','6'),
+ ('admin_emaillog','adminzone','7'),
+ ('admin_emaillog','adminzone','8'),
+ ('admin_emaillog','adminzone','9'),
+ ('admin_emaillog','adminzone','10'),
+ ('admin_import','adminzone','1'),
+ ('admin_import','adminzone','2'),
+ ('admin_import','adminzone','3'),
+ ('admin_import','adminzone','4'),
+ ('admin_import','adminzone','5'),
+ ('admin_import','adminzone','6'),
+ ('admin_import','adminzone','7'),
+ ('admin_import','adminzone','8'),
+ ('admin_import','adminzone','9'),
+ ('admin_import','adminzone','10'),
+ ('admin_occle','adminzone','1'),
+ ('admin_occle','adminzone','2'),
+ ('admin_occle','adminzone','3'),
+ ('admin_occle','adminzone','4'),
+ ('admin_occle','adminzone','5'),
+ ('admin_occle','adminzone','6'),
+ ('admin_occle','adminzone','7'),
+ ('admin_occle','adminzone','8'),
+ ('admin_occle','adminzone','9'),
+ ('admin_occle','adminzone','10'),
+ ('admin_redirects','adminzone','1'),
+ ('admin_redirects','adminzone','2'),
+ ('admin_redirects','adminzone','3'),
+ ('admin_redirects','adminzone','4'),
+ ('admin_redirects','adminzone','5'),
+ ('admin_redirects','adminzone','6'),
+ ('admin_redirects','adminzone','7'),
+ ('admin_redirects','adminzone','8'),
+ ('admin_redirects','adminzone','9'),
+ ('admin_redirects','adminzone','10'),
+ ('admin_staff','adminzone','1'),
+ ('admin_staff','adminzone','2'),
+ ('admin_staff','adminzone','3'),
+ ('admin_staff','adminzone','4'),
+ ('admin_staff','adminzone','5'),
+ ('admin_staff','adminzone','6'),
+ ('admin_staff','adminzone','7'),
+ ('admin_staff','adminzone','8'),
+ ('admin_staff','adminzone','9'),
+ ('admin_staff','adminzone','10'),
+ ('cms_chat','cms','1'),
+ ('cms_chat','cms','2'),
+ ('cms_chat','cms','3'),
+ ('cms_chat','cms','4'),
+ ('cms_chat','cms','5'),
+ ('cms_chat','cms','6'),
+ ('cms_chat','cms','7'),
+ ('cms_chat','cms','8'),
+ ('cms_chat','cms','9'),
+ ('cms_chat','cms','10');
+
+DROP TABLE IF EXISTS `ocp_group_zone_access`;
+
+CREATE TABLE `ocp_group_zone_access` (
+  `zone_name` varchar(80) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`zone_name`,`group_id`),
+  KEY `group_id` (`group_id`)
+) ENGINE=MyISAM;
+
+insert into `ocp_group_zone_access` values('','1'),
+ ('','2'),
+ ('','3'),
+ ('','4'),
+ ('','5'),
+ ('','6'),
+ ('','7'),
+ ('','8'),
+ ('','9'),
+ ('','10'),
+ ('adminzone','2'),
+ ('adminzone','3'),
+ ('cms','2'),
+ ('cms','3'),
+ ('cms','4'),
+ ('cms','5'),
+ ('cms','6'),
+ ('cms','7'),
+ ('cms','8'),
+ ('cms','9'),
+ ('cms','10'),
+ ('collaboration','2'),
+ ('collaboration','3'),
+ ('collaboration','4'),
+ ('forum','1'),
+ ('forum','2'),
+ ('forum','3'),
+ ('forum','4'),
+ ('forum','5'),
+ ('forum','6'),
+ ('forum','7'),
+ ('forum','8'),
+ ('forum','9'),
+ ('forum','10'),
+ ('site','2'),
+ ('site','3'),
+ ('site','4'),
+ ('site','5'),
+ ('site','6'),
+ ('site','7'),
+ ('site','8'),
+ ('site','9'),
+ ('site','10');
+
+DROP TABLE IF EXISTS `ocp_gsp`;
+
+CREATE TABLE `ocp_gsp` (
+  `group_id` int(11) NOT NULL,
+  `specific_permission` varchar(80) NOT NULL,
+  `the_page` varchar(80) NOT NULL,
+  `module_the_name` varchar(80) NOT NULL,
+  `category_name` varchar(80) NOT NULL,
   `the_value` tinyint(1) NOT NULL,
   PRIMARY KEY (`group_id`,`specific_permission`,`the_page`,`module_the_name`,`category_name`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_gsp` values('1','submit_lowrange_content','','forums','1','0'),
+insert into `ocp_gsp` values('1','submit_lowrange_content','','forums','1','0'),
  ('1','submit_midrange_content','','forums','1','0'),
  ('2','bypass_validation_lowrange_content','','forums','1','1'),
  ('2','bypass_validation_midrange_content','','forums','1','1'),
@@ -2517,76 +4438,58 @@ insert into `ocp7_gsp` values('1','submit_lowrange_content','','forums','1','0')
  ('9','submit_midrange_content','','forums','1','0'),
  ('10','submit_lowrange_content','','forums','1','0'),
  ('10','submit_midrange_content','','forums','1','0'),
- ('1','submit_lowrange_content','','forums','2','0'),
- ('1','submit_midrange_content','','forums','2','0'),
+ ('1','bypass_validation_lowrange_content','','forums','2','1'),
+ ('1','bypass_validation_midrange_content','','forums','2','1'),
  ('2','bypass_validation_lowrange_content','','forums','2','1'),
  ('2','bypass_validation_midrange_content','','forums','2','1'),
  ('3','bypass_validation_lowrange_content','','forums','2','1'),
  ('3','bypass_validation_midrange_content','','forums','2','1'),
- ('5','submit_lowrange_content','','forums','2','0'),
- ('5','submit_midrange_content','','forums','2','0'),
- ('6','submit_lowrange_content','','forums','2','0'),
- ('6','submit_midrange_content','','forums','2','0'),
- ('7','submit_lowrange_content','','forums','2','0'),
- ('7','submit_midrange_content','','forums','2','0'),
- ('8','submit_lowrange_content','','forums','2','0'),
- ('8','submit_midrange_content','','forums','2','0'),
- ('9','submit_lowrange_content','','forums','2','0'),
- ('9','submit_midrange_content','','forums','2','0'),
- ('10','submit_lowrange_content','','forums','2','0'),
- ('10','submit_midrange_content','','forums','2','0'),
- ('1','bypass_validation_lowrange_content','','forums','3','1'),
- ('1','bypass_validation_midrange_content','','forums','3','1'),
+ ('4','bypass_validation_lowrange_content','','forums','2','1'),
+ ('4','bypass_validation_midrange_content','','forums','2','1'),
+ ('5','bypass_validation_lowrange_content','','forums','2','1'),
+ ('5','bypass_validation_midrange_content','','forums','2','1'),
+ ('6','bypass_validation_lowrange_content','','forums','2','1'),
+ ('6','bypass_validation_midrange_content','','forums','2','1'),
+ ('7','bypass_validation_lowrange_content','','forums','2','1'),
+ ('7','bypass_validation_midrange_content','','forums','2','1'),
+ ('8','bypass_validation_lowrange_content','','forums','2','1'),
+ ('8','bypass_validation_midrange_content','','forums','2','1'),
+ ('9','bypass_validation_lowrange_content','','forums','2','1'),
+ ('9','bypass_validation_midrange_content','','forums','2','1'),
  ('2','bypass_validation_lowrange_content','','forums','3','1'),
  ('2','bypass_validation_midrange_content','','forums','3','1'),
  ('3','bypass_validation_lowrange_content','','forums','3','1'),
  ('3','bypass_validation_midrange_content','','forums','3','1'),
- ('4','bypass_validation_lowrange_content','','forums','3','1'),
- ('4','bypass_validation_midrange_content','','forums','3','1'),
- ('5','bypass_validation_lowrange_content','','forums','3','1'),
- ('5','bypass_validation_midrange_content','','forums','3','1'),
- ('6','bypass_validation_lowrange_content','','forums','3','1'),
- ('6','bypass_validation_midrange_content','','forums','3','1'),
- ('7','bypass_validation_lowrange_content','','forums','3','1'),
- ('7','bypass_validation_midrange_content','','forums','3','1'),
- ('8','bypass_validation_lowrange_content','','forums','3','1'),
- ('8','bypass_validation_midrange_content','','forums','3','1'),
- ('9','bypass_validation_lowrange_content','','forums','3','1'),
- ('9','bypass_validation_midrange_content','','forums','3','1'),
  ('2','bypass_validation_lowrange_content','','forums','4','1'),
  ('2','bypass_validation_midrange_content','','forums','4','1'),
  ('3','bypass_validation_lowrange_content','','forums','4','1'),
  ('3','bypass_validation_midrange_content','','forums','4','1'),
+ ('1','bypass_validation_lowrange_content','','forums','5','1'),
+ ('1','bypass_validation_midrange_content','','forums','5','1'),
  ('2','bypass_validation_lowrange_content','','forums','5','1'),
  ('2','bypass_validation_midrange_content','','forums','5','1'),
  ('3','bypass_validation_lowrange_content','','forums','5','1'),
  ('3','bypass_validation_midrange_content','','forums','5','1'),
- ('1','bypass_validation_lowrange_content','','forums','6','1'),
- ('1','bypass_validation_midrange_content','','forums','6','1'),
+ ('4','bypass_validation_lowrange_content','','forums','5','1'),
+ ('4','bypass_validation_midrange_content','','forums','5','1'),
+ ('5','bypass_validation_lowrange_content','','forums','5','1'),
+ ('5','bypass_validation_midrange_content','','forums','5','1'),
+ ('6','bypass_validation_lowrange_content','','forums','5','1'),
+ ('6','bypass_validation_midrange_content','','forums','5','1'),
+ ('7','bypass_validation_lowrange_content','','forums','5','1'),
+ ('7','bypass_validation_midrange_content','','forums','5','1'),
+ ('8','bypass_validation_lowrange_content','','forums','5','1'),
+ ('8','bypass_validation_midrange_content','','forums','5','1'),
+ ('9','bypass_validation_lowrange_content','','forums','5','1'),
+ ('9','bypass_validation_midrange_content','','forums','5','1'),
  ('2','bypass_validation_lowrange_content','','forums','6','1'),
  ('2','bypass_validation_midrange_content','','forums','6','1'),
  ('3','bypass_validation_lowrange_content','','forums','6','1'),
  ('3','bypass_validation_midrange_content','','forums','6','1'),
- ('4','bypass_validation_lowrange_content','','forums','6','1'),
- ('4','bypass_validation_midrange_content','','forums','6','1'),
- ('5','bypass_validation_lowrange_content','','forums','6','1'),
- ('5','bypass_validation_midrange_content','','forums','6','1'),
- ('6','bypass_validation_lowrange_content','','forums','6','1'),
- ('6','bypass_validation_midrange_content','','forums','6','1'),
- ('7','bypass_validation_lowrange_content','','forums','6','1'),
- ('7','bypass_validation_midrange_content','','forums','6','1'),
- ('8','bypass_validation_lowrange_content','','forums','6','1'),
- ('8','bypass_validation_midrange_content','','forums','6','1'),
- ('9','bypass_validation_lowrange_content','','forums','6','1'),
- ('9','bypass_validation_midrange_content','','forums','6','1'),
  ('2','bypass_validation_lowrange_content','','forums','7','1'),
  ('2','bypass_validation_midrange_content','','forums','7','1'),
  ('3','bypass_validation_lowrange_content','','forums','7','1'),
  ('3','bypass_validation_midrange_content','','forums','7','1'),
- ('2','bypass_validation_lowrange_content','','forums','8','1'),
- ('2','bypass_validation_midrange_content','','forums','8','1'),
- ('3','bypass_validation_lowrange_content','','forums','8','1'),
- ('3','bypass_validation_midrange_content','','forums','8','1'),
  ('1','run_multi_moderations','','','','1'),
  ('2','run_multi_moderations','','','','1'),
  ('3','run_multi_moderations','','','','1'),
@@ -2597,16 +4500,6 @@ insert into `ocp7_gsp` values('1','submit_lowrange_content','','forums','1','0')
  ('8','run_multi_moderations','','','','1'),
  ('9','run_multi_moderations','','','','1'),
  ('10','run_multi_moderations','','','','1'),
- ('1','may_track_forums','','','','1'),
- ('2','may_track_forums','','','','1'),
- ('3','may_track_forums','','','','1'),
- ('4','may_track_forums','','','','1'),
- ('5','may_track_forums','','','','1'),
- ('6','may_track_forums','','','','1'),
- ('7','may_track_forums','','','','1'),
- ('8','may_track_forums','','','','1'),
- ('9','may_track_forums','','','','1'),
- ('10','may_track_forums','','','','1'),
  ('1','use_pt','','','','1'),
  ('2','use_pt','','','','1'),
  ('3','use_pt','','','','1'),
@@ -2708,14 +4601,24 @@ insert into `ocp7_gsp` values('1','submit_lowrange_content','','forums','1','0')
  ('3','show_user_browsing','','','','1'),
  ('3','see_hidden_groups','','','','1'),
  ('3','pt_anyone','','','','1'),
+ ('1','reuse_others_attachments','','','','1'),
  ('2','reuse_others_attachments','','','','1'),
  ('3','reuse_others_attachments','','','','1'),
+ ('4','reuse_others_attachments','','','','1'),
+ ('5','reuse_others_attachments','','','','1'),
+ ('6','reuse_others_attachments','','','','1'),
+ ('7','reuse_others_attachments','','','','1'),
+ ('8','reuse_others_attachments','','','','1'),
+ ('9','reuse_others_attachments','','','','1'),
+ ('10','reuse_others_attachments','','','','1'),
  ('2','use_sms','','','','1'),
  ('3','use_sms','','','','1'),
  ('2','sms_higher_limit','','','','1'),
  ('3','sms_higher_limit','','','','1'),
  ('2','sms_higher_trigger_limit','','','','1'),
  ('3','sms_higher_trigger_limit','','','','1'),
+ ('2','may_enable_staff_notifications','','','','1'),
+ ('3','may_enable_staff_notifications','','','','1'),
  ('2','draw_to_server','','','','1'),
  ('3','draw_to_server','','','','1'),
  ('2','see_unvalidated','','','','1'),
@@ -2938,8 +4841,8 @@ insert into `ocp7_gsp` values('1','submit_lowrange_content','','forums','1','0')
  ('3','delete_own_cat_lowrange_content','','','','1'),
  ('2','mass_import','','','','1'),
  ('3','mass_import','','','','1'),
- ('3','bypass_validation_lowrange_content','','forums','9','1'),
- ('3','bypass_validation_midrange_content','','forums','9','1'),
+ ('3','bypass_validation_lowrange_content','','forums','8','1'),
+ ('3','bypass_validation_midrange_content','','forums','8','1'),
  ('2','full_banner_setup','','','','1'),
  ('3','full_banner_setup','','','','1'),
  ('2','view_anyones_banner_stats','','','','1'),
@@ -3083,28 +4986,387 @@ insert into `ocp7_gsp` values('1','submit_lowrange_content','','forums','1','0')
  ('2','delete_anything_filedump','','','','1'),
  ('3','delete_anything_filedump','','','','1');
 
-DROP TABLE IF EXISTS `ocp7_https_pages`;
+DROP TABLE IF EXISTS `ocp_hackattack`;
 
-CREATE TABLE `ocp7_https_pages` (
-  `https_page_name` varchar(80) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_hackattack` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL,
+  `data_post` longtext NOT NULL,
+  `user_agent` varchar(255) NOT NULL,
+  `referer` varchar(255) NOT NULL,
+  `user_os` varchar(255) NOT NULL,
+  `the_user` int(11) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `reason` varchar(80) NOT NULL,
+  `reason_param_a` varchar(255) NOT NULL,
+  `reason_param_b` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `otherhacksby` (`ip`),
+  KEY `h_date_and_time` (`date_and_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_https_pages`;
+
+CREATE TABLE `ocp_https_pages` (
+  `https_page_name` varchar(80) NOT NULL,
   PRIMARY KEY (`https_page_name`)
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_modules`;
+DROP TABLE IF EXISTS `ocp_images`;
 
-CREATE TABLE `ocp7_modules` (
-  `module_the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `module_author` varchar(80) COLLATE latin1_bin NOT NULL,
-  `module_organisation` varchar(80) COLLATE latin1_bin NOT NULL,
-  `module_hacked_by` varchar(80) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_images` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cat` varchar(80) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `thumb_url` varchar(255) NOT NULL,
+  `comments` int(10) unsigned NOT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `allow_trackbacks` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  `submitter` int(11) NOT NULL,
+  `validated` tinyint(1) NOT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `edit_date` int(10) unsigned DEFAULT NULL,
+  `image_views` int(11) NOT NULL,
+  `title` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `image_views` (`image_views`),
+  KEY `category_list` (`cat`),
+  KEY `i_validated` (`validated`),
+  KEY `xis` (`submitter`),
+  KEY `iadd_date` (`add_date`),
+  KEY `ftjoin_icomments` (`comments`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_import_id_remap`;
+
+CREATE TABLE `ocp_import_id_remap` (
+  `id_old` varchar(80) NOT NULL,
+  `id_new` int(11) NOT NULL,
+  `id_type` varchar(80) NOT NULL,
+  `id_session` int(11) NOT NULL,
+  PRIMARY KEY (`id_old`,`id_type`,`id_session`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_import_parts_done`;
+
+CREATE TABLE `ocp_import_parts_done` (
+  `imp_id` varchar(255) NOT NULL,
+  `imp_session` int(11) NOT NULL,
+  PRIMARY KEY (`imp_id`,`imp_session`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_import_session`;
+
+CREATE TABLE `ocp_import_session` (
+  `imp_old_base_dir` varchar(255) NOT NULL,
+  `imp_db_name` varchar(80) NOT NULL,
+  `imp_db_user` varchar(80) NOT NULL,
+  `imp_hook` varchar(80) NOT NULL,
+  `imp_db_table_prefix` varchar(80) NOT NULL,
+  `imp_refresh_time` int(11) NOT NULL,
+  `imp_session` int(11) NOT NULL,
+  PRIMARY KEY (`imp_session`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_incoming_uploads`;
+
+CREATE TABLE `ocp_incoming_uploads` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `i_submitter` int(11) NOT NULL,
+  `i_date_and_time` int(10) unsigned NOT NULL,
+  `i_orig_filename` varchar(255) NOT NULL,
+  `i_save_url` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_invoices`;
+
+CREATE TABLE `ocp_invoices` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `i_type_code` varchar(80) NOT NULL,
+  `i_member_id` int(11) NOT NULL,
+  `i_state` varchar(80) NOT NULL,
+  `i_amount` varchar(255) NOT NULL,
+  `i_special` varchar(255) NOT NULL,
+  `i_time` int(10) unsigned NOT NULL,
+  `i_note` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_iotd`;
+
+CREATE TABLE `ocp_iotd` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL,
+  `i_title` int(10) unsigned NOT NULL,
+  `caption` int(10) unsigned NOT NULL,
+  `thumb_url` varchar(255) NOT NULL,
+  `is_current` tinyint(1) NOT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `allow_trackbacks` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  `used` tinyint(1) NOT NULL,
+  `date_and_time` int(10) unsigned DEFAULT NULL,
+  `iotd_views` int(11) NOT NULL,
+  `submitter` int(11) NOT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `edit_date` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `iotd_views` (`iotd_views`),
+  KEY `get_current` (`is_current`),
+  KEY `ios` (`submitter`),
+  KEY `iadd_date` (`add_date`),
+  KEY `date_and_time` (`date_and_time`),
+  KEY `ftjoin_icap` (`caption`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_ip_country`;
+
+CREATE TABLE `ocp_ip_country` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `begin_num` int(10) unsigned NOT NULL,
+  `end_num` int(10) unsigned NOT NULL,
+  `country` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_leader_board`;
+
+CREATE TABLE `ocp_leader_board` (
+  `lb_member` int(11) NOT NULL,
+  `lb_points` int(11) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`lb_member`,`date_and_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_link_tracker`;
+
+CREATE TABLE `ocp_link_tracker` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_date_and_time` int(10) unsigned NOT NULL,
+  `c_member_id` int(11) NOT NULL,
+  `c_ip_address` varchar(40) NOT NULL,
+  `c_url` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_logged_mail_messages`;
+
+CREATE TABLE `ocp_logged_mail_messages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `m_subject` longtext NOT NULL,
+  `m_message` longtext NOT NULL,
+  `m_to_email` longtext NOT NULL,
+  `m_to_name` longtext NOT NULL,
+  `m_from_email` varchar(255) NOT NULL,
+  `m_from_name` varchar(255) NOT NULL,
+  `m_priority` tinyint(4) NOT NULL,
+  `m_attachments` longtext NOT NULL,
+  `m_no_cc` tinyint(1) NOT NULL,
+  `m_as` int(11) NOT NULL,
+  `m_as_admin` tinyint(1) NOT NULL,
+  `m_in_html` tinyint(1) NOT NULL,
+  `m_date_and_time` int(10) unsigned NOT NULL,
+  `m_member_id` int(11) NOT NULL,
+  `m_url` longtext NOT NULL,
+  `m_queued` tinyint(1) NOT NULL,
+  `m_template` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `recentmessages` (`m_date_and_time`),
+  KEY `queued` (`m_queued`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_long_values`;
+
+CREATE TABLE `ocp_long_values` (
+  `the_name` varchar(80) NOT NULL,
+  `the_value` longtext NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`the_name`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_match_key_messages`;
+
+CREATE TABLE `ocp_match_key_messages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `k_message` int(10) unsigned NOT NULL,
+  `k_match_key` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_member_category_access`;
+
+CREATE TABLE `ocp_member_category_access` (
+  `active_until` int(10) unsigned NOT NULL,
+  `module_the_name` varchar(80) NOT NULL,
+  `category_name` varchar(80) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  PRIMARY KEY (`active_until`,`module_the_name`,`category_name`,`member_id`),
+  KEY `mcaname` (`module_the_name`,`category_name`),
+  KEY `mcamember_id` (`member_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_member_page_access`;
+
+CREATE TABLE `ocp_member_page_access` (
+  `active_until` int(10) unsigned NOT NULL,
+  `page_name` varchar(80) NOT NULL,
+  `zone_name` varchar(80) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  PRIMARY KEY (`active_until`,`page_name`,`zone_name`,`member_id`),
+  KEY `mzaname` (`page_name`,`zone_name`),
+  KEY `mzamember_id` (`member_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_member_tracking`;
+
+CREATE TABLE `ocp_member_tracking` (
+  `mt_member_id` int(11) NOT NULL,
+  `mt_cache_username` varchar(80) NOT NULL,
+  `mt_time` int(10) unsigned NOT NULL,
+  `mt_page` varchar(80) NOT NULL,
+  `mt_type` varchar(80) NOT NULL,
+  `mt_id` varchar(80) NOT NULL,
+  PRIMARY KEY (`mt_member_id`,`mt_time`,`mt_page`,`mt_type`,`mt_id`),
+  KEY `mt_page` (`mt_page`),
+  KEY `mt_id` (`mt_page`,`mt_id`,`mt_type`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_member_zone_access`;
+
+CREATE TABLE `ocp_member_zone_access` (
+  `active_until` int(10) unsigned NOT NULL,
+  `zone_name` varchar(80) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  PRIMARY KEY (`active_until`,`zone_name`,`member_id`),
+  KEY `mzazone_name` (`zone_name`),
+  KEY `mzamember_id` (`member_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_menu_items`;
+
+CREATE TABLE `ocp_menu_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `i_menu` varchar(80) NOT NULL,
+  `i_order` int(11) NOT NULL,
+  `i_parent` int(11) DEFAULT NULL,
+  `i_caption` int(10) unsigned NOT NULL,
+  `i_caption_long` int(10) unsigned NOT NULL,
+  `i_url` varchar(255) NOT NULL,
+  `i_check_permissions` tinyint(1) NOT NULL,
+  `i_expanded` tinyint(1) NOT NULL,
+  `i_new_window` tinyint(1) NOT NULL,
+  `i_page_only` varchar(80) NOT NULL,
+  `i_theme_img_code` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `menu_extraction` (`i_menu`)
+) ENGINE=MyISAM AUTO_INCREMENT=56;
+
+insert into `ocp_menu_items` values('1','root_website','0',null,'100','101',':','0','0','0','',''),
+ ('2','root_website','1',null,'102','103','_SEARCH:rules','0','0','0','',''),
+ ('3','main_features','2',null,'104','105','site:','0','0','0','',''),
+ ('4','main_features','3',null,'106','107','_SEARCH:help','0','0','0','',''),
+ ('5','main_features','4',null,'108','109','_SEARCH:rules','0','0','0','',''),
+ ('6','main_community','5',null,'110','111','_SEARCH:members:type=misc','0','0','0','',''),
+ ('7','main_community','6',null,'112','113','_SEARCH:groups:type=misc','0','0','0','',''),
+ ('8','member_features','7',null,'114','115','_SEARCH:join:type=misc','1','0','0','',''),
+ ('9','member_features','8',null,'116','117','_SEARCH:lostpassword:type=misc','0','0','0','',''),
+ ('10','collab_website','9',null,'118','119','collaboration:','0','0','0','',''),
+ ('11','collab_website','10',null,'120','121','collaboration:about','0','0','0','',''),
+ ('12','forum_features','11',null,'122','123','_SEARCH:rules','0','0','0','',''),
+ ('13','forum_features','12',null,'124','125','_SEARCH:members:type=misc','0','0','0','',''),
+ ('14','zone_menu','13',null,'126','127','site:','1','0','0','',''),
+ ('15','zone_menu','14',null,'128','129','forum:','1','0','0','',''),
+ ('16','zone_menu','15',null,'130','131','collaboration:','1','0','0','',''),
+ ('17','zone_menu','16',null,'132','133','cms:','1','0','0','',''),
+ ('18','zone_menu','17',null,'134','135','adminzone:','1','0','0','',''),
+ ('19','collab_features','0',null,'138','139','_SELF:authors:type=misc','0','0','0','',''),
+ ('20','collab_features','1',null,'140','141','_SEARCH:cms_authors:type=_ad','0','0','1','',''),
+ ('21','main_content','2',null,'164','165','_SEARCH:catalogues:type=index:id=projects','0','0','0','',''),
+ ('22','main_content','3',null,'180','181','_SEARCH:catalogues:type=index:id=modifications','0','0','0','',''),
+ ('23','main_content','4',null,'192','193','_SEARCH:catalogues:type=index:id=hosted','0','0','0','',''),
+ ('24','main_content','5',null,'204','205','_SEARCH:catalogues:type=index:id=links','0','0','0','',''),
+ ('25','main_content','6',null,'216','217','_SEARCH:catalogues:type=index:id=faqs','0','0','0','',''),
+ ('26','main_content','7',null,'248','249','_SEARCH:catalogues:type=index:id=contacts','0','0','0','',''),
+ ('27','collab_features','8',null,'250','251','','0','0','0','',''),
+ ('28','collab_features','9','27','252','253','_SEARCH:catalogues:id=projects:type=index','0','0','1','',''),
+ ('29','collab_features','10','27','254','255','_SEARCH:cms_catalogues:catalogue_name=projects:type=add_entry','0','0','1','',''),
+ ('45','ecommerce_features','26',null,'349','350','_SEARCH:shopping:type=my_orders','0','0','0','',''),
+ ('31','main_content','12',null,'286','287','_SEARCH:cedi:type=misc','0','0','0','',''),
+ ('32','cedi_features','13',null,'288','289','_SEARCH:cedi:type=misc','0','0','0','',''),
+ ('33','cedi_features','14',null,'290','291','_SEARCH:cedi:type=random','0','0','0','',''),
+ ('34','cedi_features','15',null,'292','293','_SEARCH:cedi:type=changes','0','0','0','',''),
+ ('35','cedi_features','16',null,'294','295','_SEARCH:cedi:type=tree','0','0','0','',''),
+ ('36','main_community','17',null,'299','300','_SEARCH:chat:type=misc','0','0','0','',''),
+ ('37','main_content','18',null,'303','304','_SEARCH:downloads:type=misc','0','0','0','',''),
+ ('38','main_content','19',null,'305','306','_SEARCH:galleries:type=misc','0','0','0','',''),
+ ('39','main_community','20',null,'321','322','_SEARCH:pointstore:type=misc','0','0','0','',''),
+ ('40','ecommerce_features','21',null,'339','340','_SEARCH:purchase:type=misc','0','0','0','',''),
+ ('41','ecommerce_features','22',null,'341','342','_SEARCH:invoices:type=misc','0','0','0','',''),
+ ('42','ecommerce_features','23',null,'343','344','_SEARCH:subscriptions:type=misc','0','0','0','',''),
+ ('43','main_website','24',null,'345','346','_SEARCH:quiz:type=misc','0','0','0','',''),
+ ('44','forum_features','25',null,'347','348','_SEARCH:search:type=misc:id=ocf_posts','0','0','0','',''),
+ ('46','main_website','27',null,'365','366','_SEARCH:staff:type=misc','0','0','0','',''),
+ ('47','main_website','28',null,'369','370','_SEARCH:tickets:type=misc','0','0','0','',''),
+ ('48','forum_features','0',null,'371','372','_SEARCH:forumview:type=misc','0','0','0','',''),
+ ('49','forum_features','1',null,'373','374','_SEARCH:forumview:type=pt','0','0','0','',''),
+ ('50','forum_features','2',null,'375','376','_SEARCH:vforums:type=misc','0','0','0','',''),
+ ('51','forum_features','3',null,'377','378','_SEARCH:vforums:type=unread','0','0','0','',''),
+ ('52','forum_features','4',null,'379','380','_SEARCH:vforums:type=recently_read','0','0','0','',''),
+ ('53','collab_features','5',null,'381','382','_SEARCH:filedump:type=misc','0','0','0','',''),
+ ('54','root_website','100',null,'383','384','_SEARCH:recommend:from={$REPLACE,:,%3A,{$SELF_URL&,0,0,0,from=<null>}}','0','0','0','',''),
+ ('55','collab_website','101',null,'385','386','_SEARCH:supermembers','0','0','0','','');
+
+DROP TABLE IF EXISTS `ocp_messages_to_render`;
+
+CREATE TABLE `ocp_messages_to_render` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `r_session_id` int(11) NOT NULL,
+  `r_message` longtext NOT NULL,
+  `r_type` varchar(80) NOT NULL,
+  `r_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `forsession` (`r_session_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_modules`;
+
+CREATE TABLE `ocp_modules` (
+  `module_the_name` varchar(80) NOT NULL,
+  `module_author` varchar(80) NOT NULL,
+  `module_organisation` varchar(80) NOT NULL,
+  `module_hacked_by` varchar(80) NOT NULL,
   `module_hack_version` int(11) DEFAULT NULL,
   `module_version` int(11) NOT NULL,
   PRIMARY KEY (`module_the_name`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_modules` values('admin_permissions','Chris Graham','ocProducts','',null,'6'),
- ('admin_version','Chris Graham','ocProducts','',null,'13'),
+insert into `ocp_modules` values('admin_permissions','Chris Graham','ocProducts','',null,'7'),
+ ('admin_version','Chris Graham','ocProducts','',null,'14'),
  ('admin','Chris Graham','ocProducts','',null,'2'),
  ('admin_actionlog','Chris Graham','ocProducts','',null,'2'),
  ('admin_addons','Chris Graham','ocProducts','',null,'3'),
@@ -3114,13 +5376,13 @@ insert into `ocp7_modules` values('admin_permissions','Chris Graham','ocProducts
  ('admin_bulkupload','Chris Graham','ocProducts','',null,'2'),
  ('admin_chat','Chris Graham','ocProducts','',null,'2'),
  ('admin_cleanup','Chris Graham','ocProducts','',null,'3'),
- ('admin_config','Chris Graham','ocProducts','',null,'10'),
+ ('admin_config','Chris Graham','ocProducts','',null,'12'),
  ('admin_custom_comcode','Chris Graham','ocProducts','',null,'2'),
  ('admin_debrand','Chris Graham','ocProducts','',null,'2'),
  ('admin_ecommerce','Chris Graham','ocProducts','',null,'2'),
  ('admin_emaillog','Chris Graham','ocProducts','',null,'2'),
  ('admin_errorlog','Chris Graham','ocProducts','',null,'2'),
- ('admin_flagrant','Chris Graham','ocProducts','',null,'2'),
+ ('admin_flagrant','Chris Graham','ocProducts','',null,'3'),
  ('admin_import','Chris Graham','ocProducts','',null,'5'),
  ('admin_invoices','Chris Graham','ocProducts','',null,'2'),
  ('admin_ipban','Chris Graham','ocProducts','',null,'4'),
@@ -3129,6 +5391,7 @@ insert into `ocp7_modules` values('admin_permissions','Chris Graham','ocProducts
  ('admin_menus','Chris Graham','ocProducts','',null,'2'),
  ('admin_messaging','Chris Graham','ocProducts','',null,'2'),
  ('admin_newsletter','Chris Graham','ocProducts','',null,'2'),
+ ('admin_notifications','Chris Graham','ocProducts','',null,'1'),
  ('admin_occle','Philip Withnall','ocProducts','',null,'2'),
  ('admin_ocf_categories','Chris Graham','ocProducts','',null,'2'),
  ('admin_ocf_customprofilefields','Chris Graham','ocProducts','',null,'2'),
@@ -3167,32 +5430,33 @@ insert into `ocp7_modules` values('admin_permissions','Chris Graham','ocProducts
  ('awards','Chris Graham','ocProducts','',null,'2'),
  ('banners','Chris Graham','ocProducts','',null,'5'),
  ('bookmarks','Chris Graham','ocProducts','',null,'2'),
- ('calendar','Chris Graham','ocProducts','',null,'5'),
- ('catalogues','Chris Graham','ocProducts','',null,'5'),
+ ('calendar','Chris Graham','ocProducts','',null,'6'),
+ ('catalogues','Chris Graham','ocProducts','',null,'6'),
  ('cedi','Chris Graham','ocProducts','',null,'8'),
  ('chat','Philip Withnall','ocProducts','',null,'11'),
  ('contactmember','Chris Graham','ocProducts','',null,'2'),
  ('downloads','Chris Graham','ocProducts','',null,'6'),
- ('galleries','Chris Graham','ocProducts','',null,'6'),
+ ('galleries','Chris Graham','ocProducts','',null,'7'),
  ('groups','Chris Graham','ocProducts','',null,'2'),
  ('invoices','Chris Graham','ocProducts','',null,'2'),
  ('iotds','Chris Graham','ocProducts','',null,'4'),
  ('leader_board','Chris Graham','ocProducts','',null,'2'),
  ('members','Chris Graham','ocProducts','',null,'2'),
  ('news','Chris Graham','ocProducts','',null,'5'),
- ('newsletter','Chris Graham','ocProducts','',null,'8'),
+ ('newsletter','Chris Graham','ocProducts','',null,'9'),
+ ('notifications','Chris Graham','ocProducts','',null,'1'),
  ('onlinemembers','Chris Graham','ocProducts','',null,'2'),
- ('points','Chris Graham','ocProducts','',null,'5'),
+ ('points','Chris Graham','ocProducts','',null,'6'),
  ('pointstore','Allen Ellis','ocProducts','',null,'4'),
  ('polls','Chris Graham','ocProducts','',null,'5'),
  ('purchase','Chris Graham','ocProducts','',null,'4'),
  ('quiz','Chris Graham','ocProducts','',null,'5'),
  ('search','Chris Graham','ocProducts','',null,'4'),
- ('shopping','Manuprathap','ocProducts','',null,'5'),
+ ('shopping','Manuprathap','ocProducts','',null,'6'),
  ('staff','Chris Graham','ocProducts','',null,'2'),
  ('subscriptions','Chris Graham','ocProducts','',null,'4'),
  ('tester','Chris Graham','ocProducts','',null,'2'),
- ('tickets','Chris Graham','ocProducts','',null,'4'),
+ ('tickets','Chris Graham','ocProducts','',null,'5'),
  ('warnings','Chris Graham','ocProducts','',null,'2'),
  ('forumview','Chris Graham','ocProducts','',null,'2'),
  ('topics','Chris Graham','ocProducts','',null,'2'),
@@ -3214,43 +5478,634 @@ insert into `ocp7_modules` values('admin_permissions','Chris Graham','ocProducts
  ('cms_ocf_groups','Chris Graham','ocProducts','',null,'2'),
  ('cms_polls','Chris Graham','ocProducts','',null,'2'),
  ('cms_quiz','Chris Graham','ocProducts','',null,'2'),
+ ('filedump','Chris Graham','ocProducts','',null,'3'),
  ('forums','Chris Graham','ocProducts','',null,'2'),
  ('join','Chris Graham','ocProducts','',null,'2'),
  ('login','Chris Graham','ocProducts','',null,'2'),
  ('lostpassword','Chris Graham','ocProducts','',null,'2'),
  ('recommend','Chris Graham','ocProducts','',null,'2'),
- ('filedump','Chris Graham','ocProducts','',null,'3'),
  ('supermembers','Chris Graham','ocProducts','',null,'2');
 
-DROP TABLE IF EXISTS `ocp7_seo_meta`;
+DROP TABLE IF EXISTS `ocp_msp`;
 
-CREATE TABLE `ocp7_seo_meta` (
+CREATE TABLE `ocp_msp` (
+  `active_until` int(10) unsigned NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `specific_permission` varchar(80) NOT NULL,
+  `the_page` varchar(80) NOT NULL,
+  `module_the_name` varchar(80) NOT NULL,
+  `category_name` varchar(80) NOT NULL,
+  `the_value` tinyint(1) NOT NULL,
+  PRIMARY KEY (`active_until`,`member_id`,`specific_permission`,`the_page`,`module_the_name`,`category_name`),
+  KEY `mspname` (`specific_permission`,`the_page`,`module_the_name`,`category_name`),
+  KEY `mspmember_id` (`member_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_news`;
+
+CREATE TABLE `ocp_news` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `meta_for_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `meta_for_id` varchar(80) COLLATE latin1_bin NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `title` int(10) unsigned NOT NULL,
+  `news` int(10) unsigned NOT NULL,
+  `news_article` int(10) unsigned NOT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `allow_trackbacks` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  `author` varchar(80) NOT NULL,
+  `submitter` int(11) NOT NULL,
+  `validated` tinyint(1) NOT NULL,
+  `edit_date` int(10) unsigned DEFAULT NULL,
+  `news_category` int(11) NOT NULL,
+  `news_views` int(11) NOT NULL,
+  `news_image` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `news_views` (`news_views`),
+  KEY `findnewscat` (`news_category`),
+  KEY `newsauthor` (`author`),
+  KEY `nes` (`submitter`),
+  KEY `headlines` (`date_and_time`,`id`),
+  KEY `nvalidated` (`validated`),
+  KEY `ftjoin_ititle` (`title`),
+  KEY `ftjoin_nnews` (`news`),
+  KEY `ftjoin_nnewsa` (`news_article`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_news_categories`;
+
+CREATE TABLE `ocp_news_categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nc_title` int(10) unsigned NOT NULL,
+  `nc_owner` int(11) DEFAULT NULL,
+  `nc_img` varchar(80) NOT NULL,
+  `notes` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ncs` (`nc_owner`)
+) ENGINE=MyISAM AUTO_INCREMENT=8;
+
+insert into `ocp_news_categories` values('1','312',null,'newscats/general',''),
+ ('2','313',null,'newscats/technology',''),
+ ('3','314',null,'newscats/difficulties',''),
+ ('4','315',null,'newscats/community',''),
+ ('5','316',null,'newscats/entertainment',''),
+ ('6','317',null,'newscats/business',''),
+ ('7','318',null,'newscats/art','');
+
+DROP TABLE IF EXISTS `ocp_news_category_entries`;
+
+CREATE TABLE `ocp_news_category_entries` (
+  `news_entry` int(11) NOT NULL,
+  `news_entry_category` int(11) NOT NULL,
+  PRIMARY KEY (`news_entry`,`news_entry_category`),
+  KEY `news_entry_category` (`news_entry_category`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_news_rss_cloud`;
+
+CREATE TABLE `ocp_news_rss_cloud` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `rem_procedure` varchar(80) NOT NULL,
+  `rem_port` tinyint(4) NOT NULL,
+  `rem_path` varchar(255) NOT NULL,
+  `rem_protocol` varchar(80) NOT NULL,
+  `rem_ip` varchar(40) NOT NULL,
+  `watching_channel` varchar(255) NOT NULL,
+  `register_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_newsletter`;
+
+CREATE TABLE `ocp_newsletter` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `join_time` int(10) unsigned NOT NULL,
+  `code_confirm` int(11) NOT NULL,
+  `the_password` varchar(33) NOT NULL,
+  `pass_salt` varchar(80) NOT NULL,
+  `language` varchar(80) NOT NULL,
+  `n_forename` varchar(255) NOT NULL,
+  `n_surname` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `welcomemails` (`join_time`),
+  KEY `code_confirm` (`code_confirm`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_newsletter_archive`;
+
+CREATE TABLE `ocp_newsletter_archive` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `date_and_time` int(11) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `newsletter` longtext NOT NULL,
+  `language` varchar(80) NOT NULL,
+  `importance_level` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_newsletter_drip_send`;
+
+CREATE TABLE `ocp_newsletter_drip_send` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `d_inject_time` int(10) unsigned NOT NULL,
+  `d_subject` varchar(255) NOT NULL,
+  `d_message` longtext NOT NULL,
+  `d_html_only` tinyint(1) NOT NULL,
+  `d_to_email` varchar(255) NOT NULL,
+  `d_to_name` varchar(255) NOT NULL,
+  `d_from_email` varchar(255) NOT NULL,
+  `d_from_name` varchar(255) NOT NULL,
+  `d_priority` tinyint(4) NOT NULL,
+  `d_mail_template` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `d_inject_time` (`d_inject_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_newsletter_periodic`;
+
+CREATE TABLE `ocp_newsletter_periodic` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `np_message` longtext NOT NULL,
+  `np_subject` longtext NOT NULL,
+  `np_lang` varchar(5) NOT NULL,
+  `np_send_details` longtext NOT NULL,
+  `np_html_only` tinyint(1) NOT NULL,
+  `np_from_email` varchar(255) NOT NULL,
+  `np_from_name` varchar(255) NOT NULL,
+  `np_priority` tinyint(4) NOT NULL,
+  `np_csv_data` longtext NOT NULL,
+  `np_frequency` varchar(255) NOT NULL,
+  `np_day` tinyint(4) NOT NULL,
+  `np_in_full` tinyint(1) NOT NULL,
+  `np_template` varchar(80) NOT NULL,
+  `np_last_sent` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_newsletter_subscribe`;
+
+CREATE TABLE `ocp_newsletter_subscribe` (
+  `newsletter_id` int(11) NOT NULL,
+  `the_level` tinyint(4) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  PRIMARY KEY (`newsletter_id`,`email`),
+  KEY `peopletosendto` (`the_level`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_newsletters`;
+
+CREATE TABLE `ocp_newsletters` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` int(10) unsigned NOT NULL,
+  `description` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_newsletters` values('1','319','320');
+
+DROP TABLE IF EXISTS `ocp_notification_lockdown`;
+
+CREATE TABLE `ocp_notification_lockdown` (
+  `l_notification_code` varchar(80) NOT NULL,
+  `l_setting` int(11) NOT NULL,
+  PRIMARY KEY (`l_notification_code`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_notifications_enabled`;
+
+CREATE TABLE `ocp_notifications_enabled` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_member_id` int(11) NOT NULL,
+  `l_notification_code` varchar(80) NOT NULL,
+  `l_code_category` varchar(255) NOT NULL,
+  `l_setting` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `l_member_id` (`l_member_id`,`l_notification_code`),
+  KEY `l_code_category` (`l_code_category`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_occlechat`;
+
+CREATE TABLE `ocp_occlechat` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_message` longtext NOT NULL,
+  `c_url` varchar(255) NOT NULL,
+  `c_incoming` tinyint(1) NOT NULL,
+  `c_timestamp` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_poll`;
+
+CREATE TABLE `ocp_poll` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `question` int(10) unsigned NOT NULL,
+  `option1` int(10) unsigned NOT NULL,
+  `option2` int(10) unsigned NOT NULL,
+  `option3` int(10) unsigned DEFAULT NULL,
+  `option4` int(10) unsigned DEFAULT NULL,
+  `option5` int(10) unsigned DEFAULT NULL,
+  `option6` int(10) unsigned NOT NULL,
+  `option7` int(10) unsigned NOT NULL,
+  `option8` int(10) unsigned DEFAULT NULL,
+  `option9` int(10) unsigned DEFAULT NULL,
+  `option10` int(10) unsigned DEFAULT NULL,
+  `votes1` int(11) NOT NULL,
+  `votes2` int(11) NOT NULL,
+  `votes3` int(11) NOT NULL,
+  `votes4` int(11) NOT NULL,
+  `votes5` int(11) NOT NULL,
+  `votes6` int(11) NOT NULL,
+  `votes7` int(11) NOT NULL,
+  `votes8` int(11) NOT NULL,
+  `votes9` int(11) NOT NULL,
+  `votes10` int(11) NOT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `allow_trackbacks` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  `num_options` tinyint(4) NOT NULL,
+  `is_current` tinyint(1) NOT NULL,
+  `date_and_time` int(10) unsigned DEFAULT NULL,
+  `submitter` int(11) NOT NULL,
+  `add_time` int(11) NOT NULL,
+  `poll_views` int(11) NOT NULL,
+  `edit_date` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `poll_views` (`poll_views`),
+  KEY `get_current` (`is_current`),
+  KEY `ps` (`submitter`),
+  KEY `padd_time` (`add_time`),
+  KEY `date_and_time` (`date_and_time`),
+  KEY `ftjoin_pq` (`question`),
+  KEY `ftjoin_po1` (`option1`),
+  KEY `ftjoin_po2` (`option2`),
+  KEY `ftjoin_po3` (`option3`),
+  KEY `ftjoin_po4` (`option4`),
+  KEY `ftjoin_po5` (`option5`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_poll_votes`;
+
+CREATE TABLE `ocp_poll_votes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `v_poll_id` int(11) NOT NULL,
+  `v_voter_id` int(11) DEFAULT NULL,
+  `v_voter_ip` varchar(40) NOT NULL,
+  `v_vote_for` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `v_voter_id` (`v_voter_id`),
+  KEY `v_voter_ip` (`v_voter_ip`),
+  KEY `v_vote_for` (`v_vote_for`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_prices`;
+
+CREATE TABLE `ocp_prices` (
+  `name` varchar(80) NOT NULL,
+  `price` int(11) NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_pstore_customs`;
+
+CREATE TABLE `ocp_pstore_customs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_title` int(10) unsigned NOT NULL,
+  `c_description` int(10) unsigned NOT NULL,
+  `c_enabled` tinyint(1) NOT NULL,
+  `c_cost` int(11) NOT NULL,
+  `c_one_per_member` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_pstore_permissions`;
+
+CREATE TABLE `ocp_pstore_permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `p_title` int(10) unsigned NOT NULL,
+  `p_description` int(10) unsigned NOT NULL,
+  `p_enabled` tinyint(1) NOT NULL,
+  `p_cost` int(11) NOT NULL,
+  `p_hours` int(11) NOT NULL,
+  `p_type` varchar(80) NOT NULL,
+  `p_specific_permission` varchar(80) NOT NULL,
+  `p_zone` varchar(80) NOT NULL,
+  `p_page` varchar(80) NOT NULL,
+  `p_module` varchar(80) NOT NULL,
+  `p_category` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_quiz_entries`;
+
+CREATE TABLE `ocp_quiz_entries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `q_time` int(10) unsigned NOT NULL,
+  `q_member` int(11) NOT NULL,
+  `q_quiz` int(11) NOT NULL,
+  `q_results` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_quiz_entry_answer`;
+
+CREATE TABLE `ocp_quiz_entry_answer` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `q_entry` int(11) NOT NULL,
+  `q_question` int(11) NOT NULL,
+  `q_answer` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_quiz_member_last_visit`;
+
+CREATE TABLE `ocp_quiz_member_last_visit` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `v_time` int(10) unsigned NOT NULL,
+  `v_member_id` int(11) NOT NULL,
+  `v_quiz_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_quiz_question_answers`;
+
+CREATE TABLE `ocp_quiz_question_answers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `q_question` int(11) NOT NULL,
+  `q_answer_text` int(10) unsigned NOT NULL,
+  `q_is_correct` tinyint(1) NOT NULL,
+  `q_order` int(11) NOT NULL,
+  `q_explanation` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_quiz_questions`;
+
+CREATE TABLE `ocp_quiz_questions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `q_long_input_field` tinyint(1) NOT NULL,
+  `q_num_choosable_answers` int(11) NOT NULL,
+  `q_quiz` int(11) NOT NULL,
+  `q_question_text` int(10) unsigned NOT NULL,
+  `q_order` int(11) NOT NULL,
+  `q_required` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_quiz_winner`;
+
+CREATE TABLE `ocp_quiz_winner` (
+  `q_quiz` int(11) NOT NULL,
+  `q_entry` int(11) NOT NULL,
+  `q_winner_level` int(11) NOT NULL,
+  PRIMARY KEY (`q_quiz`,`q_entry`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_quizzes`;
+
+CREATE TABLE `ocp_quizzes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `q_timeout` int(11) DEFAULT NULL,
+  `q_name` int(10) unsigned NOT NULL,
+  `q_start_text` int(10) unsigned NOT NULL,
+  `q_end_text` int(10) unsigned NOT NULL,
+  `q_notes` longtext NOT NULL,
+  `q_percentage` int(11) NOT NULL,
+  `q_open_time` int(10) unsigned NOT NULL,
+  `q_close_time` int(10) unsigned DEFAULT NULL,
+  `q_num_winners` int(11) NOT NULL,
+  `q_redo_time` int(11) DEFAULT NULL,
+  `q_type` varchar(80) NOT NULL,
+  `q_add_date` int(10) unsigned NOT NULL,
+  `q_validated` tinyint(1) NOT NULL,
+  `q_submitter` int(11) NOT NULL,
+  `q_points_for_passing` int(11) NOT NULL,
+  `q_tied_newsletter` int(11) DEFAULT NULL,
+  `q_end_text_fail` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `q_validated` (`q_validated`),
+  KEY `ftjoin_qstarttext` (`q_start_text`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_rating`;
+
+CREATE TABLE `ocp_rating` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `rating_for_type` varchar(80) NOT NULL,
+  `rating_for_id` varchar(80) NOT NULL,
+  `rating_member` int(11) NOT NULL,
+  `rating_ip` varchar(40) NOT NULL,
+  `rating_time` int(10) unsigned NOT NULL,
+  `rating` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `alt_key` (`rating_for_type`,`rating_for_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_redirects`;
+
+CREATE TABLE `ocp_redirects` (
+  `r_from_page` varchar(80) NOT NULL,
+  `r_from_zone` varchar(80) NOT NULL,
+  `r_to_page` varchar(80) NOT NULL,
+  `r_to_zone` varchar(80) NOT NULL,
+  `r_is_transparent` tinyint(1) NOT NULL,
+  PRIMARY KEY (`r_from_page`,`r_from_zone`)
+) ENGINE=MyISAM;
+
+insert into `ocp_redirects` values('rules','site','rules','','1'),
+ ('rules','forum','rules','','1'),
+ ('authors','collaboration','authors','site','1'),
+ ('panel_top','collaboration','panel_top','','1'),
+ ('panel_top','forum','panel_top','','1');
+
+DROP TABLE IF EXISTS `ocp_review_supplement`;
+
+CREATE TABLE `ocp_review_supplement` (
+  `r_post_id` int(11) NOT NULL,
+  `r_rating_type` varchar(80) NOT NULL,
+  `r_rating` tinyint(4) NOT NULL,
+  `r_topic_id` int(11) NOT NULL,
+  `r_rating_for_id` varchar(80) NOT NULL,
+  `r_rating_for_type` varchar(80) NOT NULL,
+  PRIMARY KEY (`r_post_id`,`r_rating_type`),
+  KEY `rating_for_id` (`r_rating_for_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_sales`;
+
+CREATE TABLE `ocp_sales` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `memberid` int(11) NOT NULL,
+  `purchasetype` varchar(80) NOT NULL,
+  `details` varchar(255) NOT NULL,
+  `details2` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_searches_logged`;
+
+CREATE TABLE `ocp_searches_logged` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `s_member_id` int(11) NOT NULL,
+  `s_time` int(10) unsigned NOT NULL,
+  `s_primary` varchar(255) NOT NULL,
+  `s_auxillary` longtext NOT NULL,
+  `s_num_results` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `past_search` (`s_primary`),
+  FULLTEXT KEY `past_search_ft` (`s_primary`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_searches_saved`;
+
+CREATE TABLE `ocp_searches_saved` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `s_title` varchar(255) NOT NULL,
+  `s_member_id` int(11) NOT NULL,
+  `s_time` int(10) unsigned NOT NULL,
+  `s_primary` varchar(255) NOT NULL,
+  `s_auxillary` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_security_images`;
+
+CREATE TABLE `ocp_security_images` (
+  `si_session_id` int(11) NOT NULL,
+  `si_time` int(10) unsigned NOT NULL,
+  `si_code` int(11) NOT NULL,
+  PRIMARY KEY (`si_session_id`),
+  KEY `si_time` (`si_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_seedy_changes`;
+
+CREATE TABLE `ocp_seedy_changes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `the_action` varchar(80) NOT NULL,
+  `the_page` int(11) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `the_user` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_seedy_children`;
+
+CREATE TABLE `ocp_seedy_children` (
+  `parent_id` int(11) NOT NULL,
+  `child_id` int(11) NOT NULL,
+  `the_order` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`parent_id`,`child_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_seedy_pages`;
+
+CREATE TABLE `ocp_seedy_pages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` int(10) unsigned NOT NULL,
+  `notes` longtext NOT NULL,
+  `description` int(10) unsigned NOT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `seedy_views` int(11) NOT NULL,
+  `hide_posts` tinyint(1) NOT NULL,
+  `submitter` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `seedy_views` (`seedy_views`),
+  KEY `sps` (`submitter`),
+  KEY `sadd_date` (`add_date`),
+  KEY `ftjoin_spt` (`title`),
+  KEY `ftjoin_spd` (`description`)
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_seedy_pages` values('1','282','','283','1332090686','0','0','1');
+
+DROP TABLE IF EXISTS `ocp_seedy_posts`;
+
+CREATE TABLE `ocp_seedy_posts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) NOT NULL,
+  `the_message` int(10) unsigned NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `validated` tinyint(1) NOT NULL,
+  `seedy_views` int(11) NOT NULL,
+  `the_user` int(11) NOT NULL,
+  `edit_date` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `seedy_views` (`seedy_views`),
+  KEY `spos` (`the_user`),
+  KEY `posts_on_page` (`page_id`),
+  KEY `cdate_and_time` (`date_and_time`),
+  KEY `svalidated` (`validated`),
+  KEY `ftjoin_spm` (`the_message`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_seo_meta`;
+
+CREATE TABLE `ocp_seo_meta` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `meta_for_type` varchar(80) NOT NULL,
+  `meta_for_id` varchar(80) NOT NULL,
   `meta_keywords` int(10) unsigned NOT NULL,
   `meta_description` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `alt_key` (`meta_for_type`,`meta_for_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2;
 
-insert into `ocp7_seo_meta` values('1','gallery','root','332','333');
+insert into `ocp_seo_meta` values('1','gallery','root','310','311');
 
-DROP TABLE IF EXISTS `ocp7_sessions`;
+DROP TABLE IF EXISTS `ocp_sessions`;
 
-CREATE TABLE `ocp7_sessions` (
+CREATE TABLE `ocp_sessions` (
   `the_session` int(11) NOT NULL,
   `last_activity` int(10) unsigned NOT NULL,
   `the_user` int(11) NOT NULL,
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
+  `ip` varchar(40) NOT NULL,
   `session_confirmed` tinyint(1) NOT NULL,
   `session_invisible` tinyint(1) NOT NULL,
-  `cache_username` varchar(255) COLLATE latin1_bin NOT NULL,
-  `the_zone` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_title` varchar(255) COLLATE latin1_bin NOT NULL,
+  `cache_username` varchar(255) NOT NULL,
+  `the_zone` varchar(80) NOT NULL,
+  `the_page` varchar(80) NOT NULL,
+  `the_type` varchar(80) NOT NULL,
+  `the_id` varchar(80) NOT NULL,
+  `the_title` varchar(255) NOT NULL,
   PRIMARY KEY (`the_session`),
   KEY `delete_old` (`last_activity`),
   KEY `the_user` (`the_user`),
@@ -3258,30 +6113,148 @@ CREATE TABLE `ocp7_sessions` (
 ) ENGINE=MEMORY;
 
 
-DROP TABLE IF EXISTS `ocp7_sp_list`;
+DROP TABLE IF EXISTS `ocp_shopping_cart`;
 
-CREATE TABLE `ocp7_sp_list` (
-  `p_section` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_name` varchar(80) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_shopping_cart` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` int(11) NOT NULL,
+  `ordered_by` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_code` varchar(255) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price_pre_tax` double NOT NULL,
+  `price` double NOT NULL,
+  `product_description` longtext NOT NULL,
+  `product_type` varchar(255) NOT NULL,
+  `product_weight` double NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`,`ordered_by`,`product_id`),
+  KEY `ordered_by` (`ordered_by`),
+  KEY `session_id` (`session_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_shopping_logging`;
+
+CREATE TABLE `ocp_shopping_logging` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `e_member_id` int(11) NOT NULL,
+  `session_id` int(11) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `last_action` varchar(255) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`e_member_id`),
+  KEY `calculate_bandwidth` (`date_and_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_shopping_order`;
+
+CREATE TABLE `ocp_shopping_order` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `c_member` int(11) NOT NULL,
+  `session_id` int(11) NOT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `tot_price` double NOT NULL,
+  `order_status` varchar(80) NOT NULL,
+  `notes` longtext NOT NULL,
+  `transaction_id` varchar(255) NOT NULL,
+  `purchase_through` varchar(255) NOT NULL,
+  `tax_opted_out` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `finddispatchable` (`order_status`),
+  KEY `soc_member` (`c_member`),
+  KEY `sosession_id` (`session_id`),
+  KEY `soadd_date` (`add_date`),
+  KEY `recent_shopped` (`add_date`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_shopping_order_addresses`;
+
+CREATE TABLE `ocp_shopping_order_addresses` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) DEFAULT NULL,
+  `address_name` varchar(255) NOT NULL,
+  `address_street` longtext NOT NULL,
+  `address_city` varchar(255) NOT NULL,
+  `address_zip` varchar(255) NOT NULL,
+  `address_country` varchar(255) NOT NULL,
+  `receiver_email` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_shopping_order_details`;
+
+CREATE TABLE `ocp_shopping_order_details` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) DEFAULT NULL,
+  `p_id` int(11) DEFAULT NULL,
+  `p_name` varchar(255) NOT NULL,
+  `p_code` varchar(255) NOT NULL,
+  `p_type` varchar(255) NOT NULL,
+  `p_quantity` int(11) NOT NULL,
+  `p_price` double NOT NULL,
+  `included_tax` double NOT NULL,
+  `dispatch_status` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `p_id` (`p_id`),
+  KEY `order_id` (`order_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_sitewatchlist`;
+
+CREATE TABLE `ocp_sitewatchlist` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `siteurl` varchar(255) NOT NULL,
+  `site_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2;
+
+insert into `ocp_sitewatchlist` values('1','http://chris4.com/git','');
+
+DROP TABLE IF EXISTS `ocp_sms_log`;
+
+CREATE TABLE `ocp_sms_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `s_member_id` int(11) NOT NULL,
+  `s_time` int(10) unsigned NOT NULL,
+  `s_trigger_ip` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sms_log_for` (`s_member_id`,`s_time`),
+  KEY `sms_trigger_ip` (`s_trigger_ip`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_sp_list`;
+
+CREATE TABLE `ocp_sp_list` (
+  `p_section` varchar(80) NOT NULL,
+  `the_name` varchar(80) NOT NULL,
   `the_default` tinyint(1) NOT NULL,
   PRIMARY KEY (`the_name`,`the_default`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_sp_list` values('SUBMISSION','delete_own_lowrange_content','0'),
- ('SUBMISSION','delete_own_midrange_content','0'),
+insert into `ocp_sp_list` values('SUBMISSION','edit_highrange_content','0'),
+ ('SUBMISSION','edit_midrange_content','0'),
+ ('SUBMISSION','delete_own_lowrange_content','0'),
  ('STAFF_ACTIONS','restore_content_history','0'),
  ('STAFF_ACTIONS','view_content_history','0'),
- ('SUBMISSION','edit_highrange_content','0'),
- ('SUBMISSION','edit_midrange_content','0'),
+ ('SUBMISSION','edit_lowrange_content','0'),
+ ('SUBMISSION','edit_own_highrange_content','0'),
  ('SUBMISSION','search_engine_links','0'),
  ('SUBMISSION','can_submit_to_others_categories','0'),
+ ('SUBMISSION','delete_own_midrange_content','0'),
  ('SUBMISSION','delete_own_highrange_content','0'),
  ('SUBMISSION','delete_lowrange_content','0'),
  ('SUBMISSION','delete_midrange_content','0'),
  ('SUBMISSION','delete_highrange_content','0'),
  ('SUBMISSION','edit_own_midrange_content','0'),
- ('SUBMISSION','edit_own_highrange_content','0'),
- ('SUBMISSION','edit_lowrange_content','0'),
  ('SUBMISSION','bypass_validation_midrange_content','0'),
  ('SUBMISSION','bypass_validation_highrange_content','0'),
  ('STAFF_ACTIONS','access_overrun_site','0'),
@@ -3318,8 +6291,8 @@ insert into `ocp7_sp_list` values('SUBMISSION','delete_own_lowrange_content','0'
  ('GENERAL_SETTINGS','jump_to_unvalidated','1'),
  ('GENERAL_SETTINGS','see_unvalidated','0'),
  ('SUBMISSION','draw_to_server','0'),
+ ('STAFF_ACTIONS','may_enable_staff_notifications','0'),
  ('SECTION_FORUMS','run_multi_moderations','1'),
- ('SECTION_FORUMS','may_track_forums','1'),
  ('SECTION_FORUMS','use_pt','1'),
  ('SECTION_FORUMS','edit_personal_topic_posts','1'),
  ('SECTION_FORUMS','may_unblind_own_poll','1'),
@@ -3350,7 +6323,7 @@ insert into `ocp7_sp_list` values('SUBMISSION','delete_own_lowrange_content','0'
  ('SECTION_FORUMS','show_user_browsing','0'),
  ('SECTION_FORUMS','see_hidden_groups','0'),
  ('SECTION_FORUMS','pt_anyone','0'),
- ('_COMCODE','reuse_others_attachments','0'),
+ ('_COMCODE','reuse_others_attachments','1'),
  ('STAFF_ACTIONS','assume_any_member','0'),
  ('GENERAL_SETTINGS','use_sms','0'),
  ('GENERAL_SETTINGS','sms_higher_limit','0'),
@@ -3409,14 +6382,252 @@ insert into `ocp7_sp_list` values('SUBMISSION','delete_own_lowrange_content','0'
  ('FILE_DUMP','upload_filedump','1'),
  ('FILE_DUMP','delete_anything_filedump','0');
 
-DROP TABLE IF EXISTS `ocp7_translate`;
+DROP TABLE IF EXISTS `ocp_staff_tips_dismissed`;
 
-CREATE TABLE `ocp7_translate` (
+CREATE TABLE `ocp_staff_tips_dismissed` (
+  `t_member` int(11) NOT NULL,
+  `t_tip` varchar(80) NOT NULL,
+  PRIMARY KEY (`t_member`,`t_tip`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_stafflinks`;
+
+CREATE TABLE `ocp_stafflinks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `language` varchar(5) COLLATE latin1_bin NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `link_title` varchar(255) NOT NULL,
+  `link_desc` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=29;
+
+insert into `ocp_stafflinks` values('1','http://ocportal.com/','ocPortal.com','ocPortal.com'),
+ ('2','http://ocportal.com/forum/vforums/unread.htm','ocPortal.com (topics with unread posts)','ocPortal.com (topics with unread posts)'),
+ ('3','http://ocproducts.com/','ocProducts (web development services)','ocProducts (web development services)'),
+ ('4','https://translations.launchpad.net/ocportal/+translations','Launchpad (ocPortal language translations)','Launchpad (ocPortal language translations)'),
+ ('5','http://www.google.com/alerts','Google Alerts','Google Alerts'),
+ ('6','http://www.google.com/analytics/','Google Analytics','Google Analytics'),
+ ('7','https://www.google.com/webmasters/tools','Google Webmaster Tools','Google Webmaster Tools'),
+ ('8','http://www.google.com/apps/intl/en/group/index.html','Google Apps (free gmail for domains, etc)','Google Apps (free gmail for domains, etc)'),
+ ('9','http://www.google.com/chrome','Google Chrome (web browser)','Google Chrome (web browser)'),
+ ('10','https://chrome.google.com/extensions/featured/web_dev','Google Chrome addons','Google Chrome addons'),
+ ('11','http://www.getfirefox.com/','Firefox (web browser)','Firefox (web browser)'),
+ ('12','http://www.instantshift.com/2009/01/25/26-essential-firefox-add-ons-for-web-designers/','FireFox addons','FireFox addons'),
+ ('13','http://www.opera.com/','Opera (web browser)','Opera (web browser)'),
+ ('14','http://www.my-debugbar.com/wiki/IETester/HomePage','Internet Explorer Tester (for testing)','Internet Explorer Tester (for testing)'),
+ ('15','http://www.getpaint.net/','Paint.net (free graphics tool)','Paint.net (free graphics tool)'),
+ ('16','http://benhollis.net/software/pnggauntlet/','PNGGauntlet (compress PNG files, Windows)','PNGGauntlet (compress PNG files, Windows)'),
+ ('17','http://imageoptim.pornel.net/','ImageOptim (compress PNG files, Mac)','ImageOptim (compress PNG files, Mac)'),
+ ('18','http://www.iconlet.com/','Iconlet (free icons)','Iconlet (free icons)'),
+ ('19','http://sxc.hu/','stock.xchng (free stock art)','stock.xchng (free stock art)'),
+ ('20','http://www.kompozer.net/','Kompozer (Web design tool)','Kompozer (Web design tool)'),
+ ('21','http://www.sourcegear.com/diffmerge/','DiffMerge','DiffMerge'),
+ ('22','http://www.jingproject.com/','Jing (record screencasts)','Jing (record screencasts)'),
+ ('23','http://www.elief.com/billing/aff.php?aff=035','Elief hosting (quality shared hosting)','Elief hosting (quality shared hosting)'),
+ ('24','http://www.rackspacecloud.com/1043-0-3-13.html','Rackspace Cloud hosting','Rackspace Cloud hosting'),
+ ('25','http://www.jdoqocy.com/click-3972552-10378406','GoDaddy (Domains and SSL certificates)','GoDaddy (Domains and SSL certificates)'),
+ ('26','http://www.silktide.com/siteray','SiteRay (site quality auditing)','SiteRay (site quality auditing)'),
+ ('27','http://www.smashingmagazine.com/','Smashing Magazine (web design articles)','Smashing Magazine (web design articles)'),
+ ('28','http://www.w3schools.com/','w3schools (learn web technologies)','w3schools (learn web technologies)');
+
+DROP TABLE IF EXISTS `ocp_stats`;
+
+CREATE TABLE `ocp_stats` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `the_page` varchar(255) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `the_user` int(11) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  `referer` varchar(255) NOT NULL,
+  `get` varchar(255) NOT NULL,
+  `post` longtext NOT NULL,
+  `browser` varchar(255) NOT NULL,
+  `milliseconds` int(11) NOT NULL,
+  `operating_system` varchar(255) NOT NULL,
+  `access_denied_counter` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `member_track_1` (`the_user`),
+  KEY `member_track_2` (`ip`),
+  KEY `pages` (`the_page`),
+  KEY `date_and_time` (`date_and_time`),
+  KEY `milliseconds` (`milliseconds`),
+  KEY `referer` (`referer`),
+  KEY `browser` (`browser`),
+  KEY `operating_system` (`operating_system`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_subscriptions`;
+
+CREATE TABLE `ocp_subscriptions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `s_type_code` varchar(80) NOT NULL,
+  `s_member_id` int(11) NOT NULL,
+  `s_state` varchar(80) NOT NULL,
+  `s_amount` varchar(255) NOT NULL,
+  `s_special` varchar(255) NOT NULL,
+  `s_time` int(10) unsigned NOT NULL,
+  `s_auto_fund_source` varchar(80) NOT NULL,
+  `s_auto_fund_key` varchar(255) NOT NULL,
+  `s_via` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_temp_block_permissions`;
+
+CREATE TABLE `ocp_temp_block_permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `p_session_id` int(11) NOT NULL,
+  `p_block_constraints` longtext NOT NULL,
+  `p_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_test_sections`;
+
+CREATE TABLE `ocp_test_sections` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `s_section` varchar(255) NOT NULL,
+  `s_notes` longtext NOT NULL,
+  `s_inheritable` tinyint(1) NOT NULL,
+  `s_assigned_to` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_tests`;
+
+CREATE TABLE `ocp_tests` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `t_section` int(11) NOT NULL,
+  `t_test` longtext NOT NULL,
+  `t_assigned_to` int(11) DEFAULT NULL,
+  `t_enabled` tinyint(1) NOT NULL,
+  `t_status` int(11) NOT NULL,
+  `t_inherit_section` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_text`;
+
+CREATE TABLE `ocp_text` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `the_message` int(10) unsigned NOT NULL,
+  `days` int(11) NOT NULL,
+  `order_time` int(10) unsigned NOT NULL,
+  `activation_time` int(10) unsigned DEFAULT NULL,
+  `active_now` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `findflagrant` (`active_now`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_theme_images`;
+
+CREATE TABLE `ocp_theme_images` (
+  `id` varchar(255) NOT NULL,
+  `theme` varchar(40) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `lang` varchar(5) NOT NULL,
+  PRIMARY KEY (`id`,`theme`,`lang`),
+  KEY `theme` (`theme`,`lang`)
+) ENGINE=MyISAM;
+
+insert into `ocp_theme_images` values('favicon','default','favicon.ico','EN'),
+ ('appleicon','default','appleicon.png','EN');
+
+DROP TABLE IF EXISTS `ocp_ticket_types`;
+
+CREATE TABLE `ocp_ticket_types` (
+  `ticket_type` int(10) unsigned NOT NULL,
+  `guest_emails_mandatory` tinyint(1) NOT NULL,
+  `search_faq` tinyint(1) NOT NULL,
+  `cache_lead_time` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`ticket_type`)
+) ENGINE=MyISAM;
+
+insert into `ocp_ticket_types` values('367','0','0',null),
+ ('368','0','0',null);
+
+DROP TABLE IF EXISTS `ocp_tickets`;
+
+CREATE TABLE `ocp_tickets` (
+  `ticket_id` varchar(255) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
+  `ticket_type` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`ticket_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_trackbacks`;
+
+CREATE TABLE `ocp_trackbacks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `trackback_for_type` varchar(80) NOT NULL,
+  `trackback_for_id` varchar(80) NOT NULL,
+  `trackback_ip` varchar(40) NOT NULL,
+  `trackback_time` int(10) unsigned NOT NULL,
+  `trackback_url` varchar(255) NOT NULL,
+  `trackback_title` varchar(255) NOT NULL,
+  `trackback_excerpt` longtext NOT NULL,
+  `trackback_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `trackback_for_type` (`trackback_for_type`),
+  KEY `trackback_for_id` (`trackback_for_id`),
+  KEY `trackback_time` (`trackback_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_trans_expecting`;
+
+CREATE TABLE `ocp_trans_expecting` (
+  `id` varchar(80) NOT NULL,
+  `e_purchase_id` varchar(80) NOT NULL,
+  `e_item_name` varchar(255) NOT NULL,
+  `e_member_id` int(11) NOT NULL,
+  `e_amount` varchar(255) NOT NULL,
+  `e_ip_address` varchar(40) NOT NULL,
+  `e_session_id` int(11) NOT NULL,
+  `e_time` int(10) unsigned NOT NULL,
+  `e_length` int(11) DEFAULT NULL,
+  `e_length_units` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_transactions`;
+
+CREATE TABLE `ocp_transactions` (
+  `id` varchar(80) NOT NULL,
+  `purchase_id` varchar(80) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `amount` varchar(255) NOT NULL,
+  `t_currency` varchar(80) NOT NULL,
+  `linked` varchar(80) NOT NULL,
+  `t_time` int(10) unsigned NOT NULL,
+  `item` varchar(255) NOT NULL,
+  `pending_reason` varchar(255) NOT NULL,
+  `t_memo` longtext NOT NULL,
+  `t_via` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`,`t_time`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_translate`;
+
+CREATE TABLE `ocp_translate` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `language` varchar(5) NOT NULL,
   `importance_level` tinyint(4) NOT NULL,
-  `text_original` longtext COLLATE latin1_bin NOT NULL,
-  `text_parsed` longtext COLLATE latin1_bin NOT NULL,
+  `text_original` longtext NOT NULL,
+  `text_parsed` longtext NOT NULL,
   `broken` tinyint(1) NOT NULL,
   `source_user` int(11) NOT NULL,
   PRIMARY KEY (`id`,`language`),
@@ -3424,59 +6635,59 @@ CREATE TABLE `ocp7_translate` (
   KEY `equiv_lang` (`text_original`(4)),
   KEY `decache` (`text_parsed`(2)),
   FULLTEXT KEY `search` (`text_original`)
-) ENGINE=MyISAM AUTO_INCREMENT=447;
+) ENGINE=MyISAM AUTO_INCREMENT=403;
 
-insert into `ocp7_translate` values('1','EN','1',0x4120736974652061626f7574203f3f3f,'','0','1'),
- ('2','EN','1',0x41646d696e205a6f6e65,'','0','1'),
- ('3','EN','1',0x436f6c6c61626f726174696f6e205a6f6e65,'','0','1'),
- ('4','EN','1',0x4120736974652061626f7574203f3f3f,'','0','1'),
- ('5','EN','1',0x436f6e74656e74204d616e6167656d656e74,'','0','1'),
- ('6','EN','1',0x477569646573,'','0','1'),
- ('7','EN','1',0x57656c636f6d65,'','0','1'),
- ('8','EN','1',0x41646d696e205a6f6e65,'','0','1'),
- ('9','EN','1',0x53697465,'','0','1'),
- ('10','EN','1',0x436f6c6c61626f726174696f6e205a6f6e65,'','0','1'),
- ('11','EN','1',0x436f6e74656e74204d616e6167656d656e74,'','0','1'),
- ('12','EN','1',0x466f72756d,'','0','1'),
- ('13','EN','1',0x4163636f756e74,'','0','1'),
- ('14','EN','1',0x466f72756d73,'','0','1'),
- ('15','EN','1',0x4163636f756e74,'','0','1'),
- ('16','EN','2',0x41626f7574206d65,'','0','1'),
- ('17','EN','2',0x536f6d6520706572736f6e616c6c79207772697474656e20696e666f726d6174696f6e2e,'','0','1'),
- ('18','EN','2',0x4d534e204d657373656e676572204944,'','0','1'),
- ('19','EN','2',0x452d6d61696c2061646472657373206f66204d534e204d657373656e676572206163636f756e742e,'','0','1'),
- ('20','EN','2',0x536b797065204944,'','0','1'),
- ('21','EN','2',0x536b79706520757365726e616d652e,'','0','1'),
- ('22','EN','2',0x496e74657265737473,'','0','1'),
- ('23','EN','2',0x412073756d6d617279206f6620796f757220696e746572657374732e,'','0','1'),
- ('24','EN','2',0x4c6f636174696f6e,'','0','1'),
- ('25','EN','2',0x596f75722067656f67726170686963616c206c6f636174696f6e2e,'','0','1'),
- ('26','EN','2',0x4f636375706174696f6e,'','0','1'),
- ('27','EN','2',0x596f7572206f636375706174696f6e2e,'','0','1'),
- ('28','EN','2',0x5374616666206e6f746573,'','0','1'),
- ('29','EN','2',0x4e6f746573206f6e2074686973206d656d6265722c206f6e6c79207669657761626c652062792073746166662e,'','0','1'),
- ('30','EN','2',0x477565737473,'','0','1'),
- ('31','EN','2',0x47756573742075736572,'','0','1'),
- ('32','EN','2',0x41646d696e6973747261746f7273,'','0','1'),
- ('33','EN','2',0x53697465206469726563746f72,'','0','1'),
- ('34','EN','2',0x53757065722d6d6f64657261746f7273,'','0','1'),
- ('35','EN','2',0x53697465207374616666,'','0','1'),
- ('36','EN','2',0x53757065722d6d656d62657273,'','0','1'),
- ('37','EN','2',0x53757065722d6d656d626572,'','0','1'),
- ('38','EN','2',0x4c6f63616c206865726f,'','0','1'),
- ('39','EN','2',0x5374616e64617264206d656d626572,'','0','1'),
- ('40','EN','2',0x4f6c642074696d6572,'','0','1'),
- ('41','EN','2',0x5374616e64617264206d656d626572,'','0','1'),
- ('42','EN','2',0x4c6f63616c,'','0','1'),
- ('43','EN','2',0x5374616e64617264206d656d626572,'','0','1'),
- ('44','EN','2',0x526567756c6172,'','0','1'),
- ('45','EN','2',0x5374616e64617264206d656d626572,'','0','1'),
- ('46','EN','2',0x4e6577626965,'','0','1'),
- ('47','EN','2',0x5374616e64617264206d656d626572,'','0','1'),
- ('48','EN','2',0x50726f626174696f6e,'','0','1'),
- ('49','EN','2',0x4d656d626572732077696c6c20626520636f6e7369646572656420746f20626520696e2074686973207573657267726f75702028616e64206f6e6c792074686973207573657267726f75702920696620616e64207768696c737420746865792068617665206265656e20706c61636564206f6e2070726f626174696f6e2e2054686973207573657267726f75702062656861766573206c696b6520616e79206f746865722c20616e64207468657265666f7265206d617920616c736f206265206d616e75616c6c7920706c6163656420696e746f2069742e,'','0','1'),
- ('50','EN','2','','','0','1'),
- ('51','EN','3','','','0','1'),
+insert into `ocp_translate` values('1','EN','1','','','0','1'),
+ ('2','EN','1','Admin Zone','','0','1'),
+ ('3','EN','1','Collaboration Zone','','0','1'),
+ ('4','EN','1','','','0','1'),
+ ('5','EN','1','Content Management','','0','1'),
+ ('6','EN','1','Guides','','0','1'),
+ ('7','EN','1','Welcome','','0','1'),
+ ('8','EN','1','Admin Zone','','0','1'),
+ ('9','EN','1','Site','','0','1'),
+ ('10','EN','1','Collaboration Zone','','0','1'),
+ ('11','EN','1','Content Management','','0','1'),
+ ('12','EN','1','Forum','','0','1'),
+ ('13','EN','1','Forums','','0','1'),
+ ('14','EN','2','About me','','0','1'),
+ ('15','EN','2','Some personally written information.','','0','1'),
+ ('16','EN','2','Skype ID','','0','1'),
+ ('17','EN','2','Your Skype ID.','','0','1'),
+ ('18','EN','2','Facebook profile','','0','1'),
+ ('19','EN','2','A link to your Facebook profile.','','0','1'),
+ ('20','EN','2','Google+ profile','','0','1'),
+ ('21','EN','2','A link to your Google+ profile.','','0','1'),
+ ('22','EN','2','Twitter account','','0','1'),
+ ('23','EN','2','Your Twitter name (for example, \'charlie12345\').','','0','1'),
+ ('24','EN','2','Interests','','0','1'),
+ ('25','EN','2','A summary of your interests.','','0','1'),
+ ('26','EN','2','Location','','0','1'),
+ ('27','EN','2','Your geographical location.','','0','1'),
+ ('28','EN','2','Occupation','','0','1'),
+ ('29','EN','2','Your occupation.','','0','1'),
+ ('30','EN','2','Staff notes','','0','1'),
+ ('31','EN','2','Notes on this member, only viewable by staff.','','0','1'),
+ ('32','EN','2','Guests','','0','1'),
+ ('33','EN','2','Guest user','','0','1'),
+ ('34','EN','2','Administrators','','0','1'),
+ ('35','EN','2','Site director','','0','1'),
+ ('36','EN','2','Super-moderators','','0','1'),
+ ('37','EN','2','Site staff','','0','1'),
+ ('38','EN','2','Super-members','','0','1'),
+ ('39','EN','2','Super-member','','0','1'),
+ ('40','EN','2','Local hero','','0','1'),
+ ('41','EN','2','Standard member','','0','1'),
+ ('42','EN','2','Old timer','','0','1'),
+ ('43','EN','2','Standard member','','0','1'),
+ ('44','EN','2','Local','','0','1'),
+ ('45','EN','2','Standard member','','0','1'),
+ ('46','EN','2','Regular','','0','1'),
+ ('47','EN','2','Standard member','','0','1'),
+ ('48','EN','2','Newbie','','0','1'),
+ ('49','EN','2','Standard member','','0','1'),
+ ('50','EN','2','Probation','','0','1'),
+ ('51','EN','2','Members will be considered to be in this usergroup (and only this usergroup) if and whilst they have been placed on probation. This usergroup behaves like any other, and therefore may also be manually placed into it.','','0','1'),
  ('52','EN','2','','','0','1'),
  ('53','EN','3','','','0','1'),
  ('54','EN','2','','','0','1'),
@@ -3491,2343 +6702,351 @@ insert into `ocp7_translate` values('1','EN','1',0x4120736974652061626f7574203f3
  ('63','EN','3','','','0','1'),
  ('64','EN','2','','','0','1'),
  ('65','EN','3','','','0','1'),
- ('66','EN','3',0x5472617368,'','0','1'),
- ('67','EN','4','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('68','EN','4','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
+ ('66','EN','3','Trash','','0','1'),
+ ('67','EN','4','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661710bab452.35545218\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f661710bab452.35545218\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('68','EN','4','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661710bade92.78045630\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f661710bade92.78045630\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
  ('69','EN','3','','','0','1'),
  ('70','EN','3','','','0','1'),
  ('71','EN','3','','','0','1'),
- ('72','EN','4','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('73','EN','4','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
+ ('72','EN','3','','','0','1'),
+ ('73','EN','3','','','0','1'),
  ('74','EN','3','','','0','1'),
- ('75','EN','3','','','0','1'),
- ('76','EN','3','','','0','1'),
- ('77','EN','4','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('78','EN','4','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
+ ('75','EN','4','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661710bbd3d0.93197112\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f661710bbd3d0.93197112\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('76','EN','4','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661710bbfec2.14388323\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f661710bbfec2.14388323\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('77','EN','3','','','0','1'),
+ ('78','EN','3','','','0','1'),
  ('79','EN','3','','','0','1'),
  ('80','EN','3','','','0','1'),
  ('81','EN','3','','','0','1'),
- ('82','EN','4',0x546869732069732074686520696e6275696c7420666f72756d2073797374656d20286b6e6f776e206173204f4346292e0a0a4120666f72756d2073797374656d206973206120746f6f6c20666f7220636f6d6d756e69636174696f6e206265747765656e206d656d626572733b20697420636f6e7369737473206f6620706f7374732c206f7267616e6973656420696e746f20746f706963733a206561636820746f7069632069732061206c696e65206f6620636f6e766572736174696f6e2e0a0a546865207765627369746520736f6674776172652070726f766964657320737570706f727420666f722061206e756d626572206f6620646966666572656e7420666f72756d2073797374656d732c20616e64206561636820666f72756d2068616e646c65732061757468656e7469636174696f6e206f66206d656d626572733a204f434620697320746865206275696c742d696e20666f72756d2c2077686963682070726f7669646573207365616d6c65737320696e746567726174696f6e206265747765656e20746865206d61696e20776562736974652c2074686520666f72756d732c20616e642074686520696e6275696c74206d656d626572206163636f756e74732073797374656d2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a373a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623838393033386564392e37373038373537365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d693a313b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623838393033393166362e31373532313332365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d693a323b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623838393033393365352e30393132343334305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d693a333b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623838393062336161362e32303835373531375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d693a343b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623838393062336364392e30343636343637325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d693a353b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623838393062336563322e37333232393533365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d693a363b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623838393139373066382e39333934393734385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3934353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623838393033386564392e3737303837353736275d3d5c226563686f205c5c5c22546869732069732074686520696e6275696c7420666f72756d2073797374656d20286b6e6f776e206173204f4346292e5c5c5c223b5c223b5c6e5c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623838393033393166362e3137353231333236275d3d5c226563686f205c5c5c223c6272202f3e5c5c5c223b5c223b5c6e5c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623838393033393365352e3039313234333430275d3d5c226563686f205c5c5c223c6272202f3e5c5c5c223b5c223b5c6e5c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623838393062336161362e3230383537353137275d3d5c226563686f205c5c5c224120666f72756d2073797374656d206973206120746f6f6c20666f7220636f6d6d756e69636174696f6e206265747765656e206d656d626572733b20697420636f6e7369737473206f6620706f7374732c206f7267616e6973656420696e746f20746f706963733a206561636820746f7069632069732061206c696e65206f6620636f6e766572736174696f6e2e5c5c5c223b5c223b5c6e5c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623838393062336364392e3034363634363732275d3d5c226563686f205c5c5c223c6272202f3e5c5c5c223b5c223b5c6e5c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623838393062336563322e3733323239353336275d3d5c226563686f205c5c5c223c6272202f3e5c5c5c223b5c223b5c6e5c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623838393139373066382e3933393439373438275d3d5c226563686f205c5c5c22546865207765627369746520736f6674776172652070726f766964657320737570706f727420666f722061206e756d626572206f6620646966666572656e7420666f72756d2073797374656d732c20616e64206561636820666f72756d2068616e646c65732061757468656e7469636174696f6e206f66206d656d626572733a204f434620697320746865206275696c742d696e20666f72756d2c2077686963682070726f7669646573207365616d6c65737320696e746567726174696f6e206265747765656e20746865206d61696e20776562736974652c2074686520666f72756d732c20616e642074686520696e6275696c74206d656d626572206163636f756e74732073797374656d2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('83','EN','2',0x6f63705f6d6f62696c655f70686f6e655f6e756d626572,'','0','1'),
- ('84','EN','2',0x546869732073686f756c6420626520746865206d6f62696c652070686f6e65206e756d62657220696e20696e7465726e6174696f6e616c20666f726d61742c206465766f6964206f6620616e79206e6174696f6e616c206f7220696e7465726e6174696f6e616c206f7574676f696e672061636365737320636f6465732e20466f7220696e7374616e63652c2061207479706963616c20554b2028343429206e756d626572206d69676874206265206e6174696f6e616c6c79206b6e6f776e2061732027303132333420313233343536272c2062757420696e7465726e6174696f6e616c6c7920616e6420776974686f7574206f7574676f696e672061636365737320636f64657320776f756c642062652027343431323334313233343536272e,'','0','1'),
- ('85','EN','2',0x446f776e6c6f6164206f6620746865207765656b,'','0','1'),
- ('85','RU','2',0xc390c2a4c390c2b0c390c2b9c390c2bb20c390c2bdc390c2b5c390c2b4c390c2b5c390c2bbc390c2b8,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623839386436343165322e30383235393536335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623839386436343165322e3038323539353633275d3d5c226563686f205c5c5c22c390c2a4c390c2b0c390c2b9c390c2bb20c390c2bdc390c2b5c390c2b4c390c2b5c390c2bbc390c2b85c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('86','EN','2',0x546865206265737420646f776e6c6f61647320696e2074686520646f776e6c6f61642073797374656d2c2063686f73656e206576657279207765656b2e,'','0','1'),
- ('86','RU','2',0xc390e280bac391c692c391e280a1c391cb86c390c2b8c390c2b520c391e2809ec390c2b0c390c2b9c390c2bbc391e280b920c390c2b220c391e2809ec390c2b0c390c2b9c390c2bbc390c2bec390c2b2c390c2bec390c2bc20c391e280a6c391e282acc390c2b0c390c2bdc390c2b8c390c2bbc390c2b8c391e280b0c390c2b52c20c390c2b2c391e280b9c390c2b1c390c2b8c391e282acc390c2b0c391c5bdc391e2809ac391c281c391c28f20c390c2b5c390c2b6c390c2b5c390c2bdc390c2b5c390c2b4c390c2b5c390c2bbc391c592c390c2bdc390c2be2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623839386464346566382e30323338393433355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3137343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623839386464346566382e3032333839343335275d3d5c226563686f205c5c5c22c390e280bac391c692c391e280a1c391cb86c390c2b8c390c2b520c391e2809ec390c2b0c390c2b9c390c2bbc391e280b920c390c2b220c391e2809ec390c2b0c390c2b9c390c2bbc390c2bec390c2b2c390c2bec390c2bc20c391e280a6c391e282acc390c2b0c390c2bdc390c2b8c390c2bbc390c2b8c391e280b0c390c2b52c20c390c2b2c391e280b9c390c2b1c390c2b8c391e282acc390c2b0c391c5bdc391e2809ac391c281c391c28f20c390c2b5c390c2b6c390c2b5c390c2bdc390c2b5c390c2b4c390c2b5c390c2bbc391c592c390c2bdc390c2be2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('87','EN','2',0x456d62656420596f755475626520766964656f73,'','0','1'),
- ('87','RU','2',0x456d62656420596f755475626520766964656f73,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623839393133653864372e32353739393734305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623839393133653864372e3235373939373430275d3d5c226563686f205c5c5c22456d62656420596f755475626520766964656f735c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('88','EN','2',0x456d62656420596f755475626520766964656f7320696e746f20796f757220636f6e74656e742e,'','0','1'),
- ('88','RU','2',0x456d62656420596f755475626520766964656f7320696e746f20796f757220636f6e74656e742e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623839393134386636342e34333638343531375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623839393134386636342e3433363834353137275d3d5c226563686f205c5c5c22456d62656420596f755475626520766964656f7320696e746f20796f757220636f6e74656e742e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('89','EN','1',0x46726f6e742070616765,'','0','1'),
- ('90','EN','1','','','0','1'),
- ('91','EN','1',0x52756c6573,'','0','1'),
- ('92','EN','1','','','0','1'),
- ('93','EN','1',0x46726f6e742070616765,'','0','1'),
- ('94','EN','1','','','0','1'),
- ('95','EN','1',0x4775696465,'','0','1'),
- ('96','EN','1','','','0','1'),
- ('97','EN','1',0x52756c6573,'','0','1'),
- ('98','EN','1','','','0','1'),
- ('99','EN','1',0x4d656d62657273,'','0','1'),
- ('100','EN','1','','','0','1'),
- ('101','EN','1',0x5573657267726f757073,'','0','1'),
- ('102','EN','1','','','0','1'),
- ('103','EN','1',0x4a6f696e,'','0','1'),
- ('104','EN','1','','','0','1'),
- ('105','EN','1',0x52657365742070617373776f7264,'','0','1'),
- ('106','EN','1','','','0','1'),
- ('107','EN','1',0x46726f6e742070616765,'','0','1'),
- ('108','EN','1','','','0','1'),
- ('109','EN','1',0x41626f7574,'','0','1'),
- ('110','EN','1','','','0','1'),
- ('111','EN','1',0x4163636f756e74,'','0','1'),
- ('112','EN','1','','','0','1'),
- ('113','EN','1',0x56696577206d656d6265722070726f66696c65,'','0','1'),
- ('114','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('115','EN','1',0x456469742070726f66696c65,'','0','1'),
- ('116','EN','1','','','0','1'),
- ('117','EN','1',0x4564697420617661746172,'','0','1'),
- ('118','EN','1','','','0','1'),
- ('119','EN','1',0x456469742070686f746f,'','0','1'),
- ('120','EN','1','','','0','1'),
- ('121','EN','1',0x45646974207369676e6174757265,'','0','1'),
- ('122','EN','1','','','0','1'),
- ('123','EN','1',0x45646974207469746c65,'','0','1'),
- ('124','EN','1','','','0','1'),
- ('125','EN','1',0x44656c657465206163636f756e74,'','0','1'),
- ('126','EN','1','','','0','1'),
- ('127','EN','1',0x52756c6573,'','0','1'),
- ('128','EN','1','','','0','1'),
- ('129','EN','1',0x4d656d62657273,'','0','1'),
- ('130','EN','1','','','0','1'),
- ('131','EN','1',0x56696577206d656d6265722070726f66696c65,'','0','1'),
- ('132','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('133','EN','1',0x456469742070726f66696c65,'','0','1'),
- ('134','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('135','EN','1',0x4564697420617661746172,'','0','1'),
- ('136','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('137','EN','1',0x456469742070686f746f,'','0','1'),
- ('138','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('139','EN','1',0x45646974207369676e6174757265,'','0','1'),
- ('140','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('141','EN','1',0x45646974207469746c65,'','0','1'),
- ('142','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('143','EN','1',0x53697465,'','0','1'),
- ('144','EN','1','','','0','1'),
- ('145','EN','1',0x466f72756d73,'','0','1'),
- ('146','EN','1','','','0','1'),
- ('147','EN','1',0x4163636f756e74,'','0','1'),
- ('148','EN','1','','','0','1'),
- ('149','EN','1',0x436f6c6c61626f726174696f6e205a6f6e65,'','0','1'),
- ('150','EN','1','','','0','1'),
- ('151','EN','1',0x436f6e74656e74204d616e6167656d656e74,'','0','1'),
- ('152','EN','1','','','0','1'),
- ('153','EN','1',0x41646d696e205a6f6e65,'','0','1'),
- ('154','EN','1','','','0','1'),
- ('155','EN','2','','','0','1'),
- ('156','EN','3','','','0','1'),
- ('157','EN','1',0x56696577206d7920617574686f722070726f66696c65,'','0','1'),
- ('158','EN','1','','','0','1'),
- ('159','EN','1',0x45646974206d7920617574686f722070726f66696c65,'','0','1'),
- ('160','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('161','EN','1',0x416476657274697365206865726521,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861343663326463332e31333431303435345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861343663326463332e3133343130343534275d3d5c226563686f205c5c5c224164766572746973652068657265215c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('161','RU','1',0xc390e28099c390c2b0c391cb86c390c2b020c391e282acc390c2b5c390c2bac390c2bbc390c2b0c390c2bcc390c2b020c390c2b7c390c2b4c390c2b5c391c281c391c592,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861343730396331352e37353238383934345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861343730396331352e3735323838393434275d3d5c226563686f205c5c5c22c390e28099c390c2b0c391cb86c390c2b020c391e282acc390c2b5c390c2bac390c2bbc390c2b0c390c2bcc390c2b020c390c2b7c390c2b4c390c2b5c391c281c391c5925c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('162','EN','1',0x47657420686f7374656420627920757321,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861343730656636382e38313333363338375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861343730656636382e3831333336333837275d3d5c226563686f205c5c5c2247657420686f73746564206279207573215c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('162','RU','1',0xc390c5b8c390c2bec390c2bbc391c692c391e280a1c390c2b8c391e2809ac391c59220c391e280a6c390c2bec391c281c391e2809ac390c2b8c390c2bdc390c2b3,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861343733353430382e35343538323734325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861343733353430382e3534353832373432275d3d5c226563686f205c5c5c22c390c5b8c390c2bec390c2bbc391c692c391e280a1c390c2b8c391e2809ac391c59220c391e280a6c390c2bec391c281c391e2809ac390c2b8c390c2bdc390c2b35c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('163','EN','1',0x506c6561736520646f6e61746520746f206b6565702074686973207369746520616c697665,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861343733393261302e32353433353733385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861343733393261302e3235343335373338275d3d5c226563686f205c5c5c22506c6561736520646f6e61746520746f206b6565702074686973207369746520616c6976655c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('163','RU','1',0xc390c5b8c390c2bec390c2b6c390c2b0c390c2bbc391c692c390c2b9c391c281c391e2809ac390c2b020c390c2bfc390c2bec390c2b6c390c2b5c391e282acc391e2809ac390c2b2c391c692c390c2b9c391e2809ac390c2b520c390c2b4c390c2bbc391c28f20c390c2bfc390c2bec390c2b4c390c2b4c390c2b5c391e282acc390c2b6c390c2b0c390c2bdc390c2b8c391c28f20c391c281c390c2b0c390c2b9c391e2809ac390c2b020c390c2bdc390c2b020c390c2bfc390c2bbc390c2b0c390c2b2c391c692,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861343761393434392e30343238323838335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3136363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861343761393434392e3034323832383833275d3d5c226563686f205c5c5c22c390c5b8c390c2bec390c2b6c390c2b0c390c2bbc391c692c390c2b9c391c281c391e2809ac390c2b020c390c2bfc390c2bec390c2b6c390c2b5c391e282acc391e2809ac390c2b2c391c692c390c2b9c391e2809ac390c2b520c390c2b4c390c2bbc391c28f20c390c2bfc390c2bec390c2b4c390c2b4c390c2b5c391e282acc390c2b6c390c2b0c390c2bdc390c2b8c391c28f20c391c281c390c2b0c390c2b9c391e2809ac390c2b020c390c2bdc390c2b020c390c2bfc390c2bbc390c2b0c390c2b2c391c6925c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('164','EN','1',0x47657420686f7374656420627920757321,'','0','1'),
+ ('82','EN','3','','','0','1'),
+ ('83','EN','4','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661710bcc933.19430014\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f661710bcc933.19430014\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('84','EN','4','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661710bce1c6.54984498\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f661710bce1c6.54984498\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('85','EN','3','','','0','1'),
+ ('86','EN','3','','','0','1'),
+ ('87','EN','3','','','0','1'),
+ ('88','EN','3','','','0','1'),
+ ('89','EN','3','','','0','1'),
+ ('90','EN','3','','','0','1'),
+ ('91','EN','4','This is the inbuilt forum system (known as OCF).\n\nA forum system is a tool for communication between members; it consists of posts, organised into topics: each topic is a line of conversation.\n\nThe website software provides support for a number of different forum systems, and each forum handles authentication of members: OCF is the built-in forum, which provides seamless integration between the main website, the forums, and the inbuilt member accounts system.','return unserialize(\"a:6:{i:0;a:7:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661711486134.14173370\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}i:1;a:5:{i:0;s:37:\\\"string_attach_4f6617114862f8.05056137\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}i:2;a:5:{i:0;s:37:\\\"string_attach_4f661711486492.66728217\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}i:3;a:5:{i:0;s:37:\\\"string_attach_4f6617114d23f4.86954486\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}i:4;a:5:{i:0;s:37:\\\"string_attach_4f6617114d2598.40103278\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}i:5;a:5:{i:0;s:37:\\\"string_attach_4f6617114d2717.32348490\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}i:6;a:5:{i:0;s:37:\\\"string_attach_4f661711575bf2.93706228\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:7:\\\"(mixed)\\\";i:3;s:0:\\\"\\\";i:4;N;i:5;s:945:\\\"\\$TPL_FUNCS[\'string_attach_4f661711486134.14173370\']=\\\"echo \\\\\\\"This is the inbuilt forum system (known as OCF).\\\\\\\";\\\";\\n\\$TPL_FUNCS[\'string_attach_4f6617114862f8.05056137\']=\\\"echo \\\\\\\"<br />\\\\\\\";\\\";\\n\\$TPL_FUNCS[\'string_attach_4f661711486492.66728217\']=\\\"echo \\\\\\\"<br />\\\\\\\";\\\";\\n\\$TPL_FUNCS[\'string_attach_4f6617114d23f4.86954486\']=\\\"echo \\\\\\\"A forum system is a tool for communication between members; it consists of posts, organised into topics: each topic is a line of conversation.\\\\\\\";\\\";\\n\\$TPL_FUNCS[\'string_attach_4f6617114d2598.40103278\']=\\\"echo \\\\\\\"<br />\\\\\\\";\\\";\\n\\$TPL_FUNCS[\'string_attach_4f6617114d2717.32348490\']=\\\"echo \\\\\\\"<br />\\\\\\\";\\\";\\n\\$TPL_FUNCS[\'string_attach_4f661711575bf2.93706228\']=\\\"echo \\\\\\\"The website software provides support for a number of different forum systems, and each forum handles authentication of members: OCF is the built-in forum, which provides seamless integration between the main website, the forums, and the inbuilt member accounts system.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('92','EN','2','ocp_mobile_phone_number','','0','1'),
+ ('93','EN','2','This should be the mobile phone number in international format, devoid of any national or international outgoing access codes. For instance, a typical UK (44) number might be nationally known as \'01234 123456\', but internationally and without outgoing access codes would be \'441234123456\'.','','0','1'),
+ ('94','EN','2','Download of the week','','0','1'),
+ ('95','EN','2','The best downloads in the download system, chosen every week.','','0','1'),
+ ('96','EN','2','Embed Facebook videos','','0','1'),
+ ('97','EN','2','Embed Facebook videos into your content.','','0','1'),
+ ('98','EN','2','Embed YouTube videos','','0','1'),
+ ('99','EN','2','Embed YouTube videos into your content.','','0','1'),
+ ('100','EN','1','Front page','','0','1'),
+ ('101','EN','1','','','0','1'),
+ ('102','EN','1','Rules','','0','1'),
+ ('103','EN','1','','','0','1'),
+ ('104','EN','1','Front page','','0','1'),
+ ('105','EN','1','','','0','1'),
+ ('106','EN','1','Guide','','0','1'),
+ ('107','EN','1','','','0','1'),
+ ('108','EN','1','Rules','','0','1'),
+ ('109','EN','1','','','0','1'),
+ ('110','EN','1','Members','','0','1'),
+ ('111','EN','1','','','0','1'),
+ ('112','EN','1','Usergroups','','0','1'),
+ ('113','EN','1','','','0','1'),
+ ('114','EN','1','Join','','0','1'),
+ ('115','EN','1','','','0','1'),
+ ('116','EN','1','Reset password','','0','1'),
+ ('117','EN','1','','','0','1'),
+ ('118','EN','1','Front page','','0','1'),
+ ('119','EN','1','','','0','1'),
+ ('120','EN','1','About','','0','1'),
+ ('121','EN','1','','','0','1'),
+ ('122','EN','1','Rules','','0','1'),
+ ('123','EN','1','','','0','1'),
+ ('124','EN','1','Members','','0','1'),
+ ('125','EN','1','','','0','1'),
+ ('126','EN','1','Site','','0','1'),
+ ('127','EN','1','','','0','1'),
+ ('128','EN','1','Forums','','0','1'),
+ ('129','EN','1','','','0','1'),
+ ('130','EN','1','Collaboration Zone','','0','1'),
+ ('131','EN','1','','','0','1'),
+ ('132','EN','1','Content Management','','0','1'),
+ ('133','EN','1','','','0','1'),
+ ('134','EN','1','Admin Zone','','0','1'),
+ ('135','EN','1','','','0','1'),
+ ('136','EN','2','','','0','1'),
+ ('137','EN','3','','','0','1'),
+ ('138','EN','1','View my author profile','','0','1'),
+ ('139','EN','1','','','0','1'),
+ ('140','EN','1','Configure my author profile','','0','1'),
+ ('141','EN','1','This link is a shortcut: the menu will change','','0','1'),
+ ('142','EN','1','Advertise here!','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661732eb0ac9.90138419\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:81:\\\"\\$TPL_FUNCS[\'string_attach_4f661732eb0ac9.90138419\']=\\\"echo \\\\\\\"Advertise here!\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('143','EN','1','Please donate to keep this site alive','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f661732eb7925.31341370\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:103:\\\"\\$TPL_FUNCS[\'string_attach_4f661732eb7925.31341370\']=\\\"echo \\\\\\\"Please donate to keep this site alive\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('144','EN','2','(System command)','','0','1'),
+ ('145','EN','2','General','','0','1'),
+ ('146','EN','2','Birthday','','0','1'),
+ ('147','EN','2','Public holiday','','0','1'),
+ ('148','EN','2','Vacation','','0','1'),
+ ('149','EN','2','Appointment','','0','1'),
+ ('150','EN','2','Task','','0','1'),
+ ('151','EN','2','Anniversary','','0','1'),
+ ('152','EN','2','Super-member projects','','0','1'),
+ ('153','EN','3','These are projects listed by super-members, designed to: advertise project existence, detail current progress, and solicit help.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b5a4052.58288014\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:194:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b5a4052.58288014\']=\\\"echo \\\\\\\"These are projects listed by super-members, designed to: advertise project existence, detail current progress, and solicit help.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('154','EN','3','Name','','0','1'),
+ ('155','EN','3','The name for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b5b4643.52716870\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:84:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b5b4643.52716870\']=\\\"echo \\\\\\\"The name for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('156','EN','3','Maintainer','','0','1'),
+ ('157','EN','3','The maintainer of this project.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b5cbb93.52396199\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:97:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b5cbb93.52396199\']=\\\"echo \\\\\\\"The maintainer of this project.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('158','EN','3','Description','','0','1'),
+ ('159','EN','3','A concise description for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b5d8199.48072332\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:97:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b5d8199.48072332\']=\\\"echo \\\\\\\"A concise description for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('160','EN','3','Project progress','','0','1'),
+ ('161','EN','3','The estimated percentage of completion of this project.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b5e2e10.30725128\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:121:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b5e2e10.30725128\']=\\\"echo \\\\\\\"The estimated percentage of completion of this project.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('162','EN','2','Super-member projects','','0','1'),
+ ('163','EN','3','These are projects listed by super-members, designed to: advertise project existence, detail current progress, and solicit help.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b5ed697.47368703\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:194:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b5ed697.47368703\']=\\\"echo \\\\\\\"These are projects listed by super-members, designed to: advertise project existence, detail current progress, and solicit help.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('164','EN','1','Super-member projects','','0','1'),
  ('165','EN','1','','','0','1'),
- ('166','EN','2',0x2853797374656d20636f6d6d616e6429,'','0','1'),
- ('166','RU','2',0x28c390c2a1c390c2b8c391c281c391e2809ac390c2b5c390c2bcc390c2bdc390c2b0c391c28f20c390c2bac390c2bec390c2bcc390c2b0c390c2bdc390c2b4c390c2b029,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861363534653730342e34363734393638395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861363534653730342e3436373439363839275d3d5c226563686f205c5c5c2228c390c2a1c390c2b8c391c281c391e2809ac390c2b5c390c2bcc390c2bdc390c2b0c391c28f20c390c2bac390c2bec390c2bcc390c2b0c390c2bdc390c2b4c390c2b0295c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('167','EN','2',0x47656e6572616c,'','0','1'),
- ('167','RU','2',0xc390c5bec390c2b1c391e280b0c390c2b5c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861363537343533382e32383531313032355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861363537343533382e3238353131303235275d3d5c226563686f205c5c5c22c390c5bec390c2b1c391e280b0c390c2b5c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('168','EN','2',0x4269727468646179,'','0','1'),
- ('168','RU','2',0xc390e2809dc390c2b5c390c2bdc391c59220c391e282acc390c2bec390c2b6c390c2b4c390c2b5c390c2bdc390c2b8c391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861363538316234332e32373432313136355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861363538316234332e3237343231313635275d3d5c226563686f205c5c5c22c390e2809dc390c2b5c390c2bdc391c59220c391e282acc390c2bec390c2b6c390c2b4c390c2b5c390c2bdc390c2b8c391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('169','EN','2',0x5075626c696320686f6c69646179,'','0','1'),
- ('169','RU','2',0xc390c5bec390c2b1c391e280b0c390c2b5c391c281c391e2809ac390c2b2c390c2b5c390c2bdc390c2bdc391e280b9c390c2b920c390c2bfc391e282acc390c2b0c390c2b7c390c2b4c390c2bdc390c2b8c390c2ba,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861363538666566372e35383632363236365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861363538666566372e3538363236323636275d3d5c226563686f205c5c5c22c390c5bec390c2b1c391e280b0c390c2b5c391c281c391e2809ac390c2b2c390c2b5c390c2bdc390c2bdc391e280b9c390c2b920c390c2bfc391e282acc390c2b0c390c2b7c390c2b4c390c2bdc390c2b8c390c2ba5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('170','EN','2',0x5661636174696f6e,'','0','1'),
- ('170','RU','2',0xc390c5a1c390c2b0c390c2bdc390c2b8c390c2bac391c692c390c2bbc391e280b92fc390c2bec391e2809ac390c2bfc391c692c391c281c390c2ba,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861363539643766322e33393638363532315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861363539643766322e3339363836353231275d3d5c226563686f205c5c5c22c390c5a1c390c2b0c390c2bdc390c2b8c390c2bac391c692c390c2bbc391e280b92fc390c2bec391e2809ac390c2bfc391c692c391c281c390c2ba5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('171','EN','2',0x4170706f696e746d656e74,'','0','1'),
- ('171','RU','2',0xc390e28099c391c281c391e2809ac391e282acc390c2b5c391e280a1c390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861363561623037382e31383932383730355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861363561623037382e3138393238373035275d3d5c226563686f205c5c5c22c390e28099c391c281c391e2809ac391e282acc390c2b5c391e280a1c390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('172','EN','2',0x5461736b,'','0','1'),
- ('172','RU','2',0xc390e28094c390c2b0c390c2b4c390c2b0c391e280a1c390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861363562383266322e37323934343834315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861363562383266322e3732393434383431275d3d5c226563686f205c5c5c22c390e28094c390c2b0c390c2b4c390c2b0c391e280a1c390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('173','EN','2',0x416e6e6976657273617279,'','0','1'),
- ('173','RU','2',0xc390e2809cc390c2bec390c2b4c390c2bec390c2b2c391e280b0c390c2b8c390c2bdc390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861363563353362352e39333331323337375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861363563353362352e3933333132333737275d3d5c226563686f205c5c5c22c390e2809cc390c2bec390c2b4c390c2bec390c2b2c391e280b0c390c2b8c390c2bdc390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('174','EN','1',0x43616c656e646172,'','0','1'),
- ('175','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('176','EN','2',0x53757065722d6d656d6265722070726f6a65637473,'','0','1'),
- ('176','RU','2',0xc390c5b8c391e282acc390c2bec390c2b5c390c2bac391e2809ac391e280b920c391c281c391c692c390c2bfc390c2b5c391e282ac2dc390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386536643062362e35303436313632345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386536643062362e3530343631363234275d3d5c226563686f205c5c5c22c390c5b8c391e282acc390c2bec390c2b5c390c2bac391e2809ac391e280b920c391c281c391c692c390c2bfc390c2b5c391e282ac2dc390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('177','EN','3',0x5468657365206172652070726f6a65637473206c69737465642062792073757065722d6d656d626572732c2064657369676e656420746f3a206164766572746973652070726f6a656374206578697374656e63652c2064657461696c2063757272656e742070726f67726573732c20616e6420736f6c696369742068656c702e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386537323262322e31383836323130365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3139343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386537323262322e3138383632313036275d3d5c226563686f205c5c5c225468657365206172652070726f6a65637473206c69737465642062792073757065722d6d656d626572732c2064657369676e656420746f3a206164766572746973652070726f6a656374206578697374656e63652c2064657461696c2063757272656e742070726f67726573732c20616e6420736f6c696369742068656c702e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('177','RU','3',0xc390c2adc391e2809ac390c2be20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac391e280b92c20c391c281c390c2bec390c2b7c390c2b4c390c2b0c390c2bdc390c2bdc391e280b9c390c2b520c391c281c391c692c390c2bfc390c2b5c391e282ac2dc390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc390c2b5c390c2bc2c20c390c2bfc391e282acc390c2b5c390c2b4c390c2bdc390c2b0c390c2b7c390c2bdc390c2b0c391e280a1c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c390c2b4c390c2bbc391c28f3a20c390c2bfc391e282acc390c2bec390c2b4c390c2b2c390c2b8c390c2b6c390c2b5c390c2bdc390c2b8c391c28f20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2b02c20c390c2b4c390c2b5c391e2809ac390c2b0c390c2bbc391c592c390c2bdc390c2bec390c2b3c390c2be20c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c391c28f20c390c2bfc391e282acc390c2bec390c2b4c390c2b2c390c2b8c390c2b6c390c2b5c390c2bdc390c2b8c391c28f2c20c391e280a0c390c2b5c390c2bdc391e2809ac391e282acc390c2b0c390c2bbc390c2b8c390c2b7c390c2bec390c2b2c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2bfc390c2bec390c2bcc390c2bec391e280b0c390c2b82e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386539383064392e33333636353738305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3333333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386539383064392e3333363635373830275d3d5c226563686f205c5c5c22c390c2adc391e2809ac390c2be20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac391e280b92c20c391c281c390c2bec390c2b7c390c2b4c390c2b0c390c2bdc390c2bdc391e280b9c390c2b520c391c281c391c692c390c2bfc390c2b5c391e282ac2dc390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc390c2b5c390c2bc2c20c390c2bfc391e282acc390c2b5c390c2b4c390c2bdc390c2b0c390c2b7c390c2bdc390c2b0c391e280a1c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c390c2b4c390c2bbc391c28f3a20c390c2bfc391e282acc390c2bec390c2b4c390c2b2c390c2b8c390c2b6c390c2b5c390c2bdc390c2b8c391c28f20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2b02c20c390c2b4c390c2b5c391e2809ac390c2b0c390c2bbc391c592c390c2bdc390c2bec390c2b3c390c2be20c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c391c28f20c390c2bfc391e282acc390c2bec390c2b4c390c2b2c390c2b8c390c2b6c390c2b5c390c2bdc390c2b8c391c28f2c20c391e280a0c390c2b5c390c2bdc391e2809ac391e282acc390c2b0c390c2bbc390c2b8c390c2b7c390c2bec390c2b2c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2bfc390c2bec390c2bcc390c2bec391e280b0c390c2b82e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('178','EN','3',0x4e616d65,'','0','1'),
- ('178','RU','3',0xc390cb9cc390c2bcc391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386562616333372e37373837393131305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386562616333372e3737383739313130275d3d5c226563686f205c5c5c22c390cb9cc390c2bcc391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('179','EN','3',0x546865206e616d6520666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386562653461392e31373231363931345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386562653461392e3137323136393134275d3d5c226563686f205c5c5c22546865206e616d6520666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('179','RU','3',0xc390c29dc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386564663561352e32303438363936345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386564663561352e3230343836393634275d3d5c226563686f205c5c5c22c390c29dc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('180','EN','3',0x4d61696e7461696e6572,'','0','1'),
- ('180','RU','3',0xc390c2a3c390c2bfc391e282acc390c2b0c390c2b2c390c2bbc391c28fc391c5bdc391e280b0c390c2b8c390c2b9,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386566333330332e37333831313039335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386566333330332e3733383131303933275d3d5c226563686f205c5c5c22c39026706f756e643bc390c2bfc391e282acc390c2b0c390c2b2c390c2bbc391c28fc391c5bdc391e280b0c390c2b8c390c2b95c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('181','EN','3',0x546865206d61696e7461696e6572206f6620746869732070726f6a6563742e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386566363463372e39313632363833385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386566363463372e3931363236383338275d3d5c226563686f205c5c5c22546865206d61696e7461696e6572206f6620746869732070726f6a6563742e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('181','RU','3',0xc390c2a3c390c2bfc391e282acc390c2b0c390c2b2c390c2bbc391c28fc391c5bdc391e280b0c390c2b8c390c2b920c391c28dc391e2809ac390c2b8c390c2bc20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2bec390c2bc,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386630343234332e30343336343634395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3132303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386630343234332e3034333634363439275d3d5c226563686f205c5c5c22c39026706f756e643bc390c2bfc391e282acc390c2b0c390c2b2c390c2bbc391c28fc391c5bdc391e280b0c390c2b8c390c2b920c391c28dc391e2809ac390c2b8c390c2bc20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2bec390c2bc5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('182','EN','3',0x4465736372697074696f6e,'','0','1'),
- ('182','RU','3',0xc390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386631353066312e37313135333534345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386631353066312e3731313533353434275d3d5c226563686f205c5c5c22c390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('183','EN','3',0x4120636f6e63697365206465736372697074696f6e20666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386631376539382e33363837333537305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386631376539382e3336383733353730275d3d5c226563686f205c5c5c224120636f6e63697365206465736372697074696f6e20666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('183','RU','3',0xc390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386632333537322e33353738353734345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386632333537322e3335373835373434275d3d5c226563686f205c5c5c22c390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('184','EN','3',0x50726f6a6563742070726f6772657373,'','0','1'),
- ('184','RU','3',0xc390c2a1c391e2809ac390c2b5c390c2bfc390c2b5c390c2bdc391c59220c390c2b3c390c2bec391e2809ac390c2bec390c2b2c390c2bdc390c2bec391c281c391e2809ac390c2b820c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386633373861302e38393530393939305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386633373861302e3839353039393930275d3d5c226563686f205c5c5c22c390c2a1c391e2809ac390c2b5c390c2bfc390c2b5c390c2bdc391c59220c390c2b3c390c2bec391e2809ac390c2bec390c2b2c390c2bdc390c2bec391c281c391e2809ac390c2b820c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('185','EN','3',0x54686520657374696d617465642070657263656e74616765206f6620636f6d706c6574696f6e206f6620746869732070726f6a6563742e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861386633626435322e38323434303532305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3132313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861386633626435322e3832343430353230275d3d5c226563686f205c5c5c2254686520657374696d617465642070657263656e74616765206f6620636f6d706c6574696f6e206f6620746869732070726f6a6563742e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('185','RU','3',0xc390c5bec391e282acc390c2b8c390c2b5c390c2bdc391e2809ac390c2b8c391e282acc390c2bec390c2b2c390c2bec391e280a1c390c2bdc390c2b0c391c28f20c391c281c391e2809ac390c2b5c390c2bfc390c2b5c390c2bdc391c59220c390c2b3c390c2bec391e2809ac390c2bec390c2b2c390c2bdc390c2bec391c281c391e2809ac390c2b820c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2b020c390c2b220c390c2bfc391e282acc390c2bec391e280a0c390c2b5c390c2bdc391e2809ac390c2b0c391e280a62e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393031373266372e34313336383136355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3137303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393031373266372e3431333638313635275d3d5c226563686f205c5c5c22c390c5bec391e282acc390c2b8c390c2b5c390c2bdc391e2809ac390c2b8c391e282acc390c2bec390c2b2c390c2bec391e280a1c390c2bdc390c2b0c391c28f20c391c281c391e2809ac390c2b5c390c2bfc390c2b5c390c2bdc391c59220c390c2b3c390c2bec391e2809ac390c2bec390c2b2c390c2bdc390c2bec391c281c391e2809ac390c2b820c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2b020c390c2b220c390c2bfc391e282acc390c2bec391e280a0c390c2b5c390c2bdc391e2809ac390c2b0c391e280a62e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('186','EN','2',0x53757065722d6d656d6265722070726f6a65637473,'','0','1'),
- ('186','RU','2',0xc390c5b8c391e282acc390c2bec390c2b5c390c2bac391e2809ac391e280b920c391c281c391c692c390c2bfc390c2b5c391e282ac2dc390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393033363039382e34373337333234345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393033363039382e3437333733323434275d3d5c226563686f205c5c5c22c390c5b8c391e282acc390c2bec390c2b5c390c2bac391e2809ac391e280b920c391c281c391c692c390c2bfc390c2b5c391e282ac2dc390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('187','EN','3',0x5468657365206172652070726f6a65637473206c69737465642062792073757065722d6d656d626572732c2064657369676e656420746f3a206164766572746973652070726f6a656374206578697374656e63652c2064657461696c2063757272656e742070726f67726573732c20616e6420736f6c696369742068656c702e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393033393239392e36313036313332315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3139343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393033393239392e3631303631333231275d3d5c226563686f205c5c5c225468657365206172652070726f6a65637473206c69737465642062792073757065722d6d656d626572732c2064657369676e656420746f3a206164766572746973652070726f6a656374206578697374656e63652c2064657461696c2063757272656e742070726f67726573732c20616e6420736f6c696369742068656c702e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('187','RU','3',0xc390c2adc391e2809ac390c2be20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac391e280b92c20c391c281c390c2bec390c2b7c390c2b4c390c2b0c390c2bdc390c2bdc391e280b9c390c2b520c391c281c391c692c390c2bfc390c2b5c391e282ac2dc390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc390c2b5c390c2bc2c20c390c2bfc391e282acc390c2b5c390c2b4c390c2bdc390c2b0c390c2b7c390c2bdc390c2b0c391e280a1c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c390c2b4c390c2bbc391c28f3a20c390c2bfc391e282acc390c2bec390c2b4c390c2b2c390c2b8c390c2b6c390c2b5c390c2bdc390c2b8c391c28f20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2b02c20c390c2b4c390c2b5c391e2809ac390c2b0c390c2bbc391c592c390c2bdc390c2bec390c2b3c390c2be20c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c391c28f20c390c2bfc391e282acc390c2bec390c2b4c390c2b2c390c2b8c390c2b6c390c2b5c390c2bdc390c2b8c391c28f2c20c391e280a0c390c2b5c390c2bdc391e2809ac391e282acc390c2b0c390c2bbc390c2b8c390c2b7c390c2bec390c2b2c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2bfc390c2bec390c2bcc390c2bec391e280b0c390c2b82e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393035613833372e32373731373234365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3333333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393035613833372e3237373137323436275d3d5c226563686f205c5c5c22c390c2adc391e2809ac390c2be20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac391e280b92c20c391c281c390c2bec390c2b7c390c2b4c390c2b0c390c2bdc390c2bdc391e280b9c390c2b520c391c281c391c692c390c2bfc390c2b5c391e282ac2dc390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc390c2b5c390c2bc2c20c390c2bfc391e282acc390c2b5c390c2b4c390c2bdc390c2b0c390c2b7c390c2bdc390c2b0c391e280a1c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c390c2b4c390c2bbc391c28f3a20c390c2bfc391e282acc390c2bec390c2b4c390c2b2c390c2b8c390c2b6c390c2b5c390c2bdc390c2b8c391c28f20c390c2bfc391e282acc390c2bec390c2b5c390c2bac391e2809ac390c2b02c20c390c2b4c390c2b5c391e2809ac390c2b0c390c2bbc391c592c390c2bdc390c2bec390c2b3c390c2be20c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c391c28f20c390c2bfc391e282acc390c2bec390c2b4c390c2b2c390c2b8c390c2b6c390c2b5c390c2bdc390c2b8c391c28f2c20c391e280a0c390c2b5c390c2bdc391e2809ac391e282acc390c2b0c390c2bbc390c2b8c390c2b7c390c2bec390c2b2c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2bfc390c2bec390c2bcc390c2bec391e280b0c390c2b82e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('188','EN','1',0x53757065722d6d656d6265722070726f6a65637473,'','0','1'),
- ('189','EN','1','','','0','1'),
- ('190','EN','2',0x4d6f64696669636174696f6e73,'','0','1'),
- ('190','RU','2',0xc390c593c390c2bec390c2b4c390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e280a0c390c2b8c390c2b8,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393038616463392e30383736313330345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393038616463392e3038373631333034275d3d5c226563686f205c5c5c22c390c593c390c2bec390c2b4c390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e280a0c390c2b8c390c2b85c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('191','EN','3',0x546865736520617265206d6f64732074686174206d6179206265206170706c6965642e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393038643662362e34343135373434345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393038643662362e3434313537343434275d3d5c226563686f205c5c5c22546865736520617265206d6f64732074686174206d6179206265206170706c6965642e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('191','RU','3',0xc390c2adc391e2809ac390c2be20c391c281c390c2bfc390c2b8c391c281c390c2bec390c2ba20c390c2b2c390c2bec390c2b7c390c2bcc390c2bec390c2b6c390c2bdc391e280b9c391e280a620c390c2bcc390c2bec390c2b4c390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e280a0c390c2b8c390c2b92e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393039633361392e34363639353238355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3132383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393039633361392e3436363935323835275d3d5c226563686f205c5c5c22c390c2adc391e2809ac390c2be20c391c281c390c2bfc390c2b8c391c281c390c2bec390c2ba20c390c2b2c390c2bec390c2b7c390c2bcc390c2bec390c2b6c390c2bdc391e280b9c391e280a620c390c2bcc390c2bec390c2b4c390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e280a0c390c2b8c390c2b92e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('192','EN','3',0x4e616d65,'','0','1'),
- ('192','RU','3',0xc390cb9cc390c2bcc391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393061646261352e34373230313535385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393061646261352e3437323031353538275d3d5c226563686f205c5c5c22c390cb9cc390c2bcc391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('193','EN','3',0x546865206e616d6520666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393062303162312e36313430373836335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393062303162312e3631343037383633275d3d5c226563686f205c5c5c22546865206e616d6520666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('193','RU','3',0xc390c29dc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393062396435362e38393231313232365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393062396435362e3839323131323236275d3d5c226563686f205c5c5c22c390c29dc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('194','EN','3',0x496d616765,'','0','1'),
- ('194','RU','3',0xc390cb9cc390c2b7c390c2bec390c2b1c391e282acc390c2b0c390c2b6c390c2b5c390c2bdc390c2b8c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393063383464332e31343531303635325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393063383464332e3134353130363532275d3d5c226563686f205c5c5c22c390cb9cc390c2b7c390c2bec390c2b1c391e282acc390c2b0c390c2b6c390c2b5c390c2bdc390c2b8c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('195','EN','3',0x41206c6f676f20666f722074686973206d6f64696669636174696f6e2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393063613763312e31323630333835385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393063613763312e3132363033383538275d3d5c226563686f205c5c5c2241206c6f676f20666f722074686973206d6f64696669636174696f6e2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('195','RU','3',0xc390e280bac390c2bec390c2b3c390c2be20c390c2b4c390c2bbc391c28f20c391c28dc391e2809ac390c2bec390c2b920c390c2bcc390c2bec390c2b4c390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e280a0c390c2b8c390c2b82e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393064373365352e36353335303530305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393064373365352e3635333530353030275d3d5c226563686f205c5c5c22c390e280bac390c2bec390c2b3c390c2be20c390c2b4c390c2bbc391c28f20c391c28dc391e2809ac390c2bec390c2b920c390c2bcc390c2bec390c2b4c390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e280a0c390c2b8c390c2b82e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('196','EN','3',0x537461747573,'','0','1'),
- ('196','RU','3',0xc390c2a1c391e2809ac390c2b0c391e2809ac391c692c391c281,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393065376332342e36363136313039385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393065376332342e3636313631303938275d3d5c226563686f205c5c5c22c390c2a1c391e2809ac390c2b0c391e2809ac391c692c391c2815c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('197','EN','3',0x54686520737461747573206f662074686973206d6f64696669636174696f6e2e20546869732063616e20626520616e79207465787420737472696e672c20737563682061733a20436f6d706c657465642c20506c616e6e696e672c20446576656c6f706d656e74206f722054657374696e672e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393065613330342e36303035393737305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3138313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393065613330342e3630303539373730275d3d5c226563686f205c5c5c2254686520737461747573206f662074686973206d6f64696669636174696f6e2e20546869732063616e20626520616e79207465787420737472696e672c20737563682061733a20436f6d706c657465642c20506c616e6e696e672c20446576656c6f706d656e74206f722054657374696e672e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('197','RU','3',0xc390c2a1c390c2bec391c281c391e2809ac390c2bec391c28fc390c2bdc390c2b8c390c2b520c390c2b4c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2bcc390c2bec390c2b4c390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e280a0c390c2b8c390c2b82e20c390c2adc391e2809ac390c2be20c390c2bcc390c2bec390c2b6c390c2b5c391e2809a20c390c2b1c391e280b9c391e2809ac391c59220c390c2bbc391c5bdc390c2b1c390c2b0c391c28f20c391e2809ac390c2b5c390c2bac391c281c391e2809ac390c2bec390c2b2c390c2b0c391c28f20c391c281c391e2809ac391e282acc390c2bec390c2bac390c2b02c20c391e2809ac390c2b0c390c2bac390c2b0c391c28f20c390c2bac390c2b0c390c2ba3a20266c7371756f3bc390e28094c390c2b0c390c2b2c390c2b5c391e282acc391cb86c390c2b5c390c2bdc390c2b026727371756f3b2c20266c7371756f3bc390c5b8c390c2bbc390c2b0c390c2bdc390c2b8c391e282acc391c692c390c2b5c391e2809ac391c281c391c28f26727371756f3b2c20266c7371756f3bc390e2809920c391e282acc390c2b0c390c2b7c391e282acc390c2b0c390c2b1c390c2bec391e2809ac390c2bac390c2b526727371756f3b206f7220266c7371756f3bc390c2a2c390c2b5c391c281c391e2809ac390c2b8c391e282acc391c692c390c2b5c391e2809ac391c281c391c28f26727371756f3b,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393130383132342e36313634363734345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3336313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393130383132342e3631363436373434275d3d5c226563686f205c5c5c22c390c2a1c390c2bec391c281c391e2809ac390c2bec391c28fc390c2bdc390c2b8c390c2b520c390c2b4c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2bcc390c2bec390c2b4c390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e280a0c390c2b8c390c2b82e20c390c2adc391e2809ac390c2be20c390c2bcc390c2bec390c2b6c390c2b5c391e2809a20c390c2b1c391e280b9c391e2809ac391c59220c390c2bbc391c5bdc390c2b1c390c2b0c391c28f20c391e2809ac390c2b5c390c2bac391c281c391e2809ac390c2bec390c2b2c390c2b0c391c28f20c391c281c391e2809ac391e282acc390c2bec390c2bac390c2b02c20c391e2809ac390c2b0c390c2bac390c2b0c391c28f20c390c2bac390c2b0c390c2ba3a20266c7371756f3bc390e28094c390c2b0c390c2b2c390c2b5c391e282acc391cb86c390c2b5c390c2bdc390c2b026727371756f3b2c20266c7371756f3bc390c5b8c390c2bbc390c2b0c390c2bdc390c2b8c391e282acc391c692c390c2b5c391e2809ac391c281c391c28f26727371756f3b2c20266c7371756f3bc390e2809920c391e282acc390c2b0c390c2b7c391e282acc390c2b0c390c2b1c390c2bec391e2809ac390c2bac390c2b526727371756f3b206f7220266c7371756f3bc390c2a2c390c2b5c391c281c391e2809ac390c2b8c391e282acc391c692c390c2b5c391e2809ac391c281c391c28f26727371756f3b5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('198','EN','3',0x55524c,'','0','1'),
- ('198','RU','3',0x55524c,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393131633134362e36353934383333395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a36393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393131633134362e3635393438333339275d3d5c226563686f205c5c5c2255524c5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('199','EN','3',0x54686520656e746572656420746578742077696c6c20626520696e74657270726574656420617320612055524c2c20616e64207573656420617320612068797065726c696e6b2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393131656236302e30343637383836355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3133373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393131656236302e3034363738383635275d3d5c226563686f205c5c5c2254686520656e746572656420746578742077696c6c20626520696e74657270726574656420617320612055524c2c20616e64207573656420617320612068797065726c696e6b2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('199','RU','3',0xc390e28099c390c2b2c390c2b5c390c2b4c390c2b5c390c2bdc390c2bdc391e280b9c390c2b920c391e2809ac390c2b5c390c2bac391c28120c390c2b1c391c692c390c2b4c390c2b5c391e2809a20c390c2b8c390c2bdc391e2809ac390c2b5c391e282acc390c2bfc391e282acc390c2b5c391e2809ac390c2b8c391e282acc390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba2055524c20c390c2b820c390c2b8c391c281c390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba20c390c2b3c390c2b8c390c2bfc390c2b5c391e282acc391c281c391c281c391e280b9c390c2bbc390c2bac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393133333132312e31323832323736365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3230323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393133333132312e3132383232373636275d3d5c226563686f205c5c5c22c390e28099c390c2b2c390c2b5c390c2b4c390c2b5c390c2bdc390c2bdc391e280b9c390c2b920c391e2809ac390c2b5c390c2bac391c28120c390c2b1c391c692c390c2b4c390c2b5c391e2809a20c390c2b8c390c2bdc391e2809ac390c2b5c391e282acc390c2bfc391e282acc390c2b5c391e2809ac390c2b8c391e282acc390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba2055524c20c390c2b820c390c2b8c391c281c390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba20c390c2b3c390c2b8c390c2bfc390c2b5c391e282acc391c281c391c281c391e280b9c390c2bbc390c2bac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1');
-insert into `ocp7_translate` values('200','EN','3',0x4465736372697074696f6e,'','0','1'),
- ('200','RU','3',0xc390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393134353434332e34313838323730305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393134353434332e3431383832373030275d3d5c226563686f205c5c5c22c390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('201','EN','3',0x4120636f6e63697365206465736372697074696f6e20666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393134376264302e38383936353430315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393134376264302e3838393635343031275d3d5c226563686f205c5c5c224120636f6e63697365206465736372697074696f6e20666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('201','RU','3',0xc390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393135326561302e31393938313334325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393135326561302e3139393831333432275d3d5c226563686f205c5c5c22c390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('202','EN','3',0x417574686f72,'','0','1'),
- ('202','RU','3',0xc390c290c390c2b2c391e2809ac390c2bec391e282ac,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393136306636382e36343836363634305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393136306636382e3634383636363430275d3d5c226563686f205c5c5c22c390c290c390c2b2c391e2809ac390c2bec391e282ac5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('203','EN','3',0x54686520617574686f72206f66207468697320656e7472792e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393136336137372e34323538363232345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393136336137372e3432353836323234275d3d5c226563686f205c5c5c2254686520617574686f72206f66207468697320656e7472792e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('203','RU','3',0xc390c290c390c2b2c391e2809ac390c2bec391e282ac20c390c2b4c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2b7c390c2b0c390c2bfc390c2b8c391c281c390c2b82e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393136666263352e33363833373238395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393136666263352e3336383337323839275d3d5c226563686f205c5c5c22c390c290c390c2b2c391e2809ac390c2bec391e282ac20c390c2b4c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2b7c390c2b0c390c2bfc390c2b8c391c281c390c2b82e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('204','EN','1',0x4d6f64696669636174696f6e73,'','0','1'),
+ ('166','EN','2','Modifications','','0','1'),
+ ('167','EN','3','These are mods that may be applied.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b626057.51151338\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:101:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b626057.51151338\']=\\\"echo \\\\\\\"These are mods that may be applied.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('168','EN','3','Name','','0','1'),
+ ('169','EN','3','The name for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b62e143.08875870\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:84:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b62e143.08875870\']=\\\"echo \\\\\\\"The name for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('170','EN','3','Image','','0','1'),
+ ('171','EN','3','A logo for this modification.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b636087.25139477\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:95:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b636087.25139477\']=\\\"echo \\\\\\\"A logo for this modification.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('172','EN','3','Status','','0','1'),
+ ('173','EN','3','The status of this modification. This can be any text string, such as: Completed, Planning, Development or Testing.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b645591.82582132\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:181:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b645591.82582132\']=\\\"echo \\\\\\\"The status of this modification. This can be any text string, such as: Completed, Planning, Development or Testing.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('174','EN','3','URL','','0','1'),
+ ('175','EN','3','The entered text will be interpreted as a URL, and used as a hyperlink.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b64d630.34218582\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:137:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b64d630.34218582\']=\\\"echo \\\\\\\"The entered text will be interpreted as a URL, and used as a hyperlink.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('176','EN','3','Description','','0','1'),
+ ('177','EN','3','A concise description for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b65aa68.13458241\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:97:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b65aa68.13458241\']=\\\"echo \\\\\\\"A concise description for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('178','EN','3','Author','','0','1'),
+ ('179','EN','3','The author of this entry.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b6618e3.69525845\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:91:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b6618e3.69525845\']=\\\"echo \\\\\\\"The author of this entry.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('180','EN','1','Modifications','','0','1'),
+ ('181','EN','1','','','0','1'),
+ ('182','EN','2','Hosted sites','','0','1'),
+ ('183','EN','3','These are sites hosted by us.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b68e007.61335760\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:95:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b68e007.61335760\']=\\\"echo \\\\\\\"These are sites hosted by us.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('184','EN','2','Name','','0','1'),
+ ('185','EN','3','The name for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b69e3e4.10164868\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:84:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b69e3e4.10164868\']=\\\"echo \\\\\\\"The name for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('186','EN','2','URL','','0','1'),
+ ('187','EN','3','The entered text will be interpreted as a URL, and used as a hyperlink.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b6a82e6.31704119\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:137:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b6a82e6.31704119\']=\\\"echo \\\\\\\"The entered text will be interpreted as a URL, and used as a hyperlink.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('188','EN','2','Description','','0','1'),
+ ('189','EN','3','A concise description for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b6af4d7.75112088\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:97:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b6af4d7.75112088\']=\\\"echo \\\\\\\"A concise description for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('190','EN','2','Hosted sites','','0','1'),
+ ('191','EN','3','These are sites hosted by us.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b6b73d2.78912326\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:95:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b6b73d2.78912326\']=\\\"echo \\\\\\\"These are sites hosted by us.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('192','EN','1','Hosted sites','','0','1'),
+ ('193','EN','1','','','0','1'),
+ ('194','EN','2','Links','','0','1'),
+ ('195','EN','3','Warning: these sites are outside our control.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b6ee670.98545948\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:111:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b6ee670.98545948\']=\\\"echo \\\\\\\"Warning: these sites are outside our control.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('196','EN','1','Links','','0','1'),
+ ('197','EN','3','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b6f5d61.42116410\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b6f5d61.42116410\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('198','EN','2','Title','','0','1'),
+ ('199','EN','3','A concise title for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b6fc604.03792929\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:91:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b6fc604.03792929\']=\\\"echo \\\\\\\"A concise title for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('200','EN','2','URL','','0','1'),
+ ('201','EN','3','The entered text will be interpreted as a URL, and used as a hyperlink.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b712e33.23645043\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:137:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b712e33.23645043\']=\\\"echo \\\\\\\"The entered text will be interpreted as a URL, and used as a hyperlink.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('202','EN','2','Description','','0','1'),
+ ('203','EN','3','A concise description for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b722fa1.42426233\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:97:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b722fa1.42426233\']=\\\"echo \\\\\\\"A concise description for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('204','EN','1','Links','','0','1'),
  ('205','EN','1','','','0','1'),
- ('206','EN','2',0x486f73746564207369746573,'','0','1'),
- ('206','RU','2',0xc390c2a0c390c2b0c390c2b7c390c2bcc390c2b5c391e280b0c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c391c281c390c2b0c390c2b9c391e2809ac391e280b9,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393139333736392e38383237383337355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393139333736392e3838323738333735275d3d5c226563686f205c5c5c22c390c2a0c390c2b0c390c2b7c390c2bcc390c2b5c391e280b0c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c391c281c390c2b0c390c2b9c391e2809ac391e280b95c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('207','EN','3',0x54686573652061726520736974657320686f737465642062792075732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393139373830312e32343537353430305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393139373830312e3234353735343030275d3d5c226563686f205c5c5c2254686573652061726520736974657320686f737465642062792075732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('207','RU','3',0xc390c2adc391e2809ac390c2be20c391c281c390c2b0c390c2b9c391e2809ac391e280b92c20c391e282acc390c2b0c390c2b7c390c2bcc390c2b5c391e280b0c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c391c69220c390e28099c390c2b0c391c2812e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393161363934392e34313532353139385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393161363934392e3431353235313938275d3d5c226563686f205c5c5c22c390c2adc391e2809ac390c2be20c391c281c390c2b0c390c2b9c391e2809ac391e280b92c20c391e282acc390c2b0c390c2b7c390c2bcc390c2b5c391e280b0c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c391c69220c390e28099c390c2b0c391c2812e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('208','EN','2',0x4e616d65,'','0','1'),
- ('208','RU','2',0xc390cb9cc390c2bcc391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393162336466372e31363030393332315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393162336466372e3136303039333231275d3d5c226563686f205c5c5c22c390cb9cc390c2bcc391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('209','EN','3',0x546865206e616d6520666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393162363133322e36353238353831325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393162363133322e3635323835383132275d3d5c226563686f205c5c5c22546865206e616d6520666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('209','RU','3',0xc390c29dc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393162666134342e37353633373439335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393162666134342e3735363337343933275d3d5c226563686f205c5c5c22c390c29dc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('210','EN','2',0x55524c,'','0','1'),
- ('210','RU','2',0x55524c,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393163653261372e30373937393735305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a36393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393163653261372e3037393739373530275d3d5c226563686f205c5c5c2255524c5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('211','EN','3',0x54686520656e746572656420746578742077696c6c20626520696e74657270726574656420617320612055524c2c20616e64207573656420617320612068797065726c696e6b2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393164303937332e31333135383734375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3133373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393164303937332e3133313538373437275d3d5c226563686f205c5c5c2254686520656e746572656420746578742077696c6c20626520696e74657270726574656420617320612055524c2c20616e64207573656420617320612068797065726c696e6b2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('211','RU','3',0xc390e28099c390c2b2c390c2b5c390c2b4c390c2b5c390c2bdc390c2bdc391e280b9c390c2b920c391e2809ac390c2b5c390c2bac391c28120c390c2b1c391c692c390c2b4c390c2b5c391e2809a20c390c2b8c390c2bdc391e2809ac390c2b5c391e282acc390c2bfc391e282acc390c2b5c391e2809ac390c2b8c391e282acc390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba2055524c20c390c2b820c390c2b8c391c281c390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba20c390c2b3c390c2b8c390c2bfc390c2b5c391e282acc391c281c391c281c391e280b9c390c2bbc390c2bac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393165343435362e35303532313334315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3230323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393165343435362e3530353231333431275d3d5c226563686f205c5c5c22c390e28099c390c2b2c390c2b5c390c2b4c390c2b5c390c2bdc390c2bdc391e280b9c390c2b920c391e2809ac390c2b5c390c2bac391c28120c390c2b1c391c692c390c2b4c390c2b5c391e2809a20c390c2b8c390c2bdc391e2809ac390c2b5c391e282acc390c2bfc391e282acc390c2b5c391e2809ac390c2b8c391e282acc390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba2055524c20c390c2b820c390c2b8c391c281c390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba20c390c2b3c390c2b8c390c2bfc390c2b5c391e282acc391c281c391c281c391e280b9c390c2bbc390c2bac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('212','EN','2',0x4465736372697074696f6e,'','0','1'),
- ('212','RU','2',0xc390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393166323162312e36383538383937325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393166323162312e3638353838393732275d3d5c226563686f205c5c5c22c390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('213','EN','3',0x4120636f6e63697365206465736372697074696f6e20666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393166343534312e38393732323235385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393166343534312e3839373232323538275d3d5c226563686f205c5c5c224120636f6e63697365206465736372697074696f6e20666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('213','RU','3',0xc390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393166666137372e32383635353539345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393166666137372e3238363535353934275d3d5c226563686f205c5c5c22c390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('214','EN','2',0x486f73746564207369746573,'','0','1'),
- ('214','RU','2',0xc390c2a0c390c2b0c390c2b7c390c2bcc390c2b5c391e280b0c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c391c281c390c2b0c390c2b9c391e2809ac391e280b9,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393231303965322e30363934313730365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393231303965322e3036393431373036275d3d5c226563686f205c5c5c22c390c2a0c390c2b0c390c2b7c390c2bcc390c2b5c391e280b0c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c391c281c390c2b0c390c2b9c391e2809ac391e280b95c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('215','EN','3',0x54686573652061726520736974657320686f737465642062792075732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393231333531312e38393130363737375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393231333531312e3839313036373737275d3d5c226563686f205c5c5c2254686573652061726520736974657320686f737465642062792075732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('215','RU','3',0xc390c2adc391e2809ac390c2be20c391c281c390c2b0c390c2b9c391e2809ac391e280b92c20c391e282acc390c2b0c390c2b7c390c2bcc390c2b5c391e280b0c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c391c69220c390e28099c390c2b0c391c2812e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393232306466312e38333630353336365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393232306466312e3833363035333636275d3d5c226563686f205c5c5c22c390c2adc391e2809ac390c2be20c391c281c390c2b0c390c2b9c391e2809ac391e280b92c20c391e282acc390c2b0c390c2b7c390c2bcc390c2b5c391e280b0c390c2b5c390c2bdc390c2bdc391e280b9c390c2b520c391c69220c390e28099c390c2b0c391c2812e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('216','EN','1',0x486f73746564207369746573,'','0','1'),
+ ('206','EN','2','Frequently Asked Questions','','0','1'),
+ ('207','EN','3','If you have questions that are not covered in our FAQ, please post them in an appropriate forum.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b76d7c5.75797260\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:162:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b76d7c5.75797260\']=\\\"echo \\\\\\\"If you have questions that are not covered in our FAQ, please post them in an appropriate forum.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('208','EN','2','Question','','0','1'),
+ ('209','EN','3','The question asked.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b77e0a2.40903955\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:85:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b77e0a2.40903955\']=\\\"echo \\\\\\\"The question asked.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('210','EN','2','Answer','','0','1'),
+ ('211','EN','3','The answer(s) to the question.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b788f17.27139578\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:96:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b788f17.27139578\']=\\\"echo \\\\\\\"The answer(s) to the question.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('212','EN','2','Order','','0','1'),
+ ('213','EN','3','The order priority this entry has in the category.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b795283.69179764\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:116:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b795283.69179764\']=\\\"echo \\\\\\\"The order priority this entry has in the category.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('214','EN','2','Frequently Asked Questions','','0','1'),
+ ('215','EN','3','If you have questions that are not covered in our FAQ, please post them in an appropriate forum.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b7a35c5.90852878\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:162:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b7a35c5.90852878\']=\\\"echo \\\\\\\"If you have questions that are not covered in our FAQ, please post them in an appropriate forum.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('216','EN','1','Frequently Asked Questions','','0','1'),
  ('217','EN','1','','','0','1'),
- ('218','EN','2',0x4c696e6b73,'','0','1'),
- ('218','RU','2',0xc390c2a1c391c281c391e280b9c390c2bbc390c2bac390c2b8,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393234613638392e36333739363131355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393234613638392e3633373936313135275d3d5c226563686f205c5c5c22c390c2a1c391c281c391e280b9c390c2bbc390c2bac390c2b85c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('219','EN','3',0x5761726e696e673a20746865736520736974657320617265206f757473696465206f757220636f6e74726f6c2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393234636466382e38343935333730395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393234636466382e3834393533373039275d3d5c226563686f205c5c5c225761726e696e673a20746865736520736974657320617265206f757473696465206f757220636f6e74726f6c2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('219','RU','3',0xc390e28099c390c2bdc390c2b8c390c2bcc390c2b0c390c2bdc390c2b8c390c2b53a20c391c28dc391e2809ac390c2b820c391c281c390c2b0c390c2b9c391e2809ac391e280b920c390c2bdc390c2b520c390c2bac390c2bec390c2bdc391e2809ac391e282acc390c2bec390c2bbc390c2b8c391e282acc391c692c391c5bdc391e2809ac391c281c391c28f20c390c2bdc390c2b0c390c2bcc390c2b82e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393235626430392e30333832373337345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3134353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393235626430392e3033383237333734275d3d5c226563686f205c5c5c22c390e28099c390c2bdc390c2b8c390c2bcc390c2b0c390c2bdc390c2b8c390c2b53a20c391c28dc391e2809ac390c2b820c391c281c390c2b0c390c2b9c391e2809ac391e280b920c390c2bdc390c2b520c390c2bac390c2bec390c2bdc391e2809ac391e282acc390c2bec390c2bbc390c2b8c391e282acc391c692c391c5bdc391e2809ac391c281c391c28f20c390c2bdc390c2b0c390c2bcc390c2b82e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('220','EN','1',0x4c696e6b73,'','0','1'),
- ('221','EN','3','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('222','EN','2',0x5469746c65,'','0','1'),
- ('222','RU','2',0xc390e28094c390c2b0c390c2b3c390c2bec390c2bbc390c2bec390c2b2c390c2bec390c2ba,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393236653331322e37333833303937385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393236653331322e3733383330393738275d3d5c226563686f205c5c5c22c390e28094c390c2b0c390c2b3c390c2bec390c2bbc390c2bec390c2b2c390c2bec390c2ba5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('223','EN','3',0x4120636f6e63697365207469746c6520666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393237313030362e33363635383132375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393237313030362e3336363538313237275d3d5c226563686f205c5c5c224120636f6e63697365207469746c6520666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('223','RU','3',0xc390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2b8c390c2b920c390c2b7c390c2b0c390c2b3c390c2bec390c2bbc390c2bec390c2b2c390c2bec390c2ba20c390c2b4c390c2bbc391c28f20c390c2bdc390c2b5c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393237653337322e32383433353338385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393237653337322e3238343335333838275d3d5c226563686f205c5c5c22c390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2b8c390c2b920c390c2b7c390c2b0c390c2b3c390c2bec390c2bbc390c2bec390c2b2c390c2bec390c2ba20c390c2b4c390c2bbc391c28f20c390c2bdc390c2b5c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('224','EN','2',0x55524c,'','0','1'),
- ('224','RU','2',0x55524c,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393238666131322e35363235323936345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a36393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393238666131322e3536323532393634275d3d5c226563686f205c5c5c2255524c5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('225','EN','3',0x54686520656e746572656420746578742077696c6c20626520696e74657270726574656420617320612055524c2c20616e64207573656420617320612068797065726c696e6b2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393239316432392e32373838383530385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3133373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393239316432392e3237383838353038275d3d5c226563686f205c5c5c2254686520656e746572656420746578742077696c6c20626520696e74657270726574656420617320612055524c2c20616e64207573656420617320612068797065726c696e6b2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('225','RU','3',0xc390e28099c390c2b2c390c2b5c390c2b4c390c2b5c390c2bdc390c2bdc391e280b9c390c2b920c391e2809ac390c2b5c390c2bac391c28120c390c2b1c391c692c390c2b4c390c2b5c391e2809a20c390c2b8c390c2bdc391e2809ac390c2b5c391e282acc390c2bfc391e282acc390c2b5c391e2809ac390c2b8c391e282acc390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba2055524c20c390c2b820c390c2b8c391c281c390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba20c390c2b3c390c2b8c390c2bfc390c2b5c391e282acc391c281c391c281c391e280b9c390c2bbc390c2bac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393261356531342e38393935313439375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3230323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393261356531342e3839393531343937275d3d5c226563686f205c5c5c22c390e28099c390c2b2c390c2b5c390c2b4c390c2b5c390c2bdc390c2bdc391e280b9c390c2b920c391e2809ac390c2b5c390c2bac391c28120c390c2b1c391c692c390c2b4c390c2b5c391e2809a20c390c2b8c390c2bdc391e2809ac390c2b5c391e282acc390c2bfc391e282acc390c2b5c391e2809ac390c2b8c391e282acc390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba2055524c20c390c2b820c390c2b8c391c281c390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c390c2bd20c390c2bac390c2b0c390c2ba20c390c2b3c390c2b8c390c2bfc390c2b5c391e282acc391c281c391c281c391e280b9c390c2bbc390c2bac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('226','EN','2',0x4465736372697074696f6e,'','0','1'),
- ('226','RU','2',0xc390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393262373363302e31363636303934305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393262373363302e3136363630393430275d3d5c226563686f205c5c5c22c390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('227','EN','3',0x4120636f6e63697365206465736372697074696f6e20666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393262396139372e33323836393431355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393262396139372e3332383639343135275d3d5c226563686f205c5c5c224120636f6e63697365206465736372697074696f6e20666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('227','RU','3',0xc390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393263346131342e32303236363432325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393263346131342e3230323636343232275d3d5c226563686f205c5c5c22c390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('228','EN','1',0x4c696e6b73,'','0','1'),
- ('229','EN','1','','','0','1'),
- ('230','EN','2',0x4672657175656e746c792041736b6564205175657374696f6e73,'','0','1'),
- ('230','RU','2',0xc390c2a7c390c2b0c391c281c391e2809ac390c2be20c390e28094c390c2b0c390c2b4c390c2b0c390c2b2c390c2b0c390c2b5c390c2bcc391e280b9c390c2b520c390e28099c390c2bec390c2bfc391e282acc390c2bec391c281c391e280b9202846415129,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393265666334382e37383630303633335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393265666334382e3738363030363333275d3d5c226563686f205c5c5c22c390c2a7c390c2b0c391c281c391e2809ac390c2be20c390e28094c390c2b0c390c2b4c390c2b0c390c2b2c390c2b0c390c2b5c390c2bcc391e280b9c390c2b520c390e28099c390c2bec390c2bfc391e282acc390c2bec391c281c391e280b92028464151295c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('231','EN','3',0x496620796f752068617665207175657374696f6e73207468617420617265206e6f7420636f766572656420696e206f7572204641512c20706c6561736520706f7374207468656d20696e20616e20617070726f70726961746520666f72756d2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393266323735332e37393333353437305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3136323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393266323735332e3739333335343730275d3d5c226563686f205c5c5c22496620796f752068617665207175657374696f6e73207468617420617265206e6f7420636f766572656420696e206f7572204641512c20706c6561736520706f7374207468656d20696e20616e20617070726f70726961746520666f72756d2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('231','RU','3',0xc390e280a2c391c281c390c2bbc390c2b820c391c69220c390e28099c390c2b0c391c28120c390c2b5c391c281c391e2809ac391c59220c390c2b2c390c2bec390c2bfc391e282acc390c2bec391c281c391e280b92c20c390c2bdc390c2b020c390c2bac390c2bec391e2809ac390c2bec391e282acc391e280b9c390c2b520c390e28099c391e280b920c390c2bdc390c2b520c390c2bdc390c2b0c391cb86c390c2bbc390c2b820c390c2bec391e2809ac390c2b2c390c2b5c391e2809ac391e280b920c390c2b2204641512c20c390c2bfc390c2bec390c2b6c390c2b0c390c2bbc391c692c390c2b9c391c281c391e2809ac390c2b020c390c2b7c390c2b0c390c2b4c390c2b0c390c2b2c390c2b0c390c2b9c391e2809ac390c2b520c390c2b8c391e280a620c390c2b220c391c281c390c2bec390c2bec391e2809ac390c2b2c390c2b5c391e2809ac391c281c391e2809ac390c2b2c391c692c391c5bdc391e280b0c390c2b5c390c2bc20c391e2809ec390c2bec391e282acc391c692c390c2bcc390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393330623863342e36313835353433325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3236343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393330623863342e3631383535343332275d3d5c226563686f205c5c5c22c390e280a2c391c281c390c2bbc390c2b820c391c69220c390e28099c390c2b0c391c28120c390c2b5c391c281c391e2809ac391c59220c390c2b2c390c2bec390c2bfc391e282acc390c2bec391c281c391e280b92c20c390c2bdc390c2b020c390c2bac390c2bec391e2809ac390c2bec391e282acc391e280b9c390c2b520c390e28099c391e280b920c390c2bdc390c2b520c390c2bdc390c2b0c391cb86c390c2bbc390c2b820c390c2bec391e2809ac390c2b2c390c2b5c391e2809ac391e280b920c390c2b2204641512c20c390c2bfc390c2bec390c2b6c390c2b0c390c2bbc391c692c390c2b9c391c281c391e2809ac390c2b020c390c2b7c390c2b0c390c2b4c390c2b0c390c2b2c390c2b0c390c2b9c391e2809ac390c2b520c390c2b8c391e280a620c390c2b220c391c281c390c2bec390c2bec391e2809ac390c2b2c390c2b5c391e2809ac391c281c391e2809ac390c2b2c391c692c391c5bdc391e280b0c390c2b5c390c2bc20c391e2809ec390c2bec391e282acc391c692c390c2bcc390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('232','EN','2',0x5175657374696f6e,'','0','1'),
- ('232','RU','2',0xc390e28099c390c2bec390c2bfc391e282acc390c2bec391c281,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393331396466342e36323932323633385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393331396466342e3632393232363338275d3d5c226563686f205c5c5c22c390e28099c390c2bec390c2bfc391e282acc390c2bec391c2815c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('233','EN','3',0x546865207175657374696f6e2061736b65642e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393331636563342e37353636353330345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393331636563342e3735363635333034275d3d5c226563686f205c5c5c22546865207175657374696f6e2061736b65642e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('233','RU','3',0xc390e28094c390c2b0c390c2b4c390c2b0c390c2bd20c390c2b2c390c2bec390c2bfc391e282acc390c2bec391c2812e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393332373563392e35343235383435365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393332373563392e3534323538343536275d3d5c226563686f205c5c5c22c390e28094c390c2b0c390c2b4c390c2b0c390c2bd20c390c2b2c390c2bec390c2bfc391e282acc390c2bec391c2812e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('234','EN','2',0x416e73776572,'','0','1'),
- ('234','RU','2',0xc390c5bec391e2809ac390c2b2c390c2b5c391e2809a,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393333353431332e39363438333136315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393333353431332e3936343833313631275d3d5c226563686f205c5c5c22c390c5bec391e2809ac390c2b2c390c2b5c391e2809a5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('235','EN','3',0x54686520616e7377657228732920746f20746865207175657374696f6e2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393333373863312e37393031393231345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393333373863312e3739303139323134275d3d5c226563686f205c5c5c2254686520616e7377657228732920746f20746865207175657374696f6e2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('235','RU','3',0xc390c5bec391e2809ac390c2b2c390c2b5c391e2809a28c391e280b92920c390c2bdc390c2b020c390c2b2c390c2bec390c2bfc391e282acc390c2bec391c2812e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393334326361322e34393035343130395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393334326361322e3439303534313039275d3d5c226563686f205c5c5c22c390c5bec391e2809ac390c2b2c390c2b5c391e2809a28c391e280b92920c390c2bdc390c2b020c390c2b2c390c2bec390c2bfc391e282acc390c2bec391c2812e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('236','EN','2',0x4f72646572,'','0','1'),
- ('236','RU','2',0xc390c2a1c391e2809ac390c2b0c391e282acc391cb86c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393335303663342e33393432303034395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393335303663342e3339343230303439275d3d5c226563686f205c5c5c22c390c2a1c391e2809ac390c2b0c391e282acc391cb86c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('237','EN','3',0x546865206f72646572207072696f72697479207468697320656e7472792068617320696e207468652063617465676f72792e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393335323939312e32303838303839355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393335323939312e3230383830383935275d3d5c226563686f205c5c5c22546865206f72646572207072696f72697479207468697320656e7472792068617320696e207468652063617465676f72792e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('237','RU','3',0xc390c5b8c391e282acc390c2b8c390c2bec391e282acc390c2b8c391e2809ac390c2b5c391e2809a20c390c2b4c390c2bbc391c28f20c391c28dc391e2809ac390c2bec390c2b920c390c2b7c390c2b0c390c2bfc390c2b8c391c281c390c2b820c390c2b220c390c2bac390c2b0c391e2809ac390c2b5c390c2b3c390c2bec391e282acc390c2b8c390c2b82e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393336306265362e38343534323734305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3133363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393336306265362e3834353432373430275d3d5c226563686f205c5c5c22c390c5b8c391e282acc390c2b8c390c2bec391e282acc390c2b8c391e2809ac390c2b5c391e2809a20c390c2b4c390c2bbc391c28f20c391c28dc391e2809ac390c2bec390c2b920c390c2b7c390c2b0c390c2bfc390c2b8c391c281c390c2b820c390c2b220c390c2bac390c2b0c391e2809ac390c2b5c390c2b3c390c2bec391e282acc390c2b8c390c2b82e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('238','EN','2',0x4672657175656e746c792041736b6564205175657374696f6e73,'','0','1'),
- ('238','RU','2',0xc390c2a7c390c2b0c391c281c391e2809ac390c2be20c390e28094c390c2b0c390c2b4c390c2b0c390c2b2c390c2b0c390c2b5c390c2bcc391e280b9c390c2b520c390e28099c390c2bec390c2bfc391e282acc390c2bec391c281c391e280b9202846415129,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393337326364302e30313835373734365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393337326364302e3031383537373436275d3d5c226563686f205c5c5c22c390c2a7c390c2b0c391c281c391e2809ac390c2be20c390e28094c390c2b0c390c2b4c390c2b0c390c2b2c390c2b0c390c2b5c390c2bcc391e280b9c390c2b520c390e28099c390c2bec390c2bfc391e282acc390c2bec391c281c391e280b92028464151295c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('239','EN','3',0x496620796f752068617665207175657374696f6e73207468617420617265206e6f7420636f766572656420696e206f7572204641512c20706c6561736520706f7374207468656d20696e20616e20617070726f70726961746520666f72756d2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393337353335342e32363836383734305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3136323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393337353335342e3236383638373430275d3d5c226563686f205c5c5c22496620796f752068617665207175657374696f6e73207468617420617265206e6f7420636f766572656420696e206f7572204641512c20706c6561736520706f7374207468656d20696e20616e20617070726f70726961746520666f72756d2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('239','RU','3',0xc390e280a2c391c281c390c2bbc390c2b820c391c69220c390e28099c390c2b0c391c28120c390c2b5c391c281c391e2809ac391c59220c390c2b2c390c2bec390c2bfc391e282acc390c2bec391c281c391e280b92c20c390c2bdc390c2b020c390c2bac390c2bec391e2809ac390c2bec391e282acc391e280b9c390c2b520c390e28099c391e280b920c390c2bdc390c2b520c390c2bdc390c2b0c391cb86c390c2bbc390c2b820c390c2bec391e2809ac390c2b2c390c2b5c391e2809ac391e280b920c390c2b2204641512c20c390c2bfc390c2bec390c2b6c390c2b0c390c2bbc391c692c390c2b9c391c281c391e2809ac390c2b020c390c2b7c390c2b0c390c2b4c390c2b0c390c2b2c390c2b0c390c2b9c391e2809ac390c2b520c390c2b8c391e280a620c390c2b220c391c281c390c2bec390c2bec391e2809ac390c2b2c390c2b5c391e2809ac391c281c391e2809ac390c2b2c391c692c391c5bdc391e280b0c390c2b5c390c2bc20c391e2809ec390c2bec391e282acc391c692c390c2bcc390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393338653937372e35323131373731315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3236343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393338653937372e3532313137373131275d3d5c226563686f205c5c5c22c390e280a2c391c281c390c2bbc390c2b820c391c69220c390e28099c390c2b0c391c28120c390c2b5c391c281c391e2809ac391c59220c390c2b2c390c2bec390c2bfc391e282acc390c2bec391c281c391e280b92c20c390c2bdc390c2b020c390c2bac390c2bec391e2809ac390c2bec391e282acc391e280b9c390c2b520c390e28099c391e280b920c390c2bdc390c2b520c390c2bdc390c2b0c391cb86c390c2bbc390c2b820c390c2bec391e2809ac390c2b2c390c2b5c391e2809ac391e280b920c390c2b2204641512c20c390c2bfc390c2bec390c2b6c390c2b0c390c2bbc391c692c390c2b9c391c281c391e2809ac390c2b020c390c2b7c390c2b0c390c2b4c390c2b0c390c2b2c390c2b0c390c2b9c391e2809ac390c2b520c390c2b8c391e280a620c390c2b220c391c281c390c2bec390c2bec391e2809ac390c2b2c390c2b5c391e2809ac391c281c391e2809ac390c2b2c391c692c391c5bdc391e280b0c390c2b5c390c2bc20c391e2809ec390c2bec391e282acc391c692c390c2bcc390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('240','EN','1',0x4672657175656e746c792041736b6564205175657374696f6e73,'','0','1'),
- ('241','EN','1','','','0','1'),
- ('242','EN','2',0x436f6e7461637473,'','0','1'),
- ('242','RU','2',0xc390c5a1c390c2bec390c2bdc391e2809ac390c2b0c390c2bac391e2809ac391e280b9,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393362623066392e37353233363739345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393362623066392e3735323336373934275d3d5c226563686f205c5c5c22c390c5a1c390c2bec390c2bdc391e2809ac390c2b0c390c2bac391e2809ac391e280b95c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('243','EN','3',0x4120636f6e74616374732f616464726573732d626f6f6b2e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393362656634372e37333935353736335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393362656634372e3733393535373633275d3d5c226563686f205c5c5c224120636f6e74616374732f616464726573732d626f6f6b2e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('243','RU','3',0xc390c5a1c390c2bdc390c2b8c390c2b3c390c2b020c390c2bac390c2bec390c2bdc391e2809ac390c2b0c390c2bac391e2809ac390c2bec390c2b22fc390c2b0c390c2b4c391e282acc390c2b5c391c281c390c2bec390c2b2,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393363633636382e34393134313739385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393363633636382e3439313431373938275d3d5c226563686f205c5c5c22c390c5a1c390c2bdc390c2b8c390c2b3c390c2b020c390c2bac390c2bec390c2bdc391e2809ac390c2b0c390c2bac391e2809ac390c2bec390c2b22fc390c2b0c390c2b4c391e282acc390c2b5c391c281c390c2bec390c2b25c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('244','EN','3',0x466f72656e616d65,'','0','1'),
- ('244','RU','3',0xc390cb9cc390c2bcc391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393364633761342e33333534393230365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393364633761342e3333353439323036275d3d5c226563686f205c5c5c22c390cb9cc390c2bcc391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
+ ('218','EN','2','Contacts','','0','1'),
+ ('219','EN','3','A contacts/address-book.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b7d4183.48168792\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:90:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b7d4183.48168792\']=\\\"echo \\\\\\\"A contacts/address-book.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('220','EN','3','Forename','','0','1'),
+ ('221','EN','2','','','0','1'),
+ ('222','EN','3','Surname','','0','1'),
+ ('223','EN','2','','','0','1'),
+ ('224','EN','3','E-mail address','','0','1'),
+ ('225','EN','2','','','0','1'),
+ ('226','EN','3','Company','','0','1'),
+ ('227','EN','2','','','0','1'),
+ ('228','EN','3','Home address','','0','1'),
+ ('229','EN','2','','','0','1'),
+ ('230','EN','3','City','','0','1'),
+ ('231','EN','2','','','0','1'),
+ ('232','EN','3','Home phone number','','0','1'),
+ ('233','EN','2','','','0','1'),
+ ('234','EN','3','Work phone number','','0','1'),
+ ('235','EN','2','','','0','1'),
+ ('236','EN','3','Homepage','','0','1'),
+ ('237','EN','2','','','0','1'),
+ ('238','EN','3','Instant messenger handle','','0','1'),
+ ('239','EN','2','','','0','1'),
+ ('240','EN','3','Events relating to them','','0','1'),
+ ('241','EN','2','','','0','1'),
+ ('242','EN','3','Notes','','0','1'),
+ ('243','EN','2','','','0','1'),
+ ('244','EN','3','Photo','','0','1'),
  ('245','EN','2','','','0','1'),
- ('246','EN','3',0x5375726e616d65,'','0','1'),
- ('246','RU','3',0xc390c2a4c390c2b0c390c2bcc390c2b8c390c2bbc390c2b8c391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393365626165312e30393432333433395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393365626165312e3039343233343339275d3d5c226563686f205c5c5c22c390c2a4c390c2b0c390c2bcc390c2b8c390c2bbc390c2b8c391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('247','EN','2','','','0','1'),
- ('248','EN','3',0x452d6d61696c2061646472657373,'','0','1'),
- ('248','RU','3',0xc390c290c390c2b4c391e282acc390c2b5c391c28120c391c28dc390c2bbc390c2b5c390c2bac391e2809ac391e282acc390c2bec390c2bdc390c2bdc390c2bec390c2b920c390c2bfc390c2bec391e280a1c391e2809ac391e280b9,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393366636432382e36393835343939395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393366636432382e3639383534393939275d3d5c226563686f205c5c5c22c390c290c390c2b4c391e282acc390c2b5c391c28120c391c28dc390c2bbc390c2b5c390c2bac391e2809ac391e282acc390c2bec390c2bdc390c2bdc390c2bec390c2b920c390c2bfc390c2bec391e280a1c391e2809ac391e280b95c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('249','EN','2','','','0','1'),
- ('250','EN','3',0x436f6d70616e79,'','0','1'),
- ('250','RU','3',0xc390c5a1c390c2bec390c2bcc390c2bfc390c2b0c390c2bdc390c2b8c391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393430643138372e32363032353039355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393430643138372e3236303235303935275d3d5c226563686f205c5c5c22c390c5a1c390c2bec390c2bcc390c2bfc390c2b0c390c2bdc390c2b8c391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('251','EN','2','','','0','1'),
- ('252','EN','3',0x486f6d652061646472657373,'','0','1'),
- ('252','RU','3',0xc390e2809dc390c2bec390c2bcc390c2b0c391cb86c390c2bdc390c2b8c390c2b920c390c2b0c390c2b4c391e282acc390c2b5c391c281,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393432306266382e36363735383235315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393432306266382e3636373538323531275d3d5c226563686f205c5c5c22c390e2809dc390c2bec390c2bcc390c2b0c391cb86c390c2bdc390c2b8c390c2b920c390c2b0c390c2b4c391e282acc390c2b5c391c2815c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('253','EN','2','','','0','1'),
- ('254','EN','3',0x43697479,'','0','1'),
- ('254','RU','3',0xc390e2809cc390c2bec391e282acc390c2bec390c2b4,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393433303437312e38373535333132315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393433303437312e3837353533313231275d3d5c226563686f205c5c5c22c390e2809cc390c2bec391e282acc390c2bec390c2b45c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('255','EN','2','','','0','1'),
- ('256','EN','3',0x486f6d652070686f6e65206e756d626572,'','0','1'),
- ('256','RU','3',0xc390e2809dc390c2bec390c2bcc390c2b0c391cb86c390c2bdc390c2b8c390c2b920c390c2bdc390c2bec390c2bcc390c2b5c391e282ac20c391e2809ac390c2b5c390c2bbc390c2b5c391e2809ec390c2bec390c2bdc390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393434333035342e32303338363336355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393434333035342e3230333836333635275d3d5c226563686f205c5c5c22c390e2809dc390c2bec390c2bcc390c2b0c391cb86c390c2bdc390c2b8c390c2b920c390c2bdc390c2bec390c2bcc390c2b5c391e282ac20c391e2809ac390c2b5c390c2bbc390c2b5c391e2809ec390c2bec390c2bdc390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('257','EN','2','','','0','1'),
- ('258','EN','3',0x576f726b2070686f6e65206e756d626572,'','0','1'),
- ('258','RU','3',0xc390c2a0c390c2b0c390c2b1c390c2bec391e280a1c390c2b8c390c2b920c390c2bdc390c2bec390c2bcc390c2b5c391e282ac20c391e2809ac390c2b5c390c2bbc390c2b5c391e2809ec390c2bec390c2bdc390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393435633634352e35313331323238325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393435633634352e3531333132323832275d3d5c226563686f205c5c5c22c390c2a0c390c2b0c390c2b1c390c2bec391e280a1c390c2b8c390c2b920c390c2bdc390c2bec390c2bcc390c2b5c391e282ac20c391e2809ac390c2b5c390c2bbc390c2b5c391e2809ec390c2bec390c2bdc390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('259','EN','2','','','0','1'),
- ('260','EN','3',0x486f6d6570616765,'','0','1'),
- ('260','RU','3',0xc390e2809dc390c2bec390c2bcc390c2b0c391cb86c390c2bdc391c28fc391c28f20c391c281c391e2809ac391e282acc390c2b0c390c2bdc390c2b8c391e280a0c390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393436646533332e33363039383138355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393436646533332e3336303938313835275d3d5c226563686f205c5c5c22c390e2809dc390c2bec390c2bcc390c2b0c391cb86c390c2bdc391c28fc391c28f20c391c281c391e2809ac391e282acc390c2b0c390c2bdc390c2b8c391e280a0c390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('261','EN','2','','','0','1'),
- ('262','EN','3',0x496e7374616e74206d657373656e6765722068616e646c65,'','0','1'),
- ('262','RU','3',0xc390cb9cc390c2b4c390c2b5c390c2bdc391e2809ac390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e2809ac390c2bec391e282ac20c390c2bec390c2bdc390c2bbc390c2b0c390c2b9c390c2bd2dc390c2bfc390c2b5c390c2b9c390c2b4c390c2b6c390c2b5c391e282acc390c2b020284943512c20414f4c2c20536b7970652c20476f6f676c652074616c6b7320c390c2b820c391e2809a2ec390c2b42e29,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393438336634362e30323736333035385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3136343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393438336634362e3032373633303538275d3d5c226563686f205c5c5c22c390cb9cc390c2b4c390c2b5c390c2bdc391e2809ac390c2b8c391e2809ec390c2b8c390c2bac390c2b0c391e2809ac390c2bec391e282ac20c390c2bec390c2bdc390c2bbc390c2b0c390c2b9c390c2bd2dc390c2bfc390c2b5c390c2b9c390c2b4c390c2b6c390c2b5c391e282acc390c2b020284943512c20414f4c2c20536b7970652c20476f6f676c652074616c6b7320c390c2b820c391e2809a2ec390c2b42e295c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('263','EN','2','','','0','1'),
- ('264','EN','3',0x4576656e74732072656c6174696e6720746f207468656d,'','0','1'),
- ('264','RU','3',0xc390c2a1c390c2bec390c2b1c391e280b9c391e2809ac390c2b8c391c28f2c20c391c281c390c2b2c391c28fc390c2b7c390c2b0c390c2bdc390c2bdc391e280b9c390c2b520c391c28120c390c2bac390c2bec390c2bdc391e2809ac390c2b0c390c2bac391e2809ac390c2bec390c2bc,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393439613065352e31373439353031345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3132323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393439613065352e3137343935303134275d3d5c226563686f205c5c5c22c390c2a1c390c2bec390c2b1c391e280b9c391e2809ac390c2b8c391c28f2c20c391c281c390c2b2c391c28fc390c2b7c390c2b0c390c2bdc390c2bdc391e280b9c390c2b520c391c28120c390c2bac390c2bec390c2bdc391e2809ac390c2b0c390c2bac391e2809ac390c2bec390c2bc5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('265','EN','2','','','0','1'),
- ('266','EN','3',0x4e6f746573,'','0','1'),
- ('266','RU','3',0xc390e28094c390c2b0c390c2bcc390c2b5c391e2809ac390c2bac390c2b8,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393461663632362e39373639333234315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393461663632362e3937363933323431275d3d5c226563686f205c5c5c22c390e28094c390c2b0c390c2bcc390c2b5c391e2809ac390c2bac390c2b85c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('267','EN','2','','','0','1'),
- ('268','EN','2',0x436f6e7461637473,'','0','1'),
- ('268','RU','2',0xc390c5a1c390c2bec390c2bdc391e2809ac390c2b0c390c2bac391e2809ac391e280b9,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393462656530352e30303735313533325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393462656530352e3030373531353332275d3d5c226563686f205c5c5c22c390c5a1c390c2bec390c2bdc391e2809ac390c2b0c390c2bac391e2809ac391e280b95c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('269','EN','3','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('270','EN','1',0x53757065722d6d656d6265722070726f6a65637473,'','0','1'),
- ('271','EN','1','','','0','1'),
- ('272','EN','1',0x56696577,'','0','1'),
- ('273','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('274','EN','1',0x416464,'','0','1'),
- ('275','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('276','EN','2',0x50726f6475637473,'','0','1'),
- ('276','RU','2',0xc390c5b8c391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac391e280b9,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393465323965322e36353333333336365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393465323965322e3635333333333636275d3d5c226563686f205c5c5c22c390c5b8c391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac391e280b95c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('277','EN','2',0x5468657365206172652070726f647563747320666f722073616c652066726f6d207468697320776562736974652e,'','0','1'),
- ('277','RU','2',0xc390c5b8c391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac391e280b920c390c2b4c390c2bbc391c28f20c390c2bfc391e282acc390c2bec390c2b4c390c2b0c390c2b6c390c2b820c390c2bdc390c2b020c391c28dc391e2809ac390c2bec390c2bc20c391c281c390c2b0c390c2b9c391e2809ac390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393466323634332e36313734363834335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3133303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393466323634332e3631373436383433275d3d5c226563686f205c5c5c22c390c5b8c391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac391e280b920c390c2b4c390c2bbc391c28f20c390c2bfc391e282acc390c2bec390c2b4c390c2b0c390c2b6c390c2b820c390c2bdc390c2b020c391c28dc391e2809ac390c2bec390c2bc20c391c281c390c2b0c390c2b9c391e2809ac390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('278','EN','1',0x7b317d20686f6d65,'','0','1'),
- ('279','EN','3','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('280','EN','3',0x50726f64756374207469746c65,'','0','1'),
- ('280','RU','3',0xc390c29dc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b520c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393530616265302e32363732373635345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393530616265302e3236373237363534275d3d5c226563686f205c5c5c22c390c29dc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b520c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('281','EN','3',0x4120636f6e63697365207469746c6520666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393530643837332e32393133343939325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393530643837332e3239313334393932275d3d5c226563686f205c5c5c224120636f6e63697365207469746c6520666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('281','RU','3',0xc390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2b8c390c2b920c390c2b7c390c2b0c390c2b3c390c2bec390c2bbc390c2bec390c2b2c390c2bec390c2ba20c390c2b4c390c2bbc391c28f20c390c2bdc390c2b5c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393531616131332e31303431323936345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393531616131332e3130343132393634275d3d5c226563686f205c5c5c22c390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2b8c390c2b920c390c2b7c390c2b0c390c2b3c390c2bec390c2bbc390c2bec390c2b2c390c2bec390c2ba20c390c2b4c390c2bbc391c28f20c390c2bdc390c2b5c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('282','EN','3',0x50726f6475637420636f6465,'','0','1'),
- ('282','RU','3',0xc390c5a1c390c2bec390c2b420c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393532636363372e35313632383439385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393532636363372e3531363238343938275d3d5c226563686f205c5c5c22c390c5a1c390c2bec390c2b420c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1');
-insert into `ocp7_translate` values('283','EN','3',0x54686520636f64656e616d6520666f72207468652070726f64756374,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393533333261372e36343737313536365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393533333261372e3634373731353636275d3d5c226563686f205c5c5c2254686520636f64656e616d6520666f72207468652070726f647563745c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('283','RU','3',0xc390c5a1c390c2bec390c2b4c390c2bec390c2b2c390c2bec390c2b520c390c2bdc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b520c390c2b4c390c2bbc391c28f20c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393534323339392e35353035333434305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3132313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393534323339392e3535303533343430275d3d5c226563686f205c5c5c22c390c5a1c390c2bec390c2b4c390c2bec390c2b2c390c2bec390c2b520c390c2bdc390c2b0c390c2b7c390c2b2c390c2b0c390c2bdc390c2b8c390c2b520c390c2b4c390c2bbc391c28f20c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('284','EN','3',0x4e6574207072696365,'','0','1'),
- ('284','RU','3',0xc390c2a6c390c2b5c390c2bdc390c2b020c390c2bdc390c2b5c391e2809ac391e2809ac390c2be,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393535363365372e37343036363338315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393535363365372e3734303636333831275d3d5c226563686f205c5c5c22c390c2a6c390c2b5c390c2bdc390c2b020c390c2bdc390c2b5c391e2809ac391e2809ac390c2be5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('285','EN','3',0x5468652070726963652c206265666f7265207461782069732061646465642c20696e20746865207072696d6172792063757272656e6379206f66207468697320776562736974652e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393535386531302e30353332373236355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3133383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393535386531302e3035333237323635275d3d5c226563686f205c5c5c225468652070726963652c206265666f7265207461782069732061646465642c20696e20746865207072696d6172792063757272656e6379206f66207468697320776562736974652e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('285','RU','3',0xc390c2a6c390c2b5c390c2bdc390c2b020c390c2b4c390c2be20c390c2b2c391e280b9c391e280a1c390c2b5c391e2809ac390c2b020c390c2bdc390c2b0c390c2bbc390c2bec390c2b3c390c2b020c390c2b2c391e280b9c391e282acc390c2b0c390c2b6c390c2b5c390c2bdc390c2bdc390c2b0c391c28f20c390c2b220c390c2bec391c281c390c2bdc390c2bec390c2b2c390c2bdc390c2bec390c2b920c390c2b2c390c2b0c390c2bbc391c5bdc391e2809ac390c2b520c391c28dc391e2809ac390c2bec390c2b3c390c2be20c391c281c390c2b0c390c2b9c391e2809ac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393536616339352e34383737363530355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3138313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393536616339352e3438373736353035275d3d5c226563686f205c5c5c22c390c2a6c390c2b5c390c2bdc390c2b020c390c2b4c390c2be20c390c2b2c391e280b9c391e280a1c390c2b5c391e2809ac390c2b020c390c2bdc390c2b0c390c2bbc390c2bec390c2b3c390c2b020c390c2b2c391e280b9c391e282acc390c2b0c390c2b6c390c2b5c390c2bdc390c2bdc390c2b0c391c28f20c390c2b220c390c2bec391c281c390c2bdc390c2bec390c2b2c390c2bdc390c2bec390c2b920c390c2b2c390c2b0c390c2bbc391c5bdc391e2809ac390c2b520c391c28dc391e2809ac390c2bec390c2b3c390c2be20c391c281c390c2b0c390c2b9c391e2809ac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('286','EN','3',0x53746f636b206c6576656c,'','0','1'),
- ('286','RU','3',0xc390c2a3c391e282acc390c2bec390c2b2c390c2b5c390c2bdc391c59220c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b2,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393538303833332e37383234353932375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393538303833332e3738323435393237275d3d5c226563686f205c5c5c22c39026706f756e643bc391e282acc390c2bec390c2b2c390c2b5c390c2bdc391c59220c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b25c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('287','EN','3',0x5468652073746f636b206c6576656c206f66207468652070726f6475637420286c6561766520626c616e6b206966206e6f2073746f636b20636f756e74696e6720697320746f20626520646f6e65292e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393538333837342e36373834333439305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3134363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393538333837342e3637383433343930275d3d5c226563686f205c5c5c225468652073746f636b206c6576656c206f66207468652070726f6475637420286c6561766520626c616e6b206966206e6f2073746f636b20636f756e74696e6720697320746f20626520646f6e65292e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('287','RU','3',0xc390c2a3c391e282acc390c2bec390c2b2c390c2b5c390c2bdc391c59220c390c2bdc390c2b0c390c2bbc390c2b8c391e280a1c390c2b8c391c28f20c390c2bdc390c2b020c391c281c390c2bac390c2bbc390c2b0c390c2b4c390c2b520c391c28dc391e2809ac390c2bec390c2b3c390c2be20c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b02028c390c2bec391c281c391e2809ac390c2b0c390c2b2c390c2b8c391e2809ac391c59220c390c2bfc391c692c391c281c391e2809ac391e280b9c390c2bc20c390c2b5c391c281c390c2bbc390c2b820c391c692c391e280a1c390c2b5c391e2809a20c390c2bdc390c2b0c390c2bbc390c2b8c391e280a1c390c2b8c391c28f20c390c2bdc390c2b520c390c2b2c391e280b9c390c2bfc390c2bec390c2bbc390c2bdc390c2b5c390c2bd29,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393539616664322e35323132353432385c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3233343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393539616664322e3532313235343238275d3d5c226563686f205c5c5c22c39026706f756e643bc391e282acc390c2bec390c2b2c390c2b5c390c2bdc391c59220c390c2bdc390c2b0c390c2bbc390c2b8c391e280a1c390c2b8c391c28f20c390c2bdc390c2b020c391c281c390c2bac390c2bbc390c2b0c390c2b4c390c2b520c391c28dc391e2809ac390c2bec390c2b3c390c2be20c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b02028c390c2bec391c281c391e2809ac390c2b0c390c2b2c390c2b8c391e2809ac391c59220c390c2bfc391c692c391c281c391e2809ac391e280b9c390c2bc20c390c2b5c391c281c390c2bbc390c2b820c391c692c391e280a1c390c2b5c391e2809a20c390c2bdc390c2b0c390c2bbc390c2b8c391e280a1c390c2b8c391c28f20c390c2bdc390c2b520c390c2b2c391e280b9c390c2bfc390c2bec390c2bbc390c2bdc390c2b5c390c2bd295c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('288','EN','3',0x53746f636b206c6576656c207761726e2d7468726573686f6c64,'','0','1'),
- ('288','RU','3',0xc390e280bac390c2b8c390c2bcc390c2b8c391e2809a20c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b220c390c2b4c390c2be20c390c2bfc391e282acc390c2b5c390c2b4c391c692c390c2bfc391e282acc390c2b5c390c2b6c390c2b4c390c2b5c390c2bdc390c2b8c391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393562393566332e31313238353035315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3132353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393562393566332e3131323835303531275d3d5c226563686f205c5c5c22c390e280bac390c2b8c390c2bcc390c2b8c391e2809a20c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b220c390c2b4c390c2be20c390c2bfc391e282acc390c2b5c390c2b4c391c692c390c2bfc391e282acc390c2b5c390c2b6c390c2b4c390c2b5c390c2bdc390c2b8c391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('289','EN','3',0x53656e64206f757420616e20652d6d61696c20616c65727420746f20746865207374616666206966207468652073746f636b20676f65732062656c6f772074686973206c6576656c20286c6561766520626c616e6b206966206e6f2073746f636b20636f756e74696e6720697320746f20626520646f6e65292e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393562633266382e33323135303939325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3138383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393562633266382e3332313530393932275d3d5c226563686f205c5c5c2253656e64206f757420616e20652d6d61696c20616c65727420746f20746865207374616666206966207468652073746f636b20676f65732062656c6f772074686973206c6576656c20286c6561766520626c616e6b206966206e6f2073746f636b20636f756e74696e6720697320746f20626520646f6e65292e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('289','RU','3',0xc390e28099c391e280b9c391c281c391e280b9c390c2bbc390c2b0c391e2809ac391c59220c390c2bfc391e282acc390c2b5c390c2b4c391c692c390c2bfc391e282acc390c2b5c390c2b6c390c2b4c390c2b5c390c2bdc390c2b8c390c2b520c390c2bfc390c2be20c391c28dc390c2bbc390c2b5c390c2bac391e2809ac391e282acc390c2bec390c2bdc390c2bdc390c2bec390c2b920c390c2bfc390c2bec391e280a1c391e2809ac390c2b52c20c390c2b5c391c281c390c2bbc390c2b820c391c692c391e282acc390c2bec390c2b2c390c2b5c390c2bdc391c59220c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b220c391c281c390c2bdc390c2b8c390c2b6c390c2b0c390c2b5c391e2809ac391c281c391c28f20c390c2bdc390c2b8c390c2b6c390c2b520c391c692c390c2bac390c2b0c390c2b7c390c2b0c390c2bdc390c2bdc390c2bec390c2b3c390c2be2028c390c2bec391c281c391e2809ac390c2b0c390c2b2c391c592c391e2809ac390c2b520c390c2bfc391c692c391c281c391e2809ac391e280b9c390c2bc2c20c390c2b5c391c281c390c2bbc390c2b820c390c2b7c390c2b0c390c2bfc390c2b0c391c281c391e280b920c390c2bdc390c2b520c391e282acc390c2b0c391c281c391e280a1c390c2b8c391e2809ac391e280b9c390c2b2c390c2b0c391c5bdc391e2809ac391c281c391c28f29,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393565323036302e32313730323730335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3332363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393565323036302e3231373032373033275d3d5c226563686f205c5c5c22c390e28099c391e280b9c391c281c391e280b9c390c2bbc390c2b0c391e2809ac391c59220c390c2bfc391e282acc390c2b5c390c2b4c391c692c390c2bfc391e282acc390c2b5c390c2b6c390c2b4c390c2b5c390c2bdc390c2b8c390c2b520c390c2bfc390c2be20c391c28dc390c2bbc390c2b5c390c2bac391e2809ac391e282acc390c2bec390c2bdc390c2bdc390c2bec390c2b920c390c2bfc390c2bec391e280a1c391e2809ac390c2b52c20c390c2b5c391c281c390c2bbc390c2b820c391c692c391e282acc390c2bec390c2b2c390c2b5c390c2bdc391c59220c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b220c391c281c390c2bdc390c2b8c390c2b6c390c2b0c390c2b5c391e2809ac391c281c391c28f20c390c2bdc390c2b8c390c2b6c390c2b520c391c692c390c2bac390c2b0c390c2b7c390c2b0c390c2bdc390c2bdc390c2bec390c2b3c390c2be2028c390c2bec391c281c391e2809ac390c2b0c390c2b2c391c592c391e2809ac390c2b520c390c2bfc391c692c391c281c391e2809ac391e280b9c390c2bc2c20c390c2b5c391c281c390c2bbc390c2b820c390c2b7c390c2b0c390c2bfc390c2b0c391c281c391e280b920c390c2bdc390c2b520c391e282acc390c2b0c391c281c391e280a1c390c2b8c391e2809ac391e280b9c390c2b2c390c2b0c391c5bdc391e2809ac391c281c391c28f295c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('290','EN','3',0x53746f636b206d61696e7461696e6564,'','0','1'),
- ('290','RU','3',0xc390e28094c390c2b0c390c2bfc390c2b0c391c281c391e280b920c390c2bfc390c2bec390c2b4c390c2b4c390c2b5c391e282acc390c2b6c390c2b8c390c2b2c390c2b0c391c5bdc391e2809ac391c281c391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393566383135352e35333135333138305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393566383135352e3533313533313830275d3d5c226563686f205c5c5c22c390e28094c390c2b0c390c2bfc390c2b0c391c281c391e280b920c390c2bfc390c2bec390c2b4c390c2b4c390c2b5c391e282acc390c2b6c390c2b8c390c2b2c390c2b0c391c5bdc391e2809ac391c281c391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('291','EN','3',0x576865746865722073746f636b2077696c6c206265206d61696e7461696e65642e204966207468652073746f636b206973206e6f74206d61696e7461696e6564207468656e2075736572732077696c6c206e6f742062652061626c6520746f207075726368617365206974206966207468652073746f636b2072756e73206f75742e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393566623165352e32353837383530325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3139363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393566623165352e3235383738353032275d3d5c226563686f205c5c5c22576865746865722073746f636b2077696c6c206265206d61696e7461696e65642e204966207468652073746f636b206973206e6f74206d61696e7461696e6564207468656e2075736572732077696c6c206e6f742062652061626c6520746f207075726368617365206974206966207468652073746f636b2072756e73206f75742e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('291','RU','3',0xc390e28098c391c692c390c2b4c390c2b5c391e2809a20c390c2bbc390c2b820c390c2bfc390c2bec390c2b4c390c2b4c390c2b5c391e282acc390c2b6c390c2b8c390c2b2c390c2b0c391e2809ac391c592c391c281c391c28f20c391c692c391e282acc390c2bec390c2b2c390c2b5c390c2bdc391c59220c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b22e20c390e280a2c391c281c390c2bbc390c2b820c390c2bdc390c2b5c391e2809a2c20c391e2809ac390c2be20c390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc390c2b820c390c2bdc390c2b520c391c281c390c2bcc390c2bec390c2b3c391c692c391e2809a20c390c2bfc390c2bec390c2bac391c692c390c2bfc390c2b0c391e2809ac391c59220c390c2bfc390c2bec391c281c390c2bbc390c2b520c390c2b8c391c281c391e280a1c390c2b5c391e282acc390c2bfc390c2b0c390c2bdc390c2b8c391c28f20c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b22e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393631363364312e36383937323436395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3237313a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393631363364312e3638393732343639275d3d5c226563686f205c5c5c22c390e28098c391c692c390c2b4c390c2b5c391e2809a20c390c2bbc390c2b820c390c2bfc390c2bec390c2b4c390c2b4c390c2b5c391e282acc390c2b6c390c2b8c390c2b2c390c2b0c391e2809ac391c592c391c281c391c28f20c391c692c391e282acc390c2bec390c2b2c390c2b5c390c2bdc391c59220c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b22e20c390e280a2c391c281c390c2bbc390c2b820c390c2bdc390c2b5c391e2809a2c20c391e2809ac390c2be20c390c2bfc390c2bec390c2bbc391c592c390c2b7c390c2bec390c2b2c390c2b0c391e2809ac390c2b5c390c2bbc390c2b820c390c2bdc390c2b520c391c281c390c2bcc390c2bec390c2b3c391c692c391e2809a20c390c2bfc390c2bec390c2bac391c692c390c2bfc390c2b0c391e2809ac391c59220c390c2bfc390c2bec391c281c390c2bbc390c2b520c390c2b8c391c281c391e280a1c390c2b5c391e282acc390c2bfc390c2b0c390c2bdc390c2b8c391c28f20c390c2b7c390c2b0c390c2bfc390c2b0c391c281c390c2bec390c2b22e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('292','EN','3',0x50726f64756374207461782072617465,'','0','1'),
- ('292','RU','3',0xc390c2a1c391e2809ac390c2b0c390c2b2c390c2bac390c2b020c390c2bdc390c2b0c390c2bbc390c2bec390c2b3c390c2b020c390c29dc390e2809dc390c2a1,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393633323266302e32373339313135365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393633323266302e3237333931313536275d3d5c226563686f205c5c5c22c390c2a1c391e2809ac390c2b0c390c2b2c390c2bac390c2b020c390c2bdc390c2b0c390c2bbc390c2bec390c2b3c390c2b020c390c29dc390e2809dc390c2a15c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('293','EN','3',0x5468652074617820726174657320746861742070726f64756374732063616e2062652061737369676e65642e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393633346263352e30353433343837335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3131303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393633346263352e3035343334383733275d3d5c226563686f205c5c5c225468652074617820726174657320746861742070726f64756374732063616e2062652061737369676e65642e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('293','RU','3',0xc390c2a2c390c2b8c390c2bf20c390c2bdc390c2b0c390c2bbc390c2bec390c2b3c390c2b02c20c390c2bac390c2bec391e2809ac390c2bec391e282acc391e280b9c390c2b920c390c2bcc390c2bec390c2b6c390c2b5c391e2809a20c390c2b1c391e280b9c391e2809ac391c59220c390c2bfc391e282acc390c2b8c390c2bcc390c2b5c390c2bdc390c2b5c390c2bd20c390c2ba20c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b0c390c2bc,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393634353533332e33393235313630345c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3136303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393634353533332e3339323531363034275d3d5c226563686f205c5c5c22c390c2a2c390c2b8c390c2bf20c390c2bdc390c2b0c390c2bbc390c2bec390c2b3c390c2b02c20c390c2bac390c2bec391e2809ac390c2bec391e282acc391e280b9c390c2b920c390c2bcc390c2bec390c2b6c390c2b5c391e2809a20c390c2b1c391e280b9c391e2809ac391c59220c390c2bfc391e282acc390c2b8c390c2bcc390c2b5c390c2bdc390c2b5c390c2bd20c390c2ba20c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b0c390c2bc5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('294','EN','3',0x50726f6475637420696d616765,'','0','1'),
- ('294','RU','3',0xc390cb9cc390c2b7c390c2bec390c2b1c391e282acc390c2b0c390c2b6c390c2b5c390c2bdc390c2b8c390c2b520c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393635396466362e39363838333939335c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3130353a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393635396466362e3936383833393933275d3d5c226563686f205c5c5c22c390cb9cc390c2b7c390c2bec390c2b1c391e282acc390c2b0c390c2b6c390c2b5c390c2bdc390c2b8c390c2b520c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('295','EN','3',0x55706c6f616420616e20696d616765206f6620796f75722070726f647563742e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393635633533392e39373330373036315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393635633533392e3937333037303631275d3d5c226563686f205c5c5c2255706c6f616420616e20696d616765206f6620796f75722070726f647563742e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('295','RU','3',0xc390e28094c390c2b0c390c2b3c391e282acc391c692c390c2b7c390c2b8c391e2809ac390c2b520c390c2bac390c2b0c391e282acc391e2809ac390c2b8c390c2bdc390c2bac391c69220c390c2b2c390c2b0c391cb86c390c2b5c390c2b3c390c2be20c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b02e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393636616666372e30343331303135325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3133323a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393636616666372e3034333130313532275d3d5c226563686f205c5c5c22c390e28094c390c2b0c390c2b3c391e282acc391c692c390c2b7c390c2b8c391e2809ac390c2b520c390c2bac390c2b0c391e282acc391e2809ac390c2b8c390c2bdc390c2bac391c69220c390c2b2c390c2b0c391cb86c390c2b5c390c2b3c390c2be20c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b02e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('296','EN','3',0x50726f6475637420776569676874,'','0','1'),
- ('296','RU','3',0xc390e28099c390c2b5c391c28120c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393638336539352e39323531393834315c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393638336539352e3932353139383431275d3d5c226563686f205c5c5c22c390e28099c390c2b5c391c28120c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('297','EN','3',0x546865207765696768742c20696e20776861746576657220756e6974732061726520617373756d656420627920746865207368697070696e6720636f7374732070726f6772616d6d65642d696e20746f207468697320776562736974652e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393638386436322e38353633313438325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3136303a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393638386436322e3835363331343832275d3d5c226563686f205c5c5c22546865207765696768742c20696e20776861746576657220756e6974732061726520617373756d656420627920746865207368697070696e6720636f7374732070726f6772616d6d65642d696e20746f207468697320776562736974652e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('297','RU','3',0xc390e28099c390c2b5c391c2812c20c390c2b220c390c2bbc391c5bdc390c2b1c391e280b9c391e280a620c390c2b5c390c2b4c390c2b8c390c2bdc390c2b8c391e280a0c390c2b0c391e280a62c20c390c2bfc391e282acc390c2b5c390c2b4c391c692c391c281c390c2bcc390c2bec391e2809ac391e282acc390c2b5c390c2bdc390c2bdc391e280b9c391e280a620c390c2b4c390c2bbc391c28f20c391e282acc390c2b0c391c281c391e280a1c390c2b5c391e2809ac390c2b020c391e280a0c390c2b5c390c2bdc391e280b920c390c2b4c390c2bec391c281c391e2809ac390c2b0c390c2b2c390c2bac390c2b820c390c2b7c390c2b0c390c2bfc391e282acc390c2bec390c2b3c391e282acc390c2b0c390c2bcc390c2bcc390c2b8c391e282acc390c2bec390c2b2c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2b4c390c2bbc391c28f20c391c28dc391e2809ac390c2bec390c2b3c390c2be20c391c281c390c2b0c390c2b9c391e2809ac390c2b02e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393661373966372e33383736393336305c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3235333a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393661373966372e3338373639333630275d3d5c226563686f205c5c5c22c390e28099c390c2b5c391c2812c20c390c2b220c390c2bbc391c5bdc390c2b1c391e280b9c391e280a620c390c2b5c390c2b4c390c2b8c390c2bdc390c2b8c391e280a0c390c2b0c391e280a62c20c390c2bfc391e282acc390c2b5c390c2b4c391c692c391c281c390c2bcc390c2bec391e2809ac391e282acc390c2b5c390c2bdc390c2bdc391e280b9c391e280a620c390c2b4c390c2bbc391c28f20c391e282acc390c2b0c391c281c391e280a1c390c2b5c391e2809ac390c2b020c391e280a0c390c2b5c390c2bdc391e280b920c390c2b4c390c2bec391c281c391e2809ac390c2b0c390c2b2c390c2bac390c2b820c390c2b7c390c2b0c390c2bfc391e282acc390c2bec390c2b3c391e282acc390c2b0c390c2bcc390c2bcc390c2b8c391e282acc390c2bec390c2b2c390c2b0c390c2bdc390c2bdc390c2bec390c2b920c390c2b4c390c2bbc391c28f20c391c28dc391e2809ac390c2bec390c2b3c390c2be20c391c281c390c2b0c390c2b9c391e2809ac390c2b02e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('298','EN','3',0x50726f64756374206465736372697074696f6e,'','0','1'),
- ('298','RU','3',0xc390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b520c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b0,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393732333637312e35303033393034325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393732333637312e3530303339303432275d3d5c226563686f205c5c5c22c390c5bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b520c390c2bfc391e282acc390c2bec390c2b4c391c692c390c2bac391e2809ac390c2b05c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('299','EN','3',0x4120636f6e63697365206465736372697074696f6e20666f7220746869732e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393732366235332e36343331313634325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393732366235332e3634333131363432275d3d5c226563686f205c5c5c224120636f6e63697365206465736372697074696f6e20666f7220746869732e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('299','RU','3',0xc390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861393733333731312e30313034343438395c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861393733333731312e3031303434343839275d3d5c226563686f205c5c5c22c390c5a1c391e282acc390c2b0c391e2809ac390c2bac390c2bec390c2b520c390c2bec390c2bfc390c2b8c391c281c390c2b0c390c2bdc390c2b8c390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('300','EN','1',0x50726f6475637473,'','0','1'),
- ('301','EN','1','','','0','1'),
- ('302','EN','1',0x4345444920686f6d65,'','0','1'),
- ('302','RU','1',0xc390e2809dc390c2bec390c2bcc390c2b0c391cb86c390c2bdc391c28fc391c28f2043454449,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623861633438393237352e34303237303539365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38373a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623861633438393237352e3430323730353936275d3d5c226563686f205c5c5c22c390e2809dc390c2bec390c2bcc390c2b0c391cb86c390c2bdc391c28fc391c28f20434544495c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('303','EN','2','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('304','EN','2',0x6f63705f706f696e74735f6761696e65645f7365656479,'','0','1'),
- ('305','EN','2','','','0','1'),
- ('306','EN','1',0x43454449,'','0','1'),
- ('307','EN','1','','','0','1'),
- ('308','EN','1',0x43454449,'','0','1'),
- ('309','EN','1','','','0','1'),
- ('310','EN','1',0x52616e646f6d2070616765,'','0','1'),
- ('311','EN','1','','','0','1'),
- ('312','EN','1',0x43454449206368616e67652d6c6f67,'','0','1'),
- ('313','EN','1','','','0','1'),
- ('314','EN','1',0x54726565,'','0','1'),
- ('315','EN','1','','','0','1'),
- ('316','EN','2','','','0','1'),
- ('317','EN','2',0x6f63705f706f696e74735f6761696e65645f63686174,'','0','1'),
- ('318','EN','2','','','0','1'),
- ('319','EN','1',0x43686174206c6f626279,'','0','1'),
- ('320','EN','1','','','0','1'),
- ('321','EN','1',0x43686174206c6f626279,'','0','1'),
- ('322','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('323','EN','2',0x446f776e6c6f61647320686f6d65,'','0','1'),
- ('323','RU','2',0xc390e28094c390c2b0c390c2b3c391e282acc391c692c390c2b7c390c2bac390c2b820c390c2b4c390c2bec390c2bcc390c2b0c391cb86c390c2bdc391c28fc391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862303233393636352e34353835323935355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a39393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862303233393636352e3435383532393535275d3d5c226563686f205c5c5c22c390e28094c390c2b0c390c2b3c391e282acc391c692c390c2b7c390c2bac390c2b820c390c2b4c390c2bec390c2bcc390c2b0c391cb86c390c2bdc391c28fc391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('324','EN','3','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('325','EN','1',0x446f776e6c6f616473,'','0','1'),
- ('326','EN','1','','','0','1'),
- ('327','EN','1',0x47616c6c6572696573,'','0','1'),
- ('328','EN','1','','','0','1'),
- ('329','EN','2','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('330','EN','2','',0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a303a7b7d693a313b613a303a7b7d693a323b733a31303a5c223a636f6e7461696e65725c223b693a333b4e3b693a343b4e3b693a353b733a303a5c225c223b7d22293b0a,'0','1'),
- ('331','EN','1',0x47616c6c657269657320686f6d65,'','0','1'),
- ('332','EN','2',0x686f6d652c67616c6c6572696573,'','0','1'),
- ('333','EN','2','','','0','1'),
- ('334','EN','2',0x47656e6572616c,'','0','1'),
- ('334','RU','2',0xc390c5bec390c2b1c391e280b0c390c2b5c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862383662666336352e32353639373635365c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862383662666336352e3235363937363536275d3d5c226563686f205c5c5c22c390c5bec390c2b1c391e280b0c390c2b5c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('335','EN','2',0x546563686e6f6c6f6779,'','0','1'),
- ('335','RU','2',0xc390c2a2c390c2b5c391e280a6c390c2bdc390c2bec390c2bbc390c2bec390c2b3c390c2b8c391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862383663666533362e33353331373237325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862383663666533362e3335333137323732275d3d5c226563686f205c5c5c22c390c2a2c390c2b5c391e280a6c390c2bdc390c2bec390c2bbc390c2bec390c2b3c390c2b8c391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('336','EN','2',0x446966666963756c74696573,'','0','1'),
- ('336','RU','2',0xc390c2a2c391e282acc391c692c390c2b4c390c2bdc390c2bec391c281c391e2809ac390c2b8,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862383664636337392e33363437323935325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862383664636337392e3336343732393532275d3d5c226563686f205c5c5c22c390c2a2c391e282acc391c692c390c2b4c390c2bdc390c2bec391c281c391e2809ac390c2b85c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('337','EN','2',0x436f6d6d756e697479,'','0','1'),
- ('337','RU','2',0xc390c2a1c390c2bec390c2bec390c2b1c391e280b0c390c2b5c391c281c391e2809ac390c2b2c390c2be,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862383665616661392e35333736393339355c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862383665616661392e3533373639333935275d3d5c226563686f205c5c5c22c390c2a1c390c2bec390c2bec390c2b1c391e280b0c390c2b5c391c281c391e2809ac390c2b2c390c2be5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('338','EN','2',0x456e7465727461696e6d656e74,'','0','1'),
- ('338','RU','2',0xc390c2a0c390c2b0c390c2b7c390c2b2c390c2bbc390c2b5c391e280a1c390c2b5c390c2bdc390c2b8c391c28f,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862383666383938392e37313038363836375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862383666383938392e3731303836383637275d3d5c226563686f205c5c5c22c390c2a0c390c2b0c390c2b7c390c2b2c390c2bbc390c2b5c391e280a1c390c2b5c390c2bdc390c2b8c391c28f5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('339','EN','2',0x427573696e657373,'','0','1'),
- ('339','RU','2',0xc390e28098c390c2b8c390c2b7c390c2bdc390c2b5c391c281,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862383730346338392e34343837343238375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37383a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862383730346338392e3434383734323837275d3d5c226563686f205c5c5c22c390e28098c390c2b8c390c2b7c390c2bdc390c2b5c391c2815c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('340','EN','2',0x417274,'','0','1'),
- ('340','RU','2',0xc390cb9cc391c281c390c2bac391c692c391c281c391c281c391e2809ac390c2b2c390c2be,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862383731333832362e31373632373632375c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a38343a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862383731333832362e3137363237363237275d3d5c226563686f205c5c5c22c390cb9cc391c281c390c2bac391c692c391c281c391c281c391e2809ac390c2b2c390c2be5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('341','EN','1',0x426c6f67,'','0','1'),
- ('342','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('343','EN','1',0x4e6577736c6574746572,'','0','1'),
+ ('246','EN','2','Contacts','','0','1'),
+ ('247','EN','3','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173b82fbb3.25630389\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f66173b82fbb3.25630389\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('248','EN','1','Contacts','','0','1'),
+ ('249','EN','1','','','0','1'),
+ ('250','EN','1','Super-member projects','','0','1'),
+ ('251','EN','1','','','0','1'),
+ ('252','EN','1','View','','0','1'),
+ ('253','EN','1','This link is a shortcut: the menu will change','','0','1'),
+ ('254','EN','1','Add','','0','1'),
+ ('255','EN','1','This link is a shortcut: the menu will change','','0','1'),
+ ('256','EN','2','Products','','0','1'),
+ ('257','EN','2','These are products for sale from this website.','','0','1'),
+ ('258','EN','1','Products home','','0','1'),
+ ('259','EN','3','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bc8e707.15571232\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bc8e707.15571232\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('260','EN','3','Product title','','0','1'),
+ ('261','EN','3','A concise title for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bc93d05.51273006\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:91:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bc93d05.51273006\']=\\\"echo \\\\\\\"A concise title for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('262','EN','3','Product code','','0','1'),
+ ('263','EN','3','The codename for the product','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bc9f430.17670927\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:94:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bc9f430.17670927\']=\\\"echo \\\\\\\"The codename for the product\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('264','EN','3','Net price','','0','1'),
+ ('265','EN','3','The price, before tax is added, in the primary currency of this website.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bca96b5.82907382\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:138:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bca96b5.82907382\']=\\\"echo \\\\\\\"The price, before tax is added, in the primary currency of this website.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('266','EN','3','Stock level','','0','1'),
+ ('267','EN','3','The stock level of the product (leave blank if no stock counting is to be done).','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bcb2a67.23116387\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:146:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bcb2a67.23116387\']=\\\"echo \\\\\\\"The stock level of the product (leave blank if no stock counting is to be done).\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('268','EN','3','Stock level warn-threshold','','0','1'),
+ ('269','EN','3','Send out a notification to the staff if the stock goes below this level (leave blank if no stock counting is to be done).','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bcba8f9.60490332\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:187:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bcba8f9.60490332\']=\\\"echo \\\\\\\"Send out a notification to the staff if the stock goes below this level (leave blank if no stock counting is to be done).\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('270','EN','3','Stock maintained','','0','1'),
+ ('271','EN','3','Whether stock will be maintained. If the stock is not maintained then users will not be able to purchase it if the stock runs out.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bcc1627.19818783\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:196:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bcc1627.19818783\']=\\\"echo \\\\\\\"Whether stock will be maintained. If the stock is not maintained then users will not be able to purchase it if the stock runs out.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('272','EN','3','Product tax rate','','0','1'),
+ ('273','EN','3','The tax rates that products can be assigned.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bccb8a0.95610593\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:110:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bccb8a0.95610593\']=\\\"echo \\\\\\\"The tax rates that products can be assigned.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('274','EN','3','Product image','','0','1'),
+ ('275','EN','3','Upload an image of your product.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bcd3e48.31269639\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:98:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bcd3e48.31269639\']=\\\"echo \\\\\\\"Upload an image of your product.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('276','EN','3','Product weight','','0','1'),
+ ('277','EN','3','The weight, in whatever units are assumed by the shipping costs programmed-in to this website.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bcdb5a1.28918831\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:160:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bcdb5a1.28918831\']=\\\"echo \\\\\\\"The weight, in whatever units are assumed by the shipping costs programmed-in to this website.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('278','EN','3','Product description','','0','1'),
+ ('279','EN','3','A concise description for this.','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173bce2370.61104280\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:97:\\\"\\$TPL_FUNCS[\'string_attach_4f66173bce2370.61104280\']=\\\"echo \\\\\\\"A concise description for this.\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('280','EN','1','Products','','0','1'),
+ ('281','EN','1','','','0','1'),
+ ('282','EN','1','CEDI home','','0','1'),
+ ('283','EN','2','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66173ee958f4.36227935\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f66173ee958f4.36227935\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('284','EN','2','ocp_points_gained_seedy','','0','1'),
+ ('285','EN','2','','','0','1'),
+ ('286','EN','1','CEDI','','0','1'),
+ ('287','EN','1','','','0','1'),
+ ('288','EN','1','CEDI','','0','1'),
+ ('289','EN','1','','','0','1'),
+ ('290','EN','1','Random page','','0','1'),
+ ('291','EN','1','','','0','1'),
+ ('292','EN','1','CEDI change-log','','0','1'),
+ ('293','EN','1','','','0','1'),
+ ('294','EN','1','Tree','','0','1'),
+ ('295','EN','1','','','0','1'),
+ ('296','EN','2','','','0','1'),
+ ('297','EN','2','ocp_points_gained_chat','','0','1'),
+ ('298','EN','2','','','0','1'),
+ ('299','EN','1','Chat lobby','','0','1'),
+ ('300','EN','1','','','0','1'),
+ ('301','EN','2','Downloads home','','0','1'),
+ ('302','EN','3','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f6617432e72a7.59056797\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f6617432e72a7.59056797\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('303','EN','1','Downloads','','0','1'),
+ ('304','EN','1','','','0','1'),
+ ('305','EN','1','Galleries','','0','1'),
+ ('306','EN','1','','','0','1'),
+ ('307','EN','2','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66174840a251.76028862\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f66174840a251.76028862\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('308','EN','2','','return unserialize(\"a:6:{i:0;a:1:{i:0;a:5:{i:0;s:37:\\\"string_attach_4f66174840cc68.83939268\\\";i:1;a:0:{}i:2;i:1;i:3;s:0:\\\"\\\";i:4;s:0:\\\"\\\";}}i:1;a:0:{}i:2;s:10:\\\":container\\\";i:3;N;i:4;N;i:5;s:66:\\\"\\$TPL_FUNCS[\'string_attach_4f66174840cc68.83939268\']=\\\"echo \\\\\\\"\\\\\\\";\\\";\\n\\\";}\");\n','0','1'),
+ ('309','EN','1','Galleries home','','0','1'),
+ ('310','EN','2','home,galleries','','0','1'),
+ ('311','EN','2','','','0','1'),
+ ('312','EN','2','General','','0','1'),
+ ('313','EN','2','Technology','','0','1'),
+ ('314','EN','2','Difficulties','','0','1'),
+ ('315','EN','2','Community','','0','1'),
+ ('316','EN','2','Entertainment','','0','1'),
+ ('317','EN','2','Business','','0','1'),
+ ('318','EN','2','Art','','0','1'),
+ ('319','EN','2','General','','0','1'),
+ ('320','EN','2','General messages will be sent out in this newsletter.','','0','1'),
+ ('321','EN','1','Point-store','','0','1'),
+ ('322','EN','1','','','0','1'),
+ ('323','EN','2','ocp_currency','','0','1'),
+ ('324','EN','2','','','0','1'),
+ ('325','EN','2','ocp_payment_cardholder_name','','0','1'),
+ ('326','EN','2','','','0','1'),
+ ('327','EN','2','ocp_payment_type','','0','1'),
+ ('328','EN','2','','','0','1'),
+ ('329','EN','2','ocp_payment_card_number','','0','1'),
+ ('330','EN','2','','','0','1'),
+ ('331','EN','2','ocp_payment_card_start_date','','0','1'),
+ ('332','EN','2','','','0','1'),
+ ('333','EN','2','ocp_payment_card_expiry_date','','0','1'),
+ ('334','EN','2','','','0','1'),
+ ('335','EN','2','ocp_payment_card_issue_number','','0','1'),
+ ('336','EN','2','','','0','1'),
+ ('337','EN','2','ocp_payment_card_cv2','','0','1'),
+ ('338','EN','2','','','0','1'),
+ ('339','EN','1','Purchasing','','0','1'),
+ ('340','EN','1','','','0','1'),
+ ('341','EN','1','Invoices','','0','1'),
+ ('342','EN','1','','','0','1'),
+ ('343','EN','1','Subscriptions','','0','1'),
  ('344','EN','1','','','0','1'),
- ('345','EN','2',0x47656e6572616c,'','0','1'),
- ('345','RU','2',0xc390c5bec390c2b1c391e280b0c390c2b5c390c2b5,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862396138633435352e35353030343535325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a37363a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862396138633435352e3535303034353532275d3d5c226563686f205c5c5c22c390c5bec390c2b1c391e280b0c390c2b5c390c2b55c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('346','EN','2',0x47656e6572616c206d657373616765732077696c6c2062652073656e74206f757420696e2074686973206e6577736c65747465722e,'','0','1'),
- ('346','RU','2',0xc390c5bec390c2b1c391e280b0c390c2b8c390c2b520c391c281c390c2bec390c2bec390c2b1c391e280b0c390c2b5c390c2bdc390c2b8c391c28f20c390c2b4c390c2bbc391c28f20c390c2bec391e2809ac390c2bfc391e282acc390c2b0c390c2b2c390c2bac390c2b820c390c2b220c391c28dc391e2809ac390c2bec390c2b920c391e282acc390c2b0c391c281c391c281c391e280b9c390c2bbc390c2bac390c2b52e,0x72657475726e20756e73657269616c697a652822613a363a7b693a303b613a313a7b693a303b613a353a7b693a303b733a33373a5c22737472696e675f6174746163685f34643365623862396161333564362e31383136333035325c223b693a313b613a303a7b7d693a323b693a313b693a333b733a303a5c225c223b693a343b733a303a5c225c223b7d7d693a313b613a303a7b7d693a323b733a373a5c22286d69786564295c223b693a333b733a303a5c225c223b693a343b4e3b693a353b733a3134393a5c225c2454504c5f46554e43535b27737472696e675f6174746163685f34643365623862396161333564362e3138313633303532275d3d5c226563686f205c5c5c22c390c5bec390c2b1c391e280b0c390c2b8c390c2b520c391c281c390c2bec390c2bec390c2b1c391e280b0c390c2b5c390c2bdc390c2b8c391c28f20c390c2b4c390c2bbc391c28f20c390c2bec391e2809ac390c2bfc391e282acc390c2b0c390c2b2c390c2bac390c2b820c390c2b220c391c28dc391e2809ac390c2bec390c2b920c391e282acc390c2b0c391c281c391c281c391e280b9c390c2bbc390c2bac390c2b52e5c5c5c223b5c223b5c6e5c223b7d22293b0a,'0','1'),
- ('347','EN','1',0x506f696e7473,'','0','1'),
- ('348','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('349','EN','1',0x506f696e7473,'','0','1'),
- ('350','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('351','EN','1',0x506f696e742d73746f7265,'','0','1'),
- ('352','EN','1','','','0','1'),
- ('353','EN','2',0x6f63705f63757272656e6379,'','0','1'),
+ ('345','EN','1','Quizzes','','0','1'),
+ ('346','EN','1','','','0','1'),
+ ('347','EN','1','Search','','0','1'),
+ ('348','EN','1','This link is a shortcut: the menu will change','','0','1'),
+ ('349','EN','1','Orders','','0','1'),
+ ('350','EN','1','','','0','1'),
+ ('351','EN','2','ocp_firstname','','0','1'),
+ ('352','EN','2','','','0','1'),
+ ('353','EN','2','ocp_lastname','','0','1'),
  ('354','EN','2','','','0','1'),
- ('355','EN','2',0x6f63705f7061796d656e745f63617264686f6c6465725f6e616d65,'','0','1'),
+ ('355','EN','2','ocp_building_name_or_number','','0','1'),
  ('356','EN','2','','','0','1'),
- ('357','EN','2',0x6f63705f7061796d656e745f74797065,'','0','1'),
+ ('357','EN','2','ocp_city','','0','1'),
  ('358','EN','2','','','0','1'),
- ('359','EN','2',0x6f63705f7061796d656e745f636172645f6e756d626572,'','0','1'),
+ ('359','EN','2','ocp_state','','0','1'),
  ('360','EN','2','','','0','1'),
- ('361','EN','2',0x6f63705f7061796d656e745f636172645f73746172745f64617465,'','0','1'),
+ ('361','EN','2','ocp_post_code','','0','1'),
  ('362','EN','2','','','0','1'),
- ('363','EN','2',0x6f63705f7061796d656e745f636172645f6578706972795f64617465,'','0','1'),
+ ('363','EN','2','ocp_country','','0','1'),
  ('364','EN','2','','','0','1'),
- ('365','EN','2',0x6f63705f7061796d656e745f636172645f69737375655f6e756d626572,'','0','1'),
- ('366','EN','2','','','0','1'),
- ('367','EN','2',0x6f63705f7061796d656e745f636172645f637632,'','0','1'),
- ('368','EN','2','','','0','1'),
- ('369','EN','1',0x496e766f69636573,'','0','1'),
- ('370','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('371','EN','1',0x537562736372697074696f6e73,'','0','1'),
- ('372','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('373','EN','1',0x50757263686173696e67,'','0','1'),
+ ('365','EN','1','Staff','','0','1'),
+ ('366','EN','1','','','0','1'),
+ ('367','EN','1','Other','','0','1'),
+ ('368','EN','1','Complaint','','0','1'),
+ ('369','EN','1','Support tickets','','0','1'),
+ ('370','EN','1','','','0','1'),
+ ('371','EN','1','Forum home','','0','1'),
+ ('372','EN','1','','','0','1'),
+ ('373','EN','1','Private Topics','','0','1'),
  ('374','EN','1','','','0','1'),
- ('375','EN','1',0x496e766f69636573,'','0','1'),
+ ('375','EN','1','Posts since last visit','','0','1'),
  ('376','EN','1','','','0','1'),
- ('377','EN','1',0x535542534352495054494f4e53,'','0','1'),
+ ('377','EN','1','Topics with unread posts','','0','1'),
  ('378','EN','1','','','0','1'),
- ('379','EN','1',0x5175697a7a6573,'','0','1'),
+ ('379','EN','1','Recently-read topics','','0','1'),
  ('380','EN','1','','','0','1'),
- ('381','EN','1',0x536561726368,'','0','1'),
- ('382','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('383','EN','1',0x4f7264657273,'','0','1'),
+ ('381','EN','1','File/Media library','','0','1'),
+ ('382','EN','1','','','0','1'),
+ ('383','EN','1','Recommend site','','0','1'),
  ('384','EN','1','','','0','1'),
- ('385','EN','2',0x6f63705f66697273746e616d65,'','0','1'),
- ('386','EN','2','','','0','1'),
- ('387','EN','2',0x6f63705f6c6173746e616d65,'','0','1'),
+ ('385','EN','1','Super-members','','0','1'),
+ ('386','EN','1','','','0','1'),
+ ('387','EN','2','ocp_points_used','','0','1'),
  ('388','EN','2','','','0','1'),
- ('389','EN','2',0x6f63705f6275696c64696e675f6e616d655f6f725f6e756d626572,'','0','1'),
+ ('389','EN','2','ocp_gift_points_used','','0','1'),
  ('390','EN','2','','','0','1'),
- ('391','EN','2',0x6f63705f63697479,'','0','1'),
+ ('391','EN','2','ocp_points_gained_given','','0','1'),
  ('392','EN','2','','','0','1'),
- ('393','EN','2',0x6f63705f7374617465,'','0','1'),
+ ('393','EN','2','ocp_points_gained_rating','','0','1'),
  ('394','EN','2','','','0','1'),
- ('395','EN','2',0x6f63705f706f73745f636f6465,'','0','1'),
+ ('395','EN','2','ocp_points_gained_voting','','0','1'),
  ('396','EN','2','','','0','1'),
- ('397','EN','2',0x6f63705f636f756e747279,'','0','1'),
+ ('397','EN','2','ocp_sites','','0','1'),
  ('398','EN','2','','','0','1'),
- ('399','EN','1',0x5374616666,'','0','1'),
- ('400','EN','1','','','0','1'),
- ('401','EN','1',0x4f74686572,'','0','1'),
- ('402','EN','1',0x436f6d706c61696e74,'','0','1'),
- ('403','EN','1',0x537570706f7274207469636b657473,'','0','1'),
- ('404','EN','1','','','0','1'),
- ('405','EN','1',0x537570706f7274207469636b657473,'','0','1'),
- ('406','EN','1','','','0','1'),
- ('407','EN','1',0x466f72756d20686f6d65,'','0','1'),
- ('408','EN','1','','','0','1'),
- ('409','EN','1',0x506572736f6e616c20746f70696373,'','0','1'),
- ('410','EN','1',0x54686973206c696e6b20697320612073686f72746375743a20746865206d656e752077696c6c206368616e6765,'','0','1'),
- ('411','EN','1',0x466f72756d20686f6d65,'','0','1'),
- ('412','EN','1','','','0','1'),
- ('413','EN','1',0x506572736f6e616c20746f70696373,'','0','1'),
- ('414','EN','1','','','0','1'),
- ('415','EN','1',0x506f7374732073696e6365206c617374207669736974,'','0','1'),
- ('416','EN','1','','','0','1'),
- ('417','EN','1',0x546f70696373207769746820756e7265616420706f737473,'','0','1'),
- ('418','EN','1','','','0','1'),
- ('419','EN','1',0x526563656e746c792d7265616420746f70696373,'','0','1'),
- ('420','EN','1','','','0','1'),
- ('421','EN','1',0x50726976616379,'','0','1'),
- ('422','EN','1','','','0','1'),
- ('423','EN','1',0x4775657374626f6f6b,'','0','1'),
- ('424','EN','1','','','0','1'),
- ('425','EN','1',0x5265636f6d6d656e642073697465,'','0','1'),
- ('426','EN','1','','','0','1'),
- ('427','EN','1',0x46696c652d64756d70,'','0','1'),
- ('428','EN','1','','','0','1'),
- ('429','EN','1',0x53757065722d6d656d62657273,'','0','1'),
- ('430','EN','1','','','0','1'),
- ('431','EN','2',0x6f63705f706f696e74735f75736564,'','0','1'),
- ('432','EN','2','','','0','1'),
- ('433','EN','2',0x6f63705f676966745f706f696e74735f75736564,'','0','1'),
- ('434','EN','2','','','0','1'),
- ('435','EN','2',0x6f63705f706f696e74735f6761696e65645f676976656e,'','0','1'),
- ('436','EN','2','','','0','1'),
- ('437','EN','2',0x6f63705f706f696e74735f6761696e65645f726174696e67,'','0','1'),
- ('438','EN','2','','','0','1'),
- ('439','EN','2',0x6f63705f706f696e74735f6761696e65645f766f74696e67,'','0','1'),
- ('440','EN','2','','','0','1'),
- ('441','EN','2',0x6f63705f7369746573,'','0','1'),
- ('442','EN','2','','','0','1'),
- ('443','EN','2',0x6f63705f726f6c65,'','0','1'),
- ('444','EN','2','','','0','1'),
- ('445','EN','2',0x6f63705f66756c6c6e616d65,'','0','1'),
- ('446','EN','2','','','0','1');
+ ('399','EN','2','ocp_role','','0','1'),
+ ('400','EN','2','','','0','1'),
+ ('401','EN','2','ocp_fullname','','0','1'),
+ ('402','EN','2','','','0','1');
 
-DROP TABLE IF EXISTS `ocp7_values`;
+DROP TABLE IF EXISTS `ocp_translate_history`;
 
-CREATE TABLE `ocp7_values` (
-  `the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_value` varchar(80) COLLATE latin1_bin NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`the_name`),
-  KEY `date_and_time` (`date_and_time`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_values` values('version','7.1','1295956121'),
- ('ocf_version','7.1','1295956121');
-
-DROP TABLE IF EXISTS `ocp7_zones`;
-
-CREATE TABLE `ocp7_zones` (
-  `zone_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `zone_title` int(10) unsigned NOT NULL,
-  `zone_default_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `zone_header_text` int(10) unsigned NOT NULL,
-  `zone_theme` varchar(80) COLLATE latin1_bin NOT NULL,
-  `zone_wide` tinyint(1) DEFAULT NULL,
-  `zone_require_session` tinyint(1) NOT NULL,
-  `zone_displayed_in_menu` tinyint(1) NOT NULL,
-  PRIMARY KEY (`zone_name`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_zones` values('','7','start','1','-1','0','0','0'),
- ('adminzone','8','start','2','default','0','1','1'),
- ('site','9','start','4','-1','0','0','1'),
- ('collaboration','10','start','3','-1','0','0','1'),
- ('cms','11','cms','5','default','0','1','1'),
- ('forum','14','forumview','12','-1',null,'0','1');
-
-DROP TABLE IF EXISTS `ocp7_addons`;
-
-CREATE TABLE `ocp7_addons` (
-  `addon_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `addon_author` varchar(255) COLLATE latin1_bin NOT NULL,
-  `addon_organisation` varchar(255) COLLATE latin1_bin NOT NULL,
-  `addon_version` varchar(255) COLLATE latin1_bin NOT NULL,
-  `addon_description` longtext COLLATE latin1_bin NOT NULL,
-  `addon_install_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`addon_name`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_addons_dependencies`;
-
-CREATE TABLE `ocp7_addons_dependencies` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `addon_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `addon_name_dependant_upon` varchar(255) COLLATE latin1_bin NOT NULL,
-  `addon_name_incompatibility` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_addons_files`;
-
-CREATE TABLE `ocp7_addons_files` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `addon_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `filename` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_authors`;
-
-CREATE TABLE `ocp7_authors` (
-  `author` varchar(80) COLLATE latin1_bin NOT NULL,
-  `url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `forum_handle` int(11) DEFAULT NULL,
-  `description` int(10) unsigned NOT NULL,
-  `skills` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`author`),
-  KEY `findmemberlink` (`forum_handle`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_autosave`;
-
-CREATE TABLE `ocp7_autosave` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `a_member_id` int(11) NOT NULL,
-  `a_key` longtext COLLATE latin1_bin NOT NULL,
-  `a_value` longtext COLLATE latin1_bin NOT NULL,
-  `a_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `myautosaves` (`a_member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_award_archive`;
-
-CREATE TABLE `ocp7_award_archive` (
-  `a_type_id` int(11) NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `content_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `member_id` int(11) NOT NULL,
-  PRIMARY KEY (`a_type_id`,`date_and_time`),
-  KEY `awardquicksearch` (`content_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_award_types`;
-
-CREATE TABLE `ocp7_award_types` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `a_title` int(10) unsigned NOT NULL,
-  `a_description` int(10) unsigned NOT NULL,
-  `a_points` int(11) NOT NULL,
-  `a_content_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `a_hide_awardee` tinyint(1) NOT NULL,
-  `a_update_time_hours` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_award_types` values('1','85','86','0','download','1','168');
-
-DROP TABLE IF EXISTS `ocp7_banner_clicks`;
-
-CREATE TABLE `ocp7_banner_clicks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_date_and_time` int(10) unsigned NOT NULL,
-  `c_member_id` int(11) NOT NULL,
-  `c_ip_address` varchar(40) COLLATE latin1_bin NOT NULL,
-  `c_source` varchar(80) COLLATE latin1_bin NOT NULL,
-  `c_banner_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `clicker_ip` (`c_ip_address`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_banner_types`;
-
-CREATE TABLE `ocp7_banner_types` (
-  `id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `t_is_textual` tinyint(1) NOT NULL,
-  `t_image_width` int(11) NOT NULL,
-  `t_image_height` int(11) NOT NULL,
-  `t_max_file_size` int(11) NOT NULL,
-  `t_comcode_inline` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `hottext` (`t_comcode_inline`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_banner_types` values('','0','468','60','80','0');
-
-DROP TABLE IF EXISTS `ocp7_banners`;
-
-CREATE TABLE `ocp7_banners` (
-  `name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `expiry_date` int(10) unsigned DEFAULT NULL,
-  `submitter` int(11) NOT NULL,
-  `img_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `b_title_text` varchar(255) COLLATE latin1_bin NOT NULL,
-  `the_type` tinyint(4) NOT NULL,
-  `caption` int(10) unsigned NOT NULL,
-  `campaign_remaining` int(11) NOT NULL,
-  `site_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `hits_from` int(11) NOT NULL,
-  `views_from` int(11) NOT NULL,
-  `hits_to` int(11) NOT NULL,
-  `views_to` int(11) NOT NULL,
-  `importance_modulus` int(11) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `validated` tinyint(1) NOT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `edit_date` int(10) unsigned DEFAULT NULL,
-  `b_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`name`),
-  KEY `banner_child_find` (`b_type`),
-  KEY `the_type` (`the_type`),
-  KEY `expiry_date` (`expiry_date`),
-  KEY `badd_date` (`add_date`),
-  KEY `topsites` (`hits_from`,`hits_to`),
-  KEY `campaign_remaining` (`campaign_remaining`),
-  KEY `bvalidated` (`validated`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_banners` values('advertise_here',null,'1','data/images/advertise_here.png','','2','161','0','http://localhost/svn/code/4.2.x/site/index.php?page=advertise','0','0','0','0','10',0x50726f76696465642061732064656661756c742e205468697320697320612064656661756c742062616e6e6572202869742073686f7773207768656e206f746865727320617265206e6f7420617661696c61626c65292e,'1','1295956132',null,''),
- ('hosting',null,'1','data/images/hosting.png','','0','162','0','http://localhost/svn/code/4.2.x/site/index.php?page=hosting-submit','0','0','0','0','32',0x50726f76696465642061732064656661756c742e,'1','1295956132',null,''),
- ('donate',null,'1','data/images/donate.png','','0','163','0','http://localhost/svn/code/4.2.x/site/index.php?page=donate','0','0','0','0','30',0x50726f76696465642061732064656661756c742e,'1','1295956132',null,'');
-
-DROP TABLE IF EXISTS `ocp7_bookmarks`;
-
-CREATE TABLE `ocp7_bookmarks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `b_owner` int(11) NOT NULL,
-  `b_folder` varchar(255) COLLATE latin1_bin NOT NULL,
-  `b_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `b_page_link` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_cache`;
-
-CREATE TABLE `ocp7_cache` (
-  `cached_for` varchar(80) COLLATE latin1_bin NOT NULL,
-  `identifier` varchar(40) COLLATE latin1_bin NOT NULL,
-  `the_value` longtext COLLATE latin1_bin NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `the_theme` varchar(80) COLLATE latin1_bin NOT NULL,
-  `lang` varchar(5) COLLATE latin1_bin NOT NULL,
-  `langs_required` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`cached_for`,`identifier`,`the_theme`,`lang`),
-  KEY `cached_ford` (`date_and_time`),
-  KEY `cached_fore` (`cached_for`),
-  KEY `cached_forf` (`lang`),
-  KEY `cached_forg` (`identifier`),
-  KEY `cached_forh` (`the_theme`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_cache_on`;
-
-CREATE TABLE `ocp7_cache_on` (
-  `cached_for` varchar(80) COLLATE latin1_bin NOT NULL,
-  `cache_on` longtext COLLATE latin1_bin NOT NULL,
-  `cache_ttl` int(11) NOT NULL,
-  PRIMARY KEY (`cached_for`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_calendar_events`;
-
-CREATE TABLE `ocp7_calendar_events` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `e_submitter` int(11) NOT NULL,
-  `e_views` int(11) NOT NULL,
-  `e_title` int(10) unsigned NOT NULL,
-  `e_content` int(10) unsigned NOT NULL,
-  `e_add_date` int(10) unsigned NOT NULL,
-  `e_edit_date` int(10) unsigned DEFAULT NULL,
-  `e_geo_position` varchar(255) COLLATE latin1_bin NOT NULL,
-  `e_recurrence` varchar(80) COLLATE latin1_bin NOT NULL,
-  `e_recurrences` int(11) DEFAULT NULL,
-  `e_seg_recurrences` tinyint(1) NOT NULL,
-  `e_start_year` int(11) NOT NULL,
-  `e_start_month` int(11) NOT NULL,
-  `e_start_day` int(11) NOT NULL,
-  `e_start_hour` int(11) NOT NULL,
-  `e_start_minute` int(11) NOT NULL,
-  `e_end_year` int(11) DEFAULT NULL,
-  `e_end_month` int(11) DEFAULT NULL,
-  `e_end_day` int(11) DEFAULT NULL,
-  `e_end_hour` int(11) DEFAULT NULL,
-  `e_end_minute` int(11) DEFAULT NULL,
-  `e_is_public` tinyint(1) NOT NULL,
-  `e_groups_access` varchar(255) COLLATE latin1_bin NOT NULL,
-  `e_groups_modify` varchar(255) COLLATE latin1_bin NOT NULL,
-  `e_priority` int(11) NOT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `allow_trackbacks` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `e_type` int(11) NOT NULL,
-  `validated` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `e_views` (`e_views`),
-  KEY `ces` (`e_submitter`),
-  KEY `publicevents` (`e_is_public`),
-  KEY `e_type` (`e_type`),
-  KEY `eventat` (`e_start_year`,`e_start_month`,`e_start_day`,`e_start_hour`,`e_start_minute`),
-  KEY `e_add_date` (`e_add_date`),
-  KEY `validated` (`validated`),
-  KEY `ftjoin_etitle` (`e_title`),
-  KEY `ftjoin_econtent` (`e_content`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_calendar_interests`;
-
-CREATE TABLE `ocp7_calendar_interests` (
-  `i_member_id` int(11) NOT NULL,
-  `t_type` int(11) NOT NULL,
-  PRIMARY KEY (`i_member_id`,`t_type`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_calendar_jobs`;
-
-CREATE TABLE `ocp7_calendar_jobs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `j_time` int(10) unsigned NOT NULL,
-  `j_reminder_id` int(11) DEFAULT NULL,
-  `j_member_id` int(11) DEFAULT NULL,
-  `j_event_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `applicablejobs` (`j_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_calendar_reminders`;
-
-CREATE TABLE `ocp7_calendar_reminders` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `e_id` int(11) NOT NULL,
-  `n_member_id` int(11) NOT NULL,
-  `n_seconds_before` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_calendar_types`;
-
-CREATE TABLE `ocp7_calendar_types` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `t_title` int(10) unsigned NOT NULL,
-  `t_logo` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9;
-
-insert into `ocp7_calendar_types` values('1','166','calendar/system_command'),
- ('2','167','calendar/general'),
- ('3','168','calendar/birthday'),
- ('4','169','calendar/public_holiday'),
- ('5','170','calendar/vacation'),
- ('6','171','calendar/appointment'),
- ('7','172','calendar/commitment'),
- ('8','173','calendar/anniversary');
-
-DROP TABLE IF EXISTS `ocp7_catalogue_categories`;
-
-CREATE TABLE `ocp7_catalogue_categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `cc_title` int(10) unsigned NOT NULL,
-  `cc_description` int(10) unsigned NOT NULL,
-  `rep_image` varchar(255) COLLATE latin1_bin NOT NULL,
-  `cc_notes` longtext COLLATE latin1_bin NOT NULL,
-  `cc_add_date` int(10) unsigned NOT NULL,
-  `cc_parent_id` int(11) DEFAULT NULL,
-  `cc_move_target` int(11) DEFAULT NULL,
-  `cc_move_days_lower` int(11) NOT NULL,
-  `cc_move_days_higher` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `catstoclean` (`cc_move_target`),
-  KEY `cataloguefind` (`c_name`),
-  KEY `ftjoin_cctitle` (`cc_title`),
-  KEY `ftjoin_ccdescrip` (`cc_description`)
-) ENGINE=MyISAM AUTO_INCREMENT=7;
-
-insert into `ocp7_catalogue_categories` values('1','projects','186','187','','','1295956137',null,null,'30','60'),
- ('2','hosted','214','215','','','1295956137',null,null,'30','60'),
- ('3','links','220','221','','','1295956137',null,null,'30','60'),
- ('4','faqs','238','239','','','1295956137',null,null,'30','60'),
- ('5','contacts','268','269','','','1295956137',null,null,'30','60'),
- ('6','products','278','279','','','1295956137',null,null,'30','60');
-
-DROP TABLE IF EXISTS `ocp7_catalogue_efv_long`;
-
-CREATE TABLE `ocp7_catalogue_efv_long` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cf_id` int(11) NOT NULL,
-  `ce_id` int(11) NOT NULL,
-  `cv_value` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `lcf_id` (`cf_id`),
-  KEY `lce_id` (`ce_id`),
-  FULLTEXT KEY `lcv_value` (`cv_value`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_catalogue_efv_long_trans`;
-
-CREATE TABLE `ocp7_catalogue_efv_long_trans` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cf_id` int(11) NOT NULL,
-  `ce_id` int(11) NOT NULL,
-  `cv_value` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ltcf_id` (`cf_id`),
-  KEY `ltce_id` (`ce_id`),
-  KEY `ltcv_value` (`cv_value`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_catalogue_efv_short`;
-
-CREATE TABLE `ocp7_catalogue_efv_short` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cf_id` int(11) NOT NULL,
-  `ce_id` int(11) NOT NULL,
-  `cv_value` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `iscv_value` (`cv_value`),
-  KEY `scf_id` (`cf_id`),
-  KEY `sce_id` (`ce_id`),
-  FULLTEXT KEY `scv_value` (`cv_value`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_catalogue_efv_short_trans`;
-
-CREATE TABLE `ocp7_catalogue_efv_short_trans` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cf_id` int(11) NOT NULL,
-  `ce_id` int(11) NOT NULL,
-  `cv_value` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `stcf_id` (`cf_id`),
-  KEY `stce_id` (`ce_id`),
-  KEY `stcv_value` (`cv_value`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_catalogue_entries`;
-
-CREATE TABLE `ocp7_catalogue_entries` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `cc_id` int(11) NOT NULL,
-  `ce_submitter` int(11) NOT NULL,
-  `ce_add_date` int(10) unsigned NOT NULL,
-  `ce_edit_date` int(10) unsigned DEFAULT NULL,
-  `ce_views` int(11) NOT NULL,
-  `ce_views_prior` int(11) NOT NULL,
-  `ce_validated` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `allow_trackbacks` tinyint(1) NOT NULL,
-  `ce_last_moved` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ce_views` (`ce_views`),
-  KEY `ces` (`ce_submitter`),
-  KEY `ce_validated` (`ce_validated`),
-  KEY `ce_cc_id` (`cc_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_catalogue_fields`;
-
-CREATE TABLE `ocp7_catalogue_fields` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `cf_name` int(10) unsigned NOT NULL,
-  `cf_description` int(10) unsigned NOT NULL,
-  `cf_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `cf_order` int(11) NOT NULL,
-  `cf_defines_order` tinyint(4) NOT NULL,
-  `cf_visible` tinyint(1) NOT NULL,
-  `cf_searchable` tinyint(1) NOT NULL,
-  `cf_default` longtext COLLATE latin1_bin NOT NULL,
-  `cf_required` tinyint(1) NOT NULL,
-  `cf_put_in_category` tinyint(1) NOT NULL,
-  `cf_put_in_search` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=42;
-
-insert into `ocp7_catalogue_fields` values('1','projects','178','179','short_trans','0','1','1','1','','1','1','1'),
- ('2','projects','180','181','user','1','0','1','1','','1','1','1'),
- ('3','projects','182','183','long_trans','2','0','1','1','','1','1','1'),
- ('4','projects','184','185','integer','3','0','1','1','','1','1','1'),
- ('5','modifications','192','193','short_trans','0','1','1','1','','1','1','1'),
- ('6','modifications','194','195','picture','1','0','1','1','','0','1','1'),
- ('7','modifications','196','197','short_trans','2','0','1','1','','1','1','1'),
- ('8','modifications','198','199','url','3','0','1','1','','0','1','1'),
- ('9','modifications','200','201','long_trans','4','0','1','1','','1','1','1'),
- ('10','modifications','202','203','short_text','5','0','1','1','','1','1','1'),
- ('11','hosted','208','209','short_trans','0','1','1','1','','1','1','1'),
- ('12','hosted','210','211','url','1','0','1','1','','0','1','1'),
- ('13','hosted','212','213','long_trans','2','0','1','1','','0','1','1'),
- ('14','links','222','223','short_trans','0','1','1','1','','1','1','1'),
- ('15','links','224','225','url','1','0','1','1','','1','0','1'),
- ('16','links','226','227','long_trans','2','0','1','1','','0','1','1'),
- ('17','faqs','232','233','short_trans','0','0','1','1','','1','1','1'),
- ('18','faqs','234','235','long_trans','1','0','1','1','','1','1','1'),
- ('19','faqs','236','237','integer','2','1','0','1','','1','1','1'),
- ('20','contacts','244','245','short_text','0','0','1','1','','1','1','1'),
- ('21','contacts','246','247','short_text','1','1','1','1','','1','1','1'),
- ('22','contacts','248','249','short_text','2','0','1','1','','1','1','1'),
- ('23','contacts','250','251','short_text','3','0','1','1','','1','1','1'),
- ('24','contacts','252','253','short_text','4','0','1','1','','1','1','1'),
- ('25','contacts','254','255','short_text','5','0','1','1','','1','1','1'),
- ('26','contacts','256','257','short_text','6','0','1','1','','1','1','1'),
- ('27','contacts','258','259','short_text','7','0','1','1','','1','1','1'),
- ('28','contacts','260','261','short_text','8','0','1','1','','1','1','1'),
- ('29','contacts','262','263','short_text','9','0','1','1','','1','1','1'),
- ('30','contacts','264','265','long_text','10','0','1','1','','1','1','1'),
- ('31','contacts','266','267','long_text','11','0','1','1','','1','1','1'),
- ('32','products','280','281','short_trans','0','1','1','1','','1','1','1'),
- ('33','products','282','283','random','1','0','1','1','','1','1','1'),
- ('34','products','284','285','float','2','0','1','1','','1','1','1'),
- ('35','products','286','287','integer','3','0','1','0','','0','1','1'),
- ('36','products','288','289','integer','4','0','0','0','','0','0','0'),
- ('37','products','290','291','list','5','0','0','0',0x4e6f7c596573,'1','0','0'),
- ('38','products','292','293','list','6','0','0','0',0x30257c35257c31372e3525,'1','0','0'),
- ('39','products','294','295','picture','7','0','1','1','','0','1','1'),
- ('40','products','296','297','float','8','0','0','0','','1','0','0'),
- ('41','products','298','299','long_trans','9','0','1','1','','1','1','1');
-
-DROP TABLE IF EXISTS `ocp7_catalogues`;
-
-CREATE TABLE `ocp7_catalogues` (
-  `c_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `c_title` int(10) unsigned NOT NULL,
-  `c_description` int(10) unsigned NOT NULL,
-  `c_display_type` tinyint(4) NOT NULL,
-  `c_is_tree` tinyint(1) NOT NULL,
-  `c_notes` longtext COLLATE latin1_bin NOT NULL,
-  `c_add_date` int(10) unsigned NOT NULL,
-  `c_submit_points` int(11) NOT NULL,
-  `c_ecommerce` tinyint(1) NOT NULL,
-  `c_send_view_reports` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`c_name`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_catalogues` values('projects','176','177','0','0','','1295956136','30','0','never'),
- ('modifications','190','191','1','0','','1295956137','60','0','never'),
- ('hosted','206','207','0','0','','1295956137','0','0','never'),
- ('links','218','219','2','1','','1295956137','0','0','never'),
- ('faqs','230','231','0','0','','1295956137','0','0','never'),
- ('contacts','242','243','0','0','','1295956137','30','0','never'),
- ('products','276','277','1','1','','1295956137','0','1','never');
-
-DROP TABLE IF EXISTS `ocp7_custom_comcode`;
-
-CREATE TABLE `ocp7_custom_comcode` (
-  `tag_tag` varchar(80) COLLATE latin1_bin NOT NULL,
-  `tag_title` int(10) unsigned NOT NULL,
-  `tag_description` int(10) unsigned NOT NULL,
-  `tag_replace` longtext COLLATE latin1_bin NOT NULL,
-  `tag_example` longtext COLLATE latin1_bin NOT NULL,
-  `tag_parameters` varchar(255) COLLATE latin1_bin NOT NULL,
-  `tag_enabled` tinyint(1) NOT NULL,
-  `tag_dangerous_tag` tinyint(1) NOT NULL,
-  `tag_block_tag` tinyint(1) NOT NULL,
-  `tag_textual_tag` tinyint(1) NOT NULL,
-  PRIMARY KEY (`tag_tag`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_custom_comcode` values('youtube','87','88',0x7b245345542c564944454f2c7b24505245475f5245504c4143452c28687474703a2f2f2e2a5c3f763d293f285c772b29282e2a293f2c245c7b325c7d2c7b636f6e74656e747d7d7d3c6f626a6563742077696474683d2234383022206865696768743d22333835223e3c706172616d206e616d653d226d6f766965222076616c75653d22687474703a2f2f7777772e796f75747562652e636f6d2f762f7b244745542a2c564944454f7d3f66733d3126616d703b686c3d656e5f5553223e3c2f706172616d3e3c706172616d206e616d653d22616c6c6f7746756c6c53637265656e222076616c75653d2274727565223e3c2f706172616d3e3c706172616d206e616d653d22616c6c6f77736372697074616363657373222076616c75653d22616c77617973223e3c2f706172616d3e3c656d626564207372633d22687474703a2f2f7777772e796f75747562652e636f6d2f762f7b244745542a2c564944454f7d3f66733d3126616d703b686c3d656e5f55532220747970653d226170706c69636174696f6e2f782d73686f636b776176652d666c6173682220616c6c6f777363726970746163636573733d22616c776179732220616c6c6f7766756c6c73637265656e3d2274727565222077696474683d2234383022206865696768743d22333835223e3c2f656d6265643e3c2f6f626a6563743e,0x5b796f75747562655d687474703a2f2f7777772e796f75747562652e636f6d2f77617463683f763d5a44464648617a394773595b2f796f75747562655d,'','1','0','1','0');
-
-DROP TABLE IF EXISTS `ocp7_edit_pings`;
-
-CREATE TABLE `ocp7_edit_pings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `the_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_time` int(10) unsigned NOT NULL,
-  `the_member` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_categories`;
-
-CREATE TABLE `ocp7_f_categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `c_description` longtext COLLATE latin1_bin NOT NULL,
-  `c_expanded_by_default` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3;
-
-insert into `ocp7_f_categories` values('1','General','','1'),
- ('2','Staff','','1');
-
-DROP TABLE IF EXISTS `ocp7_f_custom_fields`;
-
-CREATE TABLE `ocp7_f_custom_fields` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cf_locked` tinyint(1) NOT NULL,
-  `cf_name` int(10) unsigned NOT NULL,
-  `cf_description` int(10) unsigned NOT NULL,
-  `cf_default` longtext COLLATE latin1_bin NOT NULL,
-  `cf_public_view` tinyint(1) NOT NULL,
-  `cf_owner_view` tinyint(1) NOT NULL,
-  `cf_owner_set` tinyint(1) NOT NULL,
-  `cf_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `cf_required` tinyint(1) NOT NULL,
-  `cf_show_in_posts` tinyint(1) NOT NULL,
-  `cf_show_in_post_previews` tinyint(1) NOT NULL,
-  `cf_order` int(11) NOT NULL,
-  `cf_only_group` longtext COLLATE latin1_bin NOT NULL,
-  `cf_encrypted` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=34;
-
-insert into `ocp7_f_custom_fields` values('1','0','16','17','','1','1','1','long_trans','0','0','0','0','','0'),
- ('2','0','18','19','','1','1','1','short_text','0','0','0','1','','0'),
- ('3','0','20','21','','1','1','1','short_text','0','0','0','2','','0'),
- ('4','0','22','23','','1','1','1','long_trans','0','0','0','3','','0'),
- ('5','0','24','25','','1','1','1','short_text','0','0','0','4','','0'),
- ('6','0','26','27','','1','1','1','short_text','0','0','0','5','','0'),
- ('7','0','28','29','','0','0','0','long_trans','0','0','0','6','','0'),
- ('8','1','83','84','','0','0','1','short_text','0','0','0','7','','0'),
- ('9','1','304','305',0x30,'0','0','0','integer','0','0','0','8','','0'),
- ('10','1','317','318',0x30,'0','0','0','integer','0','0','0','9','','0'),
- ('11','1','353','354',0x4145447c4146417c414c4c7c414d447c414e477c414f4b7c414f4e7c4152417c4152507c4152537c4155447c4157477c415a4d7c42414d7c4242447c4244547c42474c7c4248447c4249467c424d447c424e447c424f427c424f507c4252437c42524c7c4252527c4253447c42544e7c4257507c4259527c425a447c4341447c43445a7c4348467c434c467c434c507c434e597c434f507c4352437c4353447c4355507c4356457c4359507c435a4b7c444a467c444b4b7c444f507c445a447c45454b7c4547507c45524e7c4554427c4555527c464a447c464b507c4742507c47454c7c4748437c4749507c474d447c474e537c4751457c4754517c4757507c4759447c484b447c484e4c7c4852447c48524b7c4854477c4855467c4944527c494c537c494e527c4951447c4952527c49534b7c4a4d447c4a4f447c4a50597c4b45537c4b47537c4b48527c4b4d467c4b50577c4b52577c4b57447c4b59447c4b5a547c4c414b7c4c42507c4c4b527c4c52447c4c534c7c4c534d7c4c544c7c4c564c7c4c59447c4d41447c4d444c7c4d47467c4d4b447c4d4c467c4d4d4b7c4d4e547c4d4f507c4d524f7c4d544c7c4d55527c4d56527c4d574b7c4d584e7c4d59527c4d5a4d7c4e41447c4e474e7c4e49437c4e4f4b7c4e50527c4e5a447c4f4d527c5041427c5045497c50454e7c50474b7c5048507c504b527c504c4e7c5059477c5141527c524f4c7c5255427c5257467c5341527c5342447c5343527c5344447c5344507c53454b7c5347447c5348507c5349547c534b4b7c534c4c7c534f537c5352477c5354447c5355527c5356437c5359507c535a4c7c5448427c544a527c544d4d7c544e447c544f507c5450457c54524c7c5454447c5457447c545a537c5541487c55414b7c5547537c5553447c5559557c555a537c5645427c564e447c5655567c5753547c5841467c5843447c584f467c5850467c5944447c5945527c5a414c7c5a41527c5a4d4b7c5a5744,'0','0','1','list','0','0','0','10','','0'),
- ('12','1','355','356','','0','0','1','short_text','0','0','0','11','','1'),
- ('13','1','357','358',0x416d65726963616e20457870726573737c44656c74617c44696e65727320436172647c4a43427c4d617374657220436172647c536f6c6f7c5377697463687c56697361,'0','0','1','list','0','0','0','12','','1'),
- ('14','1','359','360','','0','0','1','integer','0','0','0','13','','1'),
- ('15','1','361','362',0x6d6d2f7979,'0','0','1','short_text','0','0','0','14','','1'),
- ('16','1','363','364',0x6d6d2f7979,'0','0','1','short_text','0','0','0','15','','1'),
- ('17','1','365','366','','0','0','1','short_text','0','0','0','16','','1'),
- ('18','1','367','368','','0','0','1','short_text','0','0','0','17','','1'),
- ('19','1','385','386','','0','0','0','short_text','0','0','0','18','','0'),
- ('20','1','387','388','','0','0','0','short_text','0','0','0','19','','0'),
- ('21','1','389','390','','0','0','0','long_text','0','0','0','20','','0'),
- ('22','1','391','392','','0','0','0','short_text','0','0','0','21','','0'),
- ('23','1','393','394','','0','0','0','short_text','0','0','0','22','','0'),
- ('24','1','395','396','','0','0','0','short_text','0','0','0','23','','0'),
- ('25','1','397','398',0x7c41447c41457c41467c41477c41497c414c7c414d7c414e7c414f7c41517c41527c41537c41547c41557c41577c415a7c42417c42427c42447c42457c42467c42477c42487c42497c424a7c424d7c424e7c424f7c42527c42537c42547c42557c42567c42577c42597c425a7c43417c43437c43447c43467c43477c43487c43497c434b7c434c7c434d7c434e7c434f7c43527c43537c43557c43567c43587c43597c435a7c44457c444a7c444b7c444d7c444f7c445a7c45437c45457c45477c45487c45527c45537c45547c46497c464a7c464b7c464d7c464f7c46527c47417c47427c47447c47457c47487c47497c474c7c474d7c474e7c47517c47527c47537c47547c47557c47577c47597c484b7c484d7c484e7c48527c48547c48557c49447c49457c494c7c494e7c494f7c49517c49527c49537c49547c4a4d7c4a4f7c4a507c4b457c4b477c4b487c4b497c4b4d7c4b4e7c4b507c4b527c4b577c4b597c4b5a7c4c417c4c427c4c437c4c497c4c4b7c4c527c4c537c4c547c4c557c4c597c4d417c4d437c4d447c4d477c4d487c4d4b7c4d4c7c4d4d7c4d4e7c4d4f7c4d507c4d527c4d537c4d547c4d557c4d567c4d577c4d587c4d597c4d5a7c4e417c4e437c4e457c4e467c4e477c4e497c4e4c7c4e4f7c4e507c4e527c4e557c4e5a7c4f4d7c50417c50457c50467c50477c50487c504b7c504c7c504e7c50527c50547c50577c50597c51417c524f7c52557c52577c53417c53427c53437c53447c53457c53477c53487c53497c534a7c534b7c534c7c534d7c534e7c534f7c53527c53547c53557c53567c53597c535a7c54437c54447c54477c54487c544a7c544b7c544d7c544e7c544f7c54507c54527c54547c54567c54577c545a7c55417c55477c554d7c55537c55597c555a7c56417c56437c56457c56477c56497c564e7c56557c57467c57537c59447c59457c5a417c5a4d7c5a527c5a57,'0','0','0','list','0','0','0','24','','0'),
- ('26','1','431','432',0x30,'0','0','0','integer','0','0','0','25','','0'),
- ('27','1','433','434',0x30,'0','0','0','integer','0','0','0','26','','0'),
- ('28','1','435','436',0x30,'0','0','0','integer','0','0','0','27','','0'),
- ('29','1','437','438',0x30,'0','0','0','integer','0','0','0','28','','0'),
- ('30','1','439','440',0x30,'0','0','0','integer','0','0','0','29','','0'),
- ('31','1','441','442','','0','0','0','short_text','0','0','0','30','','0'),
- ('32','1','443','444','','0','0','1','short_text','0','0','0','31','','0'),
- ('33','1','445','446','','0','0','1','short_text','0','0','0','32','','0');
-
-DROP TABLE IF EXISTS `ocp7_f_emoticons`;
-
-CREATE TABLE `ocp7_f_emoticons` (
-  `e_code` varchar(80) COLLATE latin1_bin NOT NULL,
-  `e_theme_img_code` varchar(255) COLLATE latin1_bin NOT NULL,
-  `e_relevance_level` int(11) NOT NULL,
-  `e_use_topics` tinyint(1) NOT NULL,
-  `e_is_special` tinyint(1) NOT NULL,
-  PRIMARY KEY (`e_code`),
-  KEY `relevantemoticons` (`e_relevance_level`),
-  KEY `topicemos` (`e_use_topics`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_f_emoticons` values(':P','ocf_emoticons/cheeky','0','1','0'),
- (':\'(','ocf_emoticons/cry','0','1','0'),
- (':dry:','ocf_emoticons/dry','0','1','0'),
- (':$','ocf_emoticons/blush','0','1','0'),
- (';)','ocf_emoticons/wink','0','0','0'),
- ('O_o','ocf_emoticons/blink','0','1','0'),
- (':wub:','ocf_emoticons/wub','0','1','0'),
- (':cool:','ocf_emoticons/cool','0','1','0'),
- (':lol:','ocf_emoticons/lol','0','1','0'),
- (':(','ocf_emoticons/sad','0','1','0'),
- (':)','ocf_emoticons/smile','0','0','0'),
- (':thumbs:','ocf_emoticons/thumbs','0','1','0'),
- (':offtopic:','ocf_emoticons/offtopic','0','0','0'),
- (':|','ocf_emoticons/mellow','0','0','0'),
- (':ninja:','ocf_emoticons/ph34r','0','1','0'),
- (':o','ocf_emoticons/shocked','0','1','0'),
- (':rolleyes:','ocf_emoticons/rolleyes','1','1','0'),
- (':D','ocf_emoticons/grin','1','1','0'),
- ('^_^','ocf_emoticons/glee','1','1','0'),
- ('(K)','ocf_emoticons/kiss','1','0','0'),
- (':S','ocf_emoticons/confused','1','1','0'),
- (':@','ocf_emoticons/angry','1','1','0'),
- (':shake:','ocf_emoticons/shake','1','1','0'),
- (':hand:','ocf_emoticons/hand','1','1','0'),
- (':drool:','ocf_emoticons/drool','1','1','0'),
- (':devil:','ocf_emoticons/devil','1','1','0'),
- (':party:','ocf_emoticons/party','1','0','0'),
- (':constipated:','ocf_emoticons/constipated','1','1','0'),
- (':depressed:','ocf_emoticons/depressed','1','1','0'),
- (':zzz:','ocf_emoticons/zzz','1','1','0'),
- (':whistle:','ocf_emoticons/whistle','1','0','0'),
- (':upsidedown:','ocf_emoticons/upsidedown','1','1','0'),
- (':sick:','ocf_emoticons/sick','1','1','0'),
- (':shutup:','ocf_emoticons/shutup','1','0','0'),
- (':sarcy:','ocf_emoticons/sarcy','1','1','0'),
- (':puppyeyes:','ocf_emoticons/puppyeyes','1','1','0'),
- (':nod:','ocf_emoticons/nod','1','0','0'),
- (':nerd:','ocf_emoticons/nerd','1','1','0'),
- (':king:','ocf_emoticons/king','1','1','0'),
- (':birthday:','ocf_emoticons/birthday','1','1','0'),
- (':cyborg:','ocf_emoticons/cyborg','1','0','0'),
- (':hippie:','ocf_emoticons/hippie','1','1','0'),
- (':ninja2:','ocf_emoticons/ninja2','1','1','0'),
- (':rockon:','ocf_emoticons/rockon','1','0','0'),
- (':sinner:','ocf_emoticons/sinner','1','0','0'),
- (':guitar:','ocf_emoticons/guitar','1','0','0'),
- (':christmas:','ocf_emoticons/christmas','1','0','0');
-
-DROP TABLE IF EXISTS `ocp7_f_forum_intro_ip`;
-
-CREATE TABLE `ocp7_f_forum_intro_ip` (
-  `i_forum_id` int(11) NOT NULL,
-  `i_ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`i_forum_id`,`i_ip`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_forum_intro_member`;
-
-CREATE TABLE `ocp7_f_forum_intro_member` (
-  `i_forum_id` int(11) NOT NULL,
-  `i_member_id` int(11) NOT NULL,
-  PRIMARY KEY (`i_forum_id`,`i_member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_forum_tracking`;
-
-CREATE TABLE `ocp7_f_forum_tracking` (
-  `r_forum_id` int(11) NOT NULL,
-  `r_member_id` int(11) NOT NULL,
-  PRIMARY KEY (`r_forum_id`,`r_member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_forums`;
-
-CREATE TABLE `ocp7_f_forums` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `f_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `f_description` int(10) unsigned NOT NULL,
-  `f_category_id` int(11) DEFAULT NULL,
-  `f_parent_forum` int(11) DEFAULT NULL,
-  `f_position` int(11) NOT NULL,
-  `f_order_sub_alpha` tinyint(1) NOT NULL,
-  `f_post_count_increment` tinyint(1) NOT NULL,
-  `f_intro_question` int(10) unsigned NOT NULL,
-  `f_intro_answer` varchar(255) COLLATE latin1_bin NOT NULL,
-  `f_cache_num_topics` int(11) NOT NULL,
-  `f_cache_num_posts` int(11) NOT NULL,
-  `f_cache_last_topic_id` int(11) DEFAULT NULL,
-  `f_cache_last_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `f_cache_last_time` int(10) unsigned DEFAULT NULL,
-  `f_cache_last_username` varchar(255) COLLATE latin1_bin NOT NULL,
-  `f_cache_last_member_id` int(11) DEFAULT NULL,
-  `f_cache_last_forum_id` int(11) DEFAULT NULL,
-  `f_redirection` varchar(255) COLLATE latin1_bin NOT NULL,
-  `f_order` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `cache_num_posts` (`f_cache_num_posts`),
-  KEY `subforum_parenting` (`f_parent_forum`),
-  KEY `findnamedforum` (`f_name`),
-  KEY `f_position` (`f_position`)
-) ENGINE=MyISAM AUTO_INCREMENT=10;
-
-insert into `ocp7_f_forums` values('1','Forum home','50',null,null,'1','0','1','51','','0','0',null,'',null,'',null,null,'','last_post'),
- ('2','News','52','1','1','1','0','1','53','','0','0',null,'',null,'',null,null,'','last_post'),
- ('3','General chat','54','1','1','1','0','1','55','','0','0',null,'',null,'',null,null,'','last_post'),
- ('4','Reported posts forum','56','2','1','1','0','1','57','','0','0',null,'',null,'',null,null,'','last_post'),
- ('5','Trash','58','2','1','1','0','1','59','','0','0',null,'',null,'',null,null,'','last_post'),
- ('6','Website comment topics','60','1','1','1','0','1','61','','0','0',null,'',null,'',null,null,'','last_post'),
- ('7','Website support tickets','62','2','1','1','0','1','63','','0','0',null,'',null,'',null,null,'','last_post'),
- ('8','Staff','64','2','1','1','0','1','65','','1','1','1','Welcome to the forums','1295956104','System','1','8','','last_post'),
- ('9','Website \"Contact Us\" messages','155','2','1','1','0','1','156','','0','0',null,'',null,'',null,null,'','last_post');
-
-DROP TABLE IF EXISTS `ocp7_f_group_member_timeouts`;
-
-CREATE TABLE `ocp7_f_group_member_timeouts` (
-  `member_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  `timeout` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`member_id`,`group_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_group_members`;
-
-CREATE TABLE `ocp7_f_group_members` (
-  `gm_group_id` int(11) NOT NULL,
-  `gm_member_id` int(11) NOT NULL,
-  `gm_validated` tinyint(1) NOT NULL,
-  PRIMARY KEY (`gm_group_id`,`gm_member_id`),
-  KEY `gm_validated` (`gm_validated`),
-  KEY `gm_member_id` (`gm_member_id`),
-  KEY `gm_group_id` (`gm_group_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_groups`;
-
-CREATE TABLE `ocp7_f_groups` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `g_name` int(10) unsigned NOT NULL,
-  `g_is_default` tinyint(1) NOT NULL,
-  `g_is_presented_at_install` tinyint(1) NOT NULL,
-  `g_is_super_admin` tinyint(1) NOT NULL,
-  `g_is_super_moderator` tinyint(1) NOT NULL,
-  `g_group_leader` int(11) DEFAULT NULL,
-  `g_title` int(10) unsigned NOT NULL,
-  `g_promotion_target` int(11) DEFAULT NULL,
-  `g_promotion_threshold` int(11) DEFAULT NULL,
-  `g_flood_control_submit_secs` int(11) NOT NULL,
-  `g_flood_control_access_secs` int(11) NOT NULL,
-  `g_gift_points_base` int(11) NOT NULL,
-  `g_gift_points_per_day` int(11) NOT NULL,
-  `g_max_daily_upload_mb` int(11) NOT NULL,
-  `g_max_attachments_per_post` int(11) NOT NULL,
-  `g_max_avatar_width` int(11) NOT NULL,
-  `g_max_avatar_height` int(11) NOT NULL,
-  `g_max_post_length_comcode` int(11) NOT NULL,
-  `g_max_sig_length_comcode` int(11) NOT NULL,
-  `g_enquire_on_new_ips` tinyint(1) NOT NULL,
-  `g_rank_image` varchar(80) COLLATE latin1_bin NOT NULL,
-  `g_hidden` tinyint(1) NOT NULL,
-  `g_order` int(11) NOT NULL,
-  `g_rank_image_pri_only` tinyint(1) NOT NULL,
-  `g_open_membership` tinyint(1) NOT NULL,
-  `g_is_private_club` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ftjoin_gname` (`g_name`),
-  KEY `ftjoin_gtitle` (`g_title`),
-  KEY `is_private_club` (`g_is_private_club`),
-  KEY `is_super_admin` (`g_is_super_admin`),
-  KEY `is_super_moderator` (`g_is_super_moderator`),
-  KEY `is_default` (`g_is_default`),
-  KEY `is_presented_at_install` (`g_is_presented_at_install`),
-  KEY `gorder` (`g_order`,`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11;
-
-insert into `ocp7_f_groups` values('1','30','0','0','0','0',null,'31',null,null,'5','0','25','1','70','50','100','100','30000','700','0','','0','0','1','0','0'),
- ('2','32','0','0','1','0',null,'33',null,null,'0','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/admin','0','1','1','0','0'),
- ('3','34','0','0','0','1',null,'35',null,null,'0','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/mod','0','2','1','0','0'),
- ('4','36','0','0','0','0',null,'37',null,null,'0','0','25','1','70','50','100','100','30000','700','0','','0','3','1','0','0'),
- ('5','38','0','0','0','0',null,'39',null,null,'5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/4','0','4','1','0','0'),
- ('6','40','0','0','0','0',null,'41','5','10000','5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/3','0','5','1','0','0'),
- ('7','42','0','0','0','0',null,'43','6','2500','5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/2','0','6','1','0','0'),
- ('8','44','0','0','0','0',null,'45','7','400','5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/1','0','7','1','0','0'),
- ('9','46','0','0','0','0',null,'47','8','100','5','0','25','1','70','50','100','100','30000','700','0','ocf_rank_images/0','0','8','1','0','0'),
- ('10','48','0','0','0','0',null,'49',null,null,'0','0','25','1','70','50','100','100','30000','700','0','','0','9','1','0','0');
-
-DROP TABLE IF EXISTS `ocp7_f_invites`;
-
-CREATE TABLE `ocp7_f_invites` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `i_inviter` int(11) NOT NULL,
-  `i_email_address` varchar(255) COLLATE latin1_bin NOT NULL,
-  `i_time` int(10) unsigned NOT NULL,
-  `i_taken` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_member_cpf_perms`;
-
-CREATE TABLE `ocp7_f_member_cpf_perms` (
-  `member_id` int(11) NOT NULL,
-  `field_id` int(11) NOT NULL,
-  `guest_view` tinyint(1) NOT NULL,
-  `member_view` tinyint(1) NOT NULL,
-  `friend_view` tinyint(1) NOT NULL,
-  `group_view` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`member_id`,`field_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_member_custom_fields`;
-
-CREATE TABLE `ocp7_f_member_custom_fields` (
-  `mf_member_id` int(11) NOT NULL,
-  `field_1` int(10) unsigned DEFAULT NULL,
-  `field_2` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_3` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_4` int(10) unsigned DEFAULT NULL,
-  `field_5` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_6` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_7` int(10) unsigned DEFAULT NULL,
-  `field_8` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_9` int(11) DEFAULT NULL,
-  `field_10` int(11) DEFAULT NULL,
-  `field_11` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_12` longtext COLLATE latin1_bin NOT NULL,
-  `field_13` longtext COLLATE latin1_bin NOT NULL,
-  `field_14` int(11) DEFAULT NULL,
-  `field_15` longtext COLLATE latin1_bin NOT NULL,
-  `field_16` longtext COLLATE latin1_bin NOT NULL,
-  `field_17` longtext COLLATE latin1_bin NOT NULL,
-  `field_18` longtext COLLATE latin1_bin NOT NULL,
-  `field_19` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_20` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_21` longtext COLLATE latin1_bin NOT NULL,
-  `field_22` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_23` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_24` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_25` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_26` int(11) DEFAULT NULL,
-  `field_27` int(11) DEFAULT NULL,
-  `field_28` int(11) DEFAULT NULL,
-  `field_29` int(11) DEFAULT NULL,
-  `field_30` int(11) DEFAULT NULL,
-  `field_31` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_32` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  `field_33` varchar(255) COLLATE latin1_bin NOT NULL DEFAULT '',
-  PRIMARY KEY (`mf_member_id`),
-  FULLTEXT KEY `mcf2` (`field_2`),
-  FULLTEXT KEY `mcf3` (`field_3`),
-  FULLTEXT KEY `mcf5` (`field_5`),
-  FULLTEXT KEY `mcf6` (`field_6`),
-  FULLTEXT KEY `mcf8` (`field_8`),
-  FULLTEXT KEY `mcf11` (`field_11`),
-  FULLTEXT KEY `mcf12` (`field_12`),
-  FULLTEXT KEY `mcf13` (`field_13`),
-  FULLTEXT KEY `mcf15` (`field_15`),
-  FULLTEXT KEY `mcf16` (`field_16`),
-  FULLTEXT KEY `mcf17` (`field_17`),
-  FULLTEXT KEY `mcf18` (`field_18`),
-  FULLTEXT KEY `mcf19` (`field_19`),
-  FULLTEXT KEY `mcf20` (`field_20`),
-  FULLTEXT KEY `mcf21` (`field_21`),
-  FULLTEXT KEY `mcf22` (`field_22`),
-  FULLTEXT KEY `mcf23` (`field_23`),
-  FULLTEXT KEY `mcf24` (`field_24`),
-  FULLTEXT KEY `mcf25` (`field_25`),
-  FULLTEXT KEY `mcf31` (`field_31`),
-  FULLTEXT KEY `mcf32` (`field_32`),
-  FULLTEXT KEY `mcf33` (`field_33`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_f_member_custom_fields` values('1','69','','','70','','','71','',null,null,'','','',null,'','','','','','','','','','','',null,null,null,null,null,'','',''),
- ('2','74','','','75','','','76','',null,null,'','','',null,'','','','','','','','','','','',null,null,null,null,null,'','',''),
- ('3','79','','','80','','','81','',null,null,'','','',null,'','','','','','','','','','','',null,null,null,null,null,'','','');
-
-DROP TABLE IF EXISTS `ocp7_f_member_known_login_ips`;
-
-CREATE TABLE `ocp7_f_member_known_login_ips` (
-  `i_member_id` int(11) NOT NULL,
-  `i_ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `i_val_code` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`i_member_id`,`i_ip`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_members`;
-
-CREATE TABLE `ocp7_f_members` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `m_username` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_pass_hash_salted` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_pass_salt` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_theme` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_avatar_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_validated` tinyint(1) NOT NULL,
-  `m_validated_email_confirm_code` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_cache_num_posts` int(11) NOT NULL,
-  `m_cache_warnings` int(11) NOT NULL,
-  `m_join_time` int(10) unsigned NOT NULL,
-  `m_timezone_offset` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_primary_group` int(11) NOT NULL,
-  `m_last_visit_time` int(10) unsigned NOT NULL,
-  `m_last_submit_time` int(10) unsigned NOT NULL,
-  `m_signature` int(10) unsigned NOT NULL,
-  `m_is_perm_banned` tinyint(1) NOT NULL,
-  `m_preview_posts` tinyint(1) NOT NULL,
-  `m_dob_day` int(11) DEFAULT NULL,
-  `m_dob_month` int(11) DEFAULT NULL,
-  `m_dob_year` int(11) DEFAULT NULL,
-  `m_reveal_age` tinyint(1) NOT NULL,
-  `m_email_address` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_photo_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_photo_thumb_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_views_signatures` tinyint(1) NOT NULL,
-  `m_auto_alert_contrib_content` tinyint(1) NOT NULL,
-  `m_language` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_ip_address` varchar(40) COLLATE latin1_bin NOT NULL,
-  `m_allow_emails` tinyint(1) NOT NULL,
-  `m_notes` longtext COLLATE latin1_bin NOT NULL,
-  `m_zone_wide` tinyint(1) NOT NULL,
-  `m_highlighted_name` tinyint(1) NOT NULL,
-  `m_pt_allow` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_pt_rules_text` int(10) unsigned NOT NULL,
-  `m_max_email_attach_size_mb` int(11) NOT NULL,
-  `m_password_change_code` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_password_compat_scheme` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_on_probation_until` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_list` (`m_username`),
-  KEY `menail` (`m_email_address`),
-  KEY `external_auth_lookup` (`m_pass_hash_salted`),
-  KEY `sort_post_count` (`m_cache_num_posts`),
-  KEY `m_join_time` (`m_join_time`),
-  KEY `whos_validated` (`m_validated`),
-  KEY `birthdays` (`m_dob_day`,`m_dob_month`),
-  KEY `ftjoin_msig` (`m_signature`),
-  KEY `primary_group` (`m_primary_group`),
-  KEY `avatar_url` (`m_avatar_url`),
-  FULLTEXT KEY `search_user` (`m_username`)
-) ENGINE=MyISAM AUTO_INCREMENT=4;
-
-insert into `ocp7_f_members` values('1','Guest','310ab58805cda9e06fd9d88fbe4a1d70','4d3eb8887ad2b','','','1','','0','0','1295956104','0','1','1295956104','1295956104','67','0','1',null,null,null,'1','','','','','1','0','','0000:0000:0000:0000:0000:0000:0000:0001','1','','1','0','*','68','5','','','1295956104'),
- ('2','admin','f8be1ff42716b049c8b9619e4ecda3df','4d3eb8887d23a','','themes/default/images/ocf_default_avatars/default_set/cool_flare.png','1','','0','0','1295956104','0','2','1295956104','1295956104','72','0','0',null,null,null,'1','','','','','1','0','','0000:0000:0000:0000:0000:0000:0000:0001','1','','1','0','*','73','5','','','1295956104'),
- ('3','test','efc7a793ac76dc40a23e5416f57a38e0','4d3eb8887de92','','','1','','0','0','1295956104','0','9','1295956104','1295956104','77','0','0',null,null,null,'1','','','','','1','0','','0000:0000:0000:0000:0000:0000:0000:0001','1','','1','0','*','78','5','','','1295956104');
-
-DROP TABLE IF EXISTS `ocp7_f_moderator_logs`;
-
-CREATE TABLE `ocp7_f_moderator_logs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `l_the_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `l_param_a` varchar(255) COLLATE latin1_bin NOT NULL,
-  `l_param_b` varchar(255) COLLATE latin1_bin NOT NULL,
-  `l_date_and_time` int(10) unsigned NOT NULL,
-  `l_reason` longtext COLLATE latin1_bin NOT NULL,
-  `l_by` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_multi_moderations`;
-
-CREATE TABLE `ocp7_f_multi_moderations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `mm_name` int(10) unsigned NOT NULL,
-  `mm_post_text` longtext COLLATE latin1_bin NOT NULL,
-  `mm_move_to` int(11) DEFAULT NULL,
-  `mm_pin_state` tinyint(1) DEFAULT NULL,
-  `mm_sink_state` tinyint(1) DEFAULT NULL,
-  `mm_open_state` tinyint(1) DEFAULT NULL,
-  `mm_forum_multi_code` varchar(255) COLLATE latin1_bin NOT NULL,
-  `mm_title_suffix` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`,`mm_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_f_multi_moderations` values('1','66','','5','0','0','0','*','');
-
-DROP TABLE IF EXISTS `ocp7_f_poll_answers`;
-
-CREATE TABLE `ocp7_f_poll_answers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `pa_poll_id` int(11) NOT NULL,
-  `pa_answer` varchar(255) COLLATE latin1_bin NOT NULL,
-  `pa_cache_num_votes` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_poll_votes`;
-
-CREATE TABLE `ocp7_f_poll_votes` (
-  `pv_poll_id` int(11) NOT NULL,
-  `pv_member_id` int(11) NOT NULL,
-  `pv_answer_id` int(11) NOT NULL,
-  PRIMARY KEY (`pv_poll_id`,`pv_member_id`,`pv_answer_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_polls`;
-
-CREATE TABLE `ocp7_f_polls` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `po_question` varchar(255) COLLATE latin1_bin NOT NULL,
-  `po_cache_total_votes` int(11) NOT NULL,
-  `po_is_private` tinyint(1) NOT NULL,
-  `po_is_open` tinyint(1) NOT NULL,
-  `po_minimum_selections` int(11) NOT NULL,
-  `po_maximum_selections` int(11) NOT NULL,
-  `po_requires_reply` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_post_history`;
-
-CREATE TABLE `ocp7_f_post_history` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `h_create_date_and_time` int(10) unsigned NOT NULL,
-  `h_action_date_and_time` int(10) unsigned NOT NULL,
-  `h_owner_member_id` int(11) NOT NULL,
-  `h_alterer_member_id` int(11) NOT NULL,
-  `h_post_id` int(11) NOT NULL,
-  `h_topic_id` int(11) NOT NULL,
-  `h_before` longtext COLLATE latin1_bin NOT NULL,
-  `h_action` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `phistorylookup` (`h_post_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_post_templates`;
-
-CREATE TABLE `ocp7_f_post_templates` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `t_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_text` longtext COLLATE latin1_bin NOT NULL,
-  `t_forum_multi_code` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_use_default_forums` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4;
-
-insert into `ocp7_f_post_templates` values('1','Bug report',0x56657273696f6e3a203f0a537570706f727420736f66747761726520656e7669726f6e6d656e7420286f7065726174696e672073797374656d2c206574632e293a0a3f0a0a41737369676e656420746f3a203f0a53657665726974793a203f0a4578616d706c652055524c3a203f0a4465736372697074696f6e3a0a3f0a0a537465707320666f7220726570726f64756374696f6e3a0a3f0a0a,'','0'),
- ('2','Task',0x41737369676e656420746f3a203f0a5072696f726974792f54696d657363616c653a203f0a4465736372697074696f6e3a0a3f0a0a,'','0'),
- ('3','Fault',0x56657273696f6e3a203f0a41737369676e656420746f3a203f0a53657665726974792f54696d657363616c653a203f0a4465736372697074696f6e3a0a3f0a0a537465707320666f7220726570726f64756374696f6e3a0a3f0a0a,'','0');
-
-DROP TABLE IF EXISTS `ocp7_f_posts`;
-
-CREATE TABLE `ocp7_f_posts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `p_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `p_post` int(10) unsigned NOT NULL,
-  `p_ip_address` varchar(40) COLLATE latin1_bin NOT NULL,
-  `p_time` int(10) unsigned NOT NULL,
-  `p_poster` int(11) NOT NULL,
-  `p_intended_solely_for` int(11) DEFAULT NULL,
-  `p_poster_name_if_guest` varchar(80) COLLATE latin1_bin NOT NULL,
-  `p_validated` tinyint(1) NOT NULL,
-  `p_topic_id` int(11) NOT NULL,
-  `p_cache_forum_id` int(11) DEFAULT NULL,
-  `p_last_edit_time` int(10) unsigned DEFAULT NULL,
-  `p_last_edit_by` int(11) DEFAULT NULL,
-  `p_is_emphasised` tinyint(1) NOT NULL,
-  `p_skip_sig` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `p_validated` (`p_validated`),
-  KEY `in_topic` (`p_topic_id`,`p_time`,`id`),
-  KEY `post_order_time` (`p_time`,`id`),
-  KEY `p_last_edit_time` (`p_last_edit_time`),
-  KEY `posts_by` (`p_poster`),
-  KEY `find_pp` (`p_intended_solely_for`),
-  KEY `search_join` (`p_post`),
-  KEY `postsinforum` (`p_cache_forum_id`),
-  KEY `deletebyip` (`p_ip_address`),
-  FULLTEXT KEY `p_title` (`p_title`)
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_f_posts` values('1','Welcome to the forums','82','127.0.0.1','1295956104','1',null,'System','1','1','8',null,null,'0','0');
-
-DROP TABLE IF EXISTS `ocp7_f_read_logs`;
-
-CREATE TABLE `ocp7_f_read_logs` (
-  `l_member_id` int(11) NOT NULL,
-  `l_topic_id` int(11) NOT NULL,
-  `l_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`l_member_id`,`l_topic_id`),
-  KEY `erase_old_read_logs` (`l_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_saved_warnings`;
-
-CREATE TABLE `ocp7_f_saved_warnings` (
-  `s_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_explanation` longtext COLLATE latin1_bin NOT NULL,
-  `s_message` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`s_title`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_special_pt_access`;
-
-CREATE TABLE `ocp7_f_special_pt_access` (
-  `s_member_id` int(11) NOT NULL,
-  `s_topic_id` int(11) NOT NULL,
-  PRIMARY KEY (`s_member_id`,`s_topic_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_topic_tracking`;
-
-CREATE TABLE `ocp7_f_topic_tracking` (
-  `r_topic_id` int(11) NOT NULL,
-  `r_member_id` int(11) NOT NULL,
-  `r_last_message_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`r_topic_id`,`r_member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_topics`;
-
-CREATE TABLE `ocp7_f_topics` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `t_pinned` tinyint(1) NOT NULL,
-  `t_sunk` tinyint(1) NOT NULL,
-  `t_cascading` tinyint(1) NOT NULL,
-  `t_forum_id` int(11) DEFAULT NULL,
-  `t_pt_from` int(11) DEFAULT NULL,
-  `t_pt_to` int(11) DEFAULT NULL,
-  `t_pt_from_category` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_pt_to_category` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_description` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_description_link` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_emoticon` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_num_views` int(11) NOT NULL,
-  `t_validated` tinyint(1) NOT NULL,
-  `t_is_open` tinyint(1) NOT NULL,
-  `t_poll_id` int(11) DEFAULT NULL,
-  `t_cache_first_post_id` int(11) DEFAULT NULL,
-  `t_cache_first_time` int(10) unsigned DEFAULT NULL,
-  `t_cache_first_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_cache_first_post` int(10) unsigned DEFAULT NULL,
-  `t_cache_first_username` varchar(80) COLLATE latin1_bin NOT NULL,
-  `t_cache_first_member_id` int(11) DEFAULT NULL,
-  `t_cache_last_post_id` int(11) DEFAULT NULL,
-  `t_cache_last_time` int(10) unsigned DEFAULT NULL,
-  `t_cache_last_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_cache_last_username` varchar(80) COLLATE latin1_bin NOT NULL,
-  `t_cache_last_member_id` int(11) DEFAULT NULL,
-  `t_cache_num_posts` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `t_num_views` (`t_num_views`),
-  KEY `t_pt_to` (`t_pt_to`),
-  KEY `t_pt_from` (`t_pt_from`),
-  KEY `t_validated` (`t_validated`),
-  KEY `in_forum` (`t_forum_id`),
-  KEY `topic_order_time` (`t_cache_last_time`),
-  KEY `topic_order_time_2` (`t_cache_first_time`),
-  KEY `descriptionsearch` (`t_description`),
-  KEY `forumlayer` (`t_cache_first_title`),
-  KEY `t_cascading` (`t_cascading`),
-  KEY `t_cascading_or_forum` (`t_cascading`,`t_forum_id`),
-  KEY `topic_order` (`t_cascading`,`t_pinned`,`t_cache_last_time`),
-  KEY `topic_order_2` (`t_forum_id`,`t_cascading`,`t_pinned`,`t_sunk`,`t_cache_last_time`),
-  KEY `topic_order_3` (`t_forum_id`,`t_cascading`,`t_pinned`,`t_cache_last_time`),
-  KEY `ownedtopics` (`t_cache_first_member_id`),
-  FULLTEXT KEY `t_description` (`t_description`)
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_f_topics` values('1','0','0','0','8',null,null,'','','','','','0','1','1',null,'1','1295956104','Welcome to the forums','82','System','1','1','1295956104','Welcome to the forums','System','1','1');
-
-DROP TABLE IF EXISTS `ocp7_f_warnings`;
-
-CREATE TABLE `ocp7_f_warnings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `w_member_id` int(11) NOT NULL,
-  `w_time` int(10) unsigned NOT NULL,
-  `w_explanation` longtext COLLATE latin1_bin NOT NULL,
-  `w_by` int(11) NOT NULL,
-  `w_is_warning` tinyint(1) NOT NULL,
-  `p_silence_from_topic` int(11) DEFAULT NULL,
-  `p_silence_from_forum` int(11) DEFAULT NULL,
-  `p_probation` int(11) NOT NULL,
-  `p_banned_ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `p_charged_points` int(11) NOT NULL,
-  `p_banned_member` tinyint(1) NOT NULL,
-  `p_changed_usergroup_from` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `warningsmemberid` (`w_member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_welcome_emails`;
-
-CREATE TABLE `ocp7_f_welcome_emails` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `w_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `w_subject` int(10) unsigned NOT NULL,
-  `w_text` int(10) unsigned NOT NULL,
-  `w_send_time` int(11) NOT NULL,
-  `w_newsletter` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_group_page_access`;
-
-CREATE TABLE `ocp7_group_page_access` (
-  `page_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `zone_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`page_name`,`zone_name`,`group_id`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_group_page_access` values('admin_addons','adminzone','1'),
- ('admin_addons','adminzone','2'),
- ('admin_addons','adminzone','3'),
- ('admin_addons','adminzone','4'),
- ('admin_addons','adminzone','5'),
- ('admin_addons','adminzone','6'),
- ('admin_addons','adminzone','7'),
- ('admin_addons','adminzone','8'),
- ('admin_addons','adminzone','9'),
- ('admin_addons','adminzone','10'),
- ('admin_import','adminzone','1'),
- ('admin_import','adminzone','2'),
- ('admin_import','adminzone','3'),
- ('admin_import','adminzone','4'),
- ('admin_import','adminzone','5'),
- ('admin_import','adminzone','6'),
- ('admin_import','adminzone','7'),
- ('admin_import','adminzone','8'),
- ('admin_import','adminzone','9'),
- ('admin_import','adminzone','10'),
- ('admin_occle','adminzone','1'),
- ('admin_occle','adminzone','2'),
- ('admin_occle','adminzone','3'),
- ('admin_occle','adminzone','4'),
- ('admin_occle','adminzone','5'),
- ('admin_occle','adminzone','6'),
- ('admin_occle','adminzone','7'),
- ('admin_occle','adminzone','8'),
- ('admin_occle','adminzone','9'),
- ('admin_occle','adminzone','10'),
- ('admin_redirects','adminzone','1'),
- ('admin_redirects','adminzone','2'),
- ('admin_redirects','adminzone','3'),
- ('admin_redirects','adminzone','4'),
- ('admin_redirects','adminzone','5'),
- ('admin_redirects','adminzone','6'),
- ('admin_redirects','adminzone','7'),
- ('admin_redirects','adminzone','8'),
- ('admin_redirects','adminzone','9'),
- ('admin_redirects','adminzone','10'),
- ('admin_staff','adminzone','1'),
- ('admin_staff','adminzone','2'),
- ('admin_staff','adminzone','3'),
- ('admin_staff','adminzone','4'),
- ('admin_staff','adminzone','5'),
- ('admin_staff','adminzone','6'),
- ('admin_staff','adminzone','7'),
- ('admin_staff','adminzone','8'),
- ('admin_staff','adminzone','9'),
- ('admin_staff','adminzone','10'),
- ('cms_chat','cms','1'),
- ('cms_chat','cms','2'),
- ('cms_chat','cms','3'),
- ('cms_chat','cms','4'),
- ('cms_chat','cms','5'),
- ('cms_chat','cms','6'),
- ('cms_chat','cms','7'),
- ('cms_chat','cms','8'),
- ('cms_chat','cms','9'),
- ('cms_chat','cms','10');
-
-DROP TABLE IF EXISTS `ocp7_group_zone_access`;
-
-CREATE TABLE `ocp7_group_zone_access` (
-  `zone_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`zone_name`,`group_id`),
-  KEY `group_id` (`group_id`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_group_zone_access` values('','1'),
- ('','2'),
- ('','3'),
- ('','4'),
- ('','5'),
- ('','6'),
- ('','7'),
- ('','8'),
- ('','9'),
- ('','10'),
- ('adminzone','2'),
- ('adminzone','3'),
- ('cms','2'),
- ('cms','3'),
- ('cms','4'),
- ('cms','5'),
- ('cms','6'),
- ('cms','7'),
- ('cms','8'),
- ('cms','9'),
- ('cms','10'),
- ('collaboration','2'),
- ('collaboration','3'),
- ('collaboration','4'),
- ('forum','1'),
- ('forum','2'),
- ('forum','3'),
- ('forum','4'),
- ('forum','5'),
- ('forum','6'),
- ('forum','7'),
- ('forum','8'),
- ('forum','9'),
- ('forum','10'),
- ('site','2'),
- ('site','3'),
- ('site','4'),
- ('site','5'),
- ('site','6'),
- ('site','7'),
- ('site','8'),
- ('site','9'),
- ('site','10');
-
-DROP TABLE IF EXISTS `ocp7_hackattack`;
-
-CREATE TABLE `ocp7_hackattack` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `data_post` longtext COLLATE latin1_bin NOT NULL,
-  `user_agent` varchar(255) COLLATE latin1_bin NOT NULL,
-  `referer` varchar(255) COLLATE latin1_bin NOT NULL,
-  `user_os` varchar(255) COLLATE latin1_bin NOT NULL,
-  `the_user` int(11) NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `reason` varchar(80) COLLATE latin1_bin NOT NULL,
-  `reason_param_a` varchar(255) COLLATE latin1_bin NOT NULL,
-  `reason_param_b` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `otherhacksby` (`ip`),
-  KEY `h_date_and_time` (`date_and_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_import_id_remap`;
-
-CREATE TABLE `ocp7_import_id_remap` (
-  `id_old` varchar(80) COLLATE latin1_bin NOT NULL,
-  `id_new` int(11) NOT NULL,
-  `id_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `id_session` int(11) NOT NULL,
-  PRIMARY KEY (`id_old`,`id_type`,`id_session`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_import_parts_done`;
-
-CREATE TABLE `ocp7_import_parts_done` (
-  `imp_id` varchar(255) COLLATE latin1_bin NOT NULL,
-  `imp_session` int(11) NOT NULL,
-  PRIMARY KEY (`imp_id`,`imp_session`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_import_session`;
-
-CREATE TABLE `ocp7_import_session` (
-  `imp_old_base_dir` varchar(255) COLLATE latin1_bin NOT NULL,
-  `imp_db_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `imp_db_user` varchar(80) COLLATE latin1_bin NOT NULL,
-  `imp_hook` varchar(80) COLLATE latin1_bin NOT NULL,
-  `imp_db_table_prefix` varchar(80) COLLATE latin1_bin NOT NULL,
-  `imp_refresh_time` int(11) NOT NULL,
-  `imp_session` int(11) NOT NULL,
-  PRIMARY KEY (`imp_session`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_incoming_uploads`;
-
-CREATE TABLE `ocp7_incoming_uploads` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `i_submitter` int(11) NOT NULL,
-  `i_date_and_time` int(10) unsigned NOT NULL,
-  `i_orig_filename` varchar(255) COLLATE latin1_bin NOT NULL,
-  `i_save_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_ip_country`;
-
-CREATE TABLE `ocp7_ip_country` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `begin_num` int(10) unsigned NOT NULL,
-  `end_num` int(10) unsigned NOT NULL,
-  `country` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_link_tracker`;
-
-CREATE TABLE `ocp7_link_tracker` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_date_and_time` int(10) unsigned NOT NULL,
-  `c_member_id` int(11) NOT NULL,
-  `c_ip_address` varchar(40) COLLATE latin1_bin NOT NULL,
-  `c_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_logged_mail_messages`;
-
-CREATE TABLE `ocp7_logged_mail_messages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `m_subject` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_message` longtext COLLATE latin1_bin NOT NULL,
-  `m_to_email` longtext COLLATE latin1_bin NOT NULL,
-  `m_to_name` longtext COLLATE latin1_bin NOT NULL,
-  `m_from_email` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_from_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `m_priority` tinyint(4) NOT NULL,
-  `m_attachments` longtext COLLATE latin1_bin NOT NULL,
-  `m_no_cc` tinyint(1) NOT NULL,
-  `m_as` int(11) NOT NULL,
-  `m_as_admin` tinyint(1) NOT NULL,
-  `m_in_html` tinyint(1) NOT NULL,
-  `m_date_and_time` int(10) unsigned NOT NULL,
-  `m_member_id` int(11) NOT NULL,
-  `m_url` longtext COLLATE latin1_bin NOT NULL,
-  `m_queued` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `recentmessages` (`m_date_and_time`),
-  KEY `queued` (`m_queued`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_long_values`;
-
-CREATE TABLE `ocp7_long_values` (
-  `the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_value` longtext COLLATE latin1_bin NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`the_name`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_match_key_messages`;
-
-CREATE TABLE `ocp7_match_key_messages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `k_message` int(10) unsigned NOT NULL,
-  `k_match_key` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_member_category_access`;
-
-CREATE TABLE `ocp7_member_category_access` (
-  `active_until` int(10) unsigned NOT NULL,
-  `module_the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `category_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `member_id` int(11) NOT NULL,
-  PRIMARY KEY (`active_until`,`module_the_name`,`category_name`,`member_id`),
-  KEY `mcaname` (`module_the_name`,`category_name`),
-  KEY `mcamember_id` (`member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_member_page_access`;
-
-CREATE TABLE `ocp7_member_page_access` (
-  `active_until` int(10) unsigned NOT NULL,
-  `page_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `zone_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `member_id` int(11) NOT NULL,
-  PRIMARY KEY (`active_until`,`page_name`,`zone_name`,`member_id`),
-  KEY `mzaname` (`page_name`,`zone_name`),
-  KEY `mzamember_id` (`member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_member_tracking`;
-
-CREATE TABLE `ocp7_member_tracking` (
-  `mt_member_id` int(11) NOT NULL,
-  `mt_cache_username` varchar(80) COLLATE latin1_bin NOT NULL,
-  `mt_time` int(10) unsigned NOT NULL,
-  `mt_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `mt_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `mt_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`mt_member_id`,`mt_time`,`mt_page`,`mt_type`,`mt_id`),
-  KEY `mt_page` (`mt_page`),
-  KEY `mt_id` (`mt_page`,`mt_id`,`mt_type`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_member_zone_access`;
-
-CREATE TABLE `ocp7_member_zone_access` (
-  `active_until` int(10) unsigned NOT NULL,
-  `zone_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `member_id` int(11) NOT NULL,
-  PRIMARY KEY (`active_until`,`zone_name`,`member_id`),
-  KEY `mzazone_name` (`zone_name`),
-  KEY `mzamember_id` (`member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_menu_items`;
-
-CREATE TABLE `ocp7_menu_items` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `i_menu` varchar(80) COLLATE latin1_bin NOT NULL,
-  `i_order` int(11) NOT NULL,
-  `i_parent` int(11) DEFAULT NULL,
-  `i_caption` int(10) unsigned NOT NULL,
-  `i_caption_long` int(10) unsigned NOT NULL,
-  `i_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `i_check_permissions` tinyint(1) NOT NULL,
-  `i_expanded` tinyint(1) NOT NULL,
-  `i_new_window` tinyint(1) NOT NULL,
-  `i_page_only` varchar(80) COLLATE latin1_bin NOT NULL,
-  `i_theme_img_code` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `menu_extraction` (`i_menu`)
-) ENGINE=MyISAM AUTO_INCREMENT=84;
-
-insert into `ocp7_menu_items` values('1','root_website','0',null,'89','90',':','0','0','0','',''),
- ('2','root_website','1',null,'91','92','_SEARCH:rules','0','0','0','',''),
- ('3','main_features','2',null,'93','94','_SELF:','0','0','0','',''),
- ('4','main_features','3',null,'95','96','_SEARCH:help','0','0','0','',''),
- ('5','main_features','4',null,'97','98','_SEARCH:rules','0','0','0','',''),
- ('6','main_community','5',null,'99','100','_SEARCH:members:type=misc','0','0','0','',''),
- ('7','main_community','6',null,'101','102','_SEARCH:groups:type=misc','0','0','0','',''),
- ('8','member_features','7',null,'103','104','_SEARCH:join:type=misc','1','0','0','',''),
- ('9','member_features','8',null,'105','106','_SEARCH:lostpassword:type=misc','0','0','0','',''),
- ('10','collab_website','9',null,'107','108','collaboration:','0','0','0','',''),
- ('11','collab_website','10',null,'109','110','collaboration:about','0','0','0','',''),
- ('20','forum_features','19',null,'127','128','_SEARCH:rules','0','0','0','',''),
- ('21','forum_features','20',null,'129','130','_SEARCH:members:type=misc','0','0','0','',''),
- ('28','zone_menu','27',null,'143','144','site:','1','0','0','',''),
- ('29','zone_menu','28',null,'145','146','forum:forumview','1','0','0','',''),
- ('31','zone_menu','30',null,'149','150','collaboration:','1','0','0','',''),
- ('32','zone_menu','31',null,'151','152','cms:cms','1','0','0','',''),
- ('33','zone_menu','32',null,'153','154','adminzone:','1','0','0','',''),
- ('34','collab_features','0',null,'157','158','_SELF:authors:type=misc','0','0','0','',''),
- ('35','collab_features','1',null,'159','160','_SEARCH:cms_authors:type=_ad','0','0','1','',''),
- ('36','collab_website','2',null,'164','165','_SELF:hosting-submit','0','0','0','',''),
- ('38','main_content','4',null,'188','189','_SEARCH:catalogues:type=index:id=projects','0','0','0','',''),
- ('39','main_content','5',null,'204','205','_SEARCH:catalogues:type=index:id=modifications','0','0','0','',''),
- ('40','main_content','6',null,'216','217','_SEARCH:catalogues:type=index:id=hosted','0','0','0','',''),
- ('41','main_content','7',null,'228','229','_SEARCH:catalogues:type=index:id=links','0','0','0','',''),
- ('42','main_content','8',null,'240','241','_SEARCH:catalogues:type=index:id=contacts','0','0','0','',''),
- ('43','collab_features','9',null,'270','271','','0','0','0','',''),
- ('44','collab_features','10','43','272','273','_SEARCH:catalogues:id=projects:type=index','0','0','1','',''),
- ('45','collab_features','11','43','274','275','_SEARCH:cms_catalogues:catalogue_name=projects:type=add_entry','0','0','1','',''),
- ('68','ecommerce_features','34',null,'383','384','_SEARCH:shopping:type=my_orders','0','0','0','',''),
- ('47','main_content','13',null,'306','307','_SEARCH:cedi:type=misc','0','0','0','',''),
- ('48','cedi_features','14',null,'308','309','_SEARCH:cedi:type=misc','0','0','0','',''),
- ('49','cedi_features','15',null,'310','311','_SEARCH:cedi:type=random','0','0','0','',''),
- ('50','cedi_features','16',null,'312','313','_SEARCH:cedi:type=changes','0','0','0','',''),
- ('51','cedi_features','17',null,'314','315','_SEARCH:cedi:type=tree','0','0','0','',''),
- ('52','main_community','18',null,'319','320','_SEARCH:chat:type=misc','0','0','0','',''),
- ('54','main_content','20',null,'325','326','_SEARCH:downloads:type=misc','0','0','0','',''),
- ('55','main_content','21',null,'327','328','_SEARCH:galleries:type=misc','0','0','0','',''),
- ('60','main_community','26',null,'351','352','_SEARCH:pointstore:type=misc','0','0','0','',''),
- ('63','ecommerce_features','29',null,'373','374','_SEARCH:purchase:type=misc','0','0','0','',''),
- ('64','ecommerce_features','30',null,'375','376','_SEARCH:invoices:type=misc','0','0','0','',''),
- ('65','ecommerce_features','31',null,'377','378','_SEARCH:subscriptions:type=misc','0','0','0','',''),
- ('66','main_website','32',null,'379','380','_SEARCH:quiz:type=misc','0','0','0','',''),
- ('67','forum_features','33',null,'381','382','_SEARCH:search:type=misc:id=ocf_posts','0','0','0','',''),
- ('69','main_website','35',null,'399','400','_SEARCH:staff:type=misc','0','0','0','',''),
- ('70','main_website','36',null,'403','404','_SEARCH:tickets:type=misc','0','0','0','',''),
- ('72','member_features','0',null,'407','408','_SEARCH:forumview:type=misc','0','0','0','',''),
- ('74','forum_features','2',null,'411','412','_SEARCH:forumview:type=misc','0','0','0','',''),
- ('75','forum_features','3',null,'413','414','_SEARCH:forumview:type=pt','0','0','0','',''),
- ('76','forum_features','4',null,'415','416','_SEARCH:vforums:type=misc','0','0','0','',''),
- ('77','forum_features','5',null,'417','418','_SEARCH:vforums:type=unread','0','0','0','',''),
- ('78','forum_features','6',null,'419','420','_SEARCH:vforums:type=recently_read','0','0','0','',''),
- ('80','main_features','8',null,'423','424','_SEARCH:guestbook','0','0','0','',''),
- ('81','root_website','100',null,'425','426','_SEARCH:recommend:from={$REPLACE&,:,%3A,{$SELF_URL}}','0','0','0','',''),
- ('82','collab_features','101',null,'427','428','_SEARCH:filedump:type=misc','0','0','0','',''),
- ('83','collab_website','102',null,'429','430','_SEARCH:supermembers','0','0','0','','');
-
-DROP TABLE IF EXISTS `ocp7_messages_to_render`;
-
-CREATE TABLE `ocp7_messages_to_render` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `r_session_id` int(11) NOT NULL,
-  `r_message` longtext COLLATE latin1_bin NOT NULL,
-  `r_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `forsession` (`r_session_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_msp`;
-
-CREATE TABLE `ocp7_msp` (
-  `active_until` int(10) unsigned NOT NULL,
-  `member_id` int(11) NOT NULL,
-  `specific_permission` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `module_the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `category_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_value` tinyint(1) NOT NULL,
-  PRIMARY KEY (`active_until`,`member_id`,`specific_permission`,`the_page`,`module_the_name`,`category_name`),
-  KEY `mspname` (`specific_permission`,`the_page`,`module_the_name`,`category_name`),
-  KEY `mspmember_id` (`member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_occlechat`;
-
-CREATE TABLE `ocp7_occlechat` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_message` longtext COLLATE latin1_bin NOT NULL,
-  `c_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `c_incoming` tinyint(1) NOT NULL,
-  `c_timestamp` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_rating`;
-
-CREATE TABLE `ocp7_rating` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `rating_for_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `rating_for_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `rating_member` int(11) NOT NULL,
-  `rating_ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `rating_time` int(10) unsigned NOT NULL,
-  `rating` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `alt_key` (`rating_for_type`,`rating_for_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_redirects`;
-
-CREATE TABLE `ocp7_redirects` (
-  `r_from_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_from_zone` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_to_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_to_zone` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_is_transparent` tinyint(1) NOT NULL,
-  PRIMARY KEY (`r_from_page`,`r_from_zone`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_redirects` values('rules','site','rules','','1'),
- ('rules','forum','rules','','1'),
- ('hosting-submit','collaboration','hosting-submit','site','1'),
- ('authors','collaboration','authors','site','1'),
- ('panel_top','collaboration','panel_top','','1'),
- ('panel_top','forum','panel_top','','1');
-
-DROP TABLE IF EXISTS `ocp7_review_supplement`;
-
-CREATE TABLE `ocp7_review_supplement` (
-  `r_post_id` int(11) NOT NULL,
-  `r_rating_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_rating` tinyint(4) NOT NULL,
-  `r_topic_id` int(11) NOT NULL,
-  `r_rating_for_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_rating_for_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`r_post_id`,`r_rating_type`),
-  KEY `rating_for_id` (`r_rating_for_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_security_images`;
-
-CREATE TABLE `ocp7_security_images` (
-  `si_session_id` int(11) NOT NULL,
-  `si_time` int(10) unsigned NOT NULL,
-  `si_code` int(11) NOT NULL,
-  PRIMARY KEY (`si_session_id`),
-  KEY `si_time` (`si_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_sms_log`;
-
-CREATE TABLE `ocp7_sms_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `s_member_id` int(11) NOT NULL,
-  `s_time` int(10) unsigned NOT NULL,
-  `s_trigger_ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sms_log_for` (`s_member_id`,`s_time`),
-  KEY `sms_trigger_ip` (`s_trigger_ip`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_stats`;
-
-CREATE TABLE `ocp7_stats` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `the_page` varchar(255) COLLATE latin1_bin NOT NULL,
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `the_user` int(11) NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `referer` varchar(255) COLLATE latin1_bin NOT NULL,
-  `get` varchar(255) COLLATE latin1_bin NOT NULL,
-  `post` longtext COLLATE latin1_bin NOT NULL,
-  `browser` varchar(255) COLLATE latin1_bin NOT NULL,
-  `milliseconds` int(11) NOT NULL,
-  `operating_system` varchar(255) COLLATE latin1_bin NOT NULL,
-  `access_denied_counter` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `member_track_1` (`the_user`),
-  KEY `member_track_2` (`ip`),
-  KEY `pages` (`the_page`),
-  KEY `date_and_time` (`date_and_time`),
-  KEY `milliseconds` (`milliseconds`),
-  KEY `referer` (`referer`),
-  KEY `browser` (`browser`),
-  KEY `operating_system` (`operating_system`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_text`;
-
-CREATE TABLE `ocp7_text` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `the_message` int(10) unsigned NOT NULL,
-  `days` int(11) NOT NULL,
-  `order_time` int(10) unsigned NOT NULL,
-  `activation_time` int(10) unsigned DEFAULT NULL,
-  `active_now` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `findflagrant` (`active_now`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_theme_images`;
-
-CREATE TABLE `ocp7_theme_images` (
-  `id` varchar(255) COLLATE latin1_bin NOT NULL,
-  `theme` varchar(40) COLLATE latin1_bin NOT NULL,
-  `path` varchar(255) COLLATE latin1_bin NOT NULL,
-  `lang` varchar(5) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`,`theme`,`lang`),
-  KEY `theme` (`theme`,`lang`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_theme_images` values('favicon','default','favicon.ico','EN'),
- ('appleicon','default','appleicon.png','EN');
-
-DROP TABLE IF EXISTS `ocp7_trackbacks`;
-
-CREATE TABLE `ocp7_trackbacks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `trackback_for_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `trackback_for_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `trackback_ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `trackback_time` int(10) unsigned NOT NULL,
-  `trackback_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `trackback_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `trackback_excerpt` longtext COLLATE latin1_bin NOT NULL,
-  `trackback_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `trackback_for_type` (`trackback_for_type`),
-  KEY `trackback_for_id` (`trackback_for_id`),
-  KEY `trackback_time` (`trackback_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_tracking`;
-
-CREATE TABLE `ocp7_tracking` (
-  `r_resource_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_resource_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `r_member_id` int(11) NOT NULL,
-  `r_notify_sms` tinyint(1) NOT NULL,
-  `r_notify_email` tinyint(1) NOT NULL,
-  `r_filter` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`r_resource_type`,`r_resource_id`,`r_member_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_translate_history`;
-
-CREATE TABLE `ocp7_translate_history` (
+CREATE TABLE `ocp_translate_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `lang_id` int(11) NOT NULL,
-  `language` varchar(5) COLLATE latin1_bin NOT NULL,
-  `text_original` longtext COLLATE latin1_bin NOT NULL,
+  `language` varchar(5) NOT NULL,
+  `text_original` longtext NOT NULL,
   `broken` tinyint(1) NOT NULL,
   `action_member` int(11) NOT NULL,
   `action_time` int(10) unsigned NOT NULL,
@@ -5835,23 +7054,23 @@ CREATE TABLE `ocp7_translate_history` (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_tutorial_links`;
+DROP TABLE IF EXISTS `ocp_tutorial_links`;
 
-CREATE TABLE `ocp7_tutorial_links` (
-  `the_name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_value` longtext COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_tutorial_links` (
+  `the_name` varchar(80) NOT NULL,
+  `the_value` longtext NOT NULL,
   PRIMARY KEY (`the_name`)
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_url_id_monikers`;
+DROP TABLE IF EXISTS `ocp_url_id_monikers`;
 
-CREATE TABLE `ocp7_url_id_monikers` (
+CREATE TABLE `ocp_url_id_monikers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `m_resource_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_resource_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_resource_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `m_moniker` varchar(255) COLLATE latin1_bin NOT NULL,
+  `m_resource_page` varchar(80) NOT NULL,
+  `m_resource_type` varchar(80) NOT NULL,
+  `m_resource_id` varchar(80) NOT NULL,
+  `m_moniker` varchar(255) NOT NULL,
   `m_deprecated` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `uim_pagelink` (`m_resource_page`,`m_resource_type`,`m_resource_id`),
@@ -5859,19 +7078,19 @@ CREATE TABLE `ocp7_url_id_monikers` (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_url_title_cache`;
+DROP TABLE IF EXISTS `ocp_url_title_cache`;
 
-CREATE TABLE `ocp7_url_title_cache` (
+CREATE TABLE `ocp_url_title_cache` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `t_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_title` varchar(255) COLLATE latin1_bin NOT NULL,
+  `t_url` varchar(255) NOT NULL,
+  `t_title` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_usersonline_track`;
+DROP TABLE IF EXISTS `ocp_usersonline_track`;
 
-CREATE TABLE `ocp7_usersonline_track` (
+CREATE TABLE `ocp_usersonline_track` (
   `date_and_time` int(10) unsigned NOT NULL,
   `peak` int(11) NOT NULL,
   PRIMARY KEY (`date_and_time`),
@@ -5879,41 +7098,101 @@ CREATE TABLE `ocp7_usersonline_track` (
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_usersubmitban_ip`;
+DROP TABLE IF EXISTS `ocp_usersubmitban_ip`;
 
-CREATE TABLE `ocp7_usersubmitban_ip` (
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `i_descrip` longtext COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_usersubmitban_ip` (
+  `ip` varchar(40) NOT NULL,
+  `i_descrip` longtext NOT NULL,
   PRIMARY KEY (`ip`)
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_usersubmitban_member`;
+DROP TABLE IF EXISTS `ocp_usersubmitban_member`;
 
-CREATE TABLE `ocp7_usersubmitban_member` (
+CREATE TABLE `ocp_usersubmitban_member` (
   `the_member` int(11) NOT NULL,
   PRIMARY KEY (`the_member`)
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_validated_once`;
+DROP TABLE IF EXISTS `ocp_validated_once`;
 
-CREATE TABLE `ocp7_validated_once` (
-  `hash` varchar(33) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_validated_once` (
+  `hash` varchar(33) NOT NULL,
   PRIMARY KEY (`hash`)
 ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `ocp7_wordfilter`;
+DROP TABLE IF EXISTS `ocp_values`;
 
-CREATE TABLE `ocp7_wordfilter` (
-  `word` varchar(255) COLLATE latin1_bin NOT NULL,
-  `w_replacement` varchar(255) COLLATE latin1_bin NOT NULL,
+CREATE TABLE `ocp_values` (
+  `the_name` varchar(80) NOT NULL,
+  `the_value` varchar(80) NOT NULL,
+  `date_and_time` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`the_name`),
+  KEY `date_and_time` (`date_and_time`)
+) ENGINE=MyISAM;
+
+insert into `ocp_values` values('version','8','1332090660'),
+ ('ocf_version','8','1332090660');
+
+DROP TABLE IF EXISTS `ocp_video_transcoding`;
+
+CREATE TABLE `ocp_video_transcoding` (
+  `t_id` varchar(80) NOT NULL,
+  `t_error` longtext NOT NULL,
+  `t_url` varchar(255) NOT NULL,
+  `t_table` varchar(80) NOT NULL,
+  `t_url_field` varchar(80) NOT NULL,
+  `t_orig_filename_field` varchar(80) NOT NULL,
+  `t_width_field` varchar(80) NOT NULL,
+  `t_height_field` varchar(80) NOT NULL,
+  `t_output_filename` varchar(80) NOT NULL,
+  PRIMARY KEY (`t_id`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_videos`;
+
+CREATE TABLE `ocp_videos` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cat` varchar(80) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `thumb_url` varchar(255) NOT NULL,
+  `comments` int(10) unsigned NOT NULL,
+  `allow_rating` tinyint(1) NOT NULL,
+  `allow_comments` tinyint(4) NOT NULL,
+  `allow_trackbacks` tinyint(1) NOT NULL,
+  `notes` longtext NOT NULL,
+  `submitter` int(11) NOT NULL,
+  `validated` tinyint(1) NOT NULL,
+  `add_date` int(10) unsigned NOT NULL,
+  `edit_date` int(10) unsigned DEFAULT NULL,
+  `video_views` int(11) NOT NULL,
+  `video_width` int(11) NOT NULL,
+  `video_height` int(11) NOT NULL,
+  `video_length` int(11) NOT NULL,
+  `title` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `video_views` (`video_views`),
+  KEY `vs` (`submitter`),
+  KEY `v_validated` (`validated`),
+  KEY `category_list` (`cat`),
+  KEY `vadd_date` (`add_date`),
+  KEY `ftjoin_vcomments` (`comments`)
+) ENGINE=MyISAM;
+
+
+DROP TABLE IF EXISTS `ocp_wordfilter`;
+
+CREATE TABLE `ocp_wordfilter` (
+  `word` varchar(255) NOT NULL,
+  `w_replacement` varchar(255) NOT NULL,
   `w_substr` tinyint(1) NOT NULL,
   PRIMARY KEY (`word`,`w_substr`)
 ) ENGINE=MyISAM;
 
-insert into `ocp7_wordfilter` values('arsehole','','0'),
+insert into `ocp_wordfilter` values('arsehole','','0'),
  ('asshole','','0'),
  ('arse','','0'),
  ('cock','','0'),
@@ -5951,1202 +7230,33 @@ insert into `ocp7_wordfilter` values('arsehole','','0'),
  ('wanker','','0'),
  ('whore','','0');
 
-DROP TABLE IF EXISTS `ocp7_adminlogs`;
+DROP TABLE IF EXISTS `ocp_zones`;
 
-CREATE TABLE `ocp7_adminlogs` (
+CREATE TABLE `ocp_zones` (
+  `zone_name` varchar(80) NOT NULL,
+  `zone_title` int(10) unsigned NOT NULL,
+  `zone_default_page` varchar(80) NOT NULL,
+  `zone_header_text` int(10) unsigned NOT NULL,
+  `zone_theme` varchar(80) NOT NULL,
+  `zone_wide` tinyint(1) DEFAULT NULL,
+  `zone_require_session` tinyint(1) NOT NULL,
+  `zone_displayed_in_menu` tinyint(1) NOT NULL,
+  PRIMARY KEY (`zone_name`)
+) ENGINE=MyISAM;
+
+insert into `ocp_zones` values('','7','start','1','-1','0','0','0'),
+ ('adminzone','8','start','2','default','0','1','1'),
+ ('site','9','start','4','-1','0','0','1'),
+ ('collaboration','10','start','3','-1','0','0','1'),
+ ('cms','11','cms','5','default','0','1','1'),
+ ('forum','13','forumview','12','-1',null,'0','1');
+
+DROP TABLE IF EXISTS `ocp_failedlogins`;
+
+CREATE TABLE `ocp_failedlogins` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `the_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `param_a` varchar(80) COLLATE latin1_bin NOT NULL,
-  `param_b` varchar(255) COLLATE latin1_bin NOT NULL,
-  `the_user` int(11) NOT NULL,
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
+  `failed_account` varchar(80) NOT NULL,
   `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `xas` (`the_user`),
-  KEY `ts` (`date_and_time`),
-  KEY `aip` (`ip`),
-  KEY `athe_type` (`the_type`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_cached_comcode_pages`;
-
-CREATE TABLE `ocp7_cached_comcode_pages` (
-  `the_zone` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `string_index` int(10) unsigned NOT NULL,
-  `the_theme` varchar(80) COLLATE latin1_bin NOT NULL,
-  `cc_page_title` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`the_zone`,`the_page`,`the_theme`),
-  KEY `ftjoin_ccpt` (`cc_page_title`),
-  KEY `ftjoin_ccsi` (`string_index`),
-  KEY `ccp_join` (`the_page`,`the_zone`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_chargelog`;
-
-CREATE TABLE `ocp7_chargelog` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `amount` int(11) NOT NULL,
-  `reason` int(10) unsigned NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
+  `ip` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_chat_active`;
-
-CREATE TABLE `ocp7_chat_active` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `member_id` int(11) NOT NULL,
-  `room_id` int(11) DEFAULT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `active_ordering` (`date_and_time`),
-  KEY `member_select` (`member_id`),
-  KEY `room_select` (`room_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_chat_blocking`;
-
-CREATE TABLE `ocp7_chat_blocking` (
-  `member_blocker` int(11) NOT NULL,
-  `member_blocked` int(11) NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`member_blocker`,`member_blocked`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_chat_buddies`;
-
-CREATE TABLE `ocp7_chat_buddies` (
-  `member_likes` int(11) NOT NULL,
-  `member_liked` int(11) NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`member_likes`,`member_liked`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_chat_events`;
-
-CREATE TABLE `ocp7_chat_events` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `e_type_code` varchar(80) COLLATE latin1_bin NOT NULL,
-  `e_member_id` int(11) NOT NULL,
-  `e_room_id` int(11) DEFAULT NULL,
-  `e_date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `event_ordering` (`e_date_and_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_chat_messages`;
-
-CREATE TABLE `ocp7_chat_messages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `system_message` tinyint(1) NOT NULL,
-  `ip_address` varchar(40) COLLATE latin1_bin NOT NULL,
-  `room_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `the_message` int(10) unsigned NOT NULL,
-  `text_colour` varchar(255) COLLATE latin1_bin NOT NULL,
-  `font_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ordering` (`date_and_time`),
-  KEY `room_id` (`room_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_chat_rooms`;
-
-CREATE TABLE `ocp7_chat_rooms` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `room_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `room_owner` int(11) DEFAULT NULL,
-  `allow_list` longtext COLLATE latin1_bin NOT NULL,
-  `allow_list_groups` longtext COLLATE latin1_bin NOT NULL,
-  `disallow_list` longtext COLLATE latin1_bin NOT NULL,
-  `disallow_list_groups` longtext COLLATE latin1_bin NOT NULL,
-  `room_language` varchar(5) COLLATE latin1_bin NOT NULL,
-  `c_welcome` int(10) unsigned NOT NULL,
-  `is_im` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `room_name` (`room_name`),
-  KEY `is_im` (`is_im`,`room_name`),
-  KEY `first_public` (`is_im`,`id`),
-  KEY `allow_list` (`allow_list`(30))
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_chat_rooms` values('1','General chat',null,'','','','','EN','316','0');
-
-DROP TABLE IF EXISTS `ocp7_chat_sound_effects`;
-
-CREATE TABLE `ocp7_chat_sound_effects` (
-  `s_member` int(11) NOT NULL,
-  `s_effect_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `s_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`s_member`,`s_effect_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_comcode_pages`;
-
-CREATE TABLE `ocp7_comcode_pages` (
-  `the_zone` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `p_parent_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `p_validated` tinyint(1) NOT NULL,
-  `p_edit_date` int(10) unsigned DEFAULT NULL,
-  `p_add_date` int(10) unsigned NOT NULL,
-  `p_submitter` int(11) NOT NULL,
-  `p_show_as_edit` tinyint(1) NOT NULL,
-  PRIMARY KEY (`the_zone`,`the_page`),
-  KEY `p_submitter` (`p_submitter`),
-  KEY `p_add_date` (`p_add_date`),
-  KEY `p_validated` (`p_validated`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_customtasks`;
-
-CREATE TABLE `ocp7_customtasks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `tasktitle` varchar(255) COLLATE latin1_bin NOT NULL,
-  `datetimeadded` int(10) unsigned NOT NULL,
-  `recurinterval` int(11) NOT NULL,
-  `recurevery` varchar(80) COLLATE latin1_bin NOT NULL,
-  `taskisdone` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12;
-
-insert into `ocp7_customtasks` values('1','Set up website configuration and structure','1295956169','0','',null),
- ('2','Make \'favicon\' theme image','1295956169','0','',null),
- ('3','Make \'appleicon\' (webclip) theme image','1295956169','0','',null),
- ('4','Make/install custom theme','1295956169','0','',null),
- ('5','Add your content','1295956169','0','',null),
- ('6','[page=\"adminzone:admin_themes:_edit_templates:theme=default:f0file=MAIL.tpl\"]Customise your \'MAIL\' template[/page]','1295956169','0','',null),
- ('7','[url=\"P3P Wizard (set up privacy policy)\"]http://www.p3pwiz.com/[/url]','1295956169','0','',null),
- ('8','[url=\"Submit to Google\"]http://www.google.com/addurl/[/url]','1295956169','0','',null),
- ('9','[url=\"Submit to OpenDMOZ\"]http://www.dmoz.org/add.html[/url]','1295956169','0','',null),
- ('10','[url=\"Submit to Bing\"]http://www.bing.com/webmaster/SubmitSitePage.aspx[/url]','1295956169','0','',null),
- ('11','[url=\"Submit Blog to MyYahoo\"]http://publisher.yahoo.com/rss_guide/submit.php[/url]','1295956169','0','',null);
-
-DROP TABLE IF EXISTS `ocp7_download_categories`;
-
-CREATE TABLE `ocp7_download_categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `category` int(10) unsigned NOT NULL,
-  `parent_id` int(11) DEFAULT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `description` int(10) unsigned NOT NULL,
-  `rep_image` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `child_find` (`parent_id`),
-  KEY `ftjoin_dccat` (`category`),
-  KEY `ftjoin_dcdescrip` (`description`)
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_download_categories` values('1','323',null,'1295956144','','324','');
-
-DROP TABLE IF EXISTS `ocp7_download_downloads`;
-
-CREATE TABLE `ocp7_download_downloads` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `category_id` int(11) NOT NULL,
-  `name` int(10) unsigned NOT NULL,
-  `url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `description` int(10) unsigned NOT NULL,
-  `author` varchar(80) COLLATE latin1_bin NOT NULL,
-  `comments` int(10) unsigned NOT NULL,
-  `num_downloads` int(11) NOT NULL,
-  `out_mode_id` int(11) DEFAULT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `edit_date` int(10) unsigned DEFAULT NULL,
-  `validated` tinyint(1) NOT NULL,
-  `default_pic` int(11) NOT NULL,
-  `file_size` int(11) DEFAULT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `allow_trackbacks` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `download_views` int(11) NOT NULL,
-  `download_cost` int(11) NOT NULL,
-  `download_submitter_gets_points` tinyint(1) NOT NULL,
-  `submitter` int(11) NOT NULL,
-  `original_filename` varchar(255) COLLATE latin1_bin NOT NULL,
-  `rep_image` varchar(255) COLLATE latin1_bin NOT NULL,
-  `download_licence` int(11) DEFAULT NULL,
-  `download_data_mash` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `download_views` (`download_views`),
-  KEY `category_list` (`category_id`),
-  KEY `recent_downloads` (`add_date`),
-  KEY `top_downloads` (`num_downloads`),
-  KEY `downloadauthor` (`author`),
-  KEY `dds` (`submitter`),
-  KEY `ddl` (`download_licence`),
-  KEY `dvalidated` (`validated`),
-  KEY `ftjoin_dname` (`name`),
-  KEY `ftjoin_ddescrip` (`description`),
-  KEY `ftjoin_dcomments` (`comments`),
-  FULLTEXT KEY `download_data_mash` (`download_data_mash`),
-  FULLTEXT KEY `original_filename` (`original_filename`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_download_licences`;
-
-CREATE TABLE `ocp7_download_licences` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `l_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `l_text` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_download_logging`;
-
-CREATE TABLE `ocp7_download_logging` (
-  `id` int(11) NOT NULL,
-  `the_user` int(11) NOT NULL,
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`the_user`),
-  KEY `calculate_bandwidth` (`date_and_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_f_usergroup_subs`;
-
-CREATE TABLE `ocp7_f_usergroup_subs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `s_title` int(10) unsigned NOT NULL,
-  `s_description` int(10) unsigned NOT NULL,
-  `s_cost` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_length` int(11) NOT NULL,
-  `s_length_units` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_group_id` int(11) NOT NULL,
-  `s_enabled` tinyint(1) NOT NULL,
-  `s_mail_start` int(10) unsigned NOT NULL,
-  `s_mail_end` int(10) unsigned NOT NULL,
-  `s_mail_uhoh` int(10) unsigned NOT NULL,
-  `s_uses_primary` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_failedlogins`;
-
-CREATE TABLE `ocp7_failedlogins` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `failed_account` varchar(80) COLLATE latin1_bin NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_feature_lifetime_monitor`;
-
-CREATE TABLE `ocp7_feature_lifetime_monitor` (
-  `content_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `block_cache_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `run_period` int(11) NOT NULL,
-  `running_now` tinyint(1) NOT NULL,
-  `last_update` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`content_id`,`block_cache_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_filedump`;
-
-CREATE TABLE `ocp7_filedump` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `path` varchar(255) COLLATE latin1_bin NOT NULL,
-  `description` int(10) unsigned NOT NULL,
-  `the_member` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_galleries`;
-
-CREATE TABLE `ocp7_galleries` (
-  `name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `description` int(10) unsigned NOT NULL,
-  `teaser` int(10) unsigned NOT NULL,
-  `fullname` int(10) unsigned NOT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `rep_image` varchar(255) COLLATE latin1_bin NOT NULL,
-  `parent_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `watermark_top_left` varchar(255) COLLATE latin1_bin NOT NULL,
-  `watermark_top_right` varchar(255) COLLATE latin1_bin NOT NULL,
-  `watermark_bottom_left` varchar(255) COLLATE latin1_bin NOT NULL,
-  `watermark_bottom_right` varchar(255) COLLATE latin1_bin NOT NULL,
-  `accept_images` tinyint(1) NOT NULL,
-  `accept_videos` tinyint(1) NOT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `is_member_synched` tinyint(1) NOT NULL,
-  `flow_mode_interface` tinyint(1) NOT NULL,
-  PRIMARY KEY (`name`),
-  KEY `watermark_top_left` (`watermark_top_left`),
-  KEY `watermark_top_right` (`watermark_top_right`),
-  KEY `watermark_bottom_left` (`watermark_bottom_left`),
-  KEY `watermark_bottom_right` (`watermark_bottom_right`),
-  KEY `gadd_date` (`add_date`),
-  KEY `parent_id` (`parent_id`),
-  KEY `ftjoin_gfullname` (`fullname`),
-  KEY `ftjoin_gdescrip` (`description`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_galleries` values('root','329','330','331','1295956149','','','','','','','1','1','1','1','','0','1');
-
-DROP TABLE IF EXISTS `ocp7_gifts`;
-
-CREATE TABLE `ocp7_gifts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `amount` int(11) NOT NULL,
-  `gift_from` int(11) NOT NULL,
-  `gift_to` int(11) NOT NULL,
-  `reason` int(10) unsigned NOT NULL,
-  `anonymous` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `giftsgiven` (`gift_from`),
-  KEY `giftsreceived` (`gift_to`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_images`;
-
-CREATE TABLE `ocp7_images` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cat` varchar(80) COLLATE latin1_bin NOT NULL,
-  `url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `thumb_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `comments` int(10) unsigned NOT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `allow_trackbacks` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `submitter` int(11) NOT NULL,
-  `validated` tinyint(1) NOT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `edit_date` int(10) unsigned DEFAULT NULL,
-  `image_views` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `image_views` (`image_views`),
-  KEY `category_list` (`cat`),
-  KEY `i_validated` (`validated`),
-  KEY `xis` (`submitter`),
-  KEY `iadd_date` (`add_date`),
-  KEY `ftjoin_icomments` (`comments`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_invoices`;
-
-CREATE TABLE `ocp7_invoices` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `i_type_code` varchar(80) COLLATE latin1_bin NOT NULL,
-  `i_member_id` int(11) NOT NULL,
-  `i_state` varchar(80) COLLATE latin1_bin NOT NULL,
-  `i_amount` varchar(255) COLLATE latin1_bin NOT NULL,
-  `i_special` varchar(255) COLLATE latin1_bin NOT NULL,
-  `i_time` int(10) unsigned NOT NULL,
-  `i_note` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_iotd`;
-
-CREATE TABLE `ocp7_iotd` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `i_title` int(10) unsigned NOT NULL,
-  `caption` int(10) unsigned NOT NULL,
-  `thumb_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `is_current` tinyint(1) NOT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `allow_trackbacks` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `used` tinyint(1) NOT NULL,
-  `date_and_time` int(10) unsigned DEFAULT NULL,
-  `iotd_views` int(11) NOT NULL,
-  `submitter` int(11) NOT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `edit_date` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `iotd_views` (`iotd_views`),
-  KEY `get_current` (`is_current`),
-  KEY `ios` (`submitter`),
-  KEY `iadd_date` (`add_date`),
-  KEY `date_and_time` (`date_and_time`),
-  KEY `ftjoin_icap` (`caption`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_leader_board`;
-
-CREATE TABLE `ocp7_leader_board` (
-  `lb_member` int(11) NOT NULL,
-  `lb_points` int(11) NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`lb_member`,`date_and_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_news`;
-
-CREATE TABLE `ocp7_news` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `title` int(10) unsigned NOT NULL,
-  `news` int(10) unsigned NOT NULL,
-  `news_article` int(10) unsigned NOT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `allow_trackbacks` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `author` varchar(80) COLLATE latin1_bin NOT NULL,
-  `submitter` int(11) NOT NULL,
-  `validated` tinyint(1) NOT NULL,
-  `edit_date` int(10) unsigned DEFAULT NULL,
-  `news_category` int(11) NOT NULL,
-  `news_views` int(11) NOT NULL,
-  `news_image` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `news_views` (`news_views`),
-  KEY `findnewscat` (`news_category`),
-  KEY `newsauthor` (`author`),
-  KEY `nes` (`submitter`),
-  KEY `headlines` (`date_and_time`),
-  KEY `nvalidated` (`validated`),
-  KEY `ftjoin_ititle` (`title`),
-  KEY `ftjoin_nnews` (`news`),
-  KEY `ftjoin_nnewsa` (`news_article`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_news_categories`;
-
-CREATE TABLE `ocp7_news_categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `nc_title` int(10) unsigned NOT NULL,
-  `nc_owner` int(11) DEFAULT NULL,
-  `nc_img` varchar(80) COLLATE latin1_bin NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ncs` (`nc_owner`)
-) ENGINE=MyISAM AUTO_INCREMENT=8;
-
-insert into `ocp7_news_categories` values('1','334',null,'newscats/general',''),
- ('2','335',null,'newscats/technology',''),
- ('3','336',null,'newscats/difficulties',''),
- ('4','337',null,'newscats/community',''),
- ('5','338',null,'newscats/entertainment',''),
- ('6','339',null,'newscats/business',''),
- ('7','340',null,'newscats/art','');
-
-DROP TABLE IF EXISTS `ocp7_news_category_entries`;
-
-CREATE TABLE `ocp7_news_category_entries` (
-  `news_entry` int(11) NOT NULL,
-  `news_entry_category` int(11) NOT NULL,
-  PRIMARY KEY (`news_entry`,`news_entry_category`),
-  KEY `news_entry_category` (`news_entry_category`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_news_rss_cloud`;
-
-CREATE TABLE `ocp7_news_rss_cloud` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `rem_procedure` varchar(80) COLLATE latin1_bin NOT NULL,
-  `rem_port` tinyint(4) NOT NULL,
-  `rem_path` varchar(255) COLLATE latin1_bin NOT NULL,
-  `rem_protocol` varchar(80) COLLATE latin1_bin NOT NULL,
-  `rem_ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `watching_channel` varchar(255) COLLATE latin1_bin NOT NULL,
-  `register_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_newsletter`;
-
-CREATE TABLE `ocp7_newsletter` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) COLLATE latin1_bin NOT NULL,
-  `join_time` int(10) unsigned NOT NULL,
-  `code_confirm` int(11) NOT NULL,
-  `the_password` varchar(33) COLLATE latin1_bin NOT NULL,
-  `pass_salt` varchar(80) COLLATE latin1_bin NOT NULL,
-  `language` varchar(80) COLLATE latin1_bin NOT NULL,
-  `n_forename` varchar(255) COLLATE latin1_bin NOT NULL,
-  `n_surname` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `welcomemails` (`join_time`),
-  KEY `code_confirm` (`code_confirm`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_newsletter_archive`;
-
-CREATE TABLE `ocp7_newsletter_archive` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `date_and_time` int(11) NOT NULL,
-  `subject` varchar(255) COLLATE latin1_bin NOT NULL,
-  `newsletter` longtext COLLATE latin1_bin NOT NULL,
-  `language` varchar(80) COLLATE latin1_bin NOT NULL,
-  `importance_level` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_newsletter_drip_send`;
-
-CREATE TABLE `ocp7_newsletter_drip_send` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `d_inject_time` int(10) unsigned NOT NULL,
-  `d_subject` varchar(255) COLLATE latin1_bin NOT NULL,
-  `d_message` longtext COLLATE latin1_bin NOT NULL,
-  `d_html_only` tinyint(1) NOT NULL,
-  `d_to_email` varchar(255) COLLATE latin1_bin NOT NULL,
-  `d_to_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `d_from_email` varchar(255) COLLATE latin1_bin NOT NULL,
-  `d_from_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `d_priority` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `d_inject_time` (`d_inject_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_newsletter_subscribe`;
-
-CREATE TABLE `ocp7_newsletter_subscribe` (
-  `newsletter_id` int(11) NOT NULL,
-  `the_level` tinyint(4) NOT NULL,
-  `email` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`newsletter_id`,`email`),
-  KEY `peopletosendto` (`the_level`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_newsletters`;
-
-CREATE TABLE `ocp7_newsletters` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` int(10) unsigned NOT NULL,
-  `description` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_newsletters` values('1','345','346');
-
-DROP TABLE IF EXISTS `ocp7_poll`;
-
-CREATE TABLE `ocp7_poll` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `question` int(10) unsigned NOT NULL,
-  `option1` int(10) unsigned NOT NULL,
-  `option2` int(10) unsigned NOT NULL,
-  `option3` int(10) unsigned DEFAULT NULL,
-  `option4` int(10) unsigned DEFAULT NULL,
-  `option5` int(10) unsigned DEFAULT NULL,
-  `option6` int(10) unsigned NOT NULL,
-  `option7` int(10) unsigned NOT NULL,
-  `option8` int(10) unsigned DEFAULT NULL,
-  `option9` int(10) unsigned DEFAULT NULL,
-  `option10` int(10) unsigned DEFAULT NULL,
-  `votes1` int(11) NOT NULL,
-  `votes2` int(11) NOT NULL,
-  `votes3` int(11) NOT NULL,
-  `votes4` int(11) NOT NULL,
-  `votes5` int(11) NOT NULL,
-  `votes6` int(11) NOT NULL,
-  `votes7` int(11) NOT NULL,
-  `votes8` int(11) NOT NULL,
-  `votes9` int(11) NOT NULL,
-  `votes10` int(11) NOT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `allow_trackbacks` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `num_options` tinyint(4) NOT NULL,
-  `is_current` tinyint(1) NOT NULL,
-  `date_and_time` int(10) unsigned DEFAULT NULL,
-  `submitter` int(11) NOT NULL,
-  `add_time` int(11) NOT NULL,
-  `poll_views` int(11) NOT NULL,
-  `edit_date` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `poll_views` (`poll_views`),
-  KEY `get_current` (`is_current`),
-  KEY `ps` (`submitter`),
-  KEY `padd_time` (`add_time`),
-  KEY `date_and_time` (`date_and_time`),
-  KEY `ftjoin_pq` (`question`),
-  KEY `ftjoin_po1` (`option1`),
-  KEY `ftjoin_po2` (`option2`),
-  KEY `ftjoin_po3` (`option3`),
-  KEY `ftjoin_po4` (`option4`),
-  KEY `ftjoin_po5` (`option5`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_poll_votes`;
-
-CREATE TABLE `ocp7_poll_votes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `v_poll_id` int(11) NOT NULL,
-  `v_voter_id` int(11) DEFAULT NULL,
-  `v_voter_ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `v_vote_for` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `v_voter_id` (`v_voter_id`),
-  KEY `v_voter_ip` (`v_voter_ip`),
-  KEY `v_vote_for` (`v_vote_for`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_prices`;
-
-CREATE TABLE `ocp7_prices` (
-  `name` varchar(80) COLLATE latin1_bin NOT NULL,
-  `price` int(11) NOT NULL,
-  PRIMARY KEY (`name`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_pstore_customs`;
-
-CREATE TABLE `ocp7_pstore_customs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_title` int(10) unsigned NOT NULL,
-  `c_description` int(10) unsigned NOT NULL,
-  `c_enabled` tinyint(1) NOT NULL,
-  `c_cost` int(11) NOT NULL,
-  `c_one_per_member` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_pstore_permissions`;
-
-CREATE TABLE `ocp7_pstore_permissions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `p_title` int(10) unsigned NOT NULL,
-  `p_description` int(10) unsigned NOT NULL,
-  `p_enabled` tinyint(1) NOT NULL,
-  `p_cost` int(11) NOT NULL,
-  `p_hours` int(11) NOT NULL,
-  `p_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `p_specific_permission` varchar(80) COLLATE latin1_bin NOT NULL,
-  `p_zone` varchar(80) COLLATE latin1_bin NOT NULL,
-  `p_page` varchar(80) COLLATE latin1_bin NOT NULL,
-  `p_module` varchar(80) COLLATE latin1_bin NOT NULL,
-  `p_category` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_quiz_entries`;
-
-CREATE TABLE `ocp7_quiz_entries` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `q_time` int(10) unsigned NOT NULL,
-  `q_member` int(11) NOT NULL,
-  `q_quiz` int(11) NOT NULL,
-  `q_results` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_quiz_entry_answer`;
-
-CREATE TABLE `ocp7_quiz_entry_answer` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `q_entry` int(11) NOT NULL,
-  `q_question` int(11) NOT NULL,
-  `q_answer` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_quiz_member_last_visit`;
-
-CREATE TABLE `ocp7_quiz_member_last_visit` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `v_time` int(10) unsigned NOT NULL,
-  `v_member_id` int(11) NOT NULL,
-  `v_quiz_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_quiz_question_answers`;
-
-CREATE TABLE `ocp7_quiz_question_answers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `q_question` int(11) NOT NULL,
-  `q_answer_text` int(10) unsigned NOT NULL,
-  `q_is_correct` tinyint(1) NOT NULL,
-  `q_order` int(11) NOT NULL,
-  `q_explanation` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_quiz_questions`;
-
-CREATE TABLE `ocp7_quiz_questions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `q_long_input_field` tinyint(1) NOT NULL,
-  `q_num_choosable_answers` int(11) NOT NULL,
-  `q_quiz` int(11) NOT NULL,
-  `q_question_text` int(10) unsigned NOT NULL,
-  `q_order` int(11) NOT NULL,
-  `q_required` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_quiz_winner`;
-
-CREATE TABLE `ocp7_quiz_winner` (
-  `q_quiz` int(11) NOT NULL,
-  `q_entry` int(11) NOT NULL,
-  `q_winner_level` int(11) NOT NULL,
-  PRIMARY KEY (`q_quiz`,`q_entry`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_quizzes`;
-
-CREATE TABLE `ocp7_quizzes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `q_timeout` int(11) DEFAULT NULL,
-  `q_name` int(10) unsigned NOT NULL,
-  `q_start_text` int(10) unsigned NOT NULL,
-  `q_end_text` int(10) unsigned NOT NULL,
-  `q_notes` longtext COLLATE latin1_bin NOT NULL,
-  `q_percentage` int(11) NOT NULL,
-  `q_open_time` int(10) unsigned NOT NULL,
-  `q_close_time` int(10) unsigned DEFAULT NULL,
-  `q_num_winners` int(11) NOT NULL,
-  `q_redo_time` int(11) DEFAULT NULL,
-  `q_type` varchar(80) COLLATE latin1_bin NOT NULL,
-  `q_add_date` int(10) unsigned NOT NULL,
-  `q_validated` tinyint(1) NOT NULL,
-  `q_submitter` int(11) NOT NULL,
-  `q_points_for_passing` int(11) NOT NULL,
-  `q_tied_newsletter` int(11) DEFAULT NULL,
-  `q_end_text_fail` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `q_validated` (`q_validated`),
-  KEY `ftjoin_qstarttext` (`q_start_text`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_sales`;
-
-CREATE TABLE `ocp7_sales` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `memberid` int(11) NOT NULL,
-  `purchasetype` varchar(80) COLLATE latin1_bin NOT NULL,
-  `details` varchar(255) COLLATE latin1_bin NOT NULL,
-  `details2` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_searches_logged`;
-
-CREATE TABLE `ocp7_searches_logged` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `s_member_id` int(11) NOT NULL,
-  `s_time` int(10) unsigned NOT NULL,
-  `s_primary` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_auxillary` longtext COLLATE latin1_bin NOT NULL,
-  `s_num_results` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `past_search` (`s_primary`),
-  FULLTEXT KEY `past_search_ft` (`s_primary`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_searches_saved`;
-
-CREATE TABLE `ocp7_searches_saved` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `s_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_member_id` int(11) NOT NULL,
-  `s_time` int(10) unsigned NOT NULL,
-  `s_primary` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_auxillary` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_seedy_changes`;
-
-CREATE TABLE `ocp7_seedy_changes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `the_action` varchar(80) COLLATE latin1_bin NOT NULL,
-  `the_page` int(11) NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `the_user` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_seedy_children`;
-
-CREATE TABLE `ocp7_seedy_children` (
-  `parent_id` int(11) NOT NULL,
-  `child_id` int(11) NOT NULL,
-  `the_order` int(11) NOT NULL,
-  `title` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`parent_id`,`child_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_seedy_pages`;
-
-CREATE TABLE `ocp7_seedy_pages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` int(10) unsigned NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `description` int(10) unsigned NOT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `seedy_views` int(11) NOT NULL,
-  `hide_posts` tinyint(1) NOT NULL,
-  `submitter` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `seedy_views` (`seedy_views`),
-  KEY `sps` (`submitter`),
-  KEY `sadd_date` (`add_date`),
-  KEY `ftjoin_spt` (`title`),
-  KEY `ftjoin_spd` (`description`)
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_seedy_pages` values('1','302','','303','1295956140','0','0','1');
-
-DROP TABLE IF EXISTS `ocp7_seedy_posts`;
-
-CREATE TABLE `ocp7_seedy_posts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `page_id` int(11) NOT NULL,
-  `the_message` int(10) unsigned NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  `validated` tinyint(1) NOT NULL,
-  `seedy_views` int(11) NOT NULL,
-  `the_user` int(11) NOT NULL,
-  `edit_date` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `seedy_views` (`seedy_views`),
-  KEY `spos` (`the_user`),
-  KEY `posts_on_page` (`page_id`),
-  KEY `cdate_and_time` (`date_and_time`),
-  KEY `svalidated` (`validated`),
-  KEY `ftjoin_spm` (`the_message`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_shopping_cart`;
-
-CREATE TABLE `ocp7_shopping_cart` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `session_id` int(11) NOT NULL,
-  `ordered_by` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `product_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `product_code` varchar(255) COLLATE latin1_bin NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `price_pre_tax` double NOT NULL,
-  `price` double NOT NULL,
-  `product_description` longtext COLLATE latin1_bin NOT NULL,
-  `product_type` varchar(255) COLLATE latin1_bin NOT NULL,
-  `product_weight` double NOT NULL,
-  `is_deleted` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`,`ordered_by`,`product_id`),
-  KEY `ordered_by` (`ordered_by`),
-  KEY `session_id` (`session_id`),
-  KEY `product_id` (`product_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_shopping_logging`;
-
-CREATE TABLE `ocp7_shopping_logging` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `e_member_id` int(11) NOT NULL,
-  `session_id` int(11) NOT NULL,
-  `ip` varchar(40) COLLATE latin1_bin NOT NULL,
-  `last_action` varchar(255) COLLATE latin1_bin NOT NULL,
-  `date_and_time` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`e_member_id`),
-  KEY `calculate_bandwidth` (`date_and_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_shopping_order`;
-
-CREATE TABLE `ocp7_shopping_order` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `c_member` int(11) NOT NULL,
-  `session_id` int(11) NOT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `tot_price` double NOT NULL,
-  `order_status` varchar(80) COLLATE latin1_bin NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `transaction_id` varchar(255) COLLATE latin1_bin NOT NULL,
-  `purchase_through` varchar(255) COLLATE latin1_bin NOT NULL,
-  `tax_opted_out` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `finddispatchable` (`order_status`),
-  KEY `soc_member` (`c_member`),
-  KEY `sosession_id` (`session_id`),
-  KEY `soadd_date` (`add_date`),
-  KEY `recent_shopped` (`add_date`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_shopping_order_addresses`;
-
-CREATE TABLE `ocp7_shopping_order_addresses` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `order_id` int(11) DEFAULT NULL,
-  `address_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `address_street` longtext COLLATE latin1_bin NOT NULL,
-  `address_city` varchar(255) COLLATE latin1_bin NOT NULL,
-  `address_zip` varchar(255) COLLATE latin1_bin NOT NULL,
-  `address_country` varchar(255) COLLATE latin1_bin NOT NULL,
-  `receiver_email` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `order_id` (`order_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_shopping_order_details`;
-
-CREATE TABLE `ocp7_shopping_order_details` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `order_id` int(11) DEFAULT NULL,
-  `p_id` int(11) DEFAULT NULL,
-  `p_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `p_code` varchar(255) COLLATE latin1_bin NOT NULL,
-  `p_type` varchar(255) COLLATE latin1_bin NOT NULL,
-  `p_quantity` int(11) NOT NULL,
-  `p_price` double NOT NULL,
-  `included_tax` double NOT NULL,
-  `dispatch_status` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `p_id` (`p_id`),
-  KEY `order_id` (`order_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_sitewatchlist`;
-
-CREATE TABLE `ocp7_sitewatchlist` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `siteurl` varchar(255) COLLATE latin1_bin NOT NULL,
-  `site_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2;
-
-insert into `ocp7_sitewatchlist` values('1','http://localhost/svn/code/4.2.x','');
-
-DROP TABLE IF EXISTS `ocp7_staff_tips_dismissed`;
-
-CREATE TABLE `ocp7_staff_tips_dismissed` (
-  `t_member` int(11) NOT NULL,
-  `t_tip` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`t_member`,`t_tip`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_stafflinks`;
-
-CREATE TABLE `ocp7_stafflinks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `link` varchar(255) COLLATE latin1_bin NOT NULL,
-  `link_title` varchar(255) COLLATE latin1_bin NOT NULL,
-  `link_desc` longtext COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=28;
-
-insert into `ocp7_stafflinks` values('1','http://ocportal.com/','ocPortal.com',0x6f63506f7274616c2e636f6d),
- ('2','http://ocportal.com/forum/vforums/unread.htm','ocPortal.com (topics with unread posts)',0x6f63506f7274616c2e636f6d2028746f70696373207769746820756e7265616420706f73747329),
- ('3','http://ocproducts.com/','ocProducts (web development services)',0x6f6350726f6475637473202877656220646576656c6f706d656e7420736572766963657329),
- ('4','https://translations.launchpad.net/ocportal/+translations','Launchpad (ocPortal language translations)',0x4c61756e636870616420286f63506f7274616c206c616e6775616765207472616e736c6174696f6e7329),
- ('5','http://www.google.com/analytics/','Google Analytics',0x476f6f676c6520416e616c7974696373),
- ('6','https://www.google.com/webmasters/tools','Google Webmaster Tools',0x476f6f676c65205765626d617374657220546f6f6c73),
- ('7','http://www.google.com/apps/intl/en/group/index.html','Google Apps (free gmail for domains, etc)',0x476f6f676c65204170707320286672656520676d61696c20666f7220646f6d61696e732c2065746329),
- ('8','http://www.google.com/chrome','Google Chrome (web browser)',0x476f6f676c65204368726f6d6520287765622062726f7773657229),
- ('9','https://chrome.google.com/extensions/featured/web_dev','Google Chrome addons',0x476f6f676c65204368726f6d65206164646f6e73),
- ('10','http://www.getfirefox.com/','Firefox (web browser)',0x46697265666f7820287765622062726f7773657229),
- ('11','http://www.instantshift.com/2009/01/25/26-essential-firefox-add-ons-for-web-designers/','FireFox addons',0x46697265466f78206164646f6e73),
- ('12','http://www.opera.com/','Opera (web browser)',0x4f7065726120287765622062726f7773657229),
- ('13','http://finalbuilds.edskes.net/iecollection.htm','Internet Explorer Collection (for testing)',0x496e7465726e6574204578706c6f72657220436f6c6c656374696f6e2028666f722074657374696e6729),
- ('14','http://www.getpaint.net/','Paint.net (free graphics tool)',0x5061696e742e6e657420286672656520677261706869637320746f6f6c29),
- ('15','http://benhollis.net/software/pnggauntlet/','PNGGauntlet (compress PNG files, Windows)',0x504e474761756e746c65742028636f6d707265737320504e472066696c65732c2057696e646f777329),
- ('16','http://www.leveltendesign.com/blog/nickc/pngthing-v11-previously-pngoptimizer','pngThing (compress PNG files, Mac)',0x706e675468696e672028636f6d707265737320504e472066696c65732c204d616329),
- ('17','http://www.iconlet.com/','Iconlet (free icons)',0x49636f6e6c65742028667265652069636f6e7329),
- ('18','http://sxc.hu/','stock.xchng (free stock art)',0x73746f636b2e7863686e672028667265652073746f636b2061727429),
- ('19','http://www.kompozer.net/','Kompozer (Web design tool)',0x4b6f6d706f7a657220285765622064657369676e20746f6f6c29),
- ('20','http://www.sourcegear.com/diffmerge/','DiffMerge',0x446966664d65726765),
- ('21','http://www.jingproject.com/','Jing (record screencasts)',0x4a696e6720287265636f72642073637265656e636173747329),
- ('22','http://www.elief.com/billing/aff.php?aff=035','Elief hosting (quality shared hosting)',0x456c69656620686f7374696e6720287175616c6974792073686172656420686f7374696e6729),
- ('23','http://www.rackspacecloud.com/1043-0-3-13.html','Rackspace Cloud hosting',0x5261636b737061636520436c6f756420686f7374696e67),
- ('24','http://www.jdoqocy.com/click-3972552-10378406','GoDaddy (Domains and SSL certificates)',0x476f44616464792028446f6d61696e7320616e642053534c2063657274696669636174657329),
- ('25','http://www.silktide.com/siteray','SiteRay (site quality auditing)',0x53697465526179202873697465207175616c697479206175646974696e6729),
- ('26','http://www.smashingmagazine.com/','Smashing Magazine (web design articles)',0x536d617368696e67204d6167617a696e6520287765622064657369676e2061727469636c657329),
- ('27','http://www.w3schools.com/','w3schools (learn web technologies)',0x77337363686f6f6c7320286c6561726e2077656220746563686e6f6c6f6769657329);
-
-DROP TABLE IF EXISTS `ocp7_subscriptions`;
-
-CREATE TABLE `ocp7_subscriptions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `s_type_code` varchar(80) COLLATE latin1_bin NOT NULL,
-  `s_member_id` int(11) NOT NULL,
-  `s_state` varchar(80) COLLATE latin1_bin NOT NULL,
-  `s_amount` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_special` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_time` int(10) unsigned NOT NULL,
-  `s_auto_fund_source` varchar(80) COLLATE latin1_bin NOT NULL,
-  `s_auto_fund_key` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_via` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_test_sections`;
-
-CREATE TABLE `ocp7_test_sections` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `s_section` varchar(255) COLLATE latin1_bin NOT NULL,
-  `s_notes` longtext COLLATE latin1_bin NOT NULL,
-  `s_inheritable` tinyint(1) NOT NULL,
-  `s_assigned_to` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_tests`;
-
-CREATE TABLE `ocp7_tests` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `t_section` int(11) NOT NULL,
-  `t_test` longtext COLLATE latin1_bin NOT NULL,
-  `t_assigned_to` int(11) DEFAULT NULL,
-  `t_enabled` tinyint(1) NOT NULL,
-  `t_status` int(11) NOT NULL,
-  `t_inherit_section` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_ticket_types`;
-
-CREATE TABLE `ocp7_ticket_types` (
-  `ticket_type` int(10) unsigned NOT NULL,
-  `guest_emails_mandatory` tinyint(1) NOT NULL,
-  `search_faq` tinyint(1) NOT NULL,
-  `send_sms_to` varchar(255) COLLATE latin1_bin NOT NULL,
-  `cache_lead_time` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`ticket_type`)
-) ENGINE=MyISAM;
-
-insert into `ocp7_ticket_types` values('401','0','0','',null),
- ('402','0','0','',null);
-
-DROP TABLE IF EXISTS `ocp7_tickets`;
-
-CREATE TABLE `ocp7_tickets` (
-  `ticket_id` varchar(255) COLLATE latin1_bin NOT NULL,
-  `topic_id` int(11) NOT NULL,
-  `forum_id` int(11) NOT NULL,
-  `ticket_type` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`ticket_id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_trans_expecting`;
-
-CREATE TABLE `ocp7_trans_expecting` (
-  `id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `e_purchase_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `e_item_name` varchar(255) COLLATE latin1_bin NOT NULL,
-  `e_member_id` int(11) NOT NULL,
-  `e_amount` varchar(255) COLLATE latin1_bin NOT NULL,
-  `e_ip_address` varchar(40) COLLATE latin1_bin NOT NULL,
-  `e_session_id` int(11) NOT NULL,
-  `e_time` int(10) unsigned NOT NULL,
-  `e_length` int(11) DEFAULT NULL,
-  `e_length_units` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_transactions`;
-
-CREATE TABLE `ocp7_transactions` (
-  `id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `purchase_id` varchar(80) COLLATE latin1_bin NOT NULL,
-  `status` varchar(255) COLLATE latin1_bin NOT NULL,
-  `reason` varchar(255) COLLATE latin1_bin NOT NULL,
-  `amount` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_currency` varchar(80) COLLATE latin1_bin NOT NULL,
-  `linked` varchar(80) COLLATE latin1_bin NOT NULL,
-  `t_time` int(10) unsigned NOT NULL,
-  `item` varchar(255) COLLATE latin1_bin NOT NULL,
-  `pending_reason` varchar(255) COLLATE latin1_bin NOT NULL,
-  `t_memo` longtext COLLATE latin1_bin NOT NULL,
-  `t_via` varchar(80) COLLATE latin1_bin NOT NULL,
-  PRIMARY KEY (`id`,`t_time`)
-) ENGINE=MyISAM;
-
-
-DROP TABLE IF EXISTS `ocp7_videos`;
-
-CREATE TABLE `ocp7_videos` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cat` varchar(80) COLLATE latin1_bin NOT NULL,
-  `url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `thumb_url` varchar(255) COLLATE latin1_bin NOT NULL,
-  `comments` int(10) unsigned NOT NULL,
-  `allow_rating` tinyint(1) NOT NULL,
-  `allow_comments` tinyint(4) NOT NULL,
-  `allow_trackbacks` tinyint(1) NOT NULL,
-  `notes` longtext COLLATE latin1_bin NOT NULL,
-  `submitter` int(11) NOT NULL,
-  `validated` tinyint(1) NOT NULL,
-  `add_date` int(10) unsigned NOT NULL,
-  `edit_date` int(10) unsigned DEFAULT NULL,
-  `video_views` int(11) NOT NULL,
-  `video_width` int(11) NOT NULL,
-  `video_height` int(11) NOT NULL,
-  `video_length` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `video_views` (`video_views`),
-  KEY `vs` (`submitter`),
-  KEY `v_validated` (`validated`),
-  KEY `category_list` (`cat`),
-  KEY `vadd_date` (`add_date`),
-  KEY `ftjoin_vcomments` (`comments`)
 ) ENGINE=MyISAM;

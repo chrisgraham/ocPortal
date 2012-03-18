@@ -1295,9 +1295,9 @@ function hsv_to_rgb($h,$s,$v)
 }
 
 /**
- * Convert an array of CSS colours into an actual CSS sheet.
+ * Rewrite some CSS code according to a CSS landscape.
  *
- * @param  string		Array of colours, template map style.
+ * @param  ID_TEXT	CSS filename of source file.
  * @param  array		The colour expression landscape which we'll make substitutions using.
  * @param  ID_TEXT	The theme this is being generated from
  * @param  ID_TEXT	The algorithm to use
@@ -1311,18 +1311,34 @@ function theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorith
 
 	if (file_exists(get_file_base().'/themes/'.$theme.'/css_custom/'.filter_naughty($sheet)))
 	{
-		$sheet=unixify_line_format(file_get_contents(get_file_base().'/themes/'.$theme.'/css_custom/'.filter_naughty($sheet),FILE_TEXT));
+		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/'.$theme.'/css_custom/'.filter_naughty($sheet),FILE_TEXT));
 	} elseif (file_exists(get_file_base().'/themes/'.$theme.'/css/'.filter_naughty($sheet)))
 	{
-		$sheet=unixify_line_format(file_get_contents(get_file_base().'/themes/'.$theme.'/css/'.filter_naughty($sheet),FILE_TEXT));
+		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/'.$theme.'/css/'.filter_naughty($sheet),FILE_TEXT));
 	} elseif (file_exists(get_file_base().'/themes/default/css_custom/'.filter_naughty($sheet)))
 	{
-		$sheet=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css_custom/'.filter_naughty($sheet),FILE_TEXT));
+		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css_custom/'.filter_naughty($sheet),FILE_TEXT));
 	} else/*if (file_exists(get_file_base().'/themes/default/css/'.filter_naughty($sheet)))*/
 	{
-		$sheet=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css/'.filter_naughty($sheet),FILE_TEXT));
+		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css/'.filter_naughty($sheet),FILE_TEXT));
 	}
 
+	return theme_wizard_colours_to_css($contents,$landscape,$source_theme,$algorithm,$seed);
+}
+
+/**
+ * Rewrite some CSS code according to a CSS landscape.
+ *
+ * @param  string		CSS to apply to.
+ * @param  array		The colour expression landscape which we'll make substitutions using.
+ * @param  ID_TEXT	The theme this is being generated from
+ * @param  ID_TEXT	The algorithm to use
+ * @set equations hsv
+ * @param  ID_TEXT	The seed colour
+ * @return string		The sheet
+ */
+function theme_wizard_colours_to_css($contents,$landscape,$source_theme,$algorithm,$seed)
+{
 	if ($algorithm=='hsv')
 	{
 		list($ocportal_h,$ocportal_s,$ocportal_v)=rgb_to_hsv(find_theme_seed($source_theme,true));
@@ -1332,30 +1348,30 @@ function theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorith
 		$val_dif=$desired_v-$ocportal_v;
 
 		$matches=array();
-		$num_matches=preg_match_all('#\#([A-Fa-f0-9]{3,6})([^A-Fa-f0-9])#',$sheet,$matches);
+		$num_matches=preg_match_all('#\#([A-Fa-f0-9]{3,6})([^A-Fa-f0-9])#',$contents,$matches);
 		for ($i=0;$i<$num_matches;$i++)
 		{
 			list($h,$s,$v)=rgb_to_hsv((strlen($matches[1][$i])==3)?($matches[1][$i][0].$matches[1][$i][0].$matches[1][$i][1].$matches[1][$i][1].$matches[1][$i][2].$matches[1][$i][2]):$matches[1][$i]);
 			$new_colour=hsv_to_rgb(floatval(fix_colour($h+$hue_dif,true)),floatval(fix_colour($s+$sat_dif)),floatval(fix_colour($v+$val_dif)));
-			$sheet=str_replace($matches[0][$i],'#'.$new_colour.$matches[2][$i],$sheet);
+			$contents=str_replace($matches[0][$i],'#'.$new_colour.$matches[2][$i],$contents);
 		}
 
-		return $sheet;
+		return $contents;
 	}
 
 	foreach ($landscape as $peak)
 	{
 		$matches=array();
 
-		$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$sheet,$matches);
+		$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$contents,$matches);
 		for ($i=0;$i<$num_matches;$i++)
-			$sheet=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$sheet);
-		$num_matches=preg_match_all('#\#[A-Fa-f0-9]{3}([^A-Fa-f0-9].*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$sheet,$matches);
+			$contents=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$contents);
+		$num_matches=preg_match_all('#\#[A-Fa-f0-9]{3}([^A-Fa-f0-9].*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$contents,$matches);
 		for ($i=0;$i<$num_matches;$i++)
-			$sheet=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$sheet);
+			$contents=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$contents);
 	}
 
-	return $sheet;
+	return $contents;
 }
 
 /**

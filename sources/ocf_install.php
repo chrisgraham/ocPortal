@@ -405,6 +405,7 @@ function install_ocf($upgrade_from=NULL)
 			{
 				enable_notifications('ocf_forum',strval($row['r_forum_id']),$row['r_member_id']);
 			}
+			$start+=100;
 		}
 		while (count($rows)==100);
 		$start=0;
@@ -415,6 +416,7 @@ function install_ocf($upgrade_from=NULL)
 			{
 				enable_notifications('ocf_topic',strval($row['r_topic_id']),$row['r_member_id']);
 			}
+			$start+=100;
 		}
 		while (count($rows)==100);
 

@@ -67,6 +67,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('images');
-	convert_image(get_custom_file_base().'/uploads/galleries/test.jpeg',get_custom_file_base().'/uploads/galleries/test2.jpeg',-1,-1,2048,false,NULL,true);
 }

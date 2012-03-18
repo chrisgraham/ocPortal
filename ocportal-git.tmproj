@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/forum_stub.php</string>
+	<string>data_custom/execute_temp.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -64,7 +64,9 @@
 			<key>filename</key>
 			<string>code_editor.php</string>
 			<key>lastUsed</key>
-			<date>2012-02-29T15:01:12Z</date>
+			<date>2012-03-16T12:30:32Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -549,6 +551,20 @@
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
 		</dict>
+		<key>data_custom/execute_temp.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>55</integer>
+				<key>line</key>
+				<integer>393</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>351</integer>
+		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
 			<key>caret</key>
@@ -805,6 +821,36 @@
 			<key>firstVisibleLine</key>
 			<integer>12</integer>
 		</dict>
+		<key>lang/EN/upgrade.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>30</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>79</integer>
+			</dict>
+		</dict>
 		<key>pages/comcode/EN/privacy.txt</key>
 		<dict>
 			<key>caret</key>
@@ -946,34 +992,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>401</integer>
-		</dict>
-		<key>sources/exif.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>317</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>283</integer>
-		</dict>
-		<key>sources/forum_stub.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>4</integer>
-				<key>line</key>
-				<integer>46</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>47</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1749,20 +1767,6 @@
 				<integer>5</integer>
 			</dict>
 		</dict>
-		<key>themes/default/css/global.css</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1068</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1068</integer>
-		</dict>
 		<key>themes/default/css_custom/columns.css</key>
 		<dict>
 			<key>caret</key>
@@ -2271,34 +2275,6 @@
 				<integer>8</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates/NOTIFICATIONS_MANAGE.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>34</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>19</integer>
-		</dict>
-		<key>themes/default/templates/NOTIFICATION_TYPES.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>themes/default/templates/OCF_GROUP_DIRECTORY_SCREEN.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2646,15 +2622,12 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>themes/default/templates/NOTIFICATIONS_MANAGE.tpl</string>
-		<string>sources/exif.php</string>
-		<string>sources/forum_stub.php</string>
-		<string>themes/default/templates/NOTIFICATION_TYPES.tpl</string>
-		<string>themes/default/css/global.css</string>
+		<string>data_custom/execute_temp.php</string>
+		<string>lang/EN/upgrade.ini</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{671, 106}, {1154, 939}}</string>
+	<string>{{516, 50}, {1154, 939}}</string>
 </dict>
 </plist>

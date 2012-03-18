@@ -74,6 +74,7 @@ function upgrade_script()
 					$l_integrity_scan=fu_link('upgrader.php?type=integrity_scan&allow_merging=1',do_lang('FU_INTEGRITY_SCAN'),false,do_lang('FU_WILL_MERGE'));
 					$l_integrity_scan_no_merging=fu_link('upgrader.php?type=integrity_scan',do_lang('FU_INTEGRITY_SCAN_NO_CSS_MERGE'));
 					$l_database_upgrade=fu_link('upgrader.php?type=db_upgrade',do_lang('FU_DATABASE_UPGRADE'));
+					$l_theme_upgrade=fu_link('upgrader.php?type=theme_upgrade',do_lang('FU_THEME_UPGRADE'));
 					$l_open_site=fu_link('upgrader.php?type=open_site',do_lang('FU_OPEN_SITE'),get_option('site_closed')=='0');
 					$l_error_correction=do_lang('FU_ERROR_CORRECTION');
 					$l_not_for_patch=do_lang('FU_NOT_FOR_PATCH');
@@ -144,10 +145,11 @@ function upgrade_script()
 		<tr><th>1</th><td>{$l_take_backup}</td><td>".escape_html(display_time_period(60*120))."</td></tr>
 		<tr><th>2</th><td>{$l_close_site}  {$l_fu_closedness}<br /><q style=\"font-style: italic\">".$closed->evaluate()."</q> <span class=\"associated_link_to_small\">[<a href=\"".escape_html($closed_url->evaluate())."\" title=\"(this link will open in a new window)\" target=\"_blank\">".do_lang('CHANGE')."</a>]</span></td><td>".escape_html(display_time_period(60))."</td></tr>
 		<tr><th>3</th><td>{$l_download}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
-		<tr><th>4</th><td>{$l_not_for_patch}<br />{$l_integrity_scan} ".do_lang('OR')." {$l_integrity_scan_no_merging}</td><td>".escape_html(display_time_period(60*10))." &dagger;</td></tr>
+		<tr><th>4</th><td>{$l_not_for_patch}<br />{$l_integrity_scan_no_merging}><!-- ".do_lang('OR')." {$l_integrity_scan}--></td><td>".escape_html(display_time_period(60*10))." &dagger;</td></tr>
 		<tr><th>5</th><td>{$l_not_for_patch} {$l_database_upgrade}<br />{$l_up_info}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
-		<tr><th>6</th><td>{$l_clear_caches}</td><td>1 minute</td></tr>
-		<tr><th>7</th><td>{$l_open_site}  {$l_fu_closedness}</td><td>1 minute</td></tr>
+		<tr><th>5</th><td>{$l_not_for_patch} {$l_theme_upgrade}<br />{$l_up_info}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
+		<tr><th>7</th><td>{$l_clear_caches}</td><td>1 minute</td></tr>
+		<tr><th>8</th><td>{$l_open_site}  {$l_fu_closedness}</td><td>1 minute</td></tr>
 	</table></div>
 
 	<p>&dagger; {$l_customisations}</p>
@@ -403,6 +405,10 @@ function upgrade_script()
 					$version_database=floatval($_version_database);
 					if (is_null($_version_database)) $version_database=2.1; // Either 2.0 or 2.1, and they are equivalent in terms of what we need to do
 					if ($version_database<$version_files) echo do_lang('FU_MUST_UPGRADE_OCF',fu_link('upgrader.php?type=ocf',do_lang('FU_UPGRADE_OCF')));
+					break;
+
+				case 'theme_upgrade':
+					echo upgrade_themes();
 					break;
 
 				case 'ocf': // Only to be launched as a consequent of db_upgrade
@@ -1580,5 +1586,604 @@ function change_mysql_database_charset($new_charset,$db,$reencode=false)
 	}
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
+}
+
+/**
+ * Upgrade all themes.
+ *
+ * @return  string	HTML output
+ */
+function upgrade_themes()
+{
+	$test_run=(post_param_integer('live_run',0)==0);
+
+	echo '<h2>Theme upgrade: '.($test_run?'test run':'live results').'</h2>';
+
+	$themes=find_all_themes();
+	$str='';
+	$has_errors=false;
+	foreach (array_keys($themes) as $theme)
+	{
+		$from=round(ocp_version_number())-1;
+		$to=ocp_version_number();
+		list($errors,$successes)=upgrade_theme($theme,$from,$to,$test_run);
+
+		$str.='<h3>'.escape_html($theme).'</h3>';
+
+		foreach ($errors as $error)
+		{
+			echo '<p>&#x2717; '.$error->evaluate().'</p>';
+			$has_errors=true;
+		}
+
+		foreach ($successes as $success)
+		{
+			echo '<p>&#x2713; '.$success->evaluate().'</p>';
+		}
+	}
+
+	if ($test_run)
+	{
+		if ($has_errors)
+		{
+			echo '<p>'.do_lang('FU_THEME_ERRORS').'</p>';
+		}
+
+		$l_theme_upgrade=fu_link('upgrader.php?type=theme_upgrade&live_run=1',do_lang('FU_THEME_UPGRADE_FINAL'));
+		echo $l_theme_upgrade;
+	}
+
+	return $str;
+}
+
+/**
+ * Upgrade a theme automatically, using hand-coded migration arrays.
+ *
+ * @param   ID_TEXT	Theme to be upgraded
+ * @param   float		From version
+ * @param   float		Target version
+ * @param   boolean	Whether executing a test run (i.e. not do anything)
+ * @return  array		A pair: List of errors, List of successes
+ */
+function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
+{
+	$errors=array();
+	$successes=array();
+
+	$css_replace__single_match=array();
+	$css_prepend__single_match=array();
+	$css_append__single_match=array();
+	$css_replace__multi_match=array();
+	$css_prepend__multi_match=array();
+	$css_append__multi_match=array();
+	$css_file_append=array();
+	$theme_images_new=array();
+	$theme_images_renames=array();
+	$templates_replace=array();
+	$templates_rename=array();
+	$templates_borked=array();
+
+	if (($from_version<8.0) && ($to_version==8.0))
+	{
+		$css_recognition_string='2004-2011'; // Must be defined. Ensures theme is right version.
+
+		$css_replace__multi_match=array(
+			array(
+				'*'=>array(
+					"2004-2011"=>"2004-2012",
+					"gradiant"=>"gradient",
+					"\$IMG,"=>"\$IMG;,",
+					"url(\""=>"url('",
+					"\")"=>"')",
+				),
+			),
+			array(
+				'global.css'=>array(
+					"comments_outer"=>"comments_posting_form_outer",
+					"comments_inner"=>"comments_posting_form_inner",
+					"comments_end"=>"comments_posting_form_end",
+					"comments_emoticons"=>"comments_posting_form_emoticons",
+					"comments_links"=>"comments_posting_form_links",
+				),
+			),
+		);
+
+		$css_replace__single_match=array(
+			array(
+				'adminzone.css'=>array(
+					"template_edit_guid__true"=>"template_edit_guid__1",
+					"template_edit_guid__false"=>"template_edit_guid__0",
+				),
+				'calendar.css'=>array(
+					".calendar_week_hour {\n	width: 90px;\n}"=>".calendar_week_hour {\n	width: 90px;\n	height: 30px;\n	border: 1px solid #6b81a1; /* {\$,dottedborder.border, 95% (seed sat_to 33) + 5% !W/B}*/\n}",
+				),
+				'chat.css'=>array(
+					".chat_lobby_convos_area {\n}"=>".chat_lobby_convos_area {\n	overflow: hidden;\n	width: 100%;\n}",
+				),
+				'global.css'=>array(
+					"tt, kbd, samp {\n	font-size: 1.25em;\n	font-weight: bold;\n}"=>"tt, kbd, samp {\n	font-weight: bold;\n}",
+					"input[type=\"text\"],input[type=\"password\"],textarea,select { /* Normally a browser default, but gets inherited on some phones */"=>"input[type=\"text\"],input[type=\"password\"],input[type=\"color\"],input[type=\"email\"],input[type=\"number\"],input[type=\"range\"],input[type=\"search\"],input[type=\"tel\"],input[type=\"url\"],textarea,select { /* Normally a browser default, but gets inherited on some phones */",
+					".breadcrumbs {\n	padding: 5px 0 0 0;\n	float: {!en_right};\n	margin-left: 5px;\n	zoom: 1;\n}"=>".breadcrumbs {\n	padding: 5px 0 0 0;\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		float: {!en_right};\n		margin-left: 5px;\n	{+END}\n	zoom: 1;\n}\n\n.breadcrumbs abbr {\n	white-space: nowrap;\n}",
+					".standardbox_wrap_panel img {\n	max-width: 100%;\n}"=>".standardbox_wrap_panel img {\n	max-width: 98%;\n}",
+					".standardbox_classic, .standardbox_links_classic {"=>".standardbox_classic, .standardbox_wrap_classic .standardbox_links_classic {",
+					".scale_down { /* {\$,Membership of this class is used as a tag to turn on image scaling} */\n	max-width: 100%;\n}"=>".scale_down { /* {\$,Membership of this class is used as a tag to turn on image scaling} */\n	max-width: 100%;\n	box-sizing: border-box;\n}",
+					"ul.compact_list {"=>"ul.compact_list, ol.compact_list {",
+					"ul.compact_list li {"=>"ul.compact_list li, ol.compact_list li {",
+					"ul.spaced_list, .spaced_list ul {"=>"ul.spaced_list, .spaced_list ul, ol.spaced_list, .spaced_list ol {",
+					".trinav_right {\n	float: right;\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		margin-left: 10px;\n	{+END}\n	{+START,IF,{\$MOBILE}}\n		width: 33%;\n	{+END}\n	text-align: right;\n}\n"=>".trinav_right {\n	float: right;\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		margin-left: 10px;\n		margin-right: 26px;\n	{+END}\n	{+START,IF,{\$MOBILE}}\n		width: 33%;\n	{+END}\n	text-align: right;\n}\n",
+					".category_entry {\n	padding: 6px 0;\n	margin: 6px 0;\n	clear: both;\n}"=>".category_entry {\n	padding: 6px 0;\n	margin: 6px 0;\n	clear: both;\n	overflow: hidden;\n	width: 100%;\n}",
+					"ul.actions_list li, ul.actions_list_compact li, ul.actions_list_super_compact li {\n	padding: 0;\n	margin: 0;\n	list-style-type: none;\n}"=>"ul.actions_list li, ul.actions_list_compact li, ul.actions_list_super_compact li {\n	padding: 0;\n	margin: 0;\n	list-style-type: none;\n	list-style-image: none;\n}",
+					".non_link:link,\n.non_link:visited,\n.non_link:hover,\n.non_link:active {\n	color: #0d1522; /* {\$wizard, 20% seed + 80% !W/B} */\n	text-decoration: none;\n	cursor: default;\n}"=>".non_link,\n.non_link:link,\n.non_link:visited,\n.non_link:hover,\n.non_link:active {\n	color: #0d1522 !important; /* {\$wizard, 20% seed + 80% !W/B} */\n	text-decoration: none;\n	cursor: default;\n}",
+					"text-shadow: 1px 1px 1px #000000; /* {\$wizard, 100% !W/B} */\n	margin: 0 2px;"=>"text-shadow: 1px 1px 1px #000000; /* {\$wizard, 100% !W/B} */\n	margin: 0 2px;\n	overflow: visible; /* stops button padding on IE7 */",
+					".inline_image {\n	vertical-align: top;\n}\n\n.inline_image_2 {\n	vertical-align: middle;\n}\n\n.inline_image_3 {\n	vertical-align: baseline;\n}\n\n.inline_image_4 {\n	margin-top: -4px;\n}"=>".inline_image {\n	vertical-align: top !important;\n}\n\n.inline_image_2 {\n	vertical-align: middle !important;\n}\n\n.inline_image_3 {\n	vertical-align: baseline !important;\n}\n\n.inline_image_4 {\n	margin-top: -4px !important;\n}",
+					".gallery_media_full_expose {\n	overflow: hidden;\n	width: 100%;\n	outline: 0;\n	margin: {\$?,{\$MOBILE},1,3}em 0;\n}\n\n.gallery_media_full_expose {\n	text-align: center;\n}"=>".gallery_media_full_expose {\n	overflow: hidden;\n	width: 100%;\n	outline: 0;\n	margin: {\$?,{\$MOBILE},1,3}em 0;\n	text-align: center;\n	position: relative;\n}",
+					".gallery_media_full_expose img, .img_thumb {\n	border: 1px solid #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	-webkit-box-shadow: 3px 3px 10px #6b81a1; /* {\$wizard, 100% medborder.border} */\n	-moz-box-shadow: 3px 3px 10px #6b81a1; /* {\$wizard, 100% medborder.border} */\n	box-shadow: 3px 3px 10px #6b81a1; /* {\$wizard, 100% medborder.border} */\n	max-width: 100%;\n}"=>".gallery_media_full_expose img, .img_thumb {\n	border: 1px solid #6b81a1; /* {\$wizard, 100% medborder.border} */\n	-webkit-box-shadow: 3px 3px 10px #6b81a1; /* {\$wizard, 100% medborder.border} */\n	-moz-box-shadow: 3px 3px 10px #6b81a1; /* {\$wizard, 100% medborder.border} */\n	box-shadow: 3px 3px 10px #6b81a1; /* {\$wizard, 100% medborder.border} */\n	max-width: 100%;\n	box-sizing: border-box;\n}",
+					".form_field_name {\n	margin: 4px 0;\n}"=>".form_field_name {\n	margin: 4px;\n	display: inline-block;\n}",
+					".input_author, .input_username, .input_colour, .input_email,"=>".input_author, .input_username, .input_colour, .input_email, .input_codename,",
+					".input_author_required, .input_username_required, .input_colour_required, .input_email_required,"=>".input_author_required, .input_username_required, .input_colour_required, .input_email_required, .input_codename_required,",
+					".members_viewing {\n	border-top: 0;\n	padding: 4px;\n	text-indent: 25px;\n	padding-{!en_left}: 0;\n}"=>".members_viewing {\n	padding: 4px;\n	text-indent: 25px;\n	padding-{!en_left}: 0;\n}\n\n.ocf_topic_0 .members_viewing {\n	border-top: 0;\n}",
+					".post .post_edit_link {\n}"=>".post .post_action_link {\n}\n\n.post .post_thread_children {\n	margin-top: 1em;\n	{+START,IF,{\$MOBILE}}\n		margin-left: 7px;\n	{+END}\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		margin-left: 20px;\n	{+END}\n}\n\n.ocf_post_buttons a {\n	opacity: 0.0;\n	-webkit-transition-property : opacity;\n	-webkit-transition-duration : 0.5s;\n	-moz-transition-property : opacity;\n	-moz-transition-duration : 0.5s;\n	-o-transition-property : opacity;\n	-o-transition-duration : 0.5s;\n	transition-property : opacity;\n	transition-duration : 0.5s;\n}\n\n.ocf_post_buttons a[rel=\"add reply\"] {\n	opacity: 1.0;\n}\n\n.ocf_post_buttons:hover a {\n	opacity: 1.0;\n}\n\n.post_show_more {\n	text-align: center;\n	border: 1px dashed #c1cee3; /* {\$wizard, 100% lightborder} */\n	border-bottom-left-radius: 40px;\n	border-bottom-right-radius: 40px;\n	padding: 15px;\n	font-weight: bold;\n	font-size: 0.85em;\n}\n\n.post .post_show_more {\n	margin-left: 20px;\n}",
+					"ul.sitemap {\n	list-style-type: none;\n	margin-left: 0;\n	padding-left: 0;\n}"=>"ul.sitemap {\n	list-style-type: none;\n	list-style-image: none;\n	margin-left: 0;\n	padding-left: 0;\n}",
+					".rating_inner {\n	text-align: center;\n	white-space: nowrap;\n}"=>".RATING_BOX .rating_inner {\n	text-align: center;\n}\n\n.RATING_INLINE_DYNAMIC .rating_inner, .RATING_INLINE_DYNAMIC form {\n	display: inline;\n}\n\n.post_action_link .RATING_INLINE_DYNAMIC {\n	padding-left: 20px;\n}\n\n.rating_inner {\n	white-space: nowrap;\n}\n\n.rating_inner img {\n	cursor: pointer;\n}",
+					".tab {\n	float: left;\n	background: url('{\$IMG;,tab}');\n	padding: 3px 5px 0 5px;\n	height: 20px;\n	text-align: center;\n	cursor: pointer;\n}"=>".tab {\n	float: left;\n	background: url('{\$IMG;,tab}') !important;\n	padding: 3px 7px 0 7px !important;\n	height: 20px;\n	text-align: center;\n	cursor: pointer;\n}",
+					".tab_active, .tab:hover {\n	font-weight: bold;\n}"=>".tab_active {\n	font-weight: bold;\n}\n\n.tab:hover {\n	text-decoration: underline !important;\n}",
+					".nl li {\n	display: block;\n	margin-{!en_left}: 0;\n	padding-{!en_left}: 0;\n	list-style-type: none;\n}"=>".nl li {\n	display: block;\n	margin-{!en_left}: 0;\n	padding-{!en_left}: 0;\n	list-style-type: none;\n	list-style-image: none;\n}",
+					".menu_type__popup li a:link a:hover {\n	color: #9C202F; /* {\$wizard, 100% a.hover}*/\n}"=>".menu_type__popup li a:hover {\n	color: #9C202F !important; /* {\$wizard, 100% a.hover}*/\n}",
+					".menu_type__top li, .menu_type__dropdown li.toplevel {\n	float: {!en_left};\n	border-{!en_left}: 1px solid #0d1522; /* {\$wizard, 20% seed + 80% !W/B} */\n	margin-{!en_right}: -1px;"=>".menu_type__top li, .menu_type__dropdown li.toplevel {\n	float: {!en_left};\n	border-{!en_left}: 1px solid #0d1522; /* {\$wizard, 20% seed + 80% !W/B} */\n	margin-{!en_right}: -1px;\n	margin-bottom: 0;",
+					".menu_type__top img, .menu_type__dropdown li.toplevel img {\n	float: {!en_left};\n	padding: 0 8px 0 3px;\n	margin-top: -2px;\n}"=>".menu_type__top img, .menu_type__dropdown .toplevel_link img {\n	margin-top: -2px;\n}\n\n.menu_type__top img, .menu_type__dropdown img {\n	float: {!en_left};\n	padding: 0 8px 0 3px;\n}",
+					".menu_type__top .menu_spacer, .menu_type__dropdown li.toplevel.menu_spacer {\n	height: 1.15em;\n	width: 4em;\n	padding: 4px;\n}"=>".menu_type__top .menu_spacer, .menu_type__dropdown li.toplevel.menu_spacer {\n	height: 1.15em;\n	width: 4em;\n	padding: 4px;\n	float: {!en_left};\n}",
+					".menu_type__zone {\n	font-size: 0.9em;\n}"=>".menu_type__zone {\n	font-size: 0.9em;\n	max-height: 15px;\n}",
+					".menu_type__zone li {\n	display: inline;\n	padding: 0;\n	list-style-type: none;\n}"=>".menu_type__zone li {\n	display: inline;\n	padding: 0;\n	list-style-type: none;\n	list-style-image: none;\n}\n\n.menu_type__zone li * {\n	vertical-align: middle;\n}",
+					".edit_menu_link_inline {\n	position: absolute;\n	right: 1px;\n}"=>"*>.edit_menu_link_inline {\n	display: none;\n}\n\n*:hover>.edit_menu_link_inline {\n	display: block;\n}\n\n.edit_menu_link_inline {\n	position: absolute;\n	right: 1px;\n	z-index: 10000;\n}",
+				),
+				'news.css'=>array(
+					".standardbox_wrap_classic .news_piece_summary h3, .rss_summary h3 {\n	margin-{!en_right}: 130px;\n	border-bottom: 1px solid #6b81a1; /* {\$,wizard, 100% medborder.border} */\n}"=>".news_piece_summary h3, .rss_summary h3 {\n	margin-{!en_right}: 130px !important;\n	border-bottom: 1px solid #6b81a1 !important; /* {\$,wizard, 100% medborder.border} */\n}\n\n.rss_summary nobr { /* Stops naughty Google news from breaking layout */\n	white-space: normal;\n}",
+				),
+				'ocf.css'=>array(
+					".ocf_post_details_date {\n	float: {!en_left};\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		width: 25em;\n	{+END}\n	padding-{!en_left}: 4px;\n}"=>".ocf_post_details_date {\n	float: {!en_left};\n	padding-{!en_left}: 4px;\n}\n\n.ocf_post_details_rating {\n	float: {!en_left};\n	padding-{!en_left}: 20px;\n	white-space: nowrap;\n}",
+					".ocf_information_bar { /* {\$,either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl} */\n	background-color: #eef2f7; /* {\$,wizard, 60% bgcol + 40% W/B} */\n	font-size: 0.85em;\n	border-collapse: collapse;\n	white-space: nowrap;\n	width: 100%;\n}"=>".ocf_information_bar { /* {\$,either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl} */\n	background-color: #eef2f7; /* {\$,wizard, 60% bgcol + 40% W/B} */\n	font-size: 0.85em;\n	border-collapse: collapse;\n	white-space: nowrap;\n	width: 100%;\n	padding: 0;\n}",
+					".ocf_member_column_d {\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		width: 11.3em;\n	{+END}\n	{+START,IF,{\$MOBILE}}\n		float: left;\n	{+END}\n	white-space: nowrap;\n}"=>".ocf_member_column_d {\n	white-space: nowrap;\n}",
+					".ocf_member_column_e {\n	white-space: nowrap;\n}\n\n"=>"",
+				),
+				'points.css'=>array(
+					".points_give_choices .sub_option {\n	font-size: 0.9em;\n}"=>".points_give_choices .sub_option {\n	font-size: 0.9em;\n	white-space: nowrap;\n}",
+				),
+				'swfupload.css'=>array(
+					"width: 365px;"=>"{+START,IF,{\$NOT,{\$MOBILE}}}\n		width: 365px;\n	{+END}",
+				),
+				'tickets.css'=>array(
+					".closed_ticket {\n	font-weight: bold;\n	padding-{!en_left}: 30px;\n}"=>".closed_ticket {\n	font-style: italic;\n	float: right;\n	padding-{!en_left}: 30px;\n}",
+				),
+			),
+		);
+
+		$css_prepend__single_match=array(
+			array(
+				'adminzone.css'=>array(
+					".css_colour_strip"=>".dottedborder .css_colour_chooser_name {\n	width: 190px;\n}\n\n.dottedborder .css_colour_chooser {\n	width: 680px;\n	margin: 0;\n}\n\n",
+					".menu_editor_rh_side"=>".menu_editor_page.docked .menu_editor_rh_side {\n	overflow-y: scroll;\n	max-height: 380px;\n	margin-right: 10px;\n}\n\n",
+					".menu_editor_lh_side"=>".menu_editor_page.docked #mini_form_hider {\n	margin-top: 1em;\n	border-top: 3px dotted #8b96df !important; /* {\$,wizard, 61% seed + 39% W/B} */\n	position: fixed;\n	left: 0;\n	bottom: 0;\n	background: #ffffff; /* {\$,wizard, 100% W/B} */\n	font-size: 0.9em;\n}\n\n.docked .menu_edit_main {\n	padding-bottom: 30em;\n}\n\n.dock_button {\n	float: right;\n	padding: 5px;\n	cursor: pointer;\n}\n\n",
+				),
+				'calendar.css'=>array(
+					".top_navigation"=>"abbr.dtstart, abbr.dtend {\n	border-bottom: 0;\n}\n\n",
+				),
+				'galleries.css'=>array(
+					".nav_mid"=>"#gallery_entry_screen {\n	width: 100%;\n	min-height: 100%;\n}\n\n",
+					"/* side_root galleries block */"=>".slideshow_speed {\n	position: absolute;\n	right: 0;\n	top: 0;\n}\n\n.slideshow_speed input {\n	width: 3em;\n}\n\n#changer {\n	font-weight: bold;\n	font-family: Courier;\n	font-size: 1.2em;\n}\n\n",
+				),
+				'global.css'=>array(
+					".standardbox_title_classic a"=>"h3.standardbox_title_classic {\n	border-bottom: 0;\n}\n\n",
+					".no_stbox_padding .dottedborder {"=>".overlay .dottedborder_huge_a, .overlay .dottedborder_barrier_a_nonrequired, .overlay .dottedborder_barrier_b_nonrequired, .overlay .dottedborder_divider, .overlay .dottedborder_divider_continue, .overlay .no_stbox_padding .forcedottedborder, .overlay .dottedborder {\n	border: 0;\n}\n\n",
+					".edited"=>".bookmarks_menu_box {\n	width: 320px;\n}\n\n",
+					"\na.poster_member:hover"=>".post_poster a.poster_member:link, .post_poster a.poster_member:active, .post_poster a.poster_member:visited, .post_poster a.poster_member:hover {\n	display: inline-block;\n}\n",
+					".menu_type__dropdown ul.nlevel, .menu_type__popup ul"=>".menu_type__popup {\n	min-width: 150px;\n}\n\n",
+				),
+			),
+		);
+
+		$css_append__single_match=array(
+			array(
+				'global.css'=>array(
+					".medborder_detailhead a:hover {\n	color: #9C202F; /* {\$,wizard, 100% a.hover}*/\n}\n\n"=>".global_side .medborder_detailhead_wrap {\n	padding: 0;\n}\n\n.global_side .medborder_detailhead {\n	border-bottom: 0;\n	padding-left: 0;\n	padding-top: 5px;\n}\n\n",
+					"	top: -256000px;\n	left: 0;\n"=>"	display: block; /* stops browser bugs where it interacts with the layout flow incorrectly */\n",
+					".page_icon {\n	vertical-align: middle;\n	{+START,IF,{\$MOBILE}}\n		margin-bottom: 5px;\n	{+END}\n}\n\n"=>".standardbox_title_classic .page_icon {\n	margin: -1px 3px 0 0;\n}\n\n",
+					".input_huge_field {\n}\n\n"=>".password_strength {\n	float: right;\n	width: 100px;\n	border: 1px solid #6b81a1; /* {\$wizard, 100% medborder.border} */\n	display: none;\n}\n\n.password_strength_inner {\n	height: 1em;\n	width: 0px;\n}\n\n",
+					".radio_list_picture {\n	float: {!en_left};\n	white-space: nowrap;\n	padding: 3px;\n	min-width: 40px;\n	min-height: 40px;\n}\n\n"=>"#page_running_admin_themes .radio_list_picture {\n	float: none;\n	margin: 15px;\n	border: 1px solid #c1cee3; /* {\$wizard, 100% lightborder} */\n}\n\n.radio_list_picture img {\n	max-width: 100px;\n}\n\n",
+					".tab_last {\n	border-right: 1px solid;\n	border-color: #b5b5b5; /* {\$wizard, 100% b5b5b5} */\n}\n\n"=>".tab_surround .tab { /* subtabs */\n	padding-top: 5px !important;\n	height: 18px;\n	font-size: 0.88em;\n}\n\n",
+					"#screen_actions .digg {\n	background-image: url('{\$IMG,recommend/digg}');\n}"=>"\n#screen_actions .google_plusone {\n	margin-top: 1px;\n}\n",
+				),
+			),
+		);
+
+		$css_file_append=array(
+			'galleries.css'=>array(
+				"\n/* Miscellaneous media handling */\n\n.gallery_pdf {\n	width: 100%;\n	height: 600px;\n}",
+			),
+			'no_cache.css'=>array(
+				"\n{\$BROWSER,opera,,tt\, kbd\, samp \{ font-size: 1.25em; \}}\n",
+			),
+		);
+
+		// NB: This UNIX command can work out what theme images are added...
+		// OLD=/Library/WebServer/Documents/test/themes/default/images ; NEW=/Library/WebServer/Documents/git/themes/default/images ; diff -r $OLD $NEW | grep "Only in $NEW" | grep -v .DS_Store | sed "s#Only in "$NEW"##g" | sed "s#: #/#g" | sed "s#^/##g" | sed "s#^EN/##g"
+		// Obviously only theme-wizable images should go here
+		$theme_images_new=array(
+			'page/add_ticket.png',
+			'page/disable_notifications.png',
+			'page/enable_notifications.png',
+			'page/forum.png',
+			'page/send_message.png',
+			'pageitem/disable_notifications.png',
+			'pageitem/enable_notifications.png',
+			'pageitem/reply.png',
+			'pageitem/send_message.png',
+		);
+
+		$theme_image_renames=array(
+			'standardboxes/title_gradiant.png'=>'standardboxes/title_gradient.png',
+			'quote_gradiant.png'=>'quote_gradient.png',
+			'zone_gradiant.png'=>'zone_gradient.png',
+		);
+
+		$templates_replace=array(
+			'*'=>array(
+				'_true'=>'1',
+				'_false'=>'0',
+				'TOPIC_NAME'=>'TOPIC_TITLE',
+				'load_XML_doc'=>'do_ajax_request',
+				'DESPATCH'=>'DISPATCH',
+			),
+		);
+
+		/*Find deleted/renamed templates:
+		OLD=/Library/WebServer/Documents/test/themes/default/templates ; NEW=/Library/WebServer/Documents/git/themes/default/templates ; diff -r $OLD $NEW | grep .tpl$ | grep "Only in "$OLD | sed "s#Only in "$OLD": ##"*/
+		$templates_rename=array(
+			'COMMENTS.tpl'=>'COMMENTS_POSTING_FORM.tpl',
+			'CEDI_RATING_INSIDE.tpl'=>'CEDI_RATING_FORM.tpl',
+			'RATING_INSIDE.tpl'=>'RATING_FORM.tpl',
+			'RATING.tpl'=>'RATING_BOX.tpl',
+			'RATING_INLINE.tpl'=>'RATING_INLINE_STATIC.tpl',
+		);
+
+		/*Find diff of changes templates
+		OLD=/Library/WebServer/Documents/test/themes/default/templates ; NEW=/Library/WebServer/Documents/git/themes/default/templates ; diff -u $OLD $NEW > ~/Desktop/diff.txt*/
+		$templates_borked=array(
+			'COMMENTS_POSTING_FORM.tpl',
+			'CEDI_RATING_FORM.tpl',
+			'RATING_FORM.tpl',
+			'RATING_BOX.tpl',
+			'RATING_INLINE_STATIC.tpl',
+
+			'COMMENTS_WRAPPER.tpl',
+			'CEDI_RATING.tpl',
+			'OCF_MEMBER_PROFILE_SCREEN.tpl',
+			'ATTACHMENT.tpl',
+			'POSTING_FORM.tpl',
+			'POSTING_FIELD.tpl',
+			'ATTACHMENTS.tpl',
+			'BLOCK_HELPER_DONE.tpl',
+			'ATTACHMENT_IMG.tpl',
+			'ATTACHMENT_IMG_MINI.tpl',
+			'CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl',
+			'JAVASCRIPT.tpl',
+			'JAVASCRIPT_AJAX.tpl',
+			'JAVASCRIPT_AJAX_PEOPLE_LISTS.tpl',
+			'JAVASCRIPT_CHAT.tpl',
+			'JAVASCRIPT_DATE_CHOOSER.tpl',
+			'JAVASCRIPT_EDITING.tpl',
+			'JAVASCRIPT_JWPLAYER.tpl',
+			'JAVASCRIPT_MENU_EDITOR.tpl',
+			'JAVASCRIPT_PERMISSIONS.tpl',
+			'JAVASCRIPT_POSTING.tpl',
+			'JAVASCRIPT_SOUND.tpl',
+			'JAVASCRIPT_STAFF.tpl',
+			'JAVASCRIPT_SWFUPLOAD.tpl',
+			'JAVASCRIPT_THUMBNAILS.tpl',
+			'JAVASCRIPT_TREE_LIST.tpl',
+			'JAVASCRIPT_VALIDATION.tpl',
+			'JAVASCRIPT_YAHOO_EVENTS.tpl',
+			'JAVASCRIPT_ZONE_EDITOR.tpl',
+			'FORM_SCREEN_INPUT_CAPTCHA.tpl',
+			'FORM_SCREEN_INPUT_DATE.tpl',
+			'FORM_SCREEN_INPUT_PASSWORD.tpl',
+			'FORM_SCREEN_INPUT_RADIO_LIST.tpl',
+			'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_2.tpl',
+			'FORM_SCREEN_INPUT_TICK.tpl',
+			'FORM_SCREEN_INPUT_TREE_LIST.tpl',
+			'FORM_SCREEN_INPUT_UPLOAD.tpl',
+			'FORM_SCREEN_INPUT_UPLOAD_MULTI.tpl',
+			'GALLERY_NAV.tpl',
+			'MENU_EDITOR_BRANCH_WRAP.tpl',
+			'MENU_EDITOR_SCREEN.tpl',
+			'OCF_FORUM.tpl',
+			'OCF_MEMBER_BAR.tpl',
+			'OCF_TOPIC_WRAP.tpl',
+			'PAGE_LINK_CHOOSER.tpl',
+			'POINTS_SCREEN.tpl',
+			'SUPPORT_TICKETS_SCREEN.tpl',
+			'SUPPORT_TICKET_SCREEN.tpl',
+		);
+	} else
+	{
+		$errors[]=do_lang_tempcode('NO_DEFINED_THEME_UPGRADER');
+		return $errors;
+	}
+
+	if (addon_installed('themewizard'))
+	{
+		require_code('themewizard');
+		$seed=find_theme_seed($theme);
+		$dark=find_theme_dark($theme);
+		list($colours,$landscape)=calculate_theme($seed,'default','equations','colours',$dark);
+	}
+
+	// CSS
+	$css_dir=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/';
+	while (($css_file=readdir($css_dir))!==false)
+	{
+		if (substr($css_file,-4)!='.css') continue;
+
+		$css_file_contents=file_get_contents($css_dir.$css_file);
+		if (strpos($css_file_contents,$css_recognition_string)===false)
+		{
+			$errors[]=do_lang_tempcode('NON_RECOGNISED_CSS_FILE',escape_html($css_file),escape_html(float_to_raw_string($from_version)));
+			//continue;		Actually we'll let it pass
+		}
+
+		// Apply single match rules. First check single match rules apply exactly once (means rule is bogus if it matches more than once, or unusable if not at all)
+		foreach (array($css_replace__single_match=>'css_replace',$css_prepend__single_match=>'css_prepend',$css_append__single_match=>'css_append') as $rule_set=>$rule_set_type)
+		{
+			foreach ($rule_set as $target_file=>$_rule_set)
+			{
+				if (($target_file=='*') || ($target_file==$css_file))
+				{
+					foreach ($_rule_set as $from=>$to)
+					{
+						// Apply theme wizard to $to
+						if (addon_installed('themewizard'))
+							$to=theme_wizard_colours_to_css($to,$landscape,'default','equations',$seed);
+
+						$occurrences=substr_count($css_file_contents,$from);
+						if ($occurrences==0) // Try after applying theme wizard
+						{
+							if (addon_installed('themewizard'))
+								$from=theme_wizard_colours_to_css($from,$landscape,'default','equations',$seed);
+						}
+						if ($occurrences==0)
+						{
+							$errors[]=do_lang_tempcode('CSS_RULE_UNMATCHED_'.$rule_set_type,escape_html($from),escape_html($to),escape_html($target_file));
+						}
+						elseif ($occurrences>1)
+						{
+							$errors[]=do_lang_tempcode('CSS_RULE_OVERMATCHED_'.$rule_set_type,escape_html($from),escape_html($to),escape_html($target_file));
+						} else
+						{
+							switch ($rule_set_type)
+							{
+								case 'css_replace':
+									$css_file_contents=str_replace($from,$to,$css_file_contents);
+									break;
+
+								case 'css_prepend':
+									$pos=strpos($css_file_contents,$from);
+									if (substr($css_file_contents,$pos,-strlen($to))!=$to)
+									{
+										$css_file_contents=substr($css_file_contents,0,$pos).$to.substr($css_file_contents,$pos);
+									}
+									break;
+
+								case 'css_append':
+									$pos=strpos($css_file_contents,$from)+strlen($from);
+									if (substr($css_file_contents,$pos,strlen($to))!=$to)
+									{
+										$css_file_contents=substr($css_file_contents,0,$pos).$to.substr($css_file_contents,$pos);
+									}
+									break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Apply multi-match rules
+		foreach (array($css_replace__multi_match=>'css_replace',$css_prepend__multi_match=>'css_prepend',$css_append__multi_match=>'css_append') as $rule_set=>$rule_set_type)
+		{
+			foreach ($rule_set as $target_file=>$_rule_set)
+			{
+				if (($target_file=='*') || ($target_file==$css_file))
+				{
+					foreach ($_rule_set as $from=>$to)
+					{
+						// Apply theme wizard to $to
+						if (addon_installed('themewizard'))
+							$to=theme_wizard_colours_to_css($to,$landscape,'default','equations',$seed);
+
+						$froms=array($from);
+						if (addon_installed('themewizard'))
+							$froms[]=theme_wizard_colours_to_css($from,$landscape,'default','equations',$seed);
+						foreach ($froms as $from)
+						{
+							switch ($rule_set_type)
+							{
+								case 'css_replace':
+									$css_file_contents=str_replace($from,$to,$css_file_contents);
+									break;
+
+								case 'css_prepend':
+									$pos=0;
+									do
+									{
+										$pos=strpos($css_file_contents,$from,$pos);
+										if ($pos!==false)
+										{
+											if (substr($css_file_contents,$pos,-strlen($to))!=$to)
+											{
+												$css_file_contents=substr($css_file_contents,0,$pos).$to.substr($css_file_contents,$pos);
+												$pos+=strlen($to)+strlen($from);
+											} else
+											{
+												$pos+=strlen($from);
+											}
+										}
+									}
+									while ($pos!==false);
+									break;
+
+								case 'css_append':
+									$pos=0;
+									do
+									{
+										$pos=strpos($css_file_contents,$from,$pos);
+										if ($pos!==false)
+										{
+											if (substr($css_file_contents,$pos,strlen($to))!=$to)
+											{
+												$pos+=strlen($from);
+												$css_file_contents=substr($css_file_contents,0,$pos).$to.substr($css_file_contents,$pos);
+												$pos+=strlen($to);
+											} else
+											{
+												$pos+=strlen($from);
+											}
+										}
+									}
+									while ($pos!==false);
+									break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Apply unmatched rules
+		foreach ($css_file_append as $rule_set)
+		{
+			foreach ($rule_set as $target_file=>$_rule_set)
+			{
+				if (($target_file=='*') || ($target_file==$css_file))
+				{
+					foreach ($_rule_set as $to)
+					{
+						$css_file_contents.=$to;
+					}
+				}
+			}
+		}
+
+		if (!$test_run)
+		{
+			// Take revision
+			$revision_file=$css_dir.$css_file.'.'.strval(time());
+			if (@copy($css_dir.$css_file,$revision_file)!==false)
+			{
+				fix_permissions($revision_file);
+				sync_file($revision_file);
+			}
+
+			// Save
+			$outfile=@fopen($css_dir.$css_file,'wb') OR intelligent_write_error($css_dir.$css_file);
+			fwrite($outfile,$css_file_contents);
+			fclose($outfile);
+
+			$successes[]=do_lang_tempcode('CSS_FILE_UPGRADED',escape_html($css_file));
+		}
+	}
+
+	// Theme images
+	if (!$test_run)
+	{
+		require_code('themes2');
+		$langs=find_all_langs();
+		require_code('abstract_file_manager');
+		foreach ($theme_images_renames as $old=>$new)
+		{
+			foreach (array_keys($langs) as $lang)
+			{
+				$path=urldecode(find_theme_image($old,true,true,$theme,$lang));
+				if ($path!='')
+				{
+					$new_path=str_replace('/'.$old,'/'.$new,$path);
+					afm_move($path,$new_path);
+					actual_edit_theme_image($old,$theme,$lang,$new,$new_path);
+
+					$successes[]=do_lang_tempcode('THEME_IMAGE_RENAMED',escape_html($old),escape_html($new));
+				}
+			}
+		}
+		if (addon_installed('themewizard'))
+		{
+			foreach ($theme_images_new as $new)
+			{
+				foreach (array_keys($langs) as $lang)
+				{
+					$path=urldecode(find_theme_image($new,true,true,'default',$lang));
+					if ($path!='')
+					{
+						$new_path=str_replace('themes/default/images/','themes/'.$theme.'/images_custom/',$path);
+						if (!file_exists(get_custom_file_base().'/'.$new_path))
+						{
+							afm_make_directory(dirname($new_path),true);
+
+							$image=calculate_theme($seed,'default','equations',$new,$dark,$colours,$landscape,$lang);
+							if (!is_null($image))
+							{
+								@imagepng($image,$new_path) OR intelligent_write_error($new_path);
+								imagedestroy($image);
+								fix_permissions($new_path);
+								sync_file($new_path);
+
+								$successes[]=do_lang_tempcode('THEME_IMAGE_NEW',escape_html($new));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Templates
+	$templates_dir=get_custom_file_base().'/themes/'.filter_naughty($theme).'/templates_custom/';
+	while (($templates_file=readdir($templates_dir))!==false)
+	{
+		if (substr($templates_file,-4)!='.tpl') continue;
+
+		$templates_file_contents=file_get_contents($templates_dir.$templates_file);
+		$orig_templates_file_contents=$templates_file_contents;
+
+		foreach ($templates_replace as $target_file=>$_rule_set)
+		{
+			if (($target_file=='*') || ($target_file==$templates_file))
+			{
+				foreach ($_rule_set as $from=>$to)
+				{
+					$templates_file_contents=str_replace($from,$to,$templates_file_contents);
+				}
+			}
+		}
+		if (array_key_exists($templates_file,$templates_rename))
+		{
+			@rename($templates_dir.$templates_file,$templates_dir.$templates_rename[$templates_file]) OR intelligent_write_error($templates_dir.$templates_rename[$templates_file]);
+			$successes[]=do_lang_tempcode('TEMPLATE_RENAMED',escape_html($templates_file),escape_html($templates_rename[$templates_file]));
+			$templates_file=$templates_rename[$templates_file];
+		}
+		if (($templates_file_contents!=$orig_templates_file_contents) && (!$test_run))
+		{
+			$successes[]=do_lang_tempcode('TEMPLATE_ALTERED',escape_html($templates_file));
+
+			// Save
+			$outfile=@fopen($templates_dir.$templates_file,'wb') OR intelligent_write_error($templates_dir.$templates_file);
+			fwrite($outfile,$templates_file_contents);
+			fclose($outfile);
+		}
+
+		if (array_key_exists($templates_file,$templates_borked))
+		{
+			$errors[]=do_lang_tempcode('TEMPLATE_WILL_NEED_RESTORING',escape_html($templates_file));
+		}
+	}
+
+	return array($errors,$successes);
 }
 
