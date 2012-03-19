@@ -1421,6 +1421,8 @@ function get_param($name,$default=false,$no_security=false)
 	{
 		if ($is_url)
 		{
+			$a=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($a):$a;
+
 			if (preg_match('#\n|\000|<|(".*[=<>])|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0)
 			{
 				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
@@ -1435,7 +1437,7 @@ function get_param($name,$default=false,$no_security=false)
 	}
 
 	if ($a===NULL) return NULL;
-	return function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($a):$a;
+	return $a;
 }
 
 /**

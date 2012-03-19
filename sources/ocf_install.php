@@ -392,7 +392,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_allow_emails_from_staff','BINARY');
 		$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_show_on_join_form','BINARY');
 		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_is_threaded','BINARY',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_posts','p_parent','?AUTO_LINK',NULL);
+		$GLOBALS['FORUM_DB']->add_table_field('f_posts','p_parent_id','?AUTO_LINK',NULL);
 		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields SET cf_show_on_join_form=cf_required');
 		delete_config_option('send_staff_message_post_validation');
 

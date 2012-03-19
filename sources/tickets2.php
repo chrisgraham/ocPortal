@@ -258,7 +258,6 @@ function delete_ticket_by_topic_id($topic_id)
  * @param  LONG_TEXT		The post content in Comcode format
  * @param  string			The home URL
  * @param  boolean		Whether the reply is staff only (invisible to ticket owner, only on OCF)
- * @return boolean		Success?
  */
 function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_url,$staff_only=false)
 {
@@ -287,8 +286,9 @@ function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_ur
 	$topic_id=$GLOBALS['LAST_TOPIC_ID'];
 	$is_new=$GLOBALS['LAST_TOPIC_IS_NEW'];
 	if ($is_new)
-		return $GLOBALS['SITE_DB']->query_insert('tickets',array('ticket_id'=>$ticket_id,'forum_id'=>$fid,'topic_id'=>$topic_id,'ticket_type'=>$ticket_type));
-	return true;
+	{
+		$GLOBALS['SITE_DB']->query_insert('tickets',array('ticket_id'=>$ticket_id,'forum_id'=>$fid,'topic_id'=>$topic_id,'ticket_type'=>$ticket_type));
+	}
 }
 
 /**

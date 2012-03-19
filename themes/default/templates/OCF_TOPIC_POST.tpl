@@ -15,8 +15,8 @@
 
 {+START,IF_NON_EMPTY,{POSTER}}
 	<tr>
-		<th class="{CLASS*}">{EMPHASIS*}{+START,IF_NON_EMPTY,{ID}}<a name="post_{ID*}" id="post_{ID*}"></a>{+END}{FIRST_UNREAD}</th>
-		<th{+START,IF,{$NOT,{$VALUE_OPTION,html5}}} abbr="#{ID*}"{+END} class="ocf_post_details">
+		<th class="ocf_forum_box_left {CLASS*}">{EMPHASIS*}{+START,IF_NON_EMPTY,{ID}}<a name="post_{ID*}" id="post_{ID*}"></a>{+END}{FIRST_UNREAD}</th>
+		<th{+START,IF,{$NOT,{$VALUE_OPTION,html5}}} abbr="#{ID*}"{+END} class="ocf_forum_box_right ocf_post_details">
 			<div class="ocf_post_details_date">
 				{+START,IF,{$VALUE_OPTION,html5}}
 					{!POST_DATE,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{POST_DATE_RAW}}">{POST_DATE*}</time>}
@@ -74,8 +74,8 @@
 						<div id="cell_mark_{ID*}" class="ocf_off ocf_topic_marker">
 							<form title="{!MARKER} #{ID*}" method="post" action="index.php" id="form_mark_{ID*}">
 								<div>
-									<p class="accessibility_hidden"><label for="mark_{ID*}">{!MARKER} #{ID*}</label></p>
-									<input value="1" type="checkbox" id="mark_{ID*}" name="mark_{ID*}" onclick="changeClass(this,'cell_mark_{ID*}','ocf_on ocf_topic_marker','ocf_off ocf_topic_marker')" />
+									{+START,IF,{$NOT,{$IS_GUEST}}}<div class="accessibility_hidden"><label for="mark_{ID*}">{!MARKER} #{ID*}</label></div>{+END}{$,Guests don't see this so search engines don't; hopefully people with screen-readers are logged in}
+									<input {+START,IF,{$NOT,{$IS_GUEST}}}title="{!MARKER} #{ID*}" {+END}value="1" type="checkbox" id="mark_{ID*}" name="mark_{ID*}" onclick="changeClass(this,'cell_mark_{ID*}','ocf_on ocf_topic_marker','ocf_off ocf_topic_marker')" />
 								</div>
 							</form>
 						</div>
@@ -99,9 +99,9 @@
 		</div>
 	</td>
 </tr>
-{+START,IF,{$NOR,{$EQ,{ID},},{$EQ,{ID},{TOPIC_FIRST_POST_ID}}}}
+{+START,IF,{$NOT,{$EQ,{ID},}}}
 	<tr>
-		<td class="{CLASS*}">
+		<td class="ocf_left_post_buttons {CLASS*}">
 			{EMPHASIS*}
 
 			{+START,IF_EMPTY,{EMPHASIS}}{+START,IF_NON_EMPTY,{ID}}
@@ -115,7 +115,7 @@
 		</td>
 	</tr>
 {+END}
-<tr>
+<tr class="post_spacer">
 	<td colspan="2">&nbsp;</td>
 </tr>
 

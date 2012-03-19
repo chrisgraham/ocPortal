@@ -7,7 +7,7 @@
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
 {+END}
 	<channel>
-		<title>{$SITE_NAME*}: {MODE*}</title>
+		<title>{$SITE_NAME*}: {MODE_NICE*}</title>
 		<link>{$BASE_URL*}</link>
 		<language>{$LANG*}</language>
 		<copyright>{COPYRIGHT`}</copyright>

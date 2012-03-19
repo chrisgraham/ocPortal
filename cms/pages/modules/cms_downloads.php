@@ -47,7 +47,7 @@ class Module_cms_downloads extends standard_aed_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_DOWNLOADS','import'=>'FTP_DOWNLOADS','import2'=>'FILESYSTEM_DOWNLOADS'),parent::get_entry_points());
+		return array_merge(array('misc'=>'MANAGE_DOWNLOADS')+(has_specific_permission(get_member(),'mass_import','cms_downloads')?array('import'=>'FTP_DOWNLOADS','import2'=>'FILESYSTEM_DOWNLOADS'):array()),parent::get_entry_points());
 	}
 	
 	/**

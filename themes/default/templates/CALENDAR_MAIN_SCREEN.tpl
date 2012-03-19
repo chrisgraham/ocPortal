@@ -134,7 +134,3 @@
 	</div>
 {+END}
 }
-
-<p>
-	<a href="{BACK_URL*}"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></a>
-</p>

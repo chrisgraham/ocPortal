@@ -59,7 +59,7 @@ class Hook_addon_registry_syndication
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
+			'requires'=>array('syndication_blocks'),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
 			'previously_in_addon'=>array('core_syndication'),

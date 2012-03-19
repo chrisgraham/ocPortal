@@ -168,8 +168,4 @@
 	{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}
-
-	<p>
-		<a href="{BACK_URL*}"><img title="{!_NEXT_ITEM_BACK}" alt="{!_NEXT_ITEM_BACK}" src="{$IMG*,bigicons/back}" /></a>
-	</p>
 </div>

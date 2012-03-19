@@ -36,6 +36,8 @@ function init__feedback()
 
 	global $RATINGS_STRUCTURE;
 	$RATINGS_STRUCTURE=array();
+	global $REVIEWS_STRUCTURE;
+	$REVIEWS_STRUCTURE=array();
 }
 
 /**
@@ -690,14 +692,14 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		}
 	}
 
-	if (!$private)
+	if ((!$private) && ($post!=''))
 	{
 		// Notification
 		require_code('notifications');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),$content_title,array(post_param('title'),$username),get_site_default_lang());
+		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),$content_title,array($post_title,$username),get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape($content_title),array(post_param('title'),post_param('post'),$content_url_flat,comcode_escape($username)),get_site_default_lang());
+		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape($content_title),array($post_title,post_param('post'),$content_url_flat,comcode_escape($username)),get_site_default_lang());
 		dispatch_notification('comment_posted',$content_type.'_'.$content_id,$subject,$message_raw);
 
 		// Is the user gonna automatically enable notifications for this?

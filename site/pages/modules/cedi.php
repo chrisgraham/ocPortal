@@ -570,19 +570,19 @@ class Module_cedi
 		$page_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF');
 		$pos=strpos($chain,'/');
 		$id=intval(substr($chain,($pos===false)?0:($pos+1)));
-		if (addon_installed('search'))
+		if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search')))
 		{
 			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'cedi_posts','search_under'=>$id),get_module_zone('search'));
 			$search_button=do_template('SCREEN_BUTTON',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'search'));
 		} else $search_button=new ocp_tempcode();
 		$changes_url=build_url(array('page'=>'_SELF','type'=>'changes','id'=>$chain),'_SELF');
 		$changes_button=do_template('SCREEN_BUTTON',array('_GUID'=>'99ad7faac817326510583a69ac719d58','IMMEDIATE'=>false,'REL'=>'history','URL'=>$changes_url,'TITLE'=>do_lang_tempcode('CEDI_CHANGELOG'),'IMG'=>'changes'));
-		if (has_specific_permission(get_member(),'seedy_manage_tree','cms_cedi',array('seedy_page',$id)))
+		if ((has_specific_permission(get_member(),'seedy_manage_tree','cms_cedi',array('seedy_page',$id))) && (has_actual_page_access(get_member(),'cms_cedi')))
 		{
 			$tree_url=build_url(array('page'=>'cms_cedi','type'=>'edit_tree','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_cedi'));
 			$tree_button=do_template('SCREEN_BUTTON',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('TREE'),'IMG'=>'edit_tree'));
 		} else $tree_button=new ocp_tempcode();
-		if (has_edit_permission('cat_low',get_member(),NULL,'cms_cedi',array('seedy_page',$id)))
+		if ((has_edit_permission('cat_low',get_member(),NULL,'cms_cedi',array('seedy_page',$id))) && (has_actual_page_access(get_member(),'cms_cedi')))
 		{
 			$edit_url=build_url(array('page'=>'cms_cedi','type'=>'edit_page','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_cedi'));
 			$edit_button=do_template('SCREEN_BUTTON',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'edit'));

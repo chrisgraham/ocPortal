@@ -351,7 +351,7 @@ class Module_shopping
 
 		$ecom_catalogue	=	$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_ecommerce'=>1));
 
-		$cont_shopping 	= 	build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
+		$cont_shopping 	= 	is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
 
 		//Product id string for hidden field in Shopping cart
 		$pro_ids_val	=	is_array($pro_ids)?implode(',',$pro_ids):'';

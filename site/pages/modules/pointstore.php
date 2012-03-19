@@ -187,7 +187,7 @@ class Module_pointstore
 	 */
 	function get_entry_points()
 	{
-		return array('!'=>'POINT_STORE');
+		return is_guest()?array():array('!'=>'POINT_STORE');
 	}
 
 	/**

@@ -48,7 +48,7 @@ class Module_cms_galleries extends standard_aed_module
 	 */
 	function get_entry_points()
 	{
-		return array_merge(array('misc'=>'MANAGE_GALLERIES','gimp'=>'GALLERY_IMPORT'),parent::get_entry_points());
+		return array_merge(array('misc'=>'MANAGE_GALLERIES')+(has_specific_permission(get_member(),'mass_import','cms_galleries')?array('gimp'=>'GALLERY_IMPORT'):array()),parent::get_entry_points());
 	}
 
 	/**

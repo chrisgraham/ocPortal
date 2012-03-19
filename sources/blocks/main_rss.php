@@ -60,6 +60,7 @@ class Block_main_rss
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
+		// TODO: This is actually for the 'syndication' addon
 		if (is_null($upgrade_from))
 		{
 			add_config_option('ENABLE_RSS','is_on_rss','tick','return \'1\';','FEATURE','NEWS_AND_RSS');

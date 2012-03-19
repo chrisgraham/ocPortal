@@ -15,7 +15,7 @@
 					<tr>
 						<th class="de_th ocf_row1 ocf_stats_usersonline_1">
 							<span class="field_name">{!USERS_ONLINE}:</span><br />
-							<span class="community_block_tagline">[ <a href="{USERS_ONLINE_URL*}">{!DETAILS}</a> ]</span>
+							<span class="community_block_tagline">[ {+START,IF_NON_EMPTY,{USERS_ONLINE_URL}}<a href="{USERS_ONLINE_URL*}">{+END}{+START,IF_NON_EMPTY,{USERS_ONLINE_URL}}{!DETAILS}</a>{+END} ]</span>
 						</th>
 						<td class="ocf_stats_usersonline_2">
 							{USERS_ONLINE}
