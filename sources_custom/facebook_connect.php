@@ -146,10 +146,10 @@ function handle_facebook_connection_login($current_logged_in_member)
 				if (!is_null($test)) // Make sure there's no conflict
 				{
 					$update_map=array('m_username'=>$username,'m_email_address'=>$email_address,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);
-					if ($timezone!==NULL)
-						$update_map['m_timezone_offset']=$timezone;
-					if ($avatar_url!==NULL)
+					if (($avatar_url!==NULL) && (($test=='') || (strpos($test,'facebook')!==false) || (strpos($test,'fbcdn')!==false)))
 					{
+						if ($timezone!==NULL)
+							$update_map['m_timezone_offset']=$timezone;
 						$update_map['m_avatar_url']=$avatar_url;
 						$update_map['m_photo_url']=$photo_url;
 						$update_map['m_photo_thumb_url']=$photo_thumb_url;

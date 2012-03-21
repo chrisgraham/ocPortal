@@ -8,11 +8,19 @@
 
 {+START,IF_NON_EMPTY,{SYNDICATIONS}}
 	<hr class="spaced_rule" />
+{+END}
 
+{+START,INCLUDE,NOTIFICATION_BUTTONS}
+	NOTIFICATIONS_TYPE=activity
+	NOTIFICATIONS_ID={MEMBER_ID}
+	RIGHT=1
+{+END}
+
+{+START,IF_NON_EMPTY,{SYNDICATIONS}}
 	<p>{!CREATE_SYNDICATION_LINK}</p>
 
 	<form action="{$SELF_URL*}#tab__activities" method="post">
-		<div>
+		<p>
 			{+START,LOOP,SYNDICATIONS}
 				{+START,IF,{SYNDICATION_IS_SET}}
 					<input class="button_pageitem" onclick="disable_button_just_clicked(this);" type="submit" name="syndicate_stop__{_loop_key*}" value="{!STOP_SYNDICATING_TO,{SYNDICATION_SERVICE_NAME*}}" />
@@ -21,13 +29,6 @@
 					<input class="button_pageitem" onclick="disable_button_just_clicked(this);" type="submit" name="syndicate_start__{_loop_key*}" value="{!START_SYNDICATING_TO,{SYNDICATION_SERVICE_NAME*}}" />
 				{+END}
 			{+END}
-		</div>
+		</p>
 	</form>
-{+END}
-
-{+START,INCLUDE,NOTIFICATION_BUTTONS}
-	NOTIFICATIONS_TYPE=activity
-	NOTIFICATIONS_ID={MEMBER_ID}
-	BREAK=1
-	RIGHT=1
 {+END}

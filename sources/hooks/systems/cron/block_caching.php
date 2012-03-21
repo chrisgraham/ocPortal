@@ -47,6 +47,7 @@ class Hook_cron_block_caching
 			// Force re-loading of values that we use to mark progress (as above calls probably resulted in changes happening)
 			global $VALUES;
 			$VALUES=$GLOBALS['SITE_DB']->query_select('values',array('*'));
+			$VALUES=list_to_map('the_name',$VALUES);
 
 			return;
 		}

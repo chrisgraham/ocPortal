@@ -1,5 +1,13 @@
 {+START,IF,{IS_SPACER_POST}}
-	{POST}
+	{+START,IF,{$NOT,{$IN_STR,{POST},<div}}}
+		{+START,BOX,,,curved}
+			{POST}
+		{+END}
+	{+END}
+
+	{+START,IF,{$IN_STR,{POST},<div}}
+		{POST}
+	{+END}
 {+END}
 
 {+START,IF,{$NOT,{IS_SPACER_POST}}}
@@ -11,6 +19,7 @@
 			{+START,IF_NON_EMPTY,{$AVATAR,{POSTER_ID}}}
 				<img class="post_avatar" src="{$AVATAR*,{POSTER_ID}}" alt="{!AVATAR}" title="" />
 			{+END}
+
 			<div class="post_subline">
 				{+START,IF_NON_PASSED,POSTER}
 					{+START,IF_NON_EMPTY,{POSTER_URL}}{!BY_SIMPLE,<a class="post_poster" href="{POSTER_URL*}">{POSTER_NAME*}</a>},{+END}
@@ -62,6 +71,19 @@
 
 				{+START,IF_PASSED,RATING}
 					<span class="post_action_link">{RATING}</span>
+				{+END}
+
+				{+START,IF,{$NOT,{$MOBILE}}}
+					{+START,IF,{$JS_ON}}{+START,IF_NON_EMPTY,{ID}}{+START,IF_NON_PASSED,PREVIEWING}{+START,IF,{$MATCH_KEY_MATCH,_SEARCH:topicview}}
+						<div id="cell_mark_{ID*}" class="ocf_off post_action_link inline_block">
+							<form title="{!MARKER} #{ID*}" method="post" action="index.php" id="form_mark_{ID*}">
+								<div>
+									{+START,IF,{$NOT,{$IS_GUEST}}}<div class="accessibility_hidden"><label for="mark_{ID*}">{!MARKER} #{ID*}</label></div>{+END}{$,Guests don't see this so search engines don't; hopefully people with screen-readers are logged in}
+									<input {+START,IF,{$NOT,{$IS_GUEST}}}title="{!MARKER} #{ID*}" {+END}value="1" type="checkbox" id="mark_{ID*}" name="mark_{ID*}" onclick="changeClass(this,'cell_mark_{ID*}','ocf_on ocf_topic_marker','ocf_off ocf_topic_marker')" />
+								</div>
+							</form>
+						</div>
+					{+END}{+END}{+END}{+END}
 				{+END}
 			</div>
 

@@ -52,7 +52,7 @@ class Hook_Profiles_Tabs_posts
 			require_code('ocf_forumview');
 
 			// Last 15 topics that member contributed to
-			$n=get_param_integer('max',15);
+			$n=get_param_integer('max',10);
 			$start=get_param_integer('start',0);
 			$forum1=NULL;//$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('comments_forum_name'));
 			$tf=get_option('ticket_forum_name',true);

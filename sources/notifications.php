@@ -280,7 +280,7 @@ function _find_member_statistical_notification_type($to_member_id)
 	static $cache=array();
 	if (isset($cache[$to_member_id])) return $cache[$to_member_id];
 
-	$notifications_enabled=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_setting'),array('l_member_id'=>$to_member_id),'',100/*within reason*/);
+	$notifications_enabled=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_setting'),array('l_member_id'=>$to_member_id,'l_code_category'=>''),'',100/*within reason*/);
 	if (count($notifications_enabled)==0) // Default to e-mail
 	{
 		$setting=A_INSTANT_EMAIL;
@@ -296,9 +296,12 @@ function _find_member_statistical_notification_type($to_member_id)
 		{
 			foreach (array_keys($possible_settings) as $possible_setting)
 			{
-				if ($ml['l_setting'] & $possible_setting != 0)
+				if ($ml['l_setting']>=0)
 				{
-					$possible_settings[$possible_setting]++;
+					if (($ml['l_setting'] & $possible_setting) != 0)
+					{
+						$possible_settings[$possible_setting]++;
+					}
 				}
 			}
 		}
@@ -329,12 +332,12 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 {
 	// Fish out some general details of the sender
 	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id);
-	$from_email=mixed();
-	$from_name=mixed();
+	$from_email='';
+	$from_name='';
 	if (!is_null($from_member_id))
 	{
 		$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_member_id);
-		if ($from_email=='') $from_email=NULL;
+		if ($from_email=='') $from_email='';
 		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($from_member_id);
 	}
 
@@ -354,7 +357,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 
 	if (_notification_setting_available(A_INSTANT_SMS,$to_member_id))
 	{
-		if ($setting & A_INSTANT_SMS !=0)
+		if (($setting & A_INSTANT_SMS) !=0)
 		{
 			$wrapped_message=do_lang('NOTIFICATION_SMS_COMPLETE_WRAP',$subject,$message_to_send); // Lang string may be modified to include {2}, but would cost more. Default just has {1}.
 
@@ -370,7 +373,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 
 	if (_notification_setting_available(A_INSTANT_EMAIL,$to_member_id))
 	{
-		if ($setting & A_INSTANT_EMAIL !=0)
+		if (($setting & A_INSTANT_EMAIL) !=0)
 		{
 			$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to_member_id);
 			if ($to_email!='')
@@ -378,7 +381,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 				$wrapped_subject=do_lang('NOTIFICATION_EMAIL_SUBJECT_WRAP',$subject,comcode_escape(get_site_name()));
 				$wrapped_message=do_lang('NOTIFICATION_EMAIL_MESSAGE_WRAP',$message_to_send,comcode_escape(get_site_name()));
 
-				mail_wrap($wrapped_subject,$wrapped_message,$to_email,$to_name,$from_email,$from_name,$priority,NULL,$no_cc,($from_member_id<0)?$GLOBALS['FORUM_DRIVER']->get_guest_id():$from_member_id,($from_member_id==A_FROM_SYSTEM_PRIVILEGED),false);
+				mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,$from_email,$from_name,$priority,NULL,$no_cc,($from_member_id<0)?$GLOBALS['FORUM_DRIVER']->get_guest_id():$from_member_id,($from_member_id==A_FROM_SYSTEM_PRIVILEGED),false);
 
 				$needs_manual_cc=false;
 				$no_cc=true; // Don't CC again
@@ -388,7 +391,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 
 	if (_notification_setting_available(A_DAILY_EMAIL_DIGEST,$to_member_id))
 	{
-		if (($setting & A_DAILY_EMAIL_DIGEST !=0) || ($setting & A_WEEKLY_EMAIL_DIGEST !=0) || ($setting & A_MONTHLY_EMAIL_DIGEST !=0))
+		if ((($setting & A_DAILY_EMAIL_DIGEST) !=0) || (($setting & A_WEEKLY_EMAIL_DIGEST) !=0) || (($setting & A_MONTHLY_EMAIL_DIGEST) !=0))
 		{
 			$GLOBALS['SITE_DB']->query_insert('digestives_tin',array(
 				'd_subject'=>$subject,
@@ -415,7 +418,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 
 	if (_notification_setting_available(A_INSTANT_PT,$to_member_id))
 	{
-		if ($setting & A_INSTANT_PT !=0)
+		if (($setting & A_INSTANT_PT) !=0)
 		{
 			require_code('ocf_topics_action');
 			require_code('ocf_posts_action');
@@ -878,7 +881,7 @@ class Hook_Notification
 		{
 			if (($has_by_default) && (get_forum_type()=='ocf') && (db_has_subqueries($db->connection_read))) // Can only enumerate and join on a local OCF forum
 			{
-				$query_stub='SELECT m.id AS l_member_id,'.strval($initial_setting).' AS l_setting FROM '.$db->get_table_prefix().'f_members m WHERE '.str_replace('l_member_id','id',$clause_3).' AND ';
+				$query_stub='SELECT m.id AS l_member_id,l_setting FROM '.$db->get_table_prefix().'f_members m LEFT JOIN '.$db->get_table_prefix().'notifications_enabled l ON '.$clause_1.' AND '.$clause_2.' AND '.$clause_3.' AND m.id=l.l_member_id WHERE '.str_replace('l_member_id','m.id',$clause_3).' AND ';
 				$query_stem='NOT EXISTS(SELECT * FROM '.$db->get_table_prefix().'notifications_enabled l WHERE m.id=l.l_member_id AND '.$clause_1.' AND '.$clause_2.' AND '.$clause_3.' AND l_setting='.strval(A_NA).')';
 			} else
 			{
@@ -888,6 +891,13 @@ class Hook_Notification
 		}
 
 		$results=$db->query($query_stub.$query_stem,$max,$start);
+		foreach ($results as $i=>$r)
+		{
+			if (is_null($results[$i]['l_setting']))
+			{
+				$results[$i]['l_setting']=$initial_setting;
+			}
+		}
 
 		$NO_DB_SCOPE_CHECK=$bak;
 

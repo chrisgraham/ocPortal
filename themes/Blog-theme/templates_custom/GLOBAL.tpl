@@ -8,7 +8,7 @@
 	{$GET,panel_top}
 
 	<div class="float_surrounder">
-		<div class="left">
+		<div{+START,IF_NON_EMPTY,{$GET,panel_right}} class="left"{+END}>
 			{+START,IF_NON_EMPTY,{BREADCRUMBS}}
 				<{$?,{$VALUE_OPTION,html5},nav,div} class="breadcrumbs breadcrumbs_always"{$?,{$VALUE_OPTION,html5}, itemprop="breadcrumb"}>
 					<img class="breadcrumbs_img" src="{$IMG*,treenav}" title="{!YOU_ARE_HERE}" alt="{!YOU_ARE_HERE}" />

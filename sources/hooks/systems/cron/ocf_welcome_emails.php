@@ -29,7 +29,7 @@ class Hook_cron_ocf_welcome_emails
 		$time_now=time();
 		$last_cron_time=intval(get_value('last_welcome_mail_time'));
 		if ($last_cron_time==0) $last_cron_time=time()-24*60*60*7;
-		set_value('last_welcome_mail_time',strval($time_now));
+		set_value('last_welcome_mail_time',strval($last_cron_time));
 
 		require_code('mail');
 

@@ -36,14 +36,14 @@ class Hook_cron_ocf_birthdays
 			$birthdays=new ocp_tempcode();
 			foreach ($_birthdays as $_birthday)
 			{
-				$member_link=$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'],false,false);
+				$member_url=$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'],false,true);
 				$username=$_birthday['username'];
-				$birthday_link=build_url(array('page'=>'topics','type'=>'birthday','id'=>$_birthday['username']),get_module_zone('topics'));
+				$birthday_url=build_url(array('page'=>'topics','type'=>'birthday','id'=>$_birthday['username']),get_module_zone('topics'));
 
 				require_code('notifications');
 
 				$subject=do_lang('BIRTHDAY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username);
-				$mail=do_lang('BIRTHDAY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array($member_link->evaluate(),$birthday_link->evaluate()));
+				$mail=do_lang('BIRTHDAY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array($member_url->evaluate(),$birthday_url->evaluate()));
 
 				if (addon_installed('chat'))
 				{

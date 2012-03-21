@@ -1,5 +1,5 @@
 {+START,IF_EMPTY,{$META_DATA,image}}
-	{$META_DATA,image,{SCRIPT}?id={ID}{SUP_PARAMS}{$KEEP,0,1}&thumb=0&for_session={$SESSION_HASHED}&no_count=1}
+	{$META_DATA,image,{URL_FULL}}
 {+END}
 
 <!-- Layout table needed for stretchyness (inline-block won't work due to auto-wrapping against width-suggestion needed) -->

@@ -164,8 +164,8 @@ class Block_main_activities
 			{
 				foreach ($activities as $row)
 				{
-					list($message,$memberpic,$datetime,$member_url)=render_activity($row);
-					$content[]=array('ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
+					list($message,$memberpic,$datetime,$member_url,$lang_string)=render_activity($row);
+					$content[]=array('LANG_STRING'=>$lang_string,'ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
 				}
 
 				return do_template('BLOCK_MAIN_ACTIVITIES',array(

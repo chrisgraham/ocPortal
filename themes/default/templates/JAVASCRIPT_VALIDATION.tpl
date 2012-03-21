@@ -78,7 +78,7 @@ function setFieldError(theElement,errorMsg)
 					while (p)
 					{
 						p=p.parentNode;
-						if ((errorMsg!='{!DISABLED_FORM_FIELD;}') && (p) && (typeof p.getAttribute!='undefined') && (p.getAttribute('id')) && (p.getAttribute('id').substr(0,2)=='g_') && (p.style.display=='none'))
+						if ((errorMsg.substr(0,5)!='{!DISABLED_FORM_FIELD;}'.substr(0,5)) && (p) && (typeof p.getAttribute!='undefined') && (p.getAttribute('id')) && (p.getAttribute('id').substr(0,2)=='g_') && (p.style.display=='none'))
 						{
 							select_tab('g',p.getAttribute('id').substr(2,p.id.length-2));
 							break;

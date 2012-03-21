@@ -355,7 +355,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
 			'NUM_POSTS'=>integer_format($stats['num_posts']),
 			'BIRTHDAYS'=>$birthdays,
 			'USERS_ONLINE'=>$users_online,
-			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'onlinemembers')?build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers')):new ocp_tempcde(),
+			'USERS_ONLINE_URL'=>has_actual_page_access(get_member(),'onlinemembers')?build_url(array('page'=>'onlinemembers'),get_module_zone('onlinemembers')):new ocp_tempcode(),
 			'GROUPS'=>$groups
 		));
 	} else $foot=new ocp_tempcode();

@@ -404,6 +404,7 @@ class Module_tickets
 		require_lang('comcode');
 
 		$id=get_param('id',NULL);
+		if ($id=='') $id=NULL;
 
 		if (!is_null($id))
 		{

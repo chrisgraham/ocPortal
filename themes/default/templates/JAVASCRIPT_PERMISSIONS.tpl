@@ -95,7 +95,7 @@ function permissions_overridden(select)
 	var element=document.getElementById(select+'_presets');
 	if (element.options[0].id!=select+'_custom_option')
 	{
-		new_option=document.createElement('option');
+		var new_option=document.createElement('option');
 		setInnerHTML(new_option,'{!PINTERFACE_LEVEL_CUSTOM^;}');
 		new_option.id=select+'_custom_option';
 		new_option.value='';

@@ -67,10 +67,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	header('Content-type: text/plain');
-	global $TZ_ZONE_DATA;
-	foreach (array_keys($TZ_ZONE_DATA) as $z)
-	{
-		echo $z."\n";
-	}
 }

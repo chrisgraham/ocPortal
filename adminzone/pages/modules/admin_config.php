@@ -245,7 +245,7 @@ class Module_admin_config
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<12))
 		{
-			add_config_option('MAIL_QUEUE','mail_queue','tick','return \'1\';','SITE','EMAIL');
+			add_config_option('MAIL_QUEUE','mail_queue','tick','return \'0\';','SITE','EMAIL');
 			add_config_option('MAIL_QUEUE_DEBUG','mail_queue_debug','tick','return \'0\';','SITE','EMAIL');
 			add_config_option('COMMENTS_TO_SHOW_IN_THREAD','comments_to_show_in_thread','integer','return \'200\';','FEATURE','USER_INTERACTION');
 			add_config_option('MAX_THREAD_DEPTH','max_thread_depth','integer','return \'6\';','FEATURE','USER_INTERACTION');

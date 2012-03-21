@@ -572,19 +572,21 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 	$groups_list=$GLOBALS['FORUM_DRIVER']->get_members_groups($member,false);
 
 	global $SITE_INFO;
+	$where='';
+	if ($member!=get_member()) $where.=' AND '.db_string_equal_to('specific_permission',$permission);
 	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 	{
-		$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE '.$groups,NULL,NULL,false,true);
+		$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE ('.$groups.')'.$where,NULL,NULL,false,true);
 		if (($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
 		{
-			$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true));
+			$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where,NULL,NULL,false,true));
 		}
 	} else
 	{
-		$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE '.$groups.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'msp WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()),NULL,NULL,false,true);
+		$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE ('.$groups.')'.$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'msp WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true);
 		if (($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
 		{
-			$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'msp WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval((integer)$member).' AND active_until>'.strval(time()),NULL,NULL,false,true));
+			$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'msp WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true));
 		}
 	}
 	$SPECIFIC_PERMISSION_CACHE[$member]=array();
@@ -598,6 +600,7 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 
 	$result=has_specific_permission($member,$permission,$page,$cats);
 	handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+	if ($member!=get_member()) unset($SPECIFIC_PERMISSION_CACHE[$member]);
 	return $result;
 }
 

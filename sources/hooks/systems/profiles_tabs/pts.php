@@ -53,7 +53,7 @@ class Hook_Profiles_Tabs_pts
 
 		$root=get_param_integer('keep_forum_root',db_get_first_id());
 
-		$max=get_param_integer('max',intval(get_option('forum_topics_per_page')));
+		$max=get_param_integer('max',10);
 		$start=get_param_integer('start',get_param_integer('kfs',0));
 
 		$root=db_get_first_id();

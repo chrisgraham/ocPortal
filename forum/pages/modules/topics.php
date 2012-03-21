@@ -510,6 +510,11 @@ class Module_topics
 		$title=get_page_title('MARK_READ');
 
 		// Show it worked / Refresh
+		$url=get_param('redirect',NULL);
+		if ($url!==NULL)
+			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
+
+		// Show it worked / Refresh
 		return $this->redirect_to_forum('MARK_READ',$forum_id);
 	}
 
@@ -1265,7 +1270,7 @@ class Module_topics
 			{
 				$hidden_fields->attach(form_input_hidden('member_id',strval($member_id)));
 			}
-			$threade=false;
+			$threaded=false;
 		} else
 		{
 			$hidden_fields->attach(form_input_hidden('forum_id',strval($forum_id)));
@@ -1790,7 +1795,7 @@ class Module_topics
 		$topic_id=either_param_integer('topic_id',-1); // Posting into an existing topic?
 		$forum_id=post_param_integer('forum_id',-1); // New topic in existing forum? (NB: -2 represents reported posts forum)
 		$member_id=post_param_integer('member_id',-1); // Send TOPIC to specific member? Could be Private Topic (topic_id==-1, forum_id==-1), or personal post (topic_id!=-1, forum_id==-1)
-		$parent_id=get_param_integer('parent_id',NULL);
+		$parent_id=either_param_integer('parent_id',NULL);
 		if ($member_id==-1)
 		{
 			$member_username=post_param('to_member_id_0','');

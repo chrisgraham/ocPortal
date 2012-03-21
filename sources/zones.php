@@ -394,8 +394,8 @@ function load_module_page($string,$codename)
 			require_code('database_action');
 			require_code('config2');
 			require_code('menus2');
+			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$this_version,'module_hack_version'=>$this_hack_version,'module_hacked_by'=>$this_hacked_by),array('module_the_name'=>$codename),'',1); // Happens first so if there is an error it won't loop (if we updated install code manually there will be an error)
 			$object->install($installed_version,$installed_hack_version,$installed_hacked_by);
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$this_version,'module_hack_version'=>$this_hack_version,'module_hacked_by'=>$this_hacked_by),array('module_the_name'=>$codename),'',1);
 		}
 		elseif (($installed_hack_version<$this_hack_version) && (array_key_exists('hack_require_upgrade',$info)))
 		{
@@ -407,8 +407,8 @@ function load_module_page($string,$codename)
 				fatal_exit();
 			} Probably better we leave the solution to this to modders rather than just block the potential for there even to be a solution	*/
 
-			$object->install($installed_version,$installed_hack_version,$installed_hacked_by);
 			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$this_version,'module_hack_version'=>$this_hack_version,'module_hacked_by'=>$this_hacked_by),array('module_the_name'=>$codename),'',1);
+			$object->install($installed_version,$installed_hack_version,$installed_hacked_by);
 		}
 	} else
 	{

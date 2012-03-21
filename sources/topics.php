@@ -609,15 +609,7 @@ class OCP_Topic
 			}
 		}
 
-		foreach ($queue as $i=>$p)
-		{
-			unset($queue[$i]);
-
-			if ($p['parent_id']===$post_id)
-			{
-				$non_rendered[]=$p;
-			}
-		}
+		$non_rendered=array_merge($non_rendered,$this->_grab_at_and_underneath($post_id,$queue));
 
 		return array($rendered,$non_rendered);
 	}
@@ -689,19 +681,19 @@ class OCP_Topic
 						{
 							list($linked_type,$linked_id)=explode('_',substr($this->topic_description,strlen($c_prefix)),2);
 							$linked_url=$this->topic_description_link;
-						}
 
-						require_code('ocf_posts');
-						list($new_description,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
-						//if (!is_null($new_description)) $this->topic_description=$new_description;	Actually, it's a bit redundant
-						if (!is_null($new_post))
-						{
-							$post['message']=$new_post;
-						}
-						$highlight=false;
+							require_code('ocf_posts');
+							list($new_description,$new_post)=ocf_display_spacer_post($linked_type,$linked_id);
+							//if (!is_null($new_description)) $this->topic_description=$new_description;	Actually, it's a bit redundant
+							if (!is_null($new_post))
+							{
+								$post['message']=$new_post;
+							}
+							$highlight=false;
 
-						$this->topic_title=do_lang('SPACER_TOPIC_TITLE_WRAP',$this->topic_title);
-						$post['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$post['title']);
+							$this->topic_title=do_lang('SPACER_TOPIC_TITLE_WRAP',$this->topic_title);
+							$post['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$post['title']);
+						}
 					}
 				}
 

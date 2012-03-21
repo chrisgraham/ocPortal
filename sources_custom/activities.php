@@ -327,7 +327,7 @@ function render_activity($row,$use_inside_ocp=true)
 		}
 	}
 	
-	return array($message,$memberpic,$datetime,$member_url);
+	return array($message,$memberpic,$datetime,$member_url,$row['a_language_string_code']);
 }
 
 /**

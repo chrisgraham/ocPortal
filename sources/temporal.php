@@ -188,7 +188,7 @@ function convert_timezone_offset_to_formal_timezone($offset)
 	$zones=get_timezone_list();
 	foreach (array_keys($zones) as $zone)
 	{
-		$converted=tz_time($time_now, $zone);
+		$converted=tz_time($time_now,$zone);
 		if ($converted==$expected)
 		{
 			if (tz_time($time_now,get_server_timezone())==$converted) return get_server_timezone(); // Prefer to set the site timezone if it is currently the same
@@ -381,6 +381,7 @@ function get_input_date($stub,$get_also=false)
  */
 function tz_time($time,$zone)
 {
+	if ($zone=='') $zone=get_server_timezone();
 	if (function_exists('date_default_timezone_set'))
 	{
 		date_default_timezone_set($zone);

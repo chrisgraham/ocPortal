@@ -498,6 +498,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
  */
 function ocf_cache_member_details($members)
 {
+	require_code('ocf_members');
+
 	$member_or_list='';
 	foreach ($members as $member)
 	{
@@ -545,6 +547,7 @@ function ocf_cache_member_details($members)
 			}
 		}
 
+		require_code('ocf_groups');
 		ocf_ensure_groups_cached(array_keys($found_groups));
 	}
 }
@@ -603,7 +606,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title=do_lang_tempcode('POINTS_THANKS');
 		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'a66f98cb4d56bd0d64e9ecc44d357141','IMMEDIATE'=>false,'IMG'=>'points','TITLE'=>$_title,'URL'=>$action_url)));
 	}
-	if ((array_key_exists('may_pt_members',$topic_info)) && ($may_reply) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (ocf_may_whisper($_postdetails['poster'])) && (get_option('overt_whisper_suggestion')=='1'))
+	if ((array_key_exists('may_pt_members',$topic_info)) && ($may_reply) && ($_postdetails['poster']!=get_member()) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (ocf_may_whisper($_postdetails['poster'])) && (get_option('overt_whisper_suggestion')=='1'))
 	{
 		$whisper_type=(get_value('no_inline_pp_advertise')==='1')?'new_pt':'whisper';
 		$action_url=build_url(array('page'=>'topics','type'=>$whisper_type,'id'=>$_postdetails['topic_id'],'quote'=>$_postdetails['id'],'intended_solely_for'=>$_postdetails['poster']),get_module_zone('topics'));

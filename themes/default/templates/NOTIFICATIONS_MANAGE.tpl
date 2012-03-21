@@ -2,7 +2,7 @@
 	{$?,{$MATCH_KEY_MATCH,_SEARCH:admin_notifications},{!NOTIFICATIONS_DEFINE_LOCKDOWN},{!NOTIFICATIONS_INTRO}}
 </p>
 
-<div class="wide_table"><table class="wide_table solidborder notifications_form" summary="{!COLUMNED_TABLE}">
+<div class="wide_table_wrap"><table class="wide_table solidborder notifications_form" summary="{!COLUMNED_TABLE}">
 	<colgroup>
 		<col style="width: 100%" />
 		{+START,IF_PASSED,SHOW_PRIVILEGES}
@@ -62,7 +62,7 @@
 	<h2>{!ocf:AUTO_NOTIFICATION_CONTRIB_CONTENT}</h2>
 
 	<p>
-		<label for="auto_monitor_contrib_content"><input {+START,IF,{AUTO_NOTIFICATION_CONTRIB_CONTENT}}checked="checked" {+END}type="checkbox" id="auto_monitor_contrib_content" name="auto_monitor_contrib_content" />
+		<label for="auto_monitor_contrib_content"><input {+START,IF,{AUTO_NOTIFICATION_CONTRIB_CONTENT}}checked="checked" {+END}type="checkbox" id="auto_monitor_contrib_content" name="auto_monitor_contrib_content" value="1" />
 		{!ocf:DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT}</label>
 	</p>
 {+END}

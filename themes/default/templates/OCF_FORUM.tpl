@@ -12,9 +12,9 @@
 	{+START,IF_NON_EMPTY,{$CATALOGUE_ENTRY_FOR,forum,{ID}}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$CATALOGUE_ENTRY_FOR,forum,{ID}}}{+END}
 {+END}
 
-{+START,IF_NON_PASSED,ID}
+{+START,IF_NON_PASSED,ID}{+START,IF,{$MATCH_KEY_MATCH,_WILD:members}}
 	<p>{!DESCRIPTION_PERSONAL_TOPICS}</p>
-{+END}
+{+END}{+END}
 
 {+START,IF_NON_EMPTY,{$TRIM,{FILTERS}}}
 	{+START,BOX,,,light}
@@ -56,21 +56,12 @@
 
 {TOPIC_WRAPPER}
 
-{+START,IF_EMPTY,{TOPIC_WRAPPER}}
-	{+START,IF,{$VALUE_OPTION,disable_forum_dupe_buttons}}
-		<div class="float_surrounder">
-			<div class="ocf_screen_buttons">
-				{+START,IF_PASSED,ID}
-					{+START,INCLUDE,NOTIFICATION_BUTTONS}
-						NOTIFICATIONS_TYPE=ocf_topic
-						NOTIFICATIONS_ID=forum:{ID}
-						NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
-					{+END}
-				{+END}
-				{BUTTONS}
-			</div>
+{+START,IF_NON_PASSED,ID}
+	<div class="float_surrounder">
+		<div class="ocf_screen_buttons">
+			{BUTTONS}
 		</div>
-	{+END}
+	</div>
 {+END}
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}

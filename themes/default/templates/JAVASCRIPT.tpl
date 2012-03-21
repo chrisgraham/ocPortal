@@ -518,7 +518,7 @@ function help_panel(show)
 		{
 			middles[i].style.margin{$WCASE,{!en_right}}='275px';
 		}
-		itm.helper_panel_contents('aria-expanded','true');
+		helper_panel_contents.setAttribute('aria-expanded','true');
 		helper_panel_contents.style.display='block';
 		if (typeof window.nereidFade!='undefined')
 		{
@@ -555,7 +555,7 @@ function _hide_help_panel(middles,panel_right,global_message,helper_panel_conten
 	{
 		middles[i].style.margin{$WCASE,{!en_right}}='16px';
 	}
-	itm.helper_panel_contents('aria-expanded','false');
+	helper_panel_contents.setAttribute('aria-expanded','false');
 	helper_panel_contents.style.display='none';
 	SetCookie('hide_help_panel','1',100);
 	helper_panel_toggle.onclick=function() { return help_panel(true); };
@@ -918,7 +918,7 @@ function select_tab(id,tab)
 			if ((typeof window.nereidFade!='undefined') && (tabs[i]==tab))
 			{
 				setOpacity(element,0.0);
-				nereidFade(element,100,30,4);
+				nereidFade(element,100,30,8);
 			}
 		}
 

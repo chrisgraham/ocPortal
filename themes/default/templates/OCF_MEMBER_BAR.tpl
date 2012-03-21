@@ -5,7 +5,7 @@
 		<div class="ocf_information_bar float_surrounder">
 			{+START,IF_NON_EMPTY,{AVATAR}}
 				<div{+START,IF,{$NOT,{$MOBILE}}} style="min-height: {MAX_AVATAR_HEIGHT|}px"{+END} class="ocf_member_column ocf_member_column_a">
-					<a href="{$PAGE_LINK*,personalzone:editavatar}"><img alt="{!AVATAR}" title="{!AVATAR}" src="{AVATAR*}" /></a>
+					<img alt="{!AVATAR}" title="{!AVATAR}" src="{AVATAR*}" />
 				</div>
 			{+END}
 

@@ -222,10 +222,11 @@ class Module_vforums
 
 			$moderator_actions='';
 			$moderator_actions.='<option value="mark_topics_read">'.do_lang('MARK_READ').'</option>';
-			$moderator_actions.='<option value="mark_topics_unread">'.do_lang('MARK_UNREAD').'</option>';
+			if ($title!=do_lang('TOPICS_UNREAD'))
+				$moderator_actions.='<option value="mark_topics_unread">'.do_lang('MARK_UNREAD').'</option>';
 			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($moderator_actions);
 
-			$action_url=build_url(array('page'=>'topics'),get_module_zone('topics'));
+			$action_url=build_url(array('page'=>'topics','redirect'=>get_self_url(true)),get_module_zone('topics'));
 			$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'67356b4daacbed3e3d960d89a57d0a4a','MAX'=>strval($max),'ORDER'=>'','MAY_CHANGE_MAX'=>false,'TREE'=>$tree,'BUTTONS'=>'','STARTER_TITLE'=>'','RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>$moderator_actions,'ACTION_URL'=>$action_url,'TOPICS'=>$topics,'FORUM_NAME'=>$forum_name));
 		}
 

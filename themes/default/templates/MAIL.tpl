@@ -10,9 +10,7 @@
 </head>
 <body style="font-size: 12px">
 	<div style="font-size: 12px">
-		{+START,BOX}
-			<a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed-logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a>
-		{+END}
+		<a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed-logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a>
 	
 		<br />
 
