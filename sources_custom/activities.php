@@ -88,7 +88,18 @@ function find_activities($viewer_id,$mode,$member_ids)
 			foreach ($member_ids as $member_id)
 			{
 				if ($whereville!='') $whereville.=' AND ';
-				$_whereville='(a_member_id='.strval($member_id).' OR a_also_involving='.strval($member_id).')';
+				$_whereville='';
+				$_whereville.='(';
+				$_whereville.='a_member_id='.strval($member_id);
+				$_whereville.=' OR ';
+				$_whereville.='(';
+				$_whereville.='a_also_involving='.strval($member_id);
+				if (addon_installed('chat'))
+				{
+					$_whereville.=' AND a_member_id IN (SELECT member_liked FROM '.get_table_prefix().'chat_buddies WHERE member_likes='.strval(get_member()).')';
+				}
+				$_whereville.=')';
+				$_whereville.=')';
 
 				// If the chat addon is installed then there may be 'friends-only'
 				// posts, which we may need to filter out. Otherwise we don't need
@@ -308,7 +319,12 @@ function render_activity($row,$use_inside_ocp=true)
 		escape_html($link[3]->evaluate())
 	);
 	if (!is_null($row['a_also_involving']))
-		$extra_lang_string_params[]=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['a_also_involving'],true);
+	{
+		$extra_lang_string_params[]=static_evaluate_tempcode($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['a_also_involving'],true));
+	} else
+	{
+		$extra_lang_string_params[]=do_lang('GUEST');
+	}
 	$message->attach(do_lang_tempcode($row['a_language_string_code'],
 		$label[1],
 		$label[2],

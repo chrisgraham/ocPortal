@@ -313,6 +313,11 @@ function ModalWindow()
 
 			this.close(this.topWindow);
 			this.initBox();
+
+			if (browser_matches('ie6'))
+			{
+				this.topWindow.smoothScroll(0);
+			}
 		},
 
 		close: function(win) {
@@ -376,7 +381,7 @@ function ModalWindow()
 					'left': '0',
 					'top': '0',
 					'width': dim.pageWidth+'px',
-					'height': dim.pageHeight+'px'
+					'height': ((dim.pageHeight>dim.windowHeight)?dim.pageHeight:dim.windowHeight)+'px'
 				}
 			});
 
@@ -457,7 +462,7 @@ function ModalWindow()
 				}
 			};
 
-			this.addEvent( this.box, "click", function(e) { cancelBubbling(e); } );
+			this.addEvent( this.box, "click", function(e) { try { _this.topWindow.cancelBubbling(e); } catch (e) {}; } );
 
 			switch(this.type) {
 				case "iframe":
@@ -504,7 +509,7 @@ function ModalWindow()
 					// Fiddle it, to behave like a popup would
 					var name=this.name;
 					var makeFrameLikePopup=function() {
-						if ((iframe) && (iframe.contentWindow) && (iframe.contentWindow.document) && (iframe.contentWindow.document.body))
+						if ((iframe) && (iframe.contentWindow) && (iframe.contentWindow.document) && (iframe.contentWindow.document.body) && (typeof iframe.contentWindow.document.body.done_popup_trans=='undefined'))
 						{
 							iframe.contentWindow.document.body.style.background='transparent';
 
@@ -546,6 +551,18 @@ function ModalWindow()
 							}
 							baseElement.target=_this.target;
 
+							// Firefox 3.6 does not respect <base> element put in via DOM manipulation :(
+							var forms=iframe.contentWindow.document.getElementsByTagName('form');
+							for (var i=0;i<forms.length;i++)
+							{
+								if (!forms[i].target) forms[i].target=_this.target;
+							}
+							var as=iframe.contentWindow.document.getElementsByTagName('a');
+							for (var i=0;i<as.length;i++)
+							{
+								if (!as[i].target) as[i].target=_this.target;
+							}
+
 							if (name && iframe.contentWindow.name != name) iframe.contentWindow.name=name;
 
 							if (typeof iframe.contentWindow.faux_close=='undefined')
@@ -556,6 +573,9 @@ function ModalWindow()
 									_this.option('finished');
 								};
 							}
+
+							if (getInnerHTML(iframe.contentWindow.document.body).length>300) // Loaded now
+								iframe.contentWindow.document.body.done_popup_trans=true;
 						}
 					};
 					window.setTimeout(function() { illustrateFrameLoad(iframe,'overlay_iframe'); iframe.src=_this.href; makeFrameLikePopup(); },0);
@@ -699,7 +719,11 @@ function ModalWindow()
 			if (p == 'opacity') {
 				this.topWindow.setOpacity(e,v);
 			} else {
-				e.style[p] = v;
+				try
+				{
+					e.style[p] = v;
+				}
+				catch (e){};
 			}
 		},
 

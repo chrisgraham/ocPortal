@@ -695,6 +695,7 @@ form { /* For IE6 */
 .global_minilinks {
 	padding-top: 3px;
 	font-size: 0.9em;
+	white-space: nowrap; /* Stops logout link wrapping around in Firefox 3.6 */
 }
 
 .global_minilinks a {

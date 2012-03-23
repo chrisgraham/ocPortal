@@ -62,6 +62,7 @@
 		"image/jpeg,jpeg jpg jpe," +
 		"image/photoshop,psd," +
 		"image/png,png," +
+		"image/vnd.microsoft.icon,ico," +
 		"image/svg+xml,svg svgz," +
 		"image/tiff,tiff tif," +
 		"text/html,htm html xhtml," +
@@ -2453,10 +2454,10 @@
 						browseSize = plupload.getSize(browseButton);
 	
 						plupload.extend(document.getElementById(up.id + '_flash_container').style, {
-							top : browsePos.y + 'px',
-							left : browsePos.x + 'px',
-							width : browseSize.w + 'px',
-							height : (browseSize.h+16) + 'px'
+							top : (browsePos.y-5) + 'px',
+							left : (browsePos.x-5) + 'px',
+							width : (browseSize.w+10) + 'px',
+							height : (browseSize.h+21) + 'px'
 						});
 					}
 				});
@@ -3228,10 +3229,10 @@
 						inputFile = getById('input_' + currentFileId);
 	
 						plupload.extend(inputContainer.style, {
-							top : browsePos.y + 'px',
-							left : browsePos.x + 'px',
-							width : browseSize.w + 'px',
-							height : (browseSize.h+16) + 'px'
+							top : (browsePos.y-5) + 'px',
+							left : (browsePos.x-5) + 'px',
+							width : (browseSize.w+10) + 'px',
+							height : (browseSize.h+21) + 'px'
 						});
 						
 						// for IE and WebKit place input element underneath the browse button and route onclick event 
@@ -3614,6 +3615,7 @@
 				container.appendChild(inputContainer);
 				
 				// Convert extensions to mime types list
+				var no=false; // ocP edit, so unknown mime types still may select
 				no_type_restriction:
 				for (i = 0; i < filters.length; i++) {
 					ext = filters[i].extensions.split(/,/);
@@ -3630,14 +3632,16 @@
 
 						if (type) {
 							mimes.push(type);
+						} else {
+							no=true;
 						}
 					}
 				}
 
 
 				// Insert the input inside the input container
-				inputContainer.innerHTML = '<input id="' + uploader.id + '_html5" ' + ' style="font-size:999px"' +
-											' type="file" accept="' + mimes.join(',') + '" ' +
+				inputContainer.innerHTML = '<input id="' + uploader.id + '_html5" ' + ' style="font-size:50px"' + // CHRISFIX: Was 999px, but broke on Firefox 3.6 on Windows
+											' type="file" accept="' + (no?'':mimes.join(',')) + '" ' +
 											(uploader.settings.multi_selection && uploader.features.multi_selection ? 'multiple="multiple"' : '') + ' />';
 
 				inputContainer.scrollTop = 100;
@@ -3786,10 +3790,10 @@
 					inputContainer = document.getElementById(uploader.id + '_html5_container');
 	
 					plupload.extend(inputContainer.style, {
-						top : browsePos.y + 'px',
-						left : browsePos.x + 'px',
-						width : browseSize.w + 'px',
-						height : (browseSize.h+16) + 'px'
+						top : (browsePos.y-5) + 'px',
+						left : (browsePos.x-5) + 'px',
+						width : (browseSize.w+10) + 'px',
+						height : (browseSize.h+21) + 'px'
 					});
 					
 					// for WebKit place input element underneath the browse button and route onclick event 
@@ -5038,10 +5042,10 @@
 						browseSize = plupload.getSize(browseButton);
 	
 						plupload.extend(document.getElementById(up.id + '_silverlight_container').style, {
-							top : browsePos.y + 'px',
-							left : browsePos.x + 'px',
-							width : browseSize.w + 'px',
-							height : (browseSize.h+16) + 'px'
+							top : (browsePos.y-5) + 'px',
+							left : (browsePos.x-5) + 'px',
+							width : (browseSize.w+10) + 'px',
+							height : (browseSize.h+21) + 'px'
 						});
 					}
 				});
@@ -5297,7 +5301,9 @@ function fireFakeChangeFor(name,value)
 			e[i]();
 	}
 
+	if (typeof rep.plUploadOb=='undefined') return;
 	var ob=rep.plUploadOb;
+	if (typeof ob.settings=='undefined') return;
 	if (ob.settings.immediate_submit{+START,IF,{$VALUE_OPTION,aviary}} || true{+END})
 	{
 		var txtID = document.getElementById(ob.settings.txtFileDbID);

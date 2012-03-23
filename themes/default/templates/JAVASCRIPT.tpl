@@ -1170,10 +1170,13 @@ function illustrateFrameLoad(pf,frame)
 					var i_new=document.createElement('img');
 					i_new.src=the_frame.document.getElementById('loading_image').src;
 					var i_default=the_frame.document.getElementById('loading_image');
-					i_new.className=i_default.className;
-					i_new.alt=i_default.alt;
-					i_new.id=i_default.id;
-					i_default.parentNode.replaceChild(i_new,i_default);
+					if (i_default)
+					{
+						i_new.className=i_default.className;
+						i_new.alt=i_default.alt;
+						i_new.id=i_default.id;
+						i_default.parentNode.replaceChild(i_new,i_default);
+					}
 				}
 			},
 			0

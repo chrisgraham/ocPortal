@@ -691,8 +691,6 @@ function _fatal_exit($text,$return=false)
 	if (get_param_integer('keep_fatalistic',0)==0)
 		@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text).' @ '.get_self_url_easy(),0);
 
-	$trace=get_html_trace();
-
 	$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'9fdc6d093bdb685a0eda6bb56988a8c5','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));
 	$echo=globalise($error_tpl,NULL,'',true);
 	$echo->evaluate_echo();

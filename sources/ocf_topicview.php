@@ -307,21 +307,25 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
 	} else
 	{
-		$out=array('num_views'=>0,
-						'num_posts'=>0,
-						'validated'=>1,
-						'title'=>do_lang('INLINE_PERSONAL_POSTS'),
-						'description'=>'',
-						'description_link'=>'',
-						'emoticon'=>'',
-						'forum_id'=>NULL,
-						'first_post'=>NULL,
-						'first_poster'=>NULL,
-						'first_post_id'=>NULL,
-						'pt_from'=>NULL,
-						'pt_to'=>NULL,
-						'is_open'=>1,
-						'is_threaded'=>0);
+		$out=array(
+			'num_views'=>0,
+			'num_posts'=>0,
+			'validated'=>1,
+			'title'=>do_lang('INLINE_PERSONAL_POSTS'),
+			'description'=>'',
+			'description_link'=>'',
+			'emoticon'=>'',
+			'forum_id'=>NULL,
+			'first_post'=>NULL,
+			'first_poster'=>NULL,
+			'first_post_id'=>NULL,
+			'pt_from'=>NULL,
+			'pt_to'=>NULL,
+			'is_open'=>1,
+			'is_threaded'=>0,
+			'last_time'=>time(),
+			'meta_data'=>array(),
+		);
 						
 		// Post query
 		$where='p_intended_solely_for='.strval(get_member());

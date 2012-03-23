@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>fixperms.sh</string>
+	<string>sources/symbols.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -122,9 +122,7 @@
 			<key>filename</key>
 			<string>fixperms.sh</string>
 			<key>lastUsed</key>
-			<date>2012-03-21T22:59:50Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2012-03-22T11:50:46Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -156,7 +154,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-05T08:23:00Z</date>
+			<date>2012-03-22T15:14:01Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -770,36 +768,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>fixperms.sh</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
 		</dict>
 		<key>hphp_debug.sh</key>
 		<dict>
@@ -1629,20 +1597,6 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
-		<key>sources/notifications.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>22</integer>
-				<key>line</key>
-				<integer>177</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>160</integer>
-		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -1670,6 +1624,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
+		</dict>
+		<key>sources/symbols.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>2258</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>2233</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>8</integer>
+				<key>line</key>
+				<integer>2258</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>2258</integer>
+			</dict>
 		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
@@ -2700,18 +2684,11 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/hooks/systems/notifications/ocf_choose_photo.php</string>
-		<string>sources/notifications.php</string>
-		<string>themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl</string>
-		<string>sources_custom/getid3/module.tag.id3v2.php</string>
-		<string>sources_custom/getid3/getid3.php</string>
-		<string>sources_custom/getid3/getid3.lib.php</string>
-		<string>data/ckeditor/plugins/ocportal/plugin.js</string>
-		<string>fixperms.sh</string>
+		<string>sources/symbols.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{561, 201}, {1154, 939}}</string>
+	<string>{{633, 179}, {1154, 939}}</string>
 </dict>
 </plist>

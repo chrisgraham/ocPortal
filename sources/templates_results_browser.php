@@ -84,7 +84,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 			if ($selector_value==$max_rows) break;
 		}
 		$hidden=build_keep_form_fields('_SELF',true,array($max_name,'wide_high',$start_name));
-		$per_page=do_template('RESULTS_BROWSER_PER_SCREEN',array('_GUID'=>'1993243727e58347d1544279c5eba496','HIDDEN'=>$hidden,'URL'=>$get_url,'MAX_NAME'=>$max_name,'SELECTORS'=>$selectors,'RAND'=>strval($GLOBALS['INCREMENTAL_ID_GENERATOR'])));
+		$per_page=do_template('RESULTS_BROWSER_PER_SCREEN',array('_GUID'=>'1993243727e58347d1544279c5eba496','HASH'=>($hash=='')?NULL:$hash,'HIDDEN'=>$hidden,'URL'=>$get_url,'MAX_NAME'=>$max_name,'SELECTORS'=>$selectors,'RAND'=>strval($GLOBALS['INCREMENTAL_ID_GENERATOR'])));
 		$GLOBALS['INCREMENTAL_ID_GENERATOR']++;
 
 		// Link to first

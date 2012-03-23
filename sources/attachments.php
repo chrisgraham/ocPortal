@@ -213,7 +213,7 @@ function attachments_script()
 function has_attachment_access($member,$id,$connection=NULL)
 {
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
-	
+
 	if ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)) return true;
 
 	$refs=$connection->query_select('attachment_refs',array('r_referer_type','r_referer_id'),array('a_id'=>$id));

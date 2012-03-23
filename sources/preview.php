@@ -249,6 +249,21 @@ function build_preview($multi_return=false)
 		}
 	}
 
+	// Make attachments temporarily readable without any permission context
+	global $COMCODE_ATTACHMENTS;
+	$posting_ref_id=post_param_integer('posting_ref_id',NULL);
+	if (!is_null($posting_ref_id))
+	{
+		if (array_key_exists(strval(-$posting_ref_id),$COMCODE_ATTACHMENTS))
+		{
+			foreach ($COMCODE_ATTACHMENTS[strval(-$posting_ref_id)] as $attachment)
+			{
+				$db->query_delete('attachment_refs',array('r_referer_type'=>'null','r_referer_id'=>strval(-$posting_ref_id),'a_id'=>$attachment['id']),'',1);
+				$db->query_insert('attachment_refs',array('r_referer_type'=>'null','r_referer_id'=>strval(-$posting_ref_id),'a_id'=>$attachment['id']));
+			}
+		}
+	}
+
 	if (is_null($output))
 	{
 		if (count($view_space_map)==1)

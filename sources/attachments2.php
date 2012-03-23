@@ -509,7 +509,7 @@ function insert_lang_comcode_attachments($level,$text,$type,$id,$connection=NULL
 /**
  * Finalise attachments which were created during a preview, so that they have the proper reference IDs.
  *
- * @param  ID_TEXT		The id in the set of the arbitrary types that the attached is for
+ * @param  ID_TEXT		The ID in the set of the arbitrary types that the attached is for
  * @param  ?object		The database connection to use (NULL: standard site connection)
  */
 function final_attachments_from_preview($id,$connection=NULL)
@@ -521,7 +521,8 @@ function final_attachments_from_preview($id,$connection=NULL)
 	if ($posting_ref_id<0) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	if (!is_null($posting_ref_id))
 	{
-		$connection->query_update('attachment_refs',array('r_referer_id'=>$id),array('r_referer_id'=>strval(-$posting_ref_id)));
+		$connection->query_delete('attachment_refs',array('r_referer_type'=>'null','r_referer_id'=>strval(-$posting_ref_id)),'',1);
+		$connection->query_delete('attachment_refs',array('r_referer_id'=>strval(-$posting_ref_id))); // Can trash this, was made during preview but we made a new one in do_comcode_attachments (recalled by insert_lang_comcode_attachments)
 	}
 }
 

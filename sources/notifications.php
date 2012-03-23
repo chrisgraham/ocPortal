@@ -189,7 +189,7 @@ class Notification_dispatcher
 		$ob=_get_notification_ob_for_code($this->notification_code);
 		if (is_null($ob))
 		{
-			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			fatal_exit('Missing notification code: '.$this->notification_code);
 			return;
 		}
 

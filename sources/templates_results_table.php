@@ -119,7 +119,7 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 	} else $sort=new ocp_tempcode();
 
 	// Results browser
-	$browser=results_browser(is_object($text_id)?$text_id:make_string_tempcode($text_id),NULL,$start,$start_name,$max,$max_name,$max_rows,NULL,'misc',true,true,$max_page_links);
+	$browser=results_browser(is_object($text_id)?$text_id:make_string_tempcode($text_id),NULL,$start,$start_name,$max,$max_name,$max_rows,NULL,get_param('type','misc'),true,true,$max_page_links,NULL,$hash);
 
 	return do_template(is_null($tplset)?'RESULTS_TABLE':('RESULTS_'.$tplset.'_TABLE'),array('_GUID'=>$guid,'TEXT_ID'=>$text_id,'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>$message,'SORT'=>$skip_sortables_form?new ocp_tempcode():$sort,'BROWSER'=>$browser,'WIDTHS'=>$widths),NULL,false,'RESULTS_TABLE');
 }

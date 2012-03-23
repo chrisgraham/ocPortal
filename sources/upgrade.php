@@ -142,7 +142,7 @@ function upgrade_script()
 		<tr><th>3</th><td>{$l_download}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
 		<tr><th>4</th><td>{$l_not_for_patch} {$l_integrity_scan_no_merging}<!-- ".do_lang('OR')." {$l_integrity_scan}--></td><td>".str_replace(' ','&nbsp;',escape_html(display_time_period(60*10)))."&nbsp;&dagger;</td></tr>
 		<tr><th>5</th><td>{$l_not_for_patch} {$l_database_upgrade}<br />{$l_up_info}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
-		<tr><th>5</th><td>{$l_not_for_patch} {$l_theme_upgrade}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
+		<tr><th>6</th><td>{$l_not_for_patch} {$l_theme_upgrade}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
 		<tr><th>7</th><td>{$l_clear_caches}</td><td>1 minute</td></tr>
 		<tr><th>8</th><td>{$l_open_site}  {$l_fu_closedness}</td><td>1 minute</td></tr>
 	</table></div>
@@ -1929,6 +1929,15 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 			{
 				foreach ($rule_set as $target_file=>$_rule_set)
 				{
+					// If people have moved CSS into global.css, to optimise page load times
+					if (($target_file!='*') && ($target_file!='global.css') && ($css_file=='global.css'))
+					{
+						if ((file_exists($css_dir.$target_file)) && (strlen(trim(file_get_contents($css_dir.$target_file)))==0))
+						{
+							$target_file='global.css';
+						}
+					}
+
 					if (($target_file=='*') || ($target_file==$css_file))
 					{
 						foreach ($_rule_set as $from=>$to)

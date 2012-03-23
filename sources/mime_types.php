@@ -54,7 +54,8 @@ function get_mime_type($extension)
 
 		// XML
 		'xml'=>'application/octet-stream', // to prevent XSS	// 'text/xml',
-		'rss'=>'application/rss+xml',
+		'rss'=>'application/octet-stream', // to prevent XSS	// 'application/rss+xm',
+		'atom'=>'application/octet-stream', // to prevent XSS	// 'application/atom+xml',
 
 		// Presentations/Animations/3D
 		'ppt'=>'application/powerpoint',
@@ -78,6 +79,7 @@ function get_mime_type($extension)
 		'tif'=>'image/tiff',
 		'tiff'=>'image/tiff',
 		'pcx'=>'image/x-pcx',
+		'ico'=>'image/vnd.microsoft.icon',
 
 		// Movies
 		'avi'=>'video/mpeg',//'video/x-ms-asf' works with the plugin on Windows Firefox but nothing else,//'video/x-msvideo' is correct but does not get recognised by Microsoft Firefox WMV plugin and confuses RealMedia Player if it sees data transferred under that mime type,

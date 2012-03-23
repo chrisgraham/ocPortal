@@ -39,7 +39,7 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
 		$pagelinks=array();
 
 		require_code('chat');
-		$types=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','room_name'),array('is_im'=>0));
+		$types=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im'=>0));
 		foreach ($types as $type)
 		{
 			if (check_chatroom_access($type,true))

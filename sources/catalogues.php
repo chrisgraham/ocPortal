@@ -578,6 +578,11 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			$map['_FIELD_'.strval($field['id'])]=$use_ev;
 			$map['FIELD_'.strval($i).'_PLAIN']=$ev;
 			$map['_FIELD_'.strval($field['id']).'_PLAIN']=$ev;
+			if (array_key_exists('effective_value_pure',$field))
+			{
+				$map['FIELD_'.strval($i).'_PURE']=$field['effective_value_pure'];
+				$map['_FIELD_'.strval($field['id']).'_PURE']=$field['effective_value_pure'];
+			}
 			$field_name=get_translated_text($field['cf_name']);
 			$map['FIELDNAME_'.strval($i)]=$field_name;
 			$fields_2d[]=array('NAME'=>$field_name,'VALUE'=>$use_ev);
