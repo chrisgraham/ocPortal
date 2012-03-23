@@ -1139,7 +1139,9 @@ function illustrateFrameLoad(pf,frame)
 
 		if (!window.frames[frame]) return;
 		if (!window.frames[frame].document) return;
-		var de=window.frames[frame].document.documentElement;
+		var doc=window.frames[frame].document;
+		if (!doc) return;
+		var de=doc.documentElement;
 		if (!de) return;
 		var body=de.getElementsByTagName('body');
 		if (body.length==0)
@@ -1641,6 +1643,8 @@ function repositionTooltip(ac,event,bottom,starting,tooltipElement,force_width)
 		{
 			var y_excess=y-getWindowHeight()-getWindowScrollY()+height+10;
 			if (y_excess>0) y-=y_excess;
+			var scrollY=getWindowScrollY();
+			if (y<scrollY) y=scrollY;
 			tooltipElement.style.top=y+'px';
 		}
 		tooltipElement.style.left=x+'px';

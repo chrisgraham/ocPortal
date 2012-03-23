@@ -635,7 +635,7 @@ CREATE TABLE `ocp_newsletter_drip_send` (
   `d_from_email` varchar(255) NOT NULL,
   `d_from_name` varchar(255) NOT NULL,
   `d_priority` tinyint(4) NOT NULL,
-  `d_mail_template` varchar(80) NOT NULL,
+  `d_template` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `d_inject_time` (`d_inject_time`)
 ) ENGINE=MyISAM;

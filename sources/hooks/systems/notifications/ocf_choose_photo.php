@@ -10,10 +10,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core
+ * @package		ocf_member_photos
  */
 
-class Hook_Notification_error_occurred_missing_reference extends Hook_Notification__Staff
+class Hook_Notification_ocf_choose_photo extends Hook_Notification__Staff
 {
 	/**
 	 * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
@@ -36,7 +36,7 @@ class Hook_Notification_error_occurred_missing_reference extends Hook_Notificati
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['error_occurred_missing_reference']=array(do_lang('ERRORS'),do_lang('NOTIFICATION_TYPE_error_occurred_missing_reference'));
+		$list['ocf_choose_photo']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_ocf_choose_photo'));
 		return $list;
 	}
 }

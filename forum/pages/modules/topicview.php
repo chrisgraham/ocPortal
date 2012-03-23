@@ -117,6 +117,7 @@ class Module_topicview
 
 		// Load up topic info
 		$topic_info=ocf_read_in_topic($id,$start,$max,$view_poll_results==1);
+		$GLOBALS['META_DATA']+=$topic_info['meta_data'];
 		global $SEO_TITLE;
 		$SEO_TITLE=do_lang('_VIEW_TOPIC',$topic_info['title']);
 		$may_reply=(array_key_exists('may_reply',$topic_info)) && (($topic_info['is_open']) || (array_key_exists('may_post_closed',$topic_info)));
@@ -325,7 +326,8 @@ class Module_topicview
 		{
 			if (!is_guest())
 			{
-				if (get_value('disable_mark_topic_unread')!=='1')
+				$too_old=$topic_info['last_time']<time()-60*60*24*intval(get_option('post_history_days'));
+				if ((get_value('disable_mark_topic_unread')!=='1') && (!$too_old))
 				{
 					$map=array('page'=>'topics','type'=>'mark_unread_topic','id'=>$id);
 					$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);

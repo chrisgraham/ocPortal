@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>themes/default/templates/NOTIFICATIONS_MANAGE.tpl</string>
+	<string>fixperms.sh</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -122,7 +122,9 @@
 			<key>filename</key>
 			<string>fixperms.sh</string>
 			<key>lastUsed</key>
-			<date>2012-03-20T17:28:22Z</date>
+			<date>2012-03-21T22:59:50Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -469,6 +471,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>data/ckeditor/plugins/ocportal/plugin.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>19</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>19</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>19</integer>
+			</dict>
+		</dict>
 		<key>data/cron_bridge.php</key>
 		<dict>
 			<key>caret</key>
@@ -738,6 +770,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>fixperms.sh</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>5</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
 		</dict>
 		<key>hphp_debug.sh</key>
 		<dict>
@@ -1511,6 +1573,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>sources/hooks/systems/notifications/ocf_choose_photo.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>42</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>sources/hooks/systems/preview/comcode_page.php</key>
 		<dict>
 			<key>caret</key>
@@ -1553,6 +1629,20 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
+		<key>sources/notifications.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>22</integer>
+				<key>line</key>
+				<integer>177</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>160</integer>
+		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -1594,6 +1684,96 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>78</integer>
+		</dict>
+		<key>sources_custom/getid3/getid3.lib.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>1286</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1259</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>1286</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>1286</integer>
+			</dict>
+		</dict>
+		<key>sources_custom/getid3/getid3.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>265</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>240</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>265</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>265</integer>
+			</dict>
+		</dict>
+		<key>sources_custom/getid3/module.tag.id3v2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>29</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
 		</dict>
 		<key>sources_custom/miniblocks/.htaccess</key>
 		<dict>
@@ -2433,6 +2613,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>5465</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>5429</integer>
+		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_SHAKE.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2506,7 +2700,14 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>themes/default/templates/NOTIFICATIONS_MANAGE.tpl</string>
+		<string>sources/hooks/systems/notifications/ocf_choose_photo.php</string>
+		<string>sources/notifications.php</string>
+		<string>themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl</string>
+		<string>sources_custom/getid3/module.tag.id3v2.php</string>
+		<string>sources_custom/getid3/getid3.php</string>
+		<string>sources_custom/getid3/getid3.lib.php</string>
+		<string>data/ckeditor/plugins/ocportal/plugin.js</string>
+		<string>fixperms.sh</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

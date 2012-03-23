@@ -77,8 +77,7 @@ function activities_addon_syndicate_described_activity($a_language_string_code,$
 			}
 		}
 
-		list($message)=render_activity($row);
-
+		list($message)=render_activity($row,false);
 		require_code('notifications');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($a_member_id);
 		$subject=do_lang('ACTIVITY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username,html_entity_decode(strip_tags($message->evaluate()),ENT_QUOTES,get_charset()));

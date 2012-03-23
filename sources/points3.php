@@ -114,14 +114,16 @@ function points_profile($member_id_of,$member_id_viewing)
 
 			$charges->attach(results_entry(array(escape_html($date),escape_html($amount),escape_html($fromname),escape_html($toname),$reason)));
 		}
-		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'start',$max,'max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort');
+		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'start',$max,'max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fgfdgfdgfdgfdger4gtrhg',false,'tab__points');
 
 		$chargelog_details->attach(do_template('POINTS_CHARGE',array('_GUID'=>'f1e2d45a7d920ab91553a5fd0728a5ad','URL'=>build_url(array('page'=>'admin_points','type'=>'charge','redirect'=>get_self_url(true)),get_module_zone('admin_points')),'USER'=>strval($member_id_of))));
 	}
 
 	// Show giving form
-	if (is_guest($member_id_viewing)) $give_template=do_lang_tempcode('POINTS_MUST_LOGIN');
-	else
+	if (is_guest($member_id_viewing))
+	{
+		$give_template=do_lang_tempcode('POINTS_MUST_LOGIN');
+	} else
 	{
 		$have_negative_gift_points=has_specific_permission($member_id_viewing,'have_negative_gift_points');
 		$enough_ok=(($viewer_gift_points_available>0) || ($have_negative_gift_points));
@@ -251,7 +253,7 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 
 		$out->attach(results_entry(array(escape_html($date),escape_html($amount),$_fromname,$_toname,$reason)));
 	}
-	$out=results_table(do_lang_tempcode('_POINTS',escape_html($viewing_name)),$start,'gift_start',$max,'gift_max',$max_rows,$fields_title,$out,$sortables,$sortable,$sort_order,'gift_sort');
+	$out=results_table(do_lang_tempcode('_POINTS',escape_html($viewing_name)),$start,'gift_start',$max,'gift_max',$max_rows,$fields_title,$out,$sortables,$sortable,$sort_order,'gift_sort',NULL,NULL,NULL,8,'gfhfghtrhhjghgfhfgf',false,'tab__points');
 
 	if ($type=='to') $title=do_lang_tempcode('POINTS_TO'); else $title=do_lang_tempcode('POINTS_FROM');
 	return do_template('POINTS_TRANSACTIONS_WRAP',array('_GUID'=>'f19e3eedeb0b8bf398251b24e8389723','CONTENT'=>$out,'TITLE'=>$title));

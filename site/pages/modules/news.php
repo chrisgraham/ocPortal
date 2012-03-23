@@ -778,7 +778,7 @@ class Module_news
 			'title'=>get_translated_text($myrow['title']),
 			'identifier'=>'_SEARCH:news:view:'.strval($id),
 			'image'=>$img,
-			'description'=>'',
+			'description'=>strip_comcode(get_translated_text($myrow['news'])),
 		);
 
 		return do_template('NEWS_FULL_SCREEN',array('_GUID'=>'7686b23934e22c493d4ac10ba6c475c4','ID'=>strval($id),'CATEGORY_ID'=>strval($myrow['news_category']),'BLOG'=>$blog===1,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('news'),'CATEGORIES'=>$categories,'NEWSLETTER_URL'=>$newsletter_url,'ADD_DATE_RAW'=>strval($myrow['date_and_time']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'IMG'=>$img,'TITLE'=>$title,'VIEWS'=>integer_format($myrow['news_views']),'COMMENT_DETAILS'=>$comment_details,'RATING_DETAILS'=>$rating_details,'TRACKBACK_DETAILS'=>$trackback_details,'DATE'=>$date,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS_FULL'=>$news_full,'NEWS_FULL_PLAIN'=>$news_full_plain,'EDIT_URL'=>$edit_url,'ARCHIVE_URL'=>$archive_url,'SUBMIT_URL'=>$submit_url,'WARNING_DETAILS'=>$warning_details));

@@ -231,13 +231,14 @@ class Module_topics
 		if (is_null($lang)) $lang=do_lang_tempcode('SUCCESS');
 		$title=get_page_title($_title);
 	
-		$type='misc';
-		if (is_null($forum_id)) $type='pt';
-	
 		// Show it worked / Refresh
-		$map=array('page'=>'forumview','id'=>$forum_id);
-		if ($type!='misc') $map['type']=$type;
-		$url=build_url($map,get_module_zone('forumview'));
+		if (is_null($forum_id))
+		{
+			$url=build_url(array('page'=>'members','type'=>'view','id'=>get_member()),get_module_zone('members'),NULL,false,false,false,'tab__pts');
+		} else
+		{
+			$url=build_url(array('page'=>'forumview','id'=>$forum_id),get_module_zone('forumview'));
+		}
 
 		return redirect_screen($title,$url,$lang);
 	}
@@ -522,10 +523,18 @@ class Module_topics
 	 * Mark a topic as unread by the current member.
 	 *
 	 * @param  AUTO_LINK The ID of the topic to mark as unread.
+	 * @return boolean   Success status.
 	 */
 	function ocf_ping_topic_unread($topic_id)
 	{
-		$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id,'l_member_id'=>get_member()),'',1);
+		$last_time=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_last_time',array('id'=>$topic_id));
+		$too_old=$last_time<time()-60*60*24*intval(get_option('post_history_days'));
+		if (!$too_old)
+		{
+			$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id,'l_member_id'=>get_member()),'',1);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -539,13 +548,19 @@ class Module_topics
 		if (count($topics)==0) warn_exit(do_lang_tempcode('NO_MARKERS_SELECTED'));
 
 		$forum_id=NULL;
+		$success=0;
 		foreach ($topics as $i=>$topic_id)
 		{
 			if ($i==0)
 			{
 				$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
 			}
-			$this->ocf_ping_topic_unread($topic_id);
+			if ($this->ocf_ping_topic_unread($topic_id)) $success++;
+		}
+
+		if ($success!=count($topics))
+		{
+			attach_message(do_lang_tempcode('MARK_UNREAD_TOO_OLD',escape_html(integer_format(count($topics)-$success)),escape_html(integer_format(intval(get_option('post_history_days'))))),'warn');
 		}
 
 		if (is_null($forum_id))

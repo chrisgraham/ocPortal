@@ -228,7 +228,7 @@ function load_contextual_css_editor(file)
 		var textarea=document.getElementById('css');
 		var last_css=textarea.value;
 		window.css_recompiler_timer=window.setInterval(function() {
-			if (window.opener)
+			if ((window.opener) && (window.opener.document))
 			{
 				if (typeof window.opener.have_set_up_parent_page_highlighting=='undefined') { set_up_parent_page_highlighting(); last_css='';/*force new CSS to apply*/ }
 

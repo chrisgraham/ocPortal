@@ -342,7 +342,7 @@ class Hook_Profiles_Tabs_about
 			'title'=>'',
 			'identifier'=>'_SEARCH:members:view:'.strval($member_id_of),
 			'description'=>'',
-			'image'=>$avatar_url,
+			'image'=>(($avatar_url=='') && (has_specific_permission($member_id_viewing,'view_member_photos')))?$photo_url:$avatar_url,
 		);
 
 		// Look up member's clubs

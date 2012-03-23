@@ -5462,6 +5462,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	}
 	
 	var maindiv=document.createElement('div');
+	maindiv.id='maindiv_'+name;
 	rep.parentNode.appendChild(maindiv);
 	var subdiv=document.createElement('div');
 	maindiv.appendChild(subdiv);
@@ -5599,7 +5600,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		uploadButton.value='{!BROWSE;}';
 		uploadButton.className='inline_image';
 		uploadButton.id='uploadButton_'+name;
-		uploadButton.onclick=function(e) { e.preventDefault(); };
+		uploadButton.onclick=function() { return false; };
 		subdiv.appendChild(uploadButton,rep);
 	} else
 	{

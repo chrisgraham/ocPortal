@@ -456,6 +456,12 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 	// Top rating / liked
 	if (($rating==10) && ($type==''))
 	{
+		$content_type_title=$content_type;
+		if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
+		{
+			$content_type_title=do_lang($cma_info['content_type_label']);
+		}
+
 		if ((!is_null($submitter)) && (!is_guest($submitter)))
 		{
 			// Give points
@@ -471,8 +477,8 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
 			// Notification
 			require_code('notifications');
-			$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$content_title);
-			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($content_title),array(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url));
+			$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?$content_type_title:$content_title);
+			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?$content_type_title:$content_title),array(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url));
 			dispatch_notification('like',NULL,$subject,$mail,array($submitter));
 		}
 
@@ -486,14 +492,15 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 			{
 				$also_involving=mixed(); // NULL
 			}
-			$content_type_title=$content_type;
-			if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
-			{
-				$content_type_title=do_lang($cma_info['content_type_label']);
-			}
 
-			if ($content_title=='') $content_title=do_lang('VIEW');
-			syndicate_described_activity(((is_null($also_involving)) || (is_guest($also_involving)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES',$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
+			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES';
+			if ($content_title=='')
+			{
+				syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
+			} else
+			{
+				syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
+			}
 		}
 	}
 
@@ -694,12 +701,20 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
 	if ((!$private) && ($post!=''))
 	{
+		list(,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
+
+		$content_type_title=$content_type;
+		if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
+		{
+			$content_type_title=do_lang($cma_info['content_type_label']);
+		}
+
 		// Notification
 		require_code('notifications');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),$content_title,array($post_title,$username),get_site_default_lang());
+		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),($content_title=='')?$content_type_title:$content_title,array($post_title,$username),get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape($content_title),array($post_title,post_param('post'),$content_url_flat,comcode_escape($username)),get_site_default_lang());
+		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?$content_type_title:$content_title),array($post_title,post_param('post'),$content_url_flat,comcode_escape($username)),get_site_default_lang());
 		dispatch_notification('comment_posted',$content_type.'_'.$content_id,$subject,$message_raw);
 
 		// Is the user gonna automatically enable notifications for this?
@@ -709,8 +724,6 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 			if ($auto_monitor_contrib_content==1)
 				enable_notifications('comment_posted',$content_type.'_'.$content_id);
 		}
-
-		list(,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
 
 		// Activity
 		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
@@ -722,12 +735,14 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 			{
 				$also_involving=mixed(); // NULL
 			}
-			$content_type_title=$content_type;
-			if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
+			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON';
+			if ($content_title=='')
 			{
-				$content_type_title=do_lang($cma_info['content_type_label']);
+				syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',url_to_pagelink(is_object($content_url)?$content_url->evaluate():$content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
+			} else
+			{
+				syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($content_url)?$content_url->evaluate():$content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
 			}
-			syndicate_described_activity(((is_null($also_involving)) || (is_guest($also_involving)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON',$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($content_url)?$content_url->evaluate():$content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$also_involving);
 		}
 	}
 

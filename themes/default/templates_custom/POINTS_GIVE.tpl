@@ -10,7 +10,7 @@
 		{+END}
 	</p>
 
-	<form title="{!GIVE_POINTS}" method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}">
+	<form title="{!GIVE_POINTS}" method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}#tab__points">
 		<div>
 			<label for="give_reason_pre">
 				Their role
@@ -51,7 +51,7 @@
 		{+END}
 	</p>
 
-	<form method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}">
+	<form method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}#tab__points">
 		<div>
 			<div class="points_give_shared_options" style="margin-top: 0">
 				<label for="give_reason_pre">

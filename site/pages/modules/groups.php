@@ -466,6 +466,7 @@ class Module_groups
 			'title'=>$group_name,
 			'identifier'=>'_SEARCH:groups:view:'.strval($id),
 			'description'=>'',
+			'image'=>find_theme_image('pagepics/usergroups'),
 		);
 
 		require_javascript('javascript_ajax');

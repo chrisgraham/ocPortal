@@ -24,6 +24,11 @@ If you run the Setup Wizard, you may wonder later what it actually did, especial
  - Placing blocks. You can place/change blocks, via the "Edit in zone editor" links you see under panels when logged in under a staff account.
  - Copying rules. You can edit the rules page manually, from "Comcode pages" in the Content Management Zone.
 
+[title="2"]Notifications[/title]
+
+Chances are that you'll want e-mailing whenever things happen on your site. So go and edit your profile, changing your notification settings.
+In particular you'll probably want to know about content needing validation, various kinds of messaging activity (e.g. support ticket posting), and eCommerce activity.
+
 [title="2"]Editing basic site configuration[/title]
 
 [exp_thumb="The list of configuration sections" float="left"]configuration[/exp_thumb]

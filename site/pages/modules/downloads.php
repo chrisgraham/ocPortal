@@ -465,6 +465,14 @@ class Module_downloads
 			'description'=>get_translated_text($category['description']),
 		);
 
+		$rep_image=$category['rep_image'];
+		if ($rep_image!='')
+		{
+			$GLOBALS['META_DATA']+=array(
+				'image'=>(url_is_local($rep_image)?(get_custom_base_url().'/'):'').$rep_image,
+			);
+		}
+
 		breadcrumb_add_segment($tree);
 		return do_template('DOWNLOAD_CATEGORY_SCREEN',array('_GUID'=>'ebb3c8708695f6a30dbd4a03f8632047','ID'=>strval($id),'SUBDOWNLOADS'=>$subdownloads,'TAGS'=>get_loaded_tags('download_categories'),'TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'DESCRIPTION'=>$description,'SUBCATEGORIES'=>$subcategories,'DOWNLOADS'=>$downloads,'SORTING'=>$sorting));
 	}
@@ -762,7 +770,7 @@ class Module_downloads
 		$map=array();
 		foreach ($category_rows as $category)
 		{
-			if ($page['category']!=db_get_first_id())
+			if ($category['category']!=db_get_first_id())
 			{
 				if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category['id']))) continue;
 			}

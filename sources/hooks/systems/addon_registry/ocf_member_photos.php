@@ -80,6 +80,7 @@ class Hook_addon_registry_ocf_member_photos
 			'uploads/ocf_photos/.htaccess',
 			'uploads/ocf_photos_thumbs/.htaccess',
 			'sources/hooks/systems/profiles_tabs_edit/photo.php',
+			'sources/hooks/systems/notifications/ocf_choose_photo.php',
 			'OCF_EDIT_PHOTO_TAB.tpl',
 		);
 	}

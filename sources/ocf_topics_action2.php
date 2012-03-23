@@ -207,6 +207,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 	}
 	$GLOBALS['FORUM_DB']->query_delete('f_topics',array('id'=>$topic_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_topic_id'=>$topic_id));
+	require_code('notifications');
 	delete_all_notifications_on('ocf_topics',strval($topic_id));
 
 	// Delete the ticket row if it's a ticket

@@ -61,6 +61,9 @@ function init__notifications()
 	// And...
 	define('A__STATISTICAL',-0x1); // This is magic, it will choose whatever the user probably wants, based on their existing settings
 	define('A__CHOICE',-0x2); // Never stored in DB, used as a flag inside admin_notifications module
+
+	global $NOTIFICATION_SETTING_CACHE;
+	$NOTIFICATION_SETTING_CACHE=array();
 }
 
 /**
@@ -93,8 +96,8 @@ function _get_notification_ob_for_code($notification_code)
 		require_code($path);
 		return object_factory('Hook_Notification_'.filter_naughty($notification_code));
 	}
-
-	return object_factory('Hook_Notification'); // default
+	return NULL;
+	//return object_factory('Hook_Notification'); // default
 }
 
 /**
@@ -184,7 +187,11 @@ class Notification_dispatcher
 		}
 
 		$ob=_get_notification_ob_for_code($this->notification_code);
-		if (is_null($ob)) return;
+		if (is_null($ob))
+		{
+			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			return;
+		}
 
 		require_lang('notifications');
 		require_code('mail');
@@ -206,6 +213,14 @@ class Notification_dispatcher
 		do
 		{
 			list($members,$possibly_has_more)=$ob->list_members_who_have_enabled($this->notification_code,$this->code_category,$this->to_member_ids,$start,$max);
+			if (get_value('notification_safety_testing')==='1')
+			{
+				if (count($members)>20)
+				{
+					$members=array(6=>A_INSTANT_EMAIL); // This is just for testing on ocportal.com, if lots of notifications going out it's probably a scary bug, so send just to Chris (#6) with a note
+					$message='OVER-ADDRESSED?'."\n\n".$message;
+				}
+			}
 
 			foreach ($members as $to_member_id=>$setting)
 			{
@@ -281,7 +296,7 @@ function _find_member_statistical_notification_type($to_member_id)
 	if (isset($cache[$to_member_id])) return $cache[$to_member_id];
 
 	$notifications_enabled=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_setting'),array('l_member_id'=>$to_member_id,'l_code_category'=>''),'',100/*within reason*/);
-	if (count($notifications_enabled)==0) // Default to e-mail
+	if ((count($notifications_enabled)==0) && (_notification_setting_available(A_INSTANT_EMAIL,$to_member_id))) // Default to e-mail
 	{
 		$setting=A_INSTANT_EMAIL;
 	} else
@@ -334,7 +349,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id);
 	$from_email='';
 	$from_name='';
-	if (!is_null($from_member_id))
+	if ((!is_null($from_member_id)) && ($from_member_id>=0))
 	{
 		$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_member_id);
 		if ($from_email=='') $from_email='';
@@ -478,6 +493,9 @@ function enable_notifications($notification_code,$notification_category,$member_
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 		'l_setting'=>$setting,
 	));
+
+	global $NOTIFICATION_SETTING_CACHE;
+	$NOTIFICATION_SETTING_CACHE=array();
 }
 
 /**
@@ -498,6 +516,9 @@ function disable_notifications($notification_code,$notification_category,$member
 		'l_notification_code'=>$notification_code,
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	));
+
+	global $NOTIFICATION_SETTING_CACHE;
+	$NOTIFICATION_SETTING_CACHE=array();
 }
 
 /**
@@ -531,9 +552,9 @@ function notifications_setting($notification_code,$notification_category,$member
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	);
 
-	static $notification_setting_cache=array();
-	if (isset($notification_setting_cache[serialize($specific_where)]))
-		return $notification_setting_cache[serialize($specific_where)];
+	global $NOTIFICATION_SETTING_CACHE;
+	if (isset($NOTIFICATION_SETTING_CACHE[serialize($specific_where)]))
+		return $NOTIFICATION_SETTING_CACHE[serialize($specific_where)];
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
@@ -559,7 +580,7 @@ function notifications_setting($notification_code,$notification_category,$member
 		}
 	}
 
-	$notification_setting_cache[serialize($specific_where)]=$test;
+	$NOTIFICATION_SETTING_CACHE[serialize($specific_where)]=$test;
 	return $test;
 }
 

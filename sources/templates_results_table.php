@@ -40,9 +40,10 @@
  * @param  integer		The maximum number of quick-jump page links to show
  * @param  string			GUID to pass to template
  * @param  boolean		Whether to skip showing a sort form (useful if there is another form wrapped around this)
+ * @param  ?ID_TEXT		URL hash component (NULL: none)
  * @return tempcode		The results table
  */
-function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fields_title,$fields,$sortables=NULL,$sortable=NULL,$sort_order=NULL,$sort_name='sort',$message=NULL,$widths=NULL,$tplset=NULL,$max_page_links=8,$guid='1c8645bc2a3ff5bec2e003142185561f',$skip_sortables_form=false)
+function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fields_title,$fields,$sortables=NULL,$sortable=NULL,$sort_order=NULL,$sort_name='sort',$message=NULL,$widths=NULL,$tplset=NULL,$max_page_links=8,$guid='1c8645bc2a3ff5bec2e003142185561f',$skip_sortables_form=false,$hash=NULL)
 {
 	require_code('templates_results_browser');
 	
@@ -112,7 +113,7 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 			$sort=new ocp_tempcode();
 		} else
 		{
-			$sort=do_template('RESULTS_BROWSER_SORT',array('_GUID'=>$guid,'HIDDEN'=>$hidden,'SORT'=>$sort_name,'RAND'=>strval($GLOBALS['INCREMENTAL_ID_GENERATOR']),'URL'=>$sort_url,'SELECTORS'=>$selectors));
+			$sort=do_template('RESULTS_BROWSER_SORT',array('_GUID'=>$guid,'HASH'=>$hash,'HIDDEN'=>$hidden,'SORT'=>$sort_name,'RAND'=>strval($GLOBALS['INCREMENTAL_ID_GENERATOR']),'URL'=>$sort_url,'SELECTORS'=>$selectors));
 		}
 		$GLOBALS['INCREMENTAL_ID_GENERATOR']++;
 	} else $sort=new ocp_tempcode();

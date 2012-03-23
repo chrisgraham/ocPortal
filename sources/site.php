@@ -180,13 +180,16 @@ function init__site()
 		$parsed_base_url=parse_url(get_base_url());
 		if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))
 		{
-			if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO)))
+			if (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO))
 			{
-				attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
-			}
+				if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+				{
+					attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
+				}
 
-			header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
-			exit();
+				header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
+				exit();
+			}
 		}
 	}
 

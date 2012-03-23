@@ -1208,6 +1208,8 @@ class Module_admin_newsletter extends standard_aed_module
 				$template_choices->attach(form_input_list_entry($tpl,post_param('template','MAIL')==$tpl,$tpl));
 			}
 		}
+		if (!file_exists(get_custom_file_base().'/themes/default/templates_custom/MAIL.tpl'))
+			$template_choices->attach(form_input_list_entry('MAIL',true,'MAIL'));
 		closedir($dh);
 		$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER_TEMPLATE'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_TEMPLATE'),'template',$template_choices,NULL,false,true));
 

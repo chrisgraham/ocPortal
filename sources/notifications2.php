@@ -335,7 +335,6 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 
 		$current_setting=notifications_setting($notification_code,$notification_category);
 		if ($current_setting==A__STATISTICAL) $current_setting=_find_member_statistical_notification_type(get_member());
-
 		$notification_types=array();
 		foreach ($_notification_types as $possible=>$ntype)
 		{

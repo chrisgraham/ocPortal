@@ -10,7 +10,7 @@
 		{+END}
 	</p>
 
-	<form title="{!GIVE_POINTS}" method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}">
+	<form title="{!GIVE_POINTS}" method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}#tab__points">
 		<div>
 			<label class="accessibility_hidden" for="give_amount">{!AMOUNT}</label>
 			<input maxlength="8" onkeydown="if (!key_pressed(event,[null,'-','0','1','2','3','4','5','6','7','8','9',190])) return false; return null;" size="7" id="give_amount" class="input_integer_required" value="{!AMOUNT}" onfocus="if (this.value=='{!AMOUNT;}') this.value=''; this.style.color='black';" onblur="if (this.value=='') { this.value='{!AMOUNT;}'; this.style.color='gray'; }" type="text" name="amount" style="color: gray" />
@@ -37,7 +37,7 @@
 		{+END}
 	</p>
 
-	<form title="{!GIVE_POINTS}" method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}">
+	<form title="{!GIVE_POINTS}" method="post" onsubmit="return checkForm(this);" action="{GIVE_URL*}#tab__points">
 		<div>
 			<div class="points_give_shared_options">
 				<label class="accessibility_hidden" for="give_amount">{!AMOUNT}</label>

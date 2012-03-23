@@ -13,6 +13,7 @@
 		<a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed-logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a>
 	
 		<br />
+		<br />
 
 		{+START,BOX}
 			{CONTENT}

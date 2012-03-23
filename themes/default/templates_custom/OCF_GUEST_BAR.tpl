@@ -19,7 +19,7 @@
 								</span>
 							{+END}
 						{+END}
-						<span class="button_options_spacer">[ <a href="{JOIN_LINK*}">{!_JOIN}</a> | <a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]</span>
+						&nbsp;[ <a href="{JOIN_LINK*}">{!_JOIN}</a> | <a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
 					</div>
 				</form>
 			</div>

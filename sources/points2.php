@@ -87,7 +87,7 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 	$yes=$GLOBALS['FORUM_DRIVER']->get_member_email_allowed($recipient_id);
 	if (($yes) && ($send_email))
 	{
-		$_url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$recipient_id),'_SELF',NULL,false,false,true);
+		$_url=build_url(array('page'=>'points','type'=>'member','id'=>$recipient_id),get_module_zone('points'),NULL,false,false,true);
 		$url=$_url->evaluate();
 		require_code('notifications');
 		if ($anonymous)
@@ -100,7 +100,7 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($recipient_id),$sender_id);
 		}
 		$message_raw=do_lang('USER_GIVEN_POINTS_FOR',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_username)),get_site_default_lang());
-		dispatch_notification('received_points_staff',NULL,do_lang('USER_GIVEN_POINTS',number_format($amount),NULL,NULL,get_site_default_lang()),$message_raw,array($recipient_id),$sender_id);
+		dispatch_notification('receive_points_staff',NULL,do_lang('USER_GIVEN_POINTS',number_format($amount),NULL,NULL,get_site_default_lang()),$message_raw,array($recipient_id),$sender_id);
 	}
 
 	if (get_forum_type()=='ocf')

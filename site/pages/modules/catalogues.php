@@ -943,6 +943,14 @@ class Module_catalogues
 			'description'=>get_translated_text($category['cc_description']),
 		);
 
+		$rep_image_str=$category['rep_image'];
+		if ($rep_image_str!='')
+		{
+			$GLOBALS['META_DATA']+=array(
+				'image'=>(url_is_local($rep_image)?(get_custom_base_url().'/'):'').$rep_image_str,
+			);
+		}
+
 		$cart_link=new ocp_tempcode();
 
 		if ($is_ecommerce)

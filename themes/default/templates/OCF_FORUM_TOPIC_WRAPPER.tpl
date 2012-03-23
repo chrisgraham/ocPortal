@@ -74,7 +74,7 @@
 			</form>
 
 			{+START,IF,{MAY_CHANGE_MAX}}
-				<form title="{!PER_PAGE}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" method="get">
+				<form title="{!PER_PAGE}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
 					{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},max}
 
 					<div class="inline">
@@ -96,7 +96,7 @@
 			{+END}
 
 			{+START,IF_NON_EMPTY,{ORDER}}
-				<form title="{!ORDER}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}" method="get">
+				<form title="{!ORDER}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
 					{$HIDDENS_FOR_GET_FORM,{$SELF_URL},order}
 
 					<div class="inline">
@@ -116,34 +116,3 @@
 		</div>
 	{+END}
 {+END}
-{+START,IF_NON_EMPTY,{BUTTONS}}
-	<div class="float_surrounder">
-		{+START,IF_EMPTY,{MODERATOR_ACTIONS}}
-			<br />
-		{+END}
-
-		<div class="ocf_screen_buttons">
-			{+START,IF_PASSED,ID}
-				{+START,INCLUDE,NOTIFICATION_BUTTONS}
-					NOTIFICATIONS_TYPE=ocf_topic
-					NOTIFICATIONS_ID=forum:{ID}
-					NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
-				{+END}
-			{+END}
-			{BUTTONS}
-		</div>
-
-		{+START,IF_PASSED,ID}
-			{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
-				<div class="non_accessibility_redundancy">
-					<div class="breadcrumbs_always">
-						<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
-						{TREE}
-					</div>
-				</div>
-			{+END}
-		{+END}
-	</div>
-{+END}
-
-

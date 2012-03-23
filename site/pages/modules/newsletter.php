@@ -184,7 +184,7 @@ class Module_newsletter
 				'd_from_email'=>'SHORT_TEXT',
 				'd_from_name'=>'SHORT_TEXT',
 				'd_priority'=>'SHORT_INTEGER',
-				'd_mail_template'=>'ID_TEXT',
+				'd_template'=>'ID_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('newsletter_drip_send','d_inject_time',array('d_inject_time'));
 		}
@@ -210,7 +210,7 @@ class Module_newsletter
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
 		{
-			$GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send','d_mail_template','ID_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send','d_template','ID_TEXT');
 		}
 	}
 

@@ -4,7 +4,7 @@ Disabled as we have it integrated into POINTS_GIVE since 4.4
 {+START,BOX,{!CHARGE_USER},,light}
 	<p>{!CHARGE_TEXT}</p>
 
-	<form title="{!CHARGE_USER}" method="post" onsubmit="return checkForm(this);" action="{URL*}">
+	<form title="{!CHARGE_USER}" method="post" onsubmit="return checkForm(this);" action="{URL*}#tab__points">
 		<div>
 			<input type="hidden" name="user" value="{USER*}" />
 			<p class="points_page_field_wrap"><label for="charge_reason"><input maxlength="255" id="charge_reason" class="input_line_required" value="" type="text" name="reason" />{!REASON}</label>: </p>

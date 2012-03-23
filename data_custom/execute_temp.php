@@ -67,4 +67,14 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('attachments2');
+	$original_comcode='[semihtml]<div>
+	Looking forward to participate in this project with these screens from my websites:</div>
+<div>
+	&nbsp;</div>
+<div>
+	Thanks for the hard work Robbie!</div>
+<div>
+	[attachment_safe description=&quot;fgdfg fddfg fdfgd&quot; type=&quot;inline&quot; thumb=&quot;1&quot;]new_1[/attachment_safe]</div>[/semihtml]';
+var_dump(do_comcode_attachments($original_comcode,'xx',123,true));
 }

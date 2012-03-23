@@ -277,18 +277,19 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 			'pt_to'=>$topic_info['t_pt_to'],
 			'is_open'=>$topic_info['t_is_open'],
 			'is_threaded'=>is_null($topic_info['f_is_threaded'])?false:$topic_info['f_is_threaded'],
-		);
-
-		$GLOBALS['META_DATA']+=array(
-			'created'=>date('Y-m-d',$topic_info['t_cache_first_time']),
-			'creator'=>$topic_info['t_cache_first_username'],
-			'publisher'=>'', // blank means same as creator
-			'modified'=>date('Y-m-d',$topic_info['t_cache_last_time']),
-			'type'=>'Forum topic',
-			'title'=>$topic_info['t_cache_first_title'],
-			'identifier'=>'_SEARCH:topicview:misc:'.strval($topic_id),
-			'description'=>$topic_info['t_description'],
-			'numcomments'=>strval($topic_info['t_cache_num_posts']),
+			'last_time'=>$topic_info['t_cache_last_time'],
+			'meta_data'=>array(
+				'created'=>date('Y-m-d',$topic_info['t_cache_first_time']),
+				'creator'=>$topic_info['t_cache_first_username'],
+				'publisher'=>'', // blank means same as creator
+				'modified'=>date('Y-m-d',$topic_info['t_cache_last_time']),
+				'type'=>'Forum topic',
+				'title'=>$topic_info['t_cache_first_title'],
+				'identifier'=>'_SEARCH:topicview:misc:'.strval($topic_id),
+				'description'=>$topic_info['t_description'],
+				'numcomments'=>strval($topic_info['t_cache_num_posts']),
+				'image'=>find_theme_image('pagepics/forums'),
+			),
 		);
 
 		// Poll?

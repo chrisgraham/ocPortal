@@ -1187,7 +1187,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 				// Create and document attachment
 				if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
-				$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'type'=>'new','attachmenttype'=>$attributes['type'],'description'=>$attachment['a_description'],'id'=>intval($attach_id),'marker'=>$marker); // Marker will allow us to search back and replace this with the added id
+				$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'type'=>'new','attachmenttype'=>$attributes['type'],'description'=>$attachment['a_description'],'id'=>intval($attach_id),'marker'=>$marker,'comcode'=>$comcode); // Marker will allow us to search back and replace this with the added id
 			}
 
 			// New attachments
@@ -1288,7 +1288,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 
 				// Create and document attachment
-				$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>time(),'type'=>(substr($id,0,4)=='new_')?'new':'url','attachmenttype'=>$attributes['type'],'description'=>$attachment['a_description'],'id'=>intval($attach_id),'marker'=>$marker); // Marker will allow us to search back and replace this with the added id
+				$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>time(),'type'=>(substr($id,0,4)=='new_')?'new':'url','attachmenttype'=>$attributes['type'],'description'=>$attachment['a_description'],'id'=>intval($attach_id),'marker'=>$marker,'comcode'=>$comcode); // Marker will allow us to search back and replace this with the added id
 
 			// Existing attachments
 			} else
@@ -1315,7 +1315,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if (($already_referenced) || ($as_admin) || (/*(!is_guest($source_member)) && */($source_member===$owner)) || (((has_specific_permission($source_member,'reuse_others_attachments')) || ($owner==$source_member)) && (has_attachment_access($source_member,$__id))))
 				{
 					if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
-					$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>$attachment['a_add_time'],'type'=>'existing','id'=>$__id,'attachmenttype'=>$attributes['type'],'marker'=>$marker);
+					$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>$attachment['a_add_time'],'type'=>'existing','id'=>$__id,'attachmenttype'=>$attributes['type'],'marker'=>$marker,'comcode'=>$comcode);
 				} else
 				{
 					require_lang('permissions');

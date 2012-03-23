@@ -4,12 +4,12 @@
 
 		<div class="ocf_information_bar float_surrounder">
 			{+START,IF_NON_EMPTY,{AVATAR}}
-				<div{+START,IF,{$NOT,{$MOBILE}}} style="min-height: {MAX_AVATAR_HEIGHT|}px"{+END} class="ocf_member_column ocf_member_column_a">
+				<div{+START,IF,{$NOT,{$MOBILE}}} style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_a">
 					<img alt="{!AVATAR}" title="{!AVATAR}" src="{AVATAR*}" />
 				</div>
 			{+END}
 
-			<div{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {MAX_AVATAR_HEIGHT|}px"{+END} class="ocf_member_column ocf_member_column_b">
+			<div{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_b">
 				<span class="ocf_member_column_title">{!WELCOME_BACK,<a href="{PROFILE_URL*}">{USERNAME*}</a>}</span><br />
 				{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 					<span class="ocf_member_column_logout">(<form title="{!LOGOUT}" class="inline" method="post" action="{LOGOUT_URL*}"><input class="buttonhyperlink" type="submit" value="{!LOGOUT}" /></form>)</span><br />
@@ -22,7 +22,7 @@
 				{!PRIMARY_GROUP}: {PRIMARY_GROUP*}<br />
 			</div>
 
-			<div{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {MAX_AVATAR_HEIGHT|}px"{+END} class="ocf_member_column ocf_member_column_c">
+			<div{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_c">
 				{+START,IF,{$ADDON_INSTALLED,search}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}}
 					{+START,IF,{$EQ,{$PAGE},forumview}}
 						{+START,IF,{$EQ,{$_GET,type},pt}}
@@ -69,7 +69,7 @@
 				</div>
 			</div>
 
-			<{$?,{$VALUE_OPTION,html5},nav,div}{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {MAX_AVATAR_HEIGHT|}px"{+END} class="ocf_member_column ocf_member_column_d"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
+			<{$?,{$VALUE_OPTION,html5},nav,div}{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_d"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 				<span class="ocf_member_column_title">{!VIEW}:</span>
 				<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list_compact">
 					<li>&raquo; <a href="{PERSONAL_TOPIC_URL*}">{!PERSONAL_TOPICS}{+START,IF_NON_EMPTY,{PT_EXTRA}} <span class="ocf_member_column_pts">{PT_EXTRA}</span>{+END}</a></li>

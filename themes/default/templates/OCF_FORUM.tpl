@@ -31,35 +31,41 @@
 	</p>
 {+END}
 
-{+START,IF_PASSED,ID}
-	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
-		<div class="non_accessibility_redundancy">
-			<div class="float_surrounder">
-				<div class="ocf_screen_buttons">
-					{+START,IF_PASSED,ID}
-						{+START,INCLUDE,NOTIFICATION_BUTTONS}
-							NOTIFICATIONS_TYPE=ocf_topic
-							NOTIFICATIONS_ID=forum:{ID}
-							NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
-						{+END}
-					{+END}
-					{BUTTONS}
-				</div>
-			</div>
+{+START,SET,BUTTONS}
+	<div class="float_surrounder">
+		<div class="ocf_screen_buttons">
+			{+START,IF_PASSED,ID}
+				{+START,INCLUDE,NOTIFICATION_BUTTONS}
+					NOTIFICATIONS_TYPE=ocf_topic
+					NOTIFICATIONS_ID=forum:{ID}
+					NOTIFICATIONS_PAGELINK=forum:topics:toggle_notifications_forum:forum%3A{ID}
+				{+END}
+			{+END}
+			{BUTTONS}
 		</div>
-	{+END}
+	</div>
 {+END}
 
-{+START,IF,{$OR,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}},{$IS_NON_EMPTY,{CATEGORIES}}}}
-	<br />
+{+START,IF_NON_EMPTY,{TOPIC_WRAPPER}}{$,Does not show if no topics as that would double it up}
+	{+START,IF_PASSED,ID}{$,Does not show on PT/virtual-forum view as those are less actiony places}
+		{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
+			<div class="non_accessibility_redundancy">
+				{$GET,BUTTONS}
+			</div>
+			<br />
+		{+END}
+	{+END}
 {+END}
 
 {TOPIC_WRAPPER}
 
-{+START,IF_NON_PASSED,ID}
-	<div class="float_surrounder">
-		<div class="ocf_screen_buttons">
-			{BUTTONS}
+{$GET,BUTTONS}
+
+{+START,IF_PASSED,ID}
+	<div class="non_accessibility_redundancy">
+		<div class="breadcrumbs_always">
+			<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
+			{TREE}
 		</div>
 	</div>
 {+END}

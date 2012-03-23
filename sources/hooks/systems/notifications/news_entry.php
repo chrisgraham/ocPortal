@@ -41,10 +41,13 @@ class Hook_Notification_news_entry extends Hook_Notification
 		$types=$GLOBALS['SITE_DB']->query_select('news_categories',array('id','nc_title'));
 		foreach ($types as $type)
 		{
-			$pagelinks[]=array(
-				'id'=>$type['id'],
-				'title'=>get_translated_text($type['nc_title']),
-			);
+			if (has_category_access(get_member(),'news',strval($type['id'])))
+			{
+				$pagelinks[]=array(
+					'id'=>$type['id'],
+					'title'=>get_translated_text($type['nc_title']),
+				);
+			}
 		}
 		global $M_SORT_KEY;
 		$M_SORT_KEY='title';

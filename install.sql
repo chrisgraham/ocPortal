@@ -2388,7 +2388,7 @@ insert into `ocp_db_meta` values('translate','id','*AUTO'),
  ('newsletter_drip_send','d_from_email','SHORT_TEXT'),
  ('newsletter_drip_send','d_from_name','SHORT_TEXT'),
  ('newsletter_drip_send','d_priority','SHORT_INTEGER'),
- ('newsletter_drip_send','d_mail_template','ID_TEXT'),
+ ('newsletter_drip_send','d_template','ID_TEXT'),
  ('newsletter_periodic','id','*AUTO'),
  ('newsletter_periodic','np_message','LONG_TEXT'),
  ('newsletter_periodic','np_subject','LONG_TEXT'),
@@ -5623,7 +5623,7 @@ CREATE TABLE `ocp_newsletter_drip_send` (
   `d_from_email` varchar(255) NOT NULL,
   `d_from_name` varchar(255) NOT NULL,
   `d_priority` tinyint(4) NOT NULL,
-  `d_mail_template` varchar(80) NOT NULL,
+  `d_template` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `d_inject_time` (`d_inject_time`)
 ) ENGINE=MyISAM;

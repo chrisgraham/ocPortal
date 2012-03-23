@@ -145,7 +145,8 @@ function handle_facebook_connection_login($current_logged_in_member)
 				$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
 				if (!is_null($test)) // Make sure there's no conflict
 				{
-					$update_map=array('m_username'=>$username,'m_email_address'=>$email_address,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);
+					$update_map=array('m_username'=>$username,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);
+					if ($email_address!='') $update_map['m_email_address']=$email_address;
 					if (($avatar_url!==NULL) && (($test=='') || (strpos($test,'facebook')!==false) || (strpos($test,'fbcdn')!==false)))
 					{
 						if ($timezone!==NULL)

@@ -38,13 +38,17 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
 	{
 		$pagelinks=array();
 
-		$types=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','room_name'));
+		require_code('chat');
+		$types=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','room_name'),array('is_im'=>0));
 		foreach ($types as $type)
 		{
-			$pagelinks[]=array(
-				'id'=>$type['id'],
-				'title'=>$type['room_name'],
-			);
+			if (check_chatroom_access($type,true))
+			{
+				$pagelinks[]=array(
+					'id'=>$type['id'],
+					'title'=>$type['room_name'],
+				);
+			}
 		}
 		global $M_SORT_KEY;
 		$M_SORT_KEY='title';

@@ -41,10 +41,13 @@ class Hook_Notification_calendar_event extends Hook_Notification
 		$types=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
 		foreach ($types as $type)
 		{
-			$pagelinks[]=array(
-				'id'=>$type['id'],
-				'title'=>get_translated_text($type['t_title']),
-			);
+			if ((has_category_access(get_member(),'calendar',strval($type['id']))) && ($type['id']!=db_get_first_id()))
+			{
+				$pagelinks[]=array(
+					'id'=>$type['id'],
+					'title'=>get_translated_text($type['t_title']),
+				);
+			}
 		}
 		global $M_SORT_KEY;
 		$M_SORT_KEY='title';

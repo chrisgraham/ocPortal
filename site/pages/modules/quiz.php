@@ -460,6 +460,7 @@ class Module_quiz
 			'title'=>get_translated_text($quiz['q_name']),
 			'identifier'=>'_SEARCH:quiz:do:'.strval($id),
 			'description'=>get_translated_text($quiz['q_start_text']),
+			'image'=>find_theme_image('pagepics/quiz'),
 		);
 		
 		$edit_url=new ocp_tempcode();

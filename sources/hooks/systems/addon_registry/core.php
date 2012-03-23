@@ -74,7 +74,6 @@ class Hook_addon_registry_core
 	{
 		return array(
 
-			'sources/hooks/systems/notifications/activity.php',
 			'sources/hooks/systems/notifications/low_disk_space.php',
 			'sources/hooks/systems/notifications/hack_attack.php',
 			'sources/hooks/systems/notifications/auto_ban.php',

@@ -39,21 +39,4 @@ class Hook_Notification_ocf_choose_avatar extends Hook_Notification__Staff
 		$list['ocf_choose_avatar']=array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_ocf_choose_avatar'));
 		return $list;
 	}
-
-	/**
-	 * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
-	 *
-	 * @param  ID_TEXT		Notification code
-	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
-	 * @param  ?array			List of member IDs we are restricting to (NULL: no restriction). This effectively works as a intersection set operator against those who have enabled.
-	 * @param  integer		Start position (for pagination)
-	 * @param  integer		Maximum (for pagination)
-	 * @return array			A pair: Map of members to their notification setting, and whether there may be more
-	 */
-	function list_members_who_have_enabled($notification_code,$category=NULL,$to_member_ids=NULL,$start=0,$max=300)
-	{
-		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-
-		return $members;
-	}
 }

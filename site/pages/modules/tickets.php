@@ -499,6 +499,7 @@ class Module_tickets
 					'title'=>$_comments[0]['title'],
 					'identifier'=>'_SEARCH:tickets:ticket:'.$id,
 					'description'=>'',
+					'image'=>find_theme_image('pagepics/tickets'),
 				);
 
 				// "Staff only reply" tickbox
