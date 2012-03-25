@@ -85,7 +85,7 @@ if (!function_exists('file_get_contents'))
 $hashed_password=$_GET['hashed_password'];
 global $SITE_INFO;
 require_once($FILE_BASE.'/info.php');
-if (($SITE_INFO['admin_password']!=$hashed_password) && (md5($SITE_INFO['admin_password'])!=$hashed_password)) exit('Access Denied');
+if (!upgrader2_check_master_password($hashed_password)) exit('Access Denied');
 
 // Open TAR file
 $tmp_path=$_GET['tmp_path'];
@@ -227,3 +227,16 @@ function up2_do_footer()
 END;
 }
 
+/**
+ * Check the given master password is valid.
+ *
+ * @param  SHORT_TEXT	Given master password
+ * @return boolean		Whether it is valid
+ */
+function upgrader2_check_master_password($password_given_double_hashed)
+{
+	global $SITE_INFO;
+	$actual_password_double_hashed=md5($SITE_INFO['admin_password']);
+
+	return ($password_given_double_hashed==$actual_password_double_hashed);
+}

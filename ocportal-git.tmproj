@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>sources/symbols.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -64,7 +62,7 @@
 			<key>filename</key>
 			<string>code_editor.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-16T12:30:32Z</date>
+			<date>2012-03-24T18:07:52Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -78,7 +76,7 @@
 			<key>filename</key>
 			<string>config_editor.php</string>
 			<key>lastUsed</key>
-			<date>2012-02-29T15:01:11Z</date>
+			<date>2012-03-24T18:12:53Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -154,7 +152,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-22T15:14:01Z</date>
+			<date>2012-03-24T18:12:52Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -166,7 +164,7 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-18T17:06:08Z</date>
+			<date>2012-03-24T18:12:52Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -240,7 +238,7 @@
 			<key>filename</key>
 			<string>rootkit_detection.php</string>
 			<key>lastUsed</key>
-			<date>2012-02-05T02:00:35Z</date>
+			<date>2012-03-24T18:07:52Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -320,7 +318,7 @@
 			<key>filename</key>
 			<string>uninstall.php</string>
 			<key>lastUsed</key>
-			<date>2011-12-29T11:30:22Z</date>
+			<date>2012-03-24T18:07:53Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -852,36 +850,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>pages/modules/recommend.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>36</integer>
-				<key>line</key>
-				<integer>229</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>204</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>229</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>38</integer>
-				<key>line</key>
-				<integer>229</integer>
-			</dict>
 		</dict>
 		<key>parameters.xml</key>
 		<dict>
@@ -1541,20 +1509,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>sources/hooks/systems/notifications/ocf_choose_photo.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>42</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>sources/hooks/systems/preview/comcode_page.php</key>
 		<dict>
 			<key>caret</key>
@@ -1624,36 +1578,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
-		</dict>
-		<key>sources/symbols.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>16</integer>
-				<key>line</key>
-				<integer>2258</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2233</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>2258</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>16</integer>
-				<key>line</key>
-				<integer>2258</integer>
-			</dict>
 		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
@@ -2597,20 +2521,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>5465</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>5429</integer>
-		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_SHAKE.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2682,13 +2592,9 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>sources/symbols.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{633, 179}, {1154, 939}}</string>
+	<string>{{600, 144}, {1154, 939}}</string>
 </dict>
 </plist>

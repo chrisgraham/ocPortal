@@ -54,6 +54,7 @@ class Hook_cron_classifieds
 					$member_id=$entry['ce_submitter'];
 					$renew_url=build_url(array('page'=>'classifieds','type'=>'adverts','id'=>$member_id),get_module_zone('classifieds'));
 
+					require_code('catalogues');
 					$data_map=get_catalogue_entry_map($entry,NULL,'CATEGORY','DEFAULT',NULL,NULL,array(0));
 					$ad_title=$data_map['FIELD_0_PLAIN'];
 					if (is_object($ad_title)) $ad_title=$ad_title->evaluate();
@@ -62,7 +63,7 @@ class Hook_cron_classifieds
 					$mail=do_lang('MAIL_CLASSIFIED_ADVERT_EXPIRING',$ad_title,comcode_escape(get_site_name()),comcode_escape($renew_url->evaluate()),get_lang($member_id),false);
 
 					// Send actual notification
-					dispatch_notification('classifieds__'.$catalogue['c_name'],$subject_tag,$mail,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
+					dispatch_notification('classifieds__'.$entry['c_name'],$subject_tag,$mail,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 				}
 			}
 		}

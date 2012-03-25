@@ -147,8 +147,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 	if (is_object($content_url)) $content_url=$content_url->evaluate();
 
 	$serialized_options=serialize(array($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum));
-	global $SITE_INFO;
-	$hash=md5($serialized_options.$SITE_INFO['admin_password']); // A little security, to ensure $serialized_options is not tampered with
+	$hash=best_hash($serialized_options,get_site_salt()); // A little security, to ensure $serialized_options is not tampered with
 
 	// AJAX support
 	$comment_details->attach(do_template('COMMENT_AJAX_HANDLER',array(
@@ -173,8 +172,7 @@ function post_comment_script()
 
 	// Check security
 	$hash=post_param('hash');
-	global $SITE_INFO;
-	if (md5($options.$SITE_INFO['admin_password'])!=$hash)
+	if (best_hash($options,get_site_salt())!=$hash)
 	{
 		header('Content-Type: text/plain; charset='.get_charset());
 		exit();
@@ -726,10 +724,10 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON';
 			if ($content_title=='')
 			{
-				syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',url_to_pagelink(is_object($content_url)?$content_url->evaluate():$content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+				syndicate_described_activity($activity_type.'_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
 			} else
 			{
-				syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($content_url)?$content_url->evaluate():$content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
+				syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,url_to_pagelink(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,NULL,false,$submitter);
 			}
 		}
 	}

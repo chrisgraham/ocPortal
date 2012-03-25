@@ -84,8 +84,9 @@ END;
 	$info_file=file_get_contents('info.php',FILE_TEXT);
 	$matches=array();
 	if (preg_match('#\$SITE_INFO\[\'admin_password\'\]=\'([^\']*)\';#',$info_file,$matches)==0) exit(':(');
-	$password=$matches[1];
-	if (md5($_POST['password'])!=$password)
+	global $SITE_INFO;
+	$SITE_INFO=array('admin_password'=>$matches[1]);
+	if (!rk_check_master_password($_POST['password']))
 	{
 		echo '<p>Incorrect master password</p>';
 		rd_do_footer();
@@ -264,6 +265,27 @@ function rd_do_footer()
 	</div></body>
 </html>
 END;
+}
+
+/**
+ * Check the given master password is valid.
+ *
+ * @param  SHORT_TEXT	Given master password
+ * @param  SHORT_TEXT	Actual master password
+ * @return boolean		Whether it is valid
+ */
+function rk_check_master_password($password_given,$password)
+{
+	global $SITE_INFO;
+	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in info.php currently so cannot authenticate');
+	$actual_password_hashed=$SITE_INFO['admin_password'];
+	$salt='';
+	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
+	{
+		$actual_password_hashed=substr($actual_password_hashed,1);
+		$salt='ocp';
+	}
+	return (((strlen($password_given)!=32) && ($actual_password_hashed==$password_given)) || ($actual_password_hashed==md5($password_given.$salt)));
 }
 
 

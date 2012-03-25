@@ -371,7 +371,7 @@ class Module_newsletter
 			if (!$found_level) warn_exit(do_lang_tempcode('NOT_NEWSLETTER_SUBSCRIBER'));
 
 			$code_confirm=mt_rand(1,32000);
-			$salt=uniqid('');
+			$salt=produce_salt();
 			$GLOBALS['SITE_DB']->query_insert('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'language'=>$lang,'email'=>$email,'code_confirm'=>$code_confirm,'pass_salt'=>$salt,'the_password'=>md5($password.$salt)));
 			$this->send_confirmation($email,$code_confirm,NULL,$forename,$surname);
 			$message=do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email));
@@ -430,7 +430,7 @@ class Module_newsletter
 		$email=trim(get_param('email'));
 		$lang=$GLOBALS['SITE_DB']->query_value('newsletter','language',array('email'=>$email));
 		$salt=$GLOBALS['SITE_DB']->query_value('newsletter','pass_salt',array('email'=>$email));
-		$new_password=uniqid('');
+		$new_password=produce_salt();
 		$GLOBALS['SITE_DB']->query_update('newsletter',array('the_password'=>md5($new_password.$salt)),array('email'=>$email),'',1);
 
 		$message=do_lang('NEWSLETTER_PASSWORD_CHANGE',comcode_escape(get_ip_address()),comcode_escape($new_password),NULL,$lang);
@@ -458,7 +458,7 @@ class Module_newsletter
 		if (!array_key_exists(0,$_subscriber)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		$subscriber=$_subscriber[0];
 
-		$needed_hash=md5('xunsub'.$subscriber['the_password']);
+		$needed_hash=best_hash($subscriber['the_password'],'xunsub');
 		
 		if ($hash!=$needed_hash)
 		{

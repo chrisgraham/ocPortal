@@ -97,10 +97,8 @@ else */require_once($FILE_BASE.'/info.php');
 
 if ((array_key_exists('given_password',$_POST)))
 {
-	global $SITE_INFO;
-	$admin_password_hashed=$SITE_INFO['admin_password'];
 	$given_password=$_POST['given_password'];
-	if ((md5($given_password)==$admin_password_hashed) || ($given_password==$admin_password_hashed))
+	if (ce_check_master_password($given_password))
 	{
 		if ((!array_key_exists('path',$_POST)) && (!array_key_exists('path',$_GET))) do_get_path($given_password);
 		else
@@ -701,4 +699,23 @@ function ce_sync_file_move($old,$new)
 	}
 }
 
+/**
+ * Check the given master password is valid.
+ *
+ * @param  SHORT_TEXT	Given master password
+ * @return boolean		Whether it is valid
+ */
+function ce_check_master_password($password_given)
+{
+	global $SITE_INFO;
+	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in info.php currently so cannot authenticate');
+	$actual_password_hashed=$SITE_INFO['admin_password'];
+	$salt='';
+	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
+	{
+		$actual_password_hashed=substr($actual_password_hashed,1);
+		$salt='ocp';
+	}
+	return (((strlen($password_given)!=32) && ($actual_password_hashed==$password_given)) || ($actual_password_hashed==md5($password_given.$salt)));
+}
 

@@ -420,7 +420,7 @@ class OCP_Topic
 		if (!is_null($this->topic_id))
 		{
 			$serialized_options=serialize(array($this->topic_id,$num_to_show_limit,true,false,strval($forum_id),$this->reverse,$may_reply,$highlight_by_user,count($all_individual_review_ratings)!=0));
-			$hash=md5($serialized_options);
+			$hash=best_hash($serialized_options,get_site_salt());
 		} else
 		{
 			$serialized_options=mixed();
@@ -713,7 +713,7 @@ class OCP_Topic
 					{
 						if (is_null($this->topic_info))
 						{
-							$this->topic_info=ocf_read_in_topic($this->topic_id,0,0,false);
+							$this->topic_info=ocf_read_in_topic($this->topic_id,0,0,false,false);
 						}
 						$buttons=ocf_render_post_buttons($this->topic_info,$post,$may_reply);
 					}

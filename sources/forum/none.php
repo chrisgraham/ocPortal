@@ -884,8 +884,8 @@ class forum_driver_none extends forum_driver_base
 			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
 			return $out;
 		}
-		global $SITE_INFO;
-		if (($SITE_INFO['admin_password']!=$password_hashed) && (md5($SITE_INFO['admin_password'])!=$password_hashed))
+
+		if (!check_master_password($password_raw))
 		{
 			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
 			return $out;

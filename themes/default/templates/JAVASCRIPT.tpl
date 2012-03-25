@@ -1692,6 +1692,7 @@ function resizeFrame(name,minHeight)
 function trigger_resize(and_subframes)
 {
 	if (typeof window.parent=='undefined') return;
+	if (typeof window.parent.document=='undefined') return;
 	var frames=window.parent.document.getElementsByTagName('iframe');
 	var done=false;
 

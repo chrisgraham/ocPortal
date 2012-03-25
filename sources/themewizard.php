@@ -80,6 +80,8 @@ function load_themewizard_params_from_theme($theme,$guess_images_if_needed=false
 			if (substr($sheet,-4)=='.css')
 			{
 				$css_path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/'.$sheet;
+				if (!file_exists($css_path))
+					$css_path=get_custom_file_base().'/themes/default/css_custom/'.$sheet;
 				$css_file=file_get_contents($css_path);
 				$matches=array();
 				$num_matches=preg_match_all('#\{\$IMG[;\#]?,([\w\_\-\d]+)\}#',$css_file,$matches);

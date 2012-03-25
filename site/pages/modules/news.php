@@ -571,8 +571,8 @@ class Module_news
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
 		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));
 
-		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','type'=>'misc','blog'=>$blog,'start'=>($start-$max==0)?NULL:$start-$max)+(($filter=='*')?array():array('filter'=>$filter))+(($filter_and=='*')?array():array('filter_and'=>$filter_and)),'_SELF');
-		$next_url=($rcount!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','type'=>'misc','blog'=>$blog,'start'=>$start+$max)+(($filter=='*')?array():array('filter'=>$filter))+(($filter_and=='*')?array():array('filter_and'=>$filter_and)),'_SELF');
+		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','type'=>'misc','blog'=>$blog,'start'=>($start-$max==0)?NULL:$start-$max)+(($filter=='*')?array():array('filter'=>$filter))+((($filter_and=='*')?array():array('filter_and'=>$filter_and))+(($max==20)?array():array('max'=>$max))),'_SELF');
+		$next_url=($rcount!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','type'=>'misc','blog'=>$blog,'start'=>$start+$max)+(($filter=='*')?array():array('filter'=>$filter))+((($filter_and=='*')?array():array('filter_and'=>$filter_and))+(($max==20)?array():array('max'=>$max))),'_SELF');
 		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'264a8412dfd0b5bb80cd767702bdd600','NEXT_LINK'=>$next_url,'PREVIOUS_LINK'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		if ($blog===1)

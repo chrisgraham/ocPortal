@@ -153,7 +153,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 
 	if (($salt=='') && ($password_compatibility_scheme==''))
 	{
-		$salt=uniqid('');
+		$salt=produce_salt();
 		$password_salted=md5($salt.md5($password));
 	} else
 	{

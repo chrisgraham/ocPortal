@@ -980,7 +980,7 @@ class Module_admin_themes
 		{
 			if ((substr($file,0,strlen($find_for)+1)==$find_for.'.') && (substr($file,-9)!='.editfrom'))
 			{
-				$temp=explode('.',$file,2);
+				$temp=explode('.',$file,3);
 				$filesarray[$file]=$temp[2];
 			}
 		}

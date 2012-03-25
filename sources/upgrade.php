@@ -33,10 +33,8 @@ function upgrade_script()
 
 	if ((array_key_exists('given_password',$_POST)))
 	{
-		global $SITE_INFO;
-		$admin_password_hashed=$SITE_INFO['admin_password'];
 		$given_password=post_param('given_password');
-		if ((md5($given_password)==$admin_password_hashed) || ($given_password==$admin_password_hashed))
+		if (check_master_password($given_password))
 		{
 			$type=get_param('type','misc');
 
@@ -356,7 +354,8 @@ function upgrade_script()
 						$tmp_data_file=fopen($tmp_data_path,'wb');
 						fwrite($tmp_data_file,serialize($data));
 						fclose($tmp_data_file);
-						$extract_url=get_base_url().'/data/upgrader2.php?hashed_password='.urlencode(md5(post_param('given_password'))).'&tmp_path='.urlencode($temp_path).'&file_offset=0&tmp_data_path='.urlencode($tmp_data_path).'&done='.urlencode(do_lang('DONE'));
+						global $SITE_INFO;
+						$extract_url=get_base_url().'/data/upgrader2.php?hashed_password='.urlencode(md5($SITE_INFO['admin_password'])).'&tmp_path='.urlencode($temp_path).'&file_offset=0&tmp_data_path='.urlencode($tmp_data_path).'&done='.urlencode(do_lang('DONE'));
 						echo '<p>'.do_lang('FU_EXTRACTING_WINDOW',integer_format(count($data['todo']))).'</p>';
 						echo '<iframe frameBorder="0" title="" style="width: 100%; height: 400px" src="'.escape_html($extract_url).'"></iframe>';
 					} else

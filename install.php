@@ -1004,7 +1004,7 @@ function step_5()
 		if (($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='admin_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm')) continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
-		if ($key=='admin_password') $val=md5($val);
+		if ($key=='admin_password') $val='!'.md5($val.'ocp');
 		$SITE_INFO[$key]=trim($val);
 	}
 	require_code('database');
@@ -1455,7 +1455,7 @@ function step_5_write_config()
 		if ((($key=='admin_username') && (post_param('forum_type')!='none')) || ($key=='clear_existing_forums_on_install') || ($key=='allow_reports_default') || ($key=='board_path') || ($key=='confirm') || ($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='admin_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm')) continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
-		if ($key=='admin_password') $val=md5($val);
+		if ($key=='admin_password') $val='!'.md5($val.'ocp');
 		if ($key=='base_url') $val=$base_url;
 		$_val=addslashes(trim($val));
 		fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");

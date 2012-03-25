@@ -99,7 +99,7 @@ class Hook_cron_ocf_welcome_emails
 						if ($newsletter_style)
 						{
 							$sendid='n'.strval($member['id']);
-							$hash=md5('xunsub'.$member['the_password']);
+							$hash=best_hash($member['the_password'],'xunsub');
 						} else
 						{
 							$sendid='w'.strval('id');

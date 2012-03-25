@@ -1469,7 +1469,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_photo_url'=>$urls[0],'m_photo_thumb_url'=>$urls[1]),array('id'=>$member_id),'',1);
 
 	require_code('notifications');
-	dispatch_notification('ocf_member_photo',NULL,do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)));
+	dispatch_notification('ocf_choose_photo',NULL,do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)));
 
 	// If [s]no avatar, or default avatar, or [/s]avatars not installed, use photo for it
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);

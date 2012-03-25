@@ -5304,14 +5304,21 @@ function fireFakeChangeFor(name,value)
 	if (typeof rep.plUploadOb=='undefined') return;
 	var ob=rep.plUploadOb;
 	if (typeof ob.settings=='undefined') return;
+
 	if (ob.settings.immediate_submit{+START,IF,{$VALUE_OPTION,aviary}} || true{+END})
 	{
 		var txtID = document.getElementById(ob.settings.txtFileDbID);
 		var txtFileName = document.getElementById(ob.settings.txtFileNameID);
-		if ((txtID.value == '-1') && (txtFileName.value != ""))
+		if ((txtID.value == '-1') && (txtFileName.value != '') && (value != ''))
 		{
 			ob.submitting=false;
 			ob.start();
+
+			// plupload does not support cancelling mid-way (ob.stop won't do that unfortunately)
+			var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
+			if (clearBtn) clearBtn.style.display='none';
+			var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
+			if (uploadBtn) uploadBtn.disabled=true;
 		}
 	}
 }
@@ -5353,7 +5360,9 @@ function uploadSuccess(ob,file,data) {
 	var progress = new FileProgress(file, ob.settings.progress_target);
 	progress.setComplete();
 	progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
-	
+
+	if (data.response=='') return ''; // NOT success, happens in plupload when clicking away from document (i.e. implicit cancel)
+
 	var decodedData = eval('(' + data.response + ')');
 
 	var id=document.getElementById(ob.settings.txtFileDbID);

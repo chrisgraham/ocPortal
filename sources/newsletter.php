@@ -51,7 +51,7 @@ function basic_newsletter_join($email,$interest_level=4,$lang=NULL,$get_confirm_
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter','email',array('email'=>$email));
 		if (is_null($test))
 		{
-			$salt=uniqid('');
+			$salt=produce_salt();
 			$GLOBALS['SITE_DB']->query_insert('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'email'=>$email,'code_confirm'=>$code_confirm,'pass_salt'=>$salt,'the_password'=>md5($password.$salt),'language'=>$lang),false,true); // race condition
 
 			if ($get_confirm_mail)
@@ -178,7 +178,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 						if ($username=='') $username=do_lang('NEWSLETTER_SUBSCRIBER',get_site_name());
 						$usernames[]=$username;
 						$ids[]='n'.strval($_temp['id']);
-						$hashes[]=md5('xunsub'.$_temp['the_password']);
+						$hashes[]=best_hash($_temp['the_password'],'xunsub');
 					} else
 					{
 						$raw_rows[]=$_temp;

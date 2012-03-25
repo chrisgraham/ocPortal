@@ -67,14 +67,20 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('attachments2');
-	$original_comcode='[semihtml]<div>
-	Looking forward to participate in this project with these screens from my websites:</div>
-<div>
-	&nbsp;</div>
-<div>
-	Thanks for the hard work Robbie!</div>
-<div>
-	[attachment_safe description=&quot;fgdfg fddfg fdfgd&quot; type=&quot;inline&quot; thumb=&quot;1&quot;]new_1[/attachment_safe]</div>[/semihtml]';
-var_dump(do_comcode_attachments($original_comcode,'xx',123,true));
+	header('Content-type: text/plain');
+	$forum_id=is_numeric(get_option('comments_forum_name'))?intval(get_option('comments_forum_name')):$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('comments_forum_name'));
+	$query='SELECT id,t_cache_first_title FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_forum_id=166 AND t_description=\'\' AND t_cache_first_title REGEXP \'\\\(#[[:alnum:]]+\\\_[[:alnum:]]*\\\)\'';
+	$topics=$GLOBALS['FORUM_DB']->query($query);
+	$tally=0;
+	foreach ($topics as $t)
+	{
+		$matches=array();
+		preg_match('#\(\#(\w+)\_(\w)+\)#',$t['t_cache_first_title'],$matches);
+		$type=$matches[1];
+		$id=$matches[2];
+		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_description'=>$type.'_'.$id),array('id'=>$t['id']),'',1);
+		$tally++;
+	}
+	echo 'Updated '.integer_format($tally).' comment topic identifiers.';
+	exit();
 }

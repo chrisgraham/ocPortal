@@ -223,9 +223,10 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
  * @param  integer		The start row for getting details of posts in the topic (i.e. 0 is start of topic, higher is further through).
  * @param  integer		The maximum number of posts to get detail of.
  * @param  boolean		Whether we are viewing poll results for the topic (if there is no poll for the topic, this is irrelevant).
+ * @param  boolean		Whether to check permissions.
  * @return array			The map of details.
  */
-function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
+function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check_perms=true)
 {
 	if (!is_null($topic_id))
 	{
@@ -238,7 +239,10 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false)
 		$forum_id=$topic_info['t_forum_id'];
 		if (!is_null($forum_id))
 		{
-			if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS_LEVEL');
+			if ($check_perms)
+			{
+				if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS_LEVEL');
+			}
 		} else
 		{
 			// It must be a personal topic. Do we have access?

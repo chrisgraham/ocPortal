@@ -39,6 +39,18 @@ if (!is_file($FILE_BASE.'/sources/global.php'))
 }
 @chdir($FILE_BASE);
 
+if (get_magic_quotes_gpc())
+{
+	foreach ($_POST as $key=>$val)
+	{
+		$_POST[$key]=stripslashes($val);
+	}
+	foreach ($_GET as $key=>$val)
+	{
+		$_GET[$key]=stripslashes($val);
+	}
+}
+
 /*if (file_exists($FILE_BASE.'/use_comp_name'))
 	require_once($FILE_BASE.'/'.(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']).'.php');
 else */require_once($FILE_BASE.'/info.php');
@@ -54,11 +66,8 @@ if (!is_writable($FILE_BASE.'/info.php'))
 ce_do_header();
 if ((array_key_exists('given_password',$_POST)))
 {
-	global $SITE_INFO;
-	$admin_password_hashed=$SITE_INFO['admin_password'];
 	$given_password=$_POST['given_password'];
-	if (get_magic_quotes_gpc()) $given_password=stripslashes($given_password);
-	if ((md5($given_password)==$admin_password_hashed) || ($given_password==$admin_password_hashed))
+	if (co_check_master_password($given_password))
 	{
 		if (count($_POST)==1) do_access($given_password); else do_set();
 	} else ce_do_login();
@@ -319,24 +328,21 @@ END;
 function do_set()
 {
 	$given_password=$_POST['given_password'];
-	if (get_magic_quotes_gpc()) $given_password=stripslashes($given_password);
 
 	$new=array();
 	foreach ($_POST as $key=>$val)
 	{
 		if ($key!='given_password')
 		{
-			if (get_magic_quotes_gpc()) $val=stripslashes($val);
 			if (($key=='admin_password') || ($key=='confirm_admin_password'))
 			{
 				if ($val=='')
 				{
-					$new[$key]=md5($given_password);
-				} else $new[$key]=md5($val);
+					$new[$key]='!'.md5($given_password.'ocp');
+				} else $new[$key]='!'.md5($val.'ocp');
 			} else $new[$key]=$val;
 		}
 	}
-
 	if ($new['confirm_admin_password']!=$new['admin_password'])
 	{
 		echo '<hr /><p><strong>Your passwords do not match up.</strong></p>';
@@ -413,11 +419,10 @@ function do_set()
 	foreach ($new as $key=>$val)
 	{
 		$_val=str_replace('\\','\\\\',$val);
-		fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
-	}
-	if (fwrite($info,"?".">\n")===false)
-	{
-		echo '<strong>Could not save to file. Out of disk space?<strong>';
+		if (fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n")===false)
+		{
+			echo '<strong>Could not save to file. Out of disk space?<strong>';
+		}
 	}
 	fclose($info);
 	co_sync_file($info_file);
@@ -469,4 +474,23 @@ function co_sync_file_move($old,$new)
 	}
 }
 
+/**
+ * Check the given master password is valid.
+ *
+ * @param  SHORT_TEXT	Given master password
+ * @return boolean		Whether it is valid
+ */
+function co_check_master_password($password_given)
+{
+	global $SITE_INFO;
+	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in info.php currently so cannot authenticate');
+	$actual_password_hashed=$SITE_INFO['admin_password'];
+	$salt='';
+	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
+	{
+		$actual_password_hashed=substr($actual_password_hashed,1);
+		$salt='ocp';
+	}
+	return (((strlen($password_given)!=32) && ($actual_password_hashed==$password_given)) || ($actual_password_hashed==md5($password_given.$salt)));
+}
 

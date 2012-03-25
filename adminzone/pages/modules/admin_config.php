@@ -296,7 +296,7 @@ class Module_admin_config
 
 			// Security/Usergroup Options
 			//  Uploading
-				add_config_option('FILE_TYPES','valid_types','line','return \'swf,sql,odg,odp,odt,ods,pdf,pgp,dot,doc,ppt,csv,xls,docx,pptx,xlsx,pub,txt,log,psd,tga,tif,gif,png,ico,bmp,jpg,jpeg,flv,avi,mov,3gp,mpg,mpeg,mp4,webm,asf,wmv,ram,ra,rm,qt,zip,tar,rar,gz,wav,mp3,ogg,ogv,torrent,php,css,tpl,ini,eml,patch,diff\';','SECURITY','UPLOADED_FILES'); // fla,html,htm,svg,xml kept out for security reasons
+				add_config_option('FILE_TYPES','valid_types','line','return \'swf,sql,odg,odp,odt,ods,pdf,pgp,dot,doc,ppt,csv,xls,docx,pptx,xlsx,pub,txt,log,psd,tga,tif,gif,png,ico,bmp,jpg,jpeg,flv,avi,mov,3gp,mpg,mpeg,mp4,webm,asf,wmv,ram,ra,rm,qt,zip,tar,rar,gz,wav,mp3,ogg,ogv,torrent,php,css,tpl,ini,eml,patch,diff,iso,dmg\';','SECURITY','UPLOADED_FILES'); // fla,html,htm,svg,xml kept out for security reasons
 				add_config_option('IMAGE_TYPES','valid_images','line','return \'jpg,jpeg,gif,png,ico\';','SECURITY','UPLOADED_FILES');
 
 			// Feature Options

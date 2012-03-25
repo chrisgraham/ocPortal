@@ -176,6 +176,10 @@ function get_member($quick_only=false)
 	if ($FORCE_INVISIBLE_GUEST)
 	{
 		$GETTING_MEMBER=false;
+		if (!isset($GLOBALS['FORUM_DRIVER']))
+		{
+			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		}
 		$MEMBER_CACHED=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 		return $MEMBER_CACHED;
 	}

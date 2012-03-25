@@ -151,6 +151,20 @@ To solve this problem, simply remove execute permission for the info.php file.
 
 It may seem an obvious solution, to not use an executable file to store configuration information. However this file contains critical data, and therefore if it was a file that would be downloaded if accessed instead of executed, this critical data would be exposed; the usual advice is to put the file outside of a downloadable location, or to restrict download, but this is tenuous due to differing web environments ocPortal must on: in trying to increase security, there would be a big likelihood we could incidentally decrease it.
 
+[title="2"]Master password[/title]
+
+For added security you can remove the:
+[code]
+$SITE_INFO['admin_password']='...';
+[/code]
+line from [tt]info.php[/tt].
+
+It is best to remove it completely, not comment it out. This prevents master password based logins to tools such as the code editor and upgrader.
+
+It means:
+1) If someone found a vulnerability that allowed them to read the hashed master password out of [tt]info.php[/tt], they could not use ocPortal-specific rainbow tables to get the original password and therefore login.
+2) Bruce force login attempts cannot work.
+
 [title="2"]Denial Of Service prevention[/title]
 
 ocPortal is a sophisticated system and comes with an unavoidable overhead. This increases the opportunity for a maliceous individual/group to try and take down a server by flooding it with requests. ocPortal is designed to prevent against this -- it will ban flooders and hackattack repeaters after a point. However, the normal IP banning that ocPortal uses works via the database, and hence a significant overhead is taken before the ban can be detected. To workaround this, ocPortal can write IP bans directly into the Apache .htaccess file (obviously, Apache only) -- to do this, the .htaccess file must be writeable by the web server (typically, 666 permissions, although as explained, a well configured environment won't need that).
