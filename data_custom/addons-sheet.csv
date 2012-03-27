@@ -171,7 +171,7 @@ Note that this addon only affects galleries at the moment, and it requires the "
 "Columns","Chris Graham","Allows wrapping of HTML with a div with a column_wrapper CSS class, to have it automatically put in columns.
 
 You need to add this code into your [tt]HEADER.tpl[/tt]:
-[code]<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+[code]<script type=""text/javascript"" src=""http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js""></script>
 {$CSS_INCLUDE,columns}
 {$JAVASCRIPT_INCLUDE,javascript_columns}[/code]
 ",,,"Graphical","Creative Commons Attribution 3.0","Based on the code of Adam Wulf",

@@ -61,7 +61,7 @@ function activities_addon_syndicate_described_activity($a_language_string_code,$
 		log_newest_activity($stored_id,1000);
 
 		// External places
-		if ($a_is_public==1)
+		if (($a_is_public==1) && (!$GLOBALS['IS_ACTUALLY_ADMIN']/*SU means oauth'd user is not intended user*/))
 		{
 			$dests=find_all_hooks('systems','syndication');
 			foreach (array_keys($dests) as $hook)
