@@ -370,7 +370,7 @@ function upgrade_script()
 						fwrite($tmp_data_file,serialize($data));
 						fclose($tmp_data_file);
 						global $SITE_INFO;
-						$extract_url=get_base_url().'/data/upgrader2.php?hashed_password='.urlencode(md5($SITE_INFO['admin_password'])).'&tmp_path='.urlencode($temp_path).'&file_offset=0&tmp_data_path='.urlencode($tmp_data_path).'&done='.urlencode(do_lang('DONE'));
+						$extract_url=get_base_url().'/data/upgrader2.php?hashed_password='.urlencode($SITE_INFO['admin_password']).'&tmp_path='.urlencode($temp_path).'&file_offset=0&tmp_data_path='.urlencode($tmp_data_path).'&done='.urlencode(do_lang('DONE'));
 						echo '<p>'.do_lang('FU_EXTRACTING_WINDOW',integer_format(count($data['todo']))).'</p>';
 						echo '<iframe frameBorder="0" title="" style="width: 100%; height: 400px" src="'.escape_html($extract_url).'"></iframe>';
 					} else

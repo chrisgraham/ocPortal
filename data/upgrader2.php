@@ -94,6 +94,7 @@ if (!file_exists($tmp_path))
 	header('Content-type: text/plain');
 	exit('Temp file has disappeared ('.$tmp_path.')');
 }
+$tmp_path=dirname(dirname(__FILE__)).'/data_custom/upgrader.tar.tmp'; // Actually for security, we will not allow it to be configurable
 $myfile=fopen($tmp_path,'rb');
 
 $file_offset=intval($_GET['file_offset']);
@@ -233,10 +234,10 @@ END;
  * @param  SHORT_TEXT	Given master password
  * @return boolean		Whether it is valid
  */
-function upgrader2_check_master_password($password_given_double_hashed)
+function upgrader2_check_master_password($password_given_hashed)
 {
 	global $SITE_INFO;
-	$actual_password_double_hashed=md5($SITE_INFO['admin_password']);
+	$actual_password_hashed=$SITE_INFO['admin_password'];
 
-	return ($password_given_double_hashed==$actual_password_double_hashed);
+	return ($password_given_hashed==$actual_password_hashed);
 }
