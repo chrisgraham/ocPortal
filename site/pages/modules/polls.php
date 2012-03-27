@@ -360,7 +360,7 @@ class Module_polls
 			'title'=>$_title,
 			'identifier'=>'_SEARCH:polls:view:'.strval($id),
 			'description'=>'',
-			'image'=>find_theme_image('pagepics/polls'),
+			'image'=>find_theme_image('bigicons/polls'),
 		);
 
 		return do_template('POLL_SCREEN',array('_GUID'=>'1463a42354c3ad154e2c6bb0c96be3b9','TITLE'=>$title,'ID'=>strval($id),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['poll_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'POLL_DETAILS'=>$poll_details));

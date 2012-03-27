@@ -48,6 +48,21 @@ function upgrade_script()
 				_ftp_info(true); // To give early error if there's a problem
 			}
 
+			// Handle shared site upgrading with no per-site UI
+			global $SITE_INFO;
+			if (isset($SITE_INFO['custom_file_base_stub'])) // This upgrader script must be called on a particular site with a real DB (e.g. shareddemo.myocp.com), but will run for all sites on same install
+			{
+				require_code('shared_installs');
+				$u=current_share_user();
+				if (!is_null($u))
+				{
+					upgrade_sharedinstall_sites();
+					echo '<p>Now regenerate <kbd>template.sql</kbd>, using something like <kbd>mysqldump -uroot -p myocp_site_shareddemo > ~/public_html/template.sql</kbd></p>';
+					up_do_footer();
+					return;
+				}
+			}
+
 			$show_more_link=true;
 
 			switch ($type)
@@ -663,6 +678,7 @@ function fu_link($url,$text,$disabled=false,$js='')
 {
 	$hidden=(strpos($url,'http://ocportal.com')!==false)?'':post_fields_relay();
 	if (get_param_integer('keep_safe_mode',0)==1) $url.='&keep_safe_mode=1';
+	if (get_param_integer('keep_show_loading',0)==1) $url.='&keep_show_loading=1';
 	return '<form title="'.escape_html($text).'" style="display: inline" action="'.escape_html($url).'" method="post">'.$hidden.'<input '.(empty($js)?'':'onclick="return window.confirm(\''.addslashes($js).'\');" ').'accesskey="c" style="margin: 1px; padding: 0" '.($disabled?'disabled="disabled"':'').' type="submit" value="'.escape_html($text).'" /></form>';
 }
 
@@ -718,6 +734,7 @@ function up_do_login($message=NULL)
 	$news_id=get_param_integer('news_id',NULL);
 	$url="upgrader.php?type=".escape_html($type);
 	if (get_param_integer('keep_safe_mode',0)==1) $url.='&keep_safe_mode=1';
+	if (get_param_integer('keep_show_loading',0)==1) $url.='&keep_show_loading=1';
 	echo "
 	<p>{$l_login_info}</p>
 	<form title=\"{$l_login}\" action=\"".escape_html($url)."\" method=\"post\">
@@ -1699,8 +1716,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				"tt, kbd, samp {\n	font-size: 1.25em;\n	font-weight: bold;\n}"=>"tt, kbd, samp {\n	font-weight: bold;\n}",
 				"input[type=\"text\"],input[type=\"password\"],textarea,select { /* Normally a browser default, but gets inherited on some phones */"=>"input[type=\"text\"],input[type=\"password\"],input[type=\"color\"],input[type=\"email\"],input[type=\"number\"],input[type=\"range\"],input[type=\"search\"],input[type=\"tel\"],input[type=\"url\"],textarea,select { /* Normally a browser default, but gets inherited on some phones */",
 				".breadcrumbs {\n	padding: 5px 0 0 0;\n	float: {!en_right};\n	margin-left: 5px;\n	zoom: 1;\n}"=>".breadcrumbs {\n	padding: 5px 0 0 0;\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		float: {!en_right};\n		margin-left: 5px;\n	{+END}\n	zoom: 1;\n}\n\n.breadcrumbs abbr {\n	white-space: nowrap;\n}",
-				".standardbox_wrap_panel img {\n	max-width: 100%;\n}"=>".standardbox_wrap_panel img {\n	max-width: 98%;\n}",
-				".standardbox_classic, .standardbox_links_classic {"=>".standardbox_classic, .standardbox_wrap_classic .standardbox_links_classic {",
+				".standardbox_wrap_panel img {\n	max-width: 100%;\n}"=>".standardbox_wrap_panel img {\n	max-width: 98%;\n}",				".standardbox_classic, .standardbox_links_classic {"=>".standardbox_classic, .standardbox_wrap_classic .standardbox_links_classic {",
 				".scale_down { /* {\$,Membership of this class is used as a tag to turn on image scaling} */\n	max-width: 100%;\n}"=>".scale_down { /* {\$,Membership of this class is used as a tag to turn on image scaling} */\n	max-width: 100%;\n	box-sizing: border-box;\n}",
 				"ul.compact_list {"=>"ul.compact_list, ol.compact_list {",
 				"ul.compact_list li {"=>"ul.compact_list li, ol.compact_list li {",
@@ -1717,7 +1733,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				".input_author, .input_username, .input_colour, .input_email,"=>".input_author, .input_username, .input_colour, .input_email, .input_codename,",
 				".input_author_required, .input_username_required, .input_colour_required, .input_email_required,"=>".input_author_required, .input_username_required, .input_colour_required, .input_email_required, .input_codename_required,",
 				".members_viewing {\n	border-top: 0;\n	padding: 4px;\n	text-indent: 25px;\n	padding-{!en_left}: 0;\n}"=>".members_viewing {\n	padding: 4px;\n	text-indent: 25px;\n	padding-{!en_left}: 0;\n}\n\n.ocf_topic_0 .members_viewing {\n	border-top: 0;\n}",
-				".post .post_edit_link {\n}"=>".post .post_action_link {\n}\n\n.post .post_thread_children {\n	margin-top: 1em;\n	{+START,IF,{\$MOBILE}}\n		margin-left: 7px;\n	{+END}\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		margin-left: 20px;\n	{+END}\n}\n\n.ocf_post_buttons a {\n	opacity: 0.0;\n	-webkit-transition-property : opacity;\n	-webkit-transition-duration : 0.5s;\n	-moz-transition-property : opacity;\n	-moz-transition-duration : 0.5s;\n	-o-transition-property : opacity;\n	-o-transition-duration : 0.5s;\n	transition-property : opacity;\n	transition-duration : 0.5s;\n}\n\n.ocf_post_buttons a[rel=\"add reply\"] {\n	opacity: 1.0;\n}\n\n.ocf_post_buttons:hover a {\n	opacity: 1.0;\n}\n\n.post_show_more {\n	text-align: center;\n	border: 1px dashed #c1cee3; /* {\$,wizard, 100% lightborder} */\n	border-bottom-left-radius: 40px;\n	border-bottom-right-radius: 40px;\n	padding: 15px;\n	font-weight: bold;\n	font-size: 0.85em;\n}\n\n.post .post_show_more {\n	margin-left: 20px;\n}",
+				".post .post_edit_link {\n}"=>".post .post_action_link {\n}\n\n.post .post_thread_children {\n	margin-top: 1em;\n	{+START,IF,{\$MOBILE}}\n		margin-left: 7px;\n	{+END}\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		margin-left: 20px;\n	{+END}\n}\n\n.post .ocf_post_buttons {\n	margin-top: 1.3em;\n}\n\n.ocf_post_buttons a {\n	opacity: 0.0;\n	-webkit-transition-property : opacity;\n	-webkit-transition-duration : 0.5s;\n	-moz-transition-property : opacity;\n	-moz-transition-duration : 0.5s;\n	-o-transition-property : opacity;\n	-o-transition-duration : 0.5s;\n	transition-property : opacity;\n	transition-duration : 0.5s;\n}\n\n.ocf_post_buttons a[rel=\"add reply\"] {\n	opacity: 1.0;\n}\n\n.ocf_post_buttons:hover a {\n	opacity: 1.0;\n}\n\n.post_show_more {\n	text-align: center;\n	border: 1px dashed #c1cee3; /* {\$,wizard, 100% lightborder} */\n	border-bottom-left-radius: 40px;\n	border-bottom-right-radius: 40px;\n	padding: 15px;\n	font-weight: bold;\n	font-size: 0.85em;\n}\n\n.post .post_show_more {\n	margin-left: 20px;\n}",
 				"ul.sitemap {\n	list-style-type: none;\n	margin-left: 0;\n	padding-left: 0;\n}"=>"ul.sitemap {\n	list-style-type: none;\n	list-style-image: none;\n	margin-left: 0;\n	padding-left: 0;\n}",
 				".rating_inner {\n	text-align: center;\n	white-space: nowrap;\n}"=>".RATING_BOX .rating_inner {\n	text-align: center;\n}\n\n.RATING_INLINE_DYNAMIC .rating_inner, .RATING_INLINE_DYNAMIC form {\n	display: inline;\n}\n\n.post_action_link .RATING_INLINE_DYNAMIC {\n	padding-left: 20px;\n}\n\n.rating_inner {\n	white-space: nowrap;\n}\n\n.rating_inner img {\n	cursor: pointer;\n}",
 				".tab {\n	float: left;\n	background: url('{\$IMG,tab}');\n	padding: 3px 5px 0 5px;\n	height: 20px;\n	text-align: center;\n	cursor: pointer;\n}"=>".tab {\n	float: left;\n	background: url('{\$IMG;,tab}') !important;\n	padding: 3px 7px 0 7px !important;\n	height: 20px;\n	text-align: center;\n	cursor: pointer;\n}",
@@ -1770,6 +1786,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				".edited {"=>".bookmarks_menu_box {\n	width: 320px;\n}\n\n",
 				"\na.poster_member:hover"=>".post_poster a.poster_member:link, .post_poster a.poster_member:active, .post_poster a.poster_member:visited, .post_poster a.poster_member:hover {\n	display: inline-block;\n}\n",
 				".menu_type__dropdown ul.nlevel, .menu_type__popup ul"=>".menu_type__popup {\n	min-width: 150px;\n}\n\n",
+				".comments_posting_form_inner table"=>".comments_posting_form_inner textarea {\n	color: #94979d; /* {\$,wizard, 65% bgcol + 35% !W/B} */\n}\n\n",
 			),
 		);
 
@@ -2110,7 +2127,13 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				$new_path=str_replace('/'.$old,'/'.$new,$path);
 				if (!$test_run)
 				{
-					afm_move($path,$new_path);
+					if (file_exists($path))
+						afm_move($path,$new_path);
+
+					$where_map=array('theme'=>$theme,'id'=>$new);
+					if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
+					$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
+
 					actual_edit_theme_image($old,$theme,$lang,$new,$new_path);
 
 					$successes[]=do_lang_tempcode('THEME_IMAGE_RENAMED',escape_html($old),escape_html($new));
@@ -2120,32 +2143,35 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 	}
 	if (addon_installed('themewizard'))
 	{
-		foreach ($theme_images_new as $new)
+		if ($theme!='default')
 		{
-			foreach (array_keys($langs) as $lang)
+			foreach ($theme_images_new as $new)
 			{
-				$path=urldecode(find_theme_image($new,true,true,'default',$lang));
-				if ($path!='')
+				foreach (array_keys($langs) as $lang)
 				{
-					$new_path=str_replace('themes/default/images/','themes/'.$theme.'/images/',$path);
-					if (!file_exists(get_custom_file_base().'/'.$new_path))
+					$path=urldecode(find_theme_image($new,true,true,'default',$lang));
+					if ($path!='')
 					{
-						if (!$test_run)
-						{
-							afm_make_directory(dirname($new_path),true,true);
-						}
-
-						$image=calculate_theme($seed,'default','equations',$new,$dark,$colours,$landscape,$lang);
-						if (!is_null($image))
+						$new_path=str_replace('themes/default/images/','themes/'.$theme.'/images/',$path);
+						if (!file_exists(get_custom_file_base().'/'.$new_path))
 						{
 							if (!$test_run)
 							{
-								@imagepng($image,$new_path) OR intelligent_write_error($new_path);
-								imagedestroy($image);
-								fix_permissions($new_path);
-								sync_file($new_path);
+								afm_make_directory(dirname($new_path),true,true);
+							}
 
-								$successes[]=do_lang_tempcode('THEME_IMAGE_NEW',escape_html($new));
+							$image=calculate_theme($seed,'default','equations',$new,$dark,$colours,$landscape,$lang);
+							if (!is_null($image))
+							{
+								if (!$test_run)
+								{
+									@imagepng($image,get_custom_file_base().'/'.$new_path) OR intelligent_write_error(get_custom_file_base().'/'.$new_path);
+									imagedestroy($image);
+									fix_permissions(get_custom_file_base().'/'.$new_path);
+									sync_file(get_custom_file_base().'/'.$new_path);
+
+									$successes[]=do_lang_tempcode('THEME_IMAGE_NEW',escape_html($new));
+								}
 							}
 						}
 					}
@@ -2210,3 +2236,72 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 	return array($errors,$successes);
 }
 
+/**
+ * Upgrade shared installs.
+ */
+function upgrade_sharedinstall_sites()
+{
+	global $CURRENT_SHARE_USER,$SITE_INFO,$TABLE_LANG_FIELDS;
+
+	// Find sites
+	$sites=array();
+	foreach (array_keys($SITE_INFO) as $key)
+	{
+		$matches=array();
+		if (preg_match('#^custom_user_(.*)#',$key,$matches)!=0)
+		{
+			$sites[]=$matches[1];
+		}
+	}
+
+	disable_php_memory_limit();
+
+	foreach ($sites as $i=>$site)
+	{
+		if (function_exists('set_time_limit')) @set_time_limit(0);
+
+		// Change active site
+		$CURRENT_SHARE_USER=$site;
+		$TABLE_LANG_FIELDS=array();
+		_general_db_init();
+
+		// Reset DB
+		$GLOBALS['SITE_DB']=new database_driver(get_db_site(),get_db_site_host(),get_db_site_user(),get_db_site_password(),get_table_prefix());
+		$GLOBALS['FORUM_DB']=$GLOBALS['SITE_DB'];
+
+		// NB: File path will be ok
+	
+		// NB: Other internal caching could need changing in the future, but works at time of writing
+
+		// Go!
+		automate_upgrade();
+
+		echo 'Upgraded '.htmlentities($site).'<br />';
+		flush();
+	}
+}
+
+/**
+ * Automatically go through full upgrade for current site.
+ */
+function automate_upgrade()
+{
+	// Database
+	clear_caches_1();
+	clear_caches_2();
+	version_specific();
+	upgrade_modules();
+
+	// OCF
+	ocf_upgrade();
+
+	// Themes
+	require_code('themes2');
+	$themes=find_all_themes();
+	foreach (array_keys($themes) as $theme)
+	{
+		$from=round(ocp_version_number())-1;
+		$to=ocp_version_number();
+		upgrade_theme($theme,$from,$to,false);
+	}
+}

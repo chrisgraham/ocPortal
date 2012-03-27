@@ -858,7 +858,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		'title'=>$forum_info[0]['f_name'],
 		'identifier'=>'_SEARCH:forumview:misc:'.strval($forum_id),
 		'description'=>$description_text,
-		'image'=>find_theme_image('pagepics/forums'),
+		'image'=>find_theme_image('bigicons/forums'),
 	);
 
 	// Is there a question/answer situation?

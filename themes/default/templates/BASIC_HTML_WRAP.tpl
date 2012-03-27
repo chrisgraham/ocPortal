@@ -1,4 +1,4 @@
-{$,This template is used for things like iframes used for previewing or for creating independent navigation areas in the site}
+{$,This template is used for very raw output like banner frames}
 {+START,IF,{$NOT,{$VALUE_OPTION,html5}}}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">{+END}
 {+START,IF,{$VALUE_OPTION,html5}}<!DOCTYPE html>{+END}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$LANG*}" lang="{$LANG*}" dir="{!dir}">
@@ -26,10 +26,6 @@
 </head>
 <body class="re_body">
 	<div>{CONTENT}</div>
-
-	<script type="text/javascript">// <![CDATA[
-		scriptLoadStuff();
-	//]]></script>
 </body>
 </html>
 

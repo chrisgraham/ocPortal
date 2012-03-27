@@ -64,7 +64,7 @@
 
 							<li>
 								<label for="post">{!POST_COMMENT}</label>
-								<textarea accesskey="x" class="wide_field" onfocus="if ((this.value=='{POST_WARNING*;}') &amp;&amp; ('{POST_WARNING*;}'!='')) this.value='';" cols="35" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
+								<textarea accesskey="x" class="wide_field" onfocus="if ((this.value=='{POST_WARNING^*;}') &amp;&amp; ('{POST_WARNING^*;}'!='')) this.value=''; this.style.color='black';" cols="35" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
 							</li>
 						</ul>
 					</div>
@@ -222,7 +222,7 @@
 								<td>
 									<label class="accessibility_hidden" for="post">{!POST_COMMENT}</label>
 									<div class="constrain_field">
-										<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} accesskey="x" class="wide_field" onfocus="if ((this.value=='{POST_WARNING*;}') &amp;&amp; ('{POST_WARNING*;}'!='')) this.value='';" tabindex="3" cols="35" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
+										<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manageScrollHeight(this);"{+END} accesskey="x" class="wide_field" onfocus="if ((this.value=='{POST_WARNING^*;}') &amp;&amp; ('{POST_WARNING^*;}'!='')) this.value=''; this.style.color='black';" tabindex="3" cols="35" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
 									</div>
 
 									<div id="error_post" style="display: none" class="input_error_here">&nbsp;</div>

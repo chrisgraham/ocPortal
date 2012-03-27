@@ -123,7 +123,7 @@ class shopping_test_set extends ocp_test_case
 
 		$map=$this->cms_cat->get_set_field_map($catalogue_name);
 
-		$this->product_id=actual_add_catalogue_entry($this->category_id,$validated=1,$notes='test note',$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$map);
+		$this->product_id=actual_add_catalogue_entry($this->category_id,$validated=0,$notes='test note',$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$map);
 	}
 
 	function tearDown()

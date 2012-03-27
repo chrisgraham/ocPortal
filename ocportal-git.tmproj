@@ -120,7 +120,7 @@
 			<key>filename</key>
 			<string>fixperms.sh</string>
 			<key>lastUsed</key>
-			<date>2012-03-22T11:50:46Z</date>
+			<date>2012-03-26T22:48:46Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -152,7 +152,7 @@
 			<key>filename</key>
 			<string>info.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-24T18:12:52Z</date>
+			<date>2012-03-26T10:21:52Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -324,7 +324,7 @@
 			<key>filename</key>
 			<string>upgrader.php</string>
 			<key>lastUsed</key>
-			<date>2011-11-20T13:47:14Z</date>
+			<date>2012-03-26T23:49:01Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -580,6 +580,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
+		</dict>
+		<key>data_custom/execute_temp.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>80</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>37</integer>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -906,6 +920,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>401</integer>
+		</dict>
+		<key>sources/forum/ocf.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>42</integer>
+				<key>line</key>
+				<integer>651</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>636</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>24</integer>
+				<key>line</key>
+				<integer>651</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>42</integer>
+				<key>line</key>
+				<integer>651</integer>
+			</dict>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -2595,6 +2639,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{600, 144}, {1154, 939}}</string>
+	<string>{{738, 212}, {1154, 939}}</string>
 </dict>
 </plist>

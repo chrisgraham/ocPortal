@@ -550,7 +550,7 @@ class Module_cedi
 			'identifier'=>'_SEARCH:cedi:misc:'.strval($page['id']),
 			'description'=>get_translated_text($page['description']),
 			'numposts'=>strval($num_posts),
-			'image'=>find_theme_image('pagepics/cedi'),
+			'image'=>find_theme_image('bigicons/cedi'),
 		);
 
 		breadcrumb_add_segment($tree);

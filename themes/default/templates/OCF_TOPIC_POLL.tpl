@@ -17,7 +17,7 @@ function ocfCheckPoll(form,min,max,error)
 }
 //]]></script>
 <a name="poll_jump" id="poll_jump" rel="dovote"></a>
-<form title="{!VOTE}" action="{VOTE_URL*}" class="inline" method="post" onsubmit="return ocfCheckPoll(this,{MINIMUM_SELECTIONS*},{MAXIMUM_SELECTIONS*},({MINIMUM_SELECTIONS*}=={MAXIMUM_SELECTIONS*})?'{!POLL_NOT_ENOUGH_ERROR_2;,{MINIMUM_SELECTIONS*}}':'{!POLL_NOT_ENOUGH_ERROR;,{MINIMUM_SELECTIONS*},{MAXIMUM_SELECTIONS*}}');">
+<form title="{!VOTE}" action="{VOTE_URL*}" method="post" onsubmit="return ocfCheckPoll(this,{MINIMUM_SELECTIONS*},{MAXIMUM_SELECTIONS*},({MINIMUM_SELECTIONS*}=={MAXIMUM_SELECTIONS*})?'{!POLL_NOT_ENOUGH_ERROR_2;,{MINIMUM_SELECTIONS*}}':'{!POLL_NOT_ENOUGH_ERROR;,{MINIMUM_SELECTIONS*},{MAXIMUM_SELECTIONS*}}');">
 	<!-- Layout table for uniform auto-sizing layout -->
 	<div class="wide_table_wrap"><table summary="" class="variable_table dottedborder wide_table">
 		<tbody>

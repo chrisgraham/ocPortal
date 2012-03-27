@@ -264,13 +264,8 @@ class Module_galleries
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
-			if (is_null($upgrade_from))
-			{
-				$old_option='';
-			} else
-			{
-				$old_option=get_option('ffmpeg_path');
-			}
+			$old_option=get_option('ffmpeg_path',true);
+			if (is_null($old_option)) $old_option='';
 			delete_config_option('ffmpeg_path');
 			add_config_option('TRANSCODING_ZENCODER_API_KEY','transcoding_zencoder_api_key','line','return \'\';','FEATURE','TRANSCODING');
 			add_config_option('TRANSCODING_ZENCODER_FTP_PATH','transcoding_zencoder_ftp_path','line','return \'\';','FEATURE','TRANSCODING');

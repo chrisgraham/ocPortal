@@ -1,6 +1,6 @@
 <tr>
 	<td>
-		{+START,IF_NON_EMPTY,{PICTURE_URL}}<a title="{+END}{NAME*}{+START,IF_NON_EMPTY,{PICTURE_URL}}: {!LINK_NEW_WINDOW}" target="_blank" href="{PICTURE_URL*}">{+END}{NAME*}{+START,IF_NON_EMPTY,{PICTURE_URL}}</a>{+END}{AUX*} [{COUNT*}]
+		{+START,IF_NON_EMPTY,{PICTURE_URL}}<a title="{NAME*}: {!LINK_NEW_WINDOW}" target="_blank" href="{PICTURE_URL*}">{+END}{NAME*}{+START,IF_NON_EMPTY,{PICTURE_URL}}</a>{+END}{AUX*} [{COUNT*}]
 	</td>
 	{+START,IF_PASSED,COST}
 	<td>

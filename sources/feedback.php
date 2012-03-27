@@ -373,7 +373,17 @@ function already_rated($rating_for_types,$content_id)
 		if ($for_types!='') $for_types.=' OR ';
 		$for_types.=db_string_equal_to('rating_for_type',$rating_for_type);
 	}
-	$has_rated=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'rating WHERE ('.$for_types.') AND '.db_string_equal_to('rating_for_id',$content_id).' AND (rating_ip=\''.get_ip_address().'\''.$more.')');
+	$query='SELECT COUNT(*) FROM '.get_table_prefix().'rating WHERE ('.$for_types.') AND '.db_string_equal_to('rating_for_id',$content_id);
+	$query.=' AND (';
+	if (!$GLOBALS['IS_ACTUALLY_ADMIN'])
+	{
+		$query.='rating_ip=\''.get_ip_address().'\'';
+	} else
+	{
+		$query.='1=0';
+	}
+	$query.=$more.')';
+	$has_rated=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
 
 	return ($has_rated==count($rating_for_types));
 }
@@ -475,8 +485,20 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
 			// Notification
 			require_code('notifications');
-			$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?$content_type_title:$content_title);
-			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?$content_type_title:$content_title),array(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url));
+			$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title);
+			$rendered_award='';
+			$award_hook=convert_ocportal_type_codes('feedback_type_code',$content_type,'award_hook');
+			if ($award_hook!='')
+			{
+				require_code('hooks/systems/awards/'.$award_hook);
+				$award_ob=object_factory('Hook_awards_'.$award_hook);
+				$award_content_row=content_get_row($content_id,$award_ob->info());
+				if (!is_null($award_content_row))
+				{
+					$rendered_award=static_evaluate_tempcode($award_ob->run($award_content_row,'_SEARCH'));
+				}
+			}
+			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url,$rendered_award));
 			dispatch_notification('like',NULL,$subject,$mail,array($submitter));
 		}
 
@@ -704,9 +726,9 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		// Notification
 		require_code('notifications');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),($content_title=='')?$content_type_title:$content_title,array($post_title,$username),get_site_default_lang());
+		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title,array($post_title,$username),get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?$content_type_title:$content_title),array($post_title,post_param('post'),$content_url_flat,comcode_escape($username)),get_site_default_lang());
+		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array($post_title,post_param('post'),$content_url_flat,comcode_escape($username)),get_site_default_lang());
 		dispatch_notification('comment_posted',$content_type.'_'.$content_id,$subject,$message_raw);
 
 		// Is the user gonna automatically enable notifications for this?

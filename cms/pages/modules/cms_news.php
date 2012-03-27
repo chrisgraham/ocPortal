@@ -603,9 +603,11 @@ class Module_cms_news extends standard_aed_module
 		require_code('rss');
 		require_code('news');
 		require_code('files');
-		
+
+		$GLOBALS['LAX_COMCODE']=true;
+
 		disable_php_memory_limit();
-		
+
 		$rss_url=post_param('rss_feed_url',NULL);
 
 		require_code('uploads');

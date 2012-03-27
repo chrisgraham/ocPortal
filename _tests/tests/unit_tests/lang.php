@@ -80,7 +80,7 @@ class lang_test_set extends ocp_test_case
 
 				if(preg_match('#([^A-Za-z]+)tar([^A-Za-z]+)#',$string)!=0) $this->assertTrue(false,'The filetype \'tar\' was used in '.$file.'. This should be changed to \'TAR\'.');
 				if(preg_match('#([^A-Za-z]>+)id([^A-Za-z=<]+)#',$string)!=0) $this->assertTrue(false,'The acronym \'id\' was used in '.$file.'. This should be changed to \'ID\'.');
-				if(preg_match('#([^A-Za-z\[\]></\']+)url([^A-Za-z=\']+)#',$string)!=0) $this->assertTrue(false,'The acronym \'url\' was used in '.$file.'. This should be changed to \'URL\'.');
+				if(preg_match('#([^A-Za-z\[\]></\']+)url([^\}A-Za-z=\']+)#',$string)!=0) $this->assertTrue(false,'The acronym \'url\' was used in '.$file.'. This should be changed to \'URL\'.');
 				if(preg_match('#([^A-Za-z]+)zip([^A-Za-z]+)#',$string)!=0) $this->assertTrue(false,'The filetype \'zip\' was used in '.$file.'. This should be changed to \'ZIP\'.');
 
 				if(($verbose) && (preg_match('#([A-Za-z]+)s( |-)#',$string)!=0)) $this->assertTrue(false,'A word ended with an \'s\', but did not contain an apostrophe. This might be a case of mistaken plurality.');

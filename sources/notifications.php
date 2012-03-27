@@ -351,9 +351,9 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 	$from_name='';
 	if ((!is_null($from_member_id)) && ($from_member_id>=0))
 	{
-		$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_member_id);
+		/*$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_member_id);		No; we can't disclose email addresses, so notifications will all be emailed from system
 		if ($from_email=='') $from_email='';
-		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($from_member_id);
+		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($from_member_id);*/
 	}
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];

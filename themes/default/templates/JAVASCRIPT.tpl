@@ -2525,6 +2525,8 @@ function threaded_reply(ob,id)
 
 	setOpacity(ob,0.4);
 
+	form.elements['post'].value='';
+
 	smoothScroll(findPosY(form));
 
 	if (document.getElementById('comments_posting_form_outer').style.display=='none')

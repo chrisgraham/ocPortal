@@ -292,7 +292,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 				'identifier'=>'_SEARCH:topicview:misc:'.strval($topic_id),
 				'description'=>$topic_info['t_description'],
 				'numcomments'=>strval($topic_info['t_cache_num_posts']),
-				'image'=>find_theme_image('pagepics/forums'),
+				'image'=>find_theme_image('bigicons/forums'),
 			),
 		);
 

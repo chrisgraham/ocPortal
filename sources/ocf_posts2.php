@@ -28,6 +28,7 @@
 function ocf_show_isolated_post($row,$use_post_title=false)
 {
 	require_code('ocf_groups');
+	require_css('ocf');
 	
 	// Poster title
 	$primary_group=$GLOBALS['FORUM_DRIVER']->get_member_row_field($row['p_poster'],'m_primary_group');

@@ -905,6 +905,9 @@ class OCP_Topic
 			);
 		}
 
+		if ($this->is_threaded)
+			$post_warning=do_lang('THREADED_REPLY_NOTICE',$post_warning);
+
 		return do_template('COMMENTS_POSTING_FORM',array(
 			'_GUID'=>'c87025f81ee64c885f0ac545efa5f16c',
 			'EXPAND_TYPE'=>'contract',

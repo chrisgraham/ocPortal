@@ -320,7 +320,11 @@ function render_activity($row,$use_inside_ocp=true)
 	);
 	if (!is_null($row['a_also_involving']))
 	{
-		$extra_lang_string_params[]=static_evaluate_tempcode($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['a_also_involving'],true));
+		$_username=$GLOBALS['FORUM_DRIVER']->get_username($row['a_also_involving']);
+		$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['a_also_involving'],false,$use_inside_ocp);
+		$hyperlink=hyperlink($url,$_username,false,true);
+
+		$extra_lang_string_params[]=static_evaluate_tempcode($hyperlink);
 	} else
 	{
 		$extra_lang_string_params[]=do_lang('GUEST');

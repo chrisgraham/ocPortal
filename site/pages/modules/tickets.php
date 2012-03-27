@@ -71,7 +71,7 @@ class Module_tickets
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('ticket_types','send_sms_to');
 		}
@@ -499,7 +499,7 @@ class Module_tickets
 					'title'=>$_comments[0]['title'],
 					'identifier'=>'_SEARCH:tickets:ticket:'.$id,
 					'description'=>'',
-					'image'=>find_theme_image('pagepics/tickets'),
+					'image'=>find_theme_image('bigicons/tickets'),
 				);
 
 				// "Staff only reply" tickbox

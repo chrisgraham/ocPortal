@@ -612,6 +612,8 @@ class Module_cms_blogs extends standard_aed_module
 		require_code('news');
 		require_code('news2');
 
+		$GLOBALS['LAX_COMCODE']=true;
+
 		require_code('uploads');
 		is_swf_upload(true);
 

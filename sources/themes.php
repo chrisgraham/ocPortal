@@ -230,8 +230,8 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		} else
 		{
 			global $SITE_INFO;
-			$missing=((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0')) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)));
-			if ((substr($path,0,22)=='themes/default/images/') || ($missing))
+			$missing=(!$pure_only) && (((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0')) && (!is_file(get_file_base().'/'.rawurldecode($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))));
+			if ((substr($path,0,22)=='themes/default/images/') || ($missing)) // Not found, so throw away custom theme image and look in default theme images to restore default
 			{
 				if ($missing)
 				{

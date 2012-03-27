@@ -427,7 +427,6 @@ function _rescope_path($path)
 		if (substr($ftp_folder,-1)!='/') $ftp_folder.='/';
 		return $ftp_folder.$path;
 	}
-	if ((!file_exists(get_custom_file_base().'/'.$path)) && (running_script('upgrader'))) return get_file_base().'/'.$path;
 	return get_custom_file_base().'/'.$path;
 }
 

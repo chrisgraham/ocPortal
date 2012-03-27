@@ -182,6 +182,10 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 	require_code('ocf_groups');
 	$custom_fields=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true),NULL,NULL,NULL,NULL,NULL,NULL,0,true);
 	$actual_custom_fields=ocf_read_in_custom_fields($custom_fields);
+	foreach ($actual_custom_fields as $key=>$val)
+	{
+		if ($val==STRING_MAGIC_NULL) $actual_custom_fields[$key]='';
+	}
 	$groups=ocf_get_all_default_groups(true);
 	$additional_group=post_param_integer('additional_group',-1);
 	if (($additional_group!=-1) && (!in_array($additional_group,$groups)))
@@ -1348,6 +1352,9 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
+	$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_avatar_url',array('id'=>$member_id));
+	if ($old==$avatar_url) return;
+
 	// Check it has valid dimensions
 	if ($avatar_url!='')
 	{
@@ -1406,7 +1413,6 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 	}
 
 	// Cleanup old avatar
-	$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_avatar_url',array('id'=>$member_id));
 	if ((url_is_local($old)) && ((substr($old,0,20)=='uploads/ocf_avatars/') || (substr($old,0,16)=='uploads/avatars/')) && ($old!=$avatar_url))
 		@unlink(get_custom_file_base().'/'.rawurldecode($old));
 
@@ -1463,7 +1469,8 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 	// Cleanup old photo
 	$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_photo_url',array('id'=>$member_id));
-	if ((url_is_local($old)) && ((substr($old,0,19)=='uploads/ocf_photos/') || (substr($old,0,15)=='uploads/photos/')) && ($old!=$urls[0]))
+	if ($old==$urls[0]) return;
+	if ((url_is_local($old)) && ((substr($old,0,19)=='uploads/ocf_photos/') || (substr($old,0,15)=='uploads/photos/')))
 		@unlink(get_custom_file_base().'/'.rawurldecode($old));
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_photo_url'=>$urls[0],'m_photo_thumb_url'=>$urls[1]),array('id'=>$member_id),'',1);
@@ -1471,7 +1478,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	require_code('notifications');
 	dispatch_notification('ocf_choose_photo',NULL,do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)));
 
-	// If [s]no avatar, or default avatar, or [/s]avatars not installed, use photo for it
+	// If no avatar, or default avatar, or avatars not installed, use photo for it
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$default_avatar_url=find_theme_image('ocf_default_avatars/default',true,true);
 	if (/*($avatar_url=='') || ($avatar_url==$default_avatar_url) || */(!addon_installed('ocf_avatars')))

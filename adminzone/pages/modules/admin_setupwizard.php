@@ -196,7 +196,7 @@ class Module_admin_setupwizard
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('INSTALLPROFILE'),do_lang_tempcode('DESCRIPTION_INSTALLPROFILE'),'installprofile',$installprofiles,NULL,true,false));
 		$fields->attach(form_input_line(do_lang_tempcode('SITE_NAME'),do_lang_tempcode('CONFIG_OPTION_site_name'),'site_name',$site_name,true));
-		$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('CONFIG_OPTION_description'),'description',$description,true));
+		$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('CONFIG_OPTION_description'),'description',$description,false));
 		$fields->attach(form_input_line(do_lang_tempcode('SITE_SCOPE'),do_lang_tempcode('CONFIG_OPTION_site_scope'),'site_scope',$site_scope,true));
 		$fields->attach(form_input_line(do_lang_tempcode('HEADER_TEXT'),do_lang_tempcode('DESCRIPTION_HEADER_TEXT'),'header_text',$header_text,false));
 		$fields->attach(form_input_line(do_lang_tempcode('COPYRIGHT'),do_lang_tempcode('CONFIG_OPTION_copyright'),'copyright',$copyright,false));

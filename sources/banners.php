@@ -195,6 +195,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 		}
 		if ($tally==0)
 		{
+			load_user_stuff();
 			require_code('permissions');
 			if ((has_actual_page_access(NULL,'cms_banners')) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_banners')))
 			{

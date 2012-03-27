@@ -1476,7 +1476,7 @@ class Module_calendar
 			'title'=>get_translated_text($event['e_title']),
 			'identifier'=>'_SEARCH:calendar:view:'.strval($id),
 			'description'=>get_translated_text($event['e_content']),
-			'image'=>find_theme_image('pagepics/calendar'),
+			'image'=>find_theme_image('bigicons/calendar'),
 		);
 
 		$map=array(

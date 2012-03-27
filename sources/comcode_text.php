@@ -288,7 +288,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								if (!$IMPORTED_CUSTOM_COMCODE)
 									_custom_comcode_import($connection);
 							}
-							if ((isset($VALID_COMCODE_TAGS[$potential_tag])) && (substr($ahead,0,2)!='i ')) // The "i" bit is just there to block a common annoyance: [i] doesn't take parameters and we don't want "[i think]" (for example) being parsed.
+							if ((isset($VALID_COMCODE_TAGS[$potential_tag])) && (strtolower(substr($ahead,0,2))!='i ')) // The "i" bit is just there to block a common annoyance: [i] doesn't take parameters and we don't want "[i think]" (for example) being parsed.
 							{
 								if (($comcode[$pos]!='/') || (count($tag_stack)==0))
 									$mindless_mode=($semiparse_mode) && /*(!isset($CODE_TAGS[$potential_tag])) && */((!isset($REVERSABLE_TAGS[$potential_tag])) || ((is_string($REVERSABLE_TAGS[$potential_tag])) && (preg_match($REVERSABLE_TAGS[$potential_tag],substr($comcode,$pos,100))!=0))) && (!isset($PUREHTML_TAGS[$potential_tag]));

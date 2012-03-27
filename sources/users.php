@@ -129,6 +129,7 @@ function handle_logins()
  */
 function is_guest($member_id=NULL,$quick_only=false)
 {
+	if (!isset($GLOBALS['FORUM_DRIVER'])) return true;
 	if ($member_id===NULL) $member_id=get_member($quick_only);
 	return ($GLOBALS['FORUM_DRIVER']->get_guest_id()==$member_id);
 }
@@ -168,6 +169,7 @@ function get_member($quick_only=false)
 
 	if ($GETTING_MEMBER)
 	{
+		if (!isset($GLOBALS['FORUM_DRIVER'])) return db_get_first_id(); // :S
 		return $GLOBALS['FORUM_DRIVER']->get_guest_id();
 	}
 	$GETTING_MEMBER=true;
