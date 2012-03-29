@@ -599,7 +599,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							$differented=false; // If somehow via lookahead we've changed this to HTML and thus won't use it in raw form
 
 							// Variable lookahead
-							if (($next=='{') && (($comcode[$pos]=='$') || ($comcode[$pos]=='+') || ($comcode[$pos]=='!')))
+							if ((!$in_code_tag) && (($next=='{') && (($comcode[$pos]=='$') || ($comcode[$pos]=='+') || ($comcode[$pos]=='!'))))
 							{
 								if ($comcode_dangerous)
 								{
@@ -783,7 +783,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								}
 
 								// Usernames
-								if (($pos<$len) && ($next=='{') && ($pos+1<$len) && ($comcode[$pos]=='{') && (!$semiparse_mode))
+								if (($pos<$len) && ($next=='{') && ($pos+1<$len) && ($comcode[$pos]=='{') && (!$in_code_tag) && (!$semiparse_mode))
 								{
 									$matches=array();
 									if (preg_match('#^\{([^"{}&\'\$<>]+)\}\}#',substr($comcode,$pos,80),$matches)!=0)
@@ -1001,7 +1001,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 								// Advertising
 								$b_all=true; // leave true - for test purposes only
-								if ((!$differented) && (!$semiparse_mode) && (addon_installed('banners')) && (($b_all) || (!has_specific_permission($source_member,'banner_free'))))
+								if ((!$differented) && (!$semiparse_mode) && (!$in_code_tag) && (addon_installed('banners')) && (($b_all) || (!has_specific_permission($source_member,'banner_free'))))
 								{
 									// Pick up correctly, including permission filtering
 									if (is_null($ADVERTISING_BANNERS))
@@ -1083,7 +1083,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								}
 
 								// Link lookahead
-								if (!$differented)
+								if ((!$differented) && (!$in_code_tag))
 								{
 									if ((!$in_semihtml) && ($next=='h') && ((substr($comcode,$pos-1,strlen('http://'))=='http://') || (substr($comcode,$pos-1,strlen('https://'))=='https://') || (substr($comcode,$pos-1,strlen('ftp://'))=='ftp://')))
 									{
@@ -1842,7 +1842,7 @@ function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_
 		$ahead=substr($comcode,$pos,$ahead_end-$pos);
 
 		// Null vector
-		$ahead=str_replace(chr(10),'',$ahead);
+		$ahead=str_replace(chr(0),'',$ahead);
 
 		// Comment vector
 		$old_ahead='';

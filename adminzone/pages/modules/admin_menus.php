@@ -229,9 +229,11 @@ class Module_admin_menus
 		$fields_template=new ocp_tempcode();
 		//$fields_template->attach(form_input_line(do_lang_tempcode('CAPTION'),do_lang_tempcode('MENU_ENTRY_CAPTION'),'caption','',true)); This is editable in the tree structure instead
 		$fields_template->attach(form_input_line(do_lang_tempcode('LINK'),do_lang_tempcode('MENU_ENTRY_URL'),'url','',false));
-		$fields_template->attach(form_input_line(do_lang_tempcode('CAPTION_LONG'),do_lang_tempcode('MENU_ENTRY_CAPTION_LONG'),'caption_long','',false));
-		$fields_template->attach(form_input_tick(do_lang_tempcode('MENU_ENTRY_NEW_WINDOW'),'','new_window',false));
-		$fields_template->attach(form_input_tick(do_lang_tempcode('MENU_ENTRY_CHECK_PERMS'),do_lang_tempcode('DESCRIPTION_MENU_ENTRY_CHECK_PERMS'),'check_perms',true));
+		$options=array(
+			array(do_lang_tempcode('MENU_ENTRY_NEW_WINDOW'),'new_window',false,new ocp_tempcode()),
+			array(do_lang_tempcode('MENU_ENTRY_CHECK_PERMS'),'check_perms',true,do_lang_tempcode('DESCRIPTION_MENU_ENTRY_CHECK_PERMS')),
+		);
+		$fields_template->attach(form_input_various_ticks($options,'',NULL,do_lang_tempcode('OPTIONS'),false));
 		$list=new ocp_tempcode();
 		if (!$clickable_sections)
 		{
@@ -240,6 +242,9 @@ class Module_admin_menus
 		$list->attach(form_input_list_entry('branch_minus',false,do_lang_tempcode('CONTRACTED_BRANCH')));
 		$list->attach(form_input_list_entry('branch_plus',false,do_lang_tempcode('EXPANDED_BRANCH')));
 		$fields_template->attach(form_input_list(do_lang_tempcode('BRANCH_TYPE'),do_lang_tempcode('MENU_ENTRY_BRANCH'),'branch_type',$list));
+
+		$fields_template->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields_template->attach(form_input_line(do_lang_tempcode('CAPTION_LONG'),do_lang_tempcode('MENU_ENTRY_CAPTION_LONG'),'caption_long','',false));
 		$list=new ocp_tempcode();
 		$list->attach(form_input_list_entry('',false,do_lang_tempcode('NONE_EM')));
 		require_code('themes2');

@@ -492,7 +492,7 @@ hr.ocf_sig_barrier {
 
 .ocf_member_column_c {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 22.4em;
+		width: 24em;
 	{+END}
 }
 

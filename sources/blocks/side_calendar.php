@@ -203,7 +203,6 @@ class Block_side_calendar
 		$num_days=array_key_exists('days',$map)?intval($map['days']):30;
 		$period_end=$period_start+60*60*24*$num_days;
 
-		//cleanprint($filter);
 		$happenings=calendar_matches($member,true,$period_start,$period_end,$filter);
 
 		$days=array();

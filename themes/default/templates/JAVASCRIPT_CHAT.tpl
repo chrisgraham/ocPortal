@@ -359,7 +359,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 	var current_room_id=-1;
 	var tabElement;
 	var flashable_alert=false;
-	var room_name,room_id,event_type,member_id,tmp_element,rooms,avatar_url,participants;
+	var username,room_name,room_id,event_type,member_id,tmp_element,rooms,avatar_url,participants;
 	var id,timestamp;
 	var first_set=false;
 	var play_chat_sound;

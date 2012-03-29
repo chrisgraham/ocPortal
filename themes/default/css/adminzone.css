@@ -254,7 +254,7 @@ a.topleftlink:hover {
 }
 
 .docked .menu_edit_main {
-	padding-bottom: 38em;
+	padding-bottom: 10em;
 }
 
 .dock_button {
@@ -267,7 +267,7 @@ a.topleftlink:hover {
 	margin-{!en_right}: 420px;
 }
 
-.menu_editor_page.docked .menu_editor_rh_side {
+.menu_editor_page.docked {
 	overflow-y: scroll;
 	max-height: 380px;
 	margin-right: 10px;
@@ -277,6 +277,7 @@ a.topleftlink:hover {
 	float: {!en_right};
 	margin-{!en_left}: 20px;
 	width: 400px;
+	font-size: 0.9em;
 }
 
 .menu_editor_selected_field {

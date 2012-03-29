@@ -357,7 +357,9 @@ class OCP_Topic
 		$posts=array();
 		$queue=$this->all_posts_ordered;
 		if ((!is_null($parent_post_id)) && (!$maybe_missing_links))
+		{
 			$queue=$this->_grab_at_and_underneath($parent_post_id,$queue);
+		}
 		if ((is_null($num_to_show_limit)) || (!$this->is_threaded))
 		{
 			$posts=$queue;

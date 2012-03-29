@@ -1566,6 +1566,8 @@ class Module_topics
 		$map=array('page'=>'_SELF','type'=>'_add_reply','parent_id'=>$parent_id);
 		$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
+		$test=get_param_integer('threaded',-1);
+		if ($test!=-1) $map['threaded']=$test;
 		$post_url=build_url($map,'_SELF');
 
 		// Certain aspects relating to the posting system
@@ -2000,6 +2002,8 @@ END;
 					$map=array('page'=>'topicview','id'=>$topic_id,'type'=>'first_unread');
 					$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
 					if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
+					$test=get_param_integer('threaded',-1);
+					if ($test!=-1) $map['threaded']=$test;
 					$_url=build_url($map,get_module_zone('topicview'));
 					$url=$_url->evaluate();
 					$url.='#first_unread';
@@ -2040,6 +2044,8 @@ END;
 			$map=array('page'=>'topicview','id'=>$post_id,'type'=>'findpost');
 			$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
+			$test=get_param_integer('threaded',-1);
+			if ($test!=-1) $map['threaded']=$test;
 			$_url=build_url($map,get_module_zone('topicview'));
 			$url=$_url->evaluate();
 			if ($validated!=0) $url.='#post_'.strval($post_id);
@@ -2553,6 +2559,8 @@ END;
 		if ($redirect!='') $map['redirect']=$redirect;
 		$test=get_param_integer('kfs'.(is_null($forum_id)?'':strval($forum_id)),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($forum_id)?'':strval($forum_id))]=$test;
+		$test=get_param_integer('threaded',-1);
+		if ($test!=-1) $map['threaded']=$test;
 		$post_url=build_url($map,'_SELF');
 
 		$post=post_param('post',get_translated_text($post_details[0]['p_post'],$GLOBALS['FORUM_DB']));

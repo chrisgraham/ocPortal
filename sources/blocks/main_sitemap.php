@@ -108,7 +108,7 @@ class Block_main_sitemap
 					if (in_array($page,$skip_pages)) continue;
 					if (in_array($zone.':'.$page,$skip_pages)) continue;
 					if ($page=='404') continue;
-					if (substr($page,-10)=='_tree_made') continue;
+					if (strpos($page,'_tree_made')!==false) continue;
 					if ($page=='sitemap') continue;
 					if (($page=='forums') && (substr($page_type,0,7)=='modules') && ((get_forum_type()=='ocf') || (get_forum_type()=='none'))) continue;
 					if (($page=='join') && (substr($page_type,0,7)=='modules') && (!is_guest())) continue;

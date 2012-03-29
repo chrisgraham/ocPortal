@@ -110,7 +110,7 @@ class Hook_Profiles_Tabs_about
 			}
 		}
 		require_code('ocf_members2');
-		if ((!is_guest()) && (ocf_may_whisper($member_id_of)) && (has_actual_page_access($member_id_viewing,'topics')) && (ocf_may_make_personal_topic()))
+		if ((!is_guest()) && (ocf_may_whisper($member_id_of)) && (has_actual_page_access($member_id_viewing,'topics')) && (ocf_may_make_personal_topic()) && ($member_id_viewing!=$member_id_of))
 		{
 			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('contact',do_lang_tempcode('ADD_PERSONAL_TOPIC'),build_url(array('page'=>'topics','type'=>'new_pt','id'=>$member_id_of),get_module_zone('topics')),'reply');
 		}
@@ -140,7 +140,7 @@ class Hook_Profiles_Tabs_about
 		}
 		if (addon_installed('ocf_contactmember'))
 		{
-			if ((($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_allow_emails')==1) || (get_option('allow_email_disable')=='0')) && (!is_guest($member_id_of)) && (has_actual_page_access($member_id_viewing,'contactmember')))
+			if ((($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_allow_emails')==1) || (get_option('allow_email_disable')=='0')) && (!is_guest($member_id_of)) && (has_actual_page_access($member_id_viewing,'contactmember')) && ($member_id_viewing!=$member_id_of))
 			{
 				$redirect=get_self_url(true);
 				$modules[]=array('contact',do_lang_tempcode('_EMAIL_MEMBER'),build_url(array('page'=>'contactmember','redirect'=>$redirect,'id'=>$member_id_of),get_module_zone('contactmember')),'reply');

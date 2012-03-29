@@ -220,6 +220,8 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/systems/awards/post.php',
 			'sources/hooks/systems/awards/topic.php',
 			'themes/default/images/EN/page/forum.png',
+			'themes/default/images/EN/page/threaded.png',
+			'themes/default/images/EN/page/linear.png',
 			'themes/default/images/EN/page/send_message.png',
 			'themes/default/images/EN/page/mark_read.png',
 			'themes/default/images/EN/page/mark_unread.png',

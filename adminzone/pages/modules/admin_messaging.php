@@ -171,7 +171,7 @@ class Module_admin_messaging
 
 		// Filter/read comments
 		require_code('feedback');
-		actualise_post_comment(true,$message_type,$id,build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF'),NULL,$forum);
+		actualise_post_comment(true,$message_type,$id,build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),NULL,$forum);
 		$count=0;
 		$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$message_type.'_'.$id),$count);
 		if ((is_array($_comments)) && (array_key_exists(0,$_comments)))

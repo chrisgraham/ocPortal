@@ -95,10 +95,9 @@ function _get_details_comcode_tags()
 		'page'=>array('param'),
 		'snapback'=>array('param','forum'),
 		'post'=>array('param','forum'),
-		'topic'=>array('param','forum')
+		'topic'=>array('param','forum'),
+		'attachment'=>array('description','filename','type','thumb','float','align','width','height','thumb_url'),
 	);
-	if (addon_installed('filedump'))
-		$tag_list['attachment']=array('description','filename','type','thumb','float','align','width','height','thumb_url');
 	//'attachment_safe'=>array('description','filename','type','width','height','align','float','thumb_url'),	Merged into attachment in UI
 	ksort($tag_list);
 	/* // Helps find missing tags
@@ -197,8 +196,7 @@ function _get_group_tags($group=NULL)
  */
 function _get_non_wysiwyg_tags()
 {
-	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','upload','exp_thumb','exp_ref','thumb','reference','snapback','post','topic');
-	if (addon_installed('filedump')) $ret[]='attachment';
+	$ret=array('indent','del','ins','u','highlight','abbr','cite','samp','q','var','dfn','address','contents','include','concepts','concept','staff_note','menu','surround','tt','no_parse','overlay','random','pulse','ticker','shocker','jumping','sections','big_tabs','tabs','carousel','hide','tooltip','currency','if_in_group','flash','upload','exp_thumb','exp_ref','thumb','reference','snapback','post','topic','attachment');
 	return $ret;
 }
 

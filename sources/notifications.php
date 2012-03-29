@@ -200,12 +200,11 @@ class Notification_dispatcher
 
 		if (($this->store_in_staff_messaging_system) && (addon_installed('staff_messaging')))
 		{
-			$id=uniqid('');
-			$message_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$this->id,'message_type'=>$this->type),get_module_zone('admin_messaging'));
-
+			list($type,$id)=explode('_',$this->code_category,2);
+			$message_url=build_url(array('page'=>'admin_messaging','type'=>'view','id'=>$id,'message_type'=>$type),get_module_zone('admin_messaging'),NULL,false,false,true);
 			$message=do_lang('MESSAGING_NOTIFICATION_WRAPPER',$message,$message_url->evaluate());
 
-			actualise_post_comment(true,'notification',$this->id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true);
+			actualise_post_comment(true,$type,$id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true);
 		}
 
 		$start=0;

@@ -78,11 +78,11 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 
 	$permission_type_code=convert_ocportal_type_codes('feedback_type_code',$content_type,'permissions_type_code');
 
-	$module=convert_ocportal_type_codes('permissions_type_code',$content_type,'module');
+	$module=convert_ocportal_type_codes('feedback_type_code',$content_type,'module');
 	if ($module=='') $module=$content_id;
 
 	$category_id=mixed();
-	$award_hook=convert_ocportal_type_codes('award_hook',$content_type,'permissions_type_code');
+	$award_hook=convert_ocportal_type_codes('feedback_type_code',$content_type,'award_hook');
 	if ($award_hook!='')
 	{
 		require_code('hooks/systems/awards/'.$award_hook);

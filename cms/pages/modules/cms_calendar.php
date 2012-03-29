@@ -682,8 +682,14 @@ class Module_cms_calendar extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
-				$from=cal_utctime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,false):$start_hour,is_null($start_minute)?find_timezone_start_minute(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),NULL,$do_timezone_conv==1);
-				$to=is_null($end_year)?mixed():cal_utctime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,false):$end_hour,is_null($end_minute)?find_timezone_end_minute(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),NULL,$do_timezone_conv==1);
+				$_from=cal_get_start_utctime_for_event(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+				$from=cal_utctime_to_usertime($_from,NULL,$do_timezone_conv==1);
+				$to=mixed();
+				if (!is_null($end_year))
+				{
+					$_to=cal_get_end_utctime_for_event(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute);
+					$to=cal_utctime_to_usertime($_to,NULL,$do_timezone_conv==1);
+				}
 
 				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 			}
@@ -811,8 +817,14 @@ class Module_cms_calendar extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
-				$from=cal_utctime_to_usertime(mktime(is_null($start_hour)?find_timezone_start_hour($timezone,$start_year,$start_month,$start_day):$start_hour,is_null($start_minute)?find_timezone_start_minute($timezone,$start_year,$start_month,$start_day):$start_minute,0,$start_month,$start_day,$start_year),$timezone,$do_timezone_conv==1);
-				$to=is_null($end_year)?mixed():cal_utctime_to_usertime(mktime(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour,is_null($end_minute)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_minute,0,$end_month,$end_day,$end_year),$timezone,$do_timezone_conv==1);
+				$_from=cal_get_start_utctime_for_event(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+				$from=cal_utctime_to_usertime($_from,NULL,$do_timezone_conv==1);
+				$to=mixed();
+				if (!is_null($end_year))
+				{
+					$_to=cal_get_end_utctime_for_event(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute);
+					$to=cal_utctime_to_usertime($_to,NULL,$do_timezone_conv==1);
+				}
 
 				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 			}

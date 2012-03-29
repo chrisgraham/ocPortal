@@ -29,7 +29,7 @@ class Hook_cron_ocf_welcome_emails
 		$time_now=time();
 		$last_cron_time=intval(get_value('last_welcome_mail_time'));
 		if ($last_cron_time==0) $last_cron_time=time()-24*60*60*7;
-		set_value('last_welcome_mail_time',strval($last_cron_time));
+		set_value('last_welcome_mail_time',strval($time_now));
 
 		require_code('mail');
 
@@ -109,6 +109,15 @@ class Hook_cron_ocf_welcome_emails
 						require_code('newsletter');
 						$message=newsletter_variable_substitution($message,$subject,$forename,$surname,$name,$member['m_email_address'],$sendid,$hash);
 					}
+
+					if (get_value('notification_safety_testing')==='1')
+					{
+						if ($GLOBALS['SITE_DB']->query_value('logged_mail_messages','COUNT(*)',array('m_subject'=>$subject,'m_to_email'=>serialize(array($member['m_email_address']))))>0)
+						{
+							fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+						}
+					}
+
 					mail_wrap($subject,$message,array($member['m_email_address']),$name,'','',3,NULL,false,NULL,true);
 				}
 			}

@@ -280,7 +280,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			'pt_from'=>$topic_info['t_pt_from'],
 			'pt_to'=>$topic_info['t_pt_to'],
 			'is_open'=>$topic_info['t_is_open'],
-			'is_threaded'=>is_null($topic_info['f_is_threaded'])?false:$topic_info['f_is_threaded'],
+			'is_threaded'=>get_param_integer('threaded',($start>0)?0:(is_null($topic_info['f_is_threaded'])?0:$topic_info['f_is_threaded'])),
+			'is_really_threaded'=>is_null($topic_info['f_is_threaded'])?0:$topic_info['f_is_threaded'],
 			'last_time'=>$topic_info['t_cache_last_time'],
 			'meta_data'=>array(
 				'created'=>date('Y-m-d',$topic_info['t_cache_first_time']),
@@ -578,6 +579,8 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$map=array('page'=>'topics','type'=>'validate_post','id'=>$_postdetails['id']);
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+		$test=get_param_integer('threaded',-1);
+		if ($test!=-1) $map['threaded']=$test;
 		$action_url=build_url($map,get_module_zone('topics'));
 		$_title=do_lang_tempcode('VALIDATE_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
@@ -585,13 +588,15 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	}
 	if (($may_reply) && (is_null(get_bot_type())))
 	{
-		$map=array('page'=>'topics','type'=>'new_post','id'=>$_postdetails['topic_id'],'quote'=>$_postdetails['id']);
+		$map=array('page'=>'topics','type'=>'new_post','id'=>$_postdetails['topic_id'],'parent_id'=>$_postdetails['id']);
 		if (array_key_exists('intended_solely_for',$_postdetails))
 		{
 			$map['intended_solely_for']=$_postdetails['poster'];
 		}
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+		$test=get_param_integer('threaded',-1);
+		if ($test!=-1) $map['threaded']=$test;
 		$action_url=build_url($map,get_module_zone('topics'));
 		$_title=do_lang_tempcode(($topic_info['is_threaded']==1)?'REPLY':'QUOTE_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
@@ -599,13 +604,13 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 
 		if ((array_key_exists('message_comcode',$_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (!array_key_exists('intended_solely_for',$map)))
 		{
-			if ($topic_info['is_threaded']==1)
-			{
+			/*if ($topic_info['is_threaded']==1)
+			{*/
 				$javascript='return threaded_reply(this,\''.strval($_postdetails['id']).'\');';
-			} else
+			/*} else   Actually, we'll always store threaded reply even if we'll render using quotes
 			{
 				$javascript='var post=document.getElementById(\'post\'); if (!post) return true; var y=findPosY(post); if (y==0) return true; post.value+=((post.value==\'\')?\'\':\'\n\n\')+\'[quote="'.addslashes($_postdetails['poster_username']).'"]'.str_replace(chr(10),'\n',addslashes($_postdetails['message_comcode'])).'[/quote]\n\'; smoothScroll(y); post.focus(); return false;';
-			}
+			}*/
 		}
 		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'reply':'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
 	}
@@ -635,6 +640,8 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$map=array('page'=>'topics','type'=>'edit_post','id'=>$_postdetails['id']);
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+		$test=get_param_integer('threaded',-1);
+		if ($test!=-1) $map['threaded']=$test;
 		$edit_url=build_url($map,get_module_zone('topics'));
 		$_title=do_lang_tempcode('EDIT_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
@@ -645,6 +652,8 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$map=array('page'=>'topics','type'=>'delete_post','id'=>$_postdetails['id']);
 		$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 		if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+		$test=get_param_integer('threaded',-1);
+		if ($test!=-1) $map['threaded']=$test;
 		$delete_url=build_url($map,get_module_zone('topics'));
 		$_title=do_lang_tempcode('DELETE_POST');
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));

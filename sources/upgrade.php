@@ -1119,9 +1119,10 @@ function check_outdated($dir,$rela,&$master_data,&$hook_files,$allow_merging)
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_CUSTOM_DIR_CONTENTS)) continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES)) continue;
 			if ($file=='files.dat') continue;
 			if ($file=='files_previous.dat') continue;
+			if ($file=='comcode_custom') continue;
 
 			$is_dir=@is_dir($dir.$file);
 	
@@ -1242,18 +1243,25 @@ function check_alien($old_files,$files,$dir,$rela='')
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_THEMES)) continue;
+			if ($file=='comcode_custom') continue;
+			if ($file=='html_custom') continue;
+			if ($file=='css_custom') continue;
+			if ($file=='templates_custom') continue;
+			if ($file=='images_custom') continue;
+			if ($file=='lang_custom') continue;
+			if ($file=='data_custom') continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES)) continue;
 			if ($rela.$file=='data/images') continue;
 			if ($rela.$file=='data/areaedit/plugins/SpellChecker/aspell') continue;
-	
+
 			$is_dir=@is_dir($dir.$file);
 			if (!is_readable($dir.$file)) continue;
-	
+
 			if ($file=='index.php') continue; // New zone
-	
+
 			if ($is_dir)
 			{
-				if ((strpos($file,'_custom')===false) && (!file_exists($dir.$file.'/info.php')))
+				if (!file_exists($dir.$file.'/info.php'))
 				{
 					if (($rela=='') && (!file_exists($dir.$file.'/pages'))) // Scan to make sure it's not some other system placed under the webroot
 					{
@@ -1386,6 +1394,10 @@ function version_specific()
 			// Installaton code got moved over
 			$sitetree_version=$GLOBALS['SITE_DB']->query_value('modules','module_version',array('module_the_name'=>'admin_sitetree'));
 			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$sitetree_version),array('module_the_name'=>'cms_comcode_pages'),'',1);
+		}
+		if ($version_database<8.0)
+		{
+			actual_delete_zone_lite('personalzone');
 		}
 		set_value('version',float_to_raw_string($version_files));
 		
@@ -1932,6 +1944,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 		while (($css_file=readdir($dh))!==false)
 		{
 			if (substr($css_file,-4)!='.css') continue;
+			if (substr($css_file,0,1)=='.') continue;
 
 			$css_file_contents=file_get_contents($css_dir.$css_file);
 			if (strpos($css_file_contents,$css_recognition_string)===false)

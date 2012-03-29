@@ -4,6 +4,35 @@
 // MENU FUNCTIONS
 // ==============
 
+function menu_editor_add_new_page()
+{
+	var form=document.getElementById('edit_form');
+
+	window.fauxmodal_prompt(
+		'{$?,{$CONFIG_OPTION,collapse_user_zones},{!javascript:ENTER_ZONE_SPZ^;},{!javascript:ENTER_ZONE^;}}',
+		'',
+		function(zone)
+		{
+			if (zone!==null)
+			{
+				window.fauxmodal_prompt(
+					'{!javascript:ENTER_PAGE^;}',
+					'',
+					function(page)
+					{
+						if (page!==null)
+						{
+							form.elements['url'].value=zone+':'+page;
+						}
+					},
+					"{!SPECIFYING_NEW_PAGE^#}"
+				);
+			}
+		},
+		"{!SPECIFYING_NEW_PAGE^#}"
+	);
+}
+
 function makeFieldSelected(ob)
 {
 	if (ob.className=='menu_editor_selected_field') return;

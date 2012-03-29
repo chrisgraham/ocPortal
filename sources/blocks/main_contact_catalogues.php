@@ -47,7 +47,7 @@ class Block_main_contact_catalogues
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'extra\']:\'\')';
+		$info['cache_on']='(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\')';
 		$info['ttl']=60*24*7;
 		return $info;
 	}

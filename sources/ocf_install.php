@@ -403,7 +403,7 @@ function install_ocf($upgrade_from=NULL)
 			$rows=$GLOBALS['FORUM_DB']->query_select('f_forum_tracking',array('r_forum_id','r_member_id'),NULL,'',100,$start);
 			foreach ($rows as $row)
 			{
-				enable_notifications('ocf_forum',strval($row['r_forum_id']),$row['r_member_id']);
+				enable_notifications('ocf_topic','forum:'.strval($row['r_forum_id']),$row['r_member_id']);
 			}
 			$start+=100;
 		}

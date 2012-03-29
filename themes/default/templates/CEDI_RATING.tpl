@@ -9,14 +9,14 @@
 				<img src="{$IMG*,rating}" title="" alt="{$ROUND,{$DIV_FLOAT,{RATING},2}}" />
 				{$INC,rating_loop}
 			{+END}
-			<br />
 		{+END}
 	{+END}
-	{+START,IF_NON_PASSED,RATING}
-		{!UNRATED}
+	{+START,IF,{$NOT,{HAS_RATINGS}}}
+		<em>{!UNRATED}</em>
 	{+END}
+	&nbsp;
 
-	<span class="associated_details"><em>{!VOTES,{NUM_RATINGS*}}</em></span>
+	<span class="associated_details"><em>{!VOTES,{OVERALL_NUM_RATINGS*}}</em></span>
 	<span class="cedi_rating_inside">{RATING_FORM}</span>
 </div>
 

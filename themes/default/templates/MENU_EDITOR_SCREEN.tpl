@@ -55,6 +55,10 @@
 				<p class="associated_caption">
 					{!CLICK_ENTRY_POINT_TO_USE}
 				</p>
+				
+				<p>
+					&raquo; <a href="#" onclick="return menu_editor_add_new_page();">{!SPECIFY_NEW_PAGE}</a>
+				</p>
 			</div>
 
 			<div class="menu_editor_lh_side">

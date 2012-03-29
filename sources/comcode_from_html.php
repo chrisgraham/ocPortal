@@ -358,7 +358,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	}
 
 	// Cleanup how blocks are converted into a line break model. We need to clean up the case where inline leads onto block, by adding a linebreak inbetween. Note that this kind of break does not go *between* blocks, which is the reason we can't arbitrarily place it later on.
-	$semihtml=preg_replace('#(\w|</('.implode('|',$inline_elements).')>)(<(div|p))#','${1}<br />${3}',$semihtml);
+	$semihtml=preg_replace('#([^\s<>]|</('.implode('|',$inline_elements).')>)(<(div|p))#','${1}<br />${3}',$semihtml);
 
 	// Reorder XHTML attributes alphabetically, so our regexp's match better
 	$semihtml=preg_replace_callback('#<([^>\s]+)\s([^>]+)>#','_reorder_xhtml_attributes',$semihtml);
@@ -764,7 +764,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
  */
 function comcode_strip_html_tags($matches)
 {
-	return $matches[1].strip_tags($matches[2],'<p><br>').$matches[3];
+	return $matches[1].strip_tags($matches[2],'<p><br><div>').$matches[3];
 }
 
 /**

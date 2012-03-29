@@ -52,6 +52,7 @@ class Hook_Syndication_facebook
 		{
 			if (get_option('facebook_uid')=='')
 			{
+				require_code('config2');
 				$facebook_uid=$FACEBOOK_CONNECT->getUser();
 				set_option('facebook_uid',strval($facebook_uid));
 			}

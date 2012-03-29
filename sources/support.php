@@ -1987,13 +1987,13 @@ function best_hash($to_hash,$salt)
 	// It md5's $to_hash first because crypt is not binary safe and we need to feed in arbitrary data.
 	// It substr's the salt to comply with salt length requirements.
 
-	if (CRYPT_BLOWFISH==1)
+	if ((defined('CRYPT_BLOWFISH')) && (CRYPT_BLOWFISH==1))
 	{
 		$_salt=substr(md5($salt),0,22).'$';
 		return substr(crypt(md5($to_hash),'$2a$07$'.$_salt),strlen($_salt));
 	}
 
-	if (CRYPT_SHA512==1)
+	if ((defined('CRYPT_SHA512')) && (CRYPT_SHA512==1))
 	{
 		$_salt='$6$rounds=5000$'.substr(md5($salt),0,17).'$';
 		return substr(crypt(md5($to_hash),$_salt),strlen($_salt));

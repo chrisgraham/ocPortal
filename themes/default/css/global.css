@@ -2766,6 +2766,7 @@ ul.sitemap li li {
 	margin-{!en_left}: 8px;
 	background-color: #fafbfd; /* {$,code_content, 25% ocf_row2 + 75% W/B} */
 	color: #3f3f3f; /* {$,wizard, 25% code_content + 85% !W/B} */
+	overflow: hidden;
 }
 
 .comcode_quote_content_titled {

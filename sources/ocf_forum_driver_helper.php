@@ -363,7 +363,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
 	if (($is_threaded) && (db_has_subqueries($this_ref->connection->connection_read)))
 	{
-		$order=($reverse?'compound_rating ASC':'compound_rating DESC').','.$order;
+		$order=(($reverse?'compound_rating ASC':'compound_rating DESC').','.$order);
 	}
 
 	if (($light_if_threaded) && ($is_threaded))

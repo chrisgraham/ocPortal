@@ -80,9 +80,10 @@ class Module_admin_notifications
 	 */
 	function run()
 	{
+		require_lang('notifications');
+
 		$title=get_page_title('NOTIFICATIONS_LOCKDOWN');
 		
-		require_lang('notifications');
 		require_css('notifications');
 		require_javascript('javascript_notifications');
 		require_code('notifications');

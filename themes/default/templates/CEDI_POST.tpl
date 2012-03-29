@@ -44,22 +44,24 @@
 </tr>
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,seedy_post,{ID}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry},1}{+END}
-<tr>
-	<td class="cedi_post_expand_button">
-	</td>
-	<td class="ocf_post_buttons ocf_post1">
-		<div class="cedi_buttons">
-			{BUTTONS}
-		</div>
-		<!--{+START,IF,{$EQ,{$CONFIG_OPTION,is_on_rating},1}}
-			<div class="cedi_post_below">
-				<form title="{!RATING}" class="inline" action="{RATE_URL*}" method="post">
-					{RATING}
-				</form>
+{+START,IF_NON_EMPTY,{BUTTONS}}
+	<tr>
+		<td class="cedi_post_expand_button">
+		</td>
+		<td class="ocf_post_buttons ocf_post1">
+			<div class="cedi_buttons">
+				{BUTTONS}
 			</div>
-		{+END}-->
-	</td>
-</tr>
+			<!--{+START,IF,{$EQ,{$CONFIG_OPTION,is_on_rating},1}}
+				<div class="cedi_post_below">
+					<form title="{!RATING}" class="inline" action="{RATE_URL*}" method="post">
+						{RATING}
+					</form>
+				</div>
+			{+END}-->
+		</td>
+	</tr>
+{+END}
 <tr>
 	<td colspan="2">&nbsp;</td>
 </tr>

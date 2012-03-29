@@ -57,7 +57,7 @@ class Module_recommend
 	function uninstall()
 	{
 		delete_config_option('points_RECOMMEND_SITE');
-		delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE&,:,%3A,{$SELF_URL}}');
+		delete_menu_item_simple('_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Module_recommend
 		add_config_option('RECOMMEND_SITE','points_RECOMMEND_SITE','integer','return addon_installed(\'points\')?\'350\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
 		require_lang('recommend');
-		add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend:from={$REPLACE,:,%3A,{$SELF_URL&,0,0,0,from=<null>}}');
+		add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
 	}
 
 	/**

@@ -81,11 +81,11 @@ function cal_utctime_to_usertime($time_raw,$timezone,$do_timezone_conv)
 {
 	if (!$do_timezone_conv) return $time_raw;
 
-	return tz_time($time_raw,$timezone);
+	return $time_raw*2-tz_time($time_raw,$timezone);
 }
 
 /**
- * Find a list of pairs specifying the times the event occurs, for 20 years into the future.
+ * Find a list of pairs specifying the times the event occurs, for 20 years into the future, in user-time.
  *
  * @param  ID_TEXT		The timezone for the event (NULL: current user's timezone)
  * @param  BINARY			Whether the time should be presented in the viewer's own timezone
@@ -103,7 +103,7 @@ function cal_utctime_to_usertime($time_raw,$timezone,$do_timezone_conv)
  * @param  ?integer		The number of recurrences (NULL: none/infinite)
  * @param  ?TIME			The timestamp that found times must exceed. In user-time (NULL: now)
  * @param  ?TIME			The timestamp that found times must not exceed. In user-time (NULL: 20 years time)
- * @return array			A list of pairs for period times (timestamps, in user-time). Actually quartets, 'window-bound timestamps' is first pair in quartet, then 'true coverage timestamps' is second pair
+ * @return array			A list of pairs for period times (timestamps, in user-time). Actually a series of pairs, 'window-bound timestamps' is first pair, then 'true coverage timestamps', then 'true coverage timestamps without timezone conversions'
  */
 function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences,$period_start=NULL,$period_end=NULL)
 {
@@ -156,6 +156,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			break;
 	}
 
+	$_b=mixed();
 	$b=mixed();
 
 	do
@@ -170,14 +171,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		The server already has the day stored UTC which may be different to the day stored for the +1 timezone (in fact either the start or end day will be stored differently, assuming there is an end day)
 		*/
 
-		$_a=mktime(
-			is_null($start_hour)?find_timezone_start_hour(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,false):$start_hour,
-			is_null($start_minute)?find_timezone_start_minute(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,false):$start_minute,
-			0,
-			$start_month,
-			$start_day,
-			$start_year
-		);
+		$_a=cal_get_start_utctime_for_event(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute);
 		$a=cal_utctime_to_usertime(
 			$_a,
 			NULL,
@@ -189,20 +183,13 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$end_month=$start_month;
 			$end_year=$start_year;
 		}
-		//exit('!'.(is_null($end_hour)?find_timezone_end_hour($timezone,$end_year,$end_month,$end_day):$end_hour).':'.(is_null($end_hour)?find_timezone_end_minute($timezone,$end_year,$end_month,$end_day):$end_hour));
 		if (is_null($end_year))
 		{
+			$_b=NULL;
 			$b=NULL;
 		} else
 		{
-			$_b=mktime(
-				is_null($end_hour)?find_timezone_end_hour(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,false):$end_hour,
-				is_null($end_minute)?find_timezone_end_minute(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,false):$end_minute,
-				0,
-				$end_month,
-				$end_day,
-				$end_year
-			);
+			$_b=cal_get_end_utctime_for_event(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute);
 			$b=cal_utctime_to_usertime(
 				$_b,
 				NULL,
@@ -214,7 +201,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		$spans=(($a<$period_start) && ($b>$period_end));
 		if (($starts_within || $ends_within || $spans) && (in_array($mask[$i%$mask_len],array('1','y'))))
 		{
-			$times[]=array(max($period_start,$a),min($period_end,$b),$a,$b);
+			$times[]=array(max($period_start,$a),min($period_end,$b),$a,$b,2*$_a-tz_time($_a,$timezone),is_null($_b)?NULL:(2*$_b-tz_time($_b,$timezone)));
 		}
 		$i++;
 
@@ -315,8 +302,8 @@ function regenerate_event_reminder_jobs($id,$force=false)
 /**
  * Create a neatly human-readable date range, using various user-friendly readability tricks.
  *
- * @param  TIME				From time
- * @param  TIME				To time
+ * @param  TIME				From time in user time
+ * @param  TIME				To time in user time
  * @param  boolean			Whether time is included in this date range
  * @return string				Textual specially-formatted range
  */
@@ -349,7 +336,7 @@ function date_range($from,$to,$do_time=true)
 }
 
 /**
- * Detect calendar matches in a time period.
+ * Detect calendar matches in a time period, in user-time.
  *
  * @param  MEMBER			The member to detect conflicts for
  * @param  boolean		Whether to restrict only to viewable events for the current member
@@ -464,7 +451,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 						// Now search every combination to see if we can get a hit
 						foreach ($their_times as $their)
 						{
-							$matches[]=array($full_url,$event,$their[0],$their[1],$their[2],$their[3]);
+							$matches[]=array($full_url,$event,$their[0],$their[1],$their[2],$their[3],$their[4],$their[5]);
 						}
 					}
 				}
@@ -495,7 +482,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 						if (($from>=$period_start) && ($from<$period_end))
 						{
 							$event+=array('e_start_year'=>date('Y',$from),'e_start_month'=>date('m',$from),'e_start_day'=>date('D',$from),'e_start_hour'=>date('H',$from),'e_start_minute'=>date('i',$from),'e_end_year'=>NULL,'e_end_month'=>NULL,'e_end_day'=>NULL,'e_end_hour'=>NULL,'e_end_minute'=>NULL);
-							$matches[]=array($full_url,$event,$from,NULL,$from,NULL);
+							$matches[]=array($full_url,$event,$from,NULL,$from,NULL,$from,NULL);
 						}
 					}
 				}
@@ -525,7 +512,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 		// Now search every combination to see if we can get a hit
 		foreach ($their_times as $their)
 		{
-			$matches[]=array($event['e_id'],$event,$their[0],$their[1],$their[2],$their[3]);
+			$matches[]=array($event['e_id'],$event,$their[0],$their[1],$their[2],$their[3],$their[4],$their[5]);
 		}
 	}
 
@@ -607,6 +594,162 @@ function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_da
 }
 
 /**
+ * Find first hour in day for a timezone.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @return integer			Hour
+ */
+function find_timezone_start_hour_in_utc($timezone,$year,$month,$day)
+{
+	$t1=mktime(0,0,0,$month,$day,$year);
+	$t2=tz_time($t1,$timezone);
+	$t2-=2*($t2-$t1);
+	$ret=intval(date('H',$t2));
+	return $ret;
+}
+
+/**
+ * Find first minute in day for a timezone. Usually 0, but some timezones have 30 min offsets.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @return integer			Hour
+ */
+function find_timezone_start_minute_in_utc($timezone,$year,$month,$day)
+{
+	$t1=mktime(0,0,0,$month,$day,$year);
+	$t2=tz_time($t1,$timezone);
+	$t2-=2*($t2-$t1);
+	$ret=intval(date('i',$t2));
+	return $ret;
+}
+
+/**
+ * Find last hour in day for a timezone.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @return integer			Hour
+ */
+function find_timezone_end_hour_in_utc($timezone,$year,$month,$day)
+{
+	$t1=mktime(23,59,0,$month,$day,$year);
+	$t2=tz_time($t1,$timezone);
+	$t2-=2*($t2-$t1);
+	$ret=intval(date('H',$t2));
+	return $ret;
+}
+
+/**
+ * Find last minute in day for a timezone. Usually 59, but some timezones have 30 min offsets.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @return integer			Hour
+ */
+function find_timezone_end_minute_in_utc($timezone,$year,$month,$day)
+{
+	$t1=mktime(23,59,0,$month,$day,$year);
+	$t2=tz_time($t1,$timezone);
+	$t2-=2*($t2-$t1);
+	$ret=intval(date('i',$t2));
+	return $ret;
+}
+
+/**
+ * Get the UTC start time for a specified UTC time event.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @param  ?integer			Hour (NULL: start hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  ?integer			Minute (NULL: start minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @return TIME				Timestamp
+ */
+function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$hour,$minute)
+{
+	$_hour=is_null($hour)?0:$hour;
+	$_minute=is_null($minute)?0:$minute;
+
+	$timestamp=mktime(
+		$_hour,
+		$_minute,
+		0,
+		$month,
+		$day,
+		$year
+	);
+
+	if (is_null($hour))
+	{
+		$timezoned_timestamp=tz_time($timestamp,$timezone);
+		$temp=mktime(
+			0,
+			0,
+			0,
+			intval(date('m',$timestamp)),
+			intval(date('d',$timestamp)),
+			intval(date('Y',$timestamp))
+		);
+		$timestamp-=($temp-$timezoned_timestamp);
+	}
+
+	return $timestamp;
+}
+
+/**
+ * Get the UTC end time for a specified UTC time event.
+ *
+ * @param  ID_TEXT			Timezone
+ * @param  integer			Year
+ * @param  integer			Month
+ * @param  integer			Day
+ * @param  ?integer			Hour (NULL: end hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  ?integer			Minute (NULL: end minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @return TIME				Timestamp
+ */
+function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$hour,$minute)
+{
+	$_hour=is_null($hour)?23:$hour;
+	$_minute=is_null($minute)?59:$minute;
+
+	$timestamp=mktime(
+		$_hour,
+		$_minute,
+		0,
+		$month,
+		$day,
+		$year
+	);
+
+	if (is_null($hour))
+	{
+		$timezoned_timestamp=tz_time($timestamp,$timezone);
+		$temp=mktime(
+			23,
+			59,
+			0,
+			intval(date('m',$timestamp)),
+			intval(date('d',$timestamp)),
+			intval(date('Y',$timestamp))
+		);
+		$timestamp-=($temp-$timezoned_timestamp);
+	}
+
+	return $timestamp;
+}
+
+/**
  * Detect conflicts with an event in certain time periods.
  *
  * @param  MEMBER			The member to detect conflicts for
@@ -638,7 +781,24 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	{
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
 
-		$their_times=find_periods_recurrence($event['e_timezone'],1,$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
+		$their_times=find_periods_recurrence(
+			$event['e_timezone'],
+			1,
+			$event['e_start_year'],
+			$event['e_start_month'],
+			$event['e_start_day'],
+			is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],
+			is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],
+			$event['e_end_year'],
+			$event['e_end_month'],
+			$event['e_end_day'],
+			is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],
+			is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],
+			$event['e_recurrence'],
+			$event['e_recurrences'],
+			$period_start,
+			$period_end
+		);
 
 		// Now search every combination to see if we can get a hit
 		foreach ($our_times as $our)

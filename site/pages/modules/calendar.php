@@ -644,11 +644,11 @@ class Module_calendar
 		$streams=array(array());
 		foreach ($happenings as $happening)
 		{
-			list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
+			list($e_id,$event,$from,$to,$real_from,$real_to,$utc_real_from)=$happening;
 			$date=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$from));
 			if (is_numeric($e_id))
 			{
-				$map=array_merge($filter,array('page'=>'_SELF','type'=>'view','id'=>$event['e_id'],'day'=>date('Y-m-d',$real_from),'date'=>$view_id));
+				$map=array_merge($filter,array('page'=>'_SELF','type'=>'view','id'=>$event['e_id'],'day'=>date('Y-m-d',$utc_real_from),'date'=>$view_id));
 				if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
 				$url=build_url($map,'_SELF');
 			} else
@@ -708,7 +708,7 @@ class Module_calendar
 		for ($i=0;$i<24;$i++)
 		{
 			// Work out the hour
-			$hour=locale_filter(gmdate(do_lang('time_hour_and_mins'),$i*60*60));
+			$hour=locale_filter(date(do_lang('time_hour_and_mins'),$i*60*60));
 
 			// The streams need rendering for each hour
 			$_streams=new ocp_tempcode();
@@ -809,7 +809,7 @@ class Module_calendar
 				for ($hap_i=0;$hap_i<count($happenings);$hap_i++)
 				{
 					$happening=$happenings[$hap_i];
-					list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
+					list($e_id,$event,$from,$to,$real_from,$real_to,$utc_real_from)=$happening;
 					$date=date('D:H',$from);
 					$explode2=explode(':',$date);
 					if ((intval($explode2[1])==$i) && ($day_remap[$explode2[0]]==$j))
@@ -817,7 +817,7 @@ class Module_calendar
 						$date=is_null($event['e_start_hour'])?'':locale_filter(my_strftime(do_lang('calendar_minute'),$real_from));
 						if (is_numeric($e_id))
 						{
-							$map=array_merge($filter,array('page'=>'_SELF','type'=>'view','id'=>$event['e_id'],'day'=>date('Y-m-d',$real_from),'date'=>$view_id,'back'=>'week'));
+							$map=array_merge($filter,array('page'=>'_SELF','type'=>'view','id'=>$event['e_id'],'day'=>date('Y-m-d',$utc_real_from),'date'=>$view_id,'back'=>'week'));
 							if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
 							$url=build_url($map,'_SELF');
 						} else
@@ -833,7 +833,7 @@ class Module_calendar
 								$continuation=24;
 								$ntime=mktime(0,0,0,$start_month,$start_day+$j+1,$start_year);
 								if ($ntime<$period_end)
-									$happenings[]=array($e_id,$event,$ntime,$to,$real_from,$real_to);
+									$happenings[]=array($e_id,$event,$ntime,$to,$real_from,$real_to,$utc_real_from);
 							}
 							elseif (intval(date('H',$to))>$i+1)
 							{
@@ -885,7 +885,7 @@ class Module_calendar
 		$hours=new ocp_tempcode();
 		for ($i=0;$i<24;$i++)
 		{
-			$hour=locale_filter(gmdate(do_lang('time_hour_and_mins'),$i*60*60));
+			$hour=locale_filter(date(do_lang('time_hour_and_mins'),$i*60*60));
 
 			$days=new ocp_tempcode();
 			for ($j=0;$j<7;$j++)
@@ -1040,7 +1040,7 @@ class Module_calendar
 			{
 				$happening=$happenings[$hap_i];
 
-				list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
+				list($e_id,$event,$from,$to,$real_from,$real_to,$utc_real_from)=$happening;
 				$date=date('d',$from);
 				if (intval($date)==$i)
 				{
@@ -1048,7 +1048,7 @@ class Module_calendar
 
 					if (is_numeric($e_id))
 					{
-						$map=array_merge($filter,array('page'=>'_SELF','type'=>'view','id'=>$event['e_id'],'day'=>date('Y-m-d',$real_from),'date'=>$view_id,'back'=>'month'));
+						$map=array_merge($filter,array('page'=>'_SELF','type'=>'view','id'=>$event['e_id'],'day'=>date('Y-m-d',$utc_real_from),'date'=>$view_id,'back'=>'month'));
 						if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
 						$url=build_url($map,'_SELF');
 					} else
@@ -1077,7 +1077,7 @@ class Module_calendar
 						{
 							$ntime=mktime(0,0,0,intval(date('m',$from)),intval($test2)+1,intval(date('Y',$from)));
 							if ($ntime<$period_end)
-								$happenings[]=array($e_id,$event,$ntime,$to,$real_from,$real_to);
+								$happenings[]=array($e_id,$event,$ntime,$to,$real_from,$real_to,$utc_real_from);
 						}
 					}
 				}
@@ -1152,13 +1152,13 @@ class Module_calendar
 
 			foreach ($happenings as $happening)
 			{
-				list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
+				list($e_id,$event,$from,$to,$real_from,$real_to,$utc_real_from)=$happening;
 				$date=date('m',$from);
 				if (intval($date)==$i)
 				{
 					if (is_numeric($e_id))
 					{
-						$map=array_merge($filter,array('page'=>'_SELF','type'=>'view','id'=>$event['e_id'],'day'=>date('Y-m-d',$real_from),'date'=>$view_id,'back'=>'year'));
+						$map=array_merge($filter,array('page'=>'_SELF','type'=>'view','id'=>$event['e_id'],'day'=>date('Y-m-d',$utc_real_from),'date'=>$view_id,'back'=>'year'));
 						if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
 						$url=build_url($map,'_SELF');
 					} else
@@ -1204,7 +1204,7 @@ class Module_calendar
 						if (intval($date2)>$i)
 						{
 							$ntime=mktime(0,0,0,intval(date('m',$from))+1,1,intval(date('Y',$from)));
-							$happenings[]=array($e_id,$event,$ntime,$to,$real_from,$real_to);
+							$happenings[]=array($e_id,$event,$ntime,$to,$real_from,$real_to,$utc_real_from);
 						}
 					}
 				}
@@ -1354,7 +1354,13 @@ class Module_calendar
 			}
 		}
 
-		$first_date=get_timezoned_date(mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_year'],$event['e_start_day']),false,false,false,is_null($event['e_start_hour']));
+		$__first_date=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_year'],$event['e_start_day']);
+		$_first_date=cal_utctime_to_usertime(
+			$__first_date,
+			NULL,
+			$event['e_do_timezone_conv']==1
+		);
+		$first_date=get_timezoned_date($_first_date);
 		$date=get_param('date',$first_date); // It's year 10,000 compliant when it comes to year display ;).
 		$back_type=get_param('back','day');
 		$map=array_merge($filter,array('page'=>'_SELF','type'=>'misc','view'=>$back_type,'id'=>$date));
@@ -1424,12 +1430,12 @@ class Module_calendar
 				$event['e_start_day']=intval($explode[2]);
 			}
 		}
-		$time_raw=mktime(is_null($event['e_start_hour'])?find_timezone_start_hour(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],false):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],false):$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
+		$time_raw=cal_get_start_utctime_for_event(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute']);
 		$from=cal_utctime_to_usertime($time_raw,NULL,$event['e_do_timezone_conv']==1);
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
 		if (!is_null($event['e_end_year']))
 		{
-			$to_raw=mktime(is_null($event['e_end_hour'])?find_timezone_end_hour(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],false):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],false):$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']);
+			$to_raw=cal_get_end_utctime_for_event(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute']);
 			$to=cal_utctime_to_usertime($to_raw,NULL,$event['e_do_timezone_conv']==1);
 			$to_day_formatted=locale_filter(date(do_lang('calendar_date'),$to));
 			$time2=date_range($from,$to,!is_null($event['e_start_hour']));
@@ -1580,8 +1586,14 @@ class Module_calendar
 
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($event['e_type']))))
 		{
-			$from=cal_utctime_to_usertime(mktime(is_null($event['e_start_hour'])?find_timezone_start_hour($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']),$event['e_timezone'],$event['e_do_timezone_conv']==1);
-			$to=is_null($event['e_end_year'])?mixed():cal_utctime_to_usertime(mktime(is_null($event['e_end_hour'])?find_timezone_end_hour($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			$_from=cal_get_start_utctime_for_event(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute']);
+			$from=cal_utctime_to_usertime($_from,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			$to=mixed();
+			if (!is_null($event['e_end_year']))
+			{
+				$_to=cal_get_end_utctime_for_event(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute']);
+				$to=cal_utctime_to_usertime($_to,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			}
 
 			syndicate_described_activity('calendar:ACTIVITY_SUBSCRIBED_EVENT',get_translated_text($event['e_title']),date_range($from,$to,!is_null($event['e_start_hour'])),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,NULL,true);
 		}

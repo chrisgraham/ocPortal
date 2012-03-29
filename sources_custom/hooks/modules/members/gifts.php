@@ -27,6 +27,7 @@ class Hook_members_gifts
 
 		if (is_guest()) return array();
 		if (!has_actual_page_access(get_member(),'pointstore',get_module_zone('pointstore'))) return array();
+		if ($member_id==get_member()) return array();
 
 		return array(array('contact',do_lang_tempcode('GIFT_GIFT'),build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocgifts','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)),get_module_zone('pointstore'))));
 	}
@@ -52,7 +53,7 @@ class Hook_members_gifts
 			{
 				$gift_url='';
 				
-				if($gift['is_anonymous']==0)
+				if ($gift['is_anonymous']==0)
 				{
 					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_user_id']);
 					$sender_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_user_id']);

@@ -65,6 +65,7 @@ class Module_topicview
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='max';
 		$NON_CANONICAL_PARAMS[]='start';
+		$NON_CANONICAL_PARAMS[]='threaded';
 
 		$start=get_param_integer('start',0);
 		$default_max=intval(get_option('forum_posts_per_page'));
@@ -309,6 +310,7 @@ class Module_topicview
 
 			// Load posts
 			$threaded_topic_ob->load_from_topic($id,$num_to_show_limit,$start,false,NULL,true);
+			$threaded_topic_ob->is_threaded=true;
 
 			// Render posts
 			list($posts,$serialized_options,$hash)=$threaded_topic_ob->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$topic_info['first_poster'],array(),$topic_info['forum_id'],NULL,false);
@@ -324,6 +326,19 @@ class Module_topicview
 		$button_array=array();
 		if (!is_null($id))
 		{
+			if (get_value('no_threaded_buttons')!=='1')
+			{
+				if ($threaded)
+				{
+					$view_as_linear_url=get_self_url(false,false,array('threaded'=>0));
+					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('VIEW_AS_LINEAR'),'url'=>$view_as_linear_url,'img'=>'linear');
+				} else
+				{
+					$view_as_threaded_url=get_self_url(false,false,array('threaded'=>1));
+					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('VIEW_AS_THREADED'),'url'=>$view_as_threaded_url,'img'=>'threaded');
+				}
+			}
+
 			if (!is_guest())
 			{
 				$too_old=$topic_info['last_time']<time()-60*60*24*intval(get_option('post_history_days'));
@@ -332,6 +347,8 @@ class Module_topicview
 					$map=array('page'=>'topics','type'=>'mark_unread_topic','id'=>$id);
 					$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 					if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+					$test=get_param_integer('threaded',-1);
+					if ($test!=-1) $map['threaded']=$test;
 					$mark_unread_url=build_url($map,get_module_zone('topics'));
 					$button_array[]=array('immediate'=>true,'title'=>do_lang_tempcode('MARK_UNREAD'),'url'=>$mark_unread_url,'img'=>'mark_unread');
 				}
@@ -354,6 +371,8 @@ class Module_topicview
 						$map=array('page'=>'topics','type'=>'new_post','id'=>$id,'intended_solely_for'=>$GLOBALS['FORUM_DRIVER']->get_guest_id());
 						$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 						if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+						$test=get_param_integer('threaded',-1);
+						if ($test!=-1) $map['threaded']=$test;
 						$new_post_url=build_url($map,get_module_zone('topics'));
 						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('TICKET_STAFF_ONLY_REPLY'),'url'=>$new_post_url,'img'=>'staff_only_reply');
 					}
@@ -366,6 +385,8 @@ class Module_topicview
 						$map=array('page'=>'topics','type'=>'new_post','id'=>$id);
 						$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 						if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+						$test=get_param_integer('threaded',-1);
+						if ($test!=-1) $map['threaded']=$test;
 						$new_post_url=build_url($map,get_module_zone('topics'));
 						$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode($topic_info['is_open']?'REPLY':'CLOSED'),'url'=>$new_post_url,'img'=>$topic_info['is_open']?'reply':'closed');
 					}
@@ -379,6 +400,8 @@ class Module_topicview
 				$map=array('page'=>'topics','type'=>'edit_post','id'=>$topic_info['last_post_id']);
 				$test=get_param_integer('kfs'.strval($topic_info['forum_id']),-1);
 				if (($test!=-1) && ($test!=0)) $map['kfs'.strval($topic_info['forum_id'])]=$test;
+				$test=get_param_integer('threaded',-1);
+				if ($test!=-1) $map['threaded']=$test;
 				$new_post_url=build_url($map,get_module_zone('topics'));
 				$button_array[]=array('immediate'=>false,'rel'=>'edit','title'=>do_lang_tempcode('LAST_POST'),'url'=>$new_post_url,'img'=>'amend');
 			}
@@ -434,6 +457,8 @@ class Module_topicview
 							$map=array('page'=>'topicview','id'=>$id,'view_poll_results'=>1,'start'=>($start==0)?NULL:$start,'max'=>($max==$default_max)?NULL:$max);
 							$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 							if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+							$test=get_param_integer('threaded',-1);
+							if ($test!=-1) $map['threaded']=$test;
 							$results_url=build_url($map,get_module_zone('topics'));
 							$button=do_template('OCF_TOPIC_POLL_BUTTON',array('_GUID'=>'94b932fd01028df8f67bb5864d9235f9','RESULTS_URL'=>$results_url));
 							$real_button=true;
@@ -460,6 +485,8 @@ class Module_topicview
 			$map=array('page'=>'topics','type'=>'vote_poll','id'=>$id,'start'=>($start==0)?NULL:$start,'max'=>($max==$default_max)?NULL:$max);
 			$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+			$test=get_param_integer('threaded',-1);
+			if ($test!=-1) $map['threaded']=$test;
 			$vote_url=build_url($map,get_module_zone('topics'));
 			if ($_poll['is_private']) $private=paragraph(do_lang_tempcode('TOPIC_POLL_IS_PRIVATE'),'dfgsdgdsgs'); else $private=new ocp_tempcode();
 			if ($_poll['maximum_selections']>1) $num_choices=paragraph(($_poll['minimum_selections']==$_poll['maximum_selections'])?do_lang_tempcode('POLL_NOT_ENOUGH_ERROR_2',integer_format($_poll['minimum_selections'])):do_lang_tempcode('POLL_NOT_ENOUGH_ERROR',integer_format($_poll['minimum_selections']),integer_format($_poll['maximum_selections'])),'dsfsdfsdfs'); else $num_choices=new ocp_tempcode();
@@ -492,6 +519,8 @@ class Module_topicview
 			$map=array('page'=>'topics','type'=>'_add_reply','topic_id'=>$id);
 			$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+			$test=get_param_integer('threaded',-1);
+			if ($test!=-1) $map['threaded']=$test;
 			$_post_url=build_url($map,get_module_zone('topics'));
 			$post_url=$_post_url->evaluate();
 			$map=array('page'=>'topics','type'=>'new_post','id'=>$id);
@@ -519,7 +548,12 @@ class Module_topicview
 					generate_captcha();
 				}
 			} else $use_captcha=false;
-			$quick_reply=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'4c532620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>false,'POST_WARNING'=>'','COMMENT_TEXT'=>'','EM'=>$em,'EXPAND_TYPE'=>$expand_type,'DISPLAY'=>$display,'FIRST_POST_URL'=>$first_post_url,'FIRST_POST'=>$first_post,'MORE_URL'=>$more_url,'COMMENT_URL'=>$post_url,'TITLE'=>do_lang_tempcode('QUICK_REPLY'),'SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST')));
+
+			$post_warning='';
+			if ($topic_info['is_really_threaded']==1)
+				$post_warning=do_lang('THREADED_REPLY_NOTICE',$post_warning);
+
+			$quick_reply=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'4c532620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','USE_CAPTCHA'=>$use_captcha,'GET_EMAIL'=>false,'EMAIL_OPTIONAL'=>true,'GET_TITLE'=>false,'POST_WARNING'=>$post_warning,'COMMENT_TEXT'=>'','EM'=>$em,'EXPAND_TYPE'=>$expand_type,'DISPLAY'=>$display,'FIRST_POST_URL'=>$first_post_url,'FIRST_POST'=>$first_post,'MORE_URL'=>$more_url,'COMMENT_URL'=>$post_url,'TITLE'=>do_lang_tempcode('QUICK_REPLY'),'SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST')));
 		} else $quick_reply=new ocp_tempcode();
 
 		$action_url=build_url(array('page'=>'topics','id'=>$id),get_module_zone('topics'));
@@ -581,6 +615,8 @@ class Module_topicview
 			$map=array('page'=>'topics','id'=>$id);
 			$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
+			$test=get_param_integer('threaded',-1);
+			if ($test!=-1) $map['threaded']=$test;
 			$action_url=build_url($map,get_module_zone('topics'),NULL,false,true);
 			$marked_post_actions='';
 			if (array_key_exists('may_move_posts',$topic_info))

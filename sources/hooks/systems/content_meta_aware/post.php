@@ -43,7 +43,7 @@ class Hook_content_meta_aware_post
 			'is_entry'=>true,
 			'seo_type_code'=>NULL,
 			'feedback_type_code'=>'post',
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+			'permissions_type_code'=>'forums',
 			'view_pagelink_pattern'=>'_SEARCH:topicview:findpost:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:topics:edit_post:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:topicview:misc:_WILD',
