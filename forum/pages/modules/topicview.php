@@ -255,8 +255,14 @@ class Module_topicview
 				$emphasis=ocf_get_post_emphasis($_postdetails);
 
 				require_code('feedback');
-				actualise_rating(true,'post',strval($_postdetails['id']),get_self_url(),$_postdetails['title']);
-				$rating=display_rating(get_self_url(),$_postdetails['title'],'post',strval($_postdetails['id']),'RATING_INLINE_DYNAMIC',$_postdetails['poster']);
+				if (!array_key_exists('intended_solely_for',$_postdetails))
+				{
+					actualise_rating(true,'post',strval($_postdetails['id']),get_self_url(),$_postdetails['title']);
+					$rating=display_rating(get_self_url(),$_postdetails['title'],'post',strval($_postdetails['id']),'RATING_INLINE_DYNAMIC',$_postdetails['poster']);
+				} else
+				{
+					$rating=new ocp_tempcode();
+				}
 
 				$rendered_post=do_template('OCF_TOPIC_POST',array(
 							'_GUID'=>'sacd09wekfofpw2f',

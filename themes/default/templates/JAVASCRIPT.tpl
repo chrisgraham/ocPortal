@@ -2466,11 +2466,19 @@ function replace_comments_form_with_ajax(options,hash)
 
 			// Fire off AJAX request
 			var post='options='+window.encodeURIComponent(options)+'&hash='+window.encodeURIComponent(hash);
+			post_element=comments_form.elements['post'];
+			var post_value=post_element.value;
+			if (typeof post_element.default_substring_to_strip!='undefined') // Strip off prefix if unchanged
+			{
+				if (post_value.substring(0,post_element.default_substring_to_strip.length)==post_element.default_substring_to_strip)
+					post_value=post_element.substring(post_element.default_substring_to_strip.length,post_value.length);
+			}
 			for (var i=0;i<comments_form.elements.length;i++)
 			{
-				if (comments_form.elements[i].name)
+				if ((comments_form.elements[i].name) && (comments_form.elements[i].name!='post'))
 					post+='&'+comments_form.elements[i].name+'='+window.encodeURIComponent(cleverFindValue(comments_form,comments_form.elements[i]));
 			}
+			post+='&post='+window.encodeURIComponent(post_value);
 			do_ajax_request('{$FIND_SCRIPT;,post_comment}'+keep_stub(true),function(ajax_result) {
 				if ((ajax_result.responseText!='') && (ajax_result.status!=500))
 				{
@@ -2504,7 +2512,7 @@ function replace_comments_form_with_ajax(options,hash)
 	}
 }
 
-function threaded_reply(ob,id)
+function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,replying_to_post_plain)
 {
 	var form=document.getElementById('comments_form');
 
@@ -2525,12 +2533,26 @@ function threaded_reply(ob,id)
 
 	setOpacity(ob,0.4);
 
-	form.elements['post'].value='';
+	var post=form.elements['post'];
+
+	post.value='';
 
 	smoothScroll(findPosY(form));
 
 	if (document.getElementById('comments_posting_form_outer').style.display=='none')
 		toggleSectionInline('comments_posting_form_outer','block');
+
+	if (is_threaded)
+	{
+		post.value='{!QUOTED_REPLY_MESSAGE^;}'.replace(/\\{1\\}/g,replying_to_username).replace(/\\{2\\}/g,replying_to_post_plain);
+		post.strip_on_focus=post.value;
+		post.style.color='';
+	} else
+	{
+		post.value='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
+		post.default_substring_to_strip=post.value;
+		post.focus();
+	}
 
 	return false;
 }

@@ -220,7 +220,10 @@ class Module_calendar
 			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_start_minute','?INTEGER');
 
 			$GLOBALS['SITE_DB']->add_table_field('calendar_types','t_external_feed','URLPATH');
+		}
 
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
 			$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
@@ -1354,13 +1357,13 @@ class Module_calendar
 			}
 		}
 
-		$__first_date=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_year'],$event['e_start_day']);
+		$__first_date=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
 		$_first_date=cal_utctime_to_usertime(
 			$__first_date,
-			NULL,
+			$event['e_timezone'],
 			$event['e_do_timezone_conv']==1
 		);
-		$first_date=get_timezoned_date($_first_date);
+		$first_date=date('Y-m-d',$_first_date);
 		$date=get_param('date',$first_date); // It's year 10,000 compliant when it comes to year display ;).
 		$back_type=get_param('back','day');
 		$map=array_merge($filter,array('page'=>'_SELF','type'=>'misc','view'=>$back_type,'id'=>$date));
@@ -1430,13 +1433,13 @@ class Module_calendar
 				$event['e_start_day']=intval($explode[2]);
 			}
 		}
-		$time_raw=cal_get_start_utctime_for_event(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute']);
-		$from=cal_utctime_to_usertime($time_raw,NULL,$event['e_do_timezone_conv']==1);
+		$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
+		$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
 		if (!is_null($event['e_end_year']))
 		{
-			$to_raw=cal_get_end_utctime_for_event(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute']);
-			$to=cal_utctime_to_usertime($to_raw,NULL,$event['e_do_timezone_conv']==1);
+			$to_raw=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
+			$to=cal_utctime_to_usertime($to_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$to_day_formatted=locale_filter(date(do_lang('calendar_date'),$to));
 			$time2=date_range($from,$to,!is_null($event['e_start_hour']));
 		} else
@@ -1586,12 +1589,12 @@ class Module_calendar
 
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($event['e_type']))))
 		{
-			$_from=cal_get_start_utctime_for_event(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute']);
+			$_from=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
 			$from=cal_utctime_to_usertime($_from,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$to=mixed();
 			if (!is_null($event['e_end_year']))
 			{
-				$_to=cal_get_end_utctime_for_event(($event['e_do_timezone_conv']==0)?get_users_timezone():$event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute']);
+				$_to=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
 				$to=cal_utctime_to_usertime($_to,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			}
 

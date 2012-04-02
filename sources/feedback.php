@@ -495,10 +495,10 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 				$award_content_row=content_get_row($content_id,$award_ob->info());
 				if (!is_null($award_content_row))
 				{
-					$rendered_award=static_evaluate_tempcode($award_ob->run($award_content_row,'_SEARCH'));
+					$rendered_award=preg_replace('#&amp;keep_\w+=[^&]*#','',static_evaluate_tempcode($award_ob->run($award_content_row,'_SEARCH')));
 				}
 			}
-			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url,$rendered_award));
+			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered_award,comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
 			dispatch_notification('like',NULL,$subject,$mail,array($submitter));
 		}
 
@@ -728,7 +728,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$subject=do_lang('NEW_COMMENT_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title,array($post_title,$username),get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array($post_title,post_param('post'),$content_url_flat,comcode_escape($username)),get_site_default_lang());
+		$message_raw=do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array($post_title,post_param('post'),comcode_escape($content_url_flat),comcode_escape($username)),get_site_default_lang());
 		dispatch_notification('comment_posted',$content_type.'_'.$content_id,$subject,$message_raw);
 
 		// Is the user gonna automatically enable notifications for this?

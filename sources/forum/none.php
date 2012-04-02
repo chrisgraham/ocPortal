@@ -375,10 +375,10 @@ class forum_driver_none extends forum_driver_base
 		
 		if ($id==1)
 		{
-			$url=build_url(array('page'=>'authors','type'=>'misc','id'=>$this->get_admin_username()),get_module_zone('authors'));
+			$url=build_url(array('page'=>'authors','type'=>'misc','id'=>$this->get_admin_username()),get_module_zone('authors'),NULL,false,false,true);
 			return $url->evaluate();
 		}
-		$url=build_url(array('page'=>'authors','type'=>'misc','id'=>do_lang('GUEST')),get_module_zone('authors'));
+		$url=build_url(array('page'=>'authors','type'=>'misc','id'=>do_lang('GUEST')),get_module_zone('authors'),NULL,false,false,true);
 		return $url->evaluate();
 	}
 
@@ -397,7 +397,7 @@ class forum_driver_none extends forum_driver_base
 			$url=build_url(array('page'=>'staff','id'=>$name),get_module_zone('staff'));
 			return $url->evaluate();
 		}
-		$url=build_url(array('page'=>'authors','id'=>$name),get_module_zone('authors'));
+		$url=build_url(array('page'=>'authors','id'=>$name),get_module_zone('authors'),NULL,false,false,true);
 		return $url->evaluate();
 	}
 
@@ -518,7 +518,7 @@ class forum_driver_none extends forum_driver_base
 	function topic_url($id,$forum)
 	{
 		unset($forum);
-		$url=build_url(array('page'=>'news','id'=>$id),get_module_zone('news'));
+		$url=build_url(array('page'=>'news','id'=>$id),get_module_zone('news'),NULL,false,false,true);
 		return $url->evaluate();
 	}
 
@@ -532,7 +532,7 @@ class forum_driver_none extends forum_driver_base
 	function post_url($id,$forum)
 	{
 		unset($forum);
-		$url=build_url(array('page'=>'news','id'=>$id),get_module_zone('news'));
+		$url=build_url(array('page'=>'news','id'=>$id),get_module_zone('news'),NULL,false,false,true);
 		return $url->evaluate();
 	}
 

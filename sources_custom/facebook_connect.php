@@ -168,6 +168,16 @@ function handle_facebook_connection_login($current_logged_in_member)
 		// Bind to existing ocPortal login?
 		if (!is_null($current_logged_in_member))
 		{
+			/*if (post_param_integer('associated_confirm',0)==0)		Won't work because Facebook is currently done in JS and cookies force this. If user wishes to cancel they must go to http://www.facebook.com/settings?tab=applications and remove the app, then run a lost password reset.
+			{
+				$title=get_page_title('LOGIN_FACEBOOK_HEADER');
+				$message=do_lang_tempcode('LOGGED_IN_SURE_FACEBOOK',escape_html($GLOBALS['FORUM_DRIVER']->get_username($current_logged_in_member)));
+				$middle=do_template('YESNO_SCREEN',array('TITLE'=>$title,'TEXT'=>$message,'HIDDEN'=>form_input_hidden('associated_confirm','1'),'URL'=>get_self_url_easy()));
+				$tpl=globalise($middle,NULL,'',true);
+				$tpl->evaluate_echo();
+				exit();
+			}*/
+
 			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>$facebook_uid),array('id'=>$current_logged_in_member),'',1);
 			require_code('site');
 			attach_message(do_lang_tempcode('FACEBOOK_ACCOUNT_CONNECTED',escape_html(get_site_name()),escape_html($GLOBALS['FORUM_DRIVER']->get_username($current_logged_in_member)),array(escape_html($username))),'inform');

@@ -160,6 +160,19 @@ function comcode_to_clean_text($message_plain)
 	return trim($message_plain);
 }
 
+/*
+What headers to use can easily confuse. Here is a guide...
+
+return-path		(aka envelope-from aka reverse-path)		SET BY SMTP SERVER, NOT HEADER
+from				Who actually sent, SMTP-wise (should be accurate, as may be checked by SPF)
+reply-to			Who replies go to
+sender			Not needed, not often used
+x-sender			As per sender, but might not be an email address
+
+Full details:
+http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
+*/
+
 /**
  * Attempt to send an e-mail to the specified recipient. The mail will be forwarding to the CC address specified in the options (if there is one, and if not specified not to cc).
  * The mail will be sent in dual HTML/text format, where the text is the unconverted comcode source: if a member does not read HTML mail, they may wish to fallback to reading that.

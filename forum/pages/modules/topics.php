@@ -2649,7 +2649,21 @@ END;
 						window.fauxmodal_alert('".php_addslashes(do_lang('_POST_TOO_LONG'))."');
 						return false;
 					}
+
+					var df=post.defaultValue;
+					if (typeof form.elements['post_parsed']!='undefined')
+					{
+						df=form.elements['post_parsed'].value;
+					}
+					var pv=post.value;
+					if ((post) && (pv.substring(0,df.length)==df))
+					{
+						pv=pv.substring(df.length,pv.length);
+					}
+					post.value=pv;
+
 					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+
 					return true;
 				};
 		";

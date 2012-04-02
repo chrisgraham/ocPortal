@@ -393,7 +393,7 @@ function do_editarea_search(regexp)
 	ecw.editArea.scroll_to_view();
 }
 
-function receive_compiled_css(ajax_result_frame,ajax_result,win)
+function receive_compiled_css(ajax_result_frame,win)
 {
 	if (!win) win=window.opener;
 	
@@ -401,7 +401,7 @@ function receive_compiled_css(ajax_result_frame,ajax_result,win)
 	{
 		try
 		{
-			var css=getInnerHTML(ajax_result);
+			var css=ajax_result_frame.responseText;
 		
 			// Remove old link tag
 			var e;
@@ -443,7 +443,7 @@ function receive_compiled_css(ajax_result_frame,ajax_result,win)
 		
 			for (var i=0;i<win.frames.length;i++)
 			{
-				receive_compiled_css(ajax_result_frame,ajax_result,win.frames[i])
+				receive_compiled_css(ajax_result_frame,win.frames[i]);
 			}
 		}
 		catch (e) {}

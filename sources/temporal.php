@@ -129,6 +129,13 @@ function get_users_timezone($member=NULL)
 	global $TIMEZONE_MEMBER_CACHE;
 	if (isset($TIMEZONE_MEMBER_CACHE[$member])) return $TIMEZONE_MEMBER_CACHE[$member];
 
+	$url=get_param('keep_timezone',NULL);
+	if (!is_null($url))
+	{
+		$TIMEZONE_MEMBER_CACHE[$member]=$url;
+		return $url;
+	}
+
 	// Get user timezone
 	if ((get_forum_type()=='ocf') && (!is_guest($member)))
 	{

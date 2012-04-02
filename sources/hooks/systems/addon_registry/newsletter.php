@@ -90,6 +90,7 @@ class Hook_addon_registry_newsletter
 			'NEWSLETTER_NEW_RESOURCE_FCOMCODE.tpl',
 			'adminzone/pages/modules/admin_newsletter.php',
 			'themes/default/images/bigicons/newsletters.png',
+			'themes/default/images/bigicons/newsletter_email_bounce.png',
 			'themes/default/images/bigicons/import_subscribers.png',
 			'themes/default/images/bigicons/newsletter_from_changes.png',
 			'themes/default/images/pagepics/newsletter.png',

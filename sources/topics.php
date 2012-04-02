@@ -591,10 +591,13 @@ class OCP_Topic
 				{
 					foreach ($children[0] as $j=>$c)
 					{
-						$c['post']='[quote="'.comcode_escape($p['username']).'"]'.$p['message_comcode'].'[/quote]'."\n\n".$c['message_comcode'];
-						$new=do_template('COMCODE_QUOTE_BY',array('SAIDLESS'=>false,'BY'=>$p['username'],'CONTENT'=>$p['message']));
-						$new->attach($c['message']);
-						$c['message']=$new;
+						if (strpos($c['message_comcode'],'[quote')===false)
+						{
+							$c['message_comcode']='[quote="'.comcode_escape($p['username']).'"]'.$p['message_comcode'].'[/quote]'."\n\n".$c['message_comcode'];
+							$new=do_template('COMCODE_QUOTE_BY',array('SAIDLESS'=>false,'BY'=>$p['username'],'CONTENT'=>$p['message']));
+							$new->attach($c['message']);
+							$c['message']=$new;
+						}
 						$c['parent_id']=$p['parent_id'];
 						$children[0][$j]=$c;
 					}

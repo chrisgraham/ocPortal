@@ -3,9 +3,6 @@
 {+START,IF_PASSED,BLOGGER}
 	{+START,IF,{$OCF}}
 		{+START,BOX,{!WELCOME_BLOG_OF,{$USERNAME*,{BLOGGER}},{$MEMBER_PROFILE_LINK*,{BLOGGER}}},,med}
-			{+START,IF_NON_EMPTY,{$AVATAR,{BLOGGER}}}
-				<img style="float: right" src="{$AVATAR*,{BLOGGER}}" alt="{!AVATAR}" title="" />
-			{+END}
 			{$OCF_MEMBER_HTML,{BLOGGER}}
 		{+END}
 		<br />

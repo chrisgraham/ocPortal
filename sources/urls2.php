@@ -427,7 +427,7 @@ function autogenerate_new_url_moniker($ob_info,$url_parts)
 }
 
 /**
- * Called when content is added, based upon a new form field that specifies what moniker to use.
+ * Called when content is added, or edited/moved, based upon a new form field that specifies what moniker to use.
  *
  * @param  ID_TEXT		Page name.
  * @param  ID_TEXT		Screen type code.
@@ -444,13 +444,15 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
 		$old=$GLOBALS['SITE_DB']->query_value_null_ok('url_id_monikers','m_moniker',array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id,'m_deprecated'=>0),'ORDER BY id DESC');
 		if (!is_null($old))
 		{
-			// See if it is compatible with current
-			$simple_moniker=_choose_moniker($page,$type,$moniker_src,$old);
-			if (preg_replace('#^.*/#','',$simple_moniker)==preg_replace('#^.*/#','',$old))
+			// See if it is same as current
+			$moniker=_choose_moniker($page,$type,$id,$moniker_src,$old);
+			$moniker=_give_moniker_scope($page,$type,$id,$moniker);
+			if ($moniker==$old)
 			{
-				$old=_give_moniker_scope($page,$type,$id,preg_replace('#^.*/#','',$old));
 				return $old; // hmm, ok it can stay actually
 			}
+
+			// It's not. Although, the later call to _choose_moniker will allow us to use the same stem as the current active one, or even re-activate an old deprecated one, so long as it is on this same m_resource_page/m_resource_page/m_resource_id.
 
 			// Deprecate
 			$GLOBALS['SITE_DB']->query_update('url_id_monikers',array('m_deprecated'=>1),array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id,'m_deprecated'=>0),'',1); // Deprecate
@@ -474,11 +476,17 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
 		$moniker=$id;
 	} else
 	{
-		$moniker=_choose_moniker($page,$type,$moniker_src);
+		$moniker=_choose_moniker($page,$type,$id,$moniker_src);
 		$moniker=_give_moniker_scope($page,$type,$id,$moniker);
 	}
 
 	// Insert
+	$GLOBALS['SITE_DB']->query_delete('url_id_monikers',array(	// It's possible we're re-activating a deprecated one
+		'm_resource_page'=>$page,
+		'm_resource_type'=>$type,
+		'm_resource_id'=>$id,
+		'm_moniker'=>$moniker,
+	),'',1);
 	$GLOBALS['SITE_DB']->query_insert('url_id_monikers',array(
 		'm_resource_page'=>$page,
 		'm_resource_type'=>$type,
@@ -495,11 +503,12 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
  *
  * @param  ID_TEXT		Page name.
  * @param  ID_TEXT		Screen type code.
+ * @param  ID_TEXT		Resource ID.
  * @param  string			String from which a moniker will be chosen (may not be blank).
  * @param  ?string		Whether to skip the exists check for a certain moniker (will be used to pass "existing self" for edits) (NULL: nothing existing to check against).
  * @return string			Chosen moniker.
  */
-function _choose_moniker($page,$type,$moniker_src,$no_exists_check_for=NULL)
+function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
 {
 	$moniker_src=strip_comcode($moniker_src);
 
@@ -527,7 +536,7 @@ function _choose_moniker($page,$type,$moniker_src,$no_exists_check_for=NULL)
 			if ($moniker==preg_replace('#^.*/#','',$no_exists_check_for)) return $moniker; // This one is okay, we know it is safe
 		}
 		
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')');
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id).' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')');
 		if (!is_null($test)) // Oh dear, will pass to next iteration, but trying a new moniker
 		{
 			$next_num++;

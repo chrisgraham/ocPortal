@@ -614,6 +614,7 @@ class Module_admin_version
 				'rating'=>'SHORT_INTEGER'
 			));
 			$GLOBALS['SITE_DB']->create_index('rating','alt_key',array('rating_for_type','rating_for_id'));
+			$GLOBALS['SITE_DB']->create_index('rating','rating_for_id',array('rating_for_id'));
 		}
 	}
 	

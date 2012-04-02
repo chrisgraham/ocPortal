@@ -31,14 +31,7 @@ class Hook_css_compile
 		if (has_actual_page_access(get_member(),'admin_themes'))
 		{
 			require_code('tempcode_compiler');
-			$output='<'.'?xml version="1.0" encoding="utf-8" ?'.'>
-<response>
-	<result>';
-			$output.=xmlentities(static_evaluate_tempcode(template_to_tempcode(post_param('css'))));
-			$output.='
-	</result>
-</response>';
-			return make_string_tempcode($output);
+			return template_to_tempcode(post_param('css'));
 		}
 		return new ocp_tempcode();
 	}

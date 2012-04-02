@@ -48,7 +48,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 	if ($RECORD_IMG_CODES)
 	{
 		global $RECORDED_IMG_CODES;
-		if ($db->connection_write!==$GLOBALS['FORUM_DB']->connection_write)
+		if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write!==$GLOBALS['FORUM_DB']->connection_write))
 			$RECORDED_IMG_CODES[serialize(array($id,$theme,$lang))]=1;
 	}
 	

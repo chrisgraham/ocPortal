@@ -273,6 +273,11 @@ a.topleftlink:hover {
 	margin-right: 10px;
 }
 
+.docked .menu_editor_rh_side {
+	overflow-y: hidden;
+	max-height: 280px;
+}
+
 .menu_editor_rh_side {
 	float: {!en_right};
 	margin-{!en_left}: 20px;

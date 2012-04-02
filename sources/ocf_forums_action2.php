@@ -95,7 +95,12 @@ function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$p
 	$old_parent=$forum_info[0]['f_parent_forum'];
 	$old_name=$forum_info[0]['f_name'];
 
-	if ($new_parent==$forum_id) warn_exit(do_lang_tempcode('FORUM_CANNOT_BE_OWN_PARENT'));
+	$under_category_id=$new_parent;
+	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
+	{
+		if ($forum_id==$under_category_id) warn_exit(do_lang_tempcode('FORUM_CANNOT_BE_OWN_PARENT'));
+		$under_category_id=$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$under_category_id));
+	}
 
 	if (($reset_intro_acceptance) && (trim(get_translated_text($forum_info[0]['f_intro_question'],$GLOBALS['FORUM_DB']))!=trim($intro_question)) && ($intro_question!=STRING_MAGIC_NULL))
 	{

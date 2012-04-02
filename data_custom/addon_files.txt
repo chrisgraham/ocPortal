@@ -2275,7 +2275,7 @@ plupload
 
 theme_debug
 -----------
- - pages/minimodules_custom/EN/theme_debug.php
+ - pages/minimodules_custom/theme_debug.php
  - adminzone/pages/minimodules_custom/fix_partial_themewizard_css.php
  - sources_custom/hooks/systems/do_next_menus/theme_debug.php
 

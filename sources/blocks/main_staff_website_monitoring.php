@@ -209,7 +209,7 @@ class Block_main_staff_website_monitoring
 		$errno = '0';
 		$errstr = '';
 		require_code('files');
-		$data=http_download_file('http://toolbarqueries.google.com/search?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1.0);
+		$data=http_download_file('http://toolbarqueries.google.com/tbr?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1.0);
 		if (is_null($data)) return '';
 		$pos = strpos($data, "Rank_");
 		if($pos === false)

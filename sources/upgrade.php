@@ -976,7 +976,10 @@ function fix_perms()
 					$dh=@opendir(get_file_base().'/'.$_chmod);
 					if ($dh!==false)
 					{
-						while (($file=readdir($dh))!==false) if (!should_ignore_file($_chmod.'/'.$file)) $array[]=$_chmod.'/'.$file;
+						while (($file=readdir($dh))!==false)
+						{
+							if (!should_ignore_file($_chmod.'/'.$file)) $array[]=$_chmod.'/'.$file;
+						}
 						closedir($dh);
 					}
 				}
@@ -985,7 +988,10 @@ function fix_perms()
 				$dh=@opendir(get_file_base().'/'.$chmod);
 				if ($dh!==false)
 				{
-					while (($file=readdir($dh))!==false) if (!should_ignore_file($_chmod.'/'.$file)) $array[]=$chmod.'/'.$file;
+					while (($file=readdir($dh))!==false)
+					{
+						if (!should_ignore_file($chmod.'/'.$file)) $array[]=$chmod.'/'.$file;
+					}
 					closedir($dh);
 				}
 			}

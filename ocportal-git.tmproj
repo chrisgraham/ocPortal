@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources_custom/comcode_renderer.php</string>
+	<string>themes/default/templates/ATTACHMENT_IMG_MINI.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -413,6 +413,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>adminzone/pages/modules/admin_backup.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>46</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>13</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>23</integer>
+			</dict>
+		</dict>
 		<key>adminzone/pages/modules/admin_ecommerce.php</key>
 		<dict>
 			<key>caret</key>
@@ -426,6 +456,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>363</integer>
+		</dict>
+		<key>adminzone/pages/modules/admin_newsletter.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>444</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>418</integer>
 		</dict>
 		<key>adminzone/pages/modules/admin_quiz.php</key>
 		<dict>
@@ -583,35 +627,19 @@
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
 		</dict>
-		<key>data_custom/addon_files.txt</key>
+		<key>data_custom/execute_temp.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>4</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>1151</integer>
+				<integer>69</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1124</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1151</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>4</integer>
-				<key>line</key>
-				<integer>1151</integer>
-			</dict>
+			<integer>48</integer>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -846,14 +874,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>36</integer>
+				<integer>420</integer>
 				<key>line</key>
-				<integer>9</integer>
+				<integer>112</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>87</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>146</integer>
+				<key>line</key>
+				<integer>112</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>420</integer>
+				<key>line</key>
+				<integer>112</integer>
+			</dict>
 		</dict>
 		<key>lang/EN/notifications.ini</key>
 		<dict>
@@ -941,6 +985,34 @@
 			<key>firstVisibleLine</key>
 			<integer>247</integer>
 		</dict>
+		<key>sources/attachments.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>406</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>381</integer>
+		</dict>
+		<key>sources/backup.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>156</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>133</integer>
+		</dict>
 		<key>sources/blocks/main_screen_actions.php</key>
 		<dict>
 			<key>caret</key>
@@ -954,6 +1026,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>21</integer>
+		</dict>
+		<key>sources/blocks/main_staff_website_monitoring.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>202</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>188</integer>
 		</dict>
 		<key>sources/cedi_stats.php</key>
 		<dict>
@@ -1641,6 +1727,36 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
+		<key>sources/mail.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>37</integer>
+				<key>line</key>
+				<integer>612</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>589</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>612</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>37</integer>
+				<key>line</key>
+				<integer>612</integer>
+			</dict>
+		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -1669,6 +1785,36 @@
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
 		</dict>
+		<key>sources/site.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>159</integer>
+				<key>line</key>
+				<integer>1658</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1619</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>157</integer>
+				<key>line</key>
+				<integer>1658</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>173</integer>
+				<key>line</key>
+				<integer>1658</integer>
+			</dict>
+		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
 			<key>caret</key>
@@ -1682,20 +1828,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>78</integer>
-		</dict>
-		<key>sources_custom/comcode_renderer.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>60</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>sources_custom/getid3/getid3.lib.php</key>
 		<dict>
@@ -1845,6 +1977,20 @@
 			<key>firstVisibleLine</key>
 			<integer>850</integer>
 		</dict>
+		<key>themes/Blog-theme/templates_custom/HEADER.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>47</integer>
+				<key>line</key>
+				<integer>26</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>themes/default/css_custom/columns.css</key>
 		<dict>
 			<key>caret</key>
@@ -1886,6 +2032,50 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/ATTACHMENT_IMG.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>17</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/templates/ATTACHMENT_IMG_MINI.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>304</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>296</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>310</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
 		</dict>
 		<key>themes/default/templates/BLOCK_MAIN_DOWNLOAD_CATEGORY.tpl</key>
 		<dict>
@@ -2684,13 +2874,15 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/comcode_renderer.php</string>
-		<string>sources_custom/comcode_renderer.php</string>
-		<string>data_custom/addon_files.txt</string>
+		<string>sources/blocks/main_staff_website_monitoring.php</string>
+		<string>sources/attachments.php</string>
+		<string>themes/default/templates/ATTACHMENT_IMG.tpl</string>
+		<string>themes/default/templates/ATTACHMENT_IMG_MINI.tpl</string>
+		<string>data_custom/execute_temp.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{104, 51}, {1154, 695}}</string>
+	<string>{{587, 167}, {1177, 879}}</string>
 </dict>
 </plist>

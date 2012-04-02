@@ -70,25 +70,10 @@ function date_from_week_of_year($year,$week)
 }
 
 /**
- * Put a timestamp into the correct timezone for being reported onto the calendar.
- *
- * @param  TIME			Timestamp
- * @param  ?ID_TEXT		The timezone for the event (NULL: current user's timezone)
- * @param  boolean		Whether the time should be presented in the viewer's own timezone
- * @return TIME			Altered timestamp
- */
-function cal_utctime_to_usertime($time_raw,$timezone,$do_timezone_conv)
-{
-	if (!$do_timezone_conv) return $time_raw;
-
-	return $time_raw*2-tz_time($time_raw,$timezone);
-}
-
-/**
  * Find a list of pairs specifying the times the event occurs, for 20 years into the future, in user-time.
  *
  * @param  ID_TEXT		The timezone for the event (NULL: current user's timezone)
- * @param  BINARY			Whether the time should be presented in the viewer's own timezone
+ * @param  BINARY			Whether the time should be converted to the viewer's own timezone
  * @param  integer		The year the event starts at. This and the below are in server time
  * @param  integer		The month the event starts at
  * @param  integer		The day the event starts at
@@ -171,10 +156,10 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		The server already has the day stored UTC which may be different to the day stored for the +1 timezone (in fact either the start or end day will be stored differently, assuming there is an end day)
 		*/
 
-		$_a=cal_get_start_utctime_for_event(($do_timezone_conv==0)?get_users_timezone():$timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+		$_a=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute,$do_timezone_conv==1);
 		$a=cal_utctime_to_usertime(
 			$_a,
-			NULL,
+			$timezone,
 			$do_timezone_conv==1
 		);
 		if ((is_null($start_hour)) && (is_null($end_day))) // All day event with no end date, should be same as start date
@@ -189,10 +174,10 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$b=NULL;
 		} else
 		{
-			$_b=cal_get_end_utctime_for_event(($do_timezone_conv==0)?get_users_timezone():$timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute);
+			$_b=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute,$do_timezone_conv==1);
 			$b=cal_utctime_to_usertime(
 				$_b,
-				NULL,
+				$timezone,
 				$do_timezone_conv==1
 			);
 		}
@@ -668,15 +653,16 @@ function find_timezone_end_minute_in_utc($timezone,$year,$month,$day)
 /**
  * Get the UTC start time for a specified UTC time event.
  *
- * @param  ID_TEXT			Timezone
+ * @param  ID_TEXT			The timezone it is in; used to derive $hour and $minute if those are NULL, such that they start the day correctly for this timezone
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
  * @param  ?integer			Hour (NULL: start hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  ?integer			Minute (NULL: start minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  boolean			Whether the time should be converted to the viewer's own timezone instead.
  * @return TIME				Timestamp
  */
-function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$hour,$minute)
+function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$hour,$minute,$show_in_users_timezone)
 {
 	$_hour=is_null($hour)?0:$hour;
 	$_minute=is_null($minute)?0:$minute;
@@ -692,16 +678,34 @@ function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$hour,$minu
 
 	if (is_null($hour))
 	{
-		$timezoned_timestamp=tz_time($timestamp,$timezone);
-		$temp=mktime(
+		$timestamp_day_end=mktime(
+			23,
+			59,
 			0,
-			0,
-			0,
-			intval(date('m',$timestamp)),
-			intval(date('d',$timestamp)),
-			intval(date('Y',$timestamp))
+			$month,
+			$day,
+			$year
 		);
-		$timestamp-=($temp-$timezoned_timestamp);
+
+		$timezoned_timestamp=tz_time($timestamp_day_end,$timezone);
+
+		$timezoned_timestamp_day_start=mktime(
+			0,
+			0,
+			0,
+			intval(date('m',$timezoned_timestamp)),
+			intval(date('d',$timezoned_timestamp)),
+			intval(date('Y',$timezoned_timestamp))
+		);
+
+		if (!$show_in_users_timezone) return $timezoned_timestamp_day_start;
+
+		return $timezoned_timestamp_day_start+($timestamp_day_end-$timezoned_timestamp);
+	}
+
+	if (!$show_in_users_timezone) // Move into timezone, as if that is UTC, as it won't get converted later
+	{
+		$timestamp=tz_time($timestamp,$timezone);
 	}
 
 	return $timestamp;
@@ -716,9 +720,10 @@ function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$hour,$minu
  * @param  integer			Day
  * @param  ?integer			Hour (NULL: end hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  ?integer			Minute (NULL: end minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
+ * @param  boolean			Whether the time should be converted to the viewer's own timezone instead.
  * @return TIME				Timestamp
  */
-function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$hour,$minute)
+function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$hour,$minute,$show_in_users_timezone)
 {
 	$_hour=is_null($hour)?23:$hour;
 	$_minute=is_null($minute)?59:$minute;
@@ -734,19 +739,51 @@ function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$hour,$minute
 
 	if (is_null($hour))
 	{
-		$timezoned_timestamp=tz_time($timestamp,$timezone);
-		$temp=mktime(
+		$timestamp_day_start=mktime(
+			0,
+			0,
+			0,
+			$month,
+			$day,
+			$year
+		);
+
+		$timezoned_timestamp=tz_time($timestamp_day_start,$timezone);
+
+		$timezoned_timestamp_day_end=mktime(
 			23,
 			59,
 			0,
-			intval(date('m',$timestamp)),
-			intval(date('d',$timestamp)),
-			intval(date('Y',$timestamp))
+			intval(date('m',$timezoned_timestamp)),
+			intval(date('d',$timezoned_timestamp)),
+			intval(date('Y',$timezoned_timestamp))
 		);
-		$timestamp-=($temp-$timezoned_timestamp);
+
+		if (!$show_in_users_timezone) return $timezoned_timestamp_day_end;
+
+		return $timezoned_timestamp_day_end+($timestamp_day_start-$timezoned_timestamp);
+	}
+
+	if (!$show_in_users_timezone) // Move into timezone, as if that is UTC, as it won't get converted later
+	{
+		$timestamp=tz_time($timestamp,$timezone);
 	}
 
 	return $timestamp;
+}
+
+/**
+ * Put a timestamp into the correct timezone for being reported onto the calendar.
+ *
+ * @param  TIME			Timestamp (proper UTC timestamp, not in user time)
+ * @param  ID_TEXT		The timezone associated with the event (the passed $utc_timestamp should NOT be relative to this timezone, that must be UTC)
+ * @param  boolean		Whether the time should be converted to the viewer's own timezone instead
+ * @return TIME			Altered timestamp
+ */
+function cal_utctime_to_usertime($utc_timestamp,$default_timezone,$show_in_users_timezone)
+{
+	if (!$show_in_users_timezone) return $utc_timestamp;
+	return tz_time($utc_timestamp,get_users_timezone());
 }
 
 /**

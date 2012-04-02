@@ -105,9 +105,11 @@ class Module_admin_emaillog
 			{
 				$edit_url=build_url(array('page'=>'_SELF','type'=>'edit','id'=>$row['id']),'_SELF');
 				$date_time=hyperlink($edit_url,get_timezoned_date($row['m_date_and_time']),false,true);
+				$date_time=do_lang_tempcode('MAIL_WAS_QUEUED',$date_time);
 			} else
 			{
 				$date_time=make_string_tempcode(escape_html(get_timezoned_date($row['m_date_and_time'])));
+				$date_time=do_lang_tempcode('MAIL_WAS_LOGGED',$date_time);
 			}
 			
 			$from_email=$row['m_from_email'];

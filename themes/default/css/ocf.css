@@ -131,7 +131,12 @@
 }
 
 .ocf_post_inner img {
-	max-width: 800px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		max-width: 800px;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		max-width: 100%;
+	{+END}
 }
 
 .ocf_post2 {

@@ -61,11 +61,15 @@ if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
 
 @set_time_limit(0);
 
+$only=get_param('only',NULL);
+
 if (get_param_integer('export_bundled_addons',1)==1)
 {
 	$addons=find_all_hooks('systems','addon_registry');
 	foreach (array_keys($addons) as $name)
 	{
+		if (($only!==NULL) && ($only!==$name)) continue;
+
 		$addon_row=read_addon_info($name);
 
 		// Archive it off to exports/mods
@@ -86,7 +90,7 @@ if (get_param_integer('export_bundled_addons',1)==1)
 
 		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'exports/mods');
 	}
-	echo "All bundled addons have been exported to 'export/mods/'\n";
+	if ($only!==NULL) echo "All bundled addons have been exported to 'export/mods/'\n";
 }
 
 if (get_param_integer('export_addons',1)==1)
@@ -96,6 +100,8 @@ if (get_param_integer('export_addons',1)==1)
 	
 	foreach ($file_list as $addon => $files)
 	{
+		if (($only!==NULL) && ($only!==$addon)) continue;
+
 		if ($addon == 'proper_name')
 			continue;
 	
@@ -138,7 +144,7 @@ if (get_param_integer('export_addons',1)==1)
 
 		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
 	}
-	echo "All non-bundled addons have been exported to 'export/mods/'\n";
+	if ($only!==NULL) echo "All non-bundled addons have been exported to 'export/mods/'\n";
 }
 
 if (get_param_integer('export_themes',1)==1)
@@ -150,6 +156,8 @@ if (get_param_integer('export_themes',1)==1)
 	$page_files=get_directory_contents(get_custom_file_base().'/','');
 	foreach (array_keys($themes) as $theme)
 	{
+		if (($only!==NULL) && ($only!==$theme)) continue;
+
 		if ($theme=='default') continue;
 		
 		$name='';
@@ -187,5 +195,7 @@ if (get_param_integer('export_themes',1)==1)
 		create_addon($file,$files2,$name,'','',$author,'ocProducts Ltd','1.0',$description,'exports/mods');
 	}
 	
-	echo "All themes have been exported to 'export/mods/'";
+	if ($only!==NULL) echo "All themes have been exported to 'export/mods/'\n";
 }
+
+echo "Done\n";

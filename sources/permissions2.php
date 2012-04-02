@@ -107,7 +107,7 @@ function has_specific_permission_group($group_id,$permission,$page=NULL,$cats=NU
 	}
 
 	$perhaps=$GLOBALS['SITE_DB']->query_select('gsp',array('*'),array('group_id'=>$group_id));
-	if (($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
+	if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
 	{
 		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE group_id='.strval($group_id).' AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true));
 	}

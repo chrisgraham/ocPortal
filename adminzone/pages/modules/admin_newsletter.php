@@ -69,6 +69,7 @@ class Module_admin_newsletter extends standard_aed_module
 			array('view_archive',array('_SELF',array('type'=>'archive'),'_SELF'),do_lang('NEWSLETTER_ARCHIVE')),
 			array('subscribers',array('_SELF',array('type'=>'subscribers'),'_SELF'),do_lang('VIEW_SUBSCRIBERS')),
 			array('import_subscribers',array('_SELF',array('type'=>'import_subscribers'),'_SELF'),do_lang('IMPORT_NEWSLETTER_SUBSCRIBERS')),
+			array('newsletter_email_bounce',array('_SELF',array('type'=>'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER')),
 		);
 
 		$this->add_one_label=do_lang_tempcode('ADD_NEWSLETTER');
@@ -432,14 +433,17 @@ class Module_admin_newsletter extends standard_aed_module
 		   $num_matches=preg_match_all("#<([^\n<>@]+@[^\n<>@]+)>#",$msg,$matches);
 		   if ($num_matches!=0)
 		   {
+				$overview=imap_headerinfo($mbox,$val);
+				$body=imap_body($mbox,$val);
+				$checked=(strpos($body,'X-Failed-Recipients')!==false) || (strpos($body,'5.1.1')!==false) || (strpos($body,'5.1.6')!==false) || (strpos($body,'5.7.1')!==false);
+
 		      for ($i=0;$i<$num_matches;$i++)
 		      {
 		         $m=$matches[1][$i];
 		         $m=str_replace('@localhost.localdomain','',$m);
 		         if (($m!=get_option('staff_address')) && (array_key_exists($m,$all_subscribers)))
 		         {
-						$overview=imap_headerinfo($mbox,$val);
-						$fields->attach(form_input_tick($m,$overview->subject.'.','email_'.strval($num),true,NULL,$m));
+						$fields->attach(form_input_tick($m,$overview->subject.'.','email_'.strval($num),$checked,NULL,$m));
 						$num++;
 						unset($all_subscribers[$m]); // So as to make the list no longer than needed; each subscriber only considered once
 		         }

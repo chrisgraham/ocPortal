@@ -135,7 +135,13 @@ class Module_members
 		$test_tpl=internalise_own_screen($title);
 		if (is_object($test_tpl)) return $test_tpl;
 
-		$get_url=find_script('iframe');
+		if (running_script('iframe'))
+		{
+			$get_url=find_script('iframe');
+		} else
+		{
+			$get_url=find_script('index');
+		}
 		$hidden=build_keep_form_fields('_SELF',true,array('filter'));
 
 		$start=get_param_integer('md_start',0);

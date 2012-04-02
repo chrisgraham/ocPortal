@@ -18,11 +18,11 @@
 					<a class="poster_member" rel="author" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>
 				</div>
 			{+END}
-	
+
 			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{$AVATAR,{SUBMITTER}}}
 				<img src="{$AVATAR*,{SUBMITTER}}" title="{!AVATAR}" alt="{!AVATAR}" />
 			{+END}{+END}
-			
+
 			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$OCF}}{+START,IF_NON_EMPTY,{$OCF_RANK_IMAGE,{SUBMITTER}}}
 				<br /><br />
 				{$OCF_RANK_IMAGE,{SUBMITTER}}

@@ -385,11 +385,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			}
 
 			// Fake a quoted post? (kind of a nice 'tidy up' feature if a forum's threading has been turned off, leaving things for flat display)
-			if (!is_null($_postdetails['p_parent_id']))
+			if ((!is_null($_postdetails['p_parent_id'])) && (strpos($_postdetails['message_comcode'],'[quote')===false))
 			{
-				$temp=$_postdetails['message'];
-				$_postdetails['message']=new ocp_tempcode();
-
 				$p=mixed(); // NULL
 				if (array_key_exists($_postdetails['p_parent_id'],$_postdetailss)) // Ah, we're already loading it on this page
 				{
@@ -414,6 +411,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 						$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
 					}
 				}
+				$temp=$_postdetails['message'];
+				$_postdetails['message']=new ocp_tempcode();
 				$_postdetails['message']=do_template('COMCODE_QUOTE_BY',array('SAIDLESS'=>false,'BY'=>$p['p_poster_name_if_guest'],'CONTENT'=>$p['message']));
 				$_postdetails['message']->attach($temp);
 			}
@@ -589,6 +588,10 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	if (($may_reply) && (is_null(get_bot_type())))
 	{
 		$map=array('page'=>'topics','type'=>'new_post','id'=>$_postdetails['topic_id'],'parent_id'=>$_postdetails['id']);
+		if ($topic_info['is_threaded']==0)
+		{
+			$map['quote']=$_postdetails['id'];
+		}
 		if (array_key_exists('intended_solely_for',$_postdetails))
 		{
 			$map['intended_solely_for']=$_postdetails['poster'];
@@ -604,13 +607,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 
 		if ((array_key_exists('message_comcode',$_postdetails)) && (!is_null($_postdetails['message_comcode'])) && (!array_key_exists('intended_solely_for',$map)))
 		{
-			/*if ($topic_info['is_threaded']==1)
-			{*/
-				$javascript='return threaded_reply(this,\''.strval($_postdetails['id']).'\');';
-			/*} else   Actually, we'll always store threaded reply even if we'll render using quotes
-			{
-				$javascript='var post=document.getElementById(\'post\'); if (!post) return true; var y=findPosY(post); if (y==0) return true; post.value+=((post.value==\'\')?\'\':\'\n\n\')+\'[quote="'.addslashes($_postdetails['poster_username']).'"]'.str_replace(chr(10),'\n',addslashes($_postdetails['message_comcode'])).'[/quote]\n\'; smoothScroll(y); post.focus(); return false;';
-			}*/
+			$javascript='return topic_reply('.($topic_info['is_threaded']?'true':'false').',this,\''.strval($_postdetails['id']).'\',\''.addslashes($_postdetails['poster_username']).'\',\''.str_replace(chr(10),'\n',addslashes($_postdetails['message_comcode'])).'\',\''.str_replace(chr(10),'\n',addslashes(strip_comcode($_postdetails['message_comcode']))).'\');';
 		}
 		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'reply':'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
 	}

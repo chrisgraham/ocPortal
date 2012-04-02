@@ -67,91 +67,241 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$time_now=time();
-	$last_cron_time=intval(get_value('last_welcome_mail_time'));
-	if ($last_cron_time==0) $last_cron_time=time()-24*60*60*7;
-	set_value('last_welcome_mail_time',strval($time_now));
+	echo getpr('http://www.slashdot.org/');
+	$x=new GooglePageRankChecker();
+	echo $x->check('http://www.slashdot.org/');
+}
 
-	require_code('mail');
+//convert a string to a 32-bit integer
+function StrToNum($str, $check, $magic)
+{
+	$int_32_unit = 4294967296.0;  // 2^32
 
-	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-	$mails=$GLOBALS['SITE_DB']->query_select('f_welcome_emails',array('*'));
-	$GLOBALS['NO_DB_SCOPE_CHECK']=false;
-	foreach ($mails as $mail)
+	$length = strlen($str);
+	for ($i = 0; $i < $length; $i++)
 	{
-		$send_seconds_after_joining=$mail['w_send_time']*60*60;
-
-		$newsletter_style=((get_value('welcome_nw_choice')==='1') && (!is_null($mail['w_newsletter']))) || ((get_value('welcome_nw_choice')!=='1') && (($mail['w_newsletter']==1) || (get_forum_type()!='ocf')));
-		if ($newsletter_style)
+		$check *= $magic;
+		//If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31),
+		//  the result of converting to integer is undefined
+		//  refer to http://www.php.net/manual/en/language.types.integer.php
+		if ((is_integer($check) && floatval($check) >= $int_32_unit) ||
+			(is_float($check) && $check >= $int_32_unit))
 		{
-			if (addon_installed('newsletter'))
-			{
-				// Think of it like this, m_join_time (members join time) must between $last_cron_time and $time_now, but offset back by $send_seconds_after_joining
-				$where=' WHERE join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND join_time<='.strval($time_now-$send_seconds_after_joining).' AND (the_level=3 OR the_level=4)';
-				if (get_value('welcome_nw_choice')==='1')
-				{
-					$where.=' AND newsletter_id='.strval($mail['w_newsletter']);
-				}
-				$members=$GLOBALS['SITE_DB']->query('SELECT join_time,s.email AS m_email_address,the_password,n_forename,n_surname,n.id FROM '.get_table_prefix().'newsletter_subscribe s JOIN '.get_table_prefix().'newsletter n ON n.email=s.email '.$where.' GROUP BY s.email');
-			} else
-			{
-				$members=array();
-			}
-		} else
-		{
-			// Think of it like this, m_join_time (members join time) must between $last_cron_time and $time_now, but offset back by $send_seconds_after_joining
-			$where=' WHERE m_join_time>'.strval($last_cron_time-$send_seconds_after_joining).' AND m_join_time<='.strval($time_now-$send_seconds_after_joining);
-			if (get_option('allow_email_from_staff_disable')=='1') $where.=' AND m_allow_emails=1';
-			$query='SELECT m_email_address,m_username,id FROM '.get_table_prefix().'f_members'.$where;
-			$members=$GLOBALS['FORUM_DB']->query($query);
+			$check = ($check - $int_32_unit * intval($check / $int_32_unit));
+			//if the check less than -2^31
+			$check = ($check < -2147483648.0) ? ($check + $int_32_unit) : $check;
+			if (is_float($check)) $check = intval($check);
 		}
-var_dump($members);exit('!'.strval($last_cron_time-$send_seconds_after_joining));
-		foreach ($members as $member)
+		$check += ord($str[$i]);
+	}
+	return is_integer($check)? $check : intval($check);
+}
+
+//genearate a hash for a url
+function HashURL($string)
+{
+	$check1 = StrToNum($string, 0x1505, 0x21);
+	$check2 = StrToNum($string, 0, 0x1003F);
+
+	$check1 = $check1 >> 2;
+	$check1 = (($check1 >> 4) & 0x3FFFFC0 ) | ($check1 & 0x3F);
+	$check1 = (($check1 >> 4) & 0x3FFC00 ) | ($check1 & 0x3FF);
+	$check1 = (($check1 >> 4) & 0x3C000 ) | ($check1 & 0x3FFF);
+
+	$t1 = (((($check1 & 0x3C0) << 4) | ($check1 & 0x3C)) <<2 ) | ($check2 & 0xF0F );
+	$t2 = @(((($check1 & 0xFFFFC000) << 4) | ($check1 & 0x3C00)) << 0xA) | ($check2 & 0xF0F0000 );
+
+	return ($t1 | $t2);
+}
+
+//genearate a checksum for the hash string
+function CheckHash($hashnum)
+{
+	$check_byte = 0;
+	$flag = 0;
+
+	$hashstr = sprintf('%u', $hashnum) ;
+	$length = strlen($hashstr);
+
+	for ($i = $length - 1;  $i >= 0;  $i --)
+	{
+		$re = intval($hashstr[$i]);
+		if (1 === ($flag % 2))
 		{
-			$subject=get_translated_text($mail['w_subject'],NULL,get_lang($member['id']));
-			$text=get_translated_text($mail['w_text'],NULL,get_lang($member['id']));
-			$_text=do_template('NEWSLETTER_DEFAULT',array('CONTENT'=>$text,'LANG'=>get_site_default_lang()));
-			for ($i=0;$i<100;$i++)
+			$re += $re;
+			$re = intval($re / 10) + ($re % 10);
+		}
+		$check_byte += $re;
+		$flag ++;
+	}
+
+	$check_byte = $check_byte % 10;
+	if (0 !== $check_byte)
+	{
+		$check_byte = 10 - $check_byte;
+		if (1 === ($flag % 2) )
+		{
+			if (1 === ($check_byte % 2))
 			{
-				if (strpos($text,'{{'.strval($i).'}}')!==false)
-					$text=str_replace('{{'.strval($i).'}}',get_timezoned_date(time()+$i*60*60*24),$text);
+				$check_byte += 9;
 			}
 
-			if ($member['m_email_address']!='')
-			{
-				$message=$_text->evaluate(get_lang($member['id']));
-				
-				if ($newsletter_style)
-				{
-					$forename=$member['n_forename'];
-					$surname=$member['n_surname'];
-					$name=trim($forename.' '.$surname);
-					require_lang('newsletter');
-					if ($name=='') $name=do_lang('NEWSLETTER_SUBSCRIBER',get_site_name());
-				} else
-				{
-					$forename='';
-					$surname='';
-					$name=$member['m_username'];
-				}
-
-				if (addon_installed('newsletter'))
-				{
-					if ($newsletter_style)
-					{
-						$sendid='n'.strval($member['id']);
-						$hash=best_hash($member['the_password'],'xunsub');
-					} else
-					{
-						$sendid='w'.strval('id');
-						$hash='';
-					}
-
-					require_code('newsletter');
-					$message=newsletter_variable_substitution($message,$subject,$forename,$surname,$name,$member['m_email_address'],$sendid,$hash);
-				}
-			//	mail_wrap($subject,$message,array($member['m_email_address']),$name,'','',3,NULL,false,NULL,true);
-			}
+			$check_byte = $check_byte >> 1;
 		}
 	}
+
+	return '7'.strval($check_byte).$hashstr;
+}
+
+//return the pagerank checksum hash
+function getch($url)
+{
+	return CheckHash(HashURL($url));
+}
+//return the pagerank figure
+function getpr($url)
+{
+	$ch = getch($url);
+	$errno = '0';
+	$errstr = '';
+	require_code('files');
+	$data=http_download_file('http://toolbarqueries.google.com/tbr?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1.0);
+	if (is_null($data)) return '';
+	$pos = strpos($data, "Rank_");
+	if($pos === false)
+	{
+		header('Content-type: text/html');
+exit('!'.$data);
+	} else
+	{
+		$pr=substr($data, $pos + 9);
+		$pr=trim($pr);
+		$pr=str_replace("\n",'',$pr);
+		return $pr;
+	}
+}
+
+
+// Declare the class
+class GooglePageRankChecker {
+  
+  // Track the instance
+  private static $instance;
+  
+  // Constructor
+  function getRank($page) {
+    // Create the instance, if one isn't created yet
+    if(!isset(self::$instance)) {
+      self::$instance = new self();
+    }
+    // Return the result
+    return self::$instance->check($page);
+  }
+  
+  
+  // Convert string to a number
+  function stringToNumber($string,$check,$magic) {
+    $int32 = 4294967296;  // 2^32
+      $length = strlen($string);
+      for ($i = 0; $i < $length; $i++) {
+          $check *= $magic;   
+          //If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31), 
+          //  the result of converting to integer is undefined
+          //  refer to http://www.php.net/manual/en/language.types.integer.php
+          if($check >= $int32) {
+              $check = ($check - $int32 * (int) ($check / $int32));
+              //if the check less than -2^31
+              $check = ($check < -($int32 / 2)) ? ($check + $int32) : $check;
+          }
+          $check += ord($string{$i}); 
+      }
+      return $check;
+  }
+  
+  // Create a url hash
+  function createHash($string) {
+    $check1 = $this->stringToNumber($string, 0x1505, 0x21);
+      $check2 = $this->stringToNumber($string, 0, 0x1003F);
+  
+    $factor = 4;
+    $halfFactor = $factor/2;
+
+      $check1 >>= $halfFactor;
+      $check1 = (($check1 >> $factor) & 0x3FFFFC0 ) | ($check1 & 0x3F);
+      $check1 = (($check1 >> $factor) & 0x3FFC00 ) | ($check1 & 0x3FF);
+      $check1 = (($check1 >> $factor) & 0x3C000 ) | ($check1 & 0x3FFF);  
+
+      $calc1 = (((($check1 & 0x3C0) << $factor) | ($check1 & 0x3C)) << $halfFactor ) | ($check2 & 0xF0F );
+      $calc2 = (((($check1 & 0xFFFFC000) << $factor) | ($check1 & 0x3C00)) << 0xA) | ($check2 & 0xF0F0000 );
+
+      return ($calc1 | $calc2);
+  }
+  
+  // Create checksum for hash
+  function checkHash($hashNumber)
+  {
+      $check = 0;
+    $flag = 0;
+
+    $hashString = sprintf('%u', $hashNumber) ;
+    $length = strlen($hashString);
+
+    for ($i = $length - 1;  $i >= 0;  $i --) {
+      $r = $hashString{$i};
+      if(1 === ($flag % 2)) {        
+        $r += $r;   
+        $r = (int)($r / 10) + ($r % 10);
+      }
+      $check += $r;
+      $flag ++;  
+    }
+
+    $check %= 10;
+    if(0 !== $check) {
+      $check = 10 - $check;
+      if(1 === ($flag % 2) ) {
+        if(1 === ($check % 2)) {
+          $check += 9;
+        }
+        $check >>= 1;
+      }
+    }
+
+    return '7'.$check.$hashString;
+  }
+  
+  function check($page) {
+
+    // Open a socket to the toolbarqueries address, used by Google Toolbar
+    $socket = fsockopen("toolbarqueries.google.com", 80, $errno, $errstr, 30);
+
+    // If a connection can be established
+    if($socket) {
+      // Prep socket headers
+      $out = "GET /tbr?client=navclient-auto&ch=".$this->checkHash($this->createHash($page))."&features=Rank&q=info:".$page."&num=100&filter=0 HTTP/1.1\r\n";
+      $out .= "Host: toolbarqueries.google.com\r\n";
+      $out .= "User-Agent: Mozilla/4.0 (compatible; GoogleToolbar 2.0.114-big; Windows XP 5.1)\r\n";
+      $out .= "Connection: Close\r\n\r\n";
+
+      // Write settings to the socket
+      fwrite($socket, $out);
+
+      // When a response is received...
+      $result = "";
+      while(!feof($socket)) {
+        $data = fgets($socket, 128);
+echo $data;
+        $pos = strpos($data, "Rank_");
+        if($pos !== false){
+          $pagerank = substr($data, $pos + 9);
+          $result += $pagerank;
+        }
+      }
+      // Close the connection
+      fclose($socket);
+
+      // Return the rank!
+      return $result;
+    }
+  }
 }

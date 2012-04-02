@@ -147,7 +147,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	if (!file_exists($template)) $template=get_file_base().'/data/modules/admin_backup/restore.php.pre';
 	$_install_php_file=file_get_contents($template);
 	$place=strpos($_install_php_file,'{!!DB!!}');
-	$__install_php_file=ocp_tempnam('ocpafm');
+	$__install_php_file=ocp_tempnam('ocpbak');
 	$install_php_file=fopen($__install_php_file,'wb');
 	fwrite($install_php_file,substr($_install_php_file,0,$place));
 	get_table_backup($logfile,'db_meta','db_meta_indices',$install_php_file);

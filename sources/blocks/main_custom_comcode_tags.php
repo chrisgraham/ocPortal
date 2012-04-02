@@ -55,7 +55,7 @@ class Block_main_custom_comcode_tags
 		$wmap=array('tag_enabled'=>1);
 		if (!has_specific_permission(get_member(),'comcode_dangerous')) $wmap['tag_dangerous_tag']=0;
 		$tags=array_merge($tags,$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_title','tag_description','tag_example','tag_parameters','tag_replace','tag_tag','tag_dangerous_tag','tag_block_tag','tag_textual_tag'),$wmap));
-		if (($GLOBALS['FORUM_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write) && (!is_null($GLOBALS['FORUM_DB'])) && (get_forum_type()=='ocf'))
+		if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['FORUM_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write) && (get_forum_type()=='ocf'))
 			$tags=array_merge($tags,$GLOBALS['FORUM_DB']->query_select('custom_comcode',array('tag_title','tag_description','tag_example','tag_parameters','tag_replace','tag_tag','tag_dangerous_tag','tag_block_tag','tag_textual_tag'),$wmap));
 
 		// From Comcode hooks

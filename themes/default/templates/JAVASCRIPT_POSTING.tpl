@@ -139,7 +139,7 @@ function doInput_quote(field_name)
 		'',
 		function(va)
 		{
-			if (va) insertTextboxWrapping(post,"[quote=\""+va+"\"]","[/quote]");
+			if (va!==null) insertTextboxWrapping(post,"[quote=\""+va+"\"]","[/quote]");
 		},
 		"{!comcode:INPUT_COMCODE_quote^#}"
 	);
