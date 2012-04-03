@@ -98,15 +98,15 @@ function scriptLoadStuffStaff()
 						var myfunc=function(hook,id,link)
 						{
 							addEventListenerAbstract(link,'mouseout',function(event) {
-								if (!event) event=window.event;
+								if (typeof event=='undefined') var event=window.event;
 								if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(link,event);
 							} );
 							addEventListenerAbstract(link,'mousemove',function(event) {
-								if (!event) event=window.event;
+								if (typeof event=='undefined') var event=window.event;
 								if (typeof window.activateTooltip!='undefined') repositionTooltip(link,event,false,false,null,true);
 							} );
 							addEventListenerAbstract(link,'mouseover',function(event) {
-								if (!event) event=window.event;
+								if (typeof event=='undefined') var event=window.event;
 
 								if (typeof window.activateTooltip!='undefined')
 								{
@@ -368,8 +368,8 @@ function handleImageMouseOut(event)
 
 function handleImageClick(event,ob,force)
 {
-	if (!event) event=window.event;
-	if (!ob) ob=this;
+	if (typeof event=='undefined') var event=window.event;
+	if ((typeof ob=='undefined') || (!ob)) var ob=this;
 
 	var src=ob.origsrc?ob.origsrc:ob.src;
 	if ((src) && ((force) || (magicKeypress(event))))
@@ -412,7 +412,7 @@ function handleZoneClick(src,event,zone_name)
 
 function load_management_menu(type,no_confirm_needed)
 {
-	if (!type) type='management';
+	if ((typeof type=='undefined') || (!type)) var type='management';
 
 	var on_url,off_url;
 
@@ -476,7 +476,7 @@ function load_management_menu(type,no_confirm_needed)
 	{
 		var show_overlay=function()
 		{
-			addEventListenerAbstract(document,'click',function (e) { if (!e) e=window.event; var el=e.target; if (!el) el=e.srcElement; if (el.id!=type+'_menu_img') { document.getElementById(type+'_menu_img').src=on_url; document.getElementById(type+'_menu_box').style.display='none'; } },false);
+			addEventListenerAbstract(document,'click',function (e) { if (typeof e=='undefined') var e=window.event; var el=e.target; if (!el) el=e.srcElement; if (el.id!=type+'_menu_img') { document.getElementById(type+'_menu_img').src=on_url; document.getElementById(type+'_menu_box').style.display='none'; } },false);
 
 			var img=document.getElementById(type+'_menu_img');
 			img.src=off_url;

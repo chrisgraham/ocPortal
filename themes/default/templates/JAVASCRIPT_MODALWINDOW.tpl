@@ -21,10 +21,10 @@ var overlay_zIndex=1000;
 function open_link_as_overlay(ob,width,height,target)
 {
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
-		if (!width) width=800;
-		if (!height) height=520;
+		if ((typeof width=='undefined') || (!width)) var width=800;
+		if ((typeof height=='undefined') || (!height)) var height=520;
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
-		if (!target) target='_top';
+		if ((typeof target=='undefined') || (!target)) var target='_top';
 		faux_open(url+((url.indexOf('?')==-1)?'?':'&')+'wide_high=1',null,'width='+width+';height='+height,target);
 		return false;
 	{+END}
@@ -91,7 +91,7 @@ function open_link_as_overlay(ob,width,height,target)
 
 function fauxmodal_confirm(question,callback,title)
 {
-	if (!title) title='{!Q_SURE;}';
+	if (typeof title=='undefined') var title='{!Q_SURE;}';
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		var myConfirm = {
@@ -118,9 +118,9 @@ function fauxmodal_confirm(question,callback,title)
 
 function fauxmodal_alert(notice,callback,title)
 {
-	if (!callback) callback=function() {};
+	if ((typeof callback=='undefined') || (!callback)) var callback=function() {};
 
-	if (!title) title='{!MESSAGE;}';
+	if (typeof title=='undefined') var title='{!MESSAGE;}';
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		var myAlert = {
@@ -169,12 +169,12 @@ function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 
 function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 {
-	if (!callback) callback=function() {};
+	if ((typeof callback=='undefined') || (!callback)) var callback=function() {};
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		var width=null,height=null,scrollbars=null,unadorned=null;
 
-		if (!cancel_text) cancel_text="{!INPUTSYSTEM_CANCEL#}";
+		if (typeof cancel_text=='undefined') var cancel_text="{!INPUTSYSTEM_CANCEL#}";
 
 		if (options)
 		{
@@ -242,7 +242,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 
 function faux_open(url,name,options,target,cancel_text)
 {
-	if (!cancel_text) cancel_text="{!INPUTSYSTEM_CLOSE#}";
+	if (typeof cancel_text=='undefined') var cancel_text="{!INPUTSYSTEM_CLOSE#}";
 
 	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
 		faux_showModalDialog(url,name,options,null,target,cancel_text);

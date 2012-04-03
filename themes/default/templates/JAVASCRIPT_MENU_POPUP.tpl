@@ -61,7 +61,7 @@ function recreateCleanTimeout()
 
 function popUpMenu(id,place,menu,event)
 {
-	if (!place) place='right';
+	if ((typeof place=='undefined') || (!place)) var place='right';
 
 	var e=document.getElementById(id);
 
@@ -132,7 +132,7 @@ function popUpMenu(id,place,menu,event)
 
 	recreateCleanTimeout();
 
-	if (event)
+	if ((typeof event!='undefined') && (event))
 	{
 		cancelBubbling(event);
 	}

@@ -28,9 +28,6 @@ function scriptLoadStuff()
 	for(i=0;i<images.length;i++) preloader.src=images[i];
 
 	{$,Inline image expansion mechanism}
-	if (!document.images) document.images=document.getElementsByTagName('img');
-	if (!document.forms) document.forms=document.getElementsByTagName('form');
-	if (!document.links) document.links=document.getElementsByTagName('a');
 	for (i=0;i<document.images.length;i++)
 	{
 		var j=document.images[i];
@@ -339,7 +336,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 
 	if ((typeof window.showModalDialog!='undefined'))
 	{
-		var height=160;
+		var height=180;
 		if (button_set.length>4) height+=5*(button_set.length-4);
 
 		{$,Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups don't know if they run on HTTPS if behind a transparent reverse proxy}
@@ -956,9 +953,9 @@ function toggleSectionInline(id,type,pic,itm,noAnimate)
 		noAnimate=true;
 	{+END}
 
-	if (!itm) itm=document.getElementById(id);
+	if ((typeof itm=='undefined') || (!itm)) var itm=document.getElementById(id);
 	if (!itm) return;
-	if (!pic) pic=document.getElementById('e_'+id);
+	if ((typeof pic=='undefined') || (!pic)) var pic=document.getElementById('e_'+id);
 	if ((pic) && (pic.src=="{$IMG,exp_con}".replace(/^http:/,window.location.protocol))) return;
 
 	itm.setAttribute('aria-expanded',(type=='none')?'false':'true');
@@ -1090,7 +1087,7 @@ function animate(itm,finalHeight,animateDif,origOverflow,animateTicks,pic)
 function animateFrameLoad(pf,frame,leave_gap_top)
 {
 	if (!pf) return;
-	if (!leave_gap_top) leave_gap_top=0;
+	if (typeof leave_gap_top=='undefined') var leave_gap_top=0;
 
 	pf.style.height=window.top.getWindowHeight()+'px'; {$,Enough to stop jumping around}
 
@@ -1203,7 +1200,7 @@ function smoothScroll(destY,expectedScrollY,dir,eventAfter)
 	if (destY<0) destY=0;
 	
 	if ((typeof expectedScrollY!="undefined") && (expectedScrollY!=null) && (expectedScrollY!=scrollY)) return; {$,We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already}
-	if (!dir) dir=((destY-scrollY)>0)?1:-1;
+	if (typeof dir=='undefined') var dir=((destY-scrollY)>0)?1:-1;
 	var dist=dir*17;
 	if (((dir==1) && (scrollY+dist>=destY)) || ((dir==-1) && (scrollY+dist<=destY)) || ((destY-scrollY)*dir>2000))
 	{
@@ -1311,12 +1308,12 @@ function getWindowHeight()
 }
 function getWindowScrollWidth(win)
 {
-	if (!win) win=window;
+	if (typeof win=='undefined') var win=window;
 	return win.document.body.scrollWidth;
 }
 function getWindowScrollHeight(win)
 {
-	if (!win) win=window;
+	if (typeof win=='undefined') var win=window;
 	var best=win.document.body.parentNode.offsetHeight;
 	if (((win.document.body.offsetHeight>best) && (win.document.body.offsetHeight!=150)) || (best==150)) best=win.document.body.offsetHeight;
 	if (((win.document.body.parentNode.scrollHeight>best) && (win.document.body.parentNode.scrollHeight!=150)) || (best==150)) best=win.document.body.parentNode.scrollHeight;
@@ -1428,7 +1425,7 @@ function findHeight(obj,takePadding,takeMargin,takeBorder)
 
 function enter_pressed(event,altChar)
 {
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 	if ((altChar) && (((event.which) && (event.which==altChar.charCodeAt(0))) || ((event.keyCode) && (event.keyCode==altChar.charCodeAt(0))))) return true;
 	return (((event.which) && (event.which==13)) || ((event.keyCode) && (event.keyCode==13)));
 }
@@ -1436,7 +1433,7 @@ function enter_pressed(event,altChar)
 {$,Takes literal or list of unicode key character codes or case insensitive letters as characters or numbers as characters or supported lower case symbols}
 function key_pressed(event,key,no_error_if_bad)
 {
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 
 	if (typeof window.anykeyokay=='undefined') window.anykeyokay=false;
 
@@ -1600,7 +1597,7 @@ function repositionTooltip(ac,event,bottom,starting,tooltipElement,force_width)
 	if (!pageLoaded) return;
 	if (!ac.tooltipId) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; };  {$,Should not happen but written as a fail-safe}
 
-	if (!tooltipElement) tooltipElement=document.getElementById(ac.tooltipId);
+	if ((typeof tooltipElement=='undefined') || (!tooltipElement)) var tooltipElement=document.getElementById(ac.tooltipId);
 	if (tooltipElement)
 	{
 		var width=findWidth(tooltipElement);
@@ -1665,7 +1662,7 @@ function deactivateTooltip(ac,event)
 
 function resizeFrame(name,minHeight)
 {
-	if (!minHeight) minHeight=0;
+	if (typeof minHeight=='undefined') var minHeight=0;
 	var frame_element=document.getElementById(name);
 	var frame_window;
 	if (typeof window.frames[name]!='undefined') frame_window=window.frames[name]; else if (parent && parent.frames[name]) frame_window=parent.frames[name]; else return;
@@ -1684,7 +1681,7 @@ function resizeFrame(name,minHeight)
 				frame_element.style.height=((h>=minHeight)?h:minHeight)+'px';
 				if (frame_window.parent) window.setTimeout(function() { if (frame_window.parent) frame_window.parent.trigger_resize(); },0);
 				frame_element.scrolling='no';
-				frame_window.onscroll=function(event) { if (!event) event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancelBubbling(event); }; {$,Needed for Opera}
+				frame_window.onscroll=function(event) { if (typeof event=='undefined') var event=window.event; if (event==null) return false; try { frame_window.scrollTo(0,0); } catch (e) {}; return cancelBubbling(event); }; {$,Needed for Opera}
 			}
 		}
 	}
@@ -1843,7 +1840,7 @@ function fixImage(img,force_ie8)
 	{
 		if (!browser_matches('no_alpha_ie')) return;
 	}
-	if (!img.src) return;
+	if (img.src) return;
 	if (window.location.href.indexOf('keep_noiepng')!=-1) return;
 	if (img.className.indexOf('no_alpha')!=-1) return;
 
@@ -1943,9 +1940,9 @@ function addEventListenerAbstract(element,the_event,func,capture)
 }
 function cancelBubbling(event,for_element)
 {
-	if (!for_element) for_element='';
+	if ((typeof for_element=='undefined') || (!for_element)) var for_element='';
 
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 	var src=event.srcElement?event.srcElement:event.target;
 	if (!src) return false;
 
@@ -2407,7 +2404,7 @@ function click_link(link)
 
 	var backup=link.onclick;
 
-	link.onclick=function(e) { if (!e) e=window.event; cancelBubbling(e); };
+	link.onclick=function(e) { if (typeof e=='undefined') var e=window.event; cancelBubbling(e); };
 
 	if ((typeof document.createEvent!='undefined') && (document.createEvent))
 	{
@@ -2441,7 +2438,7 @@ function replace_comments_form_with_ajax(options,hash)
 
 		comments_form.onsubmit=function(event) {
 			// Cancel the event from running
-			if (!event) event=window.event;
+			if (typeof event=='undefined') var event=window.event;
 			event.returnValue=false;
 			if (typeof event.preventDefault=='undefined') preventDefault();
 
@@ -2466,7 +2463,7 @@ function replace_comments_form_with_ajax(options,hash)
 
 			// Fire off AJAX request
 			var post='options='+window.encodeURIComponent(options)+'&hash='+window.encodeURIComponent(hash);
-			post_element=comments_form.elements['post'];
+			var post_element=comments_form.elements['post'];
 			var post_value=post_element.value;
 			if (typeof post_element.default_substring_to_strip!='undefined') // Strip off prefix if unchanged
 			{

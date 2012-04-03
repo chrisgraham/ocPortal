@@ -154,11 +154,11 @@
 		</div>
 
 		{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
-			<div class="non_accessibility_redundancy">
-				<div class="breadcrumbs_always">
+			<div class="non_accessibility_redundancy float_surrounder">
+				<p class="breadcrumbs_always">
 					<img class="breadcrumbs_img" src="{$IMG*,treenav}" alt="&gt; " title="{!YOU_ARE_HERE}" />
 					{TREE}
-				</div>
+				</p>
 			</div>
 		{+END}
 	</div>

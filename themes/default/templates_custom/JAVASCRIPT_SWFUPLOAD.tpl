@@ -1177,14 +1177,14 @@ function swfUploadLoaded(ob) {
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	var old_onclick=btnSubmit.onclick;
 	ob.originalClickHandler = old_onclick;
-	btnSubmit.onclick = function(event) { if (!event) event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob); };
+	btnSubmit.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob); };
 
 	// Preview button too
 	var btnSubmit2 = document.getElementById('preview_button');
 	if (btnSubmit2)
 	{
 		var old_onclick2=btnSubmit2.onclick;
-		btnSubmit2.onclick = function(event) { if (!event) event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob); };
+		btnSubmit2.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob); };
 	}
 }
 
@@ -1307,7 +1307,7 @@ function fileQueued(file, ob) {
 
 function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 {
-	if (!posting_field_name) posting_field_name='post';
+	if ((typeof posting_field_name=='undefined') || (!posting_field_name)) var posting_field_name='post';
 	
 	if (page_type=="attachment")
 	{
@@ -1500,7 +1500,7 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
 	if ('{$MOBILE}'=='1') return;
 
-	if (!posting_field_name) posting_field_name='post';
+	if ((typeof posting_field_name=='undefined') || (!posting_field_name)) var posting_field_name='post';
 	
 	var rep=document.getElementById(name);
 	rep.originally_disabled=rep.disabled;
@@ -1510,6 +1510,8 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
+	if (typeof filter=='undefined') var filter="{$CONFIG_OPTION#,valid_types}";
+	
 	if (typeof window.done_aviary=='undefined') do_aviary();
 
 	var rep=document.getElementById(name);
@@ -1768,7 +1770,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	{
 		var mfs=filenameField.form.elements['MAX_FILE_SIZE'];
 		if ((typeof mfs!='undefined') && (typeof mfs.value=='undefined')) mfs=mfs[0];
-
+		
 		filter='*.'+filter.replace(/,/g,';*.');
 
 		var ob=new SWFUpload({
@@ -1945,14 +1947,14 @@ function _isValidJVM(checker)
 function initialise_dragdrop_upload(key,key2)
 {
 	var ob=document.getElementById(key);
-	ob.ondragover=function(event) { if (!event) event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
+	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
 	if ((typeof window.google!='undefined') && (typeof window.google.gears!='undefined') && (typeof window.google.gears.factory!='undefined') && (typeof window.google.gears.factory.create!='undefined') && (typeof window.gears_upload!='undefined'))
 	{
 		/* Google Gears support. */
-		ob.ondrop=function(event) { if (!event) event=window.event; gears_upload(event,key2); };
+		ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; gears_upload(event,key2); };
 	} else
 	{
-		ob.ondrop=function(event) { if (!event) event=window.event; html5_upload(event,key2); };
+		ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; html5_upload(event,key2); };
 	}
 }
 
@@ -2213,7 +2215,7 @@ function html5_upload(event,field_name,files)
 			name: file.name
 		};
 
-		fileUpload.addEventListener("progress", function(e) { if (!e) e=window.event; html5_upload_progress(e,field_name); }, false);
+		fileUpload.addEventListener("progress", function(e) { if (typeof e=='undefined') var e=window.event; html5_upload_progress(e,field_name); }, false);
 		request.onreadystatechange = build_gears_upload_handler(request,fileUpload.fileProgress,window.extraAttachmentBase,field_name);
 
 		/* Generate headers. */

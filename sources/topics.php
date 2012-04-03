@@ -639,6 +639,7 @@ class OCP_Topic
 			if (get_forum_type()=='ocf')
 			{
 				require_code('ocf_topicview');
+				require_code('ocf_posts');
 				$post+=ocf_get_details_to_show_post($post);
 			}
 

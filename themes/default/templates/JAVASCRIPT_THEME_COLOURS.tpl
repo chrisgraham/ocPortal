@@ -21,7 +21,7 @@ var last_cc_i=[];
 function doColorChange(e)
 {
 	// Find our colour element we clicked on
-	if (!e) e=window.event;
+	if (typeof e=='undefined') var e=window.event;
 	var targ;
 	if (typeof e.target!='undefined') targ=e.target;
 	else if (typeof e.srcElement!='undefined') targ=e.srcElement;
@@ -192,8 +192,14 @@ function doColorChooserElement(element)
 
 function makeColourChooser(name,color,context,tabindex,label,className)
 {
-	if (!label) label='&lt;color-'+name+'&gt;';
-	if (!className) className=''; else className='class="'+className+'" ';
+	if ((typeof label=='undefined') || (!label)) var label='&lt;color-'+name+'&gt;';
+	if (typeof className=='undefined')
+	{
+		var className='';
+	} else
+	{
+		className='class="'+className+'" ';
+	}
 
 	names_to_numbers[name]=names_to_numbers.length;
 

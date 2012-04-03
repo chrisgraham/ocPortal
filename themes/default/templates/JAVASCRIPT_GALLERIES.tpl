@@ -14,7 +14,7 @@ function initialise_slideshow()
 	addEventListenerAbstract(window,'keypress',toggle_slideshow_timer);
 
 	addEventListenerAbstract(document.getElementById('gallery_entry_screen'),'click',function(event) {
-		if (!event) event=window.event;
+		if (typeof event=='undefined') var event=window.event;
 
 		if (event.altKey || event.metaKey)
 		{
@@ -81,7 +81,7 @@ function toggle_slideshow_timer()
 
 function stop_slideshow_timer(message)
 {
-	if (!message) message='{!STOPPED;}';
+	if (typeof message=='undefined') var message='{!STOPPED;}';
 	var changer=document.getElementById('changer_wrap');
 	if (changer) setInnerHTML(changer,message);
 	if (slideshow_timer) window.clearInterval(slideshow_timer);

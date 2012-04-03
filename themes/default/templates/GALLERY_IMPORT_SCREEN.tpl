@@ -15,19 +15,19 @@
 		<script type="text/javascript">// <![CDATA[
 			function preview_generator_mouseover(event)
 			{
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 				if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'<img width="500" src="{$BASE_URL*}/uploads/galleries/'+window.encodeURI(this.value)+'" \/>','auto');
 			}
 
 			function preview_generator_mousemove(event)
 			{
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 				if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);
 			}
 
 			function preview_generator_mouseout(event)
 			{
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 				if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);
 			}
 			

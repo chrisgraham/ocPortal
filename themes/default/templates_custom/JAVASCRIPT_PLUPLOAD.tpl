@@ -5198,14 +5198,14 @@ function plUploadLoaded(ob) {
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	var old_onclick=btnSubmit.onclick;
 	ob.originalClickHandler = old_onclick;
-	btnSubmit.onclick = function(event) { if (!event) event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob); };
+	btnSubmit.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob); };
 
 	// Preview button too
 	var btnSubmit2 = document.getElementById('preview_button');
 	if (btnSubmit2)
 	{
 		var old_onclick2=btnSubmit2.onclick;
-		btnSubmit2.onclick = function(event) { if (!event) event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob); };
+		btnSubmit2.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob); };
 	}
 }
 

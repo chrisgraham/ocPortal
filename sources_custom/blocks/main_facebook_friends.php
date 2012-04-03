@@ -59,8 +59,6 @@ class Block_main_facebook_friends
 		$appid=get_option('facebook_appid',true);
 		if ((is_null($appid)) || ($appid=='')) return new ocp_tempcode();
 
-		if (!array_key_exists('param',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','param');
-
 		$stream=array_key_exists('stream',$map)?$map['stream']:'0';
 		$fans=array_key_exists('fans',$map)?$map['fans']:'10';
 		$logobar=array_key_exists('logobar',$map)?$map['logobar']:'0';

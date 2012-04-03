@@ -30,7 +30,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		input.value=edit_text;
 		input.onkeypress=function (event)
 			{
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 				if ((enter_pressed(event)) && (this.value!=''))
 				{
 					if (typeof window.do_ajax_request=='undefined')
@@ -86,7 +86,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		object.onkeypress=function () { };
 		object.onclick=function (event)
 			{
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 
 				// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
 				cancelBubbling(event);
@@ -101,7 +101,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 			}
 		var remove_function=function (event)
 			{
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 
 				if (magicKeypress(event))
 				{

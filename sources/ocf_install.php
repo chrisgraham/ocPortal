@@ -374,8 +374,6 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('DELETE_TRASHED_PTS','delete_trashed_pts','tick','return has_no_forum()?NULL:\'0\';','SECTION_FORUMS','GENERAL');
 		//add_config_option('ALLOW_MEMBER_INTEGRATION','allow_member_integration','list','return \'off\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'strict|on|hidden|off');
 		add_config_option('PROBATION_USERGROUP','probation_usergroup','usergroup','return do_lang(\'PROBATION\');','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		//add_config_option('THREADED_COMMENTS','threaded_comments','tick','return \'0\';','SECTION_FORUMS','GENERAL');
-		//add_config_option('THREADED_TOPICS','threaded_topics_default','tick','return \'0\';','SECTION_FORUMS','GENERAL');
 		add_config_option('SHOW_FIRST_JOIN_PAGE','show_first_join_page','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('SKIP_EMAIL_CONFIRM_JOIN','skip_email_confirm_join','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('NO_DOB_ASK','no_dob_ask','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');

@@ -55,7 +55,7 @@ function deselectAltURL(form)
 
 function _ensureNextField(event)
 {
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 	if (!key_pressed(event,9)) ensureNextField(this);
 }
 
@@ -116,7 +116,7 @@ function ensureNextField(thisField)
 
 function _ensureNextFieldUpload(event)
 {
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 	if (!key_pressed(event,9)) ensureNextFieldUpload(this);
 }
 

@@ -35,7 +35,7 @@ function fix_form_enter_key(form)
 		if (((type=='text') || (type=='password') || (type=='color') || (type=='email') || (type=='number') || (type=='range') || (type=='search') || (type=='tel') || (type=='url'))
 		 && (typeof submit.onclick!='undefined') && (submit.onclick)
 		 && ((typeof inputs[i].onkeypress=='undefined') || (!inputs[i].onkeypress)))
-			inputs[i].onkeypress=function(event) { if (!event) event=window.event; if (enter_pressed(event)) submit.onclick(); };
+			inputs[i].onkeypress=function(event) { if (typeof event=='undefined') var event=window.event; if (enter_pressed(event)) submit.onclick(); };
 	}
 }
 
@@ -487,7 +487,7 @@ function checkForm(theForm,forPreview)
 // Do dynamic setLocked/setRequired such that one of these must be set, but only one may be
 function standardAlternateFields(_a,_b,_c,non_actually_required)
 {
-	if (!non_actually_required) non_actually_required=false; // Just to make sure it's a nice boolean
+	if (typeof non_actually_required=='undefined') var non_actually_required=false; // Just to make sure it's a nice boolean
 
 	// Get field objects
 	var a=_standardAlternateFieldsGet(_a);
@@ -768,7 +768,7 @@ function toggleSubordinateFields(pic,help_id)
 			count++;
 		}
 	}
-	if (!help_id) help_id=pic.parentNode.id+'_help';
+	if (typeof help_id=='undefined') var help_id=pic.parentNode.id+'_help';
 	var help=document.getElementById(help_id);
 	while (help)
 	{
@@ -825,7 +825,7 @@ function choose_picture(id,ob,name)
 
 function disable_preview_scripts(under)
 {
-	if (!under) under=document;
+	if (typeof under=='undefined') var under=document;
 
 	var elements,i;
 	var no_go=function() {

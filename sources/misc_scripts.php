@@ -883,10 +883,10 @@ function block_helper_script()
 			{
 				if ($parameter=='param')
 				{
-					$bparameters.='="'.addslashes($value).'"';
+					$bparameters.='="'.str_replace('"','\"',$value).'"';
 				} else
 				{
-					$bparameters.=' '.$parameter.'="'.addslashes($value).'"';
+					$bparameters.=' '.$parameter.'="'.str_replace('"','\"',$value).'"';
 				}
 				$bparameters_xml='<blockParam key="'.escape_html($parameter).'" val="'.escape_html($value).'" />';
 				$bparameters_tempcode.=','.$parameter.'='.str_replace(',','\,',$value);

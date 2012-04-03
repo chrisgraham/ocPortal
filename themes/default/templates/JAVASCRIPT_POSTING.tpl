@@ -224,7 +224,7 @@ function doInput_list(field_name,add)
 	if (typeof window.insertTextbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
-	if (!add) add=[];
+	if (typeof add=='undefined') var add=[];
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
@@ -700,7 +700,7 @@ function handle_form_saving(event,target,force)
 		if ((this_date.getTime()-window.last_autosave.getTime())<20000) return; // Only save every 20 seconds
 	}
 
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 	if (!target)
 	{
 		target=(event.target)?event.target:event.srcElement;

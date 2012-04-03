@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>themes/default/templates/ATTACHMENT_IMG_MINI.tpl</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -457,20 +455,6 @@
 			<key>firstVisibleLine</key>
 			<integer>363</integer>
 		</dict>
-		<key>adminzone/pages/modules/admin_newsletter.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>444</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>418</integer>
-		</dict>
 		<key>adminzone/pages/modules/admin_quiz.php</key>
 		<dict>
 			<key>caret</key>
@@ -626,20 +610,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>6</integer>
-		</dict>
-		<key>data_custom/execute_temp.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>69</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>48</integer>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -1727,36 +1697,6 @@
 			<key>firstVisibleLine</key>
 			<integer>248</integer>
 		</dict>
-		<key>sources/mail.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>37</integer>
-				<key>line</key>
-				<integer>612</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>589</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>19</integer>
-				<key>line</key>
-				<integer>612</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>37</integer>
-				<key>line</key>
-				<integer>612</integer>
-			</dict>
-		</dict>
 		<key>sources/ocf_polls_action2.php</key>
 		<dict>
 			<key>caret</key>
@@ -2046,36 +1986,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/ATTACHMENT_IMG_MINI.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>304</integer>
-				<key>line</key>
-				<integer>6</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>296</integer>
-				<key>line</key>
-				<integer>6</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>310</integer>
-				<key>line</key>
-				<integer>6</integer>
-			</dict>
 		</dict>
 		<key>themes/default/templates/BLOCK_MAIN_DOWNLOAD_CATEGORY.tpl</key>
 		<dict>
@@ -2872,17 +2782,9 @@
 			<integer>0</integer>
 		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>sources/blocks/main_staff_website_monitoring.php</string>
-		<string>sources/attachments.php</string>
-		<string>themes/default/templates/ATTACHMENT_IMG.tpl</string>
-		<string>themes/default/templates/ATTACHMENT_IMG_MINI.tpl</string>
-		<string>data_custom/execute_temp.php</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{587, 167}, {1177, 879}}</string>
+	<string>{{758, 90}, {966, 879}}</string>
 </dict>
 </plist>

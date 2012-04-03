@@ -284,7 +284,7 @@ function chat_check(backlog,message_id,event_id)
 		return null;
 	}
 
-	if (!event_id) event_id=-1; // Means, we don't want to look at events, but the server will give us a null event
+	if ((typeof event_id=='undefined') || (!event_id)) var event_id=-1; // Means, we don't want to look at events, but the server will give us a null event
 
 	// Check for new messages on the server the new or old way
 	if ((window.ajax_supported) && (ajax_supported()) && (window.do_ajax_request))

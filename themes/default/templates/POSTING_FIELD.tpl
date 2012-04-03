@@ -103,15 +103,15 @@
 		{HIDDEN_FIELDS}
 
 		<script type="text/javascript">// <![CDATA[
-			addEventListenerAbstract(document.getElementById('{NAME*}'),'dragover',function(event) { if (!event) event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue = false;} }); // NB: don't use dropEffect, prevents drop on Firefox.
+			addEventListenerAbstract(document.getElementById('{NAME*}'),'dragover',function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue = false;} }); // NB: don't use dropEffect, prevents drop on Firefox.
 			if ((typeof window.google!='undefined') && (typeof window.google.gears!='undefined') && (typeof window.google.gears.factory!='undefined') && (typeof window.google.gears.factory.create!='undefined') && (typeof window.gears_upload!='undefined'))
 			{
 				/* Google Gears support. */
 				var desktop = google.gears.factory.create('beta.desktop');
-				addEventListenerAbstract(document.getElementById('{NAME*}'),'drop',function(event) { if (!event) event=window.event; gears_upload(event,'{NAME*}'); });
+				addEventListenerAbstract(document.getElementById('{NAME*}'),'drop',function(event) { if (typeof event=='undefined') var event=window.event; gears_upload(event,'{NAME*}'); });
 			} else
 			{
-				addEventListenerAbstract(document.getElementById('{NAME*}'),'drop',function(event) { if (!event) event=window.event; html5_upload(event,'{NAME*}'); });
+				addEventListenerAbstract(document.getElementById('{NAME*}'),'drop',function(event) { if (typeof event=='undefined') var event=window.event; html5_upload(event,'{NAME*}'); });
 			}
 		//]]></script>
 	</td>

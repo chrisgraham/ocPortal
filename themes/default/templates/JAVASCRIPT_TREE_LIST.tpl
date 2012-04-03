@@ -24,7 +24,7 @@ var tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_no
 {
 	if (typeof window.do_ajax_request=='undefined') return;
 
-	if (!multi_selection) multi_selection=false;
+	if ((typeof multi_selection=='undefined') || (!multi_selection)) var multi_selection=false;
 
 	this.name=name;
 	this.hook=hook;
@@ -48,8 +48,8 @@ tree_list.prototype.last_clicked=null; // The hyperlink object that was last cli
 {$,Go through our tree list looking for a particular XML node}
 tree_list.prototype.getElementByIdHack=function(id,type,ob,serverid)
 {
-	if (!type) type='c';
-	if (!ob) ob=this.tree_list_data;
+	if ((typeof type=='undefined') || (!type)) var type='c';
+	if ((typeof ob=='undefined') || (!ob)) var ob=this.tree_list_data;
 	var i,test,done=false;
 	// Normally we could only ever use getElementsByTagName, but Konqueror and Safari don't like it
 	try // IE9 beta has serious problems
@@ -162,7 +162,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 
 	var i,colour,new_html,url,escaped_title;
 	var initially_expanded,selectable,extra,url,title,func,temp,master_html,node,node_self_wrap,node_self;
-	if (!element) element=document.getElementById(this.name);
+	if ((typeof element=='undefined') || (!element)) var element=document.getElementById(this.name);
 
 	if (typeof window.nereidFade!='undefined')
 	{
@@ -253,7 +253,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			img.onclick=function() { return false; };
 			img.object=this;
 			var a=node_self.getElementsByTagName('label')[0];
-			img.onkeypress=a.onkeypress=a.childNodes[0].onkeypress=function(img) { return function(event) { if (!event) event=window.event; if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-'].inArray(String.fromCharCode(event.keyCode?event.keyCode:event.charCode))) img.onmousedown(); } } (img);
+			img.onkeypress=a.onkeypress=a.childNodes[0].onkeypress=function(img) { return function(event) { if (typeof event=='undefined') var event=window.event; if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-'].inArray(String.fromCharCode(event.keyCode?event.keyCode:event.charCode))) img.onmousedown(); } } (img);
 			a.oncontextmenu=function() { return false; };
 			a.handle_selection=this.handle_selection;
 			a.childNodes[0].onfocus=function() { this.parentNode.style.outline='1px dotted'; };
@@ -262,7 +262,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			a.childNodes[0].object=this;
 			a.object=this;
 			a.onmousedown=function(event) { // To disable selection of text when holding shift or control
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 				cancelBubbling(event);
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
 			}
@@ -323,7 +323,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			a.childNodes[0].object=this;
 			a.object=this;
 			a.onmousedown=function(event) { // To disable selection of text when holding shift or control
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 				cancelBubbling(event);
 				if (typeof event.preventDefault!='undefined') event.preventDefault();
 			}
@@ -535,7 +535,7 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 
 tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called as a method
 {
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 
 	var element=document.getElementById(this.object.name);
 	if (element.disabled) return;

@@ -17,7 +17,7 @@
 	</div>
 
 	<div>
-		<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="if (!event) event=window.event; cancelBubbling(event);" href="{LINK*}">{DESCRIPTION*}</a>
+		<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancelBubbling(event);" href="{LINK*}">{DESCRIPTION*}</a>
 	</div>
 
 	{+START,IF_PASSED,AUTO_ADD}

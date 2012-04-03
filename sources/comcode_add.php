@@ -153,7 +153,7 @@ function _get_details_comcode_tags()
 		require_code('hooks/systems/comcode/'.filter_naughty_harsh($hook));
 		$object=object_factory('Hook_comcode_'.filter_naughty_harsh($hook),true);
 
-		$tags=$object->get_tag();
+		$tag=$object->get_tag();
 		$custom_tag_list[$tag['tag_tag']]=$tag;
 
 		if ($tag['tag_textual_tag']==1) $TEXTUAL_TAGS[$tag['tag_tag']]=1;
@@ -642,7 +642,7 @@ function _get_preview_environment_comcode($tag)
 	{
 		$tag_contents=preg_replace('# .*$#','',$tag_contents);
 		$_tag_contents=explode(':',$tag_contents,2);
-		$bparameters=' param="'.addslashes($_tag_contents[0]).'"';
+		$bparameters=' param="'.str_replace('"','\"',$_tag_contents[0]).'"';
 		$tag_contents=$_tag_contents[1];
 	}
 	elseif ($tag=='concepts')
@@ -650,7 +650,7 @@ function _get_preview_environment_comcode($tag)
 		$i=0;
 		while (post_param('x_key_'.strval($i),'')!='')
 		{
-			$value=addslashes(post_param('x_key_'.strval($i)));
+			$value=str_replace('"','\"',post_param('x_key_'.strval($i)));
 			$bparameters.=' '.strval($i+1).'_key="'.$value.'"';
 			$bparameters.=' '.strval($i+1).'_value="'.$value.'"';
 
@@ -662,7 +662,7 @@ function _get_preview_environment_comcode($tag)
 		$i=0;
 		while (post_param('string_'.strval($i),'')!='')
 		{
-			$value=addslashes(post_param('string_'.strval($i)));
+			$value=str_replace('"','\"',post_param('string_'.strval($i)));
 			$bparameters.=' '.strval($i).'="'.$value.'"';
 			$i++;
 		}
@@ -672,8 +672,8 @@ function _get_preview_environment_comcode($tag)
 		$i=0;
 		while(post_param('left_'.strval($i),'') != '')
 		{
-			$left=addslashes(post_param('left_'.strval($i)));
-			$right=addslashes(post_param('right_'.strval($i),''));
+			$left=str_replace('"','\"',post_param('left_'.strval($i)));
+			$right=str_replace('"','\"',post_param('right_'.strval($i),''));
 			$bparameters.=' left_'.strval($i+1).'="'.$left.'"';
 			$bparameters.=' right_'.strval($i+1).'="'.$right.'"';
 
@@ -681,9 +681,9 @@ function _get_preview_environment_comcode($tag)
 			$i++;
 		}
 		if (post_param('min','') != '')
-			$bparameters.=' min="'.addslashes(post_param('min')).'"';
+			$bparameters.=' min="'.str_replace('"','\"',post_param('min')).'"';
 		if (post_param('max','') != '')
-			$bparameters.=' max="'.addslashes(post_param('max')).'"';
+			$bparameters.=' max="'.str_replace('"','\"',post_param('max')).'"';
 	}
 	elseif ($tag=='random')
 	{
@@ -691,9 +691,9 @@ function _get_preview_environment_comcode($tag)
 		$last=0;
 		while (post_param('string_'.strval($i),'')!='')
 		{
-			$name=addslashes(post_param('X_'.strval($i),''));
+			$name=str_replace('"','\"',post_param('X_'.strval($i),''));
 			if ($name=='') $name=strval($last+1);
-			$value=addslashes(post_param('string_'.strval($i)));
+			$value=str_replace('"','\"',post_param('string_'.strval($i)));
 			$bparameters.=' '.$name.'="'.$value.'"';
 			$i++;
 			$last=intval($name);
@@ -708,7 +708,7 @@ function _get_preview_environment_comcode($tag)
 		while (post_param('tag_contents_'.strval($i),'')!='' && post_param('name_'.strval($i),'')!='')
 		{
 			$def='';
-			$content=addslashes(post_param('tag_contents_'.strval($i)));
+			$content=post_param('tag_contents_'.strval($i));
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
@@ -732,7 +732,7 @@ function _get_preview_environment_comcode($tag)
 		while (post_param('tag_contents_'.strval($i),'')!='' && post_param('name_'.strval($i),'')!='')
 		{
 			$def='';
-			$content=addslashes(post_param('tag_contents_'.strval($i)));
+			$content=post_param('tag_contents_'.strval($i));
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
@@ -755,7 +755,7 @@ function _get_preview_environment_comcode($tag)
 		while (post_param('tag_contents_'.strval($i),'')!='' && post_param('name_'.strval($i),'')!='')
 		{
 			$def='';
-			$content=addslashes(post_param('tag_contents_'.strval($i)));
+			$content=post_param('tag_contents_'.strval($i));
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
@@ -778,7 +778,7 @@ function _get_preview_environment_comcode($tag)
 		while (post_param('tag_contents_'.strval($i),'')!='')
 		{
 			$def='';
-			$contents=addslashes(post_param('tag_contents_'.strval($i)));
+			$contents=post_param('tag_contents_'.strval($i));
 			$comcode_arr[]=$contents;
 			$xml.="<listElement>$contents</listElement>";
 			$i++;
@@ -801,10 +801,10 @@ function _get_preview_environment_comcode($tag)
 			{
 				if ($parameter=='param')
 				{
-					$bparameters.='="'.addslashes($value).'"';
+					$bparameters.='="'.str_replace('"','\"',$value).'"';
 				} else
 				{
-					$bparameters.=' '.$parameter.'="'.addslashes($value).'"';
+					$bparameters.=' '.$parameter.'="'.str_replace('"','\"',$value).'"';
 				}
 			}
 		}

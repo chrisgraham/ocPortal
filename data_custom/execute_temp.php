@@ -67,241 +67,27 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	echo getpr('http://www.slashdot.org/');
-	$x=new GooglePageRankChecker();
-	echo $x->check('http://www.slashdot.org/');
-}
-
-//convert a string to a 32-bit integer
-function StrToNum($str, $check, $magic)
-{
-	$int_32_unit = 4294967296.0;  // 2^32
-
-	$length = strlen($str);
-	for ($i = 0; $i < $length; $i++)
+	$dir=get_file_base().'/themes/default/templates';
+	$dh=opendir($dir);
+	while (($f=readdir($dh))!==false)
 	{
-		$check *= $magic;
-		//If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31),
-		//  the result of converting to integer is undefined
-		//  refer to http://www.php.net/manual/en/language.types.integer.php
-		if ((is_integer($check) && floatval($check) >= $int_32_unit) ||
-			(is_float($check) && $check >= $int_32_unit))
+		if (substr($f,0,5)=='JAVAS')
 		{
-			$check = ($check - $int_32_unit * intval($check / $int_32_unit));
-			//if the check less than -2^31
-			$check = ($check < -2147483648.0) ? ($check + $int_32_unit) : $check;
-			if (is_float($check)) $check = intval($check);
-		}
-		$check += ord($str[$i]);
-	}
-	return is_integer($check)? $check : intval($check);
-}
-
-//genearate a hash for a url
-function HashURL($string)
-{
-	$check1 = StrToNum($string, 0x1505, 0x21);
-	$check2 = StrToNum($string, 0, 0x1003F);
-
-	$check1 = $check1 >> 2;
-	$check1 = (($check1 >> 4) & 0x3FFFFC0 ) | ($check1 & 0x3F);
-	$check1 = (($check1 >> 4) & 0x3FFC00 ) | ($check1 & 0x3FF);
-	$check1 = (($check1 >> 4) & 0x3C000 ) | ($check1 & 0x3FFF);
-
-	$t1 = (((($check1 & 0x3C0) << 4) | ($check1 & 0x3C)) <<2 ) | ($check2 & 0xF0F );
-	$t2 = @(((($check1 & 0xFFFFC000) << 4) | ($check1 & 0x3C00)) << 0xA) | ($check2 & 0xF0F0000 );
-
-	return ($t1 | $t2);
-}
-
-//genearate a checksum for the hash string
-function CheckHash($hashnum)
-{
-	$check_byte = 0;
-	$flag = 0;
-
-	$hashstr = sprintf('%u', $hashnum) ;
-	$length = strlen($hashstr);
-
-	for ($i = $length - 1;  $i >= 0;  $i --)
-	{
-		$re = intval($hashstr[$i]);
-		if (1 === ($flag % 2))
-		{
-			$re += $re;
-			$re = intval($re / 10) + ($re % 10);
-		}
-		$check_byte += $re;
-		$flag ++;
-	}
-
-	$check_byte = $check_byte % 10;
-	if (0 !== $check_byte)
-	{
-		$check_byte = 10 - $check_byte;
-		if (1 === ($flag % 2) )
-		{
-			if (1 === ($check_byte % 2))
+			$contents=file_get_contents(get_file_base().'/themes/default/templates/'.$f);
+			$matches=array();
+			$num_matches=preg_match_all('#function.*\((.*)\)#',$contents,$matches);
+			for ($i=0;$i<$num_matches;$i++)
 			{
-				$check_byte += 9;
+				if ($matches[1][$i]=='') continue;
+				$vars=explode(',',$matches[1][$i]);
+				foreach ($vars as $v)
+				{
+					if (strpos($contents,'if ('.$v.') '.$v.'=')!==false)
+					{
+						echo $f.': '.$v."\n";
+					}
+				}
 			}
-
-			$check_byte = $check_byte >> 1;
 		}
 	}
-
-	return '7'.strval($check_byte).$hashstr;
-}
-
-//return the pagerank checksum hash
-function getch($url)
-{
-	return CheckHash(HashURL($url));
-}
-//return the pagerank figure
-function getpr($url)
-{
-	$ch = getch($url);
-	$errno = '0';
-	$errstr = '';
-	require_code('files');
-	$data=http_download_file('http://toolbarqueries.google.com/tbr?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1.0);
-	if (is_null($data)) return '';
-	$pos = strpos($data, "Rank_");
-	if($pos === false)
-	{
-		header('Content-type: text/html');
-exit('!'.$data);
-	} else
-	{
-		$pr=substr($data, $pos + 9);
-		$pr=trim($pr);
-		$pr=str_replace("\n",'',$pr);
-		return $pr;
-	}
-}
-
-
-// Declare the class
-class GooglePageRankChecker {
-  
-  // Track the instance
-  private static $instance;
-  
-  // Constructor
-  function getRank($page) {
-    // Create the instance, if one isn't created yet
-    if(!isset(self::$instance)) {
-      self::$instance = new self();
-    }
-    // Return the result
-    return self::$instance->check($page);
-  }
-  
-  
-  // Convert string to a number
-  function stringToNumber($string,$check,$magic) {
-    $int32 = 4294967296;  // 2^32
-      $length = strlen($string);
-      for ($i = 0; $i < $length; $i++) {
-          $check *= $magic;   
-          //If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31), 
-          //  the result of converting to integer is undefined
-          //  refer to http://www.php.net/manual/en/language.types.integer.php
-          if($check >= $int32) {
-              $check = ($check - $int32 * (int) ($check / $int32));
-              //if the check less than -2^31
-              $check = ($check < -($int32 / 2)) ? ($check + $int32) : $check;
-          }
-          $check += ord($string{$i}); 
-      }
-      return $check;
-  }
-  
-  // Create a url hash
-  function createHash($string) {
-    $check1 = $this->stringToNumber($string, 0x1505, 0x21);
-      $check2 = $this->stringToNumber($string, 0, 0x1003F);
-  
-    $factor = 4;
-    $halfFactor = $factor/2;
-
-      $check1 >>= $halfFactor;
-      $check1 = (($check1 >> $factor) & 0x3FFFFC0 ) | ($check1 & 0x3F);
-      $check1 = (($check1 >> $factor) & 0x3FFC00 ) | ($check1 & 0x3FF);
-      $check1 = (($check1 >> $factor) & 0x3C000 ) | ($check1 & 0x3FFF);  
-
-      $calc1 = (((($check1 & 0x3C0) << $factor) | ($check1 & 0x3C)) << $halfFactor ) | ($check2 & 0xF0F );
-      $calc2 = (((($check1 & 0xFFFFC000) << $factor) | ($check1 & 0x3C00)) << 0xA) | ($check2 & 0xF0F0000 );
-
-      return ($calc1 | $calc2);
-  }
-  
-  // Create checksum for hash
-  function checkHash($hashNumber)
-  {
-      $check = 0;
-    $flag = 0;
-
-    $hashString = sprintf('%u', $hashNumber) ;
-    $length = strlen($hashString);
-
-    for ($i = $length - 1;  $i >= 0;  $i --) {
-      $r = $hashString{$i};
-      if(1 === ($flag % 2)) {        
-        $r += $r;   
-        $r = (int)($r / 10) + ($r % 10);
-      }
-      $check += $r;
-      $flag ++;  
-    }
-
-    $check %= 10;
-    if(0 !== $check) {
-      $check = 10 - $check;
-      if(1 === ($flag % 2) ) {
-        if(1 === ($check % 2)) {
-          $check += 9;
-        }
-        $check >>= 1;
-      }
-    }
-
-    return '7'.$check.$hashString;
-  }
-  
-  function check($page) {
-
-    // Open a socket to the toolbarqueries address, used by Google Toolbar
-    $socket = fsockopen("toolbarqueries.google.com", 80, $errno, $errstr, 30);
-
-    // If a connection can be established
-    if($socket) {
-      // Prep socket headers
-      $out = "GET /tbr?client=navclient-auto&ch=".$this->checkHash($this->createHash($page))."&features=Rank&q=info:".$page."&num=100&filter=0 HTTP/1.1\r\n";
-      $out .= "Host: toolbarqueries.google.com\r\n";
-      $out .= "User-Agent: Mozilla/4.0 (compatible; GoogleToolbar 2.0.114-big; Windows XP 5.1)\r\n";
-      $out .= "Connection: Close\r\n\r\n";
-
-      // Write settings to the socket
-      fwrite($socket, $out);
-
-      // When a response is received...
-      $result = "";
-      while(!feof($socket)) {
-        $data = fgets($socket, 128);
-echo $data;
-        $pos = strpos($data, "Rank_");
-        if($pos !== false){
-          $pagerank = substr($data, $pos + 9);
-          $result += $pagerank;
-        }
-      }
-      // Close the connection
-      fclose($socket);
-
-      // Return the rank!
-      return $result;
-    }
-  }
 }

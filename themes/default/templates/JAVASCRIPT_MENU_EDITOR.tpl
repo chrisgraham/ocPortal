@@ -91,7 +91,7 @@ function copyFieldsIntoBottom(i,changed)
 
 function menuEditorHandleKeypress(e)
 {
-	if (!e) e=window.event;
+	if (typeof e=='undefined') var e=window.event;
 	var t=e.srcElement?e.srcElement:e.target;
 	
 	var up=(e.keyCode?e.keyCode:e.charCode)==38;
@@ -284,7 +284,8 @@ function handleOrdering(t,up,down)
 
 function swap_names(t,a,b,t2,values_also)
 {
-	if (!t2) t2='';
+	if (typeof t2=='undefined') var t2='';
+	if (typeof values_also=='undefined') var values_also=false;
 	var _a=document.getElementById(t+'_'+a+t2);
 	var _b=document.getElementById(t+'_'+b+t2);
 	_a.name=t+'_'+b+t2;

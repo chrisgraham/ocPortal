@@ -3,7 +3,7 @@
 function make_tooltip_func(op)
 {
 	return function(event) {
-		if (!event) event=window.event;
+		if (typeof event=='undefined') var event=window.event;
 		if (!tpl_descrips[op])
 		{
 			var getDescrip=function() {
@@ -31,8 +31,8 @@ function load_template_previews()
 	{
 		ob=elements[i];
 		if ((ob.value=='') || (ob.disabled)) continue;
-		ob.onmousemove=function(event) { if (!event) event=window.event; if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event); };
-		ob.onmouseout=function(event) { if (!event) event=window.event; if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event); };
+		ob.onmousemove=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event); };
+		ob.onmouseout=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event); };
 		var op=ob.value;
 		ob.onmouseover=make_tooltip_func(op);
 	}
@@ -40,19 +40,19 @@ function load_template_previews()
 
 function preview_generator_mouseover(event)
 {
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 	if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'<iframe frameBorder="0" title="{!PREVIEW^;*}" style="width: 800px; height: 400px" src="'+escape_html(this.href)+'">{!PREVIEW^;}</iframe>','800px');
 }
 
 function preview_generator_mousemove(event)
 {
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 	if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);
 }
 
 function preview_generator_mouseout(event)
 {
-	if (!event) event=window.event;
+	if (typeof event=='undefined') var event=window.event;
 	if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);
 }
 
@@ -273,9 +273,9 @@ function set_up_parent_page_highlighting()
 		{
 			cssText=cssText.toLowerCase().replace(/; /,';<br />\n');
 		}
-		li.onmouseout=function(event) { if (!event) event=window.event; if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event); };
-		li.onmousemove=function(event) { if (!event) event=window.event; if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event); };
-		li.onmouseover=function(cssText) { return function(event) { if (!event) event=window.event; if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,cssText,'auto'); } } (cssText);
+		li.onmouseout=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event); };
+		li.onmousemove=function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event); };
+		li.onmouseover=function(cssText) { return function(event) { if (typeof event=='undefined') var event=window.event; if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,cssText,'auto'); } } (cssText);
 
 		// Jump-to
 		a.onclick=function(selector) { return function(event) {
@@ -286,7 +286,7 @@ function set_up_parent_page_highlighting()
 
 		// Highlighting on parent page
 		a.onmouseover=function(selector) { return function(event) {
-			if (!event) event=window.event;
+			if (typeof event=='undefined') var event=window.event;
 
 			if ((window.opener) && (!event.ctrlKey))
 			{
@@ -299,7 +299,7 @@ function set_up_parent_page_highlighting()
 			}
 		} }(selector);
 		a.onmouseout=function(selector) { return function(event) {
-			if (!event) event=window.event;
+			if (typeof event=='undefined') var event=window.event;
 
 			if ((window.opener) && (!event.ctrlKey))
 			{
@@ -319,7 +319,7 @@ function set_up_parent_page_highlighting()
 			element=elements[j];
 			
 			addEventListenerAbstract(element,'mouseover',function(a,element) { return function(event) {
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 
 				if ((window) && (typeof window.decToHex!='undefined') && (!event.ctrlKey))
 				{
@@ -344,7 +344,7 @@ function set_up_parent_page_highlighting()
 				}
 			} }(a,element) );
 			addEventListenerAbstract(element,'mouseout',function(a) { return function(event) {
-				if (!event) event=window.event;
+				if (typeof event=='undefined') var event=window.event;
 
 				if ((window) && (!event.ctrlKey))
 				{
@@ -395,7 +395,7 @@ function do_editarea_search(regexp)
 
 function receive_compiled_css(ajax_result_frame,win)
 {
-	if (!win) win=window.opener;
+	if ((typeof win=='undefined') || (!win)) var win=window.opener;
 	
 	if (win)
 	{

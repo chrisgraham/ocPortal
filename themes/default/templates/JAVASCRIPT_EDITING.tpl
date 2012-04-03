@@ -409,7 +409,7 @@ function findTagsInEditor(editor,element)
 		{
 			comcodes[i].orig_title=comcodes[i].title;
 			comcodes[i].onmouseout=function(event) {
-				if (!event) event=editor.window.$.event;
+				if (typeof event=='undefined') var event=editor.window.$.event;
 
 				var eventCopy={};
 				if (event)
@@ -423,7 +423,7 @@ function findTagsInEditor(editor,element)
 				}
 			};
 			comcodes[i].onmousemove=function(event) {
-				if (!event) event=editor.window.$.event;
+				if (typeof event=='undefined') var event=editor.window.$.event;
 				
 				var eventCopy={};
 				if (event)
@@ -441,7 +441,7 @@ function findTagsInEditor(editor,element)
 				}
 			};
 			comcodes[i].onmousedown=function(event) {
-				if (!event) event=editor.window.$.event;
+				if (typeof event=='undefined') var event=editor.window.$.event;
 				
 				if (event.altKey)
 				{
@@ -477,7 +477,7 @@ function findTagsInEditor(editor,element)
 				}
 			}
 			comcodes[i].onmouseover=function(event) { // Shows preview
-				if (!event) event=editor.window.$.event;
+				if (typeof event=='undefined') var event=editor.window.$.event;
 				
 				cancelBubbling(event);
 
@@ -604,7 +604,7 @@ function do_attachment(field_name,id,description)
 {
 	if (!opener.areaedit_editors) return;
 
-	if (!description) description='';
+	if (typeof description=='undefined') var description='';
 
 	var element=opener.document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
@@ -655,7 +655,7 @@ function setTextbox(element,text,html)
 {
 	if (isWYSIWYGField(element))
 	{
-		if (!html) html=escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />');
+		if (typeof html=='undefined') var html=escape_html(text).replace(new RegExp('\\\\n','gi'),'<br />');
 
 		areaedit_editors[element.id].setData(html);
 		fixImagesIn(areaedit_editors[element.id].document.getBody());
@@ -734,7 +734,8 @@ function insertTextbox(element,text,sel,plain_insert,html)
 
 	element.focus();
 
-	if (!sel) sel=document.selection?document.selection:null;
+	if (typeof sel=='undefined') var sel=false;
+	if (sel) sel=document.selection?document.selection:null;
 
 	if (typeof element.selectionEnd!='undefined') // Mozilla style
 	{
@@ -771,7 +772,7 @@ function insertTextbox(element,text,sel,plain_insert,html)
 }
 function insertTextboxOpener(element,text,sel,plain_insert,html)
 {
-	if (!sel) sel=opener.document.selection?opener.document.selection:null;
+	if ((typeof sel=='undefined') || (!sel)) var sel=opener.document.selection?opener.document.selection:null;
 
 	opener.insertTextbox(element,text,sel,plain_insert,html);
 }
