@@ -67,27 +67,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$dir=get_file_base().'/themes/default/templates';
-	$dh=opendir($dir);
-	while (($f=readdir($dh))!==false)
-	{
-		if (substr($f,0,5)=='JAVAS')
-		{
-			$contents=file_get_contents(get_file_base().'/themes/default/templates/'.$f);
-			$matches=array();
-			$num_matches=preg_match_all('#function.*\((.*)\)#',$contents,$matches);
-			for ($i=0;$i<$num_matches;$i++)
-			{
-				if ($matches[1][$i]=='') continue;
-				$vars=explode(',',$matches[1][$i]);
-				foreach ($vars as $v)
-				{
-					if (strpos($contents,'if ('.$v.') '.$v.'=')!==false)
-					{
-						echo $f.': '.$v."\n";
-					}
-				}
-			}
-		}
-	}
+	require_code('files');
+	echo http_download_file('http://www.httpwatch.com/httpgallery/chunked/');
 }

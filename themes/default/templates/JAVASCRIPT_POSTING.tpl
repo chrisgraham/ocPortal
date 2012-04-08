@@ -90,12 +90,22 @@ function setAttachment(field_name,number,filename)
 		window.faux_showModalDialog(
 			maintain_theme_in_link(url),
 			'',
-			'width=750,height=530,status=no,resizable=yes,scrollbars=yes',
-			function()
+			'width=750,height=530,status=no,resizable=yes,scrollbars=yes,unadorned=yes',
+			function(ret)
 			{
-				// Add field for next one
-				if (add_another_field)
-					addAttachment(numAttachments+1,field_name);
+				if (ret)
+				{
+					// Add field for next one
+					if (add_another_field)
+						addAttachment(numAttachments+1,field_name);
+				} else // Cancelled
+				{
+					var clearBtn=document.getElementById('fsClear_file'+number);
+					if (clearBtn)
+					{
+						clearBtn.onclick();
+					}
+				}
 			}
 		);
 	} else

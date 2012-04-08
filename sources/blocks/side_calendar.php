@@ -199,11 +199,13 @@ class Block_side_calendar
 			return do_template('BLOCK_SIDE_CALENDAR',array('_GUID'=>'1324e98b4debf7ebd6d398fae65fe29f','CALENDAR_URL'=>$calendar_url,'ENTRIES'=>$_entries,'_MONTH'=>strval($_period_start),'MONTH'=>locale_filter(my_strftime(do_lang('calendar_month_in_year'),$_period_start))));
 		}
 
+		// Listing mode
+
 		$period_start=mktime(0,0,0,$month,$day,$year);
 		$num_days=array_key_exists('days',$map)?intval($map['days']):30;
 		$period_end=$period_start+60*60*24*$num_days;
 
-		$happenings=calendar_matches($member,true,$period_start,$period_end,$filter);
+		$happenings=calendar_matches($member,true,$period_start-100*60*60*24,$period_end,$filter);
 
 		$days=array();
 		for ($hap_i=0;$hap_i<count($happenings);$hap_i++)
@@ -212,6 +214,7 @@ class Block_side_calendar
 
 			list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
 
+			if ($to<$period_start) continue;
 			if ($real_from!=$from) continue; // We won't render continuations
 
 			$__day=date('Y-m-d',$from);
@@ -219,7 +222,10 @@ class Block_side_calendar
 			$day_start=mktime(12,0,0,intval($bits[1]),intval($bits[2]),intval($bits[0]));
 			if (!array_key_exists($day_start,$days))
 			{
-				$days[$day_start]=array('TIMESTAMP'=>strval($day_start),'TIME'=>get_timezoned_date($day_start,false),'EVENTS'=>array());
+				$date_section=get_timezoned_date($day_start,false);
+				if ($from<$period_start)
+					$date_section=do_lang('DATE_IN_PAST',$date_section);
+				$days[$day_start]=array('TIMESTAMP'=>strval($day_start),'TIME'=>$date_section,'EVENTS'=>array());
 			}
 
 			$view_id=date('Y-m',$real_from);

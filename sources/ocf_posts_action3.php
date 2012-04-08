@@ -30,6 +30,7 @@
  */
 function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$post=NULL)
 {
+	require_code('submit');
 	send_content_validated_notification('post',strval($post_id));
 
 	if (is_null($topic_id))

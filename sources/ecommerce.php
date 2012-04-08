@@ -695,14 +695,24 @@ function delete_usergroup_subscription($id,$uhoh_mail)
 	foreach ($subscriptions as $sub)
 	{
 		$member_id=$sub['s_member_id'];
-		if ((get_value('unofficial_ecommerce')=='1') && (get_forum_type()!='ocf'))
+
+		$test=in_array($new_group,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id));
+		if ($test)
 		{
-			$GLOBALS['FORUM_DB']->remove_member_from_group($member_id,$new_group);
-		} else
-		{
-			$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_members',array('gm_group_id'=>$new_group,'gm_member_id'=>$member_id),'',1);
+			if (is_null($GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value_null_ok('f_group_member_timeouts','member_id',array('member_id'=>$member_id,'group_id'=>$new_group))))
+			{
+				// Remove them from the group
+
+				if ((get_value('unofficial_ecommerce')=='1') && (get_forum_type()!='ocf'))
+				{
+					$GLOBALS['FORUM_DB']->remove_member_from_group($member_id,$new_group);
+				} else
+				{
+					$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_members',array('gm_group_id'=>$new_group,'gm_member_id'=>$member_id),'',1);
+				}
+				$to_members[]=$member_id;
+			}
 		}
-		$to_members[]=$member_id;
 	}
 	if ($uhoh_mail!='')
 	{

@@ -789,7 +789,7 @@ function choose_picture(id,ob,name)
 	{
 		for (var i=0;i<e.length;i++)
 		{
-			var img=e[i].parentNode.parentNode.parentNode.getElementsByTagName('img')[0];
+			var img=e[i].parentNode.parentNode.getElementsByTagName('img')[0];
 			if ((img) && (img!=ob))
 			{
 				img.style.outline='0';
@@ -818,7 +818,7 @@ function choose_picture(id,ob,name)
 	if (e.length<100)
 	{
 		if (!browser_matches('no_alpha_ie_with_opacity')) setOpacity(ob.parentNode,1.0);
-		ob.style.outline='1px dotted';
+		if (!browser_matches('opera')) ob.style.outline='1px dotted';
 		if (!browser_matches('ie8+')) ob.style.background='green';
 	}
 }

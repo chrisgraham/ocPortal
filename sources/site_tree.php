@@ -219,7 +219,13 @@ function site_tree_script()
 	require_lang('permissions');
 	require_lang('zones');
 	$page_link=get_param('id',NULL,true);
-	$sp_access=$GLOBALS['SITE_DB']->query_select('gsp',array('*'));
+	$_sp_access=$GLOBALS['SITE_DB']->query_select('gsp',array('*'));
+	$sp_access=array();
+	foreach ($_sp_access as $a)
+	{
+		if (!isset($sp_access[$a['group_id']])) $sp_access[$a['group_id']]=array();
+		$sp_access[$a['group_id']][]=$a;
+	}
 
 	if ((!is_null($page_link)) && ($page_link!='') && ((strpos($page_link,':')===false) || (strpos($page_link,':')===strlen($page_link)-1))) // Expanding a zone
 	{
@@ -316,9 +322,9 @@ function site_tree_script()
 						if (!in_array($group,$admin_groups))
 						{
 							$override_value=-1;
-							foreach ($sp_access as $test)
+							foreach ($sp_access[$group] as $test)
 							{
-								if (($test['group_id']==$group) && ($test['specific_permission']==$overridable) && ($test['the_page']==$sp_page))
+								if (($test['specific_permission']==$overridable) && ($test['the_page']==$sp_page))
 									$override_value=$test['the_value'];
 							}
 							if ($override_value!=-1) $sp_perms.='gsp_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
@@ -481,9 +487,9 @@ function site_tree_script()
 									if (!in_array($group,$admin_groups))
 									{
 										$override_value=-1;
-										foreach ($sp_access as $test)
+										foreach ($sp_access[$group] as $test)
 										{
-											if (($test['group_id']==$group) && ($test['specific_permission']==$overridable) && ($test['the_page']=='') && ($test['category_name']==$category_name) && ($test['module_the_name']==$module_the_name))
+											if (($test['specific_permission']==$overridable) && ($test['the_page']=='') && ($test['category_name']==$category_name) && ($test['module_the_name']==$module_the_name))
 												$override_value=$test['the_value'];
 										}
 										if ($override_value!=-1) $sp_perms.='gsp_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
@@ -528,9 +534,9 @@ function site_tree_script()
 					if (!in_array($group,$admin_groups))
 					{
 						$override_value=0;
-						foreach ($sp_access as $test)
+						foreach ($sp_access[$group] as $test)
 						{
-							if (($test['group_id']==$group) && ($test['specific_permission']==$overridable) && ($test['the_page']=='') && ($test['module_the_name']=='') && ($test['category_name']==''))
+							if (($test['specific_permission']==$overridable) && ($test['the_page']=='') && ($test['module_the_name']=='') && ($test['category_name']==''))
 								$override_value=$test['the_value'];
 						}
 						$sp_perms.='gsp_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';

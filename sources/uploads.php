@@ -54,6 +54,9 @@ function is_swf_upload($fake_prepopulation=false)
 			//get the incoming uploads appropiate db table row
 			if (substr($value,-4)=='.dat') // By .dat name
 			{
+				$filename=post_param(str_replace('hidFileID','hidFileName',$key),'');
+				if ($filename=='') continue; // Was cancelled during plupload, but plupload can't cancel so was allowed to finish. So we have hidFileID but not hidFileName.
+
 				$path='uploads/incoming/'.filter_naughty($value);
 				if (file_exists(get_custom_file_base().'/'.$path))
 				{
@@ -62,7 +65,7 @@ function is_swf_upload($fake_prepopulation=false)
 					{
 						$_FILES[substr($key,10)]=array(
 							'type'=>'swfupload',
-							'name'=>post_param(str_replace('hidFileID','hidFileName',$key)),
+							'name'=>$filename,
 							'tmp_name'=>get_custom_file_base().'/'.$path,
 							'size'=>filesize(get_custom_file_base().'/'.$path)
 						);

@@ -236,7 +236,7 @@
 						{+END}{+END}{+END}
 						{+START,IF_PASSED,MORE_URL}
 							{+START,IF,{$JS_ON}}
-								<button tabindex="5" accesskey="y" onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; form.setAttribute('target','_top'); if (!form.old_action) form.old_action=form.getAttribute('action'); form.setAttribute('action','{MORE_URL*;}'); form.submit();" class="button_pageitem" type="button">{!FULL_EDITOR}</button>
+								<button tabindex="5" accesskey="y" onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; form.setAttribute('target','_top'); if (!form.old_action) form.old_action=form.getAttribute('action'); form.setAttribute('action','{MORE_URL*;}'); if ((typeof this.form.elements['post'].strip_on_focus!='undefined') &amp;&amp; (this.form.elements['post'].value==this.form.elements['post'].strip_on_focus)); this.form.elements['post'].value=''; form.submit();" class="button_pageitem" type="button">{!FULL_EDITOR}</button>
 								&nbsp;
 							{+END}
 						{+END}

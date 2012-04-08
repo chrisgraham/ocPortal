@@ -6,6 +6,8 @@
 </div>
 
 <script type="text/javascript">// <![CDATA[
+	window.returnValue=true;
+
 	window.setTimeout(function () {
 		var element;
 		var target_window=window.opener?window.opener:window.parent;

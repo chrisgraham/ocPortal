@@ -1842,7 +1842,9 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			txtFileName.value = "";
 			if ((typeof rep.form.elements[posting_field_name]!='undefined') && (name.indexOf('file')!=-1))
 			{
-				var new_contents=getTextbox(rep.form.elements[posting_field_name]).replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
+				var new_contents=getTextbox(rep.form.elements[posting_field_name]);
+				new_contents=new_contents.replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
+				new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title=""[^<>]* value="[^"]+"[^<>]* />'),''); // Shell of the above
 				setTextbox(rep.form.elements[posting_field_name],new_contents,new_contents);
 			}
 			fireFakeChangeFor(name,'');
@@ -2425,7 +2427,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 		edit_link.onclick=function()
 		{
 			window.fauxmodal_confirm(
-				'You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.'
+				'You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.',
 				function(result)
 				{
 					if (result) click_link(edit_link);

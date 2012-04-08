@@ -26,6 +26,16 @@
  */
 function build_preview($multi_return=false)
 {
+	// Check CAPTCHA if it is passed
+	if (addon_installed('captcha'))
+	{
+		if (((array_key_exists('post',$_POST)) && ($_POST['post']!='')) && (array_key_exists('security_image',$_POST)))
+		{
+			require_code('captcha');
+			enforce_captcha(false);
+		}
+	}
+
 	require_code('attachments2');
 	$hooks=find_all_hooks('systems','preview');
 	$output=NULL;

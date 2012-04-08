@@ -1370,9 +1370,9 @@ class Module_galleries
 		if ($days!='') $where.=' AND add_date>='.strval(time()-intval($days)*60*60*24);
 
 		require_code('ocfiltering');
-		$image_select_sql=ocfilter_to_sqlfragment($image_select,'id');
+		$image_select_sql=ocfilter_to_sqlfragment($image_select,'e.id');
 		$where_images=$where.' AND '.$image_select_sql;
-		$video_select_sql=ocfilter_to_sqlfragment($video_select,'id');
+		$video_select_sql=ocfilter_to_sqlfragment($video_select,'e.id');
 		$where_videos=$where.' AND '.$video_select_sql;
 
 		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images);

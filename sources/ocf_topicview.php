@@ -264,6 +264,18 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 				access_denied('SPECIFIC_PERMISSION','jump_to_unvalidated');
 		}
 
+		if (is_null(get_param_integer('threaded',NULL)))
+		{
+			if ($start>0)
+			{
+				if ($topic_info['f_is_threaded']==1)
+				{
+					$_GET['threaded']='0';
+				}
+			}
+		}
+		$is_threaded=get_param_integer('threaded',(is_null($topic_info['f_is_threaded'])?0:$topic_info['f_is_threaded']));
+
 		// Some general info
 		$out=array(
 			'num_views'=>$topic_info['t_num_views'],
@@ -280,7 +292,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			'pt_from'=>$topic_info['t_pt_from'],
 			'pt_to'=>$topic_info['t_pt_to'],
 			'is_open'=>$topic_info['t_is_open'],
-			'is_threaded'=>get_param_integer('threaded',($start>0)?0:(is_null($topic_info['f_is_threaded'])?0:$topic_info['f_is_threaded'])),
+			'is_threaded'=>$is_threaded,
 			'is_really_threaded'=>is_null($topic_info['f_is_threaded'])?0:$topic_info['f_is_threaded'],
 			'last_time'=>$topic_info['t_cache_last_time'],
 			'meta_data'=>array(

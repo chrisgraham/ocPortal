@@ -906,7 +906,7 @@ class Hook_Notification
 			} else
 			{
 				$query_stub='SELECT l_member_id,l_setting FROM '.$db->get_table_prefix().'notifications_enabled WHERE ';
-				$query_stem=$clause_1.' AND '.$clause_2.' AND l_setting<>'.strval(A_NA);
+				$query_stem=$clause_1.' AND '.$clause_2.' AND '.$clause_3.' AND l_setting<>'.strval(A_NA);
 			}
 		}
 

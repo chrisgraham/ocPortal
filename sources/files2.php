@@ -789,7 +789,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		if ((!is_null($proxy)) && ($connect_to!='localhost') && ($connect_to!='127.0.0.1'))
 		{
 			$out='';
-			$out.=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url))." HTTP/1.0\r\n";
+			$out.=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url))." HTTP/1.1\r\n";
 			$proxy_user=get_value('proxy_user',NULL,true);
 			if (!is_null($proxy_user))
 			{
@@ -798,7 +798,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			}
 		} else
 		{
-			$out=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url2))." HTTP/1.0\r\n"; // 1.0 so we don't get a chunked response
+			$out=((is_null($post_params))?(($byte_limit===0)?'HEAD ':'GET '):'POST ').str_replace("\r",'',str_replace(chr(10),'',$url2))." HTTP/1.1\r\n";
 		}
 		$out.="Host: ".$url_parts['host']."\r\n";
 		if ((!is_null($cookies)) && (count($cookies)!=0)) $out.='Cookie: '.$_cookies."\r\n";
@@ -810,6 +810,9 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		if (!is_null($accept))
 		{
 			$out.="Accept: ".rawurlencode($accept)."\r\n";
+		} else
+		{
+			$out.="Accept: */*(\r\n"; // There's a mod_security rule that checks for this
 		}
 		if (!is_null($accept_charset))
 		{
@@ -865,12 +868,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$out.="Connection: Close\r\n\r\n";
 
 		@fwrite($mysock,$out);
-
 		$data_started=false;
 		$input='';
 		$input_len=0;
 		$first_fail_time=mixed();
-		while (!@feof($mysock)) // @'d because socket might have died. If so fread will will return false and hence we'll break
+		$chunked=false;
+		$chunk_buffer_unprocessed='';
+		while (($chunked) || (!@feof($mysock))) // @'d because socket might have died. If so fread will will return false and hence we'll break
 		{
 			$line=@fread($mysock,1024);
 
@@ -884,6 +888,21 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			} else $first_fail_time=NULL;
 			if ($data_started)
 			{
+				$line=$chunk_buffer_unprocessed.$line;
+
+				if ($chunked)
+				{
+					$first_fail_time=time();
+
+					$matches=array();
+					if (preg_match('#^([a-f\d]+)\r\n(.*)$#is',$line,$matches)!=0)
+					{
+						$chunk_buffer_unprocessed=ltrim(substr($matches[2],hexdec($matches[1])));
+						$line=substr($matches[2],0,hexdec($matches[1]));
+						if ($line=='') break;
+					}
+				}
+
 				if (is_null($write_to_file)) $input.=$line; else fwrite($write_to_file,$line);
 				$input_len+=strlen($line);
 				if ((!is_null($byte_limit)) && ($input_len>=$byte_limit))
@@ -904,6 +923,10 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					$tally+=strlen($line);
 
 					$matches=array();
+					if (preg_match("#Transfer-Encoding: chunked\r\n#i",$line,$matches)!=0)
+					{
+						$chunked=true;
+					}
 					if (preg_match("#Content-Disposition: [^\r\n]*filename=\"([^;\r\n]*)\"\r\n#i",$line,$matches)!=0)
 					{
 						$HTTP_FILENAME=$matches[1];
@@ -1014,20 +1037,14 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					{
 						$data_started=true;
 						$input_len+=max(0,strlen($old_line)-$tally);
-						if (is_null($write_to_file))
-						{
-							$input=substr($old_line,$tally);
-							if ($input===false) $input='';
-						} else
-						{
-							$tmp_string=substr($old_line,$tally);
-							if ($tmp_string!==false) fwrite($write_to_file,$tmp_string);
-						}
+						$chunk_buffer_unprocessed=substr($old_line,$tally);
+						if ($chunk_buffer_unprocessed===false) $chunk_buffer_unprocessed='';
 						break;
 					}
 				}
 			}
 		}
+
 		@fclose($mysock);
 		if (!$data_started)
 		{

@@ -2018,7 +2018,7 @@ END;
 
 		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1,$forum_id==-1,false,$parent_id);
 
-		if (!is_null($forum_id))
+		if ((!is_null($forum_id)) && ($anonymous==0) && ($intended_solely_for===NULL))
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forumview')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',strval($forum_id))))
 				syndicate_described_activity($first_post?'ocf:ACTIVITY_ADD_TOPIC':'ocf:ACTIVITY_ADD_POST_IN',$first_post?$title:$topic_title,'','','_SEARCH:topicview:misc:'.strval($topic_id).'#post_'.strval($post_id),'','','ocf_forum');

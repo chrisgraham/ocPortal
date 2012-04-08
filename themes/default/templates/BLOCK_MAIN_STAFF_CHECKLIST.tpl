@@ -51,7 +51,7 @@
 			{
 				src=row_imgs[row_imgs.length-1].getAttribute('src');
 				if (row_imgs[row_imgs.length-1].origsrc) src=row_imgs[row_imgs.length-1].origsrc;
-				if (src.indexOf('checklist1')!=-1)
+				if (src && src.indexOf('checklist1')!=-1)
 					checklist_rows[i].style.display='none';
 			} else
 			{

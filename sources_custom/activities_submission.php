@@ -296,10 +296,10 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 	// Grab a pointer for appending to this file
 	// NOTE: ALWAYS open as append! Opening as write will wipe the file during
 	// the fopen call, which is before we have a lock.
-	$fp = fopen($filename, 'a+');
+	$fp = @fopen($filename, 'a+');
 
 	// Only bother running if this file can be opened
-	if ($fp)
+	if ($fp!==false)
 	{
 		// Grab our current time in milliseconds
 		$start_time = microtime(true);
@@ -336,5 +336,8 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 			}
 		}
 		fclose($fp);
+	} else
+	{
+		attach_message(intelligent_write_error_inline($filename),'warn');
 	}
 }

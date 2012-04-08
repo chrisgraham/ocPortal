@@ -568,7 +568,9 @@ function load_ocpchat(event)
 function staff_actions_select(ob)
 {
 	var form;
-	if (ob.nodeName.toLowerCase()=='form')
+
+	var is_form_submit=(ob.nodeName.toLowerCase()=='form');
+	if (is_form_submit)
 	{
 		form=ob;
 		ob=form.elements['special_page_type'];
@@ -576,6 +578,7 @@ function staff_actions_select(ob)
 	{
 		form=ob.form;
 	}
+
 	var val=ob.options[ob.selectedIndex].value;
 	if (val!='view')
 	{
@@ -583,6 +586,7 @@ function staff_actions_select(ob)
 			form.elements['cache'].value=(val.substring(val.length-4,val.length)=='.css')?'1':'0';
 		var test=window.open('','ocp_dev_tools'+Math.floor(Math.random()*10000),'width=1000,height=700,scrollbars=yes');
 		if (test) form.setAttribute('target',test.name);
-		form.submit();
+		if (!is_form_submit)
+			form.submit();
 	}
 }

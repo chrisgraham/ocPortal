@@ -2,6 +2,7 @@
 <IfModule mod_security.c>
 SecFilterEngine Off
 SecFilterScanPOST Off
+SecRuleRemoveById 300018 340147 340014 950119 950120 973331
 </IfModule>
 
 <IfModule mod_php5.c>

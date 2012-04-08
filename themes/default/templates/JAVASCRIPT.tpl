@@ -2278,7 +2278,7 @@ function setInnerHTML(element,tHTML,append)
 			{
 				window.js_runs_test=false;
 				var r_id='js_'+Math.random();
-				tHTML+='<script id="'+r_id+'" type="text/javascript">window.js_runs_test=true;</script>';
+				element.innerHTML+='<script id="'+r_id+'" type="text/javascript">window.js_runs_test=true;</script>';
 
 				window.setTimeout(function() {
 					if (!window.js_runs_test) // If JS was not run by the above op

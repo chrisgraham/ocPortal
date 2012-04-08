@@ -323,7 +323,7 @@ class Module_cms_calendar extends standard_aed_module
 			$start_hour=NULL;
 			$start_minute=NULL;
 		}
-		if ((is_null($end_month)) && ($adding))
+		if ((is_null($end_year) || is_null($end_month) || is_null($end_day)) && ($adding))
 		{
 			$end_year=NULL;//$start_year;
 			$end_month=NULL;//$start_month;
@@ -685,7 +685,7 @@ class Module_cms_calendar extends standard_aed_module
 				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute,true);
 				$from=cal_utctime_to_usertime($_from,$timezone,false);
 				$to=mixed();
-				if (!is_null($end_year))
+				if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 				{
 					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute,true);
 					$to=cal_utctime_to_usertime($_to,$timezone,false);
@@ -820,7 +820,7 @@ class Module_cms_calendar extends standard_aed_module
 				$_from=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute,true);
 				$from=cal_utctime_to_usertime($_from,$timezone,false);
 				$to=mixed();
-				if (!is_null($end_year))
+				if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 				{
 					$_to=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute,true);
 					$to=cal_utctime_to_usertime($_to,$timezone,false);

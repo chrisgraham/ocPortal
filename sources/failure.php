@@ -194,7 +194,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
 	}
 
 	// Generate error message
-	$outx='<b>'.strtoupper($type).'</b> ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline).'<br />'.chr(10);
+	$outx='<strong>'.strtoupper($type).'</strong> ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline).'<br />'.chr(10);
 	if (class_exists('ocp_tempcode'))
 	{
 		if ($GLOBALS['SUPRESS_ERROR_DEATH'])

@@ -1842,7 +1842,9 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			txtFileName.value = "";
 			if ((typeof rep.form.elements[posting_field_name]!='undefined') && (name.indexOf('file')!=-1))
 			{
-				var new_contents=getTextbox(rep.form.elements[posting_field_name]).replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
+				var new_contents=getTextbox(rep.form.elements[posting_field_name]);
+				new_contents=new_contents.replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
+				new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title=""[^<>]* value="[^"]+"[^<>]* />'),''); // Shell of the above
 				setTextbox(rep.form.elements[posting_field_name],new_contents,new_contents);
 			}
 			fireFakeChangeFor(name,'');

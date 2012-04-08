@@ -1415,14 +1415,14 @@ class Module_calendar
 			{
 				if (is_null($event['e_start_hour'])) // All day event
 				{
-					if (is_null($event['e_end_year']))
+					if (is_null($event['e_end_year']) || is_null($event['e_end_month']) || is_null($event['e_end_day']))
 					{
 						$event['e_end_day']=$event['e_start_day'];
 						$event['e_end_month']=$event['e_start_month'];
 						$event['e_end_year']=$event['e_start_year'];
 					}
 				}
-				if (!is_null($event['e_end_year']))
+				if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 				{
 					$event['e_end_year']+=intval($explode[0])-$event['e_start_year'];
 					$event['e_end_month']+=intval($explode[1])-$event['e_start_month'];
@@ -1436,7 +1436,7 @@ class Module_calendar
 		$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
 		$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
-		if (!is_null($event['e_end_year']))
+		if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 		{
 			$to_raw=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
 			$to=cal_utctime_to_usertime($to_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
@@ -1592,7 +1592,7 @@ class Module_calendar
 			$_from=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
 			$from=cal_utctime_to_usertime($_from,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$to=mixed();
-			if (!is_null($event['e_end_year']))
+			if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 			{
 				$_to=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
 				$to=cal_utctime_to_usertime($_to,$event['e_timezone'],$event['e_do_timezone_conv']==1);

@@ -5315,6 +5315,8 @@ function fireFakeChangeFor(name,value)
 			ob.start();
 
 			// plupload does not support cancelling mid-way (ob.stop won't do that unfortunately)
+			// Actually the clear button DOES work during upload, but not visibly. So we can still call it's onclick with success. It's just the upload, and plupload object, and UI, will continue until it's finished uploading.
+			// When upload finishes/fails, we put these back on.
 			var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
 			if (clearBtn) clearBtn.style.display='none';
 			var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
@@ -5377,6 +5379,11 @@ function uploadSuccess(ob,file,data) {
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	btnSubmit.disabled = false;
 
+	var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
+	if (clearBtn) clearBtn.style.display='inline';
+	var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
+	if (uploadBtn) uploadBtn.disabled=false;
+
 	if ((typeof ob.submitting!='undefined') && (ob.submitting))
 	{
 		window.form_submitting=btnSubmit.form; // For IE
@@ -5408,6 +5415,11 @@ function uploadError(ob,error) {
 		fireFakeChangeFor(ob.settings.txtName,'');
 
 	document.getElementById(ob.settings.btnSubmitID).disabled = false;
+
+	var clearBtn=document.getElementById('fsClear_'+ob.settings.txtName);
+	if (clearBtn) clearBtn.style.display='inline';
+	var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
+	if (uploadBtn) uploadBtn.disabled=false;
 }
 
 function queueChanged(ob)
@@ -5780,7 +5792,9 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		txtFileName.value = "";
 		if ((typeof rep.form.elements[posting_field_name]!='undefined') && (name.indexOf('file')!=-1))
 		{
-			var new_contents=getTextbox(rep.form.elements[posting_field_name]).replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
+			var new_contents=getTextbox(rep.form.elements[posting_field_name]);
+			new_contents=new_contents.replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
+			new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title=""[^<>]* value="[^"]+"[^<>]* />'),''); // Shell of the above
 			setTextbox(rep.form.elements[posting_field_name],new_contents,new_contents);
 		}
 		fireFakeChangeFor(name,'');
@@ -5805,7 +5819,8 @@ function initialise_dragdrop_upload(key,key2)
 // targetID is the HTML element id attribute that the FileProgress HTML structure will be added to.
 // Instantiating a new FileProgress object with an existing file will reuse/update the existing DOM elements
 function FileProgress(file, targetID) {
-	this.fileProgressID = 'progress_'+(file && typeof file.id=='undefined')?'not_inited':file.id;
+	this.fileProgressID = 'progress_'+(file && typeof file.id=='undefined')?('not_inited_'+targetID):file.id;
+
 	this.opacity = 100;
 	this.height = 0;
 
@@ -6024,7 +6039,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 		edit_link.onclick=function()
 		{
 			window.fauxmodal_confirm(
-				'You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.'
+				'You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.',
 				function(result)
 				{
 					if (result) click_link(edit_link);

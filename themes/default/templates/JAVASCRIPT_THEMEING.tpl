@@ -396,13 +396,13 @@ function do_editarea_search(regexp)
 function receive_compiled_css(ajax_result_frame,win)
 {
 	if ((typeof win=='undefined') || (!win)) var win=window.opener;
-	
+
 	if (win)
 	{
 		try
 		{
 			var css=ajax_result_frame.responseText;
-		
+
 			// Remove old link tag
 			var e;
 			if (window.doing_css_for=='no_cache')

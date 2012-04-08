@@ -285,13 +285,15 @@ function generate_captcha()
 
 /**
  * Calling this assumes captcha was needed. Checks that it was done correctly.
+ *
+ * @param  boolean		Whether to possibly regenerate upon error.
  */
-function enforce_captcha()
+function enforce_captcha($regenerate_on_error=true)
 {
 	if (use_captcha())
 	{
 		$code_entered=post_param('security_image');
-		if (!check_captcha($code_entered))
+		if (!check_captcha($code_entered,$regenerate_on_error))
 		{
 			$GLOBALS['HTTP_STATUS_CODE']='500';
 			if (!headers_sent())
@@ -309,9 +311,10 @@ function enforce_captcha()
  * Checks a CAPTCHA.
  *
  * @param  string			CAPTCHA entered.
+ * @param  boolean		Whether to possibly regenerate upon error.
  * @return boolean		Whether it is valid for the current session.
  */
-function check_captcha($code_entered)
+function check_captcha($code_entered,$regenerate_on_error=true)
 {
 	if (use_captcha())
 	{
@@ -348,9 +351,12 @@ function check_captcha($code_entered)
 			$code_needed=str_pad(strval($_code_needed),6,'0',STR_PAD_LEFT);
 		}
 		$ret=(strtolower($code_needed)==strtolower($code_entered));
-		if (get_value('more_captcha_security')==='1')
+		if ($regenerate_on_error)
 		{
-			if (!$ret) generate_captcha();
+			if (get_value('more_captcha_security')==='1')
+			{
+				if (!$ret) generate_captcha();
+			}
 		}
 		return $ret;
 	}

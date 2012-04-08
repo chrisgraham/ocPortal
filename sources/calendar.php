@@ -162,13 +162,13 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$timezone,
 			$do_timezone_conv==1
 		);
-		if ((is_null($start_hour)) && (is_null($end_day))) // All day event with no end date, should be same as start date
+		if ((is_null($start_hour)) && (is_null($end_year) || is_null($end_month) || is_null($end_day))) // All day event with no end date, should be same as start date
 		{
 			$end_day=$start_day;
 			$end_month=$start_month;
 			$end_year=$start_year;
 		}
-		if (is_null($end_year))
+		if (is_null($end_year) || is_null($end_month) || is_null($end_day))
 		{
 			$_b=NULL;
 			$b=NULL;
@@ -193,7 +193,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		$start_day+=$dif_day;
 		$start_month+=$dif_month;
 		$start_year+=$dif_year;
-		if (!is_null($end_year))
+		if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 		{
 			$end_day+=$dif_day;
 			$end_month+=$dif_month;

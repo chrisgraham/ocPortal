@@ -62,7 +62,7 @@
 			<key>filename</key>
 			<string>code_editor.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-24T18:07:52Z</date>
+			<date>2012-04-07T10:51:21Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -79,8 +79,6 @@
 			<date>2012-03-24T18:12:53Z</date>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>data</string>
 			<key>regexFolderFilter</key>
@@ -179,8 +177,6 @@
 			<date>2008-11-09T22:20:00Z</date>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>lang</string>
 			<key>regexFolderFilter</key>
@@ -189,8 +185,6 @@
 			<string>lang</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>lang_custom</string>
 			<key>regexFolderFilter</key>
@@ -207,8 +201,6 @@
 			<string>ocworld</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>pages</string>
 			<key>regexFolderFilter</key>
@@ -232,7 +224,7 @@
 			<key>filename</key>
 			<string>recommended.htaccess</string>
 			<key>lastUsed</key>
-			<date>2012-01-19T13:41:44Z</date>
+			<date>2012-04-06T22:30:03Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -249,8 +241,6 @@
 			<string>safe_mode_temp</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>site</string>
 			<key>regexFolderFilter</key>
@@ -440,20 +430,6 @@
 				<key>line</key>
 				<integer>23</integer>
 			</dict>
-		</dict>
-		<key>adminzone/pages/modules/admin_ecommerce.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>397</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>363</integer>
 		</dict>
 		<key>adminzone/pages/modules/admin_quiz.php</key>
 		<dict>
@@ -1038,20 +1014,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>1260</integer>
-		</dict>
-		<key>sources/ecommerce.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>401</integer>
 		</dict>
 		<key>sources/hooks/modules/admin_cleanup/admin_theme_images.php</key>
 		<dict>
@@ -1725,36 +1687,6 @@
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
 		</dict>
-		<key>sources/site.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>159</integer>
-				<key>line</key>
-				<integer>1658</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1619</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>157</integer>
-				<key>line</key>
-				<integer>1658</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>173</integer>
-				<key>line</key>
-				<integer>1658</integer>
-			</dict>
-		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
 			<key>caret</key>
@@ -1967,20 +1899,6 @@
 				<integer>0</integer>
 				<key>line</key>
 				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/templates/ATTACHMENT_IMG.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>17</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -2395,20 +2313,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates/JAVASCRIPT_MENU_POPUP.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>30</integer>
-				<key>line</key>
-				<integer>102</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>83</integer>
-		</dict>
 		<key>themes/default/templates/MENU_BRANCH_select.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2496,20 +2400,6 @@
 				<key>line</key>
 				<integer>1</integer>
 			</dict>
-		</dict>
-		<key>themes/default/templates/POST.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>112</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>62</integer>
 		</dict>
 		<key>themes/default/templates/STANDARDBOX_invisible.tpl</key>
 		<dict>
@@ -2785,6 +2675,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{758, 90}, {966, 879}}</string>
+	<string>{{831, 124}, {966, 879}}</string>
 </dict>
 </plist>

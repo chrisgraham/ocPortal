@@ -127,7 +127,7 @@ function output_ical()
 
 			$time=mktime(is_null($event['e_start_hour'])?12:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']);
 			$time2=mixed();
-			$time2=is_null($event['e_end_hour'])?NULL:mktime(is_null($event['e_end_hour'])?12:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']);
+			$time2=(is_null($event['e_end_year']) || is_null($event['e_end_month']) || is_null($event['e_end_day']))?NULL:mktime(is_null($event['e_end_hour'])?12:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']);
 			if ($event['e_recurrence']!='none')
 			{
 				$parts=explode(' ',$event['e_recurrence']);

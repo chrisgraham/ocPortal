@@ -181,8 +181,15 @@ function slideshow_show_slide(slide)
 		if (typeof window.show_slide_callback!='undefined') show_slide_callback();
 	}
 	
-	start_slideshow_timer();
-	reset_slideshow_countdown();
+	var fadeElements=get_elements_by_class_name(document.body,'scale_down');
+	if (typeof fadeElements[0]!='undefined')
+	{
+		start_slideshow_timer();
+		reset_slideshow_countdown();
+	} else
+	{
+		stop_slideshow_timer('{!WILL_CONTINUE_AFTER_VIDEO_FINISHED}');
+	}
 
 	if (slideshow_current_position!=slideshow_total_slides-1)
 		slideshow_ensure_loaded(slide+1,false);

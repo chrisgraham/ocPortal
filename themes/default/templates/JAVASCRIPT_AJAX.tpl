@@ -243,7 +243,7 @@ function process_request_changes()
 			if ((result.status) && (result.status==200) || (result.status==500) || (result.status==400) || (result.status==401))
 			{
 				//Process the result
-				if ((AJAX_METHODS[i]) && (!result.responseXML/*Not payload handler and not stack trace*/))
+				if ((AJAX_METHODS[i]) && (!result.responseXML/*Not payload handler and not stack trace*/ || result.responseXML.childNodes.length==0))
 				{
 					return AJAX_METHODS[i](result);
 				}

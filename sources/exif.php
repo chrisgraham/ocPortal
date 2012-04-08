@@ -44,6 +44,7 @@ function get_exif_data($path,$filename=NULL)
 
 	$caption=get_exif_image_caption($path,$filename);
 	$out['UserComment']=$caption;
+
 	$out+=_get_simple_gps($out);
 
 	return $out;
@@ -89,26 +90,6 @@ function _get_simple_gps($exif)
 	$gps['LongDegree']=$exif['GPSLongitude'][0];
 	$gps['LongMinute']=$exif['GPSLongitude'][1];
 	$gps['LongSeconds']=isset($exif['GPSLongitude'][2])?$exif['GPSLongitude'][2]:0;
-
-	// convert strings to numbers
-	foreach($gps as $key => $value)
-	{
-		$pos = strpos($value, '/');
-		if($pos !== false)
-		{
-			$temp = explode('/',$value);
-			if ((is_numeric($temp[0])) && (is_numeric($temp[1])))
-			{
-				if (floatval($temp[1])==0.0)
-				{
-					$gps[$key] = floatval($temp[0]);
-				} else
-				{
-					$gps[$key] = floatval($temp[0]) / floatval($temp[1]);
-				}
-			}
-		}
-	}
 
 	// calculate the decimal degree
 	$result['Latitude'] = float_to_raw_string(floatval($lat_m) * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)));
@@ -318,18 +299,37 @@ function cleanup_exif($meta_data)
 	$val=mixed();
 	foreach ($meta_data as $key=>$val)
 	{
+		// Cleanup fractions
+		if (is_string($val))
+		{
+			if (preg_match('#^[\d.]+/[\d.]+$#',$val)!=0)
+			{
+				$temp=explode('/',$val);
+				if ((is_numeric($temp[0])) && (is_numeric($temp[1])))
+				{
+					if (floatval($temp[1])==0.0)
+					{
+						$val=floatval($temp[0]);
+					} else
+					{
+						$val=floatval($temp[0])/floatval($temp[1]);
+					}
+					if ($key=='FocalLength') $val.='mm';
+				}
+			}
+		}
+
+		// Fix character sets
 		if (is_string($val))
 		{
 			$val=preg_replace('#[[:cntrl:]]#','',$val);
-			$meta_data[$key]=convert_to_internal_encoding($val,'ISO-8859-1'/*EXIF uses this, is not really internationalised*/);
+			$val=convert_to_internal_encoding($val,'ISO-8859-1'/*EXIF uses this, is not really internationalised*/);
 		} elseif (is_array($val))
 		{
-			foreach ($val as $key2=>$val2)
-			{
-				$val2=preg_replace('#[[:cntrl:]]#','',$val2);
-				$meta_data[$key][$key2]=convert_to_internal_encoding($val2,'ISO-8859-1'/*EXIF uses this, is not really internationalised*/);
-			}
+			$val=cleanup_exif($val);
 		}
+
+		$meta_data[$key]=$val;
 	}
 	return $meta_data;
 }

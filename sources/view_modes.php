@@ -35,6 +35,8 @@ function init__view_modes()
  */
 function initialise_special_page_types($special_page_type)
 {
+	disable_php_memory_limit();
+
 	if ($special_page_type=='templates')
 	{
 		global $RECORD_TEMPLATES_USED;

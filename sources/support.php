@@ -2041,13 +2041,13 @@ function produce_salt()
  */
 function get_site_salt()
 {
-	global $SITE_INFO;
 	$site_salt=get_value('site_salt');
 	if ($site_salt===NULL)
 	{
 		$site_salt=produce_salt();
 		set_value('site_salt',$site_salt);
 	}
-	$site_salt.=serialize($SITE_INFO);
+	//global $SITE_INFO; This is unstable on some sites, as the array can be prepopulated on the fly
+	//$site_salt.=serialize($SITE_INFO);
 	return md5($site_salt);
 }

@@ -92,11 +92,21 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 		{
 			$cma_hook=convert_ocportal_type_codes('award_hook',$award_hook,'cma_hook');
 			list(,,,$content)=content_get_details($cma_hook,$content_id);
-			$category_id=$content[$info['category_field']];
+			$category_field=$info['category_field'];
+			if (is_array($category_field))
+			{
+				$category_field=array_pop($category_field);
+				$category_id=$content[$category_field];
+				if (($award_hook=='catalogue_entry') && (!has_category_access($member_id,'catalogues_catalogue',$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id)))))
+					return false;
+			} else
+			{
+				$category_id=$content[$category_field];
+			}
 		}
 	}
 
-	return ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$permission_type_code,$category_id))));
+	return ((has_actual_page_access($member_id,$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($member_id,$permission_type_code,$category_id))));
 }
 
 /**
