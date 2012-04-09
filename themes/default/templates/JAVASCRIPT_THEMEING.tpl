@@ -368,8 +368,11 @@ function findSelectorsFor(opener,selector)
 	catch (e) {}
 	for (var i=0;i<opener.frames.length;i++)
 	{
-		result2=findSelectorsFor(opener.frames[i],selector);
-		for (var j=0;j<result2.length;j++) result.push(result2[j]);
+		if (opener.frames[i]) // If test needed for opera, as window.frames can get out-of-date
+		{
+			result2=findSelectorsFor(opener.frames[i],selector);
+			for (var j=0;j<result2.length;j++) result.push(result2[j]);
+		}
 	}
 	return result;
 }
@@ -443,7 +446,10 @@ function receive_compiled_css(ajax_result_frame,win)
 		
 			for (var i=0;i<win.frames.length;i++)
 			{
-				receive_compiled_css(ajax_result_frame,win.frames[i]);
+				if (win.frames[i]) // If test needed for opera, as window.frames can get out-of-date
+				{
+					receive_compiled_css(ajax_result_frame,win.frames[i]);
+				}
 			}
 		}
 		catch (e) {}

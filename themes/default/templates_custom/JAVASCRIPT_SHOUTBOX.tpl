@@ -43,11 +43,14 @@ function sb_handle_signals(ajax_result)
 				var frames=window.parent.document.getElementsByTagName('iframe');
 				for (var i=0;i<frames.length;i++)
 				{
-					if ((frames[i].src==window.location.href) || (frames[i].contentWindow==window) || ((typeof window.parent.frames[frames[i].id]!="undefined") && (window.parent.frames[frames[i].id]==window)))
+					if (frames[i]) // If test needed for opera, as window.frames can get out-of-date
 					{
-						var sb=frames[i];
-						if (sb.contentWindow.location.href.indexOf('posted')==-1)
-							sb.contentWindow.location.reload();
+						if ((frames[i].src==window.location.href) || (frames[i].contentWindow==window) || ((typeof window.parent.frames[frames[i].id]!="undefined") && (window.parent.frames[frames[i].id]==window)))
+						{
+							var sb=frames[i];
+							if (sb.contentWindow.location.href.indexOf('posted')==-1)
+								sb.contentWindow.location.reload();
+						}
 					}
 				}
 			}

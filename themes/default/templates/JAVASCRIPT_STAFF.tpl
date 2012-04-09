@@ -237,15 +237,18 @@ function findCSSSheets(win)
 
 			for (i=0;i<win.frames.length;i++)
 			{
-				var result2=findCSSSheets(win.frames[i]);
-				for (j=0;j<result2.length;j++)
+				if (win.frames[i]) // If test needed for opera, as window.frames can get out-of-date
 				{
-					ok=true;
-					for (k=0;k<possibilities.length;k++)
+					var result2=findCSSSheets(win.frames[i]);
+					for (j=0;j<result2.length;j++)
 					{
-						if (possibilities[k]==result2[j]) ok=false;
+						ok=true;
+						for (k=0;k<possibilities.length;k++)
+						{
+							if (possibilities[k]==result2[j]) ok=false;
+						}
+						if (ok) possibilities.push(result2[j]);
 					}
-					if (ok) possibilities.push(result2[j]);
 				}
 			}
 		}
@@ -282,8 +285,11 @@ function findActiveSelectors(match,win)
 
 	for (i=0;i<win.frames.length;i++)
 	{
-		result2=findActiveSelectors(match,win.frames[i]);
-		for (var j=0;j<result2.length;j++) selectors.push(result2[j]);
+		if (win.frames[i]) // If test needed for opera, as window.frames can get out-of-date
+		{
+			result2=findActiveSelectors(match,win.frames[i]);
+			for (var j=0;j<result2.length;j++) selectors.push(result2[j]);
+		}
 	}
 
 	return selectors;
