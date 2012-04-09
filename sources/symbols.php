@@ -1940,7 +1940,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					require_code('feedback');
-					$rating=get_rating_simple_array(array_key_exists(2,$param)?$param[2]:get_self_url(true),array_key_exists(3,$param)?$param[3]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(2,$param)?$param[2]:NULL);
+					$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
 					if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
 					{
 						$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';

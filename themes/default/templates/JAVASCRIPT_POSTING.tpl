@@ -694,7 +694,7 @@ function init_form_saving()
 
 						cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+key;
 						cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
-						SetCookie(encodeURIComponent(cookie_name),'0',1);
+						SetCookie(encodeURIComponent(cookie_name),'0',0.1);
 					}
 				}
 			}

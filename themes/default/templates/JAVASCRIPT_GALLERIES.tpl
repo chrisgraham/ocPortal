@@ -160,19 +160,27 @@ function slideshow_show_slide(slide)
 	{
 		var slideshow_from=document.getElementById('slideshow_from');
 
-		var fadeElement_old=get_elements_by_class_name(document.body,'scale_down')[0];
-		fadeElement_old.style.position='absolute';
-		var left_pos=findWidth(fadeElement_old.parentNode)/2-findWidth(fadeElement_old)/2;
-		fadeElement_old.style.left=left_pos+'px';
+		var fadeElements_old=get_elements_by_class_name(document.body,'scale_down'
+		if (typeof fadeElements_old[0]!='undefined')
+		{
+			var fadeElement_old=fadeElements_old[0];
+			fadeElement_old.style.position='absolute';
+			var left_pos=findWidth(fadeElement_old.parentNode)/2-findWidth(fad
+			fadeElement_old.style.left=left_pos+'px';
+		} // else probably a video
 
 		setInnerHTML(document.getElementById('gallery_entry_screen'),slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/gi,''));
 
-		var fadeElement=get_elements_by_class_name(document.body,'scale_down')[0];
-		setOpacity(fadeElement,0);
-		fadeElement.parentNode.insertBefore(fadeElement_old,fadeElement);
-		nereidFade(fadeElement,100.0,30,10);
-		setOpacity(fadeElement_old,1.0);
-		nereidFade(fadeElement_old,0.0,30,-10,true);
+		var fadeElements=get_elements_by_class_name(document.body,'scale_down');
+		if ((typeof fadeElements[0]!='undefined') && (typeof fadeElements_old[0]!=
+		{
+			var fadeElement=fadeElements[0];
+			setOpacity(fadeElement,0);
+			fadeElement.parentNode.insertBefore(fadeElement_old,fadeElement);
+			nereidFade(fadeElement,100.0,30,10);
+			setOpacity(fadeElement_old,1.0);
+			nereidFade(fadeElement_old,0.0,30,-10,true);
+		} // else probably a video
 
 		document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same
 
