@@ -15,7 +15,7 @@ function call_block(url,new_params,target_div,append,callback)
 	{
 		show_block_html(block_data_cache[ajax_url],target_div,append);
 		if (callback) callback();
-		return;
+		return null;
 	}
 
 	// Show loading image
@@ -228,7 +228,7 @@ function do_ajax_request(url,callback__method,post) // Note: 'post' is not an ar
 
 function process_request_changes()
 {
-	if ((typeof window.AJAX_REQUESTS=="undefined") || (!window.AJAX_REQUESTS)) return; // Probably the page is in process of being navigated away so window object is gone
+	if ((typeof window.AJAX_REQUESTS=="undefined") || (!window.AJAX_REQUESTS)) return null; // Probably the page is in process of being navigated away so window object is gone
 
 	// If any AJAX_REQUESTS are 'complete'
 	var i,result;

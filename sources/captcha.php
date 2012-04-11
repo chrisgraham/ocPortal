@@ -34,14 +34,17 @@ function securityimage_script()
 	$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
 	if (is_null($_code_needed))
 	{
-		$GLOBALS['HTTP_STATUS_CODE']='500';
+		generate_captcha();
+		$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
+
+		/*$GLOBALS['HTTP_STATUS_CODE']='500';		This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
 		if (!headers_sent())
 		{
 			if (function_exists('browser_matches'))
 				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
 		}
 
-		warn_exit(do_lang_tempcode('SECURITY_IMAGE_NO_SESSION'));
+		warn_exit(do_lang_tempcode('SECURITY_IMAGE_NO_SESSION'));*/
 	}
 	if (strlen(strval($_code_needed))>6) // Encoded in ASCII (we did it like this to avoid breaking DB compatibility)
 	{
@@ -216,7 +219,6 @@ function form_input_captcha()
 {
 	$tabindex=get_form_field_tabindex(NULL);
 
-	require_code('captcha');
 	generate_captcha();
 
 	// Show template

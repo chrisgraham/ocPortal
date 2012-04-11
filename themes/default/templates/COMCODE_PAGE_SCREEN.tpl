@@ -20,7 +20,7 @@
 		</div>
 	{+END}{+END}
 
-	{+START,IF,{$NOT,{$_GET,wide_high}}}{+START,IF,{$NOT,{BEING_INCLUDED}}}{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF,{$NEQ,{$SUBSTR,{NAME},0,6},rules,start,panel_}}{$BLOCK,failsafe=1,block=main_screen_actions}{+END}{+END}{+END}{+END}
+	{+START,IF,{$NOT,{$_GET,wide_high}}}{+START,IF,{$NOR,{IS_PANEL},{BEING_INCLUDED}}}{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF,{$NEQ,{$SUBSTR,{NAME},0,6},rules,start,panel_}}{$BLOCK,failsafe=1,block=main_screen_actions}{+END}{+END}{+END}{+END}
 
 	{+START,IF_NON_EMPTY,{EDIT_URL}}
 		{+START,IF,{$EQ,{NAME},panel_left,panel_right}}
@@ -34,7 +34,7 @@
 		{+END}
 
 		{+START,IF,{$NEQ,{NAME},panel_left,panel_right,panel_top,panel_bottom}}
-			{+START,IF,{$NOT,{BEING_INCLUDED}}}{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}{+END}
+			{+START,IF,{$NOR,{IS_PANEL},{BEING_INCLUDED}}}{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}{+END}
 
 			{+START,IF,{$NOT,{BEING_INCLUDED}}}<br />{+END}
 			{+START,INCLUDE,STAFF_ACTIONS}

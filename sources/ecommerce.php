@@ -742,7 +742,7 @@ function delete_usergroup_subscription($id,$uhoh_mail)
 /**
  * Make a shopping cart payment button.
  *
- * @param  AUTO_LINK		Order Id
+ * @param  AUTO_LINK		Order ID
  * @param  ID_TEXT		The currency to use.
  * @return tempcode		The button
 */

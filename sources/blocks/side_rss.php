@@ -89,7 +89,7 @@ class Block_side_rss
 			}
 			return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>htmlentities($rss->error)));
 		}
-	
+
 		// Sorting
 		$items=array();
 		foreach ($rss->gleamed_items as $item)

@@ -565,7 +565,10 @@ form { /* For IE6 */
 	padding: 4px;
 }
 
-/* medborder is similar to lightborder; in fact, there isn't any rule as to when to use each: it is just artistic */
+.overlay.medborder {
+	padding: 5px;
+	background-color: #e5c6c2;
+}
 
 .boxes_together_follower { /* boxes_together_follower is just for IE6, which does not support +, we have to go to extra effort in our templates to add this class */
 	border-top: 0 !important;
@@ -1547,18 +1550,6 @@ th.meta_data_title {
 	float: right;
 	width: 100px;
 	border: 1px solid #a5746f; /* {$,wizard, 100% medborder.border} */
-	display: none;
-}
-
-.password_strength_inner {
-	height: 1em;
-	width: 0px;
-}
-
-.password_strength {
-	float: right;
-	width: 100px;
-	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 	display: none;
 }
 

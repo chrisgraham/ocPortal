@@ -166,6 +166,7 @@ class Hook_addon_registry_core_comcode_pages
 			lorem_globalise(
 				do_lorem_template('COMCODE_PAGE_SCREEN',array(
 					'BEING_INCLUDED'=>false,
+					'IS_PANEL'=>false,
 					'SUBMITTER'=>placeholder_id(),
 					'TAGS'=>lorem_word_html(),
 					'WARNING_DETAILS'=>'',

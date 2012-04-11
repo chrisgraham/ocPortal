@@ -237,6 +237,20 @@ Tax and shipping calculations have intentionally been kept very simple, but prog
 
 Some custom profile fields are pre-installed to allow members to set their shipping address (instead of having to define it when they pay on the payment gateway). However by default these fields are not enabled, so you would need to edit them to enable 'Owner viewable' and 'Owner settable' for each field.
 
+[title="3"]Guests[/title]
+
+Guests may make purchases, if they have the right ocPortal permissions.
+
+Guest users have no member ID, so ocPortal will store the order against their 'session ID' instead. Session IDs work using cookies, secured against the user's IP address. The session can be lost in many circumstances:
+ - if the user has their browser set to empty cookies when closed
+ - after the session expiry time (the default for this is 1 hour, but it's a config option)
+ - if the user's IP address changes (router's can sometimes do this, or ISPs may expire them routinely)
+ - if the user switches web browsers or machines
+
+We can't tie the purchases to IP addresses because often thousands of users can be on the same IP address.
+
+If you think users may be making delayed purchases as guests, you may want to consider removing Guest permissions to the shopping module, to force logins.
+
 [title="2"]Currencies[/title]
 
 The currency the website works in is defined in the configuration. If you use PayPal you need to make sure your account can accept this currency and is not set up to allow people to choose which currency to pay in (as it stops ocPortal being able to verify the payment if they use this feature).

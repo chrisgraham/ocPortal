@@ -451,7 +451,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 	if ($filter=='') return '1=2';
 	if ($filter=='*') return '1=1';
 	if ($filter==strval(db_get_first_id()).'*') return '1=1';
-	
+
 	if (is_null($parent_spec__table_name))
 	{
 		if ((!is_null($parent_spec__parent_name)) || (!is_null($parent_field_name)) || (!is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -499,9 +499,10 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 				$out_join.=' JOIN '.$db->get_table_prefix().'catalogue_cat_treecache t'.strval($counter).' ON t'.strval($counter).'.cc_id='.$parent_field_name.' AND t'.strval($counter).'.cc_ancestor_id='.strval(intval($matches[1]));
 				$counter++;*/
 				// MySQL should be smart enough to not enumerate the 'IN' clause here, which would be bad - instead it can jump into the embedded WHERE clause on each test iteration
-				if (is_null($db->query_value('catalogue_categories','cc_parent_id',array('id'=>intval($matches[1])))))
+				$this_details=$db->query_select('catalogue_categories',array('cc_parent_id','c_name'),array('id'=>intval($matches[1])),'',1);
+				if (is_null($this_details[0]['cc_parent_id']))
 				{
-					$out_or.='1=1';
+					$out_or.=db_string_equal_to('c_name',$this_details[0]['c_name']);
 				} else
 				{
 					$out_or.=$parent_field_name.' IN (SELECT cc_id FROM '.$db->get_table_prefix().'catalogue_cat_treecache WHERE cc_ancestor_id='.strval(intval($matches[1])).')';
@@ -530,9 +531,10 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 			$out_or.=_ocfilter_eq($field_name,$token,$numeric_record_set_ids);
 		}
 	}
-	
+
 	if ($out_or=='') return ($out_and=='')?'0=1':$out_and;
 	if ($out_and=='') return ($out_or=='')?'0=1':$out_or;
+
 	return '('.$out_or.') AND ('.$out_and.')';
 }
 

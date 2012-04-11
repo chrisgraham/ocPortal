@@ -81,7 +81,9 @@
 	}
 	
 	.search_button {
-		float: left;
+		float: right;
+		margin-left: 10px;
+		margin-top: 10px;
 	}
 {+END}
 

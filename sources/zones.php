@@ -213,17 +213,20 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		return $zone;
 	}
 
-	if (($type=='modules') && (substr($module_name,0,6)=='admin_'))
+	if (get_value('allow_admin_in_other_zones')!=='1')
 	{
-		$zone='adminzone';
-		$MODULES_ZONES[$module_name]=$zone;
-		return $zone;
-	}
-	if (($type=='modules') && (substr($module_name,0,4)=='cms_'))
-	{
-		$zone='cms';
-		$MODULES_ZONES[$module_name]=$zone;
-		return $zone;
+		if (($type=='modules') && (substr($module_name,0,6)=='admin_'))
+		{
+			$zone='adminzone';
+			$MODULES_ZONES[$module_name]=$zone;
+			return $zone;
+		}
+		if (($type=='modules') && (substr($module_name,0,4)=='cms_'))
+		{
+			$zone='cms';
+			$MODULES_ZONES[$module_name]=$zone;
+			return $zone;
+		}
 	}
 
 	global $REDIRECT_CACHE;

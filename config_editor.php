@@ -237,7 +237,7 @@ vb_version*/
 				$notes='The name of the cookie used to hold passwords for each user.';
 				break;
 			case 'cookie_domain':
-				$notes='The domain name the cookies are tied to. Only URLs with this domain, or a subdomain there-of, may access the cookies. Use blank if running ocPortal off the DNS system (e.g. localhost), or if you want the active-domain to be used (i.e. autodetection). <strong>It\'s best not to change this setting once your community is active, as it can cause logging-out problems.</strong>';
+				$notes='The domain name the cookies are tied to. Only URLs with this domain, or a subdomain there-of, may access the cookies. You probably want to leave it blank. Use blank if running ocPortal off the DNS system (e.g. localhost), or if you want the active-domain to be used (i.e. autodetection). <strong>It\'s best not to change this setting once your community is active, as it can cause logging-out problems.</strong>';
 				break;
 			case 'cookie_path':
 				$notes='The URL path the cookeis are tied to. Only URLs branching from this may access the cookies. Either set it to the path portion of the base-URL, or a shortened path if cookies need to work with something elsewhere on the domain, or leave blank for auto-detection. <strong>It\'s best not to change this setting once your community is active, as it can cause logging-out problems.</strong>';

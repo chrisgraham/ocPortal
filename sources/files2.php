@@ -889,11 +889,10 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			if ($data_started)
 			{
 				$line=$chunk_buffer_unprocessed.$line;
+				$chunk_buffer_unprocessed='';
 
 				if ($chunked)
 				{
-					$first_fail_time=time();
-
 					$matches=array();
 					if (preg_match('#^([a-f\d]+)\r\n(.*)$#is',$line,$matches)!=0)
 					{

@@ -233,7 +233,7 @@ class Module_admin_config
 			add_config_option('FIXED_WIDTH','fixed_width','tick','return \'1\';','THEME','GENERAL');
 			add_config_option('SHOW_CONTENT_TAGGING','show_content_tagging','tick','return \'0\';','THEME','GENERAL');
 			add_config_option('SHOW_CONTENT_TAGGING_INLINE','show_content_tagging_inline','tick','return \'0\';','THEME','GENERAL');
-			add_config_option('SHOW_SCREEN_ACTIONS','show_screen_actions','tick','return \'0\';','THEME','GENERAL');
+			add_config_option('SHOW_SCREEN_ACTIONS','show_screen_actions','tick','return \'1\';','THEME','GENERAL');
 			add_config_option('PERSONAL_SUB_LINKS','ocp_show_personal_sub_links','tick','return \'1\';','BLOCKS','PERSONAL_BLOCK');
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<11))

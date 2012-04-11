@@ -1249,14 +1249,7 @@ function check_alien($old_files,$files,$dir,$rela='')
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if ($file=='comcode_custom') continue;
-			if ($file=='html_custom') continue;
-			if ($file=='css_custom') continue;
-			if ($file=='templates_custom') continue;
-			if ($file=='images_custom') continue;
-			if ($file=='lang_custom') continue;
-			if ($file=='data_custom') continue;
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES)) continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES | IGNORE_USER_CUSTOMISE)) continue;
 			if ($rela.$file=='data/images') continue;
 			if ($rela.$file=='data/areaedit/plugins/SpellChecker/aspell') continue;
 

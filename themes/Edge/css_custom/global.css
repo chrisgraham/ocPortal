@@ -2304,18 +2304,6 @@ th.meta_data_title {
 	width: 0px;
 }
 
-.password_strength {
-	float: right;
-	width: 100px;
-	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
-	display: none;
-}
-
-.password_strength_inner {
-	height: 1em;
-	width: 0px;
-}
-
 .input_colour, .input_list, .input_line, .input_integer,
 .input_author, .input_username, .input_colour, .input_email, .input_codename,
 .input_tick, .input_float, .input_text, .input_upload, .input_radio {
@@ -3910,6 +3898,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 #screen_actions div a {
 	padding-{!en_left}: 20px;
 	height: 1.7em;
+	display: inline-block;
 }
 
 {+START,IF,{$ADDON_INSTALLED,recommend}}

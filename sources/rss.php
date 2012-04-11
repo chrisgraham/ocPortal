@@ -86,7 +86,7 @@ class rss
 //				if (!is_null($data)) break;
 			}
 		}
-		
+
 		if (is_null($data))
 		{
 			$this->error=do_lang('RSS_XML_MISSING',$url).' ['.$GLOBALS['HTTP_MESSAGE'].']';
@@ -221,7 +221,6 @@ class rss
 	{
 		unset($parser);
 		unset($prefix);
-
 		if ((($uri=='http://purl.org/atom/ns#') || ($uri=='http://www.w3.org/2005/Atom')) && ($this->type!='RSS'))
 		{
 			array_push($this->namespace_stack,'ATOM');

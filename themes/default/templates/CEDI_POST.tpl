@@ -48,7 +48,7 @@
 	<tr>
 		<td class="cedi_post_expand_button">
 		</td>
-		<td class="ocf_post_buttons ocf_post1">
+		<td class="ocf_post1">
 			<div class="cedi_buttons">
 				{BUTTONS}
 			</div>

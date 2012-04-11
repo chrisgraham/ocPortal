@@ -683,7 +683,7 @@ function _fatal_exit($text,$return=false)
 		$trace=get_html_trace();
 	} else
 	{
-		$trace=paragraph(do_lang_tempcode('STACK_TRACE_DENIED_ERROR_ALERT'),'yrthrty4ttewdf');
+		$trace=paragraph(do_lang_tempcode('STACK_TRACE_DENIED_ERROR_NOTIFICATION'),'yrthrty4ttewdf');
 	}
 
 	$title=get_page_title('ERROR_OCCURRED');

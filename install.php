@@ -725,7 +725,7 @@ function step_4()
 	if (!array_key_exists('cookie_member_id',$INFO)) $INFO['cookie_member_id']='ocp_member_id';
 	if (!array_key_exists('cookie_member_hash',$INFO)) $INFO['cookie_member_hash']='ocp_member_hash';
 
-	$cookie_domain=(($domain=='localhost') || (strpos($domain,'.')===false))?'':('.'.$domain);
+	$cookie_domain='';//(($domain=='localhost') || (strpos($domain,'.')===false))?'':('.'.$domain);
 	$cookie_path='/';
 	$cookie_days='120';
 	$use_persistent=false;

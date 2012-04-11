@@ -5363,7 +5363,7 @@ function uploadSuccess(ob,file,data) {
 	progress.setComplete();
 	progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
 
-	if (data.response=='') return ''; // NOT success, happens in plupload when clicking away from document (i.e. implicit cancel)
+	if (data.response=='') return; // NOT success, happens in plupload when clicking away from document (i.e. implicit cancel)
 
 	var decodedData = eval('(' + data.response + ')');
 

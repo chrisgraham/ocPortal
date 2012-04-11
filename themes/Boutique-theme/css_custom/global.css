@@ -744,6 +744,11 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 	background-color: #e9c6d3 !important; /* {$,hover_bg, 93% (mm_c_tab sat_to 15) + 7% !W/B} */
 }
 
+.overlay.medborder {
+	padding: 5px;
+	background-color: #f8edf1;
+}
+
 .results_browser a,
 .results_browser span,
 .results_launcher a,
@@ -1758,18 +1763,6 @@ th.meta_data_title {
 	float: right;
 	width: 100px;
 	border: 1px solid #c3829c; /* {$,wizard, 100% medborder.border} */
-	display: none;
-}
-
-.password_strength_inner {
-	height: 1em;
-	width: 0px;
-}
-
-.password_strength {
-	float: right;
-	width: 100px;
-	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 	display: none;
 }
 
@@ -3160,9 +3153,14 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 
 #screen_actions div {
 	margin-{!en_right}: 20px;
-	padding-{!en_left}: 20px;
 	background-repeat: no-repeat;
 	float: {!en_left};
+}
+
+#screen_actions div a {
+	padding-{!en_left}: 20px;
+	height: 1.7em;
+	display: inline-block;
 }
 
 #screen_actions .print {

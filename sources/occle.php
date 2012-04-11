@@ -1496,8 +1496,9 @@ class virtual_fs
 	function _pwd_to_string($pwd=NULL)
 	{
 		if (is_null($pwd)) $pwd=$this->pwd;
-		$output='/';
-		foreach ($pwd as $section) $output.=$section.'/';
+		$output='';
+		foreach ($pwd as $section) $output.='/'.$section;
+		if ($this->_is_dir($pwd)) $output.='/';
 		return $output;
 	}
 

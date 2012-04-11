@@ -1,4 +1,4 @@
-{$BROWSER,ie,.standardbox_classic \{ overflow-x: hidden; \} }
+{$BROWSER,ie6|ie7,.standardbox_classic \{ overflow-x: hidden; \} }
 
 .float_surrounder, .float_surrounder_precise {
 	overflow: {$BROWSER,ie,{$BROWSER,ie8+,hidden,auto},hidden}; {$,auto causes scroll glitches in Firefox and hidden won't work right in IE }

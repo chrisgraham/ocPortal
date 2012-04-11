@@ -29,11 +29,6 @@
 							<span class="price">{!PRICE} <span{$?,{$VALUE_OPTION,html5}, itemprop="priceCurrency"}>{$CURRENCY_SYMBOL}</span><span{$?,{$VALUE_OPTION,html5}, itemprop="price"}>{$FLOAT_FORMAT,{FIELD_2}}</span>{$,Product price}</span>
 						</div>
 					{+END}
-					{+START,IF_NON_EMPTY,{$TRIM,{RATING}}}
-						<div class="rating">
-							<span class="price">{!RATING} {RATING}{$,Product rating}</span>
-						</div>
-					{+END}
 				</div>
 			</div>
 		</div>

@@ -947,7 +947,7 @@ class Module_catalogues
 		if ($rep_image_str!='')
 		{
 			$GLOBALS['META_DATA']+=array(
-				'image'=>(url_is_local($rep_image)?(get_custom_base_url().'/'):'').$rep_image_str,
+				'image'=>(url_is_local($rep_image_str)?(get_custom_base_url().'/'):'').$rep_image_str,
 			);
 		}
 

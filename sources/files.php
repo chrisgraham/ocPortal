@@ -36,6 +36,9 @@ function init__files()
 	define('IGNORE_CUSTOM_ZONES',32);
 	define('IGNORE_THEMES',64);
 	define('IGNORE_CUSTOM_DIR_CONTENTS_CASUAL_OVERRIDE',128);
+	define('IGNORE_USER_CUSTOMISE',256);
+	define('IGNORE_NONBUNDLED_SCATTERED',512);
+	define('IGNORE_BUNDLED_VOLATILE',1024);
 }
 
 /**
@@ -172,10 +175,13 @@ function better_parse_ini_file($filename,$file=NULL)
  *
  * @param  string			File path
  * @param  integer		Bitmask of extra stuff to ignore (see IGNORE_* constants)
+ * @param  integer		Set this to 0 if you don't want the default IGNORE_* constants to carry through
  * @return boolean		Whether it should be ignored
  */
-function should_ignore_file($filepath,$bitmask=0)
+function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 {
+	$bitmask+=$bitmask_defaults;
+
 	// Normalise
 	$filepath=strtolower($filepath);
 	if (strpos($filepath,'/')!==false)
@@ -229,9 +235,7 @@ function should_ignore_file($filepath,$bitmask=0)
 		'500.shtml'=>'',
 		'404.shtml'=>'',
 		'403.shtml'=>'',
-		'theme.ini'=>'themes/[^/]*',
 		'old'=>'.*',
-		'uploads'=>'',
 		'gibb'=>'.*',
 		'gibberish'=>'.*',
 		'.gitignore'=>'',
@@ -240,22 +244,47 @@ function should_ignore_file($filepath,$bitmask=0)
 		'subs.inc'=>'',
 		'docs'=>'data/images',
 
-		// Non-bundled addon stuff that we can't detect automatically
-		'_tests'=>'',
-		'killjunk.sh'=>'',
-		'transcoder'=>'',
-		'facebook_connect.php'=>'',
-
-		// Bundled stuff that is not in *_custom dir yet is volatile
-		'map.ini'=>'themes',
-		'info.php'=>'',
-		'ocp_sitemap.xml'=>'',
+		'theme.ini'=>'themes/[^/]*',
+		'uploads'=>'',
 	);
+	if (($bitmask & IGNORE_NONBUNDLED_SCATTERED)!=0)
+	{
+		$ignore_filenames+=array(
+			// Non-bundled addon stuff that we can't detect automatically
+			'_tests'=>'',
+			'killjunk.sh'=>'',
+			'transcoder'=>'',
+			'facebook_connect.php'=>'',
+			'ocworld'=>'',
+		);
+	}
+	if (($bitmask & IGNORE_BUNDLED_VOLATILE)!=0)
+	{
+		$ignore_filenames+=array(
+			// Bundled stuff that is not in *_custom dir yet is volatile
+			'map.ini'=>'themes',
+			'info.php'=>'',
+			'ocp_sitemap.xml'=>'',
+		);
+	}
 	if (($bitmask & IGNORE_ACCESS_CONTROLLERS)!=0)
 	{
 		$ignore_filenames+=array(
 			'.htaccess'=>'.*',
 			'index.html'=>'.*',
+		);
+	}
+	if (($bitmask & IGNORE_USER_CUSTOMISE)!=0) // Ignores directories that user override files go in
+	{
+		$ignore_filenames+=array(
+			'comcode_custom'=>'.*',
+			'html_custom'=>'.*',
+			'css_custom'=>'.*',
+			'templates_custom'=>'.*',
+			'images_custom'=>'.*',
+			'lang_custom'=>'.*',
+			'data_custom'=>'.*',
+			'text_custom'=>'.*',
 		);
 	}
 
@@ -290,14 +319,14 @@ function should_ignore_file($filepath,$bitmask=0)
 		'\..*\.(png|gif|jpeg|jpg)'=>'.*', // Image meta data file, e.g. ".example.png"
 		'\_vti\_.*'=>'.*', // Frontpage
 	);
-	if (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS)!=0)
+	if (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS)!=0) // Ignore all override directories, for both users and addons
 	{
 		$ignore_filename_patterns+=array(
 			'.*\_custom'=>'.*',
 			'.*'=>'.*\_custom(/.*)?',
 		);
 	}
-	elseif (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS_CASUAL_OVERRIDE)!=0)
+	elseif (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS_CASUAL_OVERRIDE)!=0) // Slightly different approach to IGNORE_USER_CUSTOMISE, useful when talking more about original files that may have been overridden
 	{
 		$ignore_filename_patterns+=array(
 			'(comcode|html|lang|templates|images)\_custom'=>'.*',

@@ -56,7 +56,9 @@
 
 <br />
 
-{MAIN}
+<div class="expansive_section">
+	{MAIN}
+</div>
 
 <br />
 

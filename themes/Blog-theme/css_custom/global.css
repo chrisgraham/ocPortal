@@ -756,6 +756,11 @@ h3.standardbox_title_classic {
 	padding: 4px;
 }
 
+.overlay.medborder {
+	padding: 5px;
+	background-color: #c5c5e8;
+}
+
 /* medborder is similar to lightborder; in fact, there isn't any rule as to when to use each: it is just artistic */
 .medborder,
 .results_browser a,
@@ -1801,18 +1806,6 @@ th.meta_data_title {
 	float: right;
 	width: 100px;
 	border: 1px solid #203030; /* {$,wizard, 100% medborder.border} */
-	display: none;
-}
-
-.password_strength_inner {
-	height: 1em;
-	width: 0px;
-}
-
-.password_strength {
-	float: right;
-	width: 100px;
-	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 	display: none;
 }
 
@@ -3214,9 +3207,14 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 
 #screen_actions div {
 	margin-{!en_right}: 20px;
-	padding-{!en_left}: 20px;
 	background-repeat: no-repeat;
 	float: {!en_left};
+}
+
+#screen_actions div a {
+	padding-{!en_left}: 20px;
+	height: 1.7em;
+	display: inline-block;
 }
 
 #screen_actions .print {

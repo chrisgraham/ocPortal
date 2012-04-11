@@ -24,16 +24,17 @@ class Hook_awards_catalogue_entry
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @param  ?ID_TEXT	Catalogue we'll be using (NULL: unknown).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($catalogue_name=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
 		$info['table']='catalogue_entries';
 		$info['date_field']='ce_add_date';
 		$info['id_field']='id';
-		$info['add_url']=(has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?build_url(array('page'=>'cms_catalogues','type'=>'add_entry'),get_module_zone('cms_catalogues')):new ocp_tempcode();
+		$info['add_url']=(has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?build_url(array('page'=>'cms_catalogues','type'=>'add_entry','catalogue_name'=>$catalogue_name),get_module_zone('cms_catalogues')):new ocp_tempcode();
 		$info['category_field']=array('c_name','cc_id');
 		$info['category_type']=array('catalogues_catalogue','catalogues_category');
 		$info['parent_spec__table_name']='catalogue_categories';

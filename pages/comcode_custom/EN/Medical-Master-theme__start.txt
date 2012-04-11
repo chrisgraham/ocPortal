@@ -20,7 +20,7 @@
 			[block="1" display_type="1"]main_cc_embed[/block]
 		[/surround]
 		[surround="main-content2"]
-			[block="catalogue_entry" filter="6*" mode="recent" max="2"]main_multi_content[/block]
+			[block="catalogue_entry" filter="6*" filter_b="products" mode="recent" max="2"]main_multi_content[/block]
 		[/surround]
 	[/surround]
 	[surround="col2"]

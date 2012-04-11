@@ -469,6 +469,18 @@ function rebuild_catalogue_cat_treecache()
 		foreach ($rows as $row)
 		{
 			store_in_catalogue_cat_treecache($row['id'],$row['cc_parent_id'],false);
+		}
+
+		$start+=$max;
+	}
+	while (count($rows)!=0);
+	$start=0;
+	do
+	{
+		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_parent_id'),NULL,'',$max,$start);
+
+		foreach ($rows as $row)
+		{
 			calculate_category_child_count_cache($row['id'],false);
 		}
 

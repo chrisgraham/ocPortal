@@ -3895,6 +3895,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 #screen_actions div a {
 	padding-{!en_left}: 20px;
 	height: 1.7em;
+	display: inline-block;
 }
 
 {+START,IF,{$ADDON_INSTALLED,recommend}}

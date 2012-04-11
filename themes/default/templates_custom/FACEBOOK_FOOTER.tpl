@@ -36,7 +36,7 @@
 								window.location='{$SELF_URL;,1}';
 							} else
 							{
-								window.location.reload();
+								window.top.location.reload();
 							}
 						},1000);
 					{+END}
