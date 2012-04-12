@@ -119,6 +119,8 @@ class Hook_addon_registry_themewizard
 	*/
 	function tpl_preview__administrative__themewizard_2_preview()
 	{
+		require_lang('themes');
+
 		$content = do_lorem_template('THEMEWIZARD_2_PREVIEW');
 
 	   return array(
@@ -137,6 +139,8 @@ class Hook_addon_registry_themewizard
 	*/
 	function tpl_preview__administrative__themewizard_2_screen()
 	{
+		require_lang('themes');
+
 	   return array(
 		   lorem_globalise(
 			   do_lorem_template('THEMEWIZARD_2_SCREEN',array(
@@ -166,6 +170,8 @@ class Hook_addon_registry_themewizard
 	*/
 	function tpl_preview__administrative__logowizard_2_screen()
 	{
+		require_lang('themes');
+
 		$preview = do_lorem_template('LOGOWIZARD_2_SCREEN',array('NAME'=>lorem_phrase(),'TITLE'=>lorem_phrase(),'THEME'=>lorem_phrase()));
 
 	   return array(

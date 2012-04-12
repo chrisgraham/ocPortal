@@ -575,6 +575,8 @@ function notifications_setting($notification_code,$notification_category,$member
 		if (is_null($test))
 		{
 			$ob=_get_notification_ob_for_code($notification_code);
+			if (is_null($ob)) return A_NA; // Can happen in template test sets, as this can be called up by a symbol
+			//if (is_null($ob)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 			$test=$ob->get_initial_setting($notification_code,$notification_category);
 		}
 	}
@@ -973,7 +975,7 @@ class Hook_Notification__Staff extends Hook_Notification
 	 */
 	function list_members_who_have_enabled($notification_code,$category=NULL,$to_member_ids=NULL,$start=0,$max=300)
 	{
-		return $this->_all_staff_who_have_enabled($notification_code,$category,$to_member_ids);
+		return $this->_all_staff_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
 	}
 
 	/**
@@ -1005,21 +1007,23 @@ class Hook_Notification__Staff extends Hook_Notification
 
 	/**
 	 * Get a list of staff members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
-	 * (No pagination supported, as assumed there are only a small set of members here.)
 	 *
 	 * @param  ID_TEXT		Notification code
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
 	 * @param  ?array			List of member IDs we are restricting to (NULL: no restriction). This effectively works as a intersection set operator against those who have enabled.
+	 * @param  integer		Start position (for pagination)
+	 * @param  integer		Maximum (for pagination)
 	 * @return array			A pair: Map of members to their notification setting, and whether there may be more
 	 */
-	function _all_staff_who_have_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids)
+	function _all_staff_who_have_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
 	{
 		$initial_setting=$this->get_initial_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category);
 
 		$db=(substr($only_if_enabled_on__notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
 		$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),collapse_1d_complexity('group_id',$db->query_select('gsp',array('group_id'),array('specific_permission'=>'may_enable_staff_notifications'))));
-		$rows=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups);
+		$rows=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,$max,$start);
+		$possibly_has_more=(count($rows)>=$max);
 		if (!is_null($to_member_ids))
 		{
 			$new_rows=array();
@@ -1039,8 +1043,6 @@ class Hook_Notification__Staff extends Hook_Notification
 			if ($test!=A_NA)
 				$new_rows[$GLOBALS['FORUM_DRIVER']->pname_id($row)]=$test;
 		}
-
-		$possibly_has_more=false;
 
 		return array($new_rows,$possibly_has_more);
 	}

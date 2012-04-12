@@ -41,12 +41,12 @@ function content_validated($content_type,$content_id)
 function send_content_validated_notification($content_type,$content_id)
 {
 	require_code('content');
-	list($content_title,$submitter_id,,,$content_url)=content_get_details($content_type,$content_id);
+	list($content_title,$submitter_id,,,,$content_url_safe)=content_get_details($content_type,$content_id);
 
 	require_code('notifications');
 	require_lang('unvalidated');
 	$subject=do_lang('CONTENT_VALIDATED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$content_title);
-	$mail=do_lang('CONTENT_VALIDATED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($content_title),array($content_url->evaluate()));
+	$mail=do_lang('CONTENT_VALIDATED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($content_title),array($content_url_safe->evaluate()));
 	dispatch_notification('content_validated',NULL,$subject,$mail,array($submitter_id));
 }
 

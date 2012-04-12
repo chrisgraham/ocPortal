@@ -18,3 +18,5 @@ html_custom
 spelling
 data_custom/modules/chat/*.dat
 themes/default/images_custom/*logo.png
+screens_tested
+html_dump

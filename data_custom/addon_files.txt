@@ -2281,8 +2281,8 @@ theme_debug
 
 cleanup_repository
 ------------------
- - find_files_in_uninstall_addons.php
- - remove_junk.sh
+ - data_custom/find_files_in_uninstall_addons.php
+ - killjunk.sh
 
 booking
 -------

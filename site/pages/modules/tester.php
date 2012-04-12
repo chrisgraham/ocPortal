@@ -367,7 +367,7 @@ class Module_tester
 
 		$groups=array_unique(array_merge($tester_groups,$admin_groups,$moderator_groups));
 
-		$members=$GLOBALS['FORUM_DRIVER']->member_group_query($groups);
+		$members=$GLOBALS['FORUM_DRIVER']->member_group_query($groups,2000);
 
 		$list=form_input_list_entry('-1',is_null($it),do_lang_tempcode('NA_EM'));
 		foreach ($members as $member=>$details)

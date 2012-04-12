@@ -35,7 +35,8 @@ class Hook_checklist_blog
 		require_lang('news');
 
 		$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
-		$staff=$GLOBALS['FORUM_DRIVER']->member_group_query(array_keys($admin_groups));
+		$staff=$GLOBALS['FORUM_DRIVER']->member_group_query(array_keys($admin_groups),100);
+		if (count($staff)>=100) return array();
 		$or_list='';
 		foreach (array_keys($staff) as $staff_id)
 		{

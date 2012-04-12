@@ -128,7 +128,9 @@ class Module_admin_staff
 		if (get_option('is_on_staff_filter')=='0') $text=do_lang_tempcode('STAFF_FILTER_OFF'); else $text=do_lang_tempcode('STAFF_FILTER_ON');
 	
 		$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
-		$staff=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups);
+		$staff=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,400);
+		if (count($staff)>=400)
+			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$available=new ocp_tempcode();
 		require_code('form_templates');
 		foreach ($staff as $row_staff)

@@ -338,6 +338,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 		fclose($fp);
 	} else
 	{
-		attach_message(intelligent_write_error_inline($filename),'warn');
+		if (function_exists('attach_message'))
+			attach_message(intelligent_write_error_inline($filename),'warn');
 	}
 }

@@ -793,8 +793,8 @@ class Hook_addon_registry_ocf_forum
 		$filters=do_lorem_template('OCF_PT_FILTERS',array('FILTERS'=>array(),'RESET_URL'=>placeholder_url()));
 
 		$results_browser = placeholder_result_browser();
-		$topic_wrapper = do_lorem_template('OCF_FORUM_TOPIC_WRAPPER',array('MAX'=>lorem_phrase(),'ORDER'=>lorem_phrase(),'MAY_CHANGE_MAX'=>lorem_phrase(),'TREE'=>lorem_phrase(),'BUTTONS'=>$buttons,'STARTER_TITLE'=>lorem_phrase(),'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>placeholder_options(),'ACTION_URL'=>placeholder_url(),'TOPICS'=>$topics,'FORUM_NAME'=>lorem_word()));
-		$content = do_lorem_template('OCF_FORUM',array('FILTERS'=>$filters,'FORUM_NAME'=>lorem_word_html(),'STARTER_TITLE'=>lorem_phrase(),'BUTTONS'=>$buttons,'TOPIC_WRAPPER'=>$topic_wrapper,'CATEGORIES'=>$categories,'ID'=>placeholder_id(),'DESCRIPTION'=>lorem_phrase()));
+		$topic_wrapper = do_lorem_template('OCF_FORUM_TOPIC_WRAPPER',array('TYPE'=>'misc','MAX'=>lorem_phrase(),'ORDER'=>lorem_phrase(),'MAY_CHANGE_MAX'=>lorem_phrase(),'TREE'=>lorem_phrase(),'BUTTONS'=>$buttons,'STARTER_TITLE'=>lorem_phrase(),'RESULTS_BROWSER'=>$results_browser,'MODERATOR_ACTIONS'=>placeholder_options(),'ACTION_URL'=>placeholder_url(),'TOPICS'=>$topics,'FORUM_NAME'=>lorem_word()));
+		$content = do_lorem_template('OCF_FORUM',array('TREE'=>'','FILTERS'=>$filters,'FORUM_NAME'=>lorem_word_html(),'STARTER_TITLE'=>lorem_phrase(),'BUTTONS'=>$buttons,'TOPIC_WRAPPER'=>$topic_wrapper,'CATEGORIES'=>$categories,'ID'=>placeholder_id(),'DESCRIPTION'=>lorem_phrase()));
 
 		return array(
 			lorem_globalise(

@@ -45,6 +45,8 @@ class Hook_cron_classifieds
 				if ($entry['ce_last_moved']<$time) // We have stolen use of the standard ocPortal "ce_last_moved" property as a "next move" property
 				{
 					$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_validated'=>0),array('id'=>$entry['id']),'',1);
+					require_code('catalogues2');
+					calculate_category_child_count_cache($entry['cc_id']);
 				} elseif (($entry['ce_last_moved']<$time+60*60*24) && ($entry['ce_last_moved']>$time+60*60*23)) /* one hour time window; assumes CRON runs at least once per hour */
 				{
 					// Expiring in 24 hours

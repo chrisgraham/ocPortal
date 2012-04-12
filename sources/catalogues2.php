@@ -537,7 +537,7 @@ function calculate_category_child_count_cache($cat_id,$recursive_updates=true)
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$cat_id));
 
 	$num_rec_children=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache','COUNT(*)',array('cc_ancestor_id'=>$cat_id))-1;
-	$num_rec_entries=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache t JOIN '.get_table_prefix().'catalogue_entries e ON e.cc_id=t.cc_id','COUNT(*)',array('t.cc_ancestor_id'=>$cat_id,'c_name'=>$catalogue_name/*important, else custom field cats could be included*/));
+	$num_rec_entries=$GLOBALS['SITE_DB']->query_value('catalogue_cat_treecache t JOIN '.get_table_prefix().'catalogue_entries e ON e.cc_id=t.cc_id','COUNT(*)',array('ce_validated'=>1,'t.cc_ancestor_id'=>$cat_id,'c_name'=>$catalogue_name/*important, else custom field cats could be included*/));
 
 	$GLOBALS['SITE_DB']->query_insert('catalogue_childcountcache',array(
 		'cc_id'=>$cat_id,
@@ -772,16 +772,16 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 		if ($sup_table_name=='float')
 		{
-			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>((is_null($val)) || ($val==''))?NULL:floatval($val));
+			$smap=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>((is_null($val)) || ($val==''))?NULL:floatval($val));
 		}
 		elseif ($sup_table_name=='integer')
 		{
-			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>((is_null($val)) || ($val==''))?NULL:intval($val));
+			$smap=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>((is_null($val)) || ($val==''))?NULL:intval($val));
 		} else
 		{
-			$map=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>$val);
+			$smap=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>$val);
 		}
-		$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$sup_table_name,$map);
+		$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$sup_table_name,$smap);
 	}
 
 	require_code('seo2');
@@ -837,7 +837,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	if (!addon_installed('unvalidated')) $validated=1;
 
 	require_code('submit');
-	$just_validated=(!content_validated('catalogue_entry',strval($id))) && ($validated==1);
+	$was_validated=content_validated('catalogue_entry',strval($id));
+	$just_validated=(!$was_validated) && ($validated==1);
 	if ($just_validated)
 	{
 		send_content_validated_notification('catalogue_entry',strval($id));
@@ -879,16 +880,16 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 		{
 			if ($sup_table_name=='float')
 			{
-				$map=array('cv_value'=>((is_null($val)) || ($val==''))?NULL:floatval($val));
+				$smap=array('cv_value'=>((is_null($val)) || ($val==''))?NULL:floatval($val));
 			}
 			elseif ($sup_table_name=='integer')
 			{
-				$map=array('cv_value'=>((is_null($val)) || ($val==''))?NULL:intval($val));
+				$smap=array('cv_value'=>((is_null($val)) || ($val==''))?NULL:intval($val));
 			} else
 			{
-				$map=array('cv_value'=>$val);
+				$smap=array('cv_value'=>$val);
 			}
-			$GLOBALS['SITE_DB']->query_update('catalogue_efv_'.$sup_table_name,$map,array('cf_id'=>$field_id,'ce_id'=>$id),'',1);
+			$GLOBALS['SITE_DB']->query_update('catalogue_efv_'.$sup_table_name,$smap,array('cf_id'=>$field_id,'ce_id'=>$id),'',1);
 		}
 	}
 
@@ -900,10 +901,10 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 
 	$self_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id),get_module_zone('catalogues'),NULL,false,false,true);
 
-	if ($category_id!=$old_category_id)
+	if (($category_id!=$old_category_id) || ($was_validated!=($validated==1)))
 	{
 		calculate_category_child_count_cache($category_id);
-		calculate_category_child_count_cache($old_category_id);
+		if ($category_id!=$old_category_id) calculate_category_child_count_cache($old_category_id);
 	}
 
 	decache('main_cc_embed');

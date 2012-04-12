@@ -98,7 +98,9 @@ class Module_staff
 		$title=get_page_title('STAFF_TITLE',true,array(escape_html(get_site_name())));
 
 		$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
-		$rows=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups);
+		$rows=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,400);
+		if (count($rows)>=400)
+			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
 		$pre=do_lang_tempcode('PRE_STAFF');
 

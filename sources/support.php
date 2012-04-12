@@ -1096,6 +1096,7 @@ function log_it($type,$a=NULL,$b=NULL)
  */
 function syndicate_described_activity($a_language_string_code='',$a_label_1='',$a_label_2='',$a_label_3='',$a_pagelink_1='',$a_pagelink_2='',$a_pagelink_3='',$a_addon='',$a_is_public=1,$a_member_id=NULL,$sitewide_too=false,$also_involving=NULL)
 {
+	if (running_script('install')) return NULL;
 	$hooks=find_all_hooks('systems','activities');
 	$ret=mixed();
 	foreach (array_keys($hooks) as $hook) // We only expect one actually

@@ -154,6 +154,7 @@ class Hook_addon_registry_syndication
 			lorem_globalise(
 				do_lorem_template('RSS_WRAPPER',array(
 					'MODE'=>'rss',
+					'MODE_NICE'=>lorem_word(),
 					'COPYRIGHT'=>lorem_phrase(),
 					'ABOUT'=>lorem_paragraph(),
 					'RSS_CLOUD'=>$cloud,
@@ -192,6 +193,7 @@ class Hook_addon_registry_syndication
 			lorem_globalise(
 				do_lorem_template('ATOM_WRAPPER',array(
 					'MODE'=>lorem_word(),
+					'MODE_NICE'=>lorem_word(),
 					'FILTER'=>lorem_word_2(),
 					'DATE'=>placeholder_time(),
 					'LOGO_URL'=>placeholder_image_url(),

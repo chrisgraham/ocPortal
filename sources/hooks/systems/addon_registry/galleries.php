@@ -651,7 +651,7 @@ class Hook_addon_registry_galleries
 			lorem_globalise(
 				do_lorem_template('BLOCK_MAIN_GALLERY_EMBED',array(
 					'TITLE'=>lorem_phrase(),
-					'CAT'=>lorem_phrase(),
+					'CAT'=>placeholder_id(),
 					'IMAGES'=>$entries,
 					'MAX'=>lorem_phrase(),
 					'ZONE'=>lorem_phrase(),
@@ -748,7 +748,7 @@ class Hook_addon_registry_galleries
 					'MAIN'=>lorem_phrase(),
 					'DESCRIPTION'=>lorem_paragraph_html(),
 					'FILE_SIZE'=>placeholder_filesize(),
-					'CAT'=>lorem_phrase(),
+					'CAT'=>placeholder_id(),
 					'RATING_DETAILS'=>'',
 					'THUMB_URL'=>placeholder_image_url(),
 					'FULL_URL'=>placeholder_url(),
@@ -809,7 +809,7 @@ class Hook_addon_registry_galleries
 					'MEMBER_ID'=>placeholder_id(),
 					'VIDEO_URL'=>placeholder_url(),
 					'MAY_DOWNLOAD'=>lorem_phrase(),
-					'CAT'=>lorem_phrase(),
+					'CAT'=>placeholder_id(),
 					'FIRST_ENTRY_ID'=>placeholder_id(),
 					'SORTING'=>lorem_phrase(),
 				)
@@ -831,7 +831,7 @@ class Hook_addon_registry_galleries
 					'DESCRIPTION'=>lorem_paragraph_html(),
 					'FILE_SIZE'=>placeholder_filesize(),
 					'RATING_DETAILS'=>'',
-					'CAT'=>lorem_phrase(),
+					'CAT'=>placeholder_id(),
 					'THUMB_URL'=>placeholder_image_url(),
 					'FULL_URL'=>placeholder_url(),
 					'ID'=>placeholder_id(),
@@ -887,7 +887,7 @@ class Hook_addon_registry_galleries
 					'MEMBER_ID'=>placeholder_id(),
 					'VIDEO_URL'=>placeholder_url(),
 					'MAY_DOWNLOAD'=>lorem_phrase(),
-					'CAT'=>lorem_phrase(),
+					'CAT'=>placeholder_id(),
 					'FIRST_ENTRY_ID'=>placeholder_id(),
 					'SORTING'=>lorem_phrase(),
 						)

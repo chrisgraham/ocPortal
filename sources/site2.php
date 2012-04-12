@@ -276,7 +276,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 	if (is_null($new_comcode_page_row['p_submitter']))
 	{
 		$as_admin=true;
-		$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups());
+		$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),1);
 		if (count($members)!=0)
 		{
 			$new_comcode_page_row['p_submitter']=$GLOBALS['FORUM_DRIVER']->pname_id($members[key($members)]);
@@ -369,7 +369,7 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 	if (is_null($new_comcode_page_row['p_submitter']))
 	{
 		$as_admin=true;
-		$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups());
+		$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),1);
 		if (count($members)!=0)
 		{
 			$new_comcode_page_row['p_submitter']=$GLOBALS['FORUM_DRIVER']->pname_id($members[key($members)]);

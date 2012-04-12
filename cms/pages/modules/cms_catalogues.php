@@ -569,7 +569,8 @@ class Module_cms_catalogues extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name)) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))))
 			{
-				$title=array_shift($map);
+				$map_copy=$map;
+				$title=array_shift($map_copy);
 				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
 				syndicate_described_activity('catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
 			}
@@ -607,7 +608,8 @@ class Module_cms_catalogues extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name)) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))))
 			{
-				$title=array_shift($map);
+				$map_copy=$map;
+				$title=array_shift($map_copy);
 				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
 				syndicate_described_activity('catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues');
 			}

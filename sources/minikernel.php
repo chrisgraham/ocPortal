@@ -323,13 +323,11 @@ function in_safe_mode()
  * @param  string				Script filename (canonically we want NO .php file type suffix)
  * @return boolean			Whether the script is running
  */
-function running_script($script)
+function running_script($is_this_running)
 {
-	if (substr($script,-4)=='.php') $script=substr($script,0,strlen($script)-4);
-	$s_prefix='/'.$script;
-	$url=preg_replace('#[/\w\.\-]*/'.preg_quote($script).'\.php#','/'.$script.'.php',ocp_srv('REQUEST_URI'));
-	if (substr($url,0,strlen($s_prefix))==$s_prefix) return true;
-	return false;
+	if (substr($is_this_running,-4)!='.php') $is_this_running.='.php';
+	$stripped_current_url=preg_replace('#^.*/#','',function_exists('ocp_srv')?ocp_srv('PHP_SELF'):$_SERVER['PHP_SELF']);
+	return (substr($stripped_current_url,0,strlen($is_this_running))==$is_this_running);
 }
 
 /**

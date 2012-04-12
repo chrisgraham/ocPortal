@@ -57,15 +57,15 @@ class Hook_paypal
 		$ipn_url=$this->get_ipn_url();
 
       $user_details=array();
-		if(!is_guest())
+		if (!is_guest())
 		{
-				$user_details['first_name']	=	get_ocp_cpf('firstname');
-				$user_details['last_name']		=	get_ocp_cpf('lastname');
-				$user_details['address1']		=	get_ocp_cpf('building_name_or_number');
-				$user_details['city']			=	get_ocp_cpf('city');
-				$user_details['state']			=	get_ocp_cpf('state');
-				$user_details['zip']				=	get_ocp_cpf('post_code');
-				$user_details['country']		=	get_ocp_cpf('country');
+			$user_details['first_name']=get_ocp_cpf('firstname');
+			$user_details['last_name']=get_ocp_cpf('lastname');
+			$user_details['address1']=get_ocp_cpf('building_name_or_number');
+			$user_details['city']=get_ocp_cpf('city');
+			$user_details['state']=get_ocp_cpf('state');
+			$user_details['zip']=get_ocp_cpf('post_code');
+			$user_details['country']=get_ocp_cpf('country');
 		}
 
 		return do_template('ECOM_BUTTON_VIA_PAYPAL',array('_GUID'=>'b0d48992ed17325f5e2330bf90c85762','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'MEMBER_ADDRESS'=>$user_details));
@@ -139,18 +139,18 @@ class Hook_paypal
 		}
 
 		// assign posted variables to local variables
-		$purchase_id	=	post_param_integer('custom','-1');
+		$purchase_id=post_param_integer('custom','-1');
 
-		$txn_type	=	post_param('txn_type',NULL);
+		$txn_type=post_param('txn_type',NULL);
 
-		if($txn_type=='cart')
+		if ($txn_type=='cart')
 		{	
 			require_lang('shopping');
-			$item_name	= 	do_lang('CART_ORDER',$purchase_id);
+			$item_name=do_lang('CART_ORDER',$purchase_id);
 		}
 		else
 		{
-			$item_name	=	(substr(post_param('txn_type',''),0,6)=='subscr')?'':post_param('item_name','');
+			$item_name=(substr(post_param('txn_type',''),0,6)=='subscr')?'':post_param('item_name','');
 		}
 
 		$payment_status=post_param('payment_status',''); // May be blank for subscription
@@ -182,7 +182,7 @@ class Hook_paypal
 			if (!(strcmp($res,'VERIFIED')==0))
 			{
 				if (post_param('txn_type','')=='send_money') exit('Unexpected'); // PayPal has been seen to mess up on send_money transactions, making the IPN unverifiable
-				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post));
+				my_exit(do_lang('IPN_UNVERIFIED').' - '.$res.' - '.flatten_slashed_array($pure_post),strpos($res,'<html')!==false);
 			}
 		}
 
@@ -220,7 +220,7 @@ class Hook_paypal
 			if ($receiver_email!=$this->_get_payment_address()) my_exit(do_lang('IPN_EMAIL_ERROR'));
 		}
 
-		if(addon_installed('shopping'))
+		if (addon_installed('shopping'))
 		{
 			$this->store_shipping_address($purchase_id);
 		}
@@ -238,23 +238,23 @@ class Hook_paypal
 	 */
 	function make_cart_transaction_button($items,$currency,$order_id)
 	{
-		$payment_address		=	$this->_get_payment_address();
+		$payment_address=$this->_get_payment_address();
 
-		$ipn_url					=	$this->get_ipn_url();
+		$ipn_url=$this->get_ipn_url();
 
-		$notification_text	=	do_lang_tempcode('CHECKOUT_NOTIFICATION_TEXT',$order_id);
+		$notification_text=do_lang_tempcode('CHECKOUT_NOTIFICATION_TEXT',$order_id);
 
-		$user_details			=	array();
+		$user_details=array();
 
-		if(!is_guest())
+		if (!is_guest())
 		{
-			$user_details['first_name']	=	get_ocp_cpf('firstname');
-			$user_details['last_name']		=	get_ocp_cpf('lastname');
-			$user_details['address1']		=	get_ocp_cpf('building_name_or_number');
-			$user_details['city']			=	get_ocp_cpf('city');
-			$user_details['state']			=	get_ocp_cpf('state');
-			$user_details['zip']				=	get_ocp_cpf('post_code');
-			$user_details['country']		=	get_ocp_cpf('country');
+			$user_details['first_name']=get_ocp_cpf('firstname');
+			$user_details['last_name']=get_ocp_cpf('lastname');
+			$user_details['address1']=get_ocp_cpf('building_name_or_number');
+			$user_details['city']=get_ocp_cpf('city');
+			$user_details['state']=get_ocp_cpf('state');
+			$user_details['zip']=get_ocp_cpf('post_code');
+			$user_details['country']=get_ocp_cpf('country');
 		}
 		
 		return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array('ITEMS'=>$items,'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'ORDER_ID'=>strval($order_id),'NOTIFICATION_TEXT'=>$notification_text,'MEMBER_ADDRESS'=>$user_details));
@@ -268,18 +268,18 @@ class Hook_paypal
 	 */
 	function store_shipping_address($order_id)
 	{
-		if(is_null(post_param('address_name',NULL))) return;
+		if (is_null(post_param('address_name',NULL))) return;
 
-		if(is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_addresses','id',array('order_id'=>$order_id))))
+		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_addresses','id',array('order_id'=>$order_id))))
 		{
 			$shipping_address=array();
-			$shipping_address['order_id']			=	$order_id;
-			$shipping_address['address_name']	=	post_param('address_name','');
-			$shipping_address['address_street']	=	post_param('address_street','');
-			$shipping_address['address_zip']		=	post_param('address_zip','');
-			$shipping_address['address_city']	=	post_param('address_city','');
-			$shipping_address['address_country']=	post_param('address_country','');
-			$shipping_address['receiver_email']	=	post_param('payer_email','');
+			$shipping_address['order_id']=$order_id;
+			$shipping_address['address_name']=post_param('address_name','');
+			$shipping_address['address_street']=post_param('address_street','');
+			$shipping_address['address_zip']=post_param('address_zip','');
+			$shipping_address['address_city']=post_param('address_city','');
+			$shipping_address['address_country']=post_param('address_country','');
+			$shipping_address['receiver_email']=post_param('payer_email','');
 
 			return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses',$shipping_address,true);	
 		}

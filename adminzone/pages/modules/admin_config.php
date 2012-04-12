@@ -798,21 +798,24 @@ class Module_admin_config
 		if (($new_site_name!='') && (get_option('is_on_sync_staff',true)==='1'))
 		{
 			$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
-			$staff=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups);
-			foreach ($staff as $row_staff)
+			$staff=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,100);
+			if (count($staff)<100)
 			{
-				$member=$GLOBALS['FORUM_DRIVER']->pname_id($row_staff);
-				if ($GLOBALS['FORUM_DRIVER']->is_staff($member))
+				foreach ($staff as $row_staff)
 				{
-					$sites=get_ocp_cpf('sites');
-					$sites=str_replace(', '.get_site_name(),'',$sites);
-					$sites=str_replace(','.get_site_name(),'',$sites);
-					$sites=str_replace(get_site_name().', ','',$sites);
-					$sites=str_replace(get_site_name().',','',$sites);
-					$sites=str_replace(get_site_name(),'',$sites);
-					if ($sites!='') $sites.=', ';
-					$sites.=$new_site_name;
-					$GLOBALS['FORUM_DRIVER']->set_custom_field($member,'sites',$sites);
+					$member=$GLOBALS['FORUM_DRIVER']->pname_id($row_staff);
+					if ($GLOBALS['FORUM_DRIVER']->is_staff($member))
+					{
+						$sites=get_ocp_cpf('sites');
+						$sites=str_replace(', '.get_site_name(),'',$sites);
+						$sites=str_replace(','.get_site_name(),'',$sites);
+						$sites=str_replace(get_site_name().', ','',$sites);
+						$sites=str_replace(get_site_name().',','',$sites);
+						$sites=str_replace(get_site_name(),'',$sites);
+						if ($sites!='') $sites.=', ';
+						$sites.=$new_site_name;
+						$GLOBALS['FORUM_DRIVER']->set_custom_field($member,'sites',$sites);
+					}
 				}
 			}
 		}

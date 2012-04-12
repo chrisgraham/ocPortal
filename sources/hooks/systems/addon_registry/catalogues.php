@@ -383,11 +383,13 @@ class Hook_addon_registry_catalogues
 		$row->attach(do_lorem_template('CATALOGUE_links_TAB_ENTRY',array(
 				'FIELDS_TABLE'=>$head,
 				'VIEW_URL'=>placeholder_url(),
+				'EDIT_URL'=>placeholder_url(),
 				'FIELD_1_PLAIN'=>lorem_phrase(),
 					)));
 		$row->attach(do_lorem_template('CATALOGUE_links_TAB_ENTRY',array(
 				'FIELDS_TABLE'=>$entries,
 				'VIEW_URL'=>placeholder_url(),
+				'EDIT_URL'=>placeholder_url(),
 				'FIELD_1_PLAIN'=>lorem_phrase(),
 					)));
 		$content = do_lorem_template('CATALOGUE_links_TAB_WRAP',array(
@@ -472,6 +474,7 @@ class Hook_addon_registry_catalogues
 					)));
 		$entries->attach(do_lorem_template('CATALOGUE_DEFAULT_TAB_ENTRY',array(
 				'FIELDS_TABLE'=>$fields,
+				'EDIT_URL'=>placeholder_url(),
 				'VIEW_URL'=>placeholder_url(),
 					)));
 		$content = do_lorem_template('CATALOGUE_DEFAULT_TAB_WRAP',array(

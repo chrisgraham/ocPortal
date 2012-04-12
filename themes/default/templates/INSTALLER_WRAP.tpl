@@ -162,7 +162,7 @@
 		window.setTimeout(function() {
 			if (window.alert===null)
 			{
-				document.getElementById('extra_errors').innerHTML='<p><strong style="color: red">Your popup blocker is too aggressive</strong> (even error alerts cannot display). Please disable for the installer.</p>';
+				document.getElementById('extra_errors').innerHTML='<p><strong style="color: red">Your popup blocker is too aggressive<\/strong> (even error alerts cannot display). Please disable for the installer.<\/p>';
 			}
 		}, 0);
 		//]]></script>

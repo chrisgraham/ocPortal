@@ -41,7 +41,7 @@ function restricted_manually_enabled_backdoor()
 		if (!is_null($su)) return $su; elseif (is_numeric($ks)) return intval($ks);
 	}
 
-	$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups());
+	$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),1);
 	if (count($members)!=0)
 	{
 		$ret=$GLOBALS['FORUM_DRIVER']->pname_id($members[key($members)]);

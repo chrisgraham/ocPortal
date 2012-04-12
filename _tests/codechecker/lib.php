@@ -67,7 +67,7 @@ function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if ((!is_null($avoid)) && (in_array($avoid,$file))) continue;
+			if ((!is_null($avoid)) && (in_array($file,$avoid))) continue;
 			if (((strpos($file,'_custom')!==false) || ($file=='_tests') || ($file=='ocworld')) && ($no_custom)) continue;
 
 			if ($file[0]!='.')

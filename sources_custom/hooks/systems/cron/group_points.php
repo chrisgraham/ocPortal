@@ -44,12 +44,18 @@ class Hook_cron_group_points
 				$points=$group_points[$group_id];
 				if ($points['p_points_per_month']!=0)
 				{
-					$members=$GLOBALS['FORUM_DRIVER']->member_group_query(array($group_id));
-					foreach ($members as $member_row)
+					$start=0;
+					do
 					{
-						$member_id=$GLOBALS['FORUM_DRIVER']->pname_id($member_row);
-						system_gift_transfer('Being in the '.$group_name.' usergroup',$points['p_points_per_month'],$member_id);
+						$members=$GLOBALS['FORUM_DRIVER']->member_group_query(array($group_id),100,$start);
+						foreach ($members as $member_row)
+						{
+							$member_id=$GLOBALS['FORUM_DRIVER']->pname_id($member_row);
+							system_gift_transfer('Being in the '.$group_name.' usergroup',$points['p_points_per_month'],$member_id);
+						}
+						$start+=100;
 					}
+					while(count($members)>0);
 				}
 			}
 		}

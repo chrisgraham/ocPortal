@@ -271,10 +271,9 @@ END;
  * Check the given master password is valid.
  *
  * @param  SHORT_TEXT	Given master password
- * @param  SHORT_TEXT	Actual master password
  * @return boolean		Whether it is valid
  */
-function rk_check_master_password($password_given,$password)
+function rk_check_master_password($password_given)
 {
 	global $SITE_INFO;
 	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in info.php currently so cannot authenticate');
