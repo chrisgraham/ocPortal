@@ -1500,6 +1500,12 @@ class Module_galleries
 		$slideshow_url=build_url(array('page'=>'_SELF','type'=>$first_type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$first_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF',NULL,true);
 		$more_url=is_null($cat)?NULL:build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'root'=>($root=='root')?NULL:$root,'start'=>($start==0)?NULL:$start,'max'=>($max==get_default_gallery_max())?NULL:$max,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 
+		// Only one entry?
+		if ($n==1)
+		{
+			$slideshow_url=new ocp_tempcode();
+		}
+
 		return do_template('GALLERY_NAV',array(
 			'_GUID'=>'efd58f97d9c6254bd727125dfabb5a95',
 			'X'=>integer_format($x),

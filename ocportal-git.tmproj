@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>data_custom/addon_files.txt</string>
+	<string>sources/site.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -168,7 +168,7 @@
 			<key>filename</key>
 			<string>install.php</string>
 			<key>lastUsed</key>
-			<date>2012-04-10T11:46:25Z</date>
+			<date>2012-04-12T17:15:05Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -236,7 +236,7 @@
 			<key>filename</key>
 			<string>rootkit_detection.php</string>
 			<key>lastUsed</key>
-			<date>2012-03-24T18:07:52Z</date>
+			<date>2012-04-12T15:24:37Z</date>
 		</dict>
 		<dict>
 			<key>name</key>
@@ -465,36 +465,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>cms/pages/modules/cms_calendar.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>932</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>906</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>932</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>932</integer>
-			</dict>
-		</dict>
 		<key>cms/pages/modules/cms_galleries.php</key>
 		<dict>
 			<key>caret</key>
@@ -638,36 +608,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>data_custom/addon_files.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>2284</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>2258</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>2284</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>2284</integer>
-			</dict>
 		</dict>
 		<key>data_custom/jabber-logs/.htaccess</key>
 		<dict>
@@ -911,36 +851,6 @@
 				<integer>420</integer>
 				<key>line</key>
 				<integer>112</integer>
-			</dict>
-		</dict>
-		<key>lang/EN/notifications.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>22</integer>
-				<key>line</key>
-				<integer>2</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>2</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>22</integer>
-				<key>line</key>
-				<integer>2</integer>
 			</dict>
 		</dict>
 		<key>lang/EN/quotes.ini</key>
@@ -1798,6 +1708,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
+		</dict>
+		<key>sources/site.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1335</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1318</integer>
 		</dict>
 		<key>sources/templates.php</key>
 		<dict>
@@ -2800,11 +2724,11 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>data_custom/addon_files.txt</string>
+		<string>sources/site.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{379, 158}, {966, 879}}</string>
+	<string>{{876, 75}, {966, 879}}</string>
 </dict>
 </plist>

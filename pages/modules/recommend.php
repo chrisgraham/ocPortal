@@ -194,7 +194,7 @@ class Module_recommend
 						$subject=get_param('subject',do_lang('RECOMMEND_MEMBER_SUBJECT_SPECIFIC',get_site_name(),$resource_title));
 					}
 
-					$message=do_lang('FOUND_THIS_ON',get_site_name(),$from,$resource_title);
+					$message=do_lang('FOUND_THIS_ON',get_site_name(),comcode_escape($from),comcode_escape($resource_title));
 				}
 			}
 			if (get_param_integer('ocp',0)==1)

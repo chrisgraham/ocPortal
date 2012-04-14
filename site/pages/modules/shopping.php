@@ -331,7 +331,7 @@ class Module_shopping
 				$i++;
 			}
 
-			$width=array('50','100%','85','85','85','85','85','85','85');
+			$width=NULL;//array('50','100%','85','85','85','85','85','85','85');
 
 			$results_table=results_table(do_lang_tempcode('MEMBERS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$shopping_cart,NULL,NULL,NULL,'sort',NULL,$width,'cart');
 

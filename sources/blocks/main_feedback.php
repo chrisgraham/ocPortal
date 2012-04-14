@@ -104,7 +104,7 @@ class Block_main_feedback
 		// Comment posts
 		$forum=get_option('comments_forum_name');
 		$count=0;
-		$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$type.'_'.$id),'',$count);
+		$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$type.'_'.$id),$count);
 		if ($_comments!==-1)
 		{
 			$em=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();

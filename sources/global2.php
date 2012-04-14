@@ -1409,8 +1409,11 @@ function get_param($name,$default=false,$no_security=false)
 	}
 	if ($a===$default) return $a;
 
+	if (strpos($a,':')!==false)
+		$a=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($a):$a;
+
 	// Security check
-	$is_url=($name=='preview_url') || ($name=='redirect') || ($name=='redirect_passon') || ($name=='url');
+	$is_url=($name=='from') || ($name=='preview_url') || ($name=='redirect') || ($name=='redirect_passon') || ($name=='url');
 	if (($name!='s_message') && (!$is_url) && (!$no_security))
 	{
 		if (((isset($a[100])) && (strpos(substr($a,10),'::slash::slash:')===false) && (strpos(substr($a,10),'://')===false) && (strpos(substr($a,10),'::slash::slash:')===false)) || (preg_match('#\n|\000|<|(".*[=<>])|\.\./|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0))
@@ -1421,13 +1424,11 @@ function get_param($name,$default=false,$no_security=false)
 	{
 		if ($is_url)
 		{
-			$a=function_exists('ocp_url_decode_post_process')?ocp_url_decode_post_process($a):$a;
-
 			if (preg_match('#\n|\000|<|(".*[=<>])|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0)
 			{
 				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
 			}
-			
+
 			$bu=get_base_url();
 			if ((looks_like_url($a)) && (substr($a,0,strlen($bu))!=$bu)) // Don't allow external redirections
 			{

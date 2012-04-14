@@ -33,20 +33,22 @@
 			</div>
 		</div>
 
-		<div class="wide_table_wrap">
-			<table id="product-attribute-specs-table" class="data-table wide_table solidborder" summary="{!MAP_TABLE}">
-				{+START,IF,{$NOT,{$MOBILE}}}
-					<colgroup>
-						<col style="width: 30%"/>
-						<col style="width: 70%"/>
-					</colgroup>
-				{+END}
+		{+START,IF_NON_EMPTY,{$TRIM,{FIELDS}}}
+			<div class="wide_table_wrap">
+				<table id="product-attribute-specs-table" class="data-table wide_table solidborder" summary="{!MAP_TABLE}">
+					{+START,IF,{$NOT,{$MOBILE}}}
+						<colgroup>
+							<col style="width: 30%"/>
+							<col style="width: 70%"/>
+						</colgroup>
+					{+END}
 
-				<tbody>
-					{FIELDS}
-				</tbody>
-			</table>
-		</div>
+					<tbody>
+						{FIELDS}
+					</tbody>
+				</table>
+			</div>
+		{+END}
 
 		{CART_BUTTONS}
 	</div>

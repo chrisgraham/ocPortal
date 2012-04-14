@@ -362,12 +362,12 @@ class Module_points
 					give_points($amount,$member_id_of,$member_id_viewing,$reason,$anonymous==1);
 
 					// Randomised gifts
-					if (mt_rand(0,4)==1)
+					if (mt_rand(0,4)==1) // TODO: 4 should be a config option
 					{
 						$message=do_lang_tempcode('PR_LUCKY');
 						$_current_gift=point_info($member_id_viewing);
 						$current_gift=array_key_exists('points_gained_given',$_current_gift)?$_current_gift['points_gained_given']:0;
-						$GLOBALS['FORUM_DRIVER']->set_custom_field($member_id_viewing,'points_gained_given',$current_gift+25);
+						$GLOBALS['FORUM_DRIVER']->set_custom_field($member_id_viewing,'points_gained_given',$current_gift+25); // TODO: 25 should be a config option
 					} else $message=do_lang_tempcode('PR_NORMAL');
 
 					$worked=true;

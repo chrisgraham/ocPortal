@@ -8,7 +8,7 @@ This tutorial is also partially relevant to those wishing to manually copy theme
 
 If you are moving URLs, then you need to use the base configuration editor (the [tt]config_editor.php[/tt] script) to change your base URL setting, and then to clear your caches using either the [tt]upgrader.php[/tt] script or the Cleanup Tools in the Admin Zone.
 
-If you are moving URLs but not servers, there is no need to perform any of the steps below. Simply moving the files directly on the server will suffice.
+If you are moving URLs but not servers, there is no need to perform any of the steps below. Simply move the files to the new domain webroot directly, and update the base URL as described above.
 
 [contents]decimal,lower-alpha[/contents]
 

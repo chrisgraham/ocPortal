@@ -1343,7 +1343,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
 	}
 	
-	if (($is_panel) || ($codename[0]=='_'))
+	if ((($is_panel) || ($codename[0]=='_')) && (get_page_name()==$codename))
 	{
 		global $EXTRA_HEAD;
 		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML

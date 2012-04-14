@@ -334,7 +334,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 		button_set=new_button_set;
 	}
 
-	if ((typeof window.showModalDialog!='undefined'))
+	if ((typeof window.showModalDialog!='undefined'){+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}} || true{+END})
 	{
 		var height=180;
 		if (button_set.length>4) height+=5*(button_set.length-4);
@@ -400,21 +400,34 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 			'',
 			function(result)
 			{
-				if ((typeof result=="undefined") || (result===null)) return button_set[0]; // just pressed 'cancel', so assume option 0
-				if (result=='') return button_set[1]; // just pressed 'ok', so assume option 1
-				for (var i=0;i<button_set.length;i++)
+				if ((typeof result=="undefined") || (result===null))
 				{
-					if (result.toLowerCase()==button_set[i].toLowerCase()) return result; // match
+					callback(button_set[0]); // just pressed 'cancel', so assume option 0
+					return;
+				} else
+				{
+					if (result=='')
+					{
+						callback(button_set[1]); // just pressed 'ok', so assume option 1
+						return;
+					}
+					for (var i=0;i<button_set.length;i++)
+					{
+						if (result.toLowerCase()==button_set[i].toLowerCase()) // match
+						{
+							callback(result);
+							return;
+						}
+					}
 				}
-				return button_set[0]; // unknown
+
+				// unknown
+				callback(button_set[0]);
+				return;
 			},
 			window_title
 		);
-
-		return;
 	}
-
-	return;
 }
 
 function doc_onmouseout()

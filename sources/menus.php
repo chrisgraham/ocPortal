@@ -760,7 +760,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 		{
 			list($children2,$_expand_this)=render_menu_branch($child,$codename,$source_member,$level+1,$type,$as_admin,$all_branches,$the_level+1);
 			if ($_expand_this) $expand_this=true;
-			if ($children2!=='')
+			if (($children2!=='') && (!is_null($children2)))
 			{
 				$new_children[]=$children2;
 			}

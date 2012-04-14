@@ -755,8 +755,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 			$dependencies[]=$dependency;
 			continue;
 		}
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$dependency));
-		if ((is_null($test)) && (!file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$dependency.'.php'))) $dependencies[]=$dependency;
+		if (!has_feature($dependency)) $dependencies[]=$dependency;
 	}
 	$_dependencies_str=new ocp_tempcode();
 	foreach ($dependencies as $in)
@@ -795,6 +794,52 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	$files_combined->attach($files);
 	
 	return array($warnings,$files_combined,$info);
+}
+
+/**
+ * Find whether a particular feature is available to ocPortal (e.g. it's an addon).
+ *
+ * @param  ID_TEXT		Feature name
+ * @return boolean		Whether it is
+ */
+function has_feature($dependency)
+{
+	$dependency=str_replace(' ','',strtolower(preg_replace('# (enabled|needed|required)$#','',$dependency)));
+
+	if ($dependency=='yes') return true; // Buggy addon definition
+
+	$remapping=array( // HACKHACK: Remove these for next major version
+		'chatrooms'=>'chat',
+		'side_stats'=>'stats_block',
+	);
+	if (array_key_exists($dependency,$remapping)) $dependency=$remapping[$dependency];
+
+	// Non-bundled addon
+	$test=$GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$dependency));
+	if (!is_null($test)) return true;
+
+	// Bundled addon
+	if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$dependency.'.php')) return true;
+
+	// Some other features
+	if (($dependency=='javascript') && (has_js())) return true;
+	if (($dependency=='cron') && (cron_installed())) return true;
+	if (($dependency=='ocf') && (get_forum_type()=='ocf')) return true;
+	if (($dependency=='gd') && (get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring'))) return true;
+	if ($dependency=='adobeflash') return true;
+	if (substr($dependency,0,3)=='php')
+	{
+		$phpv=phpversion();
+		if (version_compare(substr($phpv,0,strlen(substr($dependency,3))),substr($dependency,3),'>=')) return true;
+	}
+
+	// ---
+
+	// Try plural form
+	if (substr($dependency,-1)!='s')
+		return has_feature($dependency.'s');
+
+	return false;
 }
 
 /**

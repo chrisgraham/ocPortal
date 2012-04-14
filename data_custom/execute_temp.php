@@ -67,6 +67,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('files');
-	echo http_download_file('http://www.httpwatch.com/httpgallery/chunked/');
+	require_code('mail');
+	header('Content-Type: text/plain');
+	echo strip_comcode('[html]Slide shows don&#39;t play and they have gone back to reloading the whole page instead of just the image when you click through them. They were working nicely in RC3.<br />\n<br />\nI discovered it on a live site I upgraded and then checked it on a fresh install on my localhost.<br />\n<br />\n<a href=\"http://ocportal.com/data/attachment.php?id=7806\" rel=\"lightbox\" target=\"_blank\" title=\" (this link will open in a new window)\"><img alt=\"\" class=\"no_alpha attachment_img\" src=\"http://ocportal.com/data/attachment.php?id=7806&amp;thumb=1\" title=\"\" /></a><br />\n<br />\n[/html][semihtml][attachment param=\"\"]new_3[/attachment][/semihtml]');
+	exit();
 }

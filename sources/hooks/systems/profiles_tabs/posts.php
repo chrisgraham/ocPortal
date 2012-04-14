@@ -75,7 +75,8 @@ class Hook_Profiles_Tabs_posts
 				$topic_rows_map=array();
 				foreach ($topic_rows as $topic_row)
 				{
-					$topic_rows_map[$topic_row['id']]=$topic_row;
+					if (has_category_access(get_member(),'forums',strval($topic_row['t_forum_id'])))
+						$topic_rows_map[$topic_row['id']]=$topic_row;
 				}
 				$hot_topic_definition=intval(get_option('hot_topic_definition'));
 				foreach ($rows as $row)

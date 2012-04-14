@@ -25,8 +25,10 @@
 		<div class="gallery_media_expose_wrap"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
 			{ENTRIES}
 		</div>
-			
-		{SORTING}
+
+		<p>
+			{SORTING}
+		</p>
 	{+END}
 
 	{+START,IF_EMPTY,{CHILDREN}{ENTRIES}}

@@ -376,7 +376,7 @@ class Module_cms_comcode_pages
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
 		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',300);
+		$max=get_param_integer('max',50);
 
 		$filesarray=$this->get_comcode_files_array($lang);
 		if (true/*TODO*/ || count($filesarray)>=300) // Oh dear, limits reached, try another tact
@@ -401,12 +401,12 @@ class Module_cms_comcode_pages
 			if (can_arbitrary_groupby())
 				$group_by='GROUP BY c.the_zone,c.the_page';
 
-			$where_map=array('language'=>$lang);
+			$where_map='('.db_string_equal_to('language',$lang).' OR language IS NULL)';
 			if (!has_specific_permission(get_member(),'edit_highrange_content'))
-				$where_map['submitter']=get_member();
-			$ttable='comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
-			$page_rows=$GLOBALS['SITE_DB']->query_select($ttable,array('c.*','cc_page_title'),$where_map,$group_by.' ORDER BY '.$orderer,$max,$start);
-			$max_rows=$GLOBALS['SITE_DB']->query_value($ttable,'COUNT(DISTINCT c.the_zone,c.the_page)',$where_map);
+				$where_map.=' AND submitter='.strval(get_member());
+			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
+			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start);
+			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT c.the_zone,c.the_page) FROM '.$ttable.' WHERE '.$where_map);
 
 			$filesarray=array();
 			foreach ($page_rows as $row)
@@ -462,6 +462,7 @@ class Module_cms_comcode_pages
 			}
 
 			// Work out meta data
+			$page_title=do_lang_tempcode('NA_EM');
 			if (!is_null($row))
 			{
 				$username=protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['p_submitter']));
@@ -473,13 +474,10 @@ class Module_cms_comcode_pages
 				if (!is_null($row['cc_page_title']))
 				{
 					$_page_title=get_translated_text($row['cc_page_title'],NULL,NULL,true);
-					if (is_null($_page_title))
+					if (!is_null($_page_title))
 					{
-						$page_title=do_lang_tempcode('NA_EM');
-					} else
-					{
-						$page_title=make_string_tempcode($_page_title);
-						if ($page_title->is_empty()) $page_title=do_lang_tempcode('NA_EM');
+						if ($_page_title!='')
+							$page_title=make_string_tempcode($_page_title);
 					}
 				}
 			} else

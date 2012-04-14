@@ -14,7 +14,7 @@
 	<script type="text/javascript">// <![CDATA[
 		addEventListenerAbstract(window,'load',function () {
 			{$JAVASCRIPT_INCLUDE,javascript_ajax}
-			internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['mge_start'],{});
+			internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['mge_start'], { } );
 		} );
 	//]]></script>
 </div>

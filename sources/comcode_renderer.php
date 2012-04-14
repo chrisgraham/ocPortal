@@ -1298,7 +1298,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$owner=$connection->query_value_null_ok('attachments','a_member_id',array('id'=>$__id));
 				if (is_null($owner)) // Missing attachment!
 				{
-					$temp_tpl=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','attachment',escape_html(''))));
+					$temp_tpl=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','attachment',escape_html(strval($__id)))));
 					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						require_code('failure');
