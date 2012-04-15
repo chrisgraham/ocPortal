@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources/site.php</string>
+	<string>sources_custom/global2.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -637,36 +637,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>docs4/pages/comcode_custom/EN/tut_comcode.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>38</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>15</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>38</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>38</integer>
-			</dict>
-		</dict>
 		<key>docs4/pages/comcode_custom/EN/tut_correspondance.txt</key>
 		<dict>
 			<key>caret</key>
@@ -794,6 +764,36 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>lang/EN/comcode.ini</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>10</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>10</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>29</integer>
+				<key>line</key>
+				<integer>10</integer>
+			</dict>
 		</dict>
 		<key>lang/EN/errorlog.ini</key>
 		<dict>
@@ -1709,20 +1709,6 @@
 			<key>firstVisibleLine</key>
 			<integer>26</integer>
 		</dict>
-		<key>sources/site.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1335</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1318</integer>
-		</dict>
 		<key>sources/templates.php</key>
 		<dict>
 			<key>caret</key>
@@ -1840,6 +1826,20 @@
 				<key>line</key>
 				<integer>15</integer>
 			</dict>
+		</dict>
+		<key>sources_custom/global2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>12</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>sources_custom/miniblocks/.htaccess</key>
 		<dict>
@@ -2040,20 +2040,6 @@
 				<key>line</key>
 				<integer>11</integer>
 			</dict>
-		</dict>
-		<key>themes/default/templates/BLOCK_SIDE_RSS.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>9</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>themes/default/templates/CALENDAR_DAY_HOUR.tpl</key>
 		<dict>
@@ -2393,20 +2379,6 @@
 				<integer>8</integer>
 			</dict>
 		</dict>
-		<key>themes/default/templates/NOTIFICATIONS_MANAGE.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>30</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>19</integer>
-		</dict>
 		<key>themes/default/templates/OCF_GROUP_DIRECTORY_SCREEN.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2665,6 +2637,36 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>themes/default/templates_custom/JAVASCRIPT_SWFUPLOAD.tpl</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>1453</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1408</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>20</integer>
+				<key>line</key>
+				<integer>1453</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>1453</integer>
+			</dict>
+		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_XMPP_CRYPTO.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2724,11 +2726,13 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources/site.php</string>
+		<string>sources_custom/global2.php</string>
+		<string>themes/default/templates_custom/JAVASCRIPT_SWFUPLOAD.tpl</string>
+		<string>lang/EN/comcode.ini</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{876, 75}, {966, 879}}</string>
+	<string>{{645, 166}, {966, 879}}</string>
 </dict>
 </plist>
