@@ -8,7 +8,7 @@
 			<col style="width: 100px" />
 			<col style="width: 50px" />
 			<col style="width: 50px" />
-			<col style="width: 185px" />
+			<col style="width: {$?,{$MATCH_KEY_MATCH,_WILD:members},90,185}px" />
 			{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
 				<col style="width: 25px" />
 			{+END}

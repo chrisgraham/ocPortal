@@ -5217,6 +5217,7 @@ function doSubmit(e,ob) {
 
 	var btnSubmit=document.getElementById(ob.settings.btnSubmitID);
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
+
 	if (txtFileName.value == '')
 	{
 		var ret=true;
@@ -5301,8 +5302,8 @@ function fireFakeChangeFor(name,value)
 			e[i]();
 	}
 
-	if (typeof rep.plUploadOb=='undefined') return;
-	var ob=rep.plUploadOb;
+	if (typeof rep.swfob=='undefined') return;
+	var ob=rep.swfob;
 	if (typeof ob.settings=='undefined') return;
 
 	if (ob.settings.immediate_submit{+START,IF,{$VALUE_OPTION,aviary}} || true{+END})
@@ -5363,19 +5364,6 @@ function uploadSuccess(ob,file,data) {
 	progress.setComplete();
 	progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
 
-	if (data.response=='') return; // NOT success, happens in plupload when clicking away from document (i.e. implicit cancel)
-
-	var decodedData = eval('(' + data.response + ')');
-
-	var id=document.getElementById(ob.settings.txtFileDbID);
-	if (id.value=='-1') id.value='';
-	if (id.value!='') id.value+=':';
-	id.value += decodedData['upload_id'];
-	{+START,IF,{$VALUE_OPTION,aviary}}
-		if (id.value.indexOf(':')==-1) implement_aviary(decodedData['upload_savename'],decodedData['upload_name'],id);
-	{+END}
-	if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
-
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	btnSubmit.disabled = false;
 
@@ -5383,6 +5371,20 @@ function uploadSuccess(ob,file,data) {
 	if (clearBtn) clearBtn.style.display='inline';
 	var uploadBtn=document.getElementById('uploadButton_'+ob.settings.txtName);
 	if (uploadBtn) uploadBtn.disabled=false;
+
+	if (data.response=='') return ''; // NOT success, happens in plupload when clicking away from document (i.e. implicit cancel)
+
+	var decodedData = eval('(' + data.response + ')');
+
+	var id=document.getElementById(ob.settings.txtFileDbID);
+	if (id.value=='-1') id.value='';
+	if (id.value!='') id.value+=':';
+	id.value += decodedData['upload_id'];
+
+	{+START,IF,{$VALUE_OPTION,aviary}}
+		if (id.value.indexOf(':')==-1) implement_aviary(decodedData['upload_savename'],decodedData['upload_name'],id);
+	{+END}
+	if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 
 	if ((typeof ob.submitting!='undefined') && (ob.submitting))
 	{
@@ -5727,14 +5729,14 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		ob.bind('QueueChanged',queueChanged);
 		ob.init();
 
-		rep2.plUploadOb=ob;
+		rep2.swfob=ob;
 
 		window.setInterval(function() { ob.refresh(); },1000);
 	} else // Special iOS handler
 	{
 		var ob={settings: settings};
 		
-		rep2.plUploadOb=ob;
+		rep2.swfob=ob;
 
 		window.picup_current_hash=window.location.hash;
 		if (window.location.hash.indexOf('=')!=-1) picup_receive();
