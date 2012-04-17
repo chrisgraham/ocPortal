@@ -110,6 +110,7 @@ class Module_admin_ocf_categories extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','c_title ASC',true);
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'c_title'=>do_lang_tempcode('TITLE'),

@@ -304,6 +304,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 			list($sortable,$sort_order)=array('g_promotion_threshold DESC,id','DESC');
 		} else
 		{
+			if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 			list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');

@@ -177,6 +177,7 @@ class Module_cms_calendar extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','e_title ASC',true);
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'e_title'=>do_lang_tempcode('TITLE'),
@@ -295,12 +296,14 @@ class Module_cms_calendar extends standard_aed_module
 			{
 				$date2=explode(' ',$date);
 				$exploded=explode('-',$date2[0]);
+				if (count($exploded)!=3) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 				$start_year=intval($exploded[0]);
 				$start_month=intval($exploded[1]);
 				$start_day=intval($exploded[2]);
 				if (array_key_exists(1,$date2))
 				{
 					$exploded=explode(':',$date2[1]);
+					if (count($exploded)!=2) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 					$start_hour=intval($exploded[0]);
 					$start_minute=intval($exploded[1]);
 				}
@@ -1039,6 +1042,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','t_title ASC',true);
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			't_title'=>do_lang_tempcode('TITLE'),

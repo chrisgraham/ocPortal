@@ -176,6 +176,7 @@ class Module_admin_custom_comcode extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','tag_tag ASC');
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'tag_tag'=>do_lang_tempcode('COMCODE_TAG'),

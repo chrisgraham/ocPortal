@@ -123,6 +123,7 @@ class Module_cms_quiz extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','q_name ASC');
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'q_name'=>do_lang_tempcode('TITLE'),

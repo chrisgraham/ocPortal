@@ -62,7 +62,7 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
 		{
 			if (($last_posts[0]['p_poster']==$GLOBALS['OCF_DRIVER']->get_guest_id()) && (get_ip_address()!=$last_posts[0]['p_ip_address']))
 				$last_posts[0]['p_poster']=-1;
-			if (($last_posts[0]['p_poster']==$poster) && (get_translated_text($last_posts[0]['p_post'],$GLOBALS['FORUM_DB'])==$post))
+			if (($last_posts[0]['p_poster']==$poster) && (get_translated_text($last_posts[0]['p_post'],$GLOBALS['FORUM_DB'])==$post) && (get_param_integer('keep_debug_notifications',0)!=1))
 				warn_exit(do_lang_tempcode('DOUBLE_POST_PREVENTED'));
 		}
 

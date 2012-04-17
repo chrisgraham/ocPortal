@@ -170,7 +170,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 
 		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
 
-		if (is_numeric($category)) // Also merge in people monitoring forum
+		if (is_numeric($category)) // This is a topic. Also merge in people monitoring forum
 		{
 			$forum_details=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id','t_pt_from','t_pt_to'),array('id'=>intval($category)));
 			if (!array_key_exists(0,$forum_details)) return array(array(),false); // Topic deleted already?
@@ -191,10 +191,16 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 				}
 				$members=$members_new;
 			}
+		} else // This is a forum. Actually this code path should rarely if ever run - we don't dispatch notifications against forums, but topics (see above code branch).
+		{
+			$forum_id=intval(substr($category,6));
 		}
 
-		$members=$this->_all_members_who_have_enabled_with_zone_access($members,'forum',$notification_code,$category,$to_member_ids,$start,$max);
-		$members=$this->_all_members_who_have_enabled_with_category_access($members,'forum',$notification_code,$category,$to_member_ids,$start,$max);
+		if (!is_null($forum_id))
+		{
+			$members=$this->_all_members_who_have_enabled_with_zone_access($members,'forum',$notification_code,$category,$to_member_ids,$start,$max);
+			$members=$this->_all_members_who_have_enabled_with_category_access($members,'forums',$notification_code,strval($forum_id),$to_member_ids,$start,$max);
+		} // We know PTs have been pre-filtered before notification is sent out, to limit them
 
 		return $members;
 	}

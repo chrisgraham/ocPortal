@@ -101,7 +101,7 @@ function ocf_member_handle_promotion($member_id=NULL)
  * @param  ?MEMBER		Only send the notification to this member (NULL: no such limit).
  * @param  boolean		Whether this is for a Private Topic.
  */
-function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,$is_starter,$post,$topic_title,$limit_to=NULL,$is_pt=false)
+function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,$is_starter,$post,$topic_title,$_limit_to=NULL,$is_pt=false)
 {
 	if ((is_null($forum_id)) && ($is_starter)) return;
 
@@ -114,8 +114,17 @@ function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,
 	$subject=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL_SUBJECT':'POST_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$topic_title);
 	$mail=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL':'POST_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($url),array(comcode_escape($sender_username),$post,$topic_title));
 
+	$limit_to=is_null($_limit_to)?array():array($limit_to);
+
+	if ($is_pt)
+	{
+		$limit_to[]=$topic_info[0]['t_pt_to'];
+		$limit_to[]=$topic_info[0]['t_pt_from'];
+		$limit_to=array_merge($limit_to,collapse_1d_complexity('s_member_id',$GLOBALS['FORUM_DB']->query_select('f_special_pt_access',array('s_member_id'),array('s_topic_id'=>$topic_id))));
+	}
+
 	require_code('notifications');
-	dispatch_notification('ocf_topic',strval($topic_id),$subject,$mail,is_null($limit_to)?NULL:array($limit_to));
+	dispatch_notification('ocf_topic',strval($topic_id),$subject,$mail,(count($limit_to)==0)?NULL:$limit_to);
 }
 
 /**

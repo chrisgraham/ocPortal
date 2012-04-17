@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>sources_custom/global2.php</string>
+	<string>sources/tickets2.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -764,36 +764,6 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>lang/EN/comcode.ini</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>29</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
 		</dict>
 		<key>lang/EN/errorlog.ini</key>
 		<dict>
@@ -1723,6 +1693,20 @@
 			<key>firstVisibleLine</key>
 			<integer>93</integer>
 		</dict>
+		<key>sources/tickets2.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>155</integer>
+				<key>line</key>
+				<integer>228</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>207</integer>
+		</dict>
 		<key>sources_custom/blocks/main_google_map_users.php</key>
 		<dict>
 			<key>caret</key>
@@ -1826,20 +1810,6 @@
 				<key>line</key>
 				<integer>15</integer>
 			</dict>
-		</dict>
-		<key>sources_custom/global2.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>12</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
 		</dict>
 		<key>sources_custom/miniblocks/.htaccess</key>
 		<dict>
@@ -2637,36 +2607,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>themes/default/templates_custom/JAVASCRIPT_SWFUPLOAD.tpl</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>1453</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1408</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>1453</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>1453</integer>
-			</dict>
-		</dict>
 		<key>themes/default/templates_custom/JAVASCRIPT_XMPP_CRYPTO.tpl</key>
 		<dict>
 			<key>caret</key>
@@ -2726,9 +2666,7 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>sources_custom/global2.php</string>
-		<string>themes/default/templates_custom/JAVASCRIPT_SWFUPLOAD.tpl</string>
-		<string>lang/EN/comcode.ini</string>
+		<string>sources/tickets2.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

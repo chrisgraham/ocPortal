@@ -2016,7 +2016,7 @@ END;
 			}
 		}
 
-		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1,$forum_id==-1,false,$parent_id);
+		$post_id=ocf_make_post($topic_id,$title,$post,$skip_sig,$first_post,$validated,$is_emphasised,$poster_name_if_guest,NULL,NULL,NULL,$intended_solely_for,NULL,NULL,$check_permissions,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1,$forum_id==-1 || is_null($forum_id),$forum_id==-1 || is_null($forum_id),false,$parent_id);
 
 		if ((!is_null($forum_id)) && ($anonymous==0) && ($intended_solely_for===NULL))
 		{

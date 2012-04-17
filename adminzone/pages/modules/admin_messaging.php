@@ -238,7 +238,10 @@ class Module_admin_messaging
 			$forum,
 			$message_type.'_'.$id,
 			get_member(),
-			do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY',$username)
+			'',
+			do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY',$username),
+			'',
+			do_lang('COMMENT')
 		);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:view:'.$id.':message_type='.$message_type,do_lang_tempcode('VIEW'))));

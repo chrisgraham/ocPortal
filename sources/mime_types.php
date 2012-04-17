@@ -111,7 +111,7 @@ function get_mime_type($extension)
 		// File sharing
 		'torrent'=>'application/x-bittorrent',
 	);
-	if (file_exists(get_file_base().'/data/flv_player.swf'))
+	if (file_exists(get_file_base().'/data/flvplayer.swf'))
 	{
 		$mime_types['flv']='video/x-flv';
 	}

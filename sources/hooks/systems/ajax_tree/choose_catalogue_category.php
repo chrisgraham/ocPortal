@@ -34,12 +34,23 @@ class Hook_choose_catalogue_category
 		require_code('catalogues');
 		require_lang('catalogues');
 
-		$catalogue_name=$options['catalogue_name'];
+		$catalogue_name=array_key_exists('catalogue_name',$options)?$options['catalogue_name']:NULL;
 		$addable_filter=array_key_exists('addable_filter',$options)?($options['addable_filter']):false;
 		$compound_list=array_key_exists('compound_list',$options)?$options['compound_list']:false;
 		$stripped_id=($compound_list?preg_replace('#,.*$#','',$id):$id);
 
-		$tree=get_catalogue_category_tree($catalogue_name,is_null($id)?NULL:intval($id),NULL,NULL,1,$addable_filter,$compound_list);
+		if (is_null($catalogue_name))
+		{
+			$tree=array();
+			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name'));
+			foreach ($catalogues as $catalogue)
+			{
+				$tree=array_merge($tree,get_catalogue_category_tree($catalogue['c_name'],is_null($id)?NULL:intval($id),NULL,NULL,1,$addable_filter,$compound_list));
+			}
+		} else
+		{
+			$tree=get_catalogue_category_tree($catalogue_name,is_null($id)?NULL:intval($id),NULL,NULL,1,$addable_filter,$compound_list);
+		}
 		if (!has_actual_page_access(NULL,'catalogues')) $tree=array();
 
 		$out='';
@@ -92,11 +103,23 @@ class Hook_choose_catalogue_category
 
 		require_code('catalogues');
 
-		$catalogue_name=$options['catalogue_name'];
+		$catalogue_name=array_key_exists('catalogue_name',$options)?$options['catalogue_name']:NULL;
 		$addable_filter=array_key_exists('addable_filter',$options)?($options['addable_filter']):false;
 		$compound_list=array_key_exists('compound_list',$options)?$options['compound_list']:false;
 
-		return nice_get_catalogue_category_tree($catalogue_name,is_null($it)?NULL:intval($it),$addable_filter,$compound_list);
+		if (is_null($catalogue_name))
+		{
+			$out='';
+			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name'));
+			foreach ($catalogues as $catalogue)
+			{
+				$out.=nice_get_catalogue_category_tree($catalogue['c_name'],is_null($it)?NULL:intval($it),$addable_filter,$compound_list);
+			}
+			return $out;
+		} else
+		{
+			return nice_get_catalogue_category_tree($catalogue_name,is_null($it)?NULL:intval($it),$addable_filter,$compound_list);
+		}
 	}
 
 }

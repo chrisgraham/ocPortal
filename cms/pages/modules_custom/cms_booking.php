@@ -105,6 +105,7 @@ class Module_cms_booking extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','sort_order ASC');
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'title'=>do_lang_tempcode('TITLE'),
@@ -358,6 +359,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','sort_order ASC');
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'title'=>do_lang_tempcode('TITLE'),
@@ -554,6 +556,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','blacked_from_year,blacked_from_month,blacked_from_day ASC');
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'blacked_from_year,blacked_from_month,blacked_from_day'=>do_lang_tempcode('DATE'),

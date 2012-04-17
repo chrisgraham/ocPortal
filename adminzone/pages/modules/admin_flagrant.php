@@ -171,6 +171,7 @@ class Module_admin_flagrant extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','the_message ASC');
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'the_message'=>do_lang_tempcode('MESSAGE'),

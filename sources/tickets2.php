@@ -226,7 +226,7 @@ function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type,$start=0,$
 		$forum=$ticket[0]['forum_id'];
 		$topic_id=$ticket[0]['topic_id'];
 		$count=0;
-		return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$ticket_id),$count,$max,$start,false);
+		return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$ticket_id),$count,$max,$start);
 	}
 
 	// It must be an old-style ticket, residing in the root ticket forum
@@ -322,11 +322,11 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 		// Reply from staff, notification to user
 		$ticket_type_text=$GLOBALS['SITE_DB']->query_value_null_ok('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
 		$their_lang=get_lang($uid);
-		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,$title,$their_lang);
+		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,$their_lang);
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
-			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape($title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),$post,comcode_escape($ticket_type_text)),$their_lang);
+			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),$post,comcode_escape($ticket_type_text)),$their_lang);
 			dispatch_notification('ticket_reply',strval($ticket_type_id),$subject,$message,array($uid));
 		}
 	}
@@ -340,15 +340,15 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 			$ticket_type_text=($ticket_type_if_new==-1)?'':get_translated_text($ticket_type_if_new);
 		}
 
-		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',$ticket_type_text,$title,NULL,get_site_default_lang());
-		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape($title),comcode_escape($ticket_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang());
+		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,NULL,get_site_default_lang());
+		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang());
 		dispatch_notification($new_ticket?'ticket_new_staff':'ticket_reply_staff',strval($ticket_type_id),$subject,$message);
 
 		// Tell user that their message was received
 		if ($email!='')
 		{
 			require_code('mail');
-			mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email),NULL,'','',3,NULL,false,get_member());
+			mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',($title=='')?do_lang('UNKNOWN'):$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email),NULL,'','',3,NULL,false,get_member());
 		}
 	}
 }

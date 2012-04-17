@@ -125,6 +125,7 @@ class Module_cms_polls extends standard_aed_module
 			list($sortable,$sort_order)=array('is_current ASC,add_time','ASC');
 		} else
 		{
+			if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 			list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		}
 		$sortables=array(

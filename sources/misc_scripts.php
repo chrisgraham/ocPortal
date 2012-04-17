@@ -245,6 +245,7 @@ function iframe_script()
 	}
 
 	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$output=request_page($page,true);
@@ -288,6 +289,7 @@ function page_link_chooser_script()
 	require_javascript('javascript_more');
 
 	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	// Display
@@ -368,6 +370,7 @@ function staff_tips_script($ret=false)
 	if ($ret) return $content;
 
 	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	// Display
@@ -904,6 +907,7 @@ function block_helper_script()
 	}
 
 	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'CONTENT'=>$content));
@@ -945,6 +949,7 @@ function emoticons_script()
 	$content=do_template('OCF_EMOTICON_TABLE',array('_GUID'=>'d3dd9bbfacede738e2aff4712b86944b','ROWS'=>$content));
 
 	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$echo=do_template('POPUP_HTML_WRAP',array('_GUID'=>'8acac778b145bfe7b063317fbcae7fde','TITLE'=>do_lang_tempcode('EMOTICONS_POPUP'),'CONTENT'=>$content));
@@ -994,6 +999,7 @@ function question_ui_script()
 	$message=do_template('QUESTION_UI_BUTTONS',array('TITLE'=>$title,'IMAGES'=>$image_set,'BUTTONS'=>$button_set,'MESSAGE'=>$_message));
 	
 	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>escape_html($title),'CONTENT'=>$message));

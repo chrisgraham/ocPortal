@@ -1554,6 +1554,16 @@ class ocp_tempcode
 	 */
 	function evaluate($current_lang=NULL,$_escape=false,$up_to=NULL)
 	{
+		static $do_memory_tracking=NULL;
+		if ($do_memory_tracking===NULL) $do_memory_tracking=(get_value('memory_tracking')==='1');
+		if ($do_memory_tracking)
+		{
+			if ((memory_get_usage()>50*1024*1024) && ((!isset($GLOBALS['FORUM_DRIVER'])) || (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))))
+			{
+				fatal_exit('Memory problem - over 50MB used');
+			}
+		}
+
 		if (isset($this->cached_output)) return $this->cached_output;
 		if (!isset($this->seq_parts[0]))
 		{

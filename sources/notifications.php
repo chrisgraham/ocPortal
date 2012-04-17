@@ -223,7 +223,8 @@ class Notification_dispatcher
 
 			foreach ($members as $to_member_id=>$setting)
 			{
-				$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc);
+				if ($to_member_id!==$this->from_member_id)
+					$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc);
 			}
 
 			$start+=$max;

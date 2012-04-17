@@ -251,6 +251,7 @@ function comcode_convert_script()
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	require_lang('comcode');

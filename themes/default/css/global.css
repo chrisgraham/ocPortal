@@ -2455,6 +2455,9 @@ th.meta_data_title {
 	padding: 3px;
 	min-width: 40px;
 	min-height: 40px;
+	font-size: 0.8em;
+	min-height: 65px;
+	min-width: 85px;
 }
 
 #page_running_admin_themes .radio_list_picture {

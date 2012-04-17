@@ -365,7 +365,7 @@ function site_tree_script()
 				global $MODULES_ZONES;
 				$not_draggable=((array_key_exists($page,$MODULES_ZONES)) || (($zone=='adminzone') && (substr($page,0,6)=='admin_') && (substr($page_type,0,6)=='module')));
 				$serverid=$zone.':'.$page;
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').''.$extra.'type="'.$page_type.'" description="'.xmlentities($description).'" draggable="'.($not_draggable?'false':'page').'" droppable="'.(($page_type=='zone')?'page':'false').'" id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').''.$extra.'type="'.xmlentities($page_type).'" description="'.xmlentities($description).'" draggable="'.($not_draggable?'false':'page').'" droppable="'.(($page_type=='zone')?'page':'false').'" id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
 			}
 			echo '</category>';
 		}

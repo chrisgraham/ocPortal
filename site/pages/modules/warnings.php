@@ -448,6 +448,7 @@ class Module_warnings extends standard_aed_module
 		require_code('templates_results_table');
 		
 		$current_ordering=get_param('sort','w_time DESC',true);
+		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'w_time'=>do_lang_tempcode('DATE'),

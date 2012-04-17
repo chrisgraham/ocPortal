@@ -389,18 +389,18 @@ class Module_cms_galleries extends standard_aed_module
 							// Load in file
 							zip_entry_open($myfile,$entry);
 							$tmp_name_2=ocp_tempnam('bi');
-							$myfile=fopen($tmp_name_2,'wb') OR intelligent_write_error($tmp_name_2);
+							$myfile2=fopen($tmp_name_2,'wb') OR intelligent_write_error($tmp_name_2);
 							$more=mixed();
 							do
 							{
 								$more=zip_entry_read($entry);
 								if ($more!==false)
 								{
-									if (fwrite($myfile,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+									if (fwrite($myfile2,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 								}
 							}
 							while (($more!==false) && ($more!=''));
-							fclose($myfile);
+							fclose($myfile2);
 
 							// Strip off our slash to gimp right
 							$_file=zip_entry_name($entry);
@@ -558,7 +558,7 @@ class Module_cms_galleries extends standard_aed_module
 					if ($ok)
 					{
 						$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
-						$id=add_image($exif['UserComments'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'');
+						$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'');
 						store_exif('image',strval($id),$exif);
 
 						if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
@@ -739,7 +739,7 @@ class Module_cms_galleries extends standard_aed_module
 					}
 				}
 
-				$id=add_image($exif['UserComments'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''));
+				$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),post_param('notes',''));
 				store_exif('image',strval($id),$exif);
 
 				if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))

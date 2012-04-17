@@ -324,6 +324,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	if (function_exists('set_time_limit')) @set_time_limit(4);
 
 	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$GLOBALS['HTTP_STATUS_CODE']='403';
