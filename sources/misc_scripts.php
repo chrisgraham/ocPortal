@@ -206,10 +206,14 @@ function cron_bridge_script($caller)
 
 	decache('main_staff_checklist');
 
+	$limit_hook=get_param('limit_hook','');
+
 	set_value('last_cron',strval(time()));
 	$cron_hooks=find_all_hooks('systems','cron');
 	foreach (array_keys($cron_hooks) as $hook)
 	{
+		if (($limit_hook!='') && ($limit_hook!=$hook)) continue;
+
 		require_code('hooks/systems/cron/'.$hook);
 		$object=object_factory('Hook_cron_'.$hook,true);
 		if (is_null($object)) continue;

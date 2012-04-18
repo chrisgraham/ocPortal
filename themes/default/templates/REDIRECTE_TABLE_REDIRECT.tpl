@@ -39,7 +39,7 @@
 	</td>
 	<td>
 		{+START,IF,{$NEQ,{I},new}}
-			<a href="#" onclick="var t=this; window.fauxmodal_confirm('{!ARE_YOU_SURE_DELETE;}',function(result) { if (result) { this.parentNode.parentNode.parentNode.removeChild(t.parentNode.parentNode); } }); return false;"><img src="{$IMG*,tableitem/delete}" alt="{!DELETE}" title="{!DELETE}" /></a>
+			<a href="#" onclick="var t=this; window.fauxmodal_confirm('{!ARE_YOU_SURE_DELETE;}',function(result) { if (result) { t.parentNode.parentNode.parentNode.removeChild(t.parentNode.parentNode); } }); return false;"><img src="{$IMG*,tableitem/delete}" alt="{!DELETE}" title="{!DELETE}" /></a>
 		{+END}
 	</td>
 </tr>

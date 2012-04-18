@@ -63,9 +63,10 @@ function _length_so_far($bits,$i)
  * @param  ID_TEXT		The name of the template
  * @param  ID_TEXT		The name of the theme
  * @param  ID_TEXT		The language it is for
+ * @param  boolean		Whether to tolerate errors
  * @return array			A pair: array Compiled result structure, array preprocessable bits (special stuff needing attention that is referenced within the template)
  */
-function compile_template($data,$template_name,$theme,$lang)
+function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=false)
 {
 	if (strpos($data,'{$,Parser hint: pure}')!==false)
 	{
@@ -104,7 +105,11 @@ function compile_template($data,$template_name,$theme,$lang)
 				$stack[]=array($current_level_mode,$current_level_data,$current_level_params,NULL,NULL,NULL);
 				++$i;
 				$next_token=isset($bits[$i])?$bits[$i]:NULL;
-				if (is_null($next_token)) warn_exit(do_lang_tempcode('ABRUPTED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+				if (is_null($next_token))
+				{
+					if ($tolerate_errors) continue;
+					warn_exit(do_lang_tempcode('ABRUPTED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+				}
 				$current_level_data=array();
 				switch (substr($next_token,0,1))
 				{
@@ -149,8 +154,15 @@ function compile_template($data,$template_name,$theme,$lang)
 				$past_level_params=$current_level_params;
 				$past_level_mode=$current_level_mode;
 				if (count($stack)==0)
-					warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+_length_so_far($bits,$i))));
-				list($current_level_mode,$current_level_data,$current_level_params,,,)=array_pop($stack);
+				{
+					if (!$tolerate_errors)
+					{
+						warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+_length_so_far($bits,$i))));
+					}
+				} else
+				{
+					list($current_level_mode,$current_level_data,$current_level_params,,,)=array_pop($stack);
+				}
 
 				// Handle the level we just closed
 				if (function_exists('str_split'))
@@ -368,16 +380,29 @@ function compile_template($data,$template_name,$theme,$lang)
 						$past_level_params=$current_level_params;
 						$past_level_mode=$current_level_mode;
 						if (count($stack)==0)
+						{
+							if ($tolerate_errors) continue;
 							warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+						}
 						list($current_level_mode,$current_level_data,$current_level_params,$directive_level_mode,$directive_level_data,$directive_level_params)=array_pop($stack);
 						if (!is_array($directive_level_params))
+						{
+							if ($tolerate_errors) continue;
 							warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+						}
 						$directive_opener_params=array_merge($directive_level_params,array($directive_level_data));
 						if (($directive_level_mode!=PARSE_DIRECTIVE) || ($directive_opener_params[0][0]!='"START"'))
+						{
+							if ($tolerate_errors) continue;
 							warn_exit(do_lang_tempcode('TEMPCODE_TOO_MANY_CLOSES',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+						}
 
 						// Handle directive
-						if (count($directive_opener_params)==1) warn_exit(do_lang_tempcode('NO_DIRECTIVE_TYPE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+						if (count($directive_opener_params)==1)
+						{
+							if ($tolerate_errors) continue;
+							warn_exit(do_lang_tempcode('NO_DIRECTIVE_TYPE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+						}
 						$directive_params='';
 						$first_directive_param='""';
 						if ($directive_opener_params[1]==array()) $directive_opener_params[1]=array('""');
@@ -530,7 +555,8 @@ function compile_template($data,$template_name,$theme,$lang)
 	{
 		if (count($stack)!=0)
 		{
-			warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
+			if (!$tolerate_errors)
+				warn_exit(do_lang_tempcode('UNCLOSED_DIRECTIVE_OR_BRACE',escape_html($template_name),integer_format(1+substr_count(substr($data,0,_length_so_far($bits,$i)),chr(10)))));
 		}
 	}
 
@@ -636,14 +662,15 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
  * @param  ID_TEXT		The codename of the template (e.g. foo)
  * @param  ?ID_TEXT		The theme it is for (NULL: current theme)
  * @param  ?ID_TEXT		The language it is for (NULL: current language)
+ * @param  boolean		Whether to tolerate errors
  * @return mixed			The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL,$lang=NULL)
+function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL,$lang=NULL,$tolerate_errors=false)
 {
 	if (is_null($theme)) $theme=isset($GLOBALS['FORUM_DRIVER'])?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
 	if (is_null($lang)) $lang=user_lang();
 	
-	list($parts,$preprocessable_bits)=compile_template(substr($text,$symbol_pos),$codename,$theme,$lang);
+	list($parts,$preprocessable_bits)=compile_template(substr($text,$symbol_pos),$codename,$theme,$lang,$tolerate_errors);
 
 	if (count($parts)==0) return new ocp_tempcode();
 
