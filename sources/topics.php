@@ -453,10 +453,11 @@ class OCP_Topic
 			$this->_grab_at_and_above_and_remove($post_id,$queue,$posts);
 		}
 
-		// Any posts by current member must be grabbed too, and also first post
+		// Any posts by current member must be grabbed too (up to 3 root ones though - otherwise risks performance), and also first post
+		$num_poster_grabbed=0;
 		foreach ($queue as $i=>$q)
 		{
-			if (($q['p_poster']==get_member()) || ($q['id']===$this->first_post_id))
+			if ((($q['p_poster']==get_member()) && ($q['parent_id']===NULL) && ($num_poster_grabbed<3)) || ($q['id']===$this->first_post_id))
 			{
 				$this->replied=true;
 				if ($q['id']===$this->first_post_id) // First post must go first
@@ -468,6 +469,10 @@ class OCP_Topic
 				} else
 				{
 					$posts['post_'.strval($q['id'])]=$q;
+				}
+				if ($q['p_poster']==get_member())
+				{
+					$num_poster_grabbed++;
 				}
 				unset($queue[$i]);
 			}
@@ -801,7 +806,7 @@ class OCP_Topic
 			}
 
 			// Render
-			$sequence->attach(do_template('POST',array(
+			$sequence->attach(/*performance*/static_evaluate_tempcode(do_template('POST',array(
 				'_GUID'=>'eb7df038959885414e32f58e9f0f9f39',
 				'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,
 				'HIGHLIGHT'=>$highlight,
@@ -827,7 +832,7 @@ class OCP_Topic
 				'UNVALIDATED'=>$unvalidated,
 				'IS_SPACER_POST'=>$is_spacer_post,
 				'NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),
-			)));
+			))));
 		}
 
 		return $sequence;

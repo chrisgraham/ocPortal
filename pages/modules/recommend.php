@@ -36,7 +36,8 @@ class Module_recommend
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=2;
+		$info['version']=3;
+		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
 	}
@@ -68,10 +69,22 @@ class Module_recommend
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		add_config_option('RECOMMEND_SITE','points_RECOMMEND_SITE','integer','return addon_installed(\'points\')?\'350\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-
 		require_lang('recommend');
-		add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
+
+		if (is_null($upgrade_from))
+		{
+			add_config_option('RECOMMEND_SITE','points_RECOMMEND_SITE','integer','return addon_installed(\'points\')?\'350\':NULL;','POINTS','COUNT_POINTS_GIVEN');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
+		{
+			delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE&,:,%3A,{$SELF_URL}}');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<3))
+		{
+			add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
+		}
 	}
 
 	/**

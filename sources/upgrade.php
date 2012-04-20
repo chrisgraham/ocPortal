@@ -1757,6 +1757,8 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				".menu_type__zone {\n	font-size: 0.9em;\n}"=>".menu_type__zone {\n	font-size: 0.9em;\n	max-height: 15px;\n}",
 				".menu_type__zone li {\n	display: inline;\n	padding: 0;\n	list-style-type: none;\n}"=>".menu_type__zone li {\n	display: inline;\n	padding: 0;\n	list-style-type: none;\n	list-style-image: none;\n}\n\n.menu_type__zone li * {\n	vertical-align: middle;\n}",
 				".edit_menu_link_inline {\n	position: absolute;\n	right: 1px;\n}"=>"*>.edit_menu_link_inline {\n	display: none;\n}\n\n*:hover>.edit_menu_link_inline {\n	display: block;\n}\n\n.edit_menu_link_inline {\n	position: absolute;\n	right: 1px;\n	z-index: 10000;\n}",
+				".ocf_post_details_unvalidated {\n	float: {!en_left};\n	}"=>".ocf_post_details_unvalidated {\n	float: {!en_left};\n	padding-{!en_left}: 7px;\n	}",
+				".radio_list_picture {\n	float: {!en_left};\n	white-space: nowrap;\n	padding: 3px;\n	min-width: 40px;\n	min-height: 40px;\n}"=>".radio_list_picture {\n	float: {!en_left};\n	white-space: nowrap;\n	padding: 3px;\n	min-width: 40px;\n	min-height: 40px;\n	font-size: 0.8em;\n	min-height: 65px;\n	min-width: 85px;\n}",
 			),
 			'news.css'=>array(
 				".standardbox_wrap_classic .news_piece_summary h3, .rss_summary h3 {\n	margin-{!en_right}: 130px;\n	border-bottom: 1px solid #6b81a1; /* {\$,wizard, 100% medborder.border} */\n}"=>".news_piece_summary h3, .rss_summary h3 {\n	margin-{!en_right}: 130px !important;\n	border-bottom: 1px solid #6b81a1 !important; /* {\$,wizard, 100% medborder.border} */\n}\n\n.rss_summary nobr { /* Stops naughty Google news from breaking layout */\n	white-space: normal;\n}",

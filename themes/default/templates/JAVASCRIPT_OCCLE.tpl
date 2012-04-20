@@ -93,14 +93,6 @@ function occle_command_response(ajax_result_frame,ajax_result)
 	document.getElementById("occle_command").disabled=false;
 	document.getElementById("occle_command").focus();
 
-	//Deal with the response: add the result to the command_line
-	var method=merge_text_nodes(ajax_result.getElementsByTagName("command")[0].childNodes);
-	var stdcommand=merge_text_nodes(ajax_result.getElementsByTagName("stdcommand")[0].childNodes);
-	var stdhtml=ajax_result.getElementsByTagName("stdhtml")[0].childNodes[0];
-	var stdout=merge_text_nodes(ajax_result.getElementsByTagName("stdout")[0].childNodes);
-	var stderr=merge_text_nodes(ajax_result.getElementsByTagName("stderr")[0].childNodes);
-	var stdnotifications=ajax_result.getElementsByTagName("stdnotifications")[0].childNodes[0];
-
 	var command=document.getElementById("occle_command");
 	var command_prompt=document.getElementById("command_prompt");
 	var cl=document.getElementById("commands_go_here");
@@ -111,6 +103,32 @@ function occle_command_response(ajax_result_frame,ajax_result)
 	new_command.setAttribute("class","command float_surrounder");
 	past_command_prompt.setAttribute("class","past_command_prompt");
 	past_command.setAttribute("class","past_command");
+
+	if (!ajax_result)
+	{
+		var stderr_text=document.createTextNode("{!ERROR_NON_TERMINAL^#}\n{!INTERNAL_ERROR^#}");
+		var stderr_text_p=document.createElement("p");
+		stderr_text_p.setAttribute("class","error_output");
+		stderr_text_p.appendChild(stderr_text);
+		past_command.appendChild(stderr_text_p);
+
+		new_command.appendChild(past_command);
+		cl.appendChild(new_command);
+
+		command.value="";
+		var cl2=document.getElementById('command_line');
+		cl2.scrollTop=cl2.scrollHeight;
+
+		return;
+	}
+
+	//Deal with the response: add the result to the command_line
+	var method=merge_text_nodes(ajax_result.getElementsByTagName("command")[0].childNodes);
+	var stdcommand=merge_text_nodes(ajax_result.getElementsByTagName("stdcommand")[0].childNodes);
+	var stdhtml=ajax_result.getElementsByTagName("stdhtml")[0].childNodes[0];
+	var stdout=merge_text_nodes(ajax_result.getElementsByTagName("stdout")[0].childNodes);
+	var stderr=merge_text_nodes(ajax_result.getElementsByTagName("stderr")[0].childNodes);
+	var stdnotifications=ajax_result.getElementsByTagName("stdnotifications")[0].childNodes[0];
 
 	var past_command_text=document.createTextNode(method+": ");
 	past_command_prompt.appendChild(past_command_text);

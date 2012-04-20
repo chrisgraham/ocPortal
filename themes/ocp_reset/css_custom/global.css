@@ -1232,6 +1232,8 @@ h3.standardbox_title_classic {
 }
 
 .xhtml_validator_off { /* {$,Membership of this class is used as a tag to turn off the XHTML-validator} */
+	display: inline-block; /* To stop it breaking text-align: center */
+	width: 100%;
 }
 
 .img_thumb { /* {$,Membership of this class is used as a tag to turn on the nereid blend effect} */
@@ -1689,6 +1691,10 @@ input.buttonhyperlink {
 	table-layout: auto !important;
 }
 
+.variable_table img {
+	vertical-align: middle;
+}
+
 .wide_table_wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -1731,6 +1737,7 @@ input.buttonhyperlink {
 }
 
 input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
+input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
 input[type="submit"].wide_button, input[type="submit"].button_micro, input[type="submit"].button_page, input[type="submit"].button_pageitem,
 input[type="button"].wide_button, input[type="button"].button_micro, input[type="button"].button_page, input[type="button"].button_pageitem,
 button.wide_button, button.button_micro, button.button_page, button.button_pageitem
@@ -1766,6 +1773,7 @@ input[type="reset"].button_page, input[type="submit"].button_page, input[type="b
 	min-width: {$?,{$MOBILE},5.8,9.8}em;
 }
 
+input[type="reset"].wide_button:hover, input[type="reset"].button_micro:hover, input[type="reset"].button_page:hover, input[type="reset"].button_pageitem:hover,
 input[type="reset"].wide_button:hover, input[type="reset"].button_micro:hover, input[type="reset"].button_page:hover, input[type="reset"].button_pageitem:hover,
 input[type="submit"].wide_button:hover, input[type="submit"].button_micro:hover, input[type="submit"].button_page:hover, input[type="submit"].button_pageitem:hover,
 input[type="button"].wide_button:hover, input[type="button"].button_micro:hover, input[type="button"].button_page:hover, input[type="button"].button_pageitem:hover,
@@ -2163,6 +2171,10 @@ th.meta_data_title {
 	{+END}
 }
 
+.post .ocf_post_buttons {
+	margin-top: 1.3em;
+}
+
 .ocf_post_buttons a {
 	opacity: 0.0;
 	-webkit-transition-property : opacity;
@@ -2203,6 +2215,9 @@ th.meta_data_title {
 	padding: 3px;
 	min-width: 40px;
 	min-height: 40px;
+	font-size: 0.8em;
+	min-height: 65px;
+	min-width: 85px;
 }
 
 #page_running_admin_themes .radio_list_picture {

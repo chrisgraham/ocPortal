@@ -63,7 +63,7 @@ if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
 
 $only=get_param('only',NULL);
 
-if (get_param_integer('export_bundled_addons',1)==1)
+if (get_param_integer('export_bundled_addons',0)==1)
 {
 	$addons=find_all_hooks('systems','addon_registry');
 	foreach (array_keys($addons) as $name)

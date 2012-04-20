@@ -446,7 +446,7 @@ function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$
 /**
  * Implement a rating at the quantum level.
  *
- * @param  integer		Rating given
+ * @param  ?integer		Rating given (NULL: unrate)
  * @range 1 10
  * @param  ID_TEXT		The page name the rating is on
  * @param  MEMBER			The member doing the rating
@@ -458,21 +458,37 @@ function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$
  */
 function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$type,$content_id,$content_url,$content_title)
 {
-	if (($rating>10) || ($rating<1)) log_hack_attack_and_exit('VOTE_CHEAT');
+	if (!is_null($rating))
+	{
+		if (($rating>10) || ($rating<1)) log_hack_attack_and_exit('VOTE_CHEAT');
+	}
 
 	$rating_for_type=$content_type.(($type=='')?'':('_'.$type));
 
 	if (!has_specific_permission($member_id,'rate',$page_name)) return;
-	if (already_rated(array($rating_for_type),$content_id)) return;
+	if (!is_null($rating))
+	{
+		if (already_rated(array($rating_for_type),$content_id))
+		{
+			// Delete, in preparation for re-rating
+			$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address()));
+		}
+	}
 
 	list($_content_title,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
 	if (is_null($content_title)) $content_title=$_content_title;
 	if (($member_id===$submitter) && (!is_guest($member_id))) return;
 
-	$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
+	if (!is_null($rating))
+	{
+		$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>$rating));
+	} else
+	{
+		$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address()));
+	}
 
 	// Top rating / liked
-	if (($rating==10) && ($type==''))
+	if (($rating===10) && ($type==''))
 	{
 		$content_type_title=$content_type;
 		if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
@@ -516,6 +532,12 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
+			// Special case. Would prefer not to hard-code, but important for usability
+			if (($content_type=='post') && ($content_title=='') && (get_forum_type()=='ocf'))
+			{
+				$content_title=do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$GLOBALS['FORUM_DB']->query_value('f_posts','p_topic_id',array('id'=>intval($content_id))))));
+			}
 
 			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES';
 			if ($content_title=='')

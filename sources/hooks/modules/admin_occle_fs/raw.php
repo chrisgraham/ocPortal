@@ -31,8 +31,8 @@ class Hook_raw
 	*/
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
 	{
-		$path=get_custom_file_base().'/';
-		foreach ($meta_dir as $meta_dir_section) $path.=filter_naughty($meta_dir_section).'/';
+		$path=get_custom_file_base();
+		foreach ($meta_dir as $meta_dir_section) $path.='/'.filter_naughty($meta_dir_section);
 
 		$listing=array();
 		if (is_dir($path))
@@ -42,7 +42,7 @@ class Hook_raw
 			{
 				if ($file[0]!='.')
 				{
-					if (is_dir($path.$file)) $listing[$file]=array();
+					if (is_dir($path.'/'.$file)) $listing[$file]=array();
 					else $listing[]=$file;
 				}
 			}
@@ -64,17 +64,14 @@ class Hook_raw
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
 	{
 		$new_dir_name=filter_naughty($new_dir_name);
-		$path=get_custom_file_base().'/';
-		foreach ($meta_dir as $meta_dir_section)
-		{
-			$path.=filter_naughty($meta_dir_section).'/';
-		}
+		$path=get_custom_file_base();
+		foreach ($meta_dir as $meta_dir_section) $path.='/'.filter_naughty($meta_dir_section);
 
-		if ((is_dir($path)) && (!file_exists($path.$new_dir_name)) && (is_writable_wrap($path)))
+		if ((is_dir($path)) && (!file_exists($path.'/'.$new_dir_name)) && (is_writable_wrap($path)))
 		{
-			$ret=@mkdir($path.$new_dir_name,0777) OR warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path.$new_dir_name)));
-			fix_permissions($path.$new_dir_name,0777);
-			sync_file($path.$new_dir_name);
+			$ret=@mkdir($path.'/'.$new_dir_name,0777) OR warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path.'/'.$new_dir_name)));
+			fix_permissions($path.'/'.$new_dir_name,0777);
+			sync_file($path.'/'.$new_dir_name);
 			return $ret;
 		}
 		else return false; //Directory exists
@@ -92,18 +89,15 @@ class Hook_raw
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
 	{
 		$dir_name=filter_naughty($dir_name);
-		$path=get_custom_file_base().'/';
-		foreach ($meta_dir as $meta_dir_section)
-		{
-			$path.=filter_naughty($meta_dir_section).'/';
-		}
+		$path=get_custom_file_base();
+		foreach ($meta_dir as $meta_dir_section) $path.='/'.filter_naughty($meta_dir_section);
 
-		if ((is_dir($path)) && (file_exists($path.$dir_name)) && (is_writable_wrap($path.$dir_name)))
+		if ((is_dir($path)) && (file_exists($path.'/'.$dir_name)) && (is_writable_wrap($path.'/'.$dir_name)))
 		{
 			require_code('files2');
-			deldir_contents($path.$dir_name);
-			$ret=@rmdir($path.$dir_name) OR warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path.$dir_name)));
-			sync_file($path.$dir_name);
+			deldir_contents($path.'/'.$dir_name);
+			$ret=@rmdir($path.'/'.$dir_name) OR warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path.'/'.$dir_name)));
+			sync_file($path.'/'.$dir_name);
 			return true;
 		}
 		else return false; //Directory doesn't exist
@@ -121,16 +115,13 @@ class Hook_raw
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
 		$file_name=filter_naughty($file_name);
-		$path=get_custom_file_base().'/';
-		foreach ($meta_dir as $meta_dir_section)
-		{
-			$path.=filter_naughty($meta_dir_section).'/';
-		}
+		$path=get_custom_file_base();
+		foreach ($meta_dir as $meta_dir_section) $path.='/'.filter_naughty($meta_dir_section);
 
-		if ((is_dir($path)) && (file_exists($path.$file_name)) && (is_writable_wrap($path.$file_name)))
+		if ((is_dir($path)) && (file_exists($path.'/'.$file_name)) && (is_writable_wrap($path.'/'.$file_name)))
 		{
-			$ret=@unlink($path.$file_name) OR intelligent_write_error($path.$file_name);
-			sync_file($path.$file_name);
+			$ret=@unlink($path.'/'.$file_name) OR intelligent_write_error($path.'/'.$file_name);
+			sync_file($path.'/'.$file_name);
 			return $ret;
 		}
 		else return false; //File doesn't exist
@@ -148,15 +139,12 @@ class Hook_raw
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
 		$file_name=filter_naughty($file_name);
-		$path=get_custom_file_base().'/';
-		foreach ($meta_dir as $meta_dir_section)
-		{
-			$path.=filter_naughty($meta_dir_section).'/';
-		}
+		$path=get_custom_file_base();
+		foreach ($meta_dir as $meta_dir_section) $path.='/'.filter_naughty($meta_dir_section);
 
-		if ((is_dir($path)) && (file_exists($path.$file_name)) && (is_readable($path.$file_name)))
+		if ((is_dir($path)) && (file_exists($path.'/'.$file_name)) && (is_readable($path.'/'.$file_name)))
 		{
-			return file_get_contents($path.$file_name,FILE_TEXT);
+			return file_get_contents($path.'/'.$file_name,FILE_TEXT);
 		}
 		else return false; //File doesn't exist
 	}
@@ -174,19 +162,16 @@ class Hook_raw
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
 	{
 		$file_name=filter_naughty($file_name);
-		$path=get_custom_file_base().'/';
-		foreach ($meta_dir as $meta_dir_section)
-		{
-			$path.=filter_naughty($meta_dir_section).'/';
-		}
+		$path=get_custom_file_base();
+		foreach ($meta_dir as $meta_dir_section) $path.='/'.filter_naughty($meta_dir_section);
 
-		if ((is_dir($path)) && (((file_exists($path.$file_name)) && (is_writable_wrap($path.$file_name))) || ((!file_exists($path.$file_name)) && (is_writable_wrap($path)))))
+		if ((is_dir($path)) && (((file_exists($path.'/'.$file_name)) && (is_writable_wrap($path.'/'.$file_name))) || ((!file_exists($path.'/'.$file_name)) && (is_writable_wrap($path)))))
 		{
-			$fh=@fopen($path.$file_name,'wt') OR intelligent_write_error($path.$file_name);
+			$fh=@fopen($path.'/'.$file_name,'wt') OR intelligent_write_error($path.'/'.$file_name);
 			$output=fwrite($fh,$contents);
 			fclose($fh);
 			if ($output<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-			fix_permissions($path.$file_name);
+			fix_permissions($path.'/'.$file_name);
 			sync_file($path.$file_name);
 			return $output;
 		}

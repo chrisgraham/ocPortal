@@ -598,7 +598,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		$view_map=array('page'=>'forumview');
 		if ($id!=db_get_first_id()) $view_map['id']=$id;
-		$_url=build_url($view_map,get_module_zone('forumview'));
+		$_url=build_url($view_map,get_module_zone('forumview'),NULL,false,false,!$tempcode_okay);
 		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
@@ -678,7 +678,7 @@ class forum_driver_ocf extends forum_driver_base
 		if (is_null($id)) return ''; // Should not happen, but if it does, this is how we should handle it.
 
 		unset($forum);
-		$_url=build_url(array('page'=>'topicview','id'=>$id),get_module_zone('topicview'));
+		$_url=build_url(array('page'=>'topicview','id'=>$id),get_module_zone('topicview'),NULL,false,false,!$tempcode_okay);
 		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
@@ -699,7 +699,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		unset($forum);
 
-		$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$id),get_module_zone('topicview'));
+		$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$id),get_module_zone('topicview'),NULL,false,false,!$tempcode_okay);
 		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
 		$url.='#post_'.strval($id);

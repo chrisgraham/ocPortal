@@ -894,16 +894,16 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				if ($chunked)
 				{
 					$matches=array();
-					if (preg_match('#^([a-f\d]+)\r\n(.*)$#is',$line,$matches)!=0)
+					if (preg_match('#^(\r\n)?([a-f\d]+)\r\n(.*)$#is',$line,$matches)!=0)
 					{
-						$amount_wanted=hexdec($matches[1]);
-						if (strlen($matches[2])<$amount_wanted) // Chunk was more than 1024, so we need to iterate more to parse
+						$amount_wanted=hexdec($matches[2]);
+						if (strlen($matches[3])<$amount_wanted) // Chunk was more than 1024, so we need to iterate more to parse
 						{
 							$chunk_buffer_unprocessed=$line;
 							continue;
 						}
-						$chunk_buffer_unprocessed=ltrim(substr($matches[2],$amount_wanted)); // May be some more extra read
-						$line=substr($matches[2],0,$amount_wanted);
+						$chunk_buffer_unprocessed=substr($matches[3],$amount_wanted); // May be some more extra read
+						$line=substr($matches[3],0,$amount_wanted);
 						if ($line=='') break;
 					} else
 					{
@@ -928,6 +928,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				foreach ($lines as $lno=>$line)
 				{
 					$line.="\r\n";
+
 					$tally+=strlen($line);
 
 					$matches=array();

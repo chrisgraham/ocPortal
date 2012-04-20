@@ -1006,6 +1006,8 @@ h3.standardbox_title_classic {
 }
 
 .xhtml_validator_off { /* {$,Membership of this class is used as a tag to turn off the XHTML-validator} */
+	display: inline-block; /* To stop it breaking text-align: center */
+	width: 100%;
 }
 
 .img_thumb { /* {$,Membership of this class is used as a tag to turn on the nereid blend effect} */
@@ -1224,6 +1226,10 @@ hr.long_break {
 .staff_actions {
 	margin-top: 2em;
 	font-size: 0.85em;
+}
+
+.staff_actions a {
+	white-space: nowrap !important;
 }
 
 .bookmarks_menu_box {
@@ -1450,6 +1456,10 @@ input.buttonhyperlink {
 	table-layout: auto !important;
 }
 
+.variable_table img {
+	vertical-align: middle;
+}
+
 .wide_table_wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -1484,6 +1494,7 @@ input.buttonhyperlink {
 	width: 100%;
 }
 
+input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
 input[type="submit"].wide_button, input[type="submit"].button_micro, input[type="submit"].button_page, input[type="submit"].button_pageitem,
 input[type="button"].wide_button, input[type="button"].button_micro, input[type="button"].button_page, input[type="button"].button_pageitem,
 button.wide_button, button.button_micro, button.button_page, button.button_pageitem
@@ -1503,22 +1514,23 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	overflow: visible; /* stops button padding on IE7 */
 }
 
-input[type="submit"].button_micro, input[type="button"].button_micro, button.button_micro
+input[type="reset"].button_micro, input[type="submit"].button_micro, input[type="button"].button_micro, button.button_micro
 {
 	padding: 0 3px 1px 3px !important;
 }
 
-input[type="submit"].wide_button, input[type="button"].wide_button, button.wide_button, input[type="submit"].button_pageitem, input[type="button"].button_pageitem, button.button_pageitem
+input[type="reset"].wide_button, input[type="submit"].wide_button, input[type="button"].wide_button, button.wide_button, input[type="submit"].button_pageitem, input[type="button"].button_pageitem, button.button_pageitem
 {
 	padding: 2px 4px 3px 4px !important;
 }
 
-input[type="submit"].button_page, input[type="button"].button_page, button.button_page
+input[type="reset"].button_page, input[type="submit"].button_page, input[type="button"].button_page, button.button_page
 {
 	padding: 3px 5px 4px 5px !important;
 	min-width: 9.8em;
 }
 
+input[type="reset"].wide_button:hover, input[type="reset"].button_micro:hover, input[type="reset"].button_page:hover, input[type="reset"].button_pageitem:hover,
 input[type="submit"].wide_button:hover, input[type="submit"].button_micro:hover, input[type="submit"].button_page:hover, input[type="submit"].button_pageitem:hover,
 input[type="button"].wide_button:hover, input[type="button"].button_micro:hover, input[type="button"].button_page:hover, input[type="button"].button_pageitem:hover,
 button.wide_button:hover, button.button_micro:hover, button.button_page:hover, button.button_pageitem:hover
@@ -1526,8 +1538,8 @@ button.wide_button:hover, button.button_micro:hover, button.button_page:hover, b
 	opacity: 1.0;
 }
 
+input[type="reset"].wide_button:disabled, input[type="reset"].button_micro:disabled, input[type="reset"].button_page:disabled, input[type="reset"].button_pageitem:disabled,
 input[type="submit"].wide_button:disabled, input[type="submit"].button_micro:disabled, input[type="submit"].button_page:disabled, input[type="submit"].button_pageitem:disabled,
-
 input[type="button"].wide_button:disabled, input[type="button"].button_micro:disabled, input[type="button"].button_page:disabled, input[type="button"].button_pageitem:disabled,
 button.wide_button:disabled, button.button_micro:disabled, button.button_page:disabled, button.button_pageitem:disabled
 {
@@ -1719,6 +1731,20 @@ th.meta_data_title {
 	border: 1px solid #222e31; /* {$,wizard, 70% medborder.border + 30% !W/B} */
 	z-index: 1000;
 	opacity: 0.9;
+	word-wrap: break-word;
+}
+
+.ocp_tooltip img {
+	max-width: 100%;
+}
+
+.ocp_tooltip .shunted_button {
+	display: none;
+}
+
+.ocp_tooltip .whitespace {
+	max-height: 5em;
+	overflow: auto;
 }
 
 .ocp_tooltip .standardbox_links_classic {
@@ -1909,6 +1935,10 @@ th.meta_data_title {
 	{+END}
 }
 
+.post .ocf_post_buttons {
+	margin-top: 1.3em;
+}
+
 .ocf_post_buttons a {
 	opacity: 0.0;
 	-webkit-transition-property : opacity;
@@ -1949,6 +1979,9 @@ th.meta_data_title {
 	padding: 3px;
 	min-width: 40px;
 	min-height: 40px;
+	font-size: 0.8em;
+	min-height: 65px;
+	min-width: 85px;
 }
 
 #page_running_admin_themes .radio_list_picture {
@@ -2516,6 +2549,10 @@ ul.sitemap li li {
 	font-weight: bold;
 }
 
+.attachment_img {
+	max-width: 100%;
+}
+
 .ticker {
 	margin: 0 auto;
 	height: 15px;
@@ -2541,10 +2578,24 @@ ul.sitemap li li {
 	margin-top: 0.68em;
 }
 
+.RATING_BOX .rating_inner {
+	text-align: center;
+}
+.RATING_INLINE_DYNAMIC .rating_inner, .RATING_INLINE_DYNAMIC form {
+	display: inline;
+}
+
+.post_action_link .RATING_INLINE_DYNAMIC {
+	padding-left: 20px;
+}
+
 .rating_inner {
 	white-space: nowrap;
 }
 
+.rating_inner img {
+	cursor: pointer;
+}
 .addtocart {
 	width: 100px;
 	height:34px;

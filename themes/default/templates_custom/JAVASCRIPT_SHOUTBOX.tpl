@@ -10,6 +10,8 @@ function sb_chat_check(last_message_id,last_event_id)
 
 function sb_chat_check_response(ajax_result_frame,ajax_result)
 {
+	if (!ajax_result) return; // Some server side glitch. As this polls, lets ignore it
+
 	sb_handle_signals(ajax_result);
 
 	// Schedule the next check

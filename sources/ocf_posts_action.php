@@ -220,17 +220,6 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_post'=>$lang_id),array('id'=>$post_id),'',1);
 	}
 
-	if ($check_permissions) // Not automated, so we'll have to be doing run-time progressing too
-	{
-		// Is the user gonna automatically enable notifications for this?
-		$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster,'m_auto_monitor_contrib_content');
-		if ($auto_monitor_contrib_content==1)
-		{
-			require_code('notifications');
-			enable_notifications('ocf_topic',strval($topic_id),$poster);
-		}
-	}
-
 	if (($validated==0) || ($check_permissions))
 	{
 		$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
@@ -267,6 +256,17 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 					dispatch_notification('ocf_new_pt',NULL,$msubject,$mmessage,array($intended_solely_for),$anonymous?db_get_first_id():$poster);
 				}
 			}
+		}
+	}
+
+	if ($check_permissions) // Not automated, so we'll have to be doing run-time progressing too
+	{
+		// Is the user gonna automatically enable notifications for this?
+		$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster,'m_auto_monitor_contrib_content');
+		if ($auto_monitor_contrib_content==1)
+		{
+			require_code('notifications');
+			enable_notifications('ocf_topic',strval($topic_id),$poster);
 		}
 	}
 

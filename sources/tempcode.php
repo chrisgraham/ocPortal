@@ -1554,7 +1554,7 @@ class ocp_tempcode
 	 */
 	function evaluate($current_lang=NULL,$_escape=false,$up_to=NULL)
 	{
-		static $do_memory_tracking=NULL;
+		/*static $do_memory_tracking=NULL;	Breaks installer, and poor performance
 		if ($do_memory_tracking===NULL) $do_memory_tracking=(get_value('memory_tracking')==='1');
 		if ($do_memory_tracking)
 		{
@@ -1562,7 +1562,7 @@ class ocp_tempcode
 			{
 				fatal_exit('Memory problem - over 50MB used');
 			}
-		}
+		}*/
 
 		if (isset($this->cached_output)) return $this->cached_output;
 		if (!isset($this->seq_parts[0]))

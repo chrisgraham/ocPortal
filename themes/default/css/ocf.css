@@ -240,6 +240,7 @@
 
 .ocf_post_details_unvalidated {
 	float: {!en_left};
+	padding-{!en_left}: 7px;
 }
 
 .ocf_post_details_grapple {

@@ -50,11 +50,13 @@ function get_future_version_information()
 		$table=make_string_tempcode(preg_replace('#<p>\s*</p>#','',$table->evaluate()));
 	} else $table=paragraph(do_lang_tempcode('CANNOT_CONNECT_HOME'),'dfsdff32ffd');
 
+	require_code('xhtml');
+
 	/*$table->attach('<script type="text/javascript">// <![CDATA[
 		window.open(\''.$url.'\');
 	//]]></script>');*/
 
-	return $table;
+	return make_string_tempcode(xhtmlise_html($table->evaluate()));
 }
 
 

@@ -31,20 +31,27 @@ class Hook_rating
 		if (get_option('is_on_rating')=='0') return do_lang_tempcode('INTERNAL_ERROR');
 
 		// Has there actually been any rating?
-		$rating=post_param_integer('rating');
+		if ((strtoupper(ocp_srv('REQUEST_METHOD'))=='POST') || (ocp_srv('HTTP_REFERER')=='')) // Code branch if this is a post request. Allow rating to not be given (= unrate). Has to check is post request to stop CSRF
+		{
+			$rating=either_param_integer('rating',NULL);
+		} else
+		{
+			$rating=post_param_integer('rating'); // Will fail
+		}
 		$content_type=get_param('content_type');
-		$type=get_param('type');
+		$type=get_param('type','');
 		$content_id=get_param('id');
 
-		$content_url=get_param('content_url',false,true);
-		$content_title=get_param('content_title',false,true);
+		$content_url=get_param('content_url','',true);
+		$content_title=get_param('content_title','',true);
 
 		require_code('feedback');
 		actualise_specific_rating($rating,get_page_name(),get_member(),$content_type,$type,$content_id,$content_url,$content_title);
 
-		$template=get_param('template');
-		if ($template!='')
+		$template=get_param('template',NULL);
+		if ($template!=='')
 		{
+			if (is_null($template)) $template='RATING_BOX';
 			return display_rating($content_url,$content_title,$content_type,$content_id,$template);
 		}
 

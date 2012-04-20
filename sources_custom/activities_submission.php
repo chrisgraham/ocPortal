@@ -125,7 +125,7 @@ function activities_ajax_submit_handler()
 				}
 				else
 				{
-					$stored_id=syndicate_described_activity('RAW_DUMP',
+					$stored_id=activities_addon_syndicate_described_activity('RAW_DUMP',
 													$map['STATUS'],
 													'',
 													'',

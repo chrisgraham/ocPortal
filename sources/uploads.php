@@ -385,11 +385,11 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			{
 				if ($accept_errors)
 				{
-					attach_message(do_lang_tempcode('FILE_TOO_BIG',integer_format($max_size)),'warn');
+					attach_message(do_lang_tempcode('FILE_TOO_BIG',integer_format(get_max_image_size())),'warn');
 					return array('','','','');
 				} else
 				{
-					warn_exit(do_lang_tempcode('FILE_TOO_BIG',integer_format($max_size)));
+					warn_exit(do_lang_tempcode('FILE_TOO_BIG',integer_format(get_max_image_size())));
 				}
 			}
 

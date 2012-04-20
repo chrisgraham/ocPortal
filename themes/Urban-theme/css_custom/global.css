@@ -1839,6 +1839,7 @@ a.poster_member:hover {
 }
 
 input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
+input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
 input[type="submit"].wide_button, input[type="submit"].button_micro, input[type="submit"].button_page, input[type="submit"].button_pageitem,
 input[type="button"].wide_button, input[type="button"].button_micro, input[type="button"].button_page, input[type="button"].button_pageitem,
 button.wide_button, button.button_micro, button.button_page, button.button_pageitem
@@ -1873,6 +1874,7 @@ input[type="reset"].button_page, input[type="submit"].button_page, input[type="b
 	min-width: {$?,{$MOBILE},5.8,9.8}em;
 }
 
+input[type="reset"].wide_button:hover, input[type="reset"].button_micro:hover, input[type="reset"].button_page:hover, input[type="reset"].button_pageitem:hover,
 input[type="reset"].wide_button:hover, input[type="reset"].button_micro:hover, input[type="reset"].button_page:hover, input[type="reset"].button_pageitem:hover,
 input[type="submit"].wide_button:hover, input[type="submit"].button_micro:hover, input[type="submit"].button_page:hover, input[type="submit"].button_pageitem:hover,
 input[type="button"].wide_button:hover, input[type="button"].button_micro:hover, input[type="button"].button_page:hover, input[type="button"].button_pageitem:hover,
@@ -2293,6 +2295,10 @@ table.tooltip_fields td, .tooltip_fields td {
 	{+END}
 }
 
+.post .ocf_post_buttons {
+	margin-top: 1.3em;
+}
+
 .ocf_post_buttons a {
 	opacity: 0.0;
 	-webkit-transition-property : opacity;
@@ -2333,6 +2339,9 @@ table.tooltip_fields td, .tooltip_fields td {
 	padding: 3px;
 	min-width: 40px;
 	min-height: 40px;
+	font-size: 0.8em;
+	min-height: 65px;
+	min-width: 85px;
 }
 
 #page_running_admin_themes .radio_list_picture {

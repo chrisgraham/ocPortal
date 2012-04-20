@@ -114,7 +114,7 @@ function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,
 	$subject=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL_SUBJECT':'POST_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$topic_title);
 	$mail=do_lang($is_starter?'TOPIC_NOTIFICATION_MAIL':'POST_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($url),array(comcode_escape($sender_username),$post,$topic_title));
 
-	$limit_to=is_null($_limit_to)?array():array($limit_to);
+	$limit_to=is_null($_limit_to)?array():array($_limit_to);
 
 	if ($is_pt)
 	{

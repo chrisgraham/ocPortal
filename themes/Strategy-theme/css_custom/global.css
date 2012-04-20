@@ -902,6 +902,8 @@ form { /* For IE6 */
 }
 
 .xhtml_validator_off { /* {$,Membership of this class is used as a tag to turn off the XHTML-validator} */
+	display: inline-block; /* To stop it breaking text-align: center */
+	width: 100%;
 }
 
 .img_thumb { /* {$,Membership of this class is used as a tag to turn on the nereid blend effect} */
@@ -1118,6 +1120,10 @@ hr.long_break {
 .staff_actions {
 	margin-top: 2em;
 	font-size: 0.85em;
+}
+
+.staff_actions a {
+	white-space: nowrap !important;
 }
 
 .bookmarks_menu_box {
@@ -1349,6 +1355,10 @@ input.buttonhyperlink {
 	table-layout: auto !important;
 }
 
+.variable_table img {
+	vertical-align: middle;
+}
+
 .wide_table_wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -1565,6 +1575,20 @@ th.meta_data_title {
 	border: 1px solid #8c615e; /* {$,wizard, 70% medborder.border + 30% !W/B} */
 	z-index: 1000;
 	opacity: 0.9;
+	word-wrap: break-word;
+}
+
+.ocp_tooltip img {
+	max-width: 100%;
+}
+
+.ocp_tooltip .shunted_button {
+	display: none;
+}
+
+.ocp_tooltip .whitespace {
+	max-height: 5em;
+	overflow: auto;
 }
 
 .ocp_tooltip .standardbox_links_classic {
@@ -1755,6 +1779,10 @@ th.meta_data_title {
 	{+END}
 }
 
+.post .ocf_post_buttons {
+	margin-top: 1.3em;
+}
+
 .ocf_post_buttons a {
 	opacity: 0.0;
 	-webkit-transition-property : opacity;
@@ -1795,6 +1823,9 @@ th.meta_data_title {
 	padding: 3px;
 	min-width: 40px;
 	min-height: 40px;
+	font-size: 0.8em;
+	min-height: 65px;
+	min-width: 85px;
 }
 
 #page_running_admin_themes .radio_list_picture {
@@ -2364,6 +2395,10 @@ ul.sitemap li li {
 	font-weight: bold;
 }
 
+.attachment_img {
+	max-width: 100%;
+}
+
 .ticker {
 	margin: 0 auto;
 	height: 15px;
@@ -2389,10 +2424,24 @@ ul.sitemap li li {
 	margin-top: 0.68em;
 }
 
+.RATING_BOX .rating_inner {
+	text-align: center;
+}
+.RATING_INLINE_DYNAMIC .rating_inner, .RATING_INLINE_DYNAMIC form {
+	display: inline;
+}
+
+.post_action_link .RATING_INLINE_DYNAMIC {
+	padding-left: 20px;
+}
+
 .rating_inner {
 	white-space: nowrap;
 }
 
+.rating_inner img {
+	cursor: pointer;
+}
 .addtocart {
 	width: 100px;
 	height:34px;

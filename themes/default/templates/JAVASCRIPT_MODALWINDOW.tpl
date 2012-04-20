@@ -54,6 +54,8 @@ function open_link_as_overlay(ob,width,height,target)
 			var img=modal.topWindow.document.createElement('img');
 			img.onload=function()
 			{
+				if (!modal.box) return; /* Overlay closed already */
+
 				var real_width=img.width;
 				var width=real_width;
 				var real_height=img.height;

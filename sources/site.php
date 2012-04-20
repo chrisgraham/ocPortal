@@ -749,7 +749,7 @@ function do_site()
 	$SHOW_EDIT_LINKS=($show_edit_links==1) || ($special_page_type=='show_edit_links');
 	$out_evaluated=NULL;
 
-	if (($special_page_type!='view') && ($special_page_type!='show_markers') && ($special_page_type!='show_edit_links'))
+	if (($special_page_type!='view') && ($special_page_type!='show_markers'))
 	{
 		require_code('view_modes');
 		initialise_special_page_types($special_page_type);
