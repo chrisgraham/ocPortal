@@ -528,6 +528,8 @@ function run_integrity_check($basic=false,$allow_merging=true)
 	unset($hook_files);
 	foreach ($files_to_check as $file)
 	{
+		if (should_ignore_file($file,IGNORE_BUNDLED_VOLATILE)) continue;
+
 		if (preg_match('#^[^/]+\.tpl$#',$file)!=0)
 			$real_file='themes/default/templates/'.$file;
 		elseif (preg_match('#^[^/]+\.css$#',$file)!=0)
@@ -537,13 +539,8 @@ function run_integrity_check($basic=false,$allow_merging=true)
 		$file_info=@$master_data[$real_file];
 
 		if ($file=='data/files.dat') continue;
-		if (substr($file,0,12)=='data_custom/') continue;
 		if ($file=='data/files_previous.dat') continue;
-		if ($file=='info.php') continue;
-		if ($file=='ocp_sitemap.xml') continue;
-		if ($file=='themes/map.ini') continue;
-		if (($file=='recommended.htaccess') || ($file=='plain.htaccess')) continue; // Many be renamed
-		if (substr($file,0,12)=='data_custom/') continue;
+		if (($file=='recommended.htaccess') || ($file=='plain.htaccess')) continue; // May be renamed
 		if (!file_exists(get_file_base().'/'.$real_file))
 		{
 			if (!in_array(get_file_base().'/'.$real_file,$not_missing))
@@ -1054,6 +1051,8 @@ function move_modules()
 				$path_b=zone_black_magic_filterer(get_file_base().'/'.$_path_b);
 				if (($zone2!=$zone) && (file_exists($path_a)) && (filemtime($path_a)>=filemtime($path_b)))
 				{
+					if (($page=='filedump') && ($zone2=='cms')) continue; // This has moved between versions
+
 					$out.='<li><input type="checkbox" name="'.uniqid('').'" value="move:'.escape_html($_path_a.':'.$_path_b).'" /> '.do_lang('FILE_MOVED','<kbd>'.escape_html($page).'</kbd>','<kbd>'.escape_html($zone2).'</kbd>','<kbd>'.escape_html($zone).'</kbd>').'</li>';
 					$outr[]=$path_b;
 				}
@@ -1125,10 +1124,9 @@ function check_outdated($dir,$rela,&$master_data,&$hook_files,$allow_merging)
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES)) continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES | IGNORE_USER_CUSTOMISE)) continue;
 			if ($file=='files.dat') continue;
 			if ($file=='files_previous.dat') continue;
-			if ($file=='comcode_custom') continue;
 
 			$is_dir=@is_dir($dir.$file);
 	
@@ -1247,6 +1245,20 @@ function check_alien($old_files,$files,$dir,$rela='')
 	$dh=@opendir($dir);
 	if ($dh!==false)
 	{
+		if ($rela=='')
+		{
+			$old_addons_now_gone=array(
+				'sources/hooks/systems/addon_registry/core_installation_uninstallation.php',
+			);
+			$modules_moved_intentionally=array(
+				'collaboration/pages/modules/filedump.php',
+			);
+			foreach (array_merge($old_addons_now_gone,$modules_moved_intentionally) as $x)
+			{
+				if (file_exists(get_file_base().'/'.$x))
+					$alien.='<li><input checked="checked" type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($x).'" /> <kbd>'.escape_html($x).'</kbd></li>';
+			}
+		}
 		while (($file=readdir($dh))!==false)
 		{
 			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES | IGNORE_USER_CUSTOMISE)) continue;

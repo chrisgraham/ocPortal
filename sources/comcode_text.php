@@ -1238,7 +1238,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 									}
 								} else
 								{
-									$continuation.=($mindless_mode && $in_code_tag)?escape_html($next):$next;
+									$continuation.=$next;
 								}
 							}
 						}

@@ -131,6 +131,12 @@ class Module_admin_debrand
 	{
 		require_code('config2');
 		
+		if (get_file_base()==get_custom_file_base()) // Only if not a shared install
+		{
+			require_code('abstract_file_manager');
+			force_have_afm_details();
+		}
+
 		set_value('rebrand_name',post_param('rebrand_name'));
 		set_value('rebrand_base_url',post_param('rebrand_base_url'));
 		set_value('company_name',post_param('company_name'));
@@ -190,17 +196,9 @@ class Module_admin_debrand
 			$critical_errors=str_replace('ocPortal',post_param('rebrand_name'),$critical_errors);
 			$critical_errors=str_replace('http://ocportal.com',post_param('rebrand_base_url'),$critical_errors);
 			$critical_errors=str_replace('ocProducts','ocProducts/'.post_param('company_name'),$critical_errors);
-			$critical_errors_path=get_file_base().'/sources_custom/critical_errors.php';
-			$myfile=@fopen($critical_errors_path,'wb');
-			if ($myfile===false) intelligent_write_error($critical_errors_path);
-			if (fwrite($myfile,$critical_errors)<strlen($critical_errors))
-			{
-				unlink($critical_errors_path);
-				warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-			}
-			fclose($myfile);
-			fix_permissions($critical_errors_path);
-			sync_file($critical_errors_path);
+			$critical_errors_path='sources_custom/critical_errors.php';
+
+			afm_make_file($critical_errors_path,$critical_errors,false);
 		}
 
 		$save_header_path=get_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_custom/HEADER.tpl';

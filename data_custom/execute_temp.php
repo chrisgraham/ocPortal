@@ -67,6 +67,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('files');
-	echo '---'.http_download_file('http://ocportal.com/version.php?version=8-RC5&lang=EN');
+	$out=should_ignore_file('lang_cached/EN/global.lcd',IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES | IGNORE_USER_CUSTOMISE);
+	echo $out?'true':'false';
 }

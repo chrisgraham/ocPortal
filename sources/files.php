@@ -180,7 +180,7 @@ function better_parse_ini_file($filename,$file=NULL)
  */
 function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 {
-	$bitmask+=$bitmask_defaults;
+	$bitmask=$bitmask | $bitmask_defaults;
 
 	// Normalise
 	$filepath=strtolower($filepath);
@@ -209,7 +209,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		'bingsiteauth.xml'=>'',
 		'parameters.xml'=>'',
 		'manifest.xml'=>'',
-		'web.config'=>'',
 		'nbproject'=>'',
 		'no_mem_cache'=>'',
 		'php.ini'=>'.*',
@@ -261,10 +260,17 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 	if (($bitmask & IGNORE_BUNDLED_VOLATILE)!=0)
 	{
 		$ignore_filenames+=array(
-			// Bundled stuff that is not in *_custom dir yet is volatile
+			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile
 			'map.ini'=>'themes',
 			'info.php'=>'',
 			'ocp_sitemap.xml'=>'',
+			'errorlog.php'=>'data_custom',
+			'functions.dat'=>'data_custom',
+			'breadcrumbs.xml'=>'data_custom',
+			'fields.xml'=>'data_custom',
+			'execute_temp.php'=>'data_custom',
+			'output.log'=>'data_custom/spelling',
+			'write.log'=>'data_custom/spelling',
 		);
 	}
 	if (($bitmask & IGNORE_ACCESS_CONTROLLERS)!=0)
@@ -284,6 +290,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 			'images_custom'=>'.*',
 			'lang_custom'=>'.*',
 			'data_custom'=>'.*',
+			'file_backups'=>'.*',
 			'text_custom'=>'.*',
 		);
 	}
@@ -291,7 +298,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 	$ignore_extensions=array(
 		'tar'=>'(imports|exports)/.*',
 		'gz'=>'(imports|exports)/.*',
-		'lcd'=>'lang_cached/.*',
+		'lcd'=>'lang_cached(/.*)?',
 		'gcd'=>'persistant_cache',
 		'tcp'=>'themes/[^/]*/templates_cached/.*',
 		'tcd'=>'themes/[^/]*/templates_cached/.*',

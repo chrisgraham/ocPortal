@@ -1156,8 +1156,11 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>is_null($move_target),'TITLE'=>do_lang_tempcode('CLASSIFIED_ADS'))));
 		$list=new ocp_tempcode();
 		$fields->attach(form_input_tree_list(do_lang_tempcode('EXPIRY_MOVE_TARGET'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_TARGET'),'move_target',NULL,'choose_catalogue_category',array('catalogue_name'=>$catalogue_name),false,is_null($move_target)?NULL:strval($move_target)));
-		$fields->attach(form_input_integer(do_lang_tempcode('EXPIRY_MOVE_DAYS_LOWER'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_DAYS_LOWER'),'move_days_lower',$move_days_lower,true));
-		$fields->attach(form_input_integer(do_lang_tempcode('EXPIRY_MOVE_DAYS_HIGHER'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_DAYS_HIGHER'),'move_days_higher',$move_days_higher,true));
+		if (cron_installed())
+		{
+			$fields->attach(form_input_integer(do_lang_tempcode('EXPIRY_MOVE_DAYS_LOWER'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_DAYS_LOWER'),'move_days_lower',$move_days_lower,true));
+			$fields->attach(form_input_integer(do_lang_tempcode('EXPIRY_MOVE_DAYS_HIGHER'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_DAYS_HIGHER'),'move_days_higher',$move_days_higher,true));
+		}
 
 		// Permissions
 		if (get_value('disable_cat_cat_perms')!=='1')

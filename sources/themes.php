@@ -44,14 +44,6 @@ function init__themes()
  */
 function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,$lang=NULL,$db=NULL,$pure_only=false)
 {
-	global $RECORD_IMG_CODES;
-	if ($RECORD_IMG_CODES)
-	{
-		global $RECORDED_IMG_CODES;
-		if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write!==$GLOBALS['FORUM_DB']->connection_write))
-			$RECORDED_IMG_CODES[serialize(array($id,$theme,$lang))]=1;
-	}
-	
 	if ((substr($id,0,4)=='ocf_') && (is_file(get_file_base().'/themes/default/images/avatars/index.html'))) // Allow debranding of theme img dirs
 	{
 		$id=substr($id,4);
@@ -66,6 +58,14 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 	if ($db===NULL) $db=$GLOBALS['SITE_DB'];
 
+	global $RECORD_IMG_CODES;
+	if ($RECORD_IMG_CODES)
+	{
+		global $RECORDED_IMG_CODES;
+		if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write!==$GLOBALS['FORUM_DB']->connection_write))
+			$RECORDED_IMG_CODES[serialize(array($id,$theme,$lang))]=1;
+	}
+	
 	$true_theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 	if ($theme===NULL) $theme=$true_theme;
 

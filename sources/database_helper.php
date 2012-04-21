@@ -424,7 +424,9 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 		$GLOBALS['XML_CHAIN_DB']->_query($query);
 	}
 
-	$this_ref->query_update('db_meta',array('m_type'=>$_type),array('m_table'=>$table_name,'m_name'=>$name));
+	$update_map=array('m_type'=>$_type);
+	if (!is_null($new_name)) $update_map['m_name']=$new_name;
+	$this_ref->query_update('db_meta',$update_map,array('m_table'=>$table_name,'m_name'=>$name));
 
 	if (function_exists('persistant_cache_set'))
 		persistant_cache_delete('TABLE_LANG_FIELDS');

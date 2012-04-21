@@ -297,6 +297,8 @@ class Module_admin_stats
 			$message=do_lang_tempcode($stats_table?'SELECT_STATS_RANGE':'_SELECT_STATS_RANGE',escape_html(get_timezoned_date($first_stat,false)));
 		}
 
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
+
 		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'GET'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$message,'HIDDEN'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
 	}
 

@@ -81,7 +81,12 @@ function handle_facebook_connection_login($current_logged_in_member)
 	{
 		return $current_logged_in_member;
 	}
-	$details=array_merge($details,$FACEBOOK_CONNECT->api('/me',array('fields'=>'picture','type'=>'normal')));
+	$details2=$FACEBOOK_CONNECT->api('/me',array('fields'=>'picture','type'=>'normal'));
+	if (!is_array($details2))
+	{
+		return $current_logged_in_member;
+	}
+	$details=array_merge($details,$details2);
 	if (!isset($details['name'])) return $current_logged_in_member;
 	$username=$details['name'];
 	$photo_url=array_key_exists('picture',$details)?$details['picture']:'';

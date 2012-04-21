@@ -568,7 +568,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				$params.=' '.$key.'="'.comcode_escape($val).'"';
 			}
-			return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.(escape_html($embed->evaluate())).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+			return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
 		}
 	}
 
@@ -620,8 +620,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					require_code('comcode_from_html');
 					$back_to_comcode=semihtml_to_comcode($embed->evaluate()); // Undo what's happened already
-					$de_htmlified=html_entity_decode($back_to_comcode,ENT_QUOTES,get_charset()); // Remove the escaping entities that were inside the code tag
-					$embed=comcode_to_tempcode($de_htmlified,$source_member,$as_admin,80,$pass_id,$connection,true); // Re-parse (with full security)
+					//$back_to_comcode=html_entity_decode($back_to_comcode,ENT_QUOTES,get_charset()); // Remove the escaping entities that were inside the code tag
+					$embed=comcode_to_tempcode($back_to_comcode,$source_member,$as_admin,80,$pass_id,$connection,true); // Re-parse (with full security)
 				}
 
 				$_embed=$embed->evaluate();

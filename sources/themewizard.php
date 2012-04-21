@@ -95,9 +95,12 @@ function load_themewizard_params_from_theme($theme,$guess_images_if_needed=false
 			}
 		}
 
-		$myfile=fopen(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini','at');
-		fwrite($myfile,'theme_wizard_images='.$map['theme_wizard_images']."\n");
-		fclose($myfile);
+		if ($theme!='default')
+		{
+			$myfile=fopen(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini','at');
+			fwrite($myfile,'theme_wizard_images='.$map['theme_wizard_images']."\n");
+			fclose($myfile);
+		}
 	}
 
 	global $THEME_WIZARD_IMAGES,$THEME_WIZARD_IMAGES_NO_WILD;

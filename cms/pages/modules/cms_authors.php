@@ -212,6 +212,8 @@ class Module_cms_authors
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		}
 
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
+
 		return do_template('FORM_SCREEN',array('_GUID'=>'1d71c934e3e23fe394f5611191089630','PREVIEW'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
@@ -281,6 +283,8 @@ class Module_cms_authors
 			}
 		}
 
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
+
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),$author);
 	}
 
@@ -347,6 +351,8 @@ class Module_cms_authors
 			$merge_form=do_template('FORM',array('_GUID'=>'d0dd075a54b72cfe47d3c2d9fe987c89','TABINDEX'=>strval(get_form_field_tabindex()),'SECONDARY_FORM'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 		} else $merge_form=new ocp_tempcode();
 
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
+
 		return do_template('AUTHOR_MANAGE_SCREEN',array('_GUID'=>'84f8de5d53090d138cb653bb861f2f70','TITLE'=>$title,'MERGE_FORM'=>$merge_form,'DEFINE_FORM'=>$define_form));
 	}
 
@@ -366,6 +372,8 @@ class Module_cms_authors
 
 		merge_authors($from,$to);
 	
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
+
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'));
 	}
 	

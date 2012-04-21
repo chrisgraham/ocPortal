@@ -213,7 +213,7 @@ class Database_super_mysql
 			global $SITE_INFO;
 			if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
 
-			$query.=' CHARACTER SET='.$SITE_INFO['database_charset'];
+			$query.=' CHARACTER SET='.preg_replace('#\_.*$#','',$SITE_INFO['database_charset']);
 		}
 		$query.=' '.$type_key.'='.$table_type.';';
 		$this->db_query($query,$db,NULL,NULL);

@@ -114,7 +114,7 @@ class Hook_cron_ocf_welcome_emails
 					{
 						if ($GLOBALS['SITE_DB']->query_value('logged_mail_messages','COUNT(*)',array('m_subject'=>$subject,'m_to_email'=>serialize(array($member['m_email_address']))))>0)
 						{
-							fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+							fatal_exit(do_lang('INTERNAL_ERROR').' ['.$member['m_email_address'].']');
 						}
 					}
 
