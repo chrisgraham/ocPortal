@@ -51,8 +51,6 @@ function setAttachment(field_name,number,filename)
 		tmp_form.preview.disabled=true;
 	}
 
-	var add_another_field=(number==numAttachments) && (numAttachments<maxAttachments);
-
 	var post_value=getTextbox(post);
 	var done=attachment_present(post.value,number) || attachment_present(post_value,number);
 	if (!done)
@@ -96,8 +94,11 @@ function setAttachment(field_name,number,filename)
 				if (ret)
 				{
 					// Add field for next one
+					var add_another_field=(number==numAttachments) && (numAttachments<maxAttachments); // Needs running late, in case something happened inbetween
 					if (add_another_field)
+					{
 						addAttachment(numAttachments+1,field_name);
+					}
 				} else // Cancelled
 				{
 					var clearBtn=document.getElementById('fsClear_file'+number);
@@ -111,6 +112,7 @@ function setAttachment(field_name,number,filename)
 	} else
 	{
 		// Add field for next one
+		var add_another_field=(number==numAttachments) && (numAttachments<maxAttachments);
 		if (add_another_field)
 			addAttachment(numAttachments+1,field_name);
 	}

@@ -357,7 +357,7 @@ function chat_logs_script()
 	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
 		header('Content-Disposition: filename="'.$filename.'"');
 	else
-		header('Content-Disposition: attachment; filename='.$filename);
+		header('Content-Disposition: attachment; filename="'.$filename.'"');
 
 	//$message=put_in_standard_box($message_contents,do_lang_tempcode('ROOM'));
 

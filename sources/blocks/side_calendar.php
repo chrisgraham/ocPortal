@@ -214,7 +214,7 @@ class Block_side_calendar
 
 			list($e_id,$event,$from,$to,$real_from,$real_to)=$happening;
 
-			if ($to<$period_start) continue;
+			if ((!is_null($to)) && ($to<$period_start)) continue;
 			if ($real_from!=$from) continue; // We won't render continuations
 
 			$__day=date('Y-m-d',$from);
@@ -222,7 +222,7 @@ class Block_side_calendar
 			$day_start=mktime(12,0,0,intval($bits[1]),intval($bits[2]),intval($bits[0]));
 			if (!array_key_exists($day_start,$days))
 			{
-				$date_section=get_timezoned_date($day_start,false);
+				$date_section=get_timezoned_date($day_start,false,false,true);
 				if ($from<$period_start)
 					$date_section=do_lang('DATE_IN_PAST',$date_section);
 				$days[$day_start]=array('TIMESTAMP'=>strval($day_start),'TIME'=>$date_section,'EVENTS'=>array());
@@ -243,9 +243,9 @@ class Block_side_calendar
 			$days[$day_start]['EVENTS'][]=array(
 				'DESCRIPTION'=>get_translated_tempcode($event['e_content']),
 				'TIMESTAMP'=>strval($real_from),
-				'TIME'=>($real_from!=$from)?do_lang('EVENT_CONTINUES'):(is_null($event['e_start_hour'])?do_lang_tempcode('ALL_DAY_EVENT'):make_string_tempcode(get_timezoned_time($real_from))),
+				'TIME'=>($real_from!=$from)?do_lang('EVENT_CONTINUES'):(is_null($event['e_start_hour'])?do_lang_tempcode('ALL_DAY_EVENT'):make_string_tempcode(get_timezoned_time($real_from,false,NULL,true))),
 				'TIME_RAW'=>strval($real_from),
-				'FROM_DAY'=>get_timezoned_date($real_from,!is_null($event['e_start_hour'])),
+				'FROM_DAY'=>get_timezoned_date($real_from,!is_null($event['e_start_hour']),false,true),
 				'TO_DAY'=>is_null($real_to)?NULL:get_timezoned_date($real_to,!is_null($event['e_end_hour']),false,true),
 				'TO_DAY_RAW'=>strval($real_to),
 				'TIME_VCAL'=>date('Ymd',$real_from)."T".date('His',$real_from),

@@ -67,6 +67,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$out=should_ignore_file('lang_cached/EN/global.lcd',IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES | IGNORE_USER_CUSTOMISE);
-	echo $out?'true':'false';
+	delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE&,:,%3A,{$SELF_URL}}');
+	add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
 }

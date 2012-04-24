@@ -19,7 +19,13 @@
 					done_one=true;
 				}
 				
-				inputs[i].swfob.setButtonDisabled(false);
+				if (typeof inputs[i].swfob.setButtonDisabled!='undefined')
+				{
+					inputs[i].swfob.setButtonDisabled(false);
+				} else
+				{
+					top.document.getElementById('uploadButton_'+inputs[i].name).disabled=true;
+				}
 				inputs[i].value='-1';
 			} else
 			{

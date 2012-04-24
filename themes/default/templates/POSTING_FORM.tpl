@@ -26,7 +26,7 @@
 					{$,width: 100% is needed to workaround a very weird IE bug - without it, colspan had no effect. Putting it in a CSS class didn't have any effect}
 					<th style="width: 100%" abbr="{POST_COMMENT*}" class="de_th dottedborder_divider"{+START,IF,{$NOT,{$MOBILE}}} colspan="2"{+END}>
 						<div class="comcode_supported posting_form_main_comcode_button">
-							{+START,IF,{$OR,{$AND,{$IN_STR,{CLASS},wysiwyg},{$JS_ON}},{$SHOW_DOCS}}}
+							{+START,IF,{$OR,{$AND,{$IN_STR,{CLASS},wysiwyg},{$JS_ON}},{$AND,{$MATCH_KEY_MATCH,_WILD:cms_comcode_pages},{$SHOW_DOCS}}}}
 							[
 								{+START,IF,{$SHOW_DOCS}}{+START,IF_PASSED,COMCODE_URL}
 									<!--<a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{COMCODE_URL*}"><img class="comcode_button" alt="{!COMCODE_MESSAGE,Comcode}" src="{$IMG*,comcode}" title="{!COMCODE_MESSAGE,Comcode}" /></a> {!COMCODE_MESSAGE,<a class="link_exempt" title="Comcode: {!LINK_NEW_WINDOW}" target="_blank" href="{COMCODE_URL*}">Comcode</a>}-->

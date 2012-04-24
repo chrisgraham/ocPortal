@@ -91,7 +91,7 @@ class Hook_Profiles_Tabs_Edit_settings
 			if (has_specific_permission($member_id_viewing,'member_maintenance'))
 			{
 				$validated=post_param_integer('validated',0);
-				$primary_group=(($is_ldap) || (!has_specific_permission($member_id_viewing,'assume_any_member')))?NULL:post_param_integer('primary_group');
+				$primary_group=(($is_ldap) || (!has_specific_permission($member_id_viewing,'assume_any_member')))?NULL:post_param_integer('primary_group',NULL);
 				$is_perm_banned=post_param_integer('is_perm_banned',0);
 				$old_is_perm_banned=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_is_perm_banned');
 				if ($old_is_perm_banned!=$is_perm_banned)

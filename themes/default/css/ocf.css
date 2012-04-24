@@ -206,11 +206,20 @@
 
 .ocf_topic {
 	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
-	table-layout: fixed; /* Needed to be able to lock in overflow scrolling to individual cells */
+	table-layout: fixed !important; /* Needed to be able to lock in overflow scrolling to individual cells */
 }
+
+{+START,IF,{$MOBILE}}
+	.ocf_topic .ocf_forum_box_left {
+		width: 80px;
+	}
+{+END}
 
 .ocf_topic th {
 	vertical-align: middle;
+	{+START,IF,{$MOBILE}}
+		width: 80px;
+	{+END}
 }
 
 .ocf_topic_poster_title {
@@ -251,6 +260,19 @@
 {+START,IF,{$NOT,{$MOBILE}}}
 	.ocf_topic_post_member_details {
 		padding: 5px;
+	}
+{+END}
+
+.ocf_topic_post_member_details {
+	text-align: center;
+	{+START,IF,{$MOBILE}}
+		width: 80px;
+	{+END}
+}
+
+{+START,IF,{$MOBILE}}
+	.ocf_topic .ocf_topic_post_member_details img {
+		max-width: 100%;
 	}
 {+END}
 

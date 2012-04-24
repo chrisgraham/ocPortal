@@ -11,6 +11,9 @@
 
 html, body {
 	border: 0;
+	{+START,IF,{$MOBILE}}
+		word-wrap: break-word;
+	{+END}
 }
 
 body, textarea, input, td, th {
@@ -1391,6 +1394,7 @@ h3.standardbox_title_classic {
 
 .expansive_section {
 	overflow: auto;
+	padding-right: 1px; /* For non-aligning table borders */
 }
 
 #tree_list__root_tree_list {
@@ -2456,8 +2460,8 @@ th.meta_data_title {
 	min-width: 40px;
 	min-height: 40px;
 	font-size: 0.8em;
-	min-height: 65px;
-	min-width: 85px;
+	min-height: 35px;
+	min-width: 35px;
 }
 
 #page_running_admin_themes .radio_list_picture {

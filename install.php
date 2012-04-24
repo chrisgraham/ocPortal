@@ -2519,6 +2519,7 @@ php_flag register_globals off
 END;
 
 if ($php_value_ok) $clauses[]=<<<END
+php_value max_input_vars "2000"
 # Suhosin can cause problems on configuration and Catalogue forms, which use a lot of fields
 php_value suhosin.post.max_vars "2000"
 php_value suhosin.request.max_vars "2000"

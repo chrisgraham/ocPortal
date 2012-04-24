@@ -98,7 +98,14 @@
 									{+START,LOOP,BUDDIES}
 										<tr>
 											<td><img id="buddy_img_{MEMBER_ID*}" alt="" src="{$IMG*,menu_items/forum_navigation/members}" /></td>
-											<td><a rel="friend" title="{USERNAME*}: {!START_IM}" href="#" onclick="start_im('{MEMBER_ID*}'); return false;">{USERNAME*}</a></td>
+											<td>
+												{+START,IF,{CAN_IM}}
+													<a rel="friend" title="{USERNAME*}: {!START_IM}" href="#" onclick="start_im('{MEMBER_ID*}'); return false;">{USERNAME*}</a>
+												{+END}
+												{+START,IF,{$NOT,{CAN_IM}}}
+													{USERNAME*}
+												{+END}
+											</td>
 											<td id="online_{MEMBER_ID*}">{ONLINE_TEXT*}</td>
 											<td>
 												<label class="accessibility_hidden" for="select_{MEMBER_ID*}">{!CHOOSE}</label>
@@ -115,7 +122,7 @@
 									<input class="button_pageitem" type="button" value="{!START_IM}" onclick="var people=get_ticked_people(this.form); if (people) start_im(people);" />
 								{+END}
 								{+START,IF_NON_EMPTY,{URL_REMOVE_BUDDIES}}
-									<input class="button_pageitem" type="submit" value="{!DUMP_BUDDIES}" onclick="var people=get_ticked_people(this.form); if (!people) return false; var t=this; window.fauxmodal_confirm('{!Q_SURE=;}',function(result) { if (result) { disable_button_just_clicked(this); click_link(t); } })); return false;" />
+									<input class="button_pageitem" type="submit" value="{!DUMP_BUDDIES}" onclick="var people=get_ticked_people(this.form); if (!people) return false; var t=this; window.fauxmodal_confirm('{!Q_SURE=;}',function(result) { if (result) { disable_button_just_clicked(t); click_link(t); } }); return false;" />
 								{+END}
 							</div>
 						</form>

@@ -129,11 +129,11 @@ function get_users_timezone($member=NULL)
 	global $TIMEZONE_MEMBER_CACHE;
 	if (isset($TIMEZONE_MEMBER_CACHE[$member])) return $TIMEZONE_MEMBER_CACHE[$member];
 
-	$url=get_param('keep_timezone',NULL);
-	if (!is_null($url))
+	$timezone=get_param('keep_timezone',NULL);
+	if (!is_null($timezone))
 	{
-		$TIMEZONE_MEMBER_CACHE[$member]=$url;
-		return $url;
+		$TIMEZONE_MEMBER_CACHE[$member]=$timezone;
+		return $timezone;
 	}
 
 	// Get user timezone

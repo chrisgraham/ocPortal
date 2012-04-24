@@ -82,7 +82,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 		return $current_logged_in_member;
 	}
 	$details2=$FACEBOOK_CONNECT->api('/me',array('fields'=>'picture','type'=>'normal'));
-	if (!is_array($details2))
+	if ((!is_array($details)) || (!is_array($details2)))
 	{
 		return $current_logged_in_member;
 	}

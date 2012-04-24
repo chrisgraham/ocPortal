@@ -86,7 +86,7 @@ class Hook_Syndication_facebook
 
 	function auth_is_set_site()
 	{
-		return get_value('facebook_oauth_token')!==NULL;
+		return get_long_value('facebook_oauth_token')!==NULL;
 	}
 
 	function syndicate_site_activity($row)

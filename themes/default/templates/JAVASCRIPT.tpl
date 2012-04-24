@@ -2302,6 +2302,7 @@ function setInnerHTML(element,tHTML,append)
 							if (!scripts[i].src) // i.e. if it is inline JS
 							{
 								var text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
+
 								eval(text);
 							}
 						}
@@ -2435,7 +2436,7 @@ function click_link(link)
 	}
 	link.onclick=backup;
 
-	if (!cancelled)
+	if ((!cancelled) && (link.href))
 	{
 		if (link.getAttribute('target')) window.open(link.href,link.getAttribute('target'));
 		window.location=link.href;

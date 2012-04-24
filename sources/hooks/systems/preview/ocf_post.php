@@ -52,6 +52,23 @@ class Hook_Preview_ocf_post
 		$post_comcode=$post_bits['comcode'];
 		$post_html=$post_bits['tempcode'];
 
+		// Put quote in
+		$parent_id=post_param_integer('parent_id',NULL);
+		if ((!is_null($parent_id)) && (strpos($post_comcode,'[quote')===false))
+		{
+			$_p=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>$parent_id),'',1);
+			if (array_key_exists(0,$_p))
+			{
+				$p=$_p[0];
+				$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
+
+				$temp=$post_html;
+				$post_html=new ocp_tempcode();
+				$post_html=do_template('COMCODE_QUOTE_BY',array('SAIDLESS'=>false,'BY'=>$p['p_poster_name_if_guest'],'CONTENT'=>$p['message']));
+				$post_html->attach($temp);
+			}
+		}
+
 		$post_owner=get_member();
 		$_post_date=time();
 		$post_id=post_param_integer('post_id',NULL);

@@ -5440,6 +5440,7 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	var rep=document.getElementById(name);
 	rep.originally_disabled=rep.disabled;
 	rep.disabled=true;
+
 	replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter);
 }
 

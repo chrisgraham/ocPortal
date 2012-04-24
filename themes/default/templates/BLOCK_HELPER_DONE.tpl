@@ -33,13 +33,15 @@
 		if ('{$_GET%,save_to_id}'!='')
 		{
 			var ob=target_window.areaedit_editors[element.id].document.$.getElementById('{$_GET%,save_to_id}');
-			var input_container=document.createElement('div');
-			setInnerHTML(input_container,comcode_semihtml.replace(/^\s*/,''));
-			ob.parentNode.replaceChild(input_container.childNodes[0],ob);
 
 			if ('{$_POST%,_delete}'=='1')
 			{
 				ob.parentNode.removeChild(ob);
+			} else
+			{
+				var input_container=document.createElement('div');
+				setInnerHTML(input_container,comcode_semihtml.replace(/^\s*/,''));
+				ob.parentNode.replaceChild(input_container.childNodes[0],ob);
 			}
 		
 			target_window.areaedit_editors[element.id].updateElement();

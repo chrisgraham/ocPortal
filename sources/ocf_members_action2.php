@@ -540,7 +540,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			{
 				if (has_specific_permission(get_member(),'assume_any_member'))
 				{
-					$fields->attach(form_input_list(do_lang_tempcode('PRIMARY_GROUP'),do_lang_tempcode('DESCRIPTION_PRIMARY_GROUP'),'primary_group',$_groups));
+					if ((is_null($member_id)) || (!$GLOBALS['FORUM_DRIVER']->is_super_admin($member_id)) || (count($GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),2))>1))
+						$fields->attach(form_input_list(do_lang_tempcode('PRIMARY_GROUP'),do_lang_tempcode('DESCRIPTION_PRIMARY_GROUP'),'primary_group',$_groups));
 				}
 			}
 		}

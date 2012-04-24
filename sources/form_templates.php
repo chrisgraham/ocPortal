@@ -1192,7 +1192,7 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 
 	// Sorting but fudge it so 'ocf_default_avatars/default_set' always comes first
 	ksort($categories);
-	$avatars=(substr($category[0],0,20)=='ocf_default_avatars/');
+	$avatars=(array_key_exists(0,$category)) && (substr($category[0],0,20)=='ocf_default_avatars/');
 	if ((array_key_exists('ocf_default_avatars/default_set',$categories)) && ($avatars))
 	{
 		$def=$categories['ocf_default_avatars/default_set'];

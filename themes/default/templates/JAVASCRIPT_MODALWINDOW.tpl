@@ -349,6 +349,8 @@ function ModalWindow()
 		resetDimensions: function(width, height) { // Don't re-call this for an iframe-based overlay, doesn't work retro-actively on the iframe size (but CSS sized inards are fine)
 			var dim = this.getPageSize();
 
+			if (width>dim.pageWidth) width=dim.pageWidth;
+
 			var boxWidth = ((width) ? (width + 8) : (dim.pageWidth / 4))  + "px";
 			var extra_box_height = (this.type == "iframe" ) ? 160 : 120;
 			if (this.cancel_button === null) extra_box_height = 0;
@@ -369,6 +371,18 @@ function ModalWindow()
 
 			this.box.childNodes[0].style.top = boxPosTop;
 			this.box.childNodes[0].style.left = boxPosLeft;
+
+			if (((boxHeight=='auto') && ('{$MOBILE}'==1)) || (height>dim.windowHeight))
+			{
+				this.box.childNodes[0].style.position='absolute';
+				this.box.childNodes[0].style.top='0';
+
+				try
+				{
+					this.topWindow.scrollTo(0,0);
+				}
+				catch (e) {};
+			}
 		},
 
 		initBox: function() {
@@ -470,7 +484,7 @@ function ModalWindow()
 				case "iframe":
 					var iframe = this.element("iframe", {
 						'frameBorder': "0",
-						'scrolling': "no",
+						'scrolling': browser_matches('ie')?"auto":"no",
 						'title': "",
 						'name': "overlay_iframe",
 						'id': "overlay_iframe",

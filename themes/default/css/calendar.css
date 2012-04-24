@@ -22,6 +22,7 @@
 
 .calendar_month th {
 	width: 12%;
+	border: 1px solid #a2b6d5; /* {$,wizard, 60% sb_color + 40% seed} */
 }
 
 .calendar_month_entry {
