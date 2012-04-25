@@ -62,7 +62,7 @@ class Hook_fields_auto_increment
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		if (!is_null($required))
+		if (((is_null($default)) || ($default=='')) && (!is_null($field)) && (!is_null($field['id']))) // We need to calculate a default even if not required, because the defaults are progmattic
 		{
 			$default=is_null($field)?'0':strval($this->get_field_auto_increment($field['id'],intval($default)));
 		}

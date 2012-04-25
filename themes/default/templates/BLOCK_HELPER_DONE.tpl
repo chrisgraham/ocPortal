@@ -71,10 +71,12 @@
 			window.fauxmodal_alert(
 				message,
 				function() {
-					if (typeof win.faux_close!='undefined')
-						win.faux_close();
-					else
-						win.close();
+					window.setTimeout(function() { // Close master window in timeout, so that this will close first (issue on Firefox)
+						if (typeof win.faux_close!='undefined')
+							win.faux_close();
+						else
+							win.close();
+					},0);
 				}
 			);
 		}

@@ -62,8 +62,7 @@ class Hook_fields_guid
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($field);
-		if (!is_null($required))
+		if (((is_null($default)) || ($default=='')) && (!is_null($field)) && (!is_null($field['id']))) // We need to calculate a default even if not required, because the defaults are progmattic
 		{
 			$default=$this->get_field_guid();
 		}

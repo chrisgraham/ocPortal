@@ -162,7 +162,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 
 	// Supplement custom field values given with defaults, and check constraints
 	if (is_null($groups)) $groups=ocf_get_all_default_groups(true);
-	$all_fields=ocf_get_all_custom_fields_match($groups);
+	$all_fields=list_to_map('id',ocf_get_all_custom_fields_match($groups));
 	require_code('fields');
 	foreach ($all_fields as $field)
 	{
@@ -260,7 +260,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		if (!array_key_exists($field_num,$all_fields_types)) continue; // Trying to set a field we're not allowed to (doesn't apply to our group)
 
 		$ob=get_fields_hook($all_fields_types[$field_num]);
-		list(,,$storage_type)=$ob->get_field_value_row_bits($all_fields_types[$field_num]);
+		list(,,$storage_type)=$ob->get_field_value_row_bits($all_fields[$field_num]);
 
 		if (strpos($storage_type,'_trans')!==false)
 		{
@@ -350,7 +350,7 @@ function get_cpf_storage_for($type)
 {
 	require_code('fields');
 	$ob=get_fields_hook($type);
-	list(,,$storage_type)=$ob->get_field_value_row_bits(array('cf_type'=>$type,'cf_default'=>''));
+	list(,,$storage_type)=$ob->get_field_value_row_bits(array('id'=>NULL,'cf_type'=>$type,'cf_default'=>''));
 	$_type='SHORT_TEXT';
 	switch ($storage_type)
 	{

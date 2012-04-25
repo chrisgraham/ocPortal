@@ -724,7 +724,8 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
 	$catalogue_title=$GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name));
-	$fields=collapse_2d_complexity('id','cf_type',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
+	$_fields=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
+	$fields=collapse_2d_complexity('id','cf_type',$_fields);
 
 	require_code('comcode_check');
 	require_code('fields');
@@ -738,7 +739,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 		$type=$fields[$field_id];
 
 		$ob=get_fields_hook($type);
-		list($raw_type)=$ob->get_field_value_row_bits($fields[$field_id]);
+		list($raw_type)=$ob->get_field_value_row_bits($_fields[$field_id]);
 
 		if (strpos($raw_type,'_trans')!==false)
 			check_comcode($val);
@@ -754,7 +755,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 		$type=$fields[$field_id];
 
 		$ob=get_fields_hook($type);
-		list($raw_type,,$sup_table_name)=$ob->get_field_value_row_bits($fields[$field_id]);
+		list($raw_type,,$sup_table_name)=$ob->get_field_value_row_bits($_fields[$field_id]);
 
 		if (strpos($raw_type,'_trans')!==false)
 		{
@@ -828,7 +829,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 {
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
 	$catalogue_title=$GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name));
-	$fields=collapse_2d_complexity('id','cf_type',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
+	$_fields=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
+	$fields=collapse_2d_complexity('id','cf_type',$_fields);
 
 	$original_submitter=$GLOBALS['SITE_DB']->query_value('catalogue_entries','ce_submitter',array('id'=>$id));
 
@@ -854,7 +856,7 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 		$type=$fields[$field_id];
 
 		$ob=get_fields_hook($type);
-		list(,,$sup_table_name)=$ob->get_field_value_row_bits($fields[$field_id]);
+		list(,,$sup_table_name)=$ob->get_field_value_row_bits($_fields[$field_id]);
 
 		if (substr($sup_table_name,-6)=='_trans')
 		{

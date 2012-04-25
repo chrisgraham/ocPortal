@@ -61,12 +61,11 @@ class Hook_fields_random
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($field);
-		if (!is_null($required))
+		if (((is_null($default)) || ($default=='')) && (!is_null($field)) && (!is_null($field['id']))) // We need to calculate a default even if not required, because the defaults are progmattic
 		{
 			$default=$this->get_field_random($field['id'],$default);
 		}
-		return array('integer_unescaped',$default,'integer');
+		return array('short_unescaped',$default,'short');
 	}
 
 	/**
@@ -136,8 +135,14 @@ class Hook_fields_random
 	{
 		$rand_array='1234567890abcdefghijklmnopqrstuvwxyz';
 		$c=strlen($rand_array)-1;
-		$length=intval($default);
-		if ($length==0) $length=10;
+		if (($default=='') || (is_null($default)))
+		{
+			$length=10;
+		} else
+		{
+			$length=intval($default);
+			if ($length==0) $length=10;
+		}
 		$test=NULL;
 		do
 		{
@@ -151,7 +156,7 @@ class Hook_fields_random
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_integer','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
 		}
 		while (!is_null($test));
-	
+
 		return $value;
 	}
 

@@ -1127,7 +1127,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 
 	require_code('fields');
 	$ob=get_fields_hook($type);
-	list(,,$storage_type)=$ob->get_field_value_row_bits(array('cf_default'=>'','cf_type'=>$type));
+	list(,,$storage_type)=$ob->get_field_value_row_bits(array('id'=>$field,'cf_default'=>'','cf_type'=>$type));
 
 	if (strpos($storage_type,'_trans')!==false)
 	{
