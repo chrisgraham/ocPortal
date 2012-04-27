@@ -35,7 +35,7 @@ function ocp_version()
  */
 function ocp_version_minor()
 {
-	return 'RC6';
+	return 'RC7';
 }
 
 /**

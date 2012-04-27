@@ -214,7 +214,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 			}
 		} else // Simple field.
 		{
-			if (!is_array($name,$row)) continue; // Shouldn't happen, but corruption could lead to this
+			if (!array_key_exists($name,$row)) continue; // Shouldn't happen, but corruption could lead to this
 			switch (gettype($row[$name])) // Serialise as string
 			{
 				case 'integer':

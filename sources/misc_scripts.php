@@ -803,7 +803,7 @@ function block_helper_script()
 
 					$list=new ocp_tempcode();
 					$hooks=find_all_hooks($matches[1],$matches[2]);
-					asort($hooks);
+					ksort($hooks);
 					if (($default=='') && ($has_default))
 						$list->attach(form_input_list_entry('',true));
 					foreach (array_keys($hooks) as $hook)

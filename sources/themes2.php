@@ -190,10 +190,15 @@ function actual_add_theme_image($theme,$lang,$id,$path,$fail_ok=false)
  * @param  boolean		Allow no code to be given
  * @param  ID_TEXT		Form field for uploading
  * @param  ID_TEXT		Form field for choosing
+ * @param  object			Database connection
  * @return ID_TEXT		The (possibly randomised) theme image code
  */
-function get_theme_img_code($type='ocf_emoticons',$allow_skip=false,$field_file='file',$field_choose='theme_img_code')
+function get_theme_img_code($type,$allow_skip=false,$field_file='file',$field_choose='theme_img_code',$db=NULL)
 {
+	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
+
+	// TODO: Image won't upload to central site. So perhaps we should not allow uploads if not editing on central site.
+
 	if ((substr($type,0,4)=='ocf_') && (file_exists(get_file_base().'/themes/default/images/avatars/index.html'))) // Allow debranding of theme img dirs
 	{
 		$type=substr($type,4);
@@ -206,7 +211,7 @@ function get_theme_img_code($type='ocf_emoticons',$allow_skip=false,$field_file=
 
 		$theme_img_code=$type.'/'.uniqid('');
 
-		$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$theme_img_code,'theme'=>'default','path'=>$urls[0],'lang'=>get_site_default_lang()));
+		$db->query_insert('theme_images',array('id'=>$theme_img_code,'theme'=>'default','path'=>$urls[0],'lang'=>get_site_default_lang()));
 
 		persistant_cache_delete('THEME_IMAGES');
 	} else

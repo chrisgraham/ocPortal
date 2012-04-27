@@ -123,7 +123,6 @@ class Hook_addon_registry_ocf_post_templates
 		return array(
 			lorem_globalise(
 				do_lorem_template('FORM_SCREEN',array(
-					'GET'=>false,
 					'SKIP_VALIDATION'=>true,
 					'HIDDEN'=>'',
 					'TITLE'=>lorem_title(),

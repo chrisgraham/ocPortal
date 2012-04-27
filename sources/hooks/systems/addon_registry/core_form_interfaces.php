@@ -1102,7 +1102,6 @@ class Hook_addon_registry_core_form_interfaces
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_HELPER_START',array(
-					'GET'=>false,
 					'TITLE'=>lorem_phrase(),
 					'LINKS'=>placeholder_link(),
 						)

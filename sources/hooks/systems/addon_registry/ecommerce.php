@@ -341,7 +341,6 @@ class Hook_addon_registry_ecommerce
 		return array(
 			lorem_globalise(
 				do_lorem_template('PURCHASE_WIZARD_SCREEN',array(
-					'GET'=>false,
 					'TITLE'=>lorem_title(),
 					'CONTENT'=>$fields,
 					'URL'=>placeholder_url(),
