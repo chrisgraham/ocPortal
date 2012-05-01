@@ -37,13 +37,9 @@ rm ocp-<version>.zip -f
 [/code]
 (if you are running a web server where the web server runs with the same credentials as the hosting account user, then do not perform the following two steps [this is unusual])
 
-Allow the fixperm.sh script to be run:
-[code]
-chmod +x fixperms.sh
-[/code]
 Fix all the necessary file permissions:
 [code]
-./fixperms.sh
+sh fixperms.sh
 [/code]
 You must then launch the URL to the install.php in your web browser, and proceed through the installation steps.
 After this, you must delete the install.php file:

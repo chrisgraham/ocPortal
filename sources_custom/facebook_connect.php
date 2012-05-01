@@ -162,6 +162,17 @@ function handle_facebook_connection_login($current_logged_in_member)
 						$update_map['m_photo_thumb_url']=$photo_thumb_url;
 					}
 					$GLOBALS['FORUM_DB']->query_update('f_members',$update_map,array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>strval($facebook_uid)),'',1);
+
+					if ($username!=$member[0]['m_username'])
+					{
+						// Fix cacheing for usernames
+						$to_fix=array('f_forums/f_cache_last_username','f_posts/p_poster_name_if_guest','f_topics/t_cache_first_username','f_topics/t_cache_last_username');
+						foreach ($to_fix as $fix)
+						{
+							list($table,$field)=explode('/',$fix);
+							$GLOBALS['FORUM_DB']->query_update($table,array($field=>$username),array($field=>$member[0]['m_username']));
+						}
+					}
 				}
 			}
 		}

@@ -27,6 +27,7 @@
 function find_post_id_url($post_id)
 {
 	$max=intval(get_option('forum_posts_per_page'));
+	if ($max==0) $max=1;
 
 	$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_topic_id',array('id'=>$post_id));
 	if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));

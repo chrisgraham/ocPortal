@@ -1272,7 +1272,7 @@ function fileDialogStart(ob) {
 
 
 
-function fileQueueError(file, errorCode, message)  {
+function fileQueueError(file, errorCode, message, ob)  {
 	// Handle this error separately because we don't want to create a FileProgress element for it.
 	switch (errorCode) {
 		case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
@@ -1287,7 +1287,7 @@ function fileQueueError(file, errorCode, message)  {
 			this.debug("Error Code: Zero byte file, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 			return;
 		case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
-			window.fauxmodal_alert("{!INVALID_FILE_TYPE_GENERAL^#,{$CONFIG_OPTION,valid_types}}");
+			window.fauxmodal_alert("{!INVALID_FILE_TYPE_GENERAL^#,xxx}".replace(/xxx/,ob.settings.file_types));
 			this.debug("Error Code: Invalid File Type, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 			return;
 		default:
@@ -1513,7 +1513,8 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
 	if (typeof filter=='undefined') var filter="{$CONFIG_OPTION#,valid_types}";
-	
+	if (filter=='') filter="{$CONFIG_OPTION#,valid_types}";
+
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
 

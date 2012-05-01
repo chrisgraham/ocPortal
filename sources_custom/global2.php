@@ -2,7 +2,7 @@
 
 function require_javascript($javascript)
 {
-	if ($javascript=='javascript_swfupload')
+	if (($javascript=='javascript_swfupload') && (!in_safe_mode()))
 	{
 		global $EXTRA_HEAD;
 		$EXTRA_HEAD->attach('

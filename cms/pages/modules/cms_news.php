@@ -491,7 +491,7 @@ class Module_cms_news extends standard_aed_module
 		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
 
 		$schedule=get_input_date('schedule');
-		$add_time=is_null($schedule)?time():$schedule;
+		$add_time=is_null($schedule)?mixed():$schedule;
 
 		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
 		{

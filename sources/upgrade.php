@@ -900,7 +900,7 @@ function check_perms()
 					$dh=@opendir(get_file_base().'/'.$_chmod);
 					if ($dh!==false)
 					{
-						while (($file=readdir($dh))!==false) if (!should_ignore_file($_chmod.'/'.$file)) $array[]=$_chmod.'/'.$file;
+						while (($file=readdir($dh))!==false) if (!should_ignore_file($_chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$_chmod.'/'.$file;
 						closedir($dh);
 					}
 				}
@@ -909,7 +909,7 @@ function check_perms()
 				$dh=@opendir(get_file_base().'/'.$chmod);
 				if ($dh!==false)
 				{
-					while (($file=readdir($dh))!==false) if (!should_ignore_file($chmod.'/'.$file)) $array[]=$chmod.'/'.$file;
+					while (($file=readdir($dh))!==false) if (!should_ignore_file($chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$chmod.'/'.$file;
 					closedir($dh);
 				}
 			}
@@ -975,7 +975,7 @@ function fix_perms()
 					{
 						while (($file=readdir($dh))!==false)
 						{
-							if (!should_ignore_file($_chmod.'/'.$file)) $array[]=$_chmod.'/'.$file;
+							if (!should_ignore_file($_chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$_chmod.'/'.$file;
 						}
 						closedir($dh);
 					}
@@ -987,7 +987,7 @@ function fix_perms()
 				{
 					while (($file=readdir($dh))!==false)
 					{
-						if (!should_ignore_file($chmod.'/'.$file)) $array[]=$chmod.'/'.$file;
+						if (!should_ignore_file($chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$chmod.'/'.$file;
 					}
 					closedir($dh);
 				}
@@ -1082,17 +1082,22 @@ function check_excess_perms($array,$rel='')
 		while (($file=readdir($dh))!==false)
 		{
 			if (($file=='.') || ($file=='..')) continue;
-			
+
 			$is_dir=@is_dir($dir.$file);
 
-			if ((should_ignore_file($dir.$file)) && ($is_dir)) continue;
+			if ((should_ignore_file($dir.$file,IGNORE_ACCESS_CONTROLLERS)) && ($is_dir)) continue;
 
-			if ((is_writable_wrap($dir.$file)) && ((!function_exists('posix_getuid')) || (fileowner($dir.$file)!=posix_getuid())) && (!in_array($rel.(($rel=='')?'':'/').$file,$array)))
+			$relpath=$rel.(($rel=='')?'':'/').$file;
+			$ok=(in_array($relpath,$array)) || (in_array(preg_replace('#^[^/]+/#','site/',$relpath),$array)) || (in_array(preg_replace('#^themes/[^/]+/#','themes/default/',$relpath),$array));
+			if ((is_writable_wrap($dir.$file)) && ((!function_exists('posix_getuid')) || (fileowner($dir.$file)!=posix_getuid())))
 			{
-				$out.='<li>'.do_lang('FU_NEEDS_UNCHMOD','<kbd>'.escape_html($rel.(($rel=='')?'':'/').$file)).'</kbd></li>';
+				if (!$ok)
+				{
+					$out.='<li>'.do_lang('FU_NEEDS_UNCHMOD','<kbd>'.escape_html($rel.(($rel=='')?'':'/').$file)).'</kbd></li>';
+				}
 			}
-			
-			if ($is_dir) $out.=check_excess_perms($array,escape_html($rel.(($rel=='')?'':'/').$file));
+
+			if (($is_dir) && (!$ok)) $out.=check_excess_perms($array,escape_html($rel.(($rel=='')?'':'/').$file));
 		}
 	}
 
@@ -1748,13 +1753,13 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				".category_entry {\n	padding: 6px 0;\n	margin: 6px 0;\n	clear: both;\n}"=>".category_entry {\n	padding: 6px 0;\n	margin: 6px 0;\n	clear: both;\n	overflow: hidden;\n	width: 100%;\n}",
 				"ul.actions_list li, ul.actions_list_compact li, ul.actions_list_super_compact li {\n	padding: 0;\n	margin: 0;\n	list-style-type: none;\n}"=>"ul.actions_list li, ul.actions_list_compact li, ul.actions_list_super_compact li {\n	padding: 0;\n	margin: 0;\n	list-style-type: none;\n	list-style-image: none;\n}",
 				".non_link:link,\n.non_link:visited,\n.non_link:hover,\n.non_link:active {\n	color: #0d1522; /* {\$,wizard, 20% seed + 80% !W/B} */\n	text-decoration: none;\n	cursor: default;\n}"=>".non_link,\n.non_link:link,\n.non_link:visited,\n.non_link:hover,\n.non_link:active {\n	color: #0d1522 !important; /* {\$,wizard, 20% seed + 80% !W/B} */\n	text-decoration: none;\n	cursor: default;\n}",
-				"text-shadow: 1px 1px 1px #000000; /* {\$,wizard, 100% !W/B} */\n	margin: 0 2px;"=>"text-shadow: 1px 1px 1px #000000; /* {\$,wizard, 100% !W/B} */\n	margin: 0 2px;\n	overflow: visible; /* stops button padding on IE7 */",
+				"text-shadow: 1px 1px 1px #000000; /* {\$,wizard, 100% !W/B} */\n	margin: 0 2px;\n}"=>"text-shadow: 1px 1px 1px #000000; /* {\$,wizard, 100% !W/B} */\n	margin: 0 2px;\n	overflow: visible; /* stops button padding on IE7 */\n}",
 				".inline_image {\n	vertical-align: top;\n}\n\n.inline_image_2 {\n	vertical-align: middle;\n}\n\n.inline_image_3 {\n	vertical-align: baseline;\n}\n\n.inline_image_4 {\n	margin-top: -4px;\n}"=>".inline_image {\n	vertical-align: top !important;\n}\n\n.inline_image_2 {\n	vertical-align: middle !important;\n}\n\n.inline_image_3 {\n	vertical-align: baseline !important;\n}\n\n.inline_image_4 {\n	margin-top: -4px !important;\n}",
 				".gallery_media_full_expose {\n	overflow: hidden;\n	width: 100%;\n	outline: 0;\n	margin: {\$?,{\$MOBILE},1,3}em 0;\n}\n\n.gallery_media_full_expose {\n	text-align: center;\n}"=>".gallery_media_full_expose {\n	overflow: hidden;\n	width: 100%;\n	outline: 0;\n	margin: {\$?,{\$MOBILE},1,3}em 0;\n	text-align: center;\n	position: relative;\n}",
 				".gallery_media_full_expose img, .img_thumb {\n	border: 1px solid #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	-webkit-box-shadow: 3px 3px 10px #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	-moz-box-shadow: 3px 3px 10px #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	box-shadow: 3px 3px 10px #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	max-width: 100%;\n}"=>".gallery_media_full_expose img, .img_thumb {\n	border: 1px solid #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	-webkit-box-shadow: 3px 3px 10px #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	-moz-box-shadow: 3px 3px 10px #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	box-shadow: 3px 3px 10px #6b81a1; /* {\$,wizard, 100% medborder.border} */\n	max-width: 100%;\n	box-sizing: border-box;\n}",
 				".form_field_name {\n	margin: 4px 0;\n}"=>".form_field_name {\n	margin: 4px;\n	display: inline-block;\n}",
-				".input_author, .input_username, .input_colour, .input_email,"=>".input_author, .input_username, .input_colour, .input_email, .input_codename,",
-				".input_author_required, .input_username_required, .input_colour_required, .input_email_required,"=>".input_author_required, .input_username_required, .input_colour_required, .input_email_required, .input_codename_required,",
+				".input_author, .input_username, .input_colour, .input_email,\n"=>".input_author, .input_username, .input_colour, .input_email, .input_codename,\n",
+				".input_author_required, .input_username_required, .input_colour_required, .input_email_required,\n"=>".input_author_required, .input_username_required, .input_colour_required, .input_email_required, .input_codename_required,\n",
 				".members_viewing {\n	border-top: 0;\n	padding: 4px;\n	text-indent: 25px;\n	padding-{!en_left}: 0;\n}"=>".members_viewing {\n	padding: 4px;\n	text-indent: 25px;\n	padding-{!en_left}: 0;\n}\n\n.ocf_topic_0 .members_viewing {\n	border-top: 0;\n}",
 				".post .post_edit_link {\n}"=>".post .post_action_link {\n}\n\n.post .post_thread_children {\n	margin-top: 1em;\n	{+START,IF,{\$MOBILE}}\n		margin-left: 7px;\n	{+END}\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		margin-left: 20px;\n	{+END}\n}\n\n.post .ocf_post_buttons {\n	margin-top: 1.3em;\n}\n\n.ocf_post_buttons a {\n	opacity: 0.0;\n	-webkit-transition-property : opacity;\n	-webkit-transition-duration : 0.5s;\n	-moz-transition-property : opacity;\n	-moz-transition-duration : 0.5s;\n	-o-transition-property : opacity;\n	-o-transition-duration : 0.5s;\n	transition-property : opacity;\n	transition-duration : 0.5s;\n}\n\n.ocf_post_buttons a[rel=\"add reply\"] {\n	opacity: 1.0;\n}\n\n.ocf_post_buttons:hover a {\n	opacity: 1.0;\n}\n\n.post_show_more {\n	text-align: center;\n	border: 1px dashed #c1cee3; /* {\$,wizard, 100% lightborder} */\n	border-bottom-left-radius: 40px;\n	border-bottom-right-radius: 40px;\n	padding: 15px;\n	font-weight: bold;\n	font-size: 0.85em;\n}\n\n.post .post_show_more {\n	margin-left: 20px;\n}",
 				"ul.sitemap {\n	list-style-type: none;\n	margin-left: 0;\n	padding-left: 0;\n}"=>"ul.sitemap {\n	list-style-type: none;\n	list-style-image: none;\n	margin-left: 0;\n	padding-left: 0;\n}",
@@ -1960,6 +1965,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 			if (substr($css_file,0,1)=='.') continue;
 
 			$css_file_contents=file_get_contents($css_dir.$css_file);
+			$orig_css_file_contents=$css_file_contents;
 			if (strpos($css_file_contents,$css_recognition_string)===false)
 			{
 				$errors[]=do_lang_tempcode('NON_RECOGNISED_CSS_FILE',escape_html($css_file),escape_html(float_to_raw_string($from_version)));
@@ -2014,7 +2020,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 
 									case 'css_prepend':
 										$pos=strpos($css_file_contents,$from);
-										if (substr($css_file_contents,$pos,-strlen($to))!=$to)
+										if (substr($css_file_contents,$pos-strlen($to),strlen($to))!=$to)
 										{
 											$css_file_contents=substr($css_file_contents,0,$pos).$to.substr($css_file_contents,$pos);
 										}
@@ -2128,9 +2134,12 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				}
 
 				// Save
-				$outfile=@fopen($css_dir.$css_file,'wb') OR intelligent_write_error($css_dir.$css_file);
-				fwrite($outfile,$css_file_contents);
-				fclose($outfile);
+				if ($orig_css_file_contents!=$css_file_contents)
+				{
+					$outfile=@fopen($css_dir.$css_file,'wb') OR intelligent_write_error($css_dir.$css_file);
+					fwrite($outfile,$css_file_contents);
+					fclose($outfile);
+				}
 
 				$successes[]=do_lang_tempcode('CSS_FILE_UPGRADED',escape_html($css_file));
 			}

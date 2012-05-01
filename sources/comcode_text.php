@@ -84,7 +84,7 @@ function init__comcode_text()
 
 	// The contents of these tags is human readable text. It may be altered for reasons of bork, or word-wrapping, or textcode; they have hard white space
 	global $TEXTUAL_TAGS;
-	$TEXTUAL_TAGS=array('overlay'=>1,'tooltip'=>1,'section'=>1,'surround'=>1,'if_in_group'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'box'=>1,'internal_table'=>1,'external_table'=>1,'hide'=>1,'quote'=>1);
+	$TEXTUAL_TAGS=array('overlay'=>1,'tooltip'=>1,'section'=>1,'surround'=>1,'if_in_group'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'box'=>1,'internal_table'=>1,'external_table'=>1,'hide'=>1,'quote'=>1,'tab'=>1,'big_tab'=>1);
 
 	// These tags don't have <br />'s done right after them because they are their own block-end (like a paragraph). They may contain textcode lists and rules
 	global $BLOCK_TAGS;

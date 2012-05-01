@@ -225,6 +225,7 @@ function flip_page(to,pass_id,sections)
 						thumbFadeTimers[x.faderKey]=null;
 					}
 
+					x.style.width='';
 					x.style.position='static';
 					setOpacity(x,1.0);
 				} else
@@ -232,6 +233,7 @@ function flip_page(to,pass_id,sections)
 					if (x.style.position!='static') setOpacity(x,0.0); else setOpacity(x,1.0);
 					if ((typeof x.faderKey=='undefined') || (!thumbFadeTimers[x.faderKey]))
 						nereidFade(x,0,30,-5);
+					x.style.width=(findWidth(x)-24)+'px'; // 24=lhs padding+rhs padding+lhs border+rhs border
 					x.style.position='absolute';
 					x.style.top='0';
 					x.parentNode.style.position='relative';

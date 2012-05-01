@@ -69,20 +69,14 @@ Set the following to [b]777[/b]: (full directory permissions)
  - adminzone/pages/comcode_custom/<for-each-language>
  - adminzone/pages/html_custom/<for-each-language>
  - adminzone/pages/html_custom
- - adminzone/pages/modules_custom
- - adminzone/pages/minimodules_custom
  - cms/pages/comcode_custom
  - cms/pages/comcode_custom/<for-each-language>
  - cms/pages/html_custom/<for-each-language>
  - cms/pages/html_custom
- - cms/pages/modules_custom
- - cms/pages/minimodules_custom
  - collaboration/pages/comcode_custom
  - collaboration/pages/comcode_custom/<for-each-language>
  - collaboration/pages/html_custom/<for-each-language>
  - collaboration/pages/html_custom
- - collaboration/pages/modules_custom
- - collaboration/pages/minimodules_custom
  - data_custom/modules/chat
  - data_custom/modules/admin_stats
  - data_custom/modules/admin_backup
@@ -94,8 +88,6 @@ Set the following to [b]777[/b]: (full directory permissions)
  - forum/pages/comcode_custom/<for-each-language>
  - forum/pages/html_custom/<for-each-language>
  - forum/pages/html_custom
- - forum/pages/modules_custom
- - forum/pages/minimodules_custom
  - imports/mods
  - lang_cached
  - lang_cached/<for-each-language>
@@ -105,22 +97,16 @@ Set the following to [b]777[/b]: (full directory permissions)
  - pages/comcode_custom/<for-each-language>
  - pages/html_custom/<for-each-language>
  - pages/html_custom
- - pages/modules_custom
- - pages/minimodules_custom
  - personalzone/pages/comcode_custom
  - personalzone/pages/comcode_custom/<for-each-language>
  - personalzone/pages/html_custom/<for-each-language>
  - personalzone/pages/html_custom
- - personalzone/pages/modules_custom
- - personalzone/pages/minimodules_custom
  - persistant_cache
  - safe_mode_temp
  - site/pages/comcode_custom
  - site/pages/comcode_custom/<for-each-language>
  - site/pages/html_custom/<for-each-language>
  - site/pages/html_custom
- - site/pages/modules_custom
- - site/pages/minimodules_custom
  - text_custom
  - text_custom/<for-each-language>
  - themes/map.ini
@@ -151,6 +137,7 @@ Set the following to [b]777[/b]: (full directory permissions)
  - uploads/ocf_photos_thumbs
  - uploads/personal_sound_effects
  - uploads/watermarks
+ - uploads/website_specific
 
 Set the following to [b]666[/b]: (full read/write permissions)
  - data_custom/errorlog.php (if it exists)

@@ -71,6 +71,7 @@ class Module_topicview
 		$default_max=intval(get_option('forum_posts_per_page'));
 		$max=get_param_integer('max',$default_max);
 		if ($max==0) $max=$default_max;
+		if ($max==0) $max=1;
 		$first_unread_id=-1;
 
 		global $NON_CANONICAL_PARAMS;

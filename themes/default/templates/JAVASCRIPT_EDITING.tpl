@@ -141,7 +141,9 @@ function disable_wysiwyg(forms,so,so2,discard)
 					textarea.value=window.areaedit_original_comcode[id];
 				} else
 				{
-					var request=do_ajax_request('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub(),false,'data='+window.encodeURIComponent(window.areaedit_editors[id].getData()));
+					var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub());
+					if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
+					var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(window.areaedit_editors[id].getData()));
 					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName("result")[0]))
 					{
 						textarea.value='[semihtml]'+areaedit_editors[id].getData()+'[/semihtml]';
@@ -237,7 +239,9 @@ function load_html_edit(posting_form,ajax_copy)
 					e.value=posting_form.elements[id+"_parsed"].value;
 			} else
 			{
-				var request=do_ajax_request('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?semihtml=1&from_html=0'+keep_stub(),false,'data='+window.encodeURIComponent(posting_form.elements[counter].value.replace('{'+'$,page hint: no_wysiwyg}','')));
+				var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?semihtml=1&from_html=0'+keep_stub());
+				if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
+				var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(posting_form.elements[counter].value.replace('{'+'$,page hint: no_wysiwyg}','')));
 				if (!request.responseXML)
 				{
 					posting_form.elements[counter].value='';
@@ -509,7 +513,9 @@ function findTagsInEditor(editor,element)
 								self_ob.tag_text=tag_text;
 								self_ob.is_over=true;
 
-								var request=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub(false)),function(ajax_result_frame,ajax_result) {
+								var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub());
+								if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
+								var request=do_ajax_request(url,function(ajax_result_frame,ajax_result) {
 									if (ajax_result)
 									{
 										var tmp_rendered=getInnerHTML(ajax_result);
@@ -560,7 +566,9 @@ function convert_xml(name)
 	}
 
 	var old_text=element.value;
-	var request=do_ajax_request('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?to_comcode_xml=1'+keep_stub(),false,'data='+window.encodeURIComponent(old_text));
+	var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?to_comcode_xml=1'+keep_stub());
+	if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
+	var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(old_text));
 	var result=((request) && (request.responseXML) && (request.responseXML.documentElement))?request.responseXML.documentElement.getElementsByTagName("result")[0]:null;
 	if ((result) && (result.childNodes[0].data)) element.value=merge_text_nodes(result.childNodes);
 	else

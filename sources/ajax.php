@@ -303,7 +303,9 @@ function comcode_convert_script()
 			require_code('comcode_from_html');
 			$data=semihtml_to_comcode($data);
 		}
-		$tpl=comcode_to_tempcode($data,get_member(),false,60,NULL,NULL,either_param_integer('semihtml',0)==1/*true*/,false,false,false);
+		$db=$GLOBALS['SITE_DB'];
+		if (get_param_integer('forum_db',0)==1) $db=$GLOBALS['FORUM_DB'];
+		$tpl=comcode_to_tempcode($data,get_member(),false,60,NULL,$db,either_param_integer('semihtml',0)==1/*true*/,false,false,false);
 		$evaluated=$tpl->evaluate();
 		$out='';
 		if ($evaluated!='')

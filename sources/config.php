@@ -354,10 +354,10 @@ function get_option($name,$missing_ok=false)
 				}
 				$option['config_value_translated']=eval($option['eval'].';');
 				if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
-				if (get_value('setup_wizard_completed')==='1')
+				if ((get_value('setup_wizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 				{
 					require_code('config2');
-					set_option($name,($option['config_value_translated']===NULL)?'<null>':$option['config_value_translated']);
+					set_option($name,$option['config_value_translated']);
 				}
 			}
 			if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
@@ -381,10 +381,10 @@ function get_option($name,$missing_ok=false)
 			}
 			require_code('lang');
 			$option['config_value']=eval($option['eval'].';');
-			if (get_value('setup_wizard_completed')==='1')
+			if ((get_value('setup_wizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 			{
 				require_code('config2');
-				set_option($name,($option['config_value']===NULL)?'<null>':$option['config_value']);
+				set_option($name,$option['config_value']);
 			}
 		}
 		if (is_object($option['config_value'])) $option['config_value']=$option['config_value']->evaluate(); elseif (is_integer($option['config_value'])) $option['config_value']=strval($option['config_value']);

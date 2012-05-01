@@ -37,8 +37,8 @@ function init__files()
 	define('IGNORE_THEMES',64);
 	define('IGNORE_CUSTOM_DIR_CONTENTS_CASUAL_OVERRIDE',128);
 	define('IGNORE_USER_CUSTOMISE',256);
-	define('IGNORE_NONBUNDLED_SCATTERED',512);
-	define('IGNORE_BUNDLED_VOLATILE',1024);
+	define('IGNORE_NONBUNDLED_SCATTERED',512); // Has by default
+	define('IGNORE_BUNDLED_VOLATILE',1024); // Has by default
 }
 
 /**
@@ -199,6 +199,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		'..'=>'.*',
 		'__macosx'=>'.*',
 		'.bash_history'=>'.*',
+		'error_log'=>'.*',
 		'thumbs.db:encryptable'=>'.*',
 		'thumbs.db'=>'.*',
 		'.ds_store'=>'.*',
