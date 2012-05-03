@@ -37,7 +37,7 @@
 			{+START,IF,{$NOT,{$MOBILE}}}
 				{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
 					<th>
-						<a href="#" onclick="event.returnValue=false; markAllTopics(); return false;"><img src="{$IMG*,ocf_topic_modifiers/unvalidated}" alt="{!TOGGLE_SELECTION}" title="{!TOGGLE_SELECTION}" /></a>
+						<a href="#" onclick="event.returnValue=false; markAllTopics(event); return false;"><img src="{$IMG*,ocf_topic_modifiers/unvalidated}" alt="{!TOGGLE_SELECTION}" title="{!TOGGLE_SELECTION}" /></a>
 					</th>
 				{+END}
 			{+END}

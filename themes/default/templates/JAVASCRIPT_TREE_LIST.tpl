@@ -253,7 +253,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			img.onclick=function() { return false; };
 			img.object=this;
 			var a=node_self.getElementsByTagName('label')[0];
-			img.onkeypress=a.onkeypress=a.childNodes[0].onkeypress=function(img) { return function(event) { if (typeof event=='undefined') var event=window.event; if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-'].inArray(String.fromCharCode(event.keyCode?event.keyCode:event.charCode))) img.onmousedown(); } } (img);
+			img.onkeypress=a.onkeypress=a.childNodes[0].onkeypress=function(img) { return function(event) { if (typeof event=='undefined') var event=window.event; if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-'].inArray(String.fromCharCode(event.keyCode?event.keyCode:event.charCode))) img.onmousedown(event); } } (img);
 			a.oncontextmenu=function() { return false; };
 			a.handle_selection=this.handle_selection;
 			a.childNodes[0].onfocus=function() { this.parentNode.style.outline='1px dotted'; };

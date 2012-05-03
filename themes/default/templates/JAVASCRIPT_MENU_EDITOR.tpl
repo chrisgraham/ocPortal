@@ -72,7 +72,7 @@ function copyFieldsIntoBottom(i,changed)
 	form.elements['check_perms'].onclick=function () { document.getElementById('check_perms_'+i).value=this.checked?'1':'0'; };
 	//setInnerHTML(form.elements['branch_type'],getInnerHTML(document.getElementById('branch_type_'+i))); Breaks in IE due to strict container rules
 	form.elements['branch_type'].selectedIndex=document.getElementById('branch_type_'+i).selectedIndex;
-	form.elements['branch_type'].onchange=function () { document.getElementById('branch_type_'+i).selectedIndex=this.selectedIndex; if (document.getElementById('branch_type_'+i).onchange) document.getElementById('branch_type_'+i).onchange(); };
+	form.elements['branch_type'].onchange=function (event) { document.getElementById('branch_type_'+i).selectedIndex=this.selectedIndex; if (document.getElementById('branch_type_'+i).onchange) document.getElementById('branch_type_'+i).onchange(event); };
 	var mfh=document.getElementById('mini_form_hider');
 	mfh.style.display='block';
 	if ((typeof window.nereidFade!='undefined'))

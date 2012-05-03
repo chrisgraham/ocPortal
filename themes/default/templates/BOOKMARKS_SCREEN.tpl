@@ -1,7 +1,7 @@
 {TITLE}
 
 <script type="text/javascript">// <![CDATA[
-	function handle_bookmark_selection(ob,id)
+	function handle_bookmark_selection(ob,id,event)
 	{
 		var form=document.getElementById('selected_actions').getElementsByTagName('form')[0];
 		form.action='{FORM_URL;}';
@@ -29,8 +29,8 @@
 			if (folder_list.options[i].value==fv)
 			{
 				folder_list.selectedIndex=i;
-				if ((folder_list.onchange!='undefined') && (folder_list.onchange)) folder_list.onchange();
-				if ((folder_list.fakeonchange!='undefined') && (folder_list.fakeonchange)) folder_list.fakeonchange();
+				if ((folder_list.onchange!='undefined') && (folder_list.onchange)) folder_list.onchange(event);
+				if ((folder_list.fakeonchange!='undefined') && (folder_list.fakeonchange)) folder_list.fakeonchange(event);
 				break;
 			}
 		}
@@ -90,7 +90,7 @@
 							 <input class="button_pageitem" type="submit" value="{!EDIT}" />
 							 <input class="button_pageitem" type="submit" name="delete" value="{!DELETE}" />
 
-							 <label class="button_options_spacer" for="bookmark_{ID*}">{!CHOOSE}:</label> <input onclick="handle_bookmark_selection(this,'{ID*}');" type="checkbox" id="bookmark_{ID*}" name="bookmark_{ID*}" value="1" />
+							 <label class="button_options_spacer" for="bookmark_{ID*}">{!CHOOSE}:</label> <input onclick="handle_bookmark_selection(this,'{ID*}',event);" type="checkbox" id="bookmark_{ID*}" name="bookmark_{ID*}" value="1" />
 						</td>
 					</tr>
 				</tbody>

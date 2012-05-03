@@ -1771,7 +1771,7 @@ function addFormMarkedPosts(work_on,prefix)
 	}
 	return append!='';
 }
-function markAllTopics()
+function markAllTopics(event)
 {
 	var e=document.getElementsByTagName('input');
 	var i;
@@ -1780,7 +1780,7 @@ function markAllTopics()
 		if ((e[i].type=='checkbox') && (e[i].name.substr(0,5)=='mark_'))
 		{
 			e[i].checked=!e[i].checked;
-			e[i].onclick();
+			e[i].onclick(event);
 		}
 	}
 }
@@ -1956,7 +1956,9 @@ function cancelBubbling(event,for_element)
 	if ((typeof for_element=='undefined') || (!for_element)) var for_element='';
 
 	if (typeof event=='undefined') var event=window.event;
-	var src=event.srcElement?event.srcElement:event.target;
+	if (typeof event=='undefined' || !event) return false;
+
+	var src=(typeof event.srcElement!='undefined' && event.srcElement)?event.srcElement:event.target;
 	if (!src) return false;
 
 	if ((src.nodeName) && (src.nodeName.toLowerCase()==for_element) || (for_element==''))

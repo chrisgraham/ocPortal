@@ -14,8 +14,8 @@
 addEventListenerAbstract(window,'load',function () {
 	var submit_button=document.getElementById('submit_button');
 	submit_button.old_onclick=submit_button.onclick;
-	submit_button.onclick=function() {
-		submit_button.old_onclick();
+	submit_button.onclick=function(event) {
+		submit_button.old_onclick(event);
 		submit_button.disabled=true;
 	};
 	

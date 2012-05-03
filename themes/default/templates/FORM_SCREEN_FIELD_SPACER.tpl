@@ -6,8 +6,8 @@
 
 				{+START,IF_PASSED,SECTION_HIDDEN}{+START,IF,{SECTION_HIDDEN}}
 					<script type="text/javascript">// <![CDATA[
-						addEventListenerAbstract(window,'load',function () {
-							document.getElementById('fes{TITLE|}').onclick();
+						addEventListenerAbstract(window,'load',function (event) {
+							document.getElementById('fes{TITLE|}').onclick(event);
 						} );
 					//]]></script>
 				{+END}{+END}

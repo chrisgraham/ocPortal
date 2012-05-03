@@ -77,7 +77,7 @@
 				</div>
 				<div>
 					<p class="accessibility_hidden"><label for="font_name">{!CHAT_OPTIONS_TEXT_NAME}</label></p>
-					<select onclick="this.onchange();" onchange="onFontChange(this);" id="font_name" name="font_name">
+					<select onclick="this.onchange(event);" onchange="onFontChange(this);" id="font_name" name="font_name">
 						<option {$?,{$EQ,{FONT_NAME_DEFAULT*},Arial},selected="selected" ,}value="Arial" style="font-family: 'Arial'">Arial</option>
 						<option {$?,{$EQ,{FONT_NAME_DEFAULT*},Courier},selected="selected" ,}value="Courier" style="font-family: 'Courier'">Courier</option>
 						<option {$?,{$EQ,{FONT_NAME_DEFAULT*},Georgia},selected="selected" ,}value="Georgia" style="font-family: 'Georgia'">Georgia</option>

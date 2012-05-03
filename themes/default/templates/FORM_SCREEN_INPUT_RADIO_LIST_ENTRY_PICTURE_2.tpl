@@ -1,5 +1,5 @@
-<div class="radio_list_picture" onclick="this.getElementsByTagName('img')[0].onclick();">
-	<img style="padding: 3px; margin: 1px" onkeypress="this.onclick(event);" id="{$FIX_ID*,j_{NAME}_{CODE}}_img" onclick="var form=document.getElementById('{$FIX_ID*,j_{NAME}_{CODE}}').form; var ob=document.getElementById('{$FIX_ID*,j_{NAME}_{CODE}}_img'); choose_picture('{$FIX_ID*;,j_{NAME}_{CODE}}',ob,'{NAME*}'); if (typeof window.main_form_very_simple!='undefined') form.submit(); cancelBubbling(event);" src="{URL*}" title="" alt="{!SELECT_IMAGE}: {$STRIP_TAGS,{PRETTY*}}" /><br />
+<div class="radio_list_picture" onclick="this.getElementsByTagName('img')[0].onclick(event);">
+	<img style="padding: 3px; margin: 1px" onkeypress="this.onclick(event);" id="{$FIX_ID*,j_{NAME}_{CODE}}_img" onclick="var form=document.getElementById('{$FIX_ID*,j_{NAME}_{CODE}}').form; var ob=document.getElementById('{$FIX_ID*,j_{NAME}_{CODE}}_img'); choose_picture('{$FIX_ID*;,j_{NAME}_{CODE}}',ob,'{NAME*}',event); if (typeof window.main_form_very_simple!='undefined') form.submit(); cancelBubbling(event);" src="{URL*}" title="" alt="{!SELECT_IMAGE}: {$STRIP_TAGS,{PRETTY*}}" /><br />
 	
 	<div{+START,IF,{$AND,{$JS_ON},{$MATCH_KEY_MATCH,adminzone:admin_themes,_WILD:members}}} class="accessibility_hidden"{+END}>
 	{+START,IF,{$NOT,{CHECKED}}}

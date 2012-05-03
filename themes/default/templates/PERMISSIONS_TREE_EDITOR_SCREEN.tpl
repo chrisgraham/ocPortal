@@ -25,7 +25,7 @@
 					{+START,BOX,,,light}
 						<form title="{!CHOOSE} {!_USERGROUP}" action="index.php" method="post">
 							<img alt="" src="{$IMG*,pte_view_help}" /><strong><label for="group">{!PERMISSIONS_TREE_EDITOR_ICON_LABEL}:</label></strong>
-							<select id="group" name="group" onclick="this.onchange();" onchange="update_group_displayer(this)">
+							<select id="group" name="group" onclick="this.onchange(event);" onchange="update_group_displayer(this)">
 								{GROUPS}
 							</select>
 						</form>

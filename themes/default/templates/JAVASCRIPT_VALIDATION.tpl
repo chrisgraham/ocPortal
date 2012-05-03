@@ -35,7 +35,7 @@ function fix_form_enter_key(form)
 		if (((type=='text') || (type=='password') || (type=='color') || (type=='email') || (type=='number') || (type=='range') || (type=='search') || (type=='tel') || (type=='url'))
 		 && (typeof submit.onclick!='undefined') && (submit.onclick)
 		 && ((typeof inputs[i].onkeypress=='undefined') || (!inputs[i].onkeypress)))
-			inputs[i].onkeypress=function(event) { if (typeof event=='undefined') var event=window.event; if (enter_pressed(event)) submit.onclick(); };
+			inputs[i].onkeypress=function(event) { if (typeof event=='undefined') var event=window.event; if (enter_pressed(event)) submit.onclick(event); };
 	}
 }
 
@@ -185,7 +185,7 @@ function _simplified_form_continue_submit(iframe,form_cat_selector)
 	}
 }
 
-function do_form_submit(form)
+function do_form_submit(form,event)
 {
 	if (!checkForm(form,false)) return false;
 
@@ -212,7 +212,7 @@ function do_form_submit(form)
 	}
 	if (form.onsubmit)
 	{
-		var ret=form.onsubmit();
+		var ret=form.onsubmit(event);
 		if (!ret) return false;
 	}
 	if ((typeof window.just_checking_requirements=='undefined') || (!window.just_checking_requirements)) form.submit();
@@ -780,7 +780,7 @@ function toggleSubordinateFields(pic,help_id)
 	trigger_resize();
 }
 
-function choose_picture(id,ob,name)
+function choose_picture(id,ob,name,event)
 {
 	var r=document.getElementById(id);
 	if (!r) return;
@@ -814,7 +814,7 @@ function choose_picture(id,ob,name)
 	//if (r.onclick) r.onclick(); causes loop
 	ob.parentNode.onmouseover=function() {};
 	ob.parentNode.onmouseout=function() {};
-	if (typeof r.fakeonchange!='undefined' && r.fakeonchange) r.fakeonchange();
+	if (typeof r.fakeonchange!='undefined' && r.fakeonchange) r.fakeonchange(event);
 	if (e.length<100)
 	{
 		if (!browser_matches('no_alpha_ie_with_opacity')) setOpacity(ob.parentNode,1.0);

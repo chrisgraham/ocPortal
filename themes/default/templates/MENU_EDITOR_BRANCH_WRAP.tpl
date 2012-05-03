@@ -12,7 +12,7 @@
 		<input type="hidden" id="new_window_{I*}" name="new_window_{I*}" value="0" />
 		<input type="hidden" id="check_perms_{I*}" name="check_perms_{I*}" value="0" />
 		<div class="accessibility_hidden"><label id="label_branch_type_{I*}" for="branch_type_{I*}">{!MENU_ENTRY_BRANCH}</label></div>
-		<select style="display: none" onclick="this.onchange();" onchange="menuEditorBranchTypeChange(this.name.substr(12,this.name.length));" title="{$STRIP_TAGS,{!MENU_ENTRY_BRANCH;}}" id="branch_type_{I*}" name="branch_type_{I*}">
+		<select style="display: none" onclick="this.onchange(event);" onchange="menuEditorBranchTypeChange(this.name.substr(12,this.name.length));" title="{$STRIP_TAGS,{!MENU_ENTRY_BRANCH;}}" id="branch_type_{I*}" name="branch_type_{I*}">
 			{+START,IF,{$NOT,{CLICKABLE_SECTIONS}}}
 				<option value="page">{!PAGE}</option>
 			{+END}

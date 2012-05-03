@@ -380,7 +380,10 @@ class forum_driver_base
 				$CACHED_THEME=NULL;
 			} else
 			{
-				if (($CACHED_THEME=='default') || (has_category_access(get_member(),'theme',$CACHED_THEME)))
+				global $ZONE;
+				$zone_theme=($ZONE===NULL)?$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
+
+				if (($CACHED_THEME=='default') || ($CACHED_THEME==$zone_theme) || (has_category_access(get_member(),'theme',$CACHED_THEME)))
 				{
 					return $CACHED_THEME;
 				} else
