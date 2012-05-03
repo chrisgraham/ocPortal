@@ -473,7 +473,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 				}
 			}
 			
-			unlink($temp_file_path);
+			@unlink($temp_file_path);
 		}
 	}
 

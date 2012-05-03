@@ -459,7 +459,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 				}
 				@zip_close($myfile_zip);
 			}
-			unlink($tmp_file);
+			@unlink($tmp_file);
 			break;
 		case 'tar':
 			require_code('tar');
@@ -485,7 +485,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 				}
 				tar_close($myfile_tar);
 			}
-			unlink($tmp_file);
+			@unlink($tmp_file);
 			break;
 		case 'gz':
 			if (function_exists('gzopen'))
@@ -510,6 +510,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 							}
 							$mash=' '.create_data_mash(preg_replace('#\.gz#i','',$url),$file_data);
 						}
+						@unlink($tmp_file);
 					}
 				}
 			}
@@ -579,7 +580,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 				$tmp_file_2=ocp_tempnam('pdfxml_');
 				@shell_exec($path.' > '.$tmp_file_2);
 				$mash=create_data_mash($tmp_file_2,NULL,'xml',true);
-				unlink($tmp_file_2);
+				@unlink($tmp_file_2);
 			}
 			break;
 		case 'htm':

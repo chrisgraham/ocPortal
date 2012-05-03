@@ -1214,7 +1214,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 				{
 					list($_video_width,$_video_height,$_video_length)=array(NULL,NULL,NULL);
 				}
-				if ($temp_path!='') unlink($temp_path);
+				if ($temp_path!='') @unlink($temp_path);
 			}
 			if ($video_width==0)
 				$video_width=(is_null($_video_width))?intval(get_option('default_video_width')):$_video_width;

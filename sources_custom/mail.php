@@ -332,11 +332,11 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	// Attachment cleanup
 	foreach ($real_attachments as $r)
 	{
-		if ($r['temp']) unlink($r['path']);
+		if ($r['temp']) @unlink($r['path']);
 	}
 	foreach ($cid_attachments as $r)
 	{
-		if ($r['temp']) unlink($r['path']);
+		if ($r['temp']) @unlink($r['path']);
 	}
 
 	// Return / Error handling

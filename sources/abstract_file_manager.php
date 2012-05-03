@@ -619,7 +619,7 @@ function afm_make_file($basic_path,$contents,$world_access)
 		}
 		fclose($h);
 
-		unlink($path2);
+		@unlink($path2);
 
 		@ftp_chmod($conn,$access,$path);
 

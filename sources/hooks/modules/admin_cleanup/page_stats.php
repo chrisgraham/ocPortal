@@ -117,6 +117,8 @@ class Hook_page_stats
 		tar_close($myfile);
 		fclose($tmpfile);
 
+		@unlink($install_php_file);
+
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*$delete_older_than));
 
 		return do_template('CLEANUP_PAGE_STATS',array('_GUID'=>'1df213eee7c5c6b97168e5a34e92d3b0','STATS_BACKUP_URL'=>$stats_backup_url));

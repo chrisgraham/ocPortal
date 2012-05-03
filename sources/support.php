@@ -590,14 +590,14 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 }
 
 /**
- * Create file with unique file name, but works around compatibility issues between servers.
+ * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
  *
  * @param  string		The prefix of the temporary file name.
  * @return ~string	The name of the temporary file (false: error).
  */
 function ocp_tempnam($prefix)
 {
-	$problem_saving=((ini_get('safe_mode')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
+	$problem_saving=((ini_get('safe_mode')=='1') || (get_value('force_local_temp_dir')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
 	$local_path=get_custom_file_base().'/safe_mode_temp/';
 	$server_path='/tmp/';
 	$tmp_path=$problem_saving?$local_path:$server_path;

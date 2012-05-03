@@ -242,7 +242,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			fclose($tmpfile);
 			if (is_null($file))
 			{
-				unlink($path2);
+				@unlink($path2);
 				if ($accept_errors)
 				{
 					attach_message(do_lang_tempcode('CANNOT_COPY_TO_SERVER'),'warn');

@@ -76,7 +76,7 @@ function crc32_file($filename)
 		fwrite($myfile,'test');
 		fclose($myfile);
 		$crc_test=hash_file('crc32b',$tempnam);
-		unlink($tempnam);
+		@unlink($tempnam);
 		if ($crc_test=='0c7e7fd8') $reverse=true;
 
 		if (!$reverse) return hexdec($crc);

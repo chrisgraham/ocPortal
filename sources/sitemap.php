@@ -340,7 +340,7 @@ function sitemaps_xml_finished()
 	fclose($SITEMAPS_OUT_FILE);
 	@unlink($SITEMAPS_OUT_PATH);
 	copy($SITEMAPS_OUT_TEMPPATH,$SITEMAPS_OUT_PATH);
-	unlink($SITEMAPS_OUT_TEMPPATH);
+	@unlink($SITEMAPS_OUT_TEMPPATH);
 }
 
 /**
