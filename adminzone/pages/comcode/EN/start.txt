@@ -27,7 +27,7 @@ For help, see the [url="http://ocportal.com/docs"]docs[/url]. Add content/catego
 | [surround="no_stbox_padding"][box="Website Activity"][block]main_staff_actions[/block][/box][/surround]
 | [block]main_db_notes[/block]
 
-{+START,IF,{$ADDON_INSTALLED,syndication_blocks}}[block="http://ocportal.com/backend.php?mode=news&type=rss&filter=1,2,3,29&days=100" title="ocPortal news"]side_rss[/block]{+END}
+{+START,IF,{$ADDON_INSTALLED,syndication_blocks}}[block="http://ocportal.com/backend.php?mode=news&type=rss&filter=1,2,3,29&days=100" title="ocPortal news" cache="1"]side_rss[/block]{+END}
 |}
 [title="2"]Other Websites[/title]
 {| 60%:37% wide floats

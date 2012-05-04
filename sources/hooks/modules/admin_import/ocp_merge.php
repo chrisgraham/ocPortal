@@ -83,8 +83,8 @@ class Hook_ocp_merge
 							);
 		$info['dependencies']=array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
 								'attachment_references'=>array('attachments','ocf_members','ocf_posts','news_and_categories','cedi'),
-								'permissions'=>array_diff($info['import'],array('feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
-								'feedback'=>array_diff($info['import'],array('feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
+								'permissions'=>array_diff($info['import'],array('themes','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
+								'feedback'=>array_diff($info['import'],array('themes','ocf_warnings','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
 								'authors'=>array('ocf_members'),
 								'banners'=>array('ocf_members'),
 								'catalogues'=>array('ocf_members'),
@@ -822,7 +822,7 @@ class Hook_ocp_merge
 					$votes[]=array(
 						'v_poll_id'=>$row['id'],
 						'v_voter_id'=>is_numeric($voter)?intval($voter):NULL,
-						'v_voter_ip'=>is_numeric($voter)?NULL:$voter,
+						'v_voter_ip'=>is_numeric($voter)?'':$voter,
 						'v_vote_for'=>NULL,
 					);
 				}
@@ -2018,7 +2018,14 @@ class Hook_ocp_merge
 			{
 				if (import_check_if_imported('topic',strval($row['id']))) continue;
 
-				$forum_id=is_null($row['t_forum_id'])?NULL:import_id_remap_get('forum',strval($row['t_forum_id']));
+				if (is_null($row['t_forum_id']))
+				{
+					$forum_id=NULL;
+				} else
+				{
+					$forum_id=import_id_remap_get('forum',strval($row['t_forum_id']),true);
+					if (is_null($forum_id)) continue;
+				}
 
 				$t_pt_to=$row['t_pt_to'];
 				$t_pt_from=$row['t_pt_from'];
@@ -2082,7 +2089,8 @@ class Hook_ocp_merge
 				$member_id=import_id_remap_get('member',strval($row['p_poster']),true);
 				if (is_null($member_id)) $member_id=db_get_first_id();
 
-				$topic_id=import_id_remap_get('topic',strval($row['p_topic_id']));
+				$topic_id=import_id_remap_get('topic',strval($row['p_topic_id']),true);
+				if (is_null($topic_id)) continue;
 
 				// This speeds up addition... using the cache can reduce about 7/8 of a query per post on average
 				if (array_key_exists($topic_id,$TOPIC_FORUM_CACHE))
@@ -2170,7 +2178,7 @@ class Hook_ocp_merge
 				$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$row2['pv_member_id'],'pv_answer_id'=>$answer));
 			}
 
-			import_id_remap_put('poll',strval($row['id']),$id_new);
+			import_id_remap_put('f_poll',strval($row['id']),$id_new);
 		}
 	}
 	

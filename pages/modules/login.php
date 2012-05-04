@@ -129,7 +129,7 @@ class Module_login
 			$this_proper_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 			$_login_url=$this_proper_url->evaluate();
 			$test=http_download_file($_login_url,0,false,true); // Should return a 200 blank, not an HTTP error or a redirect; actual data would be an ocP error
-			if ((is_null($test)) && ($GLOBALS['HTTP_MESSAGE']!==200))
+			if ((is_null($test)) && ($GLOBALS['HTTP_MESSAGE']!=='200') && ($GLOBALS['HTTP_MESSAGE']!=='401') && ((!is_file(get_file_base().'/install.php')) || ($GLOBALS['HTTP_MESSAGE']!=='500')))
 			{
 				attach_message(do_lang_tempcode((substr(get_base_url(),0,11)=='http://www.')?'HTTP_REDIRECT_PROBLEM_WITHWWW':'HTTP_REDIRECT_PROBLEM_WITHOUTWWW',escape_html(get_base_url().'/config_editor.php')),'warn');
 			}

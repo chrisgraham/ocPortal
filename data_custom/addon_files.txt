@@ -2272,6 +2272,7 @@ plupload
  - data_custom/plupload/plupload.silverlight.xap
  - sources_custom/global2.php
  - data_custom/picup.htm
+ - themes/default/templates_custom/JAVASCRIPT_PLUPLOAD.tpl
 
 theme_debug
 -----------

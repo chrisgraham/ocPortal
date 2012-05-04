@@ -627,7 +627,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 	{
 		if ($codename=='side_weather' || $codename=='side_rss' || $codename=='main_rss') // Special cases to stop external dependencies causing issues
 		{
-			$map['cache']='2';
+			if (!array_key_exists('cache',$map))
+				$map['cache']='2';
 		}
 	}
 

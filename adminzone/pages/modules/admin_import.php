@@ -220,12 +220,19 @@ class Module_admin_import
 		require_code('form_templates');
 		foreach ($_sessions as $session)
 		{
-			if ($session['imp_session']==get_session_id()) $text=do_lang_tempcode('IMPORT_SESSION_CURRENT',escape_html($session['imp_db_name']));
-			else $text=do_lang_tempcode('IMPORT_SESSION_EXISTING_REMAP',escape_html($session['imp_db_name']));
+			if ($session['imp_session']==get_session_id())
+			{
+				$text=do_lang_tempcode('IMPORT_SESSION_CURRENT',escape_html($session['imp_db_name']));
+			} else
+			{
+				$text=do_lang_tempcode('IMPORT_SESSION_EXISTING_REMAP',escape_html($session['imp_db_name']));
+			}
 			$sessions->attach(form_input_list_entry(strval($session['imp_session']),false,$text));
 		}
 		$text=do_lang_tempcode('IMPORT_SESSION_NEW_DELETE');
 		$sessions->attach(form_input_list_entry(strval(-1),false,$text));
+		$text=do_lang_tempcode('IMPORT_SESSION_NEW_DELETE_OCF_SATELLITE');
+		$sessions->attach(form_input_list_entry(strval(-2),false,$text));
 		$fields=form_input_list(do_lang_tempcode('IMPORT_SESSION'),do_lang_tempcode('DESCRIPTION_IMPORT_SESSION'),'session',$sessions,NULL,true);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'session2','importer'=>get_param('importer')),'_SELF');
@@ -249,17 +256,26 @@ class Module_admin_import
 			  1) We are continuing (therefore do nothing)
 			  2) We are resuming a prior session, after our session changed (therefore remap old session-data to current session)
 			  3) We are starting afresh (therefore delete all previous import sessions)
+			  4) As per '3', except OCF imports are maintained as we're now importing a satellite site
 		*/
 		$session=either_param_integer('session',get_session_id());
-		if ($session==-1)
+		if (($session==-1) || ($session==-2))
 		{
 			// Delete all others
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_session');
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_parts_done');
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_id_remap');
+			if ($session==-1)
+			{
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_parts_done');
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_id_remap');
+			} else
+			{
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_parts_done WHERE imp_id NOT LIKE \''.db_encode_like('ocf_%').'\'');
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_id_remap WHERE (id_type NOT LIKE \''.db_encode_like('ocf_%').'\''.') AND '.db_string_not_equal_to('id_type','category').' AND '.db_string_not_equal_to('id_type','forum').' AND '.db_string_not_equal_to('id_type','topic').' AND '.db_string_not_equal_to('id_type','post').' AND '.db_string_not_equal_to('id_type','f_poll').' AND '.db_string_not_equal_to('id_type','group').' AND '.db_string_not_equal_to('id_type','member'));
+			}
 
 			$session=get_session_id();
-		} elseif ($session!=get_session_id())
+		}
+		if ($session!=get_session_id())
 		{
 			// Remap given to current
 			$GLOBALS['SITE_DB']->query_update('import_session',array('imp_session'=>get_session_id()),array('imp_session'=>$session),'',1);
