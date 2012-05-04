@@ -371,7 +371,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		}
 	}
 
-	if (($dir!='') && (file_exists(get_file_base().'/'.$filepath.'/sources_custom'))) // ocPortal dupe (e.g. backup) install
+	if (($dir!='') && (is_dir(get_file_base().'/'.$filepath)) && (file_exists(get_file_base().'/'.$filepath.'/sources_custom'))) // ocPortal dupe (e.g. backup) install
 	{
 		return true;
 	}

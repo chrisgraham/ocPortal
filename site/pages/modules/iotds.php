@@ -270,7 +270,7 @@ class Module_iotds
 		if (get_db_type()!='xml')
 		{
 			$myrow['iotd_views']++;
-			$GLOBALS['SITE_DB']->query_update('iotd',array('iotd_views'=>$myrow['iotd_views']),array('id'=>$id),'',1);
+			$GLOBALS['SITE_DB']->query_update('iotd',array('iotd_views'=>$myrow['iotd_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		if ((has_actual_page_access(NULL,'cms_iotds',NULL,NULL)) && (has_edit_permission('high',get_member(),$myrow['submitter'],'cms_iotds')))

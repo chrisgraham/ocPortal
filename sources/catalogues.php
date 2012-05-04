@@ -1265,7 +1265,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	if (get_db_type()!='xml')
 	{
 		$entry['ce_views']++;
-		$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_views'=>$entry['ce_views']),array('id'=>$id),'',1);
+		$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_views'=>$entry['ce_views']),array('id'=>$id),'',1,NULL,false,true);
 	}
 
 	// Validation

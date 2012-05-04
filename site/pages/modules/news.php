@@ -720,7 +720,7 @@ class Module_news
 		if (get_db_type()!='xml')
 		{
 			$myrow['news_views']++;
-			$GLOBALS['SITE_DB']->query_update('news',array('news_views'=>$myrow['news_views']),array('id'=>$id),'',1);
+			$GLOBALS['SITE_DB']->query_update('news',array('news_views'=>$myrow['news_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$myrow['news_category']))))

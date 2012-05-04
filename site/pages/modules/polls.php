@@ -319,7 +319,7 @@ class Module_polls
 		if (get_db_type()!='xml')
 		{
 			$myrow['poll_views']++;
-			$GLOBALS['SITE_DB']->query_update('poll',array('poll_views'=>$myrow['poll_views']),array('id'=>$id),'',1);
+			$GLOBALS['SITE_DB']->query_update('poll',array('poll_views'=>$myrow['poll_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		$date_raw=is_null($myrow['date_and_time'])?'':strval($myrow['date_and_time']);

@@ -217,6 +217,8 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	{
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
+		$through_queue=(get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed()));
+
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
 			'm_subject'=>substr($subject_tag,0,255),
 			'm_message'=>$message_raw,
@@ -235,9 +237,9 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_url'=>get_self_url(true),
 			'm_queued'=>((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())))?1:0,
 			'm_template'=>$mail_template,
-		));
+		),false,!$through_queue); // No errors if we don't NEED this to work
 
-		if ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed()))) return;
+		if ($through_queue) return;
 	}
 
 	if (count($attachments)==0) $attachments=NULL;

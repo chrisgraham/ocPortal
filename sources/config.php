@@ -270,7 +270,7 @@ function set_value($name,$value)
 	$VALUES[$name]['date_and_time']=time();
 	if ($existed_before)
 	{
-		$GLOBALS['SITE_DB']->query_update('values',array('date_and_time'=>time(),'the_value'=>$value),array('the_name'=>$name));
+		$GLOBALS['SITE_DB']->query_update('values',array('date_and_time'=>time(),'the_value'=>$value),array('the_name'=>$name),'',1,NULL,false,true);
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_insert('values',array('date_and_time'=>time(),'the_value'=>$value,'the_name'=>$name),false,true); // Allow failure, if there is a race condition

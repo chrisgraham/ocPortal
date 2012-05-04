@@ -88,7 +88,12 @@ class Block_side_network
 		{
 			require_code('character_sets');
 
-			$if_network=convert_to_internal_encoding(http_download_file($netlinks));
+			$data=http_download_file($netlinks,NULL,false);
+			if (is_null($data))
+			{
+				$data=do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',escape_html($netlinks));
+			}
+			$if_network=convert_to_internal_encoding($data);
 			return do_template('BLOCK_SIDE_NETWORK',array('_GUID'=>'5fe8867b9f69670ad61e6c78b956fab2','CONTENT'=>$if_network));
 		}
 		return new ocp_tempcode();

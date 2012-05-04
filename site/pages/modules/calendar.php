@@ -1471,7 +1471,7 @@ class Module_calendar
 		if (get_db_type()!='xml')
 		{
 			$event['e_views']++;
-			$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1);
+			$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 		
 		breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));

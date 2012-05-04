@@ -630,7 +630,7 @@ class Module_galleries
 		if (get_db_type()!='xml')
 		{
 			$myrow['gallery_views']++;
-			$GLOBALS['SITE_DB']->query_update('galleries',array('gallery_views'=>$myrow['gallery_views']),array('name'=>$cat),'',1);
+			$GLOBALS['SITE_DB']->query_update('galleries',array('gallery_views'=>$myrow['gallery_views']),array('name'=>$cat),'',1,NULL,false,true);
 		}
 
 		// Page title
@@ -836,7 +836,7 @@ class Module_galleries
 				$entry_views=integer_format($row['video_views']);
 				$current_entry=do_template('GALLERY_FLOWMODE_VIDEO',array('_GUID'=>'b6a795dc3853789df2a2951293d0fb26','_TITLE'=>get_translated_tempcode($row['title']),'EDIT_URL'=>$entry_edit_url,'MAIN'=>true,'RATING_DETAILS'=>$entry_rating_details,'DESCRIPTION'=>get_translated_tempcode($row['comments']),'CAT'=>$cat,'THUMB_URL'=>$url,'FULL_URL'=>$full_url,'ID'=>strval($row['id']),'VIEWS'=>strval($row['video_views']),'ADD_DATE_RAW'=>strval($row['add_date']),'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SUBMITTER'=>strval($row['submitter']),'VIDEO_PLAYER'=>$video_player,'VIEW_URL'=>$view_url,'VIDEO_DETAILS'=>show_video_details($row)));
 
-				$GLOBALS['SITE_DB']->query_update('videos',array('video_views'=>$row['video_views']+1),array('id'=>$row['id']),'',1);
+				$GLOBALS['SITE_DB']->query_update('videos',array('video_views'=>$row['video_views']+1),array('id'=>$row['id']),'',1,NULL,false,true);
 
 				break;
 			case 'image':
@@ -881,7 +881,7 @@ class Module_galleries
 
 				$current_entry=do_template('GALLERY_FLOWMODE_IMAGE',array('_GUID'=>'fd486cf9a3338bc277a7170a1961089b','_TITLE'=>get_translated_tempcode($row['title']),'EDIT_URL'=>$entry_edit_url,'MAIN'=>true,'RATING_DETAILS'=>$entry_rating_details,'DESCRIPTION'=>get_translated_tempcode($row['comments']),'FILE_SIZE'=>$file_size,'CAT'=>$cat,'THUMB_URL'=>$thumb_url,'FULL_URL'=>$full_url,'ID'=>strval($row['id']),'VIEWS'=>strval($row['image_views']),'ADD_DATE_RAW'=>strval($row['add_date']),'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SUBMITTER'=>strval($row['submitter']),'THUMB'=>$thumb_url,'VIEW_URL'=>$view_url));
 
-				$GLOBALS['SITE_DB']->query_update('images',array('image_views'=>$row['image_views']+1),array('id'=>$row['id']),'',1);
+				$GLOBALS['SITE_DB']->query_update('images',array('image_views'=>$row['image_views']+1),array('id'=>$row['id']),'',1,NULL,false,true);
 
 				break;
 		}
@@ -1129,7 +1129,7 @@ class Module_galleries
 		if (get_db_type()!='xml')
 		{
 			$myrow['image_views']++;
-			$GLOBALS['SITE_DB']->query_update('images',array('image_views'=>$myrow['image_views']),array('id'=>$id),'',1);
+			$GLOBALS['SITE_DB']->query_update('images',array('image_views'=>$myrow['image_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
@@ -1258,7 +1258,7 @@ class Module_galleries
 		if (get_db_type()!='xml')
 		{
 			$myrow['video_views']++;
-			$GLOBALS['SITE_DB']->query_update('videos',array('video_views'=>$myrow['video_views']),array('id'=>$id),'',1);
+			$GLOBALS['SITE_DB']->query_update('videos',array('video_views'=>$myrow['video_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(

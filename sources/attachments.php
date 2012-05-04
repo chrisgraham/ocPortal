@@ -80,7 +80,7 @@ function attachments_script()
 		{
 			// Update download count
 			if (ocp_srv('HTTP_RANGE')=='')
-				$connection->query_update('attachments',array('a_num_downloads'=>$myrow['a_num_downloads']+1,'a_last_downloaded_time'=>time()),array('id'=>$id),'',1);
+				$connection->query_update('attachments',array('a_num_downloads'=>$myrow['a_num_downloads']+1,'a_last_downloaded_time'=>time()),array('id'=>$id),'',1,NULL,false,true);
 		}
 	}
 	
