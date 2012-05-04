@@ -898,7 +898,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				if ($chunked)
 				{
 					$matches=array();
-					if (preg_match('#^(\r\n)?([a-f\d]+)(;[^\r\n]*)?\r\n(.*)$#is',$line,$matches)!=0)
+					if (preg_match('#^(\r\n)?([a-f\d]+) *(;[^\r\n]*)?\r\n(.*)$#is',$line,$matches)!=0)
 					{
 						$amount_wanted=hexdec($matches[2]);
 						if (strlen($matches[4])<$amount_wanted) // Chunk was more than what we grabbed, so we need to iterate more to parse

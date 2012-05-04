@@ -1798,7 +1798,9 @@ class Hook_ocp_merge
 	function import_ocf_members($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
+		$cpf_types=collapse_2d_complexity('id','cf_type',$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type')));
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -1834,7 +1836,13 @@ class Hook_ocp_merge
 					{
 						if (is_null($val)) $val='';
 						if (substr($key,0,6)=='field_')
-							$row2['field_'.strval(import_id_remap_get('cpf',substr($key,6)))]=$val;
+						{
+							$cpf_id=import_id_remap_get('cpf',substr($key,6));
+							$cpf_type=$cpf_types[$cpf_id];
+							if (($cpf_type=='short_trans') || ($cpf_type=='long_trans'))
+								$val=strval(insert_lang($this->get_lang_string($db,intval($val)),3));
+							$row2['field_'.strval($cpf_id)]=$val;
+						}
 					}
 					$GLOBALS['SITE_DB']->query_update('f_member_custom_fields',$row2,array('mf_member_id'=>$id_new),'',1);
 				}
