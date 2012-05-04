@@ -79,6 +79,7 @@ class Module_recommend
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
 			delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE&,:,%3A,{$SELF_URL}}');
+			delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE,:,%3A,{$SELF_URL&,0,0,0,from=<null>}}');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
