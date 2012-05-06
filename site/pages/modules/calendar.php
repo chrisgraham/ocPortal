@@ -1413,7 +1413,7 @@ class Module_calendar
 			$explode=explode('-',$day);
 			if (count($explode)==3)
 			{
-				/*if (is_null($event['e_start_hour'])) // All day event  //CODE COMMENTED, BECAUSE NOT WORKING OUT e_end_hour and e_end_minute, and not even needed
+				if (is_null($event['e_start_hour'])) // All day event
 				{
 					if (is_null($event['e_end_year']) || is_null($event['e_end_month']) || is_null($event['e_end_day']))
 					{
@@ -1421,7 +1421,7 @@ class Module_calendar
 						$event['e_end_month']=$event['e_start_month'];
 						$event['e_end_year']=$event['e_start_year'];
 					}
-				}*/
+				}
 				if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 				{
 					$event['e_end_year']+=intval($explode[0])-$event['e_start_year'];
@@ -1433,6 +1433,7 @@ class Module_calendar
 				$event['e_start_day']=intval($explode[2]);
 			}
 		}
+
 		$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
 		$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));

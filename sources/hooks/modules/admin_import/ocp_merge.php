@@ -1374,7 +1374,9 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$GLOBALS['SITE_DB']->query_insert('ticket_types',array('search_faq'=>array_key_exists('search_faq',$row)?$row['search_faq']:0,'guest_emails_mandatory'=>array_key_exists('guest_emails_mandatory',$row)?$row['guest_emails_mandatory']:0,'ticket_type'=>insert_lang($this->get_lang_string($db,$row['ticket_type']),1)));
+			$ticket_type=insert_lang($this->get_lang_string($db,$row['ticket_type']),1);
+			$GLOBALS['SITE_DB']->query_insert('ticket_types',array('search_faq'=>array_key_exists('search_faq',$row)?$row['search_faq']:0,'guest_emails_mandatory'=>array_key_exists('guest_emails_mandatory',$row)?$row['guest_emails_mandatory']:0,'ticket_type'=>$ticket_type));
+			import_id_remap_put('ticket_type',strval($row['ticket_type']),$ticket_type);
 		}
 	}
 
@@ -1693,6 +1695,55 @@ class Hook_ocp_merge
 			if (!array_key_exists('the_page',$row)) $row['the_page']='';
 			if (!array_key_exists('module_the_name',$row)) $row['module_the_name']='';
 			if (!array_key_exists('category_name',$row)) $row['category_name']='';
+			if ($row['category_name']!='')
+			{
+				$import_type=$row['module_the_name'];
+				$str=false;
+				switch ($import_type)
+				{
+					case 'galleries':
+						$import_type='gallery';
+						$str=true;
+						break;
+					case 'downloads':
+						$import_type='download_category';
+						break;
+					case 'calendar':
+						$import_type='event_type';
+						break;
+					case 'catalogues_catalogue':
+						$import_type='catalogue';
+						$str=true;
+						break;
+					case 'catalogues_category':
+						$import_type='catalogue_category';
+						break;
+					case 'forums':
+						$import_type='forum';
+						break;
+					case 'topics':
+						$import_type='topic';
+						break;
+					case 'seedy_page':
+						$import_type='cedi_page';
+						break;
+					case 'award':
+						$import_type='award_type';
+						break;
+					case 'news':
+						$import_type='news_category';
+						break;
+					case 'tickets':
+						$import_type='ticket_type';
+						break;
+				}
+				if ($str)
+				{
+					$id_new=import_id_remap_get($import_type,$row['category_name'],true);
+					if (is_null($id_new)) continue;
+					$row['category_name']=strval($id_new);
+				}
+			}
 			if (!array_key_exists('the_value',$row)) $row['the_value']='1';
 			$GLOBALS['SITE_DB']->query_insert('gsp',$row);
 		}
@@ -1725,28 +1776,52 @@ class Hook_ocp_merge
 			if (is_null($row['group_id'])) continue;
 			if (is_numeric($row['category_name']))
 			{
-				$module=$row['module_the_name'];
-				switch ($module)
+				$import_type=$row['module_the_name'];
+				$is_str=false;
+				switch ($import_type)
 				{
 					case 'galleries':
-						$module='gallery';
+						$import_type='gallery';
+						$str=true;
 						break;
 					case 'downloads':
-						$module='download';
+						$import_type='download_category';
 						break;
 					case 'calendar':
-						$module='event_type';
+						$import_type='event_type';
 						break;
 					case 'catalogues_catalogue':
-						$module='catalogue';
+						$import_type='catalogue';
+						$str=true;
+						break;
+					case 'catalogues_category':
+						$import_type='catalogue_category';
 						break;
 					case 'forums':
-						$module='forum';
+						$import_type='forum';
+						break;
+					case 'topics':
+						$import_type='topic';
+						break;
+					case 'seedy_page':
+						$import_type='cedi_page';
+						break;
+					case 'award':
+						$import_type='award_type';
+						break;
+					case 'news':
+						$import_type='news_category';
+						break;
+					case 'tickets':
+						$import_type='ticket_type';
 						break;
 				}
-				$id_new=import_id_remap_get($module,$row['category_name'],true);
-				if (is_null($id_new)) continue;
-				$row['category_name']=strval($id_new);
+				if (!$str)
+				{
+					$id_new=import_id_remap_get($import_type,$row['category_name'],true);
+					if (is_null($id_new)) continue;
+					$row['category_name']=strval($id_new);
+				}
 			}
 			$GLOBALS['SITE_DB']->query_delete('group_category_access',$row,'',1);
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',$row);

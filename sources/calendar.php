@@ -181,6 +181,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		} else
 		{
 			$_b=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute,$do_timezone_conv==1);
+
 			$b=cal_utctime_to_usertime(
 				$_b,
 				$timezone,
@@ -192,7 +193,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		$spans=(($a<$period_start) && ($b>$period_end));
 		if (($starts_within || $ends_within || $spans) && (in_array($mask[$i%$mask_len],array('1','y'))))
 		{
-			$times[]=array(max($period_start,$a),min($period_end,$b),$a,$b,2*$_a-tz_time($_a,$timezone),is_null($_b)?NULL:(2*$_b-tz_time($_b,$timezone)));
+			$times[]=array(max($period_start,$a),min($period_end,$b),$a,$b,$_a,$_b);
 		}
 		$i++;
 
@@ -695,18 +696,18 @@ function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$hour,$minu
 
 		$timezoned_timestamp=tz_time($timestamp_day_end,$timezone);
 
-		$timezoned_timestamp_day_start=mktime(
+		$timestamp_day_start=mktime(
 			0,
 			0,
 			0,
-			intval(date('m',$timezoned_timestamp)),
-			intval(date('d',$timezoned_timestamp)),
-			intval(date('Y',$timezoned_timestamp))
+			$month,
+			$day,
+			$year
 		);
 
-		if (!$show_in_users_timezone) return $timezoned_timestamp_day_start;
+		if (!$show_in_users_timezone) return $timestamp_day_start;
 
-		return $timezoned_timestamp_day_start+($timestamp_day_end-$timezoned_timestamp);
+		return $timestamp_day_start+($timestamp_day_end-$timezoned_timestamp);
 	}
 
 	if (!$show_in_users_timezone) // Move into timezone, as if that is UTC, as it won't get converted later
@@ -756,18 +757,18 @@ function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$hour,$minute
 
 		$timezoned_timestamp=tz_time($timestamp_day_start,$timezone);
 
-		$timezoned_timestamp_day_end=mktime(
+		$timestamp_day_end=mktime(
 			23,
 			59,
 			0,
-			intval(date('m',$timezoned_timestamp)),
-			intval(date('d',$timezoned_timestamp)),
-			intval(date('Y',$timezoned_timestamp))
+			$month,
+			$day,
+			$year
 		);
 
-		if (!$show_in_users_timezone) return $timezoned_timestamp_day_end;
+		if (!$show_in_users_timezone) return $timestamp_day_end;
 
-		return $timezoned_timestamp_day_end+($timestamp_day_start-$timezoned_timestamp);
+		return $timestamp_day_end+($timestamp_day_start-$timezoned_timestamp);
 	}
 
 	if (!$show_in_users_timezone) // Move into timezone, as if that is UTC, as it won't get converted later
