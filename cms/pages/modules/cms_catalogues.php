@@ -272,7 +272,7 @@ class Module_cms_catalogues extends standard_aed_module
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_entries','catalogue_name'=>$catalogue_name),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('news'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**
@@ -1085,7 +1085,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_categories'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**
@@ -1132,6 +1132,9 @@ class Module_cms_catalogues_cat extends standard_aed_module
 			$NON_CANONICAL_PARAMS[]='parent_id';
 
 			$parent_id=get_param_integer('parent_id',-1);
+
+			$title=get_param('title',$title);
+			$notes=get_param('notes',$notes);
 		}
 
 		$fields=new ocp_tempcode();

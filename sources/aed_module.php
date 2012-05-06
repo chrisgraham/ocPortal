@@ -727,7 +727,7 @@ class standard_aed_module
 		}
 		$max_rows=$db->query_value($table.' r '.$join,'COUNT(*)',$where,'ORDER BY '.$orderer);
 		if ($max_rows==0) return array(array(),0);
-		$rows=$db->query_select($table.' r '.$join,array('r.*'),$where,'ORDER BY '.$orderer,get_param_integer('max',50),get_param_integer('start',0));
+		$rows=$db->query_select($table.' r '.$join,array('r.*'),$where,'ORDER BY '.$orderer,get_param_integer('max',20),get_param_integer('start',0));
 		if ($force_site_db)
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;

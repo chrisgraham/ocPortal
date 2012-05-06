@@ -149,7 +149,7 @@ class Module_cms_booking extends standard_aed_module
 			$fields->attach(results_entry($fr,true));
 		}
 		
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
 	/**
@@ -393,7 +393,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 			$fields->attach(results_entry($fr,true));
 		}
 		
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
 	/**
@@ -592,7 +592,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 			$fields->attach(results_entry($fr,true));
 		}
 		
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
 	/**
@@ -782,7 +782,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 			}
 		}
 		
-		$max=get_param_integer('max',300);
+		$max=get_param_integer('max',20);
 		$start=get_param_integer('start',0);
 
 		if ($force_site_db)
@@ -864,7 +864,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 			$fields->attach(results_entry($fr,true));
 		}
 		
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
 	/**

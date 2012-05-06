@@ -232,7 +232,7 @@ class Module_cms_calendar extends standard_aed_module
 		$search_url=build_url(array('page'=>'search','id'=>'calendar'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'calendar'),get_module_zone('calendar'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**
@@ -1074,7 +1074,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 		$search_url=NULL;
 		$archive_url=NULL;
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**

@@ -475,6 +475,12 @@ class Module_cms_downloads extends standard_aed_module
 
 			$category_id=get_param_integer('cat',-1);
 			if ($category_id==-1) $category_id=NULL;
+
+			$name=get_param('name',$name);
+			$author=get_param('author',$author);
+			$description=get_param('description',$description);
+			$comments=get_param('comments',$comments);
+			$notes=get_param('notes',$notes);
 		}
 
 		$fields=new ocp_tempcode();

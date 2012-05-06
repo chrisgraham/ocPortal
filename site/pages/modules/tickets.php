@@ -446,6 +446,7 @@ class Module_tickets
 
 				$forum=1; $topic_id=1; $_ticket_type=1; // These will be returned by reference
 				$_comments=get_ticket_posts($id,$forum,$topic_id,$_ticket_type,$start,$num_to_show_limit);
+				$_comments_all=get_ticket_posts($id,$forum,$topic_id,$_ticket_type);
 				if ((!is_array($_comments)) || (!array_key_exists(0,$_comments))) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 				$ticket_title=$_comments[0]['title'];
@@ -459,10 +460,12 @@ class Module_tickets
 			$staff_details=new ocp_tempcode();
 			$types=$this->build_types_list(get_param('default',''));
 
+			$results_browser=NULL;
+
 			if (!$new)
 			{
 				require_code('templates_internalise_screen');
-				$test_tpl=internalise_own_screen($title,30,$_comments);
+				$test_tpl=internalise_own_screen($title,30,$_comments_all);
 				if (is_object($test_tpl)) return $test_tpl;
 
 				if (is_null($_comments)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -480,13 +483,12 @@ class Module_tickets
 				list($comments,$serialized_options,$hash)=$renderer->render_posts($num_to_show_limit,$max_thread_depth,true,$ticket_owner,array(),$forum);
 
 				// Pagination
-				$results_browser=NULL;
 				if (!$renderer->is_threaded)
 				{
-					if ($renderer->total_posts>$num_to_show_limit)
+					if (count($_comments_all)>$num_to_show_limit)
 					{
 						require_code('templates_results_browser');
-						$results_browser=results_browser(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',$renderer->total_posts,NULL,NULL,true);
+						$results_browser=results_browser(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',count($_comments_all),NULL,NULL,true);
 					}
 				}
 
@@ -614,6 +616,7 @@ class Module_tickets
 				'STAFF_DETAILS'=>$staff_details,
 				'URL'=>$post_url,
 				'ADD_TICKET_URL'=>$add_ticket_url,
+				'RESULTS_BROWSER'=>$results_browser,
 			));
 
 		} else // Guest has posted ticket successfully. Actually, this code problem never runs (as they in fact see a separate screen from do_update_ticket), but it's here as a fail safe.

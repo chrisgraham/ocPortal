@@ -212,7 +212,7 @@ class Module_admin_custom_comcode extends standard_aed_module
 			$fields->attach(results_entry(array($row['tag_tag'],get_translated_text($row['tag_title']),($row['tag_dangerous_tag']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($row['tag_block_tag']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($row['tag_textual_tag']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($row['tag_enabled']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.$row['tag_tag'])))),true);
 		}
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
 	/**

@@ -162,7 +162,7 @@ class Module_cms_ocf_groups extends standard_aed_module
 		$search_url=build_url(array('page'=>'search','id'=>'ocf_clubs'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'groups'),get_module_zone('groups'));
 		
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order,'sort'),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order,'sort'),false,$search_url,$archive_url);
 	}
 
 	/**

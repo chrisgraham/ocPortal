@@ -191,7 +191,7 @@ class Module_cms_news extends standard_aed_module
 		$search_url=build_url(array('page'=>'search','id'=>'news'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'news'),get_module_zone('news'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**
@@ -226,6 +226,14 @@ class Module_cms_news extends standard_aed_module
 	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+
+		if ($title=='')
+		{
+			$main_news_category=get_param_integer('cat',$main_news_category);
+			$title=get_param('title',$title);
+			$author=get_param('author',$author);
+			$notes=get_param('notes',$notes);
+		}
 
 		require_lang('menus');
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_WRITING');
@@ -861,7 +869,7 @@ class Module_cms_news_cat extends standard_aed_module
 			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'archive','filter'=>$row['id']),get_module_zone('news')),get_translated_text($row['nc_title']))),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
 		
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
 	/**

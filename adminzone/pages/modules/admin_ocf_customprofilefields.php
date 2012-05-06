@@ -292,7 +292,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			$fields->attach(results_entry($fr,true));
 		}
 		
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',300),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'gdfg43tfdgdfgdrfgd',true),true);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'gdfg43tfdgdfgdrfgd',true),true);
 	}
 
 	/**
