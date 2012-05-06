@@ -477,7 +477,6 @@ class Module_downloads
 		return do_template('DOWNLOAD_CATEGORY_SCREEN',array('_GUID'=>'ebb3c8708695f6a30dbd4a03f8632047','ID'=>strval($id),'SUBDOWNLOADS'=>$subdownloads,'TAGS'=>get_loaded_tags('download_categories'),'TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'DESCRIPTION'=>$description,'SUBCATEGORIES'=>$subcategories,'DOWNLOADS'=>$downloads,'SORTING'=>$sorting));
 	}
 
-
 	/**
 	 * The UI to view a download index.
 	 *

@@ -41,7 +41,7 @@ class Hook_rss_comments
 		$hook=convert_ocportal_type_codes('feedback_type_code',$parts[0],'cma_hook');
 		if ($hook!='')
 		{
-			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($hook));
+			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($hook),true);
 			$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($hook),true);
 			if (is_null($ob)) return NULL;
 			$info=$ob->info();

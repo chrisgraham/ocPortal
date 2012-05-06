@@ -176,6 +176,7 @@ class Module_login
 		{
 			$title=get_page_title('LOGGED_IN');
 			$url=enforce_sessioned_url(either_param('redirect'));
+			//set_session_id(get_session_id()); // Just in case something earlier set it to a pre-logged-in one     Not needed
 
 			if (count($_POST)<=4) // Only the login username, password, remember-me and redirect
 			{

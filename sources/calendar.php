@@ -164,6 +164,12 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		);
 		if ((is_null($start_hour)) && (is_null($end_year) || is_null($end_month) || is_null($end_day))) // All day event with no end date, should be same as start date
 		{
+			// Should not be needed, but normalise possible database error
+			$start_minute=NULL;
+			$start_hour=NULL;
+			$end_minute=NULL;
+			$end_hour=NULL;
+
 			$end_day=$start_day;
 			$end_month=$start_month;
 			$end_year=$start_year;

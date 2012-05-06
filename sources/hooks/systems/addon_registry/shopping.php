@@ -117,7 +117,6 @@ class Hook_addon_registry_shopping
 			'themes/default/images/bigicons/orders.png',
 			'themes/default/images/bigicons/show_orders.png',
 			'themes/default/images/bigicons/undispatched.png',
-			'themes/default/images/no_image.png',
 			'themes/default/images/results/add_note.png',
 			'themes/default/images/results/delete.gif',
 			'themes/default/images/results/dispatch.png',

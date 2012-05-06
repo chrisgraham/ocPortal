@@ -1740,9 +1740,13 @@ class Hook_ocp_merge
 					case 'catalogues_catalogue':
 						$module='catalogue';
 						break;
+					case 'forums':
+						$module='forum';
+						break;
 				}
 				$id_new=import_id_remap_get($module,$row['category_name'],true);
-				if (!is_null($id_new)) $row['category_name']=strval($id_new);
+				if (is_null($id_new)) continue;
+				$row['category_name']=strval($id_new);
 			}
 			$GLOBALS['SITE_DB']->query_delete('group_category_access',$row,'',1);
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',$row);

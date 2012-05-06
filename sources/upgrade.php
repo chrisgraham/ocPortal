@@ -1774,7 +1774,6 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				".menu_type__zone {\n	font-size: 0.9em;\n}"=>".menu_type__zone {\n	font-size: 0.9em;\n	max-height: 15px;\n}",
 				".menu_type__zone li {\n	display: inline;\n	padding: 0;\n	list-style-type: none;\n}"=>".menu_type__zone li {\n	display: inline;\n	padding: 0;\n	list-style-type: none;\n	list-style-image: none;\n}\n\n.menu_type__zone li * {\n	vertical-align: middle;\n}",
 				".edit_menu_link_inline {\n	position: absolute;\n	right: 1px;\n}"=>"*>.edit_menu_link_inline {\n	display: none;\n}\n\n*:hover>.edit_menu_link_inline {\n	display: block;\n}\n\n.edit_menu_link_inline {\n	position: absolute;\n	right: 1px;\n	z-index: 10000;\n}",
-				".ocf_post_details_unvalidated {\n	float: {!en_left};\n	}"=>".ocf_post_details_unvalidated {\n	float: {!en_left};\n	padding-{!en_left}: 7px;\n	}",
 				".radio_list_picture {\n	float: {!en_left};\n	white-space: nowrap;\n	padding: 3px;\n	min-width: 35px;\n	min-height: 35px;\n}"=>".radio_list_picture {\n	float: {!en_left};\n	white-space: nowrap;\n	padding: 3px;\n	min-width: 40px;\n	min-height: 40px;\n	font-size: 0.8em;\n	min-height: 65px;\n	min-width: 85px;\n}",
 			),
 			'news.css'=>array(
@@ -1785,6 +1784,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				".ocf_information_bar { /* {\$,either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl} */\n	background-color: #eef2f7; /* {\$,wizard, 60% bgcol + 40% W/B} */\n	font-size: 0.85em;\n	border-collapse: collapse;\n	white-space: nowrap;\n	width: 100%;\n}"=>".ocf_information_bar { /* {\$,either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl} */\n	background-color: #eef2f7; /* {\$,wizard, 60% bgcol + 40% W/B} */\n	font-size: 0.85em;\n	border-collapse: collapse;\n	white-space: nowrap;\n	width: 100%;\n	padding: 0;\n}",
 				".ocf_member_column_d {\n	{+START,IF,{\$NOT,{\$MOBILE}}}\n		width: 11.3em;\n	{+END}\n	{+START,IF,{\$MOBILE}}\n		float: left;\n	{+END}\n	white-space: nowrap;\n}"=>".ocf_member_column_d {\n	white-space: nowrap;\n}",
 				".ocf_member_column_e {\n	white-space: nowrap;\n}\n\n"=>"",
+				".ocf_post_details_unvalidated {\n	float: {!en_left};\n	}"=>".ocf_post_details_unvalidated {\n	float: {!en_left};\n	padding-{!en_left}: 7px;\n	}",
 			),
 			'points.css'=>array(
 				".points_give_choices .sub_option {\n	font-size: 0.9em;\n}"=>".points_give_choices .sub_option {\n	font-size: 0.9em;\n	white-space: nowrap;\n}",

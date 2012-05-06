@@ -89,6 +89,7 @@ class Hook_addon_registry_core
 			'web.config',
 			'data/html5.js',
 			'themes/default/images/bottom/ocpchat.png',
+			'themes/default/images/no_image.png',
 			'install.css',
 			'lang/EN/installer.ini',
 			'sources/group_member_timeouts.php',

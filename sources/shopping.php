@@ -265,9 +265,10 @@ function update_stock($order_id)
 	{
 		$hook=$ordered_items['p_type'];	
 
-		require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($hook));
+		require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($hook),true);
 
-		$object=object_factory('Hook_'.$hook);
+		$object=object_factory('Hook_'.$hook,true);
+		if (is_null($object)) continue;
 
 		if (method_exists($object,'update_stock')) // TODO: This is silly, we should recurse to the proper handler in the eCommerce hook, for whatever delivery is needed
 			$object->update_stock($ordered_items['p_id'],$ordered_items['p_quantity']);	
@@ -326,9 +327,10 @@ function payment_form()
 
 		$hook=$item['product_type'];
 
-		require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($hook));
+		require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($hook),true);
 		
-		$object=object_factory('Hook_'.filter_naughty_harsh($hook));
+		$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
+		if (is_null($object)) continue;
 	
 		$temp=$object->get_products(false,$product);
 

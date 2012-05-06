@@ -263,7 +263,8 @@ function ocp_setcookie($name,$value,$session=false,$http_only=false)
 			}
 		}
 	}
-	$_COOKIE[$name]=get_magic_quotes_gpc()?addslashes($value):$value;
+	if ($name!='has_cookies')
+		$_COOKIE[$name]=get_magic_quotes_gpc()?addslashes($value):$value;
 
 	return $output;
 }

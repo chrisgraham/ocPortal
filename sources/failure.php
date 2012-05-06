@@ -697,7 +697,11 @@ function _fatal_exit($text,$return=false)
 	$echo->evaluate_echo();
 
 	if (get_param_integer('keep_fatalistic',0)==0)
+	{
+		$trace=get_html_trace();
+		$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'9fdc6d093bdb685a0eda6bb56988a8c5','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));
 		relay_error_notification((is_object($text)?$text->evaluate():$text).'[html]'.$error_tpl->evaluate().'[/html]');
+	}
 
 	if (!$return) exit();
 }

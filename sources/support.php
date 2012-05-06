@@ -1786,7 +1786,7 @@ function has_cookies() // Will fail on users first visit, but then will catch on
 		return false;
 	}*/
 	
-	if (count($_COOKIE)>0)
+	if (isset($_COOKIE['has_cookies']))
 	{
 		$HAS_COOKIES=true;
 		return true;

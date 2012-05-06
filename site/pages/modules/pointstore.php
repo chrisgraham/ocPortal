@@ -216,7 +216,7 @@ class Module_pointstore
 
 		if ($hook!='')
 		{
-			require_code('hooks/modules/pointstore/'.filter_naughty_harsh($hook));
+			require_code('hooks/modules/pointstore/'.filter_naughty_harsh($hook),true);
 			$object=object_factory('Hook_pointstore_'.filter_naughty_harsh($hook));
 			$object->init();
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINT_STORE'))));
@@ -243,7 +243,7 @@ class Module_pointstore
 		$_hooks=find_all_hooks('modules','pointstore');
 		foreach (array_keys($_hooks) as $hook)
 		{
-			require_code('hooks/modules/pointstore/'.filter_naughty_harsh($hook));
+			require_code('hooks/modules/pointstore/'.filter_naughty_harsh($hook),true);
 			$object=object_factory('Hook_pointstore_'.filter_naughty_harsh($hook),true);
 			if (is_null($object)) continue;
 			$object->init();

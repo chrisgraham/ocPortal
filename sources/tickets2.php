@@ -285,7 +285,7 @@ function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_ur
 	);
 	$topic_id=$GLOBALS['LAST_TOPIC_ID'];
 	$is_new=$GLOBALS['LAST_TOPIC_IS_NEW'];
-	if ($is_new)
+	if (($is_new) && ($ticket_type!=-1))
 	{
 		$GLOBALS['SITE_DB']->query_insert('tickets',array('ticket_id'=>$ticket_id,'forum_id'=>$fid,'topic_id'=>$topic_id,'ticket_type'=>$ticket_type));
 	}
@@ -313,7 +313,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 
 	$new_ticket=($ticket_type_if_new!=-1);
 
-	$ticket_type_id=$GLOBALS['SITE_DB']->query_value('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+	$ticket_type_id=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','ticket_type',array('ticket_id'=>$ticket_id));
 
 	$ticket_type_text=mixed();
 
