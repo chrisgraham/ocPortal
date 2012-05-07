@@ -697,7 +697,7 @@ function afm_move($basic_old_path,$basic_new_path)
 		sync_file_move(get_custom_file_base().'/'.$basic_old_path,get_custom_file_base().'/'.$basic_new_path);
 	} else
 	{
-		rename($old_path,$new_path);
+		@rename($old_path,$new_path) OR intelligent_write_error($old_path);
 
 		sync_file_move($old_path,$new_path);
 	}

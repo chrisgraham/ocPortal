@@ -283,7 +283,7 @@ class Hook_pointstore_pop3
 		pointstore_handle_error_taken($prefix,$_suffix);
 
 		// Add us to the database
-		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>$time,'memberid'=>get_member(),'purchasetype'=>'pop3','details'=>$prefix,'details2'=>'@'.$_suffix));
+		$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>$time,'memberid'=>get_member(),'purchasetype'=>'pop3','details'=>$prefix,'details2'=>'@'.$_suffix),true);
 
 		$mail_server=get_option('mail_server');
 		$pop3_url=get_option('pop_url');
@@ -295,7 +295,7 @@ class Hook_pointstore_pop3
 		$encoded_reason=do_lang('TITLE_NEWPOP3');
 		$message_raw=do_template('POINTSTORE_POP3_MAIL',array('_GUID'=>'19022c49d0bdde39735245850d04fca7','EMAIL'=>$email,'ENCODED_REASON'=>$encoded_reason,'LOGIN'=>$login,'QUOTA'=>integer_format($initial_quota),'MAIL_SERVER'=>$mail_server,'PASSWORD'=>$password,'PREFIX'=>$prefix,'SUFFIX'=>$_suffix,'POP3_URL'=>$pop3_url,'SUFFIX_PRICE'=>integer_format($suffix_price)));
 		require_code('notifications');
-		dispatch_notification('pointstore_request_pop3',NULL,do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
+		dispatch_notification('pointstore_request_pop3','pop3_'.strval($sale_id),do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 
 		$text=do_lang_tempcode('ORDER_POP3_DONE',escape_html($prefix.'@'.$_suffix));
 		return inform_screen($title,$text);
@@ -376,7 +376,7 @@ class Hook_pointstore_pop3
 		$encoded_reason=do_lang('TITLE_QUOTA');
 		$message_raw=do_template('POINTSTORE_QUOTA_MAIL',array('_GUID'=>'5a4e0bb5e53e6ccf8e57581c377557f4','ENCODED_REASON'=>$encoded_reason,'QUOTA'=>integer_format($quota),'EMAIL'=>$prefix.$suffix,'QUOTA_URL'=>$quota_url,'PRICE'=>integer_format($_price)));
 		require_code('notifications');
-		dispatch_notification('pointstore_request_quota',NULL,do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
+		dispatch_notification('pointstore_request_quota','quota_'.uniqid(''),do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('ORDER_QUOTA_DONE'));

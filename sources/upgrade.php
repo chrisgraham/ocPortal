@@ -1695,6 +1695,12 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 	$errors=array();
 	$successes=array();
 
+	if (!$test_run)
+	{
+		require_code('abstract_file_manager');
+		force_have_afm_details();
+	}
+
 	$css_replace__single_match=array();
 	$css_prepend__single_match=array();
 	$css_append__single_match=array();
@@ -2151,7 +2157,6 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 	// Theme images
 	require_code('themes2');
 	$langs=array('EN'=>'lang');//find_all_langs();
-	require_code('abstract_file_manager');
 	foreach ($theme_images_renames as $old=>$new)
 	{
 		foreach (array_keys($langs) as $lang)

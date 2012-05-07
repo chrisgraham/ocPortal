@@ -145,7 +145,7 @@ class Notification_dispatcher
 	 * Construct notification dispatcher.
 	 *
 	 * @param  ID_TEXT		The notification code to use
-	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
+	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none). If it is to have $store_in_staff_messaging_system, it must have the format <type>_<id>
 	 * @param  SHORT_TEXT	Message subject (in Comcode)
 	 * @param  LONG_TEXT		Message body (in Comcode)
 	 * @param  ?array			List of enabled members to limit sending to (NULL: everyone)

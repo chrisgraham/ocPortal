@@ -108,6 +108,10 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 	{
 		require_code('ocf_posts_action');
 		ocf_decache_ocp_blocks($forum_id);
+	} else
+	{
+		decache('side_ocf_personal_topics');
+		decache('_new_pp');
 	}
 }
 
@@ -235,6 +239,10 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 	{
 		require_code('ocf_posts_action');
 		ocf_decache_ocp_blocks($forum_id);
+	} else
+	{
+		decache('side_ocf_personal_topics');
+		decache('_new_pp');
 	}
 
 	return $forum_id;
@@ -375,7 +383,14 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 	}
 
 	require_code('ocf_posts_action');
-	if (!is_null($from)) ocf_decache_ocp_blocks($from);
+	if (!is_null($from))
+	{
+		ocf_decache_ocp_blocks($from);
+	} else
+	{
+		decache('side_ocf_personal_topics');
+		decache('_new_pp');
+	}
 	ocf_decache_ocp_blocks($to,$forum_name);
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);

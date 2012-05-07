@@ -242,7 +242,7 @@ class Hook_pointstore_forwarding
 		pointstore_handle_error_taken($prefix,$_suffix);
 
 		// Add us to the database
-		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>$time,'memberid'=>get_member(),'purchasetype'=>'forwarding','details'=>$prefix,'details2'=>'@'.$_suffix));
+		$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>$time,'memberid'=>get_member(),'purchasetype'=>'forwarding','details'=>$prefix,'details2'=>'@'.$_suffix),true);
 
 		$forw_url=get_option('forw_url');
 
@@ -251,7 +251,7 @@ class Hook_pointstore_forwarding
 		$message_raw=do_template('POINTSTORE_FORWARDER_MAIL',array('_GUID'=>'a09dba8b440baa5cd48d462ebfafd15f','ENCODED_REASON'=>$encoded_reason,'EMAIL'=>$email,'PREFIX'=>$prefix,'SUFFIX'=>$_suffix,'FORW_URL'=>$forw_url,'SUFFIX_PRICE'=>integer_format($suffix_price)));
 
 		require_code('notifications');
-		dispatch_notification('pointstore_request_forwarding',NULL,do_lang('MAIL_REQUEST_FORWARDING',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
+		dispatch_notification('pointstore_request_forwarding','forw_'.strval($sale_id),do_lang('MAIL_REQUEST_FORWARDING',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 
 		$text=do_lang_tempcode('ORDER_FORWARDER_DONE',$email,escape_html($prefix.'@'.$_suffix));
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

@@ -365,7 +365,9 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			if ($out['title']=='') $out['title']=$_postdetails['p_title'];
 		}
 		ocf_cache_member_details(array_keys($members));
-		foreach ($_postdetailss as $i=>$_postdetails)
+
+		$i=0;
+		foreach ($_postdetailss as $_postdetails)
 		{
 			if (is_null($_postdetails['message_comcode'])) $_postdetails['message_comcode']=get_translated_text($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
 
@@ -446,6 +448,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			$collated_post_details=ocf_get_details_to_show_post($_postdetails,($start==0) && (count($_postdetailss)==1));
 			$collated_post_details['is_spacer_post']=$is_spacer_post;
 			$posts[]=$collated_post_details;
+
+			$i++;
 		}
 
 		$out['posts']=$posts;

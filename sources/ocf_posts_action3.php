@@ -275,7 +275,14 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	if (count($posts)==1) ocf_mod_log_it('DELETE_POST',strval($topic_id),strval($posts[0]),$reason);
 	else ocf_mod_log_it('DELETE_POSTS',strval($topic_id),strval(count($posts)),$reason);
 
-	if (!is_null($forum_id)) ocf_decache_ocp_blocks($forum_id);
+	if (!is_null($forum_id))
+	{
+		ocf_decache_ocp_blocks($forum_id);
+	} else
+	{
+		decache('side_ocf_personal_topics');
+		decache('_new_pp');
+	}
 	
 	return $ret;
 }

@@ -660,11 +660,16 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 
 	// Find our subforums first
 	$order=$forum_info[0]['f_order_sub_alpha']?'f_name':'f_position';
-	$huge_forums=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)')>100;
+	$_max_forum_detail=get_value('max_forum_detail');
+	$max_forum_detail=is_null($_max_forum_detail)?100:intval($_max_forum_detail);
+	$huge_forums=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)')>$max_forum_detail;
 	if ($huge_forums)
 	{
-		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$order,300,NULL,false,false,array('f_description','f_intro_question'));
-		if (count($subforum_rows)==300) $subforum_rows=array(); // Will cause performance breakage
+		$_max_forum_inspect=get_value('max_forum_inspect');
+		$max_forum_inspect=is_null($_max_forum_inspect)?300:intval($_max_forum_inspect);
+
+		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$order,$max_forum_inspect,NULL,false,false,array('f_description','f_intro_question'));
+		if (count($subforum_rows)==$max_forum_inspect) $subforum_rows=array(); // Will cause performance breakage
 	} else
 	{
 		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$order,NULL,NULL,false,array('f_description','f_intro_question'));

@@ -74,7 +74,7 @@
 {+START,IF_PASSED,ID}
 	{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_ocf_forums}}
 		{+START,INCLUDE,STAFF_ACTIONS}
-			1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:ad:parent={ID}}
+			1_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:ad:parent_forum={ID}}
 			1_TITLE={!ADD_FORUM}
 			1_REL=add
 			2_URL={$PAGE_LINK*,_SEARCH:admin_ocf_forums:_ed:{ID}}

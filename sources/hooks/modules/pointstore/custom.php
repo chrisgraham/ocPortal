@@ -218,13 +218,13 @@ class Hook_pointstore_custom
 
 		require_code('points2');
 		charge_member(get_member(),$cost,$c_title);
-		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($rows[0]['id'])));
+		$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($rows[0]['id'])),true);
 
 		require_code('notifications');
 		$subject=do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),NULL,NULL,get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$message_raw=do_lang('MAIL_REQUEST_CUSTOM_BODY',comcode_escape($c_title),$username,NULL,get_site_default_lang());
-		dispatch_notification('pointstore_request_custom',strval($id),$subject,$message_raw,NULL,NULL,3,true);
+		dispatch_notification('pointstore_request_custom','custom'.strval($id).'_'.strval($sale_id),$subject,$message_raw,NULL,NULL,3,true);
 
 		// Show message
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

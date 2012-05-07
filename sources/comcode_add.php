@@ -482,8 +482,11 @@ function comcode_helper_script()
 
 					if ($tag=='attachment')
 					{
-						$field=form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'),do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'),'_safe',$actual_tag=='attachment_safe' || $actual_tag=='attachment2');
-						$fields_advanced->attach($field);
+						if (get_option('eager_wysiwyg')=='0')
+						{
+							$field=form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'),do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'),'_safe',$actual_tag=='attachment_safe' || $actual_tag=='attachment2');
+							$fields_advanced->attach($field);
+						}
 					}
 				}
 			}
@@ -500,7 +503,10 @@ function comcode_helper_script()
 
 		if ($tag=='attachment')
 		{
-			$javascript.="document.getElementById('type').onchange=function() { document.getElementById('_safe').checked=(this.options[this.selectedIndex].value=='inline'); };";
+			if (get_option('eager_wysiwyg')=='0')
+			{
+				$javascript.="document.getElementById('type').onchange=function() { document.getElementById('_safe').checked=(this.options[this.selectedIndex].value=='inline'); };";
+			}
 
 			if (($default_embed!='') || (!addon_installed('filedump')))
 			{
@@ -586,7 +592,10 @@ function comcode_helper_script()
 		$tag=post_param('tag');
 		$title=get_page_title('_COMCODE_HELPER',true,array($tag));
 
-		if (($tag=='attachment') && (post_param_integer('_safe',0)==1)) $tag='attachment_safe';
+		if (get_option('eager_wysiwyg')=='0')
+		{
+			if (($tag=='attachment') && (post_param_integer('_safe',0)==1)) $tag='attachment_safe';
+		}
 
 		list($comcode,$bparameters)=_get_preview_environment_comcode($tag);
 		if ($tag=='sections' || $tag=='big_tabs' || $tag=='tabs' || $tag=='list')
