@@ -277,10 +277,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 	foreach ($entries as $i=>$entry)
 	{
-		if ((!$in_db_sorting) || (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select))))))
-		{
-			$entries[$i]['map']=get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root,$fields,(($display_type==1) && (!$is_ecomm) && (!is_null($order_by)))?array(0,intval($order_by)):NULL,false,false,intval($order_by));
-		}
+		$entries[$i]['map']=get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root,$fields,(($display_type==1) && (!$is_ecomm) && (!is_null($order_by)))?array(0,intval($order_by)):NULL,false,false,intval($order_by));
 	}
 
 	// Implement search filter
@@ -420,7 +417,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		{
 			if (!array_key_exists($i,$entries)) break;
 			$entry=$entries[$i];			
-			if (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || (is_array($select)) && (in_array($entry['id'],$select))))
+			if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || (is_array($select)) && (in_array($entry['id'],$select))))
 			{
 				$tab_entry_map=$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array());
 				if ((get_option('is_on_comments')=='1') && ($entry['allow_comments']>=1) || (get_option('is_on_rating')=='1') && ($entry['allow_rating']==1) || (get_option('is_on_trackbacks')=='1') && ($entry['allow_trackbacks']==1))
@@ -472,7 +469,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 			$entry=$entries[$i];
 
-			if ((is_null($max)) || ((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
+			if ((is_null($max)) || ($in_db_sorting) || ((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
 				$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED'));
 		}
 	}
@@ -484,7 +481,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 			$entry=$entries[$i];
 
-			if (((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
+			if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
 				$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_LINE',$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_LINE'));
 		}
 		if (!$entry_buildup->is_empty()) $entry_buildup=do_template('CATALOGUE_'.$tpl_set.'_LINE_WRAP',$entry['map']+array('CATALOGUE'=>$catalogue_name,'CONTENT'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_LINE_WRAP');
@@ -1137,40 +1134,40 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
 {
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$category_id);
 	if (!is_null($root)) $map['root']=$root;
-   $url=build_url($map,get_module_zone('catalogues'));
+	$url=build_url($map,get_module_zone('catalogues'));
 
-   if (is_null($category_id)) return new ocp_tempcode();
+	if (is_null($category_id)) return new ocp_tempcode();
 
-   if (($category_id!=$root) || (!$no_link_for_me_sir))
-   {
-	   global $PT_PAIR_CACHE;
-	   if (!array_key_exists($category_id,$PT_PAIR_CACHE))
-	   {
-	      $category_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('cc_parent_id','cc_title'),array('id'=>$category_id),'',1);
-	      if (!array_key_exists(0,$category_rows)) fatal_exit(do_lang_tempcode('CAT_NOT_FOUND',escape_html(strval($category_id))));
-	      $PT_PAIR_CACHE[$category_id]=$category_rows[0];
-	   }
+	if (($category_id!=$root) || (!$no_link_for_me_sir))
+	{
+		global $PT_PAIR_CACHE;
+		if (!array_key_exists($category_id,$PT_PAIR_CACHE))
+		{
+			$category_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('cc_parent_id','cc_title'),array('id'=>$category_id),'',1);
+			if (!array_key_exists(0,$category_rows)) fatal_exit(do_lang_tempcode('CAT_NOT_FOUND',escape_html(strval($category_id))));
+			$PT_PAIR_CACHE[$category_id]=$category_rows[0];
+		}
 
-	   if ($PT_PAIR_CACHE[$category_id]['cc_parent_id']==$category_id) fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN',escape_html(strval($category_id))));
+		if ($PT_PAIR_CACHE[$category_id]['cc_parent_id']==$category_id) fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN',escape_html(strval($category_id))));
 	}
 
-   if ($category_id==$root)
-   {
+	if ($category_id==$root)
+	{
 		$below=new ocp_tempcode();
 	} else
 	{
-	   $below=catalogue_category_breadcrumbs($PT_PAIR_CACHE[$category_id]['cc_parent_id'],$root,false);
+		$below=catalogue_category_breadcrumbs($PT_PAIR_CACHE[$category_id]['cc_parent_id'],$root,false);
 	}
 
-   if (!$no_link_for_me_sir)
-   {
-	   $title=get_translated_text($PT_PAIR_CACHE[$category_id]['cc_title']);
-      if (!$below->is_empty()) $tpl_url=do_template('BREADCRUMB_ESCAPED'); else $tpl_url=new ocp_tempcode();
-      $tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
-   } else $tpl_url=new ocp_tempcode();
+	if (!$no_link_for_me_sir)
+	{
+		$title=get_translated_text($PT_PAIR_CACHE[$category_id]['cc_title']);
+   	if (!$below->is_empty()) $tpl_url=do_template('BREADCRUMB_ESCAPED'); else $tpl_url=new ocp_tempcode();
+   	$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
+	} else $tpl_url=new ocp_tempcode();
 
-   $below->attach($tpl_url);
-   return $below;
+	$below->attach($tpl_url);
+	return $below;
 }
 
 /**
