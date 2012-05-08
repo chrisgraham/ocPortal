@@ -1027,7 +1027,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	var $catalogue=true;
 	var $award_type='catalogue_category';
 	var $upload='image';
-	var $javascript='var mt=document.getElementById(\'move_target\'); var form=mt.form; var crf=function() { var s=mt.selectedIndex==0; form.elements[\'move_days_lower\'].disabled=s; form.elements[\'move_days_higher\'].disabled=s; }; crf(); mt.onclick=crf;';
+	var $javascript='if (document.getElementById(\'move_days_lower\')) { var mt=document.getElementById(\'move_target\'); var form=mt.form; var crf=function() { var s=mt.selectedIndex==0; form.elements[\'move_days_lower\'].disabled=s; form.elements[\'move_days_higher\'].disabled=s; }; crf(); mt.onclick=crf; }';
 	var $menu_label='CATALOGUES';
 	var $table='catalogue_categories';
 	var $title_is_multi_lang=false;
