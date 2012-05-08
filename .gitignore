@@ -21,3 +21,5 @@ themes/default/images_custom/*logo.png
 screens_tested
 html_dump
 data_custom/modules/admin_stats/*
+ocp_sitemap.xml
+
