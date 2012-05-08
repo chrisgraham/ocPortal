@@ -212,7 +212,7 @@ function do_form_submit(form,event)
 	}
 	if (form.onsubmit)
 	{
-		var ret=form.onsubmit(event);
+		var ret=form.onsubmit.call(form,event);
 		if (!ret) return false;
 	}
 	if ((typeof window.just_checking_requirements=='undefined') || (!window.just_checking_requirements)) form.submit();

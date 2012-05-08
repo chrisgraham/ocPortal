@@ -54,7 +54,7 @@
 
 							<li>
 								<label for="post">{!POST_COMMENT}</label>
-								<textarea accesskey="x" class="wide_field" onfocus="if ((this.value=='{POST_WARNING^*;}' &amp;&amp; '{POST_WARNING^*;}'!='') || (typeof this.strip_on_focus!='undefined' &amp;&amp; this.value==this.strip_on_focus)) this.value=''; this.style.color='black';" cols="42" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
+								<textarea accesskey="x" class="wide_field" onfocus="if ((this.value.replace(/\s/g,'')=='{POST_WARNING^*;}'.replace(/\s/g,'') &amp;&amp; '{POST_WARNING^*;}'!='') || (typeof this.strip_on_focus!='undefined' &amp;&amp; this.value==this.strip_on_focus)) this.value=''; this.style.color='black';" cols="42" rows="11" name="post" id="post">{POST_WARNING*}</textarea>
 							</li>
 						</ul>
 					</div>
@@ -240,7 +240,7 @@
 								&nbsp;
 							{+END}
 						{+END}
-						<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; form.setAttribute('target','_top'); if (form.old_action) form.setAttribute('action',form.old_action); if (form.onsubmit(event)) { disable_button_just_clicked(document.getElementById('submit_button')); form.submit(); }" tabindex="4" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
+						<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; form.setAttribute('target','_top'); if (form.old_action) form.setAttribute('action',form.old_action); if (form.onsubmit.call(form,event)) { disable_button_just_clicked(document.getElementById('submit_button')); form.submit(); }" tabindex="4" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
 					</div>
 				</div>
 			</div>

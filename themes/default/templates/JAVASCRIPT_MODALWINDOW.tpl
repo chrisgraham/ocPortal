@@ -396,7 +396,7 @@ function ModalWindow()
 					'position': 'absolute',
 					'left': '0',
 					'top': '0',
-					'width': dim.pageWidth+'px',
+					'width': '100%',
 					'height': ((dim.pageHeight>dim.windowHeight)?dim.pageHeight:dim.windowHeight)+'px'
 				}
 			});

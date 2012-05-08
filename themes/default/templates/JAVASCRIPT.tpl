@@ -1329,7 +1329,7 @@ function getWindowScrollHeight(win)
 	if (typeof win=='undefined') var win=window;
 	var best=win.document.body.parentNode.offsetHeight;
 	if (((win.document.body.offsetHeight>best) && (win.document.body.offsetHeight!=150)) || (best==150)) best=win.document.body.offsetHeight;
-	if (((win.document.body.parentNode.scrollHeight>best) && (win.document.body.parentNode.scrollHeight!=150)) || (best==150)) best=win.document.body.parentNode.scrollHeight;
+	if (((win.document.body.parentNode.scrollHeight/*>best*/ /*on IE the offsetHeight is 4px too much*/) && (win.document.body.parentNode.scrollHeight!=150)) || (best==150)) best=win.document.body.parentNode.scrollHeight;
 	if (((win.document.body.scrollHeight>best) && (best<150) && (win.document.body.scrollHeight!=150)) || (best==150)) best=win.document.body.scrollHeight;
 	return best;
 }
@@ -2453,10 +2453,11 @@ function replace_comments_form_with_ajax(options,hash)
 		comments_form.old_onsubmit=comments_form.onsubmit;
 
 		comments_form.onsubmit=function(event) {
+
 			// Cancel the event from running
 			if (typeof event=='undefined') var event=window.event;
 			event.returnValue=false;
-			if (typeof event.preventDefault=='undefined') preventDefault();
+			if (typeof event.preventDefault!='undefined') event.preventDefault();
 
 			if (!comments_form.old_onsubmit(event)) return false;
 
