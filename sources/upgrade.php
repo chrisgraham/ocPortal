@@ -2167,16 +2167,19 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 				$new_path=str_replace('/'.$old,'/'.$new,$path);
 				if (!$test_run)
 				{
-					if (file_exists($path))
-						afm_move($path,$new_path);
+					if (!file_exists(get_custom_file_base().'/'.$new_path))
+					{
+						if (file_exists($path))
+							afm_move($path,$new_path);
 
-					$where_map=array('theme'=>$theme,'id'=>$new);
-					if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
-					$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
+						$where_map=array('theme'=>$theme,'id'=>$new);
+						if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
+						$GLOBALS['SITE_DB']->query_delete('theme_images',$where_map);
 
-					actual_edit_theme_image($old,$theme,$lang,$new,$new_path);
+						actual_edit_theme_image($old,$theme,$lang,$new,$new_path);
 
-					$successes[]=do_lang_tempcode('THEME_IMAGE_RENAMED',escape_html($old),escape_html($new));
+						$successes[]=do_lang_tempcode('THEME_IMAGE_RENAMED',escape_html($old),escape_html($new));
+					}
 				}
 			}
 		}
