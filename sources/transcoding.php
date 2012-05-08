@@ -98,6 +98,8 @@ function transcode_video($url,$table,$url_field,$orig_filename_field,$width_fiel
 			}
 		} else
 		{
+			if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) return $url; // Can't do
+
 			$transcoding_server=get_option('transcoding_server');
 			if ($transcoding_server!='')
 			{

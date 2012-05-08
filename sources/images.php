@@ -11,6 +11,7 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
+/*EXTRA FUNCTIONS: shell_exec*/
 
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
@@ -441,8 +442,11 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
 						$shrink_command.=' '.@escapeshellarg($file_path);
 						$err_cond=-1;
 						$output_arr=array();
-						@exec($shrink_command,$output_arr,$err_cond);
-						if ($err_cond===0) return true;
+						if (strpos(@ini_get('disable_functions'),'shell_exec')===false)
+						{
+							@shell_exec($shrink_command,$output_arr,$err_cond);
+							if ($err_cond===0) return true;
+						}
 					}
 
 					$message=do_lang_tempcode('IMAGE_TOO_LARGE_FOR_THUMB',escape_html(integer_format($max_dim)),escape_html(integer_format($max_dim)));

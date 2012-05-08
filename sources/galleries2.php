@@ -11,6 +11,7 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
+/*EXTRA FUNCTIONS: shell_exec*/
 
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
@@ -573,7 +574,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 
 	$ffmpeg_path=get_option('ffmpeg_path');
 
-	if ($ffmpeg_path!='')
+	if (($ffmpeg_path!='') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
 	{
 		$filename='thumb_'.md5(uniqid(strval(post_param_integer('thumbnail_auto_position',1)))).'%d.jpg';
 		$dest_file=get_custom_file_base().'/uploads/galleries/'.$filename;

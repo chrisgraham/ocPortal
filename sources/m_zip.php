@@ -13,6 +13,7 @@
 // Download latest at http://eSurfers.com/m-lib/
 //
 // Modified for ocPortal. This file remains copyright to Francesco.
+/*EXTRA FUNCTIONS: shell_exec*/
 
 /**
  * @copyright	Francesco M. Munafo'
@@ -101,13 +102,13 @@ function zip_open($zip_file)
 
 	$res=-1; // any nonzero value
 	$unused_array_result=array();
-	if (strpos(@ini_get('disable_functions'),'exec')!==false)
+	if (strpos(@ini_get('disable_functions'),'shell_exec')!==false)
 	{
 		attach_message(do_lang_tempcode('NO_SHELL_ZIP_POSSIBLE'),'warn');
 
 		return constant('ZIPARCHIVE::ER_INTERNAL');
 	}
-	exec($unzip_cmd,$unused_array_result,$res);
+	shell_exec($unzip_cmd,$unused_array_result,$res);
 	unset($unused_array_result);
 
 	// IT IS IMPORTANT THAT YOUR COMMANDLINE ZUNZIP TOOL CORRECTLY SETS RESULT CODE

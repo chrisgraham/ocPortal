@@ -8,7 +8,7 @@
 * @copyright DTLink, LLC 2005
 */
 
-/*EXTRA FUNCTIONS: pspell\_.+*/
+/*EXTRA FUNCTIONS: (pspell\_.+|shell_exec)*/
 
 /*	$x=fopen(get_custom_file_base().'/data_custom/spelling/write.log','wt');
 	fwrite($x,serialize($_GET+$_POST));

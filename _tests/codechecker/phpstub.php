@@ -620,19 +620,6 @@ function error_reporting($level=NULL)
 }
 
 /**
- * Execute an external program.
- *
- * @param  PATH		The path to the system program to execute.
- * @param  ?array		Put output here (technically a reference, but syntax won't let me write it). (NULL: do not get it)
- * @param  ?integer  Put return code here (technically a reference, but syntax won't let me write it). (NULL: do not get it)
- * @return string		The stdout output of the program.
- */
-function exec($command,$output=NULL,$return_val=NULL)
-{
-	return '';
-}
-
-/**
  * Output a message and terminate the current script.
  *
  * @param  string	The message.
@@ -3145,17 +3132,6 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 /*function mmcache_rm($id)
 {
 }*/
-
-/**
- * Execute command via shell and return complete output as string.
- *
- * @param  string	The command.
- * @return ~string	The output (false: error).
- */
-function shell_exec($command)
-{
-	return '';
-}
 
 /**
  * Prepare a command path for a shell call to it.
