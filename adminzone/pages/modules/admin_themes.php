@@ -729,7 +729,7 @@ class Module_admin_themes
 		$_dir=opendir(get_file_base().'/themes/default/css_custom');
 		while (false!==($file=readdir($_dir)))
 		{
-			if (strtolower(substr($file,-4,4))=='.css')
+			if ((strtolower(substr($file,-4,4))=='.css') && (!in_array($file,$files)))
 				$files[]=$file;
 		}
 		closedir($_dir);

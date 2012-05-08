@@ -881,7 +881,10 @@ class Hook_ocp_merge
 			$submitter=$on_same_msn?$row['submitter']:import_id_remap_get('member',$row['submitter'],true);
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_news($this->get_lang_string($db,$row['title']),$this->get_lang_string($db,$row['news']),$row['author'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$this->get_lang_string($db,$row['news_article']),$row['news_category'],$news_category,$row['date_and_time'],$submitter,$row['news_views'],$row['edit_date'],$id,$row['news_image']);
+			$main_news_category=$row['news_category'];
+			$main_news_category=import_id_remap_get('news_category',strval($main_news_category),true);
+			if (is_null($main_news_category)) $main_news_category=db_get_first_id();
+			$id_new=add_news($this->get_lang_string($db,$row['title']),$this->get_lang_string($db,$row['news']),$row['author'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$this->get_lang_string($db,$row['news_article']),$main_news_category,$news_category,$row['date_and_time'],$submitter,$row['news_views'],$row['edit_date'],$id,$row['news_image']);
 
 			import_id_remap_put('news',strval($row['id']),$id_new);
 		}
