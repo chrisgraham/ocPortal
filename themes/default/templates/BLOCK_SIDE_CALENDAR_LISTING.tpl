@@ -17,7 +17,7 @@
 
 				<tbody>
 					{+START,LOOP,EVENTS}
-						<tr class="vevent">
+						<tr class="vevent"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/Event"}>
 							<th>
 								{+START,IF_PASSED,ICON}{+START,IF_PASSED,T_TITLE}
 									<img src="{$IMG*,{ICON}}" title="{T_TITLE*}" alt="{T_TITLE*}" />
@@ -26,15 +26,15 @@
 
 							<td{+START,IF,{$EQ,{TIME},{!ALL_DAY_EVENT}}} style="display: none"{+END}>
 								{+START,IF,{$VALUE_OPTION,html5}}
-									<time class="dtstart" datetime="{TIME_VCAL*}" itemprop="startDate">{TIME*}</time>
+									<time class="dtstart" datetime="{TIME_VCAL*}" itemprop="startDate">{$?,{$EQ,{TIME},{!ALL_DAY_EVENT}},{TIME_VCAL*},{TIME*}}</time>
 								{+END}
 								{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-									<abbr class="dtstart" title="{TIME_VCAL*}">{TIME*}</abbr>
+									<abbr class="dtstart" title="{TIME_VCAL*}">{$?,{$EQ,{TIME},{!ALL_DAY_EVENT}},{TIME_VCAL*},{TIME*}}</abbr>
 								{+END}
 							</td>
 	
 							<td class="summary"{+START,IF,{$EQ,{TIME},{!ALL_DAY_EVENT}}} colspan="2"{+END}>
-								<a href="{VIEW_URL*}" class="url">{TITLE*}</a>
+								<a href="{VIEW_URL*}" class="url"{$?,{$VALUE_OPTION,html5}, itemprop="name"}>{TITLE*}</a>
 								{+START,IF_PASSED,TO_DAY}
 									<span{+START,IF,{$EQ,{FROM_DAY},{TO_DAY}}} style="display: none"{+END}>
 										{+START,IF,{$VALUE_OPTION,html5}}

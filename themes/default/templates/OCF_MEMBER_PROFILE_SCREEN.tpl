@@ -1,3 +1,5 @@
+{$SET,name_set_elsewhere,1}
+
 <div class="vcard"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/ProfilePage"}>
 	{TITLE}
 

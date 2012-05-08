@@ -16,7 +16,7 @@
 			{+START,IF_NON_EMPTY,{ID}}<a name="post_{ID*}"></a>{+END}
 
 			<div class="float_surrounder">
-				{+START,IF_NON_EMPTY,{TITLE}}<h3 class="post_title">{TITLE*}</h3>{+END}
+				{+START,IF_NON_EMPTY,{TITLE}}<h3 class="post_title"{$?,{$VALUE_OPTION,html5}, itemprop="name"}>{TITLE*}</h3>{+END}
 				{+START,IF_NON_EMPTY,{$AVATAR,{POSTER_ID}}}
 					<img class="post_avatar" src="{$AVATAR*,{POSTER_ID}}" alt="{!AVATAR}" title="" />
 				{+END}
@@ -28,12 +28,12 @@
 					{+END}
 					{$,OCF style...}
 					{+START,IF_PASSED,POSTER}
-						<span class="post_poster">{POSTER}</span>
+						<span class="post_poster"{$?,{$VALUE_OPTION,html5}, itemprop="author"}>{POSTER}</span>
 					{+END}
 
 					<span class="post_time">
 						{+START,IF,{$VALUE_OPTION,html5}}
-							{!_POSTED_TIME,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{TIME_RAW}}" pubdate="pubdate">{TIME*}</time>}
+							{!_POSTED_TIME,<time{$?,{$VALUE_OPTION,html5}, itemprop="datePublished"} datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{TIME_RAW}}" pubdate="pubdate">{TIME*}</time>}
 						{+END}
 						{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
 							{!_POSTED_TIME,{TIME*}}

@@ -154,6 +154,8 @@
 		{+START,IF,{VIEW_PROFILES}}
 			<h2>{!DETAILS}</h2>
 
+			{+START,IF,{$VALUE_OPTION,html5}}<meta itemprop="name" content="{USERNAME*}" />{+END}
+
 			<div class="wide_table_wrap">
 				<table class="wide_table ocf_profile_details" summary="{!MAP_TABLE}">
 					{+START,IF,{$NOT,{$MOBILE}}}
@@ -219,7 +221,7 @@
 						{+START,LOOP,EXTRA_INFO_DETAILS}
 							<tr>
 								<th class="de_th">{_loop_key*}:</th>
-								<td><span class="role">{_loop_var*}</span></td>
+								<td><span>{_loop_var*}</span></td>
 							</tr>
 						{+END}
 					</tbody>

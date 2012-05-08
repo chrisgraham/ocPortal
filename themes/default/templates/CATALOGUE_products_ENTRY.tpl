@@ -26,7 +26,7 @@
 					{+END}
 					{+START,IF_NON_EMPTY,{FIELD_2}}
 						<div class="price-box">
-							<span class="price">{!PRICE} <span{$?,{$VALUE_OPTION,html5}, itemprop="priceCurrency"}>{$CURRENCY_SYMBOL}</span><span{$?,{$VALUE_OPTION,html5}, itemprop="price"}>{$FLOAT_FORMAT,{FIELD_2}}</span>{$,Product price}</span>
+							<span>{!PRICE} <span{$?,{$VALUE_OPTION,html5}, itemprop="priceCurrency"}>{$CURRENCY_SYMBOL}</span><span class="price"{$?,{$VALUE_OPTION,html5}, itemprop="price"}>{$FLOAT_FORMAT,{FIELD_2}}</span>{$,Product price}</span>
 						</div>
 					{+END}
 				</div>

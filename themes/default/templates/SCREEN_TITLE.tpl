@@ -2,7 +2,7 @@
 <a name="title__{ID*}" id="title__{ID*}"></a>
 {+END}
 
-<h1 class="main_page_title"{$?,{$VALUE_OPTION,html5}, itemprop="name" role="banner"}>
+<h1 class="main_page_title"{$?,{$VALUE_OPTION,html5},{+START,IF,{$NOT,{$GET,name_set_elsewhere}}} itemprop="name"{+END} role="banner"}>
 	{TITLE}
 
 	{+START,IF_PASSED,AWARDS}

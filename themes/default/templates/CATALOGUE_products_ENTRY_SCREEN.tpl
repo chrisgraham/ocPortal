@@ -28,8 +28,10 @@
 				</div>
 			{+END}
 		</div>
-		<div>
+		<div{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/WebPage"}>
 			{COMMENT_DETAILS}
+
+			{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 		</div>
 	</div>
 

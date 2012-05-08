@@ -1,7 +1,4 @@
-<div class="wide_table_wrap"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/Table"}>
-	{+START,IF,{$VALUE_OPTION,html5}}
-		<meta itemprop="mainContentOfPage" content="true" />
-	{+END}
+<div class="wide_table_wrap"{$?,{$VALUE_OPTION,html5}, itemprop="mainContentOfPage" content="true" itemscope="itemscope" itemtype="http://schema.org/Table"}>
 	<table summary="{!COLUMNED_TABLE}" class="dottedborder wide_table">
 		{+START,IF,{$NOT,{$MOBILE}}}
 			<colgroup>

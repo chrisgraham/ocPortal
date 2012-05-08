@@ -1,4 +1,4 @@
-<div class="vcalendar vevent">
+<div class="vcalendar vevent"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/Event"}>
 	{TITLE}
 
 	{WARNING_DETAILS}
@@ -23,8 +23,8 @@
 							<div class="event_subscriptions float_surrounder">
 								{SUBSCRIPTIONS}
 							</div>
+							<hr />
 						{+END}
-						<hr />
 						<div class="event_subscribe"><a href="{SUBSCRIBE_URL*}">{!SUBSCRIBE_EVENT}</a></div>
 					{+END}
 				</div>
@@ -145,15 +145,15 @@
 		</div>
 	</div>
 
-	<div>
-		{COMMENT_DETAILS}
-	</div>
-
 	<!--<p class="standard_meta_block"{$?,{$VALUE_OPTION,html5}, role="contentinfo"}>
 		{+START,IF,{$VALUE_OPTION,html5}}{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}{+END}{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}{!ADDED,{ADD_DATE*}}{+END}{+START,IF,{$INLINE_STATS}}. {!VIEWS,{VIEWS*}}{+END}
 	</p>-->
 
-	{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
+	<div{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/WebPage"}>
+		{COMMENT_DETAILS}
+
+		{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
+	</div>
 
 	{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
 		<div class="edited edited_block"{$?,{$VALUE_OPTION,html5}, role="note"}>
