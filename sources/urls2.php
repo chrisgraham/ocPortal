@@ -339,11 +339,11 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 	// Put it together
 	$page_link=$zone.':'.$attributes['page'];
 	if (array_key_exists('type',$attributes)) $page_link.=':'.$attributes['type']; elseif (array_key_exists('id',$attributes)) $page_link.=':';
-	if (array_key_exists('id',$attributes)) $page_link.=':'.$attributes['id'];
+	if (array_key_exists('id',$attributes)) $page_link.=':'.urldecode($attributes['id']);
 	foreach ($attributes as $key=>$val)
 	{
 		if (($key!='page') && ($key!='type') && ($key!='id'))
-			$page_link.=':'.$key.'='.$val;
+			$page_link.=':'.$key.'='.urldecode($val);
 	}
 	
 	// Hash bit?
