@@ -243,7 +243,7 @@
 			<p class="nothing_here red_alert">{!NO_RESULTS_SEARCH}</p>
 		{+END}
 		{+START,IF_NON_EMPTY,{RESULTS}}
-			<p>The following sishyas match your search&hellip;</p>
+			<p>The following members match your search&hellip;</p>
 
 			<div class="float_surrounder">
 				{RESULTS}
