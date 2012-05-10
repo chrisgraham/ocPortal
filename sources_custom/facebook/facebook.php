@@ -838,6 +838,7 @@ abstract class BaseFacebook
    * @return array The payload inside it or null if the sig is wrong
    */
   protected function parseSignedRequest($signed_request) {
+    if (strpos($signed_request,'.') === false) return null;
     list($encoded_sig, $payload) = explode('.', $signed_request, 2);
 
     // decode the data
