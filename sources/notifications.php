@@ -455,7 +455,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 		$to_email=get_option('cc_address');
 		if ($to_email!='')
 		{
-			mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$priority,NULL,true,($from_member_id<0)?NULL:$from_member_id,($from_member_id==A_FROM_SYSTEM_PRIVILEGED),false);
+			mail_wrap($subject,$message,array($to_email),$to_name,$from_email,$from_name,$priority,NULL,true,($from_member_id<0)?NULL:$from_member_id,($from_member_id==A_FROM_SYSTEM_PRIVILEGED),false);
 		}
 	}
 
