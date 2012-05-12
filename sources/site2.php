@@ -342,7 +342,11 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 			$index=$trans_key;
 
 			$trans_cc_page_title_key=$GLOBALS['SITE_DB']->query_value('cached_comcode_pages','cc_page_title',array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
-			$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_cc_page_title_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$title_to_use,'text_parsed'=>'','language'=>$lang),true);
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('translate','id',array('id'=>$trans_cc_page_title_key,'language'=>$lang));
+			if (is_null($test))
+			{
+				$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_cc_page_title_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$title_to_use,'text_parsed'=>'','language'=>$lang),true);
+			}
 		}
 	}
 

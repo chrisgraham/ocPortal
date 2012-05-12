@@ -45,8 +45,8 @@ function splurgh(key_name,url_stub,range_a,range_b,level,data,chain,not_first)
 		if (data.charAt(to+1)=="[") // Child level exists next in list, requiring recursion
 		{
 			// Find where this level's data starts and ends
-			scanner_for_b=to+1;
-			balance=0;
+			var scanner_for_b=to+1;
+			var balance=0;
 			do
 			{
 				if (data.charAt(scanner_for_b)=="[") balance++;
