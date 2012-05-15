@@ -444,17 +444,18 @@ function upgrade_script()
 }
 
 /**
- * Do an integrity check.
+ * Do an integrity check. This does not include an alien check in basic mode; otherwise check_alien() is called within this function.
  *
  * @param  boolean	Whether to just do the minimum basic scan.
- * @param  boolean 	Whether merging of CSS changes is allowed
+ * @param  boolean 	Whether merging of CSS changes is allowed.
+ * @param  boolean 	Whether to give some help to unix people.
  * @return string		Results.
  */
-function run_integrity_check($basic=false,$allow_merging=true)
+function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 {
 	$ret_str='';
 
-	// We'll need to know about stuff in our addon registry
+	// We'll need to know about stuff in our addon registry, and file manifest
 	if (function_exists('find_all_hooks'))
 	{
 		$hooks=find_all_hooks('systems','addon_registry');
@@ -487,7 +488,10 @@ function run_integrity_check($basic=false,$allow_merging=true)
 		$hook_files[$hook]=file_get_contents($path);
 	}
 	unset($hook_keys);
+	$master_data=@unserialize(file_get_contents(get_file_base().'/data/files.dat',FILE_TEXT));
+	if ($master_data===false) $master_data=array();
 
+	// Moved module handling
 	if ($basic)
 	{
 		$not_missing=array();
@@ -501,13 +505,15 @@ function run_integrity_check($basic=false,$allow_merging=true)
 			$ret_str.=do_lang('WARNING_MOVED_MODULES',$moved);
 		}
 	}
-	$master_data=@unserialize(file_get_contents(get_file_base().'/data/files.dat',FILE_TEXT));
-	if ($master_data===false) $master_data=array();
-	list($outdated__outdated_original_and_override,$outdated__possibly_outdated_override,$outdated__missing_original_but_has_override,$outdated__uninstalled_addon_but_has_override)=check_outdated(get_file_base().'/','',$master_data,$hook_files,$allow_merging);
+
+	// Override handling
+	list($outdated__outdated_original_and_override,$outdated__possibly_outdated_override,$outdated__missing_original_but_has_override,$outdated__uninstalled_addon_but_has_override)=check_outdated__handle_overrides(get_file_base().'/','',$master_data,$hook_files,$allow_merging);
+
+	// Look for missing files, wrt bundled addons
 	$outdated__outdated_original='';
 	$outdated__missing_file_entirely='';
-
-	// Look for missing files, wrt addons
+	$outdated__future_files='';
+	$files_determined_to_upload=array();
 	$files_to_check=array();
 	foreach ($hook_files as $addon_name=>$hook_file)
 	{
@@ -526,6 +532,7 @@ function run_integrity_check($basic=false,$allow_merging=true)
 		}
 	}
 	unset($hook_files);
+	sort($files_to_check);
 	foreach ($files_to_check as $file)
 	{
 		if (should_ignore_file($file,IGNORE_BUNDLED_VOLATILE)) continue;
@@ -544,7 +551,10 @@ function run_integrity_check($basic=false,$allow_merging=true)
 		if (!file_exists(get_file_base().'/'.$real_file))
 		{
 			if (!in_array(get_file_base().'/'.$real_file,$not_missing))
+			{
 				$outdated__missing_file_entirely.='<li><kbd>'.escape_html($real_file).'</kbd></li>';
+				$files_determined_to_upload[]=$real_file;
+			}
 		} elseif (!is_null($file_info))
 		{
 			if (@filesize(get_file_base().'/'.$real_file)>1024*1024) continue; // Too big, so special exception
@@ -555,11 +565,19 @@ function run_integrity_check($basic=false,$allow_merging=true)
 			$true_hash=sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',$file_contents)));
 			if ($true_hash!=$file_info[0])
 			{
-				$outdated__outdated_original.='<li><kbd>'.escape_html($real_file).'</kbd></li>'; //  [disk-hash: '.$true_hash.', required-hash: '.$file_info[0].']
+				if (filemtime(get_file_base().'/'.$real_file)<ocp_version_time())
+				{
+					$outdated__outdated_original.='<li><kbd>'.escape_html($real_file).'</kbd></li>'; //  [disk-hash: '.$true_hash.', required-hash: '.$file_info[0].']
+					$files_determined_to_upload[]=$real_file;
+				} else
+				{
+					$outdated__future_files.='<li><kbd>'.escape_html($real_file).'</kbd></li>';
+				}
 			}
 		}
 	}
 
+	// Output integrity check results
 	if ($outdated__possibly_outdated_override!='')
 	{
 		if ($basic)
@@ -608,12 +626,46 @@ function run_integrity_check($basic=false,$allow_merging=true)
 	{
 		if ($basic)
 		{
-			$ret_str.='<p>These files are outdated (you can find the correct versions in the manual installer ZIP for the version you\'re running; ignore any files that you have knowingly replaced as official bug fixes):</p><ul>'.$outdated__outdated_original.'</ul>';
+			$ret_str.='<p>These files are outdated (you can find the correct versions in the manual installer ZIP for the version you\'re running):</p><ul>'.$outdated__outdated_original.'</ul>';
 		} else
 		{
 			$ret_str.=do_lang('WARNING_FILE_OUTDATED_ORIGINAL',$outdated__outdated_original);
 		}
 	}
+	if ($outdated__future_files!='')
+	{
+		if ($basic)
+		{
+			$ret_str.='<p>These files do not match the ones bundled with your version, but claim to be newer (so these might be bug fixes someone has put here):</p><ul>'.$outdated__future_files.'</ul>';
+		} else
+		{
+			$ret_str.=do_lang('WARNING_FILE_FUTURE_FILES',$outdated__future_files);
+		}
+	}
+
+	// And some special help for unix geeks
+	if ($unix_help)
+	{
+		$unix_out='OCP_EXTRACTED_AT="<manual-extracted-at-dir>";'."\n".'cd "<temp-dir-to-upload-from>";'."\n";
+		$directories_to_make=array();
+		foreach ($files_determined_to_upload as $file)
+		{
+			$dirname=dirname($file);
+			$directories_to_make[$dirname]=1;
+		}
+		foreach (array_keys($directories_to_make) as $directory)
+		{
+			$unix_out.='mkdir -p '.escapeshellcmd($directory).';'."\n";
+		}
+		foreach ($files_determined_to_upload as $file)
+		{
+			$unix_out.='cp "$OCP_EXTRACTED_AT/'.escapeshellcmd($file).'" "'.escapeshellcmd(dirname($file)).'"/;'."\n";
+		}
+		require_lang('upgrade');
+		$ret_str.=do_lang('SH_COMMAND',nl2br(escape_html($unix_out)));
+	}
+
+	// Alien files
 	if (!$basic)
 	{
 		$master_data=array();
@@ -631,7 +683,7 @@ function run_integrity_check($basic=false,$allow_merging=true)
 				$master_data[$file]=1;
 			}
 		}
-		
+
 		$alien=check_alien(file_exists(get_file_base().'/data/files_previous.dat')?unserialize(file_get_contents(get_file_base().'/data/files_previous.dat',FILE_TEXT)):array(),$master_data,get_file_base().'/');
 		if ($alien!='')
 		{
@@ -643,7 +695,7 @@ function run_integrity_check($basic=false,$allow_merging=true)
 		}
 		$ret_str.='</form>';
 	}
-	
+
 	return $ret_str;
 }
 
@@ -1114,7 +1166,7 @@ function check_excess_perms($array,$rel='')
  * @param  boolean 		Whether merging of CSS changes is allowed
  * @return array			Tuple of various kinds of outdated/missing files
  */
-function check_outdated($dir,$rela,&$master_data,&$hook_files,$allow_merging)
+function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,$allow_merging)
 {
 	$outdated__outdated_original_and_override='';
 	$outdated__possibly_outdated_override='';
@@ -1137,7 +1189,7 @@ function check_outdated($dir,$rela,&$master_data,&$hook_files,$allow_merging)
 	
 			if (($is_dir) && (is_readable($dir.$file)))
 			{
-				list($_outdated__outdated_original_and_override,$_outdated__possibly_outdated_override,$_outdated__missing_original_but_has_override,$_outdated__uninstalled_addon_but_has_override)=check_outdated($dir.$file.'/',$rela.$file.'/',$master_data,$hook_files,$allow_merging);
+				list($_outdated__outdated_original_and_override,$_outdated__possibly_outdated_override,$_outdated__missing_original_but_has_override,$_outdated__uninstalled_addon_but_has_override)=check_outdated__handle_overrides($dir.$file.'/',$rela.$file.'/',$master_data,$hook_files,$allow_merging);
 				$outdated__outdated_original_and_override.=$_outdated__outdated_original_and_override;
 				$outdated__possibly_outdated_override.=$_outdated__possibly_outdated_override;
 				$outdated__missing_original_but_has_override.=$_outdated__missing_original_but_has_override;
@@ -1241,9 +1293,10 @@ function check_outdated($dir,$rela,&$master_data,&$hook_files,$allow_merging)
  * @param  array			List of verbatim files
  * @param  SHORT_TEXT	The directory we are scanning relative to
  * @param  SHORT_TEXT	The directory (relative) we are scanning
+ * @param  boolean		Whether to give raw output (no UI)
  * @return string			HTML list of alien files
  */
-function check_alien($old_files,$files,$dir,$rela='')
+function check_alien($old_files,$files,$dir,$rela='',$raw=false)
 {
 	$alien='';
 
@@ -1261,7 +1314,11 @@ function check_alien($old_files,$files,$dir,$rela='')
 			foreach (array_merge($old_addons_now_gone,$modules_moved_intentionally) as $x)
 			{
 				if (file_exists(get_file_base().'/'.$x))
-					$alien.='<li><input checked="checked" type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($x).'" /> <kbd>'.escape_html($x).'</kbd></li>';
+				{
+					$alien.='<li>';
+					if (!$raw) $alien.='<input checked="checked" type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($x).'" /> ';
+					$alien.='<kbd>'.escape_html($x).'</kbd></li>';
+				}
 			}
 		}
 		while (($file=readdir($dh))!==false)
@@ -1293,7 +1350,7 @@ function check_alien($old_files,$files,$dir,$rela='')
 						if (!$ok) continue;
 					}
 	
-					$alien.=check_alien($old_files,$files,$dir.$file.'/',$rela.$file.'/');
+					$alien.=check_alien($old_files,$files,$dir.$file.'/',$rela.$file.'/',$raw);
 				}
 			} else
 			{
@@ -1316,11 +1373,14 @@ function check_alien($old_files,$files,$dir,$rela='')
 					$checked='';
 
 					if (array_key_exists($rela.$file,$old_files)) $checked='checked="checked" ';
-					$alien.='<li><input '.$disabled.$checked.'type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($rela.$file).'" /> <kbd>'.escape_html($rela.$file).'</kbd></li>';
+					$alien.='<li>';
+					if (!$raw) $alien.='<input '.$disabled.$checked.'type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($rela.$file).'" /> ';
+					$alien.='<kbd>'.escape_html($rela.$file).'</kbd></li>';
 				}
 			}
 		}
 	}
+
 	return $alien;
 }
 

@@ -92,7 +92,14 @@ public class Main {
                                 } else {
                                     if (new File("/usr/bin/kate").exists()) {
                                         textEditorPath = "/usr/bin/kate";
-                                    }
+                                    } else {
+		                                if (new File(
+		                                        "C:\\Program Files (x86)\\Codelobster Software\\CodelobsterPHPEdition\\ClPhpEd.exe").
+		                                    exists()) {
+		                                    textEditorPath =
+		                                            "C:\\Program Files (x86)\\Codelobster Software\\CodelobsterPHPEdition\\ClPhpEd.exe";
+		                                }
+												}
                                 }
                             }
                         }

@@ -153,13 +153,13 @@ function initialise_error_mechanism()
 				((code=='0') && (msg.indexOf('Script error.')!=-1)) || // Too generic, can be caused by user's connection error
 				(msg.indexOf("attempt to run compile-and-go script on a cleared scope")!=-1) || // Intermittent buggyness from Firefox
 				(msg.indexOf('UnnamedClass.toString')!=-1) || // Weirdness from Firefox
-				(msg.indexOf('chrome.tabs can only be used in extension processes')!=-1) || // Buggy Chrome extensions
 				(msg.indexOf('ASSERT: ')!=-1) || // Something from Firefox too generic
 				(msg.indexOf('TODO: FIXME')!=-1) || // Too generic, can be caused by extensions
 				(msg.indexOf('Location.toString')!=-1) || // Buggy extensions may generate 
 				(msg.indexOf('Error loading script')!=-1) || // User's connection error
 				(msg.indexOf('NS_ERROR_FAILURE')!=-1) || // Usually an internal error in Firefox
-				(msg.indexOf('AJAX_REQUESTS is not defined')!=-1) // Intermittent during page out-clicks
+				(msg.indexOf('AJAX_REQUESTS is not defined')!=-1) || // Intermittent during page out-clicks
+				(msg.indexOf('can only be used in extension processes')!=-1) // Can come up in Chrome with MeasureIt
 
 				// These probably aren't issues nowadays
 				//(msg.indexOf('chrome.tabs is not supported in content script')!=-1) ||
@@ -339,7 +339,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 		var height=180;
 		if (button_set.length>4) height+=5*(button_set.length-4);
 
-		{$,Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups don't know if they run on HTTPS if behind a transparent reverse proxy}
+		{$,Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups do not know if they run on HTTPS if behind a transparent reverse proxy}
 		var url=maintain_theme_in_link('{$FIND_SCRIPT;,question_ui}?message='+window.encodeURIComponent(message)+'&image_set='+window.encodeURIComponent(image_set.join(','))+'&button_set='+window.encodeURIComponent(button_set.join(','))+'&window_title='+window.encodeURIComponent(window_title)+keep_stub());
 		window.faux_showModalDialog(
 			url,
@@ -586,7 +586,7 @@ function captureClickKeyStates(event)
 
 function magicKeypress(event)
 {
-	{$,Cmd+Shift works on Mac - can't hold down control or alt in Mac firefox at least}
+	{$,Cmd+Shift works on Mac - can not hold down control or alt in Mac firefox at least}
 	if (typeof window.capture_event!='undefined') event=window.capture_event;
 	var count=0;
 	if (event.shiftKey) count++;
@@ -701,7 +701,7 @@ function get_elements_by_class_name(node,classname)
 
 		return a;
 	}
-	else return []; {$,Error actually, but to avoid typing error, we'll just return an empty list}
+	else return []; {$,Error actually, but to avoid typing error, we will just return an empty list}
 }
 
 {$,Type checking}

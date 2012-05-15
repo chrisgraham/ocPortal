@@ -34,14 +34,26 @@ class Hook_rm
 		else
 		{
 			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','rm'));
-			else $parameters[0]=$occle_fs->_pwd_to_array($parameters[0]);
 
-			if (!$occle_fs->_is_file($parameters[0])) return array('','','',do_lang('NOT_A_FILE','1'));
+			$success=true;
 
-			$success=$occle_fs->remove_file($parameters[0]);
-			if ($success) return array('','',do_lang('SUCCESS'),'');
-			else return array('','','',do_lang('INCOMPLETE_ERROR'));
+			foreach ($parameters as $i=>$param)
+			{
+				$param=$occle_fs->_pwd_to_array($param);
+
+				if (!$occle_fs->_is_file($param))
+				{
+					$success=false;
+					if (($i==0) && (count($parameters)==1))
+						return array('','','',do_lang('NOT_A_FILE',strval($i+1)));
+				}
+	
+				$success=$success && $occle_fs->remove_file($param);
+			}
 		}
+
+		if ($success) return array('','',do_lang('SUCCESS'),'');
+		else return array('','','',do_lang('INCOMPLETE_ERROR'));
 	}
 
 }

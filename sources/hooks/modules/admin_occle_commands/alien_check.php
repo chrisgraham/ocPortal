@@ -18,7 +18,7 @@
  * @package		occle
  */
 
-class Hook_clear_caches
+class Hook_alien_check
 {
 	/**
 	* Standard modular run function for OcCLE hooks.
@@ -30,23 +30,24 @@ class Hook_clear_caches
 	*/
 	function run($options,$parameters,&$occle_fs)
 	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('clear_caches',array('h'),array(true)),'','');
+		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('alien_check',array('h'),array()),'','');
 		else
 		{
-			require_code('view_modes');
-
-			$_caches=array();
-			if (array_key_exists(0,$parameters))
+			require_code('upgrade');
+			$master_data=@unserialize(file_get_contents(get_file_base().'/data/files.dat',FILE_TEXT));
+			if ($master_data===false) $master_data=array();
+			$result=check_alien(file_exists(get_file_base().'/data/files_previous.dat')?unserialize(file_get_contents(get_file_base().'/data/files_previous.dat',FILE_TEXT)):array(),$master_data,get_file_base().'/','',true);
+			if ($result=='')
 			{
-				$caches=explode(',',$parameters[0]);
-				foreach ($caches as $cache) $_caches[]=trim($cache);
+				$result=do_lang('NO_ACTION_REQUIRED');
+			} else
+			{
+				require_lang('upgrade');
+				$result.=do_lang('RM_HINT');
 			}
-
-			$messages=static_evaluate_tempcode(ocportal_cleanup($_caches));
-			if ($messages=='') $messages=do_lang('SUCCESS');
-			return array('',$messages,'','');
+	
+			return array('',$result,'','');
 		}
 	}
 
 }
-

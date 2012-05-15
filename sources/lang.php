@@ -847,7 +847,10 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				require_code('view_modes');
 				erase_cached_language();
 				fatal_exit(do_lang_tempcode('MISSING_LANG_ENTRY',escape_html($codename)));
-			} else return NULL;
+			} else
+			{
+				return NULL;
+			}
 		}
 	}
 
@@ -872,7 +875,10 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 	// Put in parameters
 	static $non_plural_non_vowel=array('1','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z');
 	$looked_up=$LANGUAGE[$lang][$codename];
-	if ($looked_up===NULL) return NULL; // Learning cache pool has told us this string definitely does not exist
+	if ($looked_up===NULL)
+	{
+		return NULL; // Learning cache pool has told us this string definitely does not exist
+	}
 	$out=str_replace('\n',"\n",$looked_up);
 	$plural_or_vowel_check=strpos($out,'|')!==false;
 	if ($XSS_DETECT) ocp_mark_as_escaped($out);

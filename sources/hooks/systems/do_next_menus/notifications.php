@@ -29,8 +29,6 @@ class Hook_do_next_menus_notifications
 	 */
 	function run()
 	{
-		require_lang('notifications');
-
 		if (get_forum_type()!='ocf') return array();
 
 		return array(

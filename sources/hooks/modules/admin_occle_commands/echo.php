@@ -33,7 +33,7 @@ class Hook_echo
 		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('echo',array('h'),array(true)),'','');
 		else
 		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','echo'));
+			if (!array_key_exists(0,$parameters)) return array('','','','');
 
 			return array('','',$parameters[0],'');
 		}

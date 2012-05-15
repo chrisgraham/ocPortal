@@ -18,7 +18,7 @@
  * @package		occle
  */
 
-class Hook_clear_caches
+class Hook_database_upgrade
 {
 	/**
 	* Standard modular run function for OcCLE hooks.
@@ -30,23 +30,15 @@ class Hook_clear_caches
 	*/
 	function run($options,$parameters,&$occle_fs)
 	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('clear_caches',array('h'),array(true)),'','');
+		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('database_upgrade',array('h'),array()),'','');
 		else
 		{
-			require_code('view_modes');
-
-			$_caches=array();
-			if (array_key_exists(0,$parameters))
-			{
-				$caches=explode(',',$parameters[0]);
-				foreach ($caches as $cache) $_caches[]=trim($cache);
-			}
-
-			$messages=static_evaluate_tempcode(ocportal_cleanup($_caches));
-			if ($messages=='') $messages=do_lang('SUCCESS');
-			return array('',$messages,'','');
+			require_code('upgrade');
+			$result=upgrade_modules();
+			if ($result=='') $result=do_lang('NO_ACTION_REQUIRED');
+	
+			return array('',$result,'','');
 		}
 	}
 
 }
-

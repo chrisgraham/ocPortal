@@ -553,7 +553,14 @@ public class MainDialog extends JFrame {
 
 		String params = "";
 		String line = "";
-		if (Main.textEditorPath.toLowerCase().endsWith("context.exe")) {
+		if (Main.textEditorPath.toLowerCase().endsWith("ClPhpEd.exe")) {
+			params = " /g" + decomposed.get(3) + ":" + decomposed.get(2);
+			line = Main.textEditorPath + " \"" +
+						  (((((String) decomposed.get(1)).charAt(1) == ':') ||
+							(((String) decomposed.get(1)).charAt(0) == '/')) ? "" :
+						   Main.projectPath) + File.separator + decomposed.get(1) + "\"" + params;
+		}
+		else if (Main.textEditorPath.toLowerCase().endsWith("context.exe")) {
 			params = " /g" + decomposed.get(3) + ":" + decomposed.get(2);
 			line = Main.textEditorPath + " \"" +
 						  (((((String) decomposed.get(1)).charAt(1) == ':') ||

@@ -27,6 +27,7 @@ Text editors
 ------------
 
 The checker is designed to work with the following editors:
+ - Code Lobster (Windows)
  - ConTEXT (Windows)
  - TextMate (Mac)
  - Dreamweaver
