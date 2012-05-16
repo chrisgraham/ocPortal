@@ -37,8 +37,8 @@ function init__support()
 
 	// Heavily optimised! Ended up with preg_replace after trying lots of things
 	global $HTML_ESCAPE_1,$HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-	$HTML_ESCAPE_1=array('/&/'/*,'/ì/','/î/'*/,'/"/','/\'/','/</','/>/'/*,'/£/'*/);
-	$HTML_ESCAPE_1_STRREP=array('&'/*,'ì','î'*/,'"','\'','<','>'/*,'£'*/);
+	$HTML_ESCAPE_1=array('/&/'/*,'/ì¯§,'/î¯§*/,'/"/','/\'/','/</','/>/'/*,'/ï¿½/'*/);
+	$HTML_ESCAPE_1_STRREP=array('&'/*,'ì§¬'î§ª/,'"','\'','<','>'/*,'ï¿½'*/);
 	$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
 	
 	global $BOT_MAP,$CACHE_BOT_TYPE;
@@ -1101,7 +1101,13 @@ function syndicate_described_activity($a_language_string_code='',$a_label_1='',$
 	{
 		require_code('hooks/systems/activities/'.$hook);
 		$ob=object_factory('Activity_'.$hook);
-		register_shutdown_function(array($ob,'syndicate_described_activity'),$a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
+		if (get_param_integer('keep_debug_notifications',0)==1)
+		{
+			$ob->syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
+		} else
+		{
+			register_shutdown_function(array($ob,'syndicate_described_activity'),$a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_pagelink_1,$a_pagelink_2,$a_pagelink_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$a_also_involving);
+		}
 	}
 }
 

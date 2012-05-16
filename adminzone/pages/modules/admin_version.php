@@ -583,7 +583,7 @@ class Module_admin_version
 				'id'=>'*AUTO',
 				'd_subject'=>'LONG_TEXT',
 				'd_message'=>'LONG_TEXT',
-				'd_from_member_id'=>'INTEGER',
+				'd_from_member_id'=>'?USER',
 				'd_to_member_id'=>'USER',
 				'd_priority'=>'SHORT_INTEGER',
 				'd_no_cc'=>'BINARY',

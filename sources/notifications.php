@@ -207,11 +207,14 @@ class Notification_dispatcher
 			actualise_post_comment(true,$type,$id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true);
 		}
 
+		$testing=(get_param_integer('keep_debug_notifications',0)==1);
+
 		$start=0;
 		$max=300;
 		do
 		{
 			list($members,$possibly_has_more)=$ob->list_members_who_have_enabled($this->notification_code,$this->code_category,$this->to_member_ids,$start,$max);
+
 			if (get_value('notification_safety_testing')==='1')
 			{
 				if (count($members)>20)
@@ -223,7 +226,7 @@ class Notification_dispatcher
 
 			foreach ($members as $to_member_id=>$setting)
 			{
-				if ($to_member_id!==$this->from_member_id)
+				if (($to_member_id!==$this->from_member_id) || ($testing))
 					$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc);
 			}
 

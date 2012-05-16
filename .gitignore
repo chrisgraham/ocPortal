@@ -22,4 +22,5 @@ screens_tested
 html_dump
 data_custom/modules/admin_stats/*
 ocp_sitemap.xml
+data_custom/last_activity.txt
 
