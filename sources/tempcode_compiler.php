@@ -97,6 +97,11 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 	{
 		$next_token=$bits[$i];
 		if ($next_token=='') continue;
+		if (($i!=$count-1) && ($next_token=='{') && (preg_match('#^[\dA-Z\$\+\!\_]#',$bits[$i+1])==0))
+		{
+			$current_level_data[]='"{}"';
+			continue;
+		}
 
 		switch ($next_token)
 		{

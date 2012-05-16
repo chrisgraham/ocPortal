@@ -1134,7 +1134,7 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=
 		{
 			$continuation.=substr($text,$symbol_pos);
 			break;
-		} else // We're opening a symbol if we meet a { followed by not-whitespace
+		} else // We're opening a variable if we meet a { followed by [\dA-Z\$\+\!\_]
 		{
 			$continuation.=substr($text,$symbol_pos,$jump_to-$symbol_pos);
 
@@ -1523,7 +1523,7 @@ class ocp_tempcode_static
 		{
 			// Can we add into another string at our edge
 			if (is_null($escape)) $escape=array();
-			if (($last==-1) || ($this->bits[$last][1]!=TC_KNOWN) || (($this->bits[$last][0]!=$escape) && (((array_merge($escape,$this->bits[$last][0]))!=array(ENTITY_ESCAPED)) || (preg_match('#[&<>:ью"\']#',$attach)!=0)))) // No
+			if (($last==-1) || ($this->bits[$last][1]!=TC_KNOWN) || (($this->bits[$last][0]!=$escape) && (((array_merge($escape,$this->bits[$last][0]))!=array(ENTITY_ESCAPED)) || (preg_match('#[&<>:ьов\']#',$attach)!=0)))) // No
 			{
 				$this->bits[]=array($escape,TC_KNOWN,$attach,NULL);
 			} else // Yes

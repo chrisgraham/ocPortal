@@ -687,7 +687,8 @@ class Module_galleries
 			'compound_rating DESC'=>'POPULARITY',
 			'url ASC'=>'FILENAME',
 			'add_date ASC'=>'OLDEST_FIRST',
-			'add_date DESC'=>'NEWEST_FIRST'
+			'add_date DESC'=>'NEWEST_FIRST',
+			'title ASC'=>'TITLE'
 		);
 		$selectors=new ocp_tempcode();
 		foreach ($_selectors as $selector_value=>$selector_name)
@@ -1537,7 +1538,7 @@ class Module_galleries
 
 		$sort=get_param('sort','add_date DESC');
 		if ($sort=='random ASC') $sort='add_date ASC';
-		if (($sort!='fixed_random ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC'))
+		if (($sort!='fixed_random ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC') && ($sort!='title DESC') && ($sort!='title ASC'))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		list($_sort,$_dir)=explode(' ',$sort,2);
 		$sort_backwards=$_sort.' '.(($_dir=='ASC')?'DESC':'ASC');

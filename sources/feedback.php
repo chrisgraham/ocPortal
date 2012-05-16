@@ -395,7 +395,7 @@ function already_rated($rating_for_types,$content_id)
 	$query.=$more.')';
 	$has_rated=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
 
-	return ($has_rated==count($rating_for_types));
+	return ($has_rated>=count($rating_for_types));
 }
 
 /**
@@ -466,9 +466,10 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 	$rating_for_type=$content_type.(($type=='')?'':('_'.$type));
 
 	if (!has_specific_permission($member_id,'rate',$page_name)) return;
+	$already_rated=already_rated(array($rating_for_type),$content_id);
 	if (!is_null($rating))
 	{
-		if (already_rated(array($rating_for_type),$content_id))
+		if ($already_rated)
 		{
 			// Delete, in preparation for re-rating
 			$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>$rating_for_type,'rating_for_id'=>$content_id,'rating_member'=>$member_id,'rating_ip'=>get_ip_address()));
@@ -501,7 +502,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 			// Give points
 			if ($member_id!=$submitter)
 			{
-				if (addon_installed('points'))
+				if ((addon_installed('points')) && (!$already_rated))
 				{
 					require_code('points2');
 					require_lang('points');

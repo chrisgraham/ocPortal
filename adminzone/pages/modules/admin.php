@@ -532,35 +532,33 @@ class Module_admin
 			$conf_found_count=0;
 			foreach ($all_options as $p)
 			{
-				$n=do_lang_tempcode($p['human_name']);
-				switch ($p['the_name'])
+				if (defined('HIPHOP_PHP'))
 				{
-					case 'timezone':
-						$t=do_lang('DESCRIPTION_TIMEZONE_SITE');
-						break;
-					
-					default:
-						$t=do_lang($p['explanation'],NULL,NULL,NULL,NULL,false);
-						break;
+					require_code('hooks/systems/config_default/'.$p['the_name']);
+					$hook=object_factory('Hook_config_default_'.$p['the_name']);
+					$null_test=$hook->get_default();
+				} else
+				{
+					$null_test=eval($p['eval']);
 				}
-				if (is_null($n)) continue;
-				$config_value=array_key_exists('config_value',$p)?$p['config_value']:get_option($p['the_name']);
-				if ($config_value===false) continue;
-				if ((($this->_keyword_match($p['the_name'])) || ($this->_keyword_match($n->evaluate())) || ($this->_keyword_match($t)) || ($this->_keyword_match($config_value))))
-				{
-					if (defined('HIPHOP_PHP'))
-					{
-						require_code('hooks/systems/config_default/'.$p['the_name']);
-						$hook=object_factory('Hook_config_default_'.$p['the_name']);
-						$null_test=$hook->get_default();
-					} else
-					{
-						$t_backup=$t;
-						$null_test=eval($p['eval']);
-						$t=$t_backup;
-					}
 
-					if (!is_null($null_test))
+				if (!is_null($null_test))
+				{
+					$n=do_lang_tempcode($p['human_name']);
+					switch ($p['the_name'])
+					{
+						case 'timezone':
+							$t=do_lang('DESCRIPTION_TIMEZONE_SITE');
+							break;
+						
+						default:
+							$t=do_lang($p['explanation'],NULL,NULL,NULL,NULL,false);
+							break;
+					}
+					if (is_null($n)) continue;
+					$config_value=array_key_exists('config_value',$p)?$p['config_value']:get_option($p['the_name']);
+					if ($config_value===false) continue;
+					if ((($this->_keyword_match($p['the_name'])) || ($this->_keyword_match($n->evaluate())) || ($this->_keyword_match($t)) || ($this->_keyword_match($config_value))))
 					{
 						$_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['the_page']),'adminzone');
 						$url=$_url->evaluate();
@@ -576,7 +574,7 @@ class Module_admin
 						$tree->attach(hyperlink($url,do_lang($p['section'])));
 						$sup=do_lang_tempcode('LOCATED_IN',$tree);
 						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>protect_from_escaping($t),'SUP'=>$sup)));
-
+	
 						if ($conf_found_count>100)
 						{
 							$content[$current_results_type]=do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>''));
@@ -584,10 +582,11 @@ class Module_admin
 						}
 						
 						$conf_found_count++;
+
+						if (!array_key_exists($p['the_page'],$config_categories)) $config_categories[$p['the_page']]=array();
+						$config_categories[$p['the_page']][$p['section']]=1;
 					}
 				}
-				if (!array_key_exists($p['the_page'],$config_categories)) $config_categories[$p['the_page']]=array();
-				$config_categories[$p['the_page']][$p['section']]=1;
 			}
 			$current_results_type=do_lang('OPTION_CATEGORIES');
 			$content[$current_results_type]=new ocp_tempcode();
@@ -923,6 +922,10 @@ class Module_admin
 		if (($this->_section_match($section_limitations,$current_results_type)) && (has_actual_page_access(get_member(),'admin_lang','adminzone')))
 		{
 			$content[$current_results_type]=new ocp_tempcode();
+
+			if (user_lang()!=fallback_lang())
+				$content[$current_results_type]->attach(paragraph(do_lang_tempcode('SEARCH_LAUNCHPAD',escape_html(urlencode($raw_search_string)),escape_html(urlencode(user_lang())))));
+
 			global $LANGUAGE;
 			$lang_file_contents=array();
 			$lang_found=array();

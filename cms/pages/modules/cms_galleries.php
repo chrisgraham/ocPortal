@@ -348,7 +348,7 @@ class Module_cms_galleries extends standard_aed_module
 		make_member_gallery_if_needed($cat);
 
 		require_code('uploads');
-		if ((!is_swf_upload(true)) && ((!array_key_exists('file',$_FILES)) || (!is_uploaded_file($_FILES['file']['tmp_name']))))
+		if ((!is_swf_upload(true)) && ((!array_key_exists('file_1',$_FILES)) || (!is_uploaded_file($_FILES['file_1']['tmp_name']))))
 			warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','file'));
 
 		if (get_value('use_gallery_subdirs')=='1')
@@ -371,6 +371,7 @@ class Module_cms_galleries extends standard_aed_module
 		{
 			$tmp_name=$__file['tmp_name'];
 			$file=$__file['name'];
+			if ($file=='') continue; // Not filled in this one
 
 			switch (get_file_extension($file))
 			{

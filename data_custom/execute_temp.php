@@ -67,6 +67,20 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	delete_menu_item_simple('_SEARCH:recommend:from={$REPLACE&,:,%3A,{$SELF_URL}}');
-	add_menu_item_simple('root_website',NULL,'RECOMMEND_SITE','_SEARCH:recommend:from={$SELF_URL&,0,0,0,from=<null>}');
+	$p=get_file_base().'/themes/default/templates/';
+	$dh=opendir($p);
+	while (($f=readdir($dh))!==false)
+	{
+		if (substr($f,-4)!='.tpl') continue;
+		$c=file_get_contents($p.$f);
+		$n=preg_match_all('# on\w+="([^"]*)"#',$c,$matches);
+		for ($i=0;$i<$n;$i++)
+		{
+			if (substr_count($matches[1][$i],'(')==substr_count($matches[1][$i],')'))
+			{
+				echo $f.substr_count($matches[1][$i],'(');
+			}
+		}
+	}
+	closedir($dh);
 }

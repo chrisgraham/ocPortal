@@ -406,7 +406,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 		}
 
 		// Get back to prior session if there was one
-		if ($member!==NULL)
+		if (($member!==NULL) && ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id()))
 		{
 			if (($row['the_user']==$member) && ((get_option('ip_strict_for_sessions')=='0') || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
 			{

@@ -208,7 +208,7 @@ class Module_authors
 			require_lang('downloads');
 	
 			$count=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',array('author'=>$author,'validated'=>1));
-			if ($count>300)
+			if ($count>50)
 			{
 				$downloads_released=paragraph(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 			} else
@@ -232,7 +232,7 @@ class Module_authors
 			require_lang('news');
 	
 			$count=$GLOBALS['SITE_DB']->query_value('news','COUNT(*)',array('author'=>$author,'validated'=>1));
-			if ($count>300)
+			if ($count>50)
 			{
 				$news_released=paragraph(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 			} else

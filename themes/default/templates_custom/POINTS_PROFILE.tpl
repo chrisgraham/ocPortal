@@ -76,7 +76,7 @@
 			{+END}{+END}
 			{+START,IF,{$NEQ,{POINTS_RATING},0}}
 				<tr>
-					<td>&bull; {!COUNT_RATINGS}:</td>
+					<td>&bull; {!RATING_CONTENT}:</td>
 					<td class="equation">{POINTS_GAINED_RATING*} &times; {POINTS_RATING*} {!POINTS_UNIT}</td>
 					<td class="answer">= {MULT_POINTS_RATING*} {!POINTS_UNIT}</td>
 				</tr>

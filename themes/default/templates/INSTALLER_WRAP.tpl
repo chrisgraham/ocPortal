@@ -31,6 +31,9 @@
 					var d=document.getElementById('forum_path');
 					if (d) d.style.display='block';
 				}
+
+				var forms=document.getElementsByTagName('form');
+				if (typeof forms[0]!='undefined') forms[0].title='';
 			}
 
 			function submit_settings(form)

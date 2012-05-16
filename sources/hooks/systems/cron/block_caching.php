@@ -42,7 +42,7 @@ class Hook_cron_block_caching
 						$count=$GLOBALS['SITE_DB']->query_value('cron_caching_requests','COUNT(*)',$where);
 						if ($count>0)
 						{
-							$url=get_base_url().'/data/cron_bridge.php?limit_hook=cron_block_caching&keep_lang='.urlencode($lang).'&keep_theme='.urlencode($theme);
+							$url=get_base_url().'/data/cron_bridge.php?limit_hook=block_caching&keep_lang='.urlencode($lang).'&keep_theme='.urlencode($theme);
 							http_download_file($url,NULL,false);
 						}
 					}
