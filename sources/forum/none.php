@@ -408,7 +408,7 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function _join_url()
 	{
-		return 'index.php';
+		return '';
 	}
 
 	/**
