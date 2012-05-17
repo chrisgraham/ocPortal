@@ -536,6 +536,7 @@ function comcode_helper_script()
  page = URL
  page = URL';
 			}
+			$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_EMBED');
 			$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
 			$fields->attach(form_input_text_comcode(do_lang_tempcode('TAG_CONTENTS'),protect_from_escaping(do_lang('COMCODE_TAG_'.$tag.'_EMBED')),'tag_contents',$default_embed,$embed_required,NULL,true));
 		}
