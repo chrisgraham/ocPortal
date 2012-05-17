@@ -48,6 +48,8 @@ class Hook_rating
 		require_code('feedback');
 		actualise_specific_rating($rating,get_page_name(),get_member(),$content_type,$type,$content_id,$content_url,$content_title);
 
+		actualise_give_rating_points();
+
 		$template=get_param('template',NULL);
 		if ($template!=='')
 		{

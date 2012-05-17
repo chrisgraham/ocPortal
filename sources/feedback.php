@@ -429,11 +429,19 @@ function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$
 		if (is_null($rating)) return;
 
 		actualise_specific_rating($rating,get_page_name(),get_member(),$content_type,$type,$content_id,$content_url,$content_title);
-
-		// Ok, so just thank 'em
-		attach_message(do_lang_tempcode('THANKYOU_FOR_RATING'),'inform');
 	}
 
+	actualise_give_rating_points();
+
+	// Ok, so just thank 'em
+	attach_message(do_lang_tempcode('THANKYOU_FOR_RATING'),'inform');
+}
+
+/**
+ * Assign points to the current member for rating.
+ */
+function actualise_give_rating_points()
+{
 	if ((!is_guest()) && (addon_installed('points')))
 	{
 		require_code('points');
