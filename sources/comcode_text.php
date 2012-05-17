@@ -1315,6 +1315,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 									$tag_output=$_last[2];
 									$tag_output->attach($embed_output);
 									$mindless_mode=$_last[7];
+									$comcode_dangerous=$_last[8];
+									$comcode_dangerous_html=$_last[9];
 
 									if (count($tag_stack)==0) // Hmm, it was never open. So let's pretend this tag close never happened
 									{
@@ -1368,6 +1370,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						$formatting_allowed=$_last[5];
 						$textual_area=$_last[6];
 						$tag_output=$_last[2];
+						$comcode_dangerous=$_last[8];
+						$comcode_dangerous_html=$_last[9];
 						if (($print_mode) && ($_last[0]=='exp_thumb'))
 						{
 							$queued_tempcode->attach($embed_output);
@@ -1400,9 +1404,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							$tag_output->attach($close_list);
 						}
 
-						array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
+						array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
 
-						list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+						list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 						if ($in_code_tag) $code_nest_stack=0;
 					}
 
@@ -1456,9 +1460,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						$tag_output->attach($close_list);
 					}
 
-					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
+					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
 
-					list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					if ($in_code_tag) $code_nest_stack=0;
 
 					$tag_output->attach($tag_raw);
@@ -1475,9 +1479,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						$tag_output->attach($close_list);
 					}
 
-					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
+					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
 
-					list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					if ($in_code_tag) $code_nest_stack=0;
 
 					$tag_output->attach($tag_raw);
@@ -1507,9 +1511,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						$tag_output->attach($close_list);
 					}
 
-					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
+					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
 
-					list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					if ($in_code_tag) $code_nest_stack=0;
 
 					$tag_output->attach($tag_raw);
@@ -1528,9 +1532,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						$attribute_map[$old_attribute_name].=' '.$current_attribute_name;
 					}
 
-					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode));
+					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
 
-					list($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					if ($in_code_tag) $code_nest_stack=0;
 
 					$tag_output->attach($tag_raw);
@@ -1687,6 +1691,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 				$tag_output=$_last[2];
 				$tag_output->attach($embed_output);
 				$mindless_mode=$_last[7];
+				$comcode_dangerous=$_last[8];
+				$comcode_dangerous_html=$_last[9];
 			}
 		}
 	}
@@ -1757,6 +1763,8 @@ function detect_link(&$comcode,$pos)
  * @param  array			The attribute map of the tag
  * @param  string			The identifier for the tag
  * @param  integer		The offset of the tag in the Comcode
+ * @param  boolean		Whether the parser allows dangerous Comcode
+ * @param  boolean		Whether the parser allows dangerous HTML
  * @param  boolean		Whether the parser is/was in a separate parse section (e.g. a 'code' tag)
  * @param  boolean		Whether the parser is/was in an HTML region
  * @param  boolean		Whether the parser is/was in a Semi-HTML region
@@ -1765,7 +1773,7 @@ function detect_link(&$comcode,$pos)
  * @param  LONG_TEXT		The Comcode being parsed
  * @return array			A tuple of new parser settings.
  */
-function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$in_separate_parse_section,$in_html,$in_semihtml,$close,&$len,&$comcode)
+function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,&$len,&$comcode)
 {
 	global $BLOCK_TAGS,$TEXTUAL_TAGS,$CODE_TAGS;
 
@@ -1814,7 +1822,13 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 		$in_separate_parse_section=false;
 	}
 
-	return array($tag_output,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag);
+	if ($current_tag=='quote')
+	{
+		$comcode_dangerous=false;
+		$comcode_dangerous_html=false;
+	}
+
+	return array($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag);
 }
 
 /**
