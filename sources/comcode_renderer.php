@@ -222,7 +222,14 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	//echo $comcode;
 
 	require_lang('comcode');
-	$message=is_null($_message[0])?$_message[1]:call_user_func_array('do_lang_tempcode',array_map('escape_html',$_message));
+	if (is_null($_message[0]))
+	{
+		$message=$_message[1];
+	} else
+	{
+		if (strpos($_message[0],':')===false) $_message[0]='comcode:'.$_message[0];
+		$message=call_user_func_array('do_lang_tempcode',array_map('escape_html',$_message));
+	}
 
 	$posted=false;
 	foreach ($_POST+$_GET as $name=>$val)
