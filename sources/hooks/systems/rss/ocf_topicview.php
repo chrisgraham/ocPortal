@@ -39,7 +39,7 @@ class Hook_rss_ocf_topicview
 		if (get_forum_type()!='ocf') return NULL;
 		if (!has_actual_page_access(get_member(),'forumview')) return NULL;
 
-		$filters=ocfilter_to_sqlfragment($_filters,'p_cache_forum_id','f_forums','f_parent_forum','p_cache_forum_id','id',true,true,$GLOBALS['FORUM_DB']); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+		$filters=ocfilter_to_sqlfragment($_filters,'p_topic_id','f_forums','f_parent_forum','p_cache_forum_id','id',true,true,$GLOBALS['FORUM_DB']);
 
 		$cutoff=max($cutoff,time()-60*60*24*60);
 		

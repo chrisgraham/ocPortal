@@ -92,16 +92,23 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 		{
 			$cma_hook=convert_ocportal_type_codes('award_hook',$award_hook,'cma_hook');
 			list(,,,$content)=content_get_details($cma_hook,$content_id);
-			$category_field=$info['category_field'];
-			if (is_array($category_field))
+			if (!is_null($content))
 			{
-				$category_field=array_pop($category_field);
-				$category_id=$content[$category_field];
-				if (($award_hook=='catalogue_entry') && (!has_category_access($member_id,'catalogues_catalogue',$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id)))))
-					return false;
-			} else
-			{
-				$category_id=$content[$category_field];
+				$category_field=$info['category_field'];
+				if (is_array($category_field))
+				{
+					$category_field=array_pop($category_field);
+					$category_id=$content[$category_field];
+					if ($award_hook=='catalogue_entry')
+					{
+						$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
+						if (!has_category_access($member_id,'catalogues_catalogue',$catalogue_name))
+							return false;
+					}
+				} else
+				{
+					$category_id=$content[$category_field];
+				}
 			}
 		}
 	}

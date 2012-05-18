@@ -1237,10 +1237,16 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		if ($parent_id==-1) $parent_id=NULL;
 		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$rep_image=$urls[0];
+
 		$move_days_lower=post_param_integer('move_days_lower',30);
 		$move_days_higher=post_param_integer('move_days_higher',60);
 		$move_target=post_param_integer('move_target',-1);
 		if ($move_target==-1) $move_target=NULL;
+		if (!is_null($move_target))
+		{
+			if (!has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$catalogue_name,'catalogues_category',$move_target)))
+				access_denied('CATEGORY_ACCESS');
+		}
 
 		$category_id=actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image,$move_days_lower,$move_days_higher,$move_target);
 		if (get_value('disable_cat_cat_perms')!=='1')
@@ -1263,14 +1269,24 @@ class Module_cms_catalogues_cat extends standard_aed_module
 
 		$category_id=intval($_id);
 
+		$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$category_id));
+		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
 		$title=post_param('title');
 		$description=post_param('description',STRING_MAGIC_NULL);
 		$notes=post_param('notes',STRING_MAGIC_NULL);
 		$parent_id=post_param_integer('parent_id',INTEGER_MAGIC_NULL);
+
 		$move_days_lower=post_param_integer('move_days_lower',INTEGER_MAGIC_NULL);
 		$move_days_higher=post_param_integer('move_days_higher',INTEGER_MAGIC_NULL);
 		$move_target=post_param_integer('move_target',INTEGER_MAGIC_NULL);
 		if ($move_target==-1) $move_target=NULL;
+		if (!is_null($move_target))
+		{
+			if (!has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$catalogue_name,'catalogues_category',$move_target)))
+				access_denied('CATEGORY_ACCESS');
+		}
+
 		if (!fractional_edit())
 		{
 			$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
@@ -1286,7 +1302,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		}
 
 		$this->donext_category_id=$category_id;
-		$this->donext_catalogue_name=post_param('catalogue_name',STRING_MAGIC_NULL); // The screen won't even be seen if a fractional edit
+		$this->donext_catalogue_name=$catalogue_name;
 	}
 
 	/**
@@ -1300,7 +1316,10 @@ class Module_cms_catalogues_cat extends standard_aed_module
 
 		actual_delete_catalogue_category(intval($id));
 
-		$this->donext_catalogue_name=post_param('catalogue_name');
+		$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$category_id));
+		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+		$this->donext_catalogue_name=$catalogue_name;
 	}
 
 	/**

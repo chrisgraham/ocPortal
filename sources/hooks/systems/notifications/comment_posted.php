@@ -113,7 +113,14 @@ class Hook_Notification_comment_posted extends Hook_Notification
 		list($_members,$maybe_more)=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
 		if (!is_null($category)) // Check permissions for content
 		{
-			list($type_id,$id)=explode('_',$category,2);
+			$matches=array();
+			if (preg_match('#^catalogues\_\_(.*)\_(\d+)$#',$category,$matches)!=0)
+			{
+				list($type_id,$id)=array($matches[1],$matches[2]);
+			} else
+			{
+				list($type_id,$id)=explode('_',$category,2);
+			}
 			$members=array();
 			foreach ($_members as $member=>$setting)
 			{

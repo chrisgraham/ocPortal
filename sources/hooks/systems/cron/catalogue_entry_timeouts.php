@@ -45,6 +45,8 @@ class Hook_cron_catalogue_entry_timeouts
 					if ($time_diff/(60*60*24)>$move_days)
 					{
 						$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_last_moved'=>time(),'cc_id'=>$row['cc_move_target']),array('id'=>$entry['id']),'',1);
+						calculate_category_child_count_cache($row['cc_move_target']);
+						calculate_category_child_count_cache($row['id']);
 					}
 				}
 				$start+=1000;
