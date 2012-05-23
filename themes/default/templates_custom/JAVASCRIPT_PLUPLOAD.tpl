@@ -5432,7 +5432,7 @@ function queueChanged(ob)
 
 function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
-	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
+	if (('{$CONFIG_OPTION,complex_uploader}'=='0') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
 	if ('{$MOBILE}'=='1') return;
 
 	if (!posting_field_name) posting_field_name='post';
@@ -5446,7 +5446,7 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 
 function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
-	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
+	if (('{$CONFIG_OPTION,complex_uploader}'=='0') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
 
 	if (!filter) filter='{$CONFIG_OPTION#,valid_types}';
 
@@ -5797,7 +5797,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		{
 			var new_contents=getTextbox(rep.form.elements[posting_field_name]);
 			new_contents=new_contents.replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
-			new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title=""[^<>]* value="[^"]+"[^<>]* />'),''); // Shell of the above
+			new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title="[^<>]*" value="[^"]+"[^<>]* />'),''); // Shell of the above
 			setTextbox(rep.form.elements[posting_field_name],new_contents,new_contents);
 		}
 		fireFakeChangeFor(name,'');

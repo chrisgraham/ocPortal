@@ -660,6 +660,10 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	$files=new ocp_tempcode();
 	$files_warnings=new ocp_tempcode();
 
+	global $M_SORT_KEY;
+	$M_SORT_KEY='path';
+	usort($directory,'multi_sort');
+
 	foreach ($directory as $i=>$entry)
 	{
 		if ($entry['path']=='mod.inf') continue;
@@ -687,8 +691,18 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 			$this_overwrite=true;
 		} else $this_overwrite=false;
 
+		// Comcode?
+		if ((strtolower(substr($entry['path'],-4,4))=='.txt') && (strpos($entry['path'],'pages/comcode')!==false))
+		{
+			$this_comcode_page=true;
+		} else $this_comcode_page=false;
+
 		// Template
-		if ($this_overwrite)
+		if ($this_comcode_page)
+		{
+			$files_warnings->attach(do_template('ADDON_INSTALL_FILES_WARNING',array('_GUID'=>'d0cf99f96262296df4afe2387f4cd3e8','I'=>strval($i),'PATH'=>$entry['path'],'ABOUT'=>do_lang_tempcode('ADDON_FILE_IS_COMCODE_PAGE'))));
+		}
+		elseif ($this_overwrite)
 		{
 			$backup=(substr($entry['path'],-4)=='.txt');
 			$files_warnings->attach(do_template('ADDON_INSTALL_FILES_WARNING',array('_GUID'=>'c62168dee316d8f73d20a0d70d41b1a4','I'=>strval($i),'PATH'=>$entry['path'],'ABOUT'=>do_lang_tempcode($backup?'ADDON_FILE_WILL_OVERWRITE_BACKUP':'ADDON_FILE_WILL_OVERWRITE'))));

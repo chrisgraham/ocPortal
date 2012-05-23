@@ -42,14 +42,17 @@ function do_next_manager_admin_simplified()
 /**
  * Get the tempcode for a do next manager. A do next manager is a series of linked icons that are presented after performing an action. Modules that do not use do-next pages, usually use REFRESH_PAGE's.
  *
- * @param  ID_TEXT		The title of what we are doing
+ * @param  ID_TEXT		The title of what we are doing (a language string)
  * @param  ?mixed			The language code for the docs of the hook defined do-next manager that we're creating OR tempcode for it (NULL: none)
  * @param  ID_TEXT		The menu 'type' we are doing (filters out any icons that don't match it)
+ * @param  ?string		The title to use for the main links (a language string) (NULL: same as title)
  * @return tempcode		The do next manager
  */
-function do_next_manager_hooked($title,$text,$type)
+function do_next_manager_hooked($title,$text,$type,$main_title=NULL)
 {
 	$links=array();
+
+	if (is_null($main_title)) $main_title=$title;
 
 	breadcrumb_set_self(do_lang_tempcode($title));
 
@@ -84,7 +87,7 @@ function do_next_manager_hooked($title,$text,$type)
 		} else $_text=make_string_tempcode($text);
 	} else $_text=new ocp_tempcode();
 
-	return do_next_manager(is_null($text)?NULL:get_page_title($title),$_text,$links,do_lang($title));
+	return do_next_manager(is_null($text)?NULL:get_page_title($title),$_text,$links,do_lang($main_title));
 }
 
 /**

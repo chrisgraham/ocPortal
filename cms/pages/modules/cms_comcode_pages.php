@@ -380,7 +380,7 @@ class Module_cms_comcode_pages
 		$max=get_param_integer('max',50);
 
 		$filesarray=$this->get_comcode_files_array($lang);
-		if (true/*TODO*/ || count($filesarray)>=300) // Oh dear, limits reached, try another tact
+		if (count($filesarray)>=300) // Oh dear, limits reached, try another tact
 		{
 			$orderer='p_add_date ASC';
 			switch ($sortable)
@@ -520,7 +520,7 @@ class Module_cms_comcode_pages
 			if (!$found_via_query)
 			{
 				if ($i<$start) continue;
-				if ($i+$start>$max) break;
+				if ($i>$max+$start) break;
 			}
 
 			$table_rows->attach(results_entry(array(

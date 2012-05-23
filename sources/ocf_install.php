@@ -376,7 +376,7 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('PROBATION_USERGROUP','probation_usergroup','usergroup','return do_lang(\'PROBATION\');','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('SHOW_FIRST_JOIN_PAGE','show_first_join_page','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('SKIP_EMAIL_CONFIRM_JOIN','skip_email_confirm_join','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('NO_DOB_ASK','no_dob_ask','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('NO_DOB_ASK','no_dob_ask','list','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'0|1|2');
 		add_config_option('ALLOW_INTERNATIONAL','allow_international','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 	}
 	if ((is_null($upgrade_from)) || ($upgrade_from<8.0))
@@ -384,6 +384,11 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('ALLOW_EMAIL_FROM_STAFF_DISABLE','allow_email_from_staff_disable','tick','return \'0\';','SECTION_FORUMS','GENERAL');
 		add_config_option('INTRO_FORUM_ID','intro_forum_id','?forum','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('SIGNUP_FULLNAME','signup_fullname','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+	}
+	if ((!is_null($upgrade_from)) && ($upgrade_from<8.1))
+	{
+		delete_config_option('no_dob_ask');
+		add_config_option('NO_DOB_ASK','no_dob_ask','list','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'0|1|2'); // Recreate option
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<8.0))
 	{

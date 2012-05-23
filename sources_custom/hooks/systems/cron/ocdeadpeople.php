@@ -100,7 +100,7 @@ class Hook_cron_ocdeadpeople
 					if (!$has_immunization)
 					{
 						//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
-						$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
+						$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH',NULL,false,false,true);
 						$cure_url=$cure_url->evaluate();
 
 						if ($insert)
@@ -156,7 +156,7 @@ class Hook_cron_ocdeadpeople
 				require_code('notifications');
 
 				//$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
-				$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH');
+				$cure_url=build_url(array('page'=>'pointstore','type'=>'action','id'=>'ocdeadpeople'),'_SEARCH',NULL,false,false,true);
 				$cure_url=$cure_url->evaluate();
 
 				if ($insert)

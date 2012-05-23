@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		core
  */
 
-class Hook_config_default_no_dob_ask
+class Hook_config_default_complex_uploader
 {
 
 	/**
@@ -29,15 +29,15 @@ class Hook_config_default_no_dob_ask
 	function get_details()
 	{
 		return array(
-			'human_name'=>'NO_DOB_ASK',
-			'the_type'=>'list',
-			'the_page'=>'SECTION_FORUMS',
-			'section'=>'USERNAMES_AND_PASSWORDS',
-			'explanation'=>'CONFIG_OPTION_no_dob_ask',
+			'human_name'=>'COMPLEX_UPLOADER',
+			'the_type'=>'tick',
+			'the_page'=>'ACCESSIBILITY',
+			'section'=>'GENERAL',
+			'explanation'=>'CONFIG_OPTION_complex_uploader',
 			'shared_hosting_restricted'=>'0',
-			'c_data'=>'0|1|2',
+			'c_data'=>'',
 
-			'addon'=>'core_ocf',
+			'addon'=>'core',
 		);
 	}
 
@@ -48,7 +48,7 @@ class Hook_config_default_no_dob_ask
 	 */
 	function get_default()
 	{
-		return '0';
+		return '1';
 	}
 
 }

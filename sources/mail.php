@@ -109,6 +109,9 @@ function comcode_to_clean_text($message_plain)
 	require_code('tempcode_compiler');
 	if ((strpos($message_plain,'[code')===false) && (strpos($message_plain,'[no_parse')===false) && (strpos($message_plain,'[tt')===false))
 	{
+		// Change username links to plain username namings
+		$message_plain=preg_replace('#\{\{([^\}\{]*)\}\}#','\1',$message_plain);
+
 		// Remove directives etc
 		do
 		{

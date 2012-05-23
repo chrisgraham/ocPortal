@@ -759,7 +759,7 @@ class Module_admin_themes
 
 		$title=get_page_title('_EDIT_CSS',true,array($file));
 
-		if (get_value('disable_editarea')!=='1')
+		if (get_option('editarea')=='1')
 		{
 			$GLOBALS['EXTRA_HEAD']->attach(make_string_tempcode('
 				<script language="javascript" type="text/javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
@@ -1165,7 +1165,7 @@ class Module_admin_themes
 
 		$files_seen=array();
 
-		if (get_value('disable_editarea')!=='1')
+		if (get_option('editarea')=='1')
 		{
 			$GLOBALS['EXTRA_HEAD']->attach(make_string_tempcode('
 				<script language="javascript" type="text/javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
@@ -1212,7 +1212,7 @@ class Module_admin_themes
 			if (substr($file,-4)=='.css') $syntax='css';
 			elseif (substr($file,0,11)=='JAVASCRIPT_') $syntax='js';
 
-			if (get_value('disable_editarea')!=='1')
+			if (get_option('editarea')=='1')
 			{
 				$GLOBALS['EXTRA_HEAD']->attach('
 					<script type="text/javascript">// <![CDATA[

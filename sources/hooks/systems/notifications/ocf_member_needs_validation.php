@@ -24,7 +24,7 @@ class Hook_Notification_ocf_member_needs_validation extends Hook_Notification__S
 	 */
 	function get_initial_setting($notification_code,$category=NULL)
 	{
-		return A_NA;
+		return A_INSTANT_EMAIL;
 	}
 
 	/**

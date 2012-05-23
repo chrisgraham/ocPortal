@@ -575,7 +575,8 @@ function do_header($skip_top=false)
 	if ($description===NULL) $description=''; // Shouldn't happen
 	$keywords=get_option('keywords');
 	if ($SEO_KEYWORDS===NULL) $SEO_KEYWORDS=array();
-	$keywords_array=array_merge($SEO_KEYWORDS,explode(',',$keywords));
+	$keywords_array=$SEO_KEYWORDS;
+	if ($keywords!='') $keywords_array=array_merge($keywords_array,explode(',',$keywords));
 	$keywords=implode(',',array_unique($keywords_array));
 
 	// The logo area
@@ -915,8 +916,9 @@ function do_site()
 		// Security feature admins can turn on
 		require_code('notifications');
 		$current_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$subject=do_lang('AFA_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$current_username);
+		$subject=do_lang('AFA_NOTIFICATION_MAIL_SUBJECT',$current_username,get_site_name());
 		$mail=do_lang('AFA_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($current_username));
+
 		dispatch_notification('adminzone_frontpage_accessed',NULL,$subject,$mail);
 
 		// Track very basic details of what sites use ocPortal. You can remove if you like.

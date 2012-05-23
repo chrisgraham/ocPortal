@@ -287,7 +287,7 @@ function areaedit_init(element)
 	test_div.parentNode.removeChild(test_div);
 
 	// Carefully work out toolbar
-	var precision_editing=(typeof get_elements_by_class_name(document.body,'comcode_button_box')[0]!='undefined'); // Look to see if this Comcode button is here as a hint whether we are doing an advanced editor. Unfortunately we cannot put contextual Tempcode inside a Javascript file, so this trick is needed.
+	var precision_editing=((typeof window.take_errors!='undefined') && window.take_errors) || (typeof get_elements_by_class_name(document.body,'comcode_button_box')[0]!='undefined'); // Look to see if this Comcode button is here as a hint whether we are doing an advanced editor. Unfortunately we cannot put contextual Tempcode inside a Javascript file, so this trick is needed.
 	var toolbar=[];
 	if (precision_editing)
 		toolbar.push(['Source','-']);

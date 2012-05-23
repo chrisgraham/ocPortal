@@ -411,6 +411,13 @@ class Module_chat
 			}
 		}
 
+		// And empty IM conversations
+		$old_dead_ims=$GLOBALS['SITE_DB']->query('SELECT r.* FROM '.get_table_prefix().'chat_rooms r JOIN '.get_table_prefix().'chat_events e ON e.e_room_id=r.id AND '.db_string_equal_to('e.e_type_code','JOIN_IM').' LEFT JOIN '.get_table_prefix().'chat_messages m ON m.room_id=r.id WHERE r.is_im=1 AND e_date_and_time<'.strval(time()-CHAT_EVENT_PRUNE).' AND m.id IS NULL');
+		foreach ($old_dead_ims as $old)
+		{
+			require_code('chat2');
+			delete_chatroom($old['id']);
+		}
 		// Prune chat events
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_events WHERE e_date_and_time<'.strval(time()-CHAT_EVENT_PRUNE));
 

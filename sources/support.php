@@ -1414,7 +1414,7 @@ function browser_matches($code)
 			$BROWSER_MATCHES_CACHE[$code]=$is_opera || $is_konqueror || $is_safari || $is_gecko;
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'wysiwyg':
-			if ((get_value('no_wysiwyg')==='1') || (is_mobile()) || (strpos($os,'ipad')!==false))
+			if ((get_option('wysiwyg')=='0') || (is_mobile()) || (strpos($os,'ipad')!==false))
 			{
 				$BROWSER_MATCHES_CACHE[$code]=false;
 				return false;

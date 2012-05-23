@@ -464,7 +464,7 @@ function doInput_page(field_name)
 
 	var result;
 
-	if (typeof window.showModalDialog!='undefined'{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}} || true{+END})
+	if (typeof window.showModalDialog!='undefined'{+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END})
 	{
 		window.faux_showModalDialog(
 			maintain_theme_in_link('{$FIND_SCRIPT;,page_link_chooser}'+keep_stub(true)),

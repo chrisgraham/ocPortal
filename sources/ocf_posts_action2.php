@@ -97,7 +97,7 @@ function ocf_member_handle_promotion($member_id=NULL)
  * @param  MEMBER			The member that made the post triggering this tracking notification.
  * @param  boolean		Whether the post started a new topic.
  * @param  LONG_TEXT		The post, in Comcode format.
- * @param  SHORT_TEXT	The topic title.
+ * @param  SHORT_TEXT	The topic title (blank: look it up from the $topic_id). If non-blank we must use it as it is implying the database might not have the correct value yet.
  * @param  ?MEMBER		Only send the notification to this member (NULL: no such limit).
  * @param  boolean		Whether this is for a Private Topic.
  */
@@ -105,9 +105,12 @@ function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,
 {
 	if ((is_null($forum_id)) && ($is_starter)) return;
 
-	$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_to','t_pt_from','t_cache_first_title'),array('id'=>$topic_id),'',1);
-	if (!array_key_exists(0,$topic_info)) return; // Topic's gone missing somehow (e.g. race condition)
-	$topic_title=$topic_info[0]['t_cache_first_title'];
+	if ($topic_title=='')
+	{
+		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_pt_to','t_pt_from','t_cache_first_title'),array('id'=>$topic_id),'',1);
+		if (!array_key_exists(0,$topic_info)) return; // Topic's gone missing somehow (e.g. race condition)
+		$topic_title=$topic_info[0]['t_cache_first_title'];
+	}
 
 	$sender_username=$GLOBALS['FORUM_DRIVER']->get_username($sender_member_id);
 

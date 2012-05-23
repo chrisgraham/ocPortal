@@ -182,7 +182,26 @@ function _get_group_tags($group=NULL)
 		'media'=>array('flash','img'/*Over complex,'upload','exp_thumb','exp_ref'*/,'thumb'),
 		'linking'=>array('url','email','reference','page','snapback','post','topic')
 	);
+
 	if (addon_installed('filedump')) $group_tags['media'][]='attachment';
+
+	// Non-categorised ones
+	$all_tags=_get_details_comcode_tags();
+	$not_found=array();
+	foreach (array_keys($all_tags[0]+$all_tags[1]) as $tag)
+	{
+		if (in_array($tag,array('exp_thumb','exp_ref','upload','attachment'))) continue; // Explicitly don't want to allow these (attachment will already be listed if allowed)
+		foreach ($group_tags as $_group)
+		{
+			if (in_array($tag,$_group))
+			{
+				continue 2;
+			}
+		}
+		$not_found[]=$tag;
+	}
+	$group_tags['CUSTOM']=$not_found;
+
 	if ($group!==NULL && array_key_exists($group,$group_tags))
 		return $group_tags[$group];
 
@@ -190,7 +209,7 @@ function _get_group_tags($group=NULL)
 }
 
 /**
- * Get the non-WYSIWYG tags (ones the WYSWIYG cannot do itself, so are needed even if it is on)
+ * Get the non-WYSIWYG tags (ones the WYSWIWYG cannot do itself, so are needed even if it is on)
  *
  * @return array			List of non-WYSIWYG tags
  */
@@ -221,21 +240,28 @@ function comcode_helper_script()
 		$comcode_groups='';
 		$groups=_get_group_tags();
 		
-		$wysiwyg_tags=_get_non_wysiwyg_tags();
+		$non_wysiwyg_tags=_get_non_wysiwyg_tags();
 		$in_wysiwyg=get_param_integer('in_wysiwyg',0)==1;
 
-		foreach($groups as $groupname=>$grouptags)
+		foreach ($groups as $groupname=>$grouptags)
 		{
 			sort($grouptags);
 			
 			$comcode_types='';
 			foreach ($grouptags as $tag)
 			{
-				if (($in_wysiwyg) && (!in_array($tag,$wysiwyg_tags))) continue;
-				
+				$custom=array_key_exists($tag,$custom_tag_list);
+				if (($in_wysiwyg) && (!$custom) && (!in_array($tag,$non_wysiwyg_tags))) continue;
+
 				if ((array_key_exists($tag,$DANGEROUS_TAGS)) && (!has_specific_permission(get_member(),'comcode_dangerous'))) continue;
 
-				$description=do_lang_tempcode('COMCODE_TAG_'.$tag);
+				if ($custom)
+				{
+					$description=make_string_tempcode(escape_html(is_integer($custom_tag_list[$tag]['tag_description'])?get_translated_text($custom_tag_list[$tag]['tag_description']):$custom_tag_list[$tag]['tag_description']));
+				} else
+				{
+					$description=do_lang_tempcode('COMCODE_TAG_'.$tag);
+				}
 
 				$url=find_script('comcode_helper').'?type=step2&tag='.urlencode($tag).'&field_name='.get_param('field_name').$keep->evaluate();
 				if (get_param('utheme','')!='') $url.='&utheme='.get_param('utheme');
@@ -246,22 +272,6 @@ function comcode_helper_script()
 			}
 			if ($comcode_types!='')
 				$comcode_groups.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_GROUP',array('IMG'=>NULL,'TITLE'=>do_lang_tempcode('COMCODE_GROUP_'.$groupname),'LINKS'=>$comcode_types)));
-		}
-		if (array_key_exists(0,$custom_tag_list))
-		{
-			$comcode_types='';
-			foreach ($custom_tag_list as $tag=>$options)
-			{
-				$description=get_translated_text($options['tag_description']);
-
-				$url=find_script('comcode_helper').'?type=step2&tag='.urlencode($tag).'&field_name='.get_param('field_name').$keep->evaluate();
-				if (get_param('utheme','')!='') $url.='&utheme='.get_param('utheme');
-				$link_caption=escape_html($tag);
-				$usage='';
-
-				$comcode_types.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_CHOICE',array('USAGE'=>$usage,'DESCRIPTION'=>$description,'URL'=>$url,'LINK_CAPTION'=>$link_caption)));
-			}
-			$comcode_groups.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_GROUP',array('IMG'=>NULL,'TITLE'=>do_lang_tempcode('COMCODE_GROUP_CUSTOM'),'LINKS'=>$comcode_types)));
 		}
 		$content=do_template('BLOCK_HELPER_START',array('_GUID'=>'d2d6837cdd8b19d80ea95ab9f5d09c9a','GET'=>true,'TITLE'=>$title,'LINKS'=>$comcode_groups));
 	}
@@ -493,12 +503,15 @@ function comcode_helper_script()
 		} else
 		{
 			$_params=$custom_tag_list[$tag];
-			$params=explode(",",$_params['tag_parameters']);
+			$params=explode(',',$_params['tag_parameters']);
 			foreach ($params as $param)
 			{
-				$description=''; // No description for custom comcode parameters
-				$fields->attach(form_input_line(ucwords(str_replace('_',' ',$param)),protect_from_escaping($description),$param,'',false));
+				$description=new ocp_tempcode();
+				$fields->attach(form_input_line(preg_replace('#=.*$#','',ucwords(str_replace('_',' ',$param))),protect_from_escaping($description),$param,'',false));
 			}
+			$tag_description=new ocp_tempcode();
+			$tag_description->attach(is_integer($_params['tag_description'])?get_translated_text($_params['tag_description']):$_params['tag_description']);
+			$tag_description->attach(paragraph(is_integer($_params['tag_example'])?get_translated_text($_params['tag_example']):$_params['tag_example']));
 		}
 
 		if ($tag=='attachment')

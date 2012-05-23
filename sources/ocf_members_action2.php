@@ -337,7 +337,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		$email_required=false;
 	} else
 	{
-		$dob_optional=(get_value('dob_optional')==='1');
+		$dob_optional=(get_option('no_dob_ask')=='2');
 		$email_required=true;
 	}
 
@@ -405,7 +405,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$default_time=is_null($dob_month)?NULL:usertime_to_utctime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
 	if (get_option('no_dob_ask')!='1')
 	{
-		$fields->attach(form_input_date(do_lang_tempcode((get_value('dob_optional')==='1')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
+		$fields->attach(form_input_date(do_lang_tempcode((get_option('no_dob_ask')=='2')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
 		if (addon_installed('ocf_forum'))
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('RELATED_FIELD',do_lang_tempcode('REVEAL_AGE')),do_lang_tempcode('DESCRIPTION_REVEAL_AGE'),'reveal_age',$reveal_age==1));

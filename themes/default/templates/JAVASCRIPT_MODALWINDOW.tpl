@@ -20,7 +20,7 @@ var overlay_zIndex=999999; // Has to be higher than plupload, which is 99999
 
 function open_link_as_overlay(ob,width,height,target)
 {
-	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		if ((typeof width=='undefined') || (!width)) var width=800;
 		if ((typeof height=='undefined') || (!height)) var height=520;
 		var url=(typeof ob.href=='undefined')?ob.action:ob.href;
@@ -32,7 +32,7 @@ function open_link_as_overlay(ob,width,height,target)
 	return true;
 }
 
-{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+{+START,IF,{$CONFIG_OPTION,js_overlays}}
 	function open_image_into_lightbox(a)
 	{
 		// Set up overlay for Lightbox
@@ -95,7 +95,7 @@ function fauxmodal_confirm(question,callback,title)
 {
 	if (typeof title=='undefined') var title='{!Q_SURE;}';
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var myConfirm = {
 			type: "confirm",
 			text: escape_html(question),
@@ -113,7 +113,7 @@ function fauxmodal_confirm(question,callback,title)
 		new ModalWindow().open(myConfirm);
 	{+END}
 
-	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
+	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
 		callback(window.confirm(question));
 	{+END}
 }
@@ -124,7 +124,7 @@ function fauxmodal_alert(notice,callback,title)
 
 	if (typeof title=='undefined') var title='{!MESSAGE;}';
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var myAlert = {
 			type: "alert",
 			text: escape_html(notice),
@@ -136,7 +136,7 @@ function fauxmodal_alert(notice,callback,title)
 		new ModalWindow().open(myAlert);
 	{+END}
 
-	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
+	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
 		window.alert(notice);
 		callback();
 	{+END}
@@ -144,7 +144,7 @@ function fauxmodal_alert(notice,callback,title)
 
 function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 {
-	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var myPrompt = {
 			type: "prompt",
 			text: escape_html(question),
@@ -164,7 +164,7 @@ function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 		new ModalWindow().open(myPrompt);
 	{+END}
 
-	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
+	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
 		callback(window.prompt(question,defaultValue));
 	{+END}
 }
@@ -173,7 +173,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 {
 	if ((typeof callback=='undefined') || (!callback)) var callback=function() {};
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var width=null,height=null,scrollbars=null,unadorned=null;
 
 		if (typeof cancel_text=='undefined') var cancel_text="{!INPUTSYSTEM_CANCEL#}";
@@ -221,7 +221,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 		new ModalWindow().open(myFrame);
 	{+END}
 
-	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
+	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
 		var timer=new Date().getTime();
 		try
 		{
@@ -246,16 +246,16 @@ function faux_open(url,name,options,target,cancel_text)
 {
 	if (typeof cancel_text=='undefined') var cancel_text="{!INPUTSYSTEM_CLOSE#}";
 
-	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		faux_showModalDialog(url,name,options,null,target,cancel_text);
 	{+END}
 
-	{+START,IF,{$VALUE_OPTION,no_faux_popups}}
+	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
 		window.open(url,name,options);
 	{+END}
 }
 
-{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+{+START,IF,{$CONFIG_OPTION,js_overlays}}
 /*
 Originally...
 

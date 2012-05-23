@@ -68,7 +68,7 @@ class Module_cms
 			return do_next_manager_admin_simplified();
 		}
 
-		return do_next_manager_hooked('CMS_ZONE','DOC_CMS','cms');
+		return do_next_manager_hooked('CMS_ZONE','DOC_CMS','cms','MODULE_TRANS_NAME_cms');
 	}
 
 }

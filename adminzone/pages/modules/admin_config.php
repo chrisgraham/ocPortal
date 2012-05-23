@@ -36,7 +36,7 @@ class Module_admin_config
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=12;
+		$info['version']=13;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -72,6 +72,8 @@ class Module_admin_config
 										'check_broken_urls','advanced_admin_cache','collapse_user_zones','google_analytics','fixed_width','show_screen_actions','show_content_tagging','show_content_tagging_inline',
 										'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support','mail_queue','mail_queue_debug',
 										'comments_to_show_in_thread','max_thread_depth',
+										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha',
+
 										);
 
 		foreach ($config_options as $option)
@@ -184,8 +186,8 @@ class Module_admin_config
 			add_config_option('USE_CUSTOM_ZONE_MENU','use_custom_zone_menu','tick','return \'1\';','THEME','GENERAL');
 			add_config_option('TRAY_SUPPORT','tray_support','tick','return \'1\';','THEME','GENERAL');
 			add_config_option('SHOW_DOCS','show_docs','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('CAPTCHA_NOISE','captcha_noise','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SITE','ADVANCED');
-			add_config_option('CAPTCHA_ON_FEEDBACK','captcha_on_feedback','tick','return addon_installed(\'captcha\')?\'0\':NULL;','SITE','ADVANCED');
+			add_config_option('CAPTCHA_NOISE','captcha_noise','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','SECURITY_IMAGE');
+			add_config_option('CAPTCHA_ON_FEEDBACK','captcha_on_feedback','tick','return addon_installed(\'captcha\')?\'0\':NULL;','SECURITY','SECURITY_IMAGE');
 			add_config_option('SHOW_POST_VALIDATION','show_post_validation','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('IP_FORWARDING','ip_forwarding','tick','return \'0\';','SITE','ENVIRONMENT');
 			add_config_option('FORCE_META_REFRESH','force_meta_refresh','tick','return \'0\';','SITE','ENVIRONMENT');
@@ -254,6 +256,20 @@ class Module_admin_config
 		{
 			foreach (array('send_error_emails','ocf_show_personal_myhome_link','twitter_login','twitter_password','facebook_api','facebook_appid','facebook_secret_code','facebook_uid','facebook_target_ids') as $option_to_delete)
 				delete_config_option($option_to_delete);
+		}
+		if ((!is_null($upgrade_from)) && ($upgrade_from<13))
+		{
+			add_config_option('COMPLEX_UPLOADER','complex_uploader','tick','return \'1\';','ACCESSIBILITY','GENERAL');
+			add_config_option('ENABLE_WYSIWYG','wysiwyg','tick','return \'1\';','ACCESSIBILITY','EMAIL');
+			add_config_option('EDITAREA','editarea','tick','return \'1\';','ACCESSIBILITY','EMAIL');
+			add_config_option('JS_OVERLAYS','js_overlays','tick','return \'1\';','ACCESSIBILITY','EMAIL');
+
+			add_config_option('CSS_CAPTCHA','css_captcha','tick','return \'1\';','SECURITY','SECURITY_IMAGE');
+			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return \'1\';','SECURITY','SECURITY_IMAGE');
+
+			add_config_option('ENABLE_AUTOBAN','autoban','tick','return \'1\';','SECURITY','GENERAL');
+
+			add_config_option('ENABLE_LIKES','likes','tick','return \'0\';','SITE','GENERAL');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))

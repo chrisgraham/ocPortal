@@ -279,7 +279,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 			}
 		} else
 		{
-			$likes=(get_value('likes')==='1');
+			$likes=(get_option('likes')=='1');
 			$all_rating_criteria[$content_type]=array('TITLE'=>'','TYPE'=>'','NUM_RATINGS'=>'0','RATING'=>'0');
 		}
 

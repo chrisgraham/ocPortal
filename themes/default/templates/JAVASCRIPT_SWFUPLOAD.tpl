@@ -5,7 +5,7 @@
  *
  * mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
  *
- * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzén and Mammon Media and is released under the MIT License:
+ * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzï¿½n and Mammon Media and is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
  * SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
@@ -1499,7 +1499,7 @@ function uploadError(file, errorCode, message, ob) {
 
 function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
-	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
+	if (('{$CONFIG_OPTION,complex_uploader}'=='0') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
 	if ('{$MOBILE}'=='1') return;
 
 	if ((typeof posting_field_name=='undefined') || (!posting_field_name)) var posting_field_name='post';
@@ -1522,7 +1522,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if (typeof rep.replaced_with_swfupload!='undefined') return;
 	rep.replaced_with_swfupload=true;
 
-	if (('{$VALUE_OPTION,no_swfupload}'=='1') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
+	if (('{$CONFIG_OPTION,complex_uploader}'=='0') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
 	if ('{$MOBILE}'=='1') return;
 
 	if (typeof window.no_java=='undefined') window.no_java=false;

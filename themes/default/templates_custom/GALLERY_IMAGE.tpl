@@ -1,9 +1,9 @@
 {+START,SET,TOOLTIP}
 	<div class="gallery_tooltip">
-		{+START,IF_NON_EMPTY,{DESCRIPTION}}
-			<div class="gallery_tooltip_description">
-				{$TRUNCATE_LEFT,{DESCRIPTION},100,0,1}
-			</div>
+		{+START,IF_NON_EMPTY,{TITLE}}
+			<h3 class="gallery_tooltip_description">
+				{$TRUNCATE_LEFT,{TITLE},100,0,0}
+			</h3>
 		{+END}
 
 		<table summary="{!MAP_TABLE}" class="solidborder">

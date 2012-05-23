@@ -115,7 +115,7 @@ function scriptLoadStuff()
 	}
 
 	{$,Lightboxes}
-	{+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}}
+	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		for (i=0;i<document.links.length;i++)
 		{
 			var j=document.links[i];
@@ -334,7 +334,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 		button_set=new_button_set;
 	}
 
-	if ((typeof window.showModalDialog!='undefined'){+START,IF,{$NOT,{$VALUE_OPTION,no_faux_popups}}} || true{+END})
+	if ((typeof window.showModalDialog!='undefined'){+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END})
 	{
 		var height=180;
 		if (button_set.length>4) height+=5*(button_set.length-4);
@@ -756,7 +756,7 @@ function browser_matches(code)
 		case 'no_alpha_ie_with_opacity':
 			return ((/MSIE ((5\.5)|[678])/.test(navigator.userAgent)) && (navigator.platform=="Win32") && (!_is_opera));
 		case 'wysiwyg':
-			if ('{$VALUE_OPTION,no_wysiwyg}'=='1') return false;
+			if ('{$CONFIG_OPTION,wysiwyg}'=='0') return false;
 			return true;
 		case 'windows':
 			return os.indexOf('windows')!=-1 || os.indexOf('win32')!=-1;
@@ -840,7 +840,7 @@ function confirm_session(callback)
 function _confirm_session(callback,username,url)
 {
 	window.fauxmodal_prompt(
-		'{$?,{$VALUE_OPTION,no_faux_popups},{!ENTER_PASSWORD_JS^;},{!ENTER_PASSWORD_JS_2^;}}',
+		'{$?,{$NOT,{$CONFIG_OPTION,js_overlays}},{!ENTER_PASSWORD_JS^;},{!ENTER_PASSWORD_JS_2^;}}',
 		'',
 		function(promptt)
 		{

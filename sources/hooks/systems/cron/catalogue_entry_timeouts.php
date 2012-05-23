@@ -27,12 +27,14 @@ class Hook_cron_catalogue_entry_timeouts
 	function run()
 	{
 		if (!addon_installed('catalogues')) return;
-		
+
 		if (function_exists('set_time_limit')) @set_time_limit(0);
-		
+
 		$catalogue_categories=$GLOBALS['SITE_DB']->query('SELECT id,cc_move_target,cc_move_days_lower,cc_move_days_higher FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_categories WHERE cc_move_target IS NOT NULL');
 		foreach ($catalogue_categories as $row)
 		{
+			$changed=false;
+
 			$start=0;
 			do
 			{
@@ -45,13 +47,19 @@ class Hook_cron_catalogue_entry_timeouts
 					if ($time_diff/(60*60*24)>$move_days)
 					{
 						$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_last_moved'=>time(),'cc_id'=>$row['cc_move_target']),array('id'=>$entry['id']),'',1);
-						calculate_category_child_count_cache($row['cc_move_target']);
-						calculate_category_child_count_cache($row['id']);
+						$changed=true;
 					}
 				}
 				$start+=1000;
 			}
 			while (count($entries)==1000);
+
+			if ($changed)
+			{
+				require_code('catalogues2');
+				calculate_category_child_count_cache($row['cc_move_target']);
+				calculate_category_child_count_cache($row['id']);
+			}
 		}
 	}
 
