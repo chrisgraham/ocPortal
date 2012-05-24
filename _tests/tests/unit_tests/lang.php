@@ -43,6 +43,8 @@ class lang_test_set extends ocp_test_case
 
 		while (($file=readdir($dh))!==false)
 		{
+			if ($file[0]=='.') continue;
+
 			$input=array();
 			_get_lang_file_map(get_file_base().'/lang/EN/'.$file,$input,NULL,false);
 			

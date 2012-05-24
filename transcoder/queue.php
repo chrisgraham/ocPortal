@@ -1,5 +1,7 @@
 <?php
 
+/*EXTRA FUNCTIONS: shell_exec*/
+
 if (function_exists('set_time_limit')) @set_time_limit(0);
 ini_set('allow_url_fopen','1');
 ini_set('display_errors','1');

@@ -14,7 +14,7 @@ CREATE TABLE `ocp_digestives_tin` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `d_subject` longtext NOT NULL,
   `d_message` longtext NOT NULL,
-  `d_from_member_id` int(11) NOT NULL,
+  `d_from_member_id` int(11) DEFAULT NULL,
   `d_to_member_id` int(11) NOT NULL,
   `d_priority` tinyint(4) NOT NULL,
   `d_no_cc` tinyint(1) NOT NULL,

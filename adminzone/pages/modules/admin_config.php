@@ -257,7 +257,7 @@ class Module_admin_config
 			foreach (array('send_error_emails','ocf_show_personal_myhome_link','twitter_login','twitter_password','facebook_api','facebook_appid','facebook_secret_code','facebook_uid','facebook_target_ids') as $option_to_delete)
 				delete_config_option($option_to_delete);
 		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<13))
+		if ((is_null($upgrade_from)) || ($upgrade_from<13))
 		{
 			add_config_option('COMPLEX_UPLOADER','complex_uploader','tick','return \'1\';','ACCESSIBILITY','GENERAL');
 			add_config_option('ENABLE_WYSIWYG','wysiwyg','tick','return \'1\';','ACCESSIBILITY','GENERAL');

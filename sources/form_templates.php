@@ -1151,9 +1151,10 @@ function form_input_radio($pretty_name,$description,$content,$required=false,$pi
  * @param  ?object		The database connection to the OCF install we are choosing images from (NULL: site db)
  * @param  ?ID_TEXT		Theme to use (NULL: current theme)
  * @param  ?ID_TEXT		Language to use (NULL: current language)
+ * @param  boolean		Whether to show direct codenames, rather than trying to prettify them into titles
  * @return tempcode		The input field
  */
-function form_input_picture_choose_specific($pretty_name,$description,$name,$ids,$selected_url=NULL,$selected_code=NULL,$tabindex=NULL,$allow_none=false,$db=NULL,$theme=NULL,$lang=NULL)
+function form_input_picture_choose_specific($pretty_name,$description,$name,$ids,$selected_url=NULL,$selected_code=NULL,$tabindex=NULL,$allow_none=false,$db=NULL,$theme=NULL,$lang=NULL,$direct_titles=false)
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
 
@@ -1252,7 +1253,7 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 				$url=find_theme_image($id,$theme!='default',false,$theme,$lang,$db);
 				if ($url=='')
 					$url=find_theme_image($id,false,false,'default',$lang,$db);
-				$pretty=make_string_tempcode(ucfirst((strrpos($id,'/')===false)?$id:substr($id,strrpos($id,'/')+1)));
+				$pretty=$direct_titles?make_string_tempcode($id):make_string_tempcode(ucfirst((strrpos($id,'/')===false)?$id:substr($id,strrpos($id,'/')+1)));
 			}
 			if ($url=='') continue;
 

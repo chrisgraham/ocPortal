@@ -152,7 +152,7 @@ function find_available_addons()
 	closedir($dh);
 	
 	global $M_SORT_KEY;
-	$M_SORT_KEY=1;
+	$M_SORT_KEY='1';
 	usort($files,'multi_sort');
 
 	foreach ($files as $_file)

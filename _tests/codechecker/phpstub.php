@@ -2907,8 +2907,14 @@ function realpath($path)
  * @param  ?mixed	Parameter (NULL: not used).
  * @param  ?mixed	Parameter (NULL: not used).
  * @param  ?mixed	Parameter (NULL: not used).
+ * @param  ?mixed	Parameter (NULL: not used).
+ * @param  ?mixed	Parameter (NULL: not used).
+ * @param  ?mixed	Parameter (NULL: not used).
+ * @param  ?mixed	Parameter (NULL: not used).
+ * @param  ?mixed	Parameter (NULL: not used).
+ * @param  ?mixed	Parameter (NULL: not used).
  */
-function register_shutdown_function($callback,$parama=NULL,$paramb=NULL,$paramc=NULL,$paramd=NULL,$parame=NULL,$paramf=NULL,$paramg=NULL,$paramh=NULL,$parami=NULL,$paramj=NULL,$paramk=NULL)
+function register_shutdown_function($callback,$parama=NULL,$paramb=NULL,$paramc=NULL,$paramd=NULL,$parame=NULL,$paramf=NULL,$paramg=NULL,$paramh=NULL,$parami=NULL,$paramj=NULL,$paramk=NULL,$paraml=NULL,$paramm=NULL,$paramn=NULL,$paramo=NULL,$paramp=NULL,$paramq=NULL)
 {
 }
 

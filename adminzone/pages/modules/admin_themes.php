@@ -1732,6 +1732,8 @@ class Module_admin_themes
 	{
 		$title=get_page_title('MANAGE_THEME_IMAGES');
 
+		if (function_exists('set_time_limit')) @set_time_limit(300);
+
 		$lang=choose_language($title,true,true);
 		if (is_object($lang)) return $lang;
 
@@ -1757,7 +1759,7 @@ class Module_admin_themes
 		$fields=form_input_huge_list(do_lang_tempcode('CODENAME'),'','id',make_string_tempcode($list),NULL,true,true,725);*/
 		require_code('themes2');
 		$ids=get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme);
-		$fields=form_input_picture_choose_specific(do_lang_tempcode('CODENAME'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang);
+		$fields=form_input_picture_choose_specific(do_lang_tempcode('IMAGE'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang,true);
 		$hidden=form_input_hidden('theme',$theme);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');
 		$edit_form=do_template('FORM',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));

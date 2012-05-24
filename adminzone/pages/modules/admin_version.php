@@ -36,7 +36,7 @@ class Module_admin_version
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=14;
+		$info['version']=15;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -540,6 +540,11 @@ class Module_admin_version
 		{
 			$GLOBALS['SITE_DB']->drop_if_exists('tracking');
 			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_template','ID_TEXT');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<15))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('digestives_tin','d_from_member_id','?USER');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<14))

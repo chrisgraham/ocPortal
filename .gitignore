@@ -23,4 +23,4 @@ html_dump
 data_custom/modules/admin_stats/*
 ocp_sitemap.xml
 data_custom/latest_activity.txt
-
+_tests/codechecker/functions.dat

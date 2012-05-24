@@ -37,8 +37,8 @@ function init__support()
 
 	// Heavily optimised! Ended up with preg_replace after trying lots of things
 	global $HTML_ESCAPE_1,$HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-	$HTML_ESCAPE_1=array('/&/'/*,'/쯧,'/*/,'/"/','/\'/','/</','/>/'/*,'/�/'*/);
-	$HTML_ESCAPE_1_STRREP=array('&'/*,'짬'/,'"','\'','<','>'/*,'�'*/);
+	$HTML_ESCAPE_1=array('/&/'/*,'/'.chr(195).'/','/'.chr(195).'/'*/,'/"/','/\'/','/</','/>/'/*,'/'.chr(194).'/'*/);
+	$HTML_ESCAPE_1_STRREP=array('&'/*,chr(195),chr(195)*/,'"','\'','<','>'/*,chr(194)*/);
 	$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
 	
 	global $BOT_MAP,$CACHE_BOT_TYPE;

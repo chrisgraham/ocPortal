@@ -19,7 +19,7 @@ Parse PHPdoc in all scripts under project directory
 
 global $OCPORTAL_PATH;
 
-require('lib.php');
+require(dirname(__FILE__).'/lib.php');
 
 if (isset($_SERVER['argv']))
 {
@@ -39,10 +39,11 @@ if (isset($_SERVER['argv']))
 	if (array_key_exists('path',$_SERVER['argv'])) $GLOBALS['OCPORTAL_PATH']=$_SERVER['argv']['path'];
 }
 
-require('php.php');
+require(dirname(__FILE__).'/php.php');
 
-$files=do_dir($OCPORTAL_PATH,false,true);
+$files=do_dir($OCPORTAL_PATH,true,true);
 $files[]='phpstub.php';
+
 $classes=array();
 $global=array();
 global $TO_USE;
@@ -62,14 +63,14 @@ foreach ($files as $filename)
 	if ($filename=='phpstub.php')
 	{
 		$_filename='phpstub.php';
-		$TO_USE=getcwd().'/phpstub.php';
+		$TO_USE=getcwd().DIRECTORY_SEPARATOR.'phpstub.php';
 	} else
 	{
 		$_filename=($OCPORTAL_PATH=='')?$filename:substr($filename,strlen($OCPORTAL_PATH)+1);
 	}
-	if ($_filename=='sources/minikernel.php') continue;
+	if ($_filename=='sources'.DIRECTORY_SEPARATOR.'minikernel.php') continue;
 	//echo 'SIGNATURES-DOING '.$_filename.cnl();
-	if (strpos($_filename,'_tests/')===0)
+	if (strpos($_filename,'_tests'.DIRECTORY_SEPARATOR)===0)
 	{
 		$result=array();
 	} else
@@ -83,7 +84,7 @@ foreach ($files as $filename)
 	{
 		if ($r['name']=='__global')
 		{
-			if (($_filename!='sources/global.php') && ($_filename!='phpstub.php') && ($_filename!='tempcode_compiler__runtime') && ($_filename!='tempcode_compiler'))
+			if (($_filename!='sources'.DIRECTORY_SEPARATOR.'global.php') && ($_filename!='phpstub.php') && ($_filename!='tempcode_compiler__runtime') && ($_filename!='tempcode_compiler'))
 			{
 				foreach (array_keys($r['functions']) as $f)
 				{
@@ -92,14 +93,16 @@ foreach ($files as $filename)
 				}
 			}
 			$global=array_merge($global,$r['functions']);
-			unset($result[$i]);
 		}
 	}
 	foreach ($result as $in)
 	{
-		$class=$in['name'];
-		if (isset($classes[$class])) echo 'DUPLICATE_CLASS'.' '.$class.cnl();
-		$classes[$class]=$in;
+		if ($in['name']!='__global')
+		{
+			$class=$in['name'];
+			if (isset($classes[$class])) echo 'DUPLICATE_CLASS'.' '.$class.cnl();
+			$classes[$class]=$in;
+		}
 	}
 	//echo 'SIGNATURES-DONE '.$_filename.cnl();
 }

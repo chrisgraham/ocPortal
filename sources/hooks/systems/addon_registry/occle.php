@@ -116,6 +116,7 @@ class Hook_addon_registry_occle
 			'data/occle.php',
 			'lang/EN/occle.ini',
 			'sources/hooks/modules/admin_occle_commands/.htaccess',
+			'sources/hooks/modules/admin_occle_commands/alien_check.php',
 			'sources/hooks/modules/admin_occle_commands/append.php',
 			'sources/hooks/modules/admin_occle_commands/ban_ip.php',
 			'sources/hooks/modules/admin_occle_commands/ban_member.php',

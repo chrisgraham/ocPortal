@@ -45,6 +45,7 @@ class standard_dir_files_test_set extends ocp_test_case
 			while (($file=readdir($dh))!==false)
 			{
 				if ($file[0]=='.') continue;
+				if ($file=='_old') continue;
 
 				if (is_dir($dir.'/'.$file))
 				{

@@ -203,6 +203,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		'thumbs.db:encryptable'=>'.*',
 		'thumbs.db'=>'.*',
 		'.ds_store'=>'.*',
+		'_old'=>'.*',
 		'.svn'=>'.*',
 		'.git'=>'.*',
 		'cvs'=>'.*',

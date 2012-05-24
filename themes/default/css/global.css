@@ -2453,6 +2453,10 @@ th.meta_data_title {
 	margin-left: 20px;
 }
 
+.radio_list_picture_cat .hide_button img {
+	vertical-align: bottom;
+}
+
 .radio_list_picture {
 	float: {!en_left};
 	white-space: nowrap;

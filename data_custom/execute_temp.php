@@ -67,20 +67,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$p=get_file_base().'/themes/default/templates/';
-	$dh=opendir($p);
-	while (($f=readdir($dh))!==false)
-	{
-		if (substr($f,-4)!='.tpl') continue;
-		$c=file_get_contents($p.$f);
-		$n=preg_match_all('# on\w+="([^"]*)"#',$c,$matches);
-		for ($i=0;$i<$n;$i++)
-		{
-			if (substr_count($matches[1][$i],'(')==substr_count($matches[1][$i],')'))
-			{
-				echo $f.substr_count($matches[1][$i],'(');
-			}
-		}
-	}
-	closedir($dh);
+	$GLOBALS['SITE_DB']->alter_table_field('digestives_tin','d_from_member_id','?USER');
 }

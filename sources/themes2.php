@@ -190,7 +190,7 @@ function actual_add_theme_image($theme,$lang,$id,$path,$fail_ok=false)
  * @param  boolean		Allow no code to be given
  * @param  ID_TEXT		Form field for uploading
  * @param  ID_TEXT		Form field for choosing
- * @param  object			Database connection
+ * @param  ?object		Database connection (NULL: site database)
  * @return ID_TEXT		The (possibly randomised) theme image code
  */
 function get_theme_img_code($type,$allow_skip=false,$field_file='file',$field_choose='theme_img_code',$db=NULL)
