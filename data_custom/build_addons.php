@@ -143,11 +143,13 @@ if (get_param_integer('export_addons',1)==1)
 		}
 
 		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
+
+		echo show_updated_commnets_code($file,$name);
 	}
 	if ($only!==NULL) echo "All non-bundled addons have been exported to 'export/mods/'\n";
 }
 
-if (get_param_integer('export_themes',1)==1)
+if (get_param_integer('export_themes',0)==1)
 {
 	require_code('themes2');
 	require_code('files2');
@@ -193,9 +195,27 @@ if (get_param_integer('export_themes',1)==1)
 		$_GET['keep_theme_test']='1';
 		$_GET['theme']=$theme;
 		create_addon($file,$files2,$name,'','',$author,'ocProducts Ltd','1.0',$description,'exports/mods');
+
+		echo show_updated_commnets_code($file,$name);
 	}
 	
 	if ($only!==NULL) echo "All themes have been exported to 'export/mods/'\n";
 }
 
 echo "Done\n";
+
+function show_updated_commnets_code($file,$name)
+{
+return <<<END
+	Paste into ocPortal.com's OcCLE if this addon is updated: {$file}...
+	
+	:require_code('feedback');
+	\$id=\$GLOBALS['SITE_DB']->query_value('download_downloads','id',array('url'=>'uploads/downloads/'.rawurlencode('{$file}')));
+	\$content_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>\$id),get_module_zone('downloads'));
+	\$_POST['title']='';
+	\$_POST['post']='[i]Automated message[/i]: This addon has been updated with fixes.';
+	actualise_post_comment(true,'downloads',strval(\$id),\$content_url,'{$name}');
+
+
+END;
+}

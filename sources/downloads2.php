@@ -801,7 +801,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 		require_code('galleries2');
 		$download_gallery_root=get_option('download_gallery_root');
 		if (is_null($download_gallery_root)) $download_gallery_root='root';
-		$test=$GLOBALS['SITE_DB']->query_value('galleries','parent_id',array('name'=>'download_'.strval($id)));
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','parent_id',array('name'=>'download_'.strval($id)));
 		if (!is_null($test))
 			edit_gallery('download_'.strval($id),'download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','','',$download_gallery_root);
 	}

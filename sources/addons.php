@@ -12,6 +12,8 @@
 
 */
 
+/*EXTRA FUNCTIONS: shell_exec*/
+
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -309,7 +311,8 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 
 		$full=get_file_base().'/'.filter_naughty($val);
 
-		$themed_version=dirname($full).'/'.get_param('theme',$GLOBALS['FORUM_DRIVER']->get_theme()).'__'.basename($full);
+		$themed_suffix=get_param('theme',$GLOBALS['FORUM_DRIVER']->get_theme()).'__';
+		$themed_version=dirname($full).'/'.$themed_suffix.basename($full);
 
 		if ((!file_exists($full)) && (!file_exists($themed_version)))
 		{
@@ -319,13 +322,28 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 		if ((get_param_integer('keep_theme_test',0)==1) && (file_exists($themed_version)))
 		{
 			$mode=fileperms($themed_version);
-			$mtime=filemtime($themed_version);
+			$mtime=0;
+			if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')))
+			{
+				$_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
+				require_code('files');
+				$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$_themed_version));
+				if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
+			}
+			if ($mtime==0) $mtime=filemtime($themed_version);
 			if ($mtime>$max_mtime) $max_mtime=$mtime;
 			tar_add_file($tar,$val,$themed_version,$mode,$mtime,true);
 		} else
 		{
 			$mode=fileperms($full);
-			$mtime=filemtime($full);
+			$mtime=0;
+			if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')))
+			{
+				require_code('files');
+				$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$val));
+				if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
+			}
+			if ($mtime==0) $mtime=filemtime($full);
 			if ($mtime>$max_mtime) $max_mtime=$mtime;
 			tar_add_file($tar,$val,$full,$mode,$mtime,true);
 

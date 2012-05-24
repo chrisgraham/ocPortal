@@ -67,5 +67,15 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->alter_table_field('digestives_tin','d_from_member_id','?USER');
+$file='test.tar';
+$addon_row['addon_name']='Foobar';
+echo <<<END
+/* {$file} */
+require_code('feedback');
+\$id=\$GLOBALS['SITE_DB']->query_value('download_downloads','id',array('url'=>'uploads/downloads/'.rawurlencode('{$file}')));
+\$content_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>\$id),get_module_zone('downloads'));
+\$_POST['title']='';
+\$_POST['post']='[i]Automated message[/i]: This addon has been updated with fixes.';
+actualise_post_comment(true,'downloads',strval(\$id),\$content_url,'{$addon_row['addon_name']}');
+END;
 }
