@@ -25,7 +25,7 @@ function sb_handle_signals(ajax_result)
 	var messages=ajax_result.childNodes;
 
 	// Look through our messages
-	for(var i=0;i<messages.length;i++)
+	for (var i=0;i<messages.length;i++)
 	{
 		if (messages[i].nodeName=='div')
 		{

@@ -1012,7 +1012,7 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 	require_code('hooks/systems/ajax_tree/'.$hook);
 	$object=object_factory('Hook_'.$hook);
 
-	if ((!has_js()) || (get_param_integer('avoid_treelist',0)==1))
+	if ((!has_js()) || (get_option('tree_lists')=='0'))
 	{
 		$simple_content=$object->simple($root_id,$options,$default);
 

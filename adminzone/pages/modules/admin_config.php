@@ -72,7 +72,7 @@ class Module_admin_config
 										'check_broken_urls','advanced_admin_cache','collapse_user_zones','google_analytics','fixed_width','show_screen_actions','show_content_tagging','show_content_tagging_inline',
 										'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support','mail_queue','mail_queue_debug',
 										'comments_to_show_in_thread','max_thread_depth',
-										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha',
+										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
 
 										);
 
@@ -260,9 +260,10 @@ class Module_admin_config
 		if ((!is_null($upgrade_from)) && ($upgrade_from<13))
 		{
 			add_config_option('COMPLEX_UPLOADER','complex_uploader','tick','return \'1\';','ACCESSIBILITY','GENERAL');
-			add_config_option('ENABLE_WYSIWYG','wysiwyg','tick','return \'1\';','ACCESSIBILITY','EMAIL');
-			add_config_option('EDITAREA','editarea','tick','return \'1\';','ACCESSIBILITY','EMAIL');
-			add_config_option('JS_OVERLAYS','js_overlays','tick','return \'1\';','ACCESSIBILITY','EMAIL');
+			add_config_option('ENABLE_WYSIWYG','wysiwyg','tick','return \'1\';','ACCESSIBILITY','GENERAL');
+			add_config_option('EDITAREA','editarea','tick','return \'1\';','ACCESSIBILITY','GENERAL');
+			add_config_option('JS_OVERLAYS','js_overlays','tick','return \'1\';','ACCESSIBILITY','GENERAL');
+			add_config_option('TREE_LISTS','tree_lists','tick','return \'1\';','ACCESSIBILITY','GENERAL');
 
 			add_config_option('CSS_CAPTCHA','css_captcha','tick','return \'1\';','SECURITY','SECURITY_IMAGE');
 			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return \'1\';','SECURITY','SECURITY_IMAGE');

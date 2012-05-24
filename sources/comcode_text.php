@@ -238,7 +238,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 	$list_indent=0;
 	$list_type='ul';
 
-	if ($is_all_semihtml) filter_html($as_admin,$source_member,$pos,$len,$comcode,false,false);
+	if ($is_all_semihtml) filter_html($as_admin,$source_member,$pos,$len,$comcode,false,false); // Pre-filter the whole lot (note that this means during general output we do no additional filtering)
 
 	while ($pos<$len)
 	{
@@ -342,11 +342,11 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 					}
 				}
 
-				if ((($in_html) || (((($in_semihtml) || ($is_all_semihtml)) && (!$in_code_tag)) && (($next=='<') || ($next=='>') || ($next=='"')))))
+				if ((($in_html) || ((($in_semihtml) && (!$in_code_tag)) && (($next=='<') || ($next=='>') || ($next=='"')))))
 				{
 					if ($next==chr(10)) ++$NUM_LINES;
 
-					if ((!(($comcode_dangerous_html) || ($is_all_semihtml))) && ($next=='<')) // Special filtering required
+					if ((!$comcode_dangerous_html) && ($next=='<')) // Special filtering required
 					{
 						$close=strpos($comcode,'>',$pos-1);
 						$portion=substr($comcode,$pos-1,$close-$pos+2);
@@ -1157,7 +1157,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												foreach (array_keys($link_handlers) as $link_handler)
 												{
 													require_code('hooks/systems/comcode_link_handlers/'.$link_handler);
-													$link_handler_ob=object_factory('Hook_comcode_link_handler_'.$link_handler);
+													$link_handler_ob=object_factory('Hook_comcode_link_handler_'.$link_handler,true);
+													if (is_null($link_handler_ob)) continue;
 													$embed_output=$link_handler_ob->bind($auto_link,$link_captions_title,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
 													if (!is_null($embed_output)) break;
 												}
@@ -1198,7 +1199,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 										$next.='-bork-bork-bork-';
 									}
 								}
-								if ((!$in_separate_parse_section) && ((!$in_semihtml) || ((!$comcode_dangerous) && (!$is_all_semihtml)))) // Display char. We try and support entities
+								if ((!$in_separate_parse_section) && ((!$in_semihtml) || ((!$comcode_dangerous_html)/*If we don't support HTML and we haven't done the all_semihtml pre-filter at the top*/ && (!$is_all_semihtml)))) // Display char. We try and support entities
 								{
 									if ($next=='&')
 									{
@@ -1292,7 +1293,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								$has_it=true;
 								break;
 							}
-							if ((($is_all_semihtml) || ($in_semihtml)) && (($current_tag=='html') || ($current_tag=='semihtml'))) // Only search one level for this
+							if (($in_semihtml) && (($current_tag=='html') || ($current_tag=='semihtml'))) // Only search one level for this
 								break;
 						}
 						if ($has_it)
@@ -1811,9 +1812,12 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 	elseif ($current_tag=='semihtml') $in_semihtml=!$close;
 	$status=CCP_NO_MANS_LAND;
 
-	if (($in_html) || ($in_semihtml))
+	if (($current_tag=='html') || ($current_tag=='semihtml')) // New state meaning we need to filter the contents
 	{
-		filter_html($as_admin,$source_member,$pos,$len,$comcode,$in_html,$in_semihtml);
+		if (($in_html) || ($in_semihtml))
+		{
+			filter_html($as_admin,$source_member,$pos,$len,$comcode,$in_html,$in_semihtml);
+		}
 	}
 
 	if ($mindless_mode)
@@ -1848,7 +1852,9 @@ function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_
 	{
 		global $POTENTIAL_JS_NAUGHTY_ARRAY;
 
-		if (($in_html) && ($in_semihtml)) $ahead_end=max(strpos($comcode,'[/html]',$pos),strpos($comcode,'[/semihtml]',$pos)); // Should never happen, but just to be safe
+		$comcode=preg_replace('#(\\\\)+(\[/(html|semihtml)\])#','\2',$comcode); // Stops sneaky trying to trick the end of the HTML tag to hack this function
+
+		if (($in_html) && ($in_semihtml)) $ahead_end=max(strpos($comcode,'[/html]',$pos),strpos($comcode,'[/semihtml]',$pos));
 		elseif ($in_html) $ahead_end=strpos($comcode,'[/html]',$pos);
 		elseif ($in_semihtml) $ahead_end=strpos($comcode,'[/semihtml]',$pos);
 		else $ahead_end=false;

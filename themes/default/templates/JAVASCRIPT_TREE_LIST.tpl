@@ -245,7 +245,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				if (node.getAttribute('description')) description=escape_html('. '+node.getAttribute('description'));
 				description_in_use=escaped_title+': {!TREE_LIST_SELECT^;*}'+description+((node.getAttribute('serverid')=='')?(' ('+escape_html(node.getAttribute('serverid'))+')'):'');
 			}
-			setInnerHTML(node_self,'<input style="width: 11px; height: 11px"'+(this.tabindex?(' tabindex="'+this.tabindex+'"'):'')+' type="image" alt="'+((!initially_expanded)?'{!EXPAND^;}':'{!CONTRACT^;}')+': '+escaped_title+'" title="'+((!initially_expanded)?'{!EXPAND^;}':'{!CONTRACT^;}')+'" id="'+this.name+'texp_c_'+node.getAttribute('id')+'" src="'+((!initially_expanded)?'{$IMG*,treefield/plus}':'{$IMG*,treefield/minus}').replace(/^http:/,window.location.protocol)+'" /> <img style="width: 14px; height: 14px" class="treelist_cat_icon" alt="{!CATEGORY^;}" src="'+'{$IMG*,treefield/category}'.replace(/^http:/,window.location.protocol)+'" /> <label id="'+this.name+'tsel_c_'+node.getAttribute('id')+'" for="'+this.name+'tsel_r_'+node.getAttribute('id')+'" onmouseout="if (typeof window.deactivateTooltip!=\'undefined\') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!=\'undefined\') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!=\'undefined\') activateTooltip(this,event,'+(node.getAttribute('description_html')?'':'escape_html')+'(this.childNodes[0].title),\'auto\');" style="background-color: white; color: black; cursor: pointer; color: '+colour+'"><input '+(this.tabindex?('tabindex="'+this.tabindex+'" '):'')+'id="'+this.name+'tsel_r_'+node.getAttribute('id')+'" style="position: absolute; left: -10000px" type="radio" name="_'+this.name+'" value="1" title="'+description_in_use+'" />'+escaped_title+'</label> <span id="'+this.name+'extra_'+node.getAttribute('id')+'">'+extra+'</span><br />');
+			setInnerHTML(node_self,'<input style="width: 11px; height: 11px"'+(this.tabindex?(' tabindex="'+this.tabindex+'"'):'')+' type="image" alt="'+((!initially_expanded)?'{!EXPAND_TREE_LIST^;}':'{!CONTRACT_TREE_LIST^;}')+': '+escaped_title+'" title="'+((!initially_expanded)?'{!EXPAND^;}':'{!CONTRACT^;}')+'" id="'+this.name+'texp_c_'+node.getAttribute('id')+'" src="'+((!initially_expanded)?'{$IMG*,treefield/plus}':'{$IMG*,treefield/minus}').replace(/^http:/,window.location.protocol)+'" /> <img style="width: 14px; height: 14px" class="treelist_cat_icon" alt="{!CATEGORY^;}" src="'+'{$IMG*,treefield/category}'.replace(/^http:/,window.location.protocol)+'" /> <label id="'+this.name+'tsel_c_'+node.getAttribute('id')+'" for="'+this.name+'tsel_r_'+node.getAttribute('id')+'" onmouseout="if (typeof window.deactivateTooltip!=\'undefined\') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!=\'undefined\') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!=\'undefined\') activateTooltip(this,event,'+(node.getAttribute('description_html')?'':'escape_html')+'(this.childNodes[0].title),\'auto\');" style="background-color: white; color: black; cursor: pointer; color: '+colour+'"><input '+(this.tabindex?('tabindex="'+this.tabindex+'" '):'')+'id="'+this.name+'tsel_r_'+node.getAttribute('id')+'" style="position: absolute; left: -10000px" type="radio" name="_'+this.name+'" value="1" title="'+description_in_use+'" />'+escaped_title+'</label> <span id="'+this.name+'extra_'+node.getAttribute('id')+'">'+extra+'</span><br />');
 			var img=node_self.getElementsByTagName('input')[0];
 			img.onmousedown=this.handle_tree_click;
 			img.onmouseup=function() { return false; };
@@ -505,8 +505,8 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 		}
 
 		img.src='{$IMG,treefield/minus}'.replace(/^http:/,window.location.protocol);
-		img.title=img.title.replace('{!EXPAND^;}','{!CONTRACT^;}');
-		img.alt=img.alt.replace('{!EXPAND^;}','{!CONTRACT^;}');
+		img.title=img.title.replace('{!EXPAND_TREE_LIST^;}','{!CONTRACT_TREE_LIST^;}');
+		img.alt=img.alt.replace('{!EXPAND_TREE_LIST^;}','{!CONTRACT_TREE_LIST^;}');
 	} else
 	{
 		var xml_node=this.object.getElementByIdHack(clicked_id,'c');
@@ -520,8 +520,8 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 		html_node.style.display='none';
 
 		img.src='{$IMG,treefield/plus}'.replace(/^http:/,window.location.protocol);
-		img.title=img.title.replace('{!CONTRACT^;}','{!EXPAND^;}');
-		img.alt=img.alt.replace('{!CONTRACT^;}','{!EXPAND^;}');
+		img.title=img.title.replace('{!CONTRACT_TREE_LIST^;}','{!EXPAND_TREE_LIST^;}');
+		img.alt=img.alt.replace('{!CONTRACT_TREE_LIST^;}','{!EXPAND_TREE_LIST^;}');
 	}
 
 	fixUpNodePositions(this.object.name);
