@@ -270,7 +270,7 @@ class Module_admin_config
 
 			add_config_option('ENABLE_AUTOBAN','autoban','tick','return \'1\';','SECURITY','GENERAL');
 
-			add_config_option('ENABLE_LIKES','likes','tick','return \'0\';','SITE','GENERAL');
+			add_config_option('ENABLE_LIKES','likes','tick','return \'0\';','FEATURE','USER_INTERACTION');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
