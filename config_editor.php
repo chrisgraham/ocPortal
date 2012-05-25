@@ -43,7 +43,13 @@ if (get_magic_quotes_gpc())
 {
 	foreach ($_POST as $key=>$val)
 	{
-		$_POST[$key]=stripslashes($val);
+		if (is_array($val))
+		{
+			$_POST[$key]=array_map('stripslashes',$val);
+		} else
+		{
+			$_POST[$key]=stripslashes($val);
+		}
 	}
 	foreach ($_GET as $key=>$val)
 	{
@@ -157,6 +163,15 @@ END;
 	if (!array_key_exists('use_mem_cache',$SITE_INFO)) $SITE_INFO['use_mem_cache']='1';
 	foreach ($SITE_INFO as $key=>$val)
 	{
+		if (is_array($val))
+		{
+			foreach ($val as $val2)
+			{
+				echo '<input type="hidden" name="'.htmlentities($key).'[]" value="'.htmlentities($val2).'" />';
+			}
+			continue;
+		}
+
 		$notes='';
 		switch ($key)
 		{
@@ -418,10 +433,23 @@ function do_set()
 	fwrite($info,"<"."?php\n");
 	foreach ($new as $key=>$val)
 	{
-		$_val=str_replace('\\','\\\\',$val);
-		if (fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n")===false)
+		if (is_array($val))
 		{
-			echo '<strong>Could not save to file. Out of disk space?<strong>';
+			foreach ($val as $val2)
+			{
+				$_val=str_replace('\\','\\\\',$val2);
+				if (fwrite($info,'$SITE_INFO[\''.$key.'\'][]=\''.$_val."';\n")===false)
+				{
+					echo '<strong>Could not save to file. Out of disk space?<strong>';
+				}
+			}
+		} else
+		{
+			$_val=str_replace('\\','\\\\',$val);
+			if (fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n")===false)
+			{
+				echo '<strong>Could not save to file. Out of disk space?<strong>';
+			}
 		}
 	}
 	fclose($info);
