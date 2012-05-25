@@ -2009,7 +2009,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 	} else
 	{
 		$errors[]=do_lang_tempcode('NO_DEFINED_THEME_UPGRADER');
-		return $errors;
+		return array($errors,array());
 	}
 
 	if (addon_installed('themewizard'))

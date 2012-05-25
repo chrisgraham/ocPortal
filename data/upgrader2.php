@@ -139,6 +139,7 @@ foreach ($todo as $i=>$_target_file)
 		$length-=$amount_to_read;
 	}
 	fclose($myfile2);
+	@chmod($FILE_BASE.'/'.$target_file,0644);
 }
 fclose($myfile);
 

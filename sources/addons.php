@@ -323,7 +323,7 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 		{
 			$mode=fileperms($themed_version);
 			$mtime=0;
-			if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')))
+			if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($themed_version)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
 			{
 				$_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
 				require_code('files');
@@ -337,7 +337,7 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 		{
 			$mode=fileperms($full);
 			$mtime=0;
-			if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')))
+			if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($full)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
 			{
 				require_code('files');
 				$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$val));

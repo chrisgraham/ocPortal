@@ -67,15 +67,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-$file='test.tar';
-$addon_row['addon_name']='Foobar';
-echo <<<END
-/* {$file} */
-require_code('feedback');
-\$id=\$GLOBALS['SITE_DB']->query_value('download_downloads','id',array('url'=>'uploads/downloads/'.rawurlencode('{$file}')));
-\$content_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>\$id),get_module_zone('downloads'));
-\$_POST['title']='';
-\$_POST['post']='[i]Automated message[/i]: This addon has been updated with fixes.';
-actualise_post_comment(true,'downloads',strval(\$id),\$content_url,'{$addon_row['addon_name']}');
-END;
+$ret=unserialize("a:6:{i:0;a:2:{i:0;a:5:{i:0;s:37:\"string_attach_4fbef05a0c8254.65997637\";i:1;a:0:{}i:2;i:1;i:3;s:0:\"\";i:4;s:0:\"\";}i:1;a:5:{i:0;s:20:\"tcpfunc_COMCODE_FONT\";i:1;a:5:{s:5:\"_GUID\";s:32:\"f5fcafe737b8fdf466a6a51773e09c9b\";s:7:\"CONTENT\";O:12:\"ocp_tempcode\":6:{s:18:\"code_to_preexecute\";s:106:\"\$TPL_FUNCS['string_attach_4fbef05a0ce821.66657738']=\"echo \\\"The new Guides repository is now online.\\\";\";\n\";s:9:\"seq_parts\";a:1:{i:0;a:5:{i:0;s:37:\"string_attach_4fbef05a0ce821.66657738\";i:1;a:0:{}i:2;i:1;i:3;s:0:\"\";i:4;s:0:\"\";}}s:19:\"preprocessable_bits\";a:0:{}s:11:\"last_attach\";s:0:\"\";s:9:\"pure_lang\";N;s:8:\"codename\";s:7:\"(mixed)\";}s:4:\"SIZE\";s:0:\"\";s:5:\"COLOR\";s:11:\"color: red;\";s:4:\"FACE\";s:0:\"\";}i:2;i:1;i:3;s:0:\"\";i:4;s:0:\"\";}}i:1;a:0:{}i:2;s:7:\"(mixed)\";i:3;s:12:\"COMCODE_FONT\";i:4;N;i:5;s:562:\"\$TPL_FUNCS['string_attach_4fbef05a0c8254.65997637']=\"echo \\\"Post your Gambas 1 and 2 coded tutorials. \\\";\";\nif ((\$result=@include('/home/whiteisl/public_html/themes/sea/templates_cached/EN/COMCODE_FONT.tpl.tcp'))===false) { \$tmp=do_template('COMCODE_FONT',NULL,'EN',false,'','.tpl','templates'); clearstatcache(); if (mt_rand(0,100)==1 || !is_file('/home/whiteisl/public_html/themes/sea/templates_cached/EN/COMCODE_FONT.tpl.tcp')) { \$GLOBALS['CACHE_TEMPLATES']=false; } eval(\$tmp->code_to_preexecute); unset(\$tmp); }\n			else { eval(\$result[5]); unset(\$result); }\";}");
+var_dump($ret);exit();
 }
