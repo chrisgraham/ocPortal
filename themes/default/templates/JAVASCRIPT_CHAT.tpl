@@ -352,7 +352,7 @@ function handle_signals(ajax_result_frame,ajax_result)
 
 function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 {
-	if (!ajax_result) // Some kind of error happened
+	if (!ajax_result) return; // Some kind of error happened
 
 	var messages=ajax_result.childNodes;
 	var message_container=document.getElementById("messages_window");
