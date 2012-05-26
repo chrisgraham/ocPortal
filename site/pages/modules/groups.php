@@ -413,6 +413,7 @@ class Module_groups
 				$accept_url=build_url(array('page'=>'_SELF','type'=>'accept','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
 				$decline_url=build_url(array('page'=>'_SELF','type'=>'decline','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
 				$temp=do_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE',array('_GUID'=>'16e93cf50a14e3b6a3bdf31525fd5e7f','ACCEPT_URL'=>$accept_url,'DECLINE_URL'=>$decline_url,'NAME'=>$m_username,'URL'=>$url));
+				$prospective_members->attach(results_entry(array($temp)));
 			}
 		}
 		if (!$secondary_members->is_empty())

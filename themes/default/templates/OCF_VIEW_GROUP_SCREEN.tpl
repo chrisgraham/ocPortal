@@ -29,10 +29,6 @@
 		<p class="nothing_here">{!NO_MEMBERS}</p>
 	{+END}
 
-	{+START,IF_EMPTY,{PRIMARY_MEMBERS}{SECONDARY_MEMBERS}{PROSPECTIVE_MEMBERS}}
-		<p class="nothing_here">{!NO_ENTRIES}</p>
-	{+END}
-
 	{+START,IF_NON_EMPTY,{ADD_URL}}
 		{+START,BOX,{!ADD_MEMBER_TO_GROUP},,light}
 			<form title="{!ADD_MEMBER_TO_GROUP}" onsubmit="if (checkFieldForBlankness(this.elements['username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{ADD_URL*}" method="post">
