@@ -94,7 +94,7 @@ class Module_awards
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'award','id'=>$myrow['id']),'_SELF');
 				$_title=get_translated_text($myrow['a_title']);
-				$description=get_translated_text($myrow['a_description']);
+				$description=get_translated_tempcode($myrow['a_description']);
 
 				$out->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'0974df260d7521edebf33f5397cab7f4','NAME'=>$_title,'URL'=>$url,'DESCRIPTION'=>$description,'TITLE'=>'')));
 			}

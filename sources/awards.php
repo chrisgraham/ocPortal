@@ -93,7 +93,13 @@ function give_award($award_id,$content_id,$time=NULL)
 		$category_id=mixed();
 		if (isset($info['category_field']))
 		{
-			$category_id=$content[$info['category_field']];
+			if (is_array($info['category_field']))
+			{
+				$category_id=$content[$info['category_field'][1]];
+			} else
+			{
+				$category_id=$content[$info['category_field']];
+			}
 		}
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'awards')) && (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$module)) && (($permission_type_code=='') || (is_null($category_id)) || (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),$permission_type_code,$category_id))))
 		{
