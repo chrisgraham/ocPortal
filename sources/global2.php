@@ -534,7 +534,10 @@ function init__global2()
 		require_code('firephp');
 	}
 
-	@ini_set('memory_limit','64M');
+	$default_memory_limit=get_value('memory_limit');
+	if ((is_null($default_memory_limit)) || ($default_memory_limit=='') || ($default_memory_limit=='0') || ($default_memory_limit=='-1'))
+		$default_memory_limit='64M';
+	@ini_set('memory_limit',$default_memory_limit);
 	if ((isset($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 	{
 		if (get_param_integer('keep_avoid_memory_limit',0)==1)
