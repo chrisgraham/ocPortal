@@ -236,11 +236,11 @@
 						{+END}{+END}{+END}
 						{+START,IF_PASSED,MORE_URL}
 							{+START,IF,{$JS_ON}}
-								<button tabindex="5" accesskey="y" onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; form.setAttribute('target','_top'); if (!form.old_action) form.old_action=form.getAttribute('action'); form.setAttribute('action','{MORE_URL*;}'); if ((typeof this.form.elements['post'].strip_on_focus!='undefined') &amp;&amp; (this.form.elements['post'].value==this.form.elements['post'].strip_on_focus)) this.form.elements['post'].value=''; form.submit();" class="button_pageitem" type="button">{!FULL_EDITOR}</button>
+								<button tabindex="5" accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL*;}');" class="button_pageitem" type="button">{!FULL_EDITOR}</button>
 								&nbsp;
 							{+END}
 						{+END}
-						<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; form.setAttribute('target','_top'); if (form.old_action) form.setAttribute('action',form.old_action); if (form.onsubmit.call(form,event)) { disable_button_just_clicked(document.getElementById('submit_button')); form.submit(); }" tabindex="4" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
+						<button onclick="handle_comments_posting_form_submit(this);" tabindex="4" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
 					</div>
 				</div>
 			</div>

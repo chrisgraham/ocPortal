@@ -2445,6 +2445,62 @@ function click_link(link)
 	}
 }
 
+function handle_comments_posting_form_submit(button)
+{
+	var form;
+	if (typeof button.form=='undefined')
+	{
+		form=window.form_submitting;
+	} else
+	{
+		form=button.form;
+	}
+
+	form.setAttribute('target','_top');
+	if (typeof form.old_action!='undefined') form.setAttribute('action',form.old_action);
+	if (form.onsubmit.call(form,event))
+	{
+		disable_button_just_clicked(document.getElementById('submit_button'));
+		form.submit();
+	}
+}
+
+function move_to_full_editor(button,more_url)
+{
+	var form;
+	if (typeof button.form=='undefined')
+	{
+		form=window.form_submitting;
+	} else
+	{
+		form=button.form;
+	}
+
+	// Tell next screen what the stub to trim is
+	if (form.elements['post'].default_substring_to_strip!='undefined')
+	{
+		if (more_url.indexOf('?')==-1)
+		{
+			more_url+='?';
+		} else
+		{
+			more_url+='&';
+		}
+		more_url+='stub='+window.encodeURIComponent(form.elements['post'].default_substring_to_strip);
+	}
+
+	// Reset form target
+	form.setAttribute('target','_top');
+	if (typeof form.old_action!='undefined') form.old_action=form.getAttribute('action');
+	form.setAttribute('action',more_url);
+
+	// Handle threaded strip-on-focus
+	if ((typeof form.elements['post'].strip_on_focus!='undefined') && (form.elements['post'].value==form.elements['post'].strip_on_focus))
+		form.elements['post'].value='';
+
+	form.submit();
+}
+
 function replace_comments_form_with_ajax(options,hash)
 {
 	var comments_form=document.getElementById('comments_form');

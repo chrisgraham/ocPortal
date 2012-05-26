@@ -2636,8 +2636,10 @@ END;
 	function _post_javascript()
 	{
 		$size=ocf_get_member_best_group_property(get_member(),'max_post_length_comcode');
-		
-		$javascript="
+
+		$javascript='';
+
+		$javascript.="
 			var form=document.getElementById('post').form;
 			form.old_submit=form.onsubmit;
 			form.onsubmit=function()
@@ -2649,19 +2651,21 @@ END;
 						window.fauxmodal_alert('".php_addslashes(do_lang('_POST_TOO_LONG'))."');
 						return false;
 					}
+		";
 
-					var df=post.defaultValue;
-					if (typeof form.elements['post_parsed']!='undefined')
-					{
-						df=form.elements['post_parsed'].value;
-					}
+		$stub=get_param('stub','',true);
+		if ($stub!='') $javascript.="
+					var df='".str_replace(chr(10),'\n',addslashes($stub))."';
+
 					var pv=post.value;
 					if ((post) && (pv.substring(0,df.length)==df))
 					{
 						pv=pv.substring(df.length,pv.length);
 					}
 					post.value=pv;
+		";
 
+		$javascript.="
 					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
 
 					return true;
