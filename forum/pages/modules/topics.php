@@ -371,7 +371,7 @@ class Module_topics
 	}
 
 	/**
-	 * The UI to move some posts.
+	 * The UI to move some posts to an existing topic.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -404,7 +404,7 @@ class Module_topics
 	}
 
 	/**
-	 * The UI to move some posts.
+	 * The UI to move some posts to a new topic.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -420,14 +420,14 @@ class Module_topics
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'],$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('MOVE_POSTS'));
-		$default_title=$topic_info[0]['t_cache_first_title'];
+		$default_title=do_lang('POSTS_SPLIT_FROM',$topic_info[0]['t_cache_first_title']);
 
 		require_code('ocf_forums2');
 
 		// Certain aspects relating to the posting system
 		$fields=new ocp_tempcode();
 		$hidden=$this->keep_markers();
-		$fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'),do_lang_tempcode('DESCRIPTION_POSTS_DESTINATION_FORUM'),'to_forum_id',NULL,'choose_forum',array(),true,NULL));
+		$fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'),do_lang_tempcode('DESCRIPTION_POSTS_DESTINATION_FORUM'),'to_forum_id',NULL,'choose_forum',array(),true,strval($topic_info[0]['t_forum_id'])));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('TOPIC_TITLE_WILL_BE'),'title',$default_title,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE_IF_EMPTY'),do_lang_tempcode('DESCRIPTION_DELETE_IF_EMPTY'),'delete_if_empty',true));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
