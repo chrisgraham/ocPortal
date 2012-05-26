@@ -739,6 +739,16 @@ function do_site()
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'messages_to_render WHERE r_session_id='.strval((integer)get_session_id()).' OR r_time<'.strval(time()-60*60));
 		}
 	}
+	if (in_safe_mode())
+	{
+		$disable_safe_mode_url=get_self_url(true,true,array('keep_safe_mode'=>NULL));
+		attach_message(do_lang_tempcode('CURRENTLY_HAS_KEEP_SAFE_MODE',escape_html($disable_safe_mode_url)),'inform');
+	}
+	if (get_param_integer('keep_fatalistic',0)==1)
+	{
+		$disable_fatalistic_url=get_self_url(true,true,array('keep_fatalistic'=>NULL));
+		attach_message(do_lang_tempcode('CURRENTLY_HAS_KEEP_FATALISTIC',escape_html($disable_fatalistic_url)),'inform');
+	}
 
 	$special_page_type=get_param('special_page_type','view');
 
