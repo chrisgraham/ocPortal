@@ -1085,11 +1085,23 @@ class ocp_tempcode
 
 		} else // Consider it a string
 		{
-			$myfunc='string_attach_'.uniqid('',true)/*fast_uniqid()*/;
-			$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
-			$this->code_to_preexecute.=$funcdef;
-			$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');
-			
+			$cnt=count($this->seq_parts);
+			if (($cnt!=0) && ($this->seq_parts[$cnt-1][2]==TC_KNOWN) && ($this->seq_parts[$cnt-1][1]==array()))
+			{
+				$myfunc=$this->seq_parts[count($this->seq_parts)-1][0];
+				$code=$this->code_to_preexecute;
+				$pos=strpos($code,"\$TPL_FUNCS['$myfunc']=\"echo ");
+				$pos2=strpos($code,"\";\n",$pos);
+				$code=substr($code,0,$pos2)."echo \\\"".php_addslashes_twice($attach)."\\\";".substr($code,$pos2);
+				$this->code_to_preexecute=$code;
+			} else
+			{
+				$myfunc='string_attach_'.uniqid('',true)/*fast_uniqid()*/;
+				$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
+				$this->code_to_preexecute.=$funcdef;
+				$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');
+			}
+
 			$this->last_attach='';
 		}
 		
