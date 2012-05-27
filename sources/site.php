@@ -197,7 +197,8 @@ function init__site()
 	global $SESSION_CONFIRMED;
 	get_member(); // Make sure we've loaded our backdoor if installed
 	require_code('permissions');
-	if (($ZONE['zone_name']!='') && (!is_httpauth_login()) && ((get_session_id()==-1) || (is_guest()) || ($SESSION_CONFIRMED==0)) && (!is_guest()) && ($ZONE['zone_require_session']==1) && (get_page_name()!='login'))
+	if ($ZONE['zone_require_session']==1) header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
+	if (($ZONE['zone_name']!='') && (!is_httpauth_login()) && ((get_session_id()==-1) || ($SESSION_CONFIRMED==0)) && ($ZONE['zone_require_session']==1) && (get_page_name()!='login'))
 	{
 		access_denied((($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))?'ZONE_ACCESS_SESSION':'ZONE_ACCESS',$ZONE['zone_name'],true);
 	}

@@ -35,6 +35,8 @@ function init__form_templates()
 	$NO_DEBUG_MODE_FULLSTOP_CHECK=false;
 	
 	require_code('input_filter');
+
+	header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
 }
 
 /**
