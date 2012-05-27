@@ -2035,7 +2035,7 @@ function check_master_password($password_given)
  */
 function produce_salt()
 {
-	if (function_exists('openssl_random_pseudo_bytes'))
+	if ((function_exists('openssl_random_pseudo_bytes')) && (strtoupper(substr(PHP_OS,0,3))!='WIN')/*Implementation on Windows is very slow*/)
 	{
 		$u=openssl_random_pseudo_bytes(13);
 	} else
