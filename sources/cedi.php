@@ -160,7 +160,7 @@ function cedi_edit_post($id,$message,$validated,$member=NULL)
 		send_content_validated_notification('cedi_post',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('seedy_posts',array('validated'=>$validated,'edit_date'=>time(),'the_message'=>update_lang_comcode_attachments($_message,$message,'cedi_post',strval($id),NULL,false,$original_poster)),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('seedy_posts',array('validated'=>$validated,'edit_date'=>time(),'the_message'=>update_lang_comcode_attachments($_message,$message,'cedi_post',strval($id),NULL,true,$original_poster)),array('id'=>$id),'',1);
 
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
 
