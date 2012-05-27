@@ -1662,7 +1662,7 @@ Section 3
 			given, then the embed-text becomes the caption, and 'param'
 			becomes a [/html][concept]page-link[/concept][html].</li>
 			<li>The other usage pattern is as described on the right.</li>
-			<ol>
+			</ol>
 		</td>
 		<td>
 			<p><em>param</em> &ndash; the zone the page is in</p><p><em>caption</em> &ndash; the link caption. Supports Comcode.</p>
@@ -1683,7 +1683,6 @@ Section 3
 		<li><samp>[page="site" type="misc" id="2" foo="bar" caption="Downloads"]downloads[/page]</samp></li>
 		</ol>
 		</td>
-	</tr>
 	</tr>
 	<tr>
 		<td>
