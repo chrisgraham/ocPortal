@@ -350,7 +350,7 @@ class Module_cms_iotds extends standard_aed_module
 		$current=post_param_integer('validated',0);
 		$title=post_param('title');
 
-		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('iotd','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('iotd','is_current',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
 				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds');
