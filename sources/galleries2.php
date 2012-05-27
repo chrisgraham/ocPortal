@@ -435,7 +435,7 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description)
 {
 	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','image',strval($id),$comments);
+	suggest_new_idmoniker_for('galleries','image',strval($id),($title=='')?$comments:$title);
 
 	$_comments=$GLOBALS['SITE_DB']->query_value('images','comments',array('id'=>$id));
 	$_title=$GLOBALS['SITE_DB']->query_value('images','title',array('id'=>$id));
@@ -708,7 +708,7 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description)
 {
 	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','video',strval($id),$comments);
+	suggest_new_idmoniker_for('galleries','video',strval($id),($title=='')?$comments:$title);
 
 	$_title=$GLOBALS['SITE_DB']->query_value('videos','title',array('id'=>$id));
 	$_comments=$GLOBALS['SITE_DB']->query_value('videos','comments',array('id'=>$id));
