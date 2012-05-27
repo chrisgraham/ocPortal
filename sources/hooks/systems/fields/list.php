@@ -37,7 +37,7 @@ class Hook_fields_list
 		$type='_LIST';
 		$special=new ocp_tempcode();
 		$special->attach(form_input_list_entry('',get_param('option_'.strval($row['id']),'')=='','---'));
-		$list=explode('|',$row['cf_default']);
+		$list=($row['cf_default']=='')?array():explode('|',$row['cf_default']);
 		$display=get_translated_text($row['cf_name']);
 		foreach ($list as $l)
 		{
@@ -110,7 +110,7 @@ class Hook_fields_list
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
 	{
 		$default=$field['cf_default'];
-		$list=explode('|',$default);
+		$list=($default=='')?array():explode('|',$default);
 		$_list=new ocp_tempcode();
 		if (($field['cf_required']==0) || ($actual_value=='') || (is_null($actual_value)))
 			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));

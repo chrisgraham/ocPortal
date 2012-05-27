@@ -37,7 +37,7 @@ class Hook_fields_multilist
 		$type='_LIST';
 		$special=new ocp_tempcode();
 		$special->attach(form_input_list_entry('',get_param('option_'.strval($row['id']),'')=='','---'));
-		$list=explode('|',$row['cf_default']);
+		$list=($row['cf_default']=='')?array():explode('|',$row['cf_default']);
 		$display=get_translated_text($row['cf_name']);
 		foreach ($list as $l)
 		{
@@ -117,7 +117,7 @@ class Hook_fields_multilist
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
 	{
 		$default=$field['cf_default'];
-		$list=explode('|',$default);
+		$list=($default=='')?array():explode('|',$default);
 		$_list=new ocp_tempcode();
 		$exploded=explode(chr(10),$actual_value);
 		if (($field['cf_required']==0) && (($actual_value=='') || (is_null($actual_value))))
@@ -144,7 +144,7 @@ class Hook_fields_multilist
 		$tmp_name='field_'.strval($id);
 		if (!isset($_POST[$tmp_name]))
 		{
-			return $editing?STRING_MAGIC_NULL:'';
+			return ($editing && (is_null(post_param('require__field_'.strval($field['id']),NULL))))?STRING_MAGIC_NULL:'';
 		}
 		return implode(chr(10),$_POST[$tmp_name]);
 	}

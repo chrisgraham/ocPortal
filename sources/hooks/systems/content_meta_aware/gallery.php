@@ -37,7 +37,7 @@ class Hook_content_meta_aware_gallery
 			'parent_category_field'=>'parent_id',
 			'parent_category_meta_aware_type'=>'gallery',
 			'title_field'=>'fullname',
-			'title_field_dereference'=>false,
+			'title_field_dereference'=>true,
 
 			'is_category'=>true,
 			'is_entry'=>false,
