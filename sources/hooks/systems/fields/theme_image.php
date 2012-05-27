@@ -29,12 +29,11 @@ class Hook_fields_theme_image
 	function get_field_types()
 	{
 		require_code('themes2');
-		$images=get_all_image_ids_type('',true);
+		$images=get_all_image_ids_type('',true,NULL,NULL,true);
 		$ret=array();
 		foreach ($images as $image)
 		{
-			if (strpos($image,'/')===false) continue;
-			$ret['th_'.dirname($image)]=do_lang_tempcode('FIELD_TYPE_theme_image_x',escape_html(dirname($image)));
+			$ret['th_'.$image]=do_lang_tempcode('FIELD_TYPE_theme_image_x',escape_html($image));
 		}
 		return $ret;
 	}

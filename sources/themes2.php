@@ -281,9 +281,10 @@ function find_images_do_dir($theme,$subdir,$langs)
  * @param  boolean		Whether to search recursively; i.e. in subdirectories of the type subdirectory
  * @param  ?object		The database connection to work over (NULL: site db)
  * @param  ?ID_TEXT		The theme to search in, in addition to the default theme (NULL: current theme)
+ * @param  boolean		Whether to only return directories (advanced option, rarely used)
  * @return array			The list of image IDs
  */
-function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL)
+function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_only=false)
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
 	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
@@ -297,43 +298,45 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL)
 
 	$ids=array();
 
-	if (($db->connection_write==$GLOBALS['SITE_DB']->connection_write) || (get_db_forums()==get_db_site()))
+	if (($db->connection_write==$GLOBALS['SITE_DB']->connection_write) || ($dirs_only) || (get_db_forums()==get_db_site()))
 	{
-		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.(($type=='')?'':($type.'/')),$type,$recurse);
-		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse);
+		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
+		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
 		if ($theme!='default')
 		{
-			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images/'.(($type=='')?'':($type.'/')),$type,$recurse);
-			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse);
+			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
+			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
 		}
-		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images_custom/'.(($type=='')?'':($type.'/')),$type,$recurse);
-		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images_custom/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse);
+		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images_custom/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
+		_get_all_image_ids_type($ids,get_file_base().'/themes/default/images_custom/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
 		if ($theme!='default')
 		{
-			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images_custom/'.(($type=='')?'':($type.'/')),$type,$recurse);
-			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images_custom/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse);
+			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images_custom/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
+			_get_all_image_ids_type($ids,get_custom_file_base().'/themes/'.$theme.'/images_custom/'.get_site_default_lang().'/'.(($type=='')?'':($type.'/')),$type,$recurse,$dirs_only);
 		}
 	}
 
-	$rows=$db->query('SELECT DISTINCT id,path FROM '.$db->get_table_prefix().'theme_images WHERE path NOT LIKE \''.db_encode_like('themes/default/images/%').'\' AND '.db_string_not_equal_to('path','themes/default/images/blank.gif').' AND ('.db_string_equal_to('theme',$theme).' OR '.db_string_equal_to('theme','default').') AND id LIKE \''.db_encode_like($type.'%').'\' ORDER BY path');
-	foreach ($rows as $row)
+	if (!$dirs_only)
 	{
-		if ($row['path']=='') continue;
-		
-		if ((url_is_local($row['path'])) && (!file_exists(((substr($row['path'],0,15)=='themes/default/')?get_file_base():get_custom_file_base()).'/'.rawurldecode($row['path'])))) continue;
-		if ($row['path']!='themes/default/images/blank.gif') // We sometimes associate to blank.gif to essentially delete images so they can never be found again
+		$rows=$db->query('SELECT DISTINCT id,path FROM '.$db->get_table_prefix().'theme_images WHERE path NOT LIKE \''.db_encode_like('themes/default/images/%').'\' AND '.db_string_not_equal_to('path','themes/default/images/blank.gif').' AND ('.db_string_equal_to('theme',$theme).' OR '.db_string_equal_to('theme','default').') AND id LIKE \''.db_encode_like($type.'%').'\' ORDER BY path');
+		foreach ($rows as $row)
 		{
-			$ids[]=$row['id'];
-		} else
-		{
-			$key=array_search($row['id'],$ids);
-			if (is_integer($key)) unset($ids[$key]);
+			if ($row['path']=='') continue;
+			
+			if ((url_is_local($row['path'])) && (!file_exists(((substr($row['path'],0,15)=='themes/default/')?get_file_base():get_custom_file_base()).'/'.rawurldecode($row['path'])))) continue;
+			if ($row['path']!='themes/default/images/blank.gif') // We sometimes associate to blank.gif to essentially delete images so they can never be found again
+			{
+				$ids[]=$row['id'];
+			} else
+			{
+				$key=array_search($row['id'],$ids);
+				if (is_integer($key)) unset($ids[$key]);
+			}
 		}
 	}
 	sort($ids);
 
-	$ids=array_unique($ids);
-	return $ids;
+	return array_unique($ids);
 }
 
 /**
@@ -343,8 +346,9 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL)
  * @param  ID_TEXT		The specific theme image subdirectory we are currently looking under
  * @param  ID_TEXT		The type of image (e.g. 'ocf_emoticons')
  * @param  boolean		Whether to search recursively; i.e. in subdirectories of the type subdirectory
+ * @param  boolean		Whether to only return directories (advanced option, rarely used)
  */
-function _get_all_image_ids_type(&$ids,$dir,$type,$recurse)
+function _get_all_image_ids_type(&$ids,$dir,$type,$recurse,$dirs_only=false)
 {
 	require_code('images');
 
@@ -357,13 +361,17 @@ function _get_all_image_ids_type(&$ids,$dir,$type,$recurse)
 			{
 				if (!is_dir($dir.'/'.$file))
 				{
-					$dot_pos=strrpos($file,'.');
-					if ($dot_pos===false) $dot_pos=strlen($file);
-					if (is_image($file)) $ids[]=$type.(($type!='')?'/':'').substr($file,0,$dot_pos);
+					if (!$dirs_only)
+					{
+						$dot_pos=strrpos($file,'.');
+						if ($dot_pos===false) $dot_pos=strlen($file);
+						if (is_image($file)) $ids[]=$type.(($type!='')?'/':'').substr($file,0,$dot_pos);
+					}
 				}
 				elseif (($recurse) && ((strlen($file)!=2) || (strtoupper($file)!=$file)))
 				{
-					$ids=array_merge($ids,get_all_image_ids_type($type.(($type!='')?'/':'').$file,true));
+					if ($dirs_only) $ids[]=$type.(($type!='')?'/':'').$file;
+					_get_all_image_ids_type($ids,$type.(($type!='')?'/':'').$file,true,$dirs_only);
 				}
 			}
 		}
