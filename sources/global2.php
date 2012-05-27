@@ -239,8 +239,6 @@ function init__global2()
 
 	// Try and make the PHP environment as we need it
 	if (function_exists('set_magic_quotes_runtime')) @set_magic_quotes_runtime(0); // @'d because it's deprecated and PHP 5.3 may give an error
-	srand(make_seed());
-	mt_srand(make_seed());
 
 	@ini_set('auto_detect_line_endings','0');
 	@ini_set('include_path','');
@@ -291,6 +289,8 @@ function init__global2()
 
 	// Most critical things
 	require_code('support'); // A lot of support code is present in this
+	srand(make_seed());
+	mt_srand(make_seed());
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for bots
 	{
 		if ((running_script('index')) && (count($_POST)==0))
@@ -1024,7 +1024,7 @@ function handle_has_checked_recently($id_code)
 function make_seed()
 {
 	list($usec,$sec)=explode(' ', microtime(false));
-	$u=uniqid('');
+	$u=produce_salt();
 	return intval(floatval($sec)*floatval($usec))+ord(substr($u,0,1))+(ord(substr($u,1,2))<<8);
 }
 

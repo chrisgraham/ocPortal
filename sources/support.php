@@ -2035,7 +2035,14 @@ function check_master_password($password_given)
  */
 function produce_salt()
 {
-	return uniqid('',true);
+	if (function_exists('openssl_random_pseudo_bytes'))
+	{
+		$u=openssl_random_pseudo_bytes(13);
+	} else
+	{
+		$u=uniqid('',true);
+	}
+	return $u;
 }
 
 /**
