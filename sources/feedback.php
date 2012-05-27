@@ -512,6 +512,12 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 			$content_type_title=do_lang($cma_info['content_type_label']);
 		}
 
+		// Special case. Would prefer not to hard-code, but important for usability
+		if (($content_type=='post') && ($content_title=='') && (get_forum_type()=='ocf'))
+		{
+			$content_title=do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$GLOBALS['FORUM_DB']->query_value('f_posts','p_topic_id',array('id'=>intval($content_id))))));
+		}
+
 		if ((!is_null($submitter)) && (!is_guest($submitter)))
 		{
 			// Give points
@@ -548,12 +554,6 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 		if (may_view_content_behind_feedback_code($GLOBALS['FORUM_DRIVER']->get_guest_id(),$content_type,$content_id))
 		{
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-
-			// Special case. Would prefer not to hard-code, but important for usability
-			if (($content_type=='post') && ($content_title=='') && (get_forum_type()=='ocf'))
-			{
-				$content_title=do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$GLOBALS['FORUM_DB']->query_value('f_posts','p_topic_id',array('id'=>intval($content_id))))));
-			}
 
 			$activity_type=((is_null($submitter)) || (is_guest($submitter)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES';
 			if ($content_title=='')
