@@ -2445,7 +2445,7 @@ function click_link(link)
 	}
 }
 
-function handle_comments_posting_form_submit(button)
+function handle_comments_posting_form_submit(button,event)
 {
 	var form;
 	if (typeof button.form=='undefined')
