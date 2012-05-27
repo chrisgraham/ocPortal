@@ -82,6 +82,7 @@ class Block_main_contact_us
 			$email_from=trim(post_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
 			if ($email_from!='')
 			{
+				require_code('mail');
 				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($email_from),NULL,'','',3,NULL,false,get_member());
 			}
 		} else
