@@ -81,7 +81,7 @@ class Module_forums
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
 		require_code('integrator');
-		return make_string_tempcode(reprocess_url($forums,$base_url));
+		return do_template('COMCODE_SURROUND',array('CLASS'=>'float_surrounder','CONTENT'=>protect_from_escaping(reprocess_url($forums,$base_url))));
 	}
 
 }

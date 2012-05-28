@@ -1433,7 +1433,7 @@ function get_param($name,$default=false,$no_security=false)
 			}
 
 			$bu=get_base_url();
-			if ((looks_like_url($a)) && (substr($a,0,strlen($bu))!=$bu)) // Don't allow external redirections
+			if ((looks_like_url($a)) && (substr($a,0,strlen($bu))!=$bu) && (substr($a,0,strlen(get_forum_base_url()))!=get_forum_base_url())) // Don't allow external redirections
 			{
 				$a=get_base_url();
 			}
