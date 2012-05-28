@@ -119,6 +119,16 @@ Make sure:
 Super administrator membership is determined by membership of the 'Administrator' usergroup (#1).
 Super moderator membership is determined by membership of the 'Global Moderator' usergroup (#2).
 
+For SMF cookies to work you must disable local cookies in the SMF configuration and set the cookie name correctly in ocPortal:
+[list="1"]
+[*]Disable "Enable local storage of cookies" option in SMF > Admin > Configuration > Server settings > Cookies and Sessions
+[*]The Cookie Name is configurable in the same place as above. Let's assume it is set as [tt]SMFCookieXXX[/tt]. We would need to have the cookie names configured as follows in ocPortal's [tt]info.php[/tt] file:
+[code]
+$SITE_INFO['user_cookie']='SMFCookieXXX:0';
+$SITE_INFO['pass_cookie']='SMFCookieXXX:1';
+[/code]
+[/list]
+
 [title="3"]vBulletin[/title]
 
 If you use vBulletin 3.5 or earlier put:

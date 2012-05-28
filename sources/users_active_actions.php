@@ -225,7 +225,7 @@ function delete_session($session)
  */
 function ocp_setcookie($name,$value,$session=false,$http_only=false)
 {
-	if (($GLOBALS['DEBUG_MODE']) && (!running_script('occle')) && (get_param_integer('keep_debug_has_cookies',0)==0)) return true;
+	if (($GLOBALS['DEBUG_MODE']) && (!running_script('occle')) && (get_forum_type()=='ocf') && (get_param_integer('keep_debug_has_cookies',0)==0)) return true;
 
 	$cookie_domain=get_cookie_domain();
 	$path=get_cookie_path();
