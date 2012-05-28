@@ -564,6 +564,15 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 {
 	require_code('site');
 
+	if (running_script('iframe'))
+	{
+		global $ATTACHED_MESSAGES;
+		$middle->handle_symbol_preprocessing();
+		$tpl=do_template('STYLED_HTML_WRAP',array('TITLE'=>is_null($GLOBALS['DISPLAYED_TITLE'])?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],'EXTRA_HEAD'=>$GLOBALS['EXTRA_HEAD'],'EXTRA_FOOT'=>$GLOBALS['EXTRA_FOOT'],'MESSAGE_TOP'=>$ATTACHED_MESSAGES,'FRAME'=>true,'TARGET'=>'_self','CONTENT'=>$middle));
+		$tpl->handle_symbol_preprocessing();
+		return $tpl;
+	}
+
 	global $DONE_HEADER;
 	
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
