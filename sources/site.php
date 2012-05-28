@@ -564,7 +564,7 @@ function do_header($skip_top=false)
 	{
 		if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description']!=''))
 		{
-			$description=$GLOBALS['META_DATA']['description'];
+			$description=strip_comcode($GLOBALS['META_DATA']['description']);
 		} else
 		{
 			$description=get_option('description');
