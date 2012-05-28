@@ -332,7 +332,20 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_member_avatar_url($member)
 	{
-		return $this->get_member_row_field($member,'avatar');
+		$ret=$this->get_member_row_field($member,'avatar');
+		if ($ret=='')
+		{
+			$attach_id=$this->connection->query_value_null_ok('attachments','id_attach',array('id_member'=>$member));
+			if (is_null($attach_id)) return '';
+			return get_forum_base_url().'/index.php?action=dlattach;attach='.strval($attach_id).';type=avatar';
+		}
+		if (url_is_local($ret))
+		{
+			static $base_url=NULL; //get_forum_base_url().'/avatars';
+			if (is_null($base_url)) $base_url=$this->connection->query_value_null_ok('settings','value',array('variable'=>'avatar_url'));
+			$ret=$base_url.'/'.$ret;
+		}
+		return $ret;
 	}
 
 	/**
