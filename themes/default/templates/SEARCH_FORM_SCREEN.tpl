@@ -48,7 +48,7 @@
 		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
-					<col style="width: 198px" />
+					<col style="width: 150px" />
 					<col style="width: 100%" />
 					<col style="width: 100px" />
 				</colgroup>

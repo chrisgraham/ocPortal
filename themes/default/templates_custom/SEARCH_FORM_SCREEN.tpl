@@ -49,7 +49,7 @@
 			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<colgroup>
-						<col width="197" />
+						<col width="150px" />
 						<col width="100%" />
 						<col width="100" />
 					</colgroup>
