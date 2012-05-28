@@ -693,10 +693,12 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 					$LANGS_REQUESTED=array();
 					$JAVASCRIPTS=array('javascript'=>1,'javascript_thumbnails'=>1);
 					$CSSS=array('no_cache'=>1,'global'=>1);
-					if ((isset($map['quick_cache'])) && ($map['quick_cache']=='1')) // Let this eat up some CPU in order to let it save RAM, because we know we will not do this often
+					if ((isset($map['quick_cache'])) && ($map['quick_cache']=='1')) // because we know we will not do this often we can allow this to work as a vector for doing highly complex activity
 					{
 						global $MEMORY_OVER_SPEED;
-						$MEMORY_OVER_SPEED=true;
+						$MEMORY_OVER_SPEED=true; // Let this eat up some CPU in order to let it save RAM,
+						disable_php_memory_limit();
+						if (function_exists('set_time_limit')) @set_time_limit(200);
 					}
 					$cache=$object->run($map);
 					$cache->handle_symbol_preprocessing();
