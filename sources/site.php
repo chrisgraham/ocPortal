@@ -11,7 +11,7 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
-/*EXTRA FUNCTIONS: memory_get_usage*/
+/*EXTRA FUNCTIONS: memory_get_usage|memory_get_peak_usage*/
 
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
@@ -828,7 +828,14 @@ function do_site()
 	$out->attach(do_header());
 	if ((function_exists('memory_get_usage')) && (get_param('special_page_type','')=='memory'))
 	{
-		$additional->attach(do_template('ADDITIONAL',array('_GUID'=>'d605c0d111742a8cd2d4ef270a1e5fe1','TYPE'=>'inform','MESSAGE'=>do_lang_tempcode('MEMORY_USAGE',float_format(round(floatval(memory_get_usage())/1024.0/1024.0,2))))));
+		if (function_exists('memory_get_peak_usage'))
+		{
+			$memory_usage=memory_get_peak_usage();
+		} else
+		{
+			$memory_usage=memory_get_usage();
+		}
+		$additional->attach(do_template('ADDITIONAL',array('_GUID'=>'d605c0d111742a8cd2d4ef270a1e5fe1','TYPE'=>'inform','MESSAGE'=>do_lang_tempcode('MEMORY_USAGE',float_format(round(floatval($memory_usage)/1024.0/1024.0,2))))));
 	}
 
 	// Whack it into our global template
