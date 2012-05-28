@@ -659,6 +659,7 @@ class Module_search
 	
 				$only_search_meta=get_param_integer('only_search_meta',0)==1;
 				$direction=get_param('direction','ASC');
+				if (function_exists('set_time_limit')) @set_time_limit(5); // Prevent errant search hooks (easily written!) taking down a server. Each call given 5 seconds (calling set_time_limit resets the timer).
 				$hook_results=$object->run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$max,$boolean_operator,$where_clause,$search_under,$boolean_search?1:0);
 				if (is_null($hook_results)) continue;
 				foreach ($hook_results as $i=>$result)
@@ -670,6 +671,8 @@ class Module_search
 				$results=sort_search_results($hook_results,$results,$direction);
 			}
 		}
+
+		if (function_exists('set_time_limit')) @set_time_limit(15);
 
 		global $EXTRA_HEAD;
 		$EXTRA_HEAD->attach('<meta name="robots" content="noindex,nofollow" />'); // XHTMLXHTML
