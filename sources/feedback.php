@@ -588,7 +588,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
  */
 function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no_comments=false,$forum=NULL,$post_warning=NULL,$_comments=NULL,$explicit_allow=false,$reverse=false,$highlight_by_user=NULL,$allow_reviews=false)
 {
-	if (((get_option('is_on_comments')=='1') && (get_forum_type()!='none') && (($allow_reviews) || ($allow_comments))) || ($explicit_allow))
+	if (((get_option('is_on_comments')=='1') && (get_forum_type()!='none') && ((get_forum_type()!='ocf') || (addon_installed('ocf_forum'))) && (($allow_reviews) || ($allow_comments))) || ($explicit_allow))
 	{
 		if (is_null($forum)) $forum=get_option('comments_forum_name');
 

@@ -83,6 +83,8 @@ class OCP_Topic
 	 */
 	function render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum_name,$post_warning,$preloaded_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews)
 	{
+		if ((get_forum_type()=='ocf') && (!addon_installed('ocf_forum'))) return new ocp_tempcode();
+
 		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum_name,$content_type.'_'.$content_id);
 
 		// Settings we need
@@ -224,6 +226,8 @@ class OCP_Topic
 	 */
 	function render_posts_from_topic($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum_name,$preloaded_comments,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id)
 	{
+		if ((get_forum_type()=='ocf') && (!addon_installed('ocf_forum'))) return new ocp_tempcode();
+
 		$max_thread_depth=get_param_integer('max_thread_depth',intval(get_option('max_thread_depth')));
 		$start=0;
 
@@ -353,6 +357,8 @@ class OCP_Topic
 	function render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_post_id=NULL,$maybe_missing_links=false)
 	{
 		require_code('feedback');
+
+		if ((get_forum_type()=='ocf') && (!addon_installed('ocf_forum'))) return array();
 
 		$posts=array();
 		$queue=$this->all_posts_ordered;
