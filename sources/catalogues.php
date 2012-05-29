@@ -109,8 +109,8 @@ function count_catalogue_category_children($category_id)
  * @param  ID_TEXT			The view type we're doing
  * @set    PAGE SEARCH CATEGORY
  * @param  ID_TEXT			The template set we are rendering this category using
- * @param  ?integer			The maximum number of entries to show on a single page of this this category (ignored if $select is not NULL) (NULL: all)
- * @param  ?integer			The entry number to start at (ignored if $select is not NULL) (NULL: all)
+ * @param  ?integer			The maximum number of entries to show on a single page of this this category (NULL: all)
+ * @param  ?integer			The entry number to start at (NULL: all)
  * @param  ?mixed				The entries to show, may be from other categories. Can either be SQL fragment, or array (NULL: use $start and $max)
  * @param  ?AUTO_LINK		The virtual root for display of this category (NULL: default)
  * @param  ?SHORT_INTEGER	The display type to use (NULL: lookup from $catalogue)
@@ -134,33 +134,27 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		$_catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		$catalogue=$_catalogues[0];
 	}
-	
-	if ((is_null($category_id)) && (is_null($entries)))
+
+	$or_list=mixed();
+	if ((is_null($entries)) && (!is_null($select)))
 	{
-		if (!is_null($select))
+		if (((is_array($select)) && (count($select)==0)) || ((is_string($select)) && ($select=='')))
 		{
-			if (((is_array($select)) && (count($select)==0)) || ((is_string($select)) && ($select=='')))
-			{
-				$entries=array();
-			} else
-			{
-				if (!is_array($select))
-				{
-					$or_list=$select;
-				} else
-				{
-					$or_list='';
-					foreach ($select as $s)
-					{
-						if ($or_list!='') $or_list.=' OR ';
-						$or_list.='id='.strval($s);
-					}
-				}
-				$entries=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'catalogue_entries WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND ce_validated=1 AND ('.$or_list.') ORDER BY ce_add_date DESC');
-			}
+			$entries=array();
 		} else
 		{
-			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			if (!is_array($select))
+			{
+				$or_list=$select;
+			} else
+			{
+				$or_list='';
+				foreach ($select as $s)
+				{
+					if ($or_list!='') $or_list.=' OR ';
+					$or_list.='e.id='.strval($s);
+				}
+			}
 		}
 	}
 
@@ -222,24 +216,25 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	}
 
 	// Get entries in this category
-	if ($select==='1=1') $select=NULL;
-	$map=array('cc_id'=>$category_id);
-	if (!has_specific_permission(get_member(),'see_unvalidated')) $map['ce_validated']=1;
-	$in_db_sorting=!is_null($order_by) && $do_sorting && is_null($select);
+	$map='1=1';
+	if (!is_null($category_id)) $map.=' AND cc_id='.strval($category_id);
+	if (!has_specific_permission(get_member(),'see_unvalidated')) $map.=' AND ce_validated=1';
+	if (!is_null($or_list)) $map.=' AND ('.$or_list.')';
+	$in_db_sorting=!is_null($order_by) && $do_sorting;
 	require_code('fields');
 	if (is_null($entries))
 	{
 		if ($in_db_sorting)
 		{
-			$num_entries=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',$map);
+			$num_entries=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries e WHERE '.$map);
 			if ($order_by=='add_date')
 			{
-				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query_select('catalogue_entries e',array('e.*'),$map,'ORDER BY ce_add_date '.$direction,$max,$start);
+				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query('SELECT e.* FROM '.get_table_prefix().'catalogue_entries e WHERE '.$map.' ORDER BY ce_add_date '.$direction,$max,$start);
 			}
 			elseif ($order_by=='rating')
 			{
-				$select_rating='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','catalogues').' AND rating_for_id=id) AS compound_rating';
-				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query_select('catalogue_entries e',array('e.*',$select_rating),$map,'ORDER BY compound_rating '.$direction,$max,$start);
+				$select_rating='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','catalogues').' AND rating_for_id=e.id) AS compound_rating';
+				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query('SELECT e.*,'.$select_rating.' FROM '.get_table_prefix().'catalogue_entries e  WHERE '.$map.' ORDER BY compound_rating '.$direction,$max,$start);
 			} else
 			{
 				$ob=get_fields_hook($fields[intval($order_by)]['cf_type']);
@@ -247,12 +242,12 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 				if (strpos($table,'_trans')!==false)
 				{
-					$join='catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']).' LEFT JOIN '.get_table_prefix().'translate t ON f.cv_value=t.id';
-					$entries=($max==0)?array():$GLOBALS['SITE_DB']->query_select($join,array('e.*'),$map,($num_entries>300)?'':'ORDER BY t.text_original '.$direction /* For large data sets too slow as after two MySQL joins it can't then use index for ordering */,$max,$start);
+					$join=get_table_prefix().'catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']).' LEFT JOIN '.get_table_prefix().'translate t ON f.cv_value=t.id';
+					$entries=($max==0)?array():$GLOBALS['SITE_DB']->query('SELECT e.* FROM '.$join.' WHERE '.$map.' '.(($num_entries>300)?'':'ORDER BY t.text_original '.$direction) /* For large data sets too slow as after two MySQL joins it can't then use index for ordering */,$max,$start);
 				} else
 				{
-					$join='catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']);
-					$entries=($max==0)?array():$GLOBALS['SITE_DB']->query_select($join,array('e.*'),$map,'ORDER BY f.cv_value '.$direction,$max,$start);
+					$join=get_table_prefix().'catalogue_entries e LEFT JOIN '.get_table_prefix().'catalogue_efv_'.$table.' f ON f.ce_id=e.id AND f.cf_id='.strval($fields[$order_by]['id']);
+					$entries=($max==0)?array():$GLOBALS['SITE_DB']->query('SELECT e.* FROM '.$join.' WHERE '.$map.' ORDER BY f.cv_value '.$direction,$max,$start);
 				}
 			}
 			$start=0; // To stop it skipping itself
@@ -260,12 +255,12 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		{
 			if ((is_null($order_by) || !$do_sorting) && (!is_null($max)))
 			{
-				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),$map,'',$max,$start);
-				$num_entries=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',$map);
+				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query('SELECT e.* FROM '.get_table_prefix().'catalogue_entries e WHERE '.$map,$max,$start);
+				$num_entries=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries e WHERE '.$map);
 				$start=0; // To stop it skipping itself
 			} else
 			{
-				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),$map);
+				$entries=($max==0)?array():$GLOBALS['SITE_DB']->query('SELECT e.* FROM '.get_table_prefix().'catalogue_entries e WHERE '.$map);
 				$num_entries=count($entries);
 			}
 		}
@@ -416,8 +411,8 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		for ($i=0;$i<$num_entries;$i++)
 		{
 			if (!array_key_exists($i,$entries)) break;
-			$entry=$entries[$i];			
-			if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || (is_array($select)) && (in_array($entry['id'],$select))))
+			$entry=$entries[$i];
+			if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)))
 			{
 				$tab_entry_map=$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array());
 				if ((get_option('is_on_comments')=='1') && ($entry['allow_comments']>=1) || (get_option('is_on_rating')=='1') && ($entry['allow_rating']==1) || (get_option('is_on_trackbacks')=='1') && ($entry['allow_trackbacks']==1))
@@ -469,7 +464,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 			$entry=$entries[$i];
 
-			if ((is_null($max)) || ($in_db_sorting) || ((is_null($start)) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
+			if ((is_null($max)) || ($in_db_sorting) || ((is_null($start)) || ($i>=$start) && ($i<$start+$max)))
 				$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED'));
 		}
 	}
@@ -481,7 +476,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 
 			$entry=$entries[$i];
 
-			if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
+			if (((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)))
 				$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_LINE',$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_LINE'));
 		}
 		if (!$entry_buildup->is_empty()) $entry_buildup=do_template('CATALOGUE_'.$tpl_set.'_LINE_WRAP',$entry['map']+array('CATALOGUE'=>$catalogue_name,'CONTENT'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_LINE_WRAP');
