@@ -525,7 +525,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 
 
 	$catalogue_name=$catalogue['c_name'];
-	$fields=get_catalogue_entry_field_values($catalogue_name,$entry,$only_fields,$fields);
+	$fields=get_catalogue_entry_field_values($catalogue_name,$entry,$only_fields,$fields,false,$view_type);
 	$map=array();
 	$map['FIELDS']=new ocp_tempcode();
 	$map['FIELDS_TABLE']=new ocp_tempcode();
@@ -727,9 +727,11 @@ function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_subm
  * @param  ?array			A list of fields that we are limiting ourselves to (NULL: get ALL fields)
  * @param  ?array			The database rows for the fields for this catalogue (NULL: find them)
  * @param  boolean		Whether to order the fields in their natural database order
+ * @param  ID_TEXT		The view type we're doing
+ * @set    PAGE SEARCH CATEGORY
  * @return array			A list of maps (each field for the entry gets a map), where each map contains 'effective_value' (the value for the field). Some maps get additional fields (effective_value_nontrans, effective_value_pure), depending on the field type
  */
-function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields=NULL,$fields=NULL,$natural_order=false)
+function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields=NULL,$fields=NULL,$natural_order=false,$view_type='PAGE')
 {
 	global $CAT_FIELDS_CACHE;
 
@@ -749,6 +751,26 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 
 	require_code('fields');
 
+	// Work out an ID filter for what fields to show
+	$only_field_ids=mixed();
+	if (get_value('catalogue_limit_cat_field_load__'.$catalogue_name)==='1')
+	{
+		$only_field_ids=array();
+		foreach ($fields as $i=>$field)
+		{
+			$field_id=$field['id'];
+	
+			if ((!is_null($only_fields)) && (!in_array($i,$only_fields))) continue;
+			if ($field['cf_defines_order']==0)
+			{
+				if (($view_type=='CATEGORY') && ($field['cf_put_in_category']==0)) continue;
+				if (($view_type=='SEARCH') && ($field['cf_put_in_search']==0)) continue;
+			}
+	
+			$only_field_ids[]=$field_id;
+		}
+	}
+
 	foreach ($fields as $i=>$field)
 	{
 		$field_id=$field['id'];
@@ -762,7 +784,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 		switch ($raw_type)
 		{
 			case 'short_trans':
-				$fields[$i]['effective_value_nontrans']=_get_catalogue_entry_field($field_id,$entry_id,'short_trans');
+				$fields[$i]['effective_value_nontrans']=_get_catalogue_entry_field($field_id,$entry_id,'short_trans',$only_field_ids);
 				if (is_null($fields[$i]['effective_value_nontrans']))
 				{
 					$fields[$i]['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
@@ -773,7 +795,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				$fields[$i]['effective_value_pure']=get_translated_text($fields[$i]['effective_value_nontrans']);
 				break;
 			case 'long_trans':
-				$fields[$i]['effective_value_nontrans']=_get_catalogue_entry_field($field_id,$entry_id,'long_trans');
+				$fields[$i]['effective_value_nontrans']=_get_catalogue_entry_field($field_id,$entry_id,'long_trans',$only_field_ids);
 				if (is_null($fields[$i]['effective_value_nontrans']))
 				{
 					$fields[$i]['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
@@ -784,7 +806,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				$fields[$i]['effective_value_pure']=get_translated_text($fields[$i]['effective_value_nontrans']);
 				break;
 			case 'long_text':
-				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,'long');
+				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,'long',$only_field_ids);
 				$fields[$i]['effective_value']=$fields[$i]['effective_value_pure'];
 				if (is_null($fields[$i]['effective_value']))
 				{
@@ -794,7 +816,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				}
 				break;
 			case 'short_text':
-				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id);
+				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,$only_field_ids);
 				$fields[$i]['effective_value']=$fields[$i]['effective_value_pure'];
 				if (is_null($fields[$i]['effective_value']))
 				{
@@ -804,7 +826,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				}
 				break;
 			case 'long_unescaped':
-				$fields[$i]['effective_value']=_get_catalogue_entry_field($field_id,$entry_id,'long');
+				$fields[$i]['effective_value']=_get_catalogue_entry_field($field_id,$entry_id,'long',$only_field_ids);
 				if (is_null($fields[$i]['effective_value']))
 				{
 					$fields[$i]['effective_value']=do_lang_tempcode('NA_EM');
@@ -815,7 +837,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 			case 'short_unescaped':
 			case 'float_unescaped':
 			case 'integer_unescaped':
-				$fields[$i]['effective_value']=_get_catalogue_entry_field($field_id,$entry_id,$type);
+				$fields[$i]['effective_value']=_get_catalogue_entry_field($field_id,$entry_id,$type,$only_field_ids);
 				if (is_null($fields[$i]['effective_value']))
 				{
 					$fields[$i]['effective_value']=do_lang_tempcode('NA_EM');
@@ -838,9 +860,10 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
  * @param  mixed			The ID of the entry we are getting for OR the row
  * @param  ID_TEXT		The type of field
  * @set    short long
+ * @param  ?array			A list of field IDs that we are limiting ourselves to (NULL: get ALL fields)
  * @return string			The value
  */
-function _get_catalogue_entry_field($field_id,$entry_id,$type='short')
+function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_field_ids=NULL)
 {
 	if (is_array($entry_id)) $entry_id=$entry_id['id'];
 
@@ -849,8 +872,9 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short')
 	{
 		// Pre-caching of whole entry
 		static $catalogue_entry_cache=array();
-		if (!isset($catalogue_entry_cache[$entry_id]))
+		if (!isset($catalogue_entry_cache[$entry_id][$field_id]))
 		{
+			if (!isset($catalogue_entry_cache[$entry_id])) $catalogue_entry_cache[$entry_id]=array();
 			$query='';
 			foreach (array('catalogue_efv_float','catalogue_efv_integer','catalogue_efv_long','catalogue_efv_long_trans','catalogue_efv_short','catalogue_efv_short_trans',) as $table)
 			{
@@ -869,8 +893,23 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short')
 					$query.=' JOIN '.get_table_prefix().'translate t ON t.id=v.cv_value';
 				}
 				$query.=' WHERE v.ce_id='.strval($entry_id);
+				if (!is_null($only_field_ids))
+				{
+					$query.=' AND (';
+					if ($only_field_ids!=array())
+					{
+						foreach ($only_field_ids as $i=>$_field_id)
+						{
+							if ($i!=0) $query.=' OR ';
+							$query.='f.id='.strval($_field_id);
+						}
+					} else
+					{
+						$query.='1=0';
+					}
+					$query.=')';
+				}
 			}
-			$catalogue_entry_cache[$entry_id]=array();
 			foreach ($GLOBALS['SITE_DB']->query($query,NULL,NULL,false,true) as $line)
 			{
 				$catalogue_entry_cache[$entry_id][$line['id']]=$line['cv_value'];
