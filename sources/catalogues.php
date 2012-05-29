@@ -843,7 +843,51 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 function _get_catalogue_entry_field($field_id,$entry_id,$type='short')
 {
 	if (is_array($entry_id)) $entry_id=$entry_id['id'];
-	$value=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$type,'cv_value',array('cf_id'=>$field_id,'ce_id'=>$entry_id));
+
+	global $SITE_INFO;
+	if (((!isset($SITE_INFO['mysql_old'])) || ($SITE_INFO['mysql_old']=='0')) && ((!isset($SITE_INFO['mysql_old'])) || (!is_file(get_file_base().'/mysql_old'))))
+	{
+		// Pre-caching of whole entry
+		static $catalogue_entry_cache=array();
+		if (!isset($catalogue_entry_cache[$entry_id]))
+		{
+			$query='';
+			foreach (array('catalogue_efv_float','catalogue_efv_integer','catalogue_efv_long','catalogue_efv_long_trans','catalogue_efv_short','catalogue_efv_short_trans',) as $table)
+			{
+				if ($query!='') $query.=' UNION ';
+				$query.='SELECT f.id,v.cv_value,';
+				if (strpos($table,'_trans')!==false)
+				{
+					$query.='t.text_original,t.text_parsed';
+				} else
+				{
+					$query.='NULL AS text_original,NULL AS text_parsed';
+				}
+				$query.=' FROM '.get_table_prefix().'catalogue_fields f JOIN '.get_table_prefix().$table.' v ON v.cf_id=f.id';
+				if (strpos($table,'_trans')!==false)
+				{
+					$query.=' JOIN '.get_table_prefix().'translate t ON t.id=v.cv_value';
+				}
+				$query.=' WHERE v.ce_id='.strval($entry_id);
+			}
+			$catalogue_entry_cache[$entry_id]=array();
+			foreach ($GLOBALS['SITE_DB']->query($query,NULL,NULL,false,true) as $line)
+			{
+				$catalogue_entry_cache[$entry_id][$line['id']]=$line['cv_value'];
+				if (isset($line['text_original']))
+				{
+					$GLOBALS['SITE_DB']->text_lookup_original_cache[$line['cv_value']]=$line['text_original'];
+					$GLOBALS['SITE_DB']->text_lookup_cache[$line['cv_value']]=$line['text_parsed'];
+				}
+			}
+		}
+
+		$value=isset($catalogue_entry_cache[$entry_id][$field_id])?$catalogue_entry_cache[$entry_id][$field_id]:NULL;
+	} else
+	{
+		$value=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$type,'cv_value',array('cf_id'=>$field_id,'ce_id'=>$entry_id));
+	}
+
 	if (is_integer($value)) $value=strval($value);
 	if (is_float($value)) $value=float_to_raw_string($value);
 	return $value;
