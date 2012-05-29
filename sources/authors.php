@@ -44,6 +44,8 @@ function authors_script()
 	}
 
 	$rows=array_unique($rows);
+
+	$field_name=get_param('field_name');
 	
 	$content=new ocp_tempcode();
 	$i=0;
@@ -53,10 +55,10 @@ function authors_script()
 		{
 			if ($table=='authors')
 			{
-				$content->attach(do_template('AUTHOR_POPUP_WINDOW_DEFINED',array('_GUID'=>'cffa9926cebd3ec2920677266a3299ea','AUTHOR'=>$author)));
+				$content->attach(do_template('AUTHOR_POPUP_WINDOW_DEFINED',array('_GUID'=>'cffa9926cebd3ec2920677266a3299ea','FIELD_NAME'=>$field_name,'AUTHOR'=>$author)));
 			} else
 			{
-				$content->attach(do_template('AUTHOR_POPUP_WINDOW_UNDEFINED',array('_GUID'=>'6210be6d1eef4bc2bda7f49947301f97','AUTHOR'=>$author)));
+				$content->attach(do_template('AUTHOR_POPUP_WINDOW_UNDEFINED',array('_GUID'=>'6210be6d1eef4bc2bda7f49947301f97','FIELD_NAME'=>$field_name,'AUTHOR'=>$author)));
 			}
 		}
 		
@@ -67,7 +69,7 @@ function authors_script()
 	if ($i>=$start+$max)
 	{
 		$keep=symbol_tempcode('KEEP');
-		$next_link=find_script('authors').'?start='.strval($start+$max).'&max='.strval($max).$keep->evaluate();
+		$next_link=find_script('authors').'?field_name='.urlencode($field_name).'&start='.strval($start+$max).'&max='.strval($max).$keep->evaluate();
 	} else
 	{
 		$next_link=NULL;

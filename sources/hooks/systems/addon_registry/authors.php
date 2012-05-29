@@ -208,9 +208,11 @@ class Hook_addon_registry_authors
 		$out=new ocp_tempcode();
 		$out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_DEFINED',array(
 			'AUTHOR'=>lorem_phrase(),
+			'FIELD_NAME'=>lorem_word(),
 				)));
 		$out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_UNDEFINED',array(
 			'AUTHOR'=>lorem_phrase(),
+			'FIELD_NAME'=>lorem_word(),
 				)));
 
 		return array(

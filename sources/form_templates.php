@@ -396,8 +396,8 @@ function form_input_author($pretty_name,$description,$name,$default,$required,$t
 	if (has_js())
 	{
 		$_description->attach(do_template('FORM_DESCRIP_SEP'));
-		$keep=symbol_tempcode('KEEP',array('1'));
-		$extra=do_template('HYPERLINK_POPUP_WINDOW',array('_GUID'=>'fb25dc4777a166c143a1bc32ff0c3239','URL'=>find_script('authors').$keep->evaluate(),'TITLE'=>do_lang_tempcode('AUTHOR'),'CAPTION'=>do_lang_tempcode('BROWSE_SENTENCE')));
+		$keep=symbol_tempcode('KEEP');
+		$extra=do_template('HYPERLINK_POPUP_WINDOW',array('_GUID'=>'fb25dc4777a166c143a1bc32ff0c3239','URL'=>find_script('authors').'?field_name='.urlencode($name).$keep->evaluate(),'TITLE'=>do_lang_tempcode('AUTHOR'),'CAPTION'=>do_lang_tempcode('BROWSE_SENTENCE')));
 		$_description->attach($extra);
 	}
 
