@@ -12,7 +12,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 </head>
 
 {$,You can use main_website_inner to help you create fixed width designs; never put fixed-width stuff directly on ".website_body" or "body" because it will affects things like the preview or banner frames or popups/overlays}
-<body class="website_body" id="main_website" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<body class="website_body zone_running_{$ZONE*} page_running_{$PAGE*}" id="main_website" itemscope="itemscope" itemtype="http://schema.org/WebPage">
 	<div id="main_website_inner">
 		{$,This is the main site header; if you like your layout in one place you can move it to GLOBAL.tpl}
 		{+START,IF,{$SHOW_HEADER}}
@@ -59,7 +59,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 		{$,Make sure the system knows we have not rendered our primary title for this output yet}
 		{$SET,done_first_title,0}
-		
+
 		{+START,IF,{$NOT,{$MOBILE}}}
 			{$,By default the top panel contains the admin menu, community menu, member bar, etc}
 			{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,top}}}
@@ -67,22 +67,22 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					{$LOAD_PANEL,top}
 				</div>
 			{+END}
-		
+
 			{$,ocPortal may show little messages for you as it runs relating to what you are doing or the state the site is in}
 			{+START,IF_NON_EMPTY,{$MESSAGES_TOP}}
 				<div class="global_messages">
 					{$MESSAGES_TOP}
 				</div>
 			{+END}
-		
+
 			{$,The main panels and content; float_surrounder contains the layout into a rendering box so that the footer etc can sit underneath}
-			<div class="float_surrounder">
+			<div class="global_middle_outer float_surrounder">
 				{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,left}}}
 					<div id="panel_left" class="global_side_panel" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
 						{$LOAD_PANEL,left}
 					</div>
 				{+END}
-		
+
 				{$,Deciding whether/how to show the right panel requires some complex logic}
 				{$SET,HELPER_PANEL_TUTORIAL,{$?,{$HAS_PRIVILEGE,see_software_docs},{$HELPER_PANEL_TUTORIAL}}}
 				{$SET,helper_panel,{$OR,{$IS_NON_EMPTY,{$GET,HELPER_PANEL_TUTORIAL}},{$IS_NON_EMPTY,{$HELPER_PANEL_PIC}},{$IS_NON_EMPTY,{$HELPER_PANEL_HTML}},{$IS_NON_EMPTY,{$HELPER_PANEL_TEXT}}}}
@@ -97,8 +97,8 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 						{+END}
 					</div>
 				{+END}
-		
-				<article id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle">
+
+				<article class="global_middle">
 					{$,Breadcrumbs}
 					{+START,IF_NON_EMPTY,{$BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}{+START,IF,{$SHOW_HEADER}}
 						<nav class="global_breadcrumbs breadcrumbs" itemprop="breadcrumb" role="navigation">
@@ -106,36 +106,39 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 							{$BREADCRUMBS}
 						</nav>
 					{+END}{+END}{+END}
-		
+
 					{$,Associated with the SKIP_NAVIGATION link defined further up}
 					<a id="maincontent"></a>
 		
 					{$,The main site, whatever 'page' is being loaded}
 					{MIDDLE}
 				</article>
-		
-				{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,bottom}}}
-					<div id="panel_bottom" role="complementary">
-						{$LOAD_PANEL,bottom}
-					</div>
-				{+END}
 			</div>
-		
+
+			{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,bottom}}}
+				<div id="panel_bottom" role="complementary">
+					{$LOAD_PANEL,bottom}
+				</div>
+			{+END}
+
 			{+START,IF_NON_EMPTY,{$MESSAGES_BOTTOM}}
 				<div class="global_messages">
 					{$MESSAGES_BOTTOM}
 				</div>
 			{+END}
 		{+END}
-		
+
 		{+START,IF,{$MOBILE}}
 			{+START,INCLUDE,GLOBAL_HTML_WRAP_mobile}{+END}
 		{+END}
-		
+
 		{+START,IF,{$EQ,{$CONFIG_OPTION,sitewide_im},1}}{$CHAT_IM}{+END}
 
+		{$,Late messages happen if something went wrong during outputting everything (i.e. too late in the process to show the error in the normal place)}
 		{+START,IF_NON_EMPTY,{$LATE_MESSAGES}}
-			{$LATE_MESSAGES}
+			<div class="global_messages">
+				{$LATE_MESSAGES}
+			</div>
 
 			{+START,IF,{$DEV_MODE}}
 				<script type="text/javascript">// <![CDATA[
