@@ -91,7 +91,7 @@ function load_occle()
 							setOpacity(bi,0.3);
 						}
 					}
-			
+
 					document.getElementById("occle_command").focus();
 				}
 				else // Hiding OcCLE

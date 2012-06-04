@@ -38,7 +38,7 @@ class Block_main_poll
 		$info['parameters']=array('param','zone');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -63,7 +63,7 @@ class Block_main_poll
 
 		return do_template('BLOCK_MAIN_POLL_IFRAME',array('RAND'=>strval(mt_rand(0,100000)),'PARAM'=>strval($param),'ZONE'=>$zone));
 	}
-	
+
 }
 
 

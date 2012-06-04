@@ -38,7 +38,7 @@ class Block_main_top_downloads
 		$info['parameters']=array('param','zone','show_dload_trees','filter','title');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_top_downloads
 		$info['ttl']=60*24;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -68,7 +68,7 @@ class Block_main_top_downloads
 		$number=array_key_exists('param',$map)?intval($map['param']):10;
 		$filter=array_key_exists('filter',$map)?$map['filter']:'*';
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('downloads');
-	
+
 		$sql_filter=ocfilter_to_sqlfragment($filter,'p.category_id','download_categories','parent_id','p.category_id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'download_downloads p WHERE validated=1 AND ('.$sql_filter.') ORDER BY num_downloads DESC',$number);
 

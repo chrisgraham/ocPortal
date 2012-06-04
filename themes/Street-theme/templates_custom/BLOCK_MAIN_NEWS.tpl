@@ -1,9 +1,9 @@
 {+START,BOX,{TITLE}}
 	{CONTENT}
-		
+
 	{+START,IF_NON_EMPTY,{BRIEF}}
 		<h2>{$?,{BLOG},{!BLOG_OLDER_NEWS},{!OLDER_NEWS}}</h2>
-	
+
 		{BRIEF}
 	{+END}
 {+END}

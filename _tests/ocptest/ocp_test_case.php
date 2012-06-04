@@ -31,22 +31,22 @@ function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false
 		{
 			return true;
 		}
-		
+
 		// Wrong zones
 		if ((file_exists($ocPortal_path.$dir.$file.'/index.php')) && (file_exists($ocPortal_path.$dir.$file.'/pages')) && (!in_array($file,array('adminzone','collaboration','cms','forum','site','personalzone'))))
 		{
 			return true;
 		}
-		
+
 		// Wrong data_custom files
 		if (($dir=='data_custom/') && ($file!='fonts') && ($file!='modules') && ($file!='sifr') && ($file!='spelling')) return true;
-		
+
 		// Wrong sources_custom files
 		if (($dir=='sources_custom/') && ($file!='blocks') && ($file!='database') && ($file!='hooks') && ($file!='miniblocks')) return true;
 		if ($dir=='sources_custom/hooks/blocks/') return true;
 		if ($dir=='sources_custom/hooks/modules/') return true;
 		if ($dir=='sources_custom/hooks/systems/') return true;
-		
+
 		// Wrong images_custom files
 		if ($dir=='themes/default/images_custom/') return true;
 	}
@@ -104,7 +104,7 @@ function must_skip($is_dir,$file,$dir,$upgrading=false,$allow_other_addons=false
 class ocp_test_case extends WebTestCase
 {
 	var $site_closed;
-	
+
 	function setUp()
 	{
 		// Make sure the site is open
@@ -112,12 +112,12 @@ class ocp_test_case extends WebTestCase
 		require_code('config2');
 		set_option('site_closed','0');
 	}
-	
+
 	function tearDown()
 	{
 		set_option('site_closed',$this->site_closed);
 	}
-	
+
 	function get($url,$parameters=NULL)
 	{
 		$parts=array();

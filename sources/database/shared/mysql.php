@@ -40,7 +40,7 @@ class Database_super_mysql
 	{
 		return 'root';
 	}
-	
+
 	/**
 	 * Get the default password for making db connections (used by the installer as a default).
 	 *
@@ -50,7 +50,7 @@ class Database_super_mysql
 	{
 		return '';
 	}
-	
+
 	/**
 	 * Create a table index.
 	 *
@@ -69,7 +69,7 @@ class Database_super_mysql
 		} else $type='INDEX';
 		$this->db_query('ALTER TABLE '.$table_name.' ADD '.$type.' '.$index_name.' ('.$_fields.')',$db);
 	}
-	
+
 	/**
 	 * Change the primary key of a table.
 	 *
@@ -82,7 +82,7 @@ class Database_super_mysql
 		$this->db_query('ALTER TABLE '.$table_name.' DROP PRIMARY KEY',$db);
 		$this->db_query('ALTER TABLE '.$table_name.' ADD PRIMARY KEY ('.implode(',',$new_key).')',$db);
 	}
-	
+
 	/**
 	 * Assemble part of a WHERE clause for doing full-text search
 	 *
@@ -101,10 +101,10 @@ class Database_super_mysql
 			}
 			return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\')';
 		}
-	
+
 		return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\' IN BOOLEAN MODE)';
 	}
-	
+
 	/**
 	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
 	 *
@@ -146,7 +146,7 @@ class Database_super_mysql
 		);
 		return $type_remap;
 	}
-	
+
 	/**
 	 * Whether to use InnoDB for mySQL. Change this function by hand - official only MyISAM supported
 	 *
@@ -156,7 +156,7 @@ class Database_super_mysql
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Create a new table.
 	 *
@@ -190,9 +190,9 @@ class Database_super_mysql
 				$type=substr($type,1);
 				$perhaps_null='NULL';
 			} else $perhaps_null='NOT NULL';
-	
+
 			$type=$type_remap[$type];
-	
+
 			$_fields.='	  '.$name.' '.$type.' '.$perhaps_null.','.chr(10);
 		}
 
@@ -218,7 +218,7 @@ class Database_super_mysql
 		$query.=' '.$type_key.'='.$table_type.';';
 		$this->db_query($query,$db,NULL,NULL);
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
 	 *
@@ -230,7 +230,7 @@ class Database_super_mysql
 	{
 		return $attribute."='".db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
 	 *
@@ -242,7 +242,7 @@ class Database_super_mysql
 	{
 		return $attribute."<>'".db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * Find whether expression ordering support is present
 	 *
@@ -263,7 +263,7 @@ class Database_super_mysql
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Delete a table.
 	 *
@@ -274,7 +274,7 @@ class Database_super_mysql
 	{
 		$this->db_query('DROP TABLE IF EXISTS '.$table,$db);
 	}
-	
+
 	/**
 	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
 	 *
@@ -284,7 +284,7 @@ class Database_super_mysql
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
 	 *
@@ -296,7 +296,7 @@ class Database_super_mysql
 		$ret=preg_replace('#([^\\\\])\\\\\\\\_#','${1}\_',$this->db_escape_string($pattern));
 		return $ret;
 	}
-	
+
 	/**
 	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
 	 */

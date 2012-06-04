@@ -30,10 +30,10 @@ function init__form_templates()
 
 	global $TABINDEX;
 	$TABINDEX=50; // Base
-	
+
 	global $NO_DEBUG_MODE_FULLSTOP_CHECK;
 	$NO_DEBUG_MODE_FULLSTOP_CHECK=false;
-	
+
 	require_code('input_filter');
 
 	header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
@@ -381,7 +381,7 @@ function form_input_username($pretty_name,$description,$name,$default,$required,
 function form_input_author($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
 {
 	if (!addon_installed('authors')) return form_input_username($pretty_name,$description,$name,$default,$required,true,$tabindex);
-	
+
 	if (is_null($default)) $default='';
 
 	$default=filter_form_field_default($name,$default);
@@ -541,7 +541,7 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
 	if (substr($name,-1)!='_' && substr($name,-2)!='[]') $name.='_';
 
 	$tabindex=get_form_field_tabindex($tabindex);
-	
+
 	$default_array[0]=filter_form_field_default($name,array_key_exists(0,$default_array)?$default_array[0]:'');
 
 	$input=new ocp_tempcode();
@@ -578,7 +578,7 @@ function form_input_text_multi($pretty_name,$description,$name,$default_array,$n
 	if (substr($name,-1)!='_') $name.='_';
 
 	$tabindex=get_form_field_tabindex($tabindex);
-	
+
 	$default_array[0]=filter_form_field_default($name,array_key_exists(0,$default_array)?$default_array[0]:'');
 
 	$input=new ocp_tempcode();
@@ -880,7 +880,7 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
 		foreach ($_option[0] as $option)
 		{
 			list($pretty_name,$name,$value,$_description)=$option;
-	
+
 			$value=(filter_form_field_default($name,$value?'1':'0')=='1');
 
 			$out[]=array('CHECKED'=>$value,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$_description);
@@ -912,7 +912,7 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
 		require_javascript('javascript_swfupload');
 		require_css('swfupload');
 	}
-	
+
 	if ($default==='') $default=NULL;
 
 	$tabindex=get_form_field_tabindex($tabindex);
@@ -1226,7 +1226,7 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 			$cut_pos=($cut_pos===false)?($avatars?strlen($cat):0):($cut_pos+1);
 			$cat=ucwords(substr($cat,$cut_pos)); // Make the category name a bit nicer
 		}
-		
+
 		if ((!$avatars) && ($cat=='')) $cat=do_lang('GENERAL');
 
 		$cells=new ocp_tempcode();
@@ -1570,7 +1570,7 @@ function form_input_float($pretty_name,$description,$name,$default,$required,$ta
 function _form_input($name,$pretty_name,$description,$input,$required,$comcode=false,$tabindex=NULL,$w=false,$skip_label=false,$description_side='')
 {
 	unset($tabindex); // Not currently used
-	
+
 	if (($GLOBALS['DEBUG_MODE']) && (user_lang()==fallback_lang()))
 	{
 		$_description=trim(strip_tags(is_object($description)?$description->evaluate():$description));

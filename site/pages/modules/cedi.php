@@ -41,7 +41,7 @@ class Module_cedi
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -59,7 +59,7 @@ class Module_cedi
 		delete_value('num_seedy_pages');
 		delete_value('num_seedy_posts');
 		delete_value('num_seedy_files');
-		
+
 		delete_attachments('seedy_page');
 		delete_attachments('cedi_page');
 
@@ -89,7 +89,7 @@ class Module_cedi
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
 		require_lang('cedi');
-		
+
 		if (($upgrade_from<4) && (!is_null($upgrade_from)))
 		{
 			delete_specific_permission('seedy_edit');
@@ -157,9 +157,9 @@ class Module_cedi
 				'the_order'=>'INTEGER',
 				'title'=>'SHORT_TEXT'
 			));
-	
+
 			//$GLOBALS['SITE_DB']->create_index('seedy_children','child_find',array('parent_id'));
-	
+
 			$GLOBALS['SITE_DB']->create_table('seedy_pages',array(
 				'id'=>'*AUTO',
 				'title'=>'SHORT_TRANS',
@@ -362,7 +362,7 @@ class Module_cedi
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * Redirect to a random page.
 	 *
@@ -414,7 +414,7 @@ class Module_cedi
 			list($id,$chain)=get_param_cedi_chain('id',strval(db_get_first_id()));
 		}
 		$pages=$GLOBALS['SITE_DB']->query_select('seedy_pages',array('*'),array('id'=>$id),'',1);
-	
+
 		// Display title
 		if (!array_key_exists(0,$pages))
 		{
@@ -448,7 +448,7 @@ class Module_cedi
 
 		// Build up navigation tree
 		$tree=cedi_breadcrumbs($chain,$current_title,has_specific_permission(get_member(),'open_virtual_roots'),true,true);
-	
+
 		// Children Links
 		$dbchildren=$GLOBALS['SITE_DB']->query('SELECT child_id FROM '.get_table_prefix().'seedy_children c LEFT JOIN '.get_table_prefix().'seedy_pages p ON c.child_id=p.id WHERE c.parent_id='.strval((integer)$id).' ORDER BY c.the_order');
 		$num_children=0;
@@ -480,7 +480,7 @@ class Module_cedi
 
 			$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain.'/'.strval($child_id)),'_SELF');
 			$children->attach(do_template('CEDI_SUBCATEGORY_LINK',array('_GUID'=>'e9f9b504093220dc23a1ab59b3e8e5df','URL'=>$url,'CHILD'=>$child_title,'SUP'=>$sup)));
-	
+
 			$num_children++;
 		}
 
@@ -499,7 +499,7 @@ class Module_cedi
 			$poster=$myrow['the_user'];
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($poster);
 			if (is_null($username)) $username=do_lang('UNKNOWN');
-	
+
 			$post_id=$myrow['id'];
 
 			// Date post was made
@@ -680,7 +680,7 @@ class Module_cedi
 		}
 		return $markers;
 	}
-	
+
 	/**
 	 * The UI for merging CEDI posts.
 	 *
@@ -711,12 +711,12 @@ class Module_cedi
 		}
 
 		require_code('form_templates');
-	
+
 		$posting_form=get_posting_form(do_lang('MERGE_CEDI_POSTS'),$merged,$merge_url,new ocp_tempcode(),new ocp_tempcode());
-	
+
 		return do_template('POSTING_SCREEN',array('_GUID'=>'4372327fb689ef70a9ac5d275dd454f1','POSTING_FORM'=>$posting_form,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('CEDI_MERGE_TEXT')));
 	}
-	
+
 	/**
 	 * The actualiser for merging CEDI posts.
 	 *
@@ -761,7 +761,7 @@ class Module_cedi
 	function move()
 	{
 		$title=get_page_title('CEDI_MOVE_POST');
-	
+
 		$_id=get_param_cedi_chain('id');
 		$id=$_id[0];
 		$post_id=get_param_integer('post_id');
@@ -779,7 +779,7 @@ class Module_cedi
 		require_code('form_templates');
 
 		$fields=form_input_tree_list(do_lang_tempcode('DESTINATION'),'','target',NULL,'choose_cedi_page',array(),true,strval($id));
-		
+
 		$hidden=form_input_hidden('source',strval($post_id));
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'f231626424aa83d75df571a818665152','SKIP_VALIDATION'=>true,'TITLE'=>$title,'URL'=>$move_url,'TEXT'=>do_lang_tempcode('SELECT_TARGET_POST_DESTINATION'),'FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('MOVE')));
@@ -811,7 +811,7 @@ class Module_cedi
 		{
 			check_specific_permission('feature');
 		}
-	
+
 		if ($id==$target)
 		{
 			return warn_screen($title,do_lang_tempcode('INVALID_OPERATION'));
@@ -1093,7 +1093,7 @@ class Module_cedi
 			}
 
 			$id=$page['id'];
-	
+
 			$map[$id]['title']=get_translated_text($page['title']);
 			$children=array();
 			foreach ($children_rows as $child)
@@ -1102,12 +1102,12 @@ class Module_cedi
 			}
 			$map[$id]['children']=$children;
 		}
-	
+
 		$root=get_param_integer('keep_cedi_root',NULL);
 		$cache_name='cedi_tree_made';
 		if (!is_null($root)) $cache_name.=strval($root);
 		$content=splurgh_master_build('id',$map,$url_stub->evaluate(),$cache_name,$last_change_time,$root);
-		
+
 		$title=get_page_title('CEDI_TREE');
 		return do_template('SPLURGH_SCREEN',array('_GUID'=>'be1e902d5f4429795f0f4c4e4384071b','TITLE'=>$title,'CONTENT'=>$content));
 	}

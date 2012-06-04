@@ -30,7 +30,7 @@ class Hook_addon_registry_windows_helper_scripts
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

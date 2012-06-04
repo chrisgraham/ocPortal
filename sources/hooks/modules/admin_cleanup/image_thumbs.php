@@ -37,7 +37,7 @@ class Hook_image_thumbs
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -49,7 +49,7 @@ class Hook_image_thumbs
 		foreach ($thumb_fields as $field)
 		{
 			if ($field['m_table']=='videos') continue;
-			
+
 			$GLOBALS['SITE_DB']->query_update($field['m_table'],array($field['m_name']=>''));
 		}
 		$full=get_custom_file_base().'/uploads/auto_thumbs';

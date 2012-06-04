@@ -29,9 +29,9 @@ class Hook_unvalidated_calendar
 	function info()
 	{
 		if (!module_installed('calendar')) return NULL;
-	
+
 		require_lang('calendar');
-	
+
 		$info=array();
 		$info['db_table']='calendar_events';
 		$info['db_identifier']='id';

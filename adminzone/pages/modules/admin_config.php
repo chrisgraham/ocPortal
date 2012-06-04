@@ -41,7 +41,7 @@ class Module_admin_config
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -283,7 +283,7 @@ class Module_admin_config
 		{
 			set_value('version',float_to_raw_string(ocp_version_number()));
 			set_value('ocf_version',float_to_raw_string(ocp_version_number()));
-	
+
 			// Site Configuration
 			//  General
 				add_config_option('SITE_NAME','site_name','line','return do_lang(\'UNNAMED\');','SITE','GENERAL');
@@ -293,7 +293,7 @@ class Module_admin_config
 				add_config_option('WELCOME_MESSAGE','welcome_message','transtext','return \'\';','SITE','GENERAL');
 				add_config_option('MAIN_FORUM_NAME','main_forum_name','forum','return has_no_forum()?NULL:do_lang(\'DEFAULT_FORUM_TITLE\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','USER_INTERACTION');
 				add_config_option('KEYWORDS','keywords','line','return \'\';','SITE','GENERAL');
-				
+
 			//  Advanced
 				//add_config_option('LOGO_MAP','logo_map','text','$tpl=do_template(\'IMAGE_MAP\'); return $tpl->evaluate();','SITE','ADVANCED');
 				add_config_option('GZIP_OUTPUT','gzip_output','tick','return \'0\';','SITE','ADVANCED',1);
@@ -329,7 +329,7 @@ class Module_admin_config
 			add_config_option('USERS_ONLINE_TIME','users_online_time','integer','return \'5\';','SITE','LOGGING');
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -376,7 +376,7 @@ class Module_admin_config
 		}
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='base') return $this->base();
 		if ($type=='misc') return $this->config_choose();
 		if ($type=='category') return $this->config_category();
@@ -465,7 +465,7 @@ class Module_admin_config
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';
 
 		$title=get_page_title('CONFIGURATION');
-		
+
 		$rows=$GLOBALS['SITE_DB']->query_select('config',array('the_page','COUNT(*) AS cnt'),NULL,'GROUP BY the_page ORDER BY the_page');
 		$content=new ocp_tempcode();
 		foreach ($rows as $myrow)
@@ -484,7 +484,7 @@ class Module_admin_config
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'c8fdb2b481625d58b0b228c897fda72f','PRE'=>paragraph(do_lang_tempcode('CHOOSE_A_CONFIG_CATEGORY')),'POST'=>'','TITLE'=>$title,'CONTENT'=>$content));
 	}
-	
+
 	/**
 	 * The UI to edit a configuration page.
 	 *
@@ -551,7 +551,7 @@ class Module_admin_config
 		$post_max_size=(ini_get('post_max_size')=='0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('post_max_size')));
 
 		$groups=new ocp_tempcode();
-		
+
 		require_code('form_templates');
 		$current_group='';
 		$out='';
@@ -809,7 +809,7 @@ class Module_admin_config
 		{
 			warn_exit(do_lang_tempcode('BEFORE_MOD_REWRITE'));
 		}
-	
+
 		// Make sure we haven't just locked staff out
 		$new_site_name=substr(post_param('site_name',''),0,200);
 		if (($new_site_name!='') && (get_option('is_on_sync_staff',true)==='1'))
@@ -836,7 +836,7 @@ class Module_admin_config
 				}
 			}
 		}
-		
+
 		// Empty thumbnail cache if needed
 		if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))
 		{
@@ -847,7 +847,7 @@ class Module_admin_config
 				foreach ($thumb_fields as $field)
 				{
 					if ($field['m_table']=='videos') continue;
-				
+
 					$GLOBALS['SITE_DB']->query_update($field['m_table'],array($field['m_name']=>''));
 				}
 				$GLOBALS['NO_DB_SCOPE_CHECK']=false;

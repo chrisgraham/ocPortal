@@ -30,7 +30,7 @@
 				if (typeof event=='undefined') var event=window.event;
 				if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);
 			}
-			
+
 			function load_previews()
 			{
 				var files=document.getElementById('second_files');

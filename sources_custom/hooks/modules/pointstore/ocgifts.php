@@ -88,7 +88,7 @@ class Hook_pointstore_ocgifts
 				'IMAGE_URL'=>$image_url,
 			);
 		}
-		
+
 		$categories=collapse_1d_complexity('category',$GLOBALS['SITE_DB']->query_select('ocgifts',array('DISTINCT category'),NULL,'ORDER BY category'));
 
 		return do_template('POINTSTORE_OCGIFTS_GIFTS',array('TITLE'=>$title,'GIFTS'=>$gifts,'RESULTS_BROWSER'=>$results_browser,'CATEGORY'=>$category,'CATEGORIES'=>$categories));

@@ -29,9 +29,9 @@ class Hook_unvalidated_ocf_members
 	function info()
 	{
 		if (get_forum_type()!='ocf') return NULL;
-	
+
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['db_table']='f_members';
 		$info['db_identifier']='id';
@@ -45,7 +45,7 @@ class Hook_unvalidated_ocf_members
 		$info['edit_identifier']='id';
 		$info['title']=do_lang_tempcode('MEMBERS');
 		$info['db']=$GLOBALS['FORUM_DB'];
-	
+
 		return $info;
 	}
 

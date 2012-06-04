@@ -41,7 +41,7 @@ class calendareventtype_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('test_event_type1'==get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_types','t_title ',array('id'=>$this->eventtype_id))));
 	}
-	
+
 	
 	function tearDown()
 	{

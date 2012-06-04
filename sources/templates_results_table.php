@@ -46,7 +46,7 @@
 function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fields_title,$fields,$sortables=NULL,$sortable=NULL,$sort_order=NULL,$sort_name='sort',$message=NULL,$widths=NULL,$tplset=NULL,$max_page_links=8,$guid='1c8645bc2a3ff5bec2e003142185561f',$skip_sortables_form=false,$hash=NULL)
 {
 	require_code('templates_results_browser');
-	
+
 	if (!is_null($sort_name))
 	{
 		global $NON_CANONICAL_PARAMS;
@@ -54,7 +54,7 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 	}
 
 	if (is_null($widths)) $widths=array();
-	
+
 	if (is_null($message))
 	{
 		$message=new ocp_tempcode();

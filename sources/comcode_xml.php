@@ -192,7 +192,7 @@ class comcode_xml_to_tempcode
 		array_push($this->tempcode_stack,new ocp_tempcode());
 		array_push($this->special_child_elements_stack,array());
 	}
-	
+
 	/**
 	 * Standard PHP XML parser function.
 	 *

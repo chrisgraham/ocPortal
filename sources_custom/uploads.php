@@ -3,7 +3,7 @@
 function init__uploads($old)
 {
 	if (function_exists('set_time_limit')) @set_time_limit(0); // On some server setups, slow uploads can trigger the time-out
-	
+
 	if (!defined('OCP_UPLOAD_ANYTHING'))
 	{
 		define('OCP_UPLOAD_ANYTHING',0);
@@ -47,7 +47,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	foreach (array(0,1) as $i=>$_possible_sub)
 	{
 		if (!isset($urls[$_possible_sub])) continue;
-		
+
 		$possible_sub=$urls[$_possible_sub];
 
 		$subs=$GLOBALS['SITE_DB']->query_select('image_url_sub_for',array('url_to'),array(

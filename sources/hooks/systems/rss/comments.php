@@ -54,7 +54,7 @@ class Hook_rss_comments
 				if (is_null($cat)) return NULL;
 				if (!has_category_access(get_member(),$permissions_field,$cat)) return NULL;
 			}
-			
+
 			// Page/Zone access
 			if (!is_null($info['view_pagelink_pattern']))
 			{
@@ -83,7 +83,7 @@ class Hook_rss_comments
 			if (is_array($_comments))
 			{
 				$_comments=array_reverse($_comments);
-			
+
 				foreach ($_comments as $i=>$comment)
 				{
 					if (is_null($comment)) continue;
@@ -114,11 +114,11 @@ class Hook_rss_comments
 					$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>new ocp_tempcode(),'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 				}
 			}
-			
+
 			$start+=1000;
 		}
 		while (count($_comments)==1000);
-		
+
 		if (is_null($title)) $title=do_lang('COMMENTS');
 
 		return array($content,$title);

@@ -40,7 +40,7 @@ class Module_staff
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_staff
 	{
 		return array('misc'=>'STAFF');
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -81,13 +81,13 @@ class Module_staff
 		require_lang('staff');
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='view') return $this->do_staff_member();
 		if ($type=='misc') return $this->do_all_staff();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to view a staff list.
 	 *
@@ -143,7 +143,7 @@ class Module_staff
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'3fb63955b3e1cb1cb4fda2e56b428d08','CONTENT'=>$content,'TITLE'=>$title,'POST'=>$post,'PRE'=>$pre));
 	}
-	
+
 	/**
 	 * The UI to view a staff member.
 	 *

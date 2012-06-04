@@ -144,7 +144,7 @@ function generate_notifications($cache_identifier)
 			$type=do_lang_tempcode('ADD_INLINE_PERSONAL_POST');
 			if ($unread_pp['p_title']!='') $u_title=$unread_pp['p_title'];
 			$reply_url=build_url(array('page'=>'topics','type'=>'new_post','id'=>$unread_pp['p_topic_id'],'quote'=>$unread_pp['id'],'intended_solely_for'=>$unread_pp['p_poster']),get_module_zone('topics'));
-		
+
 			$additional_posts=0;
 		}
 		$time_raw=$unread_pp['p_time'];
@@ -165,6 +165,6 @@ function generate_notifications($cache_identifier)
 	put_into_cache('_new_pp',60*60*24,$cache_identifier,array($notifications->to_assembly(),$num_unread_pps));
 
 	$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
-	
+
 	return array($notifications,$num_unread_pps);
 }

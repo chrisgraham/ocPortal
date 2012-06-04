@@ -29,7 +29,7 @@ class Hook_page_stats
 	function info()
 	{
 		require_lang('stats');
-		
+
 		$info=array();
 		$info['title']=do_lang_tempcode('PAGE_STATS_DELETE');
 		$num_records=$GLOBALS['SITE_DB']->query_value('stats','COUNT(*)');
@@ -38,7 +38,7 @@ class Hook_page_stats
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -48,14 +48,14 @@ class Hook_page_stats
 	{
 		require_lang('stats');
 		require_lang('dates');
-		
+
 		$delete_older_than=post_param_integer('delete_older_than',NULL);
 		if (is_null($delete_older_than))
 		{
 			@ob_end_clean();
 
 			$delete_older_than=intval(get_option('stats_store_time'));
-			
+
 			require_code('form_templates');
 			$fields=form_input_integer(do_lang_tempcode('DPLU_DAYS'),do_lang_tempcode('DESCRIPTION_DELETE_DAYS'),'delete_older_than',$delete_older_than,true);
 			$post_url=get_self_url(false,false,NULL,false,true);
@@ -96,11 +96,11 @@ class Hook_page_stats
 					if (!is_integer($value)) $list.="'".str_replace('\'','\\\'',$value)."'"; else $list.=strval($value);
 				}
 				fwrite($tmpfile,"	\$GLOBALS['SITE_DB']->query_insert('stats',array($list));\n");
-				
+
 				if ($or_list!='') $or_list.=' OR ';
 				$or_list.='id='.strval($d['id']);
 			}
-			
+
 			if ($or_list!='')
 				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE '.$or_list);
 		}

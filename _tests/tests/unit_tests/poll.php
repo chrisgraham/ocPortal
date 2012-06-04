@@ -35,7 +35,7 @@ class poll_test_set extends ocp_test_case
 		require_code('ocf_topics_action2');
 		require_code('ocf_topics');
 		require_code('ocf_forums');
-		
+
 		$this->establish_admin_session();
 
 		$this->topic_id=ocf_make_topic(db_get_first_id(),'Test');
@@ -51,7 +51,7 @@ class poll_test_set extends ocp_test_case
 		$_POST['cast_'.strval($this->poll_id)]='2';
 		$_GET['show_poll_results_'.strval($this->poll_id)]='1';
 		poll_script(true,$this->poll_id);
-		
+
 		$poll_details=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$this->poll_id),'',1);
 		$this->assertTrue(array_key_exists(0,$poll_details));
 
@@ -66,7 +66,7 @@ class poll_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('Who am I?'==$GLOBALS['FORUM_DB']->query_value('f_polls','po_question ',array('id'=>$this->poll_id)));
 	}
-	
+
 	function tearDown()
 	{
 		ocf_delete_poll($poll_id=$this->poll_id,$reason='Simple');

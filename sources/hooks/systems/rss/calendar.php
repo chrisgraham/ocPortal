@@ -35,7 +35,7 @@ class Hook_rss_calendar
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('calendar')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'calendar')) return NULL;
 
 		$filters=ocfilter_to_sqlfragment($_filters,'c.id','calendar_types',NULL,'e_type','id');
@@ -57,7 +57,7 @@ class Hook_rss_calendar
 		foreach ($rows as $i=>$_row)
 		{
 			if ($i==$max) break;
-			
+
 			$row=$_row[1];
 
 			if (!array_key_exists('id',$row)) continue; // RSS event
@@ -91,7 +91,7 @@ class Hook_rss_calendar
 
 			$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 		}
-		
+
 		require_lang('calendar');
 		return array($content,do_lang('CALENDAR'));
 	}

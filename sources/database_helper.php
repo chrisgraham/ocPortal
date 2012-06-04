@@ -136,7 +136,7 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 		_general_db_init();
 	}
 	$this_ref->static_ob->db_create_table($this_ref->table_prefix.$table_name,$fields,$this_ref->connection_write);
-	
+
 	// Considering tabes in a DB reference may be in multiple (if they point to same actual DB's), make sure all our DB objects have their cache cleared
 	if (isset($GLOBALS['SITE_DB'])) unset($GLOBALS['SITE_DB']->table_exists_cache[$table_name]);
 	if (isset($GLOBALS['FORUM_DB'])) unset($GLOBALS['FORUM_DB']->table_exists_cache[$table_name]);
@@ -339,7 +339,7 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 		{
 			$default='';
 		}
-		
+
 		if (is_string($default))
 		{
 			$default_st=$default;

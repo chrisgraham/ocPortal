@@ -108,7 +108,7 @@ function _find_all_langs($even_empty_langs=false)
 function _nice_get_langs($select_lang=NULL,$show_unset=false)
 {
 	global $LANGS_MAP;
-	
+
 	if ($LANGS_MAP===NULL)
 	{
 		$map_a=get_file_base().'/lang/langs.ini';
@@ -280,7 +280,7 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$so
 		$text2=$_text2->to_assembly();
 	} else $text2='';
 	if (is_null($source_member)) $source_member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
-	
+
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{
 		$connection->query_update('translate',array('source_user'=>$source_member,'broken'=>0,'text_original'=>$text,'text_parsed'=>$text2),array('id'=>$id,'language'=>$lang),'',1);
@@ -308,7 +308,7 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$so
 function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 {
 	global $SEARCH__CONTENT_BITS,$LAX_COMCODE;
-	
+
 	$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 

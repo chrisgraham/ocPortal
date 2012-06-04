@@ -46,13 +46,13 @@ class JabberAuth {
 	/*
 	 * For both debug and logging, ejabberd have to be able to write.
 	 */
-	
+
 	var $jabber_user;   /* This is the jabber user passed to the script. filled by $this->command() */
 	var $jabber_pass;   /* This is the jabber user password passed to the script. filled by $this->command() */
 	var $jabber_server; /* This is the jabber server passed to the script. filled by $this->command(). Useful for VirtualHosts */
 	var $jid;           /* Simply the JID, if you need it, you have to fill. */
 	var $data;          /* This is what SM component send to us. */
-	
+
 	var $dateformat = "M d H:i:s"; /* Check date() for string format. */
 	var $command; /* This is the command sent ... */
 	var $mysock;  /* MySQL connection ressource */
@@ -63,7 +63,7 @@ class JabberAuth {
 	{
 		@define_syslog_variables();
 		@openlog("pipe-auth", LOG_NDELAY, LOG_SYSLOG);
-		
+
 		if($this->debug) {
 			@error_reporting(E_ALL);
 			@ini_set("log_errors", "1");
@@ -72,7 +72,7 @@ class JabberAuth {
 		$this->logg("Starting pipe-auth ..."); // We notice that it's starting ...
 		$this->openstd();
 	}
-	
+
 	function stop()
 	{
 		$this->logg("Shutting down ..."); // Sorry, have to go ...
@@ -80,13 +80,13 @@ class JabberAuth {
 		$this->closestd(); // Simply close files
 		exit(0); // and exit cleanly
 	}
-	
+
 	function openstd()
 	{
 		$this->stdout = @fopen("php://stdout", "w"); // We open STDOUT so we can read
 		$this->stdin  = @fopen("php://stdin", "r"); // and STDIN so we can talk !
 	}
-	
+
 	function readstdin()
 	{
 		$l      = @fgets($this->stdin, 3); // We take the length of string
@@ -100,13 +100,13 @@ class JabberAuth {
 			$this->logg("IN: ".$data);
 		}
 	}
-	
+
 	function closestd()
 	{
 		@fclose($this->stdin); // We close everything ...
 		@fclose($this->stdout);
 	}
-	
+
 	function out($message)
 	{
 		@fwrite($this->stdout, $message); // We reply ...
@@ -114,7 +114,7 @@ class JabberAuth {
 		$dump = $dump["n"];
 		$this->logg("OUT: ". $dump);
 	}
-	
+
 	function myalive()
 	{
 		if(!is_resource($this->mysock) || !@mysql_ping($this->mysock)) { // check if we have a MySQL connection and if it's valid.
@@ -124,7 +124,7 @@ class JabberAuth {
 			return true; // so good !
 		}
 	}
-	
+
 	function play()
 	{
 		do {
@@ -140,13 +140,13 @@ class JabberAuth {
 			$this->data = NULL; // more clean. ...
 		} while (true);
 	}
-	
+
 	function command()
 	{
 		$data = $this->splitcomm(); // This is an array, where each node is part of what SM sent to us :
 		// 0 => the command,
 		// and the others are arguments .. e.g. : user, server, password ...
-		
+
 		if($this->myalive()) { // Check we can play with MySQL
 			if(strlen($data[0]) > 0 ) {
 				$this->logg("Command was : ".$data[0]);
@@ -157,26 +157,26 @@ class JabberAuth {
 						$parms = $data[1];  // only for logging purpose
 						$return = $this->checkuser();
 					break;
-					
+
 				case "auth": // check login, password
 						$this->jabber_user = $data[1];
 						$this->jabber_pass = $data[3];
 						$parms = $data[1].":".$data[2].":".md5($data[3]); // only for logging purpose
 						$return = $this->checkpass();
 					break;
-					
+
 				case "setpass":
 						$return = false; // We do not want jabber to be able to change password
 					break;
-					
+
 				default:
 						$this->stop(); // if it's not something known, we have to leave.
 						// never had a problem with this using ejabberd, but might lead to problem ?
 					break;
 			}
-			
+
 			$return = ($return) ? 1 : 0;
-			
+
 			if(strlen($data[0]) > 0 && strlen($parms) > 0) {
 				$this->logg("Command : ".$data[0].":".$parms." ==> ".$return." ");
 			}
@@ -186,7 +186,7 @@ class JabberAuth {
 			return @pack("nn", 2, 0); // it's so bad.
 		}
 	}
-	
+
 	function checkpass()
 	{
 		global $SITE_INFO;
@@ -195,7 +195,7 @@ class JabberAuth {
 			$p=parse_url($SITE_INFO['base_url']);
 			if ($this->jabber_server!=$p['host']) return false;
 		}*/
-		
+
 		$result=mysql_query('SELECT * FROM '.$SITE_INFO['table_prefix'].'f_members WHERE m_username=\''.mysql_real_escape_string($this->jabber_user).'\'');
 		$row=mysql_fetch_assoc($result);
 		if (!$row)
@@ -228,7 +228,7 @@ class JabberAuth {
 				return false;
 		}
 	}
-	
+
 	function checkuser()
 	{
 		global $SITE_INFO;
@@ -237,7 +237,7 @@ class JabberAuth {
 			$p=parse_url($SITE_INFO['base_url']);
 			if ($this->jabber_server!=$p['host']) return false;
 		}*/
-		
+
 		$result=mysql_query('SELECT * FROM '.$SITE_INFO['table_prefix'].'f_members WHERE m_username=\''.mysql_real_escape_string($this->jabber_user).'\'');
 		$row=mysql_fetch_assoc($result);
 		if (!$row)
@@ -255,19 +255,19 @@ class JabberAuth {
 		}
 		return true;
 	}
-	
+
 	function splitcomm() // simply split command and arugments into an array.
 	{
 		return explode(":", $this->data);
 	}
-	
+
 	function mysql() // "MySQL abstraction", this opens a permanent MySQL connection, and fill the ressource
 	{
 		$this->mysock = @mysql_pconnect($this->dbhost, $this->dbuser, $this->dbpass);
 		@mysql_select_db($this->dbbase, $this->mysock);
-		$this->logg("MySQL :: ". (is_resource($this->mysock) ? "Connecté" : "Déconnecté"));
+		$this->logg("MySQL :: ". (is_resource($this->mysock) ? "Connectï¿½" : "Dï¿½connectï¿½"));
 	}
-	
+
 	function logg($message) // pretty simple
 	{
 		if (@in_array('test',$_SERVER['argv']))

@@ -41,7 +41,7 @@ class Module_cms_comcode_pages
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -96,7 +96,7 @@ class Module_cms_comcode_pages
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
 		if ($GLOBALS['SITE_DB']->table_exists('comcode_pages')) return; // We moved this install code from another file. Now, upgrade.php should have dealt with this issue but if people didn't run it, detected
-		
+
 		require_code('zones2');
 
 		if (($upgrade_from<4) || (is_null($upgrade_from)))
@@ -180,7 +180,7 @@ class Module_cms_comcode_pages
 		{
 			return redirect_screen($title,build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF'),$completion_text);
 		}
-		
+
 		require_code('zones2');
 		require_code('zones3');
 		return site_tree_do_next_manager($title,$page,$zone,$completion_text);
@@ -210,7 +210,7 @@ class Module_cms_comcode_pages
 			foreach ($_out as $page=>$subdir)
 			{
 				if (is_integer($page)) $page=strval($page);
-				
+
 				$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$page));
 				if (!has_edit_permission('high',get_member(),$resource_owner,'cms_comcode_pages'))
 					continue;
@@ -221,7 +221,7 @@ class Module_cms_comcode_pages
 
 		return $out;
 	}
-	
+
 	/**
 	 * Get a map of page names to paths, under the given specifications.
 	 *
@@ -295,7 +295,7 @@ class Module_cms_comcode_pages
 		if (is_object($lang)) return $lang;
 
 		require_code('form_templates');
-		
+
 		$add_new_permission=has_specific_permission(get_member(),'submit_highrange_content');
 		if ((!$add_new_permission) && (!has_specific_permission(get_member(),'edit_highrange_content')) && (!has_specific_permission(get_member(),'edit_own_highrange_content')))
 			check_edit_permission('high',NULL);
@@ -341,9 +341,9 @@ class Module_cms_comcode_pages
 		}
 
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','page_title ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -371,9 +371,9 @@ class Module_cms_comcode_pages
 		),$sortables,'sort',$sortable.' '.$sort_order);
 
 		$all_zones=find_all_zones(false,true);
-		
+
 		$number_pages_parsed_for_titles=0;
-		
+
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
 		$start=get_param_integer('start',0);
@@ -467,7 +467,7 @@ class Module_cms_comcode_pages
 			if (!is_null($row))
 			{
 				$username=protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['p_submitter']));
-				
+
 				$parent_page=$row['p_parent_page'];
 				$add_date=get_timezoned_date($row['p_add_date']);
 				$validated=($row['p_validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('YES');
@@ -605,7 +605,7 @@ class Module_cms_comcode_pages
 		check_edit_permission('high',$resource_owner);
 		if (is_null($resource_owner))
 			check_submit_permission('high');
-		
+
 		$restore_from=$this->find_comcode_page($lang,$file,$zone);
 
 		// Check no redirects in our way
@@ -654,7 +654,7 @@ class Module_cms_comcode_pages
 
 				$new=true;
 			}
-			
+
 			if (($new) && (get_option('is_on_comcode_page_children')=='1'))
 			{
 				$contents.=chr(10).chr(10).'[block]main_comcode_page_children[/block]';
@@ -680,7 +680,7 @@ class Module_cms_comcode_pages
 			foreach ($filesarray as $iterator=>$stuff)
 			{
 				list($filepath,$time)=$stuff;
-			
+
 				// Find who did the revision
 				$editor=$GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'COMCODE_PAGE_EDIT','param_a'=>$file));
 				if ((has_specific_permission(get_member(),'view_revision_history')) || ($editor==get_member()))
@@ -797,7 +797,7 @@ class Module_cms_comcode_pages
 			if (has_specific_permission(get_member(),'bypass_validation_highrange_content'))
 				if (addon_installed('unvalidated'))
 					$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated));
-				
+
 			if (!$new)
 			{
 				if ($delete_url->is_empty())
@@ -995,7 +995,7 @@ class Module_cms_comcode_pages
 			if (fwrite($myfile,$new)<strlen($new)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			fclose($myfile);
 			sync_file($fullpath);
-			
+
 			$file_changed=true;
 		} else
 		{
@@ -1081,7 +1081,7 @@ class Module_cms_comcode_pages
 
 			$file=$new_file;
 		}
-		
+
 		if (post_param_integer('delete',0)==1)
 		{
 			unlink(get_custom_file_base().'/'.$path);

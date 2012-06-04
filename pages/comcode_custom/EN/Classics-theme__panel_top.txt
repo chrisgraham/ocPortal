@@ -1,7 +1,7 @@
 [semihtml]
 {+START,IF,{$MATCH_KEY_MATCH,:start}}
 	<div id="image-slider"><img src="{$IMG*,image1}" alt="" /></div>
-	
+
 	<div id="welcome">
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.

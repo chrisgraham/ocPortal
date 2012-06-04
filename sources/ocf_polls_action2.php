@@ -36,7 +36,7 @@
 function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$reason)
 {
 	require_code('ocf_polls');
-	
+
 	$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('t_poll_id'=>$poll_id),'',1);
 	if (!ocf_may_edit_poll_by($topic_info[0]['t_forum_id'],$topic_info[0]['t_cache_first_member_id']))
 		access_denied('I_ERROR');
@@ -97,7 +97,7 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 function ocf_delete_poll($poll_id,$reason)
 {
 	require_code('ocf_polls');
-	
+
 	$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('t_poll_id'=>$poll_id),'',1);
 	if (!ocf_may_delete_poll_by($topic_info[0]['t_forum_id'],$topic_info[0]['t_cache_first_member_id']))
 		access_denied('I_ERROR');

@@ -36,7 +36,7 @@ function init__calendar()
 function get_week_number_for($timestamp,$no_year=false)
 {
 	$format=$no_year?'W':'Y-W';
-	
+
 	$w=intval(date('w'));
 	if ((get_option('ssw')=='0') || (($w!=0) && ($w!=6)))
 	{
@@ -206,7 +206,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$end_month+=$dif_month;
 			$end_year+=$dif_year;
 		}
-		
+
 		if ($i==300) break; // Let's be reasonable
 	}
 	while (($recurrence!='') && ($recurrence!='none') && ($a<$period_end) && ((is_null($recurrences)) || ($i<$recurrences)));
@@ -270,7 +270,7 @@ function regenerate_event_reminder_jobs($id,$force=false)
 		} else
 		{
 			if (function_exists('set_time_limit')) @set_time_limit(0);
-			
+
 			$start=0;
 			do
 			{
@@ -382,7 +382,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 		{
 			if (($_event_type['t_external_feed']!='') && ((is_null($filter)) || (!array_key_exists($_event_type['id'],$filter)) || ($filter[$_event_type['id']]==1)) && (has_category_access(get_member(),'calendar',strval($_event_type['id']))))
 				$feed_urls_todo[$_event_type['t_external_feed']]=$_event_type['id'];
-			
+
 			$_event_types[$j]['text_original']=get_translated_text($_event_type['t_title']);
 		}
 		$event_types=collapse_2d_complexity('text_original','t_logo',$_event_types);
@@ -398,7 +398,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 			if (($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE']=='text/calendar') || ($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE']=='application/octet-stream'))
 			{
 				$data=file_get_contents($temp_file_path);
-				
+
 				require_code('calendar_ical');
 
 				$whole=end(explode('BEGIN:VCALENDAR',$data));
@@ -480,7 +480,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 					}
 				}
 			}
-			
+
 			@unlink($temp_file_path);
 		}
 	}
@@ -808,7 +808,7 @@ function cal_utctime_to_usertime($utc_timestamp,$default_timezone,$show_in_users
 function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$period_start=NULL,$period_end=NULL)
 {
 	if (count($our_times)==0) return array();
-	
+
 	$conflicts=array();
 	$where=is_null($skip_id)?'':('id<>'.strval($skip_id));
 	if ($restrict)

@@ -15,7 +15,7 @@
 
 class Block_main_buttons
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -33,7 +33,7 @@ class Block_main_buttons
 		$info['parameters']=array('param','extra','max');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *

@@ -161,7 +161,7 @@
 		<div class="float_surrounder">
 			{+START,IF_NON_EMPTY,{ITEMS}}
 				<br />
-		
+
 				<table class="ocw_centered_contents wide_table solidborder" summary="{!COLUMNED_TABLE}">
 					<thead>
 						<tr>
@@ -181,10 +181,10 @@
 					{ITEMS}
 				</table>
 			{+END}
-			
+
 			{+START,IF_NON_EMPTY,{ITEMS_SALE}}
 				<br />
-			
+
 				<table class="ocw_centered_contents wide_table solidborder" summary="{!COLUMNED_TABLE}">
 					<thead>
 						<tr>
@@ -257,7 +257,7 @@
 					<col style="width: 22%" />
 					<col style="width: 12%" />
 				</colgroup>
-				
+
 				<tr class="ocw_posttop">
 					<th>
 						{!ACTION}

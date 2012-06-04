@@ -45,7 +45,7 @@
 							<col style="width: 70%"/>
 						</colgroup>
 					{+END}
-	
+
 					<tbody>
 						{FIELDS}
 					</tbody>

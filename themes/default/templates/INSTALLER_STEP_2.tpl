@@ -14,7 +14,7 @@
 			<div class="constrain_field">
 				<input maxlength="255" class="wide_field" id="email" name="email" type="text" alt="{!EMAIL_ADDRESS}" value="{!EMAIL_ADDRESS}" size="25" onfocus="if (this.value=='{!EMAIL_ADDRESS;}') this.value='';" />
 			</div>
-			
+
 			<br />
 
 			<p class="accessibility_hidden"><label for="interest_level">{!INST_SUBSCRIPTION_LEVEL}</label></p>

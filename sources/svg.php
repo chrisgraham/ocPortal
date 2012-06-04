@@ -46,7 +46,7 @@ function init__svg()
 	define('MIN_X_MARKER_DISTANCE',14.0);
 	define('TEXT_HEIGHT',14.0);
 	define('BAR_WIDTH',15.0);
-	
+
 	global $CSS_FILE_CONTENTS;
 	$CSS_FILE_CONTENTS='';
 }
@@ -96,7 +96,7 @@ function _draw_key($data,$start_colour,$start_x,$start_y,$units='')
 		if (is_array($_value)) $_value=array_shift($_value);
 
 		$value=float_format($_value);
-	
+
 		if (strlen($value)>100) $value=substr($value,0,40).'&hellip;'.substr($value,-40);
 
 		if ($key=='') $key=do_lang('UNKNOWN');
@@ -170,7 +170,7 @@ if (typeof window.addEventListenerAbstract==\'undefined\') addEventListenerAbstr
 		if (typeof element.simulated_events==\'undefined\') element.simulated_events=[];
 		if (typeof element.simulated_events[the_event]==\'undefined\') element.simulated_events[the_event]=[];
 		element.simulated_events[the_event].push(command);
-		
+
 		if(typeof element.addEventListener!=\'undefined\')
 		{
 			return element.addEventListener(the_event,command,capture);
@@ -289,7 +289,7 @@ function create_bar_chart($data,$x_label='X axis',$y_label='Y axis',$x_units='',
 	foreach ($data as $value)
 	{
 		if (is_array($value)) $value=array_shift($value);
-		
+
 		if ((is_float($value)?$value:floatval($value))>$max_y) $max_y=is_float($value)?$value:floatval($value);
 		$average+=$value;
 	}
@@ -312,7 +312,7 @@ function create_bar_chart($data,$x_label='X axis',$y_label='Y axis',$x_units='',
 	foreach ($data as $key=>$value)
 	{
 		if (is_array($value)) $value=array_shift($value);
-		
+
 		$x=Y_LABEL_WIDTH+Y_AXIS_WIDTH+X_PADDING+$i*(X_PADDING+BAR_WIDTH);
 		$y=PLOT_HEIGHT-$value*$y_scale+PLOT_HEIGHT_BIAS;
 		$height=(is_float($value)?$value:floatval($value))*$y_scale;
@@ -397,7 +397,7 @@ function create_scatter_graph($data,$x_label='X Axis',$y_label='Y Axis',$x_units
 	foreach ($data as $value)
 	{
 		if (array_key_exists(0,$value)) $value=array_shift($value);
-		
+
 		$x=Y_LABEL_WIDTH+Y_AXIS_WIDTH+X_PADDING+$value['t']*$x_scale;
 
 		// Are we too close to the last one?
@@ -460,7 +460,7 @@ function create_pie_chart($data)
 	foreach ($data as $value)
 	{
 		if (is_array($value)) $value=array_shift($value);
-		
+
 		$_max_degrees+=$value;
 	}
 	$max_degrees=round($_max_degrees);
@@ -476,7 +476,7 @@ function create_pie_chart($data)
 	foreach ($data as $key=>$value)
 	{
 		if (is_array($value)) $value=array_shift($value);
-		
+
 		// We're using degrees again
 		$start_angle=$angle;
 		$angle+=$value;

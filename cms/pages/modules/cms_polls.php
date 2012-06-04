@@ -111,9 +111,9 @@ class Module_cms_polls extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$default_order='is_current DESC,add_time DESC';
 		$current_ordering=get_param('sort',$default_order);
 		if ($current_ordering=='is_current DESC,add_time DESC')
@@ -169,7 +169,7 @@ class Module_cms_polls extends standard_aed_module
 
 			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'polls','type'=>'view','id'=>$row['id']),get_module_zone('polls')),get_translated_text($row['question']))),get_timezoned_date($row['add_time']),$current?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($used || $current)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$username,integer_format($row['poll_views']),do_lang_tempcode('VOTES',escape_html(integer_format($total_votes))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'polls'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'polls'),get_module_zone('polls'));
 
@@ -187,7 +187,7 @@ class Module_cms_polls extends standard_aed_module
 		$poll_list=nice_get_polls(NULL,$only_owned);
 		return $poll_list;
 	}
-	
+
 	/**
 	 * Get tempcode for a poll adding/editing form.
 	 *
@@ -269,7 +269,7 @@ class Module_cms_polls extends standard_aed_module
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-	
+
 		$fields=$this->get_form_fields(get_translated_text($myrow['question']),get_translated_text($myrow['option1']),get_translated_text($myrow['option2']),get_translated_text($myrow['option3']),get_translated_text($myrow['option4']),get_translated_text($myrow['option5']),get_translated_text($myrow['option6']),get_translated_text($myrow['option7']),get_translated_text($myrow['option8']),get_translated_text($myrow['option9']),get_translated_text($myrow['option10']),$myrow['is_current'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['notes']);
 
 		return $fields;
@@ -316,7 +316,7 @@ class Module_cms_polls extends standard_aed_module
 				log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
 			set_poll($id);
 		}
-		
+
 		if ($current==1)
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
@@ -390,7 +390,7 @@ class Module_cms_polls extends standard_aed_module
 				{
 					if (!has_specific_permission(get_member(),'choose_poll'))
 						log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
-	
+
 					set_poll(intval($id));
 				}
 			}

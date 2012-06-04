@@ -60,7 +60,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 		require_lang('newsletter');
 		require_code('newsletter');
-		
+
 		$this->cache_level_counts=array();
 
 		$this->extra_donext_entries=array(
@@ -136,7 +136,7 @@ class Module_admin_newsletter extends standard_aed_module
 	function import_subscribers()
 	{
 		$title=get_page_title('IMPORT_NEWSLETTER_SUBSCRIBERS');
-		
+
 		$_lang=choose_language($title);
 		if (is_object($_lang)) return $_lang;
 
@@ -182,7 +182,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 		}
-		
+
 		// Read data
 		$ok=false;
 		require_code('uploads');
@@ -314,7 +314,7 @@ class Module_admin_newsletter extends standard_aed_module
 		{
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
 		}
-		
+
 		return inform_screen($title,do_lang_tempcode('NEWSLETTER_IMPORTED_THIS',integer_format($count),integer_format($count2)));
 	}
 
@@ -326,9 +326,9 @@ class Module_admin_newsletter extends standard_aed_module
 	function bounce_filter_a()
 	{
 		$title=get_page_title('BOUNCE_FILTER');
-		
+
 		if (!function_exists('imap_open')) warn_exit(do_lang_tempcode('IMAP_NEEDED'));
-		
+
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
@@ -343,7 +343,7 @@ class Module_admin_newsletter extends standard_aed_module
 		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_b'),'_SELF');
 		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('ENTER_IMAP_DETAILS'),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
-	
+
 	/**
 	 * The UI to select an inbox for bounce filtering.
 	 *
@@ -354,7 +354,7 @@ class Module_admin_newsletter extends standard_aed_module
 		$title=get_page_title('BOUNCE_FILTER');
 
 		if (!function_exists('imap_open')) warn_exit(do_lang_tempcode('IMAP_NEEDED'));
-		
+
 		$username=post_param('username');
 		$password=post_param('password');
 		$server=post_param('server');
@@ -385,7 +385,7 @@ class Module_admin_newsletter extends standard_aed_module
 			$folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce')!==false));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'),new ocp_tempcode(),'box',$folders));
-		
+
 		$submit_name=do_lang_tempcode('PROCEED');
 		$post_url=get_self_url();
 
@@ -451,16 +451,16 @@ class Module_admin_newsletter extends standard_aed_module
 		   }
 		}
 		imap_close($mbox);
-		
+
 		if ($num==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
-		
+
 		$submit_name=do_lang_tempcode('PROCEED');
 		$post_url=get_self_url();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_d'),'_SELF');
 		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$title,'TEXT'=>do_lang_tempcode('BOUNCE_WHICH'),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
-	
+
 	/**
 	 * The actualiser to prune subscribers.
 	 *
@@ -480,10 +480,10 @@ class Module_admin_newsletter extends standard_aed_module
 			}
 		}
 		if ($sup=='') warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
-		
+
 		$query='DELETE FROM '.get_table_prefix().'newsletter WHERE '.$sup;
 		$GLOBALS['SITE_DB']->query($query);
-		
+
 		return inform_screen($title,do_lang_tempcode('SUCCESS'));
 	}
 
@@ -501,7 +501,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 		$id=either_param('id',NULL);
 		$level=get_param_integer('level',NULL);
-		
+
 		require_lang('ocf');
 
 		// Select newsletter
@@ -550,7 +550,7 @@ class Module_admin_newsletter extends standard_aed_module
 		if ($csv==1)
 		{
 			$filename='subscribers_'.$id.'.csv';
-			
+
 			header('Content-type: text/csv');
 			if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
 				header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
@@ -626,7 +626,7 @@ class Module_admin_newsletter extends standard_aed_module
 					$send_id=(array_key_exists('m_username',$r)?'m':'n').(array_key_exists('id',$r)?strval($r['id']):$email);
 					$hash=array_key_exists('the_password',$r)?$r['the_password']:'';
 					$unsub=array_key_exists('the_password',$r)?best_hash($r['the_password'],'xunsub'):'';
-				
+
 					if ($csv==1)
 					{
 						echo '"'.str_replace('"','""',$email).'",'.'"'.str_replace('"','""',$forename).'",'.'"'.str_replace('"','""',$surname).'",'.'"'.str_replace('"','""',$name).'",'.'"'.str_replace('"','""',$send_id).'",'.'"'.str_replace('"','""',$unsub).'",'.'"'.str_replace('"','""',$hash).'",'.'"'.str_replace('"','""',$salt).'",'.'"'.str_replace('"','""',$lang).'",'.'"'.str_replace('"','""',strval($confirm_code)).'",'.'"'.str_replace('"','""',date('Y-m-d h:i:s',$join_time)).'"'.chr(10);
@@ -636,7 +636,7 @@ class Module_admin_newsletter extends standard_aed_module
 						$out.=$tpl->evaluate();
 					}
 				}
-				
+
 				$start2+=$max;
 			}
 			while (($csv==1) && (array_key_exists(0,$rows)));
@@ -650,7 +650,7 @@ class Module_admin_newsletter extends standard_aed_module
 				{
 				}
 			}
-			
+
 			$text=do_lang_tempcode('NEWSLETTER_PEOPLE_ON_LEVEL',((is_numeric($level)) && (intval($level)>0))?make_string_tempcode(escape_html(do_lang('NEWSLETTER_'.strval($level)))):do_lang_tempcode('NA_EM'));
 
 			if ($csv==1)
@@ -693,7 +693,7 @@ class Module_admin_newsletter extends standard_aed_module
 				if (!array_key_exists($domain,$domains)) $domains[$domain]=0;
 			   $domains[$domain]+=$cnt;
 			}
-			
+
 			$start+=500;
 		}
 		while ((array_key_exists(0,$rows)) && (strpos(get_db_type(),'mysql')===false));
@@ -735,9 +735,9 @@ class Module_admin_newsletter extends standard_aed_module
 		if ($chosen_content==0) // Content selection
 		{
 			require_code('form_templates');
-			
+
 			require_lang('menus');
-			
+
 			$fields=new ocp_tempcode();
 
 			$_cutoff_time=get_value('newsletter_whatsnew');
@@ -877,7 +877,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 		return $this->send_gui($message);
 	}
-	
+
 	/**
 	 * Generate Comcode for a what's new newsletter.
 	 *
@@ -980,7 +980,7 @@ class Module_admin_newsletter extends standard_aed_module
 		$completed=do_template('NEWSLETTER_AUTOMATED_FCOMCODE',array('_GUID'=>'20f6adc244b04d9e5206682ec4e0cc0f','CONTENT'=>$_automatic));
 		return $completed->evaluate($lang);
 	}
-	
+
 	/**
 	 * The UI to send a newsletter.
 	 *
@@ -1317,7 +1317,7 @@ class Module_admin_newsletter extends standard_aed_module
 				$_csv_data[]=$csv_line;
 			}
 			fclose($myfile);
-		
+
 			$extra_post_data['csv_data']=serialize($_csv_data);
 		}
 
@@ -1522,7 +1522,7 @@ class Module_admin_newsletter extends standard_aed_module
 
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;
-	
+
 		$newsletters=new ocp_tempcode();
 		$where=multi_lang()?array('language'=>$lang):NULL;
 		$rows=$GLOBALS['SITE_DB']->query_select('newsletter_archive',array('id','subject','date_and_time'),$where,'ORDER BY date_and_time DESC');
@@ -1534,13 +1534,13 @@ class Module_admin_newsletter extends standard_aed_module
 		require_code('form_templates');
 		$fields=form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters,NULL,true);
 		$hidden=form_input_hidden('lang',$lang);
-	
+
 		$submit_name=do_lang_tempcode('VIEW');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'view'),'_SELF',NULL,false,true);
-	
+
 		return do_template('FORM_SCREEN',array('_GUID'=>'ee295e41dc86c4583c123e6e0e445380','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
-	
+
 	/**
 	 * The UI to view a past newsletter.
 	 *
@@ -1592,9 +1592,9 @@ class Module_admin_newsletter extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','title ASC',true);
 		list($sortable,$sort_order)=array(substr($current_ordering,0,strrpos($current_ordering,' ')),substr($current_ordering,strrpos($current_ordering,' ')+1));
 		$sortables=array(
@@ -1622,12 +1622,12 @@ class Module_admin_newsletter extends standard_aed_module
 		foreach ($rows as $row)
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
-			
+
 			$num_readers=$GLOBALS['SITE_DB']->query_value('newsletter n JOIN '.get_table_prefix().'newsletter_subscribe s ON n.id=s.newsletter_id','COUNT(*)',array('code_confirm'=>0));
 
 			$fields->attach(results_entry(array(get_translated_text($row['title']),integer_format($num_readers),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -1674,7 +1674,7 @@ class Module_admin_newsletter extends standard_aed_module
 	{
 		$title=post_param('title');
 		$description=post_param('description');
-		
+
 		$id=add_newsletter($title,$description);
 
 		return strval($id);

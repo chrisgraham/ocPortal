@@ -33,7 +33,7 @@ class Block_main_ocprocks
 		$info['parameters']=array('param');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -56,15 +56,15 @@ class Block_main_ocprocks
 	function run($map)
 	{
 		$file=array_key_exists('param',$map)?$map['param']:'ocprocks';
-	
+
 		require_code('textfiles');
 		require_lang('ocprocks');
-	
+
 		$place=_find_text_file_path($file,'');
 
 		if (!file_exists($place)) warn_exit(do_lang_tempcode('DIRECTORY_NOT_FOUND',escape_html($place)));
 		$edit_url=new ocp_tempcode();
-	
+
 		return do_template('BLOCK_MAIN_OCPROCKS',array('FILE'=>$file,'CONTENT'=>apply_emoticons($this->get_random_line($place))));
 	}
 

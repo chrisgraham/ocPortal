@@ -51,11 +51,11 @@
 					var current_selection='';
 					var site_tree=new tree_list('tree_list','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1','','',false,null,false,true);
 				//]]></script>
-			
+
 				<p class="associated_caption">
 					{!CLICK_ENTRY_POINT_TO_USE}
 				</p>
-				
+
 				<p>
 					&raquo; <a href="#" onclick="return menu_editor_add_new_page();">{!SPECIFY_NEW_PAGE}</a>
 				</p>
@@ -69,7 +69,7 @@
 						<col style="width: 198px" />
 						<col style="width: 100%" />
 					</colgroup>
-	
+
 					<tbody>
 						{FIELDS_TEMPLATE}
 					</tbody>
@@ -79,7 +79,7 @@
 
 		<input type="hidden" name="confirm" value="1" />
 	</form>
-	
+
 	<br />
 
 	<div class="lightborder">
@@ -108,7 +108,7 @@
 	{+START,LOOP,ALL_MENUS}
 		all_menus.push('{_loop_var;/}');
 	{+END}
-	
+
 	var cf=function() { var e=document.getElementById('menu_editor_wrap'); if (e.className.indexOf(' docked')==-1) smoothScroll(findPosY(document.getElementById('caption_'+window.current_selection))); };
 	document.getElementById('url').ondblclick=cf;
 	document.getElementById('caption_long').ondblclick=cf;

@@ -35,14 +35,14 @@ class Hook_realtime_rain_stats
 		if (has_actual_page_access(get_member(),'admin_stats'))
 		{
 			require_lang('stats');
-			
+
 			$rows=$GLOBALS['SITE_DB']->query('SELECT browser,referer,the_page,ip,the_user AS member_id,date_and_time AS timestamp FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time BETWEEN '.strval($from).' AND '.strval($to));
 
 			foreach ($rows as $row)
 			{
 				$timestamp=$row['timestamp'];
 				$member_id=$row['member_id'];
-				
+
 				$page_link=str_replace(':',': ',page_path_to_pagelink($row['the_page']));
 				if ($row['the_page']=='/access_denied') $page_link=do_lang('ACCESS_DENIED_SCREEN');
 				if ($row['the_page']=='/closed') $page_link=do_lang('CLOSED_SITE_SCREEN');
@@ -56,7 +56,7 @@ class Hook_realtime_rain_stats
 				if ($referer!==false)
 				{
 					if (!array_key_exists('host',$referer)) $referer['host']=do_lang('UNKNOWN');
-					
+
 					if ($referer['host']!=$base_url['host'])
 					{
 						$matches=array();
@@ -90,7 +90,7 @@ class Hook_realtime_rain_stats
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

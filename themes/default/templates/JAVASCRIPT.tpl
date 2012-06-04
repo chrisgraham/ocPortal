@@ -75,7 +75,7 @@ function scriptLoadStuff()
 			for (var j=0;j<dont_autocomplete.length;j++) {$,Done in very specific way, as Firefox will nuke any explicitly non-autocompleted values when clicking back also}
 				if (document.forms[i].elements[dont_autocomplete[j]]) document.forms[i].elements[dont_autocomplete[j]].setAttribute('autocomplete','off');
 		}
-		
+
 		{$,HTML editor}
 		if (typeof window.load_html_edit!='undefined')
 		{
@@ -167,7 +167,7 @@ function initialise_error_mechanism()
 				//(msg.indexOf('Array.constructor')!=-1) ||
 			)
 				return null; {$,Comes up on due to various Firefox/extension/etc bugs}
-			
+
 			if ((typeof window.done_one_error=='undefined') || (!window.done_one_error))
 			{
 				window.done_one_error=true;
@@ -214,7 +214,7 @@ function staff_unload_action()
 		}
 		catch (e) {};
 	}
-	
+
 	addEventListenerAbstract(window,'pageshow',undo_staff_unload_action);
 	addEventListenerAbstract(window,'keydown',undo_staff_unload_action);
 	addEventListenerAbstract(document.body,'keydown',undo_staff_unload_action); // Needed for IE6
@@ -244,7 +244,7 @@ function checkFieldForBlankness(field,event)
 {
 	if (!field) return true; {$,Shame we need this, seems on Google Chrome things can get confused on JS assigned to page-changing events}
 	if (typeof field.nodeName=='undefined') return true; {$,Also bizarre}
-	
+
 	var value;
 	if (field.nodeName.toLowerCase()=='select')
 	{
@@ -262,7 +262,7 @@ function checkFieldForBlankness(field,event)
 		{
 			cancelBubbling(event);
 		}
-		
+
 		if (ee!==null)
 		{
 			ee.style.display='block';
@@ -277,7 +277,7 @@ function checkFieldForBlankness(field,event)
 	{
 		ee.style.display='none';
 	}
-	
+
 	return true;
 }
 function disable_button_just_clicked(input)
@@ -939,7 +939,7 @@ function select_tab(id,tab)
 			if (tabs[i]==tab)	element.className+=' tab_active';
 		}
 	}
-	
+
 	return false;
 }
 
@@ -1206,12 +1206,12 @@ function smoothScroll(destY,expectedScrollY,dir,eventAfter)
 		catch (e) {};
 		return;
 	{+END}
-	
+
 	var scrollY;
 	if (typeof window.scrollY=='undefined') scrollY=document.documentElement.scrollTop; /*IE6*/ else scrollY=window.scrollY;
 	if (typeof destY=='string') destY=findPosY(document.getElementById(destY));
 	if (destY<0) destY=0;
-	
+
 	if ((typeof expectedScrollY!="undefined") && (expectedScrollY!=null) && (expectedScrollY!=scrollY)) return; {$,We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already}
 	if (typeof dir=='undefined') var dir=((destY-scrollY)>0)?1:-1;
 	var dist=dir*17;
@@ -1528,7 +1528,7 @@ function activateTooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lig
 	ac.is_over=true;
 	ac.tooltip_on=false;
 	ac.initial_width=width;
-	
+
 	var children=ac.getElementsByTagName('img');
 	for (var i=0;i<children.length;i++) children[i].setAttribute('title','');
 
@@ -1606,7 +1606,7 @@ function repositionTooltip(ac,event,bottom,starting,tooltipElement,force_width)
 		if ((ac.parentNode.nodeName.toLowerCase()=='a') && (ac.parentNode.getAttribute('title')) && ((ac.nodeName.toLowerCase()=='abbr') || (ac.parentNode.getAttribute('title').indexOf('{!LINK_NEW_WINDOW^;}')!=-1)))
 			ac.parentNode.setAttribute('title',''); {$,Do not want second tooltips that are not useful}
 	}
-	
+
 	if (!pageLoaded) return;
 	if (!ac.tooltipId) { if ((typeof ac.onmouseover!='undefined') && (ac.onmouseover)) ac.onmouseover(event); return; };  {$,Should not happen but written as a fail-safe}
 
@@ -1929,7 +1929,7 @@ function addEventListenerAbstract(element,the_event,func,capture)
 			element.simulated_events[the_event]=[];
 			element.simulated_events[the_event].push(func);
 		}
-		
+
 		if(typeof element.addEventListener!='undefined')
 		{
 			{$,W3C}
@@ -1976,7 +1976,7 @@ function maintain_theme_in_link(url)
 	if (url.indexOf('?utheme=')!=-1) return url;
 	if (url.indexOf('&keep_theme=')!=-1) return url;
 	if (url.indexOf('?keep_theme=')!=-1) return url;
-	
+
 	if (typeof window.ocp_theme=='undefined') window.ocp_theme='{$THEME;}';
 	if (typeof window.ocp_theme!='undefined')
 	{
@@ -2065,7 +2065,7 @@ function getInnerHTML(element,outerToo)
 					)
 						out+=' '+aName+'="'+escape_html(aValue)+'"';
 				}
-				
+
 				if (srcDomNode.childNodes.length>0)
 				{
 					out+='>';
@@ -2100,10 +2100,10 @@ function getInnerHTML(element,outerToo)
 					out+=Copy(srcDomNode.childNodes[i],level+1);
 			}
 		}
-		
+
 		return out;
 	}
-	
+
 	return Copy(element,outerToo?2:1);
 }
 

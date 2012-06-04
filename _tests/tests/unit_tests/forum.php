@@ -29,7 +29,7 @@ class forum_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('ocf_forums_action');
 		require_code('ocf_forums_action2');
 		require_lang('ocf');
@@ -54,7 +54,7 @@ class forum_test_set extends ocp_test_case
 		ocf_edit_forum($this->forum_id,'TestEdit','Test',db_get_first_id(),db_get_first_id(),1,1,0,'','','','last_post',0,false);
 		$this->assertTrue('TestEdit'==$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$this->forum_id)));
 	}
-	
+
 	function tearDown()
 	{
 		ocf_delete_forum($this->forum_id,$this->forum_id);

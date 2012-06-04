@@ -150,7 +150,7 @@ class Hook_addon_registry_core_fields
 			),NULL,'',true),
 		);
 	}
-	
+
 	/**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.

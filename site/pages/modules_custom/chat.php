@@ -21,7 +21,7 @@ class Mx_chat extends Module_chat
 
 		// What action are we going to do?
 		$type=get_param('type','misc');
-		
+
 		if (function_exists('set_time_limit')) @set_time_limit(200);
 
 		require_javascript('javascript_xmpp_prototype');
@@ -90,7 +90,7 @@ class Mx_chat extends Module_chat
 		$fields='
 			<ul id="rooms"></ul>
 		';
-	
+
 		$seteffectslink=hyperlink(build_url(array('page'=>'_SELF','type'=>'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
 
 		$buddies=array();
@@ -117,7 +117,7 @@ class Mx_chat extends Module_chat
 		require_javascript('javascript_colour_picker');
 		require_javascript('javascript_posting');
 		require_css('colour_picker');
-		
+
 		$prefs=@$_COOKIE['ocp_chat_prefs'];
 		$prefs=@explode(';',$prefs);
 		//$mode=get_param('mode','');

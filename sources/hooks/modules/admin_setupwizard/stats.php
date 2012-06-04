@@ -30,7 +30,7 @@ class Hook_sw_stats
 	function get_fields($field_defaults)
 	{
 		if (!addon_installed('stats')) return new ocp_tempcode();
-		
+
 		$stats_store_time=get_option('stats_store_time');
 
 		require_lang('stats');
@@ -46,7 +46,7 @@ class Hook_sw_stats
 	function set_fields()
 	{
 		if (!addon_installed('stats')) return;
-		
+
 		set_option('stats_store_time',post_param('stats_store_time'));
 	}
 

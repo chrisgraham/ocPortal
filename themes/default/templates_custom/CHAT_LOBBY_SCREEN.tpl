@@ -71,5 +71,5 @@ addEventListenerAbstract(window,'load',function () {
 <p>Note that the web chat rooms won't load up if you're logged on with a desktop client.</p>
 
 <h3>Instant messaging</h3>
-	
+
 <p>We have automatically added all your buddies on {$SITE_NAME*} as contacts on XMPP, so when you login you will see them. To talk to them directly all you need to do is to convince them to install and run XMPP software.</p>

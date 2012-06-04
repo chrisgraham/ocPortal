@@ -54,7 +54,7 @@
 	.calendar_year_wrap>tbody>tr {
 		display: block;
 	}
-	
+
 	.calendar_year_wrap>tbody>tr>td {
 		display: block;
 		padding: 3em;
@@ -331,7 +331,7 @@ abbr.dtstart, abbr.dtend {
 		margin-{!en_right}: 6px;
 		float: {!en_left};
 	}
-	
+
 	.event_reminders {
 		margin-bottom: 1em;
 	}

@@ -41,7 +41,7 @@ class Module_points
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -163,7 +163,7 @@ class Module_points
 	{
 		return array('member'=>'POINTS','browser'=>'BROWSE_POINT_PROFILES','misc'=>'USER_POINT_FIND');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -183,10 +183,10 @@ class Module_points
 		if ($type=='member') return $this->points_profile();
 		if ($type=='browser') return $this->points_profile(db_get_first_id()+1);
 		if ($type=='misc') return $this->points_search_form();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to search for a member (with regard to viewing their point profile).
 	 *
@@ -197,7 +197,7 @@ class Module_points
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter=';
 
 		$title=get_page_title('USER_POINT_FIND');
-	
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_search'),'_SELF',NULL,false,true);
 		require_code('form_templates');
 		if (!is_guest())
@@ -215,7 +215,7 @@ class Module_points
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'e5ab8d5d599093d1a550cb3b3e56d2bf','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'TEXT'=>$text));
 	}
-	
+
 	/**
 	 * The actualiser for a points profile search.
 	 *
@@ -250,7 +250,7 @@ class Module_points
 				{
 					$url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$id),'_SELF');
 					$name=$GLOBALS['FORUM_DRIVER']->pname_name($myrow);
-	
+
 					$results->attach(do_template('POINTS_SEARCH_RESULT',array('_GUID'=>'df240255b2981dcaee38e126622be388','URL'=>$url,'ID'=>strval($id),'NAME'=>$name)));
 				}
 			}
@@ -278,7 +278,7 @@ class Module_points
 		$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 		if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
 		$title=get_page_title('_POINTS',true,array(escape_html($name)));
-		
+
 		if (get_forum_type()=='ocf')
 		{
 			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,true,true);
@@ -406,7 +406,7 @@ class Module_points
 			return redirect_screen($title,$url,$message);
 		} else return warn_screen($title,$message);
 	}
-	
+
 }
 
 

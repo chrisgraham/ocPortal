@@ -68,7 +68,7 @@ foreach (array_keys($themes) as $theme)
 				if ((substr($f,-4)=='.css') || (substr($f,-4)=='.tpl') || ((substr($f,-4)=='.txt') && (substr($f,0,strlen($theme.'__'))==$theme.'__')))
 				{
 					$contents=file_get_contents($dir.'/'.$f);
-					
+
 					// Test comment/brace balancing
 					if (substr($f,-4)=='.css')
 					{

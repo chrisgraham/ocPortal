@@ -237,7 +237,7 @@ class Hook_addon_registry_chat
 	function tpl_preview__chat_buddies_list_screen()
 	{
 		require_css('ocf');
-		
+
 		$friend_map=array('USERGROUP'=>lorem_phrase(),'USERNAME'=>lorem_phrase(),'URL'=>placeholder_url(),'F_ID'=>placeholder_id(),'BOX'=>placeholder_table());
 		$buddies=array();
 		$buddies[]=$friend_map;
@@ -592,7 +592,7 @@ class Hook_addon_registry_chat
 	{
 		require_javascript('javascript_validation');
 		require_javascript('javascript_swfupload');
-		
+
 		$setting_blocks = new ocp_tempcode();
 		foreach (placeholder_array() as $member=>$values)
 		{

@@ -187,9 +187,9 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 		{
 			$field_groups[$field_cat]->attach($result);
 		}
-		
+
 		$hidden->attach(form_input_hidden('label_for__field_'.strval($field['id']),$_cf_name));
-		
+
 		unset($result);
 		unset($ob);
 	}
@@ -203,7 +203,7 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 	foreach ($field_groups as $field_group_title=>$extra_fields)
 	{
 		if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
-	
+
 		if ($field_group_title!='')
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
 		$fields->attach($extra_fields);
@@ -219,7 +219,7 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 function save_form_custom_fields($content_type,$id)
 {
 	$existing=get_bound_content_entry($content_type,$id);
-	
+
 	require_code('catalogues');
 
 	// Get field values
@@ -360,6 +360,6 @@ function nice_get_field_type($type='',$limit_to_storage_set=false)
 			}
 		}
 	}
-	
+
 	return make_string_tempcode($type_list->evaluate()); // XHTMLXHTML
 }

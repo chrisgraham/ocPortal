@@ -405,7 +405,7 @@ class Hook_addon_registry_core_themeing
 							)
 				));
 		}
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('INDEX_SCREEN',array(
@@ -433,7 +433,7 @@ class Hook_addon_registry_core_themeing
 					'CODENAME'=>lorem_word(),
 					'ID'=>placeholder_random_id(),
 						);
-		
+
 		$tree = do_lorem_template('TEMPLATE_TREE_ITEM',$parameters);
 
 		$middle = new ocp_tempcode();

@@ -48,7 +48,7 @@ class Hook_realtime_rain_ecommerce
 					require_lang('ecommerce');
 					$title=do_lang('SALE_MADE');
 				}
-				
+
 				$timestamp=$row['timestamp'];
 
 				$ticker_text=do_lang('KA_CHING',ecommerce_get_currency_symbol(),$row['amount']);
@@ -73,7 +73,7 @@ class Hook_realtime_rain_ecommerce
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

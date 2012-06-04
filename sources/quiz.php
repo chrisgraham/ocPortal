@@ -75,11 +75,11 @@ function handle_quiz_answers($id,$text,$type)
 		//if (preg_match('#^(\d+)\)?(.*)#',$q,$matches)===false) continue;
 		if (preg_match('#^(.*)#',$q,$matches)===false) continue;
 		if (count($matches)==0) continue;
-		
+
 		$implicit_question_number=$i;//$matches[1];
-		
+
 		$qs2[$implicit_question_number]=$q.chr(10).implode(chr(10),$as);
-		
+
 		$question=trim($matches[count($matches)-1]);
 		$question=str_replace(array(' [LONG]',' [*]',' [REQUIRED]'),array('','',''),$question);
 
@@ -151,7 +151,7 @@ function handle_quiz_answers($id,$text,$type)
 			foreach ($as as $x=>$_a)
 			{
 				list($a,$explanation)=$_a;
-				
+
 				$is_correct=((($x==0) && (strpos($qs2[$i],' [*]')===false) && ($type!='SURVEY')) || (strpos($a,' [*]')!==false))?1:0;
 				$a=str_replace(' [*]','',$a);
 
@@ -180,7 +180,7 @@ function handle_quiz_answers($id,$text,$type)
 			foreach ($as as $x=>$_a) // Try and match to an existing answer
 			{
 				list($a,$explanation)=$_a;
-				
+
 				$a=str_replace(' [*]','',$a);
 
 				foreach ($_existing_a as $_x=>$a_row)
@@ -202,7 +202,7 @@ function handle_quiz_answers($id,$text,$type)
 			foreach ($as as $x=>$_a)
 			{
 				list($a,$explanation)=$_a;
-				
+
 				$is_correct=((($x==0) && (strpos($qs2[$i],' [*]')===false)) || (strpos($a,' [*]')!==false))?1:0;
 				$a=str_replace(' [*]','',$a);
 
@@ -532,7 +532,7 @@ function render_quiz($questions)
 			$fields->attach(form_input_radio($text,'',$radios));
 		}
 	}
-	
+
 	return $fields;
 }
 

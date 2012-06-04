@@ -248,7 +248,7 @@ function add_booking($request,$member_id)
 			}
 		}
 	}
-	
+
 	return $request;
 }
 
@@ -457,7 +457,7 @@ function send_booking_emails($request)
 function make_booking_request_printable($request)
 {
 	$out=array();
-	
+
 	foreach ($request as $_part)
 	{
 		$start=mktime(0,0,0,$_part['start_month'],$_part['start_day'],$_part['start_year']);

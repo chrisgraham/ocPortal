@@ -30,7 +30,7 @@ class Hook_sw_catalogues
 	function get_fields($field_defaults)
 	{
 		if (!addon_installed('catalogues')) return new ocp_tempcode();
-		
+
 		require_lang('catalogues');
 		$fields=new ocp_tempcode();
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'hosted'));
@@ -54,7 +54,7 @@ class Hook_sw_catalogues
 	function set_fields()
 	{
 		if (!addon_installed('catalogues')) return;
-		
+
 		if (post_param_integer('have_default_catalogues_hosting',0)==0)
 		{
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'hosted'));

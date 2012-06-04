@@ -52,7 +52,7 @@ class Module_admin_awards extends standard_aed_module
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -116,7 +116,7 @@ class Module_admin_awards extends standard_aed_module
 			));
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -177,9 +177,9 @@ class Module_admin_awards extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$hr=array();
 		$hr[]=do_lang_tempcode('TITLE');
 		if (addon_installed('points'))
@@ -236,7 +236,7 @@ class Module_admin_awards extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -333,7 +333,7 @@ class Module_admin_awards extends standard_aed_module
 		$id=add_award_type(post_param('title'),post_param('description'),post_param_integer('points',0),post_param('content_type'),post_param_integer('hide_awardee',0),post_param_integer('update_time_hours'));
 
 		$this->set_permissions($id);
-		
+
 		return strval($id);
 	}
 

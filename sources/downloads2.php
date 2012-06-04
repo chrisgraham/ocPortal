@@ -56,7 +56,7 @@ function dload_script()
 	$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
-	
+
 	// Permission
 	if (!has_category_access(get_member(),'downloads',strval($myrow['category_id'])))
 		access_denied('CATEGORY_ACCESS');
@@ -68,16 +68,16 @@ function dload_script()
 		if ($myrow['download_cost']>0)
 		{
 			require_code('points2');
-	
+
 			$member=get_member();
 			if (is_guest($member))
 				access_denied('NOT_AS_GUEST');
-	
+
 			// Check they haven't downloaded this before (they only get charged once - maybe they are resuming)
 			if (is_null($got_before))
 			{
 				$cost=$myrow['download_cost'];
-			
+
 				$member=get_member();
 				if (is_guest($member))
 					access_denied('NOT_AS_GUEST');
@@ -87,7 +87,7 @@ function dload_script()
 					warn_exit(do_lang_tempcode('LACKING_POINTS',integer_format($dif)));
 				require_code('points2');
 				charge_member($member,$cost,do_lang('DOWNLOADED_THIS',get_translated_text($myrow['name'])));
-			
+
 				if ($myrow['download_submitter_gets_points']==1)
 				{
 					system_gift_transfer(do_lang('THEY_DOWNLOADED_THIS',get_translated_text($myrow['name'])),$cost,$myrow['submitter']);
@@ -214,13 +214,13 @@ function dload_script()
 	}
 
 	/*
-	
+
 	Security note... at the download adding/editing stage, we ensured that
 	only files accessible to the web server (in raw form) could end up in
 	our database.
 	Therefore we did not check here that our file was accessible in raw
 	form.
-	
+
 	*/
 }
 
@@ -905,7 +905,7 @@ function delete_download_licence($id)
 
 	$GLOBALS['SITE_DB']->query_delete('download_licences',array('id'=>$id),'',1);
 	log_it('DELETE_DOWNLOAD_LICENCE',strval($id),$myrow['l_title']);
-	
+
 	$GLOBALS['SITE_DB']->query_update('download_downloads',array('download_licence'=>NULL),array('download_licence'=>$id));
 }
 

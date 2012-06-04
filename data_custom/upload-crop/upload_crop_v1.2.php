@@ -91,7 +91,7 @@ function resizeImage($image,$width,$height,$scale) {
 			break;
   	}
 	imagecopyresampled($newImage,$source,0,0,0,0,$newImageWidth,$newImageHeight,$width,$height);
-	
+
 	switch($imageType) {
 		case "image/gif":
 	  		imagegif($newImage,$image); 
@@ -106,7 +106,7 @@ function resizeImage($image,$width,$height,$scale) {
 			imagepng($newImage,$image);  
 			break;
     }
-	
+
 	chmod($image, 0777);
 	return $image;
 }
@@ -114,7 +114,7 @@ function resizeImage($image,$width,$height,$scale) {
 function resizeThumbnailImage($thumb_image_name, $image, $width, $height, $start_width, $start_height, $scale){
 	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
 	$imageType = image_type_to_mime_type($imageType);
-	
+
 	$newImageWidth = ceil($width * $scale);
 	$newImageHeight = ceil($height * $scale);
 	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
@@ -245,7 +245,7 @@ if(strlen($large_photo_exists)>0){
 function preview(img, selection) { 
 	var scaleX = <?php echo $thumb_width;?> / selection.width; 
 	var scaleY = <?php echo $thumb_height;?> / selection.height; 
-	
+
 	$('#thumbnail + div > img').css({ 
 		width: Math.round(scaleX * <?php echo $current_large_image_width;?>) + 'px', 
 		height: Math.round(scaleY * <?php echo $current_large_image_height;?>) + 'px',

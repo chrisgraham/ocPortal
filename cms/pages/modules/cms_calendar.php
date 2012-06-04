@@ -56,7 +56,7 @@ class Module_cms_calendar extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_CALENDARS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
@@ -88,7 +88,7 @@ class Module_cms_calendar extends standard_aed_module
 			};
 			crf();
 			for (var i=0;i<form.elements['recurrence'].length;i++) form.elements['recurrence'][i].onclick=crf;
-			
+
 			var crf2=function() {
 				var s=document.getElementById('all_day_event').checked;
 				document.getElementById('start_hour').disabled=s;
@@ -121,7 +121,7 @@ class Module_cms_calendar extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_calendar';
 
 		$this->posting_form_title=do_lang_tempcode('EVENT_TEXT');
-		
+
 		require_lang('calendar');
 		require_lang('dates');
 		require_css('calendar');
@@ -131,7 +131,7 @@ class Module_cms_calendar extends standard_aed_module
 		if ($type=='misc') return $this->misc();
 
 		// Decide what to do
-		
+
 		if ($type=='import') return $this->import_ical();
 		if ($type=='_import_ical') return $this->_import_ical();
 		if ($type=='export') 	return 	$this->export_ical();
@@ -173,9 +173,9 @@ class Module_cms_calendar extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','e_title ASC',true);
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -222,13 +222,13 @@ class Module_cms_calendar extends standard_aed_module
 				$type=get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_types','t_title',array('id'=>$row['e_type'])));
 				$types[$row['e_type']]=$type;
 			}
-			
+
 			$time_raw=mktime($row['e_start_hour'],$row['e_start_minute'],0,$row['e_start_month'],$row['e_start_day'],$row['e_start_year']);
 			$date=get_timezoned_date($time_raw,!is_null($row['e_start_hour']));
 
 			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),get_module_zone('calendar')),get_translated_text($row['e_title']))),$date,$type,($row['validated']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'calendar'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'calendar'),get_module_zone('calendar'));
 
@@ -282,7 +282,7 @@ class Module_cms_calendar extends standard_aed_module
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
 		unset($content);
-		
+
 		if ((is_null($timezone)) || ($timezone=='')) $timezone=get_users_timezone();
 
 		require_code('form_templates');
@@ -901,7 +901,7 @@ class Module_cms_calendar extends standard_aed_module
 		// Build up form
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-	
+
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ICAL'),'file_novalidate',false,NULL,NULL,true,'ics,ical'));
 
 		$hidden=new ocp_tempcode();
@@ -921,7 +921,7 @@ class Module_cms_calendar extends standard_aed_module
 		check_specific_permission('mass_import');
 
 		$title=get_page_title('IMPORT_ICAL');
-	
+
 		require_code('calendar_ical');
 
 		$ical_url=post_param('ical_feed_url',NULL);
@@ -959,10 +959,10 @@ class Module_cms_calendar extends standard_aed_module
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_EVENT_TYPE'),'type_filter',$type_list));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');
 		$submit_name=do_lang_tempcode('EXPORT_ICAL');
-		
+
 		return do_template('FORM_SCREEN',array('TITLE'=>$title,'TEXT'=>do_lang_tempcode('EXPORT_ICAL_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'GET'=>true));
 	}
-	
+
 	/**
 	 * The actualiser to export ical
 	 */
@@ -1038,9 +1038,9 @@ class Module_cms_calendar_cat extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','t_title ASC',true);
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -1065,12 +1065,12 @@ class Module_cms_calendar_cat extends standard_aed_module
 		foreach ($rows as $row)
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
-			
+
 			$total=$GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)',array('e_type'=>$row['id']));
 
 			$fields->attach(results_entry(array(get_translated_text($row['t_title']),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		$search_url=NULL;
 		$archive_url=NULL;
 
@@ -1102,7 +1102,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	function add_actualisation()
 	{
 		require_code('themes2');
-		
+
 		$id=add_event_type(post_param('title'),get_theme_img_code('calendar'),post_param('external_feed'));
 		$this->set_permissions(strval($id));
 		return strval($id);
@@ -1116,7 +1116,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	function edit_actualisation($id)
 	{
 		require_code('themes2');
-		
+
 		edit_event_type(intval($id),post_param('title'),get_theme_img_code('calendar'),post_param('external_feed'));
 		if (!fractional_edit())
 		{

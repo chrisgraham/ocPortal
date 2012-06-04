@@ -57,7 +57,7 @@ class Hook_choose_gallery
 		for ($i=0;$i<count($tree);$i++)
 		{
 			$t=$tree[$i];
-			
+
 			$_id=$compound_list?$t['compound_list']:$t['id'];
 			if ($stripped_id===$t['id'])
 			{

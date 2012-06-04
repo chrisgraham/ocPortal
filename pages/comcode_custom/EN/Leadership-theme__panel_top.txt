@@ -14,28 +14,28 @@
 			<ul class="info-box">
 				<li class="info-box1">
 					[title="4"]Lorem Ipsum[/title]
-					
+
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua.<br />
 					<br />
 					[surround="more-link"][url="#"]Read more[/url][/surround]
 				</li>
 				<li class="info-box2">
 					[title="4"]Lorem Ipsum[/title]
-					
+
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua.<br />
 					<br />
 					[surround="more-link"][url="#"]Read more[/url][/surround]
 				</li>
 				<li class="info-box3">
 					[title="4"]Lorem Ipsum[/title]
-					
+
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua.<br />
 					<br />
 					[surround="more-link"][url="#"]Read more[/url][/surround]
 				</li>
 				<li class="info-box4">
 					[title="4"]Lorem Ipsum[/title]
-					
+
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut sed do eiusmod tempor incid labore et dolore magna aliqua.<br />
 					<br />
 					[surround="more-link"][url="#"]Read more[/url][/surround]

@@ -58,7 +58,7 @@ function block_params_str_to_arr($_map)
 	}
 
 	ksort($map);
-	
+
 	return $map;
 }
 

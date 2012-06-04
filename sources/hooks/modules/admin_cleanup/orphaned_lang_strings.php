@@ -46,7 +46,7 @@ class Hook_orphaned_lang_strings
 	function run()
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		
+
 		// When a lang string isn't there
 		$missing_lang_strings=array();
 		// When a lang string isn't used

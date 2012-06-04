@@ -38,7 +38,7 @@ class Block_main_recent_downloads
 		$info['parameters']=array('param','zone','show_dload_trees','filter','title');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_recent_downloads
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

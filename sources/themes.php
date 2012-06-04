@@ -65,7 +65,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write!==$GLOBALS['FORUM_DB']->connection_write))
 			$RECORDED_IMG_CODES[serialize(array($id,$theme,$lang))]=1;
 	}
-	
+
 	$true_theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 	if ($theme===NULL) $theme=$true_theme;
 
@@ -156,7 +156,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		foreach ($priorities as $i=>$priority)
 		{
 			if ($priority===NULL) continue;
-			
+
 			if (($priority[2]=='images_custom') && ($priority[1]!='')) // Likely won't auto find
 			{
 				$smap=array('id'=>$id,'theme'=>$priority[0],'lang'=>$priority[1]);
@@ -263,18 +263,18 @@ function cdn_filter($path)
 	if (isset($cdn))
 	{
 		global $CDN_CONSISTENCY_CHECK;
-		
+
 		if (isset($CDN_CONSISTENCY_CHECK[$path])) return $CDN_CONSISTENCY_CHECK[$path];
-		
+
 		$cdn_parts=explode(',',$cdn);
-		
+
 		$sum_asc=0;
 		$path_len=strlen($path);
 		for ($i=0;$i<$path_len;$i++) $sum_asc+=ord($path[$i]);
-		
+
 		$cdn_part=$cdn_parts[$sum_asc%count($cdn_parts)]; // To make a consistent but fairly even distribution we do some modular arithmetic against the total of the ascii values
 		$out=preg_replace('#(^https?://)'.str_replace('#','#',preg_quote(get_domain())).'(/)#','${1}'.$cdn_part.'${2}',$path);
-		
+
 		$CDN_CONSISTENCY_CHECK[$path]=$out;
 		return $out;
 	}

@@ -459,7 +459,7 @@ function init__global2()
 	/*ocp_memory_profile('startup');
 	$func=get_defined_functions();
 	print_r($func['user']);*/
-	
+
 	if (((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off')) && (((!defined('HIPHOP_PHP')) || (tacit_https()) || (is_page_https(get_zone_name(),get_page_name()))))) // Fix IE bug
 	{
 		@header('Cache-Control: private');
@@ -489,7 +489,7 @@ function init__global2()
 		{
 			@header('Content-type: application/xhtml+xml; charset='.get_charset());
 		}
-		
+
 		if (isset($_CREATED_FILES)) // Comes from ocProducts custom PHP version
 		{
 			/**
@@ -498,7 +498,7 @@ function init__global2()
 			function debug_mode_aftertests()
 			{
 				global $_CREATED_FILES,$_MODIFIED_FILES;
-				
+
 				// Use the info from ocProduct's custom PHP version to make sure that all files that were created/modified got synched as they should have been.
 				foreach ($_CREATED_FILES as $file)
 				{
@@ -527,7 +527,7 @@ function init__global2()
 			}
 		}
 	}
-	
+
 	// FirePHP console support, only for administrators
 	if (((get_param_integer('keep_firephp',0)==1) || (get_param_integer('keep_queries',0)==1)) && (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN'])))
 	{
@@ -605,7 +605,7 @@ function can_fast_spider_cache()
 function fast_spider_cache($bot=true)
 {
 	global $SITE_INFO;
-	
+
 	require_code('urls');
 
 	if (!can_fast_spider_cache()) return;
@@ -643,7 +643,7 @@ function fast_spider_cache($bot=true)
 				ini_set('zlib.output_compression','Off');
 				header('Content-Encoding: gzip');
 			}
-			
+
 			exit(file_get_contents($fast_cache_path));
 		} else
 		{
@@ -678,7 +678,7 @@ function get_charset()
 {
 	global $CHARSET;
 	if (isset($CHARSET)) return $CHARSET;
-	
+
 	global $SITE_INFO;
 	if (isset($SITE_INFO['charset'])) // An optimisation, if you want to put it in here
 	{
@@ -695,7 +695,7 @@ function get_charset()
 			return $attempt;
 		}
 	}
-	
+
 	global $TEMP_CHARSET;
 	if (isset($TEMP_CHARSET)) return $TEMP_CHARSET;
 
@@ -812,7 +812,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 		// Strip down path for security
 		if (substr(str_replace(DIRECTORY_SEPARATOR,'/',$errfile),0,strlen(get_file_base().'/'))==str_replace(DIRECTORY_SEPARATOR,'/',get_file_base().'/'))
 			$errfile=substr($errfile,strlen(get_file_base().'/'));
-		
+
 		// Work out the error type
 		if (!defined('E_RECOVERABLE_ERROR')) define('E_RECOVERABLE_ERROR',4096);
 		switch ($errno)
@@ -855,7 +855,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 		require_code('failure');
 		_ocportal_error_handler($type,$errno,$errstr,$errfile,$errline);
 	}
-	
+
 	return false;
 }
 
@@ -1294,7 +1294,7 @@ function get_custom_base_url($https=NULL)
 {
 	global $SITE_INFO;
 	if (!isset($SITE_INFO['custom_base_url_stub'])) return get_base_url($https);
-	
+
 	// Note that HTTPS is not supported for shared installs
 	$u=current_share_user();
 	if ($u===NULL) return get_base_url($https);
@@ -1609,7 +1609,7 @@ function unixify_line_format($in,$desired_charset=NULL,$html=false,$from_disk=fa
 	if ($in=='') return $in;
 
 	if ($desired_charset===NULL) $desired_charset=get_charset();
-	
+
 	$in=str_replace(array(chr(13).chr(10),'&#8298;',chr(13)),array(chr(10),'',chr(10)),$in); // &#8298; is very odd- seems to come from open office copy & paste
 	if (!$from_disk)
 	{
@@ -1758,20 +1758,20 @@ function javascript_tempcode($position=NULL)
 				$js->attach(do_template('JAVASCRIPT_NEED',array('CODE'=>$j)));
 		}
 	}
-	
+
 	// Our main loop
 	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_fractional_edit'=>1,'javascript_thumbnails'=>1,'javascript_button_realtime_rain'=>1);
 	foreach (array_keys($JAVASCRIPTS) as $j)
 	{
 		if (($good_to_merge) && (in_array($j,$to_merge))) continue;
-		
+
 		if ($position!==NULL)
 		{
 			$bottom=(isset($bottom_ones[$j])); // TODO: progmattic way of saying this at point of calls
 			if (($position=='header') && ($bottom)) continue;
 			if (($position=='footer') && (!$bottom)) continue;
 		}
-		
+
 		$temp=javascript_enforce($j);
 		if ($temp!='')
 		{
@@ -2018,7 +2018,7 @@ function convert_data_encodings($known_utf8=false)
 	if ((array_key_exists('KNOWN_UTF8',$GLOBALS)) && ($GLOBALS['KNOWN_UTF8'])) $known_utf8=true;
 
 	$charset=get_charset();
-	
+
 	$done_something=false;
 
 	// Conversion of parameters that might be in the wrong character encoding (e.g. Javascript uses UTF to make requests regardless of document encoding, so the stuff needs converting)

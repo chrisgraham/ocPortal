@@ -97,7 +97,7 @@ if ($type=='auto_probe')
 							{
 								if ($theme=='map.ini') continue;
 								if ($theme=='index.html') continue;
-								
+
 								$override_file=str_replace(
 									array('themes/default/templates/','themes/default/css/'),
 									array('themes/'.$theme.'/templates_custom/','themes/'.$theme.'/css_custom/'),
@@ -143,7 +143,7 @@ if ($type=='auto_probe')
 					$manual_changes['maybe_delete'][$file]=NULL;
 			}
 		}
-		
+
 		echo '
 			<h2>Advice</h2>
 		';

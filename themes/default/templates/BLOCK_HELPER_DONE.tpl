@@ -43,7 +43,7 @@
 				setInnerHTML(input_container,comcode_semihtml.replace(/^\s*/,''));
 				ob.parentNode.replaceChild(input_container.childNodes[0],ob);
 			}
-		
+
 			target_window.areaedit_editors[element.id].updateElement();
 
 			if (typeof win.faux_close!='undefined')

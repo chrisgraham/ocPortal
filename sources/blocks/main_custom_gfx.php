@@ -20,7 +20,7 @@
 
 class Block_main_custom_gfx
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_custom_gfx
 		$info['parameters']=array('param','data','font_size','x','y','color','font','center');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -48,7 +48,7 @@ class Block_main_custom_gfx
 	function run($map)
 	{
 		// Loads up correct hook and returns rendering
-		
+
 		require_lang('custom_comcode');
 
 		$type_id=$map['param'];
@@ -78,14 +78,14 @@ class Block_main_custom_gfx
 		if ((!file_exists(get_custom_file_base().'/uploads/auto_thumbs/'.$cache_id.'.png')) || (get_option('is_on_block_cache')=='0'))
 		{
 			// Ok so not cached yet
-		
+
 			$pos_x=intval(array_key_exists('x',$map)?$map['x']:'0');
 			$pos_y=intval(array_key_exists('y',$map)?$map['y']:'12');
 			$_color=array_key_exists('color',$map)?$map['color']:'FFFFFF';
 			if (substr($_color,0,1)=='#') $_color=substr($_color,1);
 			$font=array_key_exists('font',$map)?$map['font']:'Vera';
 			$center=((array_key_exists('center',$map)?$map['center']:'0')=='1');
-			
+
 			$file_base=get_custom_file_base().'/data_custom/fonts/';
 			if (!file_exists($file_base.'/'.$font.'.ttf')) $file_base=get_file_base().'/data/fonts/';
 
@@ -132,7 +132,7 @@ class Block_main_custom_gfx
 		}
 
 		$url=get_custom_base_url().'/uploads/auto_thumbs/'.$cache_id.'.png';
-		
+
 		return $url;
 	}
 

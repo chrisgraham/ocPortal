@@ -51,7 +51,7 @@ class Hook_broken_urls
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -164,7 +164,7 @@ class Hook_broken_urls
 			foreach ($COMCODE_BROKEN_URLS as $_url)
 			{
 				list($url,$spot)=$_url;
-			
+
 				if (!array_key_exists($url,$checked_already))
 				{
 					$found_404[]=array('URL'=>$url,'SPOT'=>$spot);

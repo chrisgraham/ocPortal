@@ -137,7 +137,7 @@ echo '
 	</style>';
 	echo '
 		<script language="javascript" type="text/javascript" src="data/editarea/edit_area_full.js"></script>
-		
+
 		<meta name="robots" content="noindex, nofollow" />
 		';
 	echo '
@@ -604,7 +604,7 @@ END;
 					$path2=tempnam((((ini_get('safe_mode')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'ocpce');
 					if ($path2===false)
 						$path2=tempnam(get_custom_file_base().'/safe_mode_temp/','ocpce');
-	
+
 					$h=fopen($path2,'wt');
 					fwrite($h,$hash);
 					fclose($h);
@@ -612,7 +612,7 @@ END;
 					$h=fopen($path2,'rt');
 					@ftp_fput($conn,$save_path.'.editfrom',$h,FTP_BINARY);
 					fclose($h);
-	
+
 					unlink($path2);
 				}
 			}

@@ -1100,7 +1100,7 @@ function _convert_close_open_lists($list_indent)
 function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=false,$codename='',$theme=NULL,$lang=NULL)
 {
 	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
-	
+
 	if (defined('HIPHOP_PHP'))
 	{
 		$out=new ocp_tempcode();
@@ -1208,7 +1208,7 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=
 function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=NULL)
 {
 	if (is_null($theme)) $theme=$GLOBALS['FORUM_DRIVER']->get_theme();
-	
+
 	$type=TC_PARAMETER;
 	$escaped=array();
 	$mode=SYMBOL_PARSE_NAME;

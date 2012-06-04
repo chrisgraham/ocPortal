@@ -59,7 +59,7 @@ function init__lang()
 
 	global $LANGUAGE;
 	$LANGUAGE=array();
-	
+
 	global $LANGS_MAP;
 	$LANGS_MAP=NULL;
 
@@ -75,7 +75,7 @@ function init__lang()
 	$REQUIRE_LANG_LOOP=0;
 	global $REQUIRED_ALL_LANG;
 	$REQUIRED_ALL_LANG=array();
-	
+
 	// Lazy loading code: learning algorithm to cache strings against different pages without loading all, unless we get a cache miss in the page's pool
 	global $PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED,$PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED;
 	$PAGE_CACHE_FILE=mixed();
@@ -116,7 +116,7 @@ function init__lang()
 			$PAGE_CACHE_FILE=$cache_path;
 		}
 	}
-	
+
 	require_lang('critical_error');
 	require_lang('global');
 
@@ -314,7 +314,7 @@ function does_lang_exist($lang)
 	if ($lang=='') return false;
 	if ($lang=='Gibb') return true; // Test language
 	if ($lang=='xxx') return true; // Test language
-	
+
 	$file_a=get_file_base().'/lang/'.$lang;
 	$file_b=get_custom_file_base().'/lang_custom/'.$lang;
 	$file_c=get_file_base().'/lang_custom/'.$lang;
@@ -777,7 +777,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 		if ((!$there) && ((!isset($LANGUAGE[$lang])) || (!array_key_exists($codename,$LANGUAGE[$lang]))))
 		{
 			global $PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED,$LANG_REQUESTED_LANG;
-			
+
 			if ($PAGE_CACHE_LAZY_LOAD)
 			{
 				$PAGE_CACHE_LAZY_LOAD=false; // We can't be lazy any more, but we will keep growing our pool so hopefully CAN be lazy the next time

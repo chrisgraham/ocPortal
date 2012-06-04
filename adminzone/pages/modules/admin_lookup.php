@@ -40,7 +40,7 @@ class Module_admin_lookup
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_lookup
 	{
 		return array('!'=>'INVESTIGATE_USER');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -83,11 +83,11 @@ class Module_admin_lookup
 			$submit_name=do_lang_tempcode('INVESTIGATE_USER');
 			$post_url=build_url(array('page'=>'_SELF'),'_SELF',NULL,false,true);
 			$fields=form_input_line(do_lang_tempcode('DETAILS'),do_lang_tempcode('DESCRIPTION_INVESTIGATE'),'param','',false);
-	
+
 			breadcrumb_set_self(do_lang_tempcode('SEARCH'));
 
 			return do_template('FORM_SCREEN',array('_GUID'=>'9cc407037ec01a8f3483746a22889471','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'URL'=>$post_url));
-	
+
 		} else
 		{
 			if (is_numeric($param))
@@ -202,7 +202,7 @@ class Module_admin_lookup
 			} else $action_log_url=NULL;
 
 			$alerts=($ip=='')?new ocp_tempcode():find_security_alerts(array('ip'=>$ip));
-			
+
 			$member_banned=$GLOBALS['FORUM_DRIVER']->is_banned($id);
 			$ip_banned=($ip!='') && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_ip','ip',array('ip'=>$ip))));
 			$banned_test_2=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$id));

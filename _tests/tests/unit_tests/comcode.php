@@ -28,7 +28,7 @@ class comcode_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('comcode');
 	}
-	
+
 	function testComcode()
 	{
 		$expectations=array(" - foo  "=>"<ul><li>foo</li></ul>"," - foo

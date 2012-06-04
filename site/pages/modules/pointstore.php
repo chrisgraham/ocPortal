@@ -41,7 +41,7 @@ class Module_pointstore
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -80,7 +80,7 @@ class Module_pointstore
 
 		delete_menu_item_simple('_SEARCH:pointstore:type=misc');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -148,7 +148,7 @@ class Module_pointstore
 				'name'=>'*ID_TEXT',
 				'price'=>'INTEGER'
 			));
-		
+
 			$GLOBALS['SITE_DB']->create_table('sales',array(
 				'id'=>'*AUTO',
 				'date_and_time'=>'TIME',
@@ -157,7 +157,7 @@ class Module_pointstore
 				'details'=>'SHORT_TEXT',
 				'details2'=>'SHORT_TEXT'
 			));
-		
+
 			// Pointstore Options
 			//  Banners
 				add_config_option('ENABLE_PURCHASE','is_on_banner_buy','tick','return (!addon_installed(\'banners\'))?false:\'1\';','POINTSTORE','BANNERS');
@@ -204,10 +204,10 @@ class Module_pointstore
 		require_css('points');
 
 		$title=get_page_title('POINT_STORE');
-	
+
 		$type=get_param('type','misc');
 		$hook=get_param('id','');
-	
+
 		// Not logged in
 		if (is_guest())
 		{
@@ -226,7 +226,7 @@ class Module_pointstore
 		if ($type=='misc') return $this->do_module_gui();
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to choose a section of the point-store.
 	 *
@@ -235,11 +235,11 @@ class Module_pointstore
 	function do_module_gui()
 	{
 		$title=get_page_title('POINT_STORE');
-	
+
 		$points_left=available_points(get_member());
-	
+
 		$items=new ocp_tempcode();
-	
+
 		$_hooks=find_all_hooks('modules','pointstore');
 		foreach (array_keys($_hooks) as $hook)
 		{

@@ -29,7 +29,7 @@ class Hook_sw_calendar
 	function get_blocks()
 	{
 		if (!addon_installed('calendar')) return array();
-		
+
 		return array(array(),array('side_calendar'=>array('PANEL_NONE','PANEL_RIGHT')));
 	}
 

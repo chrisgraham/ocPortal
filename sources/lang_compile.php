@@ -41,7 +41,7 @@ function init__lang_compile()
 function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=false)
 {
 	global $LANGUAGE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;
-	
+
 	$desire_cache=(function_exists('get_option')) && ((get_option('is_on_lang_cache',true)=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
 	if ($desire_cache)
 	{
@@ -110,7 +110,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 			$bad=false;
 			$dirty=true; // Tainted from the official pack, so can't store server wide
 		}
-	
+
 		// NB: Merge op doesn't happen in require_lang. It happens when do_lang fails and then decides it has to force a recursion to do_lang(xx,fallback_lang()) which triggers require_lang(xx,fallback_lang()) when it sees it's not loaded
 
 		if (($bad) && ($lang!=fallback_lang())) // Still some hope
@@ -134,7 +134,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 		if ($bad) // Out of hope
 		{
 			if ($ignore_errors) return true;
-		
+
 			if (($codename!='critical_error') || ($lang!=get_site_default_lang()))
 			{
 				fatal_exit(do_lang_tempcode('MISSING_LANG_FILE',escape_html($codename),escape_html($lang)));
@@ -173,7 +173,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 	}
 
 	if ($desire_cache) $LANGUAGE[$lang]+=$load_target;
-	
+
 	return $bad;
 }
 
@@ -211,7 +211,7 @@ function get_lang_file_map($lang,$file,$non_custom=false)
 			$b=get_custom_file_base().'/lang/'.$lang.'/'.$file.'.po';
 			if (!file_exists($b)) $b=get_custom_file_base().'/lang/'.$lang.'/'.$file.'-'.strtolower($lang).'.po';
 		}
-		
+
 		if (file_exists($b))
 		{
 			$a=$b;

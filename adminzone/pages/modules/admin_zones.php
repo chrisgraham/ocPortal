@@ -40,7 +40,7 @@ class Module_admin_zones
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_zones
 	{
 		return array('misc'=>'ZONES','edit'=>'EDIT_ZONE','add'=>'ADD_ZONE');
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -143,7 +143,7 @@ class Module_admin_zones
 		if ($id=='/') $id='';
 
 		$GLOBALS['EXTRA_HEAD']->attach(make_string_tempcode('<base target="_blank" />'));
-		
+
 		$nice_zone_name=($id=='')?do_lang('_WELCOME'):$id;
 
 		$title=get_page_title('_ZONE_EDITOR',true,array(escape_html($nice_zone_name)));
@@ -406,7 +406,7 @@ class Module_admin_zones
 					fix_permissions(dirname($fullpath),0777);
 					sync_file(dirname($fullpath));
 				}
-				
+
 				// Store revision
 				if ((file_exists($fullpath)) && (get_option('store_revisions')=='1'))
 				{
@@ -457,12 +457,12 @@ class Module_admin_zones
 	function get_form_fields($in_zone_editor=false,$title='',$default_page='start',$header_text='',$theme=NULL,$wide=0,$require_session=0,$displayed_in_menu=1,$zone=NULL)
 	{
 		require_lang('permissions');
-		
+
 		$javascript='';
 
 		$fields='';
 		$hidden=new ocp_tempcode();
-		
+
 		require_code('form_templates');
 		$fields.=static_evaluate_tempcode(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 		$fields.=static_evaluate_tempcode(form_input_line(do_lang_tempcode('DEFAULT_PAGE'),do_lang_tempcode('DESCRIPTION_DEFAULT_PAGE'),'default_page',$default_page,true));
@@ -547,7 +547,7 @@ class Module_admin_zones
 		}
 
 		$title=get_page_title('ADD_ZONE');
-	
+
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_NAME'),'zone','',true));
@@ -582,7 +582,7 @@ class Module_admin_zones
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'d8f08884cc370672c2e5604aefe78c6c','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name,'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text));
 	}
-	
+
 	/**
 	 * The actualiser to add a zone.
 	 *
@@ -596,7 +596,7 @@ class Module_admin_zones
 
 		require_code('abstract_file_manager');
 		force_have_afm_details();
-	
+
 		$zone=post_param('zone');
 		$_title=post_param('title');
 		$default_page=post_param('default_page');
@@ -639,9 +639,9 @@ class Module_admin_zones
 		if ($type=='_editor') $url_map['wide']=1;
 
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering='name ASC';
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -659,15 +659,15 @@ class Module_admin_zones
 		),$sortables,'sort',$sortable.' '.$sort_order);
 
 		$fields=new ocp_tempcode();
-		
+
 		require_code('form_templates');
 		$max_rows=$GLOBALS['SITE_DB']->query_value('zones','COUNT(*)');
 		foreach ($_zones as $_zone_details)
 		{
 			list($zone_name,$zone_title,$zone_show_in_menu,$zone_default_page,$remaining_row)=$_zone_details;
-			
+
 			$edit_link=build_url($url_map+array('id'=>$zone_name),'_SELF');
-			
+
 			$fields->attach(results_entry(array(
 				hyperlink(build_url(array('page'=>''),$zone_name),($zone_name=='')?do_lang_tempcode('NA_EM'):make_string_tempcode(escape_html($zone_name))),
 				$zone_title,
@@ -679,7 +679,7 @@ class Module_admin_zones
 				protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,$zone_name)),
 			)),true);
 		}
-		
+
 		$table=results_table(do_lang('ZONES'),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES'))));
@@ -756,9 +756,9 @@ class Module_admin_zones
 		if ($delete==1)
 		{
 			$title=get_page_title('DELETE_ZONE');
-	
+
 			actual_delete_zone($zone);
-	
+
 			// Show it worked / Refresh
 			$_url=build_url(array('page'=>'_SELF','type'=>'edit'),'_SELF');
 			return redirect_screen($title,$_url,do_lang_tempcode('SUCCESS'));
@@ -846,7 +846,7 @@ class Module_admin_zones
 		$GLOBALS['SITE_DB']->query_delete('cache');
 		if (function_exists('persistant_cache_empty')) persistant_cache_empty();
 	}
-	
+
 }
 
 

@@ -30,7 +30,7 @@ class Hook_do_next_menus_staff
 	function run()
 	{
 		if (!addon_installed('staff')) return array();
-		
+
 		return array(
 			array('security','staff',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff')),do_lang_tempcode('STAFF'),('DOC_STAFF')),
 		);

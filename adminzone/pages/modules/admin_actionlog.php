@@ -40,7 +40,7 @@ class Module_admin_actionlog
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_actionlog
 	{
 		return array('misc'=>'VIEW_ACTION_LOGS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,9 +59,9 @@ class Module_admin_actionlog
 	function run()
 	{
 		require_all_lang();
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->search();
 		if ($type=='list') return $this->choose_action();
 		if ($type=='view') return $this->view_action();
@@ -75,7 +75,7 @@ class Module_admin_actionlog
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to choose filter parameters.
 	 *
@@ -270,7 +270,7 @@ class Module_admin_actionlog
 			if ($pos>=$start)
 			{
 				$myrow=$rows[$best];
-				
+
 				$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['the_user']);
 				$mode=array_key_exists('l_reason',$myrow)?'ocf':'ocp';
 				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$myrow['id'],'mode'=>$mode),'_SELF');
@@ -279,7 +279,7 @@ class Module_admin_actionlog
 
 				if (!is_null($myrow['param_a'])) $a=$myrow['param_a']; else $a='';
 				if (!is_null($myrow['param_b'])) $b=$myrow['param_b']; else $b='';
-	
+
 				require_code('templates_interfaces');
 				$_a=tpl_crop_text_mouse_over($a,8);
 				$_b=tpl_crop_text_mouse_over($b,15);
@@ -298,7 +298,7 @@ class Module_admin_actionlog
 					$banned_test_2=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$myrow['the_user']));
 					$banned_test_3=$GLOBALS['FORUM_DRIVER']->is_banned($myrow['the_user']);
 					$banned=((is_null($banned_test_1)) && (is_null($banned_test_2)) && (!$banned_test_3))?do_lang_tempcode('NO'):do_lang_tempcode('YES');
-					
+
 					$result_entry[]=$banned;
 				}
 
@@ -312,7 +312,7 @@ class Module_admin_actionlog
 
 		return do_template('ACTION_LOGS_SCREEN',array('_GUID'=>'d75c813e372c3ca8d1204609e54c9d65','TABLE'=>$table,'TITLE'=>$title));
 	}
-	
+
 	/**
 	 * The UI to view details of a specific moderation action.
 	 *

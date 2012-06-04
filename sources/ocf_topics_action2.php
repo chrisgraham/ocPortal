@@ -373,7 +373,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 		{
 			$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list_2));
 			$member_post_counts=array_count_values($_member_post_counts);
-	
+
 			foreach ($member_post_counts as $member_id=>$member_post_count)
 			{
 				if ($to==0) $member_post_count=-$member_post_count;
@@ -474,7 +474,7 @@ function ocf_invite_to_pt($member_id,$topic_id)
 function send_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$post=NULL,$mark_unread=false)
 {
 	if (is_null($from_id)) $from_id=get_member();
-	
+
 	$post_lang_id=is_integer($post)?$post:$GLOBALS['FORUM_DB']->query_value('f_posts','p_post',array('id'=>$post_id));
 	$post_comcode=get_translated_text((integer)$post_lang_id,$GLOBALS['FORUM_DB']);
 

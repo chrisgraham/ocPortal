@@ -120,7 +120,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 					if (is_null($view_private)) //If not friended by this person, the view is filtered.
 						$_whereville='('.$_whereville.' AND a_is_public=1)';
 				}
-				
+
 				$whereville.=$_whereville;
 			}
 	      break;
@@ -249,7 +249,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				$friends_check_where='member_liked='.strval($viewer_id);
 				if (strlen($blocked_by)>0)
 					$friends_check_where='('.$friends_check_where.' AND member_likes NOT IN ('.$blocked_by.'))';
-				
+
 				$view_private=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_likes'), NULL, ' WHERE '.$friends_check_where.';');
 				$view_private[]=array('member_likes'=>$viewer_id);
 			}
@@ -278,7 +278,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 			}
 	      break;
 	}
-	
+
 	return array($proceed_selection,$whereville);
 }
 
@@ -346,7 +346,7 @@ function render_activity($row,$use_inside_ocp=true)
 			$message->attach($label[$i]->evaluate());
 		}
 	}
-	
+
 	return array($message,$memberpic,$datetime,$member_url,$row['a_language_string_code']);
 }
 

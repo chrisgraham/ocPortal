@@ -68,7 +68,7 @@ class Module_invoices
 			'i_note'=>'LONG_TEXT'
 		));
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -110,7 +110,7 @@ class Module_invoices
 	function my()
 	{
 		$title=get_page_title('MY_INVOICES');
-		
+
 		$member_id=get_member();
 		if (has_specific_permission(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
 
@@ -141,7 +141,7 @@ class Module_invoices
 
 		return do_template('ECOM_INVOICES_SCREEN',array('_GUID'=>'144a893d93090c105eecc48fa58921a7','TITLE'=>$title,'CURRENCY'=>get_option('currency'),'INVOICES'=>$invoices));
 	}
-	
+
 	/**
 	 * Show my invoices.
 	 *

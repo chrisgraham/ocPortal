@@ -43,7 +43,7 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MULTI_MODERATIONS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -137,9 +137,9 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','mm_name ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -199,7 +199,7 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 					$sink_state=do_lang_tempcode('UNSINK_TOPIC');
 					break;
 			}
-			
+
 			$destination=is_null($row['mm_move_to'])?NULL:$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>$row['mm_move_to']));
 			if (is_null($destination)) $destination=do_lang_tempcode('NA_EM');
 
@@ -224,7 +224,7 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 		{
 			$entries->attach(form_input_list_entry(strval($m['id']),false,get_translated_text($m['mm_name'],$GLOBALS['FORUM_DB'])));
 		}
-	
+
 		return $entries;
 	}
 

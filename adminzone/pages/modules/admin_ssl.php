@@ -40,7 +40,7 @@ class Module_admin_ssl
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_ssl
 	{
 		return array('misc'=>'SSL_CONFIGURATION');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -73,13 +73,13 @@ class Module_admin_ssl
 		}
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='set') return $this->set();
 		if ($type=='misc') return $this->ssl_interface();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for selecting HTTPS pages.
 	 *
@@ -88,7 +88,7 @@ class Module_admin_ssl
 	function ssl_interface()
 	{
 		$title=get_page_title('SSL_CONFIGURATION');
-	
+
 		$content=new ocp_tempcode();
 		$zones=find_all_zones();
 		foreach ($zones as $zone)
@@ -103,11 +103,11 @@ class Module_admin_ssl
 				$content->attach(do_template('SSL_CONFIGURATION_ENTRY',array('_GUID'=>'a08c339d93834f968c8936b099c677a3','TICKED'=>$ticked,'PAGE'=>$page,'ZONE'=>$zone)));
 			}
 		}
-	
+
 		$url=build_url(array('page'=>'_SELF','type'=>'set'),'_SELF');
 		return do_template('SSL_CONFIGURATION_SCREEN',array('_GUID'=>'823f395205f0c018861847e80c622710','URL'=>$url,'TITLE'=>$title,'CONTENT'=>$content));
 	}
-	
+
 	/**
 	 * The actualiser for selecting HTTPS pages.
 	 *
@@ -128,7 +128,7 @@ class Module_admin_ssl
 				if ($value==1) $GLOBALS['SITE_DB']->query_insert('https_pages',array('https_page_name'=>$id));
 			}
 		}
-	
+
 		$title=get_page_title('SSL_CONFIGURATION');
 
 		persistant_cache_empty();

@@ -40,7 +40,7 @@ class Module_login
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -48,7 +48,7 @@ class Module_login
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('failedlogins');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -64,7 +64,7 @@ class Module_login
 			'ip'=>'IP'
 		));
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -92,7 +92,7 @@ class Module_login
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for logging in.
 	 *
@@ -106,7 +106,7 @@ class Module_login
 		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 		global $ZONE;
-	
+
 		// Where we will be redirected to after login
 		$redirect_default=get_self_url(true,true); // Still won't redirect to root if we have $_POST, because we relay $_POST values and have intelligence later on
 		$redirect=get_param('redirect',$redirect_default);
@@ -142,10 +142,10 @@ class Module_login
 			if (!is_null($redirect_passon))
 				$passion->attach(form_input_hidden('redirect_passon',$redirect_passon));
 		}
-	
+
 		$username=trim(get_param('username',''));
 		if (!is_guest()) $username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-	
+
 		if (get_forum_type()=='ocf')
 		{
 			require_lang('ocf');
@@ -154,12 +154,12 @@ class Module_login
 		} else $extra=new ocp_tempcode();
 
 		require_css('login');
-		
+
 		breadcrumb_set_parents(array());
 
 		return do_template('LOGIN_SCREEN',array('_GUID'=>'0940dbf2c42493c53b7e99eb50ca51f1','EXTRA'=>$extra,'USERNAME'=>$username,'JOIN_LINK'=>$GLOBALS['FORUM_DRIVER']->join_url(),'TITLE'=>$title,'LOGIN_URL'=>$login_url,'PASSION'=>$passion));
 	}
-	
+
 	/**
 	 * The actualiser for logging in.
 	 *
@@ -214,7 +214,7 @@ class Module_login
 			return $this->login_before();
 		}
 	}
-	
+
 	/**
 	 * The actualiser for logging out.
 	 *

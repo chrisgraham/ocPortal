@@ -241,7 +241,7 @@ class Module_admin_addons
 		{
 			$_POST['url']='http://ocportal.com/site/dload.php?id='.$url;
 		}
-		
+
 //		if ($url=='')
 //		{
 			$urls=get_url('url','file','imports/mods',0,0,false,'','',true);
@@ -261,7 +261,7 @@ class Module_admin_addons
 		$_url=build_url(array('page'=>'_SELF','type'=>'addon_install','file'=>basename($urls[0])),'_SELF');
 		return redirect_screen($title,$_url,do_lang_tempcode('ADDON_IMPORTED'));
 	}
-	
+
 	/**
 	 * The UI to confirm a combined action on addons.
 	 *
@@ -290,14 +290,14 @@ class Module_admin_addons
 				$uninstalling[]=$passed;
 			}
 		}
-		
+
 		foreach ($uninstalling as $name)
 		{
 			list($_warnings,$_files)=inform_about_addon_uninstall($name,$uninstalling);
 			$warnings->attach($_warnings);
 			$uninstall_files->attach($_files);
 		}
-		
+
 		foreach ($installing as $file)
 		{
 			list($_warnings,$_files,$info)=inform_about_addon_install($file,$uninstalling,$installing);
@@ -323,7 +323,7 @@ class Module_admin_addons
 	function _multi_action()
 	{
 		$title=get_page_title('INSTALL_AND_UNINSTALL');
-	
+
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		require_code('abstract_file_manager');
@@ -406,7 +406,7 @@ class Module_admin_addons
 	function _addon_install()
 	{
 		$title=get_page_title('INSTALL_ADDON');
-	
+
 		require_code('abstract_file_manager');
 		force_have_afm_details();
 
@@ -461,7 +461,7 @@ class Module_admin_addons
 
 		return do_template('ADDON_UNINSTALL_CONFIRM_SCREEN',array('_GUID'=>'fe96098c1f09d091fc10785134803135','TITLE'=>$title,'URL'=>$url,'NAME'=>$name,'WARNINGS'=>$warnings,'FILES'=>$files));
 	}
-	
+
 	/**
 	 * The UI to uninstall an addon.
 	 *
@@ -486,7 +486,7 @@ class Module_admin_addons
 		{
 			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).date('-dmY-Hm',time()).'.tar';
 		}
-		
+
 		$new_addon_files=array();
 		foreach ($addon_row['addon_files'] as $_file)
 		{
@@ -521,7 +521,7 @@ class Module_admin_addons
 	function addon_export()
 	{
 		$title=get_page_title('EXPORT_ADDON');
-	
+
 		// Lang packs
 		$url=build_url(array('page'=>'_SELF','type'=>'_addon_export','exp'=>'lang'),'_SELF');
 		$all_langs=find_all_langs();
@@ -630,7 +630,7 @@ class Module_admin_addons
 
 		return $out;
 	}
-	
+
 	/**
 	 * The UI to export an addon (2).
 	 *
@@ -649,7 +649,7 @@ class Module_admin_addons
 		$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$organisation=get_site_name();
 		$description='';
-		
+
 		// ... but the theme might already define some of this
 		if (!is_null($theme))
 		{
@@ -678,7 +678,7 @@ class Module_admin_addons
 				}
 			}
 		}
-	
+
 		$fields=''; /*XHTMLXHTML*/
 		require_code('form_templates');
 		$field=form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name',$name,true);
@@ -725,7 +725,7 @@ class Module_admin_addons
 				{
 					if ((substr($file,0,strlen($theme)+2)==$theme.'__'))
 						$file=substr($file,strlen($theme)+2);
-					
+
 					if ((substr($file,-4)=='.txt') && (strpos($file,'/comcode_custom/')!==false))
 					{
 						$matches=array();
@@ -766,7 +766,7 @@ class Module_admin_addons
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'dd8bea111b0dfc7df7ddc7e2246f0ef9','HIDDEN'=>$hidden,'TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url));
 	}
-	
+
 	/**
 	 * The actualiser to export an addon.
 	 *
@@ -972,13 +972,13 @@ class Module_admin_addons
 	{
 		$module=post_param('module');
 		$zone=post_param('zone');
-	
+
 		require_code('zones2');
 
 		if ($zone!='_block') uninstall_module($zone,$module); else uninstall_block($module);
-	
+
 		$title=get_page_title('UNINSTALL_MODULE');
-	
+
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$zone),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
@@ -993,13 +993,13 @@ class Module_admin_addons
 	{
 		$module=post_param('module');
 		$zone=post_param('zone');
-	
+
 		require_code('zones2');
 
 		if ($zone!='_block') reinstall_module($zone,$module); else reinstall_block($module);
-	
+
 		$title=get_page_title('REINSTALL_MODULE');
-	
+
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$zone),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));

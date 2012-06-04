@@ -3,9 +3,9 @@
 /*
     Program E
 	Copyright 2002, Paul Rydell
-	
+
 	This file is part of Program E.
-	
+
 	Program E is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -91,7 +91,7 @@ function gettemplate($input,$that,$topic,&$inputstarvals,&$thatstarvals,&$topics
 	else {
 
 		$inputmatched=array(trim($input)," : ",trim($that)," : ",trim($topic));
-		
+
 		// These arrays will hold the words that matched the wildcards in the pattern
 		$inputstarvals=array();
 		$thatstarvals=array();
@@ -118,7 +118,7 @@ function gettemplate($input,$that,$topic,&$inputstarvals,&$thatstarvals,&$topics
 		}
 
 		return $mytemplate;
-	
+
 	}
 }
 
@@ -148,7 +148,7 @@ function gettemplate($input,$that,$topic,&$inputstarvals,&$thatstarvals,&$topics
 function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarvals,&$thatstarvals,&$topicstarvals,&$patternmatched){
 
 	$curpmsize=0;
-	
+
 	//print "input: $input<BR>";
 	debugger("Graphwalker called. Input|$input| Parent: $parent Timesthrough: $timesthrough Onwild: $onwild Parton: $parton",1);
 
@@ -194,7 +194,7 @@ function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarval
 
 	// Look for _ wildcard first because it is first "alphabetically"
 	if (($whichresult[0]!=-1)&&($word!="<input>")&&($word!="<that>")&&($word!="<topic>")){
-		
+
 		// Don't keep looking in this portion of the graph - don't check for atomic or * because we matched already.
 		$continuenode=-1;
 
@@ -205,7 +205,7 @@ function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarval
 
 		// If it is the last word in its context
 		if ($whichresult[3]==1) {
-			
+
 			// The word we were on matched a wildcard so add the word to the star array.
 			// Also it is the last word in this context so add everything up to the next context to the star.
 			$ffremains=$remains;
@@ -252,7 +252,7 @@ function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarval
 
 	// Look for an atomic match. Atomic match is where the whole word matches identically.
 	if (($whichresult[1]!=-1)&&($continuenode==1)){
-		
+
 		$continuenode=-1;
 
 		// If we found a result and our word was "" then we have reached the end of the pattern so we return the template associated.
@@ -271,7 +271,7 @@ function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarval
 			}
 
 			debugger("Result not blank and word is not blank. Calling graphwalker.",2);
-			
+
 			// We take off the first word and call the graphwalker again.
 			$retvalue = graphwalker($remains,$whichresult[1],1,0,$parton,$inputstarvals,$thatstarvals,$topicstarvals,$patternmatched);
 
@@ -282,13 +282,13 @@ function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarval
 			}
 			// Else we continue down our current node alphabetically to *
 			else {
-				
+
 				$curpdiff=sizeof($patternmatched) - $curpmsize;
 
 				for ($curpc=0;$curpc<=$curpdiff;$curpc++){
 					array_pop($patternmatched);
 				}
-				
+
 				$continuenode=1;
 
 			}
@@ -305,7 +305,7 @@ function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarval
 
 	// Look for *
 	if (($whichresult[2]!=-1)&&($continuenode==1)&&($word!="<input>")&&($word!="<that>")&&($word!="<topic>")){
-		
+
 		debugger("Looking for a '*' here",2);		
 		debugger("Result not blank and word is not blank. Calling graphwalker.",2);
 
@@ -330,7 +330,7 @@ function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarval
 			// Call graphwalker with the first word removed from input
 			$retvalue = graphwalker($remains,$whichresult[2],1,1,$parton,$inputstarvals,$thatstarvals,$topicstarvals,$patternmatched);
 		}
-		
+
 
 		// If found result then return it up.
 		if ($retvalue!=""){
@@ -338,7 +338,7 @@ function graphwalker($input,$parent,$timesthrough,$onwild,$parton,&$inputstarval
 			return $retvalue;
 		}
 		else {
-			
+
 			$curpdiff=sizeof($patternmatched) - $curpmsize;
 
 			for ($curpc=0;$curpc<=$curpdiff;$curpc++){
@@ -390,7 +390,7 @@ function dographquery(&$whichresult, $word, $parent){
 	$query="select id,ordera,isend from patterns where (word='" . addslashes($word) . "' or word is null) and parent=$parent";
 
 	global $numselects;
-	
+
 	$numselects++;
 	debugger("dographquery: $query\n",2);
 
@@ -436,7 +436,7 @@ function dographquery(&$whichresult, $word, $parent){
 					}
 
 				}
-				
+
 
 
 			}
@@ -507,7 +507,7 @@ function addtostar($parton,$word,&$inputstarvals,&$thatstarvals,&$topicstarvals,
 			elseif ($action==2){
 				$inputstarvals[sizeof($inputstarvals)-1].= " " . $word;
 			}
-		
+
 		}
 		elseif ($parton=="that"){
 
@@ -578,7 +578,7 @@ function fastforward($word,$ffremains){
 	}
 
 	$ffremains=trim($newremains);
-	
+
 	return $starwords;
 
 }
@@ -617,7 +617,7 @@ function checkcache($combined,&$template,&$inputstarvals,&$thatstarvals,&$topics
 				$topicstarvals=explode(",",$q[3]);
 				$patternmatched=$q[4];
 				$inputmatched=$q[5];
-				
+
 				return true;
 			}
 		}
@@ -646,7 +646,7 @@ function checkcache($combined,&$template,&$inputstarvals,&$thatstarvals,&$topics
 function fillcache($combined,$mytemplate,$inputstarvals,$thatstarvals,$topicstarvals,$patternmatched,$inputmatched)
 {
 	global $selectbot;	
-	
+
 	$ccquery="insert into gmcache (bot, combined,template,inputstarvals,thatstarvals,topicstarvals,patternmatched,inputmatched) values ($selectbot,'" . addslashes($combined) . "'," . $mytemplate . ",'" . addslashes(arraytostring($inputstarvals)) . "','" . addslashes(arraytostring($thatstarvals)) . "','" . addslashes(arraytostring($topicstarvals)) . "','" . addslashes($patternmatched) . "','" . addslashes($inputmatched) . "')";
 
 	$selectcode = mysql_query($ccquery);

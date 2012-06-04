@@ -378,7 +378,7 @@ XMLP.prototype._parse = function() {
     else{
         return this._parseText   (this.m_iP);
     }
-	
+
 
 }  // end function _parse
 
@@ -2012,7 +2012,7 @@ function _XMLDoc_error(str) {
         this.onerror("ERROR: " + str); 
 	}
     return 0;
-	
+
 } // end function _XMLDoc_error
 
 
@@ -2668,7 +2668,7 @@ function _XMLDoc_selectNode(tagpath){
     *********************************************************************************************************************/
 
 	tagpath = trim(tagpath, true, true);
-	
+
 	var srcnode,node,tag,params,elm,rg;
 	var tags,attrName,attrValue,ok;
 	srcnode=node=((this.source)?this.docNode:this);
@@ -3119,7 +3119,7 @@ function _XMLNode_toString() {
 //
 // Contains text (used within comments to methods) from the
 //  XML Path Language (XPath) Version 1.0 W3C Recommendation
-//  Copyright © 16 November 1999 World Wide Web Consortium,
+//  Copyright ï¿½ 16 November 1999 World Wide Web Consortium,
 //  (Massachusetts Institute of Technology,
 //  European Research Consortium for Informatics and Mathematics, Keio University).
 //  All Rights Reserved.
@@ -7352,32 +7352,32 @@ function xmlEscapeXMLToHTML(xmlData) {
 
     var str = xmlData;
 
-    //replace < with «
+    //replace < with ï¿½
     gt = -1;
     while (str.indexOf("<", gt + 1) > -1) {
         var gt = str.indexOf("<", gt + 1);
         var newStr = str.substr(0, gt);
-        newStr += "«";
+        newStr += "ï¿½";
         newStr = newStr + str.substr(gt + 1, str.length);
         str = newStr;
     }
 
-    //replace > with »
+    //replace > with ï¿½
     gt = -1;
     while (str.indexOf(">", gt + 1) > -1) {
         var gt = str.indexOf(">", gt + 1);
         var newStr = str.substr(0, gt);
-        newStr += "»";
+        newStr += "ï¿½";
         newStr = newStr + str.substr(gt + 1, str.length);
         str = newStr;
     }
 
-    //replace & with §
+    //replace & with ï¿½
     gt = -1;
     while (str.indexOf("&", gt + 1) > -1) {
         var gt = str.indexOf("&", gt + 1);
         var newStr = str.substr(0, gt);
-        newStr += "§";
+        newStr += "ï¿½";
         newStr = newStr + str.substr(gt + 1, str.length);
         str = newStr;
     }
@@ -7401,10 +7401,10 @@ function xmlUnescapeHTMLToXML(xmlData)  {
 
     var gt;
 
-    //replace « with <
+    //replace ï¿½ with <
     gt = -1;
-    while (str.indexOf("«", gt + 1) > -1) {
-        var gt = str.indexOf("«", gt + 1);
+    while (str.indexOf("ï¿½", gt + 1) > -1) {
+        var gt = str.indexOf("ï¿½", gt + 1);
         var newStr = str.substr(0, gt);
         newStr += "<";
         newStr = newStr + str.substr(gt + 1, str.length);
@@ -7412,20 +7412,20 @@ function xmlUnescapeHTMLToXML(xmlData)  {
     }
 
 
-    //replace » with >
+    //replace ï¿½ with >
     gt = -1;
-    while (str.indexOf("»", gt + 1) > -1) {
-        var gt = str.indexOf("»", gt + 1);
+    while (str.indexOf("ï¿½", gt + 1) > -1) {
+        var gt = str.indexOf("ï¿½", gt + 1);
         var newStr = str.substr(0, gt);
         newStr += ">";
         newStr = newStr + str.substr(gt + 1, str.length);
         str = newStr;
     }
 
-    //replace § with &
+    //replace ï¿½ with &
     gt = -1;
-    while (str.indexOf("§", gt + 1) > -1) {
-        var gt = str.indexOf("§", gt + 1);
+    while (str.indexOf("ï¿½", gt + 1) > -1) {
+        var gt = str.indexOf("ï¿½", gt + 1);
         var newStr = str.substr(0, gt);
         newStr += "&";
         newStr = newStr + str.substr(gt + 1, str.length);
@@ -8057,7 +8057,7 @@ function __isEmpty(str) {
 //
 // Contains text (used within comments to methods) from the
 //  XML Path Language (XPath) Version 1.0 W3C Recommendation
-//  Copyright © 16 November 1999 World Wide Web Consortium,
+//  Copyright ï¿½ 16 November 1999 World Wide Web Consortium,
 //  (Massachusetts Institute of Technology,
 //  European Research Consortium for Informatics and Mathematics, Keio University).
 //  All Rights Reserved.

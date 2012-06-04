@@ -38,7 +38,7 @@ class Block_main_emoticon_codes
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_emoticon_codes
 		$info['ttl']=60*2;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -65,7 +65,7 @@ class Block_main_emoticon_codes
 		require_code('comcode_text');
 
 		$smilies=$GLOBALS['FORUM_DRIVER']->find_emoticons(get_member());
-	
+
 		$entries=new ocp_tempcode();
 		global $EMOTICON_LEVELS;
 		foreach ($smilies as $code=>$imgcode)
@@ -75,7 +75,7 @@ class Block_main_emoticon_codes
 				$entries->attach(do_template('BLOCK_MAIN_EMOTICON_CODES_ENTRY',array('_GUID'=>'9d723c17133313b327a9485aeb23aa8c','CODE'=>$code,'TPL'=>do_emoticon($imgcode))));
 			}
 		}
-	
+
 		return do_template('BLOCK_MAIN_EMOTICON_CODES',array('_GUID'=>'56c12281d7e3662b13a7ad7d9958a65c','ENTRIES'=>$entries));
 	}
 

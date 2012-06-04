@@ -50,7 +50,7 @@ class Module_awards
 	{
 		return ($GLOBALS['SITE_DB']->query_value('award_types','COUNT(*)')==0)?array():array('misc'=>'AWARDS','overview'=>'AWARD_OVERVIEW');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -117,11 +117,11 @@ class Module_awards
 	function award_overview()
 	{
 		$title=get_page_title('AWARD_OVERVIEW');
-		
+
 		$award_types=$GLOBALS['SITE_DB']->query_select('award_types',array('*'));
 
 		$content=new ocp_tempcode();
-		
+
 		require_code('content');
 
 		foreach ($award_types as $award_type_row)

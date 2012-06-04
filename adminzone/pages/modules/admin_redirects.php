@@ -41,7 +41,7 @@ class Module_admin_redirects
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -49,7 +49,7 @@ class Module_admin_redirects
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('redirects');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -93,7 +93,7 @@ class Module_admin_redirects
 	{
 		return array('misc'=>'REDIRECTS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -104,13 +104,13 @@ class Module_admin_redirects
 		require_lang('redirects');
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->gui();
 		if ($type=='actual') return $this->actual();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for managing redirects.
 	 *
@@ -142,7 +142,7 @@ class Module_admin_redirects
 
 		return do_template('REDIRECTE_TABLE_SCREEN',array('_GUID'=>'2a9add73f6dd0b8288c0c84fc7242763','NOTES'=>$notes,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'FIELDS'=>$fields,'NEW'=>$new,'URL'=>$post_url));
 	}
-	
+
 	/**
 	 * The actualiser for managing redirects.
 	 *
@@ -151,14 +151,14 @@ class Module_admin_redirects
 	function actual()
 	{
 		$title=get_page_title('REDIRECTS');
-	
+
 		$found=array();
 		foreach ($_POST as $key=>$val)
 		{
 			if (!is_string($val)) continue;
-	
+
 			if (get_magic_quotes_gpc()) $val=stripslashes($val);
-	
+
 			if ((substr($key,0,10)=='from_page_') && ($val!=''))
 			{
 				$their_i=array_search($val,$found);
@@ -168,14 +168,14 @@ class Module_admin_redirects
 				$found[$i]=$val;
 			}
 		}
-	
+
 		$GLOBALS['SITE_DB']->query_delete('redirects');
 		persistant_cache_empty();
 
 		foreach ($found as $i=>$val)
 		{
 			if (!is_string($i)) $i=strval($i);
-			
+
 			if ($val!='')
 			{
 				$GLOBALS['SITE_DB']->query_insert('redirects',array(

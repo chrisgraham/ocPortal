@@ -27,7 +27,7 @@ class Hook_cron_group_member_timeouts
 	function run()
 	{
 		require_code('group_member_timeouts');
-		
+
 		cleanup_member_timeouts();
 	}
 

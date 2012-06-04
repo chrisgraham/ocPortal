@@ -30,7 +30,7 @@ class Hook_do_next_menus_bulkupload
 	function run()
 	{
 		if (!addon_installed('bulkupload')) return array();
-		
+
 		return array(
 			array('tools','bulkupload',array('admin_bulkupload',array(),get_module_zone('admin_bulkupload')),do_lang_tempcode('BULK_UPLOAD'),('DOC_BULK_UPLOAD')),
 		);

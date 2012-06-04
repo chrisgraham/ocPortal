@@ -80,7 +80,7 @@ class Hook_fields_picture
 		if (is_object($ev)) return $ev;
 
 		if ($ev=='') return '';
-		
+
 		$img_url=$ev;
 		if (url_is_local($img_url)) $img_url=get_custom_base_url().'/'.$img_url;
 		if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
@@ -129,7 +129,7 @@ class Hook_fields_picture
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
-		
+
 		return array($ffield,$hidden);
 	}
 
@@ -166,7 +166,7 @@ class Hook_fields_picture
 
 		return $value;
 	}
-	
+
 	/**
 	 * The field is being deleted, so delete any necessary data
 	 *

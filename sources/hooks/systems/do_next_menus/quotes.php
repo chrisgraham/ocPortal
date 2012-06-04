@@ -30,7 +30,7 @@ class Hook_do_next_menus_quotes
 	function run()
 	{
 		if (!addon_installed('random_quotes')) return array();
-		
+
 		return array(
 			array('style','quotes',array('quotes',array(),get_page_zone('quotes')),do_lang_tempcode('QUOTES'),('DOC_QUOTES')),
 		);

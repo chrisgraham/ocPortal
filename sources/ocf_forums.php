@@ -28,10 +28,10 @@ function init__ocf_forums()
 
 	global $CATEGORY_TITLES;
 	$CATEGORY_TITLES=NULL;
-	
+
 	global $FORUM_TREE_SECURE_CACHE;
 	$FORUM_TREE_SECURE_CACHE=mixed();
-	
+
 	global $ALL_FORUMS_STRUCT;
 	$ALL_FORUMS_STRUCT=NULL;
 }

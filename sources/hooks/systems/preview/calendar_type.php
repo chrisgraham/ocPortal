@@ -48,7 +48,7 @@ class Hook_Preview_calendar_type
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('calendar_types',array('t_logo'),array('id'=>post_param_integer('id')),'',1);
 				$urls=$rows[0];
-	
+
 				$url=find_theme_image($urls['t_logo']);
 			} elseif (!is_null(post_param('theme_img_code',NULL)))
 			{

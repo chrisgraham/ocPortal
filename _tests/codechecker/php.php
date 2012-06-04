@@ -47,7 +47,7 @@ function init__php()
 function get_php_file_api($filename,$include_code=true)
 {
 	require_code('type_validation');
-	
+
 	$classes=array();
 
 	// Open up PHP file
@@ -490,7 +490,7 @@ function check_function_type($type,$function_name,$name,$value,$range,$set,$echo
 	);
 
 	$_type=(($type[0]=='?') || ($type[0]=='~'))?substr($type,1):$type;
-	
+
 	if ($_type=='GROUP') $_type='USERGROUP';
 
 	if (!in_array($_type,$valid_types)) fatal_exit(do_lang_tempcode('INVALID_PARAMETER_TYPE',escape_html($type),escape_html($function_name)));
@@ -775,7 +775,7 @@ function render_php_function_do_bits($parameter)
 	{
 		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'845d1a0286323342bc4e011b178d4ac1','NAME'=>do_lang_tempcode('VALUE_RANGE'),'VALUE'=>$parameter['range'])));
 	}
-	
+
 	return $bits;
 }
 

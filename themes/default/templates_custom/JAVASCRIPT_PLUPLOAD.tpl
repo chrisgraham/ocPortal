@@ -205,7 +205,7 @@
 		 * @final
 		 */
 		FILE_EXTENSION_ERROR : -601,
-		
+
 		/**
 		 * Runtime will try to detect if image is proper one. Otherwise will throw this error.
 		 *
@@ -213,7 +213,7 @@
 		 * @final
 		 */
 		IMAGE_FORMAT_ERROR : -700,
-		
+
 		/**
 		 * While working on the image runtime will try to detect if the operation may potentially run out of memeory and will throw this error.
 		 *
@@ -221,7 +221,7 @@
 		 * @final
 		 */
 		IMAGE_MEMORY_ERROR : -701,
-		
+
 		/**
 		 * Each runtime has an upper limit on a dimension of the image it can handle. If bigger, will throw this error.
 		 *
@@ -229,7 +229,7 @@
 		 * @final
 		 */
 		IMAGE_DIMENSIONS_ERROR : -702,
-		
+
 
 		/**
 		 * Mime type lookup table.
@@ -239,17 +239,17 @@
 		 * @final
 		 */
 		mimeTypes : mimes,
-		
+
 		/**
 		 * In some cases sniffing is the only way around :(
 		 */
 		ua: (function() {
 			var nav = navigator, userAgent = nav.userAgent, vendor = nav.vendor, webkit, opera, safari;
-			
+
 			webkit = /WebKit/.test(userAgent);
 			safari = webkit && vendor.indexOf('Apple') !== -1;
 			opera = window.opera && window.opera.buildNumber;
-			
+
 			return {
 				windows: navigator.platform.indexOf('Win') !== -1,
 				ie: !webkit && !opera && (/MSIE/gi).test(userAgent) && (/Explorer/gi).test(nav.appName),
@@ -414,7 +414,7 @@
 			if (size === undef || /\D/.test(size)) {
 				return plupload.translate('N/A');
 			}
-			
+
 			// GB
 			if (size > 1073741824) {
 				return Math.round(size / 1073741824, 1) + " GB";
@@ -588,7 +588,7 @@
 		translate : function(str) {
 			return i18n[str] || str;
 		},
-		
+
 		/**
 		 * Checks if object is empty.
 		 *
@@ -597,13 +597,13 @@
 		 */
 		isEmptyObj : function(obj) {
 			if (obj === undef) return true;
-			
+
 			for (var prop in obj) {
 				return false;	
 			}
 			return true;
 		},
-		
+
 		/**
 		 * Checks if specified DOM element has specified class.
 		 *
@@ -612,7 +612,7 @@
 		 */
 		hasClass : function(obj, name) {
 			var regExp;
-		
+
 			if (obj.className == '') {
 				return false;
 			}
@@ -621,7 +621,7 @@
 
 			return regExp.test(obj.className);
 		},
-		
+
 		/**
 		 * Adds specified className to specified DOM element.
 		 *
@@ -633,7 +633,7 @@
 				obj.className = obj.className == '' ? name : obj.className.replace(/\s+$/, '')+' '+name;
 			}
 		},
-		
+
 		/**
 		 * Removes specified className from specified DOM element.
 		 *
@@ -642,7 +642,7 @@
 		 */
 		removeClass : function(obj, name) {
 			var regExp = new RegExp("(^|\\s+)"+name+"(\\s+|$)");
-			
+
 			obj.className = obj.className.replace(regExp, function($0, $1, $2) {
 				return $1 === ' ' && $2 === ' ' ? ' ' : '';
 			});
@@ -673,12 +673,12 @@
 		 */
 		addEvent : function(obj, name, callback) {
 			var func, events, types, key;
-			
+
 			// if passed in, event will be locked with this key - one would need to provide it to removeEvent
 			key = arguments[3];
-						
+
 			name = name.toLowerCase();
-						
+
 			// Initialize unique identifier if needed
 			if (uid === undef) {
 				uid = 'Plupload_' + plupload.guid();
@@ -687,10 +687,10 @@
 			// Add event listener
 			if (obj.addEventListener) {
 				func = callback;
-				
+
 				obj.addEventListener(name, func, false);
 			} else if (obj.attachEvent) {
-				
+
 				func = function() {
 					var evt = window.event;
 
@@ -705,29 +705,29 @@
 				};
 				obj.attachEvent('on' + name, func);
 			} 
-			
+
 			// Log event handler to objects internal Plupload registry
 			if (obj[uid] === undef) {
 				obj[uid] = plupload.guid();
 			}
-			
+
 			if (!eventhash.hasOwnProperty(obj[uid])) {
 				eventhash[obj[uid]] = {};
 			}
-			
+
 			events = eventhash[obj[uid]];
-			
+
 			if (!events.hasOwnProperty(name)) {
 				events[name] = [];
 			}
-					
+
 			events[name].push({
 				func: func,
 				orig: callback, // store original callback for IE
 				key: key
 			});
 		},
-		
+
 		
 		/**
 		 * Remove event handler from the specified object. If third argument (callback)
@@ -739,54 +739,54 @@
 		 */
 		removeEvent: function(obj, name) {
 			var type, callback, key;
-			
+
 			// match the handler either by callback or by key	
 			if (typeof(arguments[2]) == "function") {
 				callback = arguments[2];
 			} else {
 				key = arguments[2];
 			}
-						
+
 			name = name.toLowerCase();
-			
+
 			if (obj[uid] && eventhash[obj[uid]] && eventhash[obj[uid]][name]) {
 				type = eventhash[obj[uid]][name];
 			} else {
 				return;
 			}
-			
+
 				
 			for (var i=type.length-1; i>=0; i--) {
 				// undefined or not, key should match			
 				if (type[i].key === key || type[i].orig === callback) {
-										
+
 					if (obj.detachEvent) {
 						obj.detachEvent('on'+name, type[i].func);
 					} else if (obj.removeEventListener) {
 						obj.removeEventListener(name, type[i].func, false);		
 					}
-					
+
 					type[i].orig = null;
 					type[i].func = null;
-					
+
 					type.splice(i, 1);
-					
+
 					// If callback was passed we are done here, otherwise proceed
 					if (callback !== undef) {
 						break;
 					}
 				}			
 			}	
-			
+
 			// If event array got empty, remove it
 			if (!type.length) {
 				delete eventhash[obj[uid]][name];
 			}
-			
+
 			// If Plupload registry has become empty, remove it
 			if (plupload.isEmptyObj(eventhash[obj[uid]])) {
 				delete eventhash[obj[uid]];
-				
+
 				// IE doesn't let you remove DOM object property with - delete
 				try {
 					delete obj[uid];
@@ -795,7 +795,7 @@
 				}
 			}
 		},
-		
+
 		
 		/**
 		 * Remove all kind of events from the specified object
@@ -805,17 +805,17 @@
 		 */
 		removeAllEvents: function(obj) {
 			var key = arguments[1];
-			
+
 			if (obj[uid] === undef || !obj[uid]) {
 				return;
 			}
-			
+
 			plupload.each(eventhash[obj[uid]], function(events, name) {
 				plupload.removeEvent(obj, name, key);
 			});		
 		}
 	};
-	
+
 
 	/**
 	 * Uploader class, an instance of this class will be created for each upload field.
@@ -936,7 +936,7 @@
 			 * @type Number
 			 */
 			state : plupload.STOPPED,
-			
+
 			/**
 			 * Current runtime name.
 			 *
@@ -1022,7 +1022,7 @@
 					// Convert extensions to regexp
 					if (filters && filters.length) {
 						extensionsRegExp = [];
-						
+
 						plupload.each(filters, function(filter) {
 							plupload.each(filter.extensions.split(/,/), function(ext) {
 								if (/^\s*\*\s*$/.test(ext)) {
@@ -1032,7 +1032,7 @@
 								}
 							});
 						});
-						
+
 						extensionsRegExp = new RegExp(extensionsRegExp.join('|') + '$', 'i');
 					}
 
@@ -1102,7 +1102,7 @@
 					if (up.state == plupload.STARTED) {
 						// Get start time to calculate bps
 						startTime = (+new Date());
-						
+
 					} else if (up.state == plupload.STOPPED) {
 						// Reset currently uploading files
 						for (i = up.files.length - 1; i >= 0; i--) {
@@ -1231,7 +1231,7 @@
 				if (this.state != plupload.STARTED) {
 					this.state = plupload.STARTED;
 					this.trigger("StateChanged");	
-					
+
 					uploadNext.call(this);				
 				}
 			},
@@ -1330,7 +1330,7 @@
 
 				return true;
 			},
-			
+
 			/**
 			 * Check whether uploader has any listeners to the specified event.
 			 *
@@ -1396,12 +1396,12 @@
 			 */
 			unbindAll : function() {
 				var self = this;
-				
+
 				plupload.each(events, function(list, name) {
 					self.unbind(name);
 				});
 			},
-			
+
 			/**
 			 * Destroys Plupload instance and cleans after itself.
 			 *
@@ -1409,7 +1409,7 @@
 			 */
 			destroy : function() {							
 				this.trigger('Destroy');
-				
+
 				// Clean-up after uploader itself
 				this.unbindAll();
 			}
@@ -1434,7 +1434,7 @@
 			 * @event Refresh
 			 * @param plupload.Uploader uploader Uploader instance sending the event.
 			 */
-	
+
 			/**
 			 * Fires when the overall state is being changed for the upload queue.
 			 *
@@ -1465,7 +1465,7 @@
 			 * @event QueueChanged
 			 * @param plupload.Uploader uploader Uploader instance sending the event.
 			 */
-	
+
 			/**
 			 * Fires while a file is being uploaded. Use this event to update the current file upload progress.
 			 *
@@ -2107,7 +2107,7 @@
 		 * @param Object obj Parameters to be passed with event.
 		 */
 		trigger : function(id, name, obj) {
-								
+
 			// Detach the call so that error handling in the browser is presented correctly
 			setTimeout(function() {
 				var uploader = uploadInstances[id], i, args;
@@ -2127,7 +2127,7 @@
 	 * @extends plupload.Runtime
 	 */
 	plupload.runtimes.Flash = plupload.addRuntime("flash", {
-		
+
 		/**
 		 * Returns a list of supported features for the runtime.
 		 *
@@ -2190,13 +2190,13 @@
 			}
 
 			container.appendChild(flashContainer);
-			
+
 			// insert flash object
 			(function() {
 				var html, el;
-				
+
 				html = '<object id="' + uploader.id + '_flash" type="application/x-shockwave-flash" data="' + uploader.settings.flash_swf_url + '" ';
-				
+
 				if (plupload.ua.ie) {
 					html += 'classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" '
 				}
@@ -2207,7 +2207,7 @@
 					'<param name="wmode" value="transparent" />' +
 					'<param name="allowscriptaccess" value="always" />' +
 				'</object>';
-					
+
 				if (plupload.ua.ie) {
 					el = document.createElement('div');
 					flashContainer.appendChild(el);
@@ -2223,7 +2223,7 @@
 			}
 
 			function waitLoad() {
-								
+
 				// Wait for 5 sec
 				if (waitCount++ > 5000) {
 					callback({success : false});
@@ -2357,7 +2357,7 @@
 						file : uploader.getFile(lookup[err.id])
 					});
 				});
-				
+
 				uploader.bind("Flash:ImageError", function(up, err) {
 					uploader.trigger('Error', {
 						code : parseInt(err.code, 10),
@@ -2365,66 +2365,66 @@
 						file : uploader.getFile(lookup[err.id])
 					});
 				});
-				
+
 				uploader.bind('Flash:StageEvent:rollOver', function(up) {
 					var browseButton, hoverClass;
-						
+
 					browseButton = document.getElementById(uploader.settings.browse_button);
 					hoverClass = up.settings.browse_button_hover;
-					
+
 					if (browseButton && hoverClass) {
 						plupload.addClass(browseButton, hoverClass);
 					}
 				});
-				
+
 				uploader.bind('Flash:StageEvent:rollOut', function(up) {
 					var browseButton, hoverClass;
-						
+
 					browseButton = document.getElementById(uploader.settings.browse_button);
 					hoverClass = up.settings.browse_button_hover;
-					
+
 					if (browseButton && hoverClass) {
 						plupload.removeClass(browseButton, hoverClass);
 					}
 				});
-				
+
 				uploader.bind('Flash:StageEvent:mouseDown', function(up) {
 					var browseButton, activeClass;
-						
+
 					browseButton = document.getElementById(uploader.settings.browse_button);
 					activeClass = up.settings.browse_button_active;
-					
+
 					if (browseButton && activeClass) {
 						plupload.addClass(browseButton, activeClass);
-						
+
 						// Make sure that browse_button has active state removed from it
 						plupload.addEvent(document.body, 'mouseup', function() {
 							plupload.removeClass(browseButton, activeClass);	
 						}, up.id);
 					}
 				});
-				
+
 				uploader.bind('Flash:StageEvent:mouseUp', function(up) {
 					var browseButton, activeClass;
-						
+
 					browseButton = document.getElementById(uploader.settings.browse_button);
 					activeClass = up.settings.browse_button_active;
-					
+
 					if (browseButton && activeClass) {
 						plupload.removeClass(browseButton, activeClass);
 					}
 				});
-				
+
 				
 				uploader.bind('Flash:ExifData', function(up, obj) {
 					uploader.trigger('ExifData', uploader.getFile(lookup[obj.id]), obj.data);
 				});
-				
+
 				
 				uploader.bind('Flash:GpsData', function(up, obj) {
 					uploader.trigger('GpsData', uploader.getFile(lookup[obj.id]), obj.data);
 				});
-				
+
 
 				uploader.bind("QueueChanged", function(up) {
 					uploader.refresh();
@@ -2452,7 +2452,7 @@
 					if (browseButton) {
 						browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
 						browseSize = plupload.getSize(browseButton);
-	
+
 						plupload.extend(document.getElementById(up.id + '_flash_container').style, {
 							top : (browsePos.y-5) + 'px',
 							left : (browsePos.x-5) + 'px',
@@ -2461,21 +2461,21 @@
 						});
 					}
 				});
-				
+
 				uploader.bind("Destroy", function(up) {
 					var flashContainer;
-					
+
 					plupload.removeAllEvents(document.body, up.id);
-					
+
 					delete initialized[up.id];
 					delete uploadInstances[up.id];
-					
+
 					flashContainer = document.getElementById(up.id + '_flash_container');
 					if (flashContainer) {
 						container.removeChild(flashContainer);
 					}
 				});
-							
+
 				callback({success : true});
 			});
 		}
@@ -2603,20 +2603,20 @@
 		canvas = google.gears.factory.create('beta.canvas');
 		try {
 			canvas.decode(image_blob);
-			
+
 			if (!resize['width']) {
 				resize['width'] = canvas.width;
 			}
-			
+
 			if (!resize['height']) {
 				resize['height'] = canvas.height;	
 			}
-			
+
 			scale = Math.min(width / canvas.width, height / canvas.height);
 
 			if (scale < 1 || (scale === 1 && mime === 'image/jpeg')) {
 				canvas.resize(Math.round(canvas.width * scale), Math.round(canvas.height * scale));
-				
+
 				if (resize['quality']) {
 					return canvas.encode(mime, {quality : resize.quality / 100});
 				}
@@ -2726,7 +2726,7 @@
 					var filters = [], i, a, ext;
 
 					e.preventDefault();
-					
+
 					no_type_restriction:
 					for (i = 0; i < settings.filters.length; i++) {
 						ext = settings.filters[i].extensions.split(',');
@@ -2736,7 +2736,7 @@
 								filters = [];
 								break no_type_restriction;
 							}
-							
+
 							filters.push('.' + ext[a]);
 						}
 					}
@@ -2899,14 +2899,14 @@
 				// Start uploading chunks
 				uploadNextChunk();
 			});
-			
+
 			uploader.bind("Destroy", function(up) {
 				var name, element,
 					elements = {		
 						browseButton:	up.settings.browse_button, 
 						dropElm:		up.settings.drop_element	
 					};
-				
+
 				// Unbind event handlers
 				for (name in elements) {
 					element = document.getElementById(elements[name]);
@@ -2915,7 +2915,7 @@
 					}
 				}
 			});
-			
+
 
 			callback({success : true});
 		}
@@ -2959,7 +2959,7 @@
 			// Only multipart feature
 			return {
 				multipart: true,
-				
+
 				// WebKit and Gecko 2+ can trigger file dialog progrmmatically
 				triggerDialog: (plupload.ua.gecko && window.FormData || plupload.ua.webkit) 
 			};
@@ -2984,13 +2984,13 @@
 					ext = filters[i].extensions.split(/,/);
 
 					for (y = 0; y < ext.length; y++) {
-						
+
 						// If there's an asterisk in the list, then accept attribute is not required
 						if (ext[y] === '*') {
 							mimes = [];
 							break no_type_restriction;
 						}
-						
+
 						type = plupload.mimeTypes[ext[y]];
 
 						if (type) {
@@ -2998,7 +2998,7 @@
 						}
 					}
 				}
-				
+
 				mimes = mimes.join(',');
 
 				function createForm() {
@@ -3006,7 +3006,7 @@
 
 					// Setup unique id for form
 					currentFileId = plupload.guid();
-					
+
 					// Save id for Destroy handler
 					fileIds.push(currentFileId);
 
@@ -3025,9 +3025,9 @@
 					input.setAttribute('type', 'file');
 					input.setAttribute('accept', mimes);
 					input.setAttribute('size', 1);
-					
+
 					browseButton = getById(up.settings.browse_button);
-					
+
 					// Route click event to input element programmatically, if possible
 					if (up.features.triggerDialog && browseButton) {
 						plupload.addEvent(getById(up.settings.browse_button), 'click', function(e) {
@@ -3043,7 +3043,7 @@
 						opacity : 0,
 						fontSize: '999px' // force input element to be bigger then needed to occupy whole space
 					});
-					
+
 					plupload.extend(form.style, {
 						overflow: 'hidden'
 					});
@@ -3074,7 +3074,7 @@
 
 							// Push files
 							files.push(new plupload.File(currentFileId, name));
-							
+
 							// Clean-up events - they won't be needed anymore
 							if (!up.features.triggerDialog) {
 								plupload.removeAllEvents(form, up.id);								
@@ -3133,7 +3133,7 @@
 
 						// Get result
 						result = el.body.innerHTML;
-						
+
 						// Assume no error
 						if (result) {
 							currentFile.status = plupload.DONE;
@@ -3147,18 +3147,18 @@
 						}
 					}, up.id);
 				} // end createIframe
-				
+
 				if (up.settings.container) {
 					container = getById(up.settings.container);
 					if (plupload.getStyle(container, 'position') === 'static') {
 						container.style.position = 'relative';
 					}
 				}
-				
+
 				// Upload file
 				up.bind("UploadFile", function(up, file) {
 					var form, input;
-					
+
 					// File upload finished
 					if (file.status == plupload.DONE || file.status == plupload.FAILED || up.state == plupload.STOPPED) {
 						return;
@@ -3191,13 +3191,13 @@
 
 					// Hide the current form
 					getById('form_' + currentFileId).style.top = -0xFFFFF + "px";
-					
+
 					form.submit();
 					form.parentNode.removeChild(form);
 				});
+
 				
-				
-				
+
 				up.bind('FileUploaded', function(up) {
 					up.refresh(); // just to get the form back on top of browse_button
 				});				
@@ -3227,14 +3227,14 @@
 						browseSize = plupload.getSize(browseButton);
 						inputContainer = getById('form_' + currentFileId);
 						inputFile = getById('input_' + currentFileId);
-	
+
 						plupload.extend(inputContainer.style, {
 							top : (browsePos.y-5) + 'px',
 							left : (browsePos.x-5) + 'px',
 							width : (browseSize.w+10) + 'px',
 							height : (browseSize.h+21) + 'px'
 						});
-						
+
 						// for IE and WebKit place input element underneath the browse button and route onclick event 
 						// TODO: revise when browser support for this feature will change
 						if (up.features.triggerDialog) {
@@ -3243,7 +3243,7 @@
 									position : 'relative'
 								});
 							}
-							
+
 							zIndex = parseInt(browseButton.style.zIndex, 10);
 
 							if (isNaN(zIndex)) {
@@ -3266,7 +3266,7 @@
 						hoverClass = up.settings.browse_button_hover;
 						activeClass = up.settings.browse_button_active;
 						topElement = up.features.triggerDialog ? browseButton : inputContainer;
-						
+
 						if (hoverClass) {
 							plupload.addEvent(topElement, 'mouseover', function() {
 								plupload.addClass(browseButton, hoverClass);	
@@ -3275,7 +3275,7 @@
 								plupload.removeClass(browseButton, hoverClass);
 							}, up.id);
 						}
-						
+
 						if (activeClass) {
 							plupload.addEvent(topElement, 'mousedown', function() {
 								plupload.addClass(browseButton, activeClass);	
@@ -3298,7 +3298,7 @@
 						}
 					}
 				});
-				
+
 				
 				// Completely destroy the runtime
 				uploader.bind("Destroy", function(up) {
@@ -3317,7 +3317,7 @@
 						}
 					}
 					plupload.removeAllEvents(document.body, up.id);
-					
+
 					// Remove mark-up
 					plupload.each(fileIds, function(id, i) {
 						form = getById('form_' + id);
@@ -3325,7 +3325,7 @@
 							container.removeChild(form);
 						}
 					});
-					
+
 				});
 
 				// Create initial form
@@ -3388,7 +3388,7 @@
 	function scaleImage(file, resize, mime, callback) {
 		var canvas, context, img, scale,
 			up = this;
-			
+
 		readFileAsDataURL(html5files[file.id], function(data) {
 			// Setup canvas and context
 			canvas = document.createElement("canvas");
@@ -3404,15 +3404,15 @@
 			};
 			img.onload = function() {
 				var width, height, percentage, jpegHeaders, exifParser;
-				
+
 				if (!resize['width']) {
 					resize['width'] = img.width;
 				}
-				
+
 				if (!resize['height']) {
 					resize['height'] = img.height;	
 				}
-				
+
 				scale = Math.min(resize.width / img.width, resize.height / img.height);
 
 				if (scale < 1 || (scale === 1 && mime === 'image/jpeg')) {
@@ -3423,32 +3423,32 @@
 					canvas.width = width;
 					canvas.height = height;
 					context.drawImage(img, 0, 0, width, height);
-					
+
 					// Preserve JPEG headers
 					if (mime === 'image/jpeg') {
 						jpegHeaders = new JPEG_Headers(atob(data.substring(data.indexOf('base64,') + 7)));
 						if (jpegHeaders['headers'] && jpegHeaders['headers'].length) {
 							exifParser = new ExifParser();			
-											
+
 							if (exifParser.init(jpegHeaders.get('exif')[0])) {
 								// Set new width and height
 								exifParser.setExif('PixelXDimension', width);
 								exifParser.setExif('PixelYDimension', height);
-																							
+
 								// Update EXIF header
 								jpegHeaders.set('exif', exifParser.getBinary());
-								
+
 								// trigger Exif events only if someone listens to them
 								if (up.hasEventListener('ExifData')) {
 									up.trigger('ExifData', file, exifParser.EXIF());
 								}
-								
+
 								if (up.hasEventListener('GpsData')) {
 									up.trigger('GpsData', file, exifParser.GPS());
 								}
 							}
 						}
-						
+
 						if (resize['quality']) {							
 							// Try quality property first
 							try {
@@ -3501,7 +3501,7 @@
 			var xhr, hasXhrSupport, hasProgress, canSendBinary, dataAccessSupport, sliceSupport;
 
 			hasXhrSupport = hasProgress = dataAccessSupport = sliceSupport = false;
-			
+
 			if (window.XMLHttpRequest) {
 				xhr = new XMLHttpRequest();
 				hasProgress = !!xhr.upload;
@@ -3511,7 +3511,7 @@
 			// Check for support for various features
 			if (hasXhrSupport) {
 				canSendBinary = !!(xhr.sendAsBinary || (window.Uint8Array && window.ArrayBuffer));
-				
+
 				// Set dataAccessSupport only for Gecko since BlobBuilder and XHR doesn't handle binary data correctly				
 				dataAccessSupport = !!(File && (File.prototype.getAsDataURL || window.FileReader) && canSendBinary);
 				sliceSupport = !!(File && (File.prototype.mozSlice || File.prototype.webkitSlice || File.prototype.slice)); 
@@ -3558,7 +3558,7 @@
 				// Add the selected files to the file queue
 				for (i = 0; i < native_files.length; i++) {
 					file = native_files[i];
-										
+
 					// Safari on Windows will add first file from dragged set multiple times
 					// @see: https://bugs.webkit.org/show_bug.cgi?id=37957
 					if (fileNames[file.name]) {
@@ -3613,7 +3613,7 @@
 				}
 
 				container.appendChild(inputContainer);
-				
+
 				// Convert extensions to mime types list
 				var no=false; // ocP edit, so unknown mime types still may select
 				no_type_restriction:
@@ -3621,13 +3621,13 @@
 					ext = filters[i].extensions.split(/,/);
 
 					for (y = 0; y < ext.length; y++) {
-						
+
 						// If there's an asterisk in the list, then accept attribute is not required
 						if (ext[y] === '*') {
 							mimes = [];
 							break no_type_restriction;
 						}
-						
+
 						type = plupload.mimeTypes[ext[y]];
 
 						if (type) {
@@ -3646,7 +3646,7 @@
 
 				inputContainer.scrollTop = 100;
 				inputFile = document.getElementById(uploader.id + '_html5');
-				
+
 				if (up.features.triggerDialog) {
 					plupload.extend(inputFile.style, {
 						position: 'absolute',
@@ -3660,15 +3660,15 @@
 						styleFloat: 'right'
 					});
 				}
-				
+
 				inputFile.onchange = function() {
 					// Add the selected files from file input
 					addSelectedFiles(this.files);
-					
+
 					// Clearing the value enables the user to select the same file again if they want to
 					this.value = '';
 				};
-				
+
 				/* Since we have to place input[type=file] on top of the browse_button for some browsers (FF, Opera),
 				browse_button loses interactivity, here we try to neutralize this issue highlighting browse_button
 				with a special classes
@@ -3678,7 +3678,7 @@
 					var hoverClass = up.settings.browse_button_hover,
 						activeClass = up.settings.browse_button_active,
 						topElement = up.features.triggerDialog ? browseButton : inputContainer;
-					
+
 					if (hoverClass) {
 						plupload.addEvent(topElement, 'mouseover', function() {
 							plupload.addClass(browseButton, hoverClass);	
@@ -3687,7 +3687,7 @@
 							plupload.removeClass(browseButton, hoverClass);	
 						}, up.id);
 					}
-					
+
 					if (activeClass) {
 						plupload.addEvent(topElement, 'mousedown', function() {
 							plupload.addClass(browseButton, activeClass);	
@@ -3729,18 +3729,18 @@
 								plupload.addEvent(dropInputElm, 'change', function() {
 									// Add the selected files from file input
 									addSelectedFiles(this.files);
-																		
+
 									// Remove input element
 									plupload.removeEvent(dropInputElm, 'change', uploader.id);
 									dropInputElm.parentNode.removeChild(dropInputElm);									
 								}, uploader.id);
-								
+
 								dropElm.appendChild(dropInputElm);
 							}
 
 							dropPos = plupload.getPos(dropElm, document.getElementById(uploader.settings.container));
 							dropSize = plupload.getSize(dropElm);
-							
+
 							if (plupload.getStyle(dropElm, 'position') === 'static') {
 								plupload.extend(dropElm.style, {
 									position : 'relative'
@@ -3782,20 +3782,20 @@
 
 			uploader.bind("Refresh", function(up) {
 				var browseButton, browsePos, browseSize, inputContainer, zIndex;
-					
+
 				browseButton = document.getElementById(uploader.settings.browse_button);
 				if (browseButton) {
 					browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
 					browseSize = plupload.getSize(browseButton);
 					inputContainer = document.getElementById(uploader.id + '_html5_container');
-	
+
 					plupload.extend(inputContainer.style, {
 						top : (browsePos.y-5) + 'px',
 						left : (browsePos.x-5) + 'px',
 						width : (browseSize.w+10) + 'px',
 						height : (browseSize.h+21) + 'px'
 					});
-					
+
 					// for WebKit place input element underneath the browse button and route onclick event 
 					// TODO: revise when browser support for this feature will change
 					if (uploader.features.triggerDialog) {
@@ -3804,16 +3804,16 @@
 								position : 'relative'
 							});
 						}
-						
+
 						zIndex = parseInt(plupload.getStyle(browseButton, 'z-index'), 10);
 						if (isNaN(zIndex)) {
 							zIndex = 0;
 						}						
-							
+
 						plupload.extend(browseButton.style, {
 							zIndex : zIndex
 						});						
-											
+
 						plupload.extend(inputContainer.style, {
 							zIndex : zIndex - 1
 						});
@@ -3823,10 +3823,10 @@
 
 			uploader.bind("UploadFile", function(up, file) {
 				var settings = up.settings, nativeFile, resize;
-					
+
 				function w3cBlobSlice(blob, start, end) {
 					var blobSlice;
-					
+
 					if (File.prototype.slice) {
 						try {
 							blob.slice();	// depricated version will throw WRONG_ARGUMENTS_ERR exception
@@ -3846,18 +3846,18 @@
 				function sendBinaryBlob(blob) {
 					var chunk = 0, loaded = 0,
 						fr = ("FileReader" in window) ? new FileReader : null;
-						
+
 
 					function uploadNextChunk() {
 						var chunkBlob, br, chunks, args, chunkSize, curChunkSize, mimeType, url = up.settings.url;													
 
-						
+
 						function prepareAndSend(bin) {
 							var multipartDeltaSize = 0,
 								xhr = new XMLHttpRequest,
 								upload = xhr.upload,	
 								boundary = '----pluploadboundary' + plupload.guid(), formData, dashdash = '--', crlf = '\r\n', multipartBlob = ''
-								
+
 							// Do we have upload progress support
 							if (upload) {
 								upload.onprogress = function(e) {
@@ -3865,10 +3865,10 @@
 									up.trigger('UploadProgress', file);
 								};
 							}
-	
+
 							xhr.onreadystatechange = function() {
 								var httpStatus, chunkArgs;
-	
+
 								if (xhr.readyState == 4) {
 									// Getting the HTTP status might fail on some Gecko versions
 									try {
@@ -3876,7 +3876,7 @@
 									} catch (ex) {
 										httpStatus = 0;
 									}
-	
+
 									// Is error status
 									if (httpStatus >= 400) {
 										up.trigger('Error', {
@@ -3894,29 +3894,29 @@
 												response : xhr.responseText,
 												status : httpStatus
 											};
-	
+
 											up.trigger('ChunkUploaded', file, chunkArgs);
 											loaded += curChunkSize;
-	
+
 											// Stop upload
 											if (chunkArgs.cancelled) {
 												file.status = plupload.FAILED;
 												return;
 											}
-	
+
 											file.loaded = Math.min(file.size, (chunk + 1) * chunkSize);
 										} else {
 											file.loaded = file.size;
 										}
-	
+
 										up.trigger('UploadProgress', file);
-										
+
 										bin = chunkBlob = formData = multipartBlob = null; // Free memory
-										
+
 										// Check if file is uploaded
 										if (!chunks || ++chunk >= chunks) {
 											file.status = plupload.DONE;
-																						
+
 											up.trigger('FileUploaded', file, {
 												response : xhr.responseText,
 												status : httpStatus
@@ -3926,69 +3926,69 @@
 											uploadNextChunk();
 										}
 									}	
-									
+
 									xhr = null;
-																
+
 								}
 							};
-							
+
 	
 							// Build multipart request
 							if (up.settings.multipart && features.multipart) {
-								
+
 								args.name = file.target_name || file.name;
-								
+
 								xhr.open("post", url, true);
-								
+
 								// Set custom headers
 								plupload.each(up.settings.headers, function(value, name) {
 									xhr.setRequestHeader(name, value);
 								});
-								
+
 								
 								// if has FormData support like Chrome 6+, Safari 5+, Firefox 4, use it
 								if (typeof(bin) !== 'string' && !!window.FormData) {
 									formData = new FormData();
-	
+
 									// Add multipart params
 									plupload.each(plupload.extend(args, up.settings.multipart_params), function(value, name) {
 										formData.append(name, value);
 									});
-	
+
 									// Add file and send it
 									formData.append(up.settings.file_data_name, bin);								
 									xhr.send(formData);
-	
+
 									return;
 								}  // if no FormData we can still try to send it directly as last resort (see below)
-								
+
 								
 								if (typeof(bin) === 'string') {
 									// Trying to send the whole thing as binary...
-		
+
 									// multipart request
 									xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
-		
+
 									// append multipart parameters
 									plupload.each(plupload.extend(args, up.settings.multipart_params), function(value, name) {
 										multipartBlob += dashdash + boundary + crlf +
 											'Content-Disposition: form-data; name="' + name + '"' + crlf + crlf;
-		
+
 										multipartBlob += unescape(encodeURIComponent(value)) + crlf;
 									});
-		
+
 									mimeType = plupload.mimeTypes[file.name.replace(/^.+\.([^.]+)/, '$1').toLowerCase()] || 'application/octet-stream';
-		
+
 									// Build RFC2388 blob
 									multipartBlob += dashdash + boundary + crlf +
 										'Content-Disposition: form-data; name="' + up.settings.file_data_name + '"; filename="' + unescape(encodeURIComponent(file.name)) + '"' + crlf +
 										'Content-Type: ' + mimeType + crlf + crlf +
 										bin + crlf +
 										dashdash + boundary + dashdash + crlf;
-		
+
 									multipartDeltaSize = multipartBlob.length - bin.length;
 									bin = multipartBlob;
-								
+
 							
 									if (xhr.sendAsBinary) { // Gecko
 										xhr.sendAsBinary(bin);
@@ -4002,19 +4002,19 @@
 									return; // will return from here only if shouldn't send binary
 								} 							
 							}
-							
+
 							// if no multipart, or last resort, send as binary stream
 							url = plupload.buildUrl(up.settings.url, plupload.extend(args, up.settings.multipart_params));
-							
+
 							xhr.open("post", url, true);
-							
+
 							xhr.setRequestHeader('Content-Type', 'application/octet-stream'); // Binary stream header
-								
+
 							// Set custom headers
 							plupload.each(up.settings.headers, function(value, name) {
 								xhr.setRequestHeader(name, value);
 							});
-												
+
 							xhr.send(bin); 
 						} // prepareAndSend
 
@@ -4049,7 +4049,7 @@
 							curChunkSize = file.size;
 							chunkBlob = blob;
 						}
-						
+
 						// workaround Gecko 2,5,6 FormData+Blob bug: https://bugzilla.mozilla.org/show_bug.cgi?id=649150
 						if (typeof(chunkBlob) !== 'string' && fr && features.cantSendBlobInFormData && features.chunks && up.settings.chunk_size) {// Gecko 2,5,6
 							fr.onload = function() {
@@ -4059,7 +4059,7 @@
 						} else {
 							prepareAndSend(chunkBlob);
 						}
-							
+
 					}
 
 					// Start uploading chunks
@@ -4067,7 +4067,7 @@
 				}
 
 				nativeFile = html5files[file.id];
-								
+
 				// Resize image if it's a supported format and resize is enabled
 				if (features.jpgresize && up.settings.resize && /\.(png|jpg|jpeg)$/i.test(file.name)) {
 					scaleImage.call(up, file, up.settings.resize, /\.png$/i.test(file.name) ? 'image/png' : 'image/jpeg', function(res) {
@@ -4087,7 +4087,7 @@
 					sendBinaryBlob(nativeFile); 
 				}
 			});
-			
+
 			
 			uploader.bind('Destroy', function(up) {
 				var name, element, container = document.body,
@@ -4106,11 +4106,11 @@
 					}
 				}
 				plupload.removeAllEvents(document.body, up.id);
-				
+
 				if (up.settings.container) {
 					container = document.getElementById(up.settings.container);
 				}
-				
+
 				// Remove mark-up
 				container.removeChild(document.getElementById(elements.inputContainer));
 			});
@@ -4118,7 +4118,7 @@
 			callback({success : true});
 		}
 	});
-	
+
 	function BinaryReader() {
 		var II = false, bin;
 
@@ -4135,7 +4135,7 @@
 
 		function putstr(segment, idx, length) {
 			var length = arguments.length === 3 ? length : bin.length - idx - 1;
-			
+
 			bin = bin.substr(0, idx) + segment + bin.substr(length + idx);
 		}
 
@@ -4210,9 +4210,9 @@
 			}
 		};
 	}
-	
+
 	function JPEG_Headers(data) {
-		
+
 		var markers = {
 				0xFFE1: {
 					app: 'EXIF',
@@ -4231,35 +4231,35 @@
 				}
 			},
 			headers = [], read, idx, marker = undef, length = 0, limit;
-			
+
 		
 		read = new BinaryReader();
 		read.init(data);
-				
+
 		// Check if data is jpeg
 		if (read.SHORT(0) !== 0xFFD8) {
 			return;
 		}
-		
+
 		idx = 2;
 		limit = Math.min(1048576, data.length);	
-			
+
 		while (idx <= limit) {
 			marker = read.SHORT(idx);
-			
+
 			// omit RST (restart) markers
 			if (marker >= 0xFFD0 && marker <= 0xFFD7) {
 				idx += 2;
 				continue;
 			}
-			
+
 			// no headers allowed after SOS marker
 			if (marker === 0xFFDA || marker === 0xFFD9) {
 				break;	
 			}	
-			
+
 			length = read.SHORT(idx + 2) + 2;	
-			
+
 			if (markers[marker] && 
 				read.STRING(idx + 4, markers[marker].signature.length) === markers[marker].signature) {
 				headers.push({ 
@@ -4273,43 +4273,43 @@
 			}
 			idx += length;			
 		}
-					
+
 		read.init(null); // free memory
-						
+
 		return {
-			
+
 			headers: headers,
-			
+
 			restore: function(data) {
 				read.init(data);
-				
+
 				// Check if data is jpeg
 				var jpegHeaders = new JPEG_Headers(data);
-				
+
 				if (!jpegHeaders['headers']) {
 					return false;
 				}	
-				
+
 				// Delete any existing headers that need to be replaced
 				for (var i = jpegHeaders['headers'].length; i > 0; i--) {
 					var hdr = jpegHeaders['headers'][i - 1];
 					read.SEGMENT(hdr.start, hdr.length, '')
 				}
 				jpegHeaders.purge();
-				
+
 				idx = read.SHORT(2) == 0xFFE0 ? 4 + read.SHORT(4) : 2;
-								
+
 				for (var i = 0, max = headers.length; i < max; i++) {
 					read.SEGMENT(idx, 0, headers[i].segment);						
 					idx += headers[i].length;
 				}
-				
+
 				return read.SEGMENT();
 			},
-			
+
 			get: function(app) {
 				var array = [];
-								
+
 				for (var i = 0, max = headers.length; i < max; i++) {
 					if (headers[i].app === app.toUpperCase()) {
 						array.push(headers[i].segment);
@@ -4317,16 +4317,16 @@
 				}
 				return array;
 			},
-			
+
 			set: function(app, segment) {
 				var array = [];
-				
+
 				if (typeof(segment) === 'string') {
 					array.push(segment);	
 				} else {
 					array = segment;	
 				}
-				
+
 				for (var i = ii = 0, max = headers.length; i < max; i++) {
 					if (headers[i].app === app.toUpperCase()) {
 						headers[i].segment = array[ii];
@@ -4336,14 +4336,14 @@
 					if (ii >= array.length) break;
 				}
 			},
-			
+
 			purge: function() {
 				headers = [];
 				read.init(null);
 			}
 		};		
 	}
-	
+
 	
 	function ExifParser() {
 		// Private ExifParser fields
@@ -4355,7 +4355,7 @@
 			tiff : {
 				/*
 				The image orientation viewed in terms of rows and columns.
-	
+
 				1 - The 0th row is at the visual top of the image, and the 0th column is the visual left-hand side.
 				2 - The 0th row is at the visual top of the image, and the 0th column is the visual left-hand side.
 				3 - The 0th row is at the visual top of the image, and the 0th column is the visual right-hand side.
@@ -4631,7 +4631,7 @@
 			if (data.SHORT(idx+=2) !== 0x002A) {
 				return false;
 			}
-		
+
 			offsets['IFD0'] = offsets.tiffHeader + data.LONG(idx += 2);
 			Tiff = extractTags(offsets['IFD0'], tags.tiff);
 
@@ -4640,11 +4640,11 @@
 
 			return true;
 		}
-		
+
 		// At the moment only setting of simple (LONG) values, that do not require offset recalculation, is supported
 		function setTag(ifd, tag, value) {
 			var offset, length, tagOffset, valueOffset = 0;
-			
+
 			// If tag name passed translate into hex key
 			if (typeof(tag) === 'string') {
 				var tmpTags = tags[ifd.toLowerCase()];
@@ -4657,7 +4657,7 @@
 			}
 			offset = offsets[ifd.toLowerCase() + 'IFD'];
 			length = data.SHORT(offset);
-						
+
 			for (i = 0; i < length; i++) {
 				tagOffset = offset + 12 * i + 2;
 
@@ -4666,14 +4666,14 @@
 					break;
 				}
 			}
-			
+
 			if (!valueOffset) return false;
 
-			
+
 			data.LONG(valueOffset, value);
 			return true;
 		}
-		
+
 
 		// Public functions
 		return {
@@ -4682,7 +4682,7 @@
 				offsets = {
 					tiffHeader: 10
 				};
-				
+
 				if (segment === undef || !segment.length) {
 					return false;
 				}
@@ -4695,10 +4695,10 @@
 				}
 				return false;
 			},
-			
+
 			EXIF: function() {
 				var Exif;
-				
+
 				// Populate EXIF hash
 				Exif = extractTags(offsets.exifIFD, tags.exif);
 
@@ -4717,9 +4717,9 @@
 
 			GPS: function() {
 				var GPS;
-				
+
 				GPS = extractTags(offsets.gpsIFD, tags.gps);
-				
+
 				// iOS devices (and probably some others) do not put in GPSVersionID tag (why?..)
 				if (GPS.GPSVersionID) { 
 					GPS.GPSVersionID = GPS.GPSVersionID.join('.');
@@ -4727,11 +4727,11 @@
 
 				return GPS;
 			},
-			
+
 			setExif: function(tag, value) {
 				// Right now only setting of width/height is possible
 				if (tag !== 'PixelXDimension' && tag !== 'PixelYDimension') return false;
-				
+
 				return setTag('exif', tag, value);
 			},
 
@@ -4881,7 +4881,7 @@
 	plupload.silverlight = {
 		trigger : function(id, name) {
 			var uploader = uploadInstances[id], i, args;
-			
+
 			if (uploader) {
 				args = plupload.toArray(arguments).slice(1);
 				args[0] = 'Silverlight:' + name;
@@ -4933,7 +4933,7 @@
 				callback({success : false});
 				return;
 			}
-			
+
 			initialized[uploader.id] = false;
 			uploadInstances[uploader.id] = uploader;
 
@@ -4982,12 +4982,12 @@
 
 			uploader.bind("Silverlight:Init", function() {
 				var selectedFiles, lookup = {};
-				
+
 				// Prevent eventual reinitialization of the instance
 				if (initialized[uploader.id]) {
 					return;
 				}
-					
+
 				initialized[uploader.id] = true;
 
 				uploader.bind("Silverlight:StartSelectFiles", function(up) {
@@ -5040,7 +5040,7 @@
 					if (browseButton) {
 						browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
 						browseSize = plupload.getSize(browseButton);
-	
+
 						plupload.extend(document.getElementById(up.id + '_silverlight_container').style, {
 							top : (browsePos.y-5) + 'px',
 							left : (browsePos.x-5) + 'px',
@@ -5114,65 +5114,65 @@
 						})
 					);
 				});
-				
+
 				
 				uploader.bind('Silverlight:MouseEnter', function(up) {
 					var browseButton, hoverClass;
-						
+
 					browseButton = document.getElementById(uploader.settings.browse_button);
 					hoverClass = up.settings.browse_button_hover;
-					
+
 					if (browseButton && hoverClass) {
 						plupload.addClass(browseButton, hoverClass);
 					}
 				});
-				
+
 				uploader.bind('Silverlight:MouseLeave', function(up) {
 					var browseButton, hoverClass;
-						
+
 					browseButton = document.getElementById(uploader.settings.browse_button);
 					hoverClass = up.settings.browse_button_hover;
-					
+
 					if (browseButton && hoverClass) {
 						plupload.removeClass(browseButton, hoverClass);
 					}
 				});
-				
+
 				uploader.bind('Silverlight:MouseLeftButtonDown', function(up) {
 					var browseButton, activeClass;
-						
+
 					browseButton = document.getElementById(uploader.settings.browse_button);
 					activeClass = up.settings.browse_button_active;
-					
+
 					if (browseButton && activeClass) {
 						plupload.addClass(browseButton, activeClass);
-						
+
 						// Make sure that browse_button has active state removed from it
 						plupload.addEvent(document.body, 'mouseup', function() {
 							plupload.removeClass(browseButton, activeClass);	
 						});
 					}
 				});
-				
+
 				uploader.bind('Sliverlight:StartSelectFiles', function(up) {
 					var browseButton, activeClass;
-						
+
 					browseButton = document.getElementById(uploader.settings.browse_button);
 					activeClass = up.settings.browse_button_active;
-					
+
 					if (browseButton && activeClass) {
 						plupload.removeClass(browseButton, activeClass);
 					}
 				});
-				
+
 				uploader.bind("Destroy", function(up) {
 					var silverlightContainer;
-					
+
 					plupload.removeAllEvents(document.body, up.id);
-					
+
 					delete initialized[up.id];
 					delete uploadInstances[up.id];
-					
+
 					silverlightContainer = document.getElementById(up.id + '_silverlight_container');
 					if (silverlightContainer) {
 						container.removeChild(silverlightContainer);
@@ -5241,14 +5241,14 @@ function doSubmit(e,ob) {
 			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
 		return ret && ret2;
 	}
-	
+
 	e = e || window.event;
 	if ((typeof e!='undefined') && (e))
 	{
 		cancelBubbling(e);
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 	}
-	
+
 	var txtID = document.getElementById(ob.settings.txtFileDbID);
 	if (txtID.value == '-1')
 	{
@@ -5279,7 +5279,7 @@ function doSubmit(e,ob) {
 function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 {
 	if (!posting_field_name) posting_field_name='post';
-	
+
 	if (page_type=="attachment")
 	{
 		var current_num=name.replace('file', '');
@@ -5403,7 +5403,7 @@ function uploadSuccess(ob,file,data) {
 function uploadError(ob,error) {
 	var file=error.file?error.file:ob.files[ob.files.length-1];
 	if (typeof file=='undefined') file=null;
-	
+
 	var progress = new FileProgress(file, ob.settings.progress_target);
 	progress.setError();
 	progress.setStatus("{!SWFUPLOAD_FAILED^#}: "+error.message);
@@ -5436,7 +5436,7 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if ('{$MOBILE}'=='1') return;
 
 	if (!posting_field_name) posting_field_name='post';
-	
+
 	var rep=document.getElementById(name);
 	rep.originally_disabled=rep.disabled;
 	rep.disabled=true;
@@ -5453,12 +5453,12 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	{+START,IF,{$VALUE_OPTION,aviary}}
 		if (typeof window.done_aviary=='undefined') do_aviary();
 	{+END}
-	
+
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
 
 	if (typeof window.no_java=='undefined') window.no_java=false;
-	
+
 	var java_method=false;
 	{+START,IF,{$CONFIG_OPTION,java_upload}}
 		if (window.location.search.indexOf('keep_java=1')!=-1)
@@ -5490,7 +5490,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			}
 		}
 	}
-	
+
 	var maindiv=document.createElement('div');
 	maindiv.id='maindiv_'+name;
 	rep.parentNode.appendChild(maindiv);
@@ -5531,7 +5531,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var base="{$CONFIG_OPTION#*,java_ftp_path}";
 		if (base.substr(base.length-1,1)!='/') base+='/';
 		hidFileID.value=''+random+'.dat';
-		
+
 		var colorAt=rep.parentNode,backgroundColor;
 		do
 		{
@@ -5714,7 +5714,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		browse_button : 'uploadButton_'+name,
 		drop_element : 'txtFileName_'+name,
 		container: maindiv.id,
-	
+
 		// Custom ocPortal settings
 		immediate_submit : true
 	};
@@ -5736,7 +5736,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	} else // Special iOS handler
 	{
 		var ob={settings: settings};
-		
+
 		rep2.swfob=ob;
 
 		window.picup_current_hash=window.location.hash;
@@ -5813,7 +5813,7 @@ function initialise_dragdrop_upload(key,key2)
 
 /*
 	fileprogress.js
-	
+
 	A simple class for displaying file information and progress
 */
 
@@ -5867,7 +5867,7 @@ function FileProgress(file, targetID) {
 		if (file && typeof file.name!='undefined')
 			setInnerHTML(this.fileProgressElement.childNodes[1],file.name);
 	}
-	
+
 	this.height = this.fileProgressWrapper.offsetHeight;
 
 }
@@ -5925,7 +5925,7 @@ FileProgress.prototype.appear = function () {
 	} else {
 		this.fileProgressWrapper.style.opacity = 1;
 	}
-	
+
 	this.fileProgressWrapper.style.height = "";
 	this.height = this.fileProgressWrapper.offsetHeight;
 	this.opacity = 100;

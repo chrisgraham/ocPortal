@@ -24,9 +24,9 @@
 						{BREADCRUMBS}
 					</{$?,{$VALUE_OPTION,html5},nav,div}>
 				{+END}
-	
+
 				<a name="maincontent" id="maincontent"></a>
-	
+
 				{MIDDLE}
 			</div>
 		</div>

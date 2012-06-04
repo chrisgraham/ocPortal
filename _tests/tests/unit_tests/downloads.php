@@ -28,7 +28,7 @@ class downloads_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('downloads');
 		require_code('downloads2');
 
@@ -43,7 +43,7 @@ class downloads_test_set extends ocp_test_case
 
 		$this->assertTrue('http://www.yahoo.com'==$GLOBALS['SITE_DB']->query_value('download_downloads','url',array('id'=>$this->dwn_id)));
 	}
-	
+
 	function tearDown()
 	{
 		delete_download($this->dwn_id,false);

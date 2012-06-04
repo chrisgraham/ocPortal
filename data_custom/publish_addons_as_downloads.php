@@ -90,9 +90,9 @@ if (get_param_integer('import_addons',1)==1)
 			@unlink($to);
 			copy($from, $to);
 			$addon_path = 'uploads/downloads/'.$file;
-		
+
 			$fsize = filesize($addon_path);
-			
+
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
 			if (is_null($test))
 			{
@@ -106,7 +106,7 @@ if (get_param_integer('import_addons',1)==1)
 				$attribute = $addon_list[$addon]['Attribute'];
 
 				if ($dependencies!='') $description .= "
-	
+
 [title=\"2\"]System Requirements / Dependencies[/title]
 
 $dependencies";
@@ -126,7 +126,7 @@ $license";
 
 $attribute";
 				$downid = add_download($cid,$name,$addon_path,$description,$author,'',NULL,1,1,2,1,'',$addon.'.tar',$fsize,0,0,NULL,NULL,0,0,$admin);
-				
+
 				$url = "data_custom/addon_screenshots/".$name.".png";
 				if (!file_exists(get_custom_file_base().'/'.$url)) $url = "data_custom/addon_screenshots/".strtolower($name).".png";
 				if (!file_exists(get_custom_file_base().'/'.$url)) $url = "data_custom/addon_screenshots/".$addon.".png";
@@ -135,7 +135,7 @@ $attribute";
 			}
 		}
 	}
-	
+
 	echo "All addons have been imported as downloads";
 }
 
@@ -145,7 +145,7 @@ if (get_param_integer('import_themes',1)==1)
 {
 	$cid = check_and_add_category('Themes', $c_main_id);
 	$cid = check_and_add_category('Professional Themes', $cid);
-	
+
 	$dh=opendir(get_custom_file_base().'/exports/mods');
 	while (($file=readdir($dh))!==false)
 	{
@@ -157,9 +157,9 @@ if (get_param_integer('import_themes',1)==1)
 			@unlink($to);
 			copy($from, $to);
 			$addon_path = 'uploads/downloads/'.$new_file;
-	
+
 			$fsize = filesize($addon_path);
-	
+
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
 			if (is_null($test))
 			{
@@ -168,11 +168,11 @@ if (get_param_integer('import_themes',1)==1)
 				$info_file=tar_get_file($tar,'mod.inf',true);
 				$info=better_parse_ini_file(NULL,$info_file['data']);
 				tar_close($tar);
-	
+
 				$name=$info['name'];
 				$description=str_replace('\n',"\n",$info['description']);
 				$author=$info['author'];
-				
+
 				$url = "data_custom/addon_screenshots/".preg_replace('#^theme-#','theme__',preg_replace('#\d+$#','',basename($file,'.tar'))).".png";
 				if (!file_exists(get_custom_file_base().'/'.$url)) $url = "data_custom/addon_screenshots/".strtolower(preg_replace('#^theme-#','theme__',preg_replace('#\d+$#','',basename($file,'.tar')))).".png";
 
@@ -184,6 +184,6 @@ if (get_param_integer('import_themes',1)==1)
 		}
 	}
 	closedir($dh);
-	
+
 	echo "All themes have been imported as downloads";
 }

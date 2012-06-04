@@ -8,7 +8,7 @@
 	{+START,IF_NON_EMPTY,{TIMEOUT}}
 		<p><span class="field_name">{!TIMEOUT}</span>: {TIMEOUT*}</p>
 	{+END}
-	
+
 	{+START,IF_NON_EMPTY,{REDO_TIME}}
 		<p><span class="field_name">{!REDO_TIME}</span>: {REDO_TIME*}</p>
 	{+END}

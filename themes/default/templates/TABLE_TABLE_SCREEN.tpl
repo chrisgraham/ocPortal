@@ -9,10 +9,10 @@
 {+START,IF_PASSED,POST_URL}{+START,IF_PASSED,SUBMIT_NAME}
 	<form title="{!PRIMARY_PAGE_FORM}" {+START,IF_NON_PASSED,GET}method="post" {+END}{+START,IF_PASSED,GET}method="get" {+END}action="{POST_URL*}">
 		{TABLE}
-		
+
 		{+START,IF_PASSED,FIELDS}
 			<br />
-		
+
 			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<colgroup>

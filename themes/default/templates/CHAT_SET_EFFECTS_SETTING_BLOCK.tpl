@@ -20,7 +20,7 @@
 					<th id="requirea__select_{KEY*}{+START,IF_PASSED,MEMBER_ID}_{MEMBER_ID*}{+END}" class="de_th dottedborder_barrier_a_nonrequired">
 						<span class="form_field_name field_name">{EFFECT_TITLE*}</span>
 					</th>
-	
+
 					{+START,IF,{$MOBILE}}
 						</tr>
 

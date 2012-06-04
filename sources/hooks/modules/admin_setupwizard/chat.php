@@ -29,7 +29,7 @@ class Hook_sw_chat
 	function get_blocks()
 	{
 		if (!addon_installed('chat')) return array();
-		
+
 		return array(array(),array('side_shoutbox'=>array('PANEL_NONE','PANEL_RIGHT')));
 	}
 

@@ -5,7 +5,7 @@
 		<noscript>
 			{PREVIEW*}
 		</noscript>
-	
+
 		<script type="text/javascript">// <![CDATA[
 			window.setTimeout(function() {
 				var adjustedPreview='{PREVIEW^/;}'.replace(/<!DOCTYPE[^>]*>/i,'').replace(/<html[^>]*>/i,'').replace(/<\/html>/i,'');

@@ -38,7 +38,7 @@ class Block_main_forum_topics
 		$info['parameters']=array('param','limit','hot','date_key','username_key','title','check');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_forum_topics
 		$info['ttl']=10;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -63,7 +63,7 @@ class Block_main_forum_topics
 		if (has_no_forum()) return new ocp_tempcode();
 
 		require_css('news');
-		
+
 		// Read in variables
 		$forum_name=array_key_exists('param',$map)?$map['param']:'General chat';
 		$limit=array_key_exists('limit',$map)?intval($map['limit']):6;
@@ -88,7 +88,7 @@ class Block_main_forum_topics
 		foreach ($forum_names as $forum_name)
 		{
 			if (!is_string($forum_name)) $forum_name=strval($forum_name);
-			
+
 			$forum_name=trim($forum_name);
 
 			if ($forum_name=='<announce>')
@@ -179,11 +179,11 @@ class Block_main_forum_topics
 					$member_id=array_key_exists($memberid_key,$topic)?$topic[$memberid_key]:NULL;
 					if ((!is_null($forum_names_map)) && (!array_key_exists($topic['forum_id'],$forum_names_map))) continue; // Maybe Private Topic, slipped in via reference to a missing forum
 					$forum_name=is_null($forum_names_map)?NULL:$forum_names_map[$topic['forum_id']];
-					
+
 					$out->attach(do_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array('_GUID'=>'ae4e351b3fa5422bf8ecdfb7e49076d1','POST'=>$topic['firstpost'],'FORUM_ID'=>is_null($forum_names_map)?NULL:strval($topic['forum_id']),'FORUM_NAME'=>$forum_name,'TOPIC_LINK'=>$topic_url,'TOPIC_LINK_UNREAD'=>$topic_url_unread,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic[$date_key]),'USERNAME'=>$username,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'NUM_POSTS'=>integer_format($topic['num']))));
-					
+
 					$done++;
-					
+
 					if ($done==$limit) break;
 				}
 			}

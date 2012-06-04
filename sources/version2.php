@@ -33,7 +33,7 @@ function get_future_version_information()
 	if (!is_null($data))
 	{
 		$data=str_replace('"../upgrader.php"','"'.get_base_url().'/upgrader.php"',$data);
-		
+
 		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($data);
 
 		require_code('character_sets');

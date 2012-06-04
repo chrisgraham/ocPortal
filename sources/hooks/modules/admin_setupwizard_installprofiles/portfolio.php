@@ -45,7 +45,7 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 			array('galleries','random_quotes','polls','news'),
 			array());
 	}
-	
+
 	/**
 	 * Get a map of default settings associated with this installation profile
 	 *
@@ -72,7 +72,7 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 			'rules'=>'balanced',
 		);
 	}
-	
+
 	/**
 	 * Find details of desired blocks
 	 *
@@ -97,7 +97,7 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 			),
 		);
 	}
-	
+
 	/**
 	 * Get options for blocks in this profile
 	 *
@@ -108,12 +108,12 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 		return array(
 		);
 	}
-	
+
 	/**
 	 * Execute any special code needed to put this install profile into play
 	 */
 	function install_code()
 	{
 	}
-	
+
 }

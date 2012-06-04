@@ -40,7 +40,7 @@ class Module_onlinemembers
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_onlinemembers
 	{
 		return array('!'=>'USERS_ONLINE');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,9 +59,9 @@ class Module_onlinemembers
 	function run()
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
-	
+
 		$title=get_page_title('USERS_ONLINE');
-		
+
 		global $EXTRA_HEAD;
 		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 

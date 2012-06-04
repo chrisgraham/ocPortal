@@ -83,7 +83,7 @@ class missing_block_params_test_set extends ocp_test_case
 			$this->assertTrue(false,'Missing lang string: '.$x);
 		}
 	}
-	
+
 	function tearDown()
 	{
 		parent::tearDown();

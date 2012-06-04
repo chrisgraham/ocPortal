@@ -60,7 +60,7 @@ while (($line=fgetcsv($icons,1024))!==false)
 			case 'forum_base_url':
 				$map=array('i_url'=>get_forum_base_url(true));
 				break;
-			
+
 			default:
 				$map=array('i_url'=>$line[0]);
 		}

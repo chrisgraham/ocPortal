@@ -38,7 +38,7 @@ class Block_main_quotes
 		$info['parameters']=array('param','title');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -62,7 +62,7 @@ class Block_main_quotes
 	{
 		$file=array_key_exists('param',$map)?$map['param']:'quotes';
 		$title=array_key_exists('title',$map)?$map['title']:do_lang('QUOTES');
-	
+
 		require_code('textfiles');
 		require_lang('quotes');
 

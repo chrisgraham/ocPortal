@@ -69,7 +69,7 @@ class Hook_choose_download
 			if ($id===strval($_id)) // Possible when we look under as a root
 			{
 				asort($t['entries']);
-			
+
 				foreach ($t['entries'] as $eid=>$etitle)
 				{
 					$row=$GLOBALS['SITE_DB']->query_select('download_downloads',array('description','original_filename'),array('id'=>$eid),'',1);
@@ -82,7 +82,7 @@ class Hook_choose_download
 					$lang_id=$row[0]['description'];
 					$description=get_translated_text($lang_id);
 					$description_html=get_translated_tempcode($lang_id);
-					
+
 					$images_details=new ocp_tempcode();
 					if (addon_installed('galleries'))
 					{
@@ -126,7 +126,7 @@ class Hook_choose_download
 						$images_details=put_in_standard_box($_out);
 					}
 					$description_html->attach($images_details);
-					
+
 					$out.='<entry id="'.xmlentities(strval($eid)).'" description="'.xmlentities(strip_comcode($description)).'" description_html="'.xmlentities($description_html->evaluate()).'" title="'.xmlentities($etitle).'" selectable="true"></entry>';
 				}
 				continue;

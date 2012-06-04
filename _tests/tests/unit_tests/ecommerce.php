@@ -30,19 +30,19 @@ class ecommerce_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('ecommerce');
 		require_code('autosave');
 		require_code('shopping');
 		require_code('form_templates');
-	
+
 		require_lang('ecommerce');
 
 		$this->access_mapping=array(db_get_first_id()=>4);
 		// Creating cms catalogues object
 		require_code('adminzone/pages/modules/admin_ecommerce.php');
 		$this->admin_ecom	=	new Module_admin_ecommerce();
-		
+
 		/*require_code('adminzone/pages/modules/admin_shipping.php');
 		$this->admin_shipping	=	new Module_admin_shipping();
 		$this->admin_shipping->run_start('misc');*/
@@ -101,7 +101,7 @@ class ecommerce_test_set extends ocp_test_case
 		$_POST['title']			=	'Standard shipping';
 		$_POST['description']	=	'Standard shipping';
 		$_POST['equation']		=	'3.00+(($weight>10)?(($weight-10)*0.23):0.00)';	
-	
+
 		$this->item_id=$this->admin_shipping->add_actualisation();
 	}
 
@@ -193,7 +193,7 @@ class ecommerce_test_set extends ocp_test_case
 		$this->order_id	=	$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
 		$this->admin_orders->send_dispatch_notification($this->order_id);
 	}
-	
+
 	function	testDeleteOrder()
 	{
 		$this->order_id	=	$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
@@ -207,7 +207,7 @@ class ecommerce_test_set extends ocp_test_case
 		$_GET['id']=$this->order_id;
 		$this->admin_orders->return_order();		
 	}
-	
+
 	function testholdOrder()
 	{
 		$this->order_id	=	$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
@@ -241,7 +241,7 @@ class ecommerce_test_set extends ocp_test_case
 			'require__end_date' => 1,
 			'is_from_unit_test'=>1
 		);
-	
+
 		$this->admin_orders->_order_export(true);
 	}
 

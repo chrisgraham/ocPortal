@@ -46,7 +46,7 @@
 					{+END}
 
 					{+START,INCLUDE,NOTIFICATION_TYPES}{+END}
-					
+
 					<td class="associated_details dottedborder_barrier_b_nonrequired">
 						{+START,IF,{SUPPORTS_CATEGORIES}}
 							[ <a onclick="return open_link_as_overlay(this,null,null,'_self');" href="{$PAGE_LINK*,_SEARCH:notifications:advanced:notification_code={NOTIFICATION_CODE}}">{!ADVANCED}</a> ]

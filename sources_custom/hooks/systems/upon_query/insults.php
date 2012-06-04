@@ -15,7 +15,7 @@ class upon_query_insults
 		if (!isset($GLOBALS['FORUM_DB'])) return;
 		if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return;
 		if ($GLOBALS['BOOTSTRAPPING']==1) return;
-		
+
 		//if (strpos($query,$GLOBALS['FORUM_DB']->get_table_prefix().'f_members')!==false && strpos($query,'BY RAND')==false) // to test without registration
 		if (strpos($query,'INTO '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts')!==false)
 		{

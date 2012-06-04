@@ -30,7 +30,7 @@ class Hook_do_next_menus_points
 	function run()
 	{
 		if (!addon_installed('points')) return array();
-		
+
 		return array(
 			array('usage','pointslog',array('admin_points',array('type'=>'misc'),get_module_zone('admin_points')),do_lang_tempcode('GIFT_TRANSACTIONS'),('DOC_POINTS')),
 		);

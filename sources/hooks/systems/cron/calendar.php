@@ -27,7 +27,7 @@ class Hook_cron_calendar
 	function run()
 	{
 		if (!addon_installed('calendar')) return;
-		
+
 		require_code('calendar');
 		require_lang('calendar');
 		require_code('notifications');
@@ -74,7 +74,7 @@ class Hook_cron_calendar
 							}
 						}
 					}
-	
+
 					$job['n_seconds_before']=0;
 				} else
 				{
@@ -91,7 +91,7 @@ class Hook_cron_calendar
 
 					//echo $subject_tag."\n\n".$message_raw;
 				}
-	
+
 				// Recreate job for when next reminder due (if appropriate)
 				if (array_key_exists(1,$recurrences))
 				{
@@ -102,15 +102,15 @@ class Hook_cron_calendar
 						'j_event_id'=>$job['j_event_id']
 					));
 				}
-	
+
 				// Build up OR list of the jobs
 				if ($or_list!='') $or_list.=' OR ';
 				$or_list.='id='.strval($job['id']);
 			}
-	
+
 			// Delete jobs just run
 			if ($or_list!='') $GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_jobs WHERE '.$or_list);
-			
+
 			$start+=300;
 		}
 		while (array_key_exists(0,$jobs));

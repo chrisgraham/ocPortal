@@ -31,7 +31,7 @@ class Hook_whats_news_catalogues
 		if (!addon_installed('catalogues')) return NULL;
 
 		require_lang('catalogues');
-	
+
 		require_code('catalogues');
 		return array(nice_get_catalogues(NULL,true),do_lang('CATALOGUE_ENTRIES'));
 	}
@@ -47,11 +47,11 @@ class Hook_whats_news_catalogues
 	function run($cutoff_time,$lang,$filter)
 	{
 		if (!module_installed('catalogues')) return array();
-	
+
 		require_lang('catalogues');
-	
+
 		$new=new ocp_tempcode();
-	
+
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'c_name',NULL,NULL,NULL,NULL,false);
 		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND ce_add_date>'.strval((integer)$cutoff_time).' AND ('.$or_list.') ORDER BY ce_add_date DESC',300);
@@ -86,7 +86,7 @@ class Hook_whats_news_catalogues
 			$member_id=(is_guest($row['ce_submitter']))?NULL:strval($row['ce_submitter']);
 			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'4ae604e5d0e9cf4d28e7d811dc4558e5','MEMBER_ID'=>$member_id,'URL'=>$url,'CATALOGUE'=>$catalogue,'NAME'=>$name)));
 		}
-	
+
 		return array($new,do_lang('CATALOGUE_ENTRIES','','','',$lang));
 	}
 

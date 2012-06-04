@@ -40,7 +40,7 @@ class Module_notifications
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -52,7 +52,7 @@ class Module_notifications
 		if (is_guest()) return array();
 		return array('misc'=>'NOTIFICATIONS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -62,15 +62,15 @@ class Module_notifications
 	{
 		require_lang('notifications');
 		require_code('notifications2');
-		
+
 		$type=get_param('type','misc');
-		
+
 		if ($type=='misc') return $this->overall();
 		if ($type=='advanced') return $this->advanced();
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * Show an overall notifications UI.
 	 *
@@ -79,9 +79,9 @@ class Module_notifications
 	function overall()
 	{
 		$title=get_page_title('NOTIFICATIONS');
-		
+
 		$interface=notifications_ui(get_member());
-		
+
 		return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
 			'TITLE'=>$title,
 			'INTERFACE'=>$interface,

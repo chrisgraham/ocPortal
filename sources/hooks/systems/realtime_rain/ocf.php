@@ -42,7 +42,7 @@ class Hook_realtime_rain_ocf
 				{
 					$timestamp=$row['timestamp'];
 					$member_id=$row['member_id'];
-					
+
 					if (is_guest($member_id)) continue;
 
 					$drops[]=rain_get_special_icons($row['m_ip_address'],$timestamp)+array(

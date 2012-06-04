@@ -30,7 +30,7 @@ class Hook_addon_registry_core_notifications
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *
@@ -168,7 +168,7 @@ class Hook_addon_registry_core_notifications
 			'INTERFACE'=>$interface,
 			'ACTION_URL'=>get_self_url(),
 		));
-		
+
 		return array(
 			lorem_globalise(
 				$out

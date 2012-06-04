@@ -79,7 +79,7 @@ class Module_members
 						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',$row['m_join_time'],NULL,0.2,$row['title'])); // Callback
 					}
 				}
-				
+
 				$start+=500;
 			}
 			while (array_key_exists(0,$groups));
@@ -97,14 +97,14 @@ class Module_members
 		require_css('ocf');
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->directory();
 		if ($type=='view') return $this->profile();
 		//if ($type=='remote') return $this->remote();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to show info about remote logins.
 	 *
@@ -113,7 +113,7 @@ class Module_members
 	function remote()
 	{
 		$title=get_page_title('LEARN_ABOUT_REMOTE_LOGINS');
-		
+
 		if (get_option('allow_member_integration')=='off') warn_exit(do_lang_tempcode('NO_REMOTE_ON'));
 
 		return do_template('FULL_MESSAGE_SCREEN',array('_GUID'=>'c0d5fa4f2b90e5d8e967763cca787636','TITLE'=>$title,'TEXT'=>do_lang_tempcode('DESCRIPTION_IS_REMOTE_MEMBER',ocp_srv('HTTP_HOST'))));

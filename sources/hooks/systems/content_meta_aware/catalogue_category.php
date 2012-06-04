@@ -53,11 +53,11 @@ class Hook_content_meta_aware_catalogue_category
 			'add_time_field'=>'cc_add_date',
 			'edit_time_field'=>NULL,
 			'validated_field'=>NULL,
-			
+
 			'addon_name'=>'catalogues',
-			
+
 			'module'=>'catalogues',
 		);
 	}
-	
+
 }

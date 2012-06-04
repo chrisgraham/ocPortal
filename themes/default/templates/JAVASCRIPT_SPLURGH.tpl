@@ -56,7 +56,7 @@ function splurgh(key_name,url_stub,range_a,range_b,level,data,chain,not_first)
 			while (balance!=0);
 			a=to+2;
 			b=scanner_for_b-1;
-			
+
 			// Render level
 			under=splurgh(key_name,url_stub,a,b,level+1,data,chain+"~"+anchor_reference,true);
 			if (under!="")

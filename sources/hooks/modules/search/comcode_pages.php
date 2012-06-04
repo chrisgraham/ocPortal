@@ -29,7 +29,7 @@ class Hook_search_comcode_pages
 	function info()
 	{
 		require_lang('zones');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('PAGES');
 		$info['default']=false;
@@ -38,7 +38,7 @@ class Hook_search_comcode_pages
 
 		return $info;
 	}
-	
+
 	/**
 	 * Get a list of entries for the content covered by this search hook. In hierarchical list selection format.
 	 *
@@ -83,7 +83,7 @@ class Hook_search_comcode_pages
 			case 'title':
 				$remapped_orderer='the_page';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='the_zone'; // Stucked
 				break;
@@ -147,7 +147,7 @@ class Hook_search_comcode_pages
 			$pages_found[$row['the_zone'].':'.$row['the_page']]=1;
 			$out[$i]['data']=array($row['the_zone'],$row['the_page'],$limit_to);
 			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
-			
+
 			if (!has_page_access(get_member(),$row['the_page'],$row['the_zone'])) $out[$i]['restricted']=true;
 		}
 
@@ -159,7 +159,7 @@ class Hook_search_comcode_pages
 			{
 				$pages_found[$row['the_zone'].':'.$row['the_page']]=1;
 			}
-			
+
 			// Now, look on disk for non-cached comcode pages
 			$zones=find_all_zones();
 			$i=count($out);
@@ -172,7 +172,7 @@ class Hook_search_comcode_pages
 				foreach ($pages as $page=>$dir)
 				{
 					if (!is_string($page)) $page=strval($page);
-					
+
 					if (!array_key_exists($zone.':'.$page,$pages_found))
 					{
 						if (!has_page_access(get_member(),$page,$zone)) continue;
@@ -199,9 +199,9 @@ class Hook_search_comcode_pages
 							elseif ($remapped_orderer=='the_zone') $out[$i]['orderer']=$zone;
 
 							$i++;
-						
+
 							$GLOBALS['TOTAL_RESULTS']++;
-					
+
 							// Let it cache for next time
 							if (get_option('is_on_comcode_page_cache')=='1')
 								request_page($page,false,$zone,$dir,false,true);
@@ -225,7 +225,7 @@ class Hook_search_comcode_pages
 		list($zone,$page,$limit_to)=$row;
 		return $this->decide_template($zone,$page,$limit_to);
 	}
-	
+
 	/**
 	 * Decide how to show a comcode page in the search results.
 	 *

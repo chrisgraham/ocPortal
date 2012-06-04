@@ -23,7 +23,7 @@
 	</td>
 	<td class="dottedborder_barrier_b_nonrequired addon_actions">
 		{ACTIONS}
-	
+
 		<label class="accessibility_hidden" for="install_{NAME*}">{!INSTALL} {NAME*}</label>
 		<input title="{!INSTALL} {NAME*}" type="checkbox" name="install_{NAME*}" id="install_{NAME*}" value="{PASSTHROUGH*}" {$?,{$EQ,{TYPE},install},,disabled="disabled" }/>
 

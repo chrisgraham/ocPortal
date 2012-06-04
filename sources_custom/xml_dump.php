@@ -38,7 +38,7 @@ function xml_dump_script()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	$GLOBALS['DEBUG_MODE']=false;
 	$GLOBALS['SEMI_DEBUG_MODE']=false;
-	
+
 	@ini_set('ocproducts.xss_detect','0');
 
 	if (strtolower(ocp_srv('REQUEST_METHOD'))=='get') // Interface
@@ -110,18 +110,18 @@ function xml_dump_script()
 				</div>
 			';
 		}
-		
+
 		echo '<p><input type="submit" value="Sync" /> &nbsp;&nbsp;&nbsp;&nbsp; [<a href="#" onclick="var form=document.getElementsByTagName(\'form\')[0]; for (var i=0;i&lt;form.elements.length;i++) if (form.elements[i].checked) form.elements[i].checked=false; return false;">un-tick all</a>]</p>';
 		echo '</form>';
-			
+
 		echo '
 		</body>
 		</html>
 		';
-		
+
 		exit();
 	}
-	
+
 	// Actualiser
 
 	$from=NULL;
@@ -136,7 +136,7 @@ function xml_dump_script()
 		}
 	}
 	if ($only=='') $only=NULL;
-	
+
 
 	@header('Content-type: text/plain');
 	@ob_end_clean();
@@ -173,9 +173,9 @@ function find_all_tables($db)
 	}
 	$tables['db_meta']=array('m_table'=>'*ID_TEXT','m_name'=>'*ID_TEXT','m_type'=>'ID_TEXT');
 	$tables['db_meta_indices']=array('i_table'=>'*ID_TEXT','i_name'=>'*ID_TEXT','i_fields'=>'*ID_TEXT');
-	
+
 	ksort($tables);
-	
+
 	return $tables;
 }
 
@@ -194,7 +194,7 @@ function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$sk
 	if (is_null($skip)) $skip=array();
 
 	$tables=find_all_tables($GLOBALS['SITE_DB']);
-	
+
 	$out=array();
 
 	// Tables
@@ -203,7 +203,7 @@ function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$sk
 		if ((!is_null($from)) && ($table_name<$from)) continue;
 		if (in_array($table_name,$skip)) continue;
 		if ((!is_null($only)) && (!in_array($table_name,$only))) continue;
-		
+
 		if ($output_statuses)
 		{
 			print('Working out SQL for table: '.$table_name."\n");
@@ -214,7 +214,7 @@ function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$sk
 		{
 			$out[]='DROP TABLE IF EXISTS '.get_table_prefix().$table_name.';';
 		}
-		
+
 		$out[]=db_create_table($table_name,$fields);
 
 		// Data
@@ -270,7 +270,7 @@ function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$sk
 		} else $type='INDEX';
 		$out[]='ALTER TABLE '.get_table_prefix().$index['i_table'].' ADD '.$type.' '.$index_name.' ('.$index['i_fields'].')'.";";
 	}
-	
+
 	return $out;
 }
 

@@ -53,6 +53,6 @@ function chat_poller()
 
 		exit($output);
 	}
-	
+
 	touch(get_custom_file_base().'/data_custom/modules/chat/chat_last_full_check.dat');
 }

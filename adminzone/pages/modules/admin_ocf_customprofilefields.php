@@ -41,7 +41,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'CUSTOM_PROFILE_FIELDS','stats'=>'CUSTOM_PROFILE_FIELD_STATS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -185,9 +185,9 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','cf_order ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -291,7 +291,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'gdfg43tfdgdfgdrfgd',true),true);
 	}
 
@@ -322,7 +322,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-	
+
 		$name=get_translated_text($myrow['cf_name'],$GLOBALS['FORUM_DB']);
 		$description=get_translated_text($myrow['cf_description'],$GLOBALS['FORUM_DB']);
 		$default=$myrow['cf_default'];
@@ -430,7 +430,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		$title=get_page_title('CUSTOM_PROFILE_FIELD_STATS');
 
 		breadcrumb_set_parents(array());
-		
+
 		$f_name='field_'.strval(get_param_integer('id'));
 		$_a=get_input_date('start');
 		$a=is_null($_a)?'1=1':('m_join_time>'.strval((integer)$_a));

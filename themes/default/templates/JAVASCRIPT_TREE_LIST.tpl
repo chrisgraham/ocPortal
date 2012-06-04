@@ -178,7 +178,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 		node=xml.childNodes[i];
 		if (node.nodeName=='#text') continue; // A text-node
 		if (node.nodeName.toLowerCase()=='attribute') continue;
-		
+
 		// Special handling of 'expand' nodes, which say to pre-expand some categories as soon as the page loads
 		if (node.nodeName=='expand')
 		{
@@ -288,7 +288,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				}
 			}
 			node_self.appendChild(new_html);
-			
+
 			// Auto-expand
 			if (window.ctrlPressed || window.altPressed || window.metaPressed || window.shiftPressed)
 			{
@@ -525,11 +525,11 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 	}
 
 	fixUpNodePositions(this.object.name);
-	
+
 	trigger_resize();
 
 	this.object.busy=false;
-	
+
 	return true;
 }
 
@@ -545,7 +545,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 	{
 		cancelBubbling(event);
 		if (typeof event.preventDefault!='undefined') event.preventDefault();
-		
+
 		// We're holding down shift so we need to force selection of everything bounded between our last click spot and here
 		var all_a=document.getElementById('tree_list__root_tree_list').getElementsByTagName('label');
 		var pos_last=-1;

@@ -53,10 +53,10 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 						$map=get_catalogue_entry_map($entry[0],$catalogue[0],'PAGE','DEFAULT',NULL,NULL/*,array($field_id)*/);
 					}
 				}
-				
+
 				$cache[$entry_id]=$map;
 			}
-			
+
 			if (!is_null($map))
 			{
 				if (isset($map['FIELD_'.strval($field_id)]))
@@ -64,7 +64,7 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE
 				elseif (isset($map['_FIELD_'.strval($field_id)]))
 					$value=$map['_FIELD_'.strval($field_id)];
 			}
-			
+
 			if (is_object($value)) $value=$value->evaluate();
 		}
 		return $value;

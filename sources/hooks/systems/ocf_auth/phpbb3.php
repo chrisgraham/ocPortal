@@ -49,7 +49,7 @@ class Hook_ocf_auth_phpbb3
 				return do_lang_tempcode('USER_BAD_PASSWORD');
 			}
 		}
-		
+
 		return NULL;
 	}
 

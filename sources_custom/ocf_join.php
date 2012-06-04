@@ -384,7 +384,7 @@ function referrer_report_script($ret=false)
 		if ($ret) return $table;
 
 		$title=get_page_title('REFERRALS');
-		
+
 		$out=new ocp_tempcode();
 		$out->attach($title);
 		$out->attach($table);
@@ -392,6 +392,6 @@ function referrer_report_script($ret=false)
 		$out=globalise($out,NULL,'',true);
 		$out->evaluate_echo();
 	}
-	
+
 	return NULL;
 }

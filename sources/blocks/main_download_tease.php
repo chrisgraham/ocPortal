@@ -20,7 +20,7 @@
 
 class Block_main_download_tease
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_download_tease
 		$info['parameters']=array('zone');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_download_tease
 		$info['ttl']=60*24;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -76,7 +76,7 @@ class Block_main_download_tease
 		foreach ($rows as $i=>$row)
 		{
 			if ($i!=0) $content->attach(do_template('BLOCK_SEPARATOR'));
-			
+
 			$content->attach(get_download_html($row,$zone));
 		}
 

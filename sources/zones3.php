@@ -159,7 +159,7 @@ function actual_delete_zone($zone)
 
 	require_code('abstract_file_manager');
 	force_have_afm_details();
-	
+
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	disable_php_memory_limit();
 

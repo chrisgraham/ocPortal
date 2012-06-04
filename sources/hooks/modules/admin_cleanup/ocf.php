@@ -29,17 +29,17 @@ class Hook_ocf
 	function info()
 	{
 		if (get_forum_type()!='ocf') return NULL; else ocf_require_all_forum_stuff();
-	
+
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['title']=do_lang_tempcode('SECTION_FORUMS');
 		$info['description']=do_lang_tempcode('DESCRIPTION_CACHE_FORUMS');
 		$info['type']='cache';
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -48,9 +48,9 @@ class Hook_ocf
 	function run()
 	{
 		if (get_forum_type()!='ocf') return new ocp_tempcode(); else ocf_require_all_forum_stuff();
-	
+
 		if (function_exists('set_time_limit')) @set_time_limit(0);
-	
+
 		// Forums
 		require_code('ocf_posts_action2');
 		$start=0;
@@ -64,7 +64,7 @@ class Hook_ocf
 			$start+=100;
 		}
 		while ($forums!=array());
-	
+
 		return new ocp_tempcode();
 	}
 

@@ -92,7 +92,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'m_language');
 	}
-	
+
 	/**
 	 * Find if login cookie is md5-hashed.
 	 *
@@ -102,7 +102,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Find if the login cookie contains the login name instead of the member id.
 	 *
@@ -112,7 +112,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Find the member id of the forum guest member.
 	 *
@@ -124,7 +124,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($ret===NULL) $ret=db_get_first_id();
 		return $ret;
 	}
-	
+
 	/**
 	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
 	 *
@@ -145,7 +145,7 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_forum_driver_helper_install');
 		return _helper_install_create_custom_field($this,$name,$length,$locked,$viewable,$settable,$required,$description,$type,$encrypted,$default);
 	}
-	
+
 	/**
 	 * Get an array of attributes to take in from the installer. Almost all forums require a table prefix, which the requirement there-of is defined through this function.
 	 * The attributes have 4 values in an array
@@ -161,7 +161,7 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_forum_driver_helper_install');
 		return _helper_install_specifics();
 	}
-	
+
 	/**
 	 * Searches for forum auto-config at this path.
 	 *
@@ -173,7 +173,7 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_forum_driver_helper_install');
 		return _helper_install_test_load_from($path);
 	}
-	
+
 	/**
 	 * Get an array of paths to search for config at.
 	 *
@@ -183,7 +183,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return array(get_file_base());
 	}
-	
+
 	/**
 	 * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
 	 * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
@@ -319,7 +319,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return '';
 	}
-	
+
 	/**
 	 * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
 	 *
@@ -331,7 +331,7 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_forum_driver_helper');
 		return _helper_apply_emoticons($this,$member);
 	}
-	
+
 	/**
 	 * Try to find the theme that the logged-in/guest member is using, and map it to an ocPortal theme.
 	 * The themes/map.ini file functions to provide this mapping between forum themes, and ocPortal themes, and has a slightly different meaning for different forum drivers. For example, some drivers map the forum themes theme directory to the ocPortal theme name, whilst others made the humanly readeable name.
@@ -358,7 +358,7 @@ class forum_driver_ocf extends forum_driver_base
 		}
 		return $theme;
 	}
-	
+
 	/**
 	 * Set a custom profile field's value. It should not be called directly.
 	 *
@@ -415,7 +415,7 @@ class forum_driver_ocf extends forum_driver_base
 		}
 		return $out;
 	}
-	
+
 	/**
 	 * Get a member profile-row for the member of the given name.
 	 *
@@ -432,7 +432,7 @@ class forum_driver_ocf extends forum_driver_base
 		if (!array_key_exists(0,$rows)) return NULL;
 		return $rows[0];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's primary usergroup.
 	 *
@@ -444,7 +444,7 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_members');
 		return ocf_get_member_primary_group($r['id']);
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's member id.
 	 *
@@ -455,7 +455,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return $r['id'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's last visit date.
 	 *
@@ -477,7 +477,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return $r['m_username'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's e-mail address.
 	 *
@@ -757,7 +757,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		return $out;
 	}
-	
+
 	/**
 	 * This is the opposite of the get_next_member function.
 	 *
@@ -770,7 +770,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($tempid==$this->get_guest_id()) return NULL;
 		return $tempid;
 	}
-	
+
 	/**
 	 * Get the member id of the next member after the given one, or NULL.
 	 * It cannot be assumed there are no gaps in member ids, as members may be deleted.
@@ -816,7 +816,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($member==$this->get_guest_id()) return do_lang('GUEST');
 		return $this->get_member_row_field($member,'m_username');
 	}
-	
+
 	/**
 	 * Get the e-mail address for the specified member id.
 	 *
@@ -827,7 +827,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'m_email_address');
 	}
-	
+
 	/**
 	 * Get the photo thumbnail URL for the specified member id.
 	 *
@@ -856,7 +856,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		if (is_null($pic)) $pic='';
 		elseif ((url_is_local($pic)) && ($pic!='')) $pic=get_complex_base_url($pic).'/'.$pic;
-		
+
 		return $pic;
 	}
 
@@ -967,7 +967,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return $this->connection->query_value('f_topics','COUNT(*)',array('t_cache_first_member_id'=>$member));
 	}
-	
+
 	/**
 	 * Find out if the given member id is banned.
 	 *
@@ -978,7 +978,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'m_is_perm_banned')==1;
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
@@ -1014,7 +1014,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return NULL; // Same as site
 	}
-	
+
 	/**
 	 * Get the number of members registered on the forum.
 	 *
@@ -1065,10 +1065,10 @@ class forum_driver_ocf extends forum_driver_base
 			$value=$this->connection->query_value('f_posts','COUNT(*)');
 			set_value('ocf_post_count',strval($value));
 		}
-	
+
 		return $value;
 	}
-	
+
 	/**
 	 * Get the number of new forum posts.
 	 *
@@ -1078,7 +1078,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_posts WHERE p_time>'.strval(time()-60*60*24));
 	}
-	
+
 	/**
 	 * Get a member id from the given member's username.
 	 *
@@ -1097,7 +1097,7 @@ class forum_driver_ocf extends forum_driver_base
 		$this->MEMBER_ROWS_CACHED[$id]=$row[0];
 		return $id;
 	}
-	
+
 	/**
 	 * Get a member id from the given member's username.
 	 *
@@ -1116,7 +1116,7 @@ class forum_driver_ocf extends forum_driver_base
 		$this->MEMBER_ROWS_CACHED[$id]=$row[0];
 		return $id;
 	}
-	
+
 	/**
 	 * Get the ids of the admin usergroups.
 	 *
@@ -1126,7 +1126,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return collapse_1d_complexity('id',$this->connection->query_select('f_groups',array('id'),array('g_is_super_admin'=>1)));
 	}
-	
+
 	/**
 	 * Get the ids of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
@@ -1137,7 +1137,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return collapse_1d_complexity('id',$this->connection->query_select('f_groups',array('id'),array('g_is_super_moderator'=>1)));
 	}
-	
+
 	/**
 	 * Get the forum usergroup list. This is useful to enumerate usergroups, or to find usergroup names.
 	 *
@@ -1183,7 +1183,7 @@ class forum_driver_ocf extends forum_driver_base
 		foreach ($rows as $row)
 		{
 			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['text_original'])) $row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
-			
+
 			if (($hide_hidden) && ($row['g_hidden']==1))
 			{
 				if ($skip_hidden) continue;
@@ -1225,7 +1225,7 @@ class forum_driver_ocf extends forum_driver_base
 		// User
 		ocp_setcookie(get_member_cookie(),strval($id));
 		$_COOKIE[get_member_cookie()]=strval($id);
-	
+
 		// Password
 		$password_hashed_salted=$this->get_member_row_field($id,'m_pass_hash_salted');
 		$password_compat_scheme=$this->get_member_row_field($id,'m_password_compat_scheme');
@@ -1233,7 +1233,7 @@ class forum_driver_ocf extends forum_driver_base
 		ocp_setcookie(get_pass_cookie(),$password_hashed_salted);
 		$_COOKIE[get_pass_cookie()]=$password_hashed_salted;
 	}
-	
+
 	/**
 	 * The hashing algorithm of this forum driver.
 	 *
@@ -1268,7 +1268,7 @@ class forum_driver_ocf extends forum_driver_base
 			return $password; //ocf_ldap_hash($user_id,$password); Can't do hash checks under all systems
 		}
 	}
-	
+
 	/**
 	 * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
 	 * All authorisation, cookies, and form-logins, are passed through this function.
@@ -1285,7 +1285,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		$out=array();
 		$out['id']=NULL;
-	
+
 		require_code('ocf_members');
 		require_code('ocf_groups');
 		if (!function_exists('require_lang')) require_code('lang');
@@ -1293,7 +1293,7 @@ class forum_driver_ocf extends forum_driver_base
 		if (!function_exists('require_lang')) return $out;
 		require_lang('ocf');
 		require_code('mail');
-	
+
 		$skip_auth=false;
 
 		if ($userid===NULL)
@@ -1364,7 +1364,7 @@ class forum_driver_ocf extends forum_driver_base
 		if (ocf_is_ldap_member($userid))
 		{
 			//$rows[0]['m_pass_hash_salted']=ocf_get_ldap_hash($userid);
-	
+
 			// Doesn't exist any more? This is a special case - the 'LDAP member' exists in our DB, but not LDAP. It has been deleted from LDAP or LDAP server has jumped
 			/*if (is_null($rows[0]['m_pass_hash_salted']))
 			{
@@ -1393,7 +1393,7 @@ class forum_driver_ocf extends forum_driver_base
 			$out['error']=(do_lang_tempcode('USER_BANNED'));
 			return $out;
 		}
-	
+
 		// Check password
 		if (!$skip_auth)
 		{
@@ -1479,7 +1479,7 @@ class forum_driver_ocf extends forum_driver_base
 					{
 						$this->connection->query_delete('f_member_known_login_ips',array('i_member_id'=>$row['id'],'i_ip'=>$ip),'',1);
 					}
-	
+
 					$code=!is_null($test2)?$test2:uniqid('');
 					$this->connection->query_insert('f_member_known_login_ips',array('i_val_code'=>$code,'i_member_id'=>$row['id'],'i_ip'=>$ip));
 					$url=find_script('validateip').'?code='.$code;
@@ -1497,13 +1497,13 @@ class forum_driver_ocf extends forum_driver_base
 				return $out;
 			}
 		}
-	
+
 		$this->ocf_flood_control($row['id']);
 
 		$out['id']=$row['id'];
 		return $out;
 	}
-	
+
 	/**
 	 * Handle flood control for members.
 	 *
@@ -1593,7 +1593,7 @@ class forum_driver_ocf extends forum_driver_base
 			if (($restrict_answer!=0) || ($dif>180) || ($new_visit))
 			{
 				$old_ip=$this->get_member_row_field($id,'m_ip_address');
-			
+
 				$change_map=array('m_last_visit_time'=>time());
 				if (get_ip_address()!=$old_ip) $change_map['m_ip_address']=get_ip_address();
 
@@ -1613,7 +1613,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		return $this->get_member_row_field($id,'m_ip_address');
 	}
-	
+
 	/**
 	 * Gets a whole member row from the database.
 	 *
@@ -1623,7 +1623,7 @@ class forum_driver_ocf extends forum_driver_base
 	function get_member_row($member)
 	{
 		if (isset($this->MEMBER_ROWS_CACHED[$member])) return $this->MEMBER_ROWS_CACHED[$member];
-	
+
 		$rows=$this->connection->query_select('f_members',array('*'),array('id'=>$member),'',1);
 		if (!array_key_exists(0,$rows))
 		{
@@ -1633,7 +1633,7 @@ class forum_driver_ocf extends forum_driver_base
 		$this->MEMBER_ROWS_CACHED[$member]=$rows[0];
 		return $this->MEMBER_ROWS_CACHED[$member];
 	}
-	
+
 	/**
 	 * Gets a named field of a member row from the database.
 	 *

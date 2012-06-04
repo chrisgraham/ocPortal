@@ -32,7 +32,7 @@ class shopping_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('ecommerce');
 		require_code('catalogues');
 		require_code('catalogues2');
@@ -87,9 +87,9 @@ class shopping_test_set extends ocp_test_case
 		}
 
 		$catalogue_name	=	'storetesting'.strval(get_member());
-	
+
 		//Set Sample post values
-		
+
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name));
 
 		foreach($fields as $key => $val)
@@ -141,7 +141,7 @@ class shopping_test_set extends ocp_test_case
 		$_GET['page']='shopping';	//	Static setting to indentify the module in payment form
 		payment_form();
 	}
-	
+
 	function testHandleTransaction()
 	{
 		$purchase_id	=	$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());

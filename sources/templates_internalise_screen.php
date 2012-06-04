@@ -29,7 +29,7 @@
 function internalise_own_screen($title,$refresh_time=NULL,$refresh_if_changed=NULL)
 {
 	if ((get_value('no_frames')==='1') || (get_param_integer('no_frames',0)==1) || (get_param_integer('keep_no_frames',0)==1)) return NULL;
-	
+
 	if (!has_js()) return NULL; // We need JS to make this a seamless process
 	if (strpos(ocp_srv('REQUEST_URI'),'/iframe.php')!==false) return NULL; // This is already in the iframe
 

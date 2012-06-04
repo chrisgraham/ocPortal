@@ -82,7 +82,7 @@ if ((strpos($_SERVER['PHP_SELF'],'/sources/')!==false) || (strpos($_SERVER['PHP_
 function require_code($codename,$light_exit=false)
 {
 	$hphp=defined('HIPHOP_PHP');
-	
+
 	if (($hphp)/* || ((array_key_exists('keep_old_parser',$_GET)) && ($_GET['keep_old_parser']=='1'))*/)
 	{
 		if ($codename=='tempcode')
@@ -218,7 +218,7 @@ function require_code($codename,$light_exit=false)
 			} else
 			{
 				// Note we load the original and then the override. This is so function_exists can be used in the overrides (as we can't support the re-definition) OR in the case of Mx_ class derivation, so that the base class is loaded first.
-				
+
 				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 				{
 					@ini_set('display_errors','0');
@@ -407,7 +407,7 @@ function filter_naughty($in,$preg=false)
 	if (strpos($in,'..')!==false)
 	{
 		if ($preg) return str_replace('.','',$in);
-		
+
 		$in=str_replace('...','',$in);
 		if (strpos($in,'..')!==false)
 			log_hack_attack_and_exit('PATH_HACK');

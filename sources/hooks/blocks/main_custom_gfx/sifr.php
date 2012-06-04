@@ -34,11 +34,11 @@ class Hook_main_custom_gfx_sifr
 		require_javascript('javascript_sifr');
 
 		$tag=array_key_exists('tag',$map)?$map['tag']:'h2';
-		
+
 		if (!array_key_exists('data',$map)) $map['data']=do_lang('FILL_IN_DATA_PARAM');
-		
+
 		$id='sifr'.uniqid('');
-		
+
 		$font=array_key_exists('font',$map)?$map['font']:'tradegothic';
 		if (substr($font,-4)=='.swf') $font=substr($font,0,strlen($font)-4);
 		if (file_exists(get_file_base().'/data_custom/sifr/'.$font.'.swf'))
@@ -69,7 +69,7 @@ class Hook_main_custom_gfx_sifr
 			if (typeof sIFR=="function")
 				sIFR.replaceElement(named({sSelector:"#'.php_addslashes($id).'", sFlashSrc:"'.php_addslashes($font).'"'.$extra.'}));
 			//]]></script>';
-		
+
 		if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($ret);
 		return make_string_tempcode($ret);
 	}

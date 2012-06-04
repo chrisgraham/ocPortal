@@ -29,7 +29,7 @@ function play_chat_sound(sID,for_member)
 	if (typeof window.soundManager=='undefined') return;
 
 	var play_sound=window.document.getElementById('play_sound');
-	
+
 	if ((play_sound) && (!play_sound.checked)) return;
 
 	if (for_member)
@@ -55,21 +55,21 @@ function chat_load(room_id)
 	catch (e) {};
 
 	if (window.location.href.indexOf('keep_chattest')==-1) begin_chatting(room_id);
-	
+
 	text_colour=document.getElementById('text_colour');
 	if (text_colour) text_colour.style.color=text_colour.value;
 
 	var event = YAHOO.util.Event;
 
 	event.onDOMReady(loadColourPicker);
-	
+
 	manageScrollHeight(document.getElementById('post'));
 }
 
 function begin_chatting(room_id)
 {
 	window.load_from_room_id=room_id;
-	
+
 	if ((window.chat_check) && (window.do_ajax_request)) chat_check(true,0); else window.setTimeout(begin_chatting,500);
 
 	if (typeof window.play_chat_sound!='undefined') play_chat_sound('you_connect');
@@ -82,7 +82,7 @@ function checkChatOptions(ob)
 		window.fauxmodal_alert('{!BAD_HTML_COLOUR^;}');
 		return false;
 	}
-	
+
 	return checkForm(ob);
 }
 
@@ -141,13 +141,13 @@ function loadColourPicker()
 function get_ticked_people(form)
 {
 	var people='';
-	
+
 	for (var i=0;i<form.elements.length;i++)
 	{
 		if ((form.elements[i].type=='checkbox') && (form.elements[i].checked))
 			people+=((people!='')?',':'')+form.elements[i].name.substr(7);
 	}
-	
+
 	if (people=='')
 	{
 		window.fauxmodal_alert('{!NOONE_SELECTED_YET^;}');
@@ -272,7 +272,7 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 		// Let the form be submitted the old-fashioned way.
 		return true;
 	}
-	
+
 	return null;
 }
 
@@ -896,7 +896,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 			setInnerHTML(areas,'');
 			setInnerHTML(tabs,'');
 		}
-		
+
 		lobby=true;
 	} else // Not chat lobby (sitewide IM)
 	{
@@ -904,7 +904,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 	}
 
 	all_conversations[participants]=1;
-	
+
 	var url="{$FIND_SCRIPT_NOHTTP#,messages}?action=join_im&room_id="+window.encodeURIComponent(room_id)+"&event_id="+top_window.last_event_id+top_window.keep_stub(false);
 
 	// Add in
@@ -946,9 +946,9 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 				window.setTimeout(function() // Give time for XHTML to render
 				{
 					if (!new_window.document) return;
-					
+
 					new_window.document.title=getInnerHTML(new_window.document.getElementsByTagName('title')[0]); // For Safari
-					
+
 					/*new_window.onbeforeunload=function() {
 						deinvolve_im(room_id,false);
 					};*/

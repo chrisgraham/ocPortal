@@ -151,7 +151,7 @@ class Hook_pointstore_ocdeadpeople
 		$immunization=($get_immunization==1)?1:0;
 
 		$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$member_id,'disease_id'=>$disease_id));
-		
+
 		$insert=true;
 
 		if(isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']!=0)
@@ -182,7 +182,7 @@ class Hook_pointstore_ocdeadpeople
 				return warn_screen($title,do_lang_tempcode('_CANT_AFFORD_THIS'));
 			}
 		}
-		
+
 		// Actuate
 		require_code('points2');
 		if($get_immunization==1)

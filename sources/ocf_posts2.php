@@ -29,7 +29,7 @@ function ocf_show_isolated_post($row,$use_post_title=false)
 {
 	require_code('ocf_groups');
 	require_css('ocf');
-	
+
 	// Poster title
 	$primary_group=$GLOBALS['FORUM_DRIVER']->get_member_row_field($row['p_poster'],'m_primary_group');
 	if (!is_null($primary_group))
@@ -126,7 +126,7 @@ function ocf_show_isolated_post($row,$use_post_title=false)
 		if ($row['p_title']!=$post_title) $post_title.=': '.$row['p_title'];
 	}
 	//if ($post_title=='') $post_title=do_lang_tempcode('ISOLATED_POST_TITLE',strval($row['id']));
-	
+
 	$emphasis=new ocp_tempcode();
 	if ($row['p_is_emphasised']==1)
 	{

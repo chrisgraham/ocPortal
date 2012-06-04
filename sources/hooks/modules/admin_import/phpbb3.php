@@ -179,7 +179,7 @@ class Hook_phpbb3
 		}
 
 		set_value('timezone',$INFO['board_timezone']);
-		
+
 		set_option('one_per_email_address',strval(1-intval($INFO['allow_emailreuse'])));
 
 		// Now some usergroup options
@@ -213,7 +213,7 @@ class Hook_phpbb3
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('attachment',strval($row['attach_id']))) continue;
-	
+
 				$row['poster_id']=import_id_remap_get('member',strval($row['poster_id']),true);
 				if (is_null($row['poster_id'])) $row['poster_id']=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
@@ -229,7 +229,7 @@ class Hook_phpbb3
 					'a_add_time'=>$row['filetime'],
 				);
 				$id_new=$GLOBALS['FORUM_DB']->query_insert('attachments',$row_copy,true);
-				
+
 				@rename($file_base.'/files/'.$row['physical_filename'],get_custom_file_base().'/uploads/attachments/'.$row['physical_filename']);
 
 				import_id_remap_put('attachment',strval($row['attach_id']),$id_new);
@@ -312,7 +312,7 @@ class Hook_phpbb3
 		$_pp=$db->query('SELECT * FROM '.$table_prefix.'acl_options WHERE is_global=1 AND founder_only=0 AND auth_option_id='.strval($option_id),1);
 		if (!array_key_exists(0,$_pp)) return;
 		$pp=$_pp[0];
-		
+
 		$translated_permission=$this->_translate_permission($pp['auth_option']);
 		if (!is_null($translated_permission))
 		{
@@ -326,7 +326,7 @@ class Hook_phpbb3
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -351,7 +351,7 @@ class Hook_phpbb3
 					import_id_remap_put('member',strval($row['user_id']),$test);
 					continue;
 				}
-	
+
 				$language='';
 				if ($row['user_lang']!='')
 				{
@@ -454,7 +454,7 @@ class Hook_phpbb3
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -465,7 +465,7 @@ class Hook_phpbb3
 	function import_ocf_member_files($db,$table_prefix,$file_base)
 	{
 		global $STRICT_FILE;
-	
+
 		$options=$db->query('SELECT * FROM '.$table_prefix.'config WHERE '.db_string_equal_to('config_name','avatar_path').' OR '.db_string_equal_to('config_name','avatar_gallery_path'));
 		$avatar_path=$options[0]['config_value'];
 		$avatar_gallery_path=$options[1]['config_value'];
@@ -523,12 +523,12 @@ class Hook_phpbb3
 						}
 						break;
 				}
-	
+
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url'=>$avatar_url),array('id'=>$member_id),'',1);
-	
+
 				import_id_remap_put('member_files',strval($row['user_id']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -555,7 +555,7 @@ class Hook_phpbb3
 			import_id_remap_put('ip_ban',strval($row['ban_id']),0);
 		}
 	}
-	
+
 	/**
 	 * Convert an IP address from phpBB hexadecimal string format.
 	 *
@@ -653,7 +653,7 @@ class Hook_phpbb3
 			}
 		}
 	}
-	
+
 	/**
 	 * Helper function to locate parent forum and category of a forum. Has to be clever to locate both, by tree traversal.
 	 *
@@ -708,7 +708,7 @@ class Hook_phpbb3
 		$_pp=$db->query('SELECT * FROM '.$table_prefix.'acl_options WHERE is_local=1 AND founder_only=0 AND auth_option_id='.strval($option_id),1);
 		if (!array_key_exists(0,$_pp)) return;
 		$pp=$_pp[0];
-		
+
 		$translated_permission=$this->_translate_permission($pp['auth_option']);
 		if (!is_null($translated_permission))
 		{
@@ -723,7 +723,7 @@ class Hook_phpbb3
 			}
 		}
 	}
-	
+
 	/**
 	 * Helper function to translate phpBB permissions to ocPortal permissions.
 	 *
@@ -733,7 +733,7 @@ class Hook_phpbb3
 	function _translate_permission($perm)
 	{
 		$x=NULL;
-		
+
 		switch ($perm)
 		{
 			case 'f_read':
@@ -764,7 +764,7 @@ class Hook_phpbb3
 				$x='delete_lowrange_content';
 				break;
 		}
-		
+
 		return $x;
 	}
 
@@ -793,7 +793,7 @@ class Hook_phpbb3
 
 				import_id_remap_put('topic',strval($row['topic_id']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -929,7 +929,7 @@ class Hook_phpbb3
 	function fix_links($post,$uid,$db,$table_prefix,$post_id=NULL,$is_pm=false)
 	{
 		$orig_post=$post;
-		
+
 		$post=preg_replace('#<!-- [mwl] --><a class="[\w-]+" href="([^"]*)"( onclick="window.open\(this.href\);\s*return false;")?'.'>(.*)</a><!-- [mwl] -->#U','[url="${3}"]${1}[/url]',$post);
 		$post=preg_replace('#<!-- e --><a href="mailto:(.*)">(.*)</a><!-- e -->#U','[email="${2}"]${1}[/email]',$post);
 
@@ -975,7 +975,7 @@ class Hook_phpbb3
 		$post=preg_replace('#<!-- s([^\s]*) --><img src="\{SMILIES_PATH\}/[^"]*" alt="([^\s]*)" title="[^"]*" /><!-- s([^\s]*) -->#U','${1}',$post);
 
 		$post=preg_replace('#\[size="?(\d+)"?\]#i','[size="${1}%"]',$post);
-		
+
 		$post=str_replace('{','\{',$post);
 
 		return html_entity_decode($post,ENT_QUOTES);
@@ -1036,7 +1036,7 @@ class Hook_phpbb3
 			import_id_remap_put('poll',strval($row['topic_id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1138,7 +1138,7 @@ class Hook_phpbb3
 
 				import_id_remap_put('pt_post',strval($_postdetails['msg_id']),$post_id);
 			}
-	
+
 			import_id_remap_put('pt',strval($row['msg_id']),$topic_id);
 		}
 	}
@@ -1181,7 +1181,7 @@ class Hook_phpbb3
 	function import_notifications($db,$table_prefix,$file_base)
 	{
 		require_code('notifications');
-		
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -1190,7 +1190,7 @@ class Hook_phpbb3
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('topic_notification',strval($row['topic_id']).'-'.strval($row['user_id']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
@@ -1199,7 +1199,7 @@ class Hook_phpbb3
 
 				import_id_remap_put('topic_notification',strval($row['topic_id']).'-'.strval($row['user_id']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -1212,7 +1212,7 @@ class Hook_phpbb3
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('forum_notification',strval($row['forum_id']).'-'.strval($row['user_id']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) continue;
 				$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
@@ -1221,12 +1221,12 @@ class Hook_phpbb3
 
 				import_id_remap_put('forum_notification',strval($row['forum_id']).'-'.strval($row['user_id']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1248,7 +1248,7 @@ class Hook_phpbb3
 			for ($i=0;$i<$count;$i++)
 			{
 				if ($matches[1][$i]=='TEXT') continue;
-				
+
 				if ($parameters!='') $parameters.=',';
 				$parameters.=$matches[1][$i];
 			}
@@ -1325,7 +1325,7 @@ class Hook_phpbb3
 			if (is_null($id_new))
 			{
 				$default=$row['field_default_value'];
-				
+
 				$type='short_text';
 				switch ($row['field_type'])
 				{
@@ -1343,7 +1343,7 @@ class Hook_phpbb3
 
 					case FIELD_DROPDOWN:
 						$type='list';
-						
+
 						$values=collapse_1d_complexity('lang_default_value',$db->query('SELECT lang_default_value FROM '.$table_prefix.'profile_lang WHERE field_id='.strval($row['field_id'])));
 						$_default=$default;
 						foreach ($values as $value)
@@ -1368,7 +1368,7 @@ class Hook_phpbb3
 			import_id_remap_put('cpf',$row['field_ident'],$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1384,7 +1384,7 @@ class Hook_phpbb3
 			$member_id=import_id_remap_get('member',$row['user_id'],true);
 			$by=db_get_first_id()+1;
 			if (is_null($member_id)) continue;
-			
+
 			$post_id=import_id_remap_get('post',$row['post_id'],true);
 
 			$explanation=is_null($post_id)?'':do_lang('IMPORT_WARNING_CONVERT',strval($post_id));
@@ -1401,7 +1401,7 @@ class Hook_phpbb3
 			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_on_probation_until'=>$row['ban_end']),array('id'=>$member_id));
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1430,7 +1430,7 @@ class Hook_phpbb3
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *

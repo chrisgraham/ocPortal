@@ -8,9 +8,9 @@
 				<span class="theme_wizard_change_colour">[ <a href="{CHANGE_LINK*}">{!CHANGE}</a> ]</span>
 		{+END}
 	</div>
-	
+
 	<p>{!THEMEWIZARD_2_DOMINANT,{DOMINANT*}}</p>
-	
+
 	<p>{!THEMEWIZARD_2_LIGHT_DARK,{LD*}}</p>
 </div>
 

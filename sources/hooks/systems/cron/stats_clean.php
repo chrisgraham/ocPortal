@@ -27,7 +27,7 @@ class Hook_cron_stats_clean
 	function run()
 	{
 		if (!addon_installed('stats')) return;
-		
+
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*intval(get_option('stats_store_time'))));
 	}
 

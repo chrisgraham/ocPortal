@@ -44,7 +44,7 @@ class Module_cms_ocf_groups extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_CLUBS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -119,9 +119,9 @@ class Module_cms_ocf_groups extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$default_order='g_name ASC';
 		$current_ordering=get_param('sort',$default_order,true);
 		$sortables=array(
@@ -153,15 +153,15 @@ class Module_cms_ocf_groups extends standard_aed_module
 				protect_from_escaping(ocf_get_group_link($row['id'])),
 				($row['g_open_membership']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
 			);
-			
+
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'ocf_clubs'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'groups'),get_module_zone('groups'));
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order,'sort'),false,$search_url,$archive_url);
 	}
 
@@ -236,7 +236,7 @@ class Module_cms_ocf_groups extends standard_aed_module
 
 		$name=post_param('name');
 		$id=ocf_make_group($name,0,0,0,'','',NULL,NULL,$group_leader,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,0,post_param_integer('open_membership',0),1);
-		
+
 		// Create forum
 		$mods=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();
 		$access_mapping=array();
@@ -274,7 +274,7 @@ class Module_cms_ocf_groups extends standard_aed_module
 
 		return strval($id);
 	}
-	
+
 	/**
 	 * Fix club's permissons (in case e.g. forum was recreated).
 	 *
@@ -348,7 +348,7 @@ class Module_cms_ocf_groups extends standard_aed_module
 		{
 			$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_name'=>$name),$forum_where,'ORDER BY id DESC',1);
 		}
-		
+
 		return NULL;
 	}
 

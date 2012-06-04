@@ -41,7 +41,7 @@ class Module_galleries
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -83,7 +83,7 @@ class Module_galleries
 		delete_specific_permission('no_personal_gallery_limit');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries'));
-	
+
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'galleries'));
 
 		deldir_contents(get_custom_file_base().'/uploads/galleries',true,true);
@@ -135,7 +135,7 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->create_index('galleries','watermark_bottom_right',array('watermark_bottom_right'));
 			$GLOBALS['SITE_DB']->create_index('galleries','gadd_date',array('add_date'));
 			$GLOBALS['SITE_DB']->create_index('galleries','parent_id',array('parent_id'));
-	
+
 			$GLOBALS['SITE_DB']->create_table('images',array(
 				'id'=>'*AUTO',
 				'cat'=>'ID_TEXT',
@@ -153,7 +153,7 @@ class Module_galleries
 				'image_views'=>'INTEGER',
 				'title'=>'SHORT_TRANS',
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_index('images','image_views',array('image_views'));
 			$GLOBALS['SITE_DB']->create_index('images','category_list',array('cat'));
 			$GLOBALS['SITE_DB']->create_index('images','i_validated',array('validated'));
@@ -166,7 +166,7 @@ class Module_galleries
 			require_lang('galleries');
 			add_menu_item_simple('main_content',NULL,'GALLERIES','_SEARCH:galleries:type=misc');
 		}
-	
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('galleries','teaser','SHORT_TRANS',2);
@@ -182,7 +182,7 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->add_table_field('galleries','flow_mode_interface','BINARY');
 			$GLOBALS['SITE_DB']->add_table_field('galleries','allow_rating','BINARY',1);
 			$GLOBALS['SITE_DB']->add_table_field('galleries','allow_comments','SHORT_INTEGER',1);
-	
+
 			$GLOBALS['SITE_DB']->add_table_field('images','allow_trackbacks','BINARY',1);
 		}
 
@@ -210,13 +210,13 @@ class Module_galleries
 				'video_length'=>'INTEGER',
 				'title'=>'SHORT_TRANS',
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_index('videos','video_views',array('video_views'));
 			$GLOBALS['SITE_DB']->create_index('videos','vs',array('submitter'));
 			$GLOBALS['SITE_DB']->create_index('videos','v_validated',array('validated'));
 			$GLOBALS['SITE_DB']->create_index('videos','category_list',array('cat'));
 			$GLOBALS['SITE_DB']->create_index('videos','vadd_date',array('add_date'));
-	
+
 			add_config_option('DEFAULT_VIDEO_WIDTH','default_video_width','integer','return \'320\';','FEATURE','GALLERIES');
 			add_config_option('DEFAULT_VIDEO_HEIGHT','default_video_height','integer','return \'240\';','FEATURE','GALLERIES');
 			add_config_option('MAXIMUM_IMAGE_SIZE','maximum_image_size','integer','return \'1024\';','FEATURE','GALLERIES');
@@ -293,7 +293,7 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->add_table_field('galleries','g_owner','?USER');
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -467,7 +467,7 @@ class Module_galleries
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to list all galleries for browsing.
 	 *
@@ -502,7 +502,7 @@ class Module_galleries
 			$url=build_url(array('page'=>'_SELF','id'=>$myrow['name'],'type'=>'misc'),'_SELF');
 			$name=get_translated_text($myrow['fullname']);
 			if ($name=='') $name=$myrow['name'];
-	
+
 			$out->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'8a98d6e306a71398b57aa28b92f9cc01','NAME'=>$name,'URL'=>$url)));
 		}
 
@@ -521,7 +521,7 @@ class Module_galleries
 		$cat=get_param('id','root');
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=galleries&filter='.$cat;
 		$root=get_param('root','root');
-	
+
 		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
 		// Info on our gallery
@@ -552,7 +552,7 @@ class Module_galleries
 		if ($fullname=='') $fullname=$cat;
 
 		$description=get_translated_tempcode($myrow['description']);
-	
+
 		if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
 		{
 			$submit_cat=($myrow['is_member_synched']==1)?('member_'.strval(get_member()).'_'.$cat):$cat;
@@ -730,7 +730,7 @@ class Module_galleries
 	function do_gallery_flow_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$rep_image,$start,$max,$num_galleries,$fullname,$sorting)
 	{
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
-		
+
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
 		$num_pages=intval(ceil(floatval($num_galleries)/floatval($max)));
 		$image_select=get_param('select','*');
@@ -809,7 +809,7 @@ class Module_galleries
 					}
 					$row=$rows[0];
 				}
-	
+
 				if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('galleries',$cat))))
 				{
 					$entry_edit_url=build_url(array('page'=>'cms_galleries','type'=>'_ev','id'=>$row['id']),get_module_zone('cms_galleries'));
@@ -1121,11 +1121,11 @@ class Module_galleries
 		{
 			$title=get_page_title((get_translated_text($myrow['title'])=='')?'VIEW_IMAGE':'_VIEW_IMAGE',true,array(get_translated_tempcode($myrow['title'])),NULL,$awards);
 		}
-	
+
 		$root=get_param('root','root');
-	
+
 		seo_meta_load_for('image',strval($id));
-	
+
 		// Views
 		if (get_db_type()!='xml')
 		{
@@ -1414,7 +1414,7 @@ class Module_galleries
 					$first_id=$c[0]['id'];
 					$first_type=$c[1];
 				}
-				
+
 				if ((is_null($current_id)) || (($c[1]==$current_type) && ($c[0]['id']==$current_id)))
 				{
 					if ($position!=0)

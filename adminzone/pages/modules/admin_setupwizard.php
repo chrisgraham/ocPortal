@@ -50,7 +50,7 @@ class Module_admin_setupwizard
 	{
 		return array('misc'=>'SETUP_WIZARD');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -293,7 +293,7 @@ class Module_admin_setupwizard
 			'weather',
 			'users_online_block',
 		));
-		
+
 		$addon_list_advanced_off_by_default=array(
 			'installer',
 			'tester',
@@ -333,7 +333,7 @@ class Module_admin_setupwizard
 				$hidden.=static_evaluate_tempcode(form_input_hidden('addon_'.$row['addon_name'],'1'));
 			}
 		}
-		
+
 		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields.=$fields_hidden;
 
@@ -670,7 +670,7 @@ class Module_admin_setupwizard
 					delete_menu_item($duplicate['id']);
 			}
 			delete_menu_item_simple('site:');
-			
+
 			// Remove panel_top
 			if (addon_installed('redirects_editor'))
 			{
@@ -686,7 +686,7 @@ class Module_admin_setupwizard
 				fix_permissions($fullpath);
 				sync_file($fullpath);
 			}
-			
+
 			// Run any specific code for the profile
 			require_code('hooks/modules/admin_setupwizard_installprofiles/'.$installprofile);
 			$object=object_factory('Hook_admin_setupwizard_installprofiles_'.$installprofile);
@@ -821,7 +821,7 @@ class Module_admin_setupwizard
 		{
 			require_code('config2');
 			set_option('collapse_user_zones',strval($collapse_zones));
-			
+
 			/*if (addon_installed('redirects_editor')) Old method
 			{
 				if ($collapse_zones)
@@ -940,7 +940,7 @@ class Module_admin_setupwizard
 		$url=build_url(array('page'=>'_SELF','type'=>'step11'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * UI for a setup wizard step (done, message after cache emptied - need lower memory usage to rebuild them).
 	 *

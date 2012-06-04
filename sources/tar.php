@@ -150,7 +150,7 @@ function file_size_to_tar_block_size($size)
 function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_size,$subpath='',$all_files=false)
 {
 	require_code('files');
-	
+
 	$_full=($path=='')?$subpath:($path.'/'.$subpath);
 	if ($_full=='') $_full='.';
 	$info=array();
@@ -160,7 +160,7 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 		while (($entry=readdir($dh))!==false)
 		{
 			if (($entry=='.') || ($entry=='..')) continue;
-			
+
 			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
 			if ((($all_files) || (!should_ignore_file($_subpath))) && ($entry!='backups'))
 			{
@@ -213,7 +213,7 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$avoid_backing_up=NULL,$root_only_dirs=NULL,$tick=false,$all_files=false) // Note we cannot modify $resource unless we pass it by reference
 {
 	require_code('files');
-	
+
 	$_full=($path=='')?$subpath:($path.'/'.$subpath);
 	if ($_full=='') $_full='.';
 	$dh=opendir($_full);
@@ -222,9 +222,9 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
 		while (($entry=readdir($dh))!==false)
 		{
 			if (($entry=='.') || ($entry=='..')) continue;
-			
+
 			if ($tick) @print(' ');
-			
+
 			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
 			if ((($all_files) || (!should_ignore_file($_subpath))) && ($entry!='backups'))
 			{
@@ -408,7 +408,7 @@ function tar_get_file(&$resource,$path,$tolerate_errors=false,$write_data_to=NUL
 				{
 					$read_amount=min(4096,$stuff['size']-strlen($data));
 					$data.=fread($resource['myfile'],$read_amount);
-					
+
 					if (!is_null($write_data_to))
 					{
 						if (fwrite($outfile,$data)<strlen($data)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));

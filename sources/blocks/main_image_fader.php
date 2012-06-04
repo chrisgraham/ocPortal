@@ -38,7 +38,7 @@ class Block_main_image_fader
 		$info['parameters']=array('param','time','zone','order');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_image_fader
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -79,7 +79,7 @@ class Block_main_image_fader
 			foreach (explode(',',$order) as $o)
 			{
 				$num=substr($o,1);
-				
+
 				if (is_numeric($num))
 				{
 					switch (substr($o,0,1))

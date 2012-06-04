@@ -40,7 +40,7 @@ class Module_admin_errorlog
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_errorlog
 	{
 		return array('!'=>'ERROR_LOG');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -62,9 +62,9 @@ class Module_admin_errorlog
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_disaster';
 
 		require_lang('errorlog');
-	
+
 		$title=get_page_title('ERROR_LOG');
-	
+
 		require_code('templates_internalise_screen');
 		$test_tpl=internalise_own_screen($title);
 		if (is_object($test_tpl)) return $test_tpl;
@@ -90,7 +90,7 @@ class Module_admin_errorlog
 		foreach ($lines as $line)
 		{
 			$_line=trim($line);
-	
+
 			if (($_line!='') && (strpos($_line,'<?php')===false))
 			{
 				$matches=array();
@@ -116,7 +116,7 @@ class Module_admin_errorlog
 		for ($i=$start;$i<$start+$max;$i++)
 		{
 			if (!array_key_exists($i,$stuff)) break;
-	
+
 			$message=str_replace(get_file_base(),'',$stuff[$i][4]);
 			$fields->attach(results_entry(array(escape_html($stuff[$i][1].' '.$stuff[$i][2]),escape_html($stuff[$i][3]),escape_html($message))));
 		}

@@ -7,7 +7,7 @@
 						<a class="poster_member" rel="author" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>
 					</div>
 				{+END}
-		
+
 				{+START,IF_NON_EMPTY,{$AVATAR*,{SUBMITTER}}}
 					<img src="{$AVATAR*,{SUBMITTER}}" title="{!AVATAR}" alt="{!AVATAR}" />
 				{+END}

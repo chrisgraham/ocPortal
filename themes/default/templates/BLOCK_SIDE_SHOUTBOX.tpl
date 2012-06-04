@@ -10,7 +10,7 @@
 			<input type="submit" value="{!SEND_MESSAGE}" class="wide_button" />
 		</div>
 	</form>
-	
+
 	<script type="text/javascript">// <![CDATA[
 		document.getElementById('shoutbox_message').setAttribute('autocomplete','off');
 	//]]></script>

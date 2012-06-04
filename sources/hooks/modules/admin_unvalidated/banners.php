@@ -31,7 +31,7 @@ class Hook_unvalidated_banners
 		if (!module_installed('banners')) return NULL;
 
 		require_lang('banners');
-	
+
 		$info=array();
 		$info['db_table']='banners';
 		$info['db_identifier']='name';
@@ -42,7 +42,7 @@ class Hook_unvalidated_banners
 		$info['edit_type']='_ed';
 		$info['edit_identifier']='id';
 		$info['title']=do_lang_tempcode('BANNERS');
-	
+
 		return $info;
 	}
 

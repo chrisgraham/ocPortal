@@ -89,7 +89,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 		window.clearTimeout(window.disable_timeout);
 		window.disable_timeout=null;
 	}
-	
+
 	document.getElementById("occle_command").disabled=false;
 	document.getElementById("occle_command").focus();
 

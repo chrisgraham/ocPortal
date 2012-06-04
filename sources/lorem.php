@@ -511,7 +511,7 @@ function lorem_globalise($middle,$message=NULL,$type='',$include_header_and_foot
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
 	global $LOREM_AVOID_GLOBALISE;
-	
+
 	if (($LOREM_AVOID_GLOBALISE) || is_full_screen_template(NULL, $middle))
 		return $middle;
 
@@ -563,7 +563,7 @@ function placeholder_emoticons()
 	$smilies[':constipated:'][] = 'EMOTICON_IMG_CODE_THEMED';
 	$smilies[':constipated:'][] = 'ocf_emoticons/constipated';
 	$smilies[':constipated:'][] = ':constipated:';
-	
+
 	$smilies[':upsidedown:'][] = 'EMOTICON_IMG_CODE_THEMED';
 	$smilies[':upsidedown:'][] = 'ocf_emoticons/upsidedown';
 	$smilies[':upsidedown:'][] = ':upsidedown:';
@@ -720,7 +720,7 @@ function find_all_previews__by_template()
 			}
 		}
 	}
-	
+
 	return $all_previews;
 }
 
@@ -749,7 +749,7 @@ function find_all_previews__by_screen()
 			}
 		}
 	}
-	
+
 	return $all_previews;
 }
 
@@ -821,12 +821,12 @@ function render_screen_preview($template,$hook,$function)
 
 	if ($text) $previews[0]=do_template('WITH_WHITESPACE',array('CONTENT'=>$previews[0]));
 	$tmp = substr($function, 13);
-	
+
 	if (($complete_html) && (get_page_name()=='admin_themes'))
 	{
 		exit($previews[0]->evaluate());
 	}
-	
+
 	return $previews[0];
 }
 

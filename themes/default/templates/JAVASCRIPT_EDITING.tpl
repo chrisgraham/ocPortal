@@ -169,7 +169,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 	}
 	if (so) so.style.display='block';
 	if (so2) so2.style.display='none';
-	
+
 	window.wysiwyg_on=function() { return false; };
 }
 
@@ -180,7 +180,7 @@ function load_html_edit(posting_form,ajax_copy)
 	if (typeof window._editor_url=='undefined') return; {$,Probably caused by a JS error during initialisation}
 
 	if ((!posting_form.getAttribute('method')) || (posting_form.getAttribute('method').toLowerCase()!='post')) return;
-	
+
 	if (!posting_form.elements['http_referer'])
 	{
 		var http_referer=document.createElement('input');
@@ -189,7 +189,7 @@ function load_html_edit(posting_form,ajax_copy)
 		http_referer.setAttribute('type','hidden');
 		posting_form.appendChild(http_referer);
 	}
-		
+
 	if (typeof window.do_ajax_request=='undefined') return;
 	if (typeof window.merge_text_nodes=='undefined') return;
 	if (typeof window.CKEDITOR=='undefined') return;
@@ -404,7 +404,7 @@ function findTagsInEditor(editor,element)
 	if (!editor.document) return;
 	if (typeof editor.document.$=='undefined') return;
 	if (!editor.document.$) return;
-	
+
 	var comcodes=get_elements_by_class_name(editor.document.$.getElementsByTagName('body')[0],'(ocp_keep|ocp_keep_block|ocp_keep_ui_controlled)');
 
 	for (var i=0;i<comcodes.length;i++)
@@ -428,7 +428,7 @@ function findTagsInEditor(editor,element)
 			};
 			comcodes[i].onmousemove=function(event) {
 				if (typeof event=='undefined') var event=editor.window.$.event;
-				
+
 				var eventCopy={};
 				if (event)
 				{
@@ -446,7 +446,7 @@ function findTagsInEditor(editor,element)
 			};
 			comcodes[i].onmousedown=function(event) {
 				if (typeof event=='undefined') var event=editor.window.$.event;
-				
+
 				if (event.altKey)
 				{
 					// Mouse cursor to start
@@ -482,7 +482,7 @@ function findTagsInEditor(editor,element)
 			}
 			comcodes[i].onmouseover=function(event) { // Shows preview
 				if (typeof event=='undefined') var event=editor.window.$.event;
-				
+
 				cancelBubbling(event);
 
 				if (typeof window.activateTooltip!='undefined')
@@ -498,7 +498,7 @@ function findTagsInEditor(editor,element)
 					//if (tag_text.match(/^\[.*\]$/))
 					{
 						this.style.cursor='pointer';
-						
+
 						var eventCopy={};
 						if (event)
 						{

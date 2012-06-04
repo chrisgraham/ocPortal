@@ -41,7 +41,7 @@ class Module_admin_staff
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -51,7 +51,7 @@ class Module_admin_staff
 		delete_config_option('is_on_staff_filter');
 		delete_config_option('is_on_sync_staff');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -83,7 +83,7 @@ class Module_admin_staff
 			$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_staff','zone_name'=>'adminzone','group_id'=>$id));
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -93,7 +93,7 @@ class Module_admin_staff
 	{
 		return array('misc'=>'MANAGE_STAFF');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -107,13 +107,13 @@ class Module_admin_staff
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_staff';
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='edit') return $this->staff_edit();
 		if ($type=='misc') return $this->staff_interface();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for editing staff information.
 	 *
@@ -122,11 +122,11 @@ class Module_admin_staff
 	function staff_interface()
 	{
 		if (get_forum_type()=='none') warn_exit(do_lang_tempcode('NO_MEMBER_SYSTEM_INSTALLED'));
-	
+
 		$title=get_page_title('MANAGE_STAFF');
-	
+
 		if (get_option('is_on_staff_filter')=='0') $text=do_lang_tempcode('STAFF_FILTER_OFF'); else $text=do_lang_tempcode('STAFF_FILTER_ON');
-	
+
 		$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
 		$staff=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,400);
 		if (count($staff)>=400)
@@ -142,7 +142,7 @@ class Module_admin_staff
 
 			$fields=form_input_line(do_lang_tempcode('REALNAME'),'','fullname_'.strval($id),$fullname,false);
 			$fields->attach(form_input_line(do_lang_tempcode('ROLE'),do_lang_tempcode('DESCRIPTION_ROLE'),'role_'.strval($id),$role,false));
-	
+
 			if (get_option('is_on_staff_filter')=='1')
 			{
 				if ($GLOBALS['FORUM_DRIVER']->is_staff($id))
@@ -155,12 +155,12 @@ class Module_admin_staff
 					$submit_name=do_lang_tempcode('ADD');
 					$submit_type='add';
 				}
-	
+
 				$fields->attach(form_input_tick($submit_name,'',$submit_type.'_'.strval($id),false));
 			}
-	
+
 			$form=do_template('FORM_GROUP',array('_GUID'=>'0e7d362817a7f3ae190536adf632fe59','HIDDEN'=>form_input_hidden('staff_'.strval($id),strval($id)),'FIELDS'=>$fields));
-	
+
 			$available->attach(do_template('STAFF_EDIT_WRAPPER',array('_GUID'=>'ab0516dba94c20b4d97f68677053b20d','FORM'=>$form,'NAME'=>$name)));
 		}
 		if (!$available->is_empty())
@@ -171,7 +171,7 @@ class Module_admin_staff
 
 		return do_template('STAFF_ADMIN_SCREEN',array('_GUID'=>'101087b0dbe5d679a55bb661ad7350fa','TITLE'=>$title,'TEXT'=>$text,'FORUM_STAFF'=>$available));
 	}
-	
+
 	/**
 	 * The actualiser for editing staff information.
 	 *
@@ -193,7 +193,7 @@ class Module_admin_staff
 				elseif (post_param_integer('add_'.strval($id),0)==1) $this->_staff_add($id);
 			}
 		}
-	
+
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
@@ -213,7 +213,7 @@ class Module_admin_staff
 
 		log_it('EDIT_STAFF',strval($id));
 	}
-	
+
 	/**
 	 * Add a member of staff.
 	 *
@@ -228,7 +228,7 @@ class Module_admin_staff
 
 		log_it('ADD_STAFF',strval($id));
 	}
-	
+
 	/**
 	 * Remove a member of staff.
 	 *
@@ -245,9 +245,9 @@ class Module_admin_staff
 		$sites=str_replace(substr(get_site_name(),0,200).',','',$sites);
 		$sites=str_replace(substr(get_site_name(),0,200),'',$sites);
 		if (substr($sites,0,2)==', ') $sites=substr($sites,2);
-	
+
 		$GLOBALS['FORUM_DRIVER']->set_custom_field($id,'sites',$sites);
-	
+
 		log_it('REMOVE_STAFF',strval($id));
 	}
 

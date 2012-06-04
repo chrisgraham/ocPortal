@@ -40,9 +40,9 @@ class Hook_Preview_setup_wizard_blocks
 	function run()
 	{
 		require_code('setupwizard');
-		
+
 		$collapse_zones=post_param_integer('collapse_user_zones',0)==1;
-		
+
 		$installprofile=post_param('installprofile','');
 		if ($installprofile!='')
 		{
@@ -57,7 +57,7 @@ class Hook_Preview_setup_wizard_blocks
 		}
 
 		$page_structure=_get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$installprofile);
-		
+
 		$zone_structure=array_pop($page_structure);
 
 		$preview=do_template('SETUPWIZARD_BLOCK_PREVIEW',array('LEFT'=>$zone_structure['left'],'RIGHT'=>$zone_structure['right'],'START'=>$zone_structure['start']));

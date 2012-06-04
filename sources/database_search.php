@@ -40,7 +40,7 @@ function generate_text_summary($_temp_summary,$words_searched)
 	require_code('xhtml');
 
 	$summary='';
-	
+
 	global $SEARCH__CONTENT_BITS;
 
 	$_temp_summary_lower=strtolower($_temp_summary);
@@ -176,7 +176,7 @@ function generate_text_summary($_temp_summary,$words_searched)
 			if ($best_pos+500<strlen($_temp_summary)) $summary.='&hellip;';
 		}
 	}
-	
+
 	return $summary;
 }
 
@@ -187,9 +187,9 @@ function opensearch_script()
 {
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-	
+
 	if (!has_actual_page_access(get_member(),'search')) return; // No access
-	
+
 	$type=get_param('type','misc');
 	switch ($type)
 	{
@@ -198,7 +198,7 @@ function opensearch_script()
 			header('Content-type: text/plain; charset='.get_charset());
 			$request=get_param('request',false,true);
 			if (strlen($request)<3) return;
-			
+
 			$suggestions=array();
 			$q='SELECT s_primary,COUNT(*) as cnt,MAX(s_num_results) AS s_num_results FROM '.get_table_prefix().'searches_logged WHERE ';
 			if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!is_under_radar($request)))
@@ -215,9 +215,9 @@ function opensearch_script()
 				if ($search['cnt']>5)
 					$suggestions[$search['s_primary']]=$search['s_num_results'];
 			}
-			
+
 			require_lang('search');
-			
+
 			@ini_set('ocproducts.xss_detect','0');
 
 			// JSON format
@@ -300,7 +300,7 @@ function build_search_submitter_clauses($member_field_name,$member_id,$author,$a
 		if ($clauses!='') $clauses.=' OR ';
 		$clauses.=$member_field_name.'='.strval($member_id);
 	}
-	
+
 	// Groups
 	if ((!is_null($member_field_name)) && ($author!=''))
 	{
@@ -322,21 +322,21 @@ function build_search_submitter_clauses($member_field_name,$member_id,$author,$a
 			}
 		}
 	}
-	
+
 	// Author
 	if ((!is_null($author_field_name)) && ($author!=''))
 	{
 		if ($clauses!='') $clauses.=' OR ';
 		$clauses.=db_string_equal_to($author_field_name,$author);
 	}
-	
+
 	if ($clauses=='')
 	{
 		if ($author!='') return NULL; // Query should never succeed
-		
+
 		return '';
 	}
-	
+
 	return ' AND ('.$clauses.')';
 }
 
@@ -424,7 +424,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 	if (substr($where_clause,0,5)==' AND ') $where_clause=substr($where_clause,5);
 	if (substr($where_clause,-5)==' AND ') $where_clause=substr($where_clause,0,strlen($where_clause)-5);
 	$where_alternative_matches=array();
-	
+
 	$had_limit_imposed=false;
 
 	if ((!is_null($permissions_module)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
@@ -498,7 +498,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$_count_query_keywords_search='SELECT COUNT(*) FROM '.$_keywords_query;
 
 			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
-			
+
 			$keywords_query.=($group_by_ok?' GROUP BY r.id':'');
 
 			if ($order!='')
@@ -534,7 +534,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		if (($content_where!='') || (preg_match('#t\d+\.text_original#',$where_clause)!=0) || (preg_match('#t\d+\.text_original#',$select)!=0))
 		{
 			// Each of the fields represents an 'OR' match, so we put it together into a list ($where_alternative_matches) of specifiers for each. Hopefully we will 'UNION' them rather than 'OR' them as it is much more efficient in terms of table index usage
-			
+
 			$where_alternative_matches=array();
 			foreach ($fields as $i=>$field) // Referenced fields in where condition must result in the shared table clause having a reference to the translate for that
 			{
@@ -630,7 +630,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				list($where_clause_2,$where_clause_3,$_select,$_table_clause,$tid)=$parts;
 
 				if ($query!='') $query.=' UNION ';
-				
+
 				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
 				{
 					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
@@ -855,7 +855,7 @@ function _boolean_search_prepare($search_filter)
 		elseif ($word[0]=='-') $disclude_words[]=$word;
 		else $body_words[]=$word;
 	}
-	
+
 	return array($body_words,$include_words,$disclude_words);
 }
 
@@ -947,7 +947,7 @@ function is_under_radar($test)
 function build_content_where($content,$boolean_search,&$boolean_operator,$full_coverage=false)
 {
 	$content=str_replace('?','',$content);
-	
+
 	list($body_words,$include_words,$disclude_words)=_boolean_search_prepare($content);
 
 	$under_radar=false;

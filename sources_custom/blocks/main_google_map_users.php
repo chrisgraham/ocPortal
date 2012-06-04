@@ -14,7 +14,7 @@
 
 class Block_main_google_map_users
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -32,7 +32,7 @@ class Block_main_google_map_users
 		$info['parameters']=array('title','region','cluster','filter_usergroup','filter_term','geolocate_user','username_prefix','latitude','longitude','width','height',/*'api_key',no longer used*/'zoom','center');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -137,7 +137,7 @@ class Block_main_google_map_users
 		{
 			$update_url='';
 		}
-		
+
 		return do_template('BLOCK_MAIN_GOOGLE_MAP_USERS',array('TITLE'=>$map['title'],'GEOLOCATE_USER'=>$geolocate_user,'CLUSTER'=>$cluster,'SET_COORD_URL'=>$update_url,'REGION'=>$map['region'],'DATA'=>$member_data_js,'USERNAME_PREFIX'=>$map['username_prefix'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'], 'LONGITUDE'=>$map['longitude'], 'ZOOM'=>$set_zoom,'CENTER'=>$set_center));
 	}
 }

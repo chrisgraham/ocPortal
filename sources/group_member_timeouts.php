@@ -30,7 +30,7 @@ function bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for
 {
 	// We don't want guests here!
 	if (is_guest($member_id)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	
+
 	require_code('ocf_groups_action');
 	require_code('ocf_groups_action2');
 	require_code('ocf_members');
@@ -88,7 +88,7 @@ function bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for
 function cleanup_member_timeouts()
 {
 	if (function_exists('set_time_limit')) @set_time_limit(0);
-	
+
 	require_code('ocf_groups_action');
 	require_code('ocf_groups_action2');
 	require_code('ocf_members');
@@ -103,7 +103,7 @@ function cleanup_member_timeouts()
 		{
 			$member_id=$timeout['member_id'];
 			$group_id=$timeout['group_id'];
-			
+
 			$test=in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id));
 			if ($test) // If they're still in it
 			{
@@ -119,7 +119,7 @@ function cleanup_member_timeouts()
 					}
 					$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1);
 				}
-				
+
 				global $USERS_GROUPS_CACHE,$GROUP_MEMBERS_CACHE;
 				$USERS_GROUPS_CACHE=array();
 				$GROUP_MEMBERS_CACHE=array();
@@ -128,6 +128,6 @@ function cleanup_member_timeouts()
 		$start+=100;
 	}
 	while (count($timeouts)==100);
-	
+
 	$timeouts=$db->query('DELETE FROM '.$db->get_table_prefix().'f_group_member_timeouts WHERE timeout<'.strval($time));
 }

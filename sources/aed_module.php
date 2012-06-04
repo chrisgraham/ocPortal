@@ -108,7 +108,7 @@ class standard_aed_module
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -216,7 +216,7 @@ class standard_aed_module
 			if ($type=='_ev') return $this->alt_aed_module->_ed();
 			if ($type=='__ev') return $this->alt_aed_module->__ed();
 		}
-		
+
 		// These ones are for catalogues only...
 		if ($type=='add_entry') return $this->ad();
 		if ($type=='_add_entry') return $this->_ad();
@@ -419,7 +419,7 @@ class standard_aed_module
 
 		return do_template('CONFIRM_SCREEN',array('_GUID'=>'06a3eb06338a7f821676d8ca3eb66aa6','TITLE'=>$title,'PREVIEW'=>$output,'URL'=>$url,'FIELDS'=>$fields));
 	}
-	
+
 	/**
 	 * Find whether this content type has a tied catalogue.
 	 *
@@ -434,7 +434,7 @@ class standard_aed_module
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Standard modular UI to add an entry.
 	 *
@@ -503,7 +503,7 @@ class standard_aed_module
 			$fields=$bits;
 			$hidden=new ocp_tempcode();
 		}
-		
+
 		// Add in custom fields
 		if ($this->has_tied_catalogue())
 		{
@@ -567,7 +567,7 @@ class standard_aed_module
 		if (get_param('type','ad')=='add_catalogue')
 		{
 			require_javascript('javascript_catalogues');
-			
+
 			// New field
 			$fields_new=new ocp_tempcode();
 			for ($i=0;$i<10;$i++) // Up to 10 new fields for catalogue, although this number is arbitrary
@@ -691,7 +691,7 @@ class standard_aed_module
 
 		return $this->do_next_manager($title,$description,$id);
 	}
-	
+
 	/**
 	 * Standard modular entry function to get rows for selection from.
 	 *
@@ -749,16 +749,16 @@ class standard_aed_module
 			usort($_entries,'multi_sort');
 			if (substr($orderer,-5)==' DESC') $_entries=array_reverse($_entries);
 		}
-		
+
 		if ((!is_null($orderer)) && (!is_null($where)))
 		{
 			$this->cached_entry_rows=$_entries;
 			$this->cached_max_rows=$max_rows;
 		}
-		
+
 		return array($_entries,$max_rows);
 	}
-	
+
 	/**
 	 * Standard modular entry list fetcher.
 	 *
@@ -767,7 +767,7 @@ class standard_aed_module
 	function nice_get_entries()
 	{
 		list($_entries,)=$this->get_entry_rows();
-		
+
 		$entries=new ocp_tempcode();
 		foreach ($_entries as $key=>$row)
 		{
@@ -776,7 +776,7 @@ class standard_aed_module
 		}
 		return $entries;
 	}
-	
+
 	/**
 	 * Standard modular UI to choose an entry to edit.
 	 *
@@ -1059,7 +1059,7 @@ class standard_aed_module
 		if (get_param('type','_ed')=='_edit_catalogue')
 		{
 			require_javascript('javascript_catalogues');
-			
+
 			// Existing fields
 			$field_count=0;
 			$c_name=get_param('id',false,true);
@@ -1270,7 +1270,7 @@ class standard_aed_module
 						if (addon_installed('unvalidated'))
 							send_validation_request($doing,$this->table,$this->non_integer_id,$id,$edit_url);
 					}
-	
+
 					$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
 				}
 			}

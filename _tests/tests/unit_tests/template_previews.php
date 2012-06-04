@@ -62,13 +62,13 @@ class template_previews_test_set extends ocp_test_case
 	{
 		require_code('validation');
 		require_lang('validation');
-		
+
 		global $DONE_HEADER,$RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED;
 		$RECORD_TEMPLATES_USED=true;
-		
+
 		$only_do_these=array( // If you want to test specific templates temporarily put the template names (without .tpl) in this array. But remove again before you commit!
 		);
-		
+
 		$lists = find_all_previews__by_template();
 		foreach($lists as $template=>$list)
 		{
@@ -86,7 +86,7 @@ class template_previews_test_set extends ocp_test_case
 			$function = $list[1];
 
 			if (is_file(get_file_base().'/_tests/screens_tested/'.$function)) continue; // To make easier to debug through
-		
+
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 
 			$DONE_HEADER=false;
@@ -107,7 +107,7 @@ class template_previews_test_set extends ocp_test_case
 				{
 					if($temp_name_2 == 'FORM_STANDARD_END' || $temp_name_2 == 'MENU_LINK_PROPERTIES')
 						continue;
-					
+
 					$this->assertTrue(in_array($temp_name_2,$RECORDED_TEMPLATES_USED),$template_2.' not used in preview as claimed in '.$hook.'/'.$function);
 					if(!in_array($temp_name_2,$RECORDED_TEMPLATES_USED))
 					{
@@ -137,7 +137,7 @@ class template_previews_test_set extends ocp_test_case
 			}
 		}
 	}
-	
+
 	function testRepeatConsistency()
 	{
 		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$HTTP_STATUS_CODE,$PREPROCESSABLE_SYMBOLS,$SHIFT_VARIABLES,$CYCLES,$TEMPCODE_SETGET,$LOADED_TPL_CACHE,$META_DATA;
@@ -152,7 +152,7 @@ class template_previews_test_set extends ocp_test_case
 		{
 			$template = $tpls[0];
 			$hook = NULL;
-			
+
 			if (is_file(get_file_base().'/_tests/screens_tested/consistency__'.$function)) continue; // To make easier to debug through
 
 			if (function_exists('set_time_limit')) @set_time_limit(0);
@@ -175,7 +175,7 @@ class template_previews_test_set extends ocp_test_case
 			$_out2=$out2->evaluate();
 			$different=$_out1!=$_out2;
 			$this->assertFalse($different,'Screen preview not same each time, '.$function);
-			
+
 			if (!$different)
 			{
 				fclose(fopen(get_file_base().'/_tests/screens_tested/consistency__'.$function,'wb'));
@@ -197,10 +197,10 @@ class template_previews_test_set extends ocp_test_case
 
 				require_code('diff');
 				var_dump(diff_simple_2($_out1,$_out2));
-				
+
 				exit('Error!');
 			}
-			
+
 			unset($out1);
 			unset($out2);
 		}
@@ -215,7 +215,7 @@ class template_previews_test_set extends ocp_test_case
 		{
 			$template = $tpls[0];
 			$hook = NULL;
-			
+
 			if (is_file(get_file_base().'/_tests/screens_tested/nonemissing__'.$function)) continue; // To make easier to debug through
 
 			if (function_exists('set_time_limit')) @set_time_limit(0);
@@ -226,14 +226,14 @@ class template_previews_test_set extends ocp_test_case
 
 			$put_out=(!$ATTACHED_MESSAGES->is_empty()) || (count($ATTACHED_MESSAGES_RAW)>0);
 			$this->assertFalse($put_out,'Messages put out by '.$function.'  ('.strip_tags($ATTACHED_MESSAGES->evaluate()).')');
-			
+
 			if (!$put_out)
 			{
 				fclose(fopen(get_file_base().'/_tests/screens_tested/nonemissing__'.$function,'wb'));
 				sync_file(get_file_base().'/_tests/screens_tested/nonemissing__'.$function);
 				fix_permissions(get_file_base().'/_tests/screens_tested/nonemissing__'.$function);
 			}
-			
+
 			unset($out1);
 		}
 	}
@@ -244,13 +244,13 @@ class template_previews_test_set extends ocp_test_case
 		foreach ($hooks as $hook=>$place)
 		{
 			require_code('hooks/systems/addon_registry/'.$hook);
-			
+
 			$ob=object_factory('Hook_addon_registry_'.$hook);
 			if (!method_exists($ob,'tpl_previews')) continue;
 			$used=array_unique($ob->tpl_previews());
-			
+
 			$code=file_get_contents(get_file_base().'/'.$place.'/hooks/systems/addon_registry/'.$hook.'.php');
-			
+
 			$matches=array();
 			$num_matches=preg_match_all('#function tpl\_preview\_\_(.*)\(#U',$code,$matches);
 			for ($i=0;$i<$num_matches;$i++)
@@ -263,12 +263,12 @@ class template_previews_test_set extends ocp_test_case
 	function testNoDoublePreviews()
 	{
 		$all_used=array();
-		
+
 		$hooks=find_all_hooks('systems','addon_registry');
 		foreach ($hooks as $hook=>$place)
 		{
 			require_code('hooks/systems/addon_registry/'.$hook);
-			
+
 			$ob=object_factory('Hook_addon_registry_'.$hook);
 			if (!method_exists($ob,'tpl_previews')) continue;
 			$used=array_unique($ob->tpl_previews());
@@ -280,7 +280,7 @@ class template_previews_test_set extends ocp_test_case
 		}
 	}
 
-	
+
 	function tearDown()
 	{
 		parent::tearDown();

@@ -207,7 +207,7 @@ jwplayer.utils.hasFlash = function() {
 						n[nxi]=nx[nxi];
 					}
 				}
-	
+
             i = c("element", i);
             for (var j in i) {
                 if (j != "length") {

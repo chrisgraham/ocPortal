@@ -48,7 +48,7 @@ class Hook_Preview_ocf_emoticon
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('ocf_emoticons',array('e_theme_img_code'),array('id'=>post_param_integer('id')),'',1);
 				$urls=$rows[0];
-	
+
 				$url=find_theme_image($urls['e_theme_img_code']);
 			} elseif (!is_null(post_param('theme_img_code',NULL)))
 			{

@@ -54,7 +54,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		unset($member);
 		return NULL;
 	}
-	
+
 	/**
 	 * Find if the login cookie contains the login name instead of the member id.
 	 *
@@ -64,7 +64,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Find if login cookie is md5-hashed.
 	 *
@@ -74,7 +74,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Find the member id of the forum guest member.
 	 *
@@ -84,7 +84,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return 0;
 	}
-	
+
 	/**
 	 * Get the forums' table prefix for the database.
 	 *
@@ -95,7 +95,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		global $SITE_INFO;
 		return 'bb'.$SITE_INFO['bb_forum_number'].'_';
 	}
-	
+
 	/**
 	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
 	 *
@@ -123,7 +123,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get an array of attributes to take in from the installer. Almost all forums require a table prefix, which the requirement there-of is defined through this function.
 	 * The attributes have 4 values in an array
@@ -144,7 +144,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		$a['title']=do_lang('BOARD_INSTALL_NUMBER');
 		return array($a);
 	}
-	
+
 	/**
 	 * Searches for forum auto-config at this path.
 	 *
@@ -202,7 +202,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		18=>'../burningboard',
 		19=>'../wbb');
 	}
-	
+
 	/**
 	 * Get an emoticon chooser template.
 	 *
@@ -219,10 +219,10 @@ class forum_driver_wbb_shared extends forum_driver_base
 			$code=$emo['smiliecode'];
 			$em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID'=>'c016421840b36b3f70bf5da34740dfaf','FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
 		}
-	
+
 		return $em;
 	}
-	
+
 	/**
 	 * Pin a topic.
 	 *
@@ -245,7 +245,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		if (!array_key_exists(0,$rows)) return NULL;
 		return $rows[0];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's member id.
 	 *
@@ -256,7 +256,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $r['userid'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's last visit date.
 	 *
@@ -267,7 +267,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $r['lastvisit'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's name.
 	 *
@@ -278,7 +278,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $r['username'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's e-mail address.
 	 *
@@ -289,7 +289,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $r['email'];
 	}
-	
+
 	/**
 	 * Get a URL to the specified member's home (control panel).
 	 *
@@ -301,7 +301,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		unset($id);
 		return get_forum_base_url().'/usercp.php';
 	}
-	
+
 	/**
 	 * Get the photo thumbnail URL for the specified member id.
 	 *
@@ -348,7 +348,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return get_forum_base_url().'/register.php';
 	}
-	
+
 	/**
 	 * Get a URL to the members-online page.
 	 *
@@ -358,7 +358,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return get_forum_base_url().'/wiw.php';
 	}
-	
+
 	/**
 	 * Get a URL to send a private/personal message to the given member.
 	 *
@@ -391,7 +391,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('boards','boardid',array('title'=>$forum_name));
 	}
-	
+
 	/**
 	 * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
 	 *
@@ -483,13 +483,13 @@ class forum_driver_wbb_shared extends forum_driver_base
 			$LAX_COMCODE=$temp2;
 			$temp['user']=$myrow['userid'];
 			$temp['date']=$myrow['posttime'];
-	
+
 			$out[]=$temp;
 		}
-	
+
 		return $out;
 	}
-	
+
 	/**
 	 * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
 	 *
@@ -592,7 +592,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		if (count($out)!=0) return $out;
 		return NULL;
 	}
-	
+
 	/**
 	 * This is the opposite of the get_next_member function.
 	 *
@@ -604,7 +604,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		$tempid=$this->connection->query_value_null_ok_full('SELECT userid FROM '.$this->connection->get_table_prefix().'users WHERE userid<'.strval((integer)$member).' AND userid<>\'0\' ORDER BY userid DESC');
 		return $tempid;
 	}
-	
+
 	/**
 	 * Get the member id of the next member after the given one, or NULL.
 	 * It cannot be assumed there are no gaps in member ids, as members may be deleted.
@@ -617,7 +617,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		$tempid=$this->connection->query_value_null_ok_full('SELECT userid FROM '.$this->connection->get_table_prefix().'users WHERE userid>'.strval((integer)$member).' ORDER BY userid');
 		return $tempid;
 	}
-	
+
 	/**
 	 * Try to find a member with the given IP address
 	 *
@@ -641,7 +641,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		if ($member==$this->get_guest_id()) return do_lang('GUEST');
 		return $this->get_member_row_field($member,'username');
 	}
-	
+
 	/**
 	 * Get the e-mail address for the specified member id.
 	 *
@@ -652,7 +652,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'email');
 	}
-	
+
 	/**
 	 * Find if this member may have e-mails sent to them
 	 *
@@ -665,7 +665,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		if ($v==1) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Get the timestamp of a member's join date.
 	 *
@@ -676,7 +676,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'regdate');
 	}
-	
+
 	/**
 	 * Find all members with a name matching the given SQL LIKE string.
 	 *
@@ -692,7 +692,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		uasort($rows,'multi_sort');
 		return $rows;
 	}
-	
+
 	/**
 	 * Get the given member's post count.
 	 *
@@ -705,7 +705,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		if (is_null($c)) return 0;
 		return $c;
 	}
-	
+
 	/**
 	 * Get the given member's topic count.
 	 *
@@ -716,7 +716,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value('threads','COUNT(*)',array('starterid'=>$member));
 	}
-	
+
 	/**
 	 * Find the base URL to the emoticons.
 	 *
@@ -726,7 +726,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return get_forum_base_url().'/';
 	}
-	
+
 	/**
 	 * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
 	 *
@@ -748,7 +748,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
 		return $EMOTICON_CACHE;
 	}
-	
+
 	/**
 	 * Get the number of members currently online on the forums.
 	 *
@@ -758,7 +758,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok_full('SELECT COUNT(DISTINCT userid) FROM '.$this->connection->get_table_prefix().'sessions WHERE lastactivity>'.strval(time()-60*intval(get_option('users_online_time'))));
 	}
-	
+
 	/**
 	 * Get the number of members registered on the forum.
 	 *
@@ -768,7 +768,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value('users','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the total topics ever made on the forum.
 	 *
@@ -778,7 +778,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value('threads','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the total posts ever made on the forum.
 	 *
@@ -788,7 +788,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value('posts','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the number of new forum posts.
 	 *
@@ -798,7 +798,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE posttime>'.strval(time()-60*60*24));
 	}
-	
+
 	/**
 	 * Set a custom profile fields value. It should not be called directly.
 	 *
@@ -812,7 +812,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		if (is_null($id)) return;
 		$this->connection->query_update('userfields',array('field'.strval($id)=>$amount),array('userid'=>$member),'',1);
 	}
-	
+
 	/**
 	 * Get custom profile fields values for all 'ocp_' prefixed keys.
 	 *
@@ -824,7 +824,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		$rows=$this->connection->query('SELECT profilefieldid,title FROM '.$this->connection->get_table_prefix().'profilefields WHERE title LIKE \''.db_encode_like('ocp_%').'\'');
 		$values=$this->connection->query_select('userfields',array('*'),array('userid'=>$member),'',1);
 		if (!array_key_exists(0,$values)) return NULL;
-	
+
 		$out=array();
 		foreach ($rows as $row)
 		{
@@ -833,7 +833,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		}
 		return $out;
 	}
-	
+
 	/**
 	 * Get a member id from the given member's username.
 	 *
@@ -844,7 +844,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok('users','userid',array('username'=>$name));
 	}
-	
+
 	/**
 	 * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
 	 * All authorisation, cookies, and form-logins, are passed through this function.
@@ -863,7 +863,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 
 		$out=array();
 		$out['id']=NULL;
-	
+
 		if (is_null($memberid))
 		{
 			$rows=$this->connection->query_select('users',array('*'),array('username'=>$username),'',1);
@@ -875,7 +875,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		{
 			$rows[0]=$this->get_member_row($memberid);
 		}
-	
+
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
 			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
@@ -892,13 +892,13 @@ class forum_driver_wbb_shared extends forum_driver_base
 			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
 			return $out;
 		}
-	
+
 		ocp_eatcookie('cookiehash');
 
 		$out['id']=$row['userid'];
 		return $out;
 	}
-	
+
 	/**
 	 * Get a first known IP address of the given member.
 	 *
@@ -909,7 +909,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'ipaddress');
 	}
-	
+
 	/**
 	 * Gets a whole member row from the database.
 	 *
@@ -919,7 +919,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	function get_member_row($member)
 	{
 		if (array_key_exists($member,$this->MEMBER_ROWS_CACHED)) return $this->MEMBER_ROWS_CACHED[$member];
-	
+
 		$rows=$this->connection->query_select('users',array('*'),array('userid'=>$member),'',1);
 		if ($member==$this->get_guest_id())
 		{
@@ -937,7 +937,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 		$this->MEMBER_ROWS_CACHED[$member]=$rows[0];
 		return $this->MEMBER_ROWS_CACHED[$member];
 	}
-	
+
 	/**
 	 * Gets a named field of a member row from the database.
 	 *

@@ -28,7 +28,7 @@ class authors_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('authors');
 
 		add_author($author='author1',$url='www.google.com',$forum_handle=3,$description='happy',$skills='play',$meta_keywords='',$meta_description='');
@@ -44,7 +44,7 @@ class authors_test_set extends ocp_test_case
 		// Test the forum edits
 		merge_authors($from='author1',$to='author2');
 	}
-	
+
 	function tearDown()
 	{
 		delete_author($author='author2');

@@ -166,7 +166,7 @@ class Module_subscriptions
 			$subscription_title=$products[$product][4];
 			$time=get_timezoned_date($row['s_time'],true,false,false,true);
 			$state=do_lang_tempcode('PAYMENT_STATE_'.$row['s_state']);
-			
+
 			$cancel_button=make_cancel_button($row['s_auto_fund_key'],$row['s_via']);
 			$per=do_lang('_LENGTH_UNIT_'.$products[$product][3]['length_units'],integer_format($products[$product][3]['length']));
 
@@ -185,7 +185,7 @@ class Module_subscriptions
 	function cancel()
 	{
 		$title=get_page_title('SUBSCRIPTION_CANCEL');
-		
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MY_SUBSCRIPTIONS'))));
 
 		$id=get_param_integer('id');

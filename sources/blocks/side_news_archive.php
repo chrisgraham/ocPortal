@@ -38,7 +38,7 @@ class Block_side_news_archive
 		$info['parameters']=array('filter','zone','title');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_side_news_archive
 		$info['ttl']=15;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -61,7 +61,7 @@ class Block_side_news_archive
 	function run($map)
 	{
 		require_lang('news');
-		
+
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('news');
 		$filter=array_key_exists('filter',$map)?$map['filter']:'*';
 

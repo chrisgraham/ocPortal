@@ -30,7 +30,7 @@ class Hook_addon_registry_random_quotes
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

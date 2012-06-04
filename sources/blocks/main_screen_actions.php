@@ -20,7 +20,7 @@
 
 class Block_main_screen_actions
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_screen_actions
 		$info['parameters']=array('title');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -50,11 +50,11 @@ class Block_main_screen_actions
 		//if (count($_POST)!=0) return new ocp_tempcode();		Can't do that, breaks previewing it
 
 		require_lang('recommend');
-		
+
 		$_map=array('page'=>'recommend','from'=>get_self_url(true));
 		if (array_key_exists('title',$map)) $_map['title']=$map['title'];
 		$recommend_url=build_url($_map,'_SEARCH');
-		
+
 		return do_template('BLOCK_MAIN_SCREEN_ACTIONS',array(
 			'PRINT_URL'=>get_self_url(true,false,array('wide_print'=>1,'max'=>1000)),
 			'RECOMMEND_URL'=>$recommend_url,

@@ -244,7 +244,7 @@ function site_tree_script()
 		foreach ($pages as $page=>$page_type)
 		{
 			if (!is_string($page)) $page=strval($page);
-			
+
 			$full_page_type=$page_type;
 			$description='';
 			if (strpos($full_page_type,'/')!==false) $full_page_type=substr($full_page_type,0,strpos($full_page_type,'/'));

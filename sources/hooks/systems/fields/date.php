@@ -121,7 +121,7 @@ class Hook_fields_date
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		$time=mixed();
-		
+
 		if ((is_null($actual_value)) || ($actual_value==''))
 		{
 			$time=NULL;
@@ -141,7 +141,7 @@ class Hook_fields_date
 			if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
 			if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';
 			//$time=mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
-			
+
 			$time=array(intval($time_bits[1]),intval($time_bits[0]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
 		}
 		/*

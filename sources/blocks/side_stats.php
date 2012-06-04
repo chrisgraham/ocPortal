@@ -39,7 +39,7 @@ class Block_side_stats
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -91,7 +91,7 @@ class Block_side_stats
 			add_config_option('MEMBERS_NEW_THIS_MONTH','forum_show_stats_count_members_new_this_month','tick','return ((get_forum_type()==\'ocf\') && (!has_no_forum()) && (addon_installed(\'stats_block\')))?\'0\':NULL;','BLOCKS','STATISTICS');
 		}
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -104,7 +104,7 @@ class Block_side_stats
 		$info['ttl']=15;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

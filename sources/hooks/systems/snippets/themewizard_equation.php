@@ -30,9 +30,9 @@ class Hook_themewizard_equation
 	{
 		$theme=get_param('theme');
 		$equation=get_param('css_equation');
-		
+
 		require_code('themewizard');
-		
+
 		$css_path=get_custom_file_base().'/themes/'.$theme.'/css_custom/global.css';
 		if (!file_exists($css_path))
 			$css_path=get_file_base().'/themes/default/css/global.css';
@@ -40,13 +40,13 @@ class Hook_themewizard_equation
 
 		$seed=find_theme_seed($theme);
 		$dark=(strpos($css_file_contents,'#000000; /* {$,wizard, 100% W/B} */')!==false);
-		
+
 		$colours=calculate_theme($seed,$theme,'equations','colours',$dark);
 		$parsed_equation=parse_css_colour_expression($equation);
 		if (is_null($parsed_equation)) return make_string_tempcode('');
 		$answer=execute_css_colour_expression($parsed_equation,$colours[0]);
 		if (is_null($answer)) return make_string_tempcode('');
-		
+
 		return make_string_tempcode('#'.$answer);
 	}
 

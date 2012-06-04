@@ -69,7 +69,7 @@ class Hook_realtime_rain_news
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

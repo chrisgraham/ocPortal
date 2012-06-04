@@ -29,18 +29,18 @@ class banners_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('banners');
 		require_code('banners2');
 		require_code('submit');
 	}
-	
+
 	function testAddBannerTypes()
 	{
 		$this->banner_type='Welcome';
 		//Add banner type
 		add_banner_type($this->banner_type,0,100,100,100,0);
-	
+
 		// Test the benner was actually created
 		$this->assertTrue(100==$GLOBALS['FORUM_DB']->query_value('banner_types','t_image_width',array('id'=>$this->banner_type)));
 	}
@@ -69,7 +69,7 @@ class banners_test_set extends ocp_test_case
 		delete_banner_type($this->banner_type);
 		delete_banner($this->banner_name);
 	}
-	
+
 	function tearDown()
 	{		
 		parent::tearDown();

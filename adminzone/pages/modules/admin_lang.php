@@ -40,7 +40,7 @@ class Module_admin_lang
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_lang
 	{
 		return array('misc'=>'TRANSLATE_CODE','content'=>'TRANSLATE_CONTENT','criticise'=>'CRITICISE_LANGUAGE_PACK');
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -63,7 +63,7 @@ class Module_admin_lang
 			// lang_custom purposely left
 		}
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -78,7 +78,7 @@ class Module_admin_lang
 		require_lang('lang');
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='content') return $this->interface_content();
 		if ($type=='_content') return $this->set_lang_content();
 		if ($type=='criticise') return $this->criticise();
@@ -89,7 +89,7 @@ class Module_admin_lang
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to choose a language.
 	 *
@@ -131,9 +131,9 @@ class Module_admin_lang
 
 			$javascript.='standardAlternateFields(\'lang_file\',\'search\');';
 		}
-	
+
 		$post_url=get_self_url(false,false,NULL,false,true);
-	
+
 		return do_template('FORM_SCREEN',array('_GUID'=>'ee6bdea3661cb4736173cac818a769e5','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'JAVASCRIPT'=>$javascript));
 	}
 
@@ -153,7 +153,7 @@ class Module_admin_lang
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('translate','text_original',array('id'=>$potential['id'],'language'=>$lang));
 			if (!is_null($test)) return $test;
 		}
-	
+
 		// Search code strings
 		global $LANGUAGE;
 
@@ -163,10 +163,10 @@ class Module_admin_lang
 		{
 			if ((array_key_exists($lang,$LANGUAGE)) && (array_key_exists($find,$LANGUAGE[$lang]))) return $LANGUAGE[$lang][$find];
 		}
-		
+
 		return '';
 	}
-	
+
 	/**
 	 * The UI to criticise a language pack.
 	 *
@@ -178,12 +178,12 @@ class Module_admin_lang
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/criticise_language';
 
 		$title=get_page_title('CRITICISE_LANGUAGE_PACK');
-	
+
 		$lang=get_param('crit_lang','');
 		if ($lang=='') return $this->choose_lang($title,false,false,do_lang_tempcode('CHOOSE_CRITICISE_LIST_LANG_FILE'),false,'crit_lang');
 
 		$files='';
-	
+
 		$missing=array();
 
 		if (fallback_lang()==$lang) warn_exit(do_lang_tempcode('CANNOT_CRITICISE_BASE_LANG'));
@@ -194,7 +194,7 @@ class Module_admin_lang
 		foreach (array_keys($lang_files_base) as $file_base)
 		{
 			$file=new ocp_tempcode();
-	
+
 			if (array_key_exists($file_base,$lang_files_criticise))
 			{
 				// Process this file
@@ -206,18 +206,18 @@ class Module_admin_lang
 					if (array_key_exists($key,$criticise_map))
 					{
 						$is=$criticise_map[$key];
-						
+
 						// Perhaps we have a parameter mismatch?
 						if (strpos($val,'{3}')!==false) $num=3;
 						elseif (strpos($val,'{2}')!==false) $num=2;
 						elseif (strpos($val,'{1}')!==false) $num=1;
 						else $num=0;
-	
+
 						if (strpos($is,'{3}')!==false) $num_is=3;
 						elseif (strpos($is,'{2}')!==false) $num_is=2;
 						elseif (strpos($is,'{1}')!==false) $num_is=1;
 						else $num_is=0;
-						
+
 						if ($num_is!=$num)
 						{
 							$crit=do_template('TRANSLATE_LANGUAGE_CRITICISM',array('_GUID'=>'424388712f07bde0a04d89b0f349a0de','CRITICISM'=>do_lang_tempcode('CRITICISM_PARAMETER_COUNT_MISMATCH',escape_html($key),escape_html($val))));
@@ -231,13 +231,13 @@ class Module_admin_lang
 						$file->attach($crit);
 					}
 				}
-	
+
 				foreach ($criticise_map as $key=>$val)
 				{
 					$crit=do_template('TRANSLATE_LANGUAGE_CRITICISM',array('_GUID'=>'550018f24c0f677c50cd1bba96f24cc8','CRITICISM'=>do_lang_tempcode('CRITICISM_EXTRA_STRING',escape_html($key))));
 					$file->attach($crit);
 				}
-	
+
 			} else $missing[]=$file_base;
 
 			if (!$file->is_empty())
@@ -262,7 +262,7 @@ class Module_admin_lang
 
 		return do_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN',array('_GUID'=>'62d6f40ca69609a8fd33704a8a38fb6f','TITLE'=>$title,'FILES'=>$files));
 	}
-	
+
 	/**
 	 * The UI to translate content.
 	 *
@@ -319,28 +319,28 @@ class Module_admin_lang
 		foreach ($to_translate as $i=>$it)
 		{
 			if ($it['importance_level']==0) continue; // Corrupt data
-			
+
 			$id=$it['id'];
 			$old=$it['text_original'];
 			$current=$this->find_lang_matches($old,$lang);
 			$priority=($last_level===$it['importance_level'])?NULL:do_lang('PRIORITY_'.strval($it['importance_level']));
-	
+
 			$name=$names[$id];
 			if (is_null($name)) continue; // Orphaned string
 
 			if ($intertrans!='') $actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'f625cf15c9db5e5af30fc772a7f0d5ff','LANG_FROM'=>$it['language'],'LANG_TO'=>$lang,'NAME'=>'trans_'.strval($id),'OLD'=>$old));
 
 			$line=do_template('TRANSLATE_LINE_CONTENT',array('_GUID'=>'87a0f5298ce9532839f3206cd0e06051','NAME'=>$name,'ID'=>strval($id),'OLD'=>$old,'CURRENT'=>$current,'ACTIONS'=>$actions,'PRIORITY'=>$priority));
-	
+
 			$lines.=$line->evaluate(); /*XHTMLXHTML*/
-			
+
 			$last_level=$it['importance_level'];
 		}
-	
+
 		$url=build_url(array('page'=>'_SELF','type'=>'_content','lang'=>$lang),'_SELF');
-	
+
 		require_code('lang2');
-	
+
 		return do_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array('_GUID'=>'af732c5e595816db1c6f025c4b8fa6a2','MAX'=>integer_format($max),'TOTAL'=>integer_format($total-$max),'LANG_ORIGINAL_NAME'=>get_site_default_lang(),'LANG_NICE_ORIGINAL_NAME'=>lookup_language_full_name(get_site_default_lang()),'LANG_NICE_NAME'=>lookup_language_full_name($lang),'TOO_MANY'=>$too_many,'INTERTRANS'=>$intertrans,'LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
 	}
 
@@ -360,7 +360,7 @@ class Module_admin_lang
 		{
 			if (!is_string($val)) continue;
 			if (substr($key,0,6)!='trans_') continue;
-			
+
 			$lang_id=intval(substr($key,6));
 
 			if (get_magic_quotes_gpc()) $val=stripslashes($val);
@@ -506,7 +506,7 @@ msgstr ""
 
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 		exit();
-		
+
 		return new ocp_tempcode(); // For code quality checker
 	}
 
@@ -616,7 +616,7 @@ msgstr ""
 		$for_lang=get_lang_file_map($lang,$lang_file);
 		$for_base_lang=get_lang_file_map($base_lang,$lang_file,true);
 		$descriptions=get_lang_file_descriptions($base_lang,$lang_file);
-	
+
 		// Make our translation page
 		$lines='';
 		$intertrans=$this->get_intertran_conv($lang);
@@ -646,9 +646,9 @@ msgstr ""
 			if (!is_null($result))
 			{
 				require_code('character_sets');
-				
+
 				$result=convert_to_internal_encoding($result);
-				
+
 				$matches=array();
 				if (preg_match('#<div id=result_box dir="ltr">(.*)</div>#Us',convert_to_internal_encoding($result),$matches)!=0)
 				{
@@ -692,10 +692,10 @@ msgstr ""
 		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_code','lang_file'=>$lang_file,'lang'=>$lang),'_SELF');
-	
+
 		return do_template('TRANSLATE_SCREEN',array('_GUID'=>'b3429f8bd0b4eb79c33709ca43e3207c','PAGE'=>$lang_file,'INTERTRANS'=>(get_value('google_translate_api_key')!==NULL)?$intertrans:'','LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
 	}
-	
+
 	/**
 	 * Convert a standard language code to an intertran code.
 	 *
@@ -736,7 +736,7 @@ msgstr ""
 		if (array_key_exists($in,$conv)) return $conv[$in];
 		return '';*/
 	}
-	
+
 	/**
 	 * The actualiser to translate code (called from this module).
 	 *
@@ -750,7 +750,7 @@ msgstr ""
 
 		$lang=get_param('lang');
 		$lang_file=get_param('lang_file');
-	
+
 		$for_base_lang=get_lang_file_map(fallback_lang(),$lang_file,true);
 		$for_base_lang_2=get_lang_file_map($lang,$lang_file,false);
 		$descriptions=get_lang_file_descriptions(fallback_lang(),$lang_file);
@@ -866,7 +866,7 @@ msgstr ""
 		require_code('view_modes');
 		erase_cached_language();
 		erase_cached_templates();
-	
+
 		// Show it worked / Refresh
 		$url=post_param('redirect','');
 		if ($url=='')

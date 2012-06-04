@@ -14,7 +14,7 @@
 
 class Block_main_google_map
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -32,7 +32,7 @@ class Block_main_google_map
 		$info['parameters']=array('filter_rating','title','region','cluster','filter_term','filter_category','geolocate_user','latfield','longfield','catalogue','width','height',/*'api_key',*/'zoom','center','latitude','longitude','show_links','min_latitude','max_latitude','min_longitude','max_longitude','star_entry','filter_hours','max_results','extra_sources');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -121,7 +121,7 @@ class Block_main_google_map
 			foreach($entries_to_show as $i=>$entry_row)
 			{
 				$entry_row['allow_rating']=0; // Performance: So rating is not loaded
-			
+
 				$details=get_catalogue_entry_map($entry_row,$catalogue_row,'CATEGORY',$catalogue_name,NULL);
 
 				$two_d_list=$details['FIELDS_2D'];
@@ -152,7 +152,7 @@ class Block_main_google_map
 
 						$entry_content=do_template('CATALOGUE_googlemap_ENTRY_EMBED',$details,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');//put_in_standard_box(hyperlink($url,do_lang_tempcode('VIEW')),do_lang_tempcode('CATALOGUE_ENTRY').' ('.do_lang_tempcode('IN',get_translated_text($catalogue['c_title'])).')');
 						$details['ENTRY_CONTENT']=$entry_content;
-					
+
 						$details['STAR']='0';
 						if ($star_entry!='')
 						{
@@ -161,7 +161,7 @@ class Block_main_google_map
 						}
 
 						$details['CC_ID']=strval($entry_row['cc_id']);
-						
+
 						$details['ICON']='';
 
 						$data[]=$details;

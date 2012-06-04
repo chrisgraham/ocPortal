@@ -322,7 +322,7 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_
 		foreach ($rows as $row)
 		{
 			if ($row['path']=='') continue;
-			
+
 			if ((url_is_local($row['path'])) && (!file_exists(((substr($row['path'],0,15)=='themes/default/')?get_file_base():get_custom_file_base()).'/'.rawurldecode($row['path'])))) continue;
 			if ($row['path']!='themes/default/images/blank.gif') // We sometimes associate to blank.gif to essentially delete images so they can never be found again
 			{
@@ -509,7 +509,7 @@ function nice_get_theme_images($it=NULL,$filter=NULL,$do_id=false,$include_all=f
 		foreach ($rows as $myrow)
 		{
 			$id=$myrow['id'];
-			
+
 			if (substr($id,0,strlen($under))!=$under) continue;
 
 			$selected=($id==$it);
@@ -522,7 +522,7 @@ function nice_get_theme_images($it=NULL,$filter=NULL,$do_id=false,$include_all=f
 		foreach ($rows as $id)
 		{
 			if (substr($id,0,strlen($under))!=$under) continue;
-			
+
 			$selected=($id==$it);
 
 			$out->attach(form_input_list_entry($id,$selected));
@@ -627,10 +627,10 @@ function find_all_themes($full_details=false)
 function tidy_theme_img_code($new,$old,$table,$field,$db=NULL)
 {
 	if ($new===$old) return; // Still being used
-	
+
 	$path=find_theme_image($old,true,true);
 	if ((is_null($path)) || ($path=='')) return;
-	
+
 	if ((strpos($path,'/images_custom/')!==false) && ($GLOBALS['SITE_DB']->query_value('theme_images','COUNT(DISTINCT id)',array('path'=>$path))==1))
 	{
 		if (is_null($db)) $db=$GLOBALS['SITE_DB'];

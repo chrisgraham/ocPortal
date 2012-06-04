@@ -42,7 +42,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE ID_MEMBER<>'.strval((integer)$this->get_guest_id()).' ORDER BY posts DESC',$limit);
 	}
-	
+
 	/**
 	 * Attempt to to find the member's language from their forum profile. It converts between language-identifiers using a map (lang/map.ini).
 	 *
@@ -53,7 +53,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'lngfile');
 	}
-	
+
 	/**
 	 * Find if the login cookie contains the login name instead of the member id.
 	 *
@@ -63,7 +63,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Find if login cookie is md5-hashed.
 	 *
@@ -73,7 +73,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Find the member id of the forum guest member.
 	 *
@@ -94,7 +94,7 @@ class forum_driver_smf extends forum_driver_base
 		global $SITE_INFO;
 		return $SITE_INFO['smf_table_prefix'];
 	}
-	
+
 	/**
 	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
 	 *
@@ -109,7 +109,7 @@ class forum_driver_smf extends forum_driver_base
 		$this->connection->query('ALTER TABLE '.$this->connection->get_table_prefix().'members ADD ocp_'.$name.' TEXT',NULL,NULL,true);
 		return true;
 	}
-	
+
 	/**
 	 * Get an array of attributes to take in from the installer. Almost all forums require a table prefix, which the requirement there-of is defined through this function.
 	 * The attributes have 4 values in an array
@@ -130,7 +130,7 @@ class forum_driver_smf extends forum_driver_base
 		$a['title']='SMF '.do_lang('TABLE_PREFIX');
 		return array($a);
 	}
-	
+
 	/**
 	 * Searches for forum auto-config at this path.
 	 *
@@ -161,7 +161,7 @@ class forum_driver_smf extends forum_driver_base
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get an array of paths to search for config at.
 	 *
@@ -183,7 +183,7 @@ class forum_driver_smf extends forum_driver_base
 			10=>'../smf',
 			11=>'../SMF');
 	}
-	
+
 	/**
 	 * Get an emoticon chooser template.
 	 *
@@ -200,10 +200,10 @@ class forum_driver_smf extends forum_driver_base
 			$code=$emo['code'];
 			$em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID'=>'93968e9ff0308fff92d1d45e433557e2','FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
 		}
-	
+
 		return $em;
 	}
-	
+
 	/**
 	 * Pin a topic.
 	 *
@@ -242,7 +242,7 @@ class forum_driver_smf extends forum_driver_base
 		}
 		return $out;
 	}
-	
+
 	/**
 	 * Get a member profile-row for the member of the given name.
 	 *
@@ -255,7 +255,7 @@ class forum_driver_smf extends forum_driver_base
 		if (!array_key_exists(0,$rows)) return NULL;
 		return $rows[0];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's primary usergroup.
 	 *
@@ -266,7 +266,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $r['ID_GROUP'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's member id.
 	 *
@@ -277,7 +277,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $r['ID_MEMBER'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's last visit date.
 	 *
@@ -288,7 +288,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $r['lastLogin'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's name.
 	 *
@@ -299,7 +299,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $r['realName'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's e-mail address.
 	 *
@@ -310,7 +310,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $r['emailAddress'];
 	}
-	
+
 	/**
 	 * Get the photo thumbnail URL for the specified member id.
 	 *
@@ -356,7 +356,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?action=profile&u='.strval($id);
 	}
-	
+
 	/**
 	 * Get a URL to the registration page (for people to create member accounts).
 	 *
@@ -366,7 +366,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?action=register';
 	}
-	
+
 	/**
 	 * Get a URL to the members-online page.
 	 *
@@ -376,7 +376,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?action=who';
 	}
-	
+
 	/**
 	 * Get a URL to send a private/personal message to the given member.
 	 *
@@ -398,7 +398,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?board='.strval($id);
 	}
-	
+
 	/**
 	 * Get the forum ID from a forum name.
 	 *
@@ -409,7 +409,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('boards','ID_BOARD',array('name'=>$forum_name));
 	}
-	
+
 	/**
 	 * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
 	 *
@@ -461,7 +461,7 @@ class forum_driver_smf extends forum_driver_base
 			$topic_id=$this->connection->query_insert('topics',array('ID_BOARD'=>$forum_id,'ID_FIRST_MSG'=>mt_rand(0,100000),'ID_LAST_MSG'=>mt_rand(0,100000),'ID_MEMBER_STARTED'=>$member,'ID_MEMBER_UPDATED'=>$member,'numReplies'=>2),true);
 			$home_link=hyperlink($content_url,escape_html($content_title));
 			$post_id=$this->connection->query_insert('messages',array('ID_TOPIC'=>$topic_id,'ID_BOARD'=>$forum_id,'posterTime'=>$time,'ID_MEMBER'=>$this->get_guest_id(),'subject'=>$content_title.', '.$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'posterName'=>do_lang('SYSTEM','','','',get_site_default_lang()),'posterEmail'=>get_option('staff_address'),'posterIP'=>'127.0.0.1','body'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang())),true);
-	
+
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'boards SET numPosts=(numPosts+1), numTopics=(numTopics+1) WHERE ID_BOARD='.strval((integer)$forum_id),1);
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET ID_FIRST_MSG='.strval((integer)$post_id).' WHERE ID_TOPIC='.strval((integer)$topic_id),1);
 		} else $post_id=$this->connection->query_value('messages','MIN(ID_MSG)',array('ID_TOPIC'=>$topic_id));
@@ -512,10 +512,10 @@ class forum_driver_smf extends forum_driver_base
 
 			$out[]=$temp;
 		}
-	
+
 		return $out;
 	}
-	
+
 	/**
 	 * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
 	 *
@@ -528,7 +528,7 @@ class forum_driver_smf extends forum_driver_base
 		unset($forum);
 		return get_forum_base_url().'/index.php?topic='.strval($id).'.0';
 	}
-	
+
 	/**
 	 * Get a URL to the specified post id.
 	 *
@@ -544,7 +544,7 @@ class forum_driver_smf extends forum_driver_base
 		$url=get_forum_base_url().'/index.php?topic='.strval($topic_id).'.msg'.strval($id).'#msg'.strval($id);
 		return $url;
 	}
-	
+
 	/**
 	 * Get an array of topics in the given forum. Each topic is an array with the following attributes:
 	 * - id, the topic ID
@@ -624,7 +624,7 @@ class forum_driver_smf extends forum_driver_base
 		if (count($out)!=0) return $out;
 		return NULL;
 	}
-	
+
 	/**
 	 * Get an array of members who are in at least one of the given array of usergroups.
 	 *
@@ -643,7 +643,7 @@ class forum_driver_smf extends forum_driver_base
 		}
 		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE '.$_groups.' ORDER BY ID_GROUP,ID_MEMBER ASC',$max,$start);
 	}
-	
+
 	/**
 	 * This is the opposite of the get_next_member function.
 	 *
@@ -655,7 +655,7 @@ class forum_driver_smf extends forum_driver_base
 		$tempid=$this->connection->query_value_null_ok_full('SELECT ID_MEMBER FROM '.$this->connection->get_table_prefix().'members WHERE ID_MEMBER<'.strval((integer)$member).' ORDER BY ID_MEMBER DESC');
 		return $tempid;
 	}
-	
+
 	/**
 	 * Get the member id of the next member after the given one, or NULL.
 	 * It cannot be assumed there are no gaps in member ids, as members may be deleted.
@@ -668,7 +668,7 @@ class forum_driver_smf extends forum_driver_base
 		$tempid=$this->connection->query_value_null_ok_full('SELECT ID_MEMBER FROM '.$this->connection->get_table_prefix().'members WHERE ID_MEMBER>'.strval((integer)$member).' ORDER BY ID_MEMBER');
 		return $tempid;
 	}
-	
+
 	/**
 	 * Try to find a member with the given IP address
 	 *
@@ -681,7 +681,7 @@ class forum_driver_smf extends forum_driver_base
 		$b=$this->connection->query_select('messages',array('DISTINCT ID_MEMBER AS id'),array('posterIP'=>$ip));
 		return array_merge($a,$b);
 	}
-	
+
 	/**
 	 * Get the name relating to the specified member id.
 	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
@@ -694,7 +694,7 @@ class forum_driver_smf extends forum_driver_base
 		if ($member==$this->get_guest_id()) return do_lang('GUEST');
 		return $this->get_member_row_field($member,'realName');
 	}
-	
+
 	/**
 	 * Get the e-mail address for the specified member id.
 	 *
@@ -705,7 +705,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'emailAddress');
 	}
-	
+
 	/**
 	 * Find if this member may have e-mails sent to them
 	 *
@@ -719,7 +719,7 @@ class forum_driver_smf extends forum_driver_base
 		if ($v==1) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Get the timestamp of a member's join date.
 	 *
@@ -730,7 +730,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'dateRegistered');
 	}
-	
+
 	/**
 	 * Find all members with a name matching the given SQL LIKE string.
 	 *
@@ -746,7 +746,7 @@ class forum_driver_smf extends forum_driver_base
 		uasort($rows,'multi_sort');
 		return $rows;
 	}
-	
+
 	/**
 	 * Get the given member's post count.
 	 *
@@ -770,7 +770,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->connection->query_value('topics','COUNT(*)',array('id_member_started'=>$member));
 	}
-	
+
 	/**
 	 * Find out if the given member id is banned.
 	 *
@@ -796,7 +796,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return get_forum_base_url().'/Smileys/default/';
 	}
-	
+
 	/**
 	 * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
 	 *
@@ -818,7 +818,7 @@ class forum_driver_smf extends forum_driver_base
 		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
 		return $EMOTICON_CACHE;
 	}
-	
+
 	/**
 	 * Find a list of all forum skins (aka themes).
 	 *
@@ -840,10 +840,10 @@ class forum_driver_smf extends forum_driver_base
 	function _get_theme($skip_member_specific=false)
 	{
 		$def='';
-	
+
 		// Load in remapper
 		$map=file_exists(get_file_base().'/themes/map.ini')?better_parse_ini_file(get_file_base().'/themes/map.ini'):array();
-	
+
 		if (!$skip_member_specific)
 		{
 			// Work out
@@ -863,7 +863,7 @@ class forum_driver_smf extends forum_driver_base
 			$obb=$this->connection->query_value_null_ok('themes','value',array('variable'=>'name','value'=>get_site_name()));
 			if (!is_null($obb)) $def=array_key_exists($obb,$map)?$map[$obb]:$obb;
 		}
-	
+
 		// Default then!
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 			$def=array_key_exists('default',$map)?$map['default']:'default';
@@ -894,7 +894,7 @@ class forum_driver_smf extends forum_driver_base
 		$usergroups=$this->get_members_groups($member);
 		return (in_array(1,$usergroups));
 	}
-	
+
 	/**
 	 * Get the number of members currently online on the forums.
 	 *
@@ -904,7 +904,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok_full('SELECT COUNT(DISTINCT session_id) FROM '.$this->connection->get_table_prefix().'sessions WHERE last_update>'.strval(time()-60*intval(get_option('users_online_time'))));
 	}
-	
+
 	/**
 	 * Get the number of members registered on the forum.
 	 *
@@ -914,7 +914,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->connection->query_value('members','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the total topics ever made on the forum.
 	 *
@@ -924,7 +924,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->connection->query_value('topics','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the total posts ever made on the forum.
 	 *
@@ -934,7 +934,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->connection->query_value('messages','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the number of new forum posts.
 	 *
@@ -944,7 +944,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'messages WHERE posterTime>'.strval(time()-60*60*24));
 	}
-	
+
 	/**
 	 * Get a member id from the given member's username.
 	 *
@@ -955,7 +955,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok('members','ID_MEMBER',array('realName'=>$name));
 	}
-	
+
 	/**
 	 * Get the ids of the admin usergroups.
 	 *
@@ -965,7 +965,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return array(1);
 	}
-	
+
 	/**
 	 * Get the ids of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
@@ -976,7 +976,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return array(2);
 	}
-	
+
 	/**
 	 * Get the forum usergroup list.
 	 *
@@ -986,7 +986,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return array(0=>do_lang('GUESTS'))+collapse_2d_complexity('ID_GROUP','groupName',$this->connection->query_select('membergroups',array('ID_GROUP','groupName')));
 	}
-	
+
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
@@ -996,7 +996,7 @@ class forum_driver_smf extends forum_driver_base
 	function _get_members_groups($member)
 	{
 		if ($member==$this->get_guest_id()) return array(0);
-	
+
 		$additional=$this->get_member_row_field($member,'additionalGroups');
 		if ($additional!='') $usergroups=explode(',',$additional); else $usergroups=array();
 		$primary_group=$this->get_member_row_field($member,'ID_GROUP');
@@ -1004,7 +1004,7 @@ class forum_driver_smf extends forum_driver_base
 		$usergroups[]=$this->get_member_row_field($member,'ID_POST_GROUP');
 		return $usergroups;
 	}
-	
+
 	/**
 	 * The hashing algorithm of this forum driver.
 	 *
@@ -1075,7 +1075,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		$out=array();
 		$out['id']=NULL;
-	
+
 		if (is_null($userid))
 		{
 			$rows=$this->connection->query_select('members',array('*'),array('memberName'=>$username),'',1);
@@ -1119,13 +1119,13 @@ class forum_driver_smf extends forum_driver_base
 			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
 			return $out;
 		}
-	
+
 		ocp_eatcookie('PHPSESSID');
 
 		$out['id']=$row['ID_MEMBER'];
 		return $out;
 	}
-	
+
 	/**
 	 * Get a first known IP address of the given member.
 	 *
@@ -1136,7 +1136,7 @@ class forum_driver_smf extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'memberIP');
 	}
-	
+
 	/**
 	 * Gets a whole member row from the database.
 	 *
@@ -1185,7 +1185,7 @@ class forum_driver_smf extends forum_driver_base
 			return $row[$field];
 		}
 	}
-	
+
 	/**
 	 * Add a member to a usergroup.
 	 *

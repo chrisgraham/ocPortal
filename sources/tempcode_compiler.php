@@ -72,7 +72,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 	{
 		return array(array('"'.php_addslashes(preg_replace('#\{\$,.*\}#U','/*no minify*/',$data)).'"'),array());
 	}
-	
+
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);
 
 	$compilable_symbols=array('"ADDON_INSTALLED"','"BASE_URL"','"COPYRIGHT"','"SITE_NAME"','"BRAND_BASE_URL"','"BRAND_NAME"','"IMG_WIDTH"','"IMG_HEIGHT"',/*bad if theme image missing'"IMG"',*/'"LANG"','"THEME"','"VALUE_OPTION"','"CONFIG_OPTION"');
@@ -293,7 +293,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 						{
 							$_opener_params.=',"0","'.php_addslashes($theme).'"';
 						}
-						
+
 						if ($first_param=='"?"')
 						{
 							if (implode('.',$opener_params[0])=='"1".""')
@@ -417,7 +417,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 
 							if ($directive_params!='') $directive_params.=',';
 							$directive_params.=implode('.',$directive_opener_params[$j]);
-							
+
 							if ($j==2) $first_directive_param=implode('.',$directive_opener_params[$j]);
 						}
 						$eval=@eval('return '.implode('.',$directive_opener_params[1]).';');
@@ -674,7 +674,7 @@ function template_to_tempcode(/*&*/$text,$symbol_pos=0,$inside_directive=false,$
 {
 	if (is_null($theme)) $theme=isset($GLOBALS['FORUM_DRIVER'])?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
 	if (is_null($lang)) $lang=user_lang();
-	
+
 	list($parts,$preprocessable_bits)=compile_template(substr($text,$symbol_pos),$codename,$theme,$lang,$tolerate_errors);
 
 	if (count($parts)==0) return new ocp_tempcode();

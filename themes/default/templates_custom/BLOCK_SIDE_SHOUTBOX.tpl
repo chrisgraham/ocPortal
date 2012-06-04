@@ -19,7 +19,7 @@
 			</div>
 		</div>
 	</form>
-	
+
 	<script type="text/javascript">// <![CDATA[
 		document.getElementById('shoutbox_message').setAttribute('autocomplete','off');
 	//]]></script>

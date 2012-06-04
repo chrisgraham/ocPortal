@@ -40,7 +40,7 @@ class Hook_Preview_quiz
 	function run()
 	{
 		require_code('quiz');
-		
+
 		$questions=array();
 
 		$text=post_param('text');
@@ -126,7 +126,7 @@ class Hook_Preview_quiz
 		}
 
 		$preview=render_quiz($questions);
-		
+
 		return array(do_template('FORM',array('SUBMIT_NAME'=>'','TEXT'=>'','URL'=>'','HIDDEN'=>'','FIELDS'=>$preview)),NULL);
 	}
 

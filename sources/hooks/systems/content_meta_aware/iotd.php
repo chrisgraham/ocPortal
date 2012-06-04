@@ -54,11 +54,11 @@ class Hook_content_meta_aware_iotd
 			'add_time_field'=>'add_date',
 			'edit_time_field'=>'edit_date',
 			'validated_field'=>NULL,
-			
+
 			'addon_name'=>'iotds',
-			
+
 			'module'=>'iotd',
 		);
 	}
-	
+
 }

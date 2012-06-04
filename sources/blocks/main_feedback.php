@@ -54,10 +54,10 @@ class Block_main_feedback
 
 		$self_url=get_self_url();
 		$self_title=get_page_name();
-	
+
 		$type='block_main_feedback';
 		$id=array_key_exists('param',$map)?$map['param']:'';
-	
+
 		$out=new ocp_tempcode();
 		if (post_param_integer('_comment_form_post',0)==1)
 		{

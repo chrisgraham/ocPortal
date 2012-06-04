@@ -30,7 +30,7 @@ class Hook_addon_registry_rootkit_detector
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

@@ -225,7 +225,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	);
 	if (!is_null($id)) $map['id']=$id;
 	$member_id=$GLOBALS['FORUM_DB']->query_insert('f_members',$map,true);
-	
+
 	if ($check_correctness)
 	{
 		// If it was an invite/recommendation, award the referrer
@@ -277,7 +277,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		{
 			$ob=get_fields_hook($field['cf_type']);
 			list(,,$storage_type)=$ob->get_field_value_row_bits($field);
-	
+
 			$value='';
 			if (strpos($storage_type,'_trans')!==false)
 			{
@@ -387,7 +387,7 @@ function get_cpf_storage_for($type)
 			$index=false;
 			break;
 	}
-	
+
 	return array($_type,$index);
 }
 

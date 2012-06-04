@@ -29,7 +29,7 @@
 function ocf_edit_category($category_id,$title,$description,$expanded_by_default)
 {
 	$old_title=$GLOBALS['FORUM_DB']->query_value('f_categories','c_title',array('id'=>$category_id));
-	
+
 	$GLOBALS['FORUM_DB']->query_update('f_categories',array(
 		'c_title'=>$title,
 		'c_description'=>$description,

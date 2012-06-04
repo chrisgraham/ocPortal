@@ -51,7 +51,7 @@ class Module_cms_iotds extends standard_aed_module
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/iotds';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_featured';
-		
+
 		$this->add_one_label=do_lang_tempcode('ADD_IOTD');
 		$this->edit_one_label=do_lang_tempcode('EDIT_OR_CHOOSE_IOTD');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_IOTD');
@@ -148,7 +148,7 @@ class Module_cms_iotds extends standard_aed_module
 			}
 			$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$current));
 		}
-	
+
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
@@ -195,7 +195,7 @@ class Module_cms_iotds extends standard_aed_module
 	function nice_get_iotds_link($used=0,$current=0,$submitter=NULL)
 	{
 		require_code('images');
-		
+
 		$where=array('used'=>$used,'is_current'=>$current);
 		if (!is_null($submitter)) $where['submitter']=$submitter;
 		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('i_title','submitter','is_current','used','id','thumb_url','url'),$where,'ORDER BY id DESC',100);
@@ -282,7 +282,7 @@ class Module_cms_iotds extends standard_aed_module
 
 		$url=$urls[0];
 		$thumb_url=$urls[1];
-	
+
 		$title=post_param('title');
 		$caption=post_param('caption');
 		$allow_rating=post_param_integer('allow_rating',0);
@@ -290,9 +290,9 @@ class Module_cms_iotds extends standard_aed_module
 		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		$validated=post_param_integer('validated',0);
-	
+
 		$id=add_iotd($url,$title,$caption,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
-	
+
 		if ($validated==1)
 		{
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
@@ -304,10 +304,10 @@ class Module_cms_iotds extends standard_aed_module
 		{
 			if (!has_specific_permission(get_member(),'choose_iotd'))
 				log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
-	
+
 			set_iotd($id);
 		}
-		
+
 		return strval($id);
 	}
 
@@ -319,7 +319,7 @@ class Module_cms_iotds extends standard_aed_module
 	function edit_actualisation($_id)
 	{
 		$id=intval($_id);
-		
+
 		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('is_current','submitter'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$is_current=$rows[0]['is_current'];
@@ -382,9 +382,9 @@ class Module_cms_iotds extends standard_aed_module
 		$title=get_page_title('CHOOSE_IOTD');
 
 		$id=post_param_integer('id');
-	
+
 		set_iotd($id);
-	
+
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),$id);
 	}
 

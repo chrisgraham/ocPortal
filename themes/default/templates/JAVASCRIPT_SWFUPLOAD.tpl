@@ -101,18 +101,18 @@ SWFUpload.completeURL = function(url) {
 	if (typeof(url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
 		return url;
 	}
-	
+
 	var currentURL = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "");
-	
+
 	var indexSlash = window.location.pathname.lastIndexOf("/");
 	if (indexSlash <= 0) {
 		path = "/";
 	} else {
 		path = window.location.pathname.substr(0, indexSlash) + "/";
 	}
-	
+
 	return /*currentURL +*/ path + url;
-	
+
 };
 
 
@@ -126,7 +126,7 @@ SWFUpload.prototype.initSettings = function () {
 	this.ensureDefault = function (settingName, defaultValue) {
 		this.settings[settingName] = (typeof this.settings[settingName] == 'undefined') ? defaultValue : this.settings[settingName];
 	};
-	
+
 	// Upload backend settings
 	this.ensureDefault("upload_url", "");
 	this.ensureDefault("preserve_relative_urls", false);
@@ -136,7 +136,7 @@ SWFUpload.prototype.initSettings = function () {
 	this.ensureDefault("requeue_on_error", false);
 	this.ensureDefault("http_success", []);
 	this.ensureDefault("assume_success_timeout", 0);
-	
+
 	// File Settings
 	this.ensureDefault("file_types", "*.*");
 	this.ensureDefault("file_types_description", "All Files");
@@ -147,7 +147,7 @@ SWFUpload.prototype.initSettings = function () {
 	// Flash Settings
 	this.ensureDefault("flash_url", "swfupload.swf");
 	this.ensureDefault("prevent_swf_caching", true);
-	
+
 	// Button Settings
 	this.ensureDefault("button_image_url", "");
 	this.ensureDefault("button_width", 1);
@@ -162,11 +162,11 @@ SWFUpload.prototype.initSettings = function () {
 	this.ensureDefault("button_placeholder", null);
 	this.ensureDefault("button_cursor", SWFUpload.CURSOR.ARROW);
 	this.ensureDefault("button_window_mode", SWFUpload.WINDOW_MODE.WINDOW);
-	
+
 	// Debug Settings
 	this.ensureDefault("debug", false);
 	this.settings.debug_enabled = this.settings.debug;	// Here to maintain v2 API
-	
+
 	// Event Handlers
 	this.settings.return_upload_start_handler = this.returnUploadStart;
 	this.ensureDefault("swfupload_loaded_handler", null);
@@ -174,31 +174,31 @@ SWFUpload.prototype.initSettings = function () {
 	this.ensureDefault("file_queued_handler", null);
 	this.ensureDefault("file_queue_error_handler", null);
 	this.ensureDefault("file_dialog_complete_handler", null);
-	
+
 	this.ensureDefault("upload_start_handler", null);
 	this.ensureDefault("upload_progress_handler", null);
 	this.ensureDefault("upload_error_handler", null);
 	this.ensureDefault("upload_success_handler", null);
 	this.ensureDefault("upload_complete_handler", null);
-	
+
 	this.ensureDefault("debug_handler", this.debugMessage);
 
 	this.ensureDefault("custom_settings", {});
 
 	// Other settings
 	this.customSettings = this.settings.custom_settings;
-	
+
 	// Update the flash url if needed
 	if (!!this.settings.prevent_swf_caching) {
 		this.settings.flash_url = this.settings.flash_url + (this.settings.flash_url.indexOf("?") < 0 ? "?" : "&") + "preventswfcaching=" + new Date().getTime();
 	}
-	
+
 	if (!this.settings.preserve_relative_urls) {
 		//this.settings.flash_url = SWFUpload.completeURL(this.settings.flash_url);	// Don't need to do this one since flash doesn't look at it
 		this.settings.upload_url = SWFUpload.completeURL(this.settings.upload_url);
 		this.settings.button_image_url = SWFUpload.completeURL(this.settings.button_image_url);
 	}
-	
+
 	delete this.ensureDefault;
 };
 
@@ -256,7 +256,7 @@ SWFUpload.prototype.getFlashVars = function () {
 	// Build a string from the post param object
 	var paramString = this.buildParamString();
 	var httpSuccessString = this.settings.http_success.join(",");
-	
+
 	// Build the parameter string
 	return ["movieName=", encodeURIComponent(this.movieName),
 			"&amp;uploadURL=", encodeURIComponent(this.settings.upload_url),
@@ -294,7 +294,7 @@ SWFUpload.prototype.getMovieElement = function () {
 	if (this.movieElement === null) {
 		throw "Could not find Flash element";
 	}
-	
+
 	return this.movieElement;
 };
 
@@ -323,12 +323,12 @@ SWFUpload.prototype.destroy = function () {
 	try {
 		// Make sure Flash is done before we try to remove it
 		this.cancelUpload(null, false);
-		
+
 
 		// Remove the SWFUpload DOM nodes
 		var movieElement = null;
 		movieElement = this.getMovieElement();
-		
+
 		if (movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
 			// Loop through all the movie's properties and remove all function references (DOM/JS IE 6/7 memory leak workaround)
 			for (var i in movieElement) {
@@ -344,7 +344,7 @@ SWFUpload.prototype.destroy = function () {
 				movieElement.parentNode.removeChild(movieElement);
 			} catch (ex) {}
 		}
-		
+
 		// Remove IE form fix reference
 		window[this.movieName] = null;
 
@@ -357,7 +357,7 @@ SWFUpload.prototype.destroy = function () {
 		this.customSettings = null;
 		this.eventQueue = null;
 		this.movieName = null;
-		
+
 		
 		return true;
 	} catch (ex2) {
@@ -450,7 +450,7 @@ SWFUpload.prototype.getSetting = function (name) {
 // bugs in the ExternalInterface library.
 SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	argumentArray = argumentArray || [];
-	
+
 	var movieElement = this.getMovieElement();
 	var returnValue, returnString;
 
@@ -461,7 +461,7 @@ SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	} catch (ex) {
 		throw "Call to " + functionName + " failed";
 	}
-	
+
 	// Unescape file post param values
 	if (typeof returnValue != 'undefined' && typeof returnValue.post === "object") {
 		returnValue = this.unescapeFilePostParams(returnValue);
@@ -632,7 +632,7 @@ SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
 	if (typeof http_status_codes === "string") {
 		http_status_codes = http_status_codes.replace(" ", "").split(",");
 	}
-	
+
 	this.settings.http_success = http_status_codes;
 	this.callFlash("SetHTTPSuccess", [http_status_codes]);
 };
@@ -654,7 +654,7 @@ SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
 	if (typeof buttonImageURL == 'undefined') {
 		buttonImageURL = "";
 	}
-	
+
 	this.settings.button_image_url = buttonImageURL;
 	this.callFlash("SetButtonImageURL", [buttonImageURL]);
 };
@@ -663,13 +663,13 @@ SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
 SWFUpload.prototype.setButtonDimensions = function (width, height) {
 	this.settings.button_width = width;
 	this.settings.button_height = height;
-	
+
 	var movie = this.getMovieElement();
 	if (typeof movie != 'undefined') {
 		movie.style.width = width + "px";
 		movie.style.height = height + "px";
 	}
-	
+
 	this.callFlash("SetButtonDimensions", [width, height]);
 };
 // Public: setButtonText Changes the text overlaid on the button
@@ -710,9 +710,9 @@ SWFUpload.prototype.setButtonCursor = function (cursor) {
 	Flash Event Interfaces
 	These functions are used by Flash to trigger the various
 	events.
-	
+
 	All these function as Private.
-	
+
 	Because the ExternalInterface library is buggy the event calls
 	are added to a queue and the queue then executed by a setTimeout.
 	This ensures that events are executed in a determinate order and that
@@ -721,26 +721,26 @@ SWFUpload.prototype.setButtonCursor = function (cursor) {
 
 SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
 	// Warning: Don't call this.debug inside here or you'll create an infinite loop
-	
+
 	if (typeof argumentArray == 'undefined') {
 		argumentArray = [];
 	} else if (!(argumentArray instanceof Array)) {
 		argumentArray = [argumentArray];
 	}
 	argumentArray.push(this);
-	
+
 	var self = this;
 	if (typeof this.settings[handlerName] === "function") {
 		// Queue the event
 		this.eventQueue.push(function () {
 			this.settings[handlerName].apply(this, argumentArray);
 		});
-		
+
 		// Execute the next queued event
 		setTimeout(function () {
 			self.executeNextEvent();
 		}, 0);
-		
+
 	} else if (this.settings[handlerName] !== null) {
 		throw "Event handler " + handlerName + " is unknown or is not a function";
 	}
@@ -803,7 +803,7 @@ SWFUpload.prototype.flashReady = function () {
 	}
 
 	this.cleanUp(movieElement);
-	
+
 	this.queueEvent("swfupload_loaded_handler");
 };
 
@@ -824,7 +824,7 @@ SWFUpload.prototype.cleanUp = function (movieElement) {
 			}
 		}
 	} catch (ex1) {
-	
+
 	}
 
 	// Fix Flashes own cleanup code so if the SWFMovie was removed from the page
@@ -835,7 +835,7 @@ SWFUpload.prototype.cleanUp = function (movieElement) {
 				instance[name] = null;
 			}
 		} catch (flashEx) {
-		
+
 		}
 	};
 
@@ -885,9 +885,9 @@ SWFUpload.prototype.returnUploadStart = function (file) {
 	if (typeof returnValue === 'undefined') {
 		returnValue = true;
 	}
-	
+
 	returnValue = !!returnValue;
-	
+
 	this.callFlash("ReturnUploadStart", [returnValue]);
 };
 
@@ -927,7 +927,7 @@ SWFUpload.prototype.debug = function (message) {
 	itself to the body if necessary.
 
 	The console is automatically scrolled as messages appear.
-	
+
 	If you are using your own debug handler or when you deploy to production and
 	have debug disabled you can remove these functions to reduce the file size
 	and complexity.
@@ -990,7 +990,7 @@ SWFUpload.Console.writeLine = function (message) {
 
 /*
 	fileprogress.js
-	
+
 	A simple class for displaying file information and progress
 */
 
@@ -1000,10 +1000,10 @@ SWFUpload.Console.writeLine = function (message) {
 // Instantiating a new FileProgress object with an existing file will reuse/update the existing DOM elements
 function FileProgress(file, targetID) {
 	this.fileProgressID = file.id;
-	
+
 	this.opacity = 100;
 	this.height = 0;
-	
+
 	this.fileProgressWrapper = document.getElementById(this.fileProgressID);
 	if (!this.fileProgressWrapper) {
 		this.fileProgressWrapper = document.createElement("div");
@@ -1044,7 +1044,7 @@ function FileProgress(file, targetID) {
 		if (typeof file.name!='undefined')
 			setInnerHTML(this.fileProgressElement.childNodes[1],file.name);
 	}
-	
+
 	this.height = this.fileProgressWrapper.offsetHeight;
 
 }
@@ -1114,7 +1114,7 @@ FileProgress.prototype.appear = function () {
 	} else {
 		this.fileProgressWrapper.style.opacity = 1;
 	}
-	
+
 	this.fileProgressWrapper.style.height = "";
 	this.height = this.fileProgressWrapper.offsetHeight;
 	this.opacity = 100;
@@ -1225,14 +1225,14 @@ function doSubmit(e,ob) {
 
 		return ret && ret2;
 	}
-	
+
 	e = e || window.event;
 	if ((typeof e!='undefined') && (e))
 	{
 		cancelBubbling(e);
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 	}
-	
+
 	var txtID = document.getElementById(ob.settings.txtFileDbID);
 	if (txtID.value == '-1')
 	{
@@ -1308,7 +1308,7 @@ function fileQueued(file, ob) {
 function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 {
 	if ((typeof posting_field_name=='undefined') || (!posting_field_name)) var posting_field_name='post';
-	
+
 	if (page_type=="attachment")
 	{
 		var current_num=name.replace('file', '');
@@ -1389,7 +1389,7 @@ function uploadSuccess(file, serverData, _, ob) {
 	progress.setComplete();
 	progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
 	progress.toggleCancel(false);
-	
+
 	if (serverData === " ") {
 		this.customSettings.upload_successful = false;
 	} else {
@@ -1397,7 +1397,7 @@ function uploadSuccess(file, serverData, _, ob) {
 
 		var decodedData = eval('(' + serverData + ')');
 		document.getElementById(ob.settings.txtFileDbID).value = decodedData['upload_id'];
-		
+
 		if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 	}
 }
@@ -1432,7 +1432,7 @@ function uploadComplete(file, ob) {
 
 		if (txtFileName.value != "")
 			window.fauxmodal_alert("{!INTERNAL_ERROR^#}");
-		
+
 		txtFileName.value = "";
 		fireFakeChangeFor(ob.settings.txtName,'');
 		document.getElementById(ob.settings.btnSubmitID).disabled = false;
@@ -1444,12 +1444,12 @@ function uploadError(file, errorCode, message, ob) {
 		// Don't show cancelled error boxes
 		return;
 	}
-	
+
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
 	txtFileName.value = "";
 	fireFakeChangeFor(ob.settings.txtName,'');
 	document.getElementById(ob.settings.btnSubmitID).disabled = false;
-	
+
 	// Handle this error separately because we don't want to create a FileProgress element for it.
 	switch (errorCode) {
 		case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
@@ -1503,7 +1503,7 @@ function preinitFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if ('{$MOBILE}'=='1') return;
 
 	if ((typeof posting_field_name=='undefined') || (!posting_field_name)) var posting_field_name='post';
-	
+
 	var rep=document.getElementById(name);
 	rep.originally_disabled=rep.disabled;
 	rep.disabled=true;
@@ -1526,7 +1526,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if ('{$MOBILE}'=='1') return;
 
 	if (typeof window.no_java=='undefined') window.no_java=false;
-	
+
 	var java_method=false;
 	{+START,IF,{$CONFIG_OPTION,java_upload}}
 		if (window.location.search.indexOf('keep_java=1')!=-1)
@@ -1550,7 +1550,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 				catch(e) {}
 				return '0,0,0';
 			};
-			
+
 			// ie
 			if (typeof window.ActiveXObject!='undefined')
 			{
@@ -1601,7 +1601,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			}
 		}
 	}
-	
+
 	var maindiv=document.createElement('div');
 	rep.parentNode.appendChild(maindiv);
 
@@ -1677,7 +1677,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var base="{$CONFIG_OPTION#*,java_ftp_path}";
 		if (base.substr(base.length-1,1)!='/') base+='/';
 		hidFileID.value=''+random+'.dat';
-		
+
 		var colorAt=rep.parentNode,backgroundColor;
 		do
 		{
@@ -1771,7 +1771,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	{
 		var mfs=filenameField.form.elements['MAX_FILE_SIZE'];
 		if ((typeof mfs!='undefined') && (typeof mfs.value=='undefined')) mfs=mfs[0];
-		
+
 		filter='*.'+filter.replace(/,/g,';*.');
 
 		var ob=new SWFUpload({
@@ -2024,11 +2024,11 @@ function initialise_dragdrop_upload(key,key2)
 function gears_upload(event,field_name)
 {
 	if (typeof window.extraAttachmentBase=='undefined') window.extraAttachmentBase=1000;
-	
+
 	var desktop = google.gears.factory.create('beta.desktop');
 	var data = desktop.getDragData(event, 'application/x-gears-files');
 	if (typeof data=='undefined') return;
-	
+
 	var boundary = '------multipartformboundary' + (new Date).getTime();
 	var dashdash = '--';
 	var crlf = '\r\n';
@@ -2180,13 +2180,13 @@ function html5_upload(event,field_name,files)
 	var boundary = '------multipartformboundary' + (new Date).getTime();
 	var dashdash = '--';
 	var crlf	= '\r\n';
-	
+
 	var valid_types='{$CONFIG_OPTION;,valid_types}'.split(/\s*,\s*/g);
 
 	for (var i = 0; i < count; i++)
 	{
 		var file=files.item(i);
-		
+
 		if ((typeof file.size!='undefined') && (file.size>3000000))
 		{
 			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP^;}');

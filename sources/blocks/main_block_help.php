@@ -20,7 +20,7 @@
 
 class Block_main_block_help
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_block_help
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -75,7 +75,7 @@ class Block_main_block_help
 
 			$blocks->attach(do_template('BLOCK_MAIN_BLOCK_HELP',array('_GUID'=>'00652313faa72feac0a07d77e2dddd84','NAME'=>$block,'DESCRIPTION'=>$description,'USE'=>$use,'PARAMETERS'=>$parameters)));
 		}
-	
+
 		return $blocks;
 	}
 

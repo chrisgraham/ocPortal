@@ -22,7 +22,7 @@
 				stylers: [ { visibility: "off" } ]
 			}]
 		});
-		
+
 		var infoWindow = new google.maps.InfoWindow();
 
 		{$,Close InfoWindow when clicking anywhere on the map.}
@@ -49,13 +49,13 @@
 			marker.setMap(map);
 		});
 	}
-	
+
 	function place_marker(latitude,longitude)
 	{
 		var latLng = new google.maps.LatLng(latitude,longitude);
 		marker.setPosition(latLng);
 	}
-	
+
 	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=false"});
 //]]></script>
 

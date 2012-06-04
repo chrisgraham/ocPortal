@@ -38,7 +38,7 @@ class Block_side_network
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_side_network
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */

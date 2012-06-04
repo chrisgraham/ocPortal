@@ -40,7 +40,7 @@ class Module_admin_points
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_points
 	{
 		return array('misc'=>'GIFT_TRANSACTIONS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,7 +64,7 @@ class Module_admin_points
 		require_code('points');
 		require_css('points');
 		require_lang('points');
-	
+
 		$type=get_param('type','misc');
 
 		if ($type=='charge') return $this->points_charge();
@@ -82,7 +82,7 @@ class Module_admin_points
 	function points_log()
 	{
 		$title=get_page_title('GIFT_TRANSACTIONS');
-		
+
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
@@ -192,7 +192,7 @@ class Module_admin_points
 	function points_charge()
 	{
 		$title=get_page_title('CHARGE_USER');
-	
+
 		$member=post_param_integer('user');
 		$amount=post_param_integer('amount');
 		$reason=post_param('reason');
@@ -200,11 +200,11 @@ class Module_admin_points
 		require_code('points2');
 		charge_member($member,$amount,$reason);
 		$left=available_points($member);
-	
+
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 		$text=do_lang_tempcode('USER_HAS_BEEN_CHARGED',escape_html($username),escape_html(integer_format($amount)),escape_html(integer_format($left)));
-	
+
 		// Show it worked / Refresh
 		$url=get_param('redirect',NULL);
 		if (is_null($url))

@@ -28,7 +28,7 @@ foreach (array_keys($groups) as $group_id)
 			'p_points_one_off'=>$points_one_off,
 			'p_points_per_month'=>$points_per_month,
 		));
-		
+
 		$done_something=true;
 	}
 }
@@ -45,7 +45,7 @@ $fields=new ocp_tempcode();
 foreach ($groups as $group_id=>$group_name)
 {
 	if ($group_id==db_get_first_id()) continue;
-	
+
 	if (isset($group_points[$group_id]))
 	{
 		$points=$group_points[$group_id];
@@ -53,7 +53,7 @@ foreach ($groups as $group_id=>$group_name)
 	{
 		$points=array('p_points_one_off'=>0,'p_points_per_month'=>0);
 	}
-	
+
 	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$group_name)));
 	$fields->attach(form_input_integer('One-off bonus','','points_one_off_'.strval($group_id),$points['p_points_one_off'],true));
 	$fields->attach(form_input_integer('Points per month','','points_per_month_'.strval($group_id),$points['p_points_per_month'],true));

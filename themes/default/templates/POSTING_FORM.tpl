@@ -105,7 +105,7 @@
 								</div></div>
 							{+END}{+END}
 						{+END}
-						
+
 						<p>{!USE_WEBSITE_RULES,{$PAGE_LINK*,:rules},{$PAGE_LINK*,:privacy}}</p>
 					</td>
 				</tr>
@@ -136,7 +136,7 @@
 						{ATTACHMENTS}
 					</td>
 				</tr>
-			
+
 				{+START,IF,{$AND,{$IS_NON_EMPTY,{SPECIALISATION2}},{$OR,{$NOT,{$IN_STR,{SPECIALISATION2},<th colspan="2"}},{$LT,{$STRPOS,{SPECIALISATION2},<td},{$STRPOS,{SPECIALISATION2},<th colspan="2"}}}}}
 					<tr class="form_screen_field_spacer">
 						<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="de_th dottedborder_divider">

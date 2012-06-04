@@ -4,7 +4,7 @@
 		{+START,IF,{$OR,{FORCE_PRESETS},{$IS_NON_EMPTY,{OVERRIDES}}}}
 			<label for="access_{GROUP_ID*}_presets">
 				<span class="accessibility_hidden">{!PINTERFACE_PRESETS} ({GROUP_NAME*})</span>
-				
+
 				<select tabindex="{TABINDEX*}" id="access_{GROUP_ID*}_presets" name="access_{GROUP_ID*}_presets" onkeypress="if (enter_pressed(event)) this.onclick(event);" onclick="this.onchange(event);" onchange="copy_permission_presets('access_{GROUP_ID*;}',this.options[this.selectedIndex].value); cleanup_permission_list('access_{GROUP_ID*;}')">
 					{+START,IF,{ALL_GLOBAL}}
 						<option selected="selected" value="-1">{!PINTERFACE_LEVEL_GLOBAL}</option>

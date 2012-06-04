@@ -60,7 +60,7 @@ function force_have_afm_details()
 		set_value('uses_ftp','0');
 		return; // No need for FTP
 	}
-	
+
 	if (get_file_base()!=get_custom_file_base()) // Shared installs are assumed to have the necessary AFM permissions where needed
 	{
 		set_value('uses_ftp','0');
@@ -374,7 +374,7 @@ function _translate_dir_access($world_access)
 function _translate_file_access($world_access,$file_type='')
 {
 	$mask=0;
-	
+
 	if ($file_type=='php')
 	{
 		$php_perms=fileperms(get_file_base().'/index.php');
@@ -391,7 +391,7 @@ function _translate_file_access($world_access,$file_type='')
 			$mask=$mask | 0001;
 		}
 	}
-	
+
 	if (is_suexec_like())
 	{
 		return 0644 | $mask;
@@ -507,7 +507,7 @@ function afm_make_directory($basic_path,$world_access,$recursive=false)
 		{
 			@chmod($path,$access);
 		}
-	
+
 		sync_file($path);
 	}
 }
@@ -725,7 +725,7 @@ function afm_delete_file($basic_path)
 			}
 			warn_exit(protect_from_escaping(@strval($php_errormsg)));
 		}
-		
+
 		clearstatcache();
 
 		sync_file(get_custom_file_base().'/'.$basic_path);

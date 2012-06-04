@@ -139,7 +139,7 @@ class Hook_mybb
 				$config_remapping['site_closed']=$row['value'];
 				continue;
 			}
-			
+
 			if (isset($row['name'])&&$row['name']=='boardclosed_reason')
 			{
 				$config_remapping['closed']=$row['value'];
@@ -349,7 +349,7 @@ class Hook_mybb
 					import_id_remap_put('member',strval($row['muid']),$test);
 					continue;
 				}
-	
+
 				$language='';
 				if ($row['language']!='')
 				{
@@ -445,7 +445,7 @@ class Hook_mybb
 	function import_ocf_member_files($db,$table_prefix,$file_base)
 	{
 		global $STRICT_FILE;
-	
+
 		$options=$db->query('SELECT * FROM '.$table_prefix.'settings WHERE name LIKE \''.db_encode_like('%avatar%').'\' OR '.db_string_equal_to('name','homeurl'));
 		$options_array=array();
 
@@ -531,12 +531,12 @@ class Hook_mybb
 
 
 				}
-	
+
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url'=>$avatar_url),array('id'=>$member_id),'',1);
-	
+
 				import_id_remap_put('member_files',strval($row['uid']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -552,7 +552,7 @@ class Hook_mybb
 	function import_ip_bans($db,$table_prefix,$file_base)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'users u LEFT JOIN '.$table_prefix.'banned b ON u.uid = b.uid WHERE b.gid=7');
-		
+
 		require_code('failure');
 
 		foreach ($rows as $row)
@@ -560,7 +560,7 @@ class Hook_mybb
 			$ban_time = $row['dateline']; //when is banned user
 			$ban_period = $row['bantime']; //how many days/months/years is banned
 			$perm_banned=false;
-		
+
 			if ($ban_period=='---')
 			{
 				//permanantly banned
@@ -594,7 +594,7 @@ class Hook_mybb
 			import_id_remap_put('ip_ban',strval($row['lastip']),0);
 		}
 	}
-	
+
 	/**
 	 * Convert an IP address from phpBB hexadecimal string format.
 	 *
@@ -622,7 +622,7 @@ class Hook_mybb
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('category',strval($row['fid']))) continue;
-	
+
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
@@ -685,7 +685,7 @@ class Hook_mybb
 					if ($p['canpostthreads']==1) $v=2;
 					if ($p['canpostreplys']==1) $v=3;
 					if ($p['canpostpolls']==1) $v=4;
-					
+
 					$group_id=import_id_remap_get('group',strval($p['gid']));
 					$access_mapping[$group_id]=$v;
 				}
@@ -721,7 +721,7 @@ class Hook_mybb
 
 				import_id_remap_put('topic',strval($row['tid']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -1017,7 +1017,7 @@ class Hook_mybb
 		}
 	}
 
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1085,7 +1085,7 @@ class Hook_mybb
 				ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,NULL,$last_edit_time,$last_edit_by,false,false,NULL,false);
 				$first_post=false;
 			}
-	
+
 			import_id_remap_put('pt',strval($row['pmid']),$topic_id);
 		}
 	}
@@ -1138,7 +1138,7 @@ class Hook_mybb
 	function import_notifications($db,$table_prefix,$file_base)
 	{
 		require_code('notifications');
-		
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -1147,7 +1147,7 @@ class Hook_mybb
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('topic_notification',strval($row['tid']).'-'.strval($row['uid']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['uid']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['tid']),true);
@@ -1156,12 +1156,12 @@ class Hook_mybb
 
 				import_id_remap_put('topic_notification',strval($row['tid']).'-'.strval($row['uid']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1273,7 +1273,7 @@ class Hook_mybb
 	function import_calendar($db,$table_prefix,$file_base)
 	{
 		require_code('calendar2');
-		
+
 		$rows=$db->query_select('events');
 		foreach ($rows as $row)
 		{

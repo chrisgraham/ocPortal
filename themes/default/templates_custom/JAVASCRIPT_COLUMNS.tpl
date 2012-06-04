@@ -66,11 +66,11 @@ addEventListenerAbstract(window,'real_load',function () {
 		var $cache = $('<div></div>'); // this is where we'll put the real content
 		var lastWidth = 0;
 		var columnizing = false;
-		
+
 		var adjustment = 0;
-		
+
 		$cache.append($inBox.contents().clone(true));
-	
+
 	    // images loading after dom load
 	    // can screw up the column heights,
 	    // so recolumnize after images load
@@ -95,9 +95,9 @@ addEventListenerAbstract(window,'real_load',function () {
 	    }
 
 		$inBox.empty();
-		
+
 		columnizeIt();
-		
+
 		if(!options.buildOnce) {
 			$(window).resize(function() {
 				if(!options.buildOnce && $.browser.msie) {
@@ -112,7 +112,7 @@ addEventListenerAbstract(window,'real_load',function () {
 				}
 			});
 		}
-		
+
 		/**
 		 * Create a node that has a height
 		 * less than or equal to height.
@@ -151,7 +151,7 @@ addEventListenerAbstract(window,'real_load',function () {
 			var lastKid = kids[kids.length-1];
 			$putInHere[0].removeChild(lastKid);
 			var $item = $(lastKid);
-			
+
 			// and now try and put a split version of it
 			if($item[0].nodeType == 3) {
 				// it's a text node, split it up
@@ -177,7 +177,7 @@ addEventListenerAbstract(window,'real_load',function () {
 					latestTextNode = document.createTextNode(columnText);
 					$putInHere.append(latestTextNode);
 					partsUsed++;
-					
+
 					if((oText.length > counter2) && (pos != -1)) {
 						oText = oText.substring(pos);
 					}else{
@@ -216,7 +216,7 @@ addEventListenerAbstract(window,'real_load',function () {
 			}else{
 				$pullOutHere.append($item);
 			}
-			
+
 			return $item[0].nodeType == 3;
 		}
 
@@ -256,7 +256,7 @@ addEventListenerAbstract(window,'real_load',function () {
 				}
 			}
 		}
-		
+
 		function cantEndOn(dom,lookingDeep) {
 			if (!lookingDeep) {
 				if(dom.nodeType != 1) {
@@ -271,24 +271,24 @@ addEventListenerAbstract(window,'real_load',function () {
 			if(dom.childNodes.length == 0) return false;
 			return cantEndOn(dom.childNodes[dom.childNodes.length-1],true);
 		}
-		
+
 		function columnizeIt() {
 			if(lastWidth == $inBox.width()) return;
 			lastWidth = $inBox.width();
-			
+
 			var numCols = options.columns;
 
 			if($inBox.data("columnizing")) return;
 			$inBox.data("columnized", true);
 			$inBox.data("columnizing", true);
-			
+
 			$inBox.empty();
 			$inBox.append($("<div style='float: " + options.columnFloat + ";'></div>")); //"
 			$col = $inBox.children(":last");
 			$col.append($cache.clone());
 			maxHeight = $col.height();
 			$inBox.empty();
-			
+
 			var targetHeight = maxHeight / numCols;
 			var firstTime = true;
 			var maxLoops = 3;
@@ -301,10 +301,10 @@ addEventListenerAbstract(window,'real_load',function () {
 				targetHeight = options.height;
 				scrollHorizontally = true;
 			}
-			
+
 			for(var loopCount=0;loopCount<maxLoops;loopCount++) {
 				if (typeof window.console!='undefined') console.log('STARTING COLUMNISATION ITERATION');
-				
+
 				$inBox.empty();
 				var $destroyable; // This is where we'll pull all our data from, as we progressively fill our columns
 				try{

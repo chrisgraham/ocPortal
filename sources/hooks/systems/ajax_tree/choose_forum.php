@@ -42,7 +42,7 @@ class Hook_choose_forum
 		$out='';
 
 		if (!has_actual_page_access(NULL,'forumview')) $tree=array();
-		
+
 		$categories=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_categories',array('id','c_title')));
 
 		if ($compound_list)
@@ -111,7 +111,7 @@ class Hook_choose_forum
 		{
 			list($tree,)=$tree;
 		}
-		
+
 		return $tree;
 	}
 

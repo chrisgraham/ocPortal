@@ -45,12 +45,12 @@ function xhtmlise_html($html,$definitely_want=false)
 	{
 		if (!(($GLOBALS['SEMI_DEBUG_MODE']) && (browser_matches('true_xhtml')))) return $html; // One day, this will get removed and we'll ensure all our output is always XHTML. But so far there's no point as IE doesn't support true XHTML
 	}
-	
+
 	$html=preg_replace('#<\!--.*($|-->)#Us','',$html); // Strip comments
 
 	require_code('obfuscate');
 	require_code('validation');
-	
+
 	global $XML_CONSTRAIN,$LAST_TAG_ATTRIBUTES,$POS,$OUT,$TAG_STACK,$INBETWEEN_TEXT,$LEN,$WELL_FORMED_ONLY,$MUST_SELFCLOSE_TAGS,$LINENO,$LINESTART;
 	$POS=0;
 	$OUT=$html;
@@ -60,7 +60,7 @@ function xhtmlise_html($html,$definitely_want=false)
 	$LINENO=0;
 	$LINESTART=0;
 	$XML_CONSTRAIN=true;
-	
+
 	$new='';
 
 	$token=_get_next_tag();
@@ -78,7 +78,7 @@ function xhtmlise_html($html,$definitely_want=false)
 		}
 
 		$basis_token=_get_tag_basis($token);
-		
+
 		if ($basis_token!='')
 		{
 			// Open, close, or monitonic?
@@ -121,7 +121,7 @@ function xhtmlise_html($html,$definitely_want=false)
 						array_push($TAG_STACK,'map');
 						$new.='<map>';
 					}
-					
+
 					array_push($TAG_STACK,$basis_token);
 					$new.='<'.$basis_token;
 					foreach ($LAST_TAG_ATTRIBUTES as $key=>$val)
@@ -174,7 +174,7 @@ function xhtmlise_html($html,$definitely_want=false)
 		$previous=array_pop($TAG_STACK);
 		$new.='</'.$previous.'>';
 	}
-	
+
 	// Remove some empty tags that shouldn't be empty (e.g. table)
 	$may_not_be_empty=array(/*'h1','h2','h3','h4','h5','h6','p','blockquote','pre',*/'br','hr',/*'fieldset','address','noscript',*/'table','tbody',
 	'tfoot','thead','tr','dd','dt','dl','li','ol','ul','rbc','rtc','rb','rt','rp',/*'span',*/'abbr',
@@ -464,7 +464,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 			{
 				$new_html.='</'.$tag.'>';
 			}
-			
+
 			// Shall we back-track a bit to stop cutting up a word?
 			$backtrack=strrpos($new_html,' ');
 			$backtrack_safety=strrpos($new_html,'>');
@@ -472,7 +472,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 			{
 				$new_html=substr($new_html,0,$backtrack);
 			}
-			
+
 			$new_html=rtrim($new_html).$end_ellipses;
 
 			$new_html=preg_replace('#<!--.*(-->|$)#Us','',$new_html); // Our algorithm doesn't handle comments so we need to be slightly clever about it
@@ -489,7 +489,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 			{
 				$new_html=preg_replace('#<'.$t.'>\s*</'.$t.'>#','',$new_html);
 			}
-			
+
 			if ($ellipses)
 			{
 				$new_html=str_replace(array('</p>'.$entity,'</div>'.$entity),array($entity.'</p>',$entity.'</div>'),$new_html);
@@ -569,7 +569,7 @@ Tests...
 */
 
 	// NOTE: This algorithm isn't perfect. Grammar is exceptionally complex and it does not do a parse as such.
-	
+
 	// Work out "paragraph" end (paragraph end determined by next block/table tag, our block/table tag ending, or the end of $html)
 	$look_out=array( // We will assume there are no HTML tags that start with these, like dtango. There aren't, and if there are, it's very unlikely to cause a problem. We will also assume it's valid XHTML- no upper case tags.
 		'div','h1','h2','h3','h4','h5','h6','p','blockquote','pre','br','hr','fieldset','iframe','table',
@@ -614,7 +614,7 @@ Tests...
 		// Try at least to finish word (imperfect as e.g. "1.2" is a word but could be broken within)
 		if (!@in_array($html[$real_offset+1],array(false,NULL,'.',' ',"\t",chr(10),chr(13)))) return true;
 	}
-	
+
 	return false;
 }
 

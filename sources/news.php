@@ -201,7 +201,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	if (function_exists('xmlrpc_encode'))
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(0);
-		
+
 		// Send out on RSS cloud
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'news_rss_cloud WHERE register_time<'.strval(time()-25*60*60));
 		$start=0;
@@ -292,7 +292,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	$_title=$rows[0]['title'];
 	$_news=$rows[0]['news'];
 	$_news_article=$rows[0]['news_article'];
-	
+
 	require_code('urls2');
 
 	suggest_new_idmoniker_for('news','view',strval($id),$title);

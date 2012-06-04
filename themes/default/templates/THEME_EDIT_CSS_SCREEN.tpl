@@ -39,7 +39,7 @@
 					{+END}
 				</ul>
 			{+END}{+END}
-			
+
 			<h3>{!COMMON_CSS_PROPERTIES}:</h3>
 
 			<div>
@@ -404,7 +404,7 @@
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
 	<div>
 		<p class="css_editor_css_header"><label for="css">CSS</label>:</p>
-	
+
 		<div class="constrain_field">
 			<textarea onkeydown="if (key_pressed(event,9)) { insertTextbox(this,'	'); return false; }" id="css" class="wide_field textarea_scroll" cols="70" rows="30" name="css">{CSS*}</textarea>
 		</div>
@@ -471,7 +471,7 @@
 			document.getElementById('frame_css').contentWindow.document.getElementById('area_search').value=window.location.hash.substr(1,window.location.hash.length-1);
 			document.getElementById('frame_css').contentWindow.editArea.execCommand('area_search');
 		} , 2000);
-		
+
 		// If this is a contextual edit, start talking to the parent window
 		if ((window.opener) && (window.opener.document))
 		{

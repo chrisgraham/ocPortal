@@ -28,7 +28,7 @@ class quiz_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('quiz');
 
 		$this->quiz_id=add_quiz('Quiz1',15,'Begin','End','','somethng',60,time(),NULL,1,0,'Test',1,'Questions',NULL,0,NULL);
@@ -45,7 +45,7 @@ class quiz_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('Quiz2'==get_translated_text($GLOBALS['FORUM_DB']->query_value('quizzes','q_name',array('id'=>$this->quiz_id))));
 	}
-	
+
 	function tearDown()
 	{
 		delete_quiz($this->quiz_id);

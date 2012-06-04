@@ -34,7 +34,7 @@ class Hook_search_videos
 		if ($GLOBALS['SITE_DB']->query_value('videos','COUNT(*)')==0) return NULL;
 
 		require_lang('galleries');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('VIDEOS');
 		$info['default']=true;
@@ -44,7 +44,7 @@ class Hook_search_videos
 
 		return $info;
 	}
-	
+
 	/**
 	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
 	 *
@@ -92,7 +92,7 @@ class Hook_search_videos
 			case 'title':
 				$remapped_orderer='title';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='add_date';
 				break;
@@ -103,7 +103,7 @@ class Hook_search_videos
 		}
 
 		require_lang('galleries');
-	
+
 		// Calculate our where clause (search)
 		$sq=build_search_submitter_clauses('submitter',$author_id,$author);
 		if (is_null($sq)) return array(); else $where_clause.=$sq;

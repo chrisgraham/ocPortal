@@ -63,7 +63,7 @@ function foxy_utf8_to_nce($data='')
 
 	$max_count=5; // flag-bits in $max_mark ( 1111 1000 == 5 times 1)
 	$max_mark=248; // marker for a (theoretical ;-)) 5-byte-char and mask for a 4-byte-char;
-	
+
 	$html='';
 	for($str_pos=0;$str_pos<strlen($data);$str_pos++)
 	{
@@ -330,7 +330,7 @@ function entity_utf8_decode($data,$internal_charset)
 {
 	$encoded=htmlentities($data,ENT_COMPAT,'UTF-8'); // Only works on some servers, which is why we test the utility of it before running this function. NB: It is fine that this will double encode any pre-existing entities- as the double encoding will trivially be undone again later (amp can always decode to a lower ascii character)
 	if ((strlen($encoded)==0) && ($data!='')) $encoded=htmlentities($data,ENT_COMPAT);
-	
+
 	$test=mixed();
 	$test=false;
 	if (version_compare(phpversion(),'4.3.0')>=0)

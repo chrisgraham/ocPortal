@@ -223,7 +223,7 @@ function upgrade_module($zone,$module)
 function reinstall_module($zone,$module)
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
-	
+
 	$module_path=get_file_base().'/'._get_module_path($zone,$module);
 	require_code('database_action');
 	require_code('config2');
@@ -675,9 +675,9 @@ function _find_all_pages($zone,$type,$ext='php',$keep_ext_on=false,$cutoff_time=
 								foreach ($records as $record)
 								{
 									$file=$record['the_page'].'.txt';
-								
+
 									if (!file_exists($stub.'/'.$module_path.'/'.$file)) continue;
-								
+
 									if (!is_null($cutoff_time))
 										if (filectime($stub.'/'.$module_path.'/'.$file)<$cutoff_time) continue;
 

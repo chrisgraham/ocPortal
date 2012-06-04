@@ -30,7 +30,7 @@ class Hook_addon_registry_core_validation
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *
@@ -145,7 +145,7 @@ class Hook_addon_registry_core_validation
 					'MESSY_URL'=>placeholder_url(),
 					'RET'=>lorem_phrase(),
 			)));
-		
+
 		$display->attach(do_lorem_template('VALIDATE_LINE',array(
 					'NUMBER'=>placeholder_number(),
 			)));
@@ -156,13 +156,13 @@ class Hook_addon_registry_core_validation
 		$display->attach(lorem_word());
 		$display->attach(do_lorem_template('VALIDATE_TAG_END',array(
 			)));
-		
+
 		$display->attach(do_lorem_template('VALIDATE_TAG_NAME_START',array(
 			)));
 		$display->attach(lorem_word());
 		$display->attach(do_lorem_template('VALIDATE_TAG_NAME_END',array(
 			)));
-		
+
 		$display->attach(do_lorem_template('VALIDATE_MARKER_START',array(
 						)
 			));
@@ -173,10 +173,10 @@ class Hook_addon_registry_core_validation
 
 		$display->attach(do_lorem_template('VALIDATE_LINE_END',array(
 			)));
-		
+
 		$display->attach(do_lorem_template('VALIDATE_SCREEN_END',array(
 			)));
-		
+
 		return array(lorem_globalise(
 			$display,NULL,'',true));
 	}
@@ -239,10 +239,10 @@ class Hook_addon_registry_core_validation
 		$display->attach(lorem_phrase());
 		$display->attach(do_lorem_template('VALIDATE_LINE_END',array(
 			)));
-		
+
 		$display->attach(do_lorem_template('VALIDATE_SCREEN_END',array(
 			)));
-		
+
 		return array(
 			lorem_globalise($display,NULL,'',true));
 

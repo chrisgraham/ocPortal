@@ -62,10 +62,10 @@ function build_sitetree_menu($specifier)
 	require_code('zones2');
 
 	$page_link=implode(':',$specifier);
-	
+
 	$items=array();
 	$parents=array();
-	
+
 	$_pagelinks=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,false,$page_link));
 	if (!is_null($_pagelinks[0])) // If it's a CMS-supporting module (e.g. downloads)
 	{

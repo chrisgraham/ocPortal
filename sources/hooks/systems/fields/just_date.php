@@ -116,7 +116,7 @@ class Hook_fields_just_date
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		$time=mixed();
-		
+
 		if ((is_null($actual_value)) || ($actual_value==''))
 		{
 			$time=NULL;
@@ -130,7 +130,7 @@ class Hook_fields_just_date
 			$date_bits=explode((strpos($actual_value,'-')!==false)?'-':'/',$actual_value,3);
 			if (!array_key_exists(1,$date_bits)) $date_bits[1]=date('m');
 			if (!array_key_exists(2,$date_bits)) $date_bits[2]=date('Y');
-			
+
 			$time=array(0,0,intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
 		}
 		/*

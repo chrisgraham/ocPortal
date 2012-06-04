@@ -29,7 +29,7 @@ class Hook_Preview_ocf_welcome_email
 	function applies()
 	{
 		$member_id=get_param_integer('id',get_member());
-		
+
 		$applies=(get_param('page','')=='admin_ocf_welcome_emails');
 		if ($applies)
 		{
@@ -55,7 +55,7 @@ class Hook_Preview_ocf_welcome_email
 	{
 		$preview=new ocp_tempcode();
 		$preview->attach(comcode_to_tempcode(post_param('text'),get_member()));
-		
+
 		return array($preview,NULL);
 	}
 

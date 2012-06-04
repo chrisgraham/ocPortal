@@ -20,7 +20,7 @@
 
 class Block_side_printer_friendly
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_side_printer_friendly
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

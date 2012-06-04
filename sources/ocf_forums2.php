@@ -138,7 +138,7 @@ function ocf_get_topic_tree($forum_id=NULL,$tree=NULL,$title=NULL,$levels=NULL)
 function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_format=false,$selected_forum=NULL,$tree='',$skip=NULL,$order_sub_alpha=NULL,$use_compound_list=false,$levels=NULL,$do_stats=false)
 {
 	if (($levels==-1) && (!$use_compound_list)) return $use_compound_list?array(array(),''):array();
-	
+
 	global $FORUM_TREE_SECURE_CACHE;
 
 	if (is_null($member_id)) $member_id=get_member();

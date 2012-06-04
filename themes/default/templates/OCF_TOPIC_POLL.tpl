@@ -12,7 +12,7 @@ function ocfCheckPoll(form,min,max,error)
 	{
 		disable_button_just_clicked(form.elements['poll_vote_button']);
 	}
-	
+
 	return answer;
 }
 //]]></script>

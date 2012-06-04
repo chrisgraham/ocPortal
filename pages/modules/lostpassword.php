@@ -40,7 +40,7 @@ class Module_lostpassword
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -49,16 +49,16 @@ class Module_lostpassword
 	function run()
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->step1();
 		if ($type=='step2') return $this->step2();
 		if ($type=='step3') return $this->step3();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -68,7 +68,7 @@ class Module_lostpassword
 	{
 		return is_guest()?array('misc'=>'RESET_PASSWORD'):array();
 	}
-	
+
 	/**
 	 * The UI to ask for the username to get the lost password for.
 	 *
@@ -77,7 +77,7 @@ class Module_lostpassword
 	function step1()
 	{
 		$title=get_page_title('RESET_PASSWORD');
-	
+
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),'','username',trim(get_param('username','')),false));
@@ -199,9 +199,9 @@ class Module_lostpassword
 		}
 
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_email_address');
-	
+
 		$new_password=get_rand_password();
-	
+
 		// Send password in mail
 		$_login_url=build_url(array('page'=>'login','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member)),get_module_zone('login'),NULL,false,false,true);
 		$login_url=$_login_url->evaluate();

@@ -35,7 +35,7 @@ class Hook_realtime_rain_points
 		if (has_actual_page_access(get_member(),'points'))
 		{
 			require_lang('points');
-			
+
 			$rows=$GLOBALS['SITE_DB']->query('SELECT reason,amount,user_id AS member_id,date_and_time AS timestamp FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chargelog WHERE date_and_time BETWEEN '.strval($from).' AND '.strval($to));
 
 			foreach ($rows as $row)
@@ -90,7 +90,7 @@ class Hook_realtime_rain_points
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

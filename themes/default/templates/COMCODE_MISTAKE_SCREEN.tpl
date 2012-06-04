@@ -15,12 +15,12 @@
 		<div class="comcode_error_details_div">
 			{+START,IF,{EDITABLE}}
 				<h2>{!FIXED_COMCODE}</h2>
-	
+
 				{FORM}
 			{+END}
-	
+
 			<h2>{!ORIGINAL_COMCODE}</h2>
-	
+
 			<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder variable_table">
 				<tbody>
 					{LINES}
@@ -30,7 +30,7 @@
 	</div>
 
 	<h2>{!REPAIR_HELP}</h2>
-	
+
 	<a name="help" id="help"></a>
 
 	{!COMCODE_ERROR_HELP_B}

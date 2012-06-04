@@ -82,7 +82,7 @@ class Hook_cron_ocf_welcome_emails
 				if ($member['m_email_address']!='')
 				{
 					$message=$_text->evaluate(get_lang($member['id']));
-					
+
 					if ($newsletter_style)
 					{
 						$forename=$member['n_forename'];

@@ -20,7 +20,7 @@
 
 class Block_main_as_zone_access
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_as_zone_access
 		$info['parameters']=array('param');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

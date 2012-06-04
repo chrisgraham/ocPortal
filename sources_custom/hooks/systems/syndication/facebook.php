@@ -44,7 +44,7 @@ class Hook_Syndication_facebook
 			attach_message(do_lang_tempcode('FACEBOOK_OAUTH_FAIL',escape_html(get_param('error_reason'))),'warn');
 			return false;
 		}
-		
+
 		// oauth apparently worked
 		$access_token=$FACEBOOK_CONNECT->getAccessToken();
 

@@ -51,7 +51,7 @@ class Block_side_news_categories
 		$info['ttl']=60*24;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

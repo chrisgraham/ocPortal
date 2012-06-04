@@ -418,7 +418,7 @@ function do_set()
 		$pass_cookie=$SITE_INFO['pass_cookie'];
 		if (strpos($pass_cookie,':')!==false) $pass_cookie=substr($pass_cookie,$colon_pos+1);
 		@setcookie($pass_cookie,'',time()-100000,$cookie_path,$cookie_domain);*/
-		
+
 		echo '<p><strong>You have changed your cookie settings. Your old login cookies have been deleted, and the software will try and delete all cookie variations from your member\'s computers when they log out. However there is a chance you may need to let some members know that they need to delete their old cookies manually.</strong></p>';
 	}
 

@@ -38,7 +38,7 @@ class Block_main_top_galleries
 		$info['parameters']=array('param','zone');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_top_galleries
 		$info['ttl']=60*24;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -66,7 +66,7 @@ class Block_main_top_galleries
 
 		$number=array_key_exists('param',$map)?intval($map['param']):10;
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
-	
+
 		$rows_all=collapse_2d_complexity('rating_for_id','sum_rating',$GLOBALS['SITE_DB']->query('SELECT rating_for_id,AVG(rating) AS sum_rating FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','galleries').' GROUP BY rating_for_id'));
 		arsort($rows_all);
 		$rows=array();
@@ -138,7 +138,7 @@ class Block_main_top_galleries
 				}
 			}
 		}
-	
+
 		return do_template('BLOCK_MAIN_TOP_GALLERIES',array('_GUID'=>'f95e3288fe9bee2bcdd62b46cff15208','CONTENT'=>$out,'NUMBER'=>integer_format($number)));
 	}
 

@@ -125,7 +125,7 @@ class Hook_pointstore_bank
 				return warn_screen($title,do_lang_tempcode('_CANT_AFFORD_BANK'));
 			}
 		}
-		
+
 		// Actuate
 		require_code('points2');
 		charge_member(get_member(),$amount,do_lang('BANKING'));

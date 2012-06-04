@@ -20,7 +20,7 @@
 
 class Hook_search_downloads
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -34,17 +34,17 @@ class Hook_search_downloads
 		if ($GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)')==0) return NULL;
 
 		require_lang('downloads');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('SECTION_DOWNLOADS');
 		$info['default']=true;
 		$info['category']='category_id';
 		$info['integer_category']=true;
 		$info['extra_sort_fields']=array('file_size'=>do_lang_tempcode('_FILE_SIZE'));
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
 	 *
@@ -92,7 +92,7 @@ class Hook_search_downloads
 			case 'title':
 				$remapped_orderer='name';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='add_date';
 				break;
@@ -101,7 +101,7 @@ class Hook_search_downloads
 				$remapped_orderer=$sort;
 				break;
 		}
-	
+
 		require_code('downloads');
 		require_lang('downloads');
 		require_css('downloads');

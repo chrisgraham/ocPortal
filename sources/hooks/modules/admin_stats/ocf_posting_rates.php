@@ -29,9 +29,9 @@ class Hook_admin_stats_ocf_posting_rates
 	function info()
 	{
 		if (get_forum_type()!='ocf') return NULL;
-		
+
 		require_lang('stats');
-		
+
 		return array(
 			array('posting_rates'=>'POSTING_RATES',),
 			array('statistics_posting_rates',array('_SELF',array('type'=>'posting_rates'),'_SELF'),do_lang('POSTING_RATES'),('DESCRIPTION_POSTING_RATES')),
@@ -59,7 +59,7 @@ class Hook_admin_stats_ocf_posting_rates
 		if (get_param_integer('dated',0)==0)
 		{
 			$title=get_page_title('POSTING_RATES');
-			
+
 			$extra_fields=new ocp_tempcode();
 			require_code('form_templates');
 			$extra_fields->attach(form_input_tick(do_lang_tempcode('HOURLY_BREAKDOWNS'),do_lang_tempcode('DESCRIPTION_HOURLY_BREAKDOWNS'),'hourly',false));
@@ -79,7 +79,7 @@ class Hook_admin_stats_ocf_posting_rates
 		foreach (explode(',',get_param('poster_exception','')) as $e)
 		{
 			if (trim($e)=='') continue;
-			
+
 			$poster_exception.='p_poster<>'.strval(intval($e)).' AND ';
 		}
 
@@ -94,7 +94,7 @@ class Hook_admin_stats_ocf_posting_rates
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
 
 		$hourly=get_param_integer('hourly',0)==1;//($time_end-$time_start)<=60*60*24*2;
-		
+
 		$iterate_months=((floatval($time_end-$time_start)/(60.0*60.0*24.0))>100.0);
 
 		// Gather data
@@ -116,7 +116,7 @@ class Hook_admin_stats_ocf_posting_rates
 				{
 					$date=date('Y/m',mktime(0,0,0,$month,0,$year));
 					$posting_rates[$date]=0;
-					
+
 					$month++;
 					if ($month==13)
 					{

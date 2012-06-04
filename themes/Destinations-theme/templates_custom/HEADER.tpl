@@ -44,7 +44,7 @@ Copyright ocProducts Limited
 
 	{$,If the page is doing a refresh include the markup for that}
 	{REFRESH}
-	
+
 	{$,In developer mode we totally break relative URLs so we know if they're used - we shouldn't ever use them, as they reflect path assumptions}
 	{+START,IF,{$DEV_MODE}}<base href="http://example.com/" />{+END}
 
@@ -127,14 +127,14 @@ Copyright ocProducts Limited
 		<div id="menu-banner">
 			{$BLOCK,block=side_stored_menu,param=main_features,type=zone}
 		</div>
-	
+
 		<div class="banner2">
 			<div class="banner2-in">
 				<div class="logo-part">
 					<h2><a href="{$PAGE_LINK*,:start}">{$SITE_NAME*}</a></h2>
 					<p>{$HEADER_TEXT*}</p>
 				</div>
-	
+
 				<div class="image-part"><img src="{$IMG*,img1}" width="726" height="174" alt="" /></div>
 			</div>
 		</div>

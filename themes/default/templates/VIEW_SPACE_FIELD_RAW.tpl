@@ -2,7 +2,7 @@
 	<th>
 		{NAME*}
 	</th>
-	
+
 	{+START,IF,{$MOBILE}}
 	</tr>
 	<tr>

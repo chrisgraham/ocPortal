@@ -168,7 +168,7 @@ class Module_quiz
 				'q_entry'=>'*AUTO_LINK',
 				'q_winner_level'=>'INTEGER',
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_table('quiz_entries',array(
 				'id'=>'*AUTO',
 				'q_time'=>'TIME',
@@ -176,7 +176,7 @@ class Module_quiz
 				'q_quiz'=>'AUTO_LINK',
 				'q_results'=>'INTEGER',
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_table('quiz_entry_answer',array(
 				'id'=>'*AUTO',
 				'q_entry'=>'AUTO_LINK',
@@ -285,7 +285,7 @@ class Module_quiz
 	{
 		$start=get_param_integer('start',0);
 		$title=get_page_title('QUIZZES');
-		
+
 		require_code('quiz');
 
 		$max=get_param_integer('max',20);
@@ -313,7 +313,7 @@ class Module_quiz
 					break;
 			}
 		}
-		
+
 		$content=new ocp_tempcode();
 
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
@@ -462,7 +462,7 @@ class Module_quiz
 			'description'=>get_translated_text($quiz['q_start_text']),
 			'image'=>find_theme_image('bigicons/quiz'),
 		);
-		
+
 		$edit_url=new ocp_tempcode();
 		if ((has_actual_page_access(NULL,'cms_quiz',NULL,NULL)) && (has_edit_permission('mid',get_member(),$quiz['q_submitter'],'cms_quiz',array('quiz',$id))))
 		{
@@ -651,7 +651,7 @@ class Module_quiz
 							$marks++;
 							break;
 						}
-						
+
 						$correct_explanation=$a['q_explanation'];
 					}
 				}

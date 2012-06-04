@@ -32,7 +32,7 @@
 function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_member_id)
 {
 	require_css('ocf');
-	
+
 	$type=is_null($id)?'pt':'misc';
 
 	if ($type=='pt')
@@ -339,7 +339,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		}
 	}
 	$buttons=ocf_screen_button_wrap($button_array);
-	
+
 	$starter_title=($type=='pt')?do_lang_tempcode('WITH_TITLING'):new ocp_tempcode();
 
 	// Wrap it all up
@@ -645,7 +645,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	{
 		$forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('f.id'=>$forum_id),'',1,NULL,false,array('f_description','f_intro_question'));
 		if (!array_key_exists(0,$forum_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		
+
 		if (($forum_info[0]['f_redirection']!='') && (looks_like_url($forum_info[0]['f_redirection'])))
 		{
 			header('Location: '.$forum_info[0]['f_redirection']);

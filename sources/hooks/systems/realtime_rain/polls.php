@@ -39,10 +39,10 @@ class Hook_realtime_rain_polls
 			foreach ($rows as $row)
 			{
 				require_lang('polls');
-				
+
 				$timestamp=$row['timestamp'];
 				$member_id=$row['member_id'];
-				
+
 				$best=NULL;
 				$best_num=-1;
 				for ($i=1;$i<=10;$i++)
@@ -53,7 +53,7 @@ class Hook_realtime_rain_polls
 						$best_num=$row['votes'.strval($i)];
 					}
 				}
-				
+
 				if ($best_num==-1) continue;
 
 				$ticker_text=do_lang('VOTES_ARE_IN',strip_comcode(get_translated_text($row['question'])),strip_comcode(get_translated_text($best)));
@@ -78,7 +78,7 @@ class Hook_realtime_rain_polls
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

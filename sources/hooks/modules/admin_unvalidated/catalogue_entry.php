@@ -30,9 +30,9 @@ class Hook_unvalidated_catalogue_entry
 	{
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('modules','module_version',array('module_the_name'=>'catalogues'));
 		if (is_null($test)) return NULL;
-	
+
 		require_lang('catalogues');
-	
+
 		$info=array();
 		$info['db_table']='catalogue_entries';
 		$info['db_identifier']='id';
@@ -43,7 +43,7 @@ class Hook_unvalidated_catalogue_entry
 		$info['edit_type']='_edit_entry';
 		$info['edit_identifier']='id';
 		$info['title']=do_lang_tempcode('CATALOGUE_ENTRIES');
-	
+
 		return $info;
 	}
 

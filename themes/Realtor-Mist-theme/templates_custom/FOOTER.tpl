@@ -1,5 +1,5 @@
 			<div class="content-top"> </div>
-		
+
 			{+START,IF,{SHOW_BOTTOM}}
 				<div id="footer-part">
 					<div class="footer-in">
@@ -16,14 +16,14 @@
 					</div>
 				</div>
 			{+END}
-		
+
 			<div class="content-bot"> </div>
-		
+
 			{$JS_TEMPCODE,footer}
 			<script type="text/javascript">// <![CDATA[
 				scriptLoadStuff();
 				if (typeof window.scriptPageRendered!='undefined') scriptPageRendered();
-		
+
 				{+START,IF,{$EQ,{$_GET,wide_print},1}}try { window.print(); } catch (e) {};{+END}
 			//]]></script>
 			{$EXTRA_FOOT}

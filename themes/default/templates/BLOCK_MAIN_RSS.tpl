@@ -3,9 +3,9 @@
 		{+START,IF_NON_EMPTY,{AUTHOR}}
 		<p>{AUTHOR`}</p>
 		{+END}
-	
+
 		{CONTENT`}
-	
+
 		{+START,IF_NON_EMPTY,{COPYRIGHT}}
 			<p>{COPYRIGHT`}</p>
 		{+END}

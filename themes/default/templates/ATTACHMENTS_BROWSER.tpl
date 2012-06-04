@@ -4,7 +4,7 @@
 		<select id="member_id" name="member_id">
 			{LIST}
 		</select></label>
-		
+
 		<input onclick="disable_button_just_clicked(this);" class="button_pageitem" type="submit" value="{!PROCEED}" />
 	</form>
 

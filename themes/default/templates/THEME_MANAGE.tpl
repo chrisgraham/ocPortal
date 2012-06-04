@@ -40,10 +40,10 @@
 					&middot;
 				{+END}
 				<a id="theme_preview__{NAME*}" target="_blank" title="{!PREVIEW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,::keep_theme={NAME}}">{!PREVIEW}</a>
-				
+
 				&middot;
 				<a href="{SCREEN_PREVIEW_URL*}">{!SCREEN_PREVIEWS}</a>
-				
+
 			</td>
 		</tr>
 		<tr>

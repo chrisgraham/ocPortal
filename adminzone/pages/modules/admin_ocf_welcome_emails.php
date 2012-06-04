@@ -48,7 +48,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -94,7 +94,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -104,7 +104,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'WELCOME_EMAILS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -145,7 +145,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 	function misc()
 	{
 		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_configuration')),'warn');
-		
+
 		require_code('templates_donext');
 		return do_next_manager(get_page_title('WELCOME_EMAILS'),comcode_lang_string('DOC_WELCOME_EMAILS'),
 					array(
@@ -211,9 +211,9 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','w_name ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -244,7 +244,7 @@ class Module_admin_ocf_welcome_emails extends standard_aed_module
 
 			$fields->attach(results_entry(array($row['w_name'],get_translated_text($row['w_subject']),do_lang_tempcode('HOURS',escape_html(strval($row['w_send_time']))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 

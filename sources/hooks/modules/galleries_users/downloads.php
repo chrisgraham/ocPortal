@@ -30,7 +30,7 @@ class Hook_gu_downloads
 	function new_donext_icons($cat)
 	{
 		if (!addon_installed('downloads')) return array();
-		
+
 		if (substr($cat,0,9)!='download_') return array();
 
 		$id=intval(substr($cat,9));

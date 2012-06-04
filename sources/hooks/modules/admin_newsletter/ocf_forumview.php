@@ -29,7 +29,7 @@ class Hook_whats_news_ocf_forumview
 	function choose_categories()
 	{
 		if (get_forum_type()!='ocf') return NULL;
-		
+
 		require_code('ocf_forums2');
 		return array(ocf_get_forum_tree_secure(NULL,NULL,true),do_lang('SECTION_FORUMS'));
 	}
@@ -45,7 +45,7 @@ class Hook_whats_news_ocf_forumview
 	function run($cutoff_time,$lang,$filter)
 	{
 		$new=new ocp_tempcode();
-	
+
 		if (get_forum_type()!='ocf') return array();
 
 		require_code('ocfiltering');

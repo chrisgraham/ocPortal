@@ -80,7 +80,7 @@ function initialise_special_page_types($special_page_type)
 function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 {
 	global $RECORDED_TEMPLATES_USED;
-	
+
 	if (function_exists('set_time_limit')) @set_time_limit(280);
 
 	$echo=do_header();
@@ -93,7 +93,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$out->evaluate_echo(); // False evaluation
 		ob_end_clean();
 	}
-	
+
 	// HACKHACK: Yuck. we have to after-the-fact make it wide, and empty lots of internal caching to reset the state.
 	$_GET['wide_high']='1';
 	$_GET['wide']='1';
@@ -114,7 +114,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		header('Location: '.$url->evaluate());
 		exit();
 	}
-	
+
 	// Site Tree Editor
 	if ($special_page_type=='site_tree')
 	{
@@ -122,7 +122,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		header('Location: '.$url->evaluate());
 		exit();
 	}
-	
+
 	// IDE linkage
 	if ($special_page_type=='ide_linkage')
 	{
@@ -193,16 +193,16 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 	if ($special_page_type=='theme_images')
 	{
 		$title=get_page_title('THEME_IMAGE_EDITING');
-		
+
 		$theme_images=new ocp_tempcode();
-		
+
 		global $RECORDED_IMG_CODES;
 		foreach (array_keys($RECORDED_IMG_CODES) as $theme_image_details)
 		{
 			list($id,$theme,$lang)=unserialize($theme_image_details);
 
 			$url=build_url(array('page'=>'admin_themes','type'=>'edit_image','theme'=>is_null($theme)?$GLOBALS['FORUM_DRIVER']->get_theme():$theme,'lang'=>$lang,'id'=>$id),'adminzone');
-			
+
 			$image=find_theme_image($id,false,false,$theme,$lang);
 			if ($image=='') continue;
 
@@ -618,7 +618,7 @@ function erase_cached_language()
 			closedir($_dir);
 		}
 	}
-	
+
 	init__lang();
 	require_all_lang();
 }
@@ -632,7 +632,7 @@ function erase_cached_templates($preserve_some=false)
 {
 	global $ERASED_TEMPLATES_ONCE;
 	$ERASED_TEMPLATES_ONCE=true;
-	
+
 	require_code('themes2');
 	$themes=find_all_themes();
 	$langs=find_all_langs(true);

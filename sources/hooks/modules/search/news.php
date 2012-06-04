@@ -20,7 +20,7 @@
 
 class Hook_search_news
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -34,7 +34,7 @@ class Hook_search_news
 		if ($GLOBALS['SITE_DB']->query_value('news','COUNT(*)')==0) return NULL;
 
 		require_lang('news');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('NEWS');
 		$info['default']=true;
@@ -43,7 +43,7 @@ class Hook_search_news
 
 		return $info;
 	}
-	
+
 	/**
 	 * Get a list of entries for the content covered by this search hook. In hierarchical list selection format.
 	 *

@@ -48,7 +48,7 @@ class Database_Static_ibm
 	{
 		return ''; // db2admin  ... ODBC does not need to use this
 	}
-	
+
 	/**
 	 * Get the default password for making db connections (used by the installer as a default).
 	 *
@@ -58,7 +58,7 @@ class Database_Static_ibm
 	{
 		return '';
 	}
-	
+
 	/**
 	 * Create a table index.
 	 *
@@ -72,7 +72,7 @@ class Database_Static_ibm
 		if ($index_name[0]=='#') return;
 		$this->db_query('CREATE INDEX index'.$index_name.'_'.strval(mt_rand(0,10000)).' ON '.$table_name.'('.$_fields.')',$db);
 	}
-	
+
 	/**
 	 * Change the primary key of a table.
 	 *
@@ -85,7 +85,7 @@ class Database_Static_ibm
 		$this->db_query('ALTER TABLE '.$table_name.' DROP PRIMARY KEY',$db);
 		$this->db_query('ALTER TABLE '.$table_name.' ADD PRIMARY KEY ('.implode(',',$new_key).')',$db);
 	}
-	
+
 	/**
 	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
 	 *
@@ -95,7 +95,7 @@ class Database_Static_ibm
 	{
 		return 1;
 	}
-	
+
 	/**
 	 * Get a map of ocPortal field types, to actual mySQL types.
 	 *
@@ -127,7 +127,7 @@ class Database_Static_ibm
 		);
 		return $type_remap;
 	}
-	
+
 	/**
 	 * Create a new table.
 	 *
@@ -138,13 +138,13 @@ class Database_Static_ibm
 	function db_create_table($table_name,$fields,$db)
 	{
 		$type_remap=$this->db_get_type_remap();
-	
+
 		/*if (multi_lang()==0)
 		{
 			$type_remap['LONG_TRANS']=$type_remap['LONG_TEXT'];
 			$type_remap['SHORT_TRANS']=$type_remap['SHORT_TEXT'];
 		}*/
-	
+
 		$_fields='';
 		$keys='';
 		foreach ($fields as $name=>$type)
@@ -155,25 +155,25 @@ class Database_Static_ibm
 				if ($keys!='') $keys.=', ';
 				$keys.=$name;
 			}
-	
+
 			if ($type[0]=='?') // Is perhaps null
 			{
 				$type=substr($type,1);
 				$perhaps_null='';
 			} else $perhaps_null='NOT NULL';
-	
+
 			$type=$type_remap[$type];
-	
+
 			$_fields.="	  $name $type $perhaps_null,\n";
 		}
-	
+
 		$query='CREATE TABLE '.$table_name.' (
 		  '.$_fields.'
 		  PRIMARY KEY ('.$keys.')
 		)';
 		$this->db_query($query,$db,NULL,NULL);
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
 	 *
@@ -185,7 +185,7 @@ class Database_Static_ibm
 	{
 		return $attribute." LIKE '".$this->db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
 	 *
@@ -197,7 +197,7 @@ class Database_Static_ibm
 	{
 		return $attribute."<>'".$this->db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
 	 *
@@ -207,7 +207,7 @@ class Database_Static_ibm
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Delete a table.
 	 *
@@ -218,7 +218,7 @@ class Database_Static_ibm
 	{
 		$this->db_query('DROP TABLE '.$table,$db,NULL,NULL,true);
 	}
-	
+
 	/**
 	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
 	 *
@@ -228,7 +228,7 @@ class Database_Static_ibm
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
 	 *
@@ -239,7 +239,7 @@ class Database_Static_ibm
 	{
 		return $this->db_escape_string($pattern);
 	}
-	
+
 	/**
 	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
 	 */
@@ -254,7 +254,7 @@ class Database_Static_ibm
 			}
 		}
 	}
-	
+
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
@@ -269,14 +269,14 @@ class Database_Static_ibm
 	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
 	{
 		if ($db_host!='localhost') fatal_exit(do_lang_tempcode('ONLY_LOCAL_HOST_FOR_TYPE'));
-	
+
 		// Potential cacheing
 		global $CACHE_DB;
 		if (isset($CACHE_DB[$db_name][$db_host]))
 		{
 			return $CACHE_DB[$db_name][$db_host];
 		}
-	
+
 		if (!function_exists('odbc_connect'))
 		{
 			$error='The ODBC PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
@@ -287,7 +287,7 @@ class Database_Static_ibm
 			}
 			critical_error('PASSON',$error);
 		}
-	
+
 		$db=$persistent?@odbc_pconnect($db_name,$db_user,$db_password):@odbc_connect($db_name,$db_user,$db_password);
 		if ($db===false)
 		{
@@ -299,12 +299,12 @@ class Database_Static_ibm
 			}
 			critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
 		}
-	
+
 		if (!$db) fatal_exit(do_lang('CONNECT_DB_ERROR'));
 		$CACHE_DB[$db_name][$db_host]=$db;
 		return $db;
 	}
-	
+
 	/**
 	 * Find whether full-text-search is present
 	 *
@@ -315,7 +315,7 @@ class Database_Static_ibm
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
 	 *
@@ -326,7 +326,7 @@ class Database_Static_ibm
 	{
 		return str_replace("'","''",$string);
 	}
-	
+
 	/**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
 	 *
@@ -343,13 +343,13 @@ class Database_Static_ibm
 		if (!is_null($max))
 		{
 			if (is_null($start)) $max+=$start;
-	
+
 			if (strtoupper(substr($query,0,7))=='SELECT ') // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
 			{
 				$query.=' FETCH FIRST '.strval($max+$start).' ROWS ONLY';
 			}
 		}
-	
+
 		$results=@odbc_exec($db,$query);
 		if (($results===false) && (!$fail_ok))
 		{
@@ -366,27 +366,27 @@ class Database_Static_ibm
 				return NULL;
 			}
 		}
-	
+
 		if ((strtoupper(substr($query,0,7))=='SELECT ') && (!$results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}
-	
+
 		if ($get_insert_id)
 		{
 			if (strtoupper(substr($query,0,7))=='UPDATE ') return NULL;
-	
+
 			$pos=strpos($query,'(');
 			$table_name=substr($query,12,$pos-13);
-	
+
 			$res2=odbc_exec($db,'SELECT MAX(id) FROM '.$table_name);
 			$ar2=odbc_fetch_row($res2);
 			return $ar2[0];
 		}
-	
+
 		return NULL;
 	}
-	
+
 	/**
 	 * Get the rows returned from a SELECT query.
 	 *
@@ -398,7 +398,7 @@ class Database_Static_ibm
 	{
 		$out=array();
 		$i=0;
-	
+
 		$num_fields=odbc_num_fields($results);
 		$types=array();
 		$names=array();
@@ -407,29 +407,29 @@ class Database_Static_ibm
 			$types[$x]=odbc_field_type($results,$x);
 			$names[$x]=odbc_field_name($results,$x);
 		}
-	
+
 		while (odbc_fetch_row($results))
 		{
 			if ((is_null($start)) || ($i>=$start))
 			{
 				$newrow=array();
-	
+
 				for ($j=1;$j<=$num_fields;$j++)
 				{
 					$v=odbc_result($results,$j);
-	
+
 					$type=$types[$j];
 					$name=strtolower($names[$j]);
-	
+
 					if (($type=='INTEGER') || ($type=='SMALLINT') || ($type=='UINTEGER'))
 					{
 						if (!is_null($v)) $newrow[$name]=intval($v); else $newrow[$name]=NULL;
 					} else $newrow[$name]=$v;
 				}
-	
+
 				$out[]=$newrow;
 			}
-	
+
 			$i++;
 		}
 		odbc_free_result($results);

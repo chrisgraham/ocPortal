@@ -40,7 +40,7 @@ class Module_admin_emaillog
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_emaillog
 	{
 		return array('misc'=>'EMAIL_LOG');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -61,7 +61,7 @@ class Module_admin_emaillog
 		$type=get_param('type','misc');
 
 		require_lang('emaillog');
-	
+
 		if ($type=='misc') return $this->show();
 		if ($type=='edit') return $this->edit();
 		if ($type=='_edit') return $this->_edit();
@@ -111,7 +111,7 @@ class Module_admin_emaillog
 				$date_time=make_string_tempcode(escape_html(get_timezoned_date($row['m_date_and_time'])));
 				$date_time=do_lang_tempcode('MAIL_WAS_LOGGED',$date_time);
 			}
-			
+
 			$from_email=$row['m_from_email'];
 			if ($from_email=='') $from_email=get_option('staff_address');
 			$from_name=$row['m_from_name'];
@@ -149,7 +149,7 @@ class Module_admin_emaillog
 	function edit()
 	{
 		$title=get_page_title('HANDLE_QUEUED_MESSAGE');
-		
+
 		$id=get_param_integer('id');
 
 		$fields=new ocp_tempcode();
@@ -200,7 +200,7 @@ class Module_admin_emaillog
 	function _edit()
 	{
 		$title=get_page_title('HANDLE_QUEUED_MESSAGE');
-		
+
 		$id=get_param_integer('id');
 
 		$action=post_param('action');
@@ -273,7 +273,7 @@ class Module_admin_emaillog
 	function mass_send()
 	{
 		$title=get_page_title('SEND_ALL');
-		
+
 		require_code('mail');
 		$rows=$GLOBALS['SITE_DB']->query_select('logged_mail_messages',array('*'),array('m_queued'=>1));
 		foreach ($rows as $row)
@@ -284,10 +284,10 @@ class Module_admin_emaillog
 			$to_name=unserialize($row['m_to_name']);
 			$from_email=$row['m_from_email'];
 			$from_name=$row['m_from_name'];
-			
+
 			mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true);
 		}
-		
+
 		$GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued'=>0),array('m_queued'=>1));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
@@ -302,7 +302,7 @@ class Module_admin_emaillog
 	function mass_delete()
 	{
 		$title=get_page_title('DELETE_ALL');
-		
+
 		$count=$GLOBALS['SITE_DB']->query_value('logged_mail_messages','COUNT(*)',array('m_queued'=>1));
 
 		$GLOBALS['SITE_DB']->query_delete('logged_mail_messages',array('m_queued'=>1));

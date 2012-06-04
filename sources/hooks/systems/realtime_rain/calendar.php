@@ -63,7 +63,7 @@ class Hook_realtime_rain_calendar
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

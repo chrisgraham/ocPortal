@@ -44,7 +44,7 @@ Copyright ocProducts Limited
 
 	{$,If the page is doing a refresh include the markup for that}
 	{REFRESH}
-	
+
 	{$,In developer mode we totally break relative URLs so we know if they're used - we shouldn't ever use them, as they reflect path assumptions}
 	{+START,IF,{$DEV_MODE}}<base href="http://example.com/" />{+END}
 
@@ -140,7 +140,7 @@ Copyright ocProducts Limited
 				{$BLOCK,block=side_stored_menu,param=_zone_menu,type=zone}
 			{+END}
 		</div>
-		
+
 		{$,Admin Zone options}
 		{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}
 			<div class="adminzone_search">
@@ -170,7 +170,7 @@ Copyright ocProducts Limited
 				//]]></script>
 			{+END}
 		{+END}
-		
+
 		{$,Out side Admin Zone we have the banner}
 		{+START,IF,{$NAND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}{+START,IF,{$NOT,{$MOBILE}}}
 			{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}

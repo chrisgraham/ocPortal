@@ -29,7 +29,7 @@ class forum_category_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('ocf_forums_action');
 		require_code('ocf_forums_action2');
 		require_lang('ocf');
@@ -48,7 +48,7 @@ class forum_category_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('New_title'==$GLOBALS['FORUM_DB']->query_value('f_categories','c_title',array('id'=>$this->forum_cat_id)));
 	}
-	
+
 	function tearDown()
 	{
 		ocf_delete_category($this->forum_cat_id,0);

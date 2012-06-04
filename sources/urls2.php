@@ -203,7 +203,7 @@ function _convert_url_to_path($url)
 		{
 			$file_path_stub=get_file_base().'/'.$file_path_stub;
 		}
-	
+
 		return $file_path_stub;
 	}
 
@@ -223,7 +223,7 @@ function _fixup_protocolless_urls($in)
 	$in=remove_url_mistakes($in); // Chain in some other stuff
 
 	if (strpos($in,'://')!==false) return $in; // Absolute
-	
+
 	if (substr($in,0,1)=='#') return $in;
 	if (substr($in,0,1)=='%') return $in;
 	if (substr($in,0,1)=='{') return $in;
@@ -290,7 +290,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 		foreach ($mappings as $mapping) // e.g. array(array('page'=>'cedi','id'=>NULL),'pg/s/ID',true),
 		{
 			if (is_null($mapping)) continue;
-			
+
 			list($params,$match_string,)=$mapping;
 			$match_string_pattern=preg_replace('#[A-Z]+#','[^\&\?]+',preg_quote($match_string));
 
@@ -298,7 +298,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 			if (preg_match('#^'.$match_string_pattern.'(/index\.php|$)#',$parsed_url['path'])!=0)
 			{
 				$attributes=array_merge($attributes,$params);
-				
+
 				$bits_pattern=explode('/',preg_replace('#\.htm$#','',$match_string));
 				$bits_real=explode('/',preg_replace('#\.htm$#','',$parsed_url['path']),count($bits_pattern));
 				foreach ($bits_pattern as $i=>$bit)
@@ -345,10 +345,10 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 		if (($key!='page') && ($key!='type') && ($key!='id'))
 			$page_link.=':'.$key.'='.urldecode($val);
 	}
-	
+
 	// Hash bit?
 	if (array_key_exists('fragment',$parsed_url)) $page_link.='#'.$parsed_url['fragment'];
-	
+
 	return $page_link;
 }
 
@@ -382,7 +382,7 @@ function _page_path_to_pagelink($page)
 			}
 		}
 	} else $page2='';
-	
+
 	return $page2;
 }
 
@@ -494,7 +494,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
 		'm_moniker'=>$moniker,
 		'm_deprecated'=>0
 	));
-	
+
 	return $moniker;
 }
 
@@ -535,7 +535,7 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
 		{
 			if ($moniker==preg_replace('#^.*/#','',$no_exists_check_for)) return $moniker; // This one is okay, we know it is safe
 		}
-		
+
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id).' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')');
 		if (!is_null($test)) // Oh dear, will pass to next iteration, but trying a new moniker
 		{
@@ -566,9 +566,9 @@ function _give_moniker_scope($page,$type,$id,$main)
 	$looking_for='_SEARCH:'.$page.':'.$type.':_WILD';
 
 	$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
-	
+
 	$moniker=$main;
-	
+
 	if (is_null($ob_info)) return $moniker;
 
 	if (!is_null($ob_info['parent_category_field']))
@@ -602,13 +602,13 @@ function _give_moniker_scope($page,$type,$id,$main)
 		{
 			$tree=find_id_moniker(array('page'=>$view_category_pagelink_pattern[1],'type'=>$view_category_pagelink_pattern[2],'id'=>$parent));
 		}
-		
+
 		// Okay, so our full tree path is as follows
 		if (!is_null($tree))
 		{
 			$moniker=$tree.'/'.$main;
 		}
 	}
-	
+
 	return $moniker;
 }

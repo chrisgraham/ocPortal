@@ -40,7 +40,7 @@
 						{+START,IF,{$HIDE_HELP_PANEL}}
 						<a id="helper_panel_toggle" href="#" onclick="return help_panel(true);"><img title="{!HELP_OR_ADVICE}: {!SHOW}" alt="{!HELP_OR_ADVICE}: {!SHOW}" src="{$IMG*,help_panel_show}" /></a>
 						{+END}
-					
+
 						<div id="helper_panel_contents"{+START,IF,{$HIDE_HELP_PANEL}} style="display: none"{$?,{$VALUE_OPTION,html5}, aria-expanded="false"}{+END}>
 							<h2>{!HELP_OR_ADVICE}</h2>
 

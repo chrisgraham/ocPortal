@@ -35,7 +35,7 @@ function get_chmod_array()
 //	{
 		$extra_files=array('collaboration/pages/html_custom','collaboration/pages/html_custom/'.$LANG,'collaboration/pages/comcode_custom','collaboration/pages/comcode_custom/'.$LANG,);
 //	} else $extra_files=array();
-	
+
 	if (function_exists('find_all_hooks'))
 	{
 		$hooks=find_all_hooks('systems','addon_registry');
@@ -45,9 +45,9 @@ function get_chmod_array()
 			//require_code('hooks/systems/addon_registry/'.filter_naughty_harsh($hook));
 			//$object=object_factory('Hook_addon_registry_'.filter_naughty_harsh($hook));
 			//$extra_files=array_merge($extra_files,$object->get_chmod_array());
-			
+
 			// Save memory compared to above commented code...
-			
+
 			$path=get_custom_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($hook).'.php';
 			if (!file_exists($path))
 			{

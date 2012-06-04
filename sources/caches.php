@@ -39,7 +39,7 @@ function init__caches()
 		elseif (function_exists('apc_fetch'))
 		{
 			require_code('caches_apc');
-			
+
 			$MEM_CACHE=new apccache();
 			global $ECACHE_OBJECTS;
 			$ECACHE_OBJECTS=apc_fetch(get_file_base().'ECACHE_OBJECTS');
@@ -60,7 +60,7 @@ function init__caches()
 		elseif (function_exists('xcache_get'))
 		{
 			require_code('caches_xcache');
-			
+
 			$MEM_CACHE=new xcache();
 			global $ECACHE_OBJECTS;
 			$ECACHE_OBJECTS=xcache_get(get_file_base().'ECACHE_OBJECTS');
@@ -69,7 +69,7 @@ function init__caches()
 		elseif (function_exists('wincache_ucache_get'))
 		{
 			require_code('caches_wincache');
-			
+
 			$MEM_CACHE=new wincache();
 			global $ECACHE_OBJECTS;
 			$ECACHE_OBJECTS=wincache_ucache_get(get_file_base().'ECACHE_OBJECTS');
@@ -150,14 +150,14 @@ function decache($cached_for,$identifier=NULL)
 {
 	if (running_script('stress_test_loader')) return;
 	if (get_page_name()=='admin_import') return;
-	
+
 	// NB: If we use persistant cache we still need to decache from DB, in case we're switching between for whatever reason. Or maybe some users use persistant cache and others don't. Or maybe some nodes do and others don't.
-	
+
 	if ($GLOBALS['MEM_CACHE']!==NULL)
 	{
 		persistant_cache_delete(array('CACHE',$cached_for));
 	}
-	
+
 	$where=array('cached_for'=>$cached_for);
 	if ($identifier!==NULL) $where['identifier']=md5(serialize($identifier));
 	$GLOBALS['SITE_DB']->query_delete('cache',$where);
@@ -180,7 +180,7 @@ function decache($cached_for,$identifier=NULL)
 function find_cache_on($codename)
 {
 	if (defined('HIPHOP_PHP')) return;
-	
+
 	// See if we have it cached
 	global $CACHE_ON;
 	if ($CACHE_ON===NULL)
@@ -265,7 +265,7 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false,
 	{
 		if ($stale)
 			request_via_cron($codename,$map,$tempcode);
-		
+
 		$cache=$cache_rows[0]['the_value'];
 		if ($cache_rows[0]['langs_required']!='')
 		{

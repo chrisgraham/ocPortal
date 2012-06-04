@@ -30,7 +30,7 @@ class Hook_do_next_menus_ecommerce
 	function run()
 	{
 		if (!addon_installed('ecommerce')) return array();
-		
+
 		return array(
 			array('setup','ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),('DOC_ECOMMERCE')),
 			array('usage','ecommerce',array('admin_ecommerce',array('type'=>'ecom_usage'),get_module_zone('admin_ecommerce')),do_lang_tempcode('ECOMMERCE'),('DOC_ECOMMERCE')),

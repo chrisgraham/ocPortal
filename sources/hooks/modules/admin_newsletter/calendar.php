@@ -31,7 +31,7 @@ class Hook_whats_news_calendar
 		if (!addon_installed('calendar')) return NULL;
 
 		require_lang('calendar');
-	
+
 		require_code('calendar');
 		return array(nice_get_event_types(),do_lang('CALENDAR'));
 	}
@@ -49,9 +49,9 @@ class Hook_whats_news_calendar
 		if (!addon_installed('calendar')) return array();
 
 		require_lang('calendar');
-	
+
 		$new=new ocp_tempcode();
-	
+
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'e_type');
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events WHERE e_add_date>'.strval((integer)$cutoff_time).' AND e_is_public=1 AND ('.$or_list.') ORDER BY e_add_date DESC',300);
@@ -65,7 +65,7 @@ class Hook_whats_news_calendar
 			$member_id=(is_guest($row['e_submitter']))?NULL:strval($row['e_submitter']);
 			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'654cafa75ec9f9b8e0e0fb666f28fb37','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
 		}
-	
+
 		return array($new,do_lang('CALENDAR','','','',$lang));
 	}
 

@@ -20,7 +20,7 @@
 
 class Hook_search_download_categories
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -34,14 +34,14 @@ class Hook_search_download_categories
 		if ($GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)')<=1) return NULL;
 
 		require_lang('downloads');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('DOWNLOAD_CATEGORIES');
 		$info['default']=true;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -76,12 +76,12 @@ class Hook_search_download_categories
 			case 'title':
 				$remapped_orderer='category';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='add_date';
 				break;
 		}
-	
+
 		require_lang('downloads');
 
 		// Calculate our where clause (search)

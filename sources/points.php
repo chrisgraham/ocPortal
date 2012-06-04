@@ -165,7 +165,7 @@ function get_gift_points_to_give($member)
 	{
 		require_lang('ocf');
 		require_code('ocf_groups');
-		
+
 		$base=ocf_get_member_best_group_property($member,'gift_points_base');
 		$per_day=ocf_get_member_best_group_property($member,'gift_points_per_day');
 	} else

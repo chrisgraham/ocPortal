@@ -68,7 +68,7 @@ class Hook_realtime_rain_banners
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

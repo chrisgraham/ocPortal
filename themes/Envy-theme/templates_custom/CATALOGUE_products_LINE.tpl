@@ -5,7 +5,7 @@
 				<div class="product-image-box">
 					<a title="" class="product-image">{FIELD_7_THUMB}</a>
 				</div>
-				
+
 			{+END}
 			<div class="name">
 				<span class="name">{FIELD_0}</span>

@@ -32,7 +32,7 @@ class Hook_do_next_menus_workflows
 		// TODO: Make workflows register itself in the addon registry
 		//if (!addon_installed('workflows')) return array();
 		require_lang('workflows');
-		
+
 		return array(
 			array('cms','workflows',array('admin_workflow',array('type'=>'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value('workflow_requirements','COUNT(DISTINCT workflow_name)'))))),('DOC_WORKFLOWS')),
 		);

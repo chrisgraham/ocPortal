@@ -32,7 +32,7 @@ class Hook_stats_filedump
 		if (!file_exists(get_custom_file_base().'/uploads/filedump')) return new ocp_tempcode();
 
 		require_lang('filedump');
-		
+
 		require_code('files2');
 
 		$bits=new ocp_tempcode();

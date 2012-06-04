@@ -117,7 +117,7 @@ class Hook_smf
 		$mbname='';
 		$boardurl='';
 		$cookiename='';
-		
+
 		require($file_base.'/Settings.php');
 
 		$rows=$db->query_select('settings');
@@ -331,9 +331,9 @@ class Hook_smf
 					import_id_remap_put('member',strval($row['muid']),$test);
 					continue;
 				}
-	
+
 				$language='EN';
-	
+
 				$secondary=explode(',',$row['additionalGroups']);
 				$secondary_groups=array();
 				foreach ($secondary as $g)
@@ -424,10 +424,10 @@ class Hook_smf
 	{
 		$boardurl='';
 		$boarddir='';
-		
+
 		global $STRICT_FILE;
 		require($file_base.'/Settings.php');
-	
+
 		$options=$db->query('SELECT * FROM '.$table_prefix.'settings WHERE variable LIKE \''.db_encode_like('%avatar%').'\'');
 		$options_array=array();
 
@@ -440,7 +440,7 @@ class Hook_smf
 		foreach ($options as $option)
 		{
 			$options_array[$option['variable']]=$option['value'];
-			
+
 			if ($option['variable']=='avatar_url') $avatar_gallery_path=$option['value'];
 		}
 
@@ -521,10 +521,10 @@ class Hook_smf
 				}
 
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url'=>$avatar_url),array('id'=>$member_id),'',1);
-	
+
 				import_id_remap_put('member_files',strval($row['ID_MEMBER']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -591,7 +591,7 @@ class Hook_smf
 			}
 		}
 	}
-	
+
 	/**
 	 * Convert an IP address from phpBB hexadecimal string format.
 	 *
@@ -619,7 +619,7 @@ class Hook_smf
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('category',strval($row['ID_CAT']))) continue;
-	
+
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
@@ -646,7 +646,7 @@ class Hook_smf
 	function import_ocf_forums($db,$table_prefix,$old_base_dir)
 	{
 		require_code('ocf_forums_action2');
-		
+
 		$remap_id=array();
 
 		$rows=$db->query_select('boards');
@@ -734,7 +734,7 @@ class Hook_smf
 
 				import_id_remap_put('topic',strval($row['ID_TOPIC']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -840,7 +840,7 @@ class Hook_smf
 	function fix_links($post,$db,$table_prefix,$file_base='')
 	{
 		$boardurl='';
-		
+
 		require($file_base.'/Settings.php');
 		$old_base_url=$boardurl;
 
@@ -868,7 +868,7 @@ class Hook_smf
 	{
 		$boardurl='';
 		$boarddir='';
-		
+
 		require($file_base.'/Settings.php');
 		$homeurl=$boardurl;
 
@@ -1023,7 +1023,7 @@ class Hook_smf
 			import_id_remap_put('poll',strval($row['ID_POLL']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1097,7 +1097,7 @@ class Hook_smf
 				ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,NULL,$last_edit_time,$last_edit_by,false,false,NULL,false);
 				$first_post=false;
 			}
-	
+
 			import_id_remap_put('pt',strval($row['ID_PM']),$topic_id);
 		}
 	}
@@ -1154,7 +1154,7 @@ class Hook_smf
 	function import_notifications($db,$table_prefix,$file_base)
 	{
 		require_code('notifications');
-		
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -1163,7 +1163,7 @@ class Hook_smf
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('topic_notification',strval($row['ID_TOPIC']).'-'.strval($row['ID_MEMBER']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['ID_MEMBER']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['ID_TOPIC']),true);
@@ -1172,12 +1172,12 @@ class Hook_smf
 
 				import_id_remap_put('topic_notification',strval($row['ID_TOPIC']).'-'.strval($row['ID_MEMBER']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1219,7 +1219,7 @@ class Hook_smf
 	function import_calendar($db,$table_prefix,$file_base)
 	{
 		require_code('calendar2');
-		
+
 		$rows=$db->query_select('calendar');
 		foreach ($rows as $row)
 		{

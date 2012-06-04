@@ -73,7 +73,7 @@ class Module_admin_orders
 		if($type=='order_act')
 		{
 			$action		=	either_param('action');
-	
+
 			if ($action=='add_note') 	return $this->add_note();			
 			if ($action=='dispatch') 	return $this->dispatch();
 			if ($action=='del_order') 	return $this->delete_order();
@@ -84,7 +84,7 @@ class Module_admin_orders
 		if ($type=='_add_note') 		return $this->_add_note();
 		if ($type=='order_export') 	return $this->order_export();
 		if ($type=='_order_export') 	return $this->_order_export();
-	
+
 		return new ocp_tempcode();
 	}
 
@@ -118,7 +118,7 @@ class Module_admin_orders
 		require_code('shopping');
 
 		$title		=	get_page_title('ORDER_LIST');
-		
+
 		$filter		=	get_param('filter',NULL);
 
 		$search		=	get_param('search','',true);
@@ -139,7 +139,7 @@ class Module_admin_orders
 			$cond	.=	" AND (t1.id LIKE '".db_encode_like(str_replace('#','',$search).'%')."' OR t2.m_username LIKE '".db_encode_like(str_replace('#','',$search).'%')."')";
 			$extra_join=' JOIN '.get_table_prefix().'f_members t2 ON t2.id=t1.c_member';
 		}
-		
+
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ecommerce:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:misc',do_lang_tempcode('ORDERS'))));
 
 		$orders		=	array();
@@ -160,7 +160,7 @@ class Module_admin_orders
 		if (count($query_sort)==1) $query_sort[]='ASC';
 
 		list($sortable,$sort_order)=$query_sort;		
-	
+
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		global $NON_CANONICAL_PARAMS;
@@ -212,15 +212,15 @@ class Module_admin_orders
 			$submitted_by	=	$GLOBALS['FORUM_DRIVER']->get_username($row['c_member']);
 
 			$order_status	=	do_lang($row['order_status']);
-			
+
 			$ordr_act_submit=	build_url(array('page'=>'_SELF','type'=>'order_act','id'=>$row['id']),'_SELF');	
 
 			$actions	=	do_template('ADMIN_ORDER_ACTIONS',array('ORDER_TITLE'=>$order_title,'ORDR_ACT_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));	
-			
+
 			$url		=	build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),'_SELF');
-			
+
 			$member		=	hyperlink($url,$submitted_by,false,false,do_lang('INDEX'));
-			
+
 			$view_url	=	build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
 			$order_date	=	hyperlink($view_url,get_timezoned_date($row['add_date'],true,false,true,true));
@@ -230,7 +230,7 @@ class Module_admin_orders
 			if($row['transaction_id']!='')
 			{	
 				$transaction_details_link	=	build_url(array('page'=>'admin_ecommerce','type'=>'logs','product'=>$order_title,'id'=>$row['id']),get_module_zone('admin_ecommerce'));
-				
+
 				$transaction_id	=	hyperlink($transaction_details_link,strval($row['transaction_id']));
 			}
 			else
@@ -295,7 +295,7 @@ class Module_admin_orders
 		if (count($query_sort)==1) $query_sort[]='ASC';
 
 		list($sortable,$sort_order)=$query_sort;
-	
+
 		$fields_title=results_field_title(
 							array(
 								do_lang_tempcode('SLNO'),
@@ -323,7 +323,7 @@ class Module_admin_orders
 			$product_name	=	$row['p_name'];
 
 			$quantity	=	$row['p_quantity'];
-			
+
 			$product	=	hyperlink($product_info_url,$product_name,false,false,do_lang('INDEX'));
 
 			$product_entries->attach(results_entry(
@@ -346,7 +346,7 @@ class Module_admin_orders
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$data		=	$rows[0];
-	
+
 		$results_table	=	results_table(do_lang_tempcode('PRODUCTS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$product_entries,$sortables,$sortable,$sort_order,'sort',NULL,NULL,'cart');
 
 		$ordered_by_member_id = $data['c_member'];
@@ -413,7 +413,7 @@ class Module_admin_orders
 			$res		=	$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$id),'',1);
 
 			$order_det	=	$res[0];
-			
+
 			$member_name	=	$GLOBALS['FORUM_DRIVER']->get_username($order_det['c_member']);
 
 			$message	=do_lang('ORDER_DISPATCHED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($id)),get_lang($order_det['c_member']));
@@ -432,7 +432,7 @@ class Module_admin_orders
 	function _add_note()
 	{
 		$id			=	post_param_integer('order_id');
-		
+
 		$title		=	get_page_title('ADD_NOTE_TITLE',true,array($id));
 
 		$notes		=	post_param('note');
@@ -443,13 +443,13 @@ class Module_admin_orders
 
 		//Send dispatch notification mail
 		$this->send_dispatch_notification($id);
-		
+
 		if(is_null($redirect))	//If redirect url is not passed, redirect to order list
 		{
 			$_redirect	=	build_url(array('page'=>'_SELF','type'=>'show_orders'),get_module_zone('admin_orders'));
 			$redirect = $_redirect->evaluate();
 		}
-		
+
 		return redirect_screen($title,$redirect,do_lang_tempcode('SUCCESS'));	
 	}
 
@@ -461,13 +461,13 @@ class Module_admin_orders
 	function dispatch()
 	{
 		$title=get_page_title('ORDER_STATUS_dispatched');
-		
+
 		$id	=	get_param_integer('id');
-		
+
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_dispatched'),array('id'=>$id),'',1);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_dispatched'),array('order_id'=>$id)); //There may be more than one items to update status
-		
+
 		require_code('shopping');
 		update_stock($id);
 
@@ -494,7 +494,7 @@ class Module_admin_orders
 		$order_det	=	$res[0];
 
 		//$message	=do_lang('ORDER_DISPATCHED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($order_id)));
-		
+
 		require_code('notifications');
 
 		dispatch_notification('order_dispatched',NULL,do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),strval($order_id),NULL,get_lang($order_det['c_member'])),$message,array($order_det['c_member']),A_FROM_SYSTEM_PRIVILEGED);
@@ -508,13 +508,13 @@ class Module_admin_orders
 	function delete_order()
 	{
 		$title=get_page_title('ORDER_STATUS_cancelled');
-		
+
 		$id	=	get_param_integer('id');
-		
+
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_cancelled'),array('id'=>$id),'',1);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_cancelled'),array('order_id'=>$id),'',1);
-		
+
 		$add_note_url	=	build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'cancelled','id'=>$id),get_module_zone('admin_orders'));
 
 		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
@@ -528,13 +528,13 @@ class Module_admin_orders
 	function return_order()
 	{
 		$title=get_page_title('ORDER_STATUS_returned');
-		
+
 		$id	=	get_param_integer('id');
-		
+
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_returned'),array('id'=>$id),'',1);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_returned'),array('order_id'=>$id),'',1);
-		
+
 		$add_note_url	=	build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'returned','id'=>$id),get_module_zone('admin_orders'));
 
 		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
@@ -548,13 +548,13 @@ class Module_admin_orders
 	function hold_order()
 	{
 		$title=get_page_title('ORDER_STATUS_onhold');
-		
+
 		$id	=	get_param_integer('id');
-		
+
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_onhold'),array('id'=>$id),'',1);
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_onhold'),array('order_id'=>$id),'',1);
-		
+
 		$add_note_url	=	build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'onhold','id'=>$id),get_module_zone('admin_orders'));
 
 		return redirect_screen($title,$add_note_url,do_lang_tempcode('SUCCESS'));		
@@ -618,9 +618,9 @@ class Module_admin_orders
 
 		$orders			=	array();
 		$data				=	array();
-	
+
 		$cond				=	"t1.add_date BETWEEN ".strval($start_date)." AND ".strval($end_date);
-		
+
 		if($order_status!='all')
 				$cond		.=	" AND t1.order_status='".db_escape_string($order_status)."'";
 
@@ -631,7 +631,7 @@ class Module_admin_orders
 								LEFT JOIN ".get_table_prefix()."shopping_order_details t2 ON t1.id = t2.order_id
 								LEFT JOIN ".get_table_prefix()."shopping_order_addresses t3 ON t1.id = t3.order_id
 								WHERE ".$cond;
-			
+
 		$row				=	$GLOBALS['SITE_DB']->query($qry);
 		remove_duplicate_rows($row);
 

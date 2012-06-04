@@ -38,7 +38,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Find if login cookie is md5-hashed.
 	 *
@@ -48,7 +48,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Get an array of attributes to take in from the installer. Almost all forums require a table prefix, which the requirement there-of is defined through this function.
 	 * The attributes have 4 values in an array
@@ -74,7 +74,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		$b['title']='VB '.do_lang('VB_UNIQUE_ID');
 		return array($a,$b);
 	}
-	
+
 	/**
 	 * Searches for forum auto-config at this path.
 	 *
@@ -122,7 +122,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get an array of paths to search for config at.
 	 *
@@ -150,7 +150,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 			17=>'../uploads',
 			18=>'../vbulletin');
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's last visit date.
 	 *
@@ -161,7 +161,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	{
 		return $r['lastactivity'];
 	}
-	
+
 	/**
 	 * Find out if the given member id is banned.
 	 *
@@ -176,10 +176,10 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		{
 			return true;
 		}
-	
+
 		return false;
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
@@ -192,7 +192,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		if (is_null($usergroup)) return false;
 		return ((in_array($usergroup,$this->get_super_admin_groups())) || (in_array($usergroup,$this->get_moderator_groups())));
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
@@ -205,7 +205,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		if (is_null($usergroup)) return false;
 		return (in_array($usergroup,$this->get_super_admin_groups()));
 	}
-	
+
 	/**
 	 * Get the ids of the admin usergroups.
 	 *
@@ -217,7 +217,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	//	$admin_group=$this->connection->query_value('usergroup','usergroupid',array('title'=>'Administrators'));
 	//	return array($admin_group);
 	}
-	
+
 	/**
 	 * Get the ids of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
@@ -230,7 +230,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	//	$moderator_group=$this->connection->query_value('usergroup','usergroupid',array('title'=>'Super Moderators'));
 	//	return array($moderator_group);
 	}
-	
+
 	/**
 	 * Get the forum usergroup list.
 	 *
@@ -240,7 +240,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	{
 		return collapse_2d_complexity('usergroupid','title',$this->connection->query_select('usergroup',array('usergroupid','title')));
 	}
-	
+
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
@@ -250,11 +250,11 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	function _get_members_groups($member)
 	{
 		if ($member==$this->get_guest_id()) return array(1);
-	
+
 		$group=$this->get_member_row_field($member,'usergroupid');
 		return array($group);
 	}
-	
+
 	/**
 	 * Create a member login cookie.
 	 *
@@ -278,7 +278,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		ocp_setcookie(get_pass_cookie(),$_password);
 		$_COOKIE[get_pass_cookie()]=$_password;
 	}
-	
+
 	/**
 	 * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
 	 * All authorisation, cookies, and form-logins, are passed through this function.
@@ -295,7 +295,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	{
 		$out=array();
 		$out['id']=NULL;
-	
+
 		if (is_null($userid))
 		{
 			$rows=$this->connection->query_select('user',array('*'),array('username'=>$username),'',1);
@@ -307,7 +307,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		{
 			$rows[0]=$this->get_member_row($userid);
 		}
-	
+
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
 			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
@@ -319,7 +319,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 			$out['error']=(do_lang_tempcode('USER_BANNED'));
 			return $out;
 		}
-	
+
 		global $SITE_INFO;
 		if (!(((md5($row['password'].$SITE_INFO['vb_unique_id'])==$password_hashed) && ($cookie_login))
 			|| ((!$cookie_login) && ($row['password']==md5($password_hashed.$row['salt'])))))
@@ -327,7 +327,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
 			return $out;
 		}
-	
+
 		ocp_eatcookie('sessionhash');
 
 		$out['id']=$row['userid'];

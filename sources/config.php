@@ -250,7 +250,7 @@ function get_value($name,$default=NULL,$env_also=false)
 function get_value_newer_than($name,$cutoff)
 {
 	$cutoff-=mt_rand(0,200); // Bit of scattering to stop locking issues if lots of requests hit this at once in the middle of a hit burst (whole table is read each page requests, and mysql will lock the table on set_value - causes horrible out-of-control buildups)
-	
+
 	global $VALUES;
 	if ((array_key_exists($name,$VALUES)) && ($VALUES[$name]['date_and_time']>$cutoff)) return $VALUES[$name]['the_value'];
 	return NULL;

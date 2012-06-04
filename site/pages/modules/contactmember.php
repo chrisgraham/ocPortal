@@ -40,7 +40,7 @@ class Module_contactmember
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_contactmember
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -60,21 +60,21 @@ class Module_contactmember
 	{
 		require_lang('mail');
 		require_lang('comcode');
-	
+
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
-	
+
 		$type=get_param('type','misc');
-	
+
 		$member_id=get_param_integer('id');
 		if (($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address')=='') || ((get_option('allow_email_disable')=='1') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_allow_emails')==0)) || (is_guest($member_id)))
 			warn_exit(do_lang_tempcode('NO_ACCEPT_EMAILS'));
 
 		if ($type=='misc') return $this->gui();
 		if ($type=='actual') return $this->actual();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to contact a member.
 	 *
@@ -85,7 +85,7 @@ class Module_contactmember
 		$member_id=get_param_integer('id');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 		if (is_null($username)) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
-	
+
 		$title=get_page_title('EMAIL_MEMBER',true,array(escape_html($username)));
 
 		global $EXTRA_HEAD;

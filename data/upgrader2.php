@@ -115,7 +115,7 @@ $todo=$data['todo'];
 foreach ($todo as $i=>$_target_file)
 {
 	list($target_file,,$offset,$length,)=$_target_file;
-	
+
 	if ($i<$file_offset) continue;
 	if ($i>$file_offset+20) break;
 
@@ -127,7 +127,7 @@ foreach ($todo as $i=>$_target_file)
 		$build_up.='/'.$part;
 		@mkdir($build_up,0755);
 	}
-	
+
 	// Copy in the data
 	fseek($myfile,$offset);
 	$myfile2=fopen($FILE_BASE.'/'.$target_file,'wb');

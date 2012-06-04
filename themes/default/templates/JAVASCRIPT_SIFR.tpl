@@ -2,7 +2,7 @@
 
 /*	sIFR v2.0.6
 	Copyright 2004 - 2008 Mark Wubben and Mike Davidson. Prior contributions by Shaun Inman and Tomas Jogin.
-	
+
 	This software is licensed under the CC-GNU LGPL <http://creativecommons.org/licenses/LGPL/2.1/>
 */
 

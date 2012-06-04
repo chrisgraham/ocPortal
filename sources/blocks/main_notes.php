@@ -38,7 +38,7 @@ class Block_main_notes
 		$info['parameters']=array('param','title','lang_none','scrolls');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -70,7 +70,7 @@ class Block_main_notes
 			}
 			write_text_file($file,$lang,$new);
 			log_it('NOTES',$file);
-			
+
 			attach_message(do_lang_tempcode('SUCCESS'),'inform');
 		}
 

@@ -77,7 +77,7 @@ function execute_temp()
 			15=>'http://www.google.com/',
 			16=>uniqid(''),
 		);
-	
+
 		$entry_id=actual_add_catalogue_entry(3,1,'',0,0,0,$map);
 	}
 }

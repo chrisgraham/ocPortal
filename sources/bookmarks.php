@@ -24,13 +24,13 @@
 function bookmarks_script()
 {
 	require_lang('bookmarks');
-	
+
 	$type=get_param('type');
 	switch ($type)
 	{
 		case '_ad':
 			$title=get_page_title('ADD_BOOKMARK');
-		
+
 			$folder=post_param('folder_new','');
 			if ($folder=='') $folder=post_param('folder');
 			if ($folder=='!') $folder='';

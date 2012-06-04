@@ -151,12 +151,12 @@ class Hook_fields_posting_field
 		$attachments_done=true;
 
 		$ret=do_template('POSTING_FIELD',array('REQUIRED'=>$field['cf_required']==1,'DESCRIPTION'=>$_cf_description,'HIDDEN_FIELDS'=>$hidden_fields,'PRETTY_NAME'=>$_cf_name,'NAME'=>'field_'.strval($field['id']),'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EMOTICON_CHOOSER'=>$emoticon_chooser,'COMCODE_HELP'=>$comcode_help,'POST'=>$actual_value,'DEFAULT_PARSED'=>$default_parsed,'ATTACHMENTS'=>$attachments));
-		
+
 		if (!$last)
 		{
 			$ret->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADDITIONAL_INFO'))));
 		}
-		
+
 		return $ret;
 	}
 

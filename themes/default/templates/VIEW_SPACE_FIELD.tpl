@@ -7,7 +7,7 @@
 	</tr>
 	<tr>
 	{+END}
-	
+
 	<td>
 		{VALUE*}
 	</td>

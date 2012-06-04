@@ -29,7 +29,7 @@ class moderation_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('ocf_moderation_action');
 		require_code('ocf_moderation_action2');
-		
+
 		$this->mod_id=ocf_make_multi_moderation('Test Moderation','Test',NULL,0,0,0,'*','Nothing');
 
 		// Test the forum was actually created
@@ -44,7 +44,7 @@ class moderation_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('Tested'==get_translated_text($GLOBALS['FORUM_DB']->query_value('f_multi_moderations','mm_name ',array('id'=>$this->mod_id)),$GLOBALS['FORUM_DB']));
 	}
-	
+
 	
 	function tearDown()
 	{

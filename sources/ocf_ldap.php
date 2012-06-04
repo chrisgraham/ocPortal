@@ -501,7 +501,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 				foreach ($entries[0]['memberuid'] as $key=>$member)
 				{
 					if (!is_numeric($key)) continue;
-	
+
 					$member_id=ocf_member_ldapcn_to_ocfid(utf8_decode($member));
 					if (!is_null($member_id))
 					{
@@ -512,7 +512,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 				ldap_free_result($results);
 			}
 		}
-		
+
 		if (is_null($gid))
 			$gid=ocf_group_ldapcn_to_ldapgid($cn);
 
@@ -521,7 +521,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 		{
 			$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')(gidnumber='.utf8_encode(strval($gid)).'))',array(member_property()));
 			$entries=ldap_get_entries($LDAP_CONNECTION,$results);
-	
+
 			foreach ($entries as $key=>$member) // There will only be one, but I wrote a loop so lets use a loop
 			{
 				if (!is_numeric($key)) continue;
@@ -597,7 +597,7 @@ function ocf_get_members_groups_ldap($member_id)
 				if (!is_null($group_id))
 					$groups[$group_id]=1;
 			}
-			
+
 			if (!is_numeric($key)) continue;
 			if (!array_key_exists(group_property(),$entry)) continue;
 			if (!array_key_exists(0,$entry[group_property()])) continue;
@@ -634,7 +634,7 @@ function ocf_get_members_groups_ldap($member_id)
 			foreach ($entries[0]['memberof'] as $key=>$member) // There will only be one, but I wrote a loop so lets use a loop
 			{
 				if (!is_numeric($key)) continue;
-	
+
 				$group_id=ocf_group_ldapcn_to_ocfid(ocf_long_cn_to_short_cn($member,member_property()));
 				if (!is_null($group_id)) $groups[$group_id]=1;
 			}
@@ -685,7 +685,7 @@ function ocf_ldap_get_member_primary_group($member_id)
 	}
 
 	$PRIMARY_GROUP_MEMBERS[$member_id]=$gid;
-	
+
 	return $gid;
 }
 
@@ -756,9 +756,9 @@ function ocf_long_cn_to_short_cn($long,$type)
 		return $matches[2];
 	}
 	return $long;
-	
+
 	/*$type=strtoupper($type);
-	
+
 	if (substr(strtoupper($long),0,strlen($type))==$type.'=') // If on start, we just take start
 	{
 		return substr($long,3,strpos($long,',')-strlen($type));

@@ -70,7 +70,7 @@ function get_cedi_page_html($row,$zone='_SEARCH',$put_in_box=true)
 			if (!$tree->is_empty()) $content->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
 		}
 	}
-	
+
 	$preview=do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>$content,'URL'=>$url));
 
 	if (!$put_in_box) return $preview;
@@ -281,7 +281,7 @@ function cedi_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 function cedi_delete_page($id)
 {
 	if (function_exists('set_time_limit')) @set_time_limit(0);
-	
+
 	$start=0;
 	do
 	{
@@ -402,7 +402,7 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 function cedi_derive_chain($id)
 {
 	static $parents=array();
-	
+
 	$temp_id=$id;
 	$chain=strval($id);
 	$seen_before=array();
@@ -599,7 +599,7 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$tree=NULL,$title=NULL,$do
 					list($child_children,$_compound_list)=$child_children;
 					$children[0]['compound_list'].=$_compound_list;
 				}
-		
+
 				$children=array_merge($children,$child_children);
 			}
 		}

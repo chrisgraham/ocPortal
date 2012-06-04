@@ -38,7 +38,7 @@ class Block_side_weather
 		$info['parameters']=array('param','unit');
 		return $info;
 	}
-		
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -61,7 +61,7 @@ class Block_side_weather
 			'w_code'=>'INTEGER',
 		));
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -74,7 +74,7 @@ class Block_side_weather
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -107,7 +107,7 @@ class Block_side_weather
 				{
 					$loc_code=$matches[1];
 				} else return new ocp_tempcode();
-			
+
 				if (is_numeric($loc_code))
 				{
 					$GLOBALS['SITE_DB']->query_insert('cached_weather_codes',array(
@@ -168,7 +168,7 @@ class Block_side_weather
 					$forecast = '';
 			}
 		}
-		
+
 		return do_template('BLOCK_SIDE_WEATHER',array('TITLE'=>$title,'LOC_CODE'=>strval($loc_code),'IMAGE'=>$image,'COND'=>$cur_conditions,'FORECAST'=>$forecast));
 	}
 }

@@ -171,7 +171,7 @@ function bookings_ical_script()
 
 	require_code('booking2');
 	require_lang('booking');
-	
+
 	$max_time=time();
 
 	foreach ($members_with_bookings as $member_with_booking)

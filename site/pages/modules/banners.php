@@ -41,7 +41,7 @@ class Module_banners
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -69,7 +69,7 @@ class Module_banners
 
 		//delete_menu_item_simple('_SEARCH:donate');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -101,7 +101,7 @@ class Module_banners
 				'edit_date'=>'?TIME',
 				'b_type'=>'ID_TEXT'
 			));
-		
+
 			$GLOBALS['SITE_DB']->create_index('banners','banner_child_find',array('b_type'));
 			$GLOBALS['SITE_DB']->create_index('banners','the_type',array('the_type'));
 			$GLOBALS['SITE_DB']->create_index('banners','expiry_date',array('expiry_date'));
@@ -114,7 +114,7 @@ class Module_banners
 			$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>'','name'=>'donate','the_type'=>0,'img_url'=>'data/images/donate.png','caption'=>lang_code_to_default_content('DONATION',true,1),'campaign_remaining'=>0,'site_url'=>get_base_url().'/site/index.php?page=donate','hits_from'=>0,'views_from'=>0,'hits_to'=>0,'views_to'=>0,'importance_modulus'=>30,'notes'=>'Provided as default.','validated'=>1,'add_date'=>time(),'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'b_type'=>'','expiry_date'=>NULL,'edit_date'=>NULL));
 			$banner_a='advertise_here';
 			$banner_c='donate';
-		
+
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 			{
@@ -125,7 +125,7 @@ class Module_banners
 			add_config_option('ENABLE_BANNERS','is_on_banners','tick','return \'1\';','FEATURE','BANNERS');
 			add_config_option('MONEY_AD_CODE','money_ad_code','text','return \'\';','FEATURE','BANNERS',1);
 			add_config_option('ADVERT_CHANCE','advert_chance','float','return \'5\';','FEATURE','BANNERS',1);
-		
+
 			add_specific_permission('BANNERS','full_banner_setup',false);
 			add_specific_permission('BANNERS','view_anyones_banner_stats',false);
 
@@ -172,7 +172,7 @@ class Module_banners
 			$GLOBALS['SITE_DB']->create_index('banner_clicks','clicker_ip',array('c_ip_address'));
 
 			add_specific_permission('BANNERS','banner_free',false);
-			
+
 			add_config_option('PERMISSIONS','use_banner_permissions','tick','return \'0\';','FEATURE','BANNERS');
 
 			$GLOBALS['SITE_DB']->query_update('banners',array('b_type'=>'BANNERS'),array('b_type'=>'_BANNERS'));
@@ -189,7 +189,7 @@ class Module_banners
 			add_config_option('ADMIN_BANNERS','admin_banners','tick','return is_null($old=get_value(\'always_banners\'))?\'0\':$old;','FEATURE','BANNERS');
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -199,7 +199,7 @@ class Module_banners
 	{
 		return array('misc'=>'BANNERS');
 	}
-	
+
 	/**
 	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
 	 *
@@ -229,13 +229,13 @@ class Module_banners
 
 		require_code('banners');
 		require_lang('banners');
-	
+
 		// Decide what we're doing
 		$type=get_param('type','misc');
-	
+
 		if ($type=='view') return $this->view_banner();
 		if ($type=='misc') return $this->choose_banner();
-	
+
 		return new ocp_tempcode();
 	}
 
@@ -249,9 +249,9 @@ class Module_banners
 		$title=get_page_title('BANNERS');
 
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','name ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -326,11 +326,11 @@ class Module_banners
 
 			$fields->attach(results_entry($fr),true);
 		}
-		
+
 		$table=results_table(do_lang('BANNERS'),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order);
-	
+
 		$text=do_lang_tempcode('CHOOSE_VIEW_LIST');
-	
+
 		return do_template('TABLE_TABLE_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
 	}
 
@@ -342,7 +342,7 @@ class Module_banners
 	function view_banner()
 	{
 		$title=get_page_title('BANNER_INFORMATION');
-	
+
 		$source=get_param('source');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),array('name'=>$source));
@@ -367,7 +367,7 @@ class Module_banners
 				$type=do_lang_tempcode('BANNER_DEFAULT');
 				break;
 		}
-	
+
 		if ($myrow['views_to']!=0)
 			$click_through=protect_from_escaping(escape_html(float_format(round(100.0*($myrow['hits_to']/$myrow['views_to'])))));
 		else $click_through=do_lang_tempcode('NA_EM');
@@ -392,7 +392,7 @@ class Module_banners
 		$fields->attach(view_space_field(do_lang_tempcode('SUBMITTER'),$username,true));
 
 		$view_space=do_template('VIEW_SPACE',array('_GUID'=>'eb97a46d8e9813da7081991d5beed270','WIDTH'=>'300','FIELDS'=>$fields));
-	
+
 		$banner=show_banner($myrow['name'],$myrow['b_title_text'],get_translated_tempcode($myrow['caption']),$myrow['img_url'],$source,$myrow['site_url'],$myrow['b_type']);
 
 		$edit_url=new ocp_tempcode();

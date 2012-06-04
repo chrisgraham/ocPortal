@@ -42,7 +42,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE user_id<>'.strval((integer)$this->get_guest_id()).' ORDER BY user_posts DESC',$limit);
 	}
-	
+
 	/**
 	 * Attempt to to find the member's language from their forum profile. It converts between language-identifiers using a map (lang/map.ini).
 	 *
@@ -53,7 +53,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'user_language');
 	}
-	
+
 	/**
 	 * Find if login cookie is md5-hashed.
 	 *
@@ -63,7 +63,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Find if the login cookie contains the login name instead of the member id.
 	 *
@@ -73,7 +73,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Find the member id of the forum guest member.
 	 *
@@ -83,7 +83,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return 0;
 	}
-	
+
 	/**
 	 * Get the forums' table prefix for the database.
 	 *
@@ -94,7 +94,7 @@ class forum_driver_wowbb extends forum_driver_base
 		global $SITE_INFO;
 		return $SITE_INFO['wowbb_table_prefix'];
 	}
-	
+
 	/**
 	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
 	 *
@@ -108,7 +108,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$this->connection->query('ALTER TABLE '.$this->connection->get_table_prefix().'users ADD ocp_'.$name.' TEXT',NULL,NULL,true);
 		return true;
 	}
-	
+
 	/**
 	 * Get an array of attributes to take in from the installer. Almost all forums require a table prefix, which the requirement there-of is defined through this function.
 	 * The attributes have 4 values in an array
@@ -129,7 +129,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$a['title']='WowBB '.do_lang('TABLE_PREFIX');
 		return array($a);
 	}
-	
+
 	/**
 	 * Searches for forum auto-config at this path.
 	 *
@@ -163,7 +163,7 @@ class forum_driver_wowbb extends forum_driver_base
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get an array of paths to search for config at.
 	 *
@@ -185,7 +185,7 @@ class forum_driver_wowbb extends forum_driver_base
 			14=>'../wowbb',
 			15=>'../files');
 	}
-	
+
 	/**
 	 * Get an emoticon chooser template.
 	 *
@@ -205,7 +205,7 @@ class forum_driver_wowbb extends forum_driver_base
 
 		return $em;
 	}
-	
+
 	/**
 	 * Pin a topic.
 	 *
@@ -244,7 +244,7 @@ class forum_driver_wowbb extends forum_driver_base
 		}
 		return $out;
 	}
-	
+
 	/**
 	 * Get a member profile-row for the member of the given name.
 	 *
@@ -257,7 +257,7 @@ class forum_driver_wowbb extends forum_driver_base
 		if (!array_key_exists(0,$rows)) return NULL;
 		return $rows[0];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's primary usergroup.
 	 *
@@ -268,7 +268,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $r['user_group_id'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's member id.
 	 *
@@ -279,7 +279,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $r['user_id'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's last visit date.
 	 *
@@ -292,7 +292,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$rows=$this->connection->query_select('sessions',array('last_visit'),array('user_id'=>$r['user_id']),'',1);
 		return $rows[0]['last_visit'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's name.
 	 *
@@ -303,7 +303,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $r['user_name'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's e-mail address.
 	 *
@@ -314,7 +314,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $r['user_email'];
 	}
-	
+
 	/**
 	 * Get a URL to the specified member's home (control panel).
 	 *
@@ -326,7 +326,7 @@ class forum_driver_wowbb extends forum_driver_base
 		unset($id);
 		return get_forum_base_url().'/my_account.php';
 	}
-	
+
 	/**
 	 * Get the photo thumbnail URL for the specified member id.
 	 *
@@ -372,7 +372,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return get_forum_base_url().'/view_user.php?id='.$this->get_member_from_username($name);
 	}
-	
+
 	/**
 	 * Get a URL to the registration page (for people to create member accounts).
 	 *
@@ -382,7 +382,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return get_forum_base_url().'/login.php?register=1';
 	}
-	
+
 	/**
 	 * Get a URL to the members-online page.
 	 *
@@ -392,7 +392,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?show=recent';
 	}
-	
+
 	/**
 	 * Get a URL to send a private/personal message to the given member.
 	 *
@@ -405,7 +405,7 @@ class forum_driver_wowbb extends forum_driver_base
 		return get_forum_base_url().'/pm.php?new_message=1';
 		//&to='.$this->get_username($id)
 	}
-	
+
 	/**
 	 * Get a URL to the specified forum.
 	 *
@@ -427,7 +427,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('forums','forum_id',array('forum_name'=>$forum_name));
 	}
-	
+
 	/**
 	 * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
 	 *
@@ -528,10 +528,10 @@ class forum_driver_wowbb extends forum_driver_base
 
 			$out[]=$temp;
 		}
-	
+
 		return $out;
 	}
-	
+
 	/**
 	 * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
 	 *
@@ -618,12 +618,12 @@ class forum_driver_wowbb extends forum_driver_base
 		while (array_key_exists($i,$rows))
 		{
 			$r=$rows[$i];
-	
+
 			$id=$r['topic_id'];
 
 			$post_rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts t ON p.post_id=t.post_id WHERE topic_id='.strval((integer)$id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_date_time DESC',1);
 			$r2=$post_rows[0];
-	
+
 			$username[$id]=$this->get_username($r2['user_id']);
 			$memberid[$id]=$r2['user_id'];
 			$datetimes[$id]=strtotime($r2['post_date_time']);
@@ -678,7 +678,7 @@ class forum_driver_wowbb extends forum_driver_base
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * Get an array of members who are in at least one of the given array of usergroups.
 	 *
@@ -699,7 +699,7 @@ class forum_driver_wowbb extends forum_driver_base
 		if ($_groups=='') return array();
 		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE '.$_groups.' ORDER BY user_group_id ASC',$max,$start);
 	}
-	
+
 	/**
 	 * This is the opposite of the get_next_member function.
 	 *
@@ -711,7 +711,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$tempid=$this->connection->query_value_null_ok_full('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id<'.strval((integer)$member).' ORDER BY user_id DESC');
 		return $tempid;
 	}
-	
+
 	/**
 	 * Get the member id of the next member after the given one, or NULL.
 	 * It cannot be assumed there are no gaps in member ids, as members may be deleted.
@@ -724,7 +724,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$tempid=$this->connection->query_value_null_ok_full('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id>'.strval((integer)$member).' ORDER BY user_id');
 		return $tempid;
 	}
-	
+
 	/**
 	 * Try to find a member with the given IP address
 	 *
@@ -735,11 +735,11 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		//$test=$this->connection->query_value_null_ok('users','user_id',array('regip'=>$ip));
 		//if (!is_null($test)) return $test;
-	
+
 		// Not sure if this is valid! Is useip something else entirely maybe, like usesig?
 		return $this->connection->query_select('posts',array('DISTINCT user_id AS id'),array('post_ip'=>$ip));
 	}
-	
+
 	/**
 	 * Get the name relating to the specified member id.
 	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
@@ -751,7 +751,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'user_name');
 	}
-	
+
 	/**
 	 * Get the e-mail address for the specified member id.
 	 *
@@ -762,7 +762,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'user_email');
 	}
-	
+
 	/**
 	 * Find if this member may have e-mails sent to them
 	 *
@@ -773,7 +773,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'user_forum_digest');
 	}
-	
+
 	/**
 	 * Get the timestamp of a member's join date.
 	 *
@@ -784,7 +784,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'user_joined');
 	}
-	
+
 	/**
 	 * Find all members with a name matching the given SQL LIKE string.
 	 *
@@ -800,7 +800,7 @@ class forum_driver_wowbb extends forum_driver_base
 		uasort($rows,'multi_sort');
 		return $rows;
 	}
-	
+
 	/**
 	 * Get the given member's post count.
 	 *
@@ -813,7 +813,7 @@ class forum_driver_wowbb extends forum_driver_base
 		if (is_null($c)) return 0;
 		return $c;
 	}
-	
+
 	/**
 	 * Get the given member's topic count.
 	 *
@@ -824,7 +824,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->connection->query_value('topics','COUNT(*)',array('topic_starter_id'=>$member));
 	}
-	
+
 	/**
 	 * Find out if the given member id is banned.
 	 *
@@ -840,7 +840,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$test=$this->connection->query_value('user_groups','view_board',array('user_group_id'=>$group)); // Get view board for members usergroup
 		return ($test==0);
 	}
-	
+
 	/**
 	 * Find the base URL to the emoticons.
 	 *
@@ -850,7 +850,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return get_forum_base_url().'/images/emoticons/';
 	}
-	
+
 	/**
 	 * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
 	 *
@@ -907,7 +907,7 @@ class forum_driver_wowbb extends forum_driver_base
 	function _get_theme($skip_member_specific=false)
 	{
 		$def='';
-	
+
 		// Load in remapper
 		$map=file_exists(get_file_base().'/themes/map.ini')?better_parse_ini_file(get_file_base().'/themes/map.ini'):array();
 
@@ -935,10 +935,10 @@ class forum_driver_wowbb extends forum_driver_base
 		{
 			$def=array_key_exists('default',$map)?$map['default']:'default';
 		}
-	
+
 		return $def;
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
@@ -951,7 +951,7 @@ class forum_driver_wowbb extends forum_driver_base
 		if ((is_null($usergroup)) || ($usergroup==0)) return false;
 		return ((in_array($usergroup,$this->get_super_admin_groups())) || (in_array($usergroup,$this->get_moderator_groups())));
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
@@ -964,7 +964,7 @@ class forum_driver_wowbb extends forum_driver_base
 		if ((is_null($usergroup)) || ($usergroup==0)) return false;
 		return (in_array($usergroup,$this->get_super_admin_groups()));
 	}
-	
+
 	/**
 	 * Get the number of members currently online on the forums.
 	 *
@@ -974,7 +974,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'sessions WHERE last_visit>\''.$this->_timestamp_to_date(time()-60*intval(get_option('users_online_time'))).'\'');
 	}
-	
+
 	/**
 	 * Get the number of members registered on the forum.
 	 *
@@ -984,7 +984,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->connection->query_value('users','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the total topics ever made on the forum.
 	 *
@@ -994,7 +994,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->connection->query_value('topics','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the total posts ever made on the forum.
 	 *
@@ -1004,7 +1004,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->connection->query_value('posts','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the number of new forum posts.
 	 *
@@ -1014,7 +1014,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE post_date_time>\''.$this->_timestamp_to_date(time()-60*60*24).'\'');
 	}
-	
+
 	/**
 	 * Get a member id from the given member's username.
 	 *
@@ -1025,7 +1025,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok('users','user_id',array('user_name'=>$name));
 	}
-	
+
 	/**
 	 * Get the ids of the admin usergroups.
 	 *
@@ -1036,7 +1036,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$groups=$this->connection->query_select('user_groups',array('user_group_id'),array('admin_rights'=>3));
 		return collapse_1d_complexity('user_group_id',$groups);
 	}
-	
+
 	/**
 	 * Get the ids of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
@@ -1048,7 +1048,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$groups=$this->connection->query_select('user_groups',array('user_group_id'),array('super_moderator_rights'=>3));
 		return collapse_1d_complexity('user_group_id',$groups);
 	}
-	
+
 	/**
 	 * Get the forum usergroup list.
 	 *
@@ -1059,7 +1059,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$groups=$this->connection->query_select('user_groups',array('user_group_id','user_group_title'));
 		return collapse_2d_complexity('user_group_id','user_group_title',$groups);
 	}
-	
+
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
@@ -1069,10 +1069,10 @@ class forum_driver_wowbb extends forum_driver_base
 	function _get_members_groups($member)
 	{
 		if ($member==$this->get_guest_id()) return array(1);
-	
+
 		return array($this->get_member_row_field($member,'user_group_id'));
 	}
-	
+
 	/**
 	 * Create a member login cookie.
 	 *
@@ -1085,18 +1085,18 @@ class forum_driver_wowbb extends forum_driver_base
 		/*// User
 		ocp_setcookie(get_member_cookie(),$id);
 		$_COOKIE[get_member_cookie()]=$id;
-	
+
 		// Password
 		$_password=md5($id.$password);
 		ocp_setcookie(get_pass_cookie(),$_password);
 		$_COOKIE[get_pass_cookie()]=$_password;*/
 		if (is_null($name)) $name=$this->get_username($id);
-	
+
 		$data=$name.'||'.md5($password).'||0||||||||';
 		ocp_setcookie('wowbb',$data);
 		$_COOKIE['wowbb']=$data;
 	}
-	
+
 	/**
 	 * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
 	 * All authorisation, cookies, and form-logins, are passed through this function.
@@ -1114,7 +1114,7 @@ class forum_driver_wowbb extends forum_driver_base
 		unset($cookie_login);
 		$out=array();
 		$out['id']=NULL;
-	
+
 		if (is_null($userid))
 		{
 			$rows=$this->connection->query_select('users',array('*'),array('user_name'=>$username),'',1);
@@ -1126,7 +1126,7 @@ class forum_driver_wowbb extends forum_driver_base
 		{
 			$rows[0]=$this->get_member_row($userid);
 		}
-	
+
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
 			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
@@ -1143,11 +1143,11 @@ class forum_driver_wowbb extends forum_driver_base
 			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
 			return $out;
 		}
-	
+
 		$out['id']=$row['user_id'];
 		return $out;
 	}
-	
+
 	/**
 	 * Get a first known IP address of the given member.
 	 *
@@ -1159,7 +1159,7 @@ class forum_driver_wowbb extends forum_driver_base
 		//return $this->connection->query_value_null_ok('users','regip',array('uid'=>$member));
 		return $this->connection->query_value_null_ok('posts','post_ip',array('user_id'=>$member));
 	}
-	
+
 	/**
 	 * Gets a whole member row from the database.
 	 *
@@ -1186,7 +1186,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$this->MEMBER_ROWS_CACHED[$member]=$rows[0];
 		return $this->MEMBER_ROWS_CACHED[$member];
 	}
-	
+
 	/**
 	 * Gets a named field of a member row from the database.
 	 *
@@ -1199,7 +1199,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$row=$this->get_member_row($member);
 		return is_null($row)?NULL:$row[$field];
 	}
-	
+
 	/**
 	 * Convert a wowbb date to a timestamp.
 	 *
@@ -1212,10 +1212,10 @@ class forum_driver_wowbb extends forum_driver_base
 		$sections=explode(' ',$date);
 		$sections1=explode('-',$sections[0]);
 		$sections2=explode(':',$sections[1]);
-	
+
 		return mktime($sections2[0],$sections2[1],$sections2[2],$sections1[1],$sections1[2],$sections1[0]);
 	}
-	
+
 	/**
 	 * Convert a timestamp to a wowbb date.
 	 *

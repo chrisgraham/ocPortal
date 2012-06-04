@@ -29,7 +29,7 @@ class Hook_sw_polls
 	function get_blocks()
 	{
 		if (!addon_installed('polls')) return array();
-		
+
 		return array(array('main_poll'=>array('NO','YES_CELL')),array());
 	}
 

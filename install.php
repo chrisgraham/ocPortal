@@ -80,7 +80,7 @@ if (!array_key_exists('type',$_GET))
 {
 	if (count($_GET)==0)
 		header('Content-type: text/html');
-	
+
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10);
 	if (count($_GET)==0) // Special code to skip checks if need-be. The XHTML here is invalid but unfortunately it does need to be.
 	{
@@ -931,7 +931,7 @@ function step_4()
 	$js=do_template('JAVASCRIPT');
 	$js->attach(chr(10));
 	$js->attach(do_template('JAVASCRIPT_AJAX'));
-	
+
 	$message=paragraph(do_lang_tempcode('BASIC_CONFIG'));
 	if (($forum_type!='none') && ($forum_type!='ocf'))
 		$message->attach(paragraph(do_lang_tempcode('FORUM_DRIVER_NATIVE_LOGIN')));
@@ -962,7 +962,7 @@ function step_5()
 		$_POST['db_forums_password']=$_POST['db_site_password'];
 		$_POST['ocf_table_prefix']=array_key_exists('table_prefix',$_POST)?$_POST['table_prefix']:'ocp_';
 	}
-	
+
 	// Check cookie settings. IF THIS CODE IS CHANGED ALSO CHANGE COPY&PASTED CODE IN CONFIG_EDITOR.PHP
 	$cookie_path=post_param('cookie_path');
 	$cookie_domain=trim(post_param('cookie_domain'));
@@ -2097,7 +2097,7 @@ function handle_self_referencing_embedment()
 	if (array_key_exists('type',$_GET))
 	{
 		$type=$_GET['type'];
-	
+
 		if ($type=='ajax_ftp_details')
 		{
 			header('Content-Type: text/plain');
@@ -2446,7 +2446,7 @@ function get_dir_contents($dir,$php=false)
 				}
 			}
 		}
-		
+
 //		return $out;
 	}
 

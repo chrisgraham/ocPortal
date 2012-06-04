@@ -40,7 +40,7 @@ class Block_main_staff_checklist
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -110,7 +110,7 @@ class Block_main_staff_checklist
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('customtasks');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

@@ -137,7 +137,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 		{
 			$source=strtolower(str_replace($strip_char,'',$source));
 		}
-		
+
 		$source=preg_replace('#\-+#',' ',$source);
 
 		$i=0;
@@ -205,7 +205,7 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 	seo_meta_set_for_explicit($type,$id,$imp,(strlen($description)>1000)?(substr($description,0,1000).'...'):$description);
 
 	if (function_exists('decache')) decache('side_tag_cloud');
-	
+
 	return $imp;
 }
 

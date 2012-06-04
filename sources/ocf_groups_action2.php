@@ -72,7 +72,7 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 	if (!array_key_exists(0,$_group_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$_name=$_group_info[0]['g_name'];
 	$_title=$_group_info[0]['g_title'];
-	
+
 	$map=array();
 	if (!is_null($name)) $map['g_name']=lang_remap($_name,$name,$GLOBALS['FORUM_DB']);
 	if (!is_null($is_default)) $map['g_is_default']=$is_default;

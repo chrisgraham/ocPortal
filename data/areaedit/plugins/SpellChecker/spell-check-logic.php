@@ -64,7 +64,7 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 			return implode(DIRECTORY_SEPARATOR,$bits).DIRECTORY_SEPARATOR;
 		}
 	}
-	
+
 	if (!function_exists('get_custom_file_base'))
 	{
 		/**
@@ -78,7 +78,7 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 			return isset($SITE_INFO['custom_file_base'])?$SITE_INFO['custom_file_base']:get_file_base();
 		}
 	}
-	
+
 	if (!function_exists('_filter_naughty_harsh'))
 	{
 		/**
@@ -94,7 +94,7 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 			return ''; // trick to make Zend happy
 		}
 	}
-	
+
 	if (!function_exists('mixed'))
 	{
 		/**
@@ -170,7 +170,7 @@ function aspell_init()
 	{
 		if (ini_get('safe_mode')=='1') exit('Spell Checker does not work with safe mode systems that do not have direct pspell support into PHP');
 		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) exit('Spell Checker does not work on systems with shell_exec disabled that do not have direct pspell support into PHP');
-	
+
 		// Our temporary spell check file
 		$temptext=tempnam((((ini_get('safe_mode')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
 		if ($temptext===false)
@@ -187,7 +187,7 @@ function aspell_init()
 				$aspell=dirname(__FILE__).'\\aspell\\bin\\aspell.exe';
 				if (file_exists(dirname(__FILE__).'\\aspell\\bin\\aspell_wrap.exe'))
 					$aspell=dirname(__FILE__).'\\aspell\\bin\\aspell_wrap.exe '.dirname(__FILE__).'\\aspell\\bin\\';
-	
+
 				//$dic_dir=wrap_exec($aspell.' config dict-dir');
 				//$dicfil=preg_replace('/^.*\/lib\/(aspell\S*)\n.*/s','$1',$dic_dir);
 				//$aspell_args.=' --dict-dir='.$dicfil;
@@ -216,9 +216,9 @@ function aspell_init()
 		}
 
 		if ($aspell_version===false) exit('ASpell would not execute. It is most likely not installed, or a security measure is in place, or file permissions are not correctly set. If on Windows, you may need to give windows\\system32\\cmd.exe execute permissions to the web user.');
-	
+
 		// Old aspell doesn't know about encoding, which means that unicode will be broke, but we should at least let it try.
-	
+
 		$a_ver=array();
 		preg_match('/really [aA]spell ([0-9]+)\.([0-9]+)(?:\.([0-9]+))?/i',$aspell_version,$a_ver);
 		if (!array_key_exists(1,$a_ver)) $a_ver[1]='1';
@@ -425,7 +425,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 						}
 						$suggestion_list=substr($suggestion_list,0,strlen($suggestion_list)-1);
 						$varlines.='"'.trim($word).'":"'.trim($suggestion_list).'",';
-	
+
 						$poscorrect=$poscorrect+41;
 					}
 					elseif (substr($value,0,1)=='#') // ?
@@ -546,7 +546,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 			//echo '<div id="HA-spellcheck-dictionaries">en_US,es,fr</div></body></html>';
 		}
 	}
-	
+
 	return $results;
 }
 
@@ -604,7 +604,7 @@ function aspell_save($aspellcommand,$temptext)
 			{
 				pspell_store_replacement($aspellcommand,$replace_pair[0],$replace_pair[1]);
 			}
-			
+
 			pspell_save_wordlist($aspellcommand);
 		}
 	}

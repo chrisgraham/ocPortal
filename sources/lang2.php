@@ -123,7 +123,7 @@ function find_lang_content_names($ids)
 		}
 		$langidfields[]=array('m_name'=>'config_value','m_table'=>'config','key'=>'the_name');
 	}
-	
+
 	$ret=array();
 
 	foreach ($langidfields as $field)
@@ -161,11 +161,11 @@ function find_lang_content_names($ids)
 							{
 								$ret[$id]=$field['m_table'].' \ '.(is_integer($test[$id][$info['title_field']])?strval($test[$id][$info['title_field']]):$test[$id][$info['title_field']]).' \ '.$field['m_name'];
 							}
-					
+
 							continue 2;
 						}
 					}
-			
+
 					$ret[$id]=$field['m_table'].' \ '.(is_integer($test[$id][$field['key']])?strval($test[$id][$field['key']]):$test[$id][$field['key']]).' \ '.$field['m_name'];
 				} else
 				{
@@ -199,7 +199,7 @@ function nice_get_lang_files($lang=NULL)
 		{
 			$base_map=get_lang_file_map(fallback_lang(),$lang_file,true);
 			$criticise_map=get_lang_file_map($lang,$lang_file);
-		
+
 			$num_translated=0;
 			$num_english=count($base_map);
 
@@ -258,7 +258,7 @@ function get_lang_file_descriptions($lang,$file=NULL)
 		}
 		return $descriptions;
 	}
-	
+
 	$a=get_custom_file_base().'/lang_custom/'.$lang.'/'.$file.'.ini';
 	if ((get_custom_file_base()!=get_file_base()) && (!is_file($a)))
 		$a=get_file_base().'/lang_custom/'.$lang.'/'.$file.'.ini';

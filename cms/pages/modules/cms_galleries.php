@@ -156,7 +156,7 @@ class Module_cms_galleries extends standard_aed_module
 	{
 		$allow_images=($GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)',array('accept_images'=>1))>0);
 		$allow_videos=($GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)',array('accept_videos'=>1))>0);
-		
+
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_GALLERIES'),comcode_lang_string('DOC_GALLERIES'),
@@ -408,9 +408,9 @@ class Module_cms_galleries extends standard_aed_module
 							$slash=strrpos($_file,'/');
 							if ($slash===false) $slash=strrpos($_file,"\\");
 							if ($slash!==false) $_file=substr($_file,$slash+1);
-	
+
 							if ((is_image($_file)) || (is_video($_file))) $this->store_from_archive($_file,$tmp_name_2,$cat);
-	
+
 							zip_entry_close($entry);
 						}
 
@@ -489,7 +489,7 @@ class Module_cms_galleries extends standard_aed_module
 		}
 
 		$title=get_page_title('GALLERY_IMPORT');
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
 
 		if (!is_null(get_param('redirect',NULL)))
@@ -570,7 +570,7 @@ class Module_cms_galleries extends standard_aed_module
 		}
 
 		$title=get_page_title('GALLERY_IMPORT');
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
 
 		return $this->cat_aed_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
@@ -617,7 +617,7 @@ class Module_cms_galleries extends standard_aed_module
 		// Add to database
 		$this->simple_add($aurl,$thumb_url,$_file,$cat);
 	}
-	
+
 	/**
 	 * The actualiser to simple add an orphan file to a gallery.
 	 *
@@ -634,7 +634,7 @@ class Module_cms_galleries extends standard_aed_module
 		foreach ($_POST as $x=>$file)
 		{
 			if (!is_string($file)) continue;
-	
+
 			if (substr($x,0,5)=='file_')
 			{
 				$aurl='uploads/galleries/'.rawurlencode($file);
@@ -653,14 +653,14 @@ class Module_cms_galleries extends standard_aed_module
 				$this->simple_add($aurl,$thumb_url,$file,$cat);
 			}
 		}
-	
+
 		$title=get_page_title('ADD_IMAGE');
-	
+
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'_gimp','name'=>$cat),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * See if a gallery has any watermarks to use, or all galleries.
 	 *
@@ -682,10 +682,10 @@ class Module_cms_galleries extends standard_aed_module
 			$cat=$guy['name'];
 			if (has_category_access(get_member(),'galleries',$cat)) return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Take a file in the gallery uploads directory, and add it to a gallery.
 	 *
@@ -697,7 +697,7 @@ class Module_cms_galleries extends standard_aed_module
 	function simple_add($url,$thumb_url,$file,$cat)
 	{
 		require_code('exif');
-		
+
 		if (substr($thumb_url,-4,4)=='.gif') $thumb_url=substr($thumb_url,0,strlen($thumb_url)-4).'.png';
 		if (is_video($url))
 		{
@@ -763,7 +763,7 @@ class Module_cms_galleries extends standard_aed_module
 		foreach ($_POST as $x=>$file)
 		{
 			if (!is_string($file)) continue;
-	
+
 			if (substr($x,0,5)=='file_')
 			{
 				$path=get_custom_file_base().'/uploads/galleries/'.filter_naughty($file);
@@ -771,14 +771,14 @@ class Module_cms_galleries extends standard_aed_module
 				sync_file('uploads/galleries/'.$file);
 			}
 		}
-	
+
 		$title=get_page_title('DELETE_IMAGE');
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'_gimp','name'=>$cat),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * Filter any uploaded image such that it is watermarked.
 	 */
@@ -845,7 +845,7 @@ class Module_cms_galleries extends standard_aed_module
 	function nice_get_ajax_tree()
 	{
 		if ($GLOBALS['SITE_DB']->query_value('images','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'images'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'galleries'),get_module_zone('galleries'));
 
@@ -873,7 +873,7 @@ class Module_cms_galleries extends standard_aed_module
 	function get_form_fields($title='',$cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
-		
+
 		if ($adding)
 		{
 			$cat=get_param('cat','');
@@ -916,7 +916,7 @@ class Module_cms_galleries extends standard_aed_module
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('_DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false));
 		}
-	
+
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
@@ -1097,7 +1097,7 @@ class Module_cms_galleries extends standard_aed_module
 		$id=intval($_id);
 
 		$delete_status=post_param('delete','leave');
-		
+
 		$this->donext_type=post_param('cat');
 
 		delete_image($id,$delete_status=='2');
@@ -1224,10 +1224,10 @@ class Module_cms_galleries_alt extends standard_aed_module
 			if ($video_length==0)
 				$video_length=(is_null($_video_length))?0:$_video_length;
 		}
-	
+
 		return array($video_width,$video_height,$video_length);
 	}
-	
+
 	/**
 	 * Standard aed_module list function.
 	 *
@@ -1236,7 +1236,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	function nice_get_ajax_tree()
 	{
 		if ($GLOBALS['SITE_DB']->query_value('videos','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'videos'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'galleries'),get_module_zone('galleries'));
 
@@ -1326,7 +1326,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 
 		return array($fields,$hidden);
 	}
-	
+
 	/**
 	 * Standard aed_module submitter getter.
 	 *
@@ -1423,7 +1423,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
 		$comments=post_param('comments');
-	
+
 		$this->donext_type=$cat;
 
 		$id=add_video($title,$cat,$comments,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height);
@@ -1471,7 +1471,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 
 		if (($thumb_url=='') && ($url!=''))
 			$thumb_url=create_video_thumb($url);
-			
+
 		if ($thumb_url=='')
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('videos',array('url','thumb_url'),array('id'=>$id),'',1);
@@ -1603,7 +1603,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 				$flow_mode_interface=intval(round($GLOBALS['SITE_DB']->query_value('galleries','AVG(flow_mode_interface)',array('parent_id'=>'root')))); // Determine default based on what is 'the norm' currently. Sometimes maths is beautiful :)
 			}
 		}
-		
+
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'fullname',$fullname,true));

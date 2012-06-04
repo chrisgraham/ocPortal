@@ -32,7 +32,7 @@ class Hook_search_ocf_members
 		if (($GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)')<=3) && (get_param('id','')!='ocf_members') && (get_param_integer('search_ocf_members',0)!=1)) return NULL;
 
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('MEMBERS');
 		$info['default']=false;
@@ -55,7 +55,7 @@ class Hook_search_ocf_members
 
 		return $info;
 	}
-	
+
 	/**
 	 * Get a list of extra fields to ask for.
 	 *
@@ -64,7 +64,7 @@ class Hook_search_ocf_members
 	function get_fields()
 	{
 		require_code('ocf_members');
-		
+
 		$indexes=collapse_2d_complexity('i_fields','i_name',$GLOBALS['FORUM_DB']->query_select('db_meta_indices',array('i_fields','i_name'),array('i_table'=>'f_member_custom_fields')));
 
 		$fields=array();
@@ -75,7 +75,7 @@ class Hook_search_ocf_members
 			foreach ($rows as $row)
 			{
 				if (!array_key_exists('field_'.strval($row['id']),$indexes)) continue;
-				
+
 				$ob=get_fields_hook($row['cf_type']);
 				$temp=$ob->get_search_inputter($row);
 				if (is_null($temp))
@@ -86,7 +86,7 @@ class Hook_search_ocf_members
 					$fields[]=array('NAME'=>strval($row['id']),'DISPLAY'=>$display,'TYPE'=>$type,'SPECIAL'=>$special);
 				} else $fields=array_merge($fields,$temp);
 			}
-	
+
 			$age_range=get_param('option__age_range',get_param('option__age_range_from','').'-'.get_param('option__age_range_to',''));
 			$fields[]=array('NAME'=>'_age_range','DISPLAY'=>do_lang_tempcode('AGE_RANGE'),'TYPE'=>'_TEXT','SPECIAL'=>$age_range);
 		}
@@ -127,7 +127,7 @@ class Hook_search_ocf_members
 
 		return $fields;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -168,7 +168,7 @@ class Hook_search_ocf_members
 			case 'add_date':
 				$remapped_orderer='m_join_time';
 				break;
-				
+
 			case 'relevance':
 			case 'rating':
 				break;
@@ -394,7 +394,7 @@ class Hook_search_ocf_members
 				$_lines[do_lang('ACTIONS')]=hyperlink($email_member_url,do_lang_tempcode('_EMAIL_MEMBER'));
 			}
 		}
-		
+
 		return $_lines;
 	}
 

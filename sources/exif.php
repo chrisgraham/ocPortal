@@ -59,12 +59,12 @@ function get_exif_data($path,$filename=NULL)
 function _get_simple_gps($exif)
 {
 	// Based on http://stackoverflow.com/questions/2526304/php-extract-gps-exif-data
-	
+
 	$result = array();
-	
+
 	if (!isset($exif['GPSLatitude'])) return array();
 	if (!isset($exif['GPSLongitude'])) return array();
-	
+
 	// get the Hemisphere multiplier
 	$lat_m = 1; $long_m = 1;
 	if($exif['GPSLatitudeRef'] == 'S')
@@ -223,7 +223,7 @@ function get_exif_image_caption($path,$filename)
 			}
 		}
 	}
-	
+
 	// Remove pointless camera names that some vendors put in
 	if (strpos($comments,'SONY')!==false) $comments='';
 	if (strpos($comments,'CANON')!==false) $comments='';
@@ -248,14 +248,14 @@ function store_exif($content_type,$content_id,$exif,$map=NULL)
 	require_code('fields');
 
 	if (!has_tied_catalogue($content_type)) return;
-	
+
 	// Get field values
 	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name'),array('c_name'=>'_'.$content_type),'ORDER BY cf_order');
 	if (is_null($map)) $map=array();
 	foreach ($fields as $field)
 	{
 		$name=get_translated_text($field['cf_name'],NULL,'EN');
-		
+
 		if (isset($exif[$name]))
 			$map[$field['id']]=$exif[$name];
 		elseif (isset($exif[str_replace(' ','',$name)]))

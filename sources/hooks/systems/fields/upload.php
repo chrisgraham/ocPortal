@@ -78,7 +78,7 @@ class Hook_fields_upload
 		if (is_object($ev)) return $ev;
 
 		if ($ev=='') return '';
-		
+
 		$original_filename=basename($ev);
 		$download_url=(url_is_local($ev)?(get_custom_base_url().'/'):'').$ev;
 		if (strpos($ev,'::')!==false)
@@ -87,7 +87,7 @@ class Hook_fields_upload
 			$keep=symbol_tempcode('KEEP');
 			$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($ev)).$keep->evaluate();
 		}
-		
+
 		$extension=get_file_extension($ev);
 		require_code('mime_types');
 		$mime_type=get_mime_type($extension);
@@ -176,7 +176,7 @@ class Hook_fields_upload
 		}
 		return $value;
 	}
-	
+
 	/**
 	 * The field is being deleted, so delete any necessary data
 	 *

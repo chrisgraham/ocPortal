@@ -351,7 +351,7 @@ class catalogues_test_set extends ocp_test_case
 			'http_referer' => 'http://localhost/~manu/nomosa/cms/cms_catalogues/add_catalogue.htm',
 			'description__is_wysiwyg' => '1',
 		);
-		
+
 		require_code('autosave');
 		$this->cms_catalogues_alt->_ad();
 	}

@@ -53,7 +53,7 @@ class PHP_Crossword
 	var $_tries = 0;
 	var $_debug = FALSE;
 	var $_items;
-	
+
 	var $word_pool = NULL;
 
 	/**
@@ -66,7 +66,7 @@ class PHP_Crossword
 		$this->rows = (int)$rows;
 		$this->cols = (int)$cols;
 	}
-	
+
 	/**
 	 * Enable / disable debugging
 	 * @param boolean $debug
@@ -111,20 +111,20 @@ class PHP_Crossword
 	{
 		// set the number of full tries
 		$this->_full_tries = 0;
-	
+
 		// try to generate until we get required number of words
 		while ($this->_full_tries < $this->max_full_tries)
 		{
 			// reset grid
 			$this->reset();
-			
+
 			// count number of tried to generate crossword 
 			// with required number of words
 			$this->_full_tries++;
 
 			// pick and place first word
 			$this->__placeFirstWord();
-			
+
 			// try to find other words and place them
 			$this->__autoGenerate();
 
@@ -140,7 +140,7 @@ class PHP_Crossword
 
 		if ($this->_debug)
 			echo "ERROR: unable to generate {$this->max_words} words crossword (tried {$this->_full_tries} times)";
-		
+
 		return FALSE;
 	}
 
@@ -151,10 +151,10 @@ class PHP_Crossword
 	{
 		// create new grid object
 		$this->grid = new PHP_Crossword_Grid($this->rows, $this->cols);
-		
+
 		// reset number of tries to pick words
 		$this->_tries = 0;
-		
+
 		// reset crossword items
 		$this->_items = NULL;
 	}
@@ -177,7 +177,7 @@ class PHP_Crossword
 	{
 		return $this->_items;
 	}
-	
+
 	/**
 	 * Get crossword items array
 	 * @private
@@ -199,7 +199,7 @@ class PHP_Crossword
 				"axis"		=> $w->axis,
 				);
 		}
-		
+
 		return $items;
 	}
 
@@ -287,7 +287,7 @@ class PHP_Crossword
 			// dump( $this->_match_line );
 			$s_cell = & $this->__calcStartCell($cell, $start, $end, $axis, $word, $pos);
 			$can = $this->grid->canPlaceWord($word, $s_cell->x, $s_cell->y, $axis);
-			
+
 			//if ( !$can )
 			// dump(strtoupper("Wrong start position [{$s_cell->x}x{$s_cell->y}]! Relocating..."));
 
@@ -465,7 +465,7 @@ class PHP_Crossword
 
 		$this->grid->placeWord($word, $x, $y, PC_AXIS_H);
 	}
-	
+
 	/**
 	 * Load words from ocPortal
 	 */
@@ -481,7 +481,7 @@ class PHP_Crossword
 			{
 				$this->word_pool[]=$GLOBALS['FORUM_DRIVER']->pname_name($member);
 			}
-			
+
 			// From keywords
 			$meta=$GLOBALS['SITE_DB']->query_select('seo_meta',array('meta_keywords'));
 			foreach ($meta as $m)
@@ -495,7 +495,7 @@ class PHP_Crossword
 			}
 		}
 	}
-	
+
 	/**
 	 * Load words for the match
 	 * @private
@@ -507,14 +507,14 @@ class PHP_Crossword
 	function __loadWords($match, $len_min, $len_max)
 	{
 		$this->__initialiseWords();
-		
+
 		$possible=array();
 		foreach ($this->word_pool as $w)
 		{
 			if ((strlen($w)>=$len_min) && (strlen($w)<=$len_max) && (preg_match('#'.$match.'#',$w)!=0))
 				$possible[]=$w;
 		}
-		
+
 		return $possible;
 	}
 
@@ -534,7 +534,7 @@ class PHP_Crossword
 			if (strlen($w)<=$max_length)
 				return $w;
 		}
-		
+
 		return NULL;
 	}
 
@@ -560,7 +560,7 @@ class PHP_Crossword
 		$word = preg_replace("/[\_\'\"\%\*\+\\\\\/\[\]\(\)\.\{\}\$\^\,\<\>\;\:\=\?\#\-]/", '', $word);
 		if (empty($word)) return FALSE;
 		if ($this->existsWord($word)) return FALSE;
-		
+
 		$this->__initialiseWords();
 		$this->word_pool[]=$word;
 	}
@@ -572,7 +572,7 @@ class PHP_Crossword
 	function getXML()
 	{
 		$words = $this->getWords();
-		
+
 		if (!count($words))
 			return "<error>There are no words in the grid.</error>";
 
@@ -591,7 +591,7 @@ class PHP_Crossword
 			$xml[] = $this->__wordItem2XML($item, "\t\t");
 
 		$xml[] = "	</items>";
-		
+
 		if ($this->_debug)
 			$xml[] = "	<html>" . htmlspecialchars($this->grid->getHTML()) . "</html>";
 
@@ -627,7 +627,7 @@ class PHP_Crossword
 
 		return $xml;
 	}
-	
+
 	/**
 	 * Get number of words
 	 * @return int
@@ -637,7 +637,7 @@ class PHP_Crossword
 		$this->__initialiseWords();
 		return count($this->word_pool);
 	}
-	
+
 	/**
 	 * Generate crossword from provided words list
 	 * @param string $words_list
@@ -647,36 +647,36 @@ class PHP_Crossword
 	{
 		// save current settings
 		$_max_words = $this->max_words;
-		
+
 		// split words list and  insert
 		foreach (explode("\n", $words_list) as $line)
 			foreach (explode(" ", $line) as $word)
 				$this->insertWord($word, '');
-		
+
 		// try to generate crossword from all passed words
 		$required_words = $this->countWords();
-		
+
 		// if user entered more words then max_words - require max_words...
 		if ($required_words > $_max_words)
 			$required_words = $_max_words;
-		
+
 		$success = FALSE;
-	
+
 		while ($required_words > 1)
 		{
 			$this->setMaxWords($required_words);
-			
+
 			if ($success = $this->generate()) 
 				break;
-			
+
 			$required_words--;
 		}
-		
+
 		// restore previous settings
 		$this->setMaxWords($_max_words);
 
 		return $success;
 	}
-	
+
 }
 ?>

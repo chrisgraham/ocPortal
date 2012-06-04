@@ -28,13 +28,13 @@ function get_product_details()
 	$products=array();
 
 	$_hook=get_param('hook');
-	
+
 	require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($_hook));
 
 	$object=object_factory('Hook_'.filter_naughty_harsh($_hook));
 
 	$products=$object->get_product_details();	
-	
+
 	return $products;
 }
 
@@ -46,7 +46,7 @@ function get_product_details()
 function add_to_cart($product_det)
 {
 	$_hook=get_param('hook');
-	
+
 	require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($_hook));
 
 	$object=object_factory('Hook_'.filter_naughty_harsh($_hook));
@@ -260,7 +260,7 @@ function stock_maintain_warn_mail($product_name,$product_id)
 function update_stock($order_id)
 {
 	$row=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$order_id),'',1);
-	
+
 	foreach ($row as $ordered_items)
 	{
 		$hook=$ordered_items['p_type'];	
@@ -289,7 +289,7 @@ function payment_form()
 	$cart_items=array();
 
 	$cart_items=find_products_in_cart();
-	
+
 	$purchase_id=NULL;
 
 	$tax_opt_out=get_order_tax_opt_out_status();
@@ -320,7 +320,7 @@ function payment_form()
 	}
 
 	$total_price=0;	
-	
+
 	foreach ($cart_items as $item)
 	{	
 		$product=$item['product_id'];
@@ -328,10 +328,10 @@ function payment_form()
 		$hook=$item['product_type'];
 
 		require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($hook),true);
-		
+
 		$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 		if (is_null($object)) continue;
-	
+
 		$temp=$object->get_products(false,$product);
 
 		if ($temp[$product][0]==PRODUCT_SUBSCRIPTION) continue;	//Subscription type skipped.
@@ -339,7 +339,7 @@ function payment_form()
 		$price=$temp[$product][1];
 
 		$item_name=$temp[$product][4];				
-	
+
 		if (method_exists($object,'set_needed_fields'))
 			$purchase_id=$object->set_needed_fields($product);
 		else
@@ -374,12 +374,12 @@ function payment_form()
 			),
 			true
 		);
-		
+
 		$total_price+=$price*$item['quantity'];
 	}
 
 	$GLOBALS['SITE_DB']->query_update('shopping_order',array('tot_price'=>$total_price),array('id'=>$order_id),'',1);
-	
+
 	
 	if (!perform_local_payment()) // Pass through to the gateway's HTTP server
 	{
@@ -476,7 +476,7 @@ function get_order_status_list()
 	);
 
 	$status_list->attach(form_input_list_entry('all',false,do_lang_tempcode('NA')));
-	
+
 	foreach ($status as $key=>$values)
 	{
 		$status_list->attach(form_input_list_entry($key,false,$values));
@@ -495,11 +495,11 @@ function get_ordered_product_list_string($order_id)
 	$product_det=array();
 
 	$row=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$order_id));
-	
+
 	foreach ($row as $key=>$product)
 	{
 		$product_det[]=$product['p_name']." x ".integer_format($product['p_quantity'])." @ ".do_lang('UNIT_PRICE')."=".float_format($product['p_price']);
 	}
-	
+
 	return implode(chr(10),$product_det);
 }

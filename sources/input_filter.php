@@ -62,7 +62,7 @@ function check_posted_field($name,$val)
 			foreach ($allowed_partners as $partner)
 			{
 				if (trim($partner)=='') continue;
-				
+
 				if (strpos(ocp_srv('HTTP_REFERER'),trim($partner))!==false)
 				{
 					$found=true;
@@ -78,7 +78,7 @@ function check_posted_field($name,$val)
 	}
 
 	$val=filter_form_field_default($name,$val);
-	
+
 	return $val;
 }
 
@@ -191,7 +191,7 @@ function filter_form_field_default($name,$val)
 			}
 		}
 	}
-	
+
 	return $val;
 }
 

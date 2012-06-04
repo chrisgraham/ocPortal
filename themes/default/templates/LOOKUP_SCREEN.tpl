@@ -70,7 +70,7 @@
 		<ul>
 			{IP_LIST}
 		</ul>
-		
+
 		<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SET}" />
 	</form>
 {+END}
@@ -86,7 +86,7 @@
 
 {+START,IF_NON_EMPTY,{ALERTS}}
 	<h2>{!SECURITY_ALERTS}</h2>
-	
+
 	{ALERTS}
 {+END}
 

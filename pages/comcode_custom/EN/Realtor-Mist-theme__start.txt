@@ -6,7 +6,7 @@
 		[/box]
 		[block]main_iotd[/block]
 	[/surround]
-	
+
 	[surround="col2"]
 		[box="Lorem ipsum dolor sed do eiusmod"]
 			Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit, sed do eiusmod tempor incididunt.<br />
@@ -15,7 +15,7 @@
 				[page=":about"]read more[/page]
 			[/surround]
 		[/box]
-	
+
 		[surround="lined_boxes"]	
 			[box="Lorem ipsum dolor"]
 				Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit.
@@ -23,14 +23,14 @@
 					[page=":about"]read more[/page]
 				[/surround]
 			[/box]
-		
+
 			[box="Lorem ipsum dolor"]
 				Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit.
 				[surround="more"]
 					[page=":about"]read more[/page]
 				[/surround]
 			[/box]
-		
+
 			[box="Lorem ipsum dolor"]
 				Consectetur adipisicing elit, sed do eiusmod tempor incididunt consectetur adipisicing elit.
 				[surround="more"]

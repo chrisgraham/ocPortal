@@ -30,7 +30,7 @@ class Hook_addon_registry_ocf_cpfs
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

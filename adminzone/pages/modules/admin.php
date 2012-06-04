@@ -40,7 +40,7 @@ class Module_admin
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -60,7 +60,7 @@ class Module_admin
 	{
 		require_code('templates_donext');
 		require_code('menus');
-		
+
 		require_all_lang();
 
 		$type=get_param('type','misc');
@@ -102,14 +102,14 @@ class Module_admin
 				return do_next_manager_hooked('TOOLS','DOC_TOOLS','tools');
 			case 'security':
 				return do_next_manager_hooked('SECURITY','DOC_SECURITY','security');
-				
+
 			case 'search':
 				return $this->search();
 		}
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * Get synonyms for ocPortal terminology.
 	 *
@@ -192,7 +192,7 @@ class Module_admin
 			array('ssl','https'),
 		);
 	}
-	
+
 	/**
 	 * Strip junk words from the keywords representing a search.
 	 *
@@ -218,7 +218,7 @@ class Module_admin
 		}
 		return $_words;
 	}
-	
+
 	/**
 	 * See if a string matches one of the keywords.
 	 *
@@ -249,12 +249,12 @@ class Module_admin
 	function _section_match($section_limitations,$results_type)
 	{
 		if ($section_limitations==array()) return true;
-		
+
 		foreach ($section_limitations as $l)
 		{
 			if (strpos(strtolower($results_type),strtolower($l))!==false) return true;
 		}
-		
+
 		return false;
 	}
 
@@ -268,13 +268,13 @@ class Module_admin
 		require_all_lang();
 		require_code('zones2');
 		disable_php_memory_limit();
-		
+
 		if (function_exists('set_time_limit')) @set_time_limit(100);
 
 		$n=mixed();
-		
+
 		$default_theme=$GLOBALS['FORUM_DRIVER']->get_theme('');
-		
+
 		// Mess around to find our search keywords (takes synonyms into account, and generally tidies up)
 		$raw_search_string=get_param('search_content',false,true);
 
@@ -309,13 +309,13 @@ class Module_admin
 		{
 			$keyword=trim($keyword);
 			if ($keyword=='') continue;
-			
+
 			if (substr($keyword,0,1)=='@')
 			{
 				$section_limitations[]=substr($keyword,1);
 				continue;
 			}
-			
+
 			foreach ($synonym_rows as $synonyms)
 			{
 				if ((in_array(strtolower($keyword),$synonyms)) || ((array_key_exists($xi+1,$_keywords)) && (in_array(strtolower($_keywords[$xi].' '.$_keywords[$xi+1]),$synonyms))))
@@ -338,7 +338,7 @@ class Module_admin
 				// Special stemmer exceptions
 				if ($keyword=='news') continue;
 				if ($keyword=='defaultness') continue;
-				
+
 				$_keywords[]=$stemmer->stem($keyword);
 			}
 			$keywords=$_keywords;
@@ -355,7 +355,7 @@ class Module_admin
 					$keywords[]=$kw.'s';
 			}
 		}
-		
+
 		$this->keywords=$keywords;
 
 		$content=array();
@@ -550,7 +550,7 @@ class Module_admin
 						case 'timezone':
 							$t=do_lang('DESCRIPTION_TIMEZONE_SITE');
 							break;
-						
+
 						default:
 							$t=do_lang($p['explanation'],NULL,NULL,NULL,NULL,false);
 							break;
@@ -574,13 +574,13 @@ class Module_admin
 						$tree->attach(hyperlink($url,do_lang($p['section'])));
 						$sup=do_lang_tempcode('LOCATED_IN',$tree);
 						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>protect_from_escaping($t),'SUP'=>$sup)));
-	
+
 						if ($conf_found_count>100)
 						{
 							$content[$current_results_type]=do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>''));
 							break;
 						}
-						
+
 						$conf_found_count++;
 
 						if (!array_key_exists($p['the_page'],$config_categories)) $config_categories[$p['the_page']]=array();
@@ -685,7 +685,7 @@ class Module_admin
 					$tree->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'misc'),'adminzone'),do_lang_tempcode('THEMES')));
 					$sup=do_lang_tempcode('LOCATED_IN',$tree);
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>'','SUP'=>$sup)));
-					
+
 					break;
 				}
 			}
@@ -1072,7 +1072,7 @@ class Module_admin
 				}
 			}
 		}
-		
+
 		ksort($content);
 
 		// And show results...

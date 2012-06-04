@@ -30,7 +30,7 @@ class Hook_addon_registry_guestbook
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

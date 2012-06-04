@@ -560,7 +560,7 @@ class Hook_addon_registry_core_form_interfaces
 		}
 		$name = placeholder_random_id();
 		$hidden = do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2',array('NAME'=>$name,'VALUE'=>lorem_phrase()));
-		
+
 		$name = placeholder_random_id();
 		foreach (placeholder_array() as $key=>$value)
 		{

@@ -44,7 +44,7 @@ function build_stored_menu_hooked($collect,$type,$parent=NULL)
 		if ($i[0]==$type)
 		{
 			if (!has_actual_page_access(NULL,$i[2][0],$i[2][2])) continue;
-			
+
 			do
 			{
 				$rand_id=mt_rand(0,mt_getrandmax()); // mt_getrandmax is high, needs to be to stop $parent possibly being set as $rand_id. But we will loop just in case.
@@ -143,7 +143,7 @@ function build_management_menu()
 			$sections['admin']=array('TOOLTIP'=>'','CURRENT'=>false,'URL'=>build_url(array('page'=>'cms'),'cms'),'CAPTION'=>do_lang('OPTIONS'),'IMG'=>'menu_items/management_navigation/cms');
 		}
 	}
-	
+
 	if (has_zone_access(get_member(),'adminzone'))
 	{
 		$docs_url=(get_option('show_docs')=='0')?build_url(array('page'=>'website'),'adminzone'):make_string_tempcode(brand_base_url().'/docs'.strval(ocp_version()).'/');
@@ -221,7 +221,7 @@ function build_community_menu()
 	}
 
 	$items=array();
-	
+
 	$i=1;
 	foreach ($sections as $section)
 	{
@@ -380,7 +380,7 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 		$url=build_url(array('page'=>'admin_menus','type'=>'edit','id'=>$root['special'],'redirect'=>$redirect,'wide'=>1,'clickable_sections'=>(($type=='popup') || ($type=='dropdown'))?1:0),'adminzone');
 		$content->attach(do_template('MENU_STAFF_LINK',array('_GUID'=>'a5209ec65425bed1207e2f667d9116f6','TYPE'=>$type,'EDIT_URL'=>$url,'NAME'=>$menu)));
 	}
-	
+
 	return $content;
 }
 
@@ -470,7 +470,7 @@ function build_stored_menu_branch($thisitem,$items)
 		if ($branch['type']=='drawer')
 		{
 			if ($thisitem['i_expanded']==1) $branch['modifiers']['expanded']=1;
-	
+
 			for ($i=0;$i<count($items);$i++)
 			{
 				if (array_key_exists($i,$items))
@@ -683,7 +683,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 			foreach ($all_branches as $_branch)
 			{
 				if (!is_string($_branch['special'])) continue;
-				
+
 				if (preg_match('#([\w-]*):([\w-]+|[^/]|$)((:(.*))*)#',$_branch['special'],$_parts)!=0)
 				{
 					if ($_parts[1]==$users_current_zone) $somewhere_definite=true;
@@ -715,7 +715,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 		} else // URL, not page-link
 		{
 			$page_link='';
-		
+
 			$sym_pos=mixed();
 			$sym_pos=is_null($url)?false:strpos($url,'{$');
 			if ($sym_pos!==false) // Specially encoded $ symbols

@@ -50,7 +50,7 @@ class Module_admin_realtime_rain
 	{
 		return array('!'=>'REALTIME_RAIN');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *

@@ -4,7 +4,7 @@
 			<a class="hide_button" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">
 				<img title="" alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,{$?,{EXPANDED},contract,expand}}" />
 			</a>
-			
+
 			<a class="hide_button non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{SECTION_TITLE*}</a>
 		</h4>
 		<div class="hide_tag" style="display: {$JS_ON,{$?,{EXPANDED},block,none},block}">

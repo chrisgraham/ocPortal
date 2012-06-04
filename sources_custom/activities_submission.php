@@ -36,7 +36,7 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
 		'a_label_3'=>$a_label_3,
 		'a_is_public'=>$a_is_public
 	);
-	
+
 	$stored_id=mixed();
 
 	// Check if this has been posted previously (within the last 10 minutes) to
@@ -159,7 +159,7 @@ function activities_ajax_submit_handler()
 function activities_ajax_update_list_handler()
 {
 	$map=array();
-	
+
 	$map['max']=$GLOBALS['SITE_DB']->query_value_null_ok('values', 'the_value', array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
 
 	if (is_null($map['max']))

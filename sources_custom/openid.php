@@ -109,7 +109,7 @@ class LightOpenID
 				return $this->trustRoot;
 		}
 	}
-	
+
 	/**
 	 * Checks if the server specified in the url exists.
 	 *
@@ -123,11 +123,11 @@ class LightOpenID
 		} else {
 			$server = @parse_url($url, PHP_URL_HOST);
 		}
-		
+
 		if (!$server) {
 			return false;
 		}
-		
+
 		return !!gethostbynamel($server);
 	}
 
@@ -137,7 +137,7 @@ class LightOpenID
 		if(!$this->hostExists($url)) {
 			throw new ErrorException('Invalid request.');
 		}
-		
+
 		$params = http_build_query($params, '', '&');
 		switch($method) {
 			case 'GET':
@@ -178,14 +178,14 @@ class LightOpenID
 				if(!$headers_tmp) {
 					return array();
 				}
-			
+
 				# Parsing headers.
 				$headers = array();
 				foreach($headers_tmp as $header) {
 					$pos = strpos($header,':');
 					$name = strtolower(trim(substr($header, 0, $pos)));
 					$headers[$name] = trim(substr($header, $pos+1));
-				
+
 					# Following possible redirections. The point is just to have
 					# claimed_id change with them, because get_headers() will
 					# follow redirections automatically.
@@ -402,7 +402,7 @@ class LightOpenID
 		}
 		return $params;
 	}
-	
+
 	protected function axParams()
 	{
 		$params = array();
@@ -527,7 +527,7 @@ class LightOpenID
 			'openid.signed'	   => $this->data['openid_signed'],
 			'openid.sig'		  => $this->data['openid_sig'],
 			);
-		
+
 		if (isset($this->data['openid_ns'])) {
 			# We're dealing with an OpenID 2.0 server, so let's set an ns
 			# Even though we should know location of the endpoint,
@@ -539,7 +539,7 @@ class LightOpenID
 			$this->returnUrl .= (strpos($this->returnUrl, '?') ? '&' : '?')
 							 .  'openid.claimed_id=' . $this->claimed_id;
 		}
-		
+
 		if ($this->data['openid_return_to'] != $this->returnUrl) {
 			# The return_to url must match the url of current request.
 			# I'm assuing that noone will set the returnUrl to something that doesn't make sense.
@@ -565,7 +565,7 @@ class LightOpenID
 
 		return preg_match('/is_valid\s*:\s*true/i', $response);
 	}
-	
+
 	protected function getAxAttributes()
 	{
 		$alias = null;
@@ -611,7 +611,7 @@ class LightOpenID
 		}
 		return $attributes;
 	}
-	
+
 	protected function getSregAttributes()
 	{
 		$attributes = array();
@@ -630,7 +630,7 @@ class LightOpenID
 		}
 		return $attributes;
 	}
-	
+
 	/**
 	 * Gets AX/SREG attributes provided by OP. should be used only after successful validaton.
 	 * Note that it does not guarantee that any of the required/optional parameters will be present,

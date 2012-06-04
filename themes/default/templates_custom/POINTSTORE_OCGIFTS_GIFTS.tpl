@@ -15,7 +15,7 @@
 					<col width="100" />
 					<col width="100" />
 				</colgroup>
-			
+
 				<thead>
 					<tr style="border: 1px solid #ccc; background-color: #E3EAF6;">
 						<th colspan="2">{!GIFT}</th>
@@ -45,9 +45,9 @@
 			</table>
 		</div>
 	}
-	
+
 	<p>{!CHOOSE_YOUR_GIFT}</p>
-	
+
 	{+START,BOX}
 		{+START,LOOP,GIFTS}
 			<div style="float: left; margin: 15px" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{NAME^;*}.&lt;br /&gt;&lt;br /&gt;{!GIFT_POPULARITY^;*,{POPULARITY}}','auto');">
@@ -59,7 +59,7 @@
 	{+END}
 
 	<br />
-	
+
 	<div class="float_surrounder">
 		<form style="float: left; margin-top: 3px" title="{!SORT_BY}" action="{$SELF_URL*,,,,category=<null>,start=0}" method="post">
 			<div class="inline">
@@ -74,7 +74,7 @@
 				<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!FILTER}" />
 			</div>
 		</form>
-		
+
 		{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
 			{RESULTS_BROWSER}
 		{+END}

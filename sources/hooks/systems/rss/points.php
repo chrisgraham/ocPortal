@@ -35,7 +35,7 @@ class Hook_rss_points
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('points')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'points')) return NULL;
 
 		$filters=ocfilter_to_sqlfragment($_filters,'gift_to','f_members',NULL,'gift_to','id',true,true,$GLOBALS['FORUM_DB']); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)

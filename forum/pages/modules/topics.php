@@ -50,7 +50,7 @@ class Module_topics
 	{
 		return is_guest()?array():array('new_pt'=>'ADD_PERSONAL_TOPIC');
 	}
-	
+
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
@@ -167,7 +167,7 @@ class Module_topics
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for a trivial form page that just asks a reason before relaying the results to the same URL, but with an underscored type.
 	 *
@@ -214,10 +214,10 @@ class Module_topics
 		{
 			$url=find_post_id_url($post_id);
 		}
-		
+
 		return redirect_screen($title,$url,$lang);
 	}
-	
+
 	/**
 	 * Do a redirection page to a certain forum (because we've just done an action and want to go back).
 	 *
@@ -230,7 +230,7 @@ class Module_topics
 	{
 		if (is_null($lang)) $lang=do_lang_tempcode('SUCCESS');
 		$title=get_page_title($_title);
-	
+
 		// Show it worked / Refresh
 		if (is_null($forum_id))
 		{
@@ -257,7 +257,7 @@ class Module_topics
 		}
 		return $markers;
 	}
-	
+
 	/**
 	 * Copy marker IDs that were past through in the GET/POST into hidden form fields, so they may be relayed.
 	 *
@@ -1161,7 +1161,7 @@ class Module_topics
 	function ocf_get_post_templates($forum_id)
 	{
 		if (!addon_installed('ocf_post_templates')) return array();
-		
+
 		$all_templates=$GLOBALS['FORUM_DB']->query_select('f_post_templates',array('*'));
 		$apply=array();
 		foreach ($all_templates as $template)
@@ -1291,7 +1291,7 @@ class Module_topics
 			$hidden_fields->attach(form_input_hidden('forum_id',strval($forum_id)));
 			$threaded=($GLOBALS['FORUM_DB']->query_value('f_forums','f_is_threaded',array('id'=>$forum_id))==1);
 		}
-		
+
 		// Description
 		if ((get_option('is_on_topic_descriptions')=='1') && (!$threaded))
 			$specialisation->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),'','description',post_param('description',''),false,2));
@@ -1507,7 +1507,7 @@ class Module_topics
 	function new_post()
 	{
 		require_code('ocf_posts2');
-		
+
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='quote';
 		$NON_CANONICAL_PARAMS[]='intended_solely_for';
@@ -1762,7 +1762,7 @@ class Module_topics
 		$hidden_fields->attach(form_input_hidden('title',do_lang('REPORTED_POST_TITLE',$report_title)));
 		$hidden_fields->attach(form_input_hidden('o_post_id',strval($post_id)));
 		$hidden_fields->attach(form_input_hidden('from_url',get_self_url(true)));
-	
+
 		$text=new ocp_tempcode();
 
 		if (addon_installed('captcha'))
@@ -1789,7 +1789,7 @@ class Module_topics
 		$title=get_page_title('REPORT_POST');
 		return do_template('POSTING_SCREEN',array('_GUID'=>'eee64757e66fed702f74fecf8d595260','TITLE'=>$title,'TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}
-	
+
 	/**
 	 * The actualiser to add a reply.
 	 *
@@ -1806,7 +1806,7 @@ class Module_topics
 		require_code('attachments2');
 		require_code('ocf_posts_action');
 		require_code('ocf_posts_action2');
-		
+
 		$invited_members=array();
 
 		$topic_id=either_param_integer('topic_id',-1); // Posting into an existing topic?
@@ -1828,7 +1828,7 @@ class Module_topics
 				if ($_invited_member=='') continue;
 
 				if (get_magic_quotes_gpc()) $_invited_member=stripslashes($_invited_member);
-				
+
 				$invited_member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_invited_member);
 				if (is_null($invited_member))
 				{
@@ -1847,7 +1847,7 @@ class Module_topics
 		$post=post_param('post');
 		$title=post_param('title',NULL);
 		if (is_null($title)) $title='';
-	
+
 		$check_permissions=true;
 		$add_poll=post_param_integer('add_poll',0);
 		$topic_validated=$validated;
@@ -2627,7 +2627,7 @@ END;
 		$title=get_page_title('EDIT_POST');
 		return do_template('POSTING_SCREEN',array('_GUID'=>'347e469de58882bf77722bba6ed4aba4','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','TITLE'=>$title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'POSTING_FORM'=>$posting_form));
 	}
-	
+
 	/**
 	 * Get Javascript to restrict post lengths.
 	 *
@@ -2738,12 +2738,12 @@ END;
 	function validate_post() // Type
 	{
 		$post_id=get_param_integer('id');
-	
+
 		require_code('ocf_posts_action');
 		require_code('ocf_posts_action2');
 		require_code('ocf_posts_action3');
 		$topic_id=ocf_validate_post($post_id);
-		
+
 		$redirect=get_param('redirect','');
 		if ($redirect!='')
 		{
@@ -2756,7 +2756,7 @@ END;
 	// ================
 	// TOPIC MODERATION
 	// ================
-	
+
 	/**
 	 * Check there is at least some moderation access over the given topic.
 	 *
@@ -2768,10 +2768,10 @@ END;
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$forum_id=$topic_info[0]['t_forum_id'];
 		$personal_topic=is_null($forum_id);
-	
+
 		if (($personal_topic) && ($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member()) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')))
 			access_denied('I_ERROR');
-	
+
 		if (!$personal_topic)
 		{
 			if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('I_ERROR');
@@ -3016,10 +3016,10 @@ END;
 		$maximum_selections=$poll['po_maximum_selections'];
 		$fields=$this->get_poll_form_fields($question,$answers,$is_private,$is_open,$requires_reply,$minimum_selections,$maximum_selections);
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
-	
+
 		$title=get_page_title('EDIT_TOPIC_POLL');
 		$submit_name=do_lang_tempcode('SAVE');
-	
+
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'992a1bfd025e3fabea9d13307cfd2a91','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','PREVIEW'=>true,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
@@ -3071,7 +3071,7 @@ END;
 		ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$reason);
 		return $this->redirect_to('EDIT_TOPIC_POLL',$topic_id);
 	}
-	
+
 	/**
 	 * The UI to grab a reason for deleting a poll.
 	 *
@@ -3137,7 +3137,7 @@ END;
 		$submit_name=do_lang_tempcode('MOVE_TOPIC');
 		return do_template('FORM_SCREEN',array('_GUID'=>'313fd175ccd376caa32794fedad21ac6','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
-	
+
 	/**
 	 * The actualiser to move a topic.
 	 *

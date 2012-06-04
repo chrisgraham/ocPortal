@@ -40,7 +40,7 @@ class Hook_Preview_custom_comcode
 	function run()
 	{
 		require_code('comcode_text');
-		
+
 		$tag=post_param('tag');
 
 		$replace=post_param('replace');

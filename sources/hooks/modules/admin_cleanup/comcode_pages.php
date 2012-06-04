@@ -29,7 +29,7 @@ class Hook_comcode_pages
 	function info()
 	{
 		require_lang('zones');
-	
+
 		$info=array();
 		$info['title']=do_lang_tempcode('COMCODE_PAGES');
 		$info['description']=do_lang_tempcode('DESCRIPTION_COMCODE_PAGE_CACHE');
@@ -37,7 +37,7 @@ class Hook_comcode_pages
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

@@ -29,7 +29,7 @@ class Hook_sw_printer_friendly_block
 	function get_blocks()
 	{
 		if (!addon_installed('printer_friendly_block')) return array();
-		
+
 		return array(array(),array('side_printer_friendly'=>array('PANEL_NONE','PANEL_NONE')));
 	}
 

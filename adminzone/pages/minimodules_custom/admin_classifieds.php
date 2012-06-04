@@ -76,7 +76,7 @@ if (count($_POST)!=0)
 			}
 		}
 	}
-	
+
 	attach_message(do_lang_tempcode('SUCCESS','inform'));
 }
 

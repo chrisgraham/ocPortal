@@ -22,7 +22,7 @@
 				{+END}
 			{+END}
 		{+END}
-			
+
 		{+START,IF_EMPTY,{GIFTS}}
 			<p class="nothing_here">
 				<span class="ocf_member_detailer_titler">{!NO_GIFTS_TO_DISPLAY}</span>

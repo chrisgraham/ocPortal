@@ -119,15 +119,15 @@
 				{+END}
 			</div>
 		</div>
-	
+
 		<div class="download_description"{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
 			{+START,IF_NON_EMPTY,{DESCRIPTION}}
 				{DESCRIPTION}
 			{+END}
-		
+
 			{+START,IF_NON_EMPTY,{ADDITIONAL_DETAILS}}
 				<h2>{!ADDITIONAL_INFO}</h2>
-	
+
 				{ADDITIONAL_DETAILS}
 			{+END}
 

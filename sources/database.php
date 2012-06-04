@@ -25,7 +25,7 @@
 function init__database()
 {
 	if (defined('DB_MAX_KEY_SIZE')) return;
-	
+
 	global $QUERY_LIST,$QUERY_COUNT,$NO_QUERY_LIMIT,$NO_DB_SCOPE_CHECK,$QUERY_FILE_LOG,$SITE_INFO;
 	$QUERY_LIST=array();
 	$QUERY_COUNT=0;
@@ -405,9 +405,9 @@ class database_driver
 
 	var $text_lookup_original_cache;
 	var $text_lookup_cache;
-	
+
 	var $table_exists_cache;
-	
+
 	var $static_ob;
 
 	/**
@@ -439,7 +439,7 @@ class database_driver
 			$this->connection_read=array(get_use_persistent(),$db_name,$servers[mt_rand($min,count($servers)-1)],$db_user,$db_password,$fail_ok);
 		}
 		$this->table_prefix=$table_prefix;
-		
+
 		if ($static!==NULL)
 		{
 			$this->static_ob=$static;
@@ -481,7 +481,7 @@ class database_driver
 
 		$keys='';
 		$all_values=array();
-		
+
 		$eis=$this->static_ob->db_empty_is_null();
 
 		foreach ($map as $key=>$value)
@@ -548,21 +548,21 @@ class database_driver
 	{
 		/*
 		// Just works with MySQL (too complex to do for all SQL's http://forums.whirlpool.net.au/forum-replies-archive.cfm/523219.html)
-		
+
 		$full_tablename=$this->get_table_prefix().$tablename;
-		
+
 		$rows=$this->query("SHOW TABLES LIKE '".$full_tablename."'");
 		foreach ($rows as $row)
 			foreach ($row as $field)
 				if ($field==$full_tablename) return true;
 		return false;
 		*/
-		
+
 		if (array_key_exists($tablename,$this->table_exists_cache))
 		{
 			return $this->table_exists_cache[$tablename];
 		}
-		
+
 		$test=$this->query_value_null_ok('db_meta','m_name',array('m_table'=>$tablename));
 		$this->table_exists_cache[$tablename]=($test!==NULL);
 		return $this->table_exists_cache[$tablename];
@@ -630,7 +630,7 @@ class database_driver
 		if ($values===NULL) return NULL; // error
 		return $this->_query_value($values);
 	}
-	
+
 	/**
 	 * Deletes rows from the specified table, that match the specified conditions (if any). It may be limited to a row range (it is likely, only a maximum, of 1, will be used, if any kind of range at all).
 	 *
@@ -665,7 +665,7 @@ class database_driver
 		foreach ($where_map as $key=>$value)
 		{
 			if ($where!='') $where.=' AND ';
-	
+
 			if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
 			elseif (is_integer($value)) $where.=$key.'='.strval($value);
 			elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
@@ -767,19 +767,19 @@ class database_driver
 		foreach ($select_map as $key)
 		{
 			if (!is_string($key)) $key=strval($key);
-			
+
 			if ($select!='') $select.=',';
-	
+
 			$select.=$key;
 		}
-	
+
 		$where='';
 		if (($where_map!==NULL) && ($where_map!=array()))
 		{
 			foreach ($where_map as $key=>$value)
 			{
 				if (!is_string($key)) fatal_exit('Parameters to the database API given in the wrong order. Please check the function call.');
-				
+
 				if ($where!='') $where.=' AND ';
 
 				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
@@ -804,7 +804,7 @@ class database_driver
 		}
 		return 'SELECT '.$select.' FROM '.$table.' '.$end;
 	}
-	
+
 	/**
 	 * Initialise a filesystem DB that we can use for caching.
 	 */
@@ -821,7 +821,7 @@ class database_driver
 		}
 		$FILECACHE_OBJECT=$chain_db;
 	}
-	
+
 	/**
 	 * Get the DB results found from the specified parameters.
 	 *
@@ -870,7 +870,7 @@ class database_driver
 							$lang_fields_provisional=array();
 							break; // Bad API call, but we'll let it fail naturally
 						}
-						
+
 						if (preg_match('#^[A-Za-z\_\*]+$#',$s)!=0)
 							$select[$i]='main.'.$s;
 					}
@@ -895,7 +895,7 @@ class database_driver
 					{
 						$end=preg_replace('#(^|,|\s)([a-z]+)($|,|\s)#','${1}main.${2}${3}',$end);
 					}
-					
+
 					$field_prefix='main.';
 
 					foreach ($lang_fields_provisional as $lang_field)
@@ -911,7 +911,7 @@ class database_driver
 
 		return $this->_query($this->_get_where_expand($full_table,$select,$where_map,$end),$max,$start,$fail_ok,false,$lang_fields,$field_prefix);
 	}
-	
+
 	/**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available (see below).
 	 *
@@ -952,7 +952,7 @@ class database_driver
 	function _query($query,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false,$lang_fields=NULL,$field_prefix='',$save_as_volatile=false)
 	{
 		global $QUERY_COUNT,$NO_QUERY_LIMIT,$QUERY_LOG,$QUERY_LIST,$DEBUG_MODE,$IN_MINIKERNEL_VERSION,$QUERY_FILE_LOG,$UPON_QUERY_HOOKS;
-		
+
 		if ($QUERY_FILE_LOG!==NULL)
 		{
 			fwrite($QUERY_FILE_LOG,$query.';'.chr(10).chr(10));
@@ -1002,7 +1002,7 @@ class database_driver
 		if ((isset($lang_fields[0])) && (function_exists('user_lang')))
 		{
 			$lang=user_lang(); // We can we assume this, as we will cache against it -- if subsequently code wants something else it'd be a cache miss which is fine
-			
+
 			foreach ($lang_fields as $i=>$field)
 			{
 				$_i=strval($i);
@@ -1078,7 +1078,7 @@ class database_driver
 		if ($UPON_QUERY_HOOKS===NULL)
 		{
 			if (!function_exists('find_all_hooks')) return $ret;
-			
+
 			$UPON_QUERY_HOOKS=array();
 			$hooks=find_all_hooks('systems','upon_query');
 			foreach (array_keys($hooks) as $hook)
@@ -1103,12 +1103,12 @@ class database_driver
 				foreach ($ret as $row)
 				{
 					$entry=$row[$field];
-				
+
 					if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
 						$this->text_lookup_original_cache[$entry]=$row[$original];
 					if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
 						$this->text_lookup_cache[$entry]=$row[$parsed];
-				
+
 					unset($row[$original]);
 					unset($row[$parsed]);
 				}
@@ -1237,7 +1237,7 @@ class database_driver
 		require_code('database_helper');
 		_helper_promote_text_field_to_comcode($this,$table_name,$name,$key,$level,$in_assembly);
 	}
-	
+
 	/**
 	 * Delete the specified field from the specified table.
 	 *

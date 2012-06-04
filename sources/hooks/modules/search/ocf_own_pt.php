@@ -34,16 +34,16 @@ class Hook_search_ocf_own_pt
 		if ($GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_from='.strval(get_member()).' OR '.'t_pt_to='.strval(get_member()))==0) return NULL;
 
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('SEARCH_PERSONAL_TOPICS');
 		$info['default']=false;
 		$info['special_on']=array();
 		$info['special_off']=array('starter'=>do_lang_tempcode('POST_SEARCH_STARTER'));
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -83,14 +83,14 @@ class Hook_search_ocf_own_pt
 			case 'title':
 				$remapped_orderer='p_title';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='p_time';
 				break;
 		}
-	
+
 		require_lang('ocf');
-	
+
 		// Calculate our where clause (search)
 		$where_clause.=' AND ';
 		$where_clause.='t_forum_id IS NULL AND (t_pt_from='.strval((integer)get_member()).' OR t_pt_to='.strval((integer)get_member()).')';
@@ -115,7 +115,7 @@ class Hook_search_ocf_own_pt
 
 		// Calculate and perform query
 		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_posts r LEFT JOIN '.get_table_prefix().'f_topics s ON r.p_topic_id=s.id',array('!','r.p_post'),$where_clause,$content_where,$remapped_orderer,'r.*',array('r.p_title'));
-	
+
 		$out=array();
 		foreach ($rows as $i=>$row)
 		{

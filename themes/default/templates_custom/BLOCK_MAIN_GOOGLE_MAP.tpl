@@ -21,7 +21,7 @@
 				opened: true
 			},
 		});
-		
+
 		var infoWindow = new google.maps.InfoWindow();
 
 		{$,Close InfoWindow when clicking anywhere on the map.}

@@ -246,14 +246,14 @@ function load_tag_cloud(container)
 	var sizing=(width>height && height!=0)?height:width;
 
 	var camera = new Camera3D();
-	
+
 	/*
-	
+
 	README! If you are using this on a different size to the default ocPortal block size, you will need to alter "25" and"10" below to offsets that
 	are appropriate to your particular situation.
-	
+
 	*/
-	
+
 	camera.init(width/2-25 /* -ve offset because text positions are for top-left of first character */,height/2-10,0,300);
 
 	var item = new Object3D(container);

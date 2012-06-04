@@ -41,7 +41,7 @@ class Module_downloads
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -76,7 +76,7 @@ class Module_downloads
 
 		delete_menu_item_simple('_SEARCH:downloads:type=misc');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -88,7 +88,7 @@ class Module_downloads
 		if (is_null($upgrade_from))
 		{
 			require_lang('downloads');
-			
+
 			$GLOBALS['SITE_DB']->create_table('download_categories',array(
 				'id'=>'*AUTO',
 				'category'=>'SHORT_TRANS',
@@ -98,7 +98,7 @@ class Module_downloads
 				'description'=>'LONG_TRANS',	// Comcode
 				'rep_image'=>'URLPATH'
 			));
-		
+
 			$lang_key=lang_code_to_default_content('DOWNLOADS_HOME');
 			$id=$GLOBALS['SITE_DB']->query_insert('download_categories',array('rep_image'=>'','parent_id'=>NULL,'add_date'=>time(),'notes'=>'','description'=>insert_lang_comcode('',3),'category'=>$lang_key),true);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -151,9 +151,9 @@ class Module_downloads
 				'ip'=>'IP',
 				'date_and_time'=>'TIME'
 			));
-		
+
 			$GLOBALS['SITE_DB']->create_index('download_logging','calculate_bandwidth',array('date_and_time'));
-		
+
 			add_config_option('MAXIMUM_DOWNLOAD','maximum_download','integer','return \'15\';','SITE','CLOSED_SITE');
 			add_config_option('SHOW_DLOAD_TREES','show_dload_trees','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS',1);
 			add_config_option('ADD_DOWNLOAD','points_ADD_DOWNLOAD','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');
@@ -191,7 +191,7 @@ class Module_downloads
 				'l_title'=>'SHORT_TEXT',
 				'l_text'=>'LONG_TEXT'
 			));
-			
+
 			add_config_option('_SECTION_DOWNLOADS','downloads_show_stats_count_total','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('TOTAL_DOWNLOADS_IN_ARCHIVE','downloads_show_stats_count_archive','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('_COUNT_DOWNLOADS','downloads_show_stats_count_downloads','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
@@ -214,7 +214,7 @@ class Module_downloads
 	{
 		return array('misc'=>'DOWNLOADS_HOME','tree_view'=>'TREE');
 	}
-	
+
 	/**
 	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
 	 *
@@ -307,7 +307,7 @@ class Module_downloads
 					$pagelink=$pagelink_stub.'entry:'.strval($row['id']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
 				}
-				
+
 				$start+=500;
 			}
 			while (array_key_exists(0,$entry_data));
@@ -346,7 +346,7 @@ class Module_downloads
 		if ($type=='entry') return $this->dloadinfo_screen();
 		if ($type=='misc') return $this->category_screen();
 		if ($type=='index') return $this->show_all_downloads();
-		
+
 		return new ocp_tempcode();
 	}
 
@@ -485,7 +485,7 @@ class Module_downloads
 	function show_all_downloads()
 	{
 		$title=get_page_title('SECTION_DOWNLOADS');
-	
+
 		$id=get_param('id',strval(db_get_first_id()));
 
 		require_code('ocfiltering');
@@ -509,17 +509,17 @@ class Module_downloads
 		unset($rows);
 
 		$subcats=array();
-		
+
 		foreach ($cats as $letter=>$rows)
 		{
 			if (!is_string($letter)) $letter=strval($letter); // Numbers come out as numbers not strings, even if they went in as strings- darned PHP
-			
+
 			$has_download=false;
-			
+
 			$data=array();
 			$data['CAT_TITLE'] = $letter;
 			$data['LETTER'] = $letter;
-			
+
 			$out=new ocp_tempcode();
 
 			foreach ($rows as $myrow)
@@ -529,7 +529,7 @@ class Module_downloads
 			}
 
 			$data['DOWNLOADS']=$out;
-		
+
 			$subcats[]=$data;
 		}
 
@@ -692,9 +692,9 @@ class Module_downloads
 					$iedit_url=build_url(array('page'=>'cms_galleries','type'=>'_ed','id'=>$row['id']),get_module_zone('cms_galleries'));
 				} else $iedit_url=new ocp_tempcode();
 				$_content=do_template('DOWNLOAD_SCREEN_IMAGE',array('_GUID'=>'fba0e309aa0ae04891e32c65a625b177','ID'=>strval($row['id']),'VIEW_URL'=>$view_url,'EDIT_URL'=>$iedit_url,'THUMB'=>$thumb,'COMMENT'=>$comment));
-	
+
 				$_row->attach(do_template('DOWNLOAD_GALLERY_IMAGE_CELL',array('_GUID'=>'8400a832dbed64bb63f264eb3a038895','CONTENT'=>$_content)));
-	
+
 				if (($counter%$div==1) && ($counter!=0))
 				{
 					$_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID'=>'205c4f5387e98c534d5be1bdfcccdd7d','CELLS'=>$_row)));
@@ -758,13 +758,13 @@ class Module_downloads
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=downloads&filter=';
 
 		require_code('splurgh');
-	
+
 		if ($GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)')>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
 		$url_stub=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,false,false,true);
 		$last_change_time=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','MAX(add_date)');
-	
+
 		$category_rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category','parent_id'));
 		$map=array();
 		foreach ($category_rows as $category)
@@ -775,7 +775,7 @@ class Module_downloads
 			}
 
 			$id=$category['id'];
-	
+
 			$map[$id]['title']=get_translated_text($category['category']);
 			$children=array();
 			foreach ($category_rows as $child)
@@ -784,9 +784,9 @@ class Module_downloads
 			}
 			$map[$id]['children']=$children;
 		}
-	
+
 		$content=splurgh_master_build('id',$map,$url_stub->evaluate(),'download_tree_made',$last_change_time);
-	
+
 		$title=get_page_title('DOWNLOADS_TREE');
 		return do_template('SPLURGH_SCREEN',array('_GUID'=>'4efab542cfa3d48a3b23d60b04798a37','TITLE'=>$title,'CONTENT'=>$content));
 	}

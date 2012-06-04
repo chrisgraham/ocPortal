@@ -41,7 +41,7 @@ class Module_admin_ipban
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -50,7 +50,7 @@ class Module_admin_ipban
 		$GLOBALS['SITE_DB']->drop_if_exists('usersubmitban_ip');
 		$GLOBALS['SITE_DB']->drop_if_exists('usersubmitban_member');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -65,7 +65,7 @@ class Module_admin_ipban
 				'ip'=>'*IP',
 				'i_descrip'=>'LONG_TEXT',
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_table('usersubmitban_member',array(
 				'the_member'=>'*USER',
 			));
@@ -79,7 +79,7 @@ class Module_admin_ipban
 			$GLOBALS['SITE_DB']->add_table_field('usersubmitban_ip','i_descrip','LONG_TEXT');
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -89,7 +89,7 @@ class Module_admin_ipban
 	{
 		return array('misc'=>'IP_BANS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -110,7 +110,7 @@ class Module_admin_ipban
 		if ($type=='actual') return $this->actual();
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for managing banned IPs.
 	 *
@@ -131,7 +131,7 @@ class Module_admin_ipban
 		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
-		
+
 		require_code('form_templates');
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();

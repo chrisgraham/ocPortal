@@ -139,7 +139,7 @@ function output_room_screen($member_id)
 	require_javascript('javascript_editing');
 
 	list($realm,$x,$y)=get_loc_details($member_id);
-	
+
 	$rooms=$GLOBALS['SITE_DB']->query_select('w_rooms',array('*'),array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm),'',1);
 	$room=$rooms[0];
 	$room_name=$room['name'];

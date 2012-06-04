@@ -56,7 +56,7 @@ editAreaLoader.load_syntax["js"] = {
 		}
 		,'OPERATORS' : 'color: #FF00FF;'
 		,'DELIMITERS' : 'color: #0038E1;'
-				
+
 	}
 	,'AUTO_COMPLETION' :  {
 		"default": {	// the name of this definition group. It's posisble to have different rules inside the same definition file

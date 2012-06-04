@@ -34,7 +34,7 @@ class Block_main_staff_links
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -113,7 +113,7 @@ class Block_main_staff_links
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

@@ -30,7 +30,7 @@ class post_template_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('ocf_general_action');
 		require_code('ocf_general_action2');
-		
+
 		$this->post_id=ocf_make_post_template('Test Post','Testing','Code',0);
 
 		// Test the forum was actually created
@@ -45,7 +45,7 @@ class post_template_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('Tested Post'==$GLOBALS['FORUM_DB']->query_value('f_post_templates','t_title ',array('id'=>$this->post_id)));
 	}
-	
+
 	
 	function tearDown()
 	{

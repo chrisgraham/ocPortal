@@ -40,7 +40,7 @@ class Module_forums
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_forums
 	{
 		return array('!'=>'SECTION_FORUMS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -66,7 +66,7 @@ class Module_forums
 		{
 			$base_url=rtrim($forums,'/');
 			if ((strpos($base_url,'.php')!==false) || (strpos($base_url,'?')!==false)) $base_url=dirname($base_url);
-			
+
 			//log_hack_attack_and_exit('REFERRER_IFRAME_HACK'); No longer a hack attack becase people webmasters changed their forum base URL at some point, creating problems with old bookmarks!
 			header('Location: '.get_self_url(true,false,array('url'=>get_forum_base_url())));
 			exit();
@@ -77,7 +77,7 @@ class Module_forums
 		{
 			return do_template('FORUMS_EMBED',array('_GUID'=>'159575f6b83c5366d29e184a8dd5fc49','FORUMS'=>$forums));
 		}
-		
+
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
 		require_code('integrator');

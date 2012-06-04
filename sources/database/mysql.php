@@ -58,10 +58,10 @@ class Database_Static_mysql extends Database_super_mysql
 				mysql_select_db($db_name,$x);
 				$LAST_SELECT_DB=$db_name;
 			}
-	
+
 			return array($x,$db_name);
 		}
-	
+
 		if (!function_exists('mysql_connect'))
 		{
 			$error='The mySQL PHP extension not installed (anymore?). You need to contact the system administrator of this server, or use a different mySQL database driver (drivers can be chosen by editing info.php).';
@@ -91,7 +91,7 @@ class Database_Static_mysql extends Database_super_mysql
 			{
 				@mysql_query('CREATE DATABASE IF NOT EXISTS '.$db_name,$db);
 			}
-	
+
 			if (!mysql_select_db($db_name,$db))
 			{
 				$error='Could not connect to database ('.mysql_error().')';
@@ -122,7 +122,7 @@ class Database_Static_mysql extends Database_super_mysql
 
 		return array($db,$db_name);
 	}
-	
+
 	/**
 	 * Find whether full-text-search is present
 	 *
@@ -146,7 +146,7 @@ class Database_Static_mysql extends Database_super_mysql
 	{
 		return (version_compare(mysql_get_server_info($db[0]),'4.1.0','>='));
 	}
-	
+
 	/**
 	 * Find whether collate support is present
 	 *
@@ -157,7 +157,7 @@ class Database_Static_mysql extends Database_super_mysql
 	{
 		return (version_compare(mysql_get_server_info($db[0]),'4.1.0','>='));
 	}
-	
+
 	/**
 	 * Find whether full-text-boolean-search is present
 	 *
@@ -167,7 +167,7 @@ class Database_Static_mysql extends Database_super_mysql
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
 	 *
@@ -219,11 +219,11 @@ class Database_Static_mysql extends Database_super_mysql
 			mysql_select_db($db_name,$db);
 			$LAST_SELECT_DB=$db_name;
 		}
-	
+
 		if (($max!==NULL) && ($start!==NULL)) $query.=' LIMIT '.strval((integer)$start).','.strval((integer)$max);
 		elseif ($max!==NULL) $query.=' LIMIT '.strval((integer)$max);
 		elseif ($start!==NULL) $query.=' LIMIT '.strval((integer)$start).',30000000';
-	
+
 		$results=@mysql_query($query,$db);
 		if (($results===false) && ((!$fail_ok) || (strpos(mysql_error($db),'is marked as crashed and should be repaired')!==false)))
 		{
@@ -267,10 +267,10 @@ class Database_Static_mysql extends Database_super_mysql
 			}
 			return $ins;
 		}
-	
+
 		return NULL;
 	}
-	
+
 	/**
 	 * Get the rows returned from a SELECT query.
 	 *
@@ -294,7 +294,7 @@ class Database_Static_mysql extends Database_super_mysql
 			$names[$x]=mysql_field_name($results,$x);
 			$types[$x]=mysql_field_type($results,$x);
 		}
-	
+
 		$out=array();
 		$newrow=array();
 		do
@@ -333,21 +333,21 @@ class Database_Static_mysql extends Database_super_mysql
 							{
 								$newrow[$name]=intval($v);
 							}
-							
+
 							break;
 						}
 
 					default:
 						$newrow[$name]=$v;
 				}
-	
+
 				++$j;
 			}
-	
+
 			$out[]=$newrow;
 		}
 		while (false!==($row=mysql_fetch_row($results)));
-	
+
 		mysql_free_result($results);
 		return $out;
 	}

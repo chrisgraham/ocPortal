@@ -53,7 +53,7 @@ class Hook_Syndication_twitter
 		$save_to='twitter_oauth_token_secret';
 		if (!is_null($member_id)) $save_to.='__'.strval($member_id);
 		set_long_value($save_to,$response['oauth_token_secret']);
-		
+
 		return true;
 	}
 

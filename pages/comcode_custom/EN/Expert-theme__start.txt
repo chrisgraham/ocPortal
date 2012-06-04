@@ -11,7 +11,7 @@
 				[surround="head"]
 					Welcome to&hellip;
 				[/surround]
-				
+
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed ullamcorper augue. Maecenas non est venenatis diam laoreet varius. Donec posuere massa sagittis risus sollicitudin id vestibulum ligula vehicula. Sed a ligula nulla, sit amet ultricies elit. Nullam eget orci purus, eget ullamcorper velit. Phasellus ac nisl in lectus hendrerit elementum eget ac arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus convallis quam et massa auctor id convallis neque tincidunt. Maecenas in sodales lacus.
 
 				[surround="more-link"][page=":about"]more[/page][/surround]

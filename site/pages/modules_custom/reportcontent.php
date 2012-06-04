@@ -39,7 +39,7 @@ class Module_reportcontent
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -49,7 +49,7 @@ class Module_reportcontent
 
 		delete_config_option('reported_times');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -59,7 +59,7 @@ class Module_reportcontent
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
 		require_lang('reportcontent');
-		
+
 		$GLOBALS['SITE_DB']->create_table('reported_content',array(
 			'r_session_id'=>'*AUTO_LINK',
 			'r_content_type'=>'*ID_TEXT',
@@ -80,7 +80,7 @@ class Module_reportcontent
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -90,7 +90,7 @@ class Module_reportcontent
 	{
 		require_lang('reportcontent');
 		require_lang('ocf');
-		
+
 		// Decide what we're doing
 		$type=get_param('type','misc');
 
@@ -99,19 +99,19 @@ class Module_reportcontent
 
 		return new ocp_tempcode();
 	}
-	
+
 	function form()
 	{
 		$title=get_page_title('REPORT_CONTENT');
-		
+
 		require_code('form_templates');
-		
+
 		$url=get_param('url',false,true);
 		$content_type=get_param('content_type'); // Equates to a content_meta_aware hook
 		$content_id=get_param('content_id');
-		
+
 		require_code('content');
-		
+
 		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('reported_content','r_counts',array(
 			'r_session_id'=>get_session_id(),
 			'r_content_type'=>$content_type,
@@ -122,7 +122,7 @@ class Module_reportcontent
 		list($content_title,$poster_id,)=content_get_details($content_type,$content_id);
 		if ($content_title=='') $content_title=$content_type.' #'.$content_id;
 		$poster=$GLOBALS['FORUM_DRIVER']->get_username($poster_id);
-		
+
 		// Show form with input field and CAPTCHA, like forum's report post...
 
 		$member=$poster;
@@ -165,7 +165,7 @@ class Module_reportcontent
 
 		return do_template('POSTING_SCREEN',array('TITLE'=>$title,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','TEXT'=>$text,'POSTING_FORM'=>$posting_form));
 	}
-	
+
 	function actualiser()
 	{
 		$title=get_page_title('REPORT_CONTENT');
@@ -176,7 +176,7 @@ class Module_reportcontent
 			require_code('captcha');
 			enforce_captcha();
 		}
-		
+
 		require_code('content');
 
 		$content_type=post_param('content_type'); // Equates to a content_meta_aware hook

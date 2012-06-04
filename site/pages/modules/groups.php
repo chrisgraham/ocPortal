@@ -40,7 +40,7 @@ class Module_groups
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_groups
 	{
 		return array('misc'=>'USERGROUPS');
 	}
-	
+
 	/**
 	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
 	 *
@@ -124,9 +124,9 @@ class Module_groups
 		require_code('ocf_groups_action');
 		require_code('ocf_groups_action2');
 		require_code('ocf_groups2');
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->directory();
 		if ($type=='view') return $this->usergroup();
 		if ($type=='resign') return $this->resign();
@@ -136,10 +136,10 @@ class Module_groups
 		if ($type=='validate') return $this->validate();
 		if ($type=='add_to') return $this->add_to();
 		if ($type=='decline') return $this->decline();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to show the usergroup directory.
 	 *
@@ -588,7 +588,7 @@ class Module_groups
 
 			$post_url=build_url(array('page'=>'_SELF','type'=>get_param('type')),'_SELF',NULL,true);
 			$hidden=form_input_hidden('id',strval($id));
-			
+
 			if ($free_access)
 			{
 				$text=do_lang_tempcode('ABOUT_TO_APPLY_FREE_ACCESS',escape_html($name));
@@ -672,7 +672,7 @@ class Module_groups
 		if (is_null($id))
 		{
 			$id=get_param_integer('id');
-			
+
 			require_code('form_templates');
 
 			$text=paragraph(do_lang_tempcode('OPTIONAL_REASON'));
@@ -695,7 +695,7 @@ class Module_groups
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * The actualiser to resign from a usergroup.
 	 *
@@ -716,7 +716,7 @@ class Module_groups
 		}
 
 		ocf_member_leave_group($id,get_member());
-	
+
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}

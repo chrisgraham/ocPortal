@@ -35,11 +35,11 @@ class Hook_rss_cedi
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('cedi')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'cedi')) return NULL;
-		
+
 		$filters=ocfilter_to_sqlfragment($_filters,'id','seedy_children','parent_id','parent_id','child_id');
-		
+
 		$content=new ocp_tempcode();
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'seedy_pages WHERE '.$filters.' AND add_date>'.strval((integer)$cutoff).' ORDER BY add_date DESC',$max);
 		foreach ($rows as $row)

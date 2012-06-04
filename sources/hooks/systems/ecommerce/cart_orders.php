@@ -101,7 +101,7 @@ class Hook_cart_orders
 			{			
 				$products[do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang())]	=	array(PRODUCT_ORDERS,$order['tot_price'],'handle_product_orders',array(),do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang()));
 			}
-			
+
 			$start+=500;
 		}
 		while (count($orders)==500);
@@ -124,7 +124,7 @@ class Hook_cart_orders
 			if(is_null($item['p_type']))	continue;
 
 			require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($item['p_type']));
-			
+
 			$object		=	object_factory('Hook_'.filter_naughty_harsh($item['p_type']));
 
 			//if any of the product's dispatch type is manual, return type as 'manual'

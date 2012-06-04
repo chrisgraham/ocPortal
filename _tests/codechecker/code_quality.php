@@ -699,7 +699,7 @@ elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) // Run for a
 			echo 'SKIP: '.$to_use;
 			continue;
 		}
-		
+
 		check(parse_file($to_use,false,false,$i,count($files)));
 	}
 } else // Run for a specific file
@@ -1134,7 +1134,7 @@ function check_method($c,$c_pos,$function_guard='')
 	if (!is_null($c[1]))
 	{
 		check_variable($c[1]);
-		
+
 		$params=$c[2];
 
 		// Special rule for 'this->connection'
@@ -1182,7 +1182,7 @@ function check_method($c,$c_pos,$function_guard='')
 				return 'mixed';
 			}
 		}
-	
+
 		scan_extractive_expressions($c[1][2]);
 	}
 	// Parameters
@@ -1883,7 +1883,7 @@ function check_variable($variable,$reference=false)
 			if ($passes) infer_expression_type_to_variable_type('string',$next[1]);
 			return 'string';
 		}*/
-		
+
 		if ($next[0]=='ARRAY_AT')
 		{
 			if (($identifier=='GLOBALS') && ($next[1][0]=='SOLO') && ($next[1][1][0]=='LITERAL'))
@@ -1913,7 +1913,7 @@ function check_variable($variable,$reference=false)
 				$next=$next[2];
 			}
 		}
-		
+
 		else $next=array();
 	}
 
@@ -1924,7 +1924,7 @@ function scan_extractive_expressions($variable)
 {
 	if (!is_array($variable)) return;
 	if ($variable==array()) return;
-	
+
 	if (($variable[0]=='ARRAY_AT') || ($variable[0]=='CHAR_OF_STRING'))
 	{
 		check_expression($variable[1]);
@@ -1977,7 +1977,7 @@ function check_literal($literal)
 function set_ocportal_type($identifier,$type)
 {
 	if (is_array($type)) $type=$type[0];
-				
+
 	global $LOCAL_VARIABLES;
 	$LOCAL_VARIABLES[$identifier]['types'][]=$type;
 	if (substr($type,0,7)=='object-') $LOCAL_VARIABLES[$identifier]['object_type']=substr($type,7);

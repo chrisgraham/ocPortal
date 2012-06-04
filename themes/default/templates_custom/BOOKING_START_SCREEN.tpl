@@ -24,7 +24,7 @@
 
 			{+START,IF,{$NOT,{HAS_MIXED_DATE_TYPES}}}
 				<h2>{!DATES}</h2>
-			
+
 				<span><strong>{!FROM}</strong></span>
 				{+START,INCLUDE,BOOK_DATE_CHOOSE}
 					NAME=bookable_date_from
@@ -38,7 +38,7 @@
 					MAX_DATE_MONTH={MAX_DATE_MONTH}
 					MAX_DATE_YEAR={MAX_DATE_YEAR}
 				{+END}
-		
+
 				{+START,IF,{HAS_DATE_RANGES}}
 					<span><strong>{!TO}</strong></span>
 					{+START,INCLUDE,BOOK_DATE_CHOOSE}
@@ -60,7 +60,7 @@
 
 			{+START,LOOP,CATEGORIES}
 				<h2>{CATEGORY_TITLE}</h2>
-		
+
 				<div class="wide_table_wrap">
 					<table class="wide_table solidborder spaced_table">
 						<thead>
@@ -77,14 +77,14 @@
 								<th>{!PRICE}</th>
 							</tr>
 						</thead>
-		
+
 						<tbody>
 							{+START,LOOP,BOOKABLES}
 								<tr>
 									<th class="de_th inline_image_2">
 										<strong>{BOOKABLE_TITLE*}</strong>
 									</th>
-		
+
 									<td class="inline_image_2">
 										<label class="accessibility_hidden" for="bookable_{BOOKABLE_ID*}_quantity">{!QUANTITY}, {BOOKABLE_TITLE*}</label>
 										<select name="bookable_{BOOKABLE_ID*}_quantity" id="bookable_{BOOKABLE_ID*}_quantity">
@@ -95,7 +95,7 @@
 											{+END}
 										</select>
 									</td>
-		
+
 									{+START,IF,{HAS_MIXED_DATE_TYPES}}
 										<td class="inline_image_2">
 											{+START,INCLUDE,BOOK_DATE_CHOOSE}
@@ -111,7 +111,7 @@
 												MAX_DATE_YEAR={BOOKABLE_MAX_DATE_YEAR}
 											{+END}
 										</td>
-		
+
 										<td class="inline_image_2">
 											{+START,IF,{BOOKABLE_SELECT_DATE_RANGE}}
 												{+START,INCLUDE,BOOK_DATE_CHOOSE}
@@ -129,11 +129,11 @@
 											{+END}
 										</td>
 									{+END}
-		
+
 									{+START,IF,{HAS_DETAILS}}
 										<td class="inline_image_2">
 											{BOOKABLE_DESCRIPTION}
-		
+
 											{+START,IF_NON_EMPTY,{BOOKABLE_MESSAGES}}
 												<ul>
 													{+START,LOOP,BOOKABLE_MESSAGES}
@@ -143,7 +143,7 @@
 											{+END}
 										</td>
 									{+END}
-									
+
 									<td class="inline_image_2">
 										{$CURRENCY_SYMBOL} {$PREG_REPLACE*,\.00$,,{BOOKABLE_PRICE}}
 										(<a title="{!CURRENCY_CONVERT} {!LINK_NEW_WINDOW}" target="_blank" href="http://coinmill.com/SOS_calculator.html#{$CONFIG_OPTION,currency}={BOOKABLE_PRICE_RAW*}">{!CURRENCY_CONVERT}</a>)
@@ -157,7 +157,7 @@
 				</div>
 			{+END}
 		</div>
-		
+
 		<p class="proceed_button">
 			<input class="button_page" type="submit" value="{!PROCEED}" />
 		</p>

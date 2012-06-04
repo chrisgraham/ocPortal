@@ -30,7 +30,7 @@ class Hook_addon_registry_bookmarks
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *
@@ -111,7 +111,7 @@ class Hook_addon_registry_bookmarks
 	function tpl_preview__bookmarks_screen()
 	{
 		require_lang('zones');
-		
+
 		$bookmarks=array(
 			array(
 				'CAPTION'=>lorem_word(),
@@ -120,7 +120,7 @@ class Hook_addon_registry_bookmarks
 				'PAGE_LINK'=>placeholder_url(),
 			),
 		);
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('BOOKMARKS_SCREEN',array(

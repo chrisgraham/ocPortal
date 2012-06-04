@@ -105,10 +105,10 @@ function HashURL($String)
 	$Check1 = (($Check1 >> 4) & 0x3FFFFC0 ) | ($Check1 & 0x3F);
 	$Check1 = (($Check1 >> 4) & 0x3FFC00 ) | ($Check1 & 0x3FF);
 	$Check1 = (($Check1 >> 4) & 0x3C000 ) | ($Check1 & 0x3FFF);	
-	
+
 	$T1 = (((($Check1 & 0x3C0) << 4) | ($Check1 & 0x3C)) <<2 ) | ($Check2 & 0xF0F );
 	$T2 = @(((($Check1 & 0xFFFFC000) << 4) | ($Check1 & 0x3C00)) << 0xA) | ($Check2 & 0xF0F0000 );
-	
+
 	return ($T1 | $T2);
 }
 
@@ -175,7 +175,7 @@ function getpr($url)
 		$pr=str_replace("\n",'',$pr);
 		return $pr;
 	}
-	
+
 	return '';
 }
 

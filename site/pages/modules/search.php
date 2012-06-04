@@ -100,7 +100,7 @@ class Module_search
 	{
 		return is_guest()?array('misc'=>'SEARCH_TITLE'):array('misc'=>'SEARCH_TITLE','my'=>'SAVED_SEARCHES');
 	}
-	
+
 	/**
 	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
 	 *
@@ -177,7 +177,7 @@ class Module_search
 						foreach ($rows as $row)
 						{
 							if (!has_category_access(get_member(),'catalogues_catalogue',$row['c_name'])) continue;
-							
+
 							if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
 
 							$kids[]=array('_SELF:_SELF:type=misc:id='.$hook.':catalogue_name='.$row['c_name'],NULL,NULL,$row['text_original'],array());
@@ -230,7 +230,7 @@ class Module_search
 					foreach ($rows as $row)
 					{
 						if (!has_category_access($member_id,'catalogues_catalogue',$row['c_name'])) continue;
-						
+
 						if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
 
 						$pagelink=$pagelink_stub.'misc:id='.$hook.':catalogue_name='.$row['c_name'];
@@ -362,7 +362,7 @@ class Module_search
 
 			$under=get_param('search_under','!',true);
 			if ((!is_null($info)) && (method_exists($object,'get_tree'))) $object->get_tree($under);
-			
+
 			if (!is_null($info))
 				$test_tpl=internalise_own_screen($title);
 			else $test_tpl=NULL;
@@ -402,7 +402,7 @@ class Module_search
 
 			if (array_key_exists('user_label',$info)) $user_label=$info['user_label'];
 			if (array_key_exists('days_label',$info)) $days_label=$info['days_label'];
-			
+
 			$extra_sort_fields=array_key_exists('extra_sort_fields',$info)?$info['extra_sort_fields']:array();
 
 			$under=NULL;
@@ -482,7 +482,7 @@ class Module_search
 				$is_default_or_advanced=(($info['default']) && ($id=='')) || ($hook==$id);
 
 				$checked=(get_param_integer('search_'.$hook,((is_null($content)) || (get_param_integer('all_defaults',0)==1))?($is_default_or_advanced?1:0):0)==1);
-	
+
 				$options=((array_key_exists('special_on',$info)) || (array_key_exists('special_off',$info)) || (array_key_exists('extra_sort_fields',$info)) || (method_exists($object,'get_fields')) || (method_exists($object,'get_tree')) || (method_exists($object,'get_ajax_tree')))?build_url(array('page'=>'_SELF','id'=>$hook),'_SELF',NULL,false,true):new ocp_tempcode();
 
 				$_search_domains[]=array('_GUID'=>'3d3099872184923aec0f49388f52c750','ADVANCED_ONLY'=>(array_key_exists('advanced_only',$info)) && ($info['advanced_only']),'CHECKED'=>$checked,'OPTIONS'=>$options,'LANG'=>$info['lang'],'NAME'=>$hook);
@@ -515,7 +515,7 @@ class Module_search
 		$old_mysql=!$test;
 
 		$can_order_by_rating=db_has_subqueries($GLOBALS['SITE_DB']->connection_read);
-		
+
 		// Perform search, if we did one
 		$out=NULL;
 		$results_browser='';
@@ -644,7 +644,7 @@ class Module_search
 					foreach ($cats as $cat)
 					{
 						if (trim($cat)=='') continue;
-	
+
 						if ($where_clause!='(') $where_clause.=' OR ';
 						if ($info['integer_category'])
 						{
@@ -656,7 +656,7 @@ class Module_search
 					}
 					$where_clause.=')';
 				} else $where_clause='';
-	
+
 				$only_search_meta=get_param_integer('only_search_meta',0)==1;
 				$direction=get_param('direction','ASC');
 				if (function_exists('set_time_limit')) @set_time_limit(5); // Prevent errant search hooks (easily written!) taking down a server. Each call given 5 seconds (calling set_time_limit resets the timer).

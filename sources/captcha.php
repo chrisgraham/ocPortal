@@ -281,7 +281,7 @@ function generate_captcha()
 		$si_code=floatval($code);
 	}
 	$GLOBALS['SITE_DB']->query_insert('security_images',$insert_map+array('si_code'=>$si_code),false,true);
-	
+
 	require_javascript('javascript_ajax');
 }
 

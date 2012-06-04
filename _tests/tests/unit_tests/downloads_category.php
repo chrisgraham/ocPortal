@@ -28,7 +28,7 @@ class downloads_category_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('downloads');
 		require_code('downloads2');
 
@@ -43,7 +43,7 @@ class downloads_category_test_set extends ocp_test_case
 
 		$this->assertTrue('edit_test'==$GLOBALS['SITE_DB']->query_value('download_categories','notes',array('id'=>$this->dwn_cat_id)));
 	}
-	
+
 	function tearDown()
 	{
 		delete_download_category($this->dwn_cat_id);

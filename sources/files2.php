@@ -118,7 +118,7 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 		else
 			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 	}
-	
+
 	$out='';
 	foreach ($data as $i=>$line)
 	{
@@ -144,11 +144,11 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 		}
 		$out.=chr(10);
 	}
-	
+
 	if ($output_and_exit)
 	{
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
-		
+
 		@ini_set('ocproducts.xss_detect','0');
 		exit($out);
 	}
@@ -265,7 +265,7 @@ function get_directory_size($path)
 			$size+=get_directory_size($path.'/'.$e);
 		}
 	}
-	
+
 	return $size;
 }
 
@@ -296,7 +296,7 @@ function get_upload_limit_config_url()
 function get_max_file_size($source_member=NULL,$connection=NULL)
 {
 	$possibilities=array();
-	
+
 	$a=php_return_bytes(ini_get('upload_max_filesize'));
 	$b=php_return_bytes(ini_get('post_max_size'));
 	$c=intval(get_option('max_download_size'))*1024;
@@ -392,7 +392,7 @@ function check_extension($name,$skip_server_side_security_check=false,$file_to_d
 			warn_exit($message);
 		}
 	}
-	
+
 	return true;
 }
 

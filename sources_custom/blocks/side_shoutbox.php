@@ -33,7 +33,7 @@ class Block_side_shoutbox
 		$info['parameters']=array('param','max');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -67,7 +67,7 @@ class Block_side_shoutbox
 		{
 			global $DO_NOT_CACHE_THIS; // We don't cache against access, so we have a problem and can't cache
 			$DO_NOT_CACHE_THIS=true;
-			
+
 			return new ocp_tempcode();
 		}
 

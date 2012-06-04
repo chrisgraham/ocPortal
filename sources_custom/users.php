@@ -9,15 +9,15 @@ function is_httpauth_login()
 {
 	if (get_forum_type()!='ocf') return false;
 	if (is_guest()) return false;
-	
+
 	$ret=non_overrided__is_httpauth_login();
-	
+
 	$compat=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_password_compat_scheme');
 	if (($compat=='facebook') || ($compat=='openid'))
 	{
 		global $SESSION_CONFIRMED;
 		$SESSION_CONFIRMED=1;
 	}
-	
+
 	return $ret;
 }

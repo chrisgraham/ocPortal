@@ -22,7 +22,7 @@ class Hook_cron_classifieds
 	function run()
 	{
 		if (!addon_installed('catalogues')) return;
-		
+
 		$last=get_value('last_classified_refresh');
 		$time=time();
 		if ((!is_null($last)) && (intval($last)>$time-60*60)) return; // Don't do more than once per hour

@@ -24,7 +24,7 @@
 function trackback_script()
 {
 	if (get_option('is_on_trackbacks')=='0') return;
-	
+
 	require_lang('trackbacks');
 
 	header('Content-type: text/xml');
@@ -32,7 +32,7 @@ function trackback_script()
 	$page=get_param('page');
 	$id=get_param_integer('id');
 	$mode=either_param('__mode','none');
-	
+
 	$allow_trackbacks=true;
 
 	$hooks=find_all_hooks('systems','trackback');
@@ -60,11 +60,11 @@ function trackback_script()
 
 		//Add a trackback for the specified page
 		$output=actualise_post_trackback($allow_trackbacks,$page,strval($id));
-		
+
 		if ($output) $xml=do_template('TRACKBACK_XML_NO_ERROR',array());
 		else $xml=do_template('TRACKBACK_XML_ERROR',array('_GUID'=>'ac5e34aeabf92712607e62e062407861','TRACKBACK_ERROR'=>do_lang_tempcode('TRACKBACK_ERROR')));
 	}
-	
+
 
 	$echo=do_template('TRACKBACK_XML_WRAPPER',array('_GUID'=>'cd8d057328569803a6cca9f8d37a0ac8','XML'=>$xml));
 	$echo->evaluate_echo();

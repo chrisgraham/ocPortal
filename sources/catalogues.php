@@ -85,7 +85,7 @@ function count_catalogue_category_children($category_id)
 {
 	static $total_categories=NULL;
 	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)');
-	
+
 	$out=array();
 
 	$out['num_children']=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('cc_parent_id'=>$category_id));
@@ -126,7 +126,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	{
 		require_code('ecommerce');
 	}
-	
+
 	$is_ecomm=is_ecommerce_catalogue($catalogue_name);
 
 	if (is_null($catalogue))
@@ -335,11 +335,11 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 			for ($i=0;$i<$num_entries;$i++)
 			{
 				if (!array_key_exists($i,$entries)) continue;
-				
+
 				for ($j=$i+1;$j<$num_entries;$j++)
 				{
 					if (!array_key_exists($j,$entries)) continue;
-					
+
 					$a=@$entries[$j]['map']['FIELD_'.$order_by];
 					if (array_key_exists('FIELD_'.$order_by.'_PLAIN',@$entries[$j]['map']))
 					{
@@ -405,7 +405,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		}
 	}
 
-	
+
 	if ($display_type==2)
 	{
 		for ($i=0;$i<$num_entries;$i++)
@@ -528,7 +528,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$fields_1d=array();
 	$fields_2d=array();
 	$all_visible=true;
-	
+
 	require_code('fields');
 
 	foreach ($fields as $i=>$field)
@@ -551,7 +551,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 				//$use_ev=hyperlink(build_url(array('page'=>'catalogues','type'=>'entry','id'=>$id,'root'=>$root),get_module_zone('catalogues')),$ev,false,!is_object($ev));
 				$use_ev=$ev;
 			}
-		
+
 			//Set image thumbnail in to the map array
 			if($field['cf_type']=='picture')
 			{
@@ -565,7 +565,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 				}
 				$map['_FIELD_'.strval($field['id']).'_THUMB']=$map['FIELD_'.strval($i).'_THUMB'];
 			}
-	
+
 			$map['FIELD_'.strval($i)]=$use_ev;
 			$map['_FIELD_'.strval($field['id'])]=$use_ev;
 			$map['FIELD_'.strval($i).'_PLAIN']=$ev;
@@ -580,7 +580,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			$fields_2d[]=array('NAME'=>$field_name,'VALUE'=>$use_ev);
 			$field_type=$field['cf_type'];
 			$map['FIELDTYPE_'.strval($i)]=$field_type;
-			
+
 			if (($view_type=='PAGE') || (($field['cf_put_in_category']==1) && ($view_type=='CATEGORY')) || (($field['cf_put_in_search']==1) && ($view_type=='SEARCH')))
 			{
 				$use_ev_enhanced=$use_ev;
@@ -701,7 +701,7 @@ function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_subm
 	foreach ($rows as $row)
 	{
 		if (!has_category_access(get_member(),'catalogues_catalogue',$row['c_name'])) continue;
-		
+
 		if (($only_submittable) && (!has_specific_permission(get_member(),'submit_midrange_content','cms_catalogues',array('catalogues_catalogue',$row['c_name'])))) continue;
 
 		if (($row['c_ecommerce']==0) || (addon_installed('shopping')))
@@ -754,14 +754,14 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 		foreach ($fields as $i=>$field)
 		{
 			$field_id=$field['id'];
-	
+
 			if ((!is_null($only_fields)) && (!in_array($i,$only_fields))) continue;
 			if ($field['cf_defines_order']==0)
 			{
 				if (($view_type=='CATEGORY') && ($field['cf_put_in_category']==0)) continue;
 				if (($view_type=='SEARCH') && ($field['cf_put_in_search']==0)) continue;
 			}
-	
+
 			$only_field_ids[]=$field_id;
 		}
 	}
@@ -974,7 +974,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 	{
 		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return array(); // Too many!
 	}
-	
+
 	if (is_null($category_id))
 	{
 		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name),'',1);
@@ -1081,7 +1081,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filter=false,$use_compound_list=false)
 {
 	if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
-	
+
 	$tree=array();
 	$temp_rows=$GLOBALS['SITE_DB']->query('SELECT id,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND cc_parent_id IS NULL ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
 	if (count($temp_rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
@@ -1297,7 +1297,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	require_code('images');	
 
 	require_css('catalogues');	
-	
+
 	require_lang('catalogues');
 
 	$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$id),'',1);
@@ -1351,7 +1351,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 
 		$map['WARNINGS']=do_template('WARNING_TABLE',array('_GUID'=>'bf604859a572ca53e969bec3d91f9cfb','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
 	} else $map['WARNINGS']='';
-	
+
 	//Finding any hook exists for this product--------------------
 	if (addon_installed('ecommerce'))
 	{
@@ -1363,7 +1363,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	}
 	//------------------------------------------------------------
 
-	
+
 	$map['ENTRY']=do_template('CATALOGUE_'.$tpl_set.'_ENTRY',$map,NULL,false,'CATALOGUE_DEFAULT_ENTRY');
 	$map['ADD_DATE']=get_timezoned_date($entry['ce_add_date']);
 	$map['ADD_DATE_RAW']=strval($entry['ce_add_date']);
@@ -1406,7 +1406,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	}
 	$map['CATEGORY_TITLE']=get_translated_text($category['cc_title']);
 	$map['CAT']=strval($entry['cc_id']);
-	
+
 	$map['TAGS']=get_loaded_tags('catalogue_entries');
 
 	breadcrumb_add_segment($map['TREE'],$title_to_use);

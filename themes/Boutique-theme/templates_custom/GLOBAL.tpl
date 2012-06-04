@@ -12,7 +12,7 @@
 			{$GET,panel_left}
 		</div>
 	{+END}
-	
+
 	<div class="col2" {+START,IF_EMPTY,{$GET,panel_left}}style="float: none; width: auto"{+END}>
 		{+START,IF_NON_EMPTY,{BREADCRUMBS}}
 			<{$?,{$VALUE_OPTION,html5},nav,div} class="breadcrumbs breadcrumbs_always"{$?,{$VALUE_OPTION,html5}, itemprop="breadcrumb"}>

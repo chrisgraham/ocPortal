@@ -125,7 +125,7 @@ function transcode_video($url,$table,$url_field,$orig_filename_field,$width_fiel
 			}
 
 			// Immediate local FFMPEG then...
-			
+
 			if (url_is_local($url)) return $url; // Can't locally transcode a remote URL
 
 			//mencoder path
@@ -181,7 +181,7 @@ function transcode_video($url,$table,$url_field,$orig_filename_field,$width_fiel
 			}
 		}
 	}
-	
+
 	// No success :(
 	return $url;
 }
@@ -264,13 +264,13 @@ function store_transcoding_success($transcoder_id)
 		if ($descript_row['t_width_field']!='') $row[$descript_row['t_width_field']]=intval(get_option('video_width_setting'));
 		if ($descript_row['t_height_field']!='') $row[$descript_row['t_height_field']]=intval(get_option('video_height_setting'));
 	}
-	
+
 	// Update original filename
 	if ($descript_row['t_orig_filename_field']!='')
 	{
 		$row[$descript_row['t_orig_filename_field']]=preg_replace('#\..*$#','.'.$ext,$row[$descript_row['t_orig_filename_field']]);
 	}
-	
+
 	// Update URL to transcoded one
 	$row[$descript_row['t_url_field']]='uploads/galleries/'.rawurlencode($descript_row['t_output_filename']);
 

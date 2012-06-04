@@ -29,10 +29,10 @@ class Hook_exists_zone
 	function run()
 	{
 		$zone=get_param('name');
-		
+
 		$test=file_exists(get_file_base().'/'.$zone);
 		if (!$test) return new ocp_tempcode();
-		
+
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_header_text',array('zone_name'=>$zone));
 		if (is_null($test)) return new ocp_tempcode();
 

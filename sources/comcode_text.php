@@ -37,7 +37,7 @@ function init__comcode_text()
 
 		define('MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH',30);
 	}
-	
+
 	/*
 
 	Note: Certain tags are included for compatibility with bbcode only...
@@ -848,7 +848,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 									}
 								}
 							}
-							
+
 							if (($textual_area) && (!$in_code_tag) && (trim($next)!='') && (!$differented))
 							{
 								// Table syntax
@@ -867,7 +867,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											if (preg_match('#(^|\s)floats($|\s)#',$caption)!=0)
 											{
 												$caption=preg_replace('#(^|\s)floats($|\s)#','',$caption);
-												
+
 												$ratios=array();
 												$ratios_matches=array();
 												if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches)!=0)
@@ -1025,7 +1025,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 													$rows=$new_rows;
 												}
 											}
-	
+
 											$ADVERTISING_BANNERS=array();
 											foreach ($rows as $row)
 											{
@@ -1117,7 +1117,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												$auto_link=substr($auto_link,0,strlen($auto_link)-1);
 												$link_end_pos--;
 											}
-											
+
 											$auto_link_tempcode=new ocp_tempcode();
 											$auto_link_tempcode->attach($auto_link);
 											if (!$check_only)
@@ -1428,7 +1428,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 				if ($next=='[') // Can't actually occur though
 				{
 					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
-					
+
 					$status=CCP_NO_MANS_LAND;
 					$pos--;
 				}

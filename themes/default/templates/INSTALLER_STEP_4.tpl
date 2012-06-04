@@ -4,7 +4,7 @@
 		<input name="db_type" type="hidden" value="{DB_TYPE*}" />
 		<input name="forum_type" type="hidden" value="{FORUM_TYPE*}" />
 		<input name="board_path" type="hidden" value="{BOARD_PATH*}" />
-	
+
 		<div class="installer_main_min">
 			<div>
 				{MESSAGE}
@@ -12,7 +12,7 @@
 
 			{SECTIONS}
 		</div>
-	
+
 		<div class="proceed_button">
 			<input class="button_page" type="submit" value="{!INSTALL} ocPortal" />
 		</div>

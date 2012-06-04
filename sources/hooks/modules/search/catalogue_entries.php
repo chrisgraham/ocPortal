@@ -20,7 +20,7 @@
 
 class Hook_search_catalogue_entries
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -36,7 +36,7 @@ class Hook_search_catalogue_entries
 
 		require_lang('catalogues');
 		require_code('catalogues');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('CATALOGUE_ENTRIES');
 		$info['default']=false;
@@ -226,7 +226,7 @@ class Hook_search_catalogue_entries
 		if ($catalogue_name!='')
 		{
 			$extra_select='';
-			
+
 			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name','cf_type','cf_default'),array('c_name'=>$catalogue_name,'cf_searchable'=>1),'ORDER BY cf_order');
 			$table='catalogue_entries r';
 			$trans_fields=array('!');

@@ -10,7 +10,7 @@
 			<p>{!PERMISSIONS_TREE_EDITOR_ABOUT_GROUP,<img src="{$IMG*,permlevels/3}" alt="" />}</p>
 
 			<p class="pte_tips">{!PERMISSIONS_TREE_EDITOR_ABOUT_MULTI_SELECT}</p>
-			
+
 			<p class="pte_tips">{!PERMISSIONS_TREE_EDITOR_ABOUT_HOVER_FOR_PERMISSIONS}</p>
 
 			<p class="pte_tips">{!PERMISSIONS_TREE_EDITOR_INHERIT}</p>
@@ -43,7 +43,7 @@
 				<script type="text/javascript">// <![CDATA[
 					var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=1{$KEEP;}','','',true);
 					var column_color='{COLOR*;}';
-					
+
 					window.usergroup_titles=[];
 					{+START,LOOP,USERGROUPS}
 						window.usergroup_titles[{_loop_key}]='{_loop_var;}';

@@ -53,7 +53,7 @@ class Hook_chat_bot_octavius
 		if (count($people)>2) return NULL; // Don't spam if noone is here
 
 		if (running_script('shoutbox')) return NULL; // Messes up shoutbox
-		
+
 		$is_im=$GLOBALS['SITE_DB']->query_value('chat_rooms','is_im',array('id'=>$room_id));
 		if ($is_im==1) return NULL;
 
@@ -74,7 +74,7 @@ class Hook_chat_bot_octavius
 	{
 		require_code('developer_tools');
 		destrictify();
-		
+
 		if ($string=='((SHAKE))') return NULL;
 
 		if (file_exists(get_custom_file_base().'/sources_custom/programe')) // AliceBot, much better
@@ -82,7 +82,7 @@ class Hook_chat_bot_octavius
 			if (get_value('octavius_installed')!=='1')
 			{
 				disable_php_memory_limit();
-				
+
 				if (function_exists('set_time_limit')) @set_time_limit(600);
 
 				$GLOBALS['SITE_DB']->query("DROP TABLE bot",NULL,NULL,true);
@@ -204,7 +204,7 @@ class Hook_chat_bot_octavius
 				$person2array = array();
 
 				require_code('programe/botloaderfuncs');
-			
+
 				loadstartup();
 				makesubscode();
 
@@ -367,7 +367,7 @@ class Hook_chat_bot_octavius
 		}
 
 		$originalstring = ereg_replace("[\]","",$originalstring);
-		
+
 		restrictify();
 
 		return $response;

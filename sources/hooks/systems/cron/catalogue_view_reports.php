@@ -27,7 +27,7 @@ class Hook_cron_catalogue_view_reports
 	function run()
 	{
 		if (!addon_installed('catalogues')) return;
-		
+
 		$time=time();
 
 		$done_reports=array('daily'=>false,'weekly'=>false,'monthly'=>false,'quarterly'=>false);
@@ -123,7 +123,7 @@ class Hook_cron_catalogue_view_reports
 					// Send actual notification
 					dispatch_notification('catalogue_view_reports__'.$catalogue['c_name'],NULL,$subject_tag,$mail,array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 				}
-				
+
 				$start+=2000;
 			}
 			while (count($entries)==2000);

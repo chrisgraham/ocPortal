@@ -31,7 +31,7 @@ class Hook_checklist_flagrant
 		if (!addon_installed('flagrant')) return array();
 
 		require_lang('flagrant');
-	
+
 		$rows=$GLOBALS['SITE_DB']->query_select('text',array('activation_time','days'),array('active_now'=>1),'',NULL,NULL,true);
 		if (is_null($rows)) return array();
 		$seconds_due_in=mixed();

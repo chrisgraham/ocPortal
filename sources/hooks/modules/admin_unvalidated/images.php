@@ -31,7 +31,7 @@ class Hook_unvalidated_images
 		if (!module_installed('galleries')) return NULL;
 
 		require_lang('galleries');
-	
+
 		$info=array();
 		$info['db_table']='images';
 		$info['db_identifier']='id';

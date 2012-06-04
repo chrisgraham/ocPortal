@@ -63,7 +63,7 @@ class Hook_symbol_CATALOGUE_ENTRY_BACKREFS
 					$value.=strval($result['ce_id']);
 				}
 				$done++;
-				
+
 				if ((!is_null($limit)) && ($done==$limit)) break;
 			}
 		}

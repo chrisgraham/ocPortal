@@ -262,7 +262,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	} else
 	{
 		$ret=false;
-		
+
 		// Update cacheing
 		ocf_force_update_topic_cacheing($topic_id,-$num_posts_counted,true,true);
 	}
@@ -283,7 +283,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 		decache('side_ocf_personal_topics');
 		decache('_new_pp');
 	}
-	
+
 	return $ret;
 }
 
@@ -366,7 +366,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 			{
 				$_member_post_counts=collapse_1d_complexity('p_poster',$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list));
 				$member_post_counts=array_count_values($_member_post_counts);
-	
+
 				foreach ($member_post_counts as $member_id=>$member_post_count)
 				{
 					if ($to==0) $member_post_count=-$member_post_count;
@@ -396,10 +396,10 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 
 		if (!is_null($from_forum_id)) ocf_decache_ocp_blocks($from_forum_id);
 		if (!is_null($to_forum_id)) ocf_decache_ocp_blocks($to_forum_id);
-		
+
 		return false;
 	}
-	
+
 	return false; // should never get here
 }
 

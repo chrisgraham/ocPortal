@@ -35,7 +35,7 @@ class Hook_rss_news
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('news')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'news')) return NULL;
 
 		$filters_1=ocfilter_to_sqlfragment($_filters,'p.news_category','news_categories',NULL,'p.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
@@ -103,7 +103,7 @@ class Hook_rss_news
 				$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 			}
 		}
-		
+
 		return array($content,do_lang('NEWS'));
 	}
 

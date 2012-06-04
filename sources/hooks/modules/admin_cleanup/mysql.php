@@ -30,7 +30,7 @@ class Hook_mysql
 	function info()
 	{
 		if (get_db_type()!='mysql') return NULL;
-	
+
 		$info=array();
 		$info['title']=do_lang_tempcode('MYSQL_OPTIMISE');
 		$info['description']=do_lang_tempcode('DESCRIPTION_MYSQL_OPTIMISE');
@@ -38,7 +38,7 @@ class Hook_mysql
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -47,7 +47,7 @@ class Hook_mysql
 	function run()
 	{
 		$out=new ocp_tempcode();
-	
+
 		$tables=$GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table'));
 		if (count($GLOBALS['SITE_DB']->connection_write)>4) // Okay, we can't be lazy anymore
 		{
@@ -56,13 +56,13 @@ class Hook_mysql
 		}
 		list($db,$db_name)=$GLOBALS['SITE_DB']->connection_write;
 		mysql_select_db($db_name,$db);
-	
+
 		foreach ($tables as $table)
 		{
 			if ($table['m_table']=='sessions') continue; // HEAP, so can't be repaired
-			
+
 			$table=get_table_prefix().$table['m_table'];
-	
+
 			// Check/Repair
 			$result=mysql_query('CHECK TABLE '.$table.' FAST',$db);
 			echo mysql_error($db);
@@ -76,11 +76,11 @@ class Hook_mysql
 				$status_row_2=mysql_fetch_assoc($result2);
 				$out->attach(paragraph(do_lang_tempcode('TABLE_FIXED',escape_html($table),escape_html($status_row_2['Msg_type']),array(escape_html($status_row_2['Msg_text']))),'dfsdfgdst4'));
 			}
-	
+
 			// Optimise
 			mysql_unbuffered_query('OPTIMIZE TABLE '.$table,$db);
 		}
-	
+
 		return $out;
 	}
 

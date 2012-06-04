@@ -42,7 +42,7 @@ class template_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('test_template2'==$GLOBALS['FORUM_DB']->query_value('f_post_templates','t_title ',array('id'=>$this->template_id)));
 	}
-	
+
 	
 	function tearDown()
 	{

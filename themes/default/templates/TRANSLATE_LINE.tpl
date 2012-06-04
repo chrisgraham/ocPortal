@@ -3,7 +3,7 @@
 		<a name="jmp_{NAME*}" id="jmp_{NAME*}"></a>
 
 		{NAME*}
-		
+
 		{+START,IF_NON_EMPTY,{DESCRIPTION}}
 			<p>
 				{DESCRIPTION*}

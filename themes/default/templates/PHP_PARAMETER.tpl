@@ -3,7 +3,7 @@
 		<col style="width: 110px" />
 		<col style="width: 100%" />
 	</colgroup>
-	
+
 	<tbody>
 		{BITS}
 	</tbody>

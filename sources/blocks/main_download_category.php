@@ -38,7 +38,7 @@ class Block_main_download_category
 		$info['parameters']=array('param','title','order','cat_order');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *

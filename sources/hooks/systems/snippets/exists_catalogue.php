@@ -29,10 +29,10 @@ class Hook_exists_catalogue
 	function run()
 	{
 		$val=get_param('name');
-		
+
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>$val));
 		if (is_null($test)) return new ocp_tempcode();
-		
+
 		return make_string_tempcode(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('ALREADY_EXISTS',escape_html($val)),ENT_QUOTES)));
 	}
 

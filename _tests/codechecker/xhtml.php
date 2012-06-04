@@ -61,7 +61,7 @@ if (!isset($WITHIN_PHP)) $WITHIN_PHP=false;
 if (!$WITHIN_PHP)
 {
 	error_reporting(E_ALL);
-	
+
 	$extra=array();
 	foreach ($_SERVER['argv'] as $index=>$argv)
 	{
@@ -75,7 +75,7 @@ if (!$WITHIN_PHP)
 	require_once('lib.php');
 	global $OCPORTAL_PATH,$START_TIME;
 	$START_TIME=time();
-	
+
 	$to_use=isset($_SERVER['argv'][1])?$_SERVER['argv'][1]:$_GET['to_use'];
 }
 

@@ -234,7 +234,7 @@ class Hook_phpbb2
 					import_id_remap_put('member',strval($row['user_id']),$test);
 					continue;
 				}
-	
+
 				$language='';
 				if ($row['user_lang']!='')
 				{
@@ -305,7 +305,7 @@ class Hook_phpbb2
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -316,7 +316,7 @@ class Hook_phpbb2
 	function import_ocf_member_files($db,$table_prefix,$file_base)
 	{
 		global $STRICT_FILE;
-	
+
 		$options=$db->query('SELECT * FROM '.$table_prefix.'config WHERE '.db_string_equal_to('config_name','avatar_path').' OR '.db_string_equal_to('config_name','avatar_gallery_path'));
 		$avatar_path=$options[0]['config_value'];
 		$avatar_gallery_path=$options[1]['config_value'];
@@ -374,12 +374,12 @@ class Hook_phpbb2
 						}
 						break;
 				}
-	
+
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url'=>$avatar_url),array('id'=>$member_id),'',1);
-	
+
 				import_id_remap_put('member_files',strval($row['user_id']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -406,7 +406,7 @@ class Hook_phpbb2
 			import_id_remap_put('ip_ban',strval($row['ban_id']),0);
 		}
 	}
-	
+
 	/**
 	 * Convert an IP address from phpBB hexadecimal string format.
 	 *
@@ -434,7 +434,7 @@ class Hook_phpbb2
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('category',strval($row['cat_id']))) continue;
-	
+
 			$title=$row['cat_title'];
 
 			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
@@ -534,7 +534,7 @@ class Hook_phpbb2
 
 				import_id_remap_put('topic',strval($row['topic_id']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -716,7 +716,7 @@ class Hook_phpbb2
 
 					$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>'ocf_post','r_referer_id'=>strval($post_id),'a_id'=>$a_id));
 					$post.="\n\n".'[attachment="'.$row['comment'].'"]'.strval($a_id).'[/attachment]';
-	
+
 					ocf_over_msn();
 					update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
 					ocf_over_local();
@@ -790,7 +790,7 @@ class Hook_phpbb2
 			import_id_remap_put('poll',strval($row['vote_id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -856,7 +856,7 @@ class Hook_phpbb2
 				ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,NULL,$last_edit_time,$last_edit_by,false,false,NULL,false);
 				$first_post=false;
 			}
-	
+
 			import_id_remap_put('pt',strval($row['privmsgs_id']),$topic_id);
 		}
 	}
@@ -871,7 +871,7 @@ class Hook_phpbb2
 	function import_notifications($db,$table_prefix,$file_base)
 	{
 		require_code('notifications');
-		
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -880,7 +880,7 @@ class Hook_phpbb2
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('topic_notification',strval($row['topic_id']).'-'.strval($row['user_id']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
@@ -889,12 +889,12 @@ class Hook_phpbb2
 
 				import_id_remap_put('topic_notification',strval($row['topic_id']).'-'.strval($row['user_id']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *

@@ -91,7 +91,7 @@ function get_page_title($title,$dereference_lang=true,$params=NULL,$user_online_
 {
 	global $TITLE_CALLED;
 	$TITLE_CALLED=true;
-	
+
 	global $SKIP_TITLING;
 	if ($SKIP_TITLING) return new ocp_tempcode();
 
@@ -115,7 +115,7 @@ function get_page_title($title,$dereference_lang=true,$params=NULL,$user_online_
 
 	global $DISPLAYED_TITLE;
 	$DISPLAYED_TITLE=$_title;
-	
+
 	if ($our_help_url!='')
 	{
 		global $HELP_URL;
@@ -204,7 +204,7 @@ function inform_screen($title,$text)
 function warn_screen($title,$text,$provide_back=true)
 {
 	require_code('failure');
-	
+
 	$text_eval=is_object($text)?$text->evaluate():$text;
 
 	if ($text_eval==do_lang('MISSING_RESOURCE'))

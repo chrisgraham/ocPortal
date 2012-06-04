@@ -3264,16 +3264,16 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	.wide_table_wrap {
 		overflow-y: visible !important;
 	}
-	
+
 	#content-container {
 		padding: 0;
 	}
-	
+
 	.col2 {
 		float: none;
 		width: auto;
 	}
-	
+
 	.col2-box {
 		width: auto;
 	}

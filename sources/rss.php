@@ -33,11 +33,11 @@ class rss
 {
 	// Used during parsing
 	var $type,$namespace_stack,$version,$tag_stack,$attribute_stack,$text_so_far;
-	
+
 	var $gleamed_feed,$gleamed_items;
-	
+
 	var $feed_url;
-	
+
 	var $error;
 
 	/**
@@ -53,10 +53,10 @@ class rss
 		$this->namespace_stack=array();
 		$this->tag_stack=array();
 		$this->attribute_stack=array();
-	
+
 		$this->gleamed_feed=array();
 		$this->gleamed_items=array();
-		
+
 		$this->feed_url=$url;
 
 		$this->error=NULL;
@@ -240,7 +240,7 @@ class rss
 
 		array_pop($this->namespace_stack);
 	}
-	
+
 	/**
 	 * Standard PHP XML parser function.
 	 *
@@ -255,9 +255,9 @@ class rss
 		if ((strpos($name,'HTTP://PURL.ORG/RSS/1.0/:')!==false))
 		{
 			$this->type='RSS';
-			
+
 			$name=str_replace('HTTP://PURL.ORG/RSS/1.0/:','',$name);
-	
+
 			// Unfortunately we can't find the version using PHP XML functions
 		}
 
@@ -289,13 +289,13 @@ class rss
 				}
 			}
 		}
-	
+
 		array_push($this->tag_stack,$name);
 		array_push($this->attribute_stack,$attributes);
-	
+
 		$this->text_so_far='';
 	}
-	
+
 	/**
 	 * Standard PHP XML parser function.
 	 *
@@ -321,7 +321,7 @@ class rss
 
 		$this->text_so_far.=$data;
 	}
-	
+
 	/**
 	 * Parse the complete text of the inside of the tag.
 	 *
@@ -354,7 +354,7 @@ class rss
 							case 'HTTP://PURL.ORG/DC/ELEMENTS/1.1/:RIGHTS':
 								$this->gleamed_feed['copyright']=$data;
 								break;
-	
+
 							case 'TITLE':
 								$this->gleamed_feed['title']=$data;
 								break;
@@ -392,7 +392,7 @@ class rss
 								$cloud['path']=$attributes['PATH'];
 								$cloud['registerProcedure']=$attributes['REGISTERPROCEDURE'];
 								$cloud['protocol']=$attributes['PROTOCOL'];
-	
+
 								$this->gleamed_feed['cloud']=$cloud;
 								break;
 						}
@@ -429,7 +429,7 @@ class rss
 							case 'HTTP://PURL.ORG/RSS/1.0/modules/slash:SECTION':
 								$current_item['category']=$data;
 								break;
-	
+
 							case 'TITLE':
 								$current_item['title']=$data;
 								if ((preg_match('#[<>]#',$current_item['title'])==0) && (preg_match('#[<>]#',html_entity_decode($current_item['title'],ENT_QUOTES))!=0)) // Double escaped HTML
@@ -491,7 +491,7 @@ class rss
 						break;
 				}
 				break;
-	
+
 			case 'ATOM':
 	//			if (array_peek($this->namespace_stack)=='ATOM')
 				{

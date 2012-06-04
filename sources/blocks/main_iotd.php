@@ -38,7 +38,7 @@ class Block_main_iotd
 		$info['parameters']=array('param','zone');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_iotd
 		$info['ttl']=60*24;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,7 +64,7 @@ class Block_main_iotd
 		require_css('iotds');
 		$mode=array_key_exists('param',$map)?$map['param']:'current';
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('iotds');
-	
+
 		if ((has_actual_page_access(NULL,'cms_iotds',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_iotds')))
 		{
 			$submit_url=build_url(array('page'=>'cms_iotds','type'=>'ad','redirect'=>SELF_REDIRECT),get_module_zone('cms_iotds'));
@@ -89,10 +89,10 @@ class Block_main_iotd
 			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'62baa388e068d4334f7a6c6093ead56a','HIGH'=>true,'TITLE'=>do_lang_tempcode('IOTD'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IOTD'),'SUBMIT_URL'=>$submit_url));
 		}
 		$myrow=$iotd[0];
-	
+
 		$image_url=$myrow['url'];
 		if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
-	
+
 		$view_url=build_url(array('page'=>'iotds','wide'=>1,'type'=>'view','id'=>$myrow['id']),$zone);
 		require_code('images');
 		$thumb_url=ensure_thumbnail($myrow['url'],$myrow['thumb_url'],'iotds','iotd',$myrow['id']);

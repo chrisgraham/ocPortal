@@ -6,7 +6,7 @@
 			<th>{!EXAMPLE}</th>
 		</tr>
 	</thead>
-	
+
 	<tbody>
 		{TAGS}
 	</tbody>

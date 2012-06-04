@@ -354,7 +354,7 @@ function is_httpauth_login()
 {
 	if (get_forum_type()!='ocf') return false;
 	if (is_guest()) return false;
-	
+
 	require_code('ocf_members');
 	return ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (!is_null(ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']))));
 }
@@ -385,7 +385,7 @@ function enforce_sessioned_url($url)
 function delete_expired_sessions_or_recover($member=NULL)
 {
 	$new_session=NULL;
-	
+
 	$ip=get_ip_address(3);
 
 	// Delete expired sessions
@@ -421,7 +421,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 		}
 	}
-	
+
 	return $new_session;
 }
 
@@ -511,7 +511,7 @@ function get_ocp_cpf($cpf,$member=NULL)
 		$values=ocf_get_all_custom_fields_match_member($member);
 		if (array_key_exists($cpf,$values)) return $values[$cpf]['RAW'];
 	}
-	
+
 	return '';
 }
 

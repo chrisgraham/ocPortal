@@ -3,9 +3,9 @@
 /*
     Program E
 	Copyright 2002, Paul Rydell
-	
+
 	This file is part of Program E.
-	
+
 	Program E is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -61,13 +61,13 @@ Example of how your new email tag will be used:
 
 /*
 function ct_email($xmlnode,$inputstar,$thatstar,$topicstar){
-	
+
 	// Capitalize the attributes
 	$mynode=upperkeysarray($xmlnode["attributes"]);
 
 	// Get the value of an attribute
 	$sendto=$mynode["TO"];
-	
+
 	// Process everything inside the tag
 	$emailcontent=recursechildren(realchild($xmlnode),$inputstar,$thatstar,$topicstar);
 
@@ -92,7 +92,7 @@ Example of how your new add tag will be used:
 
 /*
 function ct_add($xmlnode,$inputstar,$thatstar,$topicstar){
-	
+
 	$total=0;
 
 	# Process everything inside the tag

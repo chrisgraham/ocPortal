@@ -40,7 +40,7 @@
 	<div class="proceed_button">
 		<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />
 	</div>
-	
+
 	{+START,IF,{TOO_MANY}}
 		<p class="more_here">{!TRANSLATE_TOO_MANY,{TOTAL*},{MAX*}}</p>
 	{+END}

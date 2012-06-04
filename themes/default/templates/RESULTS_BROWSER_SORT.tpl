@@ -5,7 +5,7 @@
 		{+START,IF_PASSED,HIDDEN}
 			{HIDDEN}
 		{+END}
-		
+
 		{+START,IF_PASSED,FILTER}
 			<label for="filter"><span class="field_name">{!SEARCH}:</span> <input value="{FILTER*}" name="filter" id="filter" size="10" /></label>
 		{+END}

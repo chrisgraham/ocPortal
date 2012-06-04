@@ -30,7 +30,7 @@ class Hook_do_next_menus_iotds
 	function run()
 	{
 		if (!addon_installed('iotds')) return array();
-		
+
 		return array(
 			array('cms','iotds',array('cms_iotds',array('type'=>'misc'),get_module_zone('cms_iotds')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('IOTDS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('iotd','COUNT(*)',NULL,'',true))))),('DOC_IOTDS')),
 		);

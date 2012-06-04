@@ -24,7 +24,7 @@ function catalogue_field_reindex_around(all_orderers,ob)
 	return function()
 	{
 		var next_index=0;
-		
+
 		// Sort our all_orderers array by selectedIndex
 		for (var i=0;i<all_orderers.length;i++)
 		{

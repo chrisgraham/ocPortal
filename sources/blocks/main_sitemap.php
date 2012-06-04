@@ -20,7 +20,7 @@
 
 class Block_main_sitemap
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_sitemap
 		$info['parameters']=array('skip');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_sitemap
 		$info['ttl']=600;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -62,7 +62,7 @@ class Block_main_sitemap
 	{
 		require_all_lang();
 		require_code('zones2');
-		
+
 		$skip_pages=array_key_exists('skip',$map)?explode(',',$map['skip']):array();
 
 		$comcode_page_rows=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'));

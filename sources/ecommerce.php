@@ -149,7 +149,7 @@ function get_transaction_fee($amount,$via)
 {
 	if ($via=='') return 0.0;
 	if ($via=='manual') return 0.0;
-	
+
 	if ((file_exists(get_file_base().'/sources/hooks/systems/ecommerce_via/'.$via)) || (file_exists(get_file_base().'/sources_custom/hooks/systems/ecommerce_via/'.$via)))
 	{
 		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
@@ -280,7 +280,7 @@ function find_product($search,$site_lang=false,$search_titles_not_ids=false)
 		if (is_null($object)) continue;
 
 		$_products=$object->get_products($site_lang,$search,$search_titles_not_ids);
-		
+
 		$product=mixed();
 		foreach ($_products as $product=>$product_row)
 		{
@@ -432,7 +432,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 		list($found,$product)=find_product_row($item_name,true,true);
 	}
 	if (is_null($found)) my_exit(do_lang('PRODUCT_NO_SUCH').' - '.$item_name);
-	
+
 	// Check price
 	if (($mc_gross!=$found[1]) && ($found[1]!='?'))
 	{
@@ -448,7 +448,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 		if (strtolower($period)!=strtolower($length.' '.$length_units)) my_exit(do_lang('IPN_SUB_PERIOD_WRONG'));
 	}
 
-	
+
 	// Store
 	$GLOBALS['SITE_DB']->query_insert('transactions',array('id'=>$txn_id,'t_memo'=>$memo,'purchase_id'=>$purchase_id,'status'=>$payment_status,'pending_reason'=>$pending_reason,'reason'=>$reason_code,'amount'=>$mc_gross,'t_currency'=>$mc_currency,'linked'=>$parent_txn_id,'t_time'=>time(),'item'=>$product,'t_via'=>$source));
 
@@ -514,7 +514,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 		//Find product hooks of this order to check dispatch type
 
 		$object	=	find_product($product,true);
-		
+
 		if(is_object($object) && !method_exists($object,'get_product_dispatch_type'))	
 		{	//If hook does not have dispatch method setting take dispatch method as automatic
 			$found['ORDER_STATUS']	=	'ORDER_STATUS_dispatched';	
@@ -770,6 +770,6 @@ function make_cart_payment_button($order_id,$currency)
 		$amount	=	$GLOBALS['SITE_DB']->query_value('shopping_order','tot_price',array('id'=>$order_id));
 		return $object->make_transaction_button($order_id,do_lang('CART_ORDER',$order_id),$order_id,$amount,$currency);
 	}
-	
+
 	return $object->make_cart_transaction_button($items,$currency,$order_id);
 }

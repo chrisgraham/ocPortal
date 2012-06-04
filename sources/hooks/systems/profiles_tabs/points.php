@@ -44,7 +44,7 @@ class Hook_Profiles_Tabs_points
 	{
 		require_code('points3');
 		require_lang('points');
-		
+
 		$title=do_lang_tempcode('POINTS');
 
 		$order=40;

@@ -29,7 +29,7 @@ class Hook_Notification_chat
 	function run($timestamp=NULL)
 	{
 		if (!addon_installed('chat')) return false;
-		
+
 		if (!is_null(get_value('occle_watched_chatroom')))
 		{
 			require_lang('chat');

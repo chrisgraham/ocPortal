@@ -41,7 +41,7 @@ function init__galleries()
 function render_image_box($row,$zone='_SEARCH')
 {
 	require_css('galleries');
-	
+
 	require_code('images');
 	$url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row['id']),$zone);
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
@@ -74,7 +74,7 @@ function render_image_box($row,$zone='_SEARCH')
 function render_video_box($row,$zone='_SEARCH')
 {
 	require_css('galleries');
-	
+
 	require_code('images');
 	$url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),$zone);
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
@@ -119,7 +119,7 @@ function get_default_gallery_max()
 function gallery_has_content($name)
 {
 	$num_galleries=NULL;
-	
+
 	global $GALLERY_ENTRIES_CATS_USED;
 	if (is_null($GALLERY_ENTRIES_CATS_USED))
 	{
@@ -145,7 +145,7 @@ function gallery_has_content($name)
 	{
 		if (is_null($num_galleries))
 			$num_galleries=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
-	
+
 		if ($num_galleries<300)
 		{
 			$GALLERY_PAIRS=collapse_2d_complexity('name','parent_id',$GLOBALS['SITE_DB']->query_select('galleries',array('name','parent_id')));
@@ -298,7 +298,7 @@ function get_recursive_gallery_details($name,$test_videos=true,$test_images=true
 {
 	static $total_categories=NULL;
 	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
-	
+
 	$num_images=$test_images?$GLOBALS['SITE_DB']->query_value('images','COUNT(*)',array('cat'=>$name)):0;
 	$num_videos=$test_videos?$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)',array('cat'=>$name)):0;
 
@@ -467,7 +467,7 @@ function get_gallery_tree($category_id='root',$tree='',$gallery_info=NULL,$do_st
 		}
 		$sub=true;
 	}
-	
+
 	$can_submit=mixed();
 
 	// Children of this category

@@ -40,7 +40,7 @@ class Module_admin_notifications
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_notifications
 	{
 		return array('misc'=>'NOTIFICATIONS_LOCKDOWN');
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -58,7 +58,7 @@ class Module_admin_notifications
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('notification_lockdown');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -83,7 +83,7 @@ class Module_admin_notifications
 		require_lang('notifications');
 
 		$title=get_page_title('NOTIFICATIONS_LOCKDOWN');
-		
+
 		require_css('notifications');
 		require_javascript('javascript_notifications');
 		require_code('notifications');
@@ -209,7 +209,7 @@ class Module_admin_notifications
 					}
 				}
 			}
-			
+
 			attach_message(do_lang_tempcode('SUCCESS'));
 		}
 
@@ -252,7 +252,7 @@ class Module_admin_notifications
 			'ACTION_URL'=>get_self_url(),
 		));
 	}
-	
+
 }
 
 

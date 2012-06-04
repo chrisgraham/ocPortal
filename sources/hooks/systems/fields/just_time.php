@@ -116,7 +116,7 @@ class Hook_fields_just_time
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
 		$time=mixed();
-		
+
 		if ((is_null($actual_value)) || ($actual_value==''))
 		{
 			$time=NULL;
@@ -131,7 +131,7 @@ class Hook_fields_just_time
 			if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
 			if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';
 			//$time=mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
-			
+
 			$time=array(intval($time_bits[1]),intval($time_bits[0]),intval(date('m')),intval(date('d')),intval(date('Y')));
 		}
 		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),true,$time,1,1900,NULL,$field['cf_required']==1,false);

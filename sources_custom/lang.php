@@ -343,18 +343,18 @@ if (!function_exists('get_translated_text'))
 function google_translate($str_in, $lang)
 {
 	$tempcode=is_object($str_in);
-	
+
 	$GLOBALS['NO_QUERY_LIMIT']=true;
-	
+
 	if (get_option('enable_google_translate',true)!=='1') return $str_in;
-	
+
 	if ($tempcode) $str_in=$str_in->evaluate();
-	
+
 	global $DOING_TRANSLATE;
 	if (!isset($DOING_TRANSLATE)) $DOING_TRANSLATE=false;
 
 	if ($DOING_TRANSLATE) return $tempcode?protect_from_escaping($str_in):$str_in; // Don't want loops
-	
+
 	if ($str_in=='') return $tempcode?protect_from_escaping(escape_html('')):escape_html('');
 
 	if (strpos($str_in,'gtranslate_cache')!==false) return $tempcode?protect_from_escaping($str_in):$str_in; // Stop loops about corrupt/missing database tables

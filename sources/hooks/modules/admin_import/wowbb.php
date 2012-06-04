@@ -253,7 +253,7 @@ class Hook_wowbb
 					import_id_remap_put('member',strval($row['user_id']),$test);
 					continue;
 				}
-	
+
 				$language='';
 				if ($row['user_language']!='')
 				{
@@ -314,7 +314,7 @@ class Hook_wowbb
 					list($group,$userpending)=$s;
 					ocf_add_member_to_group($id_new,$group,1-$userpending);
 				}
-				
+
 				// OCP fields
 				foreach ($row as $field=>$val)
 				{
@@ -327,7 +327,7 @@ class Hook_wowbb
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -368,7 +368,7 @@ class Hook_wowbb
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('category',strval($row['category_id']))) continue;
-	
+
 			$title=$row['category_name'];
 
 			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
@@ -794,7 +794,7 @@ class Hook_wowbb
 				ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,NULL,$last_edit_time,$last_edit_by,false,false,NULL,false);
 				$first_post=false;
 			}
-	
+
 			import_id_remap_put('pt',strval($row['pm_id']),$topic_id);
 		}
 	}
@@ -840,7 +840,7 @@ class Hook_wowbb
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('forum_notification',strval($row['user_id']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) continue;
 
@@ -895,7 +895,7 @@ class Hook_wowbb
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *

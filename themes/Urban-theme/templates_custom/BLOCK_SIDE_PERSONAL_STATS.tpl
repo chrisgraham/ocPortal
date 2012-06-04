@@ -4,7 +4,7 @@
 			{+START,IF_NON_EMPTY,{AVATAR_URL}}
 				<div class="personal_stats_avatar"><img src="{AVATAR_URL*}" title="{!AVATAR}" alt="{!AVATAR}" /></div>
 			{+END}
-	
+
 			{+START,IF_NON_EMPTY,{CONTENT}}
 				<ul class="compact_list">
 					{CONTENT}

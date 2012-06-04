@@ -58,7 +58,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			}
 			critical_error('PASSON',$error);
 		}
-	
+
 		// Potential cacheing
 		global $CACHE_DB;
 		$x=serialize(array($db_name,$db_host));
@@ -66,7 +66,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		{
 			return array($x,$db_name);
 		}
-	
+
 		$db=@dbx_connect('mysql',$db_host,$db_name,$db_user,$db_password,$persistent?1:0);
 		if (($db===false) || (is_null($db)))
 		{
@@ -80,7 +80,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		}
 		global $LAST_SELECT_DB;
 		$LAST_SELECT_DB=$db;
-	
+
 		global $SITE_INFO;
 		if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
 		@dbx_query($db,'SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"');
@@ -89,7 +89,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 
 		return array($db,$db_name);
 	}
-	
+
 	/**
 	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
 	 *
@@ -102,7 +102,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		if (is_null($LAST_SELECT_DB)) return addslashes($string);
 		return dbx_escape_string($LAST_SELECT_DB,$string);
 	}
-	
+
 	/**
 	 * Find whether full-text-search is present
 	 *
@@ -115,7 +115,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		unset($db);
 		return true; // Assumes yes, because we are in a limited environment to actually check
 	}
-	
+
 	/**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
 	 *
@@ -130,7 +130,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 	function db_query($query,$db_parts,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false)
 	{
 		list($db,)=$db_parts;
-	
+
 		if (strlen($query)>500000) // Let's hope we can fail on this, because it's a huge query. We can only allow it if mySQL can.
 		{
 			$test_result=$this->db_query('SHOW VARIABLES LIKE \'max_allowed_packet\'',$db_parts,NULL,NULL,true);
@@ -147,7 +147,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval((integer)$start).','.strval((integer)$max);
 		elseif (!is_null($max)) $query.=' LIMIT '.strval((integer)$max);
 		elseif (!is_null($start)) $query.=' LIMIT '.strval((integer)$start).',30000000';
-	
+
 		$results=@dbx_query($db,$query,DBX_RESULT_INFO);
 		if (($results===0) && ((!$fail_ok) || (strpos(dbx_error($db),'is marked as crashed and should be repaired')!==false)))
 		{
@@ -164,12 +164,12 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 				return NULL;
 			}
 		}
-	
+
 		if ((is_object($results)) && ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')))
 		{
 			return $this->db_get_query_rows($results);
 		}
-	
+
 		if ($get_insert_id)
 		{
 			if (strtoupper(substr($query,0,7))=='UPDATE ')
@@ -178,7 +178,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 					return mysql_affected_rows($db->handle);
 				else return (-1);
 			}
-	
+
 			//return mysql_insert_id($db->handle);
 			if (strtoupper(substr($query,0,12))=='INSERT INTO ')
 			{
@@ -187,10 +187,10 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 				return $rows[0]['x'];
 			}
 		}
-	
+
 		return NULL;
 	}
-	
+
 	/**
 	 * Get the rows returned from a SELECT query.
 	 *
@@ -207,7 +207,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			$names[$x]=$results->info['name'][$x];
 			$types[$x]=$results->info['type'][$x];
 		}
-	
+
 		$out=array();
 		$newrow=array();
 		foreach ($results->data as $row)
@@ -217,7 +217,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			{
 				$name=$names[$j];
 				$type=$types[$j];
-	
+
 				if (($type=='int') || ($type=='integer'))
 				{
 					if ((is_null($v)) || ($v==='')) // Roadsend returns empty string instead of NULL
@@ -245,10 +245,10 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 						$newrow[$name]=intval($v);
 					}
 				} else $newrow[$name]=$v;
-	
+
 				$j++;
 			}
-	
+
 			$out[]=$newrow;
 		}
 		return $out;

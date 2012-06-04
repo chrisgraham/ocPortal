@@ -37,7 +37,7 @@ class Hook_pointstore_flagrant
 	function info()
 	{
 		if (!addon_installed('flagrant')) return array();
-		
+
 		if (get_option('is_on_flagrant_buy')=='1')
 		{
 			$text_url=build_url(array('page'=>'_SELF','type'=>'text','id'=>'flagrant'),'_SELF');

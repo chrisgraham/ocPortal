@@ -40,7 +40,7 @@ class Module_authors
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -51,7 +51,7 @@ class Module_authors
 		delete_menu_item_simple('_SELF:authors:type=misc');
 		delete_menu_item_simple('_SEARCH:cms_authors:type=_ad');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -82,7 +82,7 @@ class Module_authors
 		add_menu_item_simple('collab_features',NULL,'VIEW_MY_AUTHOR_PROFILE','_SELF:authors:type=misc');
 		add_menu_item_simple('collab_features',NULL,'EDIT_MY_AUTHOR_PROFILE','_SEARCH:cms_authors:type=_ad',0,0,true,do_lang('ZONE_BETWEEN'),1);
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -154,7 +154,7 @@ class Module_authors
 		{
 			$details=$rows[0];
 		}
-	
+
 		// Links associated with the mapping between the author and a forum member
 		$handle=get_author_id_from_name($author);
 		if (!is_null($handle))
@@ -171,7 +171,7 @@ class Module_authors
 			$forum_details=new ocp_tempcode();
 			$point_details=new ocp_tempcode();
 		}
-	
+
 		// Homepage
 		$url=$details['url'];
 		if (strlen($url)>0)
@@ -191,7 +191,7 @@ class Module_authors
 			$staff_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($edit_author_url,do_lang_tempcode('DEFINE_AUTHOR'),false)));
 		}
 		else $staff_details=new ocp_tempcode();
-	
+
 		// Search link
 		if (addon_installed('search'))
 		{
@@ -199,14 +199,14 @@ class Module_authors
 			$search_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($search_url,do_lang_tempcode('SEARCH'),false)));
 		}
 		else $search_details=new ocp_tempcode();
-	
+
 		// Downloads
 		$downloads_released=new ocp_tempcode();
 		if (addon_installed('downloads'))
 		{
 			require_code('downloads');
 			require_lang('downloads');
-	
+
 			$count=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',array('author'=>$author,'validated'=>1));
 			if ($count>50)
 			{
@@ -230,7 +230,7 @@ class Module_authors
 		if (addon_installed('news'))
 		{
 			require_lang('news');
-	
+
 			$count=$GLOBALS['SITE_DB']->query_value('news','COUNT(*)',array('author'=>$author,'validated'=>1));
 			if ($count>50)
 			{

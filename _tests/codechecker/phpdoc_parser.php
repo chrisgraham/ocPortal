@@ -57,7 +57,7 @@ foreach ($files as $filename)
 
 	if (basename($filename,'.php')=='tempcode__runtime') continue;
 	if (basename($filename,'.php')=='tempcode_compiler__runtime') continue;
-	
+
 	$TO_USE=$filename;
 
 	if ($filename=='phpstub.php')

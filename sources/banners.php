@@ -112,7 +112,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 		header('Location: '.$url);
 	}
-	
+
 	// Being called to display a banner
 	else
 	{
@@ -234,7 +234,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 		$echo=do_template('BASIC_HTML_WRAP',array('_GUID'=>'d23424ded86c850f4ae0006241407ff9','TITLE'=>do_lang_tempcode('BANNER'),'CONTENT'=>$content));
 		$echo->evaluate_echo();
 	}
-	
+
 	return NULL;
 }
 
@@ -251,7 +251,7 @@ function nice_get_banner_types($it=NULL)
 	foreach ($rows as $row)
 	{
 		$caption=($row['id']=='')?do_lang('GENERAL'):$row['id'];
-		
+
 		if ($row['t_is_textual']==1)
 		{
 			$type_line=do_lang_tempcode('BANNER_TYPE_LINE_TEXTUAL',$caption);
@@ -259,7 +259,7 @@ function nice_get_banner_types($it=NULL)
 		{
 			$type_line=do_lang_tempcode('BANNER_TYPE_LINE',$caption,strval($row['t_image_width']),strval($row['t_image_height']));
 		}
-		
+
 		$list->attach(form_input_list_entry($row['id'],$it===$row['id'],$type_line));
 	}
 	return $list;

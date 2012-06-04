@@ -159,7 +159,7 @@ function _get_details_comcode_tags()
 		if ($tag['tag_textual_tag']==1) $TEXTUAL_TAGS[$tag['tag_tag']]=1;
 		if ($tag['tag_dangerous_tag']==1) $DANGEROUS_TAGS[$tag['tag_tag']]=1;
 	}
-	
+
 	return array($tag_list,$custom_tag_list);
 }
 
@@ -239,14 +239,14 @@ function comcode_helper_script()
 		$keep=symbol_tempcode('KEEP');
 		$comcode_groups='';
 		$groups=_get_group_tags();
-		
+
 		$non_wysiwyg_tags=_get_non_wysiwyg_tags();
 		$in_wysiwyg=get_param_integer('in_wysiwyg',0)==1;
 
 		foreach ($groups as $groupname=>$grouptags)
 		{
 			sort($grouptags);
-			
+
 			$comcode_types='';
 			foreach ($grouptags as $tag)
 			{
@@ -459,7 +459,7 @@ function comcode_helper_script()
 
 											if (($item=='mail') && (get_param('default_type',NULL)!==NULL)) continue;
 										}
-										
+
 										$list->attach(form_input_list_entry($item,($item==$default),protect_from_escaping($label)));
 									} else
 									{
@@ -601,7 +601,7 @@ function comcode_helper_script()
 	{
 		require_javascript('javascript_posting');
 		require_javascript('javascript_editing');
-		
+
 		$field_name=get_param('field_name');
 		$tag=post_param('tag');
 		$title=get_page_title('_COMCODE_HELPER',true,array($tag));
@@ -639,7 +639,7 @@ function _get_preview_environment_comcode($tag)
 {
 	$actual_tag=$tag;
 	if ($tag=='attachment_safe') $tag='attachment';
-	
+
 	$comcode='';
 	list($tag_list,$custom_tag_list)=_get_details_comcode_tags();
 

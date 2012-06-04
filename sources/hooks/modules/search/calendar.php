@@ -20,7 +20,7 @@
 
 class Hook_search_calendar
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -34,7 +34,7 @@ class Hook_search_calendar
 		if ($GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)')==0) return NULL;
 
 		require_lang('calendar');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('CALENDAR');
 		$info['default']=false;

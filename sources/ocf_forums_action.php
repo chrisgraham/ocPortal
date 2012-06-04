@@ -33,7 +33,7 @@ function ocf_make_category($title,$description,$expanded_by_default=1)
 		'c_description'=>$description,
 		'c_expanded_by_default'=>$expanded_by_default
 	),true);
-	
+
 	log_it('ADD_FORUM_CATEGORY',strval($category_id),$title);
 
 	return $category_id;

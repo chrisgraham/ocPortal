@@ -62,7 +62,7 @@
 								<img src="{$IMG*,rating}" title="" alt="{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}" />
 								{$INC,rating_loop}
 							{+END}
-					
+
 							{+START,IF,{$VALUE_OPTION,html5}}
 								<span itemprop="reviewRating" itemscope="itemscope" itemtype="http://schema.org/Rating"><meta itemprop="ratingValue" content="{REVIEW_RATING*}" /></span>
 							{+END}

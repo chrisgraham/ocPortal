@@ -95,7 +95,7 @@ function restrictify()
 function inspect()
 {
 	$args=func_get_args();
-	
+
 	_inspect($args,false);
 }
 
@@ -105,7 +105,7 @@ function inspect()
 function inspect_plain()
 {
 	$args=func_get_args();
-	
+
 	_inspect($args,true);
 }
 
@@ -118,30 +118,30 @@ function inspect_plain()
 function _inspect($args,$force_plain=false)
 {
 	$plain=headers_sent() || $force_plain || !running_script('index');
-	
+
 	if ($plain)
 	{
 		@ini_set('ocproducts.xss_detect','0');
-		
+
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
-		
+
 		if (!headers_sent())
 		{
 			header('Content-type: text/plain; charset='.get_charset());
 			header('Content-Disposition: inline'); // Override what might have been set
 		}
-		
+
 		echo 'DEBUGGING. INSPECTING VARIABLES...'.chr(10);
 	} else
 	{
 		header('Content-type: text/html; charset='.get_charset());
 		header('Content-Disposition: inline'); // Override what might have been set
 	}
-	
+
 	foreach ($args as $arg_name=>$arg_value)
 	{
 		if (!is_string($arg_name)) $arg_name=strval($arg_name+1);
-		
+
 		if ($plain)
 		{
 			echo chr(10).chr(10).$arg_name.' is...'.chr(10);
@@ -165,11 +165,11 @@ function _inspect($args,$force_plain=false)
 			}
 		}
 	}
-	
+
 	if ($plain)
 	{
 		echo chr(10).chr(10).'--------------------'.chr(10).chr(10).'STACK TRACE FOLLOWS...'.chr(10).chr(10);
-		
+
 		debug_print_backtrace();
 		exit();
 	}
@@ -193,9 +193,9 @@ function memory_trace_point($name=NULL)
 function show_memory_points()
 {
 	@header('Content-type: text/plain; charset='.get_charset());
-	
+
 	@ini_set('ocproducts.xss_detect','0');
-	
+
 	$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
 	global $MEMORY_POINTS;

@@ -35,7 +35,7 @@ function scriptLoadStuffStaff()
 			addEventListenerAbstract(inputs[i],'click',handleImageClick,false);
 		}
 	}
-	
+
 	// Local cacheing for improved perceived performance
 	var has_local_storage=false;
 	try
@@ -382,7 +382,7 @@ function handleImageClick(event,ob,force)
 	{
 		// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
 		cancelBubbling(event);
-		
+
 		if (typeof event.preventDefault!='undefined') event.preventDefault();
 
 		if (src.indexOf('{$BASE_URL_NOHTTP;}/themes/')!=-1)
@@ -400,7 +400,7 @@ function handleZoneClick(src,event,zone_name)
 	if (magicKeypress(event))
 	{
 		zone_name=zone_name.replace(/:.*$/,'');
-		
+
 		// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
 		cancelBubbling(event);
 		if (typeof event.preventDefault!='undefined') event.preventDefault();
@@ -524,7 +524,7 @@ function load_ocpchat(event)
 {
 	cancelBubbling(event);
 	if (typeof event.preventDefault!='undefined') event.preventDefault();
-	
+
 	var html=' \
 		<div style="margin: 20px; font-size: 0.85em; float: right; width: 260px;"> \
 			<h2>{!OCP_COMMUNITY_HELP}</h2> \
@@ -534,7 +534,7 @@ function load_ocpchat(event)
 		</div> \
 		<iframe style="overflow:hidden;width:450px;height:90%;" frameborder="0" border="0" src="http://chat.zoho.com/shout.sas?k=%7B%22g%22%3A%22Anonymous%22%2C%22c%22%3A%2299b05040669de8c406b674d2366ff9b0401fe3523f0db988%22%2C%22o%22%3A%22e89335657fd675dcfb8e555ea0615984%22'+'%7D'+'&amp;chaturl=ocPortal%20chat&amp;V=000000-70a9e1-eff4f9-70a9e1-ocPortal%20chat&amp;user={$SITE_NAME.*}'+((typeof window.ocp_username!='undefined')?window.encodeURIComponent('/'+window.ocp_username):'')+'&amp;participants=true"></iframe> \
 	'.replace(/\\{1\\}/,escape_html((window.location+'').replace(get_base_url(),'http://baseurl')));
-	
+
 	var box=document.getElementById('ocpchat_box');
 	if (box)
 	{
@@ -560,14 +560,14 @@ function load_ocpchat(event)
 
 		setInnerHTML(box,html);
 		document.body.appendChild(box);
-		
+
 		smoothScroll(0);
 
 		setOpacity(document.getElementById('ocpchat_img'),0.5);
-		
+
 		//window.setTimeout( function() { try { window.frames[window.frames.length-1].documentElement.getElementById('texteditor').focus(); } catch (e) {} } ), 5000);		Unfortunately cannot do, JS security context issue
 	}
-	
+
 	return false;
 }
 

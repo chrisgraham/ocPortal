@@ -40,7 +40,7 @@ class Module_admin_menus
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -68,7 +68,7 @@ class Module_admin_menus
 			 donate/hosting/advertise linked to by banners
 			 side_personal_stats/side_search/main_newsletter_signup/main_leaderboard/main_poll/main_iotd/main_news/side_news_categories/side_calendar blocks
 			 implicit links to authors/awards/member-actions/onlinemembers
-			
+
 			(not all links defined here, various modules also install them)
 		*/
 
@@ -127,7 +127,7 @@ class Module_admin_menus
 	{
 		return array('misc'=>'MENU_MANAGEMENT');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -137,20 +137,20 @@ class Module_admin_menus
 	{
 		require_javascript('javascript_menu_editor');
 		require_javascript('javascript_ajax');
-	
+
 		require_code('menus');
 		require_lang('menus');
 		require_code('menus2');
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->get_menu_name();
 		if ($type=='edit') return $this->edit_menu();
 		if ($type=='_edit') return $this->_edit_menu();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to choose a menu to edit / create a new menu.
 	 *
@@ -162,7 +162,7 @@ class Module_admin_menus
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_menus';
 
 		$title=get_page_title('MENU_MANAGEMENT');
-	
+
 		require_code('form_templates');
 		$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
 		$list=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
@@ -191,7 +191,7 @@ class Module_admin_menus
 	function edit_menu()
 	{
 		if (!has_js()) warn_exit(do_lang_tempcode('MSG_JS_NEEDED'));
-		
+
 		$id=get_param('id','');
 		if ($id=='') $id=get_param('id_new');
 		if (substr($id,0,1)=='_') warn_exit(do_lang_tempcode('MENU_UNDERSCORE_RESERVED'));
@@ -365,20 +365,20 @@ class Module_admin_menus
 
 		// Get language codes currently used
 		$old_menu_bits=list_to_map('id',$GLOBALS['SITE_DB']->query_select('menu_items',array('id','i_caption','i_caption_long'),array('i_menu'=>$menu_id)));
-	
+
 		// Now, process everything on the root
 		$order=0;
 		foreach ($orderings as $id)
 		{
 			$parent=$ids[$id];
-	
+
 			if ($parent=='')
 			{
 				$this->add_menu_item($menu_id,$id,$ids,NULL,$old_menu_bits,$order);
 				$order++;
 			}
 		}
-	
+
 		// Erase old stuff
 		foreach ($old_menu_bits as $menu_item_id=>$lang_code)
 		{
@@ -386,7 +386,7 @@ class Module_admin_menus
 			delete_lang($lang_code['i_caption']);
 			delete_lang($lang_code['i_caption_long']);
 		}
-	
+
 		decache('side_stored_menu');
 		persistant_cache_delete(array('MENU',$menu_id));
 
@@ -444,7 +444,7 @@ class Module_admin_menus
 				$url=fixup_protocolless_urls($url);
 			}
 //		} else $url='';
-	
+
 		$menu_save_map=array(
 			'i_menu'=>$menu,
 			'i_order'=>$order,
@@ -456,7 +456,7 @@ class Module_admin_menus
 			'i_page_only'=>$page_only,
 			'i_theme_img_code'=>$theme_img_code
 		);
-	
+
 		// Save
 		if (array_key_exists($id,$old_menu_bits))
 		{
@@ -469,7 +469,7 @@ class Module_admin_menus
 			unset($old_menu_bits[$id]);
 			$insert_id=$id;
 			$GLOBALS['SITE_DB']->query_update('menu_items',$menu_save_map,array('id'=>$id));
-			
+
 			lang_remap($lang_code,$caption);
 			lang_remap($lang_code_2,$caption_long);
 		} else

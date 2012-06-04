@@ -40,7 +40,7 @@ class Module_admin_unvalidated
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_unvalidated
 	{
 		return array('!'=>'UNVALIDATED_RESOURCES');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,10 +64,10 @@ class Module_admin_unvalidated
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_censor';
 
 		$_title=get_page_title('UNVALIDATED_RESOURCES');
-	
+
 		$out=new ocp_tempcode();
 		require_code('form_templates');
-	
+
 		$_hooks=find_all_hooks('modules','admin_unvalidated');
 		foreach (array_keys($_hooks) as $hook)
 		{
@@ -112,10 +112,10 @@ class Module_admin_unvalidated
 				// Could debate whether to include "'TARGET'=>'_blank',". However it does redirect back, so it's a nice linear process like this. If it was new window it could be more efficient, but also would confuse people with a lot of new windows opening and not closing.
 				$content=do_template('FORM',array('_GUID'=>'51dcee39273a0fee29569190344f2e41','GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 			}
-	
+
 			$out->attach(do_template('UNVALIDATED_SECTION',array('_GUID'=>'838240008e190b9cbaa0280fbddd6baf','TITLE'=>$info['title'],'CONTENT'=>$content)));
 		}
-	
+
 		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'4e971f1c8851b821af030b5c7bbcb3fb','TITLE'=>$_title,'SECTIONS'=>$out));
 	}
 

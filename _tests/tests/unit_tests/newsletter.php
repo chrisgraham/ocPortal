@@ -29,7 +29,7 @@ class newsletter_test_set extends ocp_test_case
 	{
 		parent::setUp();
 		require_code('newsletter');
-		
+
 		$this->news_id=add_newsletter('New Offer','The new offer of the week');
 
 		// Test the forum was actually created
@@ -44,7 +44,7 @@ class newsletter_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('Thanks'==get_translated_text($GLOBALS['SITE_DB']->query_value('newsletters','title',array('id'=>$this->news_id))));
 	}
-	
+
 	function tearDown()
 	{
 		delete_newsletter($this->news_id);

@@ -23,7 +23,7 @@
  */
 class Module_admin_cleanup
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -41,7 +41,7 @@ class Module_admin_cleanup
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -52,7 +52,7 @@ class Module_admin_cleanup
 		delete_config_option('is_on_comcode_page_cache');
 		delete_config_option('is_on_lang_cache');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -72,7 +72,7 @@ class Module_admin_cleanup
 			add_config_option('LANGUAGE_CACHE','is_on_lang_cache','tick','return \'1\';','SITE','CACHES',1);
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -82,7 +82,7 @@ class Module_admin_cleanup
 	{
 		return array('misc'=>'CLEANUP_TOOLS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -95,16 +95,16 @@ class Module_admin_cleanup
 
 		require_lang('cleanup');
 		require_code('view_modes');
-	
+
 		// Decide what we're doing
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->choose_cache_type();
 		if ($type=='rebuild') return $this->do_rebuild();
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for choosing caches to empty.
 	 *
@@ -115,9 +115,9 @@ class Module_admin_cleanup
 		$hooks=find_all_hooks('modules','admin_cleanup');
 
 		$title=get_page_title('CLEANUP_TOOLS');
-	
+
 		$url=build_url(array('page'=>'_SELF','type'=>'rebuild'),'_SELF');
-	
+
 		require_code('form_templates');
 
 		$fields_cache=new ocp_tempcode();
@@ -140,7 +140,7 @@ class Module_admin_cleanup
 				}
 			}
 		}
-		
+
 		$fields=new ocp_tempcode();
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('CACHES_PAGE_EXP_OPTIMISERS'),'HELP'=>'')));
 		$fields->attach($fields_optimise);
@@ -184,7 +184,7 @@ class Module_admin_cleanup
 		}
 		$messages=ocportal_cleanup($todo);
 		$messages->attach(paragraph(do_lang_tempcode('SUCCESS')));
-	
+
 		$title=get_page_title('CLEANUP_TOOLS');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CLEANUP_TOOLS'))));

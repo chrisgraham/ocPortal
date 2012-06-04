@@ -41,7 +41,7 @@ class Module_polls
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -49,7 +49,7 @@ class Module_polls
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('poll');
 		$GLOBALS['SITE_DB']->drop_if_exists('poll_votes');
-	
+
 		delete_specific_permission('choose_poll');
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'polls'));
 
@@ -122,7 +122,7 @@ class Module_polls
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_po4',array('option4'));
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_po5',array('option5'));
 		}
-		
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('poll','allow_trackbacks','BINARY',1);
@@ -156,7 +156,7 @@ class Module_polls
 			$GLOBALS['SITE_DB']->create_index('poll_votes','v_voter_ip',array('v_voter_ip'));
 			$GLOBALS['SITE_DB']->create_index('poll_votes','v_vote_for',array('v_vote_for'));
 		}
-		
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
 			$polls=$GLOBALS['SITE_DB']->query_select('poll',array('id','ip'));
@@ -176,7 +176,7 @@ class Module_polls
 			$GLOBALS['SITE_DB']->delete_table_field('poll','ip');
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -186,7 +186,7 @@ class Module_polls
 	{
 		return array('misc'=>'POLLS');
 	}
-	
+
 	/**
 	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
 	 *
@@ -246,10 +246,10 @@ class Module_polls
 
 		// What are we doing?
 		$type=get_param('type','misc');
-	
+
 		if ($type=='view') return $this->view();
 		if ($type=='misc') return $this->view_polls();
-	
+
 		return new ocp_tempcode();
 	}
 
@@ -293,7 +293,7 @@ class Module_polls
 
 		return do_template('NEXT_BROWSER_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
 	}
-	
+
 	/**
 	 * The UI to view a poll.
 	 *
@@ -302,19 +302,19 @@ class Module_polls
 	function view()
 	{
 		$title=get_page_title('POLL');
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POLL_ARCHIVE'))));
 
 		$id=get_param_integer('id');
 		$_GET['poll_id']=strval($id);
-	
+
 		$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{
 			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-	
+
 		// Views
 		if (get_db_type()!='xml')
 		{

@@ -106,7 +106,7 @@ class Module_admin_messaging
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * Choose a message.
 	 *
@@ -157,7 +157,7 @@ class Module_admin_messaging
 	function view_message()
 	{
 		$title=get_page_title('CONTACT_US_MESSAGING');
-		
+
 		$id=get_param('id');
 		$message_type=get_param('message_type');
 
@@ -227,7 +227,7 @@ class Module_admin_messaging
 	function take_responsibility()
 	{
 		$title=get_page_title('CONTACT_US_MESSAGING');
-		
+
 		$id=get_param('id');
 		$message_type=get_param('message_type');
 

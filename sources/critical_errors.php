@@ -38,7 +38,7 @@ if (!function_exists('critical_error'))
 		}
 
 		$error='Unknown critical error type: this should not happen, so please report this to ocProducts.';
-	
+
 		switch ($code)
 		{
 			case 'MISSING_SOURCE':

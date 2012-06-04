@@ -49,7 +49,7 @@ function table_table_row($values,$escape=false)
 	{
 		if (($escape) && ((!is_object($value)) || ($value->pure_lang!==true)))
 			$value=make_string_tempcode(escape_html(is_object($value)?$value->evaluate():$value));
-		
+
 		$cells->attach(do_template('TABLE_TABLE_ROW_CELL',array('_GUID'=>'700a982eb2262149295816ddee91b0e7','VALUE'=>$value)));
 	}
 

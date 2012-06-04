@@ -29,7 +29,7 @@ class Hook_sw_stats_block
 	function get_blocks()
 	{
 		if (!addon_installed('stats')) return array();
-		
+
 		return array(array(),array('side_stats'=>array('PANEL_LEFT','PANEL_RIGHT')));
 	}
 

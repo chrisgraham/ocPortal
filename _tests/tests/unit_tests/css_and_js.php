@@ -29,14 +29,14 @@ class css_and_js_test_set extends ocp_test_case
 		require_code('validation2');
 		require_code('js_validator');
 		require_lang('validation');
-		
+
 		global $VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL;
 		$VALIDATION_COMPAT=false;
 		$VALIDATION_EXT_FILES=false;
 		$VALIDATION_MANUAL=false;
 
 		//@set_time_limit(0);
-		
+
 		parent::setUp();
 	}
 
@@ -63,7 +63,7 @@ class css_and_js_test_set extends ocp_test_case
 			}
 		}
 	}*/
-	
+
 	function testCSS()
 	{
 		$dh=opendir(get_file_base().'/themes/default/css');

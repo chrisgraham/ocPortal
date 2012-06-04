@@ -160,7 +160,7 @@ class OCP_Topic
 			{
 				$form=new ocp_tempcode();
 			}
-			
+
 			// Existing review ratings
 			$reviews_rating_criteria=array();
 			if ((get_forum_type()=='ocf') && ($allow_reviews))
@@ -259,7 +259,7 @@ class OCP_Topic
 			$ret=$rendered[0];
 			return $ret;
 		}
-		
+
 		return new ocp_tempcode();
 	}
 
@@ -302,7 +302,7 @@ class OCP_Topic
 				$posts=array();
 			}
 			$this->_inject_posts_for_scoring_algorithm($posts);
-			
+
 			return true;
 		}
 
@@ -547,7 +547,7 @@ class OCP_Topic
 				}
 			}
 		}
-		
+
 		return $posts_out;
 	}
 

@@ -24,7 +24,7 @@
 				{ROWS}
 			</tbody>
 		</table></div>
-		
+
 		<h2>{!MATCH_KEY_MESSAGES}</h2>
 
 		<p>

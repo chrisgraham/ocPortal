@@ -38,7 +38,7 @@ class Block_side_news
 		$info['parameters']=array('param','blogs','historic','zone','filter','filter_and','title');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_side_news
 		$info['ttl']=15;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

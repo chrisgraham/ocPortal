@@ -30,7 +30,7 @@ class Hook_secpay
 	{
 		return ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn');
 	}
-	
+
 	/**
 	 * Get the IPN URL.
 	 *
@@ -117,7 +117,7 @@ class Hook_secpay
 			$single_length=60*60*24*92;
 		}
 		$first_repeat=date('Ymd',time()+$single_length);
-		
+
 		return array($length_units_2,$first_repeat);
 	}
 
@@ -419,7 +419,7 @@ class Hook_secpay
 	function store_shipping_address($order_id)
 	{
 		if(is_null(post_param('first_name',NULL))) return;
-		
+
 		if(is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_addresses','id',array('order_id'=>$order_id))))
 		{
 			$shipping_address=array();

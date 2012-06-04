@@ -70,10 +70,10 @@ class Hook_ipb1 extends Hook_ipb_base
 		$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
 		$cleanup_url=$_cleanup_url->evaluate();
 		$info['message']=(get_param('type','misc')!='import' && get_param('type','misc')!='hook')?new ocp_tempcode():do_lang_tempcode('FORUM_CACHE_CLEAR',escape_html($cleanup_url));
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -192,12 +192,12 @@ class Hook_ipb1 extends Hook_ipb_base
 		set_option('closed',$INFO['offline_msg']);
 		set_option('session_expiry_time',strval(intval(round($INFO['session_expiration']/3600))));
 		set_option('prevent_shouting',strval($INFO['etfilter_shout']));
-	
+
 		// Now some usergroup options
 		list($width,$height)=explode('x',$INFO['avatar_dims']);
 		$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_avatar_width'=>$width,'g_max_avatar_height'=>$height,'g_max_sig_length_comcode'=>$INFO['max_sig_length'],'g_max_post_length_comcode'=>$INFO['max_post_length']));
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -208,7 +208,7 @@ class Hook_ipb1 extends Hook_ipb_base
 	function import_ocf_personal_topics($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'messages WHERE vid<>\'sent\' ORDER BY msg_date');
-	
+
 		// Group them up into what will become topics
 		$groups=array();
 		foreach ($rows as $row)
@@ -228,21 +228,21 @@ class Hook_ipb1 extends Hook_ipb_base
 			$title=str_replace('RE:','',$title);
 			$groups[strval($a).':'.strval($b).':'.@html_entity_decode($title,ENT_QUOTES,get_charset())][]=$row;
 		}
-	
+
 		// Import topics
 		foreach ($groups as $group)
 		{
 			$row=$group[0];
-	
+
 			if (import_check_if_imported('pt',strval($row['msg_id']))) continue;
-	
+
 			// Create topic
 			$from_id=import_id_remap_get('member',strval($row['from_id']),true);
 			if (is_null($from_id)) $from_id=$GLOBALS['OCF_DRIVER']->get_guest_id();
 			$to_id=import_id_remap_get('member',strval($row['recipient_id']),true);
 			if (is_null($to_id)) $to_id=$GLOBALS['OCF_DRIVER']->get_guest_id();
 			$topic_id=ocf_make_topic(NULL,'','',1,1,0,0,0,$from_id,$to_id,false);
-	
+
 			$first_post=true;
 			foreach ($group as $_postdetails)
 			{
@@ -250,7 +250,7 @@ class Hook_ipb1 extends Hook_ipb_base
 				{
 					$title=@html_entity_decode($row['title'],ENT_QUOTES,get_charset());
 				} else $title='';
-	
+
 				$post=$this->clean_ipb_post($_postdetails['message']);
 				$validated=1;
 				$from_id=import_id_remap_get('member',strval($_postdetails['from_id']),true);
@@ -261,11 +261,11 @@ class Hook_ipb1 extends Hook_ipb_base
 				$poster=$from_id;
 				$last_edit_time=NULL;
 				$last_edit_by=NULL;
-	
+
 				ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,NULL,$last_edit_time,$last_edit_by,false,false,NULL,false);
 				$first_post=false;
 			}
-	
+
 			import_id_remap_put('pt',strval($row['msg_id']),$topic_id);
 		}
 	}

@@ -54,13 +54,13 @@ class Hook_content_meta_aware_catalogue_entry
 			'add_time_field'=>'ce_add_date',
 			'edit_time_field'=>'ce_edit_date',
 			'validated_field'=>'ce_validated',
-			
+
 			'addon_name'=>'catalogues',
-			
+
 			'module'=>'catalogues',
 		);
 	}
-	
+
 }
 
 /**

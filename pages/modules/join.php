@@ -40,7 +40,7 @@ class Module_join
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -68,21 +68,21 @@ class Module_join
 		}*/
 
 		require_code('ocf_join');
-		
+
 		check_joining_allowed();
-		
+
 		ocf_require_all_forum_stuff();
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return (get_option('show_first_join_page')!='1')?$this->step2():$this->step1();
 		if ($type=='step2') return $this->step2();
 		if ($type=='step3') return $this->step3();
 		if ($type=='step4') return $this->step4();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to accept the rules of joining.
 	 *
@@ -91,7 +91,7 @@ class Module_join
 	function step1()
 	{
 		if (!is_guest()) warn_exit(do_lang_tempcode('NO_JOIN_LOGGED_IN'));
-	
+
 		$title=get_page_title('_JOIN');
 
 		// Show rules

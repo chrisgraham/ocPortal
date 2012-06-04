@@ -55,7 +55,7 @@ class Hook_sw_news
 	function set_fields()
 	{
 		if (!addon_installed('news')) return;
-		
+
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 		$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>'have_personal_category','the_page'=>'cms_news'));

@@ -26,7 +26,7 @@
 function find_lost_option($name)
 {
 	global $OPTIONS;
-	
+
 	// In the dark dark past, we'd bomb out...
 	if ((function_exists('find_all_zones')) && (!defined('HIPHOP_PHP')))
 	{
@@ -94,7 +94,7 @@ function set_option($name,$value,$type=NULL,$current_value=NULL)
 		global $GET_OPTION_LOOP;
 		if ($GET_OPTION_LOOP!=1)
 			get_option($name); // Ensure it's installed
-		
+
 		$type=$OPTIONS[$name]['the_type']; //$type=$GLOBALS['SITE_DB']->query_value('config','the_type',array('the_name'=>$name));
 	}
 

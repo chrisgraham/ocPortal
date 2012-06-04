@@ -9,7 +9,7 @@
 
 <div id="color-box">
 	<h4>Project Staff</h4>
-	
+
 	[block="5" display_type="0"]main_cc_embed[/block]
 </div>
 

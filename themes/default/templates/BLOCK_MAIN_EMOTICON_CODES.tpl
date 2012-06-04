@@ -5,7 +5,7 @@
 			<th>{!IMAGE}</th>
 		</tr>
 	</thead>
-	
+
 	<tbody>
 		{ENTRIES}
 	</tbody>

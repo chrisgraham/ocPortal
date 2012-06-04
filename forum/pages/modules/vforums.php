@@ -40,7 +40,7 @@ class Module_vforums
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -60,11 +60,11 @@ class Module_vforums
 	{
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_forumview');
-	
+
 		if (is_guest()) access_denied('NOT_AS_GUEST');
-	
+
 		require_css('ocf');
-	
+
 		$type=get_param('type','misc');
 		if ($type=='misc') list($title,$content)=$this->new_posts();
 		elseif ($type=='unread') list($title,$content)=$this->unread_topics();
@@ -110,7 +110,7 @@ class Module_vforums
 
 		return array(get_page_title('TOPICS_UNREAD'),$this->_vforum($title,$condition,'t_cache_last_time DESC',true));
 	}
-	
+
 	/**
 	 * The UI to show topics which have been recently read by the current member.
 	 *
@@ -123,7 +123,7 @@ class Module_vforums
 
 		return array(get_page_title('RECENTLY_READ'),$this->_vforum($title,$condition,'l_time DESC',true));
 	}
-	
+
 	/**
 	 * The UI to show a virtual forum.
 	 *

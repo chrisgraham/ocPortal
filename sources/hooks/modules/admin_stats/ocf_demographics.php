@@ -29,9 +29,9 @@ class Hook_admin_stats_ocf_demographics
 	function info()
 	{
 		if (get_forum_type()!='ocf') return NULL;
-		
+
 		require_lang('stats');
-		
+
 		return array(
 			array('demographics'=>'DEMOGRAPHICS',),
 			array('statistics_demographics',array('_SELF',array('type'=>'demographics'),'_SELF'),do_lang('DEMOGRAPHICS'),('DESCRIPTION_DEMOGRAPHICS')),
@@ -114,7 +114,7 @@ class Hook_admin_stats_ocf_demographics
 				{
 					$age_string=strval($age);
 				}
-				
+
 				$demographics[$age_string]++;
 			} else
 			{

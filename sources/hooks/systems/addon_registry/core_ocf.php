@@ -595,7 +595,7 @@ class Hook_addon_registry_core_ocf
 		}
 
 		require_lang('menus');
-		
+
 		$tabs=array();
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_ABOUT',array(
 			'RIGHT_MARGIN'=>lorem_phrase(),
@@ -782,7 +782,7 @@ class Hook_addon_registry_core_ocf
 		}
 
 		$fields_title = do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word()));
-		
+
 		//results_table
 		$primary_members = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$primary_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false);
 
@@ -829,7 +829,7 @@ class Hook_addon_registry_core_ocf
 
 		//results_table
 		$prospective_members = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$_prospective_members,'MESSAGE'=>'','SORT'=>'','BROWSER'=>'','WIDTHS'=>array(placeholder_number())),NULL,false);
-		
+
 
 		return array(
 			lorem_globalise(

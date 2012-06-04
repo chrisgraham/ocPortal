@@ -20,7 +20,7 @@
 
 class Hook_admin_setupwizard_installprofiles_blog
 {
-	
+
 	/**
 	 * Get info about the installprofile
 	 *
@@ -45,7 +45,7 @@ class Hook_admin_setupwizard_installprofiles_blog
 			array('news','newsletter'),
 			array());
 	}
-	
+
 	/**
 	 * Get a map of default settings associated with this installation profile
 	 *
@@ -72,7 +72,7 @@ class Hook_admin_setupwizard_installprofiles_blog
 			'rules'=>'liberal',
 		);
 	}
-	
+
 	/**
 	 * Find details of desired blocks
 	 *
@@ -101,7 +101,7 @@ class Hook_admin_setupwizard_installprofiles_blog
 			),
 		);
 	}
-	
+
 	/**
 	 * Get options for blocks in this profile
 	 *
@@ -123,12 +123,12 @@ class Hook_admin_setupwizard_installprofiles_blog
 			),
 		);
 	}
-	
+
 	/**
 	 * Execute any special code needed to put this install profile into play
 	 */
 	function install_code()
 	{
 	}
-	
+
 }

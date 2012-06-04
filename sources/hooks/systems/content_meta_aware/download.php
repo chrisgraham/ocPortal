@@ -54,11 +54,11 @@ class Hook_content_meta_aware_download
 			'add_time_field'=>'add_date',
 			'edit_time_field'=>'edit_date',
 			'validated_field'=>'validated',
-			
+
 			'addon_name'=>'downloads',
-			
+
 			'module'=>'downloads',
 		);
 	}
-	
+
 }

@@ -44,7 +44,7 @@ class Module_admin_ocf_post_templates extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'POST_TEMPLATES'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -95,9 +95,9 @@ class Module_admin_ocf_post_templates extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','t_title ASC',true);
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -121,10 +121,10 @@ class Module_admin_ocf_post_templates extends standard_aed_module
 		foreach ($rows as $row)
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
-			
+
 			$fields->attach(results_entry(array($row['t_title'],protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		$search_url=NULL;
 		$archive_url=NULL;
 

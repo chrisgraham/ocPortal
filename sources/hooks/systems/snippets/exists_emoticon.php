@@ -29,12 +29,12 @@ class Hook_exists_emoticon
 	function run()
 	{
 		$val=get_param('name');
-		
+
 		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_emoticons','e_code',array('e_code'=>$val));
 		if (is_null($test)) return new ocp_tempcode();
-		
+
 		require_lang('ocf');
-		
+
 		return make_string_tempcode(strip_tags(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('CONFLICTING_EMOTICON_CODE',escape_html($val)),ENT_QUOTES))));
 	}
 

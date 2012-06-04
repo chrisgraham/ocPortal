@@ -32,7 +32,7 @@ class standard_dir_files_test_set extends ocp_test_case
 	{
 		$this->do_dir(get_file_base());
 	}
-	
+
 	function do_dir($dir)
 	{
 		if ((!file_exists($dir.'/index.php')) && (!file_exists($dir.'/index.html')) && (strpos($dir,'ckeditor')===false) && (strpos($dir,'nbproject')===false) && (strpos($dir,'areaedit')===false) && (strpos($dir,'themes')===false) && (strpos($dir,'personal_dicts')===false))

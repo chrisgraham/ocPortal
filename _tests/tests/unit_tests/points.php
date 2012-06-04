@@ -28,17 +28,17 @@ class points_test_set extends ocp_test_case
 		parent::setUp();
 		require_once(get_file_base()."/_tests/simpletest/browser.php");
 	}
-	
+
 	/*
-	
+
 	All these tests are poor - the set up needed is not done and they are too sensitive to version/language changes!
-	
+
 	//	Test #88
 	function testPoints()
 	{
 		$browser = new SimpleBrowser();
 		$browser->get(get_base_url().'/site/index.php?page=points');
-		
+
 		$browser->setField('login_username', 'test');
 		$browser->setField('password', 'welcome');
 		$browser->clickSubmit('Login');
@@ -49,7 +49,7 @@ class points_test_set extends ocp_test_case
 		$browser->get(get_base_url().'/site/index.php?page=points');
 		$browser->setField('membername', '123abcxyz');
 		$page2= $browser->clickSubmitById('submit_button');
-		
+
 		$this->assertTrue($page1==$page2);
 	}
 
@@ -58,7 +58,7 @@ class points_test_set extends ocp_test_case
 	{
 		$browser = new SimpleBrowser();
 		$browser->get(get_base_url().'/site/index.php?page=points');
-		
+
 		$browser->setField('login_username', 'test');
 		$browser->setField('password', 'welcome');
 		$browser->clickSubmit('Login');
@@ -129,7 +129,7 @@ class points_test_set extends ocp_test_case
 // 		$browser->clickSubmit('Login');
 
 		//echo $browser->get(get_base_url().'/site/index.php?page=calendar');
-		
+
 		//$browser->clickImage('Add event');
 	}
 	*/

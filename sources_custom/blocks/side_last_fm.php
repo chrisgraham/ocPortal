@@ -142,7 +142,7 @@ class Block_side_last_fm
 
 
 					$artist = (isset($track['_c']['artist']['_c']['name']['_v']) && strlen($track['_c']['artist']['_c']['name']['_v'])>0)?$track['_c']['artist']['_c']['name']['_v']:'';
-					
+
 					$artist_url = (isset($track['_c']['artist']['_c']['url']['_v']) && strlen($track['_c']['artist']['_c']['url']['_v'])>0)?$track['_c']['artist']['_c']['url']['_v']:'';
 
 					$images=array();
@@ -161,7 +161,7 @@ class Block_side_last_fm
 					$track_images=(isset($images['medium']))?$images['medium']:'';
 					if($track_images==''  && count($images)>0)
 						$track_images=array_shift($images);
-					
+
 					if($track_images!='')
 					{
 						$out.='<div class="float_surrounder"><img width="64" src="'.$track_images.'" title="" style="float: left; margin: 3px;" /><a href="'.$track_url.'" target="_blank">'.$track_name.'</a><br />';
@@ -188,7 +188,7 @@ class Block_side_last_fm
 					$playcount = (isset($artist_item['_c']['playcount']['_v']) && $artist_item['_c']['playcount']['_v']>0)?$artist_item['_c']['playcount']['_v']:0;
 
 					$artist = (isset($artist_item['_c']['name']['_v']) && strlen($artist_item['_c']['name']['_v'])>0)?$artist_item['_c']['name']['_v']:'';
-					
+
 					$artist_url = (isset($artist_item['_c']['url']['_v']) && strlen($artist_item['_c']['url']['_v'])>0)?$artist_item['_c']['url']['_v']:'';
 
 					$images=array();
@@ -207,7 +207,7 @@ class Block_side_last_fm
 					$artist_image=(isset($images['medium']))?$images['medium']:'';
 					if($artist_image==''  && count($images)>0)
 						$artist_image=array_shift($images);
-					
+
 					if($artist_image!='')
 					{
 						$out.='<div class="float_surrounder"><img width="64" src="'.$artist_image.'" title="" style="float: left; margin: 3px;" />';
@@ -238,7 +238,7 @@ class Block_side_last_fm
 
 
 					$artist = (isset($album['_c']['artist']['_c']['name']['_v']) && strlen($album['_c']['artist']['_c']['name']['_v'])>0)?$album['_c']['artist']['_c']['name']['_v']:'';
-					
+
 					$artist_url = (isset($album['_c']['artist']['_c']['url']['_v']) && strlen($album['_c']['artist']['_c']['url']['_v'])>0)?$album['_c']['artist']['_c']['url']['_v']:'';
 
 					$images=array();
@@ -257,7 +257,7 @@ class Block_side_last_fm
 					$album_images=(isset($images['medium']))?$images['medium']:'';
 					if($album_images==''  && count($images)>0)
 						$album_images=array_shift($images);
-										
+
 					if($album_images!='')
 					{
 						$out.='<div class="float_surrounder"><img width="64" src="'.$album_images.'" title="" style="float: left; margin: 3px;" /><a href="'.$album_url.'" target="_blank">'.$album_name.'</a><br />';
@@ -285,7 +285,7 @@ class Block_side_last_fm
 
 
 
-	
+
 // XML to Array
 function xml2ary(&$string)
 {
@@ -336,7 +336,7 @@ function xml2ary(&$string)
 			$ary=&$ary['_p'];
 		}
 	}	
-	
+
 	_del_p($mnary);
 	return $mnary;
 }
@@ -375,7 +375,7 @@ function ary2xml($cary, $d=0, $forcetag='')
 			elseif (isset($r['_v'])) $res[]=$r['_v'];
 			$res[]=(isset($r['_c']) ? $sp : '')."</$tag>\n";
 		}
-		
+
 	}
 	return implode('', $res);
 }

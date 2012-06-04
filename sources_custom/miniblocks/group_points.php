@@ -37,7 +37,7 @@ foreach ($group_points as $group_id=>$points)
 		<td>'.escape_html(number_format($points['p_points_per_month'])).' <span class="associated_details">per month</span></td>
 		<td>'.(in_array($group_id,$my_groups)?'<img src="'.escape_html(find_theme_image('checklist/checklist1')).'" /> Yes':'<img src="'.escape_html(find_theme_image('checklist/checklist0')).'" /> No').'</td>
 		</tr>';
-		
+
 		$done++;
 	}
 }

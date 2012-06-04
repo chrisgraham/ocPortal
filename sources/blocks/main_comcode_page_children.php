@@ -20,7 +20,7 @@
 
 class Block_main_comcode_page_children
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_comcode_page_children
 		$info['parameters']=array('param','zone');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_comcode_page_children
 		$info['ttl']=60*24*7;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -91,17 +91,17 @@ class Block_main_comcode_page_children
 
 			if ($title=='')
 				$title=escape_html(ucwords(str_replace('_',' ',$child['the_page'])));
-			
+
 			$child['TITLE']=$title;
 			$child['PAGE']=$child['the_page'];
 			$child['ZONE']=$child['the_zone'];
-			
+
 			$children[$i]=$child;
 		}
 
 		$GLOBALS['M_SORT_KEY']='TITLE';
 		usort($children,'multi_sort');
-		
+
 		return do_template('BLOCK_MAIN_COMCODE_PAGE_CHILDREN',array('_GUID'=>'375aa1907fc6b2ca6b23ab5b5139aaef','CHILDREN'=>$children,'THE_PAGE'=>$page,'THE_ZONE'=>$zone));
 	}
 

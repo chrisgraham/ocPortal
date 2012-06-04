@@ -30,7 +30,7 @@ class Hook_do_next_menus_messaging
 	function run()
 	{
 		if (!addon_installed('staff_messaging')) return array();
-		
+
 		return array(
 			array('usage','messaging',array('admin_messaging',array('type'=>'misc'),get_module_zone('admin_messaging')),do_lang_tempcode('CONTACT_US_MESSAGING'),('DOC_MESSAGING')),
 		);

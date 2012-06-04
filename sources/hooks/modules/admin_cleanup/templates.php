@@ -32,10 +32,10 @@ class Hook_templates
 		$info['title']=do_lang_tempcode('TEMPLATE_CACHE');
 		$info['description']=do_lang_tempcode('DESCRIPTION_TEMPLATES');
 		$info['type']='cache';
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -45,7 +45,7 @@ class Hook_templates
 	{
 		require_code('view_modes');
 		erase_cached_templates();
-	
+
 		return new ocp_tempcode();
 	}
 

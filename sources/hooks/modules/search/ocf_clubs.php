@@ -34,14 +34,14 @@ class Hook_search_ocf_clubs
 		if ($GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',array('g_is_private_club'=>1))==0) return NULL;
 
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('CLUBS');
 		$info['default']=false;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *

@@ -48,7 +48,7 @@ class Hook_sw_banners
 	function set_fields()
 	{
 		if (!addon_installed('banners')) return;
-		
+
 		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 
 		if (post_param_integer('have_default_banners_donation',0)==0)

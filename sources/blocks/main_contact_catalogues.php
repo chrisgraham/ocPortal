@@ -20,7 +20,7 @@
 
 class Block_main_contact_catalogues
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_contact_catalogues
 		$info['parameters']=array('to','param');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -71,14 +71,14 @@ class Block_main_contact_catalogues
 			$to_email=array_key_exists('to',$map)?$map['to']:'';
 			if ($to_email=='') $to_email=NULL;
 			form_to_email(NULL,'',NULL,$to_email);
-			
+
 			attach_message(do_lang_tempcode('SUCCESS'));
 		}
-		
+
 		require_code('form_templates');
 
 		$fields=new ocp_tempcode();
-	
+
 		$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 
 		$field_groups=array();
@@ -116,13 +116,13 @@ class Block_main_contact_catalogues
 			{
 				$field_groups[$field_cat]->attach($result);
 			}
-			
+
 			$hidden->attach(form_input_hidden('label_for__field_'.strval($field['id']),$_cf_name));
-			
+
 			unset($result);
 			unset($ob);
 		}
-	
+
 		if (array_key_exists('',$field_groups)) // Blank prefix must go first
 		{
 			$field_groups_blank=$field_groups[''];
@@ -132,12 +132,12 @@ class Block_main_contact_catalogues
 		foreach ($field_groups as $field_group_title=>$extra_fields)
 		{
 			if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
-		
+
 			if ($field_group_title!='')
 				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
 			$fields->attach($extra_fields);
 		}
-		
+
 		$hidden->attach(form_input_hidden('subject',$catalogue_title));
 
 		$url=get_self_url();

@@ -37,7 +37,7 @@ function ocf_make_post_template($title,$text,$forum_multi_code,$use_default_foru
 	),true);
 
 	log_it('ADD_POST_TEMPLATE',strval($id),$title);
-	
+
 	return $id;
 }
 

@@ -30,7 +30,7 @@ class Hook_members_news
 	function run($member_id)
 	{
 		if (!addon_installed('news')) return array();
-		
+
 		$nc_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$member_id));
 		if (!is_null($nc_id))
 		{

@@ -38,7 +38,7 @@ class Block_main_trackback
 		$info['parameters']=array('param','page','id');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -48,26 +48,26 @@ class Block_main_trackback
 	function run($map)
 	{
 		if (!array_key_exists('page',$map)) $map['page']=get_page_name();
-	
+
 		if (array_key_exists('id',$map))
 		{
 			$id=$map['id'];
 		} else $id=get_param('id','0');
-	
+
 		require_code('feedback');
-	
+
 		//$self_url=get_self_url();
 		//$self_title=$map['page'];
-	
+
 		/*$test_changed=post_param('title','');
 		if ($test_changed!='')
 		{
 			decache('main_trackbacks');
 		}*/
-	
+
 		//actualise_post_trackbacks(1,'block_main_trackbacks',$map['page'].'_'.$map['param'].$extra,$self_url,$self_title);
 		actualise_post_trackback(get_option('is_on_trackbacks')=='1',$map['page'],$id);
-	
+
 		return get_trackbacks($map['page'],$id,get_option('is_on_trackbacks')=='1');
 	}
 

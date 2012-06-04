@@ -44,7 +44,7 @@ class Hook_checklist_cron
 			$info=do_lang_tempcode('LAST_RAN_AT',escape_html($date),escape_html(integer_format($mails_sent)),escape_html(integer_format($mails_queued)));
 			$url='';
 		}
-		
+
 		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('INFO'=>$info,'URL'=>'','STATUS'=>$_status,'TASK'=>urlise_lang(do_lang('NAG_SETUP_CRON'),$url)));
 		return array(array($tpl,($status==0)?-1:0,1,NULL));

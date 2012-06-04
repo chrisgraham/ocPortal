@@ -12,7 +12,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="right-box">
 		<h1 class="head2">Featured Stories</h1>
 		<div class="right-box-in">

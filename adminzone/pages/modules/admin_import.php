@@ -51,7 +51,7 @@ class Module_admin_import
 		$GLOBALS['SITE_DB']->drop_if_exists('import_session');
 		$GLOBALS['SITE_DB']->drop_if_exists('import_parts_done');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -71,7 +71,7 @@ class Module_admin_import
 				'imp_id'=>'*SHORT_TEXT',
 				'imp_session'=>'*INTEGER'
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_table('import_session',array(
 				'imp_old_base_dir'=>'SHORT_TEXT',
 				'imp_db_name'=>'ID_TEXT',
@@ -82,7 +82,7 @@ class Module_admin_import
 				'imp_session'=>'*INTEGER'
 			));
 		}
-	
+
 		if (is_null($upgrade_from))
 		{
 			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -99,7 +99,7 @@ class Module_admin_import
 			));
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -109,7 +109,7 @@ class Module_admin_import
 	{
 		return array('misc'=>'IMPORT');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -156,7 +156,7 @@ class Module_admin_import
 		if ($type=='import') return $this->do_import();
 		/*if ($type=='advanced_hook') return $this->advanced_choose_actions();
 		if ($type=='advanced_import') return $this->advanced_do_import();*/
-	
+
 		return new ocp_tempcode();
 	}
 
@@ -168,7 +168,7 @@ class Module_admin_import
 	function choose_importer()
 	{
 		$title=get_page_title('IMPORT');
-	
+
 		$hooks=new ocp_tempcode();
 		$_hooks=find_all_hooks('modules','admin_import');
 		require_code('form_templates');
@@ -187,7 +187,7 @@ class Module_admin_import
 		$fields=form_input_list(do_lang_tempcode('IMPORTER'),do_lang_tempcode('DESCRIPTION_IMPORTER'),'importer',$hooks,NULL,true);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'session'),'_SELF');
-	
+
 		breadcrumb_set_self(do_lang_tempcode('IMPORT'));
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'02416e5e9d6cb64248adeb9d2e6f2402','GET'=>true,'HIDDEN'=>'','SKIP_VALIDATION'=>true,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
@@ -214,7 +214,7 @@ class Module_admin_import
 			return redirect_screen($title,$redirect_url,do_lang_tempcode('REDIRECTED_TO_MODULES'));
 		}
 		/* END */
-		
+
 		$sessions=new ocp_tempcode();
 		$_sessions=$GLOBALS['SITE_DB']->query_select('import_session',array('*'));
 		require_code('form_templates');
@@ -430,7 +430,7 @@ class Module_admin_import
 				$first=true;
 				$just=NULL;
 			} else $first=false;
-			
+
 			$skip_hidden[]='import_'.$import;
 		}
 
@@ -581,7 +581,7 @@ class Module_admin_import
 			'imp_refresh_time'=>$refresh_time,
 			'imp_session'=>get_session_id()
 		));
-	
+
 		$info=$object->info();
 		$_import_list=$info['import'];
 		$out=new ocp_tempcode();
@@ -717,7 +717,7 @@ class Module_admin_import
 				}
 				$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().$field['m_table'].' SET '.$field['m_name'].'=-'.$field['m_name'].' WHERE '.$field['m_name'].'<0');
 			}
-			
+
 			$out->attach(paragraph(do_lang_tempcode('OCF_CONVERTED_'.$db_abstraction,($count==0)?'?':strval($count))));
 		}
 

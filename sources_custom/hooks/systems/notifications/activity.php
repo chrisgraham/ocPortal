@@ -47,7 +47,7 @@ class Hook_Notification_activity extends Hook_Notification
 		foreach ($types as $type)
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($type['member_liked']);
-			
+
 			if (!is_null($username))
 			{
 				$pagelinks[$type['member_liked']]=array(

@@ -26,7 +26,7 @@ function fake_levenshtein($a,$b)
 	// Some stripping, for performance, and because white space doesn't matter so much in HTML anyway
 	$a=preg_replace('#\s#','',$a);
 	$b=preg_replace('#\s#','',$b);
-	
+
 	$a_len=strlen($a);
 	$b_len=strlen($b);
 	if (($a_len<255) && ($b_len<255))
@@ -456,7 +456,7 @@ class Hook_html_site
 				}
 			}
 			// Strip bits
-			$site_name=trim(preg_replace('#^[\|\-·,]#','',preg_replace('#[\|\-·,]$#','',trim($lcs))));
+			$site_name=trim(preg_replace('#^[\|\-ï¿½,]#','',preg_replace('#[\|\-ï¿½,]$#','',trim($lcs))));
 			// Save as site name
 			set_option('site_name',$site_name);
 		}
@@ -499,7 +499,7 @@ class Hook_html_site
 				$page_title=NULL;
 				if (preg_match('#<title>(.*)</title>#',$filtered,$matches)!=0)
 				{
-					$page_title=preg_replace('#( [\|\-·] )?'.preg_quote($site_name).'( [\|\-·] )?#','',$matches[1]);
+					$page_title=preg_replace('#( [\|\-ï¿½] )?'.preg_quote($site_name).'( [\|\-ï¿½] )?#','',$matches[1]);
 				}
 				$page_keywords=NULL;
 				if (preg_match('#<meta name="keywords" content="([^"]*)"#',$filtered,$matches)!=0)
@@ -629,9 +629,9 @@ class Hook_html_site
 			{
 				if (strpos($this_url,'://')!==false)
 					$this_url=substr($this_url,strlen($base_url));
-					
+
 				$decoded_url=rawurldecode($this_url);
-				
+
 				if (substr($decoded_url,0,2)=='./') $decoded_url=substr($decoded_url,2);
 
 				// Links to directories in a deep path will be changed so underscores replace slashes
@@ -675,7 +675,7 @@ class Hook_html_site
 						fix_permissions($target);
 						sync_file($target);
 					}
-	
+
 					$decoded_url='uploads/website_specific/'.$decoded_url;
 					$file_contents=str_replace('src="'.$matches[2][$i].'"','src="{$BASE_URL*}/'.str_replace('%2F','/',rawurlencode($decoded_url)).'"',$file_contents);
 					$file_contents=str_replace('href="'.$matches[2][$i].'"','href="{$BASE_URL*}/'.str_replace('%2F','/',rawurlencode($decoded_url)).'"',$file_contents);
@@ -685,7 +685,7 @@ class Hook_html_site
 
 		return $file_contents;
 	}
-	
+
 	/* Try and strip out a bit of HTML from the start/end of another bit of HTML, but with rough levenshtein matching.
 	 *
 	 * @param  string		What we are stripping.

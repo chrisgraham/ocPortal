@@ -41,7 +41,7 @@ class Module_recommend
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -51,7 +51,7 @@ class Module_recommend
 	{
 		return array('misc'=>'RECOMMEND_SITE');
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -99,7 +99,7 @@ class Module_recommend
 		require_code('recommend');
 
 		$type=get_param('type','misc');
-	
+
 		//is it send a CSV address file to parse and later usage
 		if (array_key_exists('upload',$_FILES) && isset($_FILES['upload']['tmp_name']) && strlen($_FILES['upload']['tmp_name'])>0)  return $this->gui2();
 
@@ -112,10 +112,10 @@ class Module_recommend
 
 		if ($type=='misc') return $this->gui();
 		if ($type=='actual') return $this->actual();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for recommending the site.
 	 *
@@ -153,7 +153,7 @@ class Module_recommend
 		foreach ($_POST as $key=>$email_address)
 		{
 			if (substr($key,0,14)!='email_address_') continue;
-			
+
 			if (get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
 
 			$already[]=$email_address;
@@ -359,7 +359,7 @@ class Module_recommend
 					}
 
 					$myfile=fopen($_FILES['upload']['tmp_name'],'rb');
-				
+
 					$del=',';
 
 					$csv_header_line_fields=fgetcsv($myfile,10240,$del);
@@ -538,7 +538,7 @@ class Module_recommend
 			require_code('captcha');
 			enforce_captcha();
 		}
-		
+
 		require_code('type_validation');
 
 		$email_adrs_to_send=array();
@@ -548,9 +548,9 @@ class Module_recommend
 		{
 			if (substr($key,0,14)!='email_address_') continue;
 			if ($email_address=='') continue;
-			
+
 			if (get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
-			
+
 			if (!is_valid_email_address($email_address))
 			{
 				attach_message(do_lang_tempcode('INVALID_EMAIL_ADDRESS'),'warn');
@@ -612,7 +612,7 @@ class Module_recommend
 		foreach ($email_adrs_to_send as $key=>$email_address)
 		{
 			if (get_magic_quotes_gpc()) $email_address=stripslashes($email_address);
-			
+
 			if (post_param_integer('wrap_message',0)==1)
 			{
 				$title=get_page_title('_RECOMMEND_SITE',true,array(escape_html(get_site_name())));
@@ -639,7 +639,7 @@ class Module_recommend
 						'i_time'=>time(),
 						'i_taken'=>0
 					));
-				
+
 					$invite=true;
 				}
 			}

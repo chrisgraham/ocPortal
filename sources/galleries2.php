@@ -71,7 +71,7 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 			if (file_exists(get_file_base().'/sources_custom/getid3/getid3.php'))
 			{
 				error_reporting(0);
-				
+
 				if (!defined('GETID3_HELPERAPPSDIR')) define('GETID3_HELPERAPPSDIR',get_file_base().'/sources_custom/getid3/helperapps');
 
 				require_code('getid3/getid3');
@@ -539,10 +539,10 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 
 	if (substr($src_url,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/') $src_url=substr($src_url,strlen(get_custom_base_url().'/'));
 	if (!url_is_local($src_url)) return '';
-	
+
 	$src_file=get_custom_file_base().'/'.rawurldecode($src_url);
 	$src_file=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$src_file);
-	
+
 	if (class_exists('ffmpeg_movie'))
 	{
 		$filename='thumb_'.md5(uniqid('')).'1.jpg';
@@ -586,7 +586,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 		@unlink($dest_file); // So "if (@filesize($expected_output_path)) break;" will definitely fail if error
 
 		$dest_file=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$dest_file);
-		
+
 		$at=display_seconds_period(post_param_integer('thumbnail_auto_position',1));
 		if (strlen($at)==5) $at='00:'.$at;
 
@@ -615,7 +615,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 			return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
 		}
 	}
-	
+
 	// get_mime_type
 	require_code('mime_types');
 	$file_ext=get_file_extension($src_url);

@@ -137,7 +137,7 @@ class Module_admin_ocgifts extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_GIFTS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -221,7 +221,7 @@ class Module_admin_ocgifts extends standard_aed_module
 	{
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
-		
+
 		require_code('form_templates');
 
 		$fields->attach(form_input_line(do_lang_tempcode('GIFT'),do_lang_tempcode('DESCRIPTION_GIFT'),'name',$name,true));

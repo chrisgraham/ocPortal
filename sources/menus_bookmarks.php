@@ -72,7 +72,7 @@ function build_bookmarks_menu()
 			$items[]=array('id'=>$row['id'],'i_parent'=>$parent,'cap'=>$row['b_title'],'i_url'=>$_url,'i_check_permissions'=>0,'i_expanded'=>0,'i_new_window'=>0,'i_page_only'=>'');
 		}
 	}
-	
+
 	return $items;
 }
 

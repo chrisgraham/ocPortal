@@ -34,7 +34,7 @@ function init__sitemap()
 	$SITEMAPS_OUT_FILE=NULL;
 	$SITEMAPS_OUT_PATH=NULL;
 	$SITEMAPS_OUT_TEMPPATH=NULL;
-	
+
 	define('DEPTH__PAGES',1);
 	define('DEPTH__ENTRY_POINTS',2);
 	define('DEPTH__CATEGORIES',3);
@@ -131,7 +131,7 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
 		if (has_zone_access($member_id,$zone))
 		{
 			$done_zone_level=false;
-			
+
 			$_pages=array();
 			$pages=find_all_pages_wrap($zone,false,false,FIND_ALL_PAGES__ALL);
 			foreach ($pages as $page=>$page_type)
@@ -262,7 +262,7 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
 							call_user_func_array($callback,array($zone.':'.$page,$zone,NULL,NULL,0.8,$title,false));
 						}
 					}
-					
+
 					// Categories
 					if ($depth>=DEPTH__CATEGORIES)
 					{
@@ -310,7 +310,7 @@ function sitemaps_xml_initialise($file_path)
 	{
 		$LOADED_MONIKERS[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
 	}
-	
+
 	// Load ALL guest permissions (for effiency)
 	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 	load_up_all_self_page_permissions($guest_id);
@@ -357,7 +357,7 @@ function sitemaps_xml_finished()
 function pagelink_to_sitemapsxml($pagelink,$parent_pagelink,$add_date,$edit_date,$priority,$title,$accessible=true)
 {
 	global $SITEMAPS_OUT_FILE;
-	
+
 	if (!$accessible) return; // $accessible is false and we're not building up a structure, so just leave
 
 	unset($parent_pagelink); // Structure not used for Sitemaps

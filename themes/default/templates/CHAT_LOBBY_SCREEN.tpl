@@ -9,7 +9,7 @@
 		{+START,IF_NON_EMPTY,{ADD_ROOM_URL}{PRIVATE_ROOM}{BLOCKING_LINK}{MOD_LINK}{SETEFFECTS_LINK}}
 			<{$?,{$VALUE_OPTION,html5},nav,div} class="chat_actions"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
 				<h2>{!ADVANCED_ACTIONS}</h2>
-			
+
 				<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list spaced_list">
 					{+START,IF_NON_EMPTY,{ADD_ROOM_URL}}
 						<li>&raquo; <a href="{ADD_ROOM_URL*}" rel="add">{!ADD_CHATROOM}</a></li>
@@ -29,15 +29,15 @@
 				</ul>
 			</{$?,{$VALUE_OPTION,html5},nav,div}>
 		{+END}
-		
+
 		<div class="chat_rooms">
 			<h2>{!SELECT_ROOM}</h2>
-			
+
 			{+START,IF_NON_EMPTY,{ROOMS}}
 				<ul class="spaced_list">
 					{ROOMS}
 				</ul>
-				
+
 				<p class="chat_multi_tab">{!OPEN_ROOMS_IN_TABS}</p>
 			{+END}
 			{+START,IF_EMPTY,{ROOMS}}
@@ -53,7 +53,7 @@
 			<div class="float_surrounder chat_im_convos_inner">
 				<div class="chat_lobby_convos">
 					<h2>{!IM_CONVERSATIONS}</h2>
-				
+
 					<div id="chat_lobby_convos_tabs" style="display: none">
 						&nbsp;
 					</div>
@@ -79,10 +79,10 @@
 					// ]]>
 					</script>
 				</div>
-			
+
 				<div class="chat_lobby_buddies">
 					<h2>{!BUDDY_LIST}</h2>
-				
+
 					{+START,IF_NON_EMPTY,{BUDDIES}}
 						<form title="{!BUDDY_LIST}" method="post" action="{$?,{$IS_EMPTY,{URL_REMOVE_BUDDIES}},index.php,{URL_REMOVE_BUDDIES*}}">
 							<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table variable_table">
@@ -127,7 +127,7 @@
 							</div>
 						</form>
 					{+END}
-			
+
 					<script type="text/javascript">
 					// <![CDATA[
 						{+START,LOOP,BUDDIES}
@@ -137,14 +137,14 @@
 						{+END}
 					// ]]>
 					</script>
-			
+
 					{+START,IF_EMPTY,{BUDDIES}}
 						<p class="nothing_here">{!NO_BUDDY_ENTRIES}</p>
 					{+END}
-			
+
 					{+START,IF_NON_EMPTY,{URL_ADD_BUDDY}}
 						<p>{!MUST_ADD_CONTACTS}</p>
-					
+
 						<form title="{!ADD}: {!BUDDY_LIST}" method="post" action="{URL_ADD_BUDDY*}">
 							<label class="accessibility_hidden" for="buddy_username">{!USERNAME}: </label><input size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="if (this.value=='{!USERNAME}') { this.value=''; this.style.color='black'; } update_ajax_member_list(this,event);" onblur="if (this.value=='') { this.value='{!USERNAME}'; this.style.color='gray'; }" style="color: gray" value="{!USERNAME}" id="buddy_username" name="buddy_username" />
 							<input onclick="disable_button_just_clicked(this);" class="button_pageitem" type="submit" value="{!ADD}" />
@@ -152,9 +152,9 @@
 					{+END}
 
 					<h2 class="chat_lobby_options_header">{!OPTIONS}</h2>
-			
+
 					{CHAT_SOUND}
-			
+
 					<form title="{!SOUND_EFFECTS}" action="index.php" method="post" class="inline">
 						<p>
 							<label for="play_sound">{!SOUND_EFFECTS}</label> <input type="checkbox" id="play_sound" name="play_sound" checked="checked" />

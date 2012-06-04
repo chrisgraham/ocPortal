@@ -228,7 +228,7 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 		if ((array_key_exists(0,$cpf_permissions)) && (!is_null($public_view)))
 		{
 			$display_cpf=false;
-			
+
 			// Negative ones
 			if ($cpf_permissions[0]['guest_view']==1) $display_cpf=true;
 			if (!is_guest())
@@ -256,7 +256,7 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 						$groups_to_search[$group_id]=NULL;
 					}
 					$matched_groups=ocfilter_to_idlist_using_memory($cpf_permissions[0]['group_view'],$groups_to_search);
-				
+
 					if (count($matched_groups)>0)
 					{
 						$display_cpf=true;
@@ -317,7 +317,7 @@ function ocf_get_custom_field_mappings($member_id)
 			{
 				$ob=get_fields_hook($field['cf_type']);
 				list(,$default,$storage_type)=$ob->get_field_value_row_bits($field,false,'',$GLOBALS['FORUM_DB']);
-		
+
 				if (strpos($storage_type,'_trans')!==false)
 				{
 					$row['field_'.strval($field['id'])]=intval($default);

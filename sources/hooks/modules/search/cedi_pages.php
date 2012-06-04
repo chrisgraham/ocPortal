@@ -36,10 +36,10 @@ class Hook_search_cedi_pages
 		$info=array();
 		$info['lang']=do_lang_tempcode('CEDI_PAGES');
 		$info['default']=true;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -74,15 +74,15 @@ class Hook_search_cedi_pages
 			case 'title':
 				$remapped_orderer='title';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='add_date';
 				break;
 		}
-	
+
 		require_code('cedi');
 		require_lang('cedi');
-	
+
 		// Calculate our where clause (search)
 		if ($author!='')
 		{

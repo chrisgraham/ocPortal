@@ -49,7 +49,7 @@ function onLoginCompletedRoom()
 {
 	var messages=document.getElementById('messages_window');
 	setInnerHTML(messages,'');
-	
+
 	chat_load('{ROOM_ID%}');
 	window.con.jid='{$REPLACE;*, ,.,{$USERNAME}}@{$DOMAIN;*}';
 	window.room = mucMan.getRoom( "{ROOM_ID*}" ).createState();

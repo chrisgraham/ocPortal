@@ -18,7 +18,7 @@ addEventListenerAbstract(window,'load',function () {
 		submit_button.old_onclick(event);
 		submit_button.disabled=true;
 	};
-	
+
 	var button=document.createElement('input');
 	button.type='button';
 	button.value='{!CALCULATE_SIZE;}';

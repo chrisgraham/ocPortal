@@ -32,10 +32,10 @@ class Hook_blocks
 		$info['title']=do_lang_tempcode('BLOCK_CACHE');
 		$info['description']=do_lang_tempcode('DESCRIPTION_BLOCK_CACHE');
 		$info['type']='cache';
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

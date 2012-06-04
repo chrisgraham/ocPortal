@@ -49,7 +49,7 @@ class Module_cms_downloads extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_DOWNLOADS')+(has_specific_permission(get_member(),'mass_import','cms_downloads')?array('import'=>'FTP_DOWNLOADS','import2'=>'FILESYSTEM_DOWNLOADS'):array()),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
@@ -215,7 +215,7 @@ class Module_cms_downloads extends standard_aed_module
 		$title=get_page_title('FTP_DOWNLOADS');
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL,$destination);
 	}
-	
+
 	/**
 	 * Worker function to do an FTP import.
 	 *
@@ -229,7 +229,7 @@ class Module_cms_downloads extends standard_aed_module
 	function ftp_recursive_downloads_scan($conn_id,$url,$directory,$dest_cat,$make_subfolders)
 	{
 		$num_added=0;
-		
+
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
 		$contents=@ftp_nlist($conn_id,$directory);
@@ -239,7 +239,7 @@ class Module_cms_downloads extends standard_aed_module
 			$full_entry=$entry;
 			$parts=explode('/',$entry);
 			$entry=$parts[count($parts)-1];
-	
+
 			// Is the entry a directory?
 			if (@ftp_chdir($conn_id,$full_entry.'/'))
 			{
@@ -265,7 +265,7 @@ class Module_cms_downloads extends standard_aed_module
 			} else
 			{
 				$full_url=$url.$entry;
-	
+
 				// Test to see if the file is already in our database
 				$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$full_url));
 				if (is_null($test))
@@ -314,7 +314,7 @@ class Module_cms_downloads extends standard_aed_module
 		$destination=post_param_integer('destination');
 
 		check_specific_permission('mass_import'/*,array('downloads',$destination)*/);
-		
+
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		$server_path=post_param('server_path');
@@ -359,7 +359,7 @@ class Module_cms_downloads extends standard_aed_module
 	function filesystem_recursive_downloads_scan($server_path,$server_url,$dest_cat,$make_subfolders)
 	{
 		$num_added=0;
-		
+
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
 		$dh=@opendir($server_path);
@@ -419,7 +419,7 @@ class Module_cms_downloads extends standard_aed_module
 				}
 			}
 		}
-		
+
 		return $num_added;
 	}
 
@@ -431,7 +431,7 @@ class Module_cms_downloads extends standard_aed_module
 	function nice_get_ajax_tree()
 	{
 		if ($GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'downloads'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'downloads'),get_module_zone('downloads'));
 
@@ -467,7 +467,7 @@ class Module_cms_downloads extends standard_aed_module
 	function get_form_fields($id=NULL,$name='',$category_id=NULL,$url='',$author='',$description='',$comments='',$out_mode_id=NULL,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$file_size=NULL,$cost=0,$submitter_gets_points=1,$original_filename=NULL,$licence=NULL,$default_pic=1)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
-		
+
 		if ((is_null($id)) && (is_null($category_id)))
 		{
 			global $NON_CANONICAL_PARAMS;
@@ -590,7 +590,7 @@ class Module_cms_downloads extends standard_aed_module
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$myrows[0];
-	
+
 		$cat=$myrow['category_id'];
 
 		list($fields,$hidden)=$this->get_form_fields($id,get_translated_text($myrow['name']),$cat,$myrow['url'],$myrow['author'],get_translated_text($myrow['description']),get_translated_text($myrow['comments']),$myrow['out_mode_id'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['file_size'],$myrow['download_cost'],$myrow['download_submitter_gets_points'],$myrow['original_filename'],$myrow['download_licence'],$myrow['default_pic']);
@@ -789,7 +789,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 	{
 		return nice_get_download_licences();
 	}
-	
+
 	/**
 	 * Get tempcode for a download adding/editing form.
 	 *
@@ -823,7 +823,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$myrows[0];
-	
+
 		$fields=$this->get_form_fields($myrow['l_title'],$myrow['l_text']);
 
 		return $fields;
@@ -967,7 +967,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-	
+
 		return $this->get_form_fields(get_translated_text($myrow['category']),$myrow['parent_id'],get_translated_text($myrow['description']),$myrow['notes'],$category_id,$myrow['rep_image']);
 	}
 
@@ -984,7 +984,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 		$notes=post_param('notes','');
 		$urls=get_url('image_url','rep_image','uploads/grepimages',0,OCP_UPLOAD_IMAGE);
 		$rep_image=$urls[0];
-	
+
 		$category_id=add_download_category($category,$parent_id,$description,$notes,$rep_image);
 		$this->set_permissions(strval($category_id));
 

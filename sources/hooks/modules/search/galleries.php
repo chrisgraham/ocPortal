@@ -20,7 +20,7 @@
 
 class Hook_search_galleries
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -34,14 +34,14 @@ class Hook_search_galleries
 		if ($GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)')<=1) return NULL;
 
 		require_lang('galleries');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('GALLERIES');
 		$info['default']=true;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -85,7 +85,7 @@ class Hook_search_galleries
 				$remapped_orderer='add_date';
 				break;
 		}
-	
+
 		require_lang('galleries');
 
 		// Calculate our where clause (search)

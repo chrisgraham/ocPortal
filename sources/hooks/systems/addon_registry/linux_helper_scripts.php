@@ -30,7 +30,7 @@ class Hook_addon_registry_linux_helper_scripts
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

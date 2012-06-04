@@ -87,7 +87,7 @@ function zip_open($zip_file)
 	$unzip_cmd=UNZIP_CMD;
 	$unzip_cmd=str_replace('@_SRC_@','"'.$zip_file.'"',$unzip_cmd);
 	$unzip_cmd=str_replace('@_DST_@','"'.$zip_dir.'"',$unzip_cmd);
-	
+
 	$bits=explode(' ',UNZIP_CMD);
 	if (!@file_exists(array_shift($bits)))
 	{

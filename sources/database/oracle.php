@@ -34,7 +34,7 @@ function init__database__oracle()
 	global $CACHE_DB;
 	$CACHE_DB=array();
 }
-	
+
 class Database_Static_oracle
 {
 
@@ -57,7 +57,7 @@ class Database_Static_oracle
 	{
 		return '';
 	}
-	
+
 	/**
 	 * Create a table index.
 	 *
@@ -81,7 +81,7 @@ class Database_Static_oracle
 		}
 		$this->db_query('CREATE INDEX index'.$index_name.'_'.strval(mt_rand(0,10000)).' ON '.$table_name.'('.$_fields.')',$db);
 	}
-	
+
 	/**
 	 * Change the primary key of a table.
 	 *
@@ -94,7 +94,7 @@ class Database_Static_oracle
 		$this->db_query('ALTER TABLE '.$table_name.' DROP PRIMARY KEY',$db);
 		$this->db_query('ALTER TABLE '.$table_name.' ADD PRIMARY KEY ('.implode(',',$new_key).')',$db);
 	}
-	
+
 	/**
 	 * Assemble part of a WHERE clause for doing full-text search
 	 *
@@ -105,11 +105,11 @@ class Database_Static_oracle
 	function db_full_text_assemble($content,$boolean)
 	{
 		unset($boolean);
-	
+
 		$content=str_replace('"','',$content);
 		return 'CONTAINS ((?),\''.$this->db_escape_string($content).'\')';
 	}
-	
+
 	/**
 	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
 	 *
@@ -119,7 +119,7 @@ class Database_Static_oracle
 	{
 		return 1;
 	}
-	
+
 	/**
 	 * Get a map of ocPortal field types, to actual mySQL types.
 	 *
@@ -151,7 +151,7 @@ class Database_Static_oracle
 		);
 		return $type_remap;
 	}
-	
+
 	/**
 	 * Create a new table.
 	 *
@@ -162,13 +162,13 @@ class Database_Static_oracle
 	function db_create_table($table_name,$fields,$db)
 	{
 		$type_remap=$this->db_get_type_remap();
-	
+
 		/*if (multi_lang()==0)
 		{
 			$type_remap['LONG_TRANS']=$type_remap['LONG_TEXT'];
 			$type_remap['SHORT_TRANS']=$type_remap['SHORT_TEXT'];
 		}*/
-	
+
 		$_fields='';
 		$keys='';
 		$trigger=false;
@@ -180,28 +180,28 @@ class Database_Static_oracle
 				if ($keys!='') $keys.=', ';
 				$keys.=$name;
 			}
-	
+
 			if ($type[0]=='?') // Is perhaps null
 			{
 				$type=substr($type,1);
 				$perhaps_null='NULL';
 			} else $perhaps_null='NOT NULL';
-	
+
 			if ($type=='AUTO')
 			{
 				$trigger=true;
 			}
-	
+
 			$type=$type_remap[$type];
-	
+
 			$_fields.="	  $name $type $perhaps_null,\n";
 		}
-	
+
 		$this->db_query('CREATE TABLE '.$table_name.' (
 		  '.$_fields.'
 		  PRIMARY KEY ('.$keys.')
 		)',$db,NULL,NULL);
-	
+
 		if ($trigger)
 		{
 			$query1="
@@ -216,14 +216,14 @@ class Database_Static_oracle
 			from dual;
 		END;
 	";
-	
+
 				$parsed1=ociparse($db,$query1);
 				$parsed2=ociparse($db,$query2);
 				@ociexecute($parsed1);
 				ociexecute($parsed2);
 		}
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
 	 *
@@ -235,7 +235,7 @@ class Database_Static_oracle
 	{
 		return $attribute." LIKE '".$this->db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
 	 *
@@ -247,7 +247,7 @@ class Database_Static_oracle
 	{
 		return $attribute."<>'".$this->db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
 	 *
@@ -257,7 +257,7 @@ class Database_Static_oracle
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Delete a table.
 	 *
@@ -268,7 +268,7 @@ class Database_Static_oracle
 	{
 		$this->db_query('DROP TABLE '.$table,$db,NULL,NULL,true);
 	}
-	
+
 	/**
 	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
 	 *
@@ -278,7 +278,7 @@ class Database_Static_oracle
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
 	 *
@@ -289,7 +289,7 @@ class Database_Static_oracle
 	{
 		return $this->db_escape_string($pattern);
 	}
-	
+
 	/**
 	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
 	 */
@@ -304,7 +304,7 @@ class Database_Static_oracle
 			}
 		}
 	}
-	
+
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
@@ -319,14 +319,14 @@ class Database_Static_oracle
 	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
 	{
 		if ($db_host!='localhost') fatal_exit(do_lang_tempcode('ONLY_LOCAL_HOST_FOR_TYPE'));
-	
+
 		// Potential cacheing
 		global $CACHE_DB;
 		if (isset($CACHE_DB[$db_name][$db_host]))
 		{
 			return $CACHE_DB[$db_name][$db_host];
 		}
-	
+
 		if (!function_exists('ocilogon'))
 		{
 			$error='The oracle PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
@@ -337,7 +337,7 @@ class Database_Static_oracle
 			}
 			critical_error('PASSON',$error);
 		}
-	
+
 		$db=$persistent?@ociplogon($db_user,$db_password,$db_name):@ocilogon($db_user,$db_password,$db_name);
 		if ($db===false)
 		{
@@ -349,12 +349,12 @@ class Database_Static_oracle
 			}
 			critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
 		}
-	
+
 		if (!$db) fatal_exit(do_lang('CONNECT_DB_ERROR'));
 		$CACHE_DB[$db_name][$db_host]=$db;
 		return $db;
 	}
-	
+
 	/**
 	 * Find whether full-text-search is present
 	 *
@@ -365,7 +365,7 @@ class Database_Static_oracle
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Find whether full-text-boolean-search is present
 	 *
@@ -375,7 +375,7 @@ class Database_Static_oracle
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
 	 *
@@ -387,7 +387,7 @@ class Database_Static_oracle
 		$string=str_replace("'","''",$string);
 		return str_replace('&','\&',$string);
 	}
-	
+
 	/**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
 	 *
@@ -404,9 +404,9 @@ class Database_Static_oracle
 		if ((!is_null($start)) && (!is_null($max)) && (strtoupper(substr($query,0,7))=='SELECT '))
 		{
 			$old_query=$query;
-	
+
 			if (is_null($start)) $start=0;
-	
+
 			$pos=strpos($old_query,'FROM ');
 			$pos2=strpos($old_query,' ',$pos+5);
 			$pos3=strpos($old_query,'WHERE ',$pos2);
@@ -426,7 +426,7 @@ class Database_Static_oracle
 				$query.=substr($old_query,$pos4);
 			}
 		}
-	
+
 		$stmt=ociparse($db,$query,0);
 		$results=@ociexecute($stmt);
 		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') && ($results===true))) && (!$fail_ok))
@@ -444,28 +444,28 @@ class Database_Static_oracle
 				return NULL;
 			}
 		}
-	
+
 		if (($results!==true) && (strtoupper(substr($query,0,7))=='SELECT ') && ($results!==false))
 		{
 			return $this->db_get_query_rows($stmt);
 		}
-	
+
 		if ($get_insert_id)
 		{
 			if (strtoupper(substr($query,0,7))=='UPDATE ') return NULL;
-	
+
 			$pos=strpos($query,'(');
 			$table_name=substr($query,12,$pos-13);
-	
+
 			$stmt=ociparse($db,'SELECT gen_'.$table_name.'.CURRVAL AS v FROM dual');
 			ociexecute($stmt);
 			$ar2=ocifetch($stmt);
 			return $ar2[0];
 		}
-	
+
 		return NULL;
 	}
-	
+
 	/**
 	 * Get the rows returned from a SELECT query.
 	 *
@@ -477,7 +477,7 @@ class Database_Static_oracle
 	{
 		$out=array();
 		$i=0;
-		
+
 		$num_fields=ocinumcols($stmt);
 		$types=array();
 		$names=array();
@@ -491,7 +491,7 @@ class Database_Static_oracle
 			if ((is_null($start)) || ($i>=$start))
 			{
 				$newrow=array();
-	
+
 				for ($j=1;$j<=$num_fields;$j++)
 				{
 					$v=ociresult($stmt,$j);
@@ -500,10 +500,10 @@ class Database_Static_oracle
 					{
 						fatal_exit(do_lang_tempcode('QUERY_FAILED',ocierror($stmt)));
 					}
-	
+
 					$name=$names[$j];
 					$type=$types[$j];
-	
+
 					if ($type=='NUMBER')
 					{
 						if (!is_null($v)) $newrow[$name]=intval($v); else $newrow[$name]=NULL;
@@ -513,13 +513,13 @@ class Database_Static_oracle
 						$newrow[$name]=$v;
 					}
 				}
-	
+
 				$out[]=$newrow;
 			}
-	
+
 			$i++;
 		}
-	
+
 		return $out;
 	}
 

@@ -52,7 +52,7 @@
 				<p class="nothing_here">{!NO_DOWNLOADS_FOUND}</p>
 			{+END}
 		{+END}
-	
+
 		<br />
 	{+END}
 
@@ -66,7 +66,7 @@
 				<p class="nothing_here">{!NONE}</p>
 			{+END}
 		{+END}
-	
+
 		<br />
 	{+END}
 

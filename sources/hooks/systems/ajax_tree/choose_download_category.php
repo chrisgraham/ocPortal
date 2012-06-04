@@ -67,7 +67,7 @@ class Hook_choose_download_category
 			$tag='category'; // category
 			$out.='<'.$tag.' id="'.$_id.'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
 		}
-		
+
 		// Mark parent cats for pre-expansion
 		if ((!is_null($default)) && ($default!=''))
 		{

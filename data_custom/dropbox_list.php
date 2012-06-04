@@ -105,7 +105,7 @@ function get_dropbox_dir()
 		{
 			echo "DIR - <a href='".find_script('dropbox_list')."?hash=".$hash."&sub_dir=".$sub_dir . "/".$directory."'>" . $directory . "</a><br>";
 		}
-		
+
 		$files=$db_connection->getfiles($dbdir."/".$sub_dir);
 
 		foreach ($files as $file)

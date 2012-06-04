@@ -29,9 +29,9 @@ class Hook_unvalidated_ocf_posts
 	function info()
 	{
 		if (get_forum_type()!='ocf') return NULL;
-	
+
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['db_table']='f_posts';
 		$info['db_identifier']='id';

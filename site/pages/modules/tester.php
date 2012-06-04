@@ -59,7 +59,7 @@ class Module_tester
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('test_sections');
 		$GLOBALS['SITE_DB']->drop_if_exists('tests');
-		
+
 		delete_specific_permission('perform_tests');
 		delete_specific_permission('add_tests');
 		delete_specific_permission('edit_own_tests');
@@ -97,7 +97,7 @@ class Module_tester
 		add_specific_permission('TESTER','perform_tests',false);
 		add_specific_permission('TESTER','add_tests',true);
 		add_specific_permission('TESTER','edit_own_tests',true);
-		
+
 		add_config_option('TESTER_FORUM_NAME','tester_forum_name','forum','return do_lang(\'DEFAULT_TESTER_FORUM\');','FEATURE','TESTER');
 		add_config_option('BUG_REPORT_TEXT','bug_report_text','text','return do_lang(\'DEFAULT_BUG_REPORT_TEMPLATE\');','FEATURE','TESTER');
 	}
@@ -304,7 +304,7 @@ class Module_tester
 	function _go()
 	{
 		$title=get_page_title('RUN_THROUGH_TESTS');
-		
+
 		foreach ($_POST as $key=>$val)
 		{
 			if ((substr($key,0,5)=='test_') && (is_numeric(substr($key,5))) && (is_numeric($val)))
@@ -572,7 +572,7 @@ class Module_tester
 		{
 			inform_exit(do_lang_tempcode('NO_ENTRIES'));
 		}
-		
+
 		$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_LIST'));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_ed'),'_SELF',NULL,false,true);
 		require_code('form_templates');

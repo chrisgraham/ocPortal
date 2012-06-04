@@ -40,7 +40,7 @@ class Module_cms_news extends standard_aed_module
 	var $table='news';
 	var $orderer='title';
 	var $title_is_multi_lang=true;
-	
+
 	var $donext_type=NULL;
 
 	/**
@@ -52,7 +52,7 @@ class Module_cms_news extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_NEWS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
@@ -86,10 +86,10 @@ class Module_cms_news extends standard_aed_module
 		if ($type=='import') return $this->import_news();
 
 		if ($type=='_import_news') return $this->_import_news();
-		
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The do-next manager for before content management.
 	 *
@@ -121,9 +121,9 @@ class Module_cms_news extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','date_and_time DESC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -187,7 +187,7 @@ class Module_cms_news extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'news'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'news'),get_module_zone('news'));
 
@@ -262,7 +262,7 @@ class Module_cms_news extends standard_aed_module
 
 			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		}
-		
+
 		$cats1=nice_get_news_categories($main_news_category,false,true,is_integer($main_news_category),NULL,true);
 		$cats2=nice_get_news_categories(is_null($news_category)?array():$news_category,false,true,is_integer($main_news_category),NULL,true);
 
@@ -583,7 +583,7 @@ class Module_cms_news extends standard_aed_module
 		// Build up form
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-	
+
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_RSS_FEED'),'file_novalidate',false,NULL,NULL,true,'rss,xml,atom'));
 
 		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'rss_feed_url','',false));
@@ -624,10 +624,10 @@ class Module_cms_news extends standard_aed_module
 		{
 			$rss_url=$_FILES['file_novalidate']['tmp_name'];
 		}
-		
+
 		if (is_null($rss_url))
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
-		
+
 		$is_validated=post_param_integer('auto_validate',0);
 		$download_images=post_param_integer('download_images',0);
 
@@ -643,7 +643,7 @@ class Module_cms_news extends standard_aed_module
 		$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 
 		$NEWS_CATS=list_to_map('id',$NEWS_CATS);
-		
+
 		$extra_post_data=array();
 
 		foreach ($rss->gleamed_items as $i=>$item)
@@ -711,7 +711,7 @@ class Module_cms_news extends standard_aed_module
 			if ($ts===false) $ts=time(); // Seen in error email, it's if the add date won't parse by PHP
 			$edit_date=array_key_exists('clean_edit_date',$item)?$item['clean_edit_date']:(array_key_exists('edit_date',$item)?strtotime($item['edit_date']):NULL);
 			if ($edit_date===false) $edit_date=NULL;
-			
+
 			$news=array_key_exists('news',$item)?html_to_comcode($item['news']):'';
 			$news_article=array_key_exists('news_article',$item)?html_to_comcode($item['news_article']):'';
 
@@ -736,7 +736,7 @@ class Module_cms_news extends standard_aed_module
 
 		if (url_is_local($rss_url)) // Means it is a temp file
 			@unlink($rss_url);
-	
+
 		return inform_screen($title,do_lang_tempcode('IMPORT_NEWS_DONE'));
 	}
 
@@ -832,9 +832,9 @@ class Module_cms_news_cat extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','nc_title ASC',true);
 		list($sortable,$sort_order)=array(substr($current_ordering,0,strrpos($current_ordering,' ')),substr($current_ordering,strrpos($current_ordering,' ')+1));
 		$sortables=array(
@@ -868,7 +868,7 @@ class Module_cms_news_cat extends standard_aed_module
 
 			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'archive','filter'=>$row['id']),get_module_zone('news')),get_translated_text($row['nc_title']))),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -896,7 +896,7 @@ class Module_cms_news_cat extends standard_aed_module
 	{
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
-		
+
 		require_code('form_templates');
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
 
@@ -955,14 +955,14 @@ class Module_cms_news_cat extends standard_aed_module
 	function add_actualisation()
 	{
 		require_code('themes2');
-		
+
 		$title=post_param('title');
 		$img=get_theme_img_code('newscats');
 		$notes=post_param('notes','');
-	
+
 		$id=add_news_category($title,$img,$notes);
 		$this->set_permissions($id);
-		
+
 		return strval($id);
 	}
 
@@ -974,7 +974,7 @@ class Module_cms_news_cat extends standard_aed_module
 	function edit_actualisation($id)
 	{
 		require_code('themes2');
-		
+
 		$title=post_param('title');
 		$img=get_theme_img_code('newscats',STRING_MAGIC_NULL);
 		$notes=post_param('notes',STRING_MAGIC_NULL);

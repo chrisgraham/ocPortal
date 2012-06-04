@@ -20,7 +20,7 @@
 
 class Block_main_cc_embed
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_cc_embed
 		$info['parameters']=array('root','sort','search','max','param','select','template_set','display_type');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *

@@ -30,7 +30,7 @@ class Hook_do_next_menus_downloads
 	function run()
 	{
 		if (!addon_installed('downloads')) return array();
-		
+
 		return array(
 			array('cms','downloads',array('cms_downloads',array('type'=>'misc'),get_module_zone('cms_downloads')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('SECTION_DOWNLOADS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','COUNT(*)',NULL,'',true))))),('DOC_DOWNLOADS')),
 		);

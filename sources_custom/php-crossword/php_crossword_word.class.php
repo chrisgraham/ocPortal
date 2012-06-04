@@ -93,7 +93,7 @@ class PHP_Crossword_Word
             return TRUE;
 
         $this->getCrossableCells();
-		
+
         return $this->fully_crossed;
     }
 

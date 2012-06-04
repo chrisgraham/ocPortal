@@ -26,7 +26,7 @@ function install_location_data()
 		require_code('zones2');
 		reinstall_module('adminzone','admin_locations');
 	}
-	
+
 	require_code('files');
 	require_code('locations');
 
@@ -253,7 +253,7 @@ function remove_accents($string)
 function _worldcities_remaining_locations()
 {
 	require_code('locations');
-	
+
 	// Load US locations using worldcitiespop.csv
 	$myfile=fopen(get_file_base().'/data_custom/locations/worldcitiespop.csv','rb');
 	$header=fgetcsv($myfile,4096);
@@ -279,7 +279,7 @@ function _worldcities_remaining_locations()
 				list($latitude,$longitude)=explode(',',$many_locations[$location['l_country']][$place]);
 				$GLOBALS['SITE_DB']->query_update('locations',array('l_latitude'=>floatval($latitude),'l_longitude'=>floatval($longitude)),array('id'=>$location['id']),'',1);
 			}
-			
+
 			$from=$location['id'];
 		}
 	}
@@ -306,7 +306,7 @@ function transcode_remaining_locations()
 			{
 				$lstring='{city="'.remove_accents($location['l_place']).'", country="'.$location['l_country'].'"}';
 				$url.='&location='.urlencode($lstring);
-				
+
 				$unknown[$i]['l_string']=$lstring;
 
 				$from=$location['id'];
@@ -376,7 +376,7 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 			create_catalogue_category_tree($catalogue_name,$country['l_country']);
 			echo('Done '.$country['l_country']."\n");flush();
 		}
-		
+
 		// Recalculate continent bounds, as will be outdated
 		recalculate_continent_bounds($catalogue_name);
 
@@ -384,7 +384,7 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 
 		return;
 	}
-	
+
 	$root_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
 
 	$locations=$GLOBALS['SITE_DB']->query_select('locations',array('*'),array('l_country'=>$country));
@@ -459,7 +459,7 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 function _create_catalogue_subtree($fields,$first_cat,$catalogue_name,$root_cat,$full_tree,$node,$tree_pos)
 {
 	if (!array_key_exists('children',$node)) $node['children']=array(); // Bottom level
-	
+
 	$id=_create_catalogue_position($catalogue_name,$tree_pos,$root_cat,$node['details'],$full_tree);
 
 	$node['details']['l_min_latitude']=$node['details']['l_latitude'];
@@ -518,7 +518,7 @@ function _create_catalogue_subtree($fields,$first_cat,$catalogue_name,$root_cat,
 			'content_id'=>strval($id),
 		));
 	}
-	
+
 	return $node;
 }
 
@@ -527,7 +527,7 @@ function _create_catalogue_position($catalogue_name,$tree_pos,$cat,$location,&$t
 	foreach ($tree_pos as $name)
 	{
 		$tree=&$tree['children'][$name];
-		
+
 		if (!isset($tree['cc_id']))
 		{
 			$tree['cc_id']=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$cat,'text_original'=>$name));
@@ -537,10 +537,10 @@ function _create_catalogue_position($catalogue_name,$tree_pos,$cat,$location,&$t
 				$tree['cc_id']=actual_add_catalogue_category($catalogue_name,$name,'','',$cat);
 			}
 		}
-		
+
 		$cat=$tree['cc_id'];
 	}
-	
+
 	return $cat;
 }
 

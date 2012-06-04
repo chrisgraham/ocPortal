@@ -238,7 +238,7 @@ function _symbol_thumbnail($param)
 			}
 		}
 	}
-	
+
 	return $value;
 }
 
@@ -283,11 +283,11 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
 	if(!$is_thumbnail_already)
 	{	
 		$new_name=strval($width).'_'.strval($height).'_'.url_to_filename($url);
-		
+
 		if (!is_saveable_image($new_name)) $new_name.='.png';
 
 		$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
-		
+
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 
 		if (!file_exists($file_thumb))
@@ -414,7 +414,7 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
 			if (is_null($what_we_will_allow))
 			{
 				$total_memory_limit_in_bytes=intval(substr($ov,0,strlen($ov)-1))*1024*1024;
-		
+
 				$what_we_will_allow=$total_memory_limit_in_bytes-memory_get_usage()-1024*1024*3; // 3 is for 3MB extra space needed to finish off
 			}
 
@@ -422,7 +422,7 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
 			if ($details!==false) // Check it is not corrupt. If it is corrupt, we will give an error later
 			{
 				$magic_factor=3.0; /* factor of inefficency by experimentation */
-				
+
 				$channels=4;//array_key_exists('channels',$details)?$details['channels']:3; it will be loaded with 4
 				$bits_per_channel=8;//array_key_exists('bits',$details)?$details['bits']:8; it will be loaded with 8
 				$bytes=($details[0]*$details[1])*($bits_per_channel/8)*($channels+1)*$magic_factor;
@@ -457,13 +457,13 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
 					{
 						warn_exit($message);
 					}
-					
+
 					return false;
 				}
 			}
 		}
 	}
-	
+
 	return true;
 }
 
@@ -526,7 +526,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	// ===============================================================================
 	$sx=imagesx($source);
 	$sy=imagesy($source);
-	
+
 	$red=NULL;
 
 	if (is_null($thumb_options))
@@ -569,14 +569,14 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		{
 			$_width=$sx;
 			$_height=$sy;
-			
+
 			// We can just escape, nothing to do
-			
+
 			imagedestroy($source);
 
 			if (($using_path) && ($from==$to))
 				return true;
-			
+
 			if ($using_path)
 			{
 				copy($from,$to);
@@ -679,7 +679,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			if (array_key_exists('background',$thumb_options) && !is_null($thumb_options['background']))
 			{
 				if (substr($thumb_options['background'],0,1)=='#') $thumb_options['background']=substr($thumb_options['background'],1);
-				
+
 				// We've been given a background, let's find out what it is
 				if (strlen($thumb_options['background']) == 8)
 				{
@@ -806,7 +806,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 
 	// If we've got transparency then we have to save as PNG
 	if (!is_null($thumb_options) && isset($red) && $using_alpha) $ext2='png';
-	
+
 	if ($ext2=='png')
 	{
 		if (strtolower(substr($to,-4)) != '.png') $to = $to . '.png';
@@ -857,10 +857,10 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 
 	// Clean up
 	imagedestroy($dest);
-	
+
 	fix_permissions($to);
 	sync_file($to);
-	
+
 	return true;
 }
 
@@ -907,7 +907,7 @@ function get_gd_version()
 function is_image($name)
 {
 	if (substr(basename($name),0,1)=='.') return false; // Temporary file that some OS's make
-	
+
 	$ext=get_file_extension($name);
 
 	$types=explode(',',get_option('valid_images'));

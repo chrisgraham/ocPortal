@@ -30,7 +30,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *
@@ -230,7 +230,7 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			$display,
 		);
-		
+
 		
 	}
 
@@ -285,7 +285,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__global()
 	{
 		$out=new ocp_tempcode();
-		
+
 		$out->attach(do_lorem_template('HEADER',array(
 			'VERSION_NUMBER'=>lorem_phrase(),
 			'CHARSET'=>'ISO-8859-1',

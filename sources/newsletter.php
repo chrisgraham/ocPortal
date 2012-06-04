@@ -316,7 +316,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 				}
 				if ($start==0)
 					$total['csv']++;
-			
+
 				$pos++;
 			}
 		}

@@ -325,7 +325,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0)
 {
 	$_notification_categories=$ob->create_category_tree($notification_code,$id);
-	
+
 	$statistical_notification_type=_find_member_statistical_notification_type(get_member());
 
 	$notification_categories=array();
@@ -380,11 +380,11 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 			'CHILDREN'=>$children,
 		);
 	}
-	
+
 	$tree=do_template('NOTIFICATIONS_TREE',array(
 		'NOTIFICATION_CODE'=>$notification_code,
 		'NOTIFICATION_CATEGORIES'=>$notification_categories,
 	));
-	
+
 	return $tree;
 }

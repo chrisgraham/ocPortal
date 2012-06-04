@@ -41,7 +41,7 @@ class Module_iotds
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -50,7 +50,7 @@ class Module_iotds
 		$GLOBALS['SITE_DB']->drop_if_exists('iotd');
 
 		delete_specific_permission('choose_iotd');
-	
+
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'iotds'));
 
 		deldir_contents(get_custom_file_base().'/uploads/iotds',true);
@@ -59,7 +59,7 @@ class Module_iotds
 		delete_config_option('points_CHOOSE_IOTD');
 		delete_config_option('iotd_update_time');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -88,13 +88,13 @@ class Module_iotds
 				'add_date'=>'TIME',
 				'edit_date'=>'?TIME'
 			));
-		
+
 			$GLOBALS['SITE_DB']->create_index('iotd','iotd_views',array('iotd_views'));
 			$GLOBALS['SITE_DB']->create_index('iotd','get_current',array('is_current'));
 			$GLOBALS['SITE_DB']->create_index('iotd','ios',array('submitter'));
 			$GLOBALS['SITE_DB']->create_index('iotd','iadd_date',array('add_date'));
 			$GLOBALS['SITE_DB']->create_index('iotd','date_and_time',array('date_and_time'));
-		
+
 			add_specific_permission('IOTDS','choose_iotd',false);
 
 			add_config_option('CHOOSE_IOTD','points_CHOOSE_IOTD','integer','return addon_installed(\'points\')?\'35\':NULL;','POINTS','COUNT_POINTS_GIVEN');
@@ -111,7 +111,7 @@ class Module_iotds
 			$GLOBALS['SITE_DB']->add_table_field('iotd','i_title','SHORT_TRANS','');
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -180,10 +180,10 @@ class Module_iotds
 
 		// What action are we going to do?
 		$type=get_param('type','misc');
-	
+
 		if ($type=='view') return $this->view();
 		if ($type=='misc') return $this->iotd_browse();
-	
+
 		return new ocp_tempcode();
 	}
 
@@ -234,11 +234,11 @@ class Module_iotds
 	function view()
 	{
 		$title=get_page_title('IOTD');
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IOTD_ARCHIVE'))));
 
 		$id=get_param_integer('id');
-	
+
 		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{

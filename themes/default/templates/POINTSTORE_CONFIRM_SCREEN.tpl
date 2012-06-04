@@ -28,7 +28,7 @@
 					<input class="button_page" type="submit" value="{!NO}" />
 				</div>
 			</form>
-			
+
 			<form title="{!YES}" class="inline" action="{PROCEED_URL*}" method="post">
 				<div class="inline">
 					{KEEP}
@@ -36,7 +36,7 @@
 				</div>
 			</form>
 		</div>
-	
+
 		{!Q_SURE}
 	</div>
 {+END}

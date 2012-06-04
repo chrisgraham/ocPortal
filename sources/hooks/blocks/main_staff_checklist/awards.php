@@ -45,7 +45,7 @@ class Hook_checklist_awards
 			if (!is_null($details))
 			{
 				$date=$GLOBALS['SITE_DB']->query_value_null_ok('award_archive','date_and_time',array('a_type_id'=>$award['id']),'ORDER BY date_and_time DESC');
-	
+
 				$seconds_ago=mixed();
 				$limit_hours=$award['a_update_time_hours'];
 				if (!is_null($date))
@@ -60,7 +60,7 @@ class Hook_checklist_awards
 				$config_url=build_url(array('page'=>'admin_awards','type'=>'_ed','id'=>$award['id']),get_module_zone('admin_awards'));
 
 				$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
-		
+
 				$url=$details['add_url'];
 				if (is_object($url)) $url=$url->evaluate();
 				$url=str_replace('=!','_ignore=1',$url);

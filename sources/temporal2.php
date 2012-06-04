@@ -43,7 +43,7 @@ function _get_input_date($stub,$get_also=false)
 	} else
 	{
 //		if (post_param_integer($stub,0)==0) return NULL; // NULL was chosen		Doesn't work like this now
-	
+
 		$year=post_param_integer($stub.'_year',NULL);
 		if (is_null($year)) return NULL;
 		$month=post_param_integer($stub.'_month',NULL);

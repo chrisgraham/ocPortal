@@ -43,16 +43,16 @@ class Hook_members_gifts
 		require_lang('ocgifts');
 		$rows=$GLOBALS['SITE_DB']->query_select('members_gifts',array('*'),array('to_user_id'=>$member_id),'',NULL,0,true);
 		if (is_null($rows)) return array();
-		
+
 		$gifts=array();
-		
+
 		foreach($rows as $gift)
 		{
 			$gift_info=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift['gift_id']));
 			if (strlen($gift_info[0]['name'])>0)
 			{
 				$gift_url='';
-				
+
 				if ($gift['is_anonymous']==0)
 				{
 					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_user_id']);

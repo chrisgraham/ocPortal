@@ -52,7 +52,7 @@ function init__minikernel()
 			return $data;
 		}
 	}
-	
+
 	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV)))
 	{
 		$_SERVER['REQUEST_URI']=$_SERVER['PHP_SELF'];
@@ -64,10 +64,10 @@ function init__minikernel()
 			$first=false;
 		}
 	}
-	
+
 	global $EXITING;
 	$EXITING=NULL;
-	
+
 	global $MICRO_BOOTUP;
 	$MICRO_BOOTUP=0;
 
@@ -292,7 +292,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 				attach_message(protect_from_escaping($errstr),'warn');
 			}
 	}
-	
+
 	return false;
 }
 
@@ -412,7 +412,7 @@ function warn_exit($text)
 	$css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
 	$out_final=do_template('INSTALLER_WRAP',array('CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>'','PASSWORD_PROMPT'=>'','CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$echo,'VERSION'=>$version));
 	$out_final->evaluate_echo();
-	
+
 	exit();
 }
 

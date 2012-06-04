@@ -6,7 +6,7 @@
 			choose_picture('{$FIX_ID;,j_{NAME}_{CODE}}',document.getElementById('{$FIX_ID;,j_{NAME}_{CODE}}_img'),'{NAME;}',event);
 		//]]></script>
 	{+END}
-	
+
 	{+START,IF,{$EQ,{NAME},delete}}
 		<script type="text/javascript">// <![CDATA[
 			addEventListenerAbstract(window,'load',function () {

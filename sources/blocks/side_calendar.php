@@ -51,7 +51,7 @@ class Block_side_calendar
 		$info['ttl']=60*24;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -137,7 +137,7 @@ class Block_side_calendar
 					}
 				}
 			}
-	
+
 			$_period_start=mktime(0,0,0,$month,1,$year);
 			$_period_end=mktime(0,0,0,$month+1,0,$year);
 			$_days=intval(round(floatval($_period_end-$_period_start)/floatval(60*60*24)));
@@ -278,13 +278,13 @@ class Block_side_calendar
 	function get_filter($filter_map)
 	{	
 		$filter=array();
-		
+
 		if(!is_array($filter_map)) return $filter;
-		
+
 		$some_pos=false;
-		
+
 		$types=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id'));
-		
+
 		foreach ($types as $type)
 		{
 			$t=$type['id'];

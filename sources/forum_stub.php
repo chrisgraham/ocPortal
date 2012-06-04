@@ -43,7 +43,7 @@ class forum_driver_base
 	{
 		return db_get_first_id();
 	}
-	
+
 	/**
 	 * Get a URL to a forum member's member profile.
 	 *
@@ -166,13 +166,13 @@ class forum_driver_base
 
 		global $USER_NAME_CACHE;
 		if (isset($USER_NAME_CACHE[$id])) return $USER_NAME_CACHE[$id];
-	
+
 		$ret=$this->_get_username($id);
 		if ($ret=='') $ret=NULL; // Odd, but sometimes
 		$USER_NAME_CACHE[$id]=$ret;
 		return $ret;
 	}
-	
+
 	/**
 	 * Get a member's e-mail address.
 	 *
@@ -183,12 +183,12 @@ class forum_driver_base
 	{
 		global $MEMBER_EMAIL_CACHE;
 		if (array_key_exists($id,$MEMBER_EMAIL_CACHE)) return $MEMBER_EMAIL_CACHE[$id];
-	
+
 		$ret=$this->_get_member_email_address($id);
 		$MEMBER_EMAIL_CACHE[$id]=$ret;
 		return $ret;
 	}
-	
+
 	/**
 	 * Find whether a member is staff.
 	 *
@@ -214,7 +214,7 @@ class forum_driver_base
 				}
 			}
 		}
-	
+
 		$ret=$this->_is_staff($id);
 		if (!$skip_staff_filter)
 		{
@@ -222,7 +222,7 @@ class forum_driver_base
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * If we can't get a list of admins via a usergroup query, we have to disable the staff filter - else the staff filtering can cause disaster at the point of being turned on (because it can't automatically sync).
 	 *
@@ -247,12 +247,12 @@ class forum_driver_base
 
 		global $IS_SUPER_ADMIN_CACHE;
 		if (isset($IS_SUPER_ADMIN_CACHE[$id])) return $IS_SUPER_ADMIN_CACHE[$id];
-	
+
 		$ret=$this->_is_super_admin($id);
 		$IS_SUPER_ADMIN_CACHE[$id]=$ret;
 		return $ret;
 	}
-	
+
 	/**
 	 * Get a list of the super admin usergroups.
 	 *
@@ -267,7 +267,7 @@ class forum_driver_base
 		$ADMIN_GROUP_CACHE=$ret;
 		return $ret;
 	}
-	
+
 	/**
 	 * Get a list of the moderator usergroups.
 	 *
@@ -277,12 +277,12 @@ class forum_driver_base
 	{
 		global $MODERATOR_GROUP_CACHE,$IN_MINIKERNEL_VERSION;
 		if ((!is_null($MODERATOR_GROUP_CACHE)) && (($IN_MINIKERNEL_VERSION==0) || ($MODERATOR_GROUP_CACHE!=array()))) return $MODERATOR_GROUP_CACHE;
-	
+
 		$ret=$this->_get_moderator_groups();
 		$MODERATOR_GROUP_CACHE=$ret;
 		return $ret;
 	}
-	
+
 	/**
 	 * Get a map of forum usergroups (id=>name).
 	 *
@@ -301,7 +301,7 @@ class forum_driver_base
 		{
 			return $USERGROUP_LIST_CACHE[$hide_hidden][$only_permissive][$force_show_all][serialize($force_find)][$for_member][$skip_hidden];
 		}
-	
+
 		$ret=$this->_get_usergroup_list($hide_hidden,$only_permissive,$force_show_all,$force_find,$for_member,$skip_hidden);
 		if (count($ret)!=0) // Conditional is for when installing... can't cache at point of there being no usergroups
 		{
@@ -310,7 +310,7 @@ class forum_driver_base
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Get a list of usergroups a member is in.
 	 *
@@ -327,7 +327,7 @@ class forum_driver_base
 			if ($ret===NULL) $ret=array(db_get_first_id());
 			return $ret;
 		}
-	
+
 		global $USERS_GROUPS_CACHE;
 		if (isset($USERS_GROUPS_CACHE[$id][$skip_secret][$handle_probation])) return $USERS_GROUPS_CACHE[$id][$skip_secret][$handle_probation];
 
@@ -335,7 +335,7 @@ class forum_driver_base
 		$USERS_GROUPS_CACHE[$id][$skip_secret][$handle_probation]=$ret;
 		return $ret;
 	}
-	
+
 	/**
 	 * Get the current member's theme identifier.
 	 *
@@ -429,7 +429,7 @@ class forum_driver_base
 
 		return $CACHED_THEME;
 	}
-	
+
 	/**
 	 * Get the number of new forum posts on the system in the last 24 hours.
 	 *

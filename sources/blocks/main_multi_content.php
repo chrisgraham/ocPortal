@@ -76,7 +76,7 @@ class Block_main_multi_content
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('feature_lifetime_monitor');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -126,7 +126,7 @@ class Block_main_multi_content
 		if (!has_actual_page_access(NULL,$info['cms_page'],NULL,NULL)) $submit_url='';
 
 		// Get entries
-		
+
 		if (is_array($info['category_field']))
 		{
 			$category_field_access=$info['category_field'][0];
@@ -245,7 +245,7 @@ class Block_main_multi_content
 			if ($where!='') $where.=' AND ';
 			$where.=$info['extra_where_sql'];
 		}
-		
+
 		if ($mode=='all')
 		{
 			if ((array_key_exists('title_field',$info)) && (strpos($info['title_field'],':')===false))
@@ -261,7 +261,7 @@ class Block_main_multi_content
 			if ($x1!='') $query.=' AND ('.$x1.')';
 			if ($x2!='') $query.=' AND ('.$x2.')';
 		}
-		
+
 		if (($mode=='top') && (array_key_exists('feedback_type',$info)) && (is_null($info['feedback_type']))) $mode='all';
 
 		switch ($mode)
@@ -431,7 +431,7 @@ class Block_main_multi_content
 		foreach ($rows as $row)
 		{
 			if (count($done_already)==$max) break;
-			
+
 			// Get content ID
 			if (is_array($info['id_field']))
 			{

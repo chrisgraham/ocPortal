@@ -40,7 +40,7 @@ class Module_cms_blogs extends standard_aed_module
 	var $table='news';
 	var $orderer='title';
 	var $title_is_multi_lang=true;
-	
+
 	var $donext_type=NULL;
 
 	/**
@@ -52,7 +52,7 @@ class Module_cms_blogs extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_BLOGS','import_wordpress'=>'IMPORT_WORDPRESS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -65,7 +65,7 @@ class Module_cms_blogs extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_news';
 
 		$this->posting_form_title=do_lang_tempcode('BLOG_NEWS_ARTICLE');
-		
+
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
 		require_css('news');
@@ -109,9 +109,9 @@ class Module_cms_blogs extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','date_and_time DESC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -156,7 +156,7 @@ class Module_cms_blogs extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'news'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'news'),get_module_zone('news'));
 
@@ -194,7 +194,7 @@ class Module_cms_blogs extends standard_aed_module
 	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='')
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
-		
+
 		if (is_null($main_news_category))
 		{
 			global $NON_CANONICAL_PARAMS;
@@ -218,7 +218,7 @@ class Module_cms_blogs extends standard_aed_module
 
 			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		}
-		
+
 		$cats1=nice_get_news_categories($main_news_category,false,true,false,true);
 		$cats2=nice_get_news_categories((is_null($news_category) || (count($news_category)==0))?array(get_param_integer('cat',NULL)):$news_category,false,true,true,false);
 
@@ -318,7 +318,7 @@ class Module_cms_blogs extends standard_aed_module
 		$category_query=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry_category'),array('news_entry'=>$id));
 
 		foreach ($category_query as $value) $categories[]=$value['news_entry_category'];
-	
+
 		list($fields,$hidden,,,,,$fields2)=$this->get_form_fields($cat,$categories,get_translated_text($myrow['title']),get_translated_text($myrow['news']),$myrow['author'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],0,$myrow['notes'],$myrow['news_image']);
 
 		return array($fields,$hidden,new ocp_tempcode(),'',false,get_translated_text($myrow['news_article']),$fields2,get_translated_tempcode($myrow['news_article']));
@@ -539,7 +539,7 @@ class Module_cms_blogs extends standard_aed_module
 	function import_wordpress()
 	{
 		check_specific_permission('mass_import');
-	
+
 		$lang			=	post_param('lang',user_lang());
 		$title		=	get_page_title('IMPORT_WP_DB');
 		$submit_name=	do_lang_tempcode('IMPORT_WP_DB');
@@ -566,7 +566,7 @@ class Module_cms_blogs extends standard_aed_module
 		$fields=new ocp_tempcode();	
 
 		$fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_HOST_NAME'),do_lang_tempcode('DESCRIPTION_WORDPRESS_HOST_NAME'),'wp_host','localhost',false));
-	
+
 		$fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_DB_NAME'),do_lang_tempcode('DESCRIPTION_WORDPRESS_DB_NAME'),'wp_db','wordpress',false));
 
 		$fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_TABLE_PREFIX'),do_lang_tempcode('DESCRIPTION_WORDPRESS_TABLE_PREFIX'),'wp_table_prefix','wp',false));
@@ -625,7 +625,7 @@ class Module_cms_blogs extends standard_aed_module
 		if((get_param('method')=='xml'))
 		{				
 			$rss_url=post_param('xml_url',NULL);
-	
+
 			if (array_key_exists('file_novalidate',$_FILES))
 			{
 				if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
@@ -633,28 +633,28 @@ class Module_cms_blogs extends standard_aed_module
 					$rss_url=$_FILES['file_novalidate']['tmp_name'];
 				} else warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 			} else warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
-			
+
 			$rss=new rss($rss_url,true);
-	
+
 			if (!is_null($rss->error))
 			{
 				warn_exit($rss->error);
 			}
-	
+
 			$cat_id=NULL;
-	
+
 			$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-	
+
 			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
-			
+
 			$extra_post_data=array();
-	
+
 			foreach ($rss->gleamed_items as $item)
 			{
 				if(!array_key_exists('category',$item)) $item['category']=do_lang('NC_general');
-	
+
 				$extra_post_data[]=$item;
-		
+
 				foreach ($NEWS_CATS as $_cat=>$news_cat)
 				{				
 					if (get_translated_text($news_cat['nc_title'])==$item['category'])
@@ -670,18 +670,18 @@ class Module_cms_blogs extends standard_aed_module
 				}
 				else
 					$submitter_id		=	get_member();
-				
+
 				//if(is_null($submitter_id))	continue;	//Skip importing posts of nonexisting users
-				
+
 				$owner_category_id	=	$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter_id));
-			
+
 				if(is_null($cat_id))
 				{
 					$cat_id=add_news_category($item['category'],'newscats/general','',NULL);
 					$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 					$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 				}
-				
+
 				// Add news
 				add_news($item['title'],html_to_comcode($item['news']),NULL,$is_validated,1,1,1,'',array_key_exists('news_article',$item)?html_to_comcode($item['news_article']):'',$owner_category_id,array($cat_id),NULL,$submitter_id,0,time(),NULL,'');
 			}
@@ -696,8 +696,8 @@ class Module_cms_blogs extends standard_aed_module
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_BLOGS')),array('_SELF:_SELF:import_wordpress',do_lang_tempcode('IMPORT_WORDPRESS'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
-	
+
 		return inform_screen($title,do_lang_tempcode('IMPORT_WORDPRESS_DONE'));
 	}
-	
+
 }

@@ -20,7 +20,7 @@
 
 class Block_side_language
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_side_language
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_side_language
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -61,7 +61,7 @@ class Block_side_language
 	function run($map)
 	{
 		unset($map);
-		
+
 		require_css('side_blocks');
 
 		$langs=nice_get_langs(user_lang());

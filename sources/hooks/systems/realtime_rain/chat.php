@@ -70,7 +70,7 @@ class Hook_realtime_rain_chat
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

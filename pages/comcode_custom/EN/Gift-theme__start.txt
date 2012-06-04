@@ -14,6 +14,6 @@
 			[surround="dark-color"][surround]Lorem ipsum dolor sit amet[/surround][/surround]
 		[/box]
 	[/surround]
-	
+
 	[block catalogue="products"]main_recent_cc_entries[/block]
 [/semihtml]{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

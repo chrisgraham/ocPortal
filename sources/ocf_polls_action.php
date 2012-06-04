@@ -35,7 +35,7 @@
 function ocf_make_poll($topic_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$check_permissions=true)
 {
 	require_code('ocf_polls');
-	
+
 	if (($check_permissions) && (!ocf_may_attach_poll($topic_id)))
 		access_denied('I_ERROR');
 

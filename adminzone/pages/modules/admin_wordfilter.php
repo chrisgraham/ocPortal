@@ -41,7 +41,7 @@ class Module_admin_wordfilter
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -49,7 +49,7 @@ class Module_admin_wordfilter
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('wordfilter');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -71,7 +71,7 @@ class Module_admin_wordfilter
 				'w_replacement'=>'SHORT_TEXT',
 				'w_substr'=>'*BINARY'
 			));
-	
+
 			$naughties=array('arsehole','asshole','arse','cock','cocked','cocksucker','crap','cunt','cum','bastard',
 									'bitch','blowjob','bollocks','bondage','bugger','buggery','dickhead','fuck','fucked','fucking',
 									'fucker','gayboy','motherfucker','nigger','piss','pissed','puffter','pussy','shag','shagged',
@@ -92,7 +92,7 @@ class Module_admin_wordfilter
 	{
 		return array('misc'=>'MANAGE_WORDFILTER');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -104,16 +104,16 @@ class Module_admin_wordfilter
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_censor';
 
 		require_lang('wordfilter');
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='add') return $this->add_word();
 		if ($type=='remove') return $this->remove_word();
 		if ($type=='misc') return $this->word_filter_interface();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to choose a filtered-word to edit, or to add a filtered-word.
 	 *
@@ -122,7 +122,7 @@ class Module_admin_wordfilter
 	function word_filter_interface()
 	{
 		$title=get_page_title('MANAGE_WORDFILTER');
-	
+
 		require_code('form_templates');
 		$list=new ocp_tempcode();
 		$words=$GLOBALS['SITE_DB']->query_select('wordfilter',array('*'),NULL,'ORDER BY word');
@@ -149,10 +149,10 @@ class Module_admin_wordfilter
 		$fields->attach(form_input_line(do_lang_tempcode('REPLACEMENT'),do_lang_tempcode('DESCRIPTION_REPLACEMENT'),'replacement','',false));
 		$fields->attach(form_input_tick(do_lang_tempcode('WORD_SUBSTR'),do_lang_tempcode('DESCRIPTION_WORD_SUBSTR'),'substr',false));
 		$add_form=do_template('FORM',array('_GUID'=>'5b1d45b374e15392b9f5496de8db2e1c','TABINDEX'=>strval(get_form_field_tabindex()),'SECONDARY_FORM'=>true,'SKIP_REQUIRED'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
-	
+
 		return do_template('WORDFILTER_SCREEN',array('_GUID'=>'4b355f5d2cecc0bc26e76a69716cc841','TITLE'=>$title,'TPL'=>$tpl,'ADD_FORM'=>$add_form));
 	}
-	
+
 	/**
 	 * The actualiser to add a filtered-word.
 	 *
@@ -164,7 +164,7 @@ class Module_admin_wordfilter
 
 		$word=post_param('word_2');
 		$this->_add_word($word,post_param('replacement'),post_param_integer('substr',0));
-	
+
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
@@ -181,12 +181,12 @@ class Module_admin_wordfilter
 	{
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('wordfilter','word',array('word'=>$word));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($word)));
-	
+
 		$GLOBALS['SITE_DB']->query_insert('wordfilter',array('word'=>$word,'w_replacement'=>$replacement,'w_substr'=>$substr));
-	
+
 		log_it('ADD_WORDFILTER',$word);
 	}
-	
+
 	/**
 	 * The actualiser to delete a filtered-word.
 	 *
@@ -195,9 +195,9 @@ class Module_admin_wordfilter
 	function remove_word()
 	{
 		$title=get_page_title('DELETE_WORDFILTER');
-	
+
 		$this->_remove_word(post_param('word'));
-	
+
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
@@ -211,7 +211,7 @@ class Module_admin_wordfilter
 	function _remove_word($word)
 	{
 		$GLOBALS['SITE_DB']->query_delete('wordfilter',array('word'=>$word),'',1);
-	
+
 		log_it('DELETE_WORDFILTER',$word);
 	}
 

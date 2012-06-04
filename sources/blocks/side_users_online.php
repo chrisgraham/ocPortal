@@ -39,7 +39,7 @@ class Block_side_users_online
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -63,7 +63,7 @@ class Block_side_users_online
 			add_config_option('BIRTHDAYS','usersonline_show_birthdays','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','USERS_ONLINE_BLOCK');
 		}
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -76,7 +76,7 @@ class Block_side_users_online
 		$info['ttl']=3;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -110,7 +110,7 @@ class Block_side_users_online
 			$member=$_member['the_user'];
 			$name=$_member['cache_username'];
 			$ip=$_member['ip'];
-	
+
 			if ((is_guest($member)) || (is_null($name)))
 			{
 				if (!array_key_exists($ip,$done_ips))

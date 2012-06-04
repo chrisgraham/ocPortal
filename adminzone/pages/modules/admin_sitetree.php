@@ -41,7 +41,7 @@ class Module_admin_sitetree
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -247,7 +247,7 @@ class Module_admin_sitetree
 					}
 				}
 			}
-			
+
 			$selected=(($zone=='forum') && ($row['i_menu']=='forum_features')) || (($zone=='collaboration') && ($row['i_menu']=='collab_website')) || ((($zone=='site') || (($zone=='') && (get_option('collapse_user_zones')=='1'))) && (($row['i_menu']=='site') || ($row['i_menu']=='main_website'))) || (($zone=='') && ($row['i_menu']=='root_website'));
 
 			if ($found)
@@ -288,7 +288,7 @@ class Module_admin_sitetree
 					for ($i=0;$i<$num_matches;$i++)
 					{
 						$menu_name=$matches[1][$i];
-						
+
 						foreach ($rows as $row)
 						{
 							if ($row['i_menu']==$menu_name)
@@ -392,7 +392,7 @@ class Module_admin_sitetree
 
 		return do_template('VALIDATE_CHECK',array('_GUID'=>'aca278de6738c2b5f840631234e44c7b','TITLE'=>$title,'CONTENTS'=>$contents));
 	}*/
-	
+
 	/**
 	 * The UI to choose a zone.
 	 *
@@ -404,14 +404,14 @@ class Module_admin_sitetree
 	{
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
-	
+
 		require_code('zones2');
 		require_code('zones3');
 		$zones=nice_get_zones(NULL,is_null($no_go)?NULL:array($no_go));
 		$fields->attach(form_input_list(do_lang_tempcode('ZONE'),'','zone',$zones,NULL,true));
 
 		$post_url=get_self_url(false,false,NULL,false,true);
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'df58e16290a783d24f9f81fc9227e6ff','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
@@ -432,10 +432,10 @@ class Module_admin_sitetree
 
 		$zone=get_param('zone',NULL);
 		if (is_null($zone)) return $this->choose_zone($title);
-		
+
 		require_code('form_templates');
 		require_code('zones2');
-	
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_delete'),'_SELF');
 		$submit_name=do_lang_tempcode('DELETE_PAGES');
 
@@ -457,7 +457,7 @@ class Module_admin_sitetree
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'a7310327788808856f1da4351f116b92','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_DELETE')),'URL'=>$post_url,'HIDDEN'=>$hidden));
 	}
-	
+
 	/**
 	 * The UI to confirm deletion of a page.
 	 *
@@ -485,7 +485,7 @@ class Module_admin_sitetree
 		foreach ($pages as $page=>$type)
 		{
 			if (is_integer($page)) $page=strval($page);
-			
+
 			if (either_param_integer('page__'.$page,0)==1)
 			{
 				$hidden->attach(form_input_hidden('page__'.$page,'1'));
@@ -528,7 +528,7 @@ class Module_admin_sitetree
 		foreach ($pages as $page=>$type)
 		{
 			if (is_integer($page)) $page=strval($page);
-			
+
 			if (post_param_integer('page__'.$page,0)==1)
 			{
 				if ((get_file_base()!=get_custom_file_base()) && (strpos($type,'comcode_custom')!==false))
@@ -549,7 +549,7 @@ class Module_admin_sitetree
 		foreach ($pages as $page=>$type)
 		{
 			if (is_integer($page)) $page=strval($page);
-			
+
 			if (post_param_integer('page__'.$page,0)==1)
 			{
 				if (substr($type,0,7)=='modules') $_page=$page.'.php';

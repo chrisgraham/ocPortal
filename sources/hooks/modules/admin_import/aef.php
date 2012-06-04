@@ -117,7 +117,7 @@ class Hook_aef
 	function import_config($db,$table_prefix,$file_base)
 	{
 		$globals=array();
-		
+
 		require($file_base.'/universal.php');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'registry WHERE '.db_string_equal_to('name','disableshoutingtopics').' OR '.db_string_equal_to('name','maxpostsintopics').' OR '.db_string_equal_to('name','maxtopics'));
@@ -131,7 +131,7 @@ class Hook_aef
 				$config_remapping['prevent_shouting']=$row['regval'];
 				continue;
 			}
-			
+
 			if (isset($row['name'])&&$row['name']=='maxpostsintopics')
 			{
 				$config_remapping['forum_posts_per_page']=$row['regval'];
@@ -235,7 +235,7 @@ class Hook_aef
 					import_id_remap_put('member',strval($row['id']),$test);
 					continue;
 				}
-	
+
 				$language='';
 				if ($row['language']!='')
 				{
@@ -266,7 +266,7 @@ class Hook_aef
 
 				$signature=$this->fix_links($row['sig'],$db,$table_prefix,$file_base);
 				$validated=$row['act_status'];
-				
+
 				$reveal_age=($row['birth_date']!='')?1:0;
 				$bits=explode('-',$row['birth_date']);
 				if (($reveal_age==1) && (count($bits)==3))
@@ -304,7 +304,7 @@ class Hook_aef
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -338,7 +338,7 @@ class Hook_aef
 	{
 		require_code('news');
 		$com=0; // we cannot comment the news
-	
+
 		//get AEF news
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'news');
 
@@ -357,7 +357,7 @@ class Hook_aef
 
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -368,7 +368,7 @@ class Hook_aef
 	function import_ocf_member_files($db,$table_prefix,$file_base)
 	{
 		global $STRICT_FILE;
-	
+
 		$options=$db->query('SELECT * FROM '.$table_prefix.'registry WHERE name LIKE \''.db_encode_like('%avatar%').'\'');
 		$options_array=array();
 
@@ -439,12 +439,12 @@ class Hook_aef
 
 
 				}
-	
+
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url'=>$avatar_url),array('id'=>$member_id),'',1);
-	
+
 				import_id_remap_put('member_files',strval($row['id']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -478,7 +478,7 @@ class Hook_aef
 			import_id_remap_put('ip_ban',strval($row['id']),0);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -492,7 +492,7 @@ class Hook_aef
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('category',strval($row['cid']))) continue;
-	
+
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
@@ -551,7 +551,7 @@ class Hook_aef
 					if ($p['can_post_topic']==1) $v=2;
 					if ($p['can_reply']==1) $v=3;
 					if ($p['can_post_polls']==1) $v=4;
-					
+
 					$group_id=import_id_remap_get('group',strval($p['fpugid']),true);
 					if (is_null($group_id)) continue;
 					$access_mapping[$group_id]=$v;
@@ -588,7 +588,7 @@ class Hook_aef
 
 				import_id_remap_put('topic',strval($row['tid']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -865,7 +865,7 @@ class Hook_aef
 		}
 	}
 
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -933,7 +933,7 @@ class Hook_aef
 				ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,NULL,$last_edit_time,$last_edit_by,false,false,NULL,false);
 				$first_post=false;
 			}
-	
+
 			import_id_remap_put('pt',strval($row['pmid']),$topic_id);
 		}
 	}
@@ -982,7 +982,7 @@ class Hook_aef
 	function import_notifications($db,$table_prefix,$file_base)
 	{
 		require_code('notifications');
-		
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -991,7 +991,7 @@ class Hook_aef
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('topic_notification',strval($row['notify_tid']).'-'.strval($row['notify_mid']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['notify_mid']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['notify_tid']),true);
@@ -1000,12 +1000,12 @@ class Hook_aef
 
 				import_id_remap_put('topic_notification',strval($row['notify_tid']).'-'.strval($row['notify_mid']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *

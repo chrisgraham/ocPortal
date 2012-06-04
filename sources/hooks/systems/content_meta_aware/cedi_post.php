@@ -56,9 +56,9 @@ class Hook_content_meta_aware_cedi_post
 			'validated_field'=>'validated',
 
 			'addon_name'=>'cedi',
-			
+
 			'module'=>'cedi',
 		);
 	}
-	
+
 }

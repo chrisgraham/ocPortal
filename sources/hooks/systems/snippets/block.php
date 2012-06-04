@@ -47,10 +47,10 @@ class Hook_block
 			require_lang('permissions');
 			return paragraph(do_lang_tempcode('ACCESS_DENIED__ACCESS_DENIED',escape_html($map['block'])));
 		}
-		
+
 		// Cleanup
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'temp_block_permissions WHERE p_time<'.strval(60*60*intval(get_option('session_expiry_time'))));
-		
+
 		// Return block snippet
 		return do_block($map['block'],$map);
 	}

@@ -32,7 +32,7 @@ class Module_admin_ecommerce extends standard_aed_module
 	var $table='f_usergroup_subs';
 	var $orderer='s_title';
 	var $title_is_multi_lang=true;
-	
+
 	var $javascript="
 		var _length_units=document.getElementById('length_units'),_length=document.getElementById('length');
 		var adjust_lengths=function()
@@ -145,7 +145,7 @@ class Module_admin_ecommerce extends standard_aed_module
 	function usage()
 	{
 		breadcrumb_set_parents(array());
-		
+
 		$also_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		attach_message(do_lang_tempcode('ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
 
@@ -230,7 +230,7 @@ class Module_admin_ecommerce extends standard_aed_module
 			{
 				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id);
 			} else $member_link=do_lang_tempcode('NA_EM');
-			
+
 			$fields->attach(results_entry(array(escape_html($myrow['id']),escape_html($myrow['purchase_id']),escape_html($myrow['linked']),escape_html($date),escape_html($myrow['amount']),escape_html($myrow['t_currency']),escape_html($myrow['item']),$status,escape_html($myrow['reason']),escape_html($myrow['pending_reason']),escape_html($myrow['t_memo']),$member_link)));
 		}
 
@@ -277,7 +277,7 @@ class Module_admin_ecommerce extends standard_aed_module
 				$list->attach(form_input_list_entry($product,do_lang('CUSTOM_PRODUCT_'.$product,NULL,NULL,NULL,NULL,false)==get_param('product',NULL),$details[4]));
 			}
 			$fields->attach(form_input_list(do_lang_tempcode('PRODUCT'),'','item_name',$list));
-			
+
 			$submit_name=do_lang('CHOOSE');
 
 			return do_template('FORM_SCREEN',array('TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>get_self_url(),'GET'=>true,'HIDDEN'=>''));
@@ -288,7 +288,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_trigger','redirect'=>get_param('redirect',NULL)),'_SELF');
 		$text=do_lang('MANUAL_TRANSACTION_TEXT');
 		$submit_name=do_lang('MANUAL_TRANSACTION');
-		
+
 		$product_ob=find_product($item_name);
 
 		// To work out key
@@ -559,7 +559,7 @@ class Module_admin_ecommerce extends standard_aed_module
 
 		return do_template('ECOM_CASH_FLOW_SCREEN',array('_GUID'=>'a042e16418417f46c24818890679f38a','TITLE'=>$title,'TYPES'=>$types));
 	}
-	
+
 	/**
 	 * Show a profit/loss account.
 	 *
@@ -675,9 +675,9 @@ class Module_admin_ecommerce extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','s_title ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -714,7 +714,7 @@ class Module_admin_ecommerce extends standard_aed_module
 
 			$fields->attach(results_entry(array(get_translated_text($r['s_title'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),$r['s_cost'],do_lang('_LENGTH_UNIT_'.$r['s_length_units'],integer_format($r['s_length'])),ocf_get_group_name($r['s_group_id']),($r['s_enabled']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($r['id']))))),true);
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 

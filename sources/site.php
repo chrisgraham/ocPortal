@@ -25,7 +25,7 @@
 function init__site()
 {
 	if (defined('BREADCRUMB_CROP_LENGTH')) return;
-	
+
 	global $HELPER_PANEL_TEXT,$HELPER_PANEL_HTML,$HELPER_PANEL_PIC,$HELPER_PANEL_TUTORIAL;
 	$HELPER_PANEL_TEXT='';
 	$HELPER_PANEL_HTML='';
@@ -85,7 +85,7 @@ function init__site()
 
 	global $PT_PAIR_CACHE_CP;
 	$PT_PAIR_CACHE_CP=array();
-	
+
 	global $ATTACH_MESSAGE_CALLED;
 	$ATTACH_MESSAGE_CALLED=0;
 
@@ -151,7 +151,7 @@ function init__site()
 	if (can_try_mod_rewrite())
 	{
 		$ruri=ocp_srv('REQUEST_URI');
-		
+
 		$old_style=get_option('htm_short_urls')!='1';
 
 		if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
@@ -162,7 +162,7 @@ function init__site()
 			exit();
 		}
 	}
-	
+
 	// Search engine having session in URL, we don't like this
 	if ((get_bot_type()!==NULL) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
 	{
@@ -246,7 +246,7 @@ function attach_message($message,$type='inform')
 	{
 		critical_error('EMERGENCY',is_object($message)?$message->evaluate():$message);
 	}
-	
+
 	if ($DONE_HEADER)
 	{
 		// Drastic measures
@@ -277,7 +277,7 @@ function attach_message($message,$type='inform')
 			$message=protect_from_escaping($message);
 		}
 	}
-	
+
 	if ((get_param_integer('keep_fatalistic',0)==1) && ($type=='warn')) fatal_exit($message);
 
 	$ATTACHED_MESSAGES_RAW[]=array($message,$type);
@@ -414,7 +414,7 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint=true)
 			$stub->attach(hyperlink($url,$title,false,false,do_lang_tempcode('GO_BACKWARDS_TO',@html_entity_decode(strip_tags(is_object($title)?$title->evaluate():$title),ENT_QUOTES,get_charset()))));
 		}
 	}
-	
+
 	// Self-link
 	if ($link_to_self_entrypoint)
 	{
@@ -544,7 +544,7 @@ function do_header($skip_top=false)
 	} else // Take from SEO title
 	{
 		$comcodeless=strip_comcode($SEO_TITLE); // This is not HTML
-		
+
 		// Strip 'Welcome to' off if it's there
 		/*$comcodeless=str_replace('&hellip;','...',$comcodeless);
 		$comcodeless=str_replace('&middot;','-',$comcodeless);
@@ -787,7 +787,7 @@ function do_site()
 		require_code('site2');
 		closed_site();
 	}
-	
+
 	// Work out which page we're viewing
 	global $PAGE;
 	$PAGE=get_page_name();
@@ -1243,7 +1243,7 @@ function _request_page($codename,$zone,$page_type=NULL,$lang=NULL,$no_redirect_c
 					return array('MINIMODULES',$zone,$codename,$path);
 				break;
 		}
-		
+
 		return false;
 	}
 
@@ -1352,7 +1352,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 	if ($file_base===NULL) $file_base=get_file_base();
 
 	if (!$being_included) $GLOBALS['TITLE_CALLED']=true;
-	
+
 	$is_panel=(substr($codename,0,6)=='panel_') || ((strpos($codename,'panel_')!==false) && (get_param_integer('keep_theme_test',0)==1));
 
 	if ($zone=='' && $codename=='404')
@@ -1363,7 +1363,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		$GLOBALS['HTTP_STATUS_CODE']='404';
 		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
 	}
-	
+
 	if ((($is_panel) || ($codename[0]=='_')) && (get_page_name()==$codename))
 	{
 		global $EXTRA_HEAD;

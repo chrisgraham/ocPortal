@@ -57,11 +57,11 @@ function _enforce_sessioned_url($url)
 	} else $url.='&';
 	$url=preg_replace('#keep\_session=\d+&#','',$url);
 	$url=preg_replace('#&keep\_session=\d+#','',$url);
-	
+
 	// Get hash back
 	$url.=$hash;
 	$url=preg_replace('#\?keep\_session=\d+#','',$url);
-	
+
 	// Possibly a nested URL too
 	$url=preg_replace('#keep\_session=\d+'.preg_quote(urlencode('&')).'#','',$url);
 	$url=preg_replace('#'.preg_quote(urlencode('&')).'keep\_session=\d+#','',$url);
@@ -69,10 +69,10 @@ function _enforce_sessioned_url($url)
 
 	// Put keep_session back
 	$url.='keep_session='.strval(get_session_id());
-	
+
 	// Get hash back
 	$url.=$hash;
-	
+
 	return $url;
 }
 
@@ -86,7 +86,7 @@ function _enforce_sessioned_url($url)
 function create_session($member,$session_confirmed=0)
 {
 	global $SESSION_CACHE;
-	
+
 	global $MEMBER_CACHED;
 	$MEMBER_CACHED=$member;
 
@@ -166,7 +166,7 @@ function set_session_id($id,$guest_session=false)  // NB: Guests sessions can pe
 		$test=@setcookie('ocp_session',strval($id),$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
 	}
 	$_COOKIE['ocp_session']=strval($id); // So we remember for this page view
-	
+
 	// If we really have to, store in URL
 	if (((!has_cookies()) || (!$test)) && (is_null(get_bot_type())))
 	{
@@ -231,7 +231,7 @@ function try_su_login($member)
 		}
 		$GLOBALS['IS_ACTUALLY_ADMIN']=true;
 	}
-	
+
 	return $member;
 }
 
@@ -243,7 +243,7 @@ function try_su_login($member)
 function try_httpauth_login()
 {
 	global $LDAP_CONNECTION;
-	
+
 	require_code('ocf_members');
 	require_code('ocf_groups');
 	require_lang('ocf');
@@ -281,7 +281,7 @@ function try_httpauth_login()
 function try_cookie_login()
 {
 	$member=NULL;
-	
+
 	// Preprocess if this is a serialized cookie
 	$member_cookie_name=get_member_cookie();
 	$bar_pos=strpos($member_cookie_name,'|');

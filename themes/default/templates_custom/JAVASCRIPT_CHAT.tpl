@@ -17,7 +17,7 @@ function play_chat_sound(sID,for_member)
 	if (typeof window.soundManager=='undefined') return;
 
 	var play_sound=window.document.getElementById('play_sound');
-	
+
 	if ((play_sound) && (!play_sound.checked)) return;
 
 	if (for_member)
@@ -80,7 +80,7 @@ function chat_post(event,current_room_id,field_name)
 	play_chat_sound('message_sent');
 
 	//addChatMessage('{$USERNAME;}',message,null);
-	
+
 	return false;
 }
 
@@ -133,7 +133,7 @@ function onConnectForLogin(username,password,onLoginCompleted)
 			con.close();
 		}
 	} );
-	
+
 	window.setInterval( function() {
 		if (!con.isConnected()) // Auto reconnect on errors
 		{

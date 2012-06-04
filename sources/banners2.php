@@ -93,7 +93,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 		$fields->attach(form_input_integer(do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('DESCRIPTION_IMPORTANCE_MODULUS',strval($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT SUM(importance_modulus) FROM '.get_table_prefix().'banners WHERE '.db_string_not_equal_to('name',$name))),strval($importancemodulus)),'importancemodulus',$importancemodulus,true));
 	}
 	$fields->attach(form_input_date(do_lang_tempcode('EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_EXPIRY_DATE'),'expiry_date',true,is_null($expiry_date),true,$expiry_date,2));
-	
+
 	return $fields;
 }
 
@@ -170,7 +170,7 @@ function check_banner($title_text='',$b_type='',$url_param_name='image_url',$fil
 		if (strlen($title_text)>$banner_type_row['t_max_file_size'])
 			warn_exit(do_lang_tempcode('BANNER_TOO_LARGE_2',integer_format(strlen($title_text)),integer_format($banner_type_row['t_max_file_size'])));
 	}
-	
+
 	return array($url,$title_text);
 }
 

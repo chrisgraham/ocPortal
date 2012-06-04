@@ -59,7 +59,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	if (!is_null($seed))
 	{
 		require_code('themewizard');
-		
+
 		list($colours,$landscape)=calculate_theme($seed,$theme,$algorithm,'colours',$dark);
 		foreach ($landscape as $peak)
 		{
@@ -287,11 +287,11 @@ function _css_compile($theme,$c,$fullpath,$minify=true)
 function js_minify($js)
 {
 	if (strpos($js,'no minify')!==false) return $js;
-	
+
 	require_code('jsmin');
-	
+
 	if (!class_exists('JSMin')) return $js;
-	
+
 	$jsmin = new JSMin($js);
 	return $jsmin->min();
 }

@@ -34,7 +34,7 @@ class Hook_rss_tickets
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('tickets')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'tickets')) return NULL;
 
 		if (is_guest()) return NULL;
@@ -60,7 +60,7 @@ class Hook_rss_tickets
 		foreach ($rows as $i=>$row)
 		{
 			if ($i==$max) break;
-			
+
 			if ($row['lasttime']<$cutoff) continue;
 
 			$ticket_id=extract_topic_identifier($row['description']);
@@ -90,7 +90,7 @@ class Hook_rss_tickets
 
 			$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$ticket_id,'NEWS'=>'','DATE'=>$date)));
 		}
-		
+
 		require_lang('tickets');
 		return array($content,do_lang('SUPPORT_TICKETS'));
 	}

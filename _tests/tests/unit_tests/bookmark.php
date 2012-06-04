@@ -41,7 +41,7 @@ class bookmark_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('nnnnn'==$GLOBALS['SITE_DB']->query_value('bookmarks','b_title ',array('id'=>$this->bookmark_id)));
 	}
-	
+
 	
 	function tearDown()
 	{

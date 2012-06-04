@@ -54,7 +54,7 @@ class Hook_Profiles_Tabs_Edit_delete
 				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 			ocf_delete_member($member_id_of);
-		
+
 			inform_exit(do_lang_tempcode('SUCCESS'));
 		}
 

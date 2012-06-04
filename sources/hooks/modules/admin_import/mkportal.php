@@ -67,7 +67,7 @@ class Hook_mkportal
 
 		return $info;
 	}
-	
+
 	/**
 	 * Verifies that the base path is correct
 	 *
@@ -111,25 +111,25 @@ class Hook_mkportal
 				$config_remapping['max_download_size']=$row['valore'];
 				continue;
 			}
-	
+
 			if ($row['chiave']=='upload_image_max')
 			{
 				$config_remapping['max_image_size']=$row['valore'];
 				continue;
 			}
-	
+
 			if ($row['chiave']=='thumb_max_dimen')
 			{
 				$config_remapping['thumb_width']=$row['valore'];
 				continue;
 			}
-	
+
 			if ($row['chiave']=='metakey')
 			{
 				$config_remapping['keywords']=$row['valore'];
 				continue;
 			}
-	
+
 			if ($row['chiave']=='metadesc')
 			{
 				$config_remapping['description']=$row['valore'];
@@ -149,7 +149,7 @@ class Hook_mkportal
 
 		$INFO['board_prefix']=$SITE_URL;
 	}
-	
+
 	/**
 	 * Add a banner type.
 	 *
@@ -182,10 +182,10 @@ class Hook_mkportal
 			't_max_file_size'=>$max_file_size,
 			't_comcode_inline'=>$comcode_inline
 		));
-		
+
 		return $id;
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -226,7 +226,7 @@ class Hook_mkportal
 					ocf_over_msn();
 					$all_members=$GLOBALS['FORUM_DRIVER']->get_matching_members('');
 					ocf_over_local();
-				
+
 					$email_address_map=array();
 					foreach ($all_members as $member)
 					{
@@ -287,7 +287,7 @@ END;
 		add_menu_item_simple('main_features',NULL,'TOP_SITES','site:topsites');
 
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -303,7 +303,7 @@ END;
 			$comcode_pages_title=do_lang('COMCODE_PAGES');
 			$page=<<<END
 [title]{$comcode_pages_title}[/title]
-		
+
 END;
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'pages WHERE '.db_string_equal_to('file',''));
 			foreach ($rows as $row)
@@ -358,7 +358,7 @@ END;
 		}
 
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -384,7 +384,7 @@ END;
 			write_text_file('quotes',get_site_default_lang(),$out);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -423,7 +423,7 @@ END;
 		fix_permissions($path);
 		sync_file($path);
 	}
-	
+
 	/**
 	 * Convert a named news category to an ocPortal news category ID.
 	 *
@@ -440,7 +440,7 @@ END;
 			$cat_id=add_news_category($title,'newscats/'.$image,'');
 		return $cat_id;
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -452,23 +452,23 @@ END;
 	{
 		require_code('news');
 		require_code('galleries2');
-	
+
 		//check is the comment forum configured in ocPortal
 		$this->test_for_comments_forum();
-		
+
 		// Can we comment the news?
 		$com=1;
-		
+
 		$forum_name=get_option('comments_forum_name');
-		
+
 		ocf_over_msn(); //used to fixed the correct forum prefix
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 		ocf_over_local(); //used to fixed the correct forum prefix
-		
+
 		/* old import reviews code, as part of the news. NOTE: now they are imported as catalogues entries
 		// Reviews (imports into 'community')
 		$rows=$db->query('SELECT r.id AS review_id, r.title AS review_title, r.description AS review_description, r.field1 AS rf1, r.field2 AS rf2, r.field3 AS rf3, r.field4 AS rf4, r.field5 AS rf5, r.field6 AS rf6, r.field7 AS rf7, r.*, rc.title AS rc_title, rc.description AS rc_description, rc.field1 AS rcf1, rc.field2 AS rcf2, rc.field3 AS rcf3, rc.field4 AS rcf4, rc.field5 AS rcf5, rc.field6 AS rcf6, rc.field7 AS rcf7, rc.* FROM '.$table_prefix.'reviews r LEFT JOIN '.$table_prefix.'reviews_sections rc ON r.id_cat=rc.id');
-		
+
 		foreach ($rows as $row)
 		{
 			$cat_id=$this->get_news_category_id($row['review_title'],'community');
@@ -518,7 +518,7 @@ END;
 				}
 			}
 		} end of old import reviews code */
-	
+
 		// Blogs (imports into community for author)
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'blog');
 		foreach ($rows as $row)
@@ -720,7 +720,7 @@ END;
 				}
 			} //end import blog images
 		} //end blog import
-	
+
 		// Stories categories, story items, and comments
 		$cats=$db->query('SELECT * FROM '.$table_prefix.'news_sections');
 		$cat_id=array();
@@ -785,7 +785,7 @@ END;
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -864,7 +864,7 @@ END;
 			$rows2[$i]['screenshot']=$row['screen1'];
 			$rows2[$i]['screenshot2']=$row['screen2'];
 		}
-		
+
 		// Import downloads
 		foreach ($rows as $row)
 		{
@@ -886,7 +886,7 @@ END;
 			}
 
 			$url='uploads/downloads/'.$mkp_disk_name;
-	
+
 			$comments_text=($row['demo']=='')?'':(do_lang('DEMO_URL').': '.$row['demo']);
 
 			$member=$row['idauth'];
@@ -958,11 +958,11 @@ END;
 			//import download rating too
 			$this->_import_ratings($db,'downloads',$row['id'],$new_id,$row['rate'],$table_prefix);
 		}
-	
+
 		$out=do_template('IMPORT_MESSAGE',array('_GUID'=>'ff9131c37b9e4fa2cff991e3479ae867','MESSAGE'=>do_lang_tempcode('IMPORT_REBUILD_CACHE',do_lang('IMAGE_THUMBNAILS'))));
 		return $out;
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -973,32 +973,32 @@ END;
 	function import_images_and_galleries($db,$table_prefix,$old_base_dir)
 	{
 		require_code('galleries2');
-		
+
 		//check is the comment forum configured in ocPortal
 		$this->test_for_comments_forum();
-		
+
 		$ocp_path=get_custom_file_base();
-		
+
 		//copy watermark image
 		$save_filename=$old_base_dir.'mkportal/modules/gallery/wt.png'; //NOTE: this is the default watermark image in MKPortal, if customer needs to use another image, he/she needs to overwite it
 		$watermark_image='';
-		
+
 		if (file_exists($save_filename))
 		{
 			$copy_destination=$ocp_path.'/uploads/watermarks/wt.png';
-			
+
 			@copy($save_filename,$copy_destination);
 			fix_permissions($copy_destination);
 			sync_file($copy_destination);
 			$watermark_image=get_custom_base_url().'/uploads/watermarks/wt.png';;
 		}
-		
+
 		//now we need to get MKPortal settings for the watermark images
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'config WHERE '.db_string_equal_to('chiave','watermark_pos').' OR '.db_string_equal_to('chiave','watermark_enable'));
-		
+
 		$watermark_pos='2'; //Possible values: 0 - Top-right; 1 - Center; 2 - Bottom-right (default for MKPortal)
 		$watermark_enable='0'; //by default it is disabled
-		
+
 		foreach ($rows as $row)
 		{
 			if ($row['chiave']=='watermark_pos')
@@ -1144,7 +1144,7 @@ END;
 			$this->_import_ratings($db,'galleries',$row['id'],$id_new,$row['rate'],$table_prefix);
 		}
 	}
-	
+
 	/**
 	 * Import ratings
 	 *
@@ -1305,18 +1305,18 @@ END;
 						//get position block content
 						$contents=@file_get_contents($position);
 						if ($contents===false) continue;
-						
+
 						//if the block is not set we need to include it at the end
 						if (preg_match('/forum_features/im',$contents)==0)
 						{
 							$myfile=@fopen($position,'at+');
 							if ($myfile===false) continue;
-							
+
 							$out='';
 							$out.=(chr(10).($middle?chr(10):'')).'[block="forum_features" type="tree" caption="Forums"]side_stored_menu[/block]';
-							
+
 							fwrite($myfile,$out); //add block to the appropiate position in the end of the file
-							
+
 							fclose($myfile);
 						}
 
@@ -1328,17 +1328,17 @@ END;
 						//get position block content
 						$contents=@file_get_contents($position);
 						if ($contents===false) continue;
-						
+
 						//if the block is not set we need to include it at the end
 						if (preg_match('/pc_features/im',$contents)==0)
 						{
 							$myfile=@fopen($position,'at+');
 							if ($myfile===false) continue;
-							
+
 							$out='';
 							$out.=(chr(10).($middle?chr(10):'')).'[block="pc_features" type="tree" caption="My stuff"]side_stored_menu[/block]';
 							fwrite($myfile,$out); //add block to the appropiate position in the end of the file
-							
+
 							fclose($myfile);
 						}
 
@@ -1347,11 +1347,11 @@ END;
 						{
 							$myfile=@fopen($position,'at+');
 							if ($myfile===false) continue;
-							
+
 							$out='';
 							$out.=(chr(10).($middle?chr(10):'')).'[block="pc_edit" type="tree" caption="Settings" silent_failure="1"]side_stored_menu[/block]';
 							fwrite($myfile,$out); //add block to the appropiate position in the end of the file
-							
+
 							fclose($myfile);
 						}
 					}
@@ -1362,17 +1362,17 @@ END;
 						//get position block content
 						$contents=@file_get_contents($position);
 						if ($contents===false) continue;
-						
+
 						//if the block is not set we need to include it at the end
 						if (preg_match('/Last\sblog\spost/im',$contents)==0)
 						{
 							$myfile=@fopen($position,'at+');
 							if ($myfile===false) continue;
-							
+
 							$out='';
 							$out.=(chr(10).($middle?chr(10):'')).'[block="1" blogs="1" title="Last blog post"]side_news[/block]';
 							fwrite($myfile,$out); //add block to the appropiate position in the end of the file
-							
+
 							fclose($myfile);
 						}
 					}
@@ -1383,17 +1383,17 @@ END;
 						//get position block content
 						$contents=@file_get_contents($position);
 						if ($contents===false) continue;
-						
+
 						//if the block is not set we need to include it at the end
 						if (preg_match('/main\_news/',$contents)==0)
 						{
 							$myfile=@fopen($position,'at+');
 							if ($myfile===false) continue;
-							
+
 							$out='';
 							$out.=(chr(10).($middle?chr(10):'')).'[block blogs="0"]main_news[/block]';
 							fwrite($myfile,$out); //add block to the appropiate position in the end of the file
-							
+
 							fclose($myfile);
 						}
 					}
@@ -1404,21 +1404,21 @@ END;
 						//get position block content
 						$contents=@file_get_contents($position);
 						if ($contents===false) continue;
-						
+
 						//if the block is not set we need to include it at the end
 						if (preg_match('/Last\sforum\spost/im',$contents)==0)
 						{
 							$myfile=@fopen($position,'at+');
 							if ($myfile===false) continue;
-							
+
 							$out='';
 							$out.=(chr(10).($middle?chr(10):'')).'[block="General chat" title="Last forum post"]main_forum_topics[/block]';
 							fwrite($myfile,$out); //add block to the appropiate position in the end of the file
-							
+
 							fclose($myfile);
 						}
 					}
-					
+
 					continue;
 				}
 
@@ -1426,42 +1426,42 @@ END;
 
 				$contents=@file_get_contents($position);
 				if ($contents===false) continue;
-				
+
 				//if the block is not set we need to include it at the end
 				if (preg_match('/'.$remapped_block.'/im',$contents)==0)
 				{
 					$myfile=@fopen($position,'at+');
 					if ($myfile===false) continue;
-					
+
 					$out='';
 					$out.=(chr(10).($middle?chr(10):'')).'[block]'.$remapped_block.'[/block]';
 					fwrite($myfile,$out); //add block to the appropiate position in the end of the file
-					
+
 					fclose($myfile);
 				}
 
 			}
-			
+
 			//get pinned category id
 			$pinned_news_cat_id=$this->get_news_category_id(do_lang('PINNED_NEWS'),'');
 			$pinned_news=$GLOBALS['SITE_DB']->query_value_null_ok('news','id',array('news_category'=>$pinned_news_cat_id));
-			
+
 			if (!is_null($pinned_news))
 			{
 				//add pinned news module at the top of the center panel (start.txt)
 				$contents=@file_get_contents($center_panel);
 				if ($contents===false) $contents='';
-				
+
 				$myfile=@fopen($center_panel,'wt+');
 				if ($myfile!==false)
 				{
 					//prepare the content to be written
 					$out=''; //just to ensure
 					$out.='[block="10000" blogs="0" filter="'.$pinned_news_cat_id.'" title="'.do_lang('PINNED_NEWS').'"]main_news[/block]'.(chr(10).($middle?chr(10):'')).$contents;
-				
+
 					//fseek($myfile, 0); //set the pointer at the start of the file
 					fwrite($myfile,$out); //write the content of the from it's start
-				
+
 					fclose($myfile); //close file
 				}
 			}
@@ -1525,10 +1525,10 @@ END;
 				//it is not a links block, so we write it into a new page
 				$page_title=$row['title'];
 				$page='';
-				
+
 				$c_dir=get_custom_file_base().'/pages/comcode_custom/'.get_site_default_lang().'/';
 				$comcode_pages_title=do_lang('COMCODE_PAGES');
-				
+
 				//get other custom comcode pages names
 				$older_comcode_files=array();
 				$d=opendir($c_dir);
@@ -1541,16 +1541,16 @@ END;
 					}
 				}
 				closedir($d);
-				
+
 				ksort($older_comcode_files);
-				
+
 				//get the highest comcode page id
 				$max_index=end($older_comcode_files);
 				$max_index=is_null($max_index)?1:$max_index;
 				$page.=' - [page caption="'.$page_title.'"]pn'.strval($max_index+1).'[/page]'.chr(10);
 
 				$page2=do_template('IMPORT_MKPORTAL_FCOMCODEPAGE',array('TITLE'=>$page_title,'SUBTITLE'=>'','PAGE_HEADER'=>'','TEXT'=>$page,'PAGE_FOOTER'=>'','SIGNATURE'=>''));
-				
+
 				//save the comcode file
 				$path=$c_dir.'pn'.strval($max_index+1).'.txt';
 				$myfile=@fopen($path,'at');
@@ -1559,7 +1559,7 @@ END;
 				fclose($myfile);
 				fix_permissions($path);
 				sync_file($path);
-				
+
 				//add info about comcode file
 				$path=$c_dir.'pnindex.txt';
 				$myfile=@fopen($path,'at');
@@ -1571,7 +1571,7 @@ END;
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1591,19 +1591,19 @@ END;
 
 		// Can we comment the news?
 		$com=1;
-		
+
 		//get comments forum name
 		$forum_name=get_option('comments_forum_name');
-		
+
 		ocf_over_msn(); //used to fixed the correct forum prefix
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 		ocf_over_local(); //used to fixed the correct forum prefix
-		
+
 		//get specific reviews fields
 		$catalogues=$db->query('SELECT * FROM '.$table_prefix.'reviews_sections');
-		
+
 		$include_reviews_link=false; //include reviews link only once
-		
+
 		//go through all of the reviews sections
 		foreach ($catalogues as $catalogue)
 		{
@@ -1625,7 +1625,7 @@ END;
 					array(do_lang('REVIEW_REVIEW'),'','long_trans',0,1),
 //					array('REVIEW_ADDITIONAL_INFO','','long_trans',0,1)
 				);
-				
+
 				$specific_fields=array();
 				//add review/catalogue specific fields
 				for ($i=1;$i<7;$i++)
@@ -1648,10 +1648,10 @@ END;
 					actual_add_catalogue_field(strtolower($catalogue_name),$field[0],'',$field[2],$i,$field[3],1,1,'',$field[4]);
 				}
 			}
-			
+
 			//import current reviews category
 			$review_category_id=actual_add_catalogue_category(strtolower($catalogue_name),$catalogue['title'],'','',NULL,'');
-			
+
 			//include reviews link in main features menu
 			if (!$include_reviews_link)
 			{
@@ -1659,9 +1659,9 @@ END;
 				add_menu_item_simple('main_features',NULL,'REVIEWS','site:catalogues:index:'.strtolower($catalogue_name));
 				$include_reviews_link=true;
 			}
-			
+
 			$remappped_fields=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('c_name'=>strtolower($catalogue_name))));
-		
+
 			//select all reviews for current review catalogue
 			$rows=$db->query('SELECT r.id AS review_id, r.title AS review_title, r.description AS review_description, r.field1 AS rf1, r.field2 AS rf2, r.field3 AS rf3, r.field4 AS rf4, r.field5 AS rf5, r.field6 AS rf6, r.field7 AS rf7, r.*, rc.title AS rc_title, rc.description AS rc_description, rc.field1 AS rcf1, rc.field2 AS rcf2, rc.field3 AS rcf3, rc.field4 AS rcf4, rc.field5 AS rcf5, rc.field6 AS rcf6, rc.field7 AS rcf7, rc.* FROM '.$table_prefix.'reviews r LEFT JOIN '.$table_prefix.'reviews_sections rc ON r.id_cat=rc.id WHERE r.id_cat='.strval($catalogue['id']));
 
@@ -1673,7 +1673,7 @@ END;
 				foreach ($specific_fields as $field_num)
 				{
 					if (!isset($remappped_fields[$map_next_ind])) break; // Don't want to import non-used fields
-					
+
 					$map[$remappped_fields[$map_next_ind]]=html_to_comcode($row['rf'.strval($field_num+1)]);
 					$map_next_ind++;
 				}
@@ -1716,7 +1716,7 @@ END;
 			}
 		}
 	}
-	
+
 	/**
 	 * Check a comments forum has been configured.
 	 */
@@ -1725,7 +1725,7 @@ END;
 		ocf_over_msn();
 		$comments_forum=$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('comments_forum_name'));
 		ocf_over_local();
-				
+
 		if (is_null($comments_forum))
 		{
 			$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'FEATURE'),'adminzone');
@@ -1733,5 +1733,5 @@ END;
 			warn_exit(do_lang_tempcode('IMPORT_NO_COMMENTS_FORUM',escape_html($config_url.'#group_USER_INTERACTION')));
 		}
 	}
-	
+
 }

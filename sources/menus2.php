@@ -35,7 +35,7 @@ function menu_management_script()
 	$id=get_param_integer('id');
 	$to_menu=get_param('menu');
 	$changes=array('i_menu'=>$to_menu);
-	
+
 	$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('*'),array('id'=>$id),'',1);
 	if (array_key_exists(0,$rows)) $row=$rows[0]; else $row=NULL;
 

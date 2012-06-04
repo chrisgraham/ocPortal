@@ -55,7 +55,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		if (!is_string($lang)) return NULL;
 		return $lang;
 	}
-	
+
 	/**
 	 * Escape a value for HTML embedding, IPB style.
 	 *
@@ -98,7 +98,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	function ipb_unescape($val)
 	{
 		$val=@html_entity_decode($val,ENT_QUOTES,get_charset());
-		
+
 		$val=preg_replace_callback('/&#x([0-9a-f]+);/i',array($this,'unentity_1'),$val);
 		$val=preg_replace_callback('/&#([0-9]+);/',array($this,'unentity_2'),$val);
 
@@ -108,10 +108,10 @@ class forum_driver_ipb_shared extends forum_driver_base
 		$val=str_replace('&quot;','"',$val);
 		$val=str_replace('&#33;','!',$val);
 		$val=str_replace('&#39;','\'',$val);*/
-	
+
 		return $val;
 	}
-	
+
 	/**
 	 * Find if the login cookie contains the login name instead of the member id.
 	 *
@@ -121,7 +121,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Find if login cookie is md5-hashed.
 	 *
@@ -131,7 +131,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Find the member id of the forum guest member.
 	 *
@@ -141,7 +141,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return 0;
 	}
-	
+
 	/**
 	 * Get the forums' table prefix for the database.
 	 *
@@ -152,7 +152,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		global $SITE_INFO;
 		return array_key_exists('ipb_table_prefix',$SITE_INFO)?$SITE_INFO['ipb_table_prefix']:'ibf_';
 	}
-	
+
 	/**
 	 * Get an array of attributes to take in from the installer. Almost all forums require a table prefix, which the requirement there-of is defined through this function.
 	 * The attributes have 4 values in an array
@@ -173,7 +173,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		$a['title']='IPB '.do_lang('TABLE_PREFIX');
 		return array($a);
 	}
-	
+
 	/**
 	 * Get an emoticon chooser template.
 	 *
@@ -193,7 +193,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 
 		return $em;
 	}
-	
+
 	/**
 	 * Pin a topic.
 	 *
@@ -214,7 +214,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return $r['mgroup'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's member id.
 	 *
@@ -225,7 +225,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return $r['id'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's last visit date.
 	 *
@@ -236,7 +236,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return $r['last_visit'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's e-mail address.
 	 *
@@ -247,7 +247,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return $this->ipb_unescape($r['email']);
 	}
-	
+
 	/**
 	 * Get a URL to the specified member's home (control panel).
 	 *
@@ -259,7 +259,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		unset($id);
 		return get_forum_base_url().'/index.php?act=UserCP&CODE=00';
 	}
-	
+
 	/**
 	 * Get a URL to the specified member's profile.
 	 *
@@ -270,7 +270,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?showuser='.strval($id);
 	}
-	
+
 	/**
 	 * Get a URL to the registration page (for people to create member accounts).
 	 *
@@ -280,7 +280,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?act=Reg&CODE=00';
 	}
-	
+
 	/**
 	 * Get a URL to the members-online page.
 	 *
@@ -290,7 +290,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?act=Online&CODE=listall';
 	}
-	
+
 	/**
 	 * Get a URL to send a private/personal message to the given member.
 	 *
@@ -301,7 +301,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?act=Msg&CODE=04&MID='.strval($id);
 	}
-	
+
 	/**
 	 * Get a URL to the specified forum.
 	 *
@@ -312,7 +312,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return get_forum_base_url().'/index.php?showforum='.strval($id);
 	}
-	
+
 	/**
 	 * Get the forum ID from a forum name.
 	 *
@@ -323,7 +323,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('forums','id',array('name'=>$this->ipb_escape($forum_name)));
 	}
-	
+
 	/**
 	 * Get the topic ID from a topic identifier in the specified forum. It is used by comment topics, which means that the unique-topic-name assumption holds valid.
 	 *
@@ -353,7 +353,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		unset($forum);
 		return get_forum_base_url().'/index.php?showtopic='.strval($id).'&view=getnewpost';
 	}
-	
+
 	/**
 	 * Get a URL to the specified post id.
 	 *
@@ -369,7 +369,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		$url=get_forum_base_url().'/index.php?act=findpost&pid='.strval($id);
 		return $url;
 	}
-	
+
 	/**
 	 * Get an array of members who are in at least one of the given array of usergroups.
 	 *
@@ -388,7 +388,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		}
 		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE '.$_groups.' ORDER BY mgroup,id ASC',$max,$start);
 	}
-	
+
 	/**
 	 * This is the opposite of the get_next_member function.
 	 *
@@ -413,7 +413,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		$tempid=$this->connection->query_value_null_ok_full('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id>'.strval((integer)$member).' ORDER BY id');
 		return $tempid;
 	}
-	
+
 	/**
 	 * Try to find a member with the given IP address
 	 *
@@ -465,7 +465,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		if ($v==1) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Get the timestamp of a member's join date.
 	 *
@@ -476,7 +476,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'joined');
 	}
-	
+
 	/**
 	 * Get the given member's post count.
 	 *
@@ -489,7 +489,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		if (is_null($c)) return 0;
 		return $c;
 	}
-	
+
 	/**
 	 * Get the given member's topic count.
 	 *
@@ -500,7 +500,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value('topics','COUNT(*)',array('starter_id'=>$member));
 	}
-	
+
 	/**
 	 * Find out if the given member id is banned.
 	 *
@@ -517,10 +517,10 @@ class forum_driver_ipb_shared extends forum_driver_base
 		{
 			return true;
 		}
-	
+
 		return false;
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
@@ -533,7 +533,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','g_is_supmod',array('g_id'=>$usergroup))==1)) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
@@ -546,7 +546,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','g_access_cp',array('g_id'=>$usergroup))==1)) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Get the number of members currently online on the forums.
 	 *
@@ -566,7 +566,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE post_date>'.strval(time()-60*60*24));
 	}
-	
+
 	/**
 	 * Get the ids of the admin usergroups.
 	 *
@@ -576,7 +576,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return collapse_1d_complexity('g_id',$this->connection->query_select('groups',array('g_id'),array('g_access_cp'=>1)));
 	}
-	
+
 	/**
 	 * Get the ids of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
@@ -587,7 +587,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return collapse_1d_complexity('g_id',$this->connection->query_select('groups',array('g_id'),array('g_access_cp'=>0,'g_is_supmod'=>1)));
 	}
-	
+
 	/**
 	 * Get the forum usergroup list.
 	 *
@@ -603,7 +603,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		}
 		return $out;
 	}
-	
+
 	/**
 	 * Get a first known IP address of the given member.
 	 *
@@ -614,7 +614,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		return $this->get_member_row_field($member,'ip_address');
 	}
-	
+
 	/**
 	 * Gets a named field of a member row from the database.
 	 *

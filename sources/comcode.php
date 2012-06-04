@@ -200,7 +200,7 @@ function strip_comcode($text)
 	require_code('mail');
 	if (function_exists('comcode_to_clean_text')) // For benefit of installer, which disables mail.php
 		$text=comcode_to_clean_text($text);
-	
+
 	global $VALID_COMCODE_TAGS;
 	foreach (array_keys($VALID_COMCODE_TAGS) as $tag)
 	{

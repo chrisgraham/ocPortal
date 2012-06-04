@@ -101,7 +101,7 @@ class Hook_fields_theme_image
 		if (is_object($ev)) return $ev;
 
 		if ($ev=='') return '';
-		
+
 		$img_url=find_theme_image($ev);
 		/*if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
 		{

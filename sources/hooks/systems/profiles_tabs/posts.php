@@ -97,7 +97,7 @@ class Hook_Profiles_Tabs_posts
 		}
 
 		$content=do_template('OCF_MEMBER_PROFILE_POSTS',array('MEMBER_ID'=>strval($member_id_of),'TOPICS'=>$topics));
-		
+
 		return array($title,$content,$order);
 	}
 

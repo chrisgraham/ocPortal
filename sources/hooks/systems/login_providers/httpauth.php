@@ -120,7 +120,7 @@ class Hook_login_provider_httpauth
 				$member=try_httpauth_login();		
 			}
 		}
-		
+
 		return $member;
 	}
 }

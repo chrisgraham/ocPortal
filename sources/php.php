@@ -78,7 +78,7 @@ function get_php_file_api($filename,$include_code=true)
 	{
 		$line=$lines[$i];
 		$LINE=$i+1;
-		
+
 		if (strpos($line,'/'.'*NO_API_CHECK*/')!==false) return array();
 
 		// Sense class boundaries (hackerish: assumes whitespace laid out correctly)
@@ -786,7 +786,7 @@ function render_php_function_do_bits($parameter)
 	{
 		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'845d1a0286323342bc4e011b178d4ac1','NAME'=>do_lang_tempcode('VALUE_RANGE'),'VALUE'=>$parameter['range'])));
 	}
-	
+
 	return $bits;
 }
 

@@ -34,7 +34,7 @@ class Hook_commands
 		else
 		{
 			$hooks=find_all_hooks('modules','admin_occle_commands');
-			
+
 			$commands=array_keys($hooks);
 			sort($commands);
 

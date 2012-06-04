@@ -38,7 +38,7 @@ class Block_main_search
 		$info['parameters']=array('title','input_fields','limit_to','search_under','zone','sort','author','days','direction','only_titles','only_search_meta','boolean_search','conjunctive_operator','extra');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_search
 		$info['ttl']=60*2;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

@@ -18,7 +18,7 @@
 					if (!done_one) window.fauxmodal_alert('{!javascript:ATTACHMENT_SAVED;^}');
 					done_one=true;
 				}
-				
+
 				if (typeof inputs[i].swfob.setButtonDisabled!='undefined')
 				{
 					inputs[i].swfob.setButtonDisabled(false);

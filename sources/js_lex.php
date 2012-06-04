@@ -28,9 +28,9 @@ function init__js_lex()
 
 	// These are standalone lexer tokens: finding them doesn't affect the lexing state
 	// ===============================================================================
-	
+
 	global $TOKENS;
-	
+
 	// Logical combinators
 	$TOKENS['BOOLEAN_AND']='&&';
 	$TOKENS['BOOLEAN_OR']='||';
@@ -154,7 +154,7 @@ function init__js_lex()
 
 	// None matches go to be 'IDENTIFIER'
 	// Also detected are: integer_literal, float_literal, string_literal, variable, comment
-	
+
 	// Loaded lexer tokens that change the lexing state
 	// ================================================
 //	$TOKENS['REGEXP']='/'; // Ending it with "/" is implicit in the LEXER_REGEXP state

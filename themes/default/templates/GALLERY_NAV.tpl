@@ -70,7 +70,7 @@
 				{+START,IF_NON_EMPTY,{SLIDESHOW_NEXT_URL}}
 					<span id="changer_wrap">{!CHANGING_IN,xxx}</span>
 				{+END}
-			
+
 				{+START,IF_EMPTY,{NEXT_URL}}
 					{!LAST_SLIDE}
 				{+END}

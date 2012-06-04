@@ -85,7 +85,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 					}
 					while (file_exists($new_path));
 					imagepng($image,$new_path);
-			
+
 					$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
 						'a_member_id'=>get_member(),
 						'a_file_size'=>strlen($data),
@@ -406,7 +406,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 				{
 					// Delete reference (as it's not actually in the new comcode!)
 					$connection->query_delete('attachment_refs',array('id'=>$ref['id']),'',1);
-	
+
 					// Was that the last reference to this attachment? (if so -- delete attachment)
 					$test=$connection->query_value_null_ok('attachment_refs','id',array('a_id'=>$ref['a_id']));
 					if (is_null($test))

@@ -55,7 +55,7 @@ class Hook_phpnuke
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -79,7 +79,7 @@ class Hook_phpnuke
 			}
 		}
 	}
-	
+
 	/**
 	 * Convert a mySQL timestamp to a standard timestamp.
 	 *
@@ -90,7 +90,7 @@ class Hook_phpnuke
 	{
 		return strtotime($timestamp);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -122,7 +122,7 @@ class Hook_phpnuke
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -139,18 +139,18 @@ class Hook_phpnuke
 			'copyright'=>'copyright',
 			'banners'=>'is_on_banners'
 		);
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'config');
 		foreach ($rows[0] as $name=>$value)
 		{
 			if (array_key_exists($name,$config_remap)) set_option($config_remap[$name],$value);
 		}
-	
+
 		$rows=$db->query('SELECT content FROM '.$table_prefix.'message WHERE active=1 ORDER BY date DESC');
-	
+
 		set_option('welcome_message',$rows[0]['content']);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -165,10 +165,10 @@ class Hook_phpnuke
 		// Can we comment the poll?
 		$rows=$db->query('SELECT pollcomm FROM '.$table_prefix.'config');
 		$com=$rows[0]['pollcomm'];
-	
+
 		$forum_name=get_option('comments_forum_name');
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'poll_desc');
 		foreach ($rows as $row)
 		{
@@ -179,7 +179,7 @@ class Hook_phpnuke
 			{
 				if ($option['optionText']!='') $num_options++; else break;
 			}
-	
+
 			// Add poll
 			$id=add_poll($row['pollTitle'],$options[0]['optionText'],$options[1]['optionText'],$options[2]['optionText'],$options[3]['optionText'],$options[4]['optionText'],'','','','','',$num_options,1,1,1,$com,'',$row['timeStamp'],get_member(),$row['timeStamp'],$options[0]['optionCount'],$options[1]['optionCount'],$options[2]['optionCount'],$options[3]['optionCount'],$options[4]['optionCount'],0,0,0,0,0);
 
@@ -218,7 +218,7 @@ class Hook_phpnuke
 			}
 		}
 	}
-	
+
 	/**
 	 * Convert a named news category to an ocPortal news category ID.
 	 *
@@ -233,7 +233,7 @@ class Hook_phpnuke
 			$cat_id=add_news_category($title,'newscats/'.$image,'');
 		return $cat_id;
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -249,10 +249,10 @@ class Hook_phpnuke
 		// Can we comment the news?
 		$rows=$db->query('SELECT articlecomm FROM '.$table_prefix.'config');
 		$com=$rows[0]['articlecomm'];
-	
+
 		$forum_name=get_option('comments_forum_name');
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
-	
+
 		// Reviews (imports into 'technology')
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'reviews');
 		foreach ($rows as $i=>$row)
@@ -291,7 +291,7 @@ class Hook_phpnuke
 				);
 			}
 		}
-	
+
 		// Journals (imports into community for author)
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'journal');
 		foreach ($rows as $row)
@@ -321,7 +321,7 @@ class Hook_phpnuke
 				);
 			}
 		}
-	
+
 		// Stories (creates categories). NB: Dunno what stories_cat's are, but topic's are the way to go
 		$cats=$db->query('SELECT * FROM '.$table_prefix.'topics');
 		$cat_id=array();
@@ -379,7 +379,7 @@ class Hook_phpnuke
 					$this->mysql_time_to_timestamp($comment['date'])
 				);
 			}
-	
+
 			// Rating
 			if ($row['ratings']!=0)
 			{
@@ -388,7 +388,7 @@ class Hook_phpnuke
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -418,7 +418,7 @@ class Hook_phpnuke
 		foreach ($orig_parents as $cid=>$bits)
 		{
 			list($orig_parent,$category,$description)=$bits;
-	
+
 			if ($orig_parent==0) $parent_id=db_get_first_id();
 			else
 			{
@@ -461,7 +461,7 @@ class Hook_phpnuke
 				$real_rating=$row['downloadratingsummary']; // Same scale as ocPortal :)
 				$GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>'downloads','rating_for_id'=>strval($new_id),'rating_member'=>get_member(),'rating_ip'=>'127.0.0.1','rating_time'=>time(),'rating'=>$real_rating));
 			}
-	
+
 			// Homepage->Into author
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('authors','url',array('author'=>$row['name']));
 			if (is_null($test))
@@ -472,7 +472,7 @@ class Hook_phpnuke
 			{
 				$GLOBALS['SITE_DB']->query_update('authors',array('url'=>$row['homepage']),array('author'=>$row['name']));
 			}
-	
+
 			// Image
 			if (($row['screenshot']!='') && (addon_installed('galleries')))
 			{
@@ -482,11 +482,11 @@ class Hook_phpnuke
 				add_image('','download_'.strval($new_id),'',$image_url,$thumb_url,$row['validated'],1,1,1,'');
 			}
 		}
-	
+
 		$out=do_template('IMPORT_MESSAGE',array('_GUID'=>'ff9131c37b9e4fa2cff991e3479ae867','MESSAGE'=>do_lang_tempcode('IMPORT_REBUILD_CACHE',do_lang('IMAGE_THUMBNAILS'))));
 		return $out;
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -499,7 +499,7 @@ class Hook_phpnuke
 		require_code('cedi');
 
 		$root_cat=db_get_first_id();
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'encyclopedia');
 		$page_id_remap=array();
 		foreach ($rows as $i=>$row)
@@ -543,7 +543,7 @@ class Hook_phpnuke
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -585,7 +585,7 @@ class Hook_phpnuke
 				if (is_null($member)) $member=get_member();
 				$map=array($fields[0]=>$row['title'],$fields[1]=>$row['url'],$fields[2]=>$row['description']);
 				$new_id=actual_add_catalogue_entry($id,$row['validated'],'',1,1,1,$map,$row['date'],$member);
-	
+
 				// Links rating
 				if ($row['totalvotes']!=0)
 				{
@@ -595,7 +595,7 @@ class Hook_phpnuke
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -615,7 +615,7 @@ class Hook_phpnuke
 			$GLOBALS['SITE_DB']->query_insert('text',array('user_id'=>$member,'the_message'=>insert_lang_comcode($row['content'],2),'days'=>1,'order_time'=>strtotime($row['date']),'activation_time'=>NULL,'active_now'=>0,'notes'=>''));
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -629,7 +629,7 @@ class Hook_phpnuke
 		$comcode_pages_title=do_lang('COMCODE_PAGES');
 		$page=<<<END
 [title]{$comcode_pages_title}[/title]
-	
+
 END;
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'pages_categories');
 		foreach ($rows as $row)
@@ -639,7 +639,7 @@ END;
 			foreach ($pages as $pr)
 			{
 				$page.='  - [page caption="'.$pr['title'].'"]pn'.$pr['pid'].'[/page]'.chr(10);
-	
+
 				$page2=do_template('IMPORT_PHPNUKE_FCOMCODEPAGE',array('_GUID'=>'b8845762ea13b4a87c55b9ffc8c6992a','TITLE'=>$pr['title'],'SUBTITLE'=>$pr['subtitle'],'PAGE_HEADER'=>$pr['page_header'],'TEXT'=>$pr['text'],'PAGE_FOOTER'=>$pr['page_footer'],'SIGNATURE'=>$pr['signature']));
 				$path=$c_dir.'pn'.strval($pr['pid']).'.txt';
 				$myfile=@fopen($path,'wb');
@@ -659,7 +659,7 @@ END;
 		fix_permissions($path);
 		sync_file($path);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -678,7 +678,7 @@ END;
 		}
 		write_text_file('quotes',get_site_default_lang(),$out);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -696,7 +696,7 @@ END;
 			add_wordfilter_word($row['word'],$row['replacement']);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -725,7 +725,7 @@ END;
 		}
 
 		$id=actual_add_catalogue_category('ephems','ex-phpNuke','','',NULL,'');
-	
+
 		$fields=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('c_name'=>'ephems')));
 		$ephems=$db->query('SELECT * FROM '.$table_prefix.'ephem');
 		foreach ($ephems as $row)
@@ -734,7 +734,7 @@ END;
 			actual_add_catalogue_entry($id,1,'',0,0,0,$map);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *

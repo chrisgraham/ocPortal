@@ -125,7 +125,7 @@ class Hook_fields_video
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
-		
+
 		return array($ffield,$hidden);
 	}
 
@@ -161,7 +161,7 @@ class Hook_fields_video
 		}
 		return $value;
 	}
-	
+
 	/**
 	 * The field is being deleted, so delete any necessary data
 	 *

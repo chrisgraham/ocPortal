@@ -28,7 +28,7 @@ function init__ocf_groups()
 
 	global $GROUP_MEMBERS_CACHE;
 	$GROUP_MEMBERS_CACHE=array();
-	
+
 	global $PROBATION_GROUP;
 	$PROBATION_GROUP=NULL;
 
@@ -76,7 +76,7 @@ function ocf_get_all_default_groups($include_primary=false)
 {
 	global $ALL_DEFAULT_GROUPS;
 	if (array_key_exists($include_primary?1:0,$ALL_DEFAULT_GROUPS)) return $ALL_DEFAULT_GROUPS[$include_primary?1:0];
-	
+
 	$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_default'=>1,'g_is_presented_at_install'=>0),'ORDER BY g_order');
 	$groups=collapse_1d_complexity('id',$rows);
 	if ($include_primary)
@@ -151,9 +151,9 @@ function ocf_get_group_link($id)
 	$_row=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$_row)) return make_string_tempcode(do_lang('UNKNOWN'));
 	$row=$_row[0];
-	
+
 	if ($row['id']==db_get_first_id()) return make_string_tempcode(escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])));
-	
+
 	$name=ocf_get_group_name($row['id']);
 
 	$see_hidden=has_specific_permission(get_member(),'see_hidden_groups');
@@ -189,12 +189,12 @@ function ocf_get_group_property($group,$property)
 {
 	ocf_ensure_groups_cached(array($group));
 	global $USER_GROUPS_CACHED;
-	
+
 	if (($property=='name') && ($USER_GROUPS_CACHED[$group]['g_hidden']==1) && (!has_specific_permission(get_member(),'see_hidden_groups')))
 	{
 		return do_lang('UNKNOWN');
 	}
-	
+
 	return $USER_GROUPS_CACHED[$group]['g_'.$property];
 }
 
@@ -321,7 +321,7 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 		$groups=ocf_get_members_groups_ldap($member_id);
 		$GROUP_MEMBERS_CACHE[$member_id][false][$handle_probation]=$groups;
 		$GROUP_MEMBERS_CACHE[$member_id][true][$handle_probation]=$groups;
-		
+
 		// Mirror to f_group_members table, so direct queries will also get it (we need to do listings of group members, for instance)
 		$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$member_id));
 		foreach (array_keys($groups) as $group_id)

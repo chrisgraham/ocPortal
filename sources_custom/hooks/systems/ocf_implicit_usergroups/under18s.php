@@ -35,7 +35,7 @@ class Hook_implicit_usergroups_under18s
 		$eago=intval(date('Y'))-18;
 		return 'm_dob_year>'.strval($eago).' OR m_dob_year='.strval($eago).' AND (m_dob_month>'.date('m').' OR m_dob_month='.date('m').' AND m_dob_day>='.date('d').')';
 	}
-	
+
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds all members in the group.
 	 *
@@ -45,7 +45,7 @@ class Hook_implicit_usergroups_under18s
 	{
 		return list_to_map('id',$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.$this->_where()));
 	}
-	
+
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds all members in the group.
 	 *
@@ -55,7 +55,7 @@ class Hook_implicit_usergroups_under18s
 	{
 		return $GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.$this->_where());
 	}
-	
+
 	/**
 	 * Standard modular run function for implicit usergroup hooks. Finds whether the member is within the implicit usergroup.
 	 *

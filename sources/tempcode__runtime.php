@@ -29,7 +29,7 @@ It works on Hip Hop PHP, whilst the normal (but more efficient for Zend PHP) eva
 function init__tempcode__runtime()
 {
 	if (defined('ENTITY_ESCAPED')) return;
-	
+
 	define('ENTITY_ESCAPED',1); // HTML entities
 	define('SQ_ESCAPED',2); // Single quotes
 	define('DQ_ESCAPED',3); // Double quotes
@@ -279,7 +279,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		global $USER_LANG_CACHED;
 		$lang=isset($USER_LANG_CACHED)?$USER_LANG_CACHED:(function_exists('user_lang')?user_lang():'EN');
 	}
-	
+
 	if ($GLOBALS['SEMI_DEBUG_MODE'])
 	{
 		if (($codename!='tempcode_test') && ($codename!='handle_conflict_resolution') && (strtoupper($codename)!=strtoupper($codename)))
@@ -369,7 +369,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		if (!isset($FILE_ARRAY))
 		{
 			$_data=NULL;
-			
+
 			$prefix_default=get_file_base().'/themes/';
 			$prefix=($theme=='default')?$prefix_default:(get_custom_file_base().'/themes/');
 
@@ -420,7 +420,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 	$TEMPLATE_CACHE[$theme][$codename][$lang]=$_data;
 
 	$ret=$_data->bind($parameters,$codename);
-	
+
 	if ($special_treatment)
 	{
 		if ($KEEP_MARKERS)
@@ -555,11 +555,11 @@ function handle_symbol_preprocessing($bit,&$children)
 			$b_value->handle_symbol_preprocessing();
 
 			$LOADED_BLOCKS[serialize($param)]=$b_value;
-			
+
 			$REQUEST_BLOCK_NEST_LEVEL--;
 
 			return;
-			
+
 		case 'JAVASCRIPT_INCLUDE':
 			if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) return;
 			$param=$bit[3];
@@ -596,7 +596,7 @@ function handle_symbol_preprocessing($bit,&$children)
 					if (strpos($param[0],':')!==false)
 						$param=array_reverse(explode(':',$param[0],2));
 					if (substr($param[0],0,6)=='panel_') $param[0]=substr($param[0],6);
-					
+
 					global $ZONE;
 					$wide_high=is_wide_high();
 					$wide=is_wide();
@@ -659,7 +659,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			{
 				if (strpos($param[0],':')!==false)
 					$param=array_reverse(explode(':',$param[0],2));
-				
+
 				$being_included=(!array_key_exists(2,$param)) || ($param[2]=='1');
 				$tp_value=request_page($param[0],false,array_key_exists(1,$param)?$param[1]:NULL,NULL,$being_included);
 				if ($GLOBALS['RECORD_TEMPLATES_TREE'])
@@ -671,7 +671,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			$LOADED_PAGES[serialize($param)]=$tp_value;
 
 			return;
-			
+
 		case 'FRACTIONAL_EDITABLE':
 			require_javascript('javascript_fractional_edit');
 			return;
@@ -701,7 +701,7 @@ class ocp_tempcode
 		} else
 		{
 			$this->bits=$details[1];
-			
+
 			foreach ($this->bits as $seq_part)
 			{
 				if ($seq_part[1]==TC_SYMBOL)
@@ -834,7 +834,7 @@ class ocp_tempcode
 		if ($attach==='') return;
 
 		$last=count($this->bits)-1;
-		
+
 		global $SIMPLE_ESCAPED;
 
 		if (is_object($attach)) // Consider it another piece of tempcode
@@ -994,7 +994,7 @@ class ocp_tempcode
 //				handle_symbol_preprocessing($bit);
 
 		$this->codename='';
-		
+
 		return true;
 	}
 
@@ -1210,7 +1210,7 @@ class ocp_tempcode
 		}
 
 		@ini_set('ocproducts.xss_detect',$before);
-		
+
 		return '';
 	}
 

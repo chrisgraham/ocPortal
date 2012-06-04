@@ -32,10 +32,10 @@ class Hook_language
 		$info['title']=do_lang_tempcode('LANGUAGE_CACHE');
 		$info['description']=do_lang_tempcode('DESCRIPTION_LANGUAGE_CACHE');
 		$info['type']='cache';
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -45,7 +45,7 @@ class Hook_language
 	{
 		require_code('view_modes');
 		erase_cached_language();
-	
+
 		return new ocp_tempcode();
 	}
 

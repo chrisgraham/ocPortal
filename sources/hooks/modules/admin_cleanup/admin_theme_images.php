@@ -35,7 +35,7 @@ class Hook_admin_theme_images
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -44,7 +44,7 @@ class Hook_admin_theme_images
 	function run()
 	{
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'theme_images WHERE path LIKE \'themes/%/images/%\'');
-	
+
 		persistant_cache_delete('THEME_IMAGES');
 
 		$paths=$GLOBALS['SITE_DB']->query_select('theme_images',array('path','id'));

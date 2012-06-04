@@ -31,7 +31,7 @@ class Module_classifieds
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */

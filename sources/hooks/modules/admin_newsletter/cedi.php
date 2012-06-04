@@ -36,9 +36,9 @@ class Hook_whats_news_cedi
 		unset($filter); // Not used
 
 		require_lang('cedi');
-	
+
 		$new=new ocp_tempcode();
-	
+
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'seedy_pages WHERE add_date>'.strval((integer)$cutoff_time).' ORDER BY add_date DESC',300);
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
@@ -50,7 +50,7 @@ class Hook_whats_news_cedi
 			$member_id=NULL;
 			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'29571e3829c6723b2ca946436a6cadb2','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
 		}
-	
+
 		return array($new,do_lang('CEDI','','','',$lang));
 	}
 

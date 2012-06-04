@@ -38,7 +38,7 @@ class Block_side_root_galleries
 		$info['parameters']=array('param','depth','zone','show_empty');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -64,11 +64,11 @@ class Block_side_root_galleries
 		require_code('galleries');
 		require_css('galleries');
 		require_css('side_blocks');
-	
+
 		$parent_id=array_key_exists('param',$map)?$map['param']:'root';
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
-		
+
 		$show_empty=array_key_exists('show_empty',$map)?($map['show_empty']=='1'):false;
 
 		$depth=array_key_exists('depth',$map)?intval($map['depth']):0; // If depth is 1 then we go down 1 level. Only 0 or 1 is supported.
@@ -94,7 +94,7 @@ class Block_side_root_galleries
 				}
 			}
 		}
-		
+
 		$_title=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$parent_id));
 		if (!is_null($_title))
 		{
@@ -106,7 +106,7 @@ class Block_side_root_galleries
 
 		return do_template('BLOCK_SIDE_ROOT_GALLERIES',array('_GUID'=>'ed420ce9d1b1dde95eb3fd8473090228','TITLE'=>$title,'ID'=>$parent_id,'DEPTH'=>$depth!=0,'CONTENT'=>$content));
 	}
-	
+
 	/**
 	 * Show a group of subgalleries for use in a compact tree structure.
 	 *
@@ -119,7 +119,7 @@ class Block_side_root_galleries
 	function inside($zone,$galleries,$tpl,$show_empty)
 	{
 		$content=new ocp_tempcode();
-	
+
 		foreach ($galleries as $gallery)
 		{
 			if (($show_empty) || (gallery_has_content($gallery['name'])))
@@ -128,7 +128,7 @@ class Block_side_root_galleries
 				$content->attach(do_template($tpl,array('TITLE'=>get_translated_text($gallery['fullname']),'URL'=>$url)));
 			}
 		}
-	
+
 		return $content;
 	}
 

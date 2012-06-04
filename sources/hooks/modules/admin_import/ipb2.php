@@ -71,7 +71,7 @@ class Hook_ipb2 extends Hook_ipb_base
 		$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
 		$cleanup_url=$_cleanup_url->evaluate();
 		$info['message']=(get_param('type','misc')!='import' && get_param('type','misc')!='hook')?new ocp_tempcode():do_lang_tempcode('FORUM_CACHE_CLEAR',escape_html($cleanup_url));
-	
+
 		return $info;
 	}
 
@@ -88,7 +88,7 @@ class Hook_ipb2 extends Hook_ipb_base
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('custom_comcode',strval($row['bbcode_id']))) continue;
-	
+
 			global $VALID_COMCODE_TAGS;
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$row['bbcode_tag']));
 			if ((array_key_exists($row['bbcode_tag'],$VALID_COMCODE_TAGS)) || (!is_null($test)))
@@ -109,11 +109,11 @@ class Hook_ipb2 extends Hook_ipb_base
 				'tag_block_tag'=>0,
 				'tag_textual_tag'=>1
 			));
-	
+
 			import_id_remap_put('custom_comcode',strval($row['bbcode_id']),1);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -127,11 +127,11 @@ class Hook_ipb2 extends Hook_ipb_base
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('category',strval($row['id']))) continue;
-	
+
 			if ($row['id']==-1) continue;
-	
+
 			$title=@html_entity_decode($row['name'],ENT_QUOTES,get_charset());
-	
+
 			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
@@ -147,7 +147,7 @@ class Hook_ipb2 extends Hook_ipb_base
 			import_id_remap_put('category',strval($row['id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -170,12 +170,12 @@ class Hook_ipb2 extends Hook_ipb_base
 				$rows[$row_number]['parent_id']=NULL;
 				continue;
 			}
-	
+
 			if ($row['id']==-1) continue;
-	
+
 			$name=@html_entity_decode($row['name'],ENT_QUOTES,get_charset());
 			$description=strip_tags(@html_entity_decode($row['description'],ENT_QUOTES,get_charset()));
-	
+
 			// To determine whether parent_id specifies category or parent, we must check status of what it is pointing at
 			$parent_test=$db->query('SELECT use_ibc,parent_id FROM '.$table_prefix.'forums WHERE id='.strval((integer)$row['parent_id']));
 			if ($parent_test[0]['parent_id']!=-1) // Pointing to parent
@@ -189,10 +189,10 @@ class Hook_ipb2 extends Hook_ipb_base
 				$parent_forum=db_get_first_id();
 				$rows[$row_number]['parent_id']=NULL; // Mark it as good (we do not need to fix this parenting)
 			}
-	
+
 			$position=$row['position'];
 			$post_count_increment=$row['inc_postcount'];
-	
+
 			$permissions=unserialize(stripslashes($row['permission_array']));
 			$_all_groups=array_unique(explode(',',$permissions['start_perms'].','.$permissions['reply_perms'].','.$permissions['read_perms']));
 			$level2_groups=explode(',',$permissions['read_perms']);
@@ -203,15 +203,15 @@ class Hook_ipb2 extends Hook_ipb_base
 			{
 				$new_group=import_id_remap_get('group',$old_group,true);
 				if (is_null($new_group)) continue;
-	
+
 				if (in_array($old_group,$level4_groups)) $access_mapping[$new_group]=4;
 				elseif (in_array($old_group,$level3_groups)) $access_mapping[$new_group]=3;
 				elseif (in_array($old_group,$level2_groups)) $access_mapping[$new_group]=2;
 				else $access_mapping[$new_group]=0;
 			}
-	
+
 			$id_new=ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_forum,$position,$post_count_increment);
-	
+
 			$remap_id[$row['id']]=$id_new;
 			import_id_remap_put('forum',strval($row['id']),$id_new);
 		}
@@ -226,7 +226,7 @@ class Hook_ipb2 extends Hook_ipb_base
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -251,7 +251,7 @@ class Hook_ipb2 extends Hook_ipb_base
 			'etfilter_shout'=>'prevent_shouting',
 	/*		'show_max_msg_list'=>'forum_posts_per_page'  */
 		);
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'conf_settings');
 		$INFO=array();
 		foreach ($rows as $row)
@@ -269,7 +269,7 @@ class Hook_ipb2 extends Hook_ipb_base
 		set_option('smtp_sockets_use',($INFO['mail_method']=='smtp')?'1':'0');
 		set_option('session_expiry_time',strval(60*intval($INFO['session_expiration'])));
 		set_value('timezone',$INFO['time_offset']);
-	
+
 		// Now some usergroup options
 		$groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list();
 		list($width,$height)=explode('x',$INFO['avatar_dims']);
@@ -279,16 +279,16 @@ class Hook_ipb2 extends Hook_ipb_base
 		foreach (array_keys($groups) as $id)
 		{
 			if (in_array($id, $super_admin_groups)) continue;
-	
+
 			if ($INFO['allow_search']=='0')
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'search','zone_name'=>get_module_zone('search'),'group_id'=>$id));
 			if ($INFO['no_reg']=='1')
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'join','zone_name'=>get_module_zone('join'),'group_id'=>$id));
-	
+
 			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_flood_control_submit_secs'=>intval($INFO['flood_control']),'g_max_avatar_width'=>$width,'g_max_avatar_height'=>$height,'g_max_sig_length_comcode'=>$INFO['max_sig_length'],'g_max_post_length_comcode'=>$INFO['max_post_length']),array('id'=>$id),'',1);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -299,7 +299,7 @@ class Hook_ipb2 extends Hook_ipb_base
 	function import_ocf_personal_topics($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'message_topics m LEFT JOIN '.$table_prefix.'message_text t ON m.mt_msg_id=t.msg_id WHERE mt_vid_folder<>\'sent\' ORDER BY mt_date');
-	
+
 		// Group them up into what will become topics
 		$groups=array();
 		foreach ($rows as $row)
@@ -319,21 +319,21 @@ class Hook_ipb2 extends Hook_ipb_base
 			$title=str_replace('RE:','',$title);
 			$groups[strval($a).':'.strval($b).':'.@html_entity_decode($title,ENT_QUOTES,get_charset())][]=$row;
 		}
-	
+
 		// Import topics
 		foreach ($groups as $group)
 		{
 			$row=$group[0];
-	
+
 			if (import_check_if_imported('pt',strval($row['mt_msg_id']))) continue;
-	
+
 			// Create topic
 			$from_id=import_id_remap_get('member',strval($row['mt_from_id']),true);
 			if (is_null($from_id)) $from_id=$GLOBALS['OCF_DRIVER']->get_guest_id();
 			$to_id=import_id_remap_get('member',strval($row['mt_to_id']),true);
 			if (is_null($to_id)) $to_id=$GLOBALS['OCF_DRIVER']->get_guest_id();
 			$topic_id=ocf_make_topic(NULL,'','',1,1,0,0,0,$from_id,$to_id,false);
-	
+
 			$first_post=true;
 			foreach ($group as $_postdetails)
 			{
@@ -356,7 +356,7 @@ class Hook_ipb2 extends Hook_ipb_base
 				$poster=$from_id;
 				$last_edit_time=NULL;
 				$last_edit_by=NULL;
-	
+
 				ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,NULL,$last_edit_time,$last_edit_by,false,false,NULL,false);
 				$first_post=false;
 			}

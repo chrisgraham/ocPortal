@@ -33,7 +33,7 @@ class Hook_search_ocf_within_topic
 		if (!has_actual_page_access(get_member(),'topicview')) return NULL;
 
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('POSTS_WITHIN_TOPIC');
 		$info['default']=false;
@@ -45,7 +45,7 @@ class Hook_search_ocf_within_topic
 
 		return $info;
 	}
-	
+
 	/**
 	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
 	 *

@@ -48,7 +48,7 @@ class Hook_Profiles_Tabs_blog
 		$title=do_lang_tempcode('BLOG');
 
 		$order=50;
-		
+
 		$max_rows=0;
 
 		$max=get_param_integer('blogs_max',5);

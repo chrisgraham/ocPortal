@@ -28,7 +28,7 @@ class user_banunban_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
 		require_lang('ocf');
@@ -47,7 +47,7 @@ class user_banunban_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue(0==$GLOBALS['FORUM_DB']->query_value('f_members','m_is_perm_banned ',array('id'=>3)));
 	}
-	
+
 	function tearDown()
 	{
 		parent::tearDown();

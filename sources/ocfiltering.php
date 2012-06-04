@@ -98,7 +98,7 @@ function _ocfilter_eq($field_name,$var,$numeric)
 function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_name,$numeric_ids,$db,&$cached_mappings,$first=true)
 {
 	$under=array();
-	
+
 	if (is_null($table_name)) return $under;
 
 	if ($first) // We want base of subtree to be included
@@ -128,7 +128,7 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 		{
 			$cached_mappings=$db->query_select($table_name,array($field_name,$parent_name),NULL,'',1000/*reasonable limit*/);
 		}
-		
+
 		$cached_mappings_copy=$cached_mappings; // Works around weird PHP bug in some versions (due to recursing over reference parameter)
 		foreach ($cached_mappings_copy as $child)
 		{
@@ -155,7 +155,7 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 function _ocfilter_find_ids_and_parents($field_name,$table_name,$parent_field_name,$db)
 {
 	if (is_null($parent_field_name)) return array();
-	
+
 	$rows=$db->query_select($table_name,is_null($parent_field_name)?array($field_name):array($field_name,$parent_field_name));
 	$ret=array();
 
@@ -207,9 +207,9 @@ function _ocfilter_to_generic_callback($table_name,$field_name,$parent_field_nam
 function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$ids_and_parents_callback,$parent_spec__table_name,$parent_spec__parent_name,$parent_field_name,$parent_spec__field_name,$numeric_record_set_ids,$numeric_category_set_ids,$db)
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
-	
+
 	if ($filter=='') return array();
-	
+
 	if (!is_null($parent_spec__table_name))
 	{
 		if ((is_null($parent_field_name)) || (is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -217,10 +217,10 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 	{
 		if ((!is_null($parent_spec__parent_name)) || (!is_null($parent_field_name)) || (!is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
-	
+
 	$out_accept=array();
 	$out_avoid=array();
-	
+
 	$cached_mappings=mixed();
 
 	if ((is_null($ids_and_parents)) && (is_null($ids_and_parents_callback)))
@@ -248,13 +248,13 @@ function _ocfilter_to_generic($filter,$field_name,$table_name,$ids_and_parents,$
 		$tokens[]='*';
 		$filter=implode(',',$tokens);
 	}
-	
+
 	$tokens=explode(',',$filter);
 	$matches=array();
 	foreach ($tokens as $token)
 	{
 		$token=trim($token);
-		
+
 		if ($token=='*') // '*'
 		{
 			if (is_null($ids_and_parents))
@@ -447,7 +447,7 @@ function ocfilter_to_idlist_using_callback($filter,$ids_and_parents_callback,$pa
 function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NULL,$parent_spec__parent_name=NULL,$parent_field_name=NULL,$parent_spec__field_name=NULL,$numeric_record_set_ids=true,$numeric_category_set_ids=true,$db=NULL)
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
-	
+
 	if ($filter=='') return '1=2';
 	if ($filter=='*') return '1=1';
 	if ($filter==strval(db_get_first_id()).'*') return '1=1';
@@ -456,10 +456,10 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 	{
 		if ((!is_null($parent_spec__parent_name)) || (!is_null($parent_field_name)) || (!is_null($parent_spec__field_name))) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
-	
+
 	$out_or='';
 	$out_and='';
-	
+
 	$cached_mappings=mixed();
 
 	$tokens=explode(',',$filter);
@@ -467,7 +467,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 	foreach ($tokens as $token)
 	{
 		$token=trim($token);
-		
+
 		if ($token=='*') // '*'
 		{
 			if ($out_or!='') $out_or.=' OR ';

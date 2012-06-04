@@ -28,7 +28,7 @@ class iotd_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('iotds');
 
 		$this->iotd_id=add_iotd('google.com','welcome','Google','images/google.jpg',0,0,0,0,'Notes ?',NULL,NULL,0,NULL,0,NULL);
@@ -42,7 +42,7 @@ class iotd_test_set extends ocp_test_case
 
 		$this->assertTrue('yahoo.com'==$GLOBALS['SITE_DB']->query_value('iotd','url',array('id'=>$this->iotd_id)));
 	}
-	
+
 	function tearDown()
 	{
 		delete_iotd($this->iotd_id);

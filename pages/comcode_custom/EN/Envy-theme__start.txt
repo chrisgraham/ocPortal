@@ -3,7 +3,7 @@
 		[title="1"]Welcome to {$SITE_NAME*}[/title]
 
 		[title="4"]About us[/title]
-		
+
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pulvinar suscipit lacus, ac dictum sapien volutpat tempus. Integer et facilisis turpis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc in lacus nec justo ornare pretium. Cras sagittis diam non turpis condimentum vel auctor sapien dictum. Aliquam erat volutpat. Morbi at cursus odio. Phasellus eu arcu non erat egestas rhoncus. Pellentesque sit amet nisl ac dolor aliquet volutpat ut ac lorem.
 
 		[surround="more-link"][page=":about"]more[/page][/surround]
@@ -11,7 +11,7 @@
 
 	[surround="sale"]
 		[block="4" catalogue="products" display_type="1"]main_recent_cc_entries[/block]
-		
+
 		[surround="more-link"][page="site:catalogues:category:catalogue_name=products"]more[/page][/surround]
 	[/surround]
 

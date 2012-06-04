@@ -29,9 +29,9 @@ class Hook_ocf_topics
 	function info()
 	{
 		if (get_forum_type()!='ocf') return NULL; else ocf_require_all_forum_stuff();
-	
+
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['title']=do_lang_tempcode('FORUM_TOPICS');
 		$info['description']=do_lang_tempcode('DESCRIPTION_CACHE_TOPICS');
@@ -39,7 +39,7 @@ class Hook_ocf_topics
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -65,7 +65,7 @@ class Hook_ocf_topics
 				if (is_null($topic['t_forum_id'])) $topic['t_forum_id']=NULL;
 				$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.(is_null($topic['t_forum_id'])?'NULL':strval($topic['t_forum_id'])).' WHERE p_topic_id='.(is_null($topic['id'])?'NULL':strval($topic['id'])));
 			}
-			
+
 			$start+=500;
 		}
 		while (array_key_exists(0,$topics));
@@ -79,7 +79,7 @@ class Hook_ocf_topics
 			{
 				$total_votes=$GLOBALS['FORUM_DB']->query_value('f_poll_votes','COUNT(*)',array('pv_poll_id'=>$poll['id']));
 				$GLOBALS['FORUM_DB']->query_update('f_polls',array('po_cache_total_votes'=>$total_votes),array('id'=>$poll['id']),'',1);
-	
+
 				$answers=$GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('id'),array('pa_poll_id'=>$poll['id']));
 				foreach ($answers as $answer)
 				{

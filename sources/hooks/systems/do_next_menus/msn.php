@@ -33,7 +33,7 @@ class Hook_do_next_menus_msn
 
 		$zone=get_page_zone('netlink',false);
 		if (is_null($zone)) return array();
-		
+
 		return array(
 			array('structure','multisitenetwork',array('netlink',array(),$zone),do_lang_tempcode('PARTNER_SITES'),('DOC_NETLINK_1')),
 		);

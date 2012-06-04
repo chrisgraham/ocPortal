@@ -151,7 +151,7 @@ class Hook_fields_random
 			{
 				$value.=$rand_array[mt_rand(0,$c)];
 			}
-	
+
 			if (!addon_installed('catalogues')) break;
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_integer','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
 		}

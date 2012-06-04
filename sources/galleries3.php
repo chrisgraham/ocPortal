@@ -34,12 +34,12 @@ function download_gallery_script()
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
 	}
-	
+
 	require_lang('galleries');
 	require_code('zip');
-	
+
 	$cat=get_param('cat');
-	
+
 	if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
 	check_specific_permission('may_download_gallery',array('galleries',$cat));
@@ -49,7 +49,7 @@ function download_gallery_script()
 	$gallery_rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$cat),'',1);
 	if (!array_key_exists(0,$gallery_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$gallery_row=$gallery_rows[0];
-	
+
 	// Send header
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
 	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
@@ -77,7 +77,7 @@ function download_gallery_script()
 		} else
 		{
 			continue; // Actually we won't include them, if they are not local it implies it is not reasonable for them to lead to server load, and they may not even be native files
-			
+
 			$time=$row['add_date'];
 			$name=basename(urldecode($row['url']));
 			$data=http_download_file($row['url']);

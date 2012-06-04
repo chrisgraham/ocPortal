@@ -39,7 +39,7 @@ class Hook_members
 			//We're listing the users
 			$cnt=$GLOBALS['SITE_DB']->query_value('f_members','COUNT(*)');
 			if ($cnt>1000) return false; // Too much to process
-			
+
 			$users=$GLOBALS['SITE_DB']->query_select('f_members',array('m_username'));
 			foreach ($users as $user) $listing[$user['m_username']]=array();
 		}
@@ -294,7 +294,7 @@ class Hook_members
 			//We're in a member's usergroup directory, and all files should contain '1' :)
 			return '1';
 		}
-		
+
 		return false; //Files shouldn't even exist anywhere else!
 	}
 

@@ -61,7 +61,7 @@ class Module_cms_banners extends standard_aed_module
 				attach_message(do_lang_tempcode('BANNERS_NOT_ENABLED',escape_html($config_url)),'warn');
 			}
 		}
-		
+
 		if ((has_specific_permission(get_member(),'banner_free')) && (get_option('admin_banners')=='0'))
 		{
 			attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'),'inform');
@@ -200,9 +200,9 @@ class Module_cms_banners extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','name ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -271,7 +271,7 @@ class Module_cms_banners extends standard_aed_module
 
 			$fields->attach(results_entry($fr),true);
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -351,7 +351,7 @@ class Module_cms_banners extends standard_aed_module
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-		
+
 		return $this->get_form_fields($id,$myrow['img_url'],$myrow['site_url'],get_translated_text($myrow['caption']),$myrow['notes'],$myrow['importance_modulus'],$myrow['campaign_remaining'],$myrow['the_type'],$myrow['expiry_date'],$myrow['submitter'],$myrow['validated'],$myrow['b_type'],$myrow['b_title_text']);
 	}
 
@@ -483,9 +483,9 @@ class Module_cms_banners_cat extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','id ASC',true);
 		list($sortable,$sort_order)=array(substr($current_ordering,0,strrpos($current_ordering,' ')),substr($current_ordering,strrpos($current_ordering,' ')+1));
 		$sortables=array(
@@ -528,7 +528,7 @@ class Module_cms_banners_cat extends standard_aed_module
 
 			$fields->attach(results_entry(array(($row['id']=='')?do_lang('GENERAL'):$row['id'],($row['t_is_textual']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),integer_format($row['t_image_width']),integer_format($row['t_image_height']),clean_file_size($row['t_max_file_size']),($row['t_comcode_inline']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$total,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -615,7 +615,7 @@ class Module_cms_banners_cat extends standard_aed_module
 		$comcode_inline=post_param_integer('comcode_inline',0);
 
 		edit_banner_type($id,post_param('new_id'),$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
-		
+
 		$this->new_id=post_param('new_id');
 
 		return do_lang_tempcode('ADD_BANNER_TEMPLATING');

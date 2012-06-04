@@ -55,7 +55,7 @@ function display_seconds_period($seconds)
 function display_time_period($seconds)
 {
 	if ($seconds<0) return '-'.display_time_period(-$seconds);
-	
+
 	if (($seconds<=3*60) && (($seconds%(60)!=0) || ($seconds==0))) return do_lang('SECONDS',integer_format($seconds));
 	if (($seconds<=3*60*60) && ($seconds%(60*60)!=0)) return do_lang('MINUTES',integer_format(intval(round(floatval($seconds)/60.0))));
 	if (($seconds<=3*60*60*24) && ($seconds%(60*60*24)!=0)) return do_lang('HOURS',integer_format(intval(round(floatval($seconds)/60.0/60.0))));
@@ -88,7 +88,7 @@ function get_server_timezone()
 	{
 		if ($SERVER_TIMEZONE!='') return $SERVER_TIMEZONE;
 	}
-	
+
 	return 'UTC';
 }
 
@@ -202,9 +202,9 @@ function convert_timezone_offset_to_formal_timezone($offset)
 			return $zone;
 		}
 	}
-	
+
 	// Could not find one
-	
+
 	if (!is_numeric(get_value('timezone'))) return get_site_timezone();
 	return get_server_timezone();
 }
@@ -254,7 +254,7 @@ function usertime_to_utctime($timestamp=NULL,$member=NULL)
 function my_strftime($format,$timestamp=NULL)
 {
 	if (is_null($timestamp)) $timestamp=time();
-	
+
 	$ret=strftime(str_replace('%i',date('g',$timestamp),str_replace('%k',date('S',$timestamp),$format)),$timestamp);
 	if ($ret===false) $ret='';
 	return $ret;
@@ -356,9 +356,9 @@ function locale_filter($ret)
 function get_timezoned_time($timestamp,$avoid_contextual_dates=false,$member=NULL,$utc_time=false)
 {
 	if (is_null($member)) $member=get_member();
-	
+
 	if (get_option('use_contextual_dates')=='0') $avoid_contextual_dates=true;
-	
+
 	$date_string=do_lang('date_withinday');
 	$usered_timestamp=$utc_time?$timestamp:utctime_to_usertime($timestamp,$member);
 	$ret=my_strftime($date_string,$usered_timestamp);

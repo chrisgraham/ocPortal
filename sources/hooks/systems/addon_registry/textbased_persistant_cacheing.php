@@ -30,7 +30,7 @@ class Hook_addon_registry_textbased_persistant_cacheing
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

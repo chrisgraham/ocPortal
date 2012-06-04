@@ -59,7 +59,7 @@ class Block_main_recent_members
 		$filter=array_key_exists('filter',$map)?$map['filter']:'*';
 
 		$out=new ocp_tempcode();
-		
+
 		require_code('ocf_members');
 		require_code('ocf_members2');
 		require_code('ocfiltering');

@@ -30,7 +30,7 @@ class Hook_members_ocworld
 	function run($member_id)
 	{
 		if (!addon_installed('ocworld')) return array();
-		
+
 		$zone=get_page_zone('ocworld',false);
 		if (is_null($zone)) return array();
 		if (!has_zone_access(get_member(),$zone)) return array();

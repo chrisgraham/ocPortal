@@ -19,7 +19,7 @@
 	</div>
 	<div style="display: none;" id="xtab3" class="tab_content">
 		<h2>New User?</h2>
-		
+
 		<p>&raquo; <a href="{JOIN_LINK*}">{!_JOIN}</a></p>
 	</div>
 </div>

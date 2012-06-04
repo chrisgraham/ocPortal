@@ -9,7 +9,7 @@
 				<input onclick="disable_button_just_clicked(this);{+START,IF,{$HAS_SPECIFIC_PERMISSION,comcode_dangerous}} return ajax_form_submit(event,this.form,'{BLOCK_NAME~;*}','{MAP~;*}');{+END}" class="button_pageitem" type="submit" onmouseover="this.form.disable_size_change=true;" onmouseout="this.form.disable_size_change=false;" value="{!SAVE}" />
 			</div>
 		</form>
-		
+
 		<script type="text/javascript">// <![CDATA[
 			require_javascript('javascript_ajax');
 			require_javascript('javascript_validation');

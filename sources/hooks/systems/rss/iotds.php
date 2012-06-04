@@ -37,7 +37,7 @@ class Hook_rss_iotds
 		unset($_filters); // Not used
 
 		if (!addon_installed('iotds')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'iotds')) return NULL;
 
 		$content=new ocp_tempcode();

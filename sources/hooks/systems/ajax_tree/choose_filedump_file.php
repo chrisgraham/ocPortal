@@ -115,7 +115,7 @@ class Hook_choose_filedump_file
 				}
 			}
 		}
-		
+
 		return make_string_tempcode($out);
 	}
 

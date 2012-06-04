@@ -157,14 +157,14 @@ class Hook_login_provider_openid
 				}
 			}
 		}
-	
+
 		catch(ErrorException $e)
 		{
 			require_code('site');
 			require_code('site2');
 			attach_message($e->getMessage(),'warn');
 		}
-	
+
 		return $member;
 	}
 }

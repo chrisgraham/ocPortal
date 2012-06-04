@@ -27,7 +27,7 @@
 
 	<div>
 		{HIDDEN}
-	
+
 		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
@@ -40,7 +40,7 @@
 				{FIELDS}
 			</tbody>
 		</table></div>
-	
+
 		{+START,IF_NON_EMPTY,{SUBMIT_NAME}}
 			{+START,INCLUDE,FORM_STANDARD_END}{+END}
 		{+END}

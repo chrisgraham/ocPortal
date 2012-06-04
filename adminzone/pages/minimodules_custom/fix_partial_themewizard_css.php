@@ -85,7 +85,7 @@ while (($sheet=readdir($dh))!==false)
 			fclose($fp);
 			fix_permissions($saveat);
 			sync_file($saveat);
-		
+
 			echo '<li>'.escape_html($sheet).'</li>';
 		}
 	}

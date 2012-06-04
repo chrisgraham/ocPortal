@@ -53,9 +53,9 @@ class Hook_content_meta_aware_tester
 			'add_time_field'=>NULL,
 			'edit_time_field'=>NULL,
 			'validated_field'=>NULL,
-			
+
 			'addon_name'=>'tester',
-			
+
 			'module'=>'tester',
 		);
 	}

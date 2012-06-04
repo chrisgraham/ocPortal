@@ -29,9 +29,9 @@ class Hook_admin_stats_downloads
 	function info()
 	{
 		if (!addon_installed('downloads')) return NULL;
-		
+
 		require_lang('downloads');
-		
+
 		return array(
 			array('downloads'=>'SECTION_DOWNLOADS',),
 			array('downloads',array('_SELF',array('type'=>'downloads'),'_SELF'),do_lang('SECTION_DOWNLOADS'),('DESCRIPTION_DOWNLOADS_STATISTICS')),

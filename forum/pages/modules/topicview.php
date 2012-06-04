@@ -40,7 +40,7 @@ class Module_topicview
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_topicview
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -61,7 +61,7 @@ class Module_topicview
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_topicview');
 		require_css('ocf');
-	
+
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='max';
 		$NON_CANONICAL_PARAMS[]='start';
@@ -430,7 +430,7 @@ class Module_topicview
 			}
 		}
 		$buttons=ocf_screen_button_wrap($button_array);
-	
+
 		// Poll
 		if (array_key_exists('poll',$topic_info))
 		{

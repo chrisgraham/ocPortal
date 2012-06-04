@@ -44,7 +44,7 @@
 				</th>
 			</tr>
 		</thead>
-	
+
 		<tbody>
 			{FORUMS}
 			<tr>

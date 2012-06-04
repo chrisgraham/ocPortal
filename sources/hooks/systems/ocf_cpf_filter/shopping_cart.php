@@ -32,7 +32,7 @@ class Hook_ocf_cpf_filter_shopping_cart
 
 		// Contact details
 		return array('firstname'=>1,'lastname'=>1,'building_name_or_number'=>1,'state'=>1,'country'=>1,'post_code'=>1,'city'=>1);
-	
+
 	}
 }
 

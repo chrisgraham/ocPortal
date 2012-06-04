@@ -29,7 +29,7 @@ class menu_test_set extends ocp_test_case
 	{
 		parent::setUp();
 		require_code('menus2');
-		
+
 		$this->menu_id=add_menu_item('Test',1,NULL,'testing menu','www.ocportal.com',1,'downloads',0,1,'testing');
 
 		// Test the forum was actually created
@@ -44,7 +44,7 @@ class menu_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('Service'==$GLOBALS['SITE_DB']->query_value('menu_items','i_menu',array('id'=>$this->menu_id)));
 	}
-	
+
 	function tearDown()
 	{
 		delete_menu_item($this->menu_id);

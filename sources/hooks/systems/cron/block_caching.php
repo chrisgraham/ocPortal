@@ -86,7 +86,7 @@ class Hook_cron_block_caching
 				{
 					$info=$object->cacheing_environment();
 					$ttl=$info['ttl'];
-					
+
 					$_cache_identifier=array();
 					$cache_on=$info['cache_on'];
 					if (is_array($cache_on))

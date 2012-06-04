@@ -34,7 +34,7 @@ class Module_cms_booking extends standard_aed_module
 	var $orderer='sort_order';
 	var $title_is_multi_lang=true;
 	var $table='bookable';
-	
+
 	var $donext_type=NULL;
 
 	/**
@@ -46,7 +46,7 @@ class Module_cms_booking extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'BOOKINGS','ab'=>'ADD_BOOKING','eb'=>'EDIT_BOOKING'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
@@ -81,7 +81,7 @@ class Module_cms_booking extends standard_aed_module
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The do-next manager for before content management.
 	 *
@@ -101,9 +101,9 @@ class Module_cms_booking extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','sort_order ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -148,7 +148,7 @@ class Module_cms_booking extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -355,9 +355,9 @@ class Module_cms_booking_supplements extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','sort_order ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -392,7 +392,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -421,7 +421,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 				'supports_notes'=>'BINARY',
 				'sort_order'=>'INTEGER',
 			);
-			
+
 			$bookables=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('bookable',array('id')));
 		}
 
@@ -552,9 +552,9 @@ class Module_cms_booking_blacks extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','blacked_from_year,blacked_from_month,blacked_from_day ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -591,7 +591,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -732,7 +732,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 	var $table='booking';
 	var $type_code='b';
 	var $non_integer_id=true;
-	
+
 	var $donext_type=NULL;
 
 	/**
@@ -781,7 +781,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 				$request[]=$r;
 			}
 		}
-		
+
 		$max=get_param_integer('max',20);
 		$start=get_param_integer('start',0);
 
@@ -797,13 +797,13 @@ class Module_cms_booking_bookings extends standard_aed_module
 
 			$_entries[]=$row;
 		}
-		
+
 		if ((!is_null($orderer)) && (!is_null($where)))
 		{
 			$this->cached_entry_rows=$_entries;
 			$this->cached_max_rows=count($request);
 		}
-		
+
 		return array($_entries,count($request));
 	}
 
@@ -816,11 +816,11 @@ class Module_cms_booking_bookings extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		attach_message(do_lang_tempcode('EASIER_TO_EDIT_BOOKING_VIA_MEMBER'),'inform');
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','b_year DESC,b_month DESC,b_day DESC');
 		list(,$sortable,$sort_order)=preg_split('#(.*) (ASC|DESC)#',$current_ordering,2,PREG_SPLIT_DELIM_CAPTURE);
 		$sortables=array(
@@ -863,7 +863,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -893,7 +893,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 				{
 					inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 				}
-				
+
 				$bookables_list=new ocp_tempcode();
 				foreach ($bookables as $bookable)
 				{
@@ -950,7 +950,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 				$quantity=$details['supplements'][$supplement_row['id']]['quantity'];
 				$notes=$details['supplements'][$supplement_row['id']]['notes'];
 			}
-			
+
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SUPPLEMENT',get_translated_tempcode($supplement_row['title'])))));
 
 			if ($supplement_row['supports_quantities']==1)

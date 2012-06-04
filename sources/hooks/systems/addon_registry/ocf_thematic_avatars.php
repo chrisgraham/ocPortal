@@ -30,7 +30,7 @@ class Hook_addon_registry_ocf_thematic_avatars
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

@@ -22,12 +22,12 @@ function unit_testing_run()
 {
 	@ini_set('ocproducts.xss_detect','0');
 	@ini_set('ocproducts.type_strictness','0'); // TODO: Fix simpletest to be type strict, then remove this line
-	
+
 	global $SCREEN_TEMPLATE_CALLED;
 	$SCREEN_TEMPLATE_CALLED='';
 
 	header('Content-Type: text/html');
-	
+
 	require_code('_tests/simpletest/unit_tester.php');
 	require_code('_tests/simpletest/web_tester.php');
 	require_code('_tests/simpletest/mock_objects.php');
@@ -46,9 +46,9 @@ function unit_testing_run()
 			{
 				run_testset($set);
 			}
-			
+
 			testset_do_footer();
-			
+
 			return;
 		}
 
@@ -68,7 +68,7 @@ function unit_testing_run()
 		echo '<li><a href="?id='.escape_html($set).'">'.escape_html($set).'</a></li>'.chr(10);
 	}
 	echo '</ul>';
-	
+
 	testset_do_footer();
 }
 
@@ -108,7 +108,7 @@ function testset_do_header($title)
 	<head>
 		<title>{$title}</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-		
+
 		<style type="text/css">
 END;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents(get_file_base().'/themes/default/css/global.css'))))));

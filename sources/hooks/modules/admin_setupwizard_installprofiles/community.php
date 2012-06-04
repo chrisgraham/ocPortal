@@ -44,7 +44,7 @@ class Hook_admin_setupwizard_installprofiles_community
 			array('ocf_forum','points','pointstore','ocf_thematic_avatars','ocf_cartoon_avatars','calendar','chat','iotds','polls','users_online_block','forum_blocks','polls','newsletter'),
 			array());
 	}
-	
+
 	/**
 	 * Get a map of default settings associated with this installation profile
 	 *
@@ -71,7 +71,7 @@ class Hook_admin_setupwizard_installprofiles_community
 			'rules'=>'liberal',
 		);
 	}
-	
+
 	/**
 	 * Find details of desired blocks
 	 *
@@ -106,7 +106,7 @@ class Hook_admin_setupwizard_installprofiles_community
 			),
 		);
 	}
-	
+
 	/**
 	 * Get options for blocks in this profile
 	 *
@@ -117,12 +117,12 @@ class Hook_admin_setupwizard_installprofiles_community
 		return array(
 		);
 	}
-	
+
 	/**
 	 * Execute any special code needed to put this install profile into play
 	 */
 	function install_code()
 	{
 	}
-	
+
 }

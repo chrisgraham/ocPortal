@@ -30,12 +30,12 @@
 				<th>{!SUBMITTER}</th>
 				<td>{USERNAME}</td>
 			</tr>
-	
+
 			<tr>
 				<th>{!DAYS_ORDERED}</th>
 				<td>{DAYS_ORDERED*}</td>
 			</tr>
-	
+
 			<tr>
 				<th>{!ORDER_DATE}</th>
 				<td>{DATE*}</td>

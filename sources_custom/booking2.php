@@ -132,7 +132,7 @@ function reconstitute_booking_requests(&$request)
 				unset($request[$i]);
 				$request=array_values($request);
 				$i--;
-				
+
 				$changes=true;
 			}
 		}
@@ -223,7 +223,7 @@ function get_bookable_details_from_form()
 	{
 		if ($active_to<$active_from) warn_exit(do_lang_tempcode('DATE_AROUND'));
 	}
-	
+
 	require_code('ecommerce');
 
 	$bookable_details=array(
@@ -402,7 +402,7 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 			'bookable_id'=>$bookable_id,
 		));
 	}
-	
+
 	log_it('ADD_BOOKABLE',strval($bookable_id),$title);
 
 	return $bookable_id;
@@ -475,7 +475,7 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 			));
 		}
 	}
-	
+
 	log_it('EDIT_BOOKABLE',strval($bookable_id),$title);
 }
 
@@ -488,7 +488,7 @@ function delete_bookable($bookable_id)
 {
 	if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('booking','id',array('bookable_id'=>$bookable_id))))
 		warn_exit(do_lang_tempcode('CANNOT_DELETE_BOOKINGS_EXIST'));
-	
+
 	$_old_bookable=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),array('id'=>$bookable_id),'',1);
 	if (!array_key_exists(0,$_old_bookable)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
@@ -512,7 +512,7 @@ function delete_bookable($bookable_id)
 	$GLOBALS['SITE_DB']->query_delete('bookable_codes',array('bookable_id'=>$bookable_id));
 
 	$GLOBALS['SITE_DB']->query_delete('bookable_supplement_for',array('bookable_id'=>$bookable_id));
-	
+
 	log_it('DELETE_BOOKABLE',strval($bookable_id),$title);
 }
 

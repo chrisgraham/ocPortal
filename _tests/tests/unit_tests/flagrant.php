@@ -28,7 +28,7 @@ class flagrant_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('flagrant');
 
 		$this->flag_id=add_flagrant('test',3,'Welcome to ocPortal',1);
@@ -42,7 +42,7 @@ class flagrant_test_set extends ocp_test_case
 
 		$this->assertTrue('Thank you'==$GLOBALS['SITE_DB']->query_value('text','notes',array('id'=>$this->flag_id)));
 	}
-	
+
 	function tearDown()
 	{
 		delete_flagrant($this->flag_id);

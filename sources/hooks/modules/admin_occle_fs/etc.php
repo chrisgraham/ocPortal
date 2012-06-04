@@ -37,7 +37,7 @@ class Hook_etc
 		load_options();
 
 		$ret=array_keys($OPTIONS);
-		
+
 		return $ret;
 	}
 

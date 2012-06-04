@@ -40,7 +40,7 @@ class Module_cms_authors
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_cms_authors
 	{
 		return array('misc'=>'AUTHOR_MANAGE','_ad'=>'EDIT_MY_AUTHOR_PROFILE','ed'=>'EDIT_MERGE_AUTHORS');
 	}
-	
+
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
@@ -74,10 +74,10 @@ class Module_cms_authors
 
 		require_code('authors');
 		require_lang('authors');
-	
+
 		// Decide what we're doing
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->misc();
 		if ($type=='_ad') return $this->_ad();
 		if ($type=='__ad') return $this->__ad();
@@ -267,7 +267,7 @@ class Module_cms_authors
 				$_url='mailto:'.$_url;
 			}
 			$url=(strpos($_url,'mailto:')===false)?fixup_protocolless_urls($_url):$_url;
-			
+
 			add_author($author,$url,$forum_handle,post_param('description'),post_param('skills'),post_param('meta_keywords'),post_param('meta_description'));
 
 			require_code('fields');
@@ -332,10 +332,10 @@ class Module_cms_authors
 	function ed()
 	{
 		$title=get_page_title('EDIT_MERGE_AUTHORS');
-	
+
 		$authors=$this->nice_get_authors();
 		if ($authors->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
-	
+
 		require_code('form_templates');
 		$fields=form_input_list(do_lang_tempcode('NAME'),'','author',$authors,NULL,true);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_ad'),'_SELF');
@@ -371,12 +371,12 @@ class Module_cms_authors
 		$to=post_param('mauthor2');
 
 		merge_authors($from,$to);
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('AUTHOR_MANAGE'))));
 
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * Get a list of authors.
 	 *
@@ -406,7 +406,7 @@ class Module_cms_authors
 			$selected=($author==$it);
 			$out->attach(form_input_list_entry($author,$selected,$author));
 		}
-	
+
 		return $out;
 	}
 

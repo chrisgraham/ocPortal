@@ -31,12 +31,12 @@ if (class_exists('Compressor')) // 'if' is for the code quality checker
 
 class Compressor{
 
-	
+
 	function compressor($param)
 	{
 		$this->__construct($param);
 	}
-	
+
 	function __construct($param)
 	{
 		$this->start_time= $this->get_microtime();
@@ -55,14 +55,14 @@ class Compressor{
 			$this->full_cache_file= $this->path."edit_area_full.js";
 			$this->gzip_cache_file= $this->path."edit_area_full.gz";
 		}
-		
+
 		$this->check_gzip_use();
 		$this->send_headers();
 		$this->check_cache();
 		$this->load_files();
 		$this->send_datas();
 	}
-	
+
 	function send_headers()
 	{
 		header("Content-type: text/javascript; charset: UTF-8");
@@ -71,15 +71,15 @@ class Compressor{
 		if($this->use_gzip)
 			header("Content-Encoding: ".$this->gzip_enc_header);
 	}
-	
+
 	function check_gzip_use()
 	{
 		$encodings = array();
 		$desactivate_gzip=false;
-				
+
 		if (isset($_SERVER['HTTP_ACCEPT_ENCODING']))
 			$encodings = explode(',', strtolower(preg_replace("/\s+/", "", $_SERVER['HTTP_ACCEPT_ENCODING'])));
-		
+
 		// desactivate gzip for IE version < 7
 		$ie=array();
 		if(preg_match("/(?:msie )([0-9.]+)/i", $_SERVER['HTTP_USER_AGENT'], $ie))
@@ -87,7 +87,7 @@ class Compressor{
 			if($ie[1]<7)
 				$desactivate_gzip=true;	
 		}
-		
+
 		// Check for gzip header or northon internet securities
 		if (!$desactivate_gzip && $this->param['use_gzip'] && (in_array('gzip', $encodings) || in_array('x-gzip', $encodings) || isset($_SERVER['---------------'])) && function_exists('ob_gzhandler') && ini_get('zlib.output_compression')=='0')
 		{
@@ -100,7 +100,7 @@ class Compressor{
 			$this->cache_file=$this->full_cache_file;
 		}
 	}
-	
+
 	function check_cache()
 	{
 		// Only gzip the contents if clients and server support it
@@ -158,16 +158,16 @@ class Compressor{
 		}
 		return false;
 	}
-	
+
 	function load_files()
 	{
 		$loader= $this->get_content("edit_area_loader.js")."\n";
-		
+
 		// get the list of other files to load
 		$loader= preg_replace("/(t\.scripts_to_load=\s*)\[([^\]]*)\];/e"
 					, "\$this->replace_scripts('script_list', '\\1', '\\2')"
 					, $loader);
-	
+
 		$loader= preg_replace("/(t\.sub_scripts_to_load=\s*)\[([^\]]*)\];/e"
 					, "\$this->replace_scripts('sub_script_list', '\\1', '\\2')"
 					, $loader);
@@ -192,10 +192,10 @@ class Compressor{
 			closedir($dir);
 		}
 		$loader	= str_replace( '/*syntax_display_name_AUTO-FILL-BY-COMPRESSOR*/', implode( ",", $a_display_name ), $loader );
-					
+
 		$this->datas= $loader;
 		$this->compress_javascript($this->datas);
-		
+
 		// load other scripts needed for the loader
 		preg_match_all('/"([^"]*)"/', $this->script_list, $match);
 		foreach($match[1] as $key => $value)
@@ -206,12 +206,12 @@ class Compressor{
 		}
 		//$this->datas);
 		//$this->datas= preg_replace('/(( |\t|\r)*\n( |\t)*)+/s', "", $this->datas);
-		
+
 		// improved compression step 1/2	
 		$this->datas= preg_replace(array("/(\b)EditAreaLoader(\b)/", "/(\b)editAreaLoader(\b)/", "/(\b)editAreas(\b)/"), array("EAL", "eAL", "eAs"), $this->datas);
 		//$this->datas= str_replace(array("EditAreaLoader", "editAreaLoader", "editAreas"), array("EAL", "eAL", "eAs"), $this->datas);
 		$this->datas.= "var editAreaLoader= eAL;var editAreas=eAs;EditAreaLoader=EAL;";
-	
+
 		// load sub scripts
 		$sub_scripts="";
 		$sub_scripts_list= array();
@@ -220,7 +220,7 @@ class Compressor{
 		{
 			$sub_scripts_list[]= preg_replace("/\\|\//i", "", $value).".js";
 		}
-	
+
 		if($this->load_all_plugins)
 		{
 			// load plugins scripts
@@ -238,7 +238,7 @@ class Compressor{
 				closedir($dir);
 			}
 		}
-						
+
 		foreach($sub_scripts_list as $value)
 		{
 			$sub_scripts.= $this->get_javascript_content($value);
@@ -247,11 +247,11 @@ class Compressor{
 		$sub_scripts= preg_replace(array("/(\b)editAreaLoader(\b)/", "/(\b)editAreas(\b)/", "/(\b)editArea(\b)/", "/(\b)EditArea(\b)/"), array("eAL", "eAs", "eA", "EA"), $sub_scripts);
 	//	$sub_scripts= str_replace(array("editAreaLoader", "editAreas", "editArea", "EditArea"), array("eAL", "eAs", "eA", "EA"), $sub_scripts);
 		$sub_scripts.= "var editArea= eA;EditArea=EA;";
-		
+
 		
 		// add the scripts
 	//	$this->datas.= sprintf("editAreaLoader.iframe_script= \"<script type='text/javascript'>%s</script>\";\n", $sub_scripts);
-	
+
 	
 		// add the script and use a last compression 
 		if( $this->param['compress'] )
@@ -277,28 +277,28 @@ class Compressor{
 		{
 			$last_comp	= array();
 		}
-		
+
 		$js_replace= '';
 		foreach( $last_comp as $key => $val )
 			$js_replace .= ".replace(/". $key ."/g,'". str_replace( array("\n", "\r"), array('\n','\r'), $val ) ."')";
-		
+
 		$this->datas.= sprintf("editAreaLoader.iframe_script= \"<script type='text/javascript'>%s</script>\"%s;\n",
 							str_replace( array_values($last_comp), array_keys($last_comp), $sub_scripts ), 
 							$js_replace);
-		
+
 		if($this->load_all_plugins)
 			$this->datas.="editAreaLoader.all_plugins_loaded=true;\n";
-	
+
 		
 		// load the template
 		$this->datas.= sprintf("editAreaLoader.template= \"%s\";\n", $this->get_html_content("template.html"));
 		// load the css
 		$this->datas.= sprintf("editAreaLoader.iframe_css= \"<style>%s</style>\";\n", $this->get_css_content("edit_area.css"));
-				
+
 	//	$this->datas= "function editArea(){};editArea.prototype.loader= function(){alert('bouhbouh');} var a= new editArea();a.loader();";
-				
+
 	}
-	
+
 	function send_datas()
 	{
 		if($this->param['debug'])
@@ -328,20 +328,20 @@ class Compressor{
 			if($this->param['use_disk_cache'])
 				$this->file_put_contents($this->gzip_cache_file, $this->gzip_datas, $mtime);
 		}
-		
+
 		// generate full js file and cache it if using disk cache			
 		if($this->param['use_disk_cache'])
 			$this->file_put_contents($this->full_cache_file, $this->datas, $mtime);
-		
+
 		// generate output
 		if($this->use_gzip)
 			echo $this->gzip_datas;
 		else
 			echo $this->datas;
-			
+
 //		die;
 	}
-			
+
 	
 	function get_content($end_uri)
 	{
@@ -361,7 +361,7 @@ class Compressor{
 			return "";
 		}
 	}
-	
+
 	function get_javascript_content($end_uri)
 	{
 		$val=$this->get_content($end_uri);
@@ -370,7 +370,7 @@ class Compressor{
 		$this->prepare_string_for_quotes($val);
 		return $val;
 	}
-	
+
 	function compress_javascript(&$code)
 	{
 		if($this->param['compress'])
@@ -386,7 +386,7 @@ class Compressor{
 			$code= preg_replace('/( |\t|\r)*(;|\{|\}|=|==|\-|\+|,|\(|\)|\|\||&\&|\:)( |\t|\r)*/', "$2", $code);
 		}
 	}
-	
+
 	function get_css_content($end_uri)
 	{
 		$code=$this->get_content($end_uri);
@@ -396,11 +396,11 @@ class Compressor{
 		$code= preg_replace('/(( |\t|\r)*\n( |\t)*)+/s', "", $code);
 		// remove spaces
 		$code= preg_replace('/( |\t|\r)?(\:|,|\{|\})( |\t|\r)+/', "$2", $code);
-	
+
 		$this->prepare_string_for_quotes($code);
 		return $code;
 	}
-	
+
 	function get_html_content($end_uri)
 	{
 		$code=$this->get_content($end_uri);
@@ -409,7 +409,7 @@ class Compressor{
 		$this->prepare_string_for_quotes($code);
 		return $code;
 	}
-	
+
 	function prepare_string_for_quotes(&$str)
 	{
 		// prepare the code to be putted into quotes 
@@ -422,7 +422,7 @@ class Compressor{
 			$replace= array('$1$1\\"', '\\\\\\n', '\\\\\\r'	, "\\n\"\n+\"");
 		$str= preg_replace($pattern, $replace, $str);
 	}
-	
+
 	function replace_scripts($var, $param1, $param2)
 	{
 		if ($var=='script_list')
@@ -444,7 +444,7 @@ class Compressor{
 		$this->file_loaded_size+= strlen($content);
 		return $content;				
 	}
-	
+
 	function file_put_contents($file, &$content, $mtime=-1)
 	{
 		if($mtime==-1)
@@ -459,7 +459,7 @@ class Compressor{
 		}
 		return false;
 	}
-	
+
 	function get_microtime()
 	{
 		list($usec, $sec) = explode(" ", microtime(false));

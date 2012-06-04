@@ -24,7 +24,7 @@
 function init__tempcode()
 {
 	if (defined('ENTITY_ESCAPED')) return;
-	
+
 	define('ENTITY_ESCAPED',1); // HTML entities
 	define('SQ_ESCAPED',2); // Single quotes
 	define('DQ_ESCAPED',3); // Double quotes
@@ -45,7 +45,7 @@ function init__tempcode()
 	define('TC_LANGUAGE_REFERENCE',2);
 	define('TC_PARAMETER',3); // A late parameter for a compiled template
 	define('TC_DIRECTIVE',4);
-	
+
 	global $XHTML_SPIT_OUT,$NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$CACHED_FOUND,$REQUEST_BLOCK_NEST_LEVEL,$LOADED_TPL_CACHE;
 	$XHTML_SPIT_OUT=NULL;
 	$NO_EVAL_CACHE=false;
@@ -68,14 +68,14 @@ function init__tempcode()
 	if ($XSS_DETECT) $SIMPLE_ESCAPED=array(12345); // Don't allow $SIMPLE_ESCAPED to work, as we need to work through full manual escaping
 
 	require_code('symbols');
-	
+
 	global $FULL_RESET_VAR_CODE,$RESET_VAR_CODE;
 	$FULL_RESET_VAR_CODE='foreach(array_keys(get_defined_vars()) as $x) { if ($x[0]==\'b\' && substr($x,0,6)==\'bound_\') unset($$x); } extract($parameters,EXTR_PREFIX_ALL,\'bound\');';
 	$RESET_VAR_CODE='extract($parameters,EXTR_PREFIX_ALL,\'bound\');';
 
 	global $TEMPLATE_PREVIEW_OP;
 	$TEMPLATE_PREVIEW_OP=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']=='1') && ((get_page_name()!='admin_themes') || (get_param('type','')=='view'));
-	
+
 	global $OB_GET_CLEAN;
 	$OB_GET_CLEAN=function_exists('ob_get_clean');
 }
@@ -100,9 +100,9 @@ function static_evaluate_tempcode($ob)
 function php_addslashes_twice($in)
 {
 	return php_addslashes(php_addslashes($in));
-	
+
 	// This code does not work, provides awfully confusing Tempcode errors...
-	
+
 	/*global $PHP_REP_FROM,$PHP_REP_TO_TWICE;
 	return str_replace($PHP_REP_FROM,$PHP_REP_TO_TWICE,$in);
 	//return str_replace("\n",'\n',str_replace('$','\$',str_replace('\\\'','\'',addslashes($in))));*/
@@ -163,7 +163,7 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 	{
 		$_escaping='array('.@implode(',',$escaping).')';
 	}
-	
+
 	$_type=strval($type);
 	if (preg_match('#^[\w\-]*$#',$name)==0)
 		$_name=php_addslashes_twice($name);
@@ -236,7 +236,7 @@ function closure_eval($code,$parameters)
 	{
 		return do_lang('NO_PHP_IN_TEMPLATES');
 	}
-	
+
 	$ret=eval($code);
 	if (!is_string($ret)) $ret=@strval($ret);
 	return $ret;
@@ -253,7 +253,7 @@ function closure_eval($code,$parameters)
 function closure_loop($param,$args,$main_function)
 {
 	$value='';
-	
+
 	if (isset($param[0]))
 	{
 		$key=$param[0];
@@ -582,7 +582,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 			if ($bit[1]!=array())
 				$out->seq_parts[$i][1]=array();
 		}
-		
+
 		return $out;
 	}
 
@@ -806,7 +806,7 @@ function handle_symbol_preprocessing($bit,&$children)
 					if (strpos($param[0],':')!==false)
 						$param=array_reverse(explode(':',$param[0],2));
 					if (substr($param[0],0,6)=='panel_') $param[0]=substr($param[0],6);
-					
+
 					global $ZONE;
 					$wide_high=is_wide_high();
 					$wide=is_wide();
@@ -877,7 +877,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			{
 				if (strpos($param[0],':')!==false)
 					$param=array_reverse(explode(':',$param[0],2));
-				
+
 				$being_included=(!array_key_exists(2,$param)) || ($param[2]=='1');
 
 				if ((function_exists('memory_get_usage')) && (isset($_GET['keep_show_loading'])) && ($_GET['keep_show_loading']=='1'))
@@ -902,7 +902,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			$LOADED_PAGES[serialize($param)]=$tp_value;
 
 			return;
-			
+
 		case 'FRACTIONAL_EDITABLE':
 			require_javascript('javascript_fractional_edit');
 			return;
@@ -918,7 +918,7 @@ class ocp_tempcode
 	var $pure_lang;
 
 	var $codename=':container'; // The name of the template it came from
-	
+
 	var $cached_output;
 
 	/**
@@ -930,7 +930,7 @@ class ocp_tempcode
 	{
 		$this->preprocessable_bits=array();
 		$this->cached_output=NULL;
-		
+
 		if (!isset($details))
 		{
 			$this->seq_parts=array();
@@ -939,7 +939,7 @@ class ocp_tempcode
 		{
 			$this->code_to_preexecute=$details[0];
 			$this->seq_parts=$details[1];
-			
+
 			foreach ($this->seq_parts as $seq_part)
 			{
 				if ($seq_part[2]==TC_SYMBOL)
@@ -979,7 +979,7 @@ class ocp_tempcode
 			$this->children=array();
 		}
 	}
-	
+
 	/**
 	 * PHP magic function to handle serialisation.
 	 *
@@ -989,7 +989,7 @@ class ocp_tempcode
 	{
 		return array('code_to_preexecute','seq_parts','preprocessable_bits','last_attach','pure_lang','codename');
 	}
-	
+
 	/**
 	 * Decache the object.
 	 */
@@ -1011,12 +1011,12 @@ class ocp_tempcode
 	function handle_symbol_preprocessing()
 	{
 		if (isset($this->preprocessed)) return;
-		
+
 		foreach ($this->preprocessable_bits as $bit)
 		{
 			handle_symbol_preprocessing($bit,$this->children);
 		}
-		
+
 		$this->preprocessed=true;
 	}
 
@@ -1106,7 +1106,7 @@ class ocp_tempcode
 			$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');
 			$this->last_attach='';
 		}
-		
+
 		$this->codename='(mixed)';
 	}
 
@@ -1305,10 +1305,10 @@ class ocp_tempcode
 		{
 			$this->_mark_all_as_escaped();
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Recursively mark all parameters in this Tempcode as escaped. This is needed when loading from cache, as escape tainting data would have been lost.
 	 */
@@ -1325,12 +1325,12 @@ class ocp_tempcode
 				{
 					$val->_mark_all_as_escaped();
 				}
-				
+
 				$seq_part[1][$key]=$val;
 			}
 		}
 	}
-	
+
 	/**
 	 * The opposite of to_assembly - it decodes a tempcode storage representation and turns it into a proper tempcode object.
 	 *
@@ -1367,7 +1367,7 @@ class ocp_tempcode
 			$this->code_to_preexecute.='/*SHIFT_ENCODE*/';
 			$this->evaluate();
 		}
-		
+
 		return true;
 	}
 
@@ -1551,7 +1551,7 @@ class ocp_tempcode
 		}*/
 
 		//ob_end_flush();
-		
+
 		//$tempcode_profile_log_end=microtime();
 		//tempcode_profile_log_diff($tempcode_profile_log_start,$tempcode_profile_log_end,$this->seq_parts);
 
@@ -1715,23 +1715,23 @@ class ocp_tempcode
 		$MY_LOG_FILE=fopen(get_custom_file_base().'/../test.log','wt');
 		$SUMMARY=array();
 		fwrite($MY_LOG_FILE,ocp_srv('SCRIPT_NAME').'?'.ocp_srv('QUERY_STRING')."...\n\n");
-		
+
 		if (function_exists('set_time_limit')) @set_time_limit(2);
-		
+
 		register_shutdown_function('finish_logging');
 	}
 
 	$backtrace=debug_backtrace();
-	
+
 	$level=count($backtrace)-1;
 	$function=$backtrace[1]['function'];
 	$sz=serialize($bit);
 	$signature=md5($sz);
 	$complexity=strlen($sz);
-	
+
 	if (!isset($SUMMARY[$signature])) $SUMMARY[$signature]=0;
 	$SUMMARY[$signature]++;
-	
+
 	$bit=array(); // Comment out this line to show full data in the dump
 	fwrite($MY_LOG_FILE,$function.': '.$signature.' [recursive level='.integer_format($level).', parts='.integer_format(count($bit)).', complexity='.integer_format($complexity).' bytes]      '.str_replace("\n",'\n',serialize($bit))."\n");
 }
@@ -1739,7 +1739,7 @@ class ocp_tempcode
 f unction tempcode_profile_log_diff($from,$to,$bit)
 {
 	global $MY_LOG_FILE,$SUMMARY;
-	
+
 	if (isset($MY_LOG_FILE))
 	{
 		$sz=serialize($bit);
@@ -1752,7 +1752,7 @@ f unction tempcode_profile_log_diff($from,$to,$bit)
 f unction finish_logging()
 {
 	global $MY_LOG_FILE,$SUMMARY;
-	
+
 	if (isset($MY_LOG_FILE))
 	{
 		fwrite($MY_LOG_FILE,"\n\nSUMMARY...\n\n");
@@ -1760,7 +1760,7 @@ f unction finish_logging()
 		{
 			fwrite($MY_LOG_FILE,$sig.' [x '.integer_format($count).']'."\n");
 		}
-	
+
 		fclose($MY_LOG_FILE);
 		$MY_LOG_FILE=NULL;
 	}

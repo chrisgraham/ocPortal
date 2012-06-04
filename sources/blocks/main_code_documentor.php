@@ -20,7 +20,7 @@
 
 class Block_main_code_documentor
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_code_documentor
 		$info['parameters']=array('param');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_code_documentor
 		$info['ttl']=120;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,7 +64,7 @@ class Block_main_code_documentor
 		require_lang('phpdoc');
 		require_code('php');
 		require_css('adminzone');
-		
+
 		disable_php_memory_limit();
 
 		$filename=(array_key_exists('param',$map)?$map['param']:'sources/global2').'.php';
@@ -76,27 +76,27 @@ class Block_main_code_documentor
 		$_classes=get_php_file_api($filename);
 
 		$classes=new ocp_tempcode();
-	
+
 		foreach ($_classes as $class)
 		{
 			if ($class['name']=='__global') $class['name']=do_lang('GLOBAL_FUNCTIONS').'_'.basename($filename);
 
 			$function_summaries=new ocp_tempcode();
 			$functions=new ocp_tempcode();
-	
+
 			foreach ($class['functions'] as $function)
 			{
 				$ret=render_php_function($function,$class);
 				$functions->attach($ret[0]);
 				$function_summaries->attach($ret[1]);
 			}
-	
+
 			$classes->attach(do_template('PHP_CLASS',array('_GUID'=>'5d58fc42c5fd3a5dd190f3f3699610c2','CLASS_NAME'=>$class['name'],'FUNCTION_SUMMARIES'=>$function_summaries,'FUNCTIONS'=>$functions)));
 		}
-	
+
 		return do_template('PHP_FILE',array('_GUID'=>'6f422e6a6e846d49864d7325b212109f','FILENAME'=>$filename,'CLASSES'=>$classes));
 	}
-	
+
 }
 
 

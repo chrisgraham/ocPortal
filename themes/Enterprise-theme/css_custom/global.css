@@ -3311,11 +3311,11 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	body {
 		background: none;
 	}
-	
+
 	h1 {
 		display: none;
 	}
-	
+
 	.wide_table_wrap {
 		overflow-y: visible !important;
 	}

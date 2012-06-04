@@ -46,6 +46,6 @@ class relations_test_set extends ocp_test_case
 			$this->assertFalse(!array_key_exists($_l,$links),'Link not described: '.$_l);
 		}
 	}
-	
+
 }
 

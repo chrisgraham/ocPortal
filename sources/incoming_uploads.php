@@ -62,7 +62,7 @@ function incoming_uploads_script()
 		fix_permissions(get_custom_file_base().'/uploads/incoming',0777);
 		sync_file(get_custom_file_base().'/uploads/incoming');
 	}
-	
+
 	$savename = 'uploads/incoming/'.uniqid('').'.dat';
 
 	if (array_key_exists('file',$_FILES)) // nice multi-part upload
@@ -159,7 +159,7 @@ function incoming_uploads_script()
 		foreach ($outa as $key=>$val) // Put out data as JSON
 		{
 			$val=str_replace(chr(0),'',$val);
-			
+
 			if ((is_string($val)) && ($val!=''))
 			{
 				if ($done!=0) $outstr.=', ';

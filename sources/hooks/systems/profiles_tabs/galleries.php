@@ -94,7 +94,7 @@ class Hook_Profiles_Tabs_galleries
 
 		return array($title,$content,$order);
 	}
-	
+
 	/**
 	 * Show subgalleries belonging to member.
 	 *

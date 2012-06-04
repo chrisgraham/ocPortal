@@ -8,7 +8,7 @@
 			<h4>Lorem ipsum dolor sit amet</h4>
 
 			<h1>Lorem ipsum dolor sit amet</h1>
-		
+
 			<h5>Lorem ipsum dolor sit amet</h5>
 		</div>
 	</div>
@@ -23,7 +23,7 @@
 			[page=":about_1"]READ MORE[/page]<br />
 			<br />
 		</li>
-	
+
 		<li class="tab-inside">
 			<h4>Lorem ipsum dolor sit amet</h4>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.<br />
@@ -31,7 +31,7 @@
 			[page=":about_2"]READ MORE[/page]<br />
 			<br />
 		</li>
-	
+
 		<li class="tab-inside">
 			<h4>Lorem ipsum dolor sit amet</h4>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.<br />

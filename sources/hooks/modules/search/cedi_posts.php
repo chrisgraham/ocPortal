@@ -32,16 +32,16 @@ class Hook_search_cedi_posts
 		if ($GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)')==0) return NULL;
 
 		require_lang('cedi');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('CEDI_POSTS');
 		$info['default']=false;
 		$info['category']='page_id';
 		$info['integer_category']=true;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
 	 *
@@ -89,15 +89,15 @@ class Hook_search_cedi_posts
 			case 'title':
 				$remapped_orderer='page_id'; // No good fit
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='date_and_time';
 				break;
 		}
-	
+
 		require_code('cedi');
 		require_lang('cedi');
-	
+
 		// Calculate our where clause (search)
 		$sq=build_search_submitter_clauses('the_user',$author_id,$author);
 		if (is_null($sq)) return array(); else $where_clause.=$sq;

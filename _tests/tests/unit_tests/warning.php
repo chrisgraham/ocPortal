@@ -30,9 +30,9 @@ class warning_test_set extends ocp_test_case
 		require_code('ocf_moderation');
 		require_code('ocf_moderation_action');
 		require_code('ocf_moderation_action2');
-		
+
 		$this->establish_admin_session();
-		
+
 		$this->warn_id=ocf_make_warning(1,'nothing',NULL,NULL,1,NULL,NULL,0,'',0,0,NULL);
 
 		// Test the forum was actually created
@@ -47,7 +47,7 @@ class warning_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('something'==$GLOBALS['FORUM_DB']->query_value('f_warnings','w_explanation ',array('id'=>$this->warn_id)));
 	}
-	
+
 	function tearDown()
 	{
 		ocf_delete_warning($this->warn_id);

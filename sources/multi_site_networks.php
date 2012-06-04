@@ -27,7 +27,7 @@
 function do_netlink($redir_url='')
 {
 	header('Content-type: text/plain; charset='.get_charset());
-	
+
 	// If we are redirecting
 	if ($redir_url!='')
 	{

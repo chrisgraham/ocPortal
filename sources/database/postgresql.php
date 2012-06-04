@@ -40,7 +40,7 @@ class Database_Static_postgresql
 	{
 		return 'postgres';
 	}
-	
+
 	/**
 	 * Get the default password for making db connections (used by the installer as a default).
 	 *
@@ -50,7 +50,7 @@ class Database_Static_postgresql
 	{
 		return '';
 	}
-	
+
 	/**
 	 * Create a table index.
 	 *
@@ -64,7 +64,7 @@ class Database_Static_postgresql
 		if ($index_name[0]=='#') return;
 		$this->db_query('CREATE INDEX index'.$index_name.'_'.strval(mt_rand(0,10000)).' ON '.$table_name.'('.$_fields.')',$db);
 	}
-	
+
 	/**
 	 * Change the primary key of a table.
 	 *
@@ -77,7 +77,7 @@ class Database_Static_postgresql
 		$this->db_query('ALTER TABLE '.$table_name.' DROP PRIMARY KEY',$db);
 		$this->db_query('ALTER TABLE '.$table_name.' ADD PRIMARY KEY ('.implode(',',$new_key).')',$db);
 	}
-	
+
 	/**
 	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
 	 *
@@ -87,7 +87,7 @@ class Database_Static_postgresql
 	{
 		return 1;
 	}
-	
+
 	/**
 	 * Get a map of ocPortal field types, to actual mySQL types.
 	 *
@@ -119,7 +119,7 @@ class Database_Static_postgresql
 		);
 		return $type_remap;
 	}
-	
+
 	/**
 	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
 	 */
@@ -128,7 +128,7 @@ class Database_Static_postgresql
 		global $CACHE_DB;
 		$CACHE_DB=array();
 	}
-	
+
 	/**
 	 * Create a new table.
 	 *
@@ -139,13 +139,13 @@ class Database_Static_postgresql
 	function db_create_table($table_name,$fields,$db)
 	{
 		$type_remap=$this->db_get_type_remap();
-	
+
 		/*if (multi_lang()==0)
 		{
 			$type_remap['LONG_TRANS']=$type_remap['LONG_TEXT'];
 			$type_remap['SHORT_TRANS']=$type_remap['SHORT_TEXT'];
 		}*/
-	
+
 		$_fields='';
 		$keys='';
 		foreach ($fields as $name=>$type)
@@ -156,25 +156,25 @@ class Database_Static_postgresql
 				if ($keys!='') $keys.=', ';
 				$keys.=$name;
 			}
-	
+
 			if ($type[0]=='?') // Is perhaps null
 			{
 				$type=substr($type,1);
 				$perhaps_null='NULL';
 			} else $perhaps_null='NOT NULL';
-	
+
 			$type=$type_remap[$type];
-	
+
 			$_fields.="	  $name $type $perhaps_null,\n";
 		}
-	
+
 		$query='CREATE TABLE '.$table_name.' (
 		  '.$_fields.'
 		  PRIMARY KEY ('.$keys.')
 		)';
 		$this->db_query($query,$db,NULL,NULL);
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
 	 *
@@ -186,7 +186,7 @@ class Database_Static_postgresql
 	{
 		return $attribute." LIKE '".$this->db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
 	 *
@@ -198,7 +198,7 @@ class Database_Static_postgresql
 	{
 		return $attribute."<>'".$this->db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
 	 *
@@ -208,7 +208,7 @@ class Database_Static_postgresql
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Delete a table.
 	 *
@@ -219,7 +219,7 @@ class Database_Static_postgresql
 	{
 		$this->db_query('DROP TABLE '.$table,$db,NULL,NULL,true);
 	}
-	
+
 	/**
 	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
 	 *
@@ -229,7 +229,7 @@ class Database_Static_postgresql
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
 	 *
@@ -240,7 +240,7 @@ class Database_Static_postgresql
 	{
 		return $this->db_escape_string($pattern);
 	}
-	
+
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
@@ -260,7 +260,7 @@ class Database_Static_postgresql
 		{
 			return $CACHE_DB[$db_name][$db_host];
 		}
-	
+
 		if (!function_exists('pg_pconnect'))
 		{
 			$error='The postgreSQL PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
@@ -271,7 +271,7 @@ class Database_Static_postgresql
 			}
 			critical_error('PASSON',$error);
 		}
-	
+
 		$db=$persistent?@pg_pconnect('host='.$db_host.' dbname='.$db_name.' user='.$db_user.' password='.$db_password):@pg_connect('host='.$db_host.' dbname='.$db_name.' user='.$db_user.' password='.$db_password);
 		if ($db===false)
 		{
@@ -283,12 +283,12 @@ class Database_Static_postgresql
 			}
 			critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
 		}
-	
+
 		if (!$db) fatal_exit(do_lang('CONNECT_DB_ERROR'));
 		$CACHE_DB[$db_name][$db_host]=$db;
 		return $db;
 	}
-	
+
 	/**
 	 * Find whether full-text-search is present
 	 *
@@ -299,7 +299,7 @@ class Database_Static_postgresql
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
 	 *
@@ -310,7 +310,7 @@ class Database_Static_postgresql
 	{
 		return pg_escape_string($string);
 	}
-	
+
 	/**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
 	 *
@@ -330,7 +330,7 @@ class Database_Static_postgresql
 			elseif (!is_null($max)) $query.=' LIMIT '.strval(intval($max));
 			elseif (!is_null($start)) $query.=' OFFSET '.strval(intval($start));
 		}
-	
+
 		$results=@pg_query($db,$query);
 		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') && ($results===true))) && (!$fail_ok))
 		{
@@ -347,20 +347,20 @@ class Database_Static_postgresql
 				return NULL;
 			}
 		}
-	
+
 		if ((strtoupper(substr($query,0,7))=='SELECT ') && ($results!==false) && ($results!==true))
 		{
 			return $this->db_get_query_rows($results);
 		}
-	
+
 		if ($get_insert_id)
 		{
 			if (strtoupper(substr($query,0,7))=='UPDATE ') return NULL;
-	
+
 			// Inefficient :(
 			$pos=strpos($query,'(');
 			$table_name=substr($query,12,$pos-13);
-	
+
 			$r3=@pg_query($db,'SELECT last_value FROM '.$table_name.'_id_seq');
 			if ($r3)
 			{
@@ -368,10 +368,10 @@ class Database_Static_postgresql
 				return intval($seq_array[0]);
 			}
 		}
-	
+
 		return NULL;
 	}
-	
+
 	/**
 	 * Get the rows returned from a SELECT query.
 	 *
@@ -389,7 +389,7 @@ class Database_Static_postgresql
 			$types[$x-1]=pg_field_type($results,$x-1);
 			$names[$x-1]=strtolower(pg_field_name($results,$x-1));
 		}
-	
+
 		$out=array();
 		$i=0;
 		while (($row=pg_fetch_row($results))!==false)
@@ -400,17 +400,17 @@ class Database_Static_postgresql
 			{
 				$name=$names[$j];
 				$type=$types[$j];
-	
+
 				if (($type=='INTEGER') || ($type=='SMALLINT') || ($type=='SERIAL') || ($type=='UINTEGER'))
 				{
 					if (!is_null($v)) $newrow[$name]=intval($v); else $newrow[$name]=NULL;
 				} else $newrow[$name]=$v;
-	
+
 				$j++;
 			}
-	
+
 			$out[]=$newrow;
-	
+
 			$i++;
 		}
 		pg_free_result($results);

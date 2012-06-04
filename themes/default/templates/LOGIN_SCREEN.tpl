@@ -75,7 +75,7 @@
 			</div>
 		</div>
 	</form>
-	
+
 	{+START,IF_NON_EMPTY,{EXTRA}}
 	<p class="login_note">
 		{EXTRA}

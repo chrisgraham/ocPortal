@@ -55,7 +55,7 @@ class Module_cms_catalogues extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_CATALOGUES','import'=>'IMPORT_CATALOGUE_ENTRIES','export'=>'CATALOGUE_EXPORT'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
@@ -183,9 +183,9 @@ class Module_cms_catalogues extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','title ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -224,7 +224,7 @@ class Module_cms_catalogues extends standard_aed_module
 		foreach ($rows as $row)
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
-			
+
 			$catalogue_name=$row['c_name'];
 
 			$entry_fields=get_catalogue_entry_field_values($catalogue_name,$row['id'],array(0));
@@ -268,7 +268,7 @@ class Module_cms_catalogues extends standard_aed_module
 		{
 			$fields->attach(results_entry($_fr['row'],true));
 		}
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_entries','catalogue_name'=>$catalogue_name),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('news'));
 
@@ -285,10 +285,10 @@ class Module_cms_catalogues extends standard_aed_module
 		$catalogue_name=get_param('catalogue_name');
 
 		if ($GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',array('c_name'=>$catalogue_name))==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
-		
+
 		$is_tree=$GLOBALS['SITE_DB']->query_value('catalogues','c_is_tree',array('c_name'=>$catalogue_name));
 		if ($is_tree==0) return NULL;
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_entries','catalogue_name'=>$catalogue_name),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues'));
 
@@ -313,16 +313,16 @@ class Module_cms_catalogues extends standard_aed_module
 	function get_form_fields($catalogue_name=NULL,$category_id=NULL,$validated=1,$notes='',$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$id=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
-		
+
 		if (is_null($catalogue_name)) $catalogue_name=get_param('catalogue_name');
 
 		require_code('feedback');
 		require_code('form_templates');
 
 		$fields=new ocp_tempcode();
-	
+
 		$hidden=form_input_hidden('catalogue_name',$catalogue_name);
-	
+
 		if ((is_null($id)) && (is_null($category_id)))
 		{
 			$category_id=get_param_integer('category_id',NULL);
@@ -352,13 +352,13 @@ class Module_cms_catalogues extends standard_aed_module
 			{
 				$category_id=get_param_integer('category_id_suggest',NULL); // Less forceful than 'category_id', as may be changed even with 'no_confirm_url_spec_cats' on
 			}
-			
+
 			$fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',NULL,'choose_catalogue_category',array('catalogue_name'=>$catalogue_name,'addable_filter'=>true),true,is_null($category_id)?'':strval($category_id)));
 		}
 
 		// Special fields
 		// ==============
-	
+
 		if (!is_null($id))
 		{
 			$special_fields=get_catalogue_entry_field_values($catalogue_name,$id);
@@ -403,13 +403,13 @@ class Module_cms_catalogues extends standard_aed_module
 			{
 				$field_groups[$field_cat]->attach($result);
 			}
-			
+
 			if (strpos($field['cf_type'],'_trans')!==false) $this->do_preview=true;
 
 			unset($result);
 			unset($ob);
 		}
-	
+
 		if (array_key_exists('',$field_groups)) // Blank prefix must go first
 		{
 			$field_groups_blank=$field_groups[''];
@@ -419,7 +419,7 @@ class Module_cms_catalogues extends standard_aed_module
 		foreach ($field_groups as $field_group_title=>$extra_fields)
 		{
 			if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
-		
+
 			if ($field_group_title!='')
 				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
 			$fields->attach($extra_fields);
@@ -532,10 +532,10 @@ class Module_cms_catalogues extends standard_aed_module
 
 			$map[$field['id']]=$value;
 		}
-		
+
 		return $map;
 	}
-	
+
 	/**
 	 * Standard aed_module add actualiser.
 	 *
@@ -684,7 +684,7 @@ class Module_cms_catalogues extends standard_aed_module
 					NULL,																						// Add to category
 					has_specific_permission(get_member(),'submit_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'add_category','catalogue_name'=>$c_name),'_SELF'):NULL,			  // Add one category
 					has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_category','catalogue_name'=>$c_name),'_SELF'):NULL,			  // Edit one category
-				
+
 					NULL,																						// Edit this category
 					NULL,																						// View this category
 					/*	  SPECIALLY TYPED 'LINKS'				  */
@@ -726,7 +726,7 @@ class Module_cms_catalogues extends standard_aed_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-	
+
 		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('UPLOAD_DESC'),'file_novalidate',true,NULL,NULL,true,'csv,txt'));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
@@ -752,11 +752,11 @@ class Module_cms_catalogues extends standard_aed_module
 		$catalogue_name=get_param('catalogue_name');
 
 		$categories=array();
-		
+
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name));
 
 		$catsrow=$GLOBALS['SITE_DB']->query("SELECT t1.id,t2.text_original,t1.cc_parent_id FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."catalogue_categories t1,".$GLOBALS['SITE_DB']->get_table_prefix()."translate t2 WHERE t1.cc_title=t2.id AND t1.c_name='".db_escape_string($catalogue_name)."'");
-	
+
 		foreach($catsrow as $values)
 		{
 			$categories[$values['text_original']]=$values['id'];
@@ -770,7 +770,7 @@ class Module_cms_catalogues extends standard_aed_module
 		$csv_name=NULL;
 		if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
 			$csv_name=$_FILES['file_novalidate']['tmp_name'];
-		
+
 		if (is_null($csv_name))
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
@@ -838,7 +838,7 @@ class Module_cms_catalogues extends standard_aed_module
 		$match_flag=false;
 
 		check_specific_permission('mass_import');
-		
+
 		$curr_cat=array_key_exists('CATEGORY',$csv_field_titles)?$csv_data[$csv_field_titles['CATEGORY']]:'';
 
 		if($curr_cat=='')
@@ -849,9 +849,9 @@ class Module_cms_catalogues extends standard_aed_module
 			else	//If category field is null, record adds to a general category named catalogue name.
 			{
 				$catalog_title=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>$catalogue_name));
-	
+
 				$catid=actual_add_catalogue_category($catalogue_name,$catalog_title,$catalog_title,$catalog_title,$catalog_root,'');
-				
+
 				$categories=array_merge(array($catalogue_name=>$catid),$categories);
 			}
 		}
@@ -868,7 +868,7 @@ class Module_cms_catalogues extends standard_aed_module
 			if (get_value('disable_cat_cat_perms')!=='1')
 				$this->set_permissions(strval($catid));					
 		}
-				
+
 		foreach ($fields as $field)
 		{
 			$field_name=get_translated_text($field['cf_name']);
@@ -1003,7 +1003,7 @@ class Module_cms_catalogues extends standard_aed_module
 				}
 				echo chr(10);
 			}
-			
+
 			$start+=4000;
 		}
 		while (count($entry_rows)!=0);
@@ -1044,9 +1044,9 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','cc_title ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -1081,7 +1081,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_categories'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues'));
 
@@ -1171,7 +1171,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 
 		return array($fields,$hidden);
 	}
-	
+
 	/**
 	 * Standard aed_module cat getter.
 	 *
@@ -1458,21 +1458,21 @@ class Module_cms_catalogues_alt extends standard_aed_module
 				{
 					if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF'));
 				}
-				
+
 				$fields->attach(form_input_tick(do_lang_tempcode('CAT_ECOMMERCE'),do_lang_tempcode('DESCRIPTION_CAT_ECOMMERCE'),'ecommerce',$ecommerce==1));
 			}
 			$fields->attach(form_input_tick(do_lang_tempcode('IS_TREE'),do_lang_tempcode('DESCRIPTION_IS_TREE'),'is_tree',$is_tree==1));
 			if ($name=='') $fields->attach(form_input_line(do_lang_tempcode('AUTO_FILL'),do_lang_tempcode('DESCRIPTION_AUTO_FILL'),'auto_fill','',false,NULL,10000));
-	
+
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='' && $submit_points==0 && $send_view_reports=='never','TITLE'=>do_lang_tempcode('ADVANCED'))));
-	
+
 			if (get_value('disable_staff_notes')!=='1')
 				$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 			if (addon_installed('points'))
 			{
 				$fields->attach(form_input_integer(do_lang_tempcode('SUBMIT_POINTS'),do_lang_tempcode('DESCRIPTION_SUBMIT_POINTS'),'submit_points',$submit_points,false));
 			}
-	
+
 			$view_report_types=new ocp_tempcode();
 			$view_report_types->attach(form_input_list_entry('never',$send_view_reports=='never',do_lang_tempcode('VR_NEVER')));
 			$view_report_types->attach(form_input_list_entry('daily',$send_view_reports=='daily',do_lang_tempcode('VR_DAILY')));
@@ -1480,10 +1480,10 @@ class Module_cms_catalogues_alt extends standard_aed_module
 			$view_report_types->attach(form_input_list_entry('monthly',$send_view_reports=='monthly',do_lang_tempcode('VR_MONTHLY')));
 			$view_report_types->attach(form_input_list_entry('quarterly',$send_view_reports=='quarterly',do_lang_tempcode('VR_QUARTERLY')));
 			$fields->attach(form_input_list(do_lang_tempcode('VIEW_REPORTS'),do_lang_tempcode('DESCRIPTION_VIEW_REPORTS'),'send_view_reports',$view_report_types));
-	
+
 			// Permissions
 			$fields->attach($this->get_permission_fields($name,NULL,($name=='')));
-	
+
 			$actions=new ocp_tempcode();
 			if (($name!='') && (get_value('disable_cat_cat_perms')!=='1'))
 				$actions->attach(form_input_tick(do_lang_tempcode('RESET_CATEGORY_PERMISSIONS'),do_lang_tempcode('DESCRIPTION_RESET_CATEGORY_PERMISSIONS'),'reset_category_permissions',false));
@@ -1557,7 +1557,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 
 		return array($fields,$hidden);
 	}
-	
+
 	/**
 	 * Standard aed_module edit form filler.
 	 *
@@ -1672,13 +1672,13 @@ class Module_cms_catalogues_alt extends standard_aed_module
 			foreach ($to_do as $doing)
 			{
 				if (trim($doing)=='') continue;
-				
+
 				$bits=explode('\\',$doing);
 				$parent_id=$category_id;
 				foreach ($bits as $bit)
 				{
 					$bit=trim($bit);
-					
+
 					if (array_key_exists($bit,$categories))
 					{
 						if (!is_null($parent_id)) $parent_id=$categories[$bit];
@@ -1731,7 +1731,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 					{
 						$this->set_permissions(strval($row['id']));
 					}
-					
+
 					$start+=300;
 				}
 				while (array_key_exists(0,$rows));
@@ -1750,7 +1750,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 			foreach ($_POST as $key=>$val)
 			{
 				if (!is_string($val)) continue;
-	
+
 				if (get_magic_quotes_gpc()) $val=stripslashes($val);
 
 				$matches=array();

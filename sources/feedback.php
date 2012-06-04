@@ -326,7 +326,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 				$all_rating_criteria[$i]=array('NUM_RATINGS'=>integer_format($num_ratings),'RATING'=>make_string_tempcode(strval($calculated_rating)))+$all_rating_criteria[$i];
 
 				$GLOBALS['META_DATA']['rating'.(($rating_criteria['TYPE']=='')?'':('_'.$rating_criteria['TYPE']))]=strval($calculated_rating);
-				
+
 				$has_ratings=true;
 			}
 		}
@@ -597,7 +597,7 @@ function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no
 
 		return $renderer->render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum,$post_warning,$_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews);
 	}
-	
+
 	return new ocp_tempcode(); // No franchise to render comments
 }
 
@@ -638,7 +638,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	if (!$explicit_allow)
 	{
 		if ((get_option('is_on_comments')=='0') || (!$allow_comments)) return false;
-	
+
 		if (!has_specific_permission(get_member(),'comment',get_page_name())) return false;
 	}
 
@@ -880,7 +880,7 @@ function get_trackbacks($content_type,$content_id,$allow_trackback,$type='')
 	if ((get_option('is_on_trackbacks')=='1') && ($allow_trackback))
 	{
 		require_lang('trackbacks');
-		
+
 		$trackbacks=$GLOBALS['SITE_DB']->query_select('trackbacks',array('*'),array('trackback_for_type'=>$content_type,'trackback_for_id'=>$content_id),'ORDER BY trackback_time DESC',300);
 
 		$content=new ocp_tempcode();

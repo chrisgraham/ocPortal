@@ -23,7 +23,7 @@
  */
 class Module_admin_backup
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_backup
 	{
 		return array('misc'=>'BACKUP');
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -103,7 +103,7 @@ class Module_admin_backup
 	function run()
 	{
 		require_lang('backups');
-	
+
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/backups';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_backup';
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_BACKUPS_2');
@@ -111,16 +111,16 @@ class Module_admin_backup
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		decache('main_staff_checklist');
-	
+
 		require_code('backup');
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='make_backup') return $this->make_backup();
 		if ($type=='confirm_delete') return $this->confirm_delete();
 		if ($type=='delete') return $this->delete();
 		if ($type=='misc') return $this->backup_interface();
-	
+
 		return new ocp_tempcode();
 	}
 
@@ -132,9 +132,9 @@ class Module_admin_backup
 	function backup_interface()
 	{
 		$title=get_page_title('BACKUP');
-		
+
 		require_javascript('javascript_ajax');
-	
+
 		$last_backup=intval(get_value('last_backup'));
 		if ($last_backup==0)
 		{
@@ -219,7 +219,7 @@ class Module_admin_backup
 		global $M_SORT_KEY;
 		$M_SORT_KEY='mtime';
 		uasort($entries,'multi_sort');
-	
+
 		if (count($entries)!=0)
 		{
 			require_code('templates_table_table');
@@ -230,9 +230,9 @@ class Module_admin_backup
 			{
 				$delete_url=build_url(array('page'=>'_SELF','type'=>'confirm_delete','file'=>$entry['file']),'_SELF');
 				$link=get_custom_base_url().'/exports/backups/'.$entry['file'];
-	
+
 				$actions=do_template('TABLE_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'23a8b5d5d345d8fdecc74b01fe5a9042','NAME'=>$entry['file'],'URL'=>$delete_url));
-				
+
 				$type=do_lang_tempcode('UNKNOWN');
 				switch (get_file_extension($entry['file']))
 				{
@@ -254,12 +254,12 @@ class Module_admin_backup
 			}
 
 			$files=do_template('TABLE_TABLE',array('_GUID'=>'726070efa71843236e975d87d4a17dae','HEADER_ROW'=>$header_row,'ROWS'=>$rows));
-	
+
 		} else $files=new ocp_tempcode();
-	
+
 		return $files;
 	}
-	
+
 	/**
 	 * The UI to confirm deletion of a backup file.
 	 *
@@ -304,7 +304,7 @@ class Module_admin_backup
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * The actualiser to start a backup.
 	 *
@@ -313,7 +313,7 @@ class Module_admin_backup
 	function make_backup()
 	{
 		$title=get_page_title('BACKUP');
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('BACKUP'))));
 		breadcrumb_set_self(do_lang_tempcode('START'));
 
@@ -352,7 +352,7 @@ class Module_admin_backup
 				$file='Backup_database_'.uniqid('');*/
 		}
 		else exit();
-	
+
 		$max_size=post_param_integer('max_size',0);
 		if (($max_size==0) || (!is_numeric($max_size))) $max_size=1000000000;
 

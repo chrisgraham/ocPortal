@@ -53,11 +53,11 @@ class Hook_content_meta_aware_gallery
 			'add_time_field'=>'add_date',
 			'edit_time_field'=>NULL,
 			'validated_field'=>NULL,
-			
+
 			'addon_name'=>'galleries',
-			
+
 			'module'=>'galleries',
 		);
 	}
-	
+
 }

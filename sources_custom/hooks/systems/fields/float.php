@@ -122,7 +122,7 @@ class Hook_fields_float
 			$LATITUDE=$actual_value; // Store for when Longitude field is rendered - critical, else won't be entered
 			return new ocp_tempcode();
 		}
-		
+
 		return form_input_float($_cf_name,$_cf_description,'field_'.strval($field['id']),(is_null($actual_value) || ($actual_value===''))?NULL:floatval($actual_value),$field['cf_required']==1);
 	}
 

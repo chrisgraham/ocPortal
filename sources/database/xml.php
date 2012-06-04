@@ -74,10 +74,10 @@ function init__database__xml()
 		if (!isset($DELIMITERS_ALPHA[$d[0]])) $DELIMITERS_ALPHA[$d[0]]=array();
 		$DELIMITERS_ALPHA[$d[0]][]=$d;
 	}
-	
+
 	global $TABLE_BASES;
 	$TABLE_BASES=array();
-	
+
 	// Support for chaining a DB- to make reads faster
 	global $SITE_INFO;
 	if ((array_key_exists('db_chain_type',$SITE_INFO)) && (!running_script('xml_db_import')) && (get_param_integer('keep_no_chain',0)!=1))
@@ -149,7 +149,7 @@ class Database_Static_xml
 	{
 		return '';
 	}
-	
+
 	/**
 	 * Find whether subquery support is present
 	 *
@@ -192,7 +192,7 @@ class Database_Static_xml
 		);
 		return $type_remap;
 	}
-	
+
 	/**
 	 * Create a table index.
 	 *
@@ -205,7 +205,7 @@ class Database_Static_xml
 	{
 		// Indexes not supported
 	}
-	
+
 	/**
 	 * Change the primary key of a table.
 	 *
@@ -221,7 +221,7 @@ class Database_Static_xml
 			$this->db_query('UPDATE db_meta SET m_type=CONCAT(\'*\',m_type) WHERE '.db_string_equal_to('m_table',$table_name).' AND '.db_string_equal_to('m_name',$_new_key),$db);
 		}
 	}
-	
+
 	/**
 	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
 	 *
@@ -231,7 +231,7 @@ class Database_Static_xml
 	{
 		return 1;
 	}
-	
+
 	/**
 	 * Create a new table.
 	 *
@@ -265,7 +265,7 @@ class Database_Static_xml
 		fix_permissions($path,0777);
 		sync_file($path);
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
 	 *
@@ -277,7 +277,7 @@ class Database_Static_xml
 	{
 		return $attribute."='".$this->db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
 	 *
@@ -289,7 +289,7 @@ class Database_Static_xml
 	{
 		return $attribute."<>'".$this->db_escape_string($compare)."'";
 	}
-	
+
 	/**
 	 * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
 	 *
@@ -299,7 +299,7 @@ class Database_Static_xml
 	{
 		return false;
 	}
-	
+
 	/**
 	 * Delete a table.
 	 *
@@ -335,7 +335,7 @@ class Database_Static_xml
 		unset($SCHEMA_CACHE[$table_name]);
 		unset($DIR_CONTENTS_CACHE[$table_name]);
 	}
-	
+
 	/**
 	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
 	 *
@@ -345,7 +345,7 @@ class Database_Static_xml
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
 	 *
@@ -356,14 +356,14 @@ class Database_Static_xml
 	{
 		return $this->db_escape_string($pattern);
 	}
-	
+
 	/**
 	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
 	 */
 	function db_close_connections()
 	{
 	}
-	
+
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
@@ -395,7 +395,7 @@ class Database_Static_xml
 
 		return array($db_name);
 	}
-	
+
 	/**
 	 * Find whether full-text-search is present
 	 *
@@ -406,7 +406,7 @@ class Database_Static_xml
 	{
 		return is_null($GLOBALS['XML_CHAIN_DB'])?false:$GLOBALS['XML_CHAIN_DB']->static_ob->db_has_full_text($GLOBALS['XML_CHAIN_DB']->connection_read);
 	}
-	
+
 	/**
 	 * Assemble part of a WHERE clause for doing full-text search
 	 *
@@ -418,7 +418,7 @@ class Database_Static_xml
 	{
 		return is_null($GLOBALS['XML_CHAIN_DB'])?'':$GLOBALS['XML_CHAIN_DB']->static_ob->db_full_text_assemble($content,$boolean);
 	}
-	
+
 	/**
 	 * Find whether full-text-boolean-search is present
 	 *
@@ -428,7 +428,7 @@ class Database_Static_xml
 	{
 		return is_null($GLOBALS['XML_CHAIN_DB'])?false:$GLOBALS['XML_CHAIN_DB']->static_ob->db_has_full_text_boolean($GLOBALS['XML_CHAIN_DB']->connection_read);
 	}
-	
+
 	/**
 	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
 	 *
@@ -439,7 +439,7 @@ class Database_Static_xml
 	{
 		return addslashes($string);
 	}
-	
+
 	/**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
 	 *
@@ -459,7 +459,7 @@ class Database_Static_xml
 
 		// LEXING STAGE
 		// ------------
-		
+
 		$i=0;
 		$query.=' '; // Cheat so that we do not have to handle the end state differently
 		$len=strlen($query);
@@ -469,7 +469,7 @@ class Database_Static_xml
 		while ($i<$len)
 		{
 			$next=$query[$i];
-			
+
 			if (($next=="'") || ($next=='"'))
 			{
 				if (trim($current_token)!='')
@@ -507,7 +507,7 @@ class Database_Static_xml
 							$current_token.=$next;
 						}
 					}
-					
+
 					$i++;
 				}
 				$current_token='';
@@ -539,15 +539,15 @@ class Database_Static_xml
 					if ($doing_symbol_delimiter) $doing_symbol_delimiter=isset($SYMBOL_DELIMINITER[$next]);
 				}
 			}
-			
+
 			$i++;
 		}
-		
+
 		$query=substr($query,0,$len-1);
 
 		// PARSING/EXECUTION STAGE
 		// -----------------------
-		
+
 		$random_key=mt_rand(0,min(2147483647,mt_getrandmax())); // Generated later, passed by reference. We will assume we only need one; multi inserts will need to each specify the key in full
 
 		if ((!is_null($GLOBALS['XML_CHAIN_DB'])) && (!$no_syndicate))
@@ -643,7 +643,7 @@ class Database_Static_xml
 					// DB chaining: It's a write query, so needs doing on chained DB too
 					$GLOBALS['XML_CHAIN_DB']->static_ob->db_query($query,$chain_connection,$max,$start,$fail_ok,$get_insert_id);
 					break;
-					
+
 				case 'SELECT':
 					return $GLOBALS['XML_CHAIN_DB']->static_ob->db_query($query,$chain_connection,$max,$start,$fail_ok,$get_insert_id);
 			}
@@ -653,7 +653,7 @@ class Database_Static_xml
 		{
 			case 'ALTER':
 				return $this->_do_query_alter($tokens,$query,$db,$fail_ok);
-			
+
 			case 'CREATE':
 				return $this->_do_query_create($tokens,$query,$db,$fail_ok);
 
@@ -677,7 +677,7 @@ class Database_Static_xml
 
 		return $this->_bad_query($query,$fail_ok,'Unrecognised query type, '.$tokens[0]);
 	}
-	
+
 	/**
 	 * See if an item is a prefix to something in the delimiter array.
 	 *
@@ -687,7 +687,7 @@ class Database_Static_xml
 	function is_start_of_delimiter($looking)
 	{
 		global $DELIMITERS_FLIPPED,$DELIMITERS,$DELIMITERS_ALPHA;
-		
+
 		$len=strlen($looking);
 		$looking=strtoupper($looking);
 		if ($len==1) return isset($DELIMITERS_FLIPPED[$looking]);
@@ -700,7 +700,7 @@ class Database_Static_xml
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Find the schema for a table.
 	 *
@@ -713,9 +713,9 @@ class Database_Static_xml
 	{
 		global $SCHEMA_CACHE;
 		if (array_key_exists($table_name,$SCHEMA_CACHE)) return $SCHEMA_CACHE[$table_name];
-		
+
 		$table_prefix=get_table_prefix();
-		
+
 		$schema_query='SELECT m_name,m_type FROM '.$table_prefix.'db_meta WHERE '.db_string_equal_to('m_table',substr($table_name,strlen($table_prefix)));
 
 		if ($table_name==$table_prefix.'db_meta')
@@ -779,12 +779,12 @@ class Database_Static_xml
 				return NULL;
 			}
 		}
-		
+
 		$SCHEMA_CACHE[$table_name]=$schema;
-		
+
 		return $schema;
 	}
-	
+
 	/**
 	 * Type check some data destined to go into a table.
 	 *
@@ -797,10 +797,10 @@ class Database_Static_xml
 		foreach ($record as $key=>$val)
 		{
 			$schema_type=preg_replace('#[^\w]#','',$schema[$key]);
-			
+
 			/*if (in_array($schema_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
 				$val=@intval($val);*/
-			
+
 			if (is_integer($val))
 			{
 				if (!in_array($schema_type,array('REAL','AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
@@ -825,7 +825,7 @@ class Database_Static_xml
 					'MD5'=>33,
 					'UINTEGER'=>10, // Fudge as we need to send in unsigned integers using strings, as PHP can't hold them
 				);
-				
+
 				if (!in_array($schema_type,array_keys($string_types)))
 					$this->_bad_query($query,false,'Database type strictness error: '.$schema_type.' wanted for '.$key.' field, but string ('.$val.') was given');
 
@@ -1081,7 +1081,7 @@ class Database_Static_xml
 
 		return $records;
 	}
-	
+
 	/**
 	 * Take an expression and do our best to collapse it into a fixed mapping of stuff we know we are going to AND.
 	 *
@@ -1128,7 +1128,7 @@ class Database_Static_xml
 
 			if ((!is_null($schema)) && (!array_key_exists($key,$schema)))
 				return array(); // Not in our table (join involved. must be in other join)
-				
+
 			if (substr($where_expr[2][1],0,1)=='%') $where_expr[2][1]=substr($where_expr[2][1],1);
 			if (substr($where_expr[2][1],-1)=='%') $where_expr[2][1]=substr($where_expr[2][1],0,strlen($where_expr[2][1])-1);
 			if ((strpos($where_expr[2][1],'%')!==false) || (strpos($where_expr[2][1],'?')!==false))
@@ -1150,7 +1150,7 @@ class Database_Static_xml
 		}
 		return array();
 	}
-	
+
 	/**
 	 * Read a record from an XML file.
 	 *
@@ -1188,7 +1188,7 @@ class Database_Static_xml
 				} else
 				{
 					if ($match=='') continue;
-					
+
 					if (strpos($file_contents,xmlentities($match))===false)
 					{
 						return NULL;
@@ -1219,7 +1219,7 @@ class Database_Static_xml
 			if (trim($bits[$i])=='') $i++; // Whitespace between tags
 			$_record[$field]=html_entity_decode($data,ENT_QUOTES,get_charset());
 		}
-		
+
 		// Even if we did serialize with type information (we don't) we would still need to do type checking, because when we do add_table_field/alter_table_field we can't assume it will alter all non-committed records on other people's systems
 		if (is_null($schema))
 		{
@@ -1257,9 +1257,9 @@ class Database_Static_xml
 				{
 					$new_val=$val;
 				}
-		
+
 				$record[$key]=$new_val;
-			
+
 				unset($schema[$key]);
 			}
 
@@ -1397,7 +1397,7 @@ class Database_Static_xml
 			}
 		}
 	}
-	
+
 	/**
 	 * Write a record to an XML file.
 	 *
@@ -1443,7 +1443,7 @@ class Database_Static_xml
 			sync_file($path.'.mine');
 		}
 	}
-	
+
 	/**
 	 * Check to see if there is a key conflict problem.
 	 *
@@ -1462,7 +1462,7 @@ class Database_Static_xml
 		foreach ($schema as $key=>$type)
 		{
 			if (strpos($type,'*')===false) continue;
-			
+
 			if ($where!='') $where.=' AND ';
 
 			$value=$record[$key];
@@ -1474,7 +1474,7 @@ class Database_Static_xml
 				else $where.=$key.'=\''.db_escape_string($value).'\'';
 			}
 		}
-		
+
 		$test_results=$this->db_query('SELECT * FROM '.$table_name.' WHERE '.$where,$db,2,NULL,$fail_ok,false,true);
 		if (count($test_results)==0) return false;
 		if (count($test_results)>1) return true;
@@ -1502,7 +1502,7 @@ class Database_Static_xml
 			$index_name=$this->_parsing_read($at,$tokens,$query);
 			if (!$this->_parsing_expects($at,$tokens,'ON',$query)) return NULL;
 			$table_name=$this->_parsing_read($at,$tokens,$query);
-			
+
 			// We don't actually do indexes, so do nothing
 		} elseif ($type=='TABLE')
 		{
@@ -1512,9 +1512,9 @@ class Database_Static_xml
 		{
 			return $this->_bad_query($query,$fail_ok,'Unrecognised DROP type, '.$type);
 		}
-		
+
 		if (!$this->_parsing_check_ended($at,$tokens,$query)) return NULL;
-		
+
 		return NULL;
 	}
 
@@ -1580,7 +1580,7 @@ class Database_Static_xml
 						$at--;
 					}
 				}
-				
+
 				if ($default===false)
 				{
 					if ($allow_null)
@@ -1639,9 +1639,9 @@ class Database_Static_xml
 						$this->_write_records($db,$table_name,$records,$fail_ok);
 					}
 				}
-				
+
 				if (!$this->_parsing_check_ended($at,$tokens,$query)) return NULL;
-		
+
 				return NULL;
 
 			case 'DROP':
@@ -1657,11 +1657,11 @@ class Database_Static_xml
 					unset($records[$guid][$column_name]);
 				}
 				$this->_write_records($db,$table_name,$records,$fail_ok);
-		
+
 				unset($SCHEMA_CACHE[$table_name][$column_name]);
 
 				if (!$this->_parsing_check_ended($at,$tokens,$query)) return NULL;
-		
+
 				return NULL;
 		}
 
@@ -1691,7 +1691,7 @@ class Database_Static_xml
 			$table_name=$this->_parsing_read($at,$tokens,$query);
 			$if_not_exists=true;
 		}
-		
+
 		if (!$this->_parsing_expects($at,$tokens,'(',$query)) return NULL;
 		$fields=array();
 		do
@@ -1818,9 +1818,9 @@ class Database_Static_xml
 		}
 		while ($token===',');
 		if (!is_null($token)) $at--;
-		
+
 		if (!$this->_parsing_check_ended($at,$tokens,$query)) return NULL;
-		
+
 		return array($table_name,$inserts);
 	}
 
@@ -2130,17 +2130,17 @@ class Database_Static_xml
 
 			case 'LITERAL':
 				return $expr[1];
-			
+
 			case 'NULL':
 				return NULL;
-			
+
 			case 'FIELD':
 				//if (!array_key_exists($expr[1],$bindings)) {@var_dump($bindings);exit($expr[1]);}	// Useful for debugging
 				return $bindings[$expr[1]];
-			
+
 			case '+':
 				return $this->_execute_expression($expr[1],$bindings,$query)+$this->_execute_expression($expr[2],$bindings,$query);
-			
+
 			case '-':
 				return $this->_execute_expression($expr[1],$bindings,$query)-$this->_execute_expression($expr[2],$bindings,$query);
 
@@ -2219,7 +2219,7 @@ class Database_Static_xml
 				}
 				return false;
 		}
-		
+
 		$this->_bad_query($query,false,'Internal error evaluating expression, '.$expr[0].' not recognised in evaluation context');
 	}
 
@@ -2443,7 +2443,7 @@ class Database_Static_xml
 						if (!$this->_parsing_expects($at,$tokens,')',$query)) return NULL;
 						break;
 				}
-				
+
 				$as_token=$this->_parsing_read($at,$tokens,$query);
 				if ($as_token=='AS')
 				{
@@ -2578,7 +2578,7 @@ class Database_Static_xml
 			$orders=NULL;
 			if (!is_null($token)) $at--;
 		}
-		
+
 		$token=$this->_parsing_read($at,$tokens,$query,true);
 		if (!is_null($token))
 		{
@@ -2602,7 +2602,7 @@ class Database_Static_xml
 				$at--;
 			}
 		}
-		
+
 		// Execute
 		$done=0;
 		if ((count($joins)==1) && ($where_expr==array('LITERAL',true)) && ($select===array(array('SIMPLE',array('COUNT','*'))))) // Quick fudge to get fast table counts
@@ -2801,7 +2801,7 @@ class Database_Static_xml
 					case 'SIMPLE':
 						$param=is_array($want[1])?$want[1][0]:$want[1];
 						if ($param=='DISTINCT') $param=is_array($want[1])?$want[1][1]:$want[1];
-						
+
 						if (strpos($param,'.')===false)
 						{
 							$_record[$param]=$record[$param];
@@ -2869,7 +2869,7 @@ class Database_Static_xml
 			}
 
 			$results_b=$this->_do_query_select($tokens,$query,$db,$max,$start,$fail_ok,$at);
-			
+
 			if ($de_dupe)
 			{
 				foreach ($results_b as $r)
@@ -2889,7 +2889,7 @@ class Database_Static_xml
 				if (!$this->_parsing_check_ended($at,$tokens,$query)) return NULL;
 			}
 		}
-		
+
 		return $results;
 	}
 
@@ -3082,7 +3082,7 @@ class Database_Static_xml
 				$join=array('INNER_JOIN',$join_table,$joined_as,$on_expr);
 				break;
 		}
-		
+
 		return $join;
 	}
 
@@ -3125,7 +3125,7 @@ class Database_Static_xml
 				}
 			}
 		}
-		
+
 		return $join_condition;
 	}
 
@@ -3373,7 +3373,7 @@ class Database_Static_xml
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * Generate a GUID for a record, preferably from the key, but doesn't have to be.
 	 *
@@ -3431,7 +3431,7 @@ class Database_Static_xml
 
 			if ($whole_key) return $guid;
 		}
-		
+
       $fuzz=strtoupper(md5(uniqid(strval(mt_rand(0,min(2147483647,mt_getrandmax()))),true)));
 
       return '{'
@@ -3453,7 +3453,7 @@ class Database_Static_xml
 	{
 		return str_replace(array('=',':',',','/','|'),array('!equals!','!colon!','!comma!','!slash!','!pipe!'),$in);
 	}
-	
+
 	/**
 	* Unescape a value from a filesystem path back to the original.
 	*
@@ -3464,5 +3464,5 @@ class Database_Static_xml
 	{
 		return str_replace(array('!equals!','!colon!','!comma!','!slash!','!pipe!'),array('=',':',',','/','|'),$in);
 	}
-	
+
 }

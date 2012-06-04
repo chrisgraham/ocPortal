@@ -30,7 +30,7 @@ class Hook_addon_registry_core_graphic_text
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

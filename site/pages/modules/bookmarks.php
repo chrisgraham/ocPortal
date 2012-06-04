@@ -40,7 +40,7 @@ class Module_bookmarks
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */

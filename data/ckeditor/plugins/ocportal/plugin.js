@@ -20,7 +20,7 @@
 						icon: icon,
 						command: 'ocportal_'+buttonName
 					});
-					
+
 					elements[0].parentNode.parentNode.style.display='none';
 				}
 			}

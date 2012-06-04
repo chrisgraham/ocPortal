@@ -34,7 +34,7 @@ function call_block(url,new_params,target_div,append,callback)
 
 	// Make AJAX call
 	do_ajax_request(ajax_url,function(raw_ajax_result) { _call_block(raw_ajax_result,ajax_url,target_div,append,callback); });
-	
+
 	return false;
 }
 
@@ -121,7 +121,7 @@ function do_ajax_field_test(url,post)
 function ajax_form_submit(event,form,block_name,map)
 {
 	if (typeof window.cleverFindValue=='undefined') return true;
-	
+
 	cancelBubbling(event);
 
 	var comcode='[block'+map+']'+block_name+'[/block]';
@@ -157,7 +157,7 @@ function ajax_form_submit(event,form,block_name,map)
 			}
 		}
 	}
-	
+
 	return true;
 }
 
@@ -348,7 +348,7 @@ function process_request_change(ajax_result_frame,i)
 		else method(ajax_result_frame,ajax_result);
 
 	}// else window.fauxmodal_alert("Method required: as it is non-blocking");
-	
+
 	return null;
 }
 

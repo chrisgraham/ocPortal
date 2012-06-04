@@ -305,7 +305,7 @@ class getid3_midi
 
 			}
 		}
-		
+
 
 		if (@$ThisFileInfo['playtime_seconds'] > 0) {
 			$ThisFileInfo['bitrate'] = (($ThisFileInfo['avdataend'] - $ThisFileInfo['avdataoffset']) * 8) / $ThisFileInfo['playtime_seconds'];

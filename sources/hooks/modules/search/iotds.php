@@ -34,14 +34,14 @@ class Hook_search_iotds
 		if ($GLOBALS['SITE_DB']->query_value('iotd','COUNT(*)')==0) return NULL;
 
 		require_lang('iotds');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('IOTD_ARCHIVE');
 		$info['default']=true;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -79,15 +79,15 @@ class Hook_search_iotds
 			case 'title':
 				$remapped_orderer='caption';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='add_date';
 				break;
 		}
-	
+
 		require_code('iotds');
 		require_lang('iotds');
-	
+
 		// Calculate our where clause (search)
 		$sq=build_search_submitter_clauses('submitter',$author_id,$author);
 		if (is_null($sq)) return array(); else $where_clause.=$sq;
@@ -100,7 +100,7 @@ class Hook_search_iotds
 
 		// Calculate and perform query
 		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'iotd r',array('','r.caption'),$where_clause,$content_where,$remapped_orderer,'r.*');
-	
+
 		$out=array();
 		foreach ($rows as $i=>$row)
 		{

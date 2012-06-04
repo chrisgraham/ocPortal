@@ -40,7 +40,7 @@ class Module_admin_ocf_history
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_ocf_history
 	{
 		return array('misc'=>'POST_HISTORY');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -62,15 +62,15 @@ class Module_admin_ocf_history
 		require_css('ocf');
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->gui();
 		if ($type=='restore') return $this->restore();
 		if ($type=='revert') return $this->revert();
 		if ($type=='delete') return $this->delete();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to show the edit/delete history of posts (exact history shown depending on GET parameters).
 	 *
@@ -79,7 +79,7 @@ class Module_admin_ocf_history
 	function gui()
 	{
 		check_specific_permission('view_content_history');
-	
+
 		$member_id=get_param_integer('member_id',-1);
 		$post_id=get_param_integer('post_id',-1);
 		$topic_id=get_param_integer('topic_id',-1);
@@ -112,9 +112,9 @@ class Module_admin_ocf_history
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',40);
-	
+
 		$max_rows=$GLOBALS['FORUM_DB']->query_value('f_post_history','COUNT(*)',$where);
-	
+
 		$posts=$GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),$where,'ORDER BY h_action_date_and_time DESC',$max,$start);
 		$content=new ocp_tempcode();
 		foreach ($posts as $post)
@@ -144,7 +144,7 @@ class Module_admin_ocf_history
 				$link=hyperlink($relates_to,$relates_text,false,true,$relates_tooltip);
 			} else $link=new ocp_tempcode();
 			$action=do_lang($post['h_action']);
-	
+
 			// Buttons
 			$buttons=new ocp_tempcode();
 			if (has_specific_permission(get_member(),'delete_content_history')) // Delete permanently
@@ -188,7 +188,7 @@ class Module_admin_ocf_history
 
 		require_code('templates_results_browser');
 		$results_browser=results_browser(do_lang_tempcode('POST_HISTORY'),NULL,$start,'start',$max,'max',$max_rows,NULL,'misc',true);
-	
+
 		return do_template('OCF_HISTORY_SCREEN',array('_GUID'=>'7dd45ce985fc7222771368336c3f19e4','RESULTS_BROWSER'=>$results_browser,'TITLE'=>$title,'CONTENT'=>$content));
 	}
 
@@ -200,9 +200,9 @@ class Module_admin_ocf_history
 	function restore()
 	{
 		check_specific_permission('restore_content_history');
-	
+
 		$title=get_page_title('POST_HISTORY');
-	
+
 		$id=get_param_integer('h_id');
 		$post=$GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$post)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -216,7 +216,7 @@ class Module_admin_ocf_history
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,true);
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * The actualiser to revert an edited post.
 	 *
@@ -225,9 +225,9 @@ class Module_admin_ocf_history
 	function revert()
 	{
 		check_specific_permission('restore_content_history');
-	
+
 		$title=get_page_title('POST_HISTORY');
-	
+
 		$id=get_param_integer('h_id');
 		$post=$GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$post)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -252,11 +252,11 @@ class Module_admin_ocf_history
 	function delete()
 	{
 		check_specific_permission('delete_content_history');
-	
+
 		$title=get_page_title('POST_HISTORY');
-	
+
 		$GLOBALS['FORUM_DB']->query_delete('f_post_history',array('id'=>get_param_integer('h_id')),'',1);
-	
+
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,true);
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}

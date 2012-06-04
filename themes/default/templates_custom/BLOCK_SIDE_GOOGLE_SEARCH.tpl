@@ -14,7 +14,7 @@
     customSearchControl.draw('cse', options);
 
     var cse_form=document.getElementById('cse-search-form');
-											
+
     if (!document.getElementById('cse'))
     {
         get_elements_by_class_name(cse_form,'gsc-search-box')[0].action='{$PAGE_LINK;,_SEARCH:{PAGE_ID}}';

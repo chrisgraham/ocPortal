@@ -31,7 +31,7 @@ class Hook_unvalidated_videos
 		if (!module_installed('galleries')) return NULL;
 
 		require_lang('galleries');
-	
+
 		$info=array();
 		$info['db_table']='videos';
 		$info['db_identifier']='id';

@@ -55,7 +55,7 @@ class Hook_criticise_mysql_fields
 	function info()
 	{
 		if (get_db_type()!='mysql') return NULL;
-	
+
 		$info=array();
 		$info['title']=do_lang_tempcode('CORRECT_MYSQL_SCHEMA_ISSUES');
 		$info['description']=do_lang_tempcode('DESCRIPTION_CORRECT_MYSQL_SCHEMA_ISSUES');
@@ -63,7 +63,7 @@ class Hook_criticise_mysql_fields
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -221,10 +221,10 @@ class Hook_criticise_mysql_fields
 				}
 			}
 		}
-		
+
 		if ($sql=='')
 			return do_lang_tempcode('NO_MYSQL_QUERY_CHANGES_MADE');
-		
+
 		return do_lang_tempcode('MYSQL_QUERY_CHANGES_MADE',escape_html($sql));
 	}
 

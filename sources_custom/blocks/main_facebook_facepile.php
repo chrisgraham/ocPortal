@@ -19,7 +19,7 @@
 
 class Block_main_facebook_facepile
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -37,7 +37,7 @@ class Block_main_facebook_facepile
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

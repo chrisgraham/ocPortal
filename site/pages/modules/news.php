@@ -41,7 +41,7 @@ class Module_news
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -51,14 +51,14 @@ class Module_news
 		$GLOBALS['SITE_DB']->drop_if_exists('news_categories');
 		$GLOBALS['SITE_DB']->drop_if_exists('news_rss_cloud');
 		$GLOBALS['SITE_DB']->drop_if_exists('news_category_entries');
-		
+
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'news'));
 
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'news'));
 		$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'news'));
-		
+
 		delete_attachments('news');
-	
+
 		delete_config_option('points_ADD_NEWS');
 		delete_config_option('news_update_time');
 		delete_config_option('blog_update_time');
@@ -68,7 +68,7 @@ class Module_news
 
 		delete_menu_item_simple('_SEARCH:cms_news:type=ad');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -103,7 +103,7 @@ class Module_news
 			$GLOBALS['SITE_DB']->create_index('news','nes',array('submitter'));
 			$GLOBALS['SITE_DB']->create_index('news','headlines',array('date_and_time','id'));
 			$GLOBALS['SITE_DB']->create_index('news','nvalidated',array('validated'));
-		
+
 			$GLOBALS['SITE_DB']->create_table('news_categories',array(
 				'id'=>'*AUTO',
 				'nc_title'=>'SHORT_TRANS',
@@ -112,9 +112,9 @@ class Module_news
 				'notes'=>'LONG_TEXT'
 			));
 			$GLOBALS['SITE_DB']->create_index('news_categories','ncs',array('nc_owner'));
-		
+
 			$default_categories=array('general','technology','difficulties','community','entertainment','business','art');
-		
+
 			require_lang('news');
 			foreach ($default_categories as $category)
 			{
@@ -136,7 +136,7 @@ class Module_news
 			add_config_option('NEWS_REGULARITY','news_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
 			add_config_option('BLOG_REGULARITY','blog_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
 		}
-		
+
 		if (($upgrade_from<3) || (is_null($upgrade_from)))
 		{
 			$GLOBALS['SITE_DB']->create_table('news_category_entries',array(
@@ -144,21 +144,21 @@ class Module_news
 				'news_entry_category'=>'*AUTO_LINK'
 			));
 			$GLOBALS['SITE_DB']->create_index('news_category_entries','news_entry_category',array('news_entry_category'));
-	
+
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			$categories=$GLOBALS['SITE_DB']->query_select('news_categories',array('id'));
-	
+
 			foreach ($categories as $_id)
 			{
 				foreach (array_keys($groups) as $group_id)
 					$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($_id['id']),'group_id'=>$group_id));
 			}
 		}
-	
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('news','allow_trackbacks','BINARY',1);
-	
+
 			$GLOBALS['SITE_DB']->add_table_field('news_categories','nc_owner','?USER');
 		}
 
@@ -187,7 +187,7 @@ class Module_news
 	{
 		return array('misc'=>'NEWS_ARCHIVE','cat_select'=>'NEWS_CATEGORIES','blog_select'=>'BLOGS','select'=>'JUST_NEWS_CATEGORIES');
 	}
-	
+
 	/**
 	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
 	 *
@@ -209,7 +209,7 @@ class Module_news
 			foreach ($rows as $row)
 			{
 				if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['nc_title']);
-				
+
 				$page_link_under='_SELF:_SELF:type=misc:id='.strval($row['id']);
 				if (!is_null($start_at))
 				{
@@ -249,7 +249,7 @@ class Module_news
 				foreach ($category_data as $row)
 				{
 					if (is_null($row['title'])) $row['title']=get_translated_text($row['nc_title']);
-				
+
 					$pagelink=$pagelink_stub.'misc:'.strval($row['id']);
 					if (__CLASS__!='')
 					{
@@ -448,14 +448,14 @@ class Module_news
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 		$blog=get_param_integer('blog',NULL);
-	
+
 		require_code('ocfiltering');
 
 		$filter=get_param('id',get_param('filter','*'));
 		$filters_1=ocfilter_to_sqlfragment($filter,'p.news_category','news_categories',NULL,'p.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 		$filters_2=ocfilter_to_sqlfragment($filter,'d.news_entry_category','news_categories',NULL,'d.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 		$q_filter='('.$filters_1.' OR '.$filters_2.')';
-		
+
 		if ($blog===1)
 		{
 			$title=get_page_title('BLOG_NEWS_ARCHIVE');
@@ -488,13 +488,13 @@ class Module_news
 		if ($blog===1)
 		{
 			$q_filter.=' AND c.nc_owner IS NOT NULL';
-			
+
 			$join.=' LEFT JOIN '.get_table_prefix().'news_categories c ON c.id=p.news_category';
 		}
 		elseif ($blog===0)
 		{
 			$q_filter.=' AND c.nc_owner IS NULL AND c.id IS NOT NULL';
-			
+
 			$join.=' LEFT JOIN '.get_table_prefix().'news_categories c ON c.id=p.news_category';
 		}
 
@@ -562,7 +562,7 @@ class Module_news
 				$map=array('_GUID'=>'a29bbea4a703287793e2b3b190114ec3','TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'CATEGORY'=>$category,'IMG'=>$img,'AUTHOR_URL'=>$author_url,'AUTHOR'=>$author,'TRUNCATE'=>$truncate,'BLOG'=>$blog===1,'NEWS'=>$summary,'SUMMARY'=>$summary,'ID'=>strval($myrow['p_id']),'VIEWS'=>strval($myrow['news_views']),'SUBMITTER'=>strval($myrow['submitter']),'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'FULL_URL'=>$url,'URL'=>$url,'TITLE_PLAIN'=>$_title_plain,'NEWS_TITLE'=>$_title,'TITLE'=>$_title);
 				if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
 				$content->attach(do_template($inline?'NEWS_PIECE_SUMMARY':'NEWS_BRIEF',$map));
-				
+
 				if ((array_key_exists('nc_owner',$myrow)) && (is_numeric($filter)))
 					$blogger=$myrow['nc_owner'];
 			}
@@ -606,12 +606,12 @@ class Module_news
 	function view_news()
 	{
 		$id=get_param_integer('id');
-	
+
 		$blog=get_param_integer('blog',NULL);
-	
+
 		$filter=get_param('filter','*');
 		$filter_and=get_param('filter_and','*');
-	
+
 		if ($blog===1)
 		{
 			$first_bc=array('_SELF:_SELF:blog_select',do_lang_tempcode('BLOGS'));
@@ -652,9 +652,9 @@ class Module_news
 			return warn_screen(get_page_title('NEWS'),do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-	
+
 		if (!has_category_access(get_member(),'news',strval($myrow['news_category']))) access_denied('CATEGORY_ACCESS');
-	
+
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
@@ -740,7 +740,7 @@ class Module_news
 			if (url_is_local($img)) $img=get_base_url().'/'.$img;
 		}
 		$category=get_translated_text($news_cats[$myrow['news_category']]['nc_title']);
-		
+
 		$categories=array(strval($myrow['news_category'])=>$category);
 		$all_categories_for_this=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('*'),array('news_entry'=>$id));
 		$NEWS_CATS=array();

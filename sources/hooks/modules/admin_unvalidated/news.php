@@ -31,7 +31,7 @@ class Hook_unvalidated_news
 		if (!module_installed('news')) return NULL;
 
 		require_lang('news');
-	
+
 		$info=array();
 		$info['db_table']='news';
 		$info['db_identifier']='id';
@@ -44,7 +44,7 @@ class Hook_unvalidated_news
 		$info['edit_type']='_ed';
 		$info['edit_identifier']='id';
 		$info['title']=do_lang_tempcode('NEWS');
-	
+
 		return $info;
 	}
 

@@ -25,26 +25,26 @@ function init__urls()
 {
 	global $HTTPS_PAGES;
 	$HTTPS_PAGES=NULL;
-	
+
 	global $CHR_0;
 	$CHR_0=chr(10);
 
 	global $USE_REWRITE_PARAMS;
 	$USE_REWRITE_PARAMS=NULL;
-	
+
 	global $HAS_KEEP_IN_URL;
 	$HAS_KEEP_IN_URL=NULL;
-	
+
 	global $URL_REMAPPINGS;
 	$URL_REMAPPINGS=NULL;
 
 	global $CONTENT_OBS,$LOADED_MONIKERS;
 	$CONTENT_OBS=NULL;
 	$LOADED_MONIKERS=array();
-	
+
 	global $SELF_URL_CACHED;
 	$SELF_URL_CACHED=NULL;
-	
+
 	define('SELF_REDIRECT','!--:)defUNLIKELY');
 }
 
@@ -93,7 +93,7 @@ function get_self_url($evaluate=false,$root_if_posted=false,$extra_params=NULL,$
 	{
 		return $SELF_URL_CACHED;
 	}
-	
+
 	if ((isset($_SERVER['PHP_SELF'])) || (isset($_ENV['PHP_SELF'])))
 	{
 		if (running_script('execute_temp'))
@@ -101,7 +101,7 @@ function get_self_url($evaluate=false,$root_if_posted=false,$extra_params=NULL,$
 			return get_self_url_easy();
 		}
 	}
-	
+
 	if ($extra_params===NULL) $extra_params=array();
 	if ($posted_too)
 	{
@@ -136,7 +136,7 @@ function get_self_url($evaluate=false,$root_if_posted=false,$extra_params=NULL,$
 		}
 		return $ret;
 	}
-	
+
 	return $url;
 }
 
@@ -223,7 +223,7 @@ function skippable_keep($key,$val)
 	{
 		return true;
 	}
-	
+
 	return ((($key=='keep_session') && (isset($_COOKIE['has_cookies']))) || (($key=='keep_has_js') && ($val=='1'))) && ((isset($_COOKIE['js_on'])) || (get_option('detect_javascript')=='0'));
 }
 
@@ -303,7 +303,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 		$vars['page']=get_zone_default_page($zone_name);
 		if ($vars['page']===NULL) $vars['page']='start';
 	}
-	
+
 	$id=isset($vars['id'])?$vars['id']:NULL;
 
 	$page_link=make_string_tempcode($zone_name.':'./*urlencode not needed in reality, performance*/($vars['page']));
@@ -339,7 +339,7 @@ function build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=f
 	{
 		if (is_integer($val)) $val=strval($val);
 		if ($val===NULL) $val='<null>';
-		
+
 		if ($key!='page')
 		{
 			if (is_object($val))
@@ -421,7 +421,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	if (($HAS_KEEP_IN_URL===NULL) || ($HAS_KEEP_IN_URL) || ($keep_all))
 	{
 		$mc=get_magic_quotes_gpc();
-		
+
 		$keep_cant_use=array();
 		$HAS_KEEP_IN_URL=false;
 		foreach ($_GET as $key=>$val)
@@ -496,7 +496,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		foreach ($vars as $key=>$val)
 		{
 			if ($val===NULL) continue; // NULL means skip
-			
+
 			if ($val===SELF_REDIRECT) $val=get_self_url(true,true);
 
 			// Add in
@@ -543,10 +543,10 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 		{
 			$loop_cnt++;
 			$last=($loop_cnt==$last_key_num);
-			
+
 			if ((!is_string($val)) && ($val!==NULL)) $val=strval($val);
 			if ((array_key_exists($key,$vars)) && (is_integer($vars[$key]))) $vars[$key]=strval($vars[$key]);
-			
+
 			if (!(((isset($vars[$key])) || (($val===NULL) && ($key=='type') && (array_key_exists('id',$vars)))) && (($key!='page') || ($vars[$key]!='') || ($val==='')) && ((!array_key_exists($key,$vars)/*NB this is just so the next clause does not error, we have other checks for non-existence*/) || ($vars[$key]!='') || (!$last)) && (($val===NULL) || ($vars[$key]==$val))))
 			{
 				$good=false;
@@ -707,7 +707,7 @@ function qualify_url($url,$url_base)
 function page_link_decode($param)
 {
 	global $CHR_0;
-	
+
 	if (strpos($param,'#')===false)
 	{
 		$hash='';
@@ -882,7 +882,7 @@ function load_moniker_hooks()
 				if ($ob_info===NULL) continue;
 				$ob_info['_hook']=$hook;
 				$CONTENT_OBS[$ob_info['view_pagelink_pattern']]=$ob_info;
-				
+
 				if (($ob_info['title_field']!==NULL) && (strpos($ob_info['title_field'],'CALL:')!==false))
 					require_code('hooks/systems/content_meta_aware/'.$hook);
 			}
@@ -932,9 +932,9 @@ function find_id_moniker($url_parts)
 						foreach ($ids as $id=>$status)
 						{
 							if (!is_bool($status)) continue;
-							
+
 							if (is_integer($id)) $id=strval($id);
-							
+
 							if ($or_list!='') $or_list.=' OR ';
 							$or_list.='('.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_equal_to('m_resource_id',$id).')';
 						}

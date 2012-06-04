@@ -51,7 +51,7 @@ class missing_colour_equations_test_set extends ocp_test_case
 			}
 		}
 	}
-	
+
 	function tearDown()
 	{
 		parent::tearDown();

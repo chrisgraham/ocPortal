@@ -38,7 +38,7 @@ class Block_main_gallery_tease
 		$info['parameters']=array('param','zone','reverse_thumb_order');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -50,7 +50,7 @@ class Block_main_gallery_tease
 		$info['ttl']=60*2;
 		return $info;
 	}*/
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -87,7 +87,7 @@ class Block_main_gallery_tease
 		foreach ($galleries as $child)
 		{
 			$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$child['name']),$zone);
-	
+
 			$is_member=(substr($child['name'],0,7)=='member_');
 			if ($is_member)
 			{
@@ -116,7 +116,7 @@ class Block_main_gallery_tease
 			$sub=do_template('GALLERY_TEASE_PIC',array('_GUID'=>'37cd5f3fc64ac1c76f85980e69a50154','TEASER'=>$teaser,'ADD_DATE'=>$add_date,'NUM_CHILDREN'=>integer_format($num_children),'NUM_IMAGES'=>integer_format($num_images),'NUM_VIDEOS'=>integer_format($num_videos),'MEMBER_INFO'=>$member_info,'URL'=>$url,'PIC'=>$pic,'TITLE'=>$_title));
 			$content->attach($sub);
 		}
-	
+
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
 		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
 		$num_pages=intval(ceil(floatval($count)/floatval($max)));

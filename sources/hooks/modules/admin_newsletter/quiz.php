@@ -32,9 +32,9 @@ class Hook_whats_news_quiz
 	function run($cutoff_time,$lang,$filter)
 	{
 		if (!addon_installed('quizzes')) return array();
-		
+
 		require_lang('quiz');
-		
+
 		unset($filter); // Not used
 
 		$new=new ocp_tempcode();

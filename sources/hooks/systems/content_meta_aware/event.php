@@ -56,7 +56,7 @@ class Hook_content_meta_aware_event
 			'validated_field'=>'validated',
 
 			'addon_name'=>'calendar',
-			
+
 			'module'=>'calendar',
 		);
 	}

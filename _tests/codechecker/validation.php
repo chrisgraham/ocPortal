@@ -159,7 +159,7 @@ function init__validation()
 		function do_lang($a,$param_a=NULL,$param_b=NULL,$param_c=NULL,$lang=NULL,$require_result=true)
 		{
 			if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
-			
+
 			unset($lang);
 			unset($allow_fail);
 
@@ -189,7 +189,7 @@ function init__validation()
 			return 'none';
 		}
 	}
-	
+
 	if (!function_exists('ocp_srv'))
 	{
 		/**
@@ -318,7 +318,7 @@ function init__validation()
 		'script'=>1, // If we have one of these as self-closing in IE... it kills it!
 	);
 	if ($strict_form_accessibility) unset($POSSIBLY_EMPTY_TAGS['textarea']);
-	
+
 	global $MUST_SELFCLOSE_TAGS;
 	$MUST_SELFCLOSE_TAGS=array(
 		'img'=>1,
@@ -331,7 +331,7 @@ function init__validation()
 		'meta'=>1,
 		'area'=>1,
 		'col'=>1,
-		
+
 		'nobr'=>1,
 	);
 
@@ -420,7 +420,7 @@ function init__validation()
 		'small'=>1,
 		'big'=>1,
 	);
-	
+
 	global $TAGS_NORMAL;
 	$TAGS_NORMAL=array(
 		'base'=>1,
@@ -2388,7 +2388,7 @@ function init__validation()
 	define('CSS_IN_CLASS',1);
 	define('CSS_EXPECTING_SEP_OR_CLASS_NAME_OR_CLASS',2);
 	define('CSS_IN_CLASS_NAME',3);
-	
+
 	define('_CSS_NO_MANS_LAND',0);
 	define('_CSS_IN_PROPERTY_KEY',1);
 	define('_CSS_IN_PROPERTY_BETWEEN',2);
@@ -2820,7 +2820,7 @@ function test_entity($offset=0)
 			}
 		}
 	}
-	
+
 	if (count($errors)==0) return NULL;
 	return $errors;
 }
@@ -2834,7 +2834,7 @@ function test_entity($offset=0)
 function fix_entities($in)
 {
 	global $ENTITIES;
-	
+
 	$out='';
 
 	$len=strlen($in);
@@ -2860,7 +2860,7 @@ function fix_entities($in)
 			}
 		}
 	}
-	
+
 	return $out;
 }
 
@@ -2941,7 +2941,7 @@ function _get_next_tag()
 				// Can't have loose text in form/body/etc
 				// 'x' is there for when called externally, checking on an x that has replaced, for example, a directive tag (which isn't actual text - so can't trip the error)
 				if (($in_no_mans_land!='x') && (trim($in_no_mans_land)!='') && (isset($TEXT_NO_BLOCK[$PARENT_TAG])) && ($GLOBALS['BLOCK_CONSTRAIN'])) $errors[]=array('XHTML_TEXT_NO_BLOCK',$PARENT_TAG);
-				
+
 				if (($next=='<') && (isset($OUT[$POS])) && ($OUT[$POS]=='!'))
 				{
 					if (($OUT[$POS+1]=='-') && ($OUT[$POS+2]=='-')) $status=IN_COMMENT;
@@ -3413,7 +3413,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 
 			// Embed is a special case
 //			if (($tag=='embed') && (!$self_close)) $EXPECTING_TAG='noembed';
-	
+
 			if (($tag=='fieldset') && (!$self_close)) $EXPECTING_TAG='legend';
 		} else
 		{
@@ -3480,7 +3480,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 						$errors[]=array('MANUAL_WCAG_SEMANTIC_LIST');
 					}
 					break;
-	
+
 				case 'script':
 					if ($GLOBALS['VALIDATION_MANUAL'])
 					{
@@ -3506,17 +3506,17 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 						if (is_array($css_validity)) $errors=array_merge($errors,$css_validity); // Some kind of error
 					}
 					break;
-	
+
 				case 'area':
 					global $AREA_LINKS;
 					if (isset($attributes['href'])) $AREA_LINKS[@html_entity_decode($attributes['href'],ENT_QUOTES,get_charset())]=1;
 					break;
-	
+
 				case 'base':
 					global $URL_BASE;
 					if (isset($attributes['href'])) $URL_BASE=@html_entity_decode($attributes['href'],ENT_QUOTES,get_charset());
 					break;
-	
+
 				case 'form':
 					if ((isset($attributes['action'])) && (strpos($attributes['action'],'?')!==false) && (isset($attributes['method'])) && ($attributes['method']=='get'))
 						$errors[]=array('XHTML_FORM_TYPE');
@@ -3534,7 +3534,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 						{
 							$errors[]=array('XHTML_A_NAME',$tag);
 						} else $ANCHORS_SEEN[$attributes['name']]=1;
-		
+
 						if ((!isset($attributes['id'])) || ((isset($attributes['id'])) && ($attributes['id']!=$attributes['name'])))
 							$errors[]=array('XHTML_NAME_ID_DEPRECATED');
 					}// elseif ((isset($attributes['id'])) && (!isset($attributes['href']))) $errors[]=array('XHTML_NAME_ID_DEPRECATED');
@@ -3548,7 +3548,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 						{
 							if (!isset($attributes['name'])) $errors[]=array('XHTML_MISSING_ATTRIBUTE',$tag,'name');
 						}
-	
+
 						if (($attributes['type']=='image') && (!isset($attributes['alt'])))
 						{
 							$errors[]=array('XHTML_MISSING_ATTRIBUTE','input','alt');
@@ -3563,12 +3563,12 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 							$errors[]=array('XHTML_MISSING_ATTRIBUTE',$tag,'value');
 					}
 					break;
-	
+
 				case 'select':
 					if ((isset($attributes['onchange'])) && (strpos($attributes['onchange'],'form.submit()')!==false))
 						$errors[]=array('WCAG_AUTO_SUBMIT_LIST');
 					break;
-	
+
 				case 'table':
 					if ((isset($attributes['summary'])) && (($attributes['summary']==do_lang('SPREAD_TABLE')) || ($attributes['summary']==do_lang('MAP_TABLE'))))
 					{
@@ -3585,27 +3585,27 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 						}
 					}
 					break;
-	
+
 				case 'thead':
 					$array_pos=array_search('table',array_reverse($TAG_STACK));
 					if ($array_pos!==false) $array_pos=count($TAG_STACK)-$array_pos-1;
 					if (($array_pos!==false) && (isset($ATT_STACK[$array_pos]['summary'])) && ($ATT_STACK[$array_pos]['summary']==''))
 						$errors[]=array('WCAG_BAD_LAYOUT_TABLE');
 					break;
-	
+
 				case 'tfoot':
 					$array_pos=array_search('table',array_reverse($TAG_STACK));
 					if ($array_pos!==false) $array_pos=count($TAG_STACK)-$array_pos-1;
 					if (($array_pos!==false) && (isset($ATT_STACK[$array_pos]['summary'])) && ($ATT_STACK[$array_pos]['summary']==''))
 						$errors[]=array('WCAG_BAD_LAYOUT_TABLE');
 					break;
-	
+
 				case 'th':
 					$array_pos=array_search('table',array_reverse($TAG_STACK));
 					if ($array_pos!==false) $array_pos=count($TAG_STACK)-$array_pos-1;
 					if (($array_pos!==false) && (isset($ATT_STACK[$array_pos]['summary'])) && ($ATT_STACK[$array_pos]['summary']==''))
 						$errors[]=array('WCAG_BAD_LAYOUT_TABLE');
-	
+
 					if (!isset($attributes['abbr']))
 					{
 						$content=trim(substr($OUT,$POS,strpos($OUT,'</th>',$POS)-$POS)); // This isn't perfect - In theory a th could contain a table itself: but it's not very semantic if it does
@@ -3638,14 +3638,14 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 					}
 					break;
 			}
-	
+
 			/*if (($tag[0]=='h') && (is_numeric(substr($tag,1))))	 Excessive check
 			{
 				global $LAST_HEADING;
 				if ($LAST_HEADING<intval(substr($tag,1))-1) $errors[]=array('WCAG_HEADING_ORDER');
 				$LAST_HEADING=intval(substr($tag,1));
 			}*/
-	
+
 			if (isset($attributes['accesskey']))
 			{
 				$this_href=isset($attributes['href'])?$attributes['href']:uniqid('');
@@ -3813,7 +3813,7 @@ function _check_attributes($tag,$attributes,$self_close,$close)
 			$IDS_SO_FAR[strtolower($value)]=1;
 		}
 	}
-	
+
 	return ($errors==array())?NULL:$errors;
 }
 
@@ -4026,15 +4026,15 @@ function _check_labelling($tag,$attributes,$self_close,$close)
 			if ($tag=='input')
 			{
 				if (!isset($attributes['type'])) return NULL;
-	
+
 				if ((($attributes['type']=='radio') || ($attributes['type']=='checkbox')) && (isset($attributes['onchange'])) && ($GLOBALS['VALIDATION_COMPAT']))
 					$errors[]=array('XHTML_IE_ONCHANGE');
 			}
-	
+
 	//		if ((!in_array('label',$TAG_STACK)) )//&& ((!isset($attributes['value']) || ($attributes['value']=='')))) // Compromise - sometimes we will use a default value as a substitute for a label. Not strictly allowed in accessibility rules, but writers mention as arguably ok (+ we need it so we don't clutter things unless we start hiding labels, which is not nice)
 			{
 				if (!isset($attributes['id'])) $attributes['id']='unnamed_'.strval(mt_rand(0,10000));
-	
+
 				if ((!isset($FOR_LABEL_IDS[$attributes['id']])) && ($attributes['id']!='x'))
 				{
 					$errors[]=array('WCAG_NO_INPUT_LABEL',$attributes['id']);

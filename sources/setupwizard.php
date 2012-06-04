@@ -30,7 +30,7 @@
 function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$installprofile)
 {
 	$page_structure=array();
-	
+
 	// Find blocks used, from environment
 	$zone_blocks=array();
 	$zone_blocks['site']=array();
@@ -45,7 +45,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 			}
 		}
 	}
-	
+
 	// Order them according to profile
 	foreach ($installprofileblocks as $set)
 	{
@@ -59,7 +59,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 			}
 		}
 	}
-	
+
 	// Work out all Comcode
 	foreach ($zone_blocks as $zone=>$blocks)
 	{
@@ -162,6 +162,6 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 		$comcode.=$right;
 		$page_structure[$zone]['right']=$comcode;
 	}
-	
+
 	return $page_structure;
 }

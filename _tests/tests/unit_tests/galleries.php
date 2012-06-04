@@ -32,7 +32,7 @@ class galleries_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		$this->establish_admin_session();
 
 		require_code('feedback');
@@ -49,7 +49,7 @@ class galleries_test_set extends ocp_test_case
 		{
 			require_code('cms/pages/modules/cms_galleries.php');
 		}
-		
+
 		$this->cms_gal				=	new Module_cms_galleries();
 		$this->cms_gal->run_start('misc');
 		$this->cms_gal_alt		=	new Module_cms_galleries_alt();
@@ -72,7 +72,7 @@ class galleries_test_set extends ocp_test_case
 			'require__name' => 1,
 			'comcode__description' => 1,
 			'description' => 'A test gallery for UT',
-		
+
 			'description_parsed' => '',
 			'require__rep_image' => 0,
 			'hidFileID_rep_image' => -1,
@@ -81,7 +81,7 @@ class galleries_test_set extends ocp_test_case
 			'secondary_parents' => array(
 						'0' => 'a_test_image',
 				),
-		
+
 			'require__secondary_parents' => 0,
 			'accept_images' => 1,
 			'tick_on_form__accept_images' => 0,
@@ -319,10 +319,10 @@ class galleries_test_set extends ocp_test_case
 
 		//return $this->cms_gal_alt->_ad();
 	}
-	
+
 	function testDeleteGallery()
 	{
 		return $this->cms_gal_category->delete_actualisation('a_test_gallery_for_ut');
 	}
-	
+
 }

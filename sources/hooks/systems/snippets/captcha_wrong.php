@@ -29,10 +29,10 @@ class Hook_captcha_wrong
 	function run()
 	{
 		$val=get_param('name');
-		
+
 		require_code('captcha');
 		if (check_captcha($val)) return new ocp_tempcode();
-		
+
 		return make_string_tempcode(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('INVALID_SECURITY_CODE_ENTERED'),ENT_QUOTES)));
 	}
 

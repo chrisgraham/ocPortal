@@ -31,7 +31,7 @@ class Hook_whats_news_downloads
 		if (!addon_installed('downloads')) return NULL;
 
 		require_lang('downloads');
-	
+
 		require_code('downloads');
 		return array(nice_get_download_category_tree(),do_lang('SECTION_DOWNLOADS'));
 	}
@@ -49,9 +49,9 @@ class Hook_whats_news_downloads
 		if (!addon_installed('downloads')) return array();
 
 		require_lang('downloads');
-	
+
 		$new=new ocp_tempcode();
-	
+
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'category_id');
 		$rows=$GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM '.get_table_prefix().'download_downloads WHERE validated=1 AND add_date>'.strval((integer)$cutoff_time).' AND ('.$or_list.') ORDER BY add_date DESC',300);
@@ -65,7 +65,7 @@ class Hook_whats_news_downloads
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
 			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'bbd85ed54500b9d6df998e3c835b45e9','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
 		}
-	
+
 		return array($new,do_lang('SECTION_DOWNLOADS','','','',$lang));
 	}
 

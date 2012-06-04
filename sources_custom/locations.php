@@ -293,9 +293,9 @@ function find_continents()
 function find_continent($country)
 {
 	static $cache=array();
-	
+
 	if (isset($cache[$country])) return $cache[$country];
-	
+
 	global $COUNTRY_LIST;
 	foreach ($COUNTRY_LIST as $continent=>$countries)
 	{
@@ -332,7 +332,7 @@ function find_iso_country_name($country)
 function find_country_name_from_iso($iso)
 {
 	static $cache=array();
-	
+
 	if (isset($cache[$iso])) return $cache[$iso];
 
 	global $COUNTRY_LIST;

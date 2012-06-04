@@ -369,7 +369,7 @@ function delete_poll($id)
 
 	$question=get_translated_text($rows[0]['question']);
 	log_it('DELETE_POLL',strval($id),$question);
-	
+
 	delete_lang($rows[0]['question']);
 	for ($i=1;$i<=10;$i++)
 	{

@@ -296,7 +296,7 @@ form { /* For IE6 */
 		float: left;
 		background: url('{$IMG;,header}') no-repeat !important;
 	}
-	
+
 	.logo_outer * {
 		display: none;
 	}
@@ -3017,7 +3017,7 @@ ul.sitemap li li {
 		margin: 1em 0;
 		border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 	}
-	
+
 	.attachment legend {
 		border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
 		padding: 0.15em 0.3em;
@@ -3986,11 +3986,11 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 	body {
 		background: none;
 	}
-	
+
 	h1 {
 		display: none;
 	}
-	
+
 	.wide_table_wrap {
 		overflow-y: visible !important;
 	}
@@ -3998,11 +3998,11 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 	.ocf_member_signature .comcode_hide, .button_panel, #screen_actions_outer, .adminzone_search, .global_top, .global_banner, .hide_button, .bottom, .global_side, .mini_edit_me, .control_functions, .staff_actions, .ocf_page_buttons, .ocf_member_bar, .ocf_post_buttons, .ocf_topic_marker, #comments_form, .members_viewing, .member_bar_etc, .ratings, .trackbacks, #news_archive_link {
 		display: none;
 	}
-	
+
 	#global_zones {
 		visibility: hidden;
 	}
-	
+
 	#global_middle_ph {
 		position: absolute;
 		{!en_left}: 0;

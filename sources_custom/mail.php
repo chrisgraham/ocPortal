@@ -60,7 +60,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_queued'=>((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && cron_installed()))?1:0,
 			'm_template'=>$mail_template,
 		));
-		
+
 		if ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && cron_installed())) return;
 	}
 
@@ -160,7 +160,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	{
 		$html_evaluated=$message_raw;
 	}
-	
+
 	// Character set
 	$regexp='#^[\x'.dechex(32).'-\x'.dechex(126).']*$#';
 	$charset=((preg_match($regexp,$html_evaluated)==0)?do_lang('charset',NULL,NULL,NULL,$lang):'us-ascii');
@@ -215,7 +215,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 				'cid'=>$id,
 			);
 		}
-		
+
 		$cid_attachments[]=$cid_attachment;
 	}
 
@@ -227,7 +227,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		foreach ($attachments as $path=>$filename)
 		{
 			$mime_type=get_mime_type(get_file_extension($filename));
-			
+
 			if (strpos($path,'://')===false)
 			{
 				$real_attachment=array(
@@ -254,7 +254,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			$real_attachments[]=$real_attachment;
 		}
 	}
-	
+
 	// ==========================
 	// Interface with SwiftMailer
 	// ==========================

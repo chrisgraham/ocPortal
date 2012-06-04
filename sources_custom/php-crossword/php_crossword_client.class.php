@@ -39,15 +39,15 @@ class PHPCrosswordClient
 	var $words = 15;
 	var $max_tries = 10;
 	var $groupid = 'en';
-	
+
 	var $html;
 	var $items = array();
 	var $_map = array();
 	var $_letters = array();
 	var $_nr = 0;
-	
+
 	var $_generator_access_method = 'http';
-	
+
 	var $_error;
 
 	/**
@@ -67,7 +67,7 @@ class PHPCrosswordClient
 	{
 		$this->groupid = $groupid;
 	}
-	
+
 	/**
 	 * Set columns number
 	 * @param int $cols
@@ -85,7 +85,7 @@ class PHPCrosswordClient
 	{
 		return $this->cols;
 	}
-	
+
 	/**
 	 * Get error message
 	 * @return string
@@ -139,7 +139,7 @@ class PHPCrosswordClient
 	{
 		$this->max_tries = $max_tries;
 	}
-	
+
 	/**
 	 * Set generator access method (http/direct)
 	 * @param string $type
@@ -158,12 +158,12 @@ class PHPCrosswordClient
 		do
 		{
 			$this->__generate();
-			
+
 			if (!empty($this->_error)) 
 				return FALSE;
 		}
 		while (!count($this->items));
-		
+
 		return TRUE;
 	}
 
@@ -175,26 +175,26 @@ class PHPCrosswordClient
 	function __generate()
 	{
 		$xml = $this->__getXML();
-		
+
 		$tree = GetXMLTreeFromString($xml);
-			
+
 		unset($snoopy);
-		
+
 		if (empty($tree[0]['tag']))
 		{
 			$this->_error = 'ERROR: INVALID XML RESPONSE';
 			return FALSE;
 		}
-		
+
 		if ($tree[0]['tag'] != 'CROSSWORD')
 		{
 			$this->_error = 'ERROR: ' . $tree[0]['value'];
 			return FALSE;
 		}
-		
+
 		return $this->__load($tree[0]['children']);
 	}
-	
+
 	/**
 	 * Get crossword XML
 	 * @private
@@ -210,7 +210,7 @@ class PHPCrosswordClient
 				die("ERROR: invalid generator access method '{$this->_generator_access_method}'");
 		}
 	}
-	
+
 	/**
 	 * Fetch XML using HTTP protocol
 	 * @private
@@ -228,10 +228,10 @@ class PHPCrosswordClient
 
 		$snoopy = new Snoopy;
 		$snoopy->fetch($url);
-		
+
 		return $snoopy->results;
 	}
-	
+
 	/**
 	 * Call generator directly
 	 * @private
@@ -240,17 +240,17 @@ class PHPCrosswordClient
 	function __getXML_Direct()
 	{
 		$pc = new PHP_Crossword($this->cols, $this->rows);
-		
+
 		$pc->setGroupID($this->groupid);
 		$pc->setMaxWords($this->words);
 		$pc->setMaxFullTries($this->max_tries);
-		
+
 		$pc->generate();
-		
+
 		$xml = $pc->getXML();
-		
+
 		unset($pc);
-		
+
 		return $xml;
 	}
 
@@ -274,13 +274,13 @@ class PHPCrosswordClient
 				case 'ITEMS':
                     $this->__loadItems($item['children']);
 					break;
-					
+
 				case 'HTML':
 					$this->html = $item['value'];
 					break;
 			}
 		}
-		
+
 		return TRUE;
 	}
 

@@ -80,6 +80,6 @@ editAreaLoader.load_syntax["css"] = {
 			}
 		,'OPERATORS' : 'color: #FF00FF;'
 		,'DELIMITERS' : 'color: #60CA00;'
-				
+
 	}
 };

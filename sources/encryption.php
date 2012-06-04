@@ -120,7 +120,7 @@ function remove_magic_encryption_marker($data)
 function decrypt_data($data,$passphrase)
 {
 	if ($data=='') return '';
-	
+
 	if (!function_exists('openssl_pkey_get_private')) return '';
 	if (!function_exists('openssl_private_decrypt')) return '';
 

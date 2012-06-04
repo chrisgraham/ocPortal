@@ -34,7 +34,7 @@ function send_recommendation_email($name,$email_address,$message,$is_invite=fals
 	if (!is_array($email_address)) $email_address=array($email_address);
 	if (is_null($recommender_email)) $recommender_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 	if (is_null($subject)) $subject=do_lang('RECOMMEND_MEMBER_SUBJECT',get_site_name());
-	
+
 	require_code('mail');
 	if ($message=='') $message='('.do_lang('NONE').')';
 

@@ -34,14 +34,14 @@ class Hook_search_polls
 		if ($GLOBALS['SITE_DB']->query_value('poll','COUNT(*)')==0) return NULL;
 
 		require_lang('polls');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('POLL_ARCHIVE');
 		$info['default']=true;
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -79,12 +79,12 @@ class Hook_search_polls
 			case 'title':
 				$remapped_orderer='question';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='add_time';
 				break;
 		}
-	
+
 		require_code('polls');
 		require_lang('polls');
 		require_css('polls');
@@ -100,7 +100,7 @@ class Hook_search_polls
 
 		// Calculate and perform query
 		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'poll r',array('r.question','r.option1','r.option2','r.option3','r.option4','r.option5'),$where_clause,$content_where,$remapped_orderer,'r.*');
-	
+
 		$out=array();
 		foreach ($rows as $i=>$row)
 		{

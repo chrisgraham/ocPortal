@@ -404,17 +404,17 @@ bar
 
 	<p>
 		Should see this text 3 times.
-		
+
 	</p>
 
 	<p>
 		Should see this text 3 times.
-		
+
 	</p>
 
 	<p>
 		Should see this text 3 times.
-		
+
 	</p>
 
 

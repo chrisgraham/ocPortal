@@ -25,7 +25,7 @@ function init__failure()
 {
 	global $DONE_ONE_WEB_SERVICE;
 	$DONE_ONE_WEB_SERVICE=false;
-	
+
 	if (!defined('MAX_STACK_TRACE_VALUE_LENGTH'))
 	{
 		define('MAX_STACK_TRACE_VALUE_LENGTH',300);
@@ -542,14 +542,14 @@ function remove_ip_ban($ip)
 function get_webservice_result($error_message)
 {
 	if (get_domain()=='ocportal.com') return NULL;
-	
+
 	if ((!function_exists('has_zone_access')) || (!has_zone_access(get_member(),'adminzone'))) return NULL;
-	
+
 	require_code('files');
 	global $DONE_ONE_WEB_SERVICE;
 	if (($GLOBALS['DOWNLOAD_LEVEL']>0) || ($DONE_ONE_WEB_SERVICE)) return NULL;
 	$DONE_ONE_WEB_SERVICE=true;
-	
+
 	if (is_object($error_message)) $error_message=$error_message->evaluate();
 
 	if ($GLOBALS['HTTP_STATUS_CODE']=='401') return NULL;
@@ -628,7 +628,7 @@ function _fatal_exit($text,$return=false)
 
 		exit($output);
 	}
-	
+
 	$GLOBALS['HTTP_STATUS_CODE']='500';
 	if (!headers_sent())
 	{

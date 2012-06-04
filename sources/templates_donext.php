@@ -322,7 +322,7 @@ function _do_next_section($list,$title)
 			$i++;
 		}
 	}
-	
+
 	if ($next_items->is_empty()) return new ocp_tempcode();
 
 	return do_template('DO_NEXT_SECTION',array('_GUID'=>'18589e9e8ec1971f692cb76d71f33ec1','I'=>strval($i),'TITLE'=>$title,'CONTENT'=>$next_items));

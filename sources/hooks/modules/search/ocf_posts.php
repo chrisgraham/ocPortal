@@ -34,7 +34,7 @@ class Hook_search_ocf_posts
 		if ($GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)')==0) return NULL;
 
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('SECTION_FORUMS');
 		$info['default']=false;
@@ -43,10 +43,10 @@ class Hook_search_ocf_posts
 		if (has_specific_permission(get_member(),'see_unvalidated')) $info['special_off']['unvalidated']=do_lang_tempcode('POST_SEARCH_UNVALIDATED');
 		$info['category']='s.t_forum_id';
 		$info['integer_category']=true;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
 	 *

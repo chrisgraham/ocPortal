@@ -45,7 +45,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'EMOTICONS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -208,14 +208,14 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 									if (fwrite($outfile,$more)<strlen($more)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 								}
 								while (($more!==false) && ($more!=''));
-	
+
 								fclose($outfile);
 								fix_permissions($path);
 								sync_file($path);
-							
+
 								$this->_import_emoticon($path);
 							}
-	
+
 							zip_entry_close($entry);
 						}
 
@@ -278,7 +278,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 		}
 
 		$title=get_page_title('IMPORT_EMOTICONS');
-	
+
 		log_it('IMPORT_EMOTICONS');
 
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),NULL);
@@ -403,7 +403,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	function add_actualisation()
 	{
 		require_code('themes2');
-		
+
 		$theme_img_code=get_theme_img_code('ocf_emoticons',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
 
 		ocf_make_emoticon(post_param('code'),$theme_img_code,post_param_integer('relevance_level'),post_param_integer('use_topics',0),post_param_integer('is_special',0));
@@ -418,7 +418,7 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 	function edit_actualisation($id)
 	{
 		require_code('themes2');
-		
+
 		$theme_img_code=get_theme_img_code('ocf_emoticons',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
 
 		ocf_edit_emoticon($id,post_param('code'),$theme_img_code,post_param_integer('relevance_level'),post_param_integer('use_topics',0),post_param_integer('is_special',0));

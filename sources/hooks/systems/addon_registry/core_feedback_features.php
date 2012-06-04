@@ -259,7 +259,7 @@ class Hook_addon_registry_core_feedback_features
 		require_lang('comcode');
 		require_javascript('javascript_swfupload');
 		require_javascript('javascript_posting');
-		
+
 		$content = do_lorem_template('ATTACHMENT',array(
 					'I'=>placeholder_number(),
 					'POSTING_FIELD_NAME'=>'',
@@ -366,7 +366,7 @@ class Hook_addon_registry_core_feedback_features
 			'FORM'=>$form,
 			'COMMENTS'=>$comments,
 		));
-		
+
 		$out->attach(do_lorem_template('COMMENT_AJAX_HANDLER',array('OPTIONS'=>lorem_phrase(),'HASH'=>lorem_phrase())));
 
 		return array(
@@ -467,7 +467,7 @@ class Hook_addon_registry_core_feedback_features
 			'HAS_RATINGS'=>true,
 			'SIMPLISTIC'=>false,
 			'ERROR'=>'',
-			
+
 		));
 		return array(
 			lorem_globalise(

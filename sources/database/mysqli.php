@@ -49,7 +49,7 @@ class Database_Static_mysqli extends Database_super_mysql
 	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
 	{
 		unset($persistent);
-	
+
 		if (!function_exists('mysqli_connect'))
 		{
 			$error='mySQLi not on server (anymore?). Try using the \'mysql\' database driver. To use it, edit the info.php config file.';
@@ -60,7 +60,7 @@ class Database_Static_mysqli extends Database_super_mysql
 			}
 			critical_error('PASSON',$error);
 		}
-	
+
 		// Potential cacheing
 		global $CACHE_DB,$LAST_SELECT_DB;
 		$x=serialize(array($db_name,$db_host));
@@ -71,11 +71,11 @@ class Database_Static_mysqli extends Database_super_mysql
 				mysqli_select_db($CACHE_DB[$x],$db_name);
 				$LAST_SELECT_DB=array($CACHE_DB[$x],$db_name);
 			}
-	
+
 			return array($CACHE_DB[$x],$db_name);
 		}
 		$db=/*$persistent?@mysqli_pconnect($db_host,$db_user,$db_password):*/@mysqli_connect($db_host,$db_user,$db_password);
-	
+
 		if ($db===false)
 		{
 			$error='Could not connect to database-server (when authenticating) ('.mysqli_connect_error().')';
@@ -92,7 +92,7 @@ class Database_Static_mysqli extends Database_super_mysql
 			{
 				@mysqli_query($db,'CREATE DATABASE IF NOT EXISTS '.$db_name);
 			}
-	
+
 			if (!mysqli_select_db($db,$db_name))
 			{
 				$error='Could not connect to database ('.mysqli_error($db).')';
@@ -105,12 +105,12 @@ class Database_Static_mysqli extends Database_super_mysql
 			}
 		}
 		$LAST_SELECT_DB=array($db,$db_name);
-	
+
 	/*	$mysql_version=mysqli_get_server_info($db);
 		if (($mysql_version[0]=='3') && (!file_exists(get_file_base().'/old_mysql'))) exit('The mySQL version used is too old (Version '.$mysql_version.' used, whilst at least Version 4.0 is required)');*/
-	
+
 		$CACHE_DB[$x]=$db;
-	
+
 		global $SITE_INFO;
 		if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
 		if (function_exists('mysqli_set_charset'))
@@ -125,7 +125,7 @@ class Database_Static_mysqli extends Database_super_mysql
 
 		return array($db,$db_name);
 	}
-	
+
 	/**
 	 * Find whether full-text-search is present
 	 *
@@ -170,7 +170,7 @@ class Database_Static_mysqli extends Database_super_mysql
 	{
 		return (version_compare(mysqli_get_server_info($db[0]),'4.1.0','>='));
 	}
-	
+
 	/**
 	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
 	 *
@@ -183,7 +183,7 @@ class Database_Static_mysqli extends Database_super_mysql
 		if (is_null($LAST_SELECT_DB)) return addslashes($string);
 		return mysqli_real_escape_string($LAST_SELECT_DB[0],$string);
 	}
-	
+
 	/**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
 	 *
@@ -198,7 +198,7 @@ class Database_Static_mysqli extends Database_super_mysql
 	function db_query($query,$db_parts,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false)
 	{
 		list($db,$db_name)=$db_parts;
-	
+
 		if (strlen($query)>500000) // Let's hope we can fail on this, because it's a huge query. We can only allow it if mySQL can.
 		{
 			$test_result=$this->db_query('SHOW VARIABLES LIKE \'max_allowed_packet\'',$db_parts,NULL,NULL,true);
@@ -218,11 +218,11 @@ class Database_Static_mysqli extends Database_super_mysql
 			mysqli_select_db($db,$db_name);
 			$LAST_SELECT_DB=array($db,$db_name);
 		}
-	
+
 		if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval((integer)$start).','.strval((integer)$max);
 		elseif (!is_null($max)) $query.=' LIMIT '.strval((integer)$max);
 		elseif (!is_null($start)) $query.=' LIMIT '.strval((integer)$start).',30000000';
-	
+
 		$results=@mysqli_query($db,$query);
 		if (($results===false) && ((!$fail_ok) || (strpos(mysqli_error($db),'is marked as crashed and should be repaired')!==false)))
 		{
@@ -249,12 +249,12 @@ class Database_Static_mysqli extends Database_super_mysql
 				return NULL;
 			}
 		}
-	
+
 		if (((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,9))=='DESCRIBE ') || (strtoupper(substr($query,0,5))=='SHOW ')) && ($results!==true) && ($results!==false))
 		{
 			return $this->db_get_query_rows($results);
 		}
-	
+
 		if ($get_insert_id)
 		{
 			if (strtoupper(substr($query,0,7))=='UPDATE ') return mysqli_affected_rows($db);
@@ -267,10 +267,10 @@ class Database_Static_mysqli extends Database_super_mysql
 			}
 			return $ins;
 		}
-	
+
 		return NULL;
 	}
-	
+
 	/**
 	 * Get the rows returned from a SELECT query.
 	 *
@@ -288,7 +288,7 @@ class Database_Static_mysqli extends Database_super_mysql
 			$names[$x]=$field->name;
 			$types[$x]=$field->type;
 		}
-	
+
 		$out=array();
 		$newrow=array();
 		while (!is_null(($row=mysqli_fetch_row($results))))
@@ -329,14 +329,14 @@ class Database_Static_mysqli extends Database_super_mysql
 				{
 					$newrow[$name]=$v;
 				}
-	
+
 				$j++;
 			}
-	
+
 			$out[]=$newrow;
 		}
 		mysqli_free_result($results);
-	
+
 		return $out;
 	}
 }

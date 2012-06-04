@@ -35,7 +35,7 @@ function _handle_permission_check_logging($member,$op,$params,$result)
 		require_all_lang();
 		$params[0]=$params[0].' ("'.do_lang('PT_'.$params[0]).'")';
 	}
-	
+
 	$str=$op;
 	if (count($params)!=0)
 	{
@@ -137,7 +137,7 @@ function get_category_permissions_for_environment($module,$category,$page=NULL,$
 	if (is_null($page)) $page=get_page_name();
 	if ($category=='-1') $category=NULL;
 	if ($category=='') $category=NULL;
-	
+
 	$server_id=get_module_zone($page).':'.$page; // $category is not of interest to us because we use this to find our inheritance settings
 
 	$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
@@ -196,7 +196,7 @@ function get_category_permissions_for_environment($module,$category,$page=NULL,$
 			foreach ($overridables as $override=>$cat_support)
 			{
 				if (is_array($cat_support)) $cat_support=$cat_support[0];
-				
+
 				$default_access[$id][$override]=array();
 				if ($cat_support==0) continue;
 				$default_access[$id][$override]=has_specific_permission_group($id,$override,$page)?'1':'0';
@@ -287,7 +287,7 @@ function get_permissions_matrix($server_id,$access,$overridables,$specific_permi
 			$color=$matches[1];
 		}
 	}
-	
+
 	// For heading up the table matrix
 	$overrides_array=array();
 	foreach ($overridables as $override=>$cat_support)

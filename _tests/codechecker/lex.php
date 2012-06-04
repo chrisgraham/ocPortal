@@ -617,7 +617,7 @@ function lex($text=NULL)
 							$tokens[]=array('CONC',$i);
 						}
 						$special_token_value_2='';
-	
+
 						if ($heredoc_simple) $i--;
 						break;
 					}

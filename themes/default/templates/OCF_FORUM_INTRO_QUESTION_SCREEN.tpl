@@ -4,7 +4,7 @@
 	<div class="site_special_message_alt_inner">
 		{+START,BOX,{!BEFORE_ENTERING_FORUM},,curved}
 			<p class="highlight_red">{$?,{$IS_NON_EMPTY,{ANSWER}},{!FORUM_INTRO_QUESTION_TEXT},{!FORUM_INTRO_QUESTION_TEXT_ALT}}</p>
-		
+
 			{QUESTION}
 		{+END}
 

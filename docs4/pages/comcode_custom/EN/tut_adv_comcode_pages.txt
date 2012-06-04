@@ -256,7 +256,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<th>Use</th>
 		<td>Used in the Admin Guide to show all the block parameters.</td>
 	</tr>
-	
+
 </table></div>
 
 <br />
@@ -635,7 +635,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<td>Used on the Comcode help page.</td>
 
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -758,7 +758,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<th>Use</th>
 		<td>Used by the Comcode help page to show which codes are available.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -979,7 +979,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<th>Use</th>
 		<td>In conjunction with the configuration setting for greeting text, this is a great way to give users customised greetings on the front page.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1570,7 +1570,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<th>Use</th>
 		<td>Used to be used on the Admin Zone front page to show an overview of what the administrators are doing.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1591,7 +1591,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<th>Use</th>
 		<td>This is a big help in making sure staff do not forget to perform regular actions, such as making backups and validating submissions.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1612,7 +1612,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<th>Use</th>
 		<td>Used on the Admin Zone front page to notify of updates to the software.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1633,7 +1633,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<th>Use</th>
 		<td>Used on the Admin Zone front page to aid administrators in getting to grips with the software.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1838,7 +1838,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<td>For a site with multiple languages, users will need to be able to choose a language to use if it isn&#039;t detected properly.</td>
 
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1859,7 +1859,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<td>Multi-site networks allow you to bind multiple websites together (preferably all running this software). This provides easy navigation between the sites specified under the netlink URL.</td>
 
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1929,7 +1929,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<td>Used in the forum zone to alert new Private Topics.</td>
 
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1950,7 +1950,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<td>Allows quick login, and shows information about the logged-in member so they can keep quick track of their own stats.</td>
 
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -1971,7 +1971,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 
 		<td>Used in the documentation.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -2099,7 +2099,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 
 		<td>Let users know about the state and size of the site.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 
@@ -2169,7 +2169,7 @@ It is advisable that you use the "block construction assistant" (linked to via t
 		<th>Use</th>
 		<td>Users get a feeling of activity, and know who is currently online.</td>
 	</tr>
-	
+
 </table></div>
 <br />
 

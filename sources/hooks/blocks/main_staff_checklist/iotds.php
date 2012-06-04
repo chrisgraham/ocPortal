@@ -33,9 +33,9 @@ class Hook_checklist_iotds
 		if (get_option('iotd_update_time')=='') return array();
 
 		require_lang('iotds');
-	
+
 		$date=$GLOBALS['SITE_DB']->query_value_null_ok('iotd','date_and_time',array('is_current'=>1));
-	
+
 		$limit_hours=intval(get_option('iotd_update_time'));
 
 		$seconds_ago=mixed();

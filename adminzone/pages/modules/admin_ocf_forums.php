@@ -48,7 +48,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_FORUMS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -72,12 +72,12 @@ class Module_admin_ocf_forums extends standard_aed_module
 		require_code('ocf_forums_action2');
 		require_code('ocf_forums2');
 		require_css('ocf');
-		
+
 		load_up_all_module_category_permissions($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums');
-		
+
 		if ($type=='misc') return $this->misc();
 		if ($type=='reorder') return $this->reorder();
-		
+
 		return new ocp_tempcode();
 	}
 
@@ -100,7 +100,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 			$menu_links[]=array('posttemplates',array('admin_ocf_post_templates',array('type'=>'misc'),get_module_zone('admin_ocf_post_templates')),do_lang_tempcode('POST_TEMPLATES'),('DOC_POST_TEMPLATES'));
 		if (addon_installed('ocf_multi_moderations'))
 			$menu_links[]=array('multimods',array('admin_ocf_multimoderations',array('type'=>'misc'),get_module_zone('admin_ocf_multimoderations')),do_lang_tempcode('MULTI_MODERATIONS'),('DOC_MULTI_MODERATIONS'));
-		
+
 		require_code('templates_donext');
 		require_code('fields');
 		return do_next_manager(get_page_title('MANAGE_FORUMS'),comcode_to_tempcode(do_lang('DOC_FORUMS')."\n\n".do_lang('DOC_FORUM_CATEGORIES'),NULL,true),
@@ -514,7 +514,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 		}
 
 		$this->set_permissions($id);
-		
+
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forumview')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',$id)))
 			syndicate_described_activity('ocf:ACTIVITY_ADD_FORUM',$name,'','','_SEARCH:forumview:misc:'.$id,'','','ocf_forum');
 
@@ -546,7 +546,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 				if (post_param_integer('access_'.strval($group_id),0)==0) // Lost access
 					$lost_groups[]=$group_id;
 			}
-	
+
 			$this->set_permissions($id);
 		}
 	}

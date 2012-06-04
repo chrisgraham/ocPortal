@@ -30,7 +30,7 @@ class Hook_members_ecommerce
 	function run($member_id)
 	{
 		if (!addon_installed('ecommerce')) return array();
-		
+
 		require_lang('ecommerce');
 		$modules=array();
 

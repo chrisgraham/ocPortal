@@ -41,7 +41,7 @@ class Module_catalogues
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -60,14 +60,14 @@ class Module_catalogues
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_entry_linkage');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_cat_treecache');
 		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_childcountcache');
-	
+
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_category'));
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_catalogue'));
-	
+
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'catalogues'));
-		
+
 		deldir_contents(get_custom_file_base().'/uploads/catalogues',true);
-		
+
 		delete_specific_permission('high_catalogue_entry_timeout');
 
 		delete_menu_item_simple('_SEARCH:catalogues:type=misc');
@@ -104,7 +104,7 @@ class Module_catalogues
 				'c_ecommerce'=>'BINARY',
 				'c_send_view_reports'=>'ID_TEXT' // never,daily,weekly,monthly,quarterly
 			));
-		
+
 			$GLOBALS['SITE_DB']->create_table('catalogue_categories',array(
 				'id'=>'*AUTO',
 				'c_name'=>'ID_TEXT',
@@ -202,7 +202,7 @@ class Module_catalogues
 				'content_id'=>'ID_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('catalogue_entry_linkage','custom_fields',array('content_type','content_id'));
-			
+
 			// This caches ancestor relationships. It is redundant to doing tree traversals on catalogue_categories.cc_id, allowing normal efficient SQL joins to be done instead
 			// Note that self relationships (cc_id=cc_ancestor_id) are stored too, so that a single join covers that too.
 			$GLOBALS['SITE_DB']->create_table('catalogue_cat_treecache',array(
@@ -250,7 +250,7 @@ class Module_catalogues
 		{
 			// Add the default catalogues
 			// ==========================
-		
+
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
 			// Projects
@@ -370,7 +370,7 @@ class Module_catalogues
 			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_add_date',array('ce_add_date'),'id');
 			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_c_name',array('c_name'),'id');
 		}
-		
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('catalogues','c_own_template');
@@ -425,7 +425,7 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'products','group_id'=>$group_id));
 			}
-			
+
 			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_PRODUCTS_TITLE','_SEARCH:catalogues:type=category:catalogue_name=products');
 
 			add_specific_permission('CATALOGUES','high_catalogue_entry_timeout',false);
@@ -521,7 +521,7 @@ class Module_catalogues
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -531,7 +531,7 @@ class Module_catalogues
 	{
 		return array('misc'=>'CATALOGUES');
 	}
-	
+
 	/**
 	 * Standard modular page-link finder function (does not return the main entry-points that are not inside the tree).
 	 *
@@ -583,7 +583,7 @@ class Module_catalogues
 		foreach ($rows as $row)
 		{
 			if (substr($row['c_name'],0,1)=='_') continue;
-		
+
 			if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
 			$kids=array();
 			if ((!is_null($max_depth)) || ($max_depth>1))
@@ -631,7 +631,7 @@ class Module_catalogues
 	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub,$parent_pagelink=NULL,$recurse_level=0,$category_data=NULL,$entry_data=NULL)
 	{
 		$parent_pagelink_orig=$parent_pagelink;
-		
+
 		// This is where we start
 		if (is_null($parent_pagelink))
 		{
@@ -713,7 +713,7 @@ class Module_catalogues
 					$map=get_catalogue_entry_map($row,$catalogues[$row['c_name']],'CATEGORY','DEFAULT',NULL,NULL,array(0));
 
 					$row['title']=is_object($map['FIELD_0_PLAIN'])?$map['FIELD_0_PLAIN']->evaluate():$map['FIELD_0_PLAIN'];
-				
+
 					$pagelink=$pagelink_stub.'entry:'.strval($row['id']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
 				}
@@ -748,7 +748,7 @@ class Module_catalogues
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to show a catalogue category.
 	 *
@@ -758,7 +758,7 @@ class Module_catalogues
 	{
 		require_code('feedback');
 		require_code('images');
-		
+
 		$id=get_param_integer('id',-1);
 		if ($id==-1)
 		{
@@ -785,11 +785,11 @@ class Module_catalogues
 
 		$catalogue_name=$category['c_name'];
 		$root=get_param_integer('root',NULL);
-	
+
 		$_title=get_translated_text($category['cc_title']);
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		if (!array_key_exists(0,$catalogues)) warn_exit(do_lang_tempcode('CATALOGUE_NOT_FOUND',$catalogue_name));
-		
+
 		$catalogue=$catalogues[0];
 		$tpl_set=$catalogue_name;
 
@@ -987,13 +987,13 @@ class Module_catalogues
 			return warn_screen(get_page_title('CATALOGUES'),do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$category=$categories[0];
-	
+
 		// Permission for here?
 		if (!has_category_access(get_member(),'catalogues_catalogue',$category['c_name']))
 		{
 			access_denied('CATALOGUE_ACCESS');
 		}
-	
+
 		$catalogue_name=$category['c_name'];
 
 		$root=get_param_integer('root',NULL);
@@ -1009,7 +1009,7 @@ class Module_catalogues
 		$catalogue=$catalogues[0];
 
 		$tpl_set=$catalogue_name;
-		
+
 		$category_buildup=new ocp_tempcode();
 
 		$max=NULL;
@@ -1039,7 +1039,7 @@ class Module_catalogues
 		foreach ($cats as $letter=>$entries)
 		{
 			list($entry_buildup)=get_catalogue_category_entry_buildup(NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,NULL,$root,NULL,true,$entries);
-	
+
 			$category_buildup->attach(do_template('CATALOGUE_CATEGORY_HEADING',array('LETTER'=>is_integer($letter)?strval($letter):$letter,'ENTRIES'=>escape_html($entry_buildup)),NULL,false,'CATALOGUE_CATEGORY_HEADING'));				
 		}
 
@@ -1168,7 +1168,7 @@ class Module_catalogues
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'9ac6f5967177b020bebfe8b4ace35eff','PRE'=>$catalogue_description,'POST'=>'','TITLE'=>$title,'CATALOGUE'=>$catalogue_name,'DESCRIPTION'=>$description,'ADD_CAT_URL'=>$add_cat_url,'CONTENT'=>$out,'EDIT_URL'=>$edit_url));
 	}
-	
+
 	/**
 	 * The UI to show a list of catalogues to choose from.
 	 *
@@ -1181,7 +1181,7 @@ class Module_catalogues
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter=';
 
 		$ecommerce=get_param_integer('ecommerce',NULL);
-		
+
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',30);
 
@@ -1198,7 +1198,7 @@ class Module_catalogues
 		{
 			$first_category=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$myrow['c_name'],'cc_parent_id'=>NULL));
 			if (is_null($first_category)) continue;
-	
+
 			if (!has_category_access(get_member(),'catalogues_catalogue',$myrow['c_name'])) continue;
 
 			if ($myrow['c_is_tree']==1) // Point to root
@@ -1215,7 +1215,7 @@ class Module_catalogues
 			if ($myrow['c_is_tree']==1) $num_children--;
 
 			$description=get_translated_tempcode($myrow['c_description']);
-	
+
 			$display_string=do_lang_tempcode(($myrow['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',integer_format($num_entries),integer_format($num_children));
 
 			$out->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'082993547f051894a6b70eea8194df5f','NAME'=>$name,'DESCRIPTION'=>$description,'URL'=>$url,'TITLE'=>'','COUNT'=>$display_string)));
@@ -1245,7 +1245,7 @@ class Module_catalogues
 
 		$url_stub=build_url(array('page'=>'_SELF','type'=>'category'),'_SELF',NULL,false,false,true);
 		$last_change_time=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MAX(cc_add_date)');
-	
+
 		if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name))
 		{
 			access_denied('CATALOGUE_ACCESS');

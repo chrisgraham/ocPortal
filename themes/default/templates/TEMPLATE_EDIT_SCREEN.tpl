@@ -19,7 +19,7 @@
 		{+END}
 
 		{TEMPLATE_EDITORS}
-		
+
 		<br />
 
 		<div class="float_surrounder">

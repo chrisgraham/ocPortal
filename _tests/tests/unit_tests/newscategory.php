@@ -29,7 +29,7 @@ class newscategory_test_set extends ocp_test_case
 	{
 		parent::setUp();
 		require_code('news');
-		
+
 		$this->news_id=add_news_category('Today','news.gif','Headlines',NULL,NULL);
 
 		// Test the forum was actually created
@@ -44,7 +44,7 @@ class newscategory_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('Politics'==get_translated_text($GLOBALS['SITE_DB']->query_value('news_categories','nc_title ',array('id'=>$this->news_id))));
 	}
-	
+
 	
 	function tearDown()
 	{

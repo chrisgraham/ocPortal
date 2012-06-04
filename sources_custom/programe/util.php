@@ -3,9 +3,9 @@
 /*
     Program E
 	Copyright 2002, Paul Rydell
-	
+
 	This file is part of Program E.
-	
+
 	Program E is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -83,7 +83,7 @@ function cleanup(){
 	if ($randval==RANDOMCHANCECLEAN){
 
 		if (MINUTESTOKEEPDATA != -1){
-		
+
 			$clean_dstore="delete from dstore where enteredtime < date_add(now(), interval - " . MINUTESTOKEEPDATA . " minute)";
 			$clean_thatstack="delete from thatstack where enteredtime < date_add(now(), interval - " . MINUTESTOKEEPDATA . " minute)";
 			$clean_thatindex="delete from thatindex where enteredtime < date_add(now(), interval - " . MINUTESTOKEEPDATA . " minute)";
@@ -99,9 +99,9 @@ function cleanup(){
 			}
 
 		}
-		
+
 		if (MINUTESTOKEEPCHATLOG != -1){
-			
+
 			$clean_convlog="delete from conversationlog where enteredtime < date_add(now(), interval - " . MINUTESTOKEEPCHATLOG . " minute) and " . whichbots();
 
 			$selectcode = mysql_query($clean_convlog);
@@ -178,7 +178,7 @@ function isdeprecated($tag,&$ttag){
 *                         should be.
 */
 function myfunc($input){
-	
+
 	global $replacecounter,$aftersearch,$afterreplace;
 
 	$aftersearch[]="~~" . $replacecounter . "~~";
@@ -415,12 +415,12 @@ function addthats($inputsarray){
 	for ($x=0;$x<sizeof($inputsarray);$x++){
 
 		$value=trim($inputsarray[$x]);
-		
+
 		$value=strip_tags($value);
 		$value=addslashes($value);
 
 		$query.="($thatidx,'$value'),";
-		
+
 	}
 
 	$query=substr($query,0,(strlen($query)-1));
@@ -478,7 +478,7 @@ function getthat($index,$offset){
 	$offset=$offset-1;
 
 	$query="select id from thatindex where uid='$uid' order by id desc limit $index,1";
-	
+
 	
 	$selectcode = mysql_query($query);
 	if ($selectcode){
@@ -491,7 +491,7 @@ function getthat($index,$offset){
 			}
 		}
 	}
-	
+
 
 	$query="select value from thatstack where thatid=$thatid order by id desc limit $offset,1";
 
@@ -572,7 +572,7 @@ function normalsentences($input){
 	$cfull=$input;
 
 	//$cfull=preg_replace($contractsearch,$contractreplace,$cfull);
-	
+
 	$cfull=str_replace($aftersearch,$afterreplace,$cfull);	
 
 	$replacecounter=1;
@@ -623,7 +623,7 @@ function gender($input){
 	$newinput=preg_replace($gendersearch,$genderreplace,$input);
 
 	$newinput=str_replace($aftersearch,$afterreplace,$newinput);
-	
+
 	$replacecounter=1;
 	$aftersearch=array();
 	$afterreplace=array();
@@ -657,7 +657,7 @@ function firstthird($input){
 	$newinput=preg_replace($firstthirdsearch,$firstthirdreplace,$input);
 
 	$newinput=str_replace($aftersearch,$afterreplace,$newinput);
-	
+
 	$replacecounter=1;
 	$aftersearch=array();
 	$afterreplace=array();
@@ -689,7 +689,7 @@ function firstsecond($input){
 //	$newinput=preg_replace($firstsecondsearch,$firstsecondreplace,$input);
 $newinput=$input;
 	$newinput=str_replace($aftersearch,$afterreplace,$newinput);
-	
+
 	$replacecounter=1;
 	$aftersearch=array();
 	$afterreplace=array();
@@ -737,28 +737,28 @@ function insertgossip($gossip){
 function GetChildren($vals, &$i) { 
 
 	$children = array(); 
-	
+
 	if (isset($vals[$i]['value'])) 
 		array_push($children, $vals[$i]['value']); 
 
 	while (++$i < count($vals)) { 
-		
+
 	if (!isset($vals[$i]['attributes'])){
 		$vals[$i]['attributes']="";
 	}
 	if (!isset($vals[$i]['value'])){
 		$vals[$i]['value']="";
 	}
-	
+
 		switch ($vals[$i]['type']) { 
 			case 'cdata': 
 			array_push($children, $vals[$i]['value']); 
 			break; 
-		
+
 			case 'complete': 
 			array_push($children, array('tag' => $vals[$i]['tag'], 'attributes' => $vals[$i]['attributes'], 'value' => $vals[$i]['value'])); 
 			break; 
-			
+
 			case 'open': 
 			array_push($children, array('tag' => $vals[$i]['tag'],'attributes' => $vals[$i]['attributes'], 'children' => GetChildren($vals,$i))); 
 			break; 
@@ -784,7 +784,7 @@ function GetXMLTree($data) {
 
 	$p = xml_parser_create(); 
 	xml_parser_set_option($p,XML_OPTION_CASE_FOLDING,0);
-	
+
 	xml_parse_into_struct($p, $data, $vals, $index); 
 	xml_parser_free($p); 
 
@@ -877,7 +877,7 @@ function ss_timing_current ($name = 'default') {
 if (!function_exists('upperkeysarray'))
 {
 	function upperkeysarray($testa){
-	
+
 		$newtesta=$testa;
 		if (is_array($testa)){
 			$newtesta=array();

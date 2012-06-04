@@ -9,7 +9,7 @@
 			{$OCF_MEMBER_HTML,{BLOGGER}}
 		{+END}
 		<br />
-		
+
 		<h2>{!BLOGS_POSTS}</h2>
 	{+END}
 {+END}
@@ -18,7 +18,7 @@
 	<!--<div class="chicklets">
 		{+START,INCLUDE,NEWS_CHICKLETS}RSS_URL={$FIND_SCRIPT*,backend}{+END}
 	</div>-->
-	
+
 	<!--<div class="chicklets_spacer">-->
 		{CONTENT}
 	<!--</div>-->

@@ -35,7 +35,7 @@ class Hook_rss_chat
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('chat')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'chat')) return NULL;
 
 		$filters=ocfilter_to_sqlfragment($_filters,'room_id','chat_rooms',NULL,'room_id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
@@ -63,7 +63,7 @@ class Hook_rss_chat
 				if (array_key_exists(0,$_categories))
 					$categories[$row['room_id']]=$_categories[0];
 			}
-			
+
 			if (!array_key_exists($row['room_id'],$categories)) continue; // Message is in deleted room (although should not exist in DB anymore!)
 
 			if (check_chatroom_access($categories[$row['room_id']],true))
@@ -91,7 +91,7 @@ class Hook_rss_chat
 				$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 			}
 		}
-		
+
 		require_lang('chat');
 		return array($content,do_lang('MESSAGES'));
 	}

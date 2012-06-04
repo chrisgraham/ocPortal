@@ -30,9 +30,9 @@ class Hook_checklist_open_site
 	{
 		$url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'SITE'),'adminzone',NULL,false,false,false,'group_CLOSED_SITE');
 		$task=urlise_lang(do_lang('NAG_OPEN_WEBSITE'),$url);
-		
+
 		$status=(get_option('site_closed')=='1')?0:1;
-		
+
 		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('URL'=>'','STATUS'=>$_status,'TASK'=>$task));
 		return array(array($tpl,($status==0)?-1:0,1,NULL));

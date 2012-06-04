@@ -171,7 +171,7 @@ class Hook_addon_registry_catalogues
 			'CATALOGUE_CATEGORIES_LIST_LINE.tpl'=>'catalogue_categories_list_line',
 			'SEARCH_RESULT_CATALOGUE_ENTRIES.tpl'=>'search_result_catalogue_entries',
 			'CATALOGUE_DEFAULT_CATEGORY_EMBED.tpl'=>'field_map_catalogue_embed_screen',
-			
+
 			'CATALOGUE_CATEGORY_HEADING.tpl'=>'field_map_category_screen',
 			'CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl'=>'field_map_category_screen',
 			'CATALOGUE_DEFAULT_SUBCATEGORY.tpl'=>'field_map_category_screen',
@@ -182,7 +182,7 @@ class Hook_addon_registry_catalogues
 			'CATALOGUE_DEFAULT_TAB_FIELD_HEAD.tpl'=>'table_category_screen',
 			'CATALOGUE_DEFAULT_TAB_ENTRY.tpl'=>'table_category_screen',
 			'CATALOGUE_DEFAULT_TAB_FIELD.tpl'=>'table_category_screen',
-			
+
 			'CATALOGUE_links_CATEGORY_SCREEN.tpl'=>'table_category_screen__links',
 			'CATALOGUE_links_TAB_WRAP.tpl'=>'table_category_screen__links',
 			'CATALOGUE_links_TAB_FIELD_HEAD.tpl'=>'table_category_screen__links',
@@ -356,7 +356,7 @@ class Hook_addon_registry_catalogues
 			));
 		$tags = do_lorem_template('TAGS',array('TAGS'=>placeholder_array(),'TYPE'=>NULL,'LINK_FULLSCOPE'=>placeholder_url(),'TAG'=>lorem_word()));
 
-		
+
 		$row = new ocp_tempcode();
 		$entries = new ocp_tempcode();
 		$head = new ocp_tempcode();
@@ -563,7 +563,7 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__administrative__catalogue_adding_screen()
 	{
 		require_javascript('javascript_validation');
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('CATALOGUE_ADDING_SCREEN',array(
@@ -589,7 +589,7 @@ class Hook_addon_registry_catalogues
 	function tpl_preview__administrative__catalogue_editing_screen()
 	{
 		require_javascript('javascript_validation');
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('CATALOGUE_EDITING_SCREEN',array(

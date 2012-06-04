@@ -239,7 +239,7 @@ function add_config_option($human_name,$name,$type,$eval,$category,$group,$share
 {
 	if (!in_array($type,array('float','integer','tick','line','text','transline','transtext','list','date','?forum','forum','category','usergroup','colour')))
 		fatal_exit('Invalid config option type');
-	
+
 	$map=array('c_set'=>0,'config_value'=>'','the_name'=>$name,'human_name'=>$human_name,'the_type'=>$type,'eval'=>$eval,'the_page'=>$category,'section'=>$group,'explanation'=>'CONFIG_OPTION_'.$name,'shared_hosting_restricted'=>$shared_hosting_restricted,'c_data'=>$data);
 	if ($GLOBALS['IN_MINIKERNEL_VERSION']==0)
 	{
@@ -381,7 +381,7 @@ function delete_attachments($type,$connection=NULL)
 function mass_delete_lang($table,$attrs,$connection)
 {
 	if (count($attrs)==0) return;
-	
+
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
 	$rows=$connection->query_select($table,$attrs,NULL,'',NULL,NULL,true);

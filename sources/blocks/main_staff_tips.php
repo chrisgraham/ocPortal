@@ -46,7 +46,7 @@ class Block_main_staff_tips
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('staff_tips_dismissed');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -60,7 +60,7 @@ class Block_main_staff_tips
 			't_tip'=>'*ID_TEXT'
 		));
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

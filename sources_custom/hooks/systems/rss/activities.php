@@ -36,7 +36,7 @@ class Hook_rss_activities
 	{
 		require_lang('activities');
 		require_code('activities');
-		
+
 		list(,$whereville)=find_activities(get_member(),($_filters=='')?'all':'some_members',($_filters=='')?NULL:array_map('intval',explode(',',$_filters)));
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE ('.$whereville.') AND a_time>'.strval($cutoff).' ORDER BY a_time DESC',$max,0);

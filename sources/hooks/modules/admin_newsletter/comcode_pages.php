@@ -43,7 +43,7 @@ class Hook_whats_news_comcode_pages
 	function run($cutoff_time,$lang,$filter)
 	{
 		$new=new ocp_tempcode();
-	
+
 		require_code('ocfiltering');
 		if ($filter=='') $filter=','; // Just welcome zone
 		$or_list=ocfilter_to_sqlfragment($filter,'b.the_zone',NULL,NULL,NULL,NULL,false);
@@ -62,12 +62,12 @@ class Hook_whats_news_comcode_pages
 		{
 			if ($zone=='cms') continue;
 			if ($zone=='adminzone') continue;
-	
+
 			$pages=find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt',false,$cutoff_time);
 			foreach (array_keys($pages) as $page)
 			{
 				if (!is_string($page)) $page=strval($page); // PHP can be weird when things like '404' are put in arrays
-				
+
 				if (substr($page,0,6)=='panel_') continue;
 
 				$id=$zone.':'.$page;

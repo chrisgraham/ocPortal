@@ -11,7 +11,7 @@
 	<div id="project">
 		[box type="panel"]
 			<h4>Latest Projects</h4>
-			
+
 			[block="1" display_type="1"]main_cc_embed[/block]
 
 			<p class="more-link">

@@ -31,7 +31,7 @@ class Hook_attachments_news
 	function run($id,$connection)
 	{
 		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) return false;
-		
+
 		$cat_id=$GLOBALS['SITE_DB']->query_value_null_ok('news','news_category',array('id'=>$id));
 		if (is_null($cat_id)) return false;
 		return (has_category_access(get_member(),'news',strval($cat_id)));

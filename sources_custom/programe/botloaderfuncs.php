@@ -52,7 +52,7 @@ global $selectbot, $annesID;
 */
 function deletebot($bot)		
 {
-	
+
 	$q="delete from bot where bot=$bot";	
     $e = mysql_query($q);
     if ($e){
@@ -338,7 +338,7 @@ function insertmysentence($mybigsentence)
         }
 		// Prevent some warnings by checking this first.
 		elseif (($x+1) >= (sizeof($allwords))){
-		
+
 		}
         elseif ((strtoupper($allwords[$x+1])=="<THAT>") || (strtoupper($allwords[$x+1])=="<TOPIC>")){
             $lwic=1;
@@ -361,7 +361,7 @@ function insertmysentence($mybigsentence)
                 $qadd="($selectbot, null,'$sword',2,$parent,$lwic)";	
 
 				$parent = insertwordpattern($qadd);
-		
+
 
 
             }
@@ -391,7 +391,7 @@ function insertmysentence($mybigsentence)
 				$parent = insertwordpattern($qadd);
 
 
-				
+
             }
         }
     }
@@ -419,7 +419,7 @@ function insertwordpattern($qadd)
 
 		return mysql_insert_id();
 	}
-	
+
 }
 
 /**
@@ -443,7 +443,7 @@ function insertwordpattern($qadd)
 */
 function insertmytemplate($idused,$template)
 {
-	
+
 	global $selectbot,$templatesinserted, $pattern, $topic, $that;
     
     if (!templateexists($idused)){
@@ -558,7 +558,7 @@ function startS($parser,$name,$attrs)
 		$asbot=addslashes($bot);
 		$q="insert into bots (id,botname) values (null,'$asbot')";	
 		$qcode=mysql_query($q);
-		
+
 		if ($areinc==1){
 			if ($qcode){
 			}
@@ -937,7 +937,7 @@ function handleme($parser, $data)
 function loadstartupinc($fileid){
 
 	global $learnfiles,$areinc,$allbots,$selectbot;
-	
+
 	$areinc=0;
 
 	if ($fileid==1){
@@ -976,9 +976,9 @@ function loadstartupinc($fileid){
 		$single_learnfiles = array_unique($single_learnfiles);
 
 		foreach ($single_learnfiles as $file) {
-			
+
 			$selectbot=$bot;
-			
+
 			if ($totalcounter==$fileid){
 				learn($file);
 				return 0;
@@ -1263,7 +1263,7 @@ function loadaimlcategory($aimlstring,$botid)
 	global $selectbot;
 
 	$selectbot=$botid;
-	
+
 	$aimlstring="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"" . "?" . "><aiml version=\"1.0\">" . $aimlstring . "</aiml>";
 
 

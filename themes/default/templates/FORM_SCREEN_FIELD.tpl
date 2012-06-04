@@ -17,7 +17,7 @@
 			<p class="associated_caption">{DESCRIPTION_SIDE}</p>
 		{+END}{+END}
 	</th>
-	
+
 	{+START,IF,{$MOBILE}}
 		</tr>
 

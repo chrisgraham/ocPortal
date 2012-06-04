@@ -30,7 +30,7 @@ function update_details_box(element)
 		case 'root':
 			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!ADD_ZONE^;}').replace(/\[2\]/,add_zone_url);
 			break;
-		
+
 		case 'zone':
 			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!ZONE_EDITOR^;}').replace(/\[2\]/,zone_editor_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
 			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE^;}').replace(/\[2\]/,permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));

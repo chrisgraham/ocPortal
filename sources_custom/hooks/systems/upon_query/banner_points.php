@@ -23,9 +23,9 @@ class upon_query_banner_points
 			{
 				require_code('comcode');
 				require_code('permissions');
-				
+
 				$member_id=get_member();
-				
+
 				$dest=get_param('dest','');
 
 				$cnt=$GLOBALS['SITE_DB']->query_value('banner_clicks','COUNT(*)',array(

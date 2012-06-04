@@ -39,7 +39,7 @@ function init__ajax()
 		function do_lang($a,$param_a=NULL,$param_b=NULL,$param_c=NULL,$lang=NULL,$require_result=true)
 		{
 			if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
-			
+
 			switch ($a)
 			{
 				case 'LINK_NEW_WINDOW':
@@ -238,7 +238,7 @@ function edit_ping_script()
 		'the_time'=>time(),
 		'the_member'=>get_member()
 	));
-	
+
 	echo '1';
 }
 
@@ -338,7 +338,7 @@ function comcode_convert_script()
 			/*$myfile=fopen(get_file_base().'/a','wb');
 			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',chr(10),$new)));
 			fclose($myfile);
-			
+
 			$myfile=fopen(get_file_base().'/b','wb');
 			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',chr(10),$out)));
 			fclose($myfile);*/
@@ -476,9 +476,9 @@ function namelike_script()
 		sort($names);
 		$names=array_unique($names);
 	}
-	
+
 	@ini_set('ocproducts.xss_detect','0');
-	
+
 	header('Content-Type: text/xml');
 	echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
 	echo '<request><result>';
@@ -531,7 +531,7 @@ function confirm_session_script()
 {
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-	
+
 	header('Content-Type: text/plain');
 	global $SESSION_CONFIRMED;
 	if ($SESSION_CONFIRMED==0) echo $GLOBALS['FORUM_DRIVER']->get_username(get_member());
@@ -545,14 +545,14 @@ function load_template_script()
 {
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-	
+
 	if (!has_actual_page_access(get_member(),'admin_themes','adminzone')) exit();
-	
+
 	@ini_set('ocproducts.xss_detect','0');
-	
+
 	$theme=filter_naughty(get_param('theme'));
 	$id=filter_naughty(get_param('id'));
-	
+
 	$x=get_custom_file_base().'/themes/'.$theme.'/templates_custom/'.$id;
 	if (!file_exists($x)) $x=get_file_base().'/themes/'.$theme.'/templates/'.$id;
 	if (!file_exists($x)) $x=get_custom_file_base().'/themes/default/templates_custom/'.$id;
@@ -567,7 +567,7 @@ function sheet_script()
 {
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-	
+
 	header('Content-Type: text/css');
 	$sheet=get_param('sheet');
 	if ($sheet!='') echo str_replace('../../../','',file_get_contents(css_enforce(filter_naughty_harsh($sheet))));
@@ -580,7 +580,7 @@ function snippet_script()
 {
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-	
+
 	header('Content-Type: text/plain; charset='.get_charset());
 	$hook=filter_naughty_harsh(get_param('snippet'));
 	require_code('hooks/systems/snippets/'.$hook,true);

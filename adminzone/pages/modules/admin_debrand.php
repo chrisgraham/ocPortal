@@ -50,7 +50,7 @@ class Module_admin_debrand
 	{
 		return array('misc'=>'SUPER_DEBRAND');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -60,7 +60,7 @@ class Module_admin_debrand
 	{
 		require_lang('debrand');
 		require_lang('config');
-		
+
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/debrand';
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_SUPERDEBRAND');
 
@@ -130,7 +130,7 @@ class Module_admin_debrand
 	function actual()
 	{
 		require_code('config2');
-		
+
 		if (get_file_base()==get_custom_file_base()) // Only if not a shared install
 		{
 			require_code('abstract_file_manager');
@@ -252,7 +252,7 @@ class Module_admin_debrand
 			$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>$main_logo_url),array('id'=>'logo/cms-logo','theme'=>$theme),'',1);
 			$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>$main_logo_url),array('id'=>'logo/collaboration-logo','theme'=>$theme),'',1);
 		}
-		
+
 		// Various other icons
 		require_code('uploads');
 		$path=get_url('','favicon','themes/default/images_custom');

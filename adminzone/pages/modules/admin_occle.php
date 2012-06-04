@@ -51,7 +51,7 @@ class Module_admin_occle
 	{
 		return array('!'=>'OCCLE');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -67,7 +67,7 @@ class Module_admin_occle
 			{
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_occle','zone_name'=>'adminzone','group_id'=>$id)); // OcCLE very dangerous
 			}
-	
+
 			$GLOBALS['SITE_DB']->create_table('occlechat',array(
 				'id'=>'*AUTO',
 				'c_message'=>'LONG_TEXT',
@@ -75,7 +75,7 @@ class Module_admin_occle
 				'c_incoming'=>'BINARY',
 				'c_timestamp'=>'TIME'
 			));
-	
+
 			add_config_option('OCCLE_CHAT_ANNOUNCE','occle_chat_announce','tick','return \'0\';','SITE','ADVANCED');
 		}
 
@@ -118,7 +118,7 @@ class Module_admin_occle
 
 		return $this->main_gui();
 	}
-	
+
 	/**
 	 * The main OcCLE GUI.
 	 *

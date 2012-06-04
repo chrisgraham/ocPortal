@@ -30,7 +30,7 @@ class Hook_do_next_menus_quiz
 	function run()
 	{
 		if (!addon_installed('quizzes')) return array();
-		
+
 		return array(
 			array('usage','quiz',array('admin_quiz',array('type'=>'misc'),get_module_zone('admin_quiz')),do_lang_tempcode('QUIZZES'),('DOC_QUIZZES')),
 			array('cms','quiz',array('cms_quiz',array('type'=>'misc'),get_module_zone('cms_quiz')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('QUIZZES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('quizzes','COUNT(*)',NULL,'',true))))),('DOC_QUIZZES')),

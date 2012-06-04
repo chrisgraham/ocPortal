@@ -44,7 +44,7 @@ Copyright ocProducts Limited
 
 	{$,If the page is doing a refresh include the markup for that}
 	{REFRESH}
-	
+
 	{$,In developer mode we totally break relative URLs so we know if they're used - we shouldn't ever use them, as they reflect path assumptions}
 	{+START,IF,{$DEV_MODE}}<base href="http://example.com/" />{+END}
 
@@ -135,16 +135,16 @@ Copyright ocProducts Limited
 		<div id="banner">
 			<div id="banner-in">
 				<div class="line-vertical"> </div>
-	
+
 				<div id="search">
 					<ul>
 						<li class="search-head">Search</li>
 						<li>{$BLOCK,block=main_search}</li>
 					</ul>
 				</div>
-	
+
 				<div class="line-vertical"> </div>
-	
+
 				<div id="login">
 					<ul>
 						<li class="search-head">Members Area</li>

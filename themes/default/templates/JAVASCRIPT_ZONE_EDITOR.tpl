@@ -60,7 +60,7 @@ function fetch_more_fields()
 	set_edited_panel(null,'panel_top');
 	set_edited_panel(null,'panel_bottom');
 	set_edited_panel(null,'start');
-	
+
 	var form=document.getElementById('middle_fields');
 	var edit_field_store=document.getElementById('edit_field_store');
 	var i,store;
@@ -112,7 +112,7 @@ function select_ze_tab(id,tab)
 					setOpacity(element,0.0);
 					nereidFade(element,100,30,4);
 				}
-				
+
 				elementh.className+=' ze_tab_selected';
 			} else
 			{
@@ -150,7 +150,7 @@ function ze_animate_to(ob,amount,towards_expanded,now)
 		ob.style.width=(amount)+'em';
 		return;
 	}
-	
+
 	{+START,IF,{$VALUE_OPTION,disable_animations}}
 		ob.style.width=(amount)+'em';
 		return;

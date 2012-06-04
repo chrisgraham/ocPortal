@@ -49,7 +49,7 @@ class Block_main_staff_website_monitoring
 		$info['ttl']=60*5;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */

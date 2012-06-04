@@ -106,7 +106,7 @@
 							<div class="calendar_main_page_hidden_data">
 								{EVENT_TYPES_2}
 							</div>
-		
+
 							<div class="proceed_button">
 								<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!FILTER}" />
 							</div>

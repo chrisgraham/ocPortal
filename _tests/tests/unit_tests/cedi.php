@@ -28,16 +28,16 @@ class cedi_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('cedi');
 	}
-	
+
 	function testAddcedipage()
 	{
 		require_code('permissions2');
 		$this->id=cedi_add_page('test page','test description','test notes',0);
 		set_category_permissions_from_environment('seedy_page',strval($this->id),'cms_cedi');
-		
+
 		//Check the page was actully created
 		$this->assertTrue('test notes'==$GLOBALS['FORUM_DB']->query_value('seedy_pages','notes',array('id'=>$this->id)));
 	}
@@ -47,11 +47,11 @@ class cedi_test_set extends ocp_test_case
 		require_code('permissions2');
 		set_category_permissions_from_environment('seedy_page',strval($this->id),'cms_cedi');
 		cedi_edit_page($this->id,'title-edited','test description','notes_edited',0,'','');
-				
+
 		//Check the page was edited
 		$this->assertTrue('notes_edited'==$GLOBALS['FORUM_DB']->query_value('seedy_pages','notes',array('id'=>$this->id)));
 	}
-	
+
 	function testDeleteCedipage()
 	{
 		//Delete cedit page

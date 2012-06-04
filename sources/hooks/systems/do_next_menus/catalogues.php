@@ -31,7 +31,7 @@ class Hook_do_next_menus_catalogues
 	function run($exhaustive=false)
 	{
 		if (!addon_installed('catalogues')) return array();
-		
+
 		$ret=array();
 		if (has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues'))
 			$ret[]=array('cms','catalogues',array('cms_catalogues',array('type'=>'misc'),get_module_zone('cms_catalogues')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('CATALOGUES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','COUNT(*)',NULL,'',true))))),('DOC_CATALOGUES'));

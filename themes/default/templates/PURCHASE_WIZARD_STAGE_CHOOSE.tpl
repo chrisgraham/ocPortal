@@ -6,7 +6,7 @@
 				<col style="width: 100%" />
 			</colgroup>
 		{+END}
-	
+
 		<tbody>
 			{FIELDS}
 		</tbody>

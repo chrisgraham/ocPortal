@@ -63,9 +63,9 @@ function attachments_script()
 				access_denied('ATTACHMENT_ACCESS');
 		}
 	}
-	
+
 	$thumb=get_param_integer('thumb',0);
-	
+
 	if ($thumb==1)
 	{
 		$full=$myrow['a_thumb_url'];
@@ -83,7 +83,7 @@ function attachments_script()
 				$connection->query_update('attachments',array('a_num_downloads'=>$myrow['a_num_downloads']+1,'a_last_downloaded_time'=>time()),array('id'=>$id),'',1,NULL,false,true);
 		}
 	}
-	
+
 	// Is it non-local? If so, redirect
 	if (!url_is_local($full))
 	{
@@ -92,7 +92,7 @@ function attachments_script()
 		header('Location: '.$full);
 		return;
 	}
-	
+
 //	$breakdown=pathinfo($full);
 //	$filename=$breakdown['basename'];
 	$_full=get_custom_file_base().'/'.rawurldecode($full);
@@ -100,7 +100,7 @@ function attachments_script()
 	$size=filesize($_full);
 	$original_filename=$myrow['a_original_filename'];
 	$extension=get_file_extension($original_filename);
-	
+
 	require_code('files2');
 	check_shared_bandwidth_usage($size);
 
@@ -130,7 +130,7 @@ function attachments_script()
 		}
 	}
 	header('Accept-Ranges: bytes');
-	
+
 	// Caching
 	header("Pragma: private");
 	header("Cache-Control: private");
@@ -303,7 +303,7 @@ function attachment_popup_script()
 function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,$as_admin,$connection,$highlight_bits=NULL,$on_behalf_of_member=NULL,$semiparse_mode=false)
 {
 	require_code('comcode_renderer');
-	
+
 	$extension=get_file_extension($attachment['a_original_filename']);
 	require_code('mime_types');
 	$mime_type=get_mime_type($extension);
@@ -377,7 +377,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 			$EMAIL_ATTACHMENTS[$attachment['a_url']]=$attachment['a_original_filename'];
 			$temp_tpl=new ocp_tempcode();
 			break;
-		
+
 		case 'code':
 			$url=$attachment['a_url'];
 			if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
@@ -386,7 +386,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 			if ($attachment['a_original_filename']!='') $title=escape_html($attachment['a_original_filename']);
 			$temp_tpl=do_template('COMCODE_CODE',array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true,'STYLE'=>'','TYPE'=>$extension,'CONTENT'=>$_embed,'TITLE'=>$title));
 			break;
-		
+
 		case 'hyperlink':
 			if ($tag=='attachment')
 			{
@@ -395,10 +395,10 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 				$_url->attach(find_script('attachment').'?id='.urlencode($attachment['id']).$keep->evaluate().'&for_session=');
 				$_url->attach(symbol_tempcode('SESSION_HASHED'));
 			}
-			
+
 			$temp_tpl=hyperlink($_url,($attachment['a_description']!='')?$attachment['a_description']:$attachment['a_original_filename'],true);
 			break;
-		
+
 		default:
 			if (is_image($attachment['a_original_filename']))
 			{
@@ -455,7 +455,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 			}
 			break;
 	}
-	
+
 	return $temp_tpl;
 }
 

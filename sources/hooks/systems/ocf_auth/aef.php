@@ -47,7 +47,7 @@ class Hook_ocf_auth_aef
 				return do_lang_tempcode('USER_BAD_PASSWORD');
 			}
 		}
-		
+
 		return NULL;
 	}
 

@@ -32,7 +32,7 @@ class TestOfsample extends UnitTestCase
 		$this->assertTrue($page);
 	}
 
-	
+
 	function testHtml()
 	{
 		$expectations=array(" - foo"=>"<ul><li>foo</li></ul>");

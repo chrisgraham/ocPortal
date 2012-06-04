@@ -27,7 +27,7 @@ class Hook_cron_ticket_type_lead_times
 	function run()
 	{
 		if (!addon_installed('tickets')) return;
-		
+
 		$time=time();
 		$last_time=intval(get_value('last_ticket_lead_time_calc'));
 		if ($last_time>time()-24*60*60) return;

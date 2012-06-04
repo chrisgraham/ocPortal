@@ -29,7 +29,7 @@ function init__zones()
 
 	global $ARB_COUNTER;
 	$ARB_COUNTER=1;
-	
+
 	global $DO_NOT_CACHE_THIS;
 	$DO_NOT_CACHE_THIS=false;
 
@@ -66,7 +66,7 @@ function init__zones()
 			'join'=>'',
 		);
 	}
-	
+
 	global $VIRTUALISED_ZONES;
 	$VIRTUALISED_ZONES=NULL;
 	if (is_null($MODULES_ZONES))
@@ -95,7 +95,7 @@ function init__zones()
 	define('FIND_ALL_PAGES__PERFORMANT',0);
 	define('FIND_ALL_PAGES__NEWEST',1);
 	define('FIND_ALL_PAGES__ALL',2);
-	
+
 	global $BLOCKS_AT_CACHE;
 	$BLOCKS_AT_CACHE=function_exists('persistant_cache_get')?persistant_cache_get('BLOCKS_AT'):array();
 	if ($BLOCKS_AT_CACHE===NULL) $BLOCKS_AT_CACHE=array();
@@ -113,7 +113,7 @@ function zone_black_magic_filterer($path,$relative=false)
 	static $no_collapse_zones=NULL;
 	if ($no_collapse_zones===NULL) $no_collapse_zones=(get_option('collapse_user_zones',true)!=='1');
 	if ($no_collapse_zones) return $path;
-	
+
 	static $zbmf_cache=array();
 	if (isset($zbmf_cache[$path])) return $zbmf_cache[$path];
 
@@ -448,7 +448,7 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 				if ((get_option('collapse_user_zones',true)==='1') && ($file=='site')) continue;
 
 				$out[]=$file;
-				
+
 				if ((!$force_all) && (count($out)==$max)) break;
 			}
 		}
@@ -783,15 +783,15 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 function block_params_arr_to_str($map)
 {
 	ksort($map);
-	
+
 	$_map='';
-	
+
 	foreach ($map as $key=>$val)
 	{
 		if ($_map!='') $_map.=',';
 		$_map.=$key.'='.str_replace(',','\,',$val);
 	}
-	
+
 	return $_map;
 }
 
@@ -805,7 +805,7 @@ function block_params_arr_to_str($map)
 function do_block_hunt_file($codename,$map=NULL)
 {
 	global $BLOCKS_AT_CACHE;
-	
+
 	$codename=filter_naughty_harsh($codename);
 
 	$file_base=get_file_base();
@@ -916,7 +916,7 @@ function do_block_get_cache_identifier($cache_on,$map)
 			}
 		} elseif (defined('HIPHOP_PHP')) return NULL;
 	}
-	
+
 	$_cache_identifier[]=get_users_timezone(get_member());
 	$_cache_identifier[]=(get_bot_type()===NULL);
 	global $TEMPCODE_SETGET;

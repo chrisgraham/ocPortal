@@ -35,7 +35,7 @@ class Hook_rss_filedump
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('filedump')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'filedump')) return NULL;
 
 		$filters=explode(',',$_filters);
@@ -54,7 +54,7 @@ class Hook_rss_filedump
 		foreach ($files as $i=>$file)
 		{
 			if ($i==$max) break;
-			
+
 			if ($filters!=array(''))
 			{
 				$ok=false;

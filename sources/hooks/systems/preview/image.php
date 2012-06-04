@@ -50,7 +50,7 @@ class Hook_Preview_image
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url'),array('id'=>post_param_integer('id')),'',1);
 				$urls=$rows[0];
-	
+
 				$url=$urls['url'];
 				$thumb_url=$urls['thumb_url'];
 			} else

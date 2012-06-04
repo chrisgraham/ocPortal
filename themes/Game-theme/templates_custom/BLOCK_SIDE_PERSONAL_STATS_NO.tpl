@@ -18,7 +18,7 @@
 				</div>
 				<input class="button" type="submit" value="{!_LOGIN}" />
 			</div>
-			
+
 			<p class="associated_details"><a href="{$PAGE_LINK*,:join}">New user?</a></p>
 		</form>
 	{+END}

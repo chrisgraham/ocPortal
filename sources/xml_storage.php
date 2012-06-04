@@ -45,15 +45,15 @@ function find_all_xml_tables()
 function export_to_xml($tables=NULL,$comcode_xml=true)
 {
 	if ($comcode_xml) require_code('comcode_conversion');
-	
+
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-	
+
 	if (is_null($tables)) // Find table list
 	{
 		$tables=find_all_xml_tables();
 	}
-	
+
 	// Build up data
 	$xml_data='';
 	$xml_data.='<!-- Exported on '.xmlentities(date('Y-m-d h:i:s')).' by '.xmlentities($GLOBALS['FORUM_DRIVER']->get_username(get_member())).' -->'.chr(10);
@@ -188,7 +188,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 	foreach ($db_fields as $field) // Assemble the fields of the row
 	{
 		if ($field['m_table']!=$table) continue;
-		
+
 		$name=$field['m_name'];
 		$value='';
 		if ((strpos($field['m_type'],'TRANS')!==false) || (($table=='config') && ($name=='config_value') && ($row[$name]!='') && (strpos($row['the_type'],'trans')!==false))) // Translation layer integration.
@@ -206,7 +206,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 
 				$inner.=_tab('<'.$name.' language="'.xmlentities($t['language']).'" importance_level="'.xmlentities(strval($t['importance_level'])).'" source_user="'.xmlentities(strval($t['source_user'])).'">'.$value.'</'.$name.'>').chr(10);
 			}
-			
+
 			if (strpos($field['m_type'],'*')!==false) // Special case if lang string forms key. We need to put in an extra attribute so we can bind an existing lang string code if it exists
 			{
 				if ($field['m_type']=='*AUTO') $auto_key_id=$field['m_name'];
@@ -251,13 +251,13 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 			}
 		}
 	}
-	
+
 	// Assemble full row in XML format
 	$xml_data.=chr(10).chr(10);
 	if (!is_null($auto_key_id)) $xml_data.='<!-- If copying to another site you may wish to remove the '.$auto_key_id.' attribute/value-pair so that an appropriate new key is chosen (otherwise could update the wrong record) -->'.chr(10);
 	$xml_data.='<'.$table.$fields.'>'.chr(10);
 	$xml_data.=$inner;
-	
+
 	// SEO
 	if (!is_null($seo_type_code))
 	{
@@ -276,7 +276,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 		foreach ($rows as $_row)
 			$xml_data.=_tab(_export_xml_row('gsp',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
 	}
-	
+
 	if ($include_end) $xml_data.='</'.$table.'>';
 
 	return $xml_data;
@@ -298,7 +298,7 @@ function make_map_nice($map)
 			if (is_float($val)) $val=float_to_raw_string($val);
 			else $val=strval($val);
 		}
-		
+
 		if ($out!='') $out.=chr(10);
 		$out.=$key.' = '.$val;
 	}
@@ -316,12 +316,12 @@ function import_from_xml($xml_data,$delete_missing_rows=false)
 {
 	$parsed=new ocp_simple_xml_reader($xml_data);
 	if (!is_null($parsed->error)) warn_exit($parsed->error);
-	
+
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-	
+
 	$ops=array();
-	
+
 	$insert_ids=array();
 
 	list($root_tag,$root_attributes,,$this_children)=$parsed->gleamed;
@@ -359,7 +359,7 @@ function import_from_xml($xml_data,$delete_missing_rows=false)
 			$ops=array_merge($ops,$_ops);
 		}
 	}
-	
+
 	// Sync deletes
 	if ($delete_missing_rows)
 	{
@@ -396,9 +396,9 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 
 	if (!array_key_exists($table[0],$all_existing_data))
 		$all_existing_data[$table[0]]=$GLOBALS['SITE_DB']->query_select($table[0],array('*'),NULL,'',NULL,NULL,false,array());
-	
+
 	$data=array();
-	
+
 	// Collate simple data
 	$data=array();
 	foreach ($table[1] as $key=>$val) // key attributes
@@ -438,7 +438,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 	foreach ($table[3] as $__) // remaining attributes / tree children
 	{
 		if (!is_array($__)) continue;
-		
+
 		list($row_tag,$row_attributes,$row_value,$row_children)=$__;
 
 		// Find corresponding field
@@ -524,7 +524,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 	foreach ($table[3] as $__) // remaining attributes
 	{
 		if (!is_array($__)) continue;
-		
+
 		list($row_tag,$row_attributes,$row_value,$row_children)=$__;
 
 		if ((count($row_children)!=0) && (trim($row_value)==''))	$row_value=$parsed->pull_together($row_children);
@@ -561,14 +561,14 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 			if ((array_key_exists($key,$data_diff)) && ($data_diff[$key]==$val)) unset($data_diff[$key]);
 		}
 		$ops[]=array(do_lang('UPDATED_IN_TABLE',$table[0]),do_lang('RECORD_IDENTIFIED_BY',make_map_nice($key_map)),($data_diff==array())?do_lang('NO_CHANGES_MADE'):make_map_nice($data_diff));
-		
+
 		$insert_ids[$table[0]]=array_key_exists($id_field,$key_map)?$key_map[$id_field]:NULL;
 	} else
 	{
 		$insert_ids[$table[0]]=$GLOBALS['SITE_DB']->query_insert($table[0],$data,!is_null($id_field) && !array_key_exists($id_field,$data));
 		$ops[]=array(do_lang('INSERTED_TO_TABLE',$table[0]),make_map_nice($data));
 	}
-	
+
 	// Special case for CPF's
 	if ($table[0]=='f_custom_fields')
 	{
@@ -577,11 +577,11 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 		{
 			$_record=$GLOBALS['SITE_DB']->query_select($table[0],array('*'),array('id'=>$insert_ids[$table[0]]));
 			$record=$_record[0];
-		
+
 			$encrypted=$record['cf_encrypted'];
 			$type=$record['cf_type'];
 			$id=$insert_ids[$table[0]];
-		
+
 			$index=false;
 			switch ($type)
 			{
@@ -619,7 +619,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 			}
 		}
 	}
-	
+
 	// Handle tree children
 	$this_id=isset($insert_ids[$table[0]])?$insert_ids[$table[0]]:NULL;
 	foreach ($tree_children as $__)
@@ -627,7 +627,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 		$_ops=_import_xml_row($parsed,$all_existing_data,$all_fields,$all_id_fields,$__,$insert_ids,$this_id);
 		$ops=array_merge($ops,$_ops);
 	}
-	
+
 	return $ops;
 }
 
@@ -635,9 +635,9 @@ class ocp_simple_xml_reader
 {
 	// Used during parsing
 	var $tag_stack,$attribute_stack,$children_stack,$text_stack;
-	
+
 	var $gleamed,$error;
-	
+
 	/**
 	 * Constructs the XML reader: parses the given data. Check $gleamed and $error after constructing.
 	 *
@@ -652,7 +652,7 @@ class ocp_simple_xml_reader
 		$this->attribute_stack=array();
 		$this->children_stack=array();
 		$this->text_stack=array();
-	
+
 		if (!function_exists('xml_parser_create'))
 		{
 			$this->error=do_lang_tempcode('XML_NEEDED');
@@ -725,7 +725,7 @@ class ocp_simple_xml_reader
 		$this_attributes=array_pop($this->attribute_stack);
 		$this_children=array_pop($this->children_stack);
 		$this_text=array_pop($this->text_stack);
-		
+
 		if (count($this->tag_stack)==0)
 		{
 			$this->gleamed=array($this_tag,$this_attributes,$this_text,$this_children);
@@ -755,7 +755,7 @@ class ocp_simple_xml_reader
 		$next_top_tags_children[]=$data;
 		array_push($this->children_stack,$next_top_tags_children);
 	}
-	
+
 	/**
 	 * Pull a portion of an XML tree structure back into textual XML.
 	 *

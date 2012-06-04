@@ -29,7 +29,7 @@ class user_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
 		require_lang('ocf');
@@ -48,7 +48,7 @@ class user_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('testing@test.com'==$GLOBALS['FORUM_DB']->query_value('f_members','m_email_address ',array('id'=>$this->user_id)));
 	}
-	
+
 	function tearDown()
 	{
 		ocf_delete_member($this->user_id);

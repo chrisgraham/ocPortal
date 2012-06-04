@@ -34,7 +34,7 @@ class Hook_cat
 		else
 		{
 			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','cat'));
-			
+
 			$line_numbers=array_key_exists('l',$options);
 
 			$output='';

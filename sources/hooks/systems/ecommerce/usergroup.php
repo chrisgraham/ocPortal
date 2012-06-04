@@ -60,7 +60,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 		if ($test)
 		{
 			// Remove them from the group
-			
+
 			if (is_null($GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value_null_ok('f_group_member_timeouts','member_id',array('member_id'=>$member_id,'group_id'=>$new_group))))
 			{
 				if ((get_value('unofficial_ecommerce')=='1') && (get_forum_type()!='ocf'))
@@ -87,7 +87,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 		if (!$test)
 		{
 			// Add them to the group
-			
+
 			if ((get_value('unofficial_ecommerce')=='1') && (get_forum_type()!='ocf'))
 			{
 				$GLOBALS['FORUM_DB']->add_member_to_group($member_id,$new_group);

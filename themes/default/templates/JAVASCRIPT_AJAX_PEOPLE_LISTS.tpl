@@ -144,7 +144,7 @@ function update_ajax_member_list_response(result,list_contents)
 		{
 			current_list_for_copy.disabled=true;
 			window.setTimeout(function() { current_list_for_copy.disabled=false; }, 1000);
-			
+
 			var temp=current_list_for_copy.onblur;
 			current_list_for_copy.onblur=function() {};
 			list.focus();
@@ -164,7 +164,7 @@ function update_ajax_member_list_response(result,list_contents)
 		{
 			current_list_for_copy.disabled=true;
 			window.setTimeout(function() { current_list_for_copy.disabled=false; }, 1000);
-			
+
 			var temp=current_list_for_copy.onblur;
 			current_list_for_copy.onblur=function() {};
 			list.focus();

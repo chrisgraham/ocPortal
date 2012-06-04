@@ -58,7 +58,7 @@ class Hook_video_embed_facebook
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * Add a custom comcode field for this URL type.
 	 */

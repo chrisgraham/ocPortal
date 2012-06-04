@@ -30,7 +30,7 @@ class Hook_do_next_menus_newsletter
 	function run()
 	{
 		if (!addon_installed('newsletter')) return array();
-		
+
 		return array(
 			array('tools','newsletters',array('admin_newsletter',array('type'=>'misc'),get_module_zone('admin_newsletter')),do_lang_tempcode('NEWSLETTER'),('DOC_NEWSLETTER')),
 		);

@@ -193,7 +193,7 @@ class Hook_addon_registry_news
 	{
 		require_lang('news');
 		require_lang('dates');
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_SIDE_NEWS_ARCHIVE',array(

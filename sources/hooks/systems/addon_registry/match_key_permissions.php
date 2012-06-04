@@ -30,7 +30,7 @@ class Hook_addon_registry_match_key_permissions
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

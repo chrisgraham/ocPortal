@@ -38,7 +38,7 @@ function init__backup()
 function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 {
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-	
+
 	// Get a list of tables
 	$tables=$GLOBALS['SITE_DB']->query_select($db_meta,array('DISTINCT m_table AS m_table'));
 
@@ -86,13 +86,13 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 						}
 						fwrite($install_php_file,"   \$GLOBALS['SITE_DB']->query_insert('$table',array($list));\n");
 					}
-					
+
 					$start+=100;
 				}
 				while (count($data)!=0);
 			}
 		}
-		
+
 		fwrite($logfile,'Backed up table '.$table."\n");
 	}
 
@@ -103,7 +103,7 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 		if (fwrite($install_php_file,'   $GLOBALS[\'SITE_DB\']->create_index(\''.$index['i_table'].'\',\''.$index['i_name'].'\',array(\''.str_replace(',','\',\'',$index['i_fields']).'\'));'."\n")==0)
 			warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	}
-	
+
 	$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 }
 
@@ -120,7 +120,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	global $STARTED_BACKUP;
 	if ($STARTED_BACKUP) return;
 	$STARTED_BACKUP=true;
-	
+
 	if (is_null($file))
 	{
 		global $MB2_FILE,$MB2_B_TYPE,$MB2_MAX_SIZE;
@@ -153,10 +153,10 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	get_table_backup($logfile,'db_meta','db_meta_indices',$install_php_file);
 	if (fwrite($install_php_file,substr($_install_php_file,$place+8))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($install_php_file);
-	
+
 	tar_add_file($myfile,'restore.php',$__install_php_file,0664,time(),true);
 	@unlink($__install_php_file);
-	
+
 	if ($b_type=='full')
 	{
 		set_value('last_backup',strval(time()));
@@ -172,7 +172,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 			'text','text_custom',
 			'themes',
 			'uploads',
-			
+
 			'site', // In case of collapsed zones blocking in
 		));
 		tar_add_folder($myfile,$logfile,get_file_base(),$max_size,'',$original_files,$root_only_dirs,!running_script('cron_bridge'),true);

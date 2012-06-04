@@ -220,7 +220,7 @@ class Module_booking
 
 		$min_min_date=time();
 		$max_max_date=mixed();
-		
+
 		$date_from=time();
 		$date_to=time();
 
@@ -291,9 +291,9 @@ class Module_booking
 			list($quantity,$date_from,$date_to)=$this->_read_chosen_bookable_settings($bookable);
 
 			if (is_null($max_max_date)) $max_max_date=MAX_AHEAD_BOOKING_DATE;
-			
+
 			$description=get_translated_tempcode($bookable['description']);
-			
+
 			if ((!$description->is_empty()) || (count($messages)>0)) $has_details=true;
 
 			$categories[$category]['BOOKABLES'][]=array(
@@ -438,7 +438,7 @@ class Module_booking
 			if (post_param_integer('bookable_'.strval($bookable_row['id']).'_quantity',0)>0)
 			{
 				$found=true;
-				
+
 				$supplements=array();
 				$supplement_rows=$GLOBALS['SITE_DB']->query_select('bookable_supplement a JOIN '.get_table_prefix().'bookable_supplement_for b ON a.id=b.supplement_id',array('a.*'),array('bookable_id'=>$bookable_row['id']),'ORDER BY sort_order');
 				foreach ($supplement_rows as $supplement_row)
@@ -464,7 +464,7 @@ class Module_booking
 				);
 			}
 		}
-		
+
 		if (!$found) warn_exit(do_lang_tempcode('BOOK_QUANTITY_NOTHING_CHOSEN'));
 
 		require_javascript('javascript_ajax');
@@ -494,7 +494,7 @@ class Module_booking
 		{
 			return $this->thanks();
 		}
-		
+
 		$url=build_url(array('page'=>'_SELF','type'=>'done'),'_SELF');
 
 		list($javascript,$form)=ocf_join_form($url,true,false,false,false);

@@ -42,11 +42,11 @@ function make_global_file_list($list)
 					$file='themes/default/css/'.$file;
 					break;
 			}
-			
+
 			$list[$i]=$file;
 		}
 	}
-	
+
 	return $list;
 }
 
@@ -129,7 +129,7 @@ function find_installed_addons()
 			);
 		}
 	}
-	
+
 	return $addons_installed;
 }
 
@@ -152,7 +152,7 @@ function find_available_addons()
 		}
 	}
 	closedir($dh);
-	
+
 	global $M_SORT_KEY;
 	$M_SORT_KEY='1';
 	usort($files,'multi_sort');
@@ -242,7 +242,7 @@ function read_addon_info($name)
 		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
-		
+
 		$path=get_file_base().'/sources_custom/hooks/systems/addon_registry/'.filter_naughty_harsh($name).'.php';
 		if (!file_exists($path))
 			$path=get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name).'.php';
@@ -278,7 +278,7 @@ function read_addon_info($name)
 			'addon_incompatibilities'=>$dep['conflicts_with'],
 		);
 	}
-	
+
 	return $addon_row;
 }
 
@@ -550,7 +550,7 @@ function install_addon($file,$files=NULL)
 	if (!is_null($_modphp_file))
 	{
 		$modphp_file=trim($_modphp_file['data']);
-		
+
 		if (!defined('HIPHOP_PHP'))
 		{
 			if (substr($modphp_file,0,5)=='<'.'?php') $modphp_file=substr($modphp_file,5);
@@ -568,7 +568,7 @@ function install_addon($file,$files=NULL)
 	}
 
 	tar_close($tar);
-	
+
 	// Call install script, if it exists
 	$path='/data_custom/'.strtolower(basename($file,'.tar')).'_install.php';
 	if (file_exists(get_file_base().$path))
@@ -644,7 +644,7 @@ function uninstall_addon($name)
 	$GLOBALS['SITE_DB']->query_delete('addons',array('addon_name'=>$addon_row['addon_name']),'',1);
 
 	log_it('UNINSTALL_ADDON',$addon_row['addon_name']);
-	
+
 	unset($ADDON_INSTALLED_CACHE[$name]);
 }
 
@@ -816,15 +816,15 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str))));
 		}
 	}
-	
+
 //	if (!$overwrite->is_empty()) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'fe40ed8192a452a835be4c0fde64406b','WARNING'=>do_lang_tempcode('ADDON_WARNING_OVERWRITE',escape_html($overwrite)))));
 	if ($info['author']!='Core Team') if ($php) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'8cf249a119d10b2e97fc94cb9981dcea','WARNING'=>do_lang_tempcode('ADDON_WARNING_PHP'))));
 //	if ($chmod!='') $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'78121e40b9a26c2f33d09f7eee7b74be','WARNING'=>do_lan g_tempcode('ADDON_WARNING_CHMOD',escape_html($chmod))))); // Now uses AFM
-	
+
 	$files_combined=new ocp_tempcode();
 	$files_combined->attach($files_warnings);
 	$files_combined->attach($files);
-	
+
 	return array($warnings,$files_combined,$info);
 }
 
@@ -929,6 +929,6 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($name)))));
 		}
 	}
-	
+
 	return array($warnings,$files);
 }

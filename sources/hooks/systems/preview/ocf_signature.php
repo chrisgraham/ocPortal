@@ -29,9 +29,9 @@ class Hook_Preview_ocf_signature
 	function applies()
 	{
 		require_lang('ocf');
-		
+
 		$member_id=get_param_integer('id',get_member());
-		
+
 		$applies=(get_param('page','')=='members') && (post_param('signature',NULL)!==NULL);
 		if ($applies)
 		{

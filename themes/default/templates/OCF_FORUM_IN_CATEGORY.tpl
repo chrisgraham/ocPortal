@@ -25,7 +25,7 @@
 				<p>{!SUBFORUMS}: {SUBFORUMS}</p>
 			</div>
 		{+END}
-		
+
 		{+START,IF,{$MOBILE}}
 			<p class="associated_details">
 				{!COUNT_TOPICS}: {$PREG_REPLACE,([^<>/\s\w]),\1 ,{NUM_TOPICS*}}

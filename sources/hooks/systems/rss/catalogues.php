@@ -35,7 +35,7 @@ class Hook_rss_catalogues
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('catalogues')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'catalogues')) return NULL;
 
 		$filters_1=ocfilter_to_sqlfragment($_filters,'id','catalogue_categories','cc_parent_id','id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
@@ -78,7 +78,7 @@ class Hook_rss_catalogues
 			if ((has_category_access(get_member(),'catalogues_catalogue',$_category['c_name'])) && ((get_value('disable_cat_cat_perms')==='1') || (has_category_access(get_member(),'catalogues_category',strval($row['cc_id'])))))
 			{
 				if (!isset($catalogues[$_category['c_name']])) continue;
-				
+
 				$id=strval($row['id']);
 				$author=$GLOBALS['FORUM_DRIVER']->get_username($row['ce_submitter']);
 				if (is_null($author)) $author='';
@@ -112,7 +112,7 @@ class Hook_rss_catalogues
 				$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 			}
 		}
-		
+
 		require_lang('catalogues');
 		return array($content,do_lang('CATALOGUE_ENTRIES'));
 	}

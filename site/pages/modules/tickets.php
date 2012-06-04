@@ -41,7 +41,7 @@ class Module_tickets
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -121,7 +121,7 @@ class Module_tickets
 				'search_faq'=>'BINARY',
 				'cache_lead_time'=>'?TIME'
 			));
-	
+
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
 			$default_types=array(/*'TT_FEATURE_REQUEST','TT_FEATURE_INQUIRY','TT_MODDING_HELP','TT_REPAIR_HELP',*/'TT_OTHER',/*'TT_FINANCIAL_INQUIRY',*/'TT_COMPLAINT');
@@ -196,7 +196,7 @@ class Module_tickets
 	{
 		require_code('tickets');
 		require_code('tickets2');
-		
+
 		// We read in all data for efficiency
 		if (is_null($category_data))
 			$category_data=$GLOBALS['SITE_DB']->query_select('ticket_types c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.ticket_type=t.id',array('ticket_type AS id','text_original AS title'));
@@ -280,7 +280,7 @@ class Module_tickets
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * Checks the ticket ID is valid, and there is access for the current member to view it. Bombs out if there's a problem.
 	 *
@@ -624,7 +624,7 @@ class Module_tickets
 			return inform_screen($title,do_lang_tempcode('SUCCESS'));
 		}
 	}
-	
+
 	/**
 	 * Actualise to toggle the closed state of a ticket.
 	 *
@@ -633,7 +633,7 @@ class Module_tickets
 	function toggle_ticket_closed()
 	{
 		$id=get_param('id');
-		
+
 		require_code('feedback');
 
 		$action='CLOSE_TICKET';
@@ -673,7 +673,7 @@ class Module_tickets
 
 		$ticket_type=post_param_integer('ticket_type',-1);
 		$this->check_id($id);
-		
+
 		$staff_only=post_param_integer('staff_only',0)==1;
 
 		// Update

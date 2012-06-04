@@ -37,7 +37,7 @@ class Hook_rss_authors
 		unset($_filters); // Not used
 
 		if (!addon_installed('authors')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'authors')) return NULL;
 
 		$content=new ocp_tempcode();
@@ -46,7 +46,7 @@ class Hook_rss_authors
 		foreach ($rows as $i=>$row)
 		{
 			if ($i==$max) break;
-			
+
 			$id=strval($row['author']);
 			$author='';
 

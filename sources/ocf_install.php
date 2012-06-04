@@ -299,7 +299,7 @@ function install_ocf($upgrade_from=NULL)
 		{
 			$GLOBALS['FORUM_DB']->alter_table_field('f_member_custom_fields',$row['m_name'],'SHORT_TEXT');
 		}
-	
+
 		$i=0;
 		do
 		{

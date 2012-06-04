@@ -43,7 +43,7 @@ class tickettype_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('gold'==get_translated_text($this->tickettype_id));;
 	}
-	
+
 	
 	function tearDown()
 	{

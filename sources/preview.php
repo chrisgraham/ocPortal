@@ -215,9 +215,9 @@ function build_preview($multi_return=false)
 				$tempcodecss=(post_param_integer('tempcodecss__'.$key,0)==1);
 				$supports_comcode=(post_param_integer('comcode__'.$key,0)==1);
 				$preformatted=(post_param_integer('pre_f_'.$key,0)==1);
-	
+
 				if ($is_hidden) continue;
-	
+
 				if ($preformatted)
 				{
 					$valt=with_whitespace($val);
@@ -232,7 +232,7 @@ function build_preview($multi_return=false)
 					{
 						$val=str_replace('<color-'.strval($i).'>','#'.$color,$val);
 						$i++;
-	
+
 						$color=post_param(strval($i),'');
 					}
 					$_val_orig=$val;
@@ -241,7 +241,7 @@ function build_preview($multi_return=false)
 				{
 					$valt=make_string_tempcode(escape_html($val));
 				}
-	
+
 				$view_space_map[$key_nice]=$valt;
 			} else // An attachment-supporting field
 			{
@@ -250,9 +250,9 @@ function build_preview($multi_return=false)
 				if ($posting_ref_id<0) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 				$post_bits=do_comcode_attachments($val,$attachment_type,strval(-$posting_ref_id),true,$db);
 				$new_post_value=$post_bits['comcode'];
-	
+
 				$view_space_map[$key_nice]=$post_bits['tempcode'];
-	
+
 				$val=$post_bits['tempcode'];
 				$supports_comcode=true;
 			}

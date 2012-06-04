@@ -33,7 +33,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	{
 		return $this->ipb_unescape($r['members_display_name']);
 	}
-	
+
 	/**
 	 * Get a member profile-row for the member of the given name.
 	 *
@@ -46,7 +46,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		if (!array_key_exists(0,$rows)) return NULL;
 		return $rows[0];
 	}
-	
+
 	/**
 	 * Get the name relating to the specified member id.
 	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
@@ -59,7 +59,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		if ($member==$this->get_guest_id()) return do_lang('GUEST');
 		return $this->ipb_unescape($this->get_member_row_field($member,'members_display_name'));
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's primary usergroup.
 	 *
@@ -70,7 +70,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	{
 		return $r['member_group_id'];
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's member id.
 	 *
@@ -81,7 +81,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	{
 		return $r['member_id'];
 	}
-	
+
 	/**
 	 * Get the rows for the top given number of posters on the forum.
 	 *
@@ -117,7 +117,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		$tempid=$this->connection->query_value_null_ok_full('SELECT member_id FROM '.$this->connection->get_table_prefix().'members WHERE member_id>'.strval((integer)$member).' ORDER BY member_id');
 		return $tempid;
 	}
-	
+
 	/**
 	 * Try to find a member with the given IP address
 	 *
@@ -147,7 +147,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		uasort($rows,'multi_sort');
 		return $rows;
 	}
-	
+
 	/**
 	 * Get a member id from the given member's username.
 	 *
@@ -158,7 +158,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	{
 		return $this->connection->query_value_null_ok('members','member_id',array('members_display_name'=>$name));
 	}
-	
+
 	/**
 	 * Get a list of custom BBcode tags.
 	 *
@@ -174,7 +174,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
 	 *
@@ -196,7 +196,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		}
 		return !is_null($id);
 	}
-	
+
 	/**
 	 * Set a custom profile fields value. It should not be called directly.
 	 *
@@ -212,7 +212,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		if (is_null($old)) $this->connection->query_insert('pfields_content',array('member_id'=>$member));
 		$this->connection->query_update('pfields_content',array('field_'.strval($id)=>$amount),array('member_id'=>$member),'',1);
 	}
-	
+
 	/**
 	 * Get custom profile fields values for all 'ocp_' prefixed keys.
 	 *
@@ -224,7 +224,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		$rows=$this->connection->query('SELECT pf_id,pf_title FROM '.$this->connection->get_table_prefix().'pfields_data WHERE pf_title LIKE \''.db_encode_like('ocp_%').'\'');
 		$values=$this->connection->query_select('pfields_content',array('*'),array('member_id'=>$member),'',1);
 		if (!array_key_exists(0,$values)) return NULL;
-	
+
 		$out=array();
 		foreach ($rows as $row)
 		{
@@ -233,7 +233,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		}
 		return $out;
 	}
-	
+
 	/**
 	 * Searches for forum auto-config at this path.
 	 *
@@ -255,7 +255,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get an array of paths to search for config at.
 	 *
@@ -283,7 +283,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		17=>'../uploads',
 		18=>'../ipboard');
 	}
-	
+
 	/**
 	 * Get the avatar URL for the specified member id.
 	 *
@@ -428,13 +428,13 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 			$temp['message']=$post;
 			$temp['user']=$myrow['author_id'];
 			$temp['date']=$myrow['post_date'];
-	
+
 			$out[]=$temp;
 		}
-	
+
 		return $out;
 	}
-	
+
 	/**
 	 * Get an array of topics in the given forum. Each topic is an array with the following attributes:
 	 * - id, the topic ID
@@ -550,7 +550,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 					{
 						$special=do_template('FORUM_ATTACHMENT_IMAGE',array('_GUID'=>'49dbf65cb5e20340a5ad4379ea6344c3','URL'=>get_forum_base_url().'/uploads/'.$attachment['attach_location']));
 					}
-	
+
 					// See if we have to place it somewhere special inside the post
 					$old_post=$post;
 					$post=str_replace('[attachmentid='.$attachment['attach_id'].']',$special->evaluate(),$post);
@@ -580,7 +580,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		if (count($out)!=0) return $out;
 		return NULL;
 	}
-	
+
 	/**
 	 * Find the base URL to the emoticons.
 	 *
@@ -622,7 +622,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
 		return $EMOTICON_CACHE;
 	}
-	
+
 	/**
 	 * Find a list of all forum skins (aka themes).
 	 *
@@ -647,7 +647,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	function _get_theme($skip_member_specific=false)
 	{
 		$def='';
-	
+
 		// Load in remapper
 		$map=file_exists(get_file_base().'/themes/map.ini')?better_parse_ini_file(get_file_base().'/themes/map.ini'):array();
 
@@ -684,7 +684,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 
 		return $def;
 	}
-	
+
 	/**
 	 * Get a URL to the registration page (for people to create member accounts).
 	 *
@@ -706,7 +706,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		unset($id);
 		return get_forum_base_url().'/index.php?app=core&module=usercp';
 	}
-	
+
 	/**
 	 * Get a URL to the members-online page.
 	 *
@@ -716,7 +716,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	{
 		return get_forum_base_url().'/index.php?app=members&module=online&sort_order=desc';
 	}
-	
+
 	/**
 	 * Get a URL to send a private/personal message to the given member.
 	 *
@@ -738,7 +738,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		$r=$this->connection->query('SELECT COUNT(*) AS a FROM '.$this->connection->get_table_prefix().'members WHERE member_group_id<>1');
 		return $r[0]['a'];
 	}
-	
+
 	/**
 	 * Get the total topics ever made on the forum.
 	 *
@@ -748,7 +748,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	{
 		return $this->connection->query_value('topics','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the total posts ever made on the forum.
 	 *
@@ -758,7 +758,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	{
 		return $this->connection->query_value('posts','COUNT(*)');
 	}
-	
+
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *
@@ -773,7 +773,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		if (($more!='') && (!is_null($more))) $secondary=array_merge($secondary,explode(',',$more));
 		return $secondary;
 	}
-	
+
 	/**
 	 * Get an array of members who are in at least one of the given array of usergroups.
 	 *
@@ -805,7 +805,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','g_is_supmod',array('g_id'=>$usergroup))==1)) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
@@ -818,7 +818,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','g_access_cp',array('g_id'=>$usergroup))==1)) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Create a member login cookie.
 	 *
@@ -839,7 +839,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		$_password=$this->get_member_row_field($id,'member_login_key');
 		ocp_setcookie(get_pass_cookie(),$_password);
 		$_COOKIE[get_pass_cookie()]=$_password;
-		
+
 		// Set stronghold
 		global $SITE_INFO;
 		if ((array_key_exists('stronghold_cookies',$SITE_INFO)) && ($SITE_INFO['stronghold_cookies']==1))
@@ -857,7 +857,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 			ocp_setcookie($cookie_prefix.'ipb_stronghold',$stronghold);
 		}
 	}
-	
+
 	/**
 	 * Find out if the given member id is banned.
 	 *
@@ -871,7 +871,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		if (is_null($banned)) return false;
 		return $banned==1;
 	}
-	
+
 	/**
 	 * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
 	 * All authorisation, cookies, and form-logins, are passed through this function.
@@ -888,7 +888,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	{
 		$out=array();
 		$out['id']=NULL;
-	
+
 		if (is_null($userid))
 		{
 			$rows=$this->connection->query_select('members',array('*'),array('name'=>$this->ipb_escape($username)),'',1);
@@ -907,7 +907,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		{
 			$rows[0]=$this->get_member_row($userid);
 		}
-	
+
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
 			$out['error']=do_lang_tempcode('_USER_NO_EXIST',$username);
@@ -926,7 +926,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 				$out['error']=do_lang_tempcode('USER_BAD_PASSWORD');
 				return $out;
 			}
-			
+
 			// Check stronghold
 			global $SITE_INFO;
 			if ((array_key_exists('stronghold_cookies',$SITE_INFO)) && ($SITE_INFO['stronghold_cookies']==1))
@@ -956,14 +956,14 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 				return $out;
 			}
 		}
-	
+
 		$pos=strpos(get_member_cookie(),'member_id');
 		ocp_eatcookie(substr(get_member_cookie(),0,$pos).'session_id');
 
 		$out['id']=$row['member_id'];
 		return $out;
 	}
-	
+
 	/**
 	 * Do converge authentication.
 	 *
@@ -1003,7 +1003,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		{
 			$rows=$this->connection->query_select('members',array('*'),array('member_id'=>$member),'',1);
 		}
-	
+
 		$this->MEMBER_ROWS_CACHED[$member]=array_key_exists(0,$rows)?$rows[0]:NULL;
 		return $this->MEMBER_ROWS_CACHED[$member];
 	}

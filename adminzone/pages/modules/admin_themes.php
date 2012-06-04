@@ -41,14 +41,14 @@ class Module_admin_themes
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('theme_images');
-	
+
 		delete_config_option('templates_store_revisions');
 		delete_config_option('templates_number_revisions_show');
 
@@ -71,7 +71,7 @@ class Module_admin_themes
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
 		require_code('themes2');
-		
+
 		$themes=find_all_themes(); // Find all images for all themes
 
 		/*if ($upgrade_from==2)
@@ -189,7 +189,7 @@ class Module_admin_themes
 	{
 		return array('misc'=>'THEMES','add_theme'=>'ADD_THEME');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -205,7 +205,7 @@ class Module_admin_themes
 		require_javascript('javascript_themeing');
 
 		$type=get_param('type','misc');
-	
+
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/themes';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_themes';
 
@@ -230,7 +230,7 @@ class Module_admin_themes
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to manage themes.
 	 *
@@ -239,7 +239,7 @@ class Module_admin_themes
 	function manage_themes()
 	{
 		$title=get_page_title('MANAGE_THEMES');
-		
+
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_THEMES');
 
 		$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),NULL,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
@@ -287,7 +287,7 @@ class Module_admin_themes
 				if ($zone['zone_theme']==$theme)
 				{
 					if ((get_option('collapse_user_zones')=='1') && ($zone['zone_name']=='site')) continue;
-					
+
 					if (!$zone_list->is_empty())
 						$zone_list->attach(do_lang_tempcode('LIST_SEP'));
 					$zone_list->attach($zone['zone_name']);
@@ -524,7 +524,7 @@ class Module_admin_themes
 		$submit_name=do_lang_tempcode('EDIT_THEME');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('THEMES'))));
-		
+
 		$javascript='var themee=document.getElementById(\'theme\'), themet=document.getElementById(\'title\'), copy=document.getElementById(\'copy\'); if (copy) copy.onchange=function() { if (copy.checked && themee.value.indexOf(\'-copy\')==-1) { themee.value+=\'-copy\'; themet.value+=\' copy\'; } };';
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'2734c55cd4d7cfa785d307d932ce8af1','JAVASCRIPT'=>$javascript,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
@@ -544,7 +544,7 @@ class Module_admin_themes
 			$theme=get_param('old_theme',false,true);
 			require_code('themes3');
 			actual_delete_theme($theme);
-			
+
 			$to='';
 		} elseif (post_param_integer('copy',0)==1)
 		{
@@ -984,7 +984,7 @@ class Module_admin_themes
 				$filesarray[$file]=$temp[2];
 			}
 		}
-	
+
 		closedir($_dir);
 		return $filesarray;
 	}
@@ -1055,7 +1055,7 @@ class Module_admin_themes
 		}
 		return array();
 	}
-	
+
 	/**
 	 * The UI to choose a template to edit.
 	 *
@@ -1339,7 +1339,7 @@ class Module_admin_themes
 			if (($j!=0) && (get_param('restore_from','')==''))
 				$revision_history=do_template('REVISION_HISTORY_WRAP',array('_GUID'=>'435e050dd2f38187d757e792ceb2f2f5','CONTENT'=>$revision_history));
 			elseif ($j!=0) $revision_history=do_template('REVISION_RESTORE');
-	
+
 			$_file=substr($file,strrpos($file,'/')+1);
 			if (substr($_file,-4)=='.css')
 			{
@@ -1361,7 +1361,7 @@ class Module_admin_themes
 				$parameters->attach(form_input_list_entry($matches[1][$j].'__0',false,$matches[1][$j]));
 			}
 			$parameters=do_template('TEMPLATE_EDIT_SCREEN_DROPDOWN',array('_GUID'=>'50f31c49c99b864c1719fb51ed426274','ID'=>$i,'PARAMETERS'=>$parameters,'NAME'=>'ppparameter','LANG'=>do_lang_tempcode('INSERT_PARAMETER')));
-		
+
 			$_directives=array(
 											array('BOX','1'),
 											array('WHILE','1'),
@@ -1475,7 +1475,7 @@ class Module_admin_themes
 
 			$count++;
 		}
-		
+
 		if ($count==1)
 		{
 			$GLOBALS['SEO_TITLE']=$files_seen[0];
@@ -1521,9 +1521,9 @@ class Module_admin_themes
 		erase_cached_templates();
 		require_code('view_modes');
 		erase_tempcode_cache();
-	
+
 		$title=get_page_title('EDIT_TEMPLATES');
-	
+
 		foreach (array_keys($_REQUEST) as $_i)
 		{
 			$matches=array();
@@ -1565,7 +1565,7 @@ class Module_admin_themes
 					sync_file($fullpath.'.editfrom');
 				}
 				$_file=preg_replace('#[^/]*/(.*)(\_custom)?/#U','default/${1}/',$_file);
-				
+
 				$file=$_file;
 			} else
 			{
@@ -1651,7 +1651,7 @@ class Module_admin_themes
 	function add_image()
 	{
 		$title=get_page_title('ADD_THEME_IMAGE');
-	
+
 		$theme=get_param('theme');
 		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 		$lang=get_param('lang',user_lang());
@@ -1966,7 +1966,7 @@ class Module_admin_themes
 		}
 
 		// Prepare all to display...
-		
+
 		$post = new ocp_tempcode();
 
 		/* $lis (the main previews) will be displayed in the main INDEX_SCREEN content */
@@ -1983,7 +1983,7 @@ class Module_admin_themes
 			foreach($pages as $page=>$type)
 			{
 				if (!is_string($page)) $page=strval($page);
-				
+
 				$file = $page.'.txt';
 				$url = build_url(array('page'=>$page),$zone);
 				$com_li->attach(do_template('TEMPLATE_LIST',array('URL'=>$url,'COLOR'=>'','TEMPLATE'=>$file,'LIST'=>'')));
@@ -2018,9 +2018,9 @@ class Module_admin_themes
 		$GLOBALS['HELPER_PANEL_PIC']='';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='';
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
-		
+
 		require_code('lorem');
-	
+
 		global $LOREM_AVOID_GLOBALISE;
 		$LOREM_AVOID_GLOBALISE=true;
 

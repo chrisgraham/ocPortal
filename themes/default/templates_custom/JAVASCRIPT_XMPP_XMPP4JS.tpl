@@ -577,7 +577,7 @@ Xmpp4Js.Jid = function(jid) {
 
   if (jid !== undefined && jid != null) {
 	  if (jid instanceof Xmpp4Js.Jid) {
-	
+
 	    this.setNode(jid.getNode());
 	    this.setDomain(jid.getDomain());
 	    this.setResource(jid.getResource());
@@ -691,10 +691,10 @@ Xmpp4Js.Jid.prototype.equals = function( jid, withoutResource ) {
 		isEqual = jid.withoutResource().toString().toLowerCase() == this.withoutResource().toString().toLowerCase();
 	} else {
 		isEqual = jid.toString().toLowerCase() == this.toString().toLowerCase();
-	
+
 	}
 	return isEqual;
-	
+
 }
 
 /**
@@ -1802,26 +1802,26 @@ Xmpp4Js.Packet.Registration = function( to, fields ) {
     Xmpp4Js.Packet.Registration.superclass.constructor.call( this, to, "set", "jabber:iq:register" );
 
 	var queryNode = this.getQuery();
-	
+
 	//Original code from xmpp4js library
 	/*for( var k in fields ) {
 	    var child = queryNode.ownerDocument.createElement( k );
 	    child.setTextContent( fields[k] );
-	
+
 	    queryNode.appendChild( child );
 	}*/
-	
+
 	//Tweaked code because of some errors
 	for( var k in fields ) {
 		if(k=="username" || k=="password" || k=="email" || k=="Jid")
 		{
 		    var child = queryNode.ownerDocument.createElement( k );
 		    child.setTextContent( fields[k] );
-		
+
 		    queryNode.appendChild( child );
 		}
 	}
-	
+
 	// in addition to fields, add a plaintext element
 	queryNode.appendChild( queryNode.ownerDocument.createElement( "plaintext" ) );
 }
@@ -1882,9 +1882,9 @@ Xmpp4Js.Packet.StanzaProvider.prototype = {
 			// TODO throw error or something.
 			return undefined;
 		}
-	
+
 		var bestProvider = undefined;
-		
+
 		for( var i = 0; i < this.providers.length; i++ ) {
 			var provider = this.providers[i];
 
@@ -1896,10 +1896,10 @@ Xmpp4Js.Packet.StanzaProvider.prototype = {
 		if( bestProvider === undefined ) {
 			throw new NoProviderError( stanzaNode );
 		}
-		
+
 		var stanza = new bestProvider.clazz();
 		stanza.setNode( stanzaNode );
-		
+
 		return stanza;
 	},
 	/**
@@ -1913,7 +1913,7 @@ Xmpp4Js.Packet.StanzaProvider.prototype = {
 			Xmpp4Js.Packet.Base,
 			0
 		);
-		
+
 		// match all packets with elem name message, priority 1, and make a Packet.Message
 		this.register(
 			Xmpp4Js.Packet.StanzaProvider.MessageProvider,
@@ -2079,7 +2079,7 @@ KeySequence.prototype = {
 		}
 		return this._keys[this._idx--]; 
 	},
-	
+
 	/**
 	 * Returns true if this is the last key in the sequence. A new
 	 * sequence will need to be generated. This is the responsibility
@@ -2088,21 +2088,21 @@ KeySequence.prototype = {
 	isLastKey: function() { 
 		return (this._idx == 0); 
 	},
-	
+
 	/**
 	 * Returns true if this is the first key in a new sequence.
 	 */
 	isFirstKey: function() {
 		return (this._idx == this.getSize() - 1);
 	},
-	
+
 	/**
 	 * Get the size of the key sequence.
 	 */
 	getSize: function() { 
 		return this._keys.length; 
 	},
-	
+
 	reset: function() {
 		this._initKeys( this.getSize() );
 	},
@@ -2114,7 +2114,7 @@ KeySequence.prototype = {
 		this._keys = [];
 		this._seed = this._createNewSeed();
 		this._idx = length - 1;
-	
+
 		var prevKey = this._seed;
 		for (var i = 0; i < length; i++) {
 			this._keys[i] = this._hash(prevKey);
@@ -2129,7 +2129,7 @@ KeySequence.prototype = {
 	_createNewSeed: function() {
 		return Math.random();
 	},
-	
+
 	/**
 	 * Used to hash the value of each key. Spec says it must be sha1-hex,
 	 * so that's what it used.
@@ -2172,9 +2172,9 @@ DelegateManager.prototype = {
 	add: function(func) {
 		var id = "delegate_"+Math.random();
 		this.map[id] = func;
-		
+
 		return id;
-	
+
 	},
 	remove: function(id) {
 		delete this.map[id];
@@ -2215,10 +2215,10 @@ EventListenerManager.prototype.add = function(event, listener) {
 		this.events[event] = new DelegateManager();
 		dm = this.events[event];
 	}
-	
+
 	var id = dm.add( listener );
 	this.listenerEvents[ id ] = event;
-	
+
 	return id;
 }
 
@@ -2230,35 +2230,35 @@ EventListenerManager.prototype.remove = function(event, id) {
 	}
 	var dm = this.events[event];
 	if( dm === undefined ) { return; }
-	
+
 	dm.remove( id );
 }
 
 EventListenerManager.prototype.getMap = function( event ) {
 	var dm = this.events[event];
 	if( dm === undefined ) { return; }
-	
+
 	return dm.getMap();
-	
+
 }
 
 EventListenerManager.prototype.fireArgs = function( event, args ) {
 	var callArgs = args.slice(0);
 	// put event onto the beginning of the arg stack
 	callArgs.unshift( event );
-	
+
 	this.fire.apply( this, callArgs );
 }
 
 EventListenerManager.prototype.fire = function( event ) {
 	var dm = this.events[event];
 	if( dm === undefined ) { return; }
-	
+
 	
 	// get passed arguments and shift the first (event) off the front 
 	var args = Array.prototype.slice.call(arguments);
 	args.shift();
-	
+
 	dm.fire.apply( dm, args );
 }
 
@@ -3409,7 +3409,7 @@ Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.RawPacketFilter, Xmpp4Js.PacketFilter.P
  */
 Xmpp4Js.PacketFilter.CompositeFilter = function() {
 		this.filters = [];
-		
+
 		for( var i = 0; i < arguments.length; i++ ) {
 			this.filters.push( arguments[i] );
 		}
@@ -3453,7 +3453,7 @@ Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.AndFilter, Xmpp4Js.PacketFilter.Composi
 Xmpp4Js.PacketFilter.OrFilter = function() {
 	Xmpp4Js.PacketFilter.OrFilter.superclass.constructor.apply(this, arguments);
 }
-	
+
 Xmpp4Js.PacketFilter.OrFilter.prototype = {
 	accept: function(packet) {
 		var accept = false;
@@ -3463,7 +3463,7 @@ Xmpp4Js.PacketFilter.OrFilter.prototype = {
 		}
 		return accept;
 	}
-	
+
 }
 
 Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.OrFilter, Xmpp4Js.PacketFilter.CompositeFilter, Xmpp4Js.PacketFilter.OrFilter.prototype);
@@ -3495,10 +3495,10 @@ Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.AllPacketFilter, Xmpp4Js.PacketFilter.P
  */
 Xmpp4Js.PacketFilter.PacketClassFilter = function(type) {
 	Xmpp4Js.PacketFilter.PacketClassFilter.superclass.constructor.apply(this, arguments);
-	
+
 	this.type = type;
 }
-	
+
 Xmpp4Js.PacketFilter.PacketClassFilter.prototype = {
 	accept: function(packet) {
 		return packet instanceof (this.type);
@@ -3517,7 +3517,7 @@ Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.PacketClassFilter, Xmpp4Js.PacketFilter
  */
 Xmpp4Js.PacketFilter.PacketTypeFilter = function(type) {
 	Xmpp4Js.PacketFilter.PacketTypeFilter.superclass.constructor.apply(this, arguments);
-	
+
 	this.type = type;
 }
 
@@ -3538,7 +3538,7 @@ Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.PacketTypeFilter, Xmpp4Js.PacketFilter.
  */
 Xmpp4Js.PacketFilter.PacketIdFilter = function(id) {
 	Xmpp4Js.PacketFilter.PacketIdFilter.superclass.constructor.apply(this, arguments);
-	
+
 	this.id = id;
 }
 
@@ -3558,10 +3558,10 @@ Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.PacketIdFilter, Xmpp4Js.PacketFilter.Pa
  */
 Xmpp4Js.PacketFilter.FromContainsFilter = function(match) {
 	Xmpp4Js.PacketFilter.FromContainsFilter.superclass.constructor.apply(this, arguments);
-	
+
 	this.match = match;
 }
-	
+
 	
 Xmpp4Js.PacketFilter.FromContainsFilter.prototype = {
 	accept: function(packet) {
@@ -3579,11 +3579,11 @@ Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.FromContainsFilter, Xmpp4Js.PacketFilte
  */
 Xmpp4Js.PacketFilter.IQQueryNSFilter = function(namespace) {
 	Xmpp4Js.PacketFilter.IQQueryNSFilter.superclass.constructor.apply(this, arguments);
-	
+
     this.iqFilter = new Xmpp4Js.PacketFilter.PacketClassFilter( Xmpp4Js.Packet.IQ );
 	this.namespace = namespace;
 }
-	
+
 Xmpp4Js.PacketFilter.IQQueryNSFilter.prototype = {
 	accept: function(packet) {
 		return this.iqFilter.accept(packet) && packet.getQuery() != null && packet.getQuery().namespaceURI == this.namespace;
@@ -4853,7 +4853,7 @@ Xmpp4Js.Roster.RosterEntry = function(jid, alias, subscription, ask, groups, ros
 }
 
 Xmpp4Js.Roster.RosterEntry.prototype = {
-	
+
 
 	/** @deprecated new model doesn't keep the same entry around */
 	update: function( alias, subscription, ask, groups ) {
@@ -4901,10 +4901,10 @@ Xmpp4Js.Roster.RosterGroup = function(name, roster) {
 Xmpp4Js.Roster.RosterGroup.prototype = {
 	getEntries: function() {
 		var retEntries = [];
-	
+
 		for(var k in this.roster.map) {
 			var entry = this.roster.map[k];
-			
+
 			var groups = entry.groups;
 			for( var j = 0; j < groups.length; j++ ) {
 				var group = groups[j];
@@ -4913,7 +4913,7 @@ Xmpp4Js.Roster.RosterGroup.prototype = {
 				}
 			}
 		};
-		
+
 		return retEntries;
 	},
         getEntry: function(jid) {
@@ -6085,7 +6085,7 @@ DataStorage.prototype.get = function( xmlns, cb, elementName ) {
 		var responseNodes = packet.getQuery().getElementsByTagNameNS( xmlns, elementName );
 		cb( responseNodes );
 	});
-	
+
 }
 
 
@@ -6419,7 +6419,7 @@ TransportHelper.discoverGateways = function( sdm, cb ) {
 			sdm.discoverItems( infoJid, function( itemsJid, items ) {
 				for( var i = 0; i < items.length; i++ ) {
 					var item = items[ i ];
-					
+
 					discoverGateways( item.jid );
 				}
 			} );

@@ -35,7 +35,7 @@ class Hook_chat_bot_default
 			case 'help':
 				$out=do_lang('CHAT_HELP_BOTMSG');
 				return do_lang('CHAT_WEBSITE_HELPER_BOT',$out);
-			
+
 			case 'users_online':
 				// On the site
 				$count=0;
@@ -72,7 +72,7 @@ class Hook_chat_bot_default
 				$out=do_lang('CHAT_TIME_BOTMSG',get_timezoned_date(time(),true,true,true,true));
 				return do_lang('CHAT_WEBSITE_HELPER_BOT',$out);
 		}
-		
+
 		return NULL;
 	}
 

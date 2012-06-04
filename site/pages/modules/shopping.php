@@ -48,7 +48,7 @@ class Module_shopping
 	function uninstall()
 	{		
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_cart');
-		
+
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order_details');
 
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order');
@@ -56,7 +56,7 @@ class Module_shopping
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_logging');
 
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order_addresses');
-					
+
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'shopping'));
 
 		delete_config_option('shipping_cost_factor');
@@ -97,7 +97,7 @@ class Module_shopping
 			if (is_null($GLOBALS['SITE_DB']->query('SELECT COUNT(DISTINCT tax_opted_out) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'shopping_order',NULL,NULL,true)))
 				$GLOBALS['SITE_DB']->add_table_field('shopping_order','tax_opted_out','BINARY',0); // This was badly versioned
 		}
-		
+
 		if (is_null($upgrade_from))
 		{	
 			$GLOBALS['SITE_DB']->create_table('shopping_cart',array(
@@ -118,7 +118,7 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->create_index('shopping_cart','ordered_by',array('ordered_by'));
 			$GLOBALS['SITE_DB']->create_index('shopping_cart','session_id',array('session_id'));
 			$GLOBALS['SITE_DB']->create_index('shopping_cart','product_id',array('product_id'));
-			
+
 			$GLOBALS['SITE_DB']->create_table('shopping_order_details',array(
 				'id'=>'*AUTO',
 				'order_id'=>'?AUTO_LINK',
@@ -133,7 +133,7 @@ class Module_shopping
 			));
 			$GLOBALS['SITE_DB']->create_index('shopping_order_details','p_id',array('p_id'));
 			$GLOBALS['SITE_DB']->create_index('shopping_order_details','order_id',array('order_id'));
-		
+
 			$GLOBALS['SITE_DB']->create_table('shopping_logging',array(
 				'id'=>'*AUTO',
 				'e_member_id'=>'*USER',
@@ -142,7 +142,7 @@ class Module_shopping
 				'last_action'=>'SHORT_TEXT',
 				'date_and_time'=>'TIME'
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_table('shopping_order_addresses',array(
 				'id'=>'*AUTO',
 				'order_id'=>'?AUTO_LINK',
@@ -156,18 +156,18 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->create_index('shopping_order_addresses','order_id',array('order_id'));
 
 			require_lang('shopping');
-	
+
 			$GLOBALS['SITE_DB']->create_index('shopping_order','recent_shopped',array('add_date'));
-				
+
 			$GLOBALS['SITE_DB']->create_index('shopping_logging','calculate_bandwidth',array('date_and_time'));
-	
+
 			add_config_option('SHIPPING_COST_FACTOR','shipping_cost_factor','float','return \'0\';','ECOMMERCE','ECOMMERCE',1);
 			add_config_option('ALLOW_OPTING_OUT_OF_TAX','allow_opting_out_of_tax','tick','return \'1\';','ECOMMERCE','ECOMMERCE');
 
 			add_menu_item_simple('ecommerce_features',NULL,'ORDERS','_SEARCH:shopping:type=my_orders');
-			
+
 			//CPFs for ecommerce purchase
-	
+
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('firstname',20,1,0,0,0,'','short_text');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('lastname',20,1,0,0,0,'','short_text');
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('building_name_or_number',100,1,0,0,0,'','long_text');
@@ -185,7 +185,7 @@ class Module_shopping
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('country',100,1,0,0,0,'','list',0,$countries);
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -218,7 +218,7 @@ class Module_shopping
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
 		$type=get_param('type','misc');
-		
+
 		delete_incomplete_orders();
 
 		if ($type=='misc') return $this->view_shopping_cart();
@@ -230,7 +230,7 @@ class Module_shopping
 		if ($type=='finish') return $this->finish();
 		if ($type=='my_orders') return $this->my_orders();
 		if ($type=='order_det') return $this->order_det();
-		
+
 		return new ocp_tempcode();
 	}
 
@@ -274,9 +274,9 @@ class Module_shopping
 		if ($max_rows>0)
 		{
 			$shopping_cart=new ocp_tempcode();
-	
+
 			$checkout_details=new ocp_tempcode();
-			
+
 			$fields_title=results_field_title(
 								array(
 									'',
@@ -290,36 +290,36 @@ class Module_shopping
 									do_lang_tempcode('REMOVE_FROM_CART')
 								),NULL
 							);
-			
+
 			$i=1;
 			$sub_tot=0.0;
 			$tot_tax=0.0;
 			$shipping_cost=0.0;
-	
+
 			foreach ($result as $value)
 			{
 				$pro_ids[]=$value['product_id'];
-	
+
 				$_hook=$value['product_type'];
-	
+
 				$value['sl_no']=$i;	
-			
+
 				require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($_hook));
-	
+
 				$object=object_factory('Hook_'.filter_naughty_harsh($_hook));
-	
+
 				if (method_exists($object,'show_cart_entry'))
 				{
 					$object->show_cart_entry($shopping_cart,$value);
 				}
-		
+
 				if (method_exists($object,'calculate_tax'))
 					$tax=$object->calculate_tax($value['price'],$value['price_pre_tax']);
 				else
 					$tax=0;
+
 				
-				
-			
+
 				//Shipping
 				if (method_exists($object,'calculate_shipping_cost'))
 					$shipping_cost=$object->calculate_shipping_cost($value['product_weight']);
@@ -372,7 +372,7 @@ class Module_shopping
 
 		return do_template('SHOPPING_CART_SCREEN',array('TITLE'=>$title,'RESULT_TABLE'=>$results_table,'CONTENT'=>'','FORM_URL'=>$update_cart,'CONT_SHOPPING'=>$cont_shopping,'MESSAGE'=>'','BACK'=>$cont_shopping,'PRO_IDS'=>$pro_ids_val,'EMPTY_CART'=>$empty_cart,'EMPTY'=>do_lang_tempcode('EMPTY_CART'),'UPDATE'=>do_lang_tempcode('UPDATE'),'CONTINUE_SHOPPING'=>do_lang_tempcode('CONTINUE_SHOPPING'),'PROCEED_BOX'=>$proceed_box,'ALLOW_OPTOUT_TAX'=>$allow_opt_out_tax,'ALLOW_OPTOUT_TAX_VALUE'=>strval($allow_opt_out_tax_value)),NULL,false);
 	}
-	
+
 	/**
 	 * Function to add item to cart.
 	 *
@@ -389,7 +389,7 @@ class Module_shopping
 		$title=get_page_title('SHOPPING');	
 
 		$_hooks=find_all_hooks('systems','ecommerce');
-	
+
 		$product_details=get_product_details();
 
 		add_to_cart($product_details);
@@ -397,7 +397,7 @@ class Module_shopping
 		log_cart_actions('Added to cart');
 
 		$cart_view=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		
+
 		return redirect_screen($title,$cart_view,do_lang_tempcode('SUCCESS'));		
 	}
 
@@ -409,7 +409,7 @@ class Module_shopping
 	function update_cart()
 	{
 		$title=get_page_title('SHOPPING');
-	
+
 		$p_ids=post_param('product_ids');
 
 		$pids=explode(",",$p_ids);
@@ -417,7 +417,7 @@ class Module_shopping
 		$product_to_remove=array();
 
 		$product_details=array();
-		
+
 		if (count($pids)>0)
 		{
 			foreach ($pids as $pid)
@@ -441,7 +441,7 @@ class Module_shopping
 				$product_details[]=array('product_id'=>$pid,'Quantity'=>$qty);
 
 				$remove=post_param_integer('remove_'.$pid,0);
-				
+
 				if ($remove==1)	$product_to_remove	[]=$pid;
 			}
 		}
@@ -455,7 +455,7 @@ class Module_shopping
 
 
 		$cart_view=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		
+
 		return redirect_screen($title,$cart_view,do_lang_tempcode('CART_UPDATED'));
 	}
 
@@ -481,9 +481,9 @@ class Module_shopping
 		}
 
 		$GLOBALS['SITE_DB']->query_update('shopping_cart',array('is_deleted'=>1),$where);
-		
+
 		$cart_view=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		
+
 		return redirect_screen($title,$cart_view,do_lang_tempcode('CART_EMPTIED'));
 	}
 
@@ -512,7 +512,7 @@ class Module_shopping
 	function finish()
 	{
 		$title=get_page_title('_PURCHASE_FINISHED');
-		
+
 		breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES')),array('_SELF:_SELF:misc',do_lang_tempcode('SHOPPING'))));
 
 		$message=get_param('message',NULL,true); // TODO: Assumption, needs to really go through the payment gateway API
@@ -617,7 +617,7 @@ class Module_shopping
 	function my_orders()
 	{
 		$title=get_page_title('MY_ORDERS');
-		
+
 		$member_id=get_member();
 
 		if (has_specific_permission(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
@@ -654,7 +654,7 @@ class Module_shopping
 
 		return do_template('ECOM_ORDERS_SCREEN',array('TITLE'=>$title,'CURRENCY'=>get_option('currency'),'ORDERS'=>$orders));
 	}
-	
+
 	/**
 	 * Show an order details
 	 *
@@ -691,5 +691,5 @@ class Module_shopping
 	}
 }
 
-	
+
 

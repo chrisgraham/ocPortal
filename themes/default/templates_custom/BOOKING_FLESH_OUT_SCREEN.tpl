@@ -88,7 +88,7 @@
 			<strong>{!PRICE_AUTO_CALC}:</strong> {$CURRENCY_SYMBOL} <span id="price">{PRICE*}</span>
 		{+END}
 	{+END}
-		
+
 	<p class="proceed_button">
 		<input class="button_page" type="submit" value="{$?,{$IS_GUEST},{!PROCEED},{!BOOK}}" />
 	</p>

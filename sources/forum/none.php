@@ -166,7 +166,7 @@ class forum_driver_none extends forum_driver_base
 
 			$em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID'=>'0b51492b6e170db4466be74fdf312260','FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
 		}
-	
+
 		return $em;
 	}
 
@@ -179,7 +179,7 @@ class forum_driver_none extends forum_driver_base
 	{
 		return '';
 	}
-	
+
 	/**
 	 * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
 	 *
@@ -189,7 +189,7 @@ class forum_driver_none extends forum_driver_base
 	{
 		global $IN_MINIKERNEL_VERSION;
 		if ($IN_MINIKERNEL_VERSION==1) return array();
-	
+
 		global $EMOTICON_CACHE,$EMOTICON_LEVELS;
 		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
 		$EMOTICON_CACHE=array();
@@ -204,7 +204,7 @@ class forum_driver_none extends forum_driver_base
 		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
 		return $EMOTICON_CACHE;
 	}
-	
+
 	/**
 	 * Set a custom profile fields value. It should not be called directly.
 	 *
@@ -242,7 +242,7 @@ class forum_driver_none extends forum_driver_base
 		if ($name==$this->get_admin_username()) return array(1);
 		return NULL;
 	}
-	
+
 	/**
 	 * Get a member row.
 	 *
@@ -372,7 +372,7 @@ class forum_driver_none extends forum_driver_base
 	function _member_profile_url($id)
 	{
 		if (!addon_installed('authors')) return get_base_url();
-		
+
 		if ($id==1)
 		{
 			$url=build_url(array('page'=>'authors','type'=>'misc','id'=>$this->get_admin_username()),get_module_zone('authors'),NULL,false,false,true);
@@ -391,7 +391,7 @@ class forum_driver_none extends forum_driver_base
 	function member_profile_url_name($name)
 	{
 		if (!addon_installed('authors')) return get_base_url();
-		
+
 		if ((addon_installed('staff')) || (!addon_installed('authors')))
 		{
 			$url=build_url(array('page'=>'staff','id'=>$name),get_module_zone('staff'));
@@ -708,7 +708,7 @@ class forum_driver_none extends forum_driver_base
 		unset($member);
 		return 0;
 	}
-	
+
 	/**
 	 * Find out if the given member id is banned.
 	 *

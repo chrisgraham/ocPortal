@@ -27,7 +27,7 @@ class Hook_cron_backups
 	function run()
 	{
 		if (!addon_installed('backup')) return;
-		
+
 		$backup_schedule_time=intval(get_value('backup_schedule_time'));
 
 		if ($backup_schedule_time!=0)

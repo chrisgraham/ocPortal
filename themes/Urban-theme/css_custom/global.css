@@ -403,7 +403,7 @@ td, table th.de_th {
 th, .fake_th {
 	font-family: 'Verdana', 'Arial', 'Helvetica', sans-serif;
 	vertical-align: top;
-	
+
 	font-size: 0.85em;
 	color: #fff; /* {$,wizard, 30% th.bgcolor + 70% !W/B} */
 	font-weight: bold;
@@ -798,7 +798,7 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 
 .standardbox_classic {
 	margin: 0;
-	
+
 	/* Want to change the tiled background?
 		Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
 		Find how to edit the referenced "block-background" theme image by doing an Admin Zone search for "block-background"
@@ -840,7 +840,7 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 	/* Structure */
 	background-color: #000; /* {$,wizard, 100% seed} */
 	padding-top: 5px;
-	
+
 	/* Text */
 	color: #edeeb5; /* {$,wizard, 100% W/B} */
 	text-decoration: none;
@@ -2891,7 +2891,7 @@ ul.sitemap li li {
 		margin: 1em 0;
 		border: 1px solid #4e6074; /* {$,wizard, 100% medborder.border} */
 	}
-	
+
 	.attachment legend {
 		border: 1px solid #4e6074; /* {$,wizard, 100% medborder.border} */
 		padding: 0.15em 0.3em;
@@ -3732,7 +3732,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	margin: 0px 0;
 	padding: 1em 0 1.3em 0;
 	padding-{!en_left}: 0.8em;
-	
+
 }
 
 #screen_actions {

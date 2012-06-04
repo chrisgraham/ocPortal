@@ -379,7 +379,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			}
 		}
 	}
-	
+
 	// Password
 	if ($special_type=='')
 	{
@@ -389,7 +389,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',$mini_mode));
 		}
 	}
-	
+
 	// E-mail address
 	if ($email_address=='') $email_address=trim(get_param('email_address',''));
 	if ($special_type!='remote')
@@ -400,7 +400,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
 		}
 	}
-	
+
 	// DOB
 	$default_time=is_null($dob_month)?NULL:usertime_to_utctime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
 	if (get_option('no_dob_ask')!='1')
@@ -467,7 +467,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('WIDE'),do_lang_tempcode('DESCRIPTION_MEMBER_ZONE_WIDE'),'zone_wide',$zone_wide==1));
 		}
-		
+
 		// Theme, if we have any zones giving a choice
 		require_code('themes2');
 		$entries=nice_get_themes($theme,false,false,'RELY_SITE_DEFAULT');
@@ -476,7 +476,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		{
 			$fields->attach(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode('DESCRIPTION_THEME'),'theme',$entries));
 		}
-		
+
 		// Various forum options
 		if (addon_installed('ocf_forum'))
 		{
@@ -507,7 +507,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				}
 			}
 		}
-		
+
 		// Prepare list of usergroups, if maybe we are gonna let (a) usergroup-change field(s)
 		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_hidden','g_open_membership'),($group_count>200)?array('g_is_private_club'=>0):NULL,'ORDER BY g_order');
@@ -523,7 +523,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				$_groups->attach(form_input_list_entry(strval($group['id']),$selected,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
 			}
 		}
-		
+
 		// Some admin options...
 		if (has_specific_permission(get_member(),'member_maintenance'))
 		{
@@ -545,7 +545,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				}
 			}
 		}
-		
+
 		// Secondary usergroups
 		if ($special_type!='ldap')
 		{
@@ -554,7 +554,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			foreach ($rows as $group)
 			{
 				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_specific_permission(get_member(),'see_hidden_groups'))) continue;
-				
+
 				if (($group['id']!=db_get_first_id()) && ($group['id']!=$current_primary_group) && ((in_array($group['id'],$members_groups)) || (has_specific_permission(get_member(),'assume_any_member')) || ($group['g_open_membership']==1)))
 				{
 					$selected=in_array($group['id'],$members_groups);
@@ -565,7 +565,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			if (!$_groups2->is_empty())
 				$fields->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'),do_lang_tempcode('DESCRIPTION_SECONDARY_GROUP',escape_html($sec_url->evaluate())),'secondary_groups',$_groups2));
 		}
-		
+
 		// Special admin options
 		if (has_specific_permission(get_member(),'member_maintenance'))
 		{
@@ -933,7 +933,7 @@ function ocf_delete_member($member_id)
 		{
 			$object->cleanup($l);
 		}
-		
+
 		if ((strpos($storage_type,'_trans')!==false) && (!is_null($l)))
 		{
 			if (true) // Always do this just in case it is for attachments
@@ -1132,7 +1132,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 	if (strpos($storage_type,'_trans')!==false)
 	{
 		if (is_integer($value)) $value=get_translated_text($value,$GLOBALS['FORUM_DB']);
-		
+
 		$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
 		if (is_null($current))
 		{
@@ -1165,7 +1165,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$change,array('mf_member_id'=>$member_id),'',1);
 		return $change;
 	}
-	
+
 	return NULL;
 }
 
@@ -1293,7 +1293,7 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 			}
 		}
 	}
-	
+
 	return NULL;
 }
 

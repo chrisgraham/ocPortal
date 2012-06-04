@@ -24,7 +24,7 @@
 function init__uploads()
 {
 	if (function_exists('set_time_limit')) @set_time_limit(0); // On some server setups, slow uploads can trigger the time-out
-	
+
 	if (!defined('OCP_UPLOAD_ANYTHING'))
 	{
 		define('OCP_UPLOAD_ANYTHING',0);
@@ -48,7 +48,7 @@ function is_swf_upload($fake_prepopulation=false)
 	foreach($_POST as $key=>$value)
 	{
 		if (!is_string($value)) continue;	
-		
+
 		if ((preg_match('#^hidFileID\_#i',$key)!=0) && ($value!='-1'))
 		{
 			//get the incoming uploads appropiate db table row
@@ -129,7 +129,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	foreach (array($attach_name,$thumb_attach_name) as $i=>$_attach_name)
 	{
 		if ($_attach_name=='') continue;
-		
+
 		//check whatever it is an incoming upload
 		$row_id_file='hidFileID_'.$_attach_name;
 		$row_id_file_value=post_param($row_id_file,NULL);

@@ -20,7 +20,7 @@
 
 class Block_side_rss
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_side_rss
 		$info['parameters']=array('param','max_entries','title','copyright','ticker');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_side_rss
 		$info['ttl']=intval(get_option('rss_update_time'));
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -105,7 +105,7 @@ class Block_side_rss
 		global $NEWS_CATS;
 		$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 		$NEWS_CATS=list_to_map('id',$NEWS_CATS);
-	
+
 		if (!array_key_exists('title',$rss->gleamed_feed)) $rss->gleamed_feed['title']=do_lang_tempcode('RSS_STREAM');
 		if (array_key_exists('title',$map)) $rss->gleamed_feed['title']=$map['title'];
 
@@ -129,7 +129,7 @@ class Block_side_rss
 		foreach ($items as $i=>$item)
 		{
 			if ($i>=$max) break;
-	
+
 			if (array_key_exists('full_url',$item)) $full_url=$item['full_url'];
 			elseif (array_key_exists('guid',$item)) $full_url=$item['guid'];
 			elseif (array_key_exists('comment_url',$item)) $full_url=$item['comment_url'];
@@ -138,7 +138,7 @@ class Block_side_rss
 			$_title=$item['title'];
 			$_title=array_key_exists('title',$item)?$item['title']:'';
 			$date=array_key_exists('clean_add_date',$item)?get_timezoned_date($item['clean_add_date']):(array_key_exists('add_date',$item)?$item['add_date']:'');
-	
+
 			$content->attach(do_template('BLOCK_SIDE_RSS_SUMMARY',array('_GUID'=>'18f6d1ccfe980cc01bbdd2ee178c2410','TICKER'=>$ticker,'FEED_URL'=>$url,'FULL_URL'=>$full_url,'NEWS_TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>array_key_exists('clean_add_date',$item)?strval($item['clean_add_date']):'','SUMMARY'=>array_key_exists('news',$item)?$item['news']:(array_key_exists('news_article',$item)?$item['news_article']:''))));
 		}
 

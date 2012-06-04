@@ -87,7 +87,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 			$GLOBALS['SITE_DB']->query_insert('diseases',array('name'=>'Fleas','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Flea spray','cure_price'=>'100','immunisation'=>'Flea repellant','immunisation_price'=>'50','spread_rate'=>'12','points_per_spread'=>'10','last_spread_time'=>'0','enabled'=>'1'),true);
 			$GLOBALS['SITE_DB']->query_insert('diseases',array('name'=>'Man-Flu','image'=>'uploads/diseases_addon/hazard.jpg','cure'=>'Lots and lots of TLC','cure_price'=>'1000','immunisation'=>'Anti Man-Flu Serum','immunisation_price'=>'250','spread_rate'=>'12','points_per_spread'=>'100','last_spread_time'=>'0','enabled'=>'1'),true);
 		}
-		
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('members_diseases','desease_id','AUTO_LINK','disease_id');
@@ -115,7 +115,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'MANAGE_DISEASES'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -221,7 +221,7 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 		$fields->attach(form_input_line(do_lang_tempcode('SPREAD_RATE'),do_lang_tempcode('DESCRIPTION_SPREAD_RATE'),'spread_rate',strval($spread_rate),true));
 
 		$fields->attach(form_input_line(do_lang_tempcode('POINTS_PER_SPREAD'),do_lang_tempcode('DESCRIPTION_POINTS_PER_SPREAD'),'points_per_spread',strval($points_per_spread),true));
-		
+
 		$fields->attach(form_input_tick(do_lang_tempcode('DISEASE_ENABLED'),do_lang_tempcode('DESCRIPTION_DISEASE_ENABLED'),'enabled',$enabled==1));
 
 		return array($fields,$hidden);

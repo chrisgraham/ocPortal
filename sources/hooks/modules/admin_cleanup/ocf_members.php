@@ -34,7 +34,7 @@ class Hook_ocf_members
 			return NULL;
 
 		require_lang('ocf');
-	
+
 		$info=array();
 		$info['title']=do_lang_tempcode('MEMBERS');
 		$info['description']=do_lang_tempcode('DESCRIPTION_CACHE_MEMBERS');
@@ -42,7 +42,7 @@ class Hook_ocf_members
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -51,12 +51,12 @@ class Hook_ocf_members
 	function run()
 	{
 		if (get_forum_type()!='ocf') return new ocp_tempcode(); else ocf_require_all_forum_stuff();
-	
+
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		require_code('ocf_posts_action');
 		require_code('ocf_posts_action2');
-	
+
 		// Members
 		$start=0;
 		do

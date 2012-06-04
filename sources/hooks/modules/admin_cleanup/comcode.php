@@ -37,7 +37,7 @@ class Hook_comcode
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -54,7 +54,7 @@ class Hook_comcode
 		}*/
 		require_code('view_modes');
 		erase_comcode_cache();
-	
+
 		return new ocp_tempcode();
 	}
 

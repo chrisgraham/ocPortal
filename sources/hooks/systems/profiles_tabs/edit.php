@@ -31,7 +31,7 @@ class Hook_Profiles_Tabs_edit
 	function is_active($member_id_of,$member_id_viewing)
 	{
 		if (is_guest($member_id_viewing)) return false;
-		
+
 		if (!(($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')))) return false;
 
 		$hooks=find_all_hooks('systems','profiles_tabs_edit');
@@ -41,7 +41,7 @@ class Hook_Profiles_Tabs_edit
 			$ob=object_factory('Hook_Profiles_Tabs_Edit_'.$hook);
 			if ($ob->is_active($member_id_of,$member_id_viewing)) return true;
 		}
-		
+
 		return false;
 	}
 
@@ -80,7 +80,7 @@ class Hook_Profiles_Tabs_edit
 		usort($tabs,'multi_sort');
 
 		$javascript='';
-		
+
 		$hidden=new ocp_tempcode();
 
 		// Session ID check, if saving

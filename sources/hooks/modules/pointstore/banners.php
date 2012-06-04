@@ -39,7 +39,7 @@ class Hook_pointstore_banners
 	function info()
 	{
 		if (!addon_installed('banners')) return array();
-		
+
 		if (get_option('is_on_banner_buy')=='1')
 		{
 			$banner_url=build_url(array('page'=>'_SELF','type'=>'bannerinfo','id'=>'banners'),get_module_zone('banners'));
@@ -59,7 +59,7 @@ class Hook_pointstore_banners
 		if (get_option('is_on_banner_buy')=='0') return new ocp_tempcode();
 
 		$title=get_page_title('TITLE_BANNER');
-	
+
 		$banner_name=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>get_member(),'purchasetype'=>'banner'));
 		if (!is_null($banner_name))
 		{
@@ -72,10 +72,10 @@ class Hook_pointstore_banners
 			$activate_url=build_url(array('page'=>'_SELF','type'=>'newbanner','id'=>'banners'),'_SELF');
 			$activate=do_template('POINTSTORE_BANNERS_ACTIVATE',array('_GUID'=>'1f06d08517395e8c22607727fe9f5b91','ACTIVATE_URL'=>$activate_url));
 		}
-	
+
 		return do_template('POINTSTORE_BANNERS_SCREEN',array('_GUID'=>'7879a4b736d5d98983fe2454677ae8d7','TITLE'=>$title,'ACTIVATE'=>$activate,'UPGRADE'=>$upgrade));
 	}
-	
+
 	/**
 	 * Checking to be sure we don't already have a banner.
 	 */
@@ -92,7 +92,7 @@ class Hook_pointstore_banners
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -113,13 +113,13 @@ class Hook_pointstore_banners
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_newbanner','id'=>'banners','uploading'=>1),'_SELF');
 
 		$javascript='standardAlternateFields(\'file\',\'image_url\',\'title_text\',true); if (document.getElementById(\'campaignremaining\')) { var form=document.getElementById(\'campaignremaining\').form; var crf=function() { form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked); }; crf(); form.elements[\'the_type\'][0].onclick=crf; form.elements[\'the_type\'][1].onclick=crf; form.elements[\'the_type\'][2].onclick=crf; }';
-	
+
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'45b8878d92712e07c4eb5497f1a33e33','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('ADD_BANNER'),'JAVASCRIPT'=>$javascript));
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -130,9 +130,9 @@ class Hook_pointstore_banners
 		if (get_option('is_on_banner_buy')=='0') return new ocp_tempcode();
 
 		require_code('uploads');
-	
+
 		$title=get_page_title('ADD_BANNER');
-	
+
 		$member_id=get_member(); // the ID of the member who is logged in right now
 		$cost=intval(get_option('banner_setup'));
 		$points_after=available_points($member_id)-$cost; // the number of points this member has left
@@ -144,7 +144,7 @@ class Hook_pointstore_banners
 		$site_url=post_param('site_url');
 		$caption=post_param('caption');
 		$notes=post_param('notes','');
-	
+
 		$this->check_afford_banner();
 
 		$this->handle_has_banner_already();
@@ -158,7 +158,7 @@ class Hook_pointstore_banners
 		$keep->attach(form_input_hidden('caption',$caption));
 		$keep->attach(form_input_hidden('notes',$notes));
 		$keep->attach(form_input_hidden('name',$name));
-	
+
 		return do_template('POINTSTORE_CONFIRM_SCREEN',array('ACTION'=>'','COST'=>integer_format($cost),'POINTS_AFTER'=>integer_format($points_after),'TITLE'=>$title,'MESSAGE'=>$banner,'PROCEED_URL'=>$proceed_url,'CANCEL_URL'=>$cancel_url,'KEEP'=>$keep));
 	}
 
@@ -192,7 +192,7 @@ class Hook_pointstore_banners
 		$caption=post_param('caption');
 		$notes=post_param('notes','');
 		$name=post_param('name');
-	
+
 		$cost=intval(get_option('banner_setup'));
 
 		$this->handle_has_banner_already();
@@ -234,7 +234,7 @@ class Hook_pointstore_banners
 	function handle_has_no_banner()
 	{
 		$member_id=get_member();
-	
+
 		$details=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>$member_id,'purchasetype'=>'banner'));
 
 		// If we don't own a banner account, stop right here.
@@ -249,10 +249,10 @@ class Hook_pointstore_banners
 			$GLOBALS['SITE_DB']->query_delete('sales',array('purchasetype'=>'banner','memberid'=>$member_id),'',1);
 			warn_exit(do_lang_tempcode('BANNER_DELETED_REMAKE'));
 		}
-		
+
 		return $myrows[0];
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -263,12 +263,12 @@ class Hook_pointstore_banners
 		if (get_option('is_on_banner_buy')=='0') return new ocp_tempcode();
 
 		$title=get_page_title('TITLE_BANNER_UPGRADE');
-	
+
 		$impcost=intval(get_option('banner_imp'));
 		$hitcost=intval(get_option('banner_hit'));
 
 		$this->handle_has_no_banner();
-	
+
 		// Screen
 		require_code('form_templates');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_upgradebanner','id'=>'banners'),'_SELF');
@@ -277,7 +277,7 @@ class Hook_pointstore_banners
 		$fields->attach(form_input_line(do_lang_tempcode('EXTRA_HITS'),do_lang_tempcode('EXTRA_HITS_DESCRIPTION'),'hits','50',true));
 		return do_template('FORM_SCREEN',array('_GUID'=>'550b0368236dcf58726a1895162ad6c2','SUBMIT_NAME'=>do_lang_tempcode('UPGRADE'),'HIDDEN'=>'','URL'=>$post_url,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text));
 	}
-	
+
 	/**
 	 * Standard stage of pointstore item purchase.
 	 *
@@ -291,33 +291,33 @@ class Hook_pointstore_banners
 
 		$member_id=get_member();
 		$pointsleft=available_points($member_id);
-	
+
 		$myrow=$this->handle_has_no_banner();
-	
+
 		$curhit=$myrow['campaign_remaining'];
 		$curimp=$myrow['importance_modulus'];
 		$name=$myrow['name'];
-	
+
 		//So we don't have to call these big ugly names, again...
 		$futhit=post_param_integer('hits');
 		$futimp=post_param_integer('importance');
-	
+
 		//Checking to be sure we've ordered numbers that are positive
 		if (!(($futimp>=0) && ($futhit>=0)))
 		{
 			return warn_screen($title,do_lang_tempcode('BAD_INPUT'));
 		}
-	
+
 		//Checking to be sure we haven't ordered nothing...
 		if (($futimp==0) && ($futhit==0))
 		{
 			return warn_screen($title,do_lang_tempcode('SILLY_INPUT'));
 		}
-	
+
 		//How many importance and hits will we have after this?
 		$afthit=$curhit+$futhit;
 		$aftimp=$curimp+$futimp;
-	
+
 		//Getting the prices of hits and importance...
 		$impprice=intval(get_option('banner_imp'));
 		$hitprice=intval(get_option('banner_hit'));
@@ -327,13 +327,13 @@ class Hook_pointstore_banners
 		$hitcost=$futhit*$hitprice;
 		$total_price=$hitcost+$impcost;
 		$points_after=$pointsleft-$total_price;
-	
+
 		//Check to see this isn't costing us more than we can afford
 		if (($points_after<0) && (!has_specific_permission(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('CANT_AFFORD'));
 		}
-	
+
 		//If this is *not* our first time through, do a confirmation screen. Else, make the purchase.
 		$ord=post_param_integer('ord',0);
 		if ($ord==0)
@@ -344,17 +344,17 @@ class Hook_pointstore_banners
 			$keep->attach(form_input_hidden('importance',strval($futimp)));
 			$keep->attach(form_input_hidden('ord','1'));
 			$action=do_lang_tempcode('BANNER_UPGRADE_CONFIRM',integer_format($futimp),integer_format($futhit));
-	
+
 			return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'acdde0bd41ccd1459bbd7a1e9ca5ed68','TITLE'=>$title,'MESSAGE'=>$action,'ACTION'=>'','COST'=>integer_format($total_price),'POINTS_AFTER'=>integer_format($points_after),'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),'PROCEED_URL'=>$proceed_url,'KEEP'=>$keep));
 		}
-	
+
 		// Our Query
 		$GLOBALS['SITE_DB']->query_update('banners',array('campaign_remaining'=>$afthit,'importance_modulus'=>$aftimp),array('name'=>$name),'',1);
-	
+
 		//Charge the user for their purchase
 		require_code('points2');
 		charge_member($member_id,$total_price,do_lang('BANNER_UPGRADE_LINE',integer_format($futhit),integer_format($futimp)));
-		
+
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('BANNER_UPGRADED'));
 	}

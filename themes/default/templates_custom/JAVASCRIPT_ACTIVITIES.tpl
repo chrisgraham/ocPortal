@@ -24,7 +24,7 @@ function sUpdateGetData ()
 				{
 					// If not then remember the new value
 					window.latest_activity = parseInt(data);
-					
+
 					// Now grab whatever updates are available
 					var addy="{$BASE_URL;,0}/data_custom/activities_updater.php"+keep_stub(true);
 					var listels=jQuery('li','#activities_feed');

@@ -18,7 +18,7 @@
 				opened: true
 			},
 		});
-		
+
 		{+START,IF_EMPTY,{LATITUDE}}
 			if (google.loader.ClientLocation)
 			{
@@ -45,7 +45,7 @@
 		{
 			infoWindow.close();
 		});
-	
+
 		{DATA}
 
 		{$,Show markers}
@@ -94,7 +94,7 @@
 			\});
 		}
 	}
-	
+
 	function add_data_point(data_point,bounds,markers,infoWindow,map)
 	{
 		var latLng = new google.maps.LatLng(data_point[1], data_point[2]);
@@ -135,7 +135,7 @@
 			};
 		})(marker, data_point[0])); {$,These are the args passed to the dynamic function above.}
 	}
-	
+
 	google.load("maps", "3",  {callback: google_map_users_initialize, other_params:"sensor=true"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
 //]]></script>
 

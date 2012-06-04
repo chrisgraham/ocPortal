@@ -22,7 +22,7 @@
 	<substitution match_key="adminzone:start">
 		<link label="{!HOME}">:</link>
 	</substitution>
-	
+
 	<!-- Simple blog links back to home page (what most people want for a personal blog) -->
 	<substitution match_key="_WILD:news:view:blog=1">
 		<link label="{!HOME}">:</link>

@@ -51,7 +51,7 @@ class Block_main_recent_cc_entries
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

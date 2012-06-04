@@ -28,7 +28,7 @@ function init__chat()
 
 	global $EFFECT_SETTINGS_ROWS;
 	$EFFECT_SETTINGS_ROWS=NULL;
-	
+
 	if (!defined('CHAT_ACTIVITY_PRUNE'))
 	{
 		define('CHAT_ACTIVITY_PRUNE',25);
@@ -261,7 +261,7 @@ function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
 
 		// We are only interested in private-message system messages and flood-control system messages, no other kinds of system message
 		if (($_message['system_message']==1) && (strpos($evaluated,'[private')===false) && (preg_match('#'.str_replace('\{1\}','\d+',preg_quote(do_lang('FLOOD_CONTROL_BLOCKED'))).'#',$evaluated)==0)) continue;
-		
+
 		if ((strpos($evaluated,'[private')===false) || (($shoutbox_message!='') && (strpos($evaluated,'[private="'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'"]')!==false)))
 		{
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_message['username']);
@@ -402,7 +402,7 @@ function chat_room_prune($room_id,$room_row=NULL)
 		if (!array_key_exists(0,$_room_row)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$room_row=$_room_row[0];
 	}
-	
+
 	// Find who may have gone offline
 	$extra='';
 	$last_active_prune=intval(get_value('last_active_prune'));
@@ -499,7 +499,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		if (array_key_exists(0,$room_check))
 			chat_room_prune($room_id,$room_check[0]);
 	}
-	
+
 	if (is_null($room_check))
 	{
 		$room_check=$GLOBALS['SITE_DB']->query('SELECT id,is_im,c_welcome,allow_list_groups,disallow_list_groups,allow_list,disallow_list,room_owner FROM '.get_table_prefix().'chat_rooms WHERE is_im=1 AND allow_list LIKE \''.db_encode_like('%'.strval(get_member()).'%').'\'');
@@ -578,7 +578,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		$template=do_template('CHAT_MESSAGE',array('_GUID'=>'6bcac8d9fdd166cde266f8d23b790b69','SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>$moderator,'OLD_MESSAGES'=>$backlog,'AVATAR_URL'=>$avatar_url,'STAFF_ACTIONS'=>$staff_actions,'USER'=>$user,'MESSAGE'=>$_message['the_message'],'TIME'=>$_message['date_and_time_nice'],'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
 		$messages_output.='<div xmlns="http://www.w3.org/1999/xhtml" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="'.strval($_message['id']).'" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 	}
-	
+
 	// Members update, but only for the room interface
 	if ($room_id>=0)
 	{
@@ -618,11 +618,11 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 							$participants.=$person;
 						}
 					}
-					
+
 					$num_posts=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
 
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($room['room_owner']);
-					
+
 					$invitations_output.='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.(is_null($room['room_owner'])?'':strval($room['room_owner'])).'" participants="'.xmlentities($participants).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="'.xmlentities($avatar_url).'">'.strval($room['id']).'</chat_invite>';
 				}
 			}
@@ -930,7 +930,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 function enter_chat_lobby()
 {
 	if (is_guest()) return;
-	
+
 	require_css('chat');
 	require_lang('chat');
 	require_javascript('javascript_ajax');
@@ -997,7 +997,7 @@ function get_chatters_in_room_tpl($users)
 				{
 					require_code('ocf_general');
 					require_code('ocf_members');
-					
+
 					$colour=get_group_colour(ocf_get_member_primary_group($member_id));
 					$usernames->attach(do_template('OCF_USER_MEMBER',array('PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),'USERNAME'=>$username,'COLOUR'=>$colour)));
 				} else
@@ -1569,7 +1569,7 @@ function check_chatroom_access($room,$ret=false,$member_id=NULL,$must_be_explici
 		if (!array_key_exists(0,$_room)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$room=$_room[0];
 	}
-	
+
 	if (!$must_be_explicit)
 	{
 		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) return true;
@@ -1679,7 +1679,7 @@ function get_effect_set($only_overridable=false)
 		'invited'=>'invited',
 		'you_connect'=>$only_overridable?NULL:'you_connect',
 	);
-	
+
 	return $effects;
 }
 

@@ -29,10 +29,10 @@ class Hook_exists_tag
 	function run()
 	{
 		$val=get_param('name');
-		
+
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$val));
 		if (is_null($test)) return new ocp_tempcode();
-		
+
 		return make_string_tempcode(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('ALREADY_EXISTS',escape_html($val)),ENT_QUOTES)));
 	}
 

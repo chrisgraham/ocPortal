@@ -47,7 +47,7 @@ class Hook_root
 			}
 			return $listing;
 		}
-		
+
 		return false; //Directory doesn't exist
 	}
 

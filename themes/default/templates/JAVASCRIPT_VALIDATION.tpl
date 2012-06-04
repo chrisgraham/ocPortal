@@ -165,7 +165,7 @@ function try_to_simplify_iframe_form()
 			}
 
 			_simplified_form_continue_submit(iframe,form_cat_selector);
-			
+
 			return null;
 		}
 		if ((found.getAttribute('size')>1) || (found.multiple)) found.onclick=found.onchange;
@@ -216,7 +216,7 @@ function do_form_submit(form,event)
 		if (!ret) return false;
 	}
 	if ((typeof window.just_checking_requirements=='undefined') || (!window.just_checking_requirements)) form.submit();
-	
+
 	disable_buttons_just_clicked(document.getElementsByTagName('input'));
 	disable_buttons_just_clicked(document.getElementsByTagName('button'));
 
@@ -405,7 +405,7 @@ function checkField(theElement,theForm,forPreview)
 		erroneous=true;
 		errorElement=theElement;
 	}
-	
+
 	return [erroneous,errorElement,totalFileSize,alerted];
 }
 
@@ -415,7 +415,7 @@ function checkForm(theForm,forPreview)
 	for (j=0;j<theForm.elements.length;j++)
 	{
 		if (!theForm.elements[j]) continue;
-		
+
 		if (theForm.elements[j].nodeName.toLowerCase()=='object') continue; // IE9 being weird!
 
 		theElement=theForm.elements[j];
@@ -427,7 +427,7 @@ function checkForm(theForm,forPreview)
 			if (!errorElement) errorElement=checkResult[1];
 			totalFileSize+=checkResult[2];
 			alerted=checkResult[3] | alerted;
-			
+
 			if (checkResult[0])
 			{
 				theElement.onblur=function(theElement) { return function(event,no_recurse) {
@@ -450,7 +450,7 @@ function checkForm(theForm,forPreview)
 			}
 		}
 	}
-	
+
 	if ((totalFileSize>0) && (theForm.elements['MAX_FILE_SIZE']))
 	{
 		if (totalFileSize>theForm.elements['MAX_FILE_SIZE'].value)
@@ -551,7 +551,7 @@ function _standardAlternateFieldsGet(x)
 	{
 		return document.getElementById(x);
 	}
-	
+
 	// A radio field ('*'), so we need to create a virtual field object to return that will hold our value
 	x=x.substr(0,x.length-1);
 	var _x=[],i,j,c=0,e;
@@ -652,7 +652,7 @@ function setLocked(name,locked,selected)
 			}
 			if (label)
 			{
-				var label_nice=getInnerHTML(label).replace('&raquo;','').replace('»','').replace(/^\s*/,'').replace(/\s*$/,'');
+				var label_nice=getInnerHTML(label).replace('&raquo;','').replace('ï¿½','').replace(/^\s*/,'').replace(/\s*$/,'');
 				if (element.type=='file')
 				{
 					setFieldError(element,'{!DISABLED_FORM_FIELD_ENCHANCEDMSG_UPLOAD^;}'.replace(/\\{1\\}/,label_nice));
@@ -708,7 +708,7 @@ function toggleSubordinateFields(pic,help_id)
 {
 	var new_state,new_state_2,new_state_3,i;
 	var tr=pic.parentNode.parentNode.parentNode;
-	
+
 	var next=tr.nextSibling;
 	if (!next) return;
 	while (next.nodeName.toLowerCase()!='tr') // Sometimes divs or whatever may have errornously been put in a table by a programmer, skip past them
@@ -739,7 +739,7 @@ function toggleSubordinateFields(pic,help_id)
 		new_state_2='none';
 		new_state_3='0';
 	}
-	
+
 	// Hide everything until we hit end of section
 	var count=0;
 	while (tr.nextSibling)
@@ -749,7 +749,7 @@ function toggleSubordinateFields(pic,help_id)
 
 		{$,Start of next section?}
 		if (tr.className=='form_screen_field_spacer') break; // End of section
-		
+
 		{$,Ok to proceed}
 		tr.style.display=new_state;
 		if (browser_matches('ie6'))
@@ -776,7 +776,7 @@ function toggleSubordinateFields(pic,help_id)
 		help=help.nextSibling;
 		if ((help) && (help.nodeName.toLowerCase()!='p')) break;
 	}
-	
+
 	trigger_resize();
 }
 

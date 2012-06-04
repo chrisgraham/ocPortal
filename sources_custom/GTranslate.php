@@ -54,7 +54,7 @@ class GTranslate{
 		}
 
 	}
-	
+
 	function GetLanguageList(){
 		return $this->language_list;
 	}
@@ -63,13 +63,13 @@ class GTranslate{
 		if(!method_exists( $this , $this->translateMode) ){
 			return false;
 		}
-		
+
 		$result = call_user_func( array($this , $this->translateMode) );
-		
+
 		$this->translateMode=false;
 		return $result;
 	}
-	
+
 	protected function _in_language_list( $language ){
 
 		if( array_key_exists($language , $this->language_list) ){
@@ -81,7 +81,7 @@ class GTranslate{
 		}
 
 	}
-	
+
 	protected function _TranslateMode_Text(){
 		require_code('files');
 		$text=str_split($this->translateContent,3000); // Google can't translate too much at once
@@ -126,7 +126,7 @@ class GTranslate{
 			if (!isset($translate_object->responseData->translatedText)) return NULL;//fatal_exit($json.serialize($translate_object));
 			$out.=$translate_object->responseData->translatedText;
 		}
-	
+
 		return $out;
 	}
 /* TODO Debug , If I use header redirect, google will not response correctly

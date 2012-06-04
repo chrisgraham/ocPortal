@@ -38,7 +38,7 @@ class Block_main_staff_new_version
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -67,7 +67,7 @@ class Block_main_staff_new_version
 		require_css('adminzone');
 
 		$table=get_future_version_information();
-		
+
 		return do_template('BLOCK_MAIN_STAFF_NEW_VERSION',array('_GUID'=>'43c7b18d3d44e825247579df23a2ad9c','VERSION'=>ocp_version_full(),'VERSION_TABLE'=>$table));
 	}
 

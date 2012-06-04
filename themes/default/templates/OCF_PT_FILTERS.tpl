@@ -8,7 +8,7 @@
 
 		{+START,IF_EMPTY,{URL}}
 			<em>{CAPTION*}</em>{+START,IF,{HAS_NEXT}},{+END}
-		
+
 			{$SET,has_filter,1}
 		{+END}
 	{+END}

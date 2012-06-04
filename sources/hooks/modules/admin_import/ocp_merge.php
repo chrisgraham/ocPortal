@@ -215,7 +215,7 @@ class Hook_ocp_merge
 	{
 		if (get_param_integer('keep_on_same_msn',NULL)===0) return false;
 		if (get_param_integer('keep_on_same_msn',NULL)===1) return true;
-		
+
 		//return false;
 		global $SITE_INFO;
 		$backup_site_info=$SITE_INFO;
@@ -223,7 +223,7 @@ class Hook_ocp_merge
 		@include($file_base.'/info.php');
 		$sites_site_info=$SITE_INFO;
 		$SITE_INFO=$backup_site_info;
-		
+
 		$answer=($sites_site_info['db_forums']==get_db_forums()) && ($sites_site_info['db_forums_host']==get_db_forums_host()) && (@$sites_site_info['ocf_table_prefix']===@$SITE_INFO['ocf_table_prefix']);
 
 		return $answer;
@@ -265,7 +265,7 @@ class Hook_ocp_merge
 	function import_ocf_welcome_emails($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_welcome_emails',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -470,7 +470,7 @@ class Hook_ocp_merge
 					's_mail_end'=>insert_lang($this->get_lang_string($db,$row['s_mail_end']),2),
 					's_mail_uhoh'=>insert_lang($this->get_lang_string($db,$row['s_mail_uhoh']),2),
 				),true);
-	
+
 				import_id_remap_put('usergroup_sub',strval($row['id']),$id_new);
 			}
 		}
@@ -508,14 +508,14 @@ class Hook_ocp_merge
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('attachment',strval($row['id']))) continue;
-	
+
 	//			$row['a_member_id']=import_id_remap_get('member',strval($row['a_member_id']));
 				$row['a_member_id']=-$row['a_member_id']; // This is resolved when importing members
 				$row_copy=$row;
 				if (get_param_integer('keep_preserve_ids',0)==0) unset($row_copy['id']);
 				if (!array_key_exists('a_description',$row_copy)) $row_copy['a_description']='';
 				$id_new=$GLOBALS['SITE_DB']->query_insert('attachments',$row_copy,true);
-	
+
 				import_id_remap_put('attachment',strval($row['id']),$id_new);
 			}
 			$row_start+=200;
@@ -620,7 +620,7 @@ class Hook_ocp_merge
 	function import_authors($db,$table_prefix,$file_base)
 	{
 		require_code('authors');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'authors',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -640,7 +640,7 @@ class Hook_ocp_merge
 	function import_banners($db,$table_prefix,$file_base)
 	{
 		require_code('banners2');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'banner_types',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -742,7 +742,7 @@ class Hook_ocp_merge
 	function import_iotds($db,$table_prefix,$file_base)
 	{
 		require_code('iotds');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'iotd',NULL,NULL,true);
 		if (is_null($rows)) return;
 		$on_same_msn=($this->on_same_msn($file_base));
@@ -757,7 +757,7 @@ class Hook_ocp_merge
 			import_id_remap_put('iotd',strval($row['id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -768,7 +768,7 @@ class Hook_ocp_merge
 	function import_polls($db,$table_prefix,$file_base)
 	{
 		require_code('polls');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'poll',NULL,NULL,true);
 		if (is_null($rows)) return;
 		$on_same_msn=($this->on_same_msn($file_base));
@@ -840,7 +840,7 @@ class Hook_ocp_merge
 			import_id_remap_put('poll',strval($row['id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -851,7 +851,7 @@ class Hook_ocp_merge
 	function import_news_and_categories($db,$table_prefix,$file_base)
 	{
 		require_code('news');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'news_categories ORDER BY id',NULL,NULL,true);
 		if (is_null($rows)) return;
 		$on_same_msn=($this->on_same_msn($file_base));
@@ -889,7 +889,7 @@ class Hook_ocp_merge
 			import_id_remap_put('news',strval($row['id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -910,7 +910,7 @@ class Hook_ocp_merge
 
 				import_id_remap_put('newsletter',strval($row['id']),$new_id);
 			}
-			
+
 			$old_format=false;
 		} else $old_format=true;
 		$rowsn=$db->query('SELECT * FROM '.$table_prefix.'newsletter',NULL,NULL,true);
@@ -941,7 +941,7 @@ class Hook_ocp_merge
 			$GLOBALS['SITE_DB']->query_insert('newsletter_archive',array('date_and_time'=>$row['date_and_time'],'subject'=>$row['subject'],'newsletter'=>$row['newsletter'],'language'=>$row['language'],'importance_level'=>$row['importance_level']));
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1000,7 +1000,7 @@ class Hook_ocp_merge
 	function import_downloads_and_categories($db,$table_prefix,$file_base)
 	{
 		require_code('downloads2');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'download_categories ORDER BY id',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -1069,7 +1069,7 @@ class Hook_ocp_merge
 	function import_images_and_galleries($db,$table_prefix,$file_base)
 	{
 		require_code('galleries2');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'galleries',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -1143,7 +1143,7 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('cedi_post',strval($row['id']))) continue;
-			
+
 			$page_id=import_id_remap_get('cedi_page',$row['page_id'],true);
 			if (is_null($page_id)) $page_id=db_get_first_id();
 
@@ -1158,7 +1158,7 @@ class Hook_ocp_merge
 		{
 			$page_id=import_id_remap_get('cedi_page',$row['the_page'],true);
 			if (is_null($page_id)) continue;
-			
+
 			$user=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
 			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>$row['the_action'],'the_page'=>$page_id,'ip'=>$row['ip'],'the_user'=>$user,'date_and_time'=>$row['date_and_time']),false,true);
@@ -1168,7 +1168,7 @@ class Hook_ocp_merge
 		{
 			$child_id=import_id_remap_get('cedi_page',$row['child_id'],true);
 			$parent_id=import_id_remap_get('cedi_page',$row['parent_id'],true);
-			
+
 			if (is_null($child_id)) continue;
 			if (is_null($parent_id)) continue;
 
@@ -1179,7 +1179,7 @@ class Hook_ocp_merge
 			{
 				$title=$this->get_lang_string($db,$rows_pages[$child_id]['title']);
 			} else continue;
-			
+
 			$GLOBALS['SITE_DB']->query_insert('seedy_children',array('parent_id'=>$parent_id,'child_id'=>$child_id,'the_order'=>$row['the_order'],'title'=>$titlemap[$child_id]),false,true);
 		}
 	}
@@ -1225,7 +1225,7 @@ class Hook_ocp_merge
 	function import_wordfilter($db,$table_prefix,$file_base)
 	{
 		require_code('word_filter');
-		
+
 		$rows=$db->query('SELECT word FROM '.$table_prefix.'wordfilter',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -1244,7 +1244,7 @@ class Hook_ocp_merge
 	function import_calendar($db,$table_prefix,$file_base)
 	{
 		require_code('calendar2');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'calendar_types',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -1336,7 +1336,7 @@ class Hook_ocp_merge
 			foreach ($rows as $row)
 			{
 				unset($row['regionality']);
-				
+
 				$row['the_user']=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
 				if (is_null($row['the_user'])) $row['the_user']=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 				unset($row['id']);
@@ -1463,7 +1463,7 @@ class Hook_ocp_merge
 	function import_catalogues($db,$table_prefix,$file_base)
 	{
 		require_code('catalogues2');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'catalogues',NULL,NULL,true);
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
@@ -1577,7 +1577,7 @@ class Hook_ocp_merge
 	function import_chat_rooms($db,$table_prefix,$file_base)
 	{
 		require_code('chat2');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'chat_rooms WHERE is_im=0 ORDER BY id',NULL,NULL,true);
 		if (is_null($rows)) return;
 		$on_same_msn=($this->on_same_msn($file_base));
@@ -1841,7 +1841,7 @@ class Hook_ocp_merge
 	function import_ocf_groups($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_groups');
 		foreach ($rows as $row)
 		{
@@ -1957,7 +1957,7 @@ class Hook_ocp_merge
 			$GLOBALS['SITE_DB']->query_insert('f_member_known_login_ips',$row);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1968,7 +1968,7 @@ class Hook_ocp_merge
 	function import_ocf_custom_profile_fields($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_custom_fields');
 		foreach ($rows as $row)
 		{
@@ -1998,7 +1998,7 @@ class Hook_ocp_merge
 			import_id_remap_put('cpf',strval($row['id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -2009,12 +2009,12 @@ class Hook_ocp_merge
 	function import_ocf_categories($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_categories');
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('category',strval($row['id']))) continue;
-	
+
 			$title=$row['c_title'];
 
 			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
@@ -2040,7 +2040,7 @@ class Hook_ocp_merge
 	function import_ocf_forums($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		require_code('ocf_forums_action2');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_forums');
@@ -2098,7 +2098,7 @@ class Hook_ocp_merge
 	function import_ocf_topics($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -2134,7 +2134,7 @@ class Hook_ocp_merge
 
 				import_id_remap_put('topic',strval($row['id']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -2162,7 +2162,7 @@ class Hook_ocp_merge
 	function import_ocf_posts($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		global $STRICT_FILE,$TOPIC_FORUM_CACHE;
 		$TOPIC_FORUM_CACHE=array();
 
@@ -2233,7 +2233,7 @@ class Hook_ocp_merge
 	function import_ocf_polls_and_votes($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT p.*,t.id AS tid FROM '.$table_prefix.'f_polls p LEFT JOIN '.$table_prefix.'f_topics t ON p.id=t.t_poll_id');
 		foreach ($rows as $row)
 		{
@@ -2271,7 +2271,7 @@ class Hook_ocp_merge
 			import_id_remap_put('f_poll',strval($row['id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -2282,7 +2282,7 @@ class Hook_ocp_merge
 	function import_ocf_emoticons($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_emoticons');
 		foreach ($rows as $row)
 		{
@@ -2346,7 +2346,7 @@ class Hook_ocp_merge
 	function import_ocf_multi_moderations($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_multi_moderations');
 		foreach ($rows as $row)
 		{
@@ -2371,7 +2371,7 @@ class Hook_ocp_merge
 	function import_ocf_post_templates($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_post_templates');
 		foreach ($rows as $row)
 		{
@@ -2390,7 +2390,7 @@ class Hook_ocp_merge
 	function import_ocf_warnings($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_warnings');
 		foreach ($rows as $row)
 		{

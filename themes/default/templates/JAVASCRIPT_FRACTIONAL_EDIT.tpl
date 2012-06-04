@@ -13,7 +13,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		if (width<180) width=180;
 		var x=findPosX(object);
 		var y=findPosY(object);
-	
+
 		object.old_onclick=object.onclick;
 		object.old_onkeypress=object.onkeypress;
 
@@ -79,7 +79,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 
 					return false;
 				}
-				
+
 				return true;
 			}
 
@@ -125,7 +125,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		input.focus();
 		return false;
 	}
-	
+
 	return true;
 }
 

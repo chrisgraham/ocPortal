@@ -105,7 +105,7 @@ function shuffle_for($by,$in)
 			if (!is_null($next)) $out[]=$next; else break 2;
 		}
 	}
-	
+
 	// $out now holds our result
 	return $out;
 }
@@ -119,7 +119,7 @@ function shuffle_for($by,$in)
 function ip_banned($ip) // This is the very first query called, so we will be a bit smarter, checking for errors
 {
 	if (!addon_installed('securitylogging')) return false;
-	
+
 	$ip4=(strpos($ip,'.')!==false);
 	if ($ip4)
 	{

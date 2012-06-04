@@ -104,7 +104,7 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 				require_code('comcode_renderer');
 				comcode_parse_error(false,array('CCP_MENU_JUMPYNESS'),$i,$comcode);
 			}
-			
+
 			$this_level=$current_level;
 			$current_level=array_pop($stack);
 			$current_level['children'][]=$this_level;

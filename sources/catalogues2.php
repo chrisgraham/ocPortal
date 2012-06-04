@@ -78,7 +78,7 @@ function catalogue_file_script()
 			header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($original_filename))).'"');
 	}
 	header('Accept-Ranges: bytes');
-	
+
 	// Default to no resume
 	$from=0;
 	$new_length=$size;
@@ -176,7 +176,7 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	} else $category=NULL;
 
 	log_it('ADD_CATALOGUE',$name);
-	
+
 	return $category;
 }
 
@@ -210,7 +210,7 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 	require_code('fields');
 
 	$ob=get_fields_hook($type);
-	
+
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
 	// Now add field values for all pre-existing entries (in the ideal world, there would be none yet)
@@ -221,7 +221,7 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 		foreach ($entries as $entry)
 		{
 			$_default=mixed();
-			
+
 			list($raw_type,$_default,$_type)=$ob->get_field_value_row_bits($map+array('id'=>$cf_id),$required==1,$default);
 
 			if (strpos($raw_type,'trans')!==false) $_default=intval($_default);
@@ -239,11 +239,11 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 			}
 			$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$_type,$map);
 		}
-		
+
 		$start+=300;
 	}
 	while (array_key_exists(0,$entries));
-	
+
 	return $cf_id;
 }
 
@@ -502,7 +502,7 @@ function store_in_catalogue_cat_treecache($id,$parent_id,$cleanup_first=true)
 	{
 		$GLOBALS['SITE_DB']->query_delete('catalogue_cat_treecache',array('cc_id'=>$id));
 	}
-	
+
 	// Self reference
 	$GLOBALS['SITE_DB']->query_insert('catalogue_cat_treecache',array(
 		'cc_id'=>$id,
@@ -529,7 +529,7 @@ function store_in_catalogue_cat_treecache($id,$parent_id,$cleanup_first=true)
 function calculate_category_child_count_cache($cat_id,$recursive_updates=true)
 {
 	if (is_null($cat_id)) return;
-	
+
 	$GLOBALS['SITE_DB']->query_delete('catalogue_childcountcache',array(
 		'cc_id'=>$cat_id,
 	),'',1);
@@ -585,7 +585,7 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 	$myrow=$rows[0];
 	$_title=$myrow['cc_title'];
 	$_description=$myrow['cc_description'];
-	
+
 	store_in_catalogue_cat_treecache($id,$parent_id);
 
 	$map=array('cc_move_days_lower'=>$move_days_lower,'cc_move_days_higher'=>$move_days_higher,'cc_move_target'=>$move_target,'cc_title'=>lang_remap($_title,$title),'cc_description'=>lang_remap_comcode($_description,$description),'cc_notes'=>$notes,'cc_parent_id'=>$parent_id);
@@ -606,7 +606,7 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('catalogue_category',strval($id),$meta_keywords,$meta_description);
-	
+
 	if ($old_parent_id!==$parent_id)
 	{
 		calculate_category_child_count_cache($old_parent_id);
@@ -657,7 +657,7 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 		} else // If we're not in a tree catalogue we can't move them, we have to delete
 		{
 			if (function_exists('set_time_limit')) @set_time_limit(0);
-			
+
 			$GLOBALS['SITE_DB']->query_delete('catalogue_categories',array('cc_parent_id'=>$id)); // Does nothing, in theory
 			$start=0;
 			do
@@ -852,7 +852,7 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	foreach ($map as $field_id=>$val)
 	{
 		if (is_null($title)) $title=$val;
-		
+
 		$type=$fields[$field_id];
 
 		$ob=get_fields_hook($type);

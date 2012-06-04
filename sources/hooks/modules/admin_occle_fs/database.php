@@ -32,7 +32,7 @@ class Hook_database
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		
+
 		$listing=array();
 		if (count($meta_dir)<1)
 		{
@@ -105,7 +105,7 @@ class Hook_database
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		
+
 		if (count($meta_dir)<1)
 		{
 			return false;
@@ -154,7 +154,7 @@ class Hook_database
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		
+
 		if (count($meta_dir)<1)
 		{
 			//We're at the top level, and removing a table
@@ -183,7 +183,7 @@ class Hook_database
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		
+
 		if (count($meta_dir)==2)
 		{
 			//We're in a row, and deleting a field entry for this row
@@ -220,7 +220,7 @@ class Hook_database
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		
+
 		if (count($meta_dir)==2)
 		{
 			//We're in a row, and reading a field entry for this row
@@ -249,7 +249,7 @@ class Hook_database
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		
+
 		if (count($meta_dir)==2)
 		{
 			//We're in a row, and writing a field entry for this row
@@ -291,7 +291,7 @@ class Hook_database
 	function _do_where($table_name,$keys)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		
+
 		$db_keys=$GLOBALS['SITE_DB']->query_select('db_meta',array('*'),array('m_table'=>$table_name));
 		$_db_keys=array();
 		foreach ($db_keys as $db_key)
@@ -323,7 +323,7 @@ class Hook_database
 
 		return $where;
 	}
-	
+
 	/**
 	* Escape a value for use in a filesystem path.
 	*
@@ -334,7 +334,7 @@ class Hook_database
 	{
 		return str_replace(array(':',',','/'),array('!colon!','!comma!','!slash!'),$in);
 	}
-	
+
 	/**
 	* Unescape a value from a filesystem path back to the original.
 	*

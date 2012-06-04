@@ -60,5 +60,5 @@ class Hook_content_meta_aware_post
 			'module'=>'forumview',
 		);
 	}
-	
+
 }

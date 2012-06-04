@@ -40,7 +40,7 @@ class Module_admin_trackbacks
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_trackbacks
 	{
 		return array('misc'=>'MANAGE_TRACKBACKS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -62,7 +62,7 @@ class Module_admin_trackbacks
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_TRACKBACKS');
 
 		require_lang('trackbacks');
-		
+
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->choose();
@@ -81,16 +81,16 @@ class Module_admin_trackbacks
 		$title=get_page_title('MANAGE_TRACKBACKS');
 
 		$trackback_rows=$GLOBALS['SITE_DB']->query_select('trackbacks',array('*'),NULL,'ORDER BY id DESC',1000);
-		
+
 		$trackbacks='';
 		foreach ($trackback_rows as $value)
 		{
 			$trackbacks.=static_evaluate_tempcode(do_template('TRACKBACK',array('ID'=>strval($value['id']),'TIME_RAW'=>strval($value['trackback_time']),'TIME'=>get_timezoned_date($value['trackback_time']),'URL'=>$value['trackback_url'],'TITLE'=>$value['trackback_title'],'EXCERPT'=>$value['trackback_excerpt'],'NAME'=>$value['trackback_name'])));
 		}
-		
+
 		return do_template('TRACKBACK_DELETE_SCREEN',array('_GUID'=>'51f7e4c1976bcaf120758d2c86771289','TITLE'=>$title,'TRACKBACKS'=>$trackbacks,'LOTS'=>count($trackback_rows)==1000));
 	}
-	
+
 	/**
 	 * The actualiser to delete trackbacks.
 	 *
@@ -99,11 +99,11 @@ class Module_admin_trackbacks
 	function delete_trackbacks()
 	{
 		$title=get_page_title('DELETE_TRACKBACKS');
-	
+
 		foreach ($_POST as $key=>$val)
 		{
 			if (!is_string($val)) continue;
-			
+
 			if (substr($key,0,10)=='trackback_')
 			{
 				$id=intval(substr($key,10));
@@ -125,7 +125,7 @@ class Module_admin_trackbacks
 				}
 			}
 		}
-		
+
 		// Show it worked / Refresh
 		$text=do_lang_tempcode('SUCCESS');
 		$url=get_param('redirect',NULL);

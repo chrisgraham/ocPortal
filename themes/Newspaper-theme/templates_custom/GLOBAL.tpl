@@ -12,7 +12,7 @@
 			{$GET,panel_left}
 		</div>
 	{+END}
-	
+
 	<div class="col2"{+START,IF_EMPTY,{$TRIM,{$GET,panel_left}}} style="width: {$?,{$IS_EMPTY,{$TRIM,{$GET,panel_right}}},auto; float: none,638px}"{+END}>
 		<div class="in"{+START,IF_EMPTY,{$TRIM,{$GET,panel_left}}} style="width: auto"{+END}>
 			{+START,IF_NON_EMPTY,{BREADCRUMBS}}

@@ -86,7 +86,7 @@ class Hook_cron_ocdeadpeople
 				if (isset($friends_healthy[$to_infect]) && ($friends_healthy[$to_infect]!=0))
 				{
 					$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']));
-					
+
 					$insert=true;
 					$has_immunization=false;
 					if (isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']!=0)
@@ -145,7 +145,7 @@ class Hook_cron_ocdeadpeople
 			if (isset($random_member[0]['id']) && $random_member[0]['id']>0)
 			{
 				$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id']));
-				
+
 				$insert=true;
 				if (isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']>0)
 				{

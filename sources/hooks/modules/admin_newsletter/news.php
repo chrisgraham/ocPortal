@@ -31,7 +31,7 @@ class Hook_whats_news_news
 		if (!addon_installed('news')) return NULL;
 
 		require_lang('news');
-	
+
 		require_code('news');
 		return array(nice_get_news_categories(NULL,false,false,true),do_lang('NEWS'));
 	}
@@ -49,9 +49,9 @@ class Hook_whats_news_news
 		if (!addon_installed('news')) return array();
 
 		require_lang('news');
-	
+
 		$new=new ocp_tempcode();
-	
+
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'news_category');
 		$or_list_2=ocfilter_to_sqlfragment($filter,'news_entry_category');

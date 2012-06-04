@@ -31,7 +31,7 @@ class Hook_attachments_cedi_post
 	function run($id,$connection)
 	{
 		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) return false;
-		
+
 		$cat_id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_posts','page_id',array('id'=>$id));
 		if (is_null($cat_id)) return false;
 		return (has_category_access(get_member(),'seedy_page',strval($cat_id)));

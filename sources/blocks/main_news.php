@@ -38,7 +38,7 @@ class Block_main_news
 		$info['parameters']=array('param','member_based','filter','filter_and','multiplier','fallback_full','fallback_archive','blogs','historic','zone','title','show_in_full');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_news
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -82,7 +82,7 @@ class Block_main_news
 		}
 
 		$days=intval($days);
-	
+
 		$days_full=floatval($days)*$multiplier;
 		$days_outline=floatval($days)-$days_full;
 
@@ -169,7 +169,7 @@ class Block_main_news
 		{
 			$myrow=$rows[$i];
 	//		$categories=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry_category'),array('news_entry'=>$myrow['p_id']));
-	
+
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
 				$id=$myrow['p_id'];
@@ -229,7 +229,7 @@ class Block_main_news
 		{
 			$myrow=$rows2[$j];
 	//		$categories=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry_category'),array('news_entry'=>$myrow['id']));
-	
+
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
 				$date=get_timezoned_date($myrow['date_and_time']);
@@ -285,7 +285,7 @@ class Block_main_news
 			}
 			$submit_url=build_url($map2,get_module_zone(($blogs===1)?'cms_blogs':'cms_news'));
 		}
-		
+
 		$_title=do_lang_tempcode(($blogs==1)?'BLOGS_POSTS':'NEWS');
 		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=make_string_tempcode(escape_html($map['title']));
 

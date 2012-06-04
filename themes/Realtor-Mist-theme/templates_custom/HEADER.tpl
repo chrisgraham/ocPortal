@@ -44,7 +44,7 @@ Copyright ocProducts Limited
 
 	{$,If the page is doing a refresh include the markup for that}
 	{REFRESH}
-	
+
 	{$,In developer mode we totally break relative URLs so we know if they're used - we shouldn't ever use them, as they reflect path assumptions}
 	{+START,IF,{$DEV_MODE}}<base href="http://example.com/" />{+END}
 
@@ -130,10 +130,10 @@ Copyright ocProducts Limited
 				<div id="menu-part">
 					<div id="signup">
 						<h4>Sign up for newsletter</h4>
-	
+
 						{$BLOCK,block=main_newsletter_signup}
 					</div>
-	
+
 					{$BLOCK,block=side_stored_menu,param=main_features,type=zone}
 				</div>
 			{+END}

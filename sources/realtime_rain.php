@@ -101,7 +101,7 @@ function realtime_rain_script()
 function get_realtime_events($from,$to)
 {
 	//restrictify();
-	
+
 	$drops=array();
 
 	$hooks=find_all_hooks('systems','realtime_rain');
@@ -135,10 +135,10 @@ function rain_truncate_for_title($text)
 function rain_get_country_image($ip_address)
 {
 	if ($ip_address=='') return '';
-	
+
 	$country=geolocate_ip($ip_address);
 	if (is_null($country)) return '';
-	
+
 	return 'http://ocportal.com/uploads/website_specific/flags/'.$country.'.gif';
 }
 
@@ -182,6 +182,6 @@ function rain_get_special_icons($ip_address,$timestamp,$user_agent=NULL,$news=NU
 			}
 		}
 	}
-	
+
 	return array('SPECIAL_ICON'=>$icon,'SPECIAL_TOOLTIP'=>$tooltip,'MULTIPLICITY'=>strval(min(20,$multiplicity)));
 }

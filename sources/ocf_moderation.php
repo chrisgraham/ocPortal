@@ -27,7 +27,7 @@
 function ocf_list_multi_moderations($forum_id)
 {
 	if (!addon_installed('ocf_multi_moderations')) return array();
-	
+
 	$rows=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND m.mm_name=t.id',array('mm_forum_multi_code','m.id','m.mm_name','text_original AS _mm_name'),NULL,'ORDER BY text_original');
 	$out=array();
 	if (count($rows)==0) return $out;
@@ -95,6 +95,6 @@ function ocf_may_warn_members($member_id=NULL)
 function ocf_get_warnings($member_id)
 {
 	if (!addon_installed('ocf_warnings')) return array();
-	
+
 	return $GLOBALS['FORUM_DB']->query_select('f_warnings',array('*'),array('w_member_id'=>$member_id,'w_is_warning'=>1));
 }

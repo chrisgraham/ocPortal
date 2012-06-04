@@ -87,7 +87,7 @@ class Hook_vb3
 
 		return $info;
 	}
-	
+
 	/**
 	 * Probe a file path for DB access details.
 	 *
@@ -307,7 +307,7 @@ class Hook_vb3
 					import_id_remap_put('member',strval($row['userid']),$test);
 					continue;
 				}
-	
+
 				$language='';
 				if ($row['languageid']!=0)
 				{
@@ -391,7 +391,7 @@ class Hook_vb3
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -498,7 +498,7 @@ class Hook_vb3
 			import_id_remap_put('cpf',strval($row['profilefieldid']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -512,7 +512,7 @@ class Hook_vb3
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('category',strval($row['forumid']))) continue;
-	
+
 			$title=$row['title'];
 
 			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
@@ -623,7 +623,7 @@ class Hook_vb3
 
 				import_id_remap_put('topic',strval($row['threadid']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
@@ -682,7 +682,7 @@ class Hook_vb3
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('post',strval($row['postid']))) continue;
-	
+
 				$topic_id=import_id_remap_get('topic',strval($row['threadid']),true);
 				if (is_null($topic_id))
 				{
@@ -958,7 +958,7 @@ class Hook_vb3
 			import_id_remap_put('poll',strval($row['pollid']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -969,7 +969,7 @@ class Hook_vb3
 	function import_calendar($db,$table_prefix,$file_base)
 	{
 		require_code('calendar2');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'event');
 		foreach ($rows as $row)
 		{
@@ -1022,7 +1022,7 @@ class Hook_vb3
 			import_id_remap_put('event',strval($row['eventid']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1088,7 +1088,7 @@ class Hook_vb3
 				ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,NULL,$last_edit_time,$last_edit_by,false,false,NULL,false);
 				$first_post=false;
 			}
-	
+
 			import_id_remap_put('pt',strval($row['pmid']),$topic_id);
 		}
 	}
@@ -1172,12 +1172,12 @@ class Hook_vb3
 	function import_notifications($db,$table_prefix,$file_base)
 	{
 		require_code('notifications');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'subscribeforum');
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('forum_notification',strval($row['subscribeforumid']))) continue;
-	
+
 			$member_id=import_id_remap_get('member',strval($row['userid']),true);
 			if (is_null($member_id)) continue;
 			$forum_id=import_id_remap_get('forum',strval($row['forumid']),true);
@@ -1193,7 +1193,7 @@ class Hook_vb3
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('topic_notification',strval($row['subscribethreadid']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['userid']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['threadid']),true);
@@ -1202,12 +1202,12 @@ class Hook_vb3
 
 				import_id_remap_put('topic_notification',strval($row['subscribethreadid']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1259,7 +1259,7 @@ moderatorlog
 adminlog
 */
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -1285,7 +1285,7 @@ adminlog
 			import_id_remap_put('points',strval($row['reputationid']),-1);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *

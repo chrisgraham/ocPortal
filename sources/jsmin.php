@@ -176,7 +176,7 @@ class JSMin
 					if (is_array($this->b)) return $this->b;
 				}
 		}
-		
+
 		return NULL;
 	}
 

@@ -40,7 +40,7 @@ class Module_admin_bulkupload
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_bulkupload
 	{
 		return array('!'=>'BULK_UPLOAD');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -65,7 +65,7 @@ class Module_admin_bulkupload
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_BULK_UPLOAD');
 
 		$title=get_page_title('BULK_UPLOAD');
-	
+
 		$parameter=post_param('parameter','');
 		require_code('form_templates');
 		if ($parameter=='')
@@ -87,7 +87,7 @@ class Module_admin_bulkupload
 			return do_template('BULK_HELPER_RESULTS_SCREEN',array('_GUID'=>'5d373553cf21a58f15006bd4e600a9ee','TITLE'=>$title,'RESULTS'=>$out));
 		}
 	}
-	
+
 	/**
 	 * Scan a directory for files, and put them into the tempcode as an entry in the visual list.
 	 *
@@ -127,7 +127,7 @@ class Module_admin_bulkupload
 		{
 			$out->attach(do_template('BULK_HELPER_ENTRY',array('_GUID'=>'f57ec94c57b0ef0096c80a6c463f31d3','FILEFULL'=>$filefull)));
 		}
-		
+
 		sort($dirs_here);
 		foreach ($dirs_here as $dir)
 		{

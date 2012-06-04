@@ -38,7 +38,7 @@ class Block_main_gallery_embed
 		$info['parameters']=array('param','select','video_select','zone','max','title','sort','days','render_if_empty');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_gallery_embed
 		$info['ttl']=60*2;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -211,7 +211,7 @@ class Block_main_gallery_embed
 						$entry_map=array('_GUID'=>'66b7fb4d3b61ef79d6803c170d102cbf','RATING_DETAILS'=>$entry_rating_details,'TITLE'=>get_translated_text($row_video['title']),'DESCRIPTION'=>get_translated_tempcode($row_video['comments']),'ID'=>strval($row_video['id']),'CAT'=>$cat,'THUMB'=>$thumb,'VIEW_URL'=>$view_url,'SUBMITTER'=>strval($row_video['submitter']),'FULL_URL'=>$full_url,'THUMB_URL'=>$thumb_url,'VIDEO_DETAILS'=>show_video_details($row_video),'VIEWS'=>strval($row_video['video_views']),'ADD_DATE_RAW'=>strval($row_video['add_date']),'EDIT_DATE_RAW'=>is_null($row_video['edit_date'])?'':strval($row_video['edit_date']));
 						$entry=do_template('GALLERY_VIDEO',$entry_map);
 						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>'a0ff010ae7fd1f7b3341993072ed23cf','ENTRY'=>$entry)+$entry_map));
-				
+
 						break;
 				}
 			}

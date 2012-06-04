@@ -59,7 +59,7 @@ class Hook_ocf_auth_smf
 				}
 			}
 		}
-		
+
 		return NULL;
 	}
 

@@ -35,7 +35,7 @@ function init__themewizard()
 	{
 		$THEME_WIZARD_IMAGES[]='';
 	}
-	
+
 	$hooks=find_all_hooks('modules','admin_themewizard');
 	foreach (array_keys($hooks) as $hook)
 	{
@@ -132,7 +132,7 @@ function load_themewizard_params_from_theme($theme,$guess_images_if_needed=false
 			$IMG_CODES=$img_codes_bak;
 		}
 	}
-	
+
 	$THEME_WIZARD_IMAGES_CACHE[$theme]=$THEME_WIZARD_IMAGES;
 }
 
@@ -182,7 +182,7 @@ function find_theme_seed($theme,$no_easy_anchor=false)
 	{
 		$THEME_SEED_CACHE[$theme]=$map['seed'];
 	}
-	
+
 	return $THEME_SEED_CACHE[$theme];
 }
 
@@ -210,7 +210,7 @@ function find_theme_dark($theme)
 	{
 		$THEME_DARK_CACHE[$theme]=false;
 	}
-	
+
 	return $THEME_DARK_CACHE[$theme];
 }
 
@@ -1177,7 +1177,7 @@ function fix_colour($x,$hue=false)
 		if ($x>255) $x=255;
 		if ($x<0) $x=0;
 	}
-	
+
 	return $x;
 }
 
@@ -1631,7 +1631,7 @@ function generate_recoloured_image($path,$colour_a_orig,$colour_a_new,$colour_b1
 		$colour_b_new_b=$colour_b1_new_b;
 		$colour_b_new=$colour_b1_new;
 	}
-	
+
 	if (function_exists('imageistruecolor'))
 	{
 		if (function_exists('imagecreatetruecolor'))
@@ -1642,10 +1642,10 @@ function generate_recoloured_image($path,$colour_a_orig,$colour_a_new,$colour_b1
 				$trans_colour=NULL;
 		} else $trans_colour=imagecolortransparent($_image);
 	} else $trans_colour=imagecolortransparent($_image);
-	
+
 	$gh=floatval($height-$gradient_offset);
 	$gw=floatval($width-$gradient_offset);
-	
+
 	$vertical=($gradient_direction=='vertical');
 	$horizontal=($gradient_direction=='horizontal');
 

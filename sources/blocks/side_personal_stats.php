@@ -38,7 +38,7 @@ class Block_side_personal_stats
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -52,9 +52,9 @@ class Block_side_personal_stats
 		require_css('side_blocks');
 
 		$member=get_member();
-	
+
 		$forum=get_forum_type();
-	
+
 		$content=new ocp_tempcode();
 		$links=new ocp_tempcode();
 		if (!is_guest())
@@ -184,7 +184,7 @@ class Block_side_personal_stats
 					$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>do_lang_tempcode('INVISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
 				}
 			}
-			
+
 			// Logout link
 			$url=build_url(array('page'=>'login','type'=>'logout'),get_module_zone('login'));
 			if (!is_httpauth_login())

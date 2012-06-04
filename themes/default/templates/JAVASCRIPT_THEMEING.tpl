@@ -219,9 +219,9 @@ function load_contextual_css_editor(file)
 	var list=document.createElement('ul');
 	document.getElementById('selectors_inner').appendChild(list);
 	list.id='selector_list';
-	
+
 	set_up_parent_page_highlighting();
-	
+
 	// Set up background compiles
 	if (typeof window.do_ajax_request!='undefined')
 	{
@@ -317,7 +317,7 @@ function set_up_parent_page_highlighting()
 		for (j=0;j<elements.length;j++)
 		{
 			element=elements[j];
-			
+
 			addEventListenerAbstract(element,'mouseover',function(a,element) { return function(event) {
 				if (typeof event=='undefined') var event=window.event;
 
@@ -443,7 +443,7 @@ function receive_compiled_css(ajax_result_frame,win)
 				style.appendChild(tn);
 			}
 			win.document.getElementsByTagName('head')[0].appendChild(style);
-		
+
 			for (var i=0;i<win.frames.length;i++)
 			{
 				if (win.frames[i]) // If test needed for opera, as window.frames can get out-of-date

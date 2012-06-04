@@ -103,7 +103,7 @@ class Hook_pointstore_gambling
 				return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 			}
 		}
-		
+
 		// Calculate
 		$average_gamble_multiplier=floatval(get_option('average_gamble_multiplier'))/100.0;
 		$maximum_gamble_multiplier=floatval(get_option('maximum_gamble_multiplier'))/100.0;

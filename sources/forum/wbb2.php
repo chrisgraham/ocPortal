@@ -34,7 +34,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 		if (is_null($guest_group)) $guest_group=5;
 		return $guest_group;
 	}
-	
+
 	/**
 	 * From a member profile-row, get the member's primary usergroup.
 	 *
@@ -45,7 +45,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	{
 		return $r['groupid'];
 	}
-	
+
 	/**
 	 * Get an array of members who are in at least one of the given array of usergroups.
 	 *
@@ -64,7 +64,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 		}
 		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE '.$_groups.' ORDER BY groupid,userid ASC',$max,$start);
 	}
-	
+
 	/**
 	 * Find out if the given member id is banned.
 	 *
@@ -80,10 +80,10 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 		{
 			return true;
 		}
-	
+
 		return false;
 	}
-	
+
 	/**
 	 * Find a list of all forum skins (aka themes).
 	 *
@@ -108,7 +108,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	function _get_theme($skip_member_specific=false)
 	{
 		$def='';
-	
+
 		// Load in remapper
 		$map=file_exists(get_file_base().'/themes/map.ini')?better_parse_ini_file(get_file_base().'/themes/map.ini'):array();
 
@@ -131,21 +131,21 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 			$bb=$this->connection->query_value_null_ok('styles','stylename',array('stylename'=>get_site_name()));
 			if (!is_null($bb)) $def=array_key_exists($bb,$map)?$map[$bb]:$bb;
 		}
-	
+
 		// Hmm, just the very-default then
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 		{
 			$bb=$this->connection->query_value_null_ok('styles','stylename',array('default_style'=>1));
 			if (!is_null($bb)) $def=array_key_exists($bb,$map)?$map[$bb]:$bb;
 		}
-	
+
 		// Default then!
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 			$def=array_key_exists('default',$map)?$map['default']:'default';
-	
+
 		return $def;
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as staff or not.
 	 *
@@ -158,7 +158,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','ismod',array('groupid'=>$usergroup))==1)) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Find if the specified member id is marked as a super admin or not.
 	 *
@@ -171,7 +171,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','canuseacp',array('groupid'=>$usergroup))==1)) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Get the ids of the admin usergroups.
 	 *
@@ -181,7 +181,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	{
 		return collapse_1d_complexity('groupid',$this->connection->query_select('groups',array('groupid'),array('canuseacp'=>1)));
 	}
-	
+
 	/**
 	 * Get the ids of the moderator usergroups.
 	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
@@ -192,7 +192,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	{
 		return collapse_1d_complexity('groupid',$this->connection->query_select('groups',array('groupid'),array('canuseacp'=>0,'ismod'=>1)));
 	}
-	
+
 	/**
 	 * Get the forum usergroup list.
 	 *
@@ -202,7 +202,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	{
 		return collapse_2d_complexity('groupid','title',$this->connection->query_select('groups',array('groupid','title')));
 	}
-	
+
 	/**
 	 * Get the forum usergroup relating to the specified member id.
 	 *

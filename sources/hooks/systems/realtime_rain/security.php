@@ -39,7 +39,7 @@ class Hook_realtime_rain_security
 			foreach ($rows as $row)
 			{
 				require_lang('security');
-				
+
 				$timestamp=$row['timestamp'];
 				$member_id=$row['member_id'];
 
@@ -63,7 +63,7 @@ class Hook_realtime_rain_security
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

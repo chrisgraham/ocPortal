@@ -19,7 +19,7 @@
 
 class Block_side_facebook_activity
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -37,7 +37,7 @@ class Block_side_facebook_activity
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -47,7 +47,7 @@ class Block_side_facebook_activity
 	function run($map)
 	{
 		unset($map);
-		
+
 		return do_template('BLOCK_SIDE_FACEBOOK_ACTIVITY',array());
 	}
 

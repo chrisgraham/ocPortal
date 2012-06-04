@@ -60,7 +60,7 @@ function show_permission_setting(ob,event)
 	if (!ob.full_setting)
 	{
 		var serverid;
-		
+
 		if (typeof window.site_tree!='undefined')
 		{
 			var value=document.getElementById('tree_list').value;
@@ -163,12 +163,12 @@ function copy_permission_presets(name,value,just_track)
 			elements[i].selectedIndex=eval(elements[i].name+';')+1; // -1 is at index 0
 		}
 	}
-	
+
 	if ((!just_track) && (elements.length==2) && (made_change))
 	{
 		window.fauxmodal_alert('{!JUST_PRESETS^;}');
 	}
-	
+
 	return made_change;
 }
 
@@ -187,7 +187,7 @@ function setup_sp_override_selector(name,default_access,sp,title,all_global)
 function permission_repeating(button,name)
 {
 	var old_permission_copying=window.permission_copying;
-	
+
 	var tr=button.parentNode.parentNode;
 	var trs=tr.parentNode.getElementsByTagName('tr');
 
@@ -310,7 +310,7 @@ function update_permission_box(setting)
 					}
 				}
 			}
-			
+
 			if ((node.getAttribute('serverid').indexOf(':cms_')!=-1) && (is_cms!==false)) is_cms=true; else is_cms=false;
 
 			// Set view access
@@ -334,7 +334,7 @@ function update_permission_box(setting)
 					done_group=true;
 				}
 			}
-			
+
 			// Create SP nodes
 			num_sp=0;
 			known_sps=[];
@@ -439,7 +439,7 @@ function update_permission_box(setting)
 					if (typeof button!='undefined') button.style.display='block';
 				}
 			}
-			
+
 			// Test to see what we wouldn't have to make a change to get - and that is what we're set at
 			for (k=0;k<known_groups.length;k++)
 			{
@@ -529,7 +529,7 @@ function set_permissions(setting)
 						}
 					}
 				}
-				
+
 				// Update UI indicators
 				setInnerHTML(document.getElementById('tree_listextra_'+id),permissions_img_func_1(node,id)+permissions_img_func_2(node,id));
 			}

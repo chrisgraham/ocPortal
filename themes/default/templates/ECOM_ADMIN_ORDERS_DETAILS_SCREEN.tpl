@@ -18,7 +18,7 @@
 					#{ORDER_NUMBER*}
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th>{!ORDERED_BY}</th>
 				<td>
@@ -37,7 +37,7 @@
 					{ADD_DATE*}
 				</td>
 			</tr>
-		
+
 		
 			<tr>
 				<th>{!TOTAL_PRICE}</th>

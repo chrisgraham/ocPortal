@@ -29,7 +29,7 @@ class Hook_sw_iotds
 	function get_blocks()
 	{
 		if (!addon_installed('iotds')) return array();
-		
+
 		return array(array('main_iotd'=>array('YES_CELL','YES_CELL')),array());
 	}
 

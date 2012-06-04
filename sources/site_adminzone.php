@@ -49,7 +49,7 @@ function adminzone_special_cases($codename)
 function adminzone_extend_breadcrumbs(&$stub)
 {
 	global $BREADCRUMB_SET_PARENTS;
-	
+
 	if ((count($BREADCRUMB_SET_PARENTS)>0) && (!is_object($BREADCRUMB_SET_PARENTS[0][0]))) // Ideally
 	{
 		// Works by finding where our oldest ancestor connects on to the do-next menus, and carries from there

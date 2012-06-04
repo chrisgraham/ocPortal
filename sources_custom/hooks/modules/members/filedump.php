@@ -30,15 +30,15 @@ class Hook_members_filedump
 	function run($member_id)
 	{
 		if (!addon_installed('filedump')) return array();
-		
+
 		$zone=get_page_zone('filedump',false);
 		if (is_null($zone)) return array();
 		if (!has_zone_access(get_member(),$zone)) return array();
 
 		require_lang('filedump');
-		
+
 		$path=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-		
+
 		return array(array('content',do_lang_tempcode('FILE_DUMP'),build_url(array('page'=>'filedump','type'=>'misc','place'=>'/'.$path.'/'),$zone)));
 	}
 }

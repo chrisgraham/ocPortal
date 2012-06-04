@@ -29,7 +29,7 @@ class Block_side_ocf_personal_topics
 	function info()
 	{
 		if (get_forum_type()!='ocf') return NULL;
-	
+
 		$info=array();
 		$info['author']='Chris Graham';
 		$info['organisation']='ocProducts';
@@ -40,7 +40,7 @@ class Block_side_ocf_personal_topics
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -53,7 +53,7 @@ class Block_side_ocf_personal_topics
 		$info['ttl']=6000;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -88,7 +88,7 @@ class Block_side_ocf_personal_topics
 			$username=$topic['t_cache_last_username'];
 			$member_link=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['t_cache_last_member_id'],false,true);
 			$num_posts=$topic['t_cache_num_posts'];
-	
+
 			$out->attach(do_template('TOPIC_LIST',array('_GUID'=>'55ae21a9f8d67ba6237c118a18b9657b','USER_LINK'=>$member_link,'TOPIC_LINK'=>$topic_url,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic['t_cache_last_time']),'USERNAME'=>$username,'NUM_POSTS'=>integer_format($num_posts))));
 		}
 		$send_url=build_url(array('page'=>'topics','type'=>'new_pt','redirect'=>SELF_REDIRECT),get_module_zone('topics'));

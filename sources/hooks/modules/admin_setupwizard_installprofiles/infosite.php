@@ -44,7 +44,7 @@ class Hook_admin_setupwizard_installprofiles_infosite
 			array('news','newsletter','syndication_blocks','quizzes','recommend','polls'),
 			array());
 	}
-	
+
 	/**
 	 * Get a map of default settings associated with this installation profile
 	 *
@@ -71,7 +71,7 @@ class Hook_admin_setupwizard_installprofiles_infosite
 			'rules'=>'balanced',
 		);
 	}
-	
+
 	/**
 	 * Find details of desired blocks
 	 *
@@ -101,7 +101,7 @@ class Hook_admin_setupwizard_installprofiles_infosite
 			),
 		);
 	}
-	
+
 	/**
 	 * Get options for blocks in this profile
 	 *
@@ -118,12 +118,12 @@ class Hook_admin_setupwizard_installprofiles_infosite
 			)
 		);
 	}
-	
+
 	/**
 	 * Execute any special code needed to put this install profile into play
 	 */
 	function install_code()
 	{
 	}
-	
+
 }

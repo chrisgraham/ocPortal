@@ -38,7 +38,7 @@ class Block_main_db_notes
 		$info['parameters']=array('param','title','scrolls');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -56,7 +56,7 @@ class Block_main_db_notes
 		{
 			set_long_value('note_text_'.$file,$new);
 			log_it('NOTES',$file);
-			
+
 			attach_message(do_lang_tempcode('SUCCESS'),'inform');
 		}
 

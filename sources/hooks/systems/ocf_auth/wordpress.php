@@ -38,7 +38,7 @@ class Hook_ocf_auth_wordpress
 		if (class_exists('PasswordHash')) // 'if' just there for code quality checker
 		{
 			$wp_hasher = new PasswordHash(8, true);
-					
+
 			if(!$wp_hasher->CheckPassword($password_raw, $row['m_pass_hash_salted']))
 				return do_lang_tempcode('USER_BAD_PASSWORD');
 		}

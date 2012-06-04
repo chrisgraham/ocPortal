@@ -50,7 +50,7 @@ class Module_admin_ocf_join
 	{
 		return array('menu'=>'MEMBERS','misc'=>'ADD_MEMBER','delurk'=>'DELETE_LURKERS','download_csv'=>'DOWNLOAD_MEMBER_CSV','import_csv'=>'IMPORT_MEMBER_CSV','group_member_timeouts'=>'GROUP_MEMBER_TIMEOUTS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -64,9 +64,9 @@ class Module_admin_ocf_join
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='menu') return $this->menu();
 		if ($type=='misc') return $this->step1();
 		if ($type=='step2') return $this->step2();
@@ -81,7 +81,7 @@ class Module_admin_ocf_join
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The do-next manager for choosing what to do
 	 *
@@ -127,11 +127,11 @@ class Module_admin_ocf_join
 	function step1()
 	{
 		$title=get_page_title('ADD_MEMBER');
-	
+
 		list($fields,$hidden)=ocf_get_member_fields(false);
-	
+
 		$text=do_lang_tempcode('_ENTER_PROFILE_DETAILS');
-	
+
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 		breadcrumb_set_self(do_lang_tempcode('ADD_MEMBER'));
 
@@ -201,9 +201,9 @@ class Module_admin_ocf_join
 			foreach ($_POST['secondary_groups'] as $group_id)
 			{
 				$group=$groups[intval($group_id)];
-				
+
 				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_specific_permission(get_member(),'see_hidden_groups'))) continue;
-				
+
 				if ((in_array($group['id'],$members_groups)) || (has_specific_permission(get_member(),'assume_any_member')) || ($group['g_open_membership']==1))
 					ocf_add_member_to_group($id,$group['id']);
 			}
@@ -242,7 +242,7 @@ class Module_admin_ocf_join
 						do_lang_tempcode('MEMBERS')
 		);
 	}
-	
+
 	/**
 	 * The UI for managing temporary usergroup memberships.
 	 *
@@ -260,7 +260,7 @@ class Module_admin_ocf_join
 
 		require_code('form_templates');
 		require_code('templates_results_table');
-		
+
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',100);
 		$max_rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value('f_group_member_timeouts','COUNT(*)');
@@ -269,11 +269,11 @@ class Module_admin_ocf_join
 			do_lang_tempcode('_USERGROUP'),
 			do_lang_tempcode('TIME'),
 		));
-		
+
 		$timeouts=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select('f_group_member_timeouts',array('member_id','group_id','timeout'),NULL,'',$max,$start);
-		
+
 		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-		
+
 		$tfields=new ocp_tempcode();
 		foreach ($timeouts as $timeout)
 		{
@@ -314,7 +314,7 @@ class Module_admin_ocf_join
 	function _group_member_timeouts()
 	{
 		$title=get_page_title('GROUP_MEMBER_TIMEOUTS');
-		
+
 		$group_id=post_param_integer('group_id');
 
 		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // Security issue, don't allow privilege elevation
@@ -322,19 +322,19 @@ class Module_admin_ocf_join
 			$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 			if (in_array($group_id,$admin_groups)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		}
-		
+
 		$username=post_param('username');
 		$num_minutes=post_param_integer('num_minutes');
 		$prefer_for_primary_group=false;//(post_param_integer('prefer_for_primary_group',0)==1); Don't promote this bad choice
 
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 		if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
-		
+
 		require_code('group_member_timeouts');
 		bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for_primary_group);
-		
+
 		$url=build_url(array('page'=>'_SELF','type'=>'group_member_timeouts'),'_SELF');
-		
+
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
@@ -617,7 +617,7 @@ class Module_admin_ocf_join
 			echo '"'.str_replace('"','""',$h).'"';
 		}
 		echo chr(10);
-		
+
 		$at=mixed();
 
 		$limit=get_param_integer('max',200); // Set 'max' if you don't want all records
@@ -657,7 +657,7 @@ class Module_admin_ocf_join
 				}
 				echo chr(10);
 			}
-			
+
 			$start+=200;
 
 			flush();
@@ -667,7 +667,7 @@ class Module_admin_ocf_join
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 		exit();
 	}
-	
+
 	/**
 	 * Get a CSV-outputtable row for a member.
 	 *
@@ -696,7 +696,7 @@ class Module_admin_ocf_join
 					case '*': // lang string
 						$at=get_translated_text($m[substr($part,1)],$GLOBALS['FORUM_DB']);
 						break;
-					
+
 					case '!': // binary
 						$at=($m[substr($part,1)]==1)?'Yes':'No'; // Hard-coded in English, because we need a multi-language standard
 						break;
@@ -864,7 +864,7 @@ class Module_admin_ocf_join
 						$h=trim($parts[0]);
 						if ($extracted_value!='') $extracted_value=$parts[1].': '.$extracted_value;
 					}
-					
+
 					if (array_key_exists($h,$line))
 					{
 						if ($extracted_value!='') $line[$h].=(($line[$h]!='')?chr(10):'').$extracted_value;
@@ -920,7 +920,7 @@ class Module_admin_ocf_join
 				if (array_key_exists('ID',$line)) $linked_id=(($line['ID']!='')&&(array_key_exists(intval($line['ID']),$all_members)))?intval($line['ID']):NULL;
 				if (is_null($linked_id)) $linked_id=array_key_exists($username,$all_members_flipped)?$all_members_flipped[$username]:NULL;
 				$new_member=is_null($linked_id);
-				
+
 				$email_address_key='E-mail address';
 				if (array_key_exists('Email address',$line)) $email_address_key='Email address';
 				if (array_key_exists('E-mail Address',$line)) $email_address_key='E-mail Address';

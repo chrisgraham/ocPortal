@@ -232,7 +232,7 @@
 			</div>
 		</form>
 	{+END}
-	
+
 	<br />
 
 	{$SET,done_search,0}

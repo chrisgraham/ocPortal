@@ -32,7 +32,7 @@ foreach($tables_by as $t=>$ts)
 	foreach ($ts as $table)
 	{
 		if (!array_key_exists($table,$all_tables)) continue; // Not installed
-		
+
 		$tables[$table]=$all_tables[$table];
 	}
 	fwrite($myfile,get_innodb_table_sql($tables,$all_tables));

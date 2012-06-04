@@ -25,7 +25,7 @@ function init__hooks__modules__admin_import__shared__ipb()
 {
 	global $TOPIC_FORUM_CACHE;
 	$TOPIC_FORUM_CACHE=array();
-	
+
 	global $STRICT_FILE;
 	$STRICT_FILE=false; // Disable this for a quicker import that is quite liable to go wrong if you don't have the files in the right place
 }
@@ -45,7 +45,7 @@ class Hook_ipb_base
 		$post=preg_replace('#\[size="?(\d+)"?\]#','[size="${1}of"]',$post);
 		return @html_entity_decode($post,ENT_QUOTES,get_charset());
 	}
-	
+
 	/**
 	 * Fix non-XHTML parts of IPB posts.
 	 *
@@ -57,7 +57,7 @@ class Hook_ipb_base
 		$post=str_replace('<br>','<br />',$post);
 		return $post;
 	}
-	
+
 	/**
 	 * Probe a file path for DB access details.
 	 *
@@ -70,10 +70,10 @@ class Hook_ipb_base
 		if (!file_exists($file_base.'/conf_global.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('conf_global.php')));
 		require_once($file_base.'/conf_global.php');
-	
+
 		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -102,12 +102,12 @@ class Hook_ipb_base
 		$max_post_length_comcode=$INFO['max_post_length'];
 		$max_sig_length_comcode=$INFO['max_sig_length'];
 		list($max_avatar_width,$max_avatar_height)=explode('x',$INFO['avatar_dims']);
-	
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'groups');
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('group',strval($row['g_id']))) continue;
-	
+
 			list($_promotion_target,$_promotion_threshold)=explode('&',$row['g_promotion']);
 			$promotion_target=intval($_promotion_target);
 			$promotion_threshold=intval($_promotion_threshold);
@@ -116,7 +116,7 @@ class Hook_ipb_base
 				$promotion_target=NULL;
 				$promotion_threshold=NULL;
 			}
-	
+
 			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['g_title']),'g.id');
 			if (is_null($id_new))
 			{
@@ -128,7 +128,7 @@ class Hook_ipb_base
 			{
 				$GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id'=>$id_new));
 			}
-	
+
 			// Page permissions
 			$denies=array();
 			if ($row['g_use_search']==0) $denies[]=array('search',get_module_zone('search'));
@@ -142,7 +142,7 @@ class Hook_ipb_base
 				$test=$GLOBALS['SITE_DB']->query_value_null_ok('group_page_access','group_id',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 				if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('group_page_access',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 			}
-	
+
 			// privileges
 			set_specific_permission($id_new,'comcode_dangerous',$row['g_dohtml']);
 			set_specific_permission($id_new,'view_member_photos',$row['g_mem_info']);
@@ -158,11 +158,11 @@ class Hook_ipb_base
 			set_specific_permission($id_new,'use_pt',$row['g_use_pm']);
 			set_specific_permission($id_new,'delete_account',$row['g_can_remove']);
 			set_specific_permission($id_new,'access_closed_site',$row['g_access_offline']);
-	
+
 			import_id_remap_put('group',strval($row['g_id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -173,7 +173,7 @@ class Hook_ipb_base
 	function import_calendar($db,$table_prefix,$file_base)
 	{
 		require_code('calendar2');
-		
+
 		if (either_param('importer')=='ipb1')
 		{
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'calendar_events');
@@ -280,9 +280,9 @@ class Hook_ipb_base
 			foreach ($rows as $row)
 			{
 				$row['name']=@html_entity_decode($row['name'],ENT_QUOTES,get_charset());
-	
+
 				if (import_check_if_imported('member',strval($row['id']))) continue;
-	
+
 				if ($row['id']==0)
 				{
 					import_id_remap_put('member','0',$GLOBALS['OCF_DRIVER']->get_guest_id());
@@ -294,13 +294,13 @@ class Hook_ipb_base
 					import_id_remap_put('member',strval($row['id']),$test);
 					continue;
 				}
-	
+
 				if ($row['mgroup']==0) $row['mgroup']=db_get_first_id(); // Not really necessary - but repairs problem in my test db
 				$primary_group=import_id_remap_get('group',strval($row['mgroup']));
 				$language=is_null($row['language'])?'':strtoupper($row['language']);
 				if ((!file_exists(get_custom_file_base().'/lang_custom/'.$language)) && (!file_exists(get_file_base().'/lang/'.$language)))
 					$language='';
-	
+
 				if (either_param('importer')=='ipb1')
 				{
 					$custom_fields=array(
@@ -318,16 +318,16 @@ class Hook_ipb_base
 					$custom_fields=array();
 					$signature='';
 				}
-	
+
 				$rows2=$db->query('SELECT * FROM '.$table_prefix.'member_extra WHERE id='.strval($row['id']));
 				$notes='';
 				if (array_key_exists(0,$rows2))
 				{
 					$row2=$rows2[0];
-	
+
 					$custom_fields[ocf_make_boiler_custom_field('SELF_DESCRIPTION')]=@html_entity_decode($row2['bio'],ENT_QUOTES,get_charset());
 					$notes=$row2['notes'];
-	
+
 					if (either_param('importer')=='ipb2')
 					{
 						ocf_over_msn();
@@ -353,7 +353,7 @@ class Hook_ipb_base
 					ocf_over_local();
 				}
 				$validated=1;
-	
+
 				if (either_param('importer')=='ipb2')
 				{
 					$password=$row['converge_pass_hash'];
@@ -369,15 +369,15 @@ class Hook_ipb_base
 				$id_new=ocf_make_member($row['name'],$password,$row['email'],NULL,$row['bday_day'],$row['bday_month'],$row['bday_year'],$custom_fields,strval($row['time_offset']),$primary_group,$validated,$row['joined'],$row['last_visit'],'','',$signature,0,1,1,$row['title'],'','',$row['view_sigs'],$row['auto_track'],$language,$row['email_pm'],$row['email_pm'],$notes,$row['ip_address'],'',false,$type,$salt);
 
 				if ($row['mgroup']==5) $GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>1),array('id'=>$id_new),'',1);
-	
+
 				import_id_remap_put('member',strval($row['id']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -388,7 +388,7 @@ class Hook_ipb_base
 	function import_ocf_member_files($db,$table_prefix,$file_base)
 	{
 		global $STRICT_FILE;
-	
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -398,17 +398,17 @@ class Hook_ipb_base
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('member_files',strval($row['id']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['id']));
-	
+
 				$photo_url='';
 				$photo_thumb_url='';
-	
+
 				$rows2=$db->query('SELECT * FROM '.$table_prefix.'member_extra WHERE id='.strval($row['id']));
 				if (array_key_exists(0,$rows2))
 				{
 					$row2=$rows2[0];
-	
+
 					if ($row2['photo_type']=='upload')
 					{
 						$filename=rawurldecode($row2['photo_location']);
@@ -434,7 +434,7 @@ class Hook_ipb_base
 						require_code('images');
 						convert_image($photo_url,$photo_thumb_url,-1,-1,intval(get_option('thumb_width')),false,NULL,true);
 					}
-	
+
 					if (either_param('importer')=='ipb2')
 					{
 						$row['avatar']=$row2['avatar_location'];
@@ -491,17 +491,17 @@ class Hook_ipb_base
 							}
 						} else $avatar_url=$row['avatar'];
 				}
-	
+
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url'=>$avatar_url,'m_photo_url'=>$photo_url,'m_photo_thumb_url'=>$photo_thumb_url),array('id'=>$member_id),'',1);
-	
+
 				import_id_remap_put('member_files',strval($row['id']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -519,26 +519,26 @@ class Hook_ipb_base
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('cpf',strval($row['fid']))) continue;
-	
+
 			$type='short_text';
 			if ($row['ftype']=='text') $type='short_text';
 			elseif ($row['ftype']=='area') $type='long_text';
-	
+
 			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['ftitle']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['ftitle'],0,$row['fdesc'],'',1-$row['fhide'],1-$row['fhide'],$row['fedit'],0,$type,$row['freq'],0,0,$row['forder'],'',true);
 			}
-			
+
 			foreach ($members as $member)
 			{
 				ocf_set_custom_field($member['member_id'],$id_new,@html_entity_decode($member['field_'.strval($row['fid'])],ENT_QUOTES,get_charset()));
 			}
-	
+
 			import_id_remap_put('cpf',strval($row['fid']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -556,7 +556,7 @@ class Hook_ipb_base
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('topic',strval($row['tid']))) continue;
-	
+
 				$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
 				if (is_null($forum_id))
 				{
@@ -610,17 +610,17 @@ class Hook_ipb_base
 						$emoticon='ocf_emoticons/sarcy';
 						break;
 				}
-	
+
 				$id_new=ocf_make_topic($forum_id,@html_entity_decode($row['description'],ENT_QUOTES,get_charset()),$emoticon,$row['approved'],$row['state']=='open'?1:0,$row['pinned'],0,0,NULL,NULL,false,$row['views']);
 
 				import_id_remap_put('topic',strval($row['tid']),$id_new);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -631,7 +631,7 @@ class Hook_ipb_base
 	function import_ocf_posts($db,$table_prefix,$file_base)
 	{
 		global $STRICT_FILE;
-	
+
 		$row_start=0;
 		$rows=array();
 		do
@@ -642,7 +642,7 @@ class Hook_ipb_base
 				if ((get_param_integer('keep_import_test',0)==1) && ($row['new_topic']==0)) continue;
 
 				if (import_check_if_imported('post',strval($row['pid']))) continue;
-	
+
 				$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
 				if (is_null($topic_id))
 				{
@@ -663,7 +663,7 @@ class Hook_ipb_base
 					if (is_null($forum_id)) continue;
 					$TOPIC_FORUM_CACHE[$topic_id]=$forum_id;
 				}
-	
+
 				$title='';
 				if ($row['new_topic']==1)
 				{
@@ -671,7 +671,7 @@ class Hook_ipb_base
 					$title=strip_tags(@html_entity_decode($topics[0]['title'],ENT_QUOTES,get_charset()));
 				}
 				elseif (!is_null($row['post_title'])) $title=@html_entity_decode($row['post_title'],ENT_QUOTES,get_charset());
-	
+
 				ocf_over_msn();
 				$post=html_to_comcode($this->clean_ipb_post_2($row['post']));
 				ocf_over_local();
@@ -681,11 +681,11 @@ class Hook_ipb_base
 				{
 					$last_edit_by=$GLOBALS['OCF_DRIVER']->get_member_from_username(@html_entity_decode($row['edit_name'],ENT_QUOTES,get_charset()));
 				}
-	
+
 				if (either_param('importer')=='ipb2')
 				{
 					$post=str_replace('style_emoticons/<#EMO_DIR#>','[/html]{$BASE_URL}[html]/data/legacy_emoticons',$post);
-	
+
 					$end=0;
 					while (($pos=strpos($post,'[right]'))!==false)
 					{
@@ -703,9 +703,9 @@ class Hook_ipb_base
 						$post=substr($post,0,$pos).$comcode.substr($post,$end);
 					}
 				}
-	
+
 				$id_new=ocf_make_post($topic_id,$title,$post,0,$row['new_topic']==1,1-$row['queued'],0,@html_entity_decode($row['author_name'],ENT_QUOTES,get_charset()),$row['ip_address'],$row['post_date'],$member_id,NULL,$row['edit_time'],$last_edit_by,false,false,$forum_id,false);
-	
+
 				import_id_remap_put('post',strval($row['pid']),$id_new);
 			}
 
@@ -713,7 +713,7 @@ class Hook_ipb_base
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -727,7 +727,7 @@ class Hook_ipb_base
 		require_code('attachments2');
 		require_code('attachments3');
 		require_code('images');
-	
+
 		$row_start=0;
 		$select=(either_param('importer')=='ipb1')?'pid,attach_id,attach_file,attach_hits,post_date':'pid,post_date';
 		$rows=array();
@@ -751,7 +751,7 @@ class Hook_ipb_base
 				$lang_id=$post_row[0]['p_post'];
 				$member_id=import_id_remap_get('member',$post_row[0]['p_poster']);
 				$post_date=$post_row[0]['p_time'];
-	
+
 				if (either_param('importer')=='ipb1')
 				{
 					$has_attachment=false;
@@ -812,7 +812,7 @@ class Hook_ipb_base
 						$i++;
 					}
 				}
-	
+
 				if (either_param('importer')=='ipb1')
 				{
 					if ($has_attachment)
@@ -839,15 +839,15 @@ class Hook_ipb_base
 					update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
 					ocf_over_local();
 				}
-	
+
 				import_id_remap_put('post_files',strval($row['pid']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -861,22 +861,22 @@ class Hook_ipb_base
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('poll',strval($row['pid']))) continue;
-	
+
 			$topic_id=import_id_remap_get('topic',strval($row['tid']),true);
 			if (is_null($topic_id)) continue;
 
 			$topic=$db->query('SELECT * FROM '.$table_prefix.'topics WHERE tid='.strval($row['tid']));
 			$is_open=($topic[0]['poll_state']=='open')?1:0;
-	
+
 			$_answers=unserialize($row['choices']);
 			$answers=array(); // An array of answers
 			foreach ($_answers as $answer)
 			{
 				$answers[]=array(@html_entity_decode($answer[1],ENT_QUOTES,get_charset()),$answer[2]);
 			}
-	
+
 			$rows2=$db->query('SELECT * FROM '.$table_prefix.'voters WHERE tid='.strval($row['tid']));
-	
+
 			$id_new=ocf_make_poll($topic_id,@html_entity_decode($row['poll_question'],ENT_QUOTES,get_charset()),0,$is_open,1,1,0,$answers,false);
 
 			$answers=collapse_1d_complexity('id',$GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('id'),array('pa_poll_id'=>$id_new))); // Effectively, a remapping from IPB vote number to ocP vote number
@@ -890,12 +890,12 @@ class Hook_ipb_base
 				}
 				$j++;
 			}
-	
+
 			foreach ($rows2 as $row2) // For all votes. We have to match votes to members - but it is arbitrary because no such mapping is stored from IPB
 			{
 				$member_id=import_id_remap_get('member',$row2['member_id'],true);
 				if (is_null($member_id)) $member_id=db_get_first_id();
-	
+
 				if ($member_id!=$GLOBALS['OCF_DRIVER']->get_guest_id())
 				{
 					$answer=array_pop($vote_list);
@@ -903,11 +903,11 @@ class Hook_ipb_base
 					$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id'=>$id_new,'pv_member_id'=>$member_id,'pv_answer_id'=>$answer));
 				}
 			}
-	
+
 			import_id_remap_put('poll',strval($row['pid']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -945,18 +945,18 @@ class Hook_ipb_base
 	function import_notifications($db,$table_prefix,$file_base)
 	{
 		require_code('notifications');
-		
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'forum_tracker');
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('forum_notification',strval($row['frid']))) continue;
-	
+
 			$member_id=import_id_remap_get('member',$row['member_id'],true);
 			if (is_null($member_id)) continue;
 			$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
 			if (is_null($forum_id)) continue;
 			enable_notifications('ocf_forum',strval($forum_id),$member_id);
-	
+
 			import_id_remap_put('forum_notification',strval($row['frid']),1);
 		}
 		$row_start=0;
@@ -966,21 +966,21 @@ class Hook_ipb_base
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('topic_notification',strval($row['trid']))) continue;
-	
+
 				$member_id=import_id_remap_get('member',strval($row['member_id']),true);
 				if (is_null($member_id)) continue;
 				$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
 				if (is_null($topic_id)) continue;
 				enable_notifications('ocf_topic',strval($topic_id),$member_id);
-	
+
 				import_id_remap_put('topic_notification',strval($row['trid']),1);
 			}
-	
+
 			$row_start+=200;
 		}
 		while (count($rows)>0);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -996,16 +996,16 @@ class Hook_ipb_base
 		foreach ($rows as $row)
 		{
 			if (import_check_if_imported('warning',strval($row['id']))) continue;
-	
+
 			$member_id=import_id_remap_get('member',strval($row['wlog_mid']),true);
 			if (is_null($member_id)) continue;
 			$by=import_id_remap_get('member',strval($row['wlog_addedby']));
 			$id_new=ocf_make_warning($member_id,@html_entity_decode($row['wlog_contact_content'],ENT_QUOTES,get_charset()),$by,$row['wlog_date']);
-	
+
 			import_id_remap_put('warning',strval($row['id']),$id_new);
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *

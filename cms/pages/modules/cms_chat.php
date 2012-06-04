@@ -40,7 +40,7 @@ class Module_cms_chat
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -78,7 +78,7 @@ class Module_cms_chat
 		require_css('chat');
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='ban') return $this->chat_ban();
 		if ($type=='unban') return $this->chat_unban();
 		if ($type=='room') return $this->moderate_chat_room();
@@ -88,10 +88,10 @@ class Module_cms_chat
 		if ($type=='ed') return $this->chat_edit_message();
 		if ($type=='_ed') return $this->_chat_edit_message();
 		if ($type=='misc') return $this->chat_choose_room();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The main user interface for choosing a chat room to moderate.
 	 *
@@ -146,7 +146,7 @@ class Module_cms_chat
 			}
 		}
 		if ($fields->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
-	
+
 		$results_table=results_table(do_lang_tempcode('ROOMS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 		return do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'c59cb6c8409d0e678b05628d92e423db','TITLE'=>$title,'INTRODUCTION'=>$introtext,'CONTENT'=>$results_table,'LINKS'=>array()));
 	}
@@ -351,7 +351,7 @@ class Module_cms_chat
 			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-		
+
 		$room_id=$myrow['room_id'];
 		check_chatroom_access($room_id);
 
@@ -408,7 +408,7 @@ class Module_cms_chat
 		else
 		{
 			$message_id=get_param_integer('id');
-			
+
 			$room_id=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','room_id',array('id'=>$message_id));
 			if (is_null($room_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			check_chatroom_access($room_id);
@@ -599,7 +599,7 @@ class Module_cms_chat
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		$title=get_page_title('DELETE_SOME_MESSAGES');
-		
+
 		$room_id=get_param_integer('room_id');
 		check_chatroom_access($room_id);
 
@@ -621,7 +621,7 @@ class Module_cms_chat
 		}
 
 		if ($count==0) warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
-		
+
 		decache('side_shoutbox');
 
 		$num_remaining=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room_id));
@@ -636,7 +636,7 @@ class Module_cms_chat
 		// Redirect
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 }
 
 

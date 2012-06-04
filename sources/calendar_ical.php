@@ -217,7 +217,7 @@ function ical_import($file_name)
 	$events=explode('BEGIN:VEVENT',$whole);
 
 	$calendar_nodes=array();
-	
+
 	$new_type=NULL;
 
 	foreach($events as $key=>$items)
@@ -300,7 +300,7 @@ function get_event_data_ical($calendar_nodes)
 
 //	if (array_key_exists('LOCATION',$calendar_nodes))
 //		$geo_position=$calendar_nodes['LOCATION'];
-	
+
 
 	if (array_key_exists('RRULE',$calendar_nodes))
 	{
@@ -338,7 +338,7 @@ function get_event_data_ical($calendar_nodes)
 	{
 		$type=strtolower($calendar_nodes['CATEGORIES']);		
 	}
-	
+
 	// Check existancy of category	
 	$typeid=NULL;
 
@@ -349,7 +349,7 @@ function get_event_data_ical($calendar_nodes)
 		if (strtolower($type)==strtolower(get_translated_text($row['t_title'])))
 			$typeid=$row['id'];
 	}
-	
+
 
 	if (array_key_exists('SUMMARY',$calendar_nodes))
 	{

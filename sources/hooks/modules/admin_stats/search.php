@@ -29,7 +29,7 @@ class Hook_admin_stats_search
 	function info()
 	{
 		require_lang('search');
-		
+
 		return array(
 			array('search'=>'SEARCH_STATISTICS',),
 			array('searchstats',array('_SELF',array('type'=>'search'),'_SELF'),do_lang('SEARCH_STATISTICS'),('DESCRIPTION_SEARCH_STATISTICS')),

@@ -256,7 +256,7 @@ class Hook_paypal
 			$user_details['zip']=get_ocp_cpf('post_code');
 			$user_details['country']=get_ocp_cpf('country');
 		}
-		
+
 		return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array('ITEMS'=>$items,'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'ORDER_ID'=>strval($order_id),'NOTIFICATION_TEXT'=>$notification_text,'MEMBER_ADDRESS'=>$user_details));
 	}
 

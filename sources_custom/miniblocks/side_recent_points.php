@@ -35,10 +35,10 @@ foreach ($gifts as $gift)
 	if (is_null($from_name)) continue;
 	if (is_null($to_name)) continue;
 	if ($amount<=0) continue;
-	
+
 	$from_link=hyperlink($from_url,$from_name,false,true);
 	$to_link=hyperlink($to_url,$to_name,false,true);
-	
+
 	echo '<tr>';
 //	echo '<td>'.$from_link->evaluate().'</td>';
 	echo '<td>'.$to_link->evaluate().'</td>';

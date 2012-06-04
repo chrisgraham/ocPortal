@@ -46,7 +46,7 @@ class Hook_orphaned_uploads
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -111,7 +111,7 @@ class Hook_orphaned_uploads
 			while (($file=readdir($dh))!==false)
 			{
 				if (in_array($file,array('filedump','auto_thumbs','website_specific','index.html','.htaccess'))) continue;
-	
+
 				if ($file[0]!='.')
 				{
 					if (is_file($_dir.'/'.$file))

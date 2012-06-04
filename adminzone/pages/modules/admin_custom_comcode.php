@@ -44,7 +44,7 @@ class Module_admin_custom_comcode extends standard_aed_module
 	{
 		return array_merge(array('misc'=>'CUSTOM_COMCODE'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -61,7 +61,7 @@ class Module_admin_custom_comcode extends standard_aed_module
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -69,7 +69,7 @@ class Module_admin_custom_comcode extends standard_aed_module
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('custom_comcode');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -172,9 +172,9 @@ class Module_admin_custom_comcode extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','tag_tag ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);

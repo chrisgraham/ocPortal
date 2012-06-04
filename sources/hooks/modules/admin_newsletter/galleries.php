@@ -31,7 +31,7 @@ class Hook_whats_news_galleries
 		if (!addon_installed('galleries')) return NULL;
 
 		require_lang('galleries');
-	
+
 		require_code('galleries');
 		return array(nice_get_gallery_tree(NULL,NULL,false,false,true),do_lang('GALLERIES'));
 	}
@@ -49,7 +49,7 @@ class Hook_whats_news_galleries
 		if (!addon_installed('galleries')) return array();
 
 		require_lang('galleries');
-	
+
 		$new=new ocp_tempcode();
 
 		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'');
@@ -80,7 +80,7 @@ class Hook_whats_news_galleries
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
 			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'dfe5850aa67c0cd00ff7d465248b87a5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
 		}
-	
+
 		return array($new,do_lang('GALLERIES','','','',$lang));
 	}
 

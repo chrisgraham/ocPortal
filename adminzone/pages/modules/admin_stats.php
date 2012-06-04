@@ -136,7 +136,7 @@ class Module_admin_stats
 			{
 				$GLOBALS['SITE_DB']->alter_table_field('stats','the_page','SHORT_TEXT');
 			}
-			
+
 			if ($upgrade_from<7)
 			{
 				$GLOBALS['SITE_DB']->delete_table_field('stats','regionality');
@@ -152,7 +152,7 @@ class Module_admin_stats
 	function get_entry_points()
 	{
 		require_lang('stats');
-		
+
 		$ret=array('misc'=>'SITE_STATISTICS','overview'=>'OVERVIEW_STATISTICS','users_online'=>'USERS_ONLINE_STATISTICS','submission_rates'=>'SUBMISSION_STATISTICS','referrers'=>'TOP_REFERRERS','keywords'=>'TOP_SEARCH_KEYWORDS','page'=>'PAGES_STATISTICS','load_times'=>'LOAD_TIMES','clear'=>'CLEAR_STATISTICS','install_data'=>'INSTALL_GEOLOCATION_DATA');
 		$hooks=find_all_hooks('modules','admin_stats');
 		foreach (array_keys($hooks) as $hook)
@@ -1351,7 +1351,7 @@ class Module_admin_stats
 					$to_insert['begin_num'][]=$_data[0]; // FUDGEFUDGE. Intentionally passes in as strings, to workaround problem in PHP integer sizes (can't store unsigned data type)
 					$to_insert['end_num'][]=$_data[1];
 					$to_insert['country'][]=substr($_data[2],0,2);
-					
+
 					if (count($to_insert['begin_num'])==100)
 					{
 						$GLOBALS['SITE_DB']->query_insert('ip_country',$to_insert);

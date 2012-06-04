@@ -20,7 +20,7 @@
 
 class Block_main_comments
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_comments
 		$info['parameters']=array('param','page','extra_param_from','reverse','forum','invisible_if_no_comments','reviews');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_comments
 		$info['ttl']=60*5;
 		return $info;
 	}*/
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */

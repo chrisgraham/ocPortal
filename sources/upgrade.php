@@ -170,16 +170,16 @@ function upgrade_script()
 ";
 					$show_more_link=false;
 					break;
-		
+
 				case 'decache':
 					clear_caches_2();
 					echo '<p>'.do_lang('SUCCESS').'</p>';
 					break;
-		
+
 				case 'check_perms':
 					echo check_perms();
 					break;
-		
+
 				case 'fix_perms':
 					echo fix_perms();
 					break;
@@ -188,13 +188,13 @@ function upgrade_script()
 					set_option('site_closed','0');
 					echo '<p>'.do_lang('SUCCESS').'</p>';
 					break;
-		
+
 				case 'close_site':
 					set_option('closed',do_lang('FU_CLOSED_FOR_UPGRADES',get_site_name()));
 					set_option('site_closed','1');
 					echo '<p>'.do_lang('SUCCESS').'</p>';
 					break;
-		
+
 				case 'file_upgrade':
 					if (get_param('tar_url','')=='') echo do_lang('FU_FILE_UPGRADE_INFO');
 					echo do_lang('FU_FILE_UPGRADE_INFO_MANUAL');
@@ -218,7 +218,7 @@ function upgrade_script()
 					} else
 					{
 						if (post_param('url','')=='') warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
-						
+
 						$temp_path=ocp_tempnam('ocpfu');
 						$myfile=fopen($temp_path,'wb');
 						http_download_file(post_param('url'),NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$myfile);
@@ -378,9 +378,9 @@ function upgrade_script()
 						echo '<p>'.do_lang('SUCCESS').'</p>';
 						@unlink($temp_path);
 					}
-					
+
 					unset($_POST['news_id']);
-					
+
 					break;
 
 				case 'integrity_scan':
@@ -817,7 +817,7 @@ function up_do_login($message=NULL)
 	</p>
 	</form>
 	";
-	
+
 	echo "
 	<hr />
 	<div style=\"font-size: 0.8em\">
@@ -846,7 +846,7 @@ function up_do_header()
 
 		<title>{$upgrader_title}</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-		
+
 		<style type="text/css">
 END;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{[\$+].*\}#','',file_get_contents(get_file_base().'/themes/default/css/global.css'))))));
@@ -1111,7 +1111,7 @@ function move_modules()
 			}
 		}
 	}
-	
+
 	return array($out,$outr);
 }
 
@@ -1186,7 +1186,7 @@ function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,
 			if ($file=='files_previous.dat') continue;
 
 			$is_dir=@is_dir($dir.$file);
-	
+
 			if (($is_dir) && (is_readable($dir.$file)))
 			{
 				list($_outdated__outdated_original_and_override,$_outdated__possibly_outdated_override,$_outdated__missing_original_but_has_override,$_outdated__uninstalled_addon_but_has_override)=check_outdated__handle_overrides($dir.$file.'/',$rela.$file.'/',$master_data,$hook_files,$allow_merging);
@@ -1256,7 +1256,7 @@ function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,
 						{
 							$outdated__possibly_outdated_override.='<li><kbd>'.escape_html($rela.$file).'</kbd></li>';
 						}
-						
+
 						unset($master_data[$rela.$file]);
 					} elseif (array_key_exists(str_replace('_custom','',preg_replace('#themes/[^/]*/#','themes/default/',$rela)).$file,$master_data))
 					{
@@ -1349,7 +1349,7 @@ function check_alien($old_files,$files,$dir,$rela='',$raw=false)
 						}
 						if (!$ok) continue;
 					}
-	
+
 					$alien.=check_alien($old_files,$files,$dir.$file.'/',$rela.$file.'/',$raw);
 				}
 			} else
@@ -1476,10 +1476,10 @@ function version_specific()
 			actual_delete_zone_lite('personalzone');
 		}
 		set_value('version',float_to_raw_string($version_files));
-		
+
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -1565,7 +1565,7 @@ function upgrade_modules()
 			}
 		}
 	}
-	
+
 	return $out;
 }
 
@@ -1597,7 +1597,7 @@ function ocf_upgrade()
 		install_ocf($version_database);
 
 		set_value('ocf_version',float_to_raw_string($version_files));
-		
+
 		return true;
 
 	} return false;
@@ -1623,9 +1623,9 @@ function fix_mysql_database_charset()
 function change_mysql_database_charset($new_charset,$db,$reencode=false)
 {
 	@ob_end_clean();
-	
+
 	if (function_exists('set_time_limit')) @set_time_limit(0);
-	
+
 	$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
@@ -1652,7 +1652,7 @@ function change_mysql_database_charset($new_charset,$db,$reencode=false)
 	{
 		echo 'Changing character sets for: '.$table."\n";
 		flush();
-		
+
 		$fields=$db->query_select('db_meta',array('m_name','m_table','m_type'),array('m_table'=>$table));
 
 		$db->query('ALTER TABLE '.$db->get_table_prefix().$table.' CHARACTER SET '.$new_charset);
@@ -2373,7 +2373,7 @@ function upgrade_sharedinstall_sites()
 		$GLOBALS['FORUM_DB']=$GLOBALS['SITE_DB'];
 
 		// NB: File path will be ok
-	
+
 		// NB: Other internal caching could need changing in the future, but works at time of writing
 
 		// Go!

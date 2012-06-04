@@ -36,7 +36,7 @@ function menu_editor_add_new_page()
 function makeFieldSelected(ob)
 {
 	if (ob.className=='menu_editor_selected_field') return;
-	
+
 	ob.className='menu_editor_selected_field';
 	var changed=false;
 	for (var i=0;i<ob.form.elements.length;i++)
@@ -93,10 +93,10 @@ function menuEditorHandleKeypress(e)
 {
 	if (typeof e=='undefined') var e=window.event;
 	var t=e.srcElement?e.srcElement:e.target;
-	
+
 	var up=(e.keyCode?e.keyCode:e.charCode)==38;
 	var down=(e.keyCode?e.keyCode:e.charCode)==40;
-	
+
 	handleOrdering(t,up,down);
 }
 
@@ -278,7 +278,7 @@ function handleOrdering(t,up,down)
 
 		return false; // Cancel event (we do not want cursor to move)
 	}
-	
+
 	return true;
 }
 
@@ -471,7 +471,7 @@ function validateMenu(missingCaptionError,missingURLError)
 function delete_menu_branch(ob)
 {
 	var id=ob.id.substring(4,ob.id.length);
-	
+
 	if ((typeof window.showModalDialog!='undefined'{+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END}) || (ob.form.elements['branch_type_'+id]!='page'))
 	{
 		var choices=['{!INPUTSYSTEM_CANCEL^;}','{!DELETE^;}','{!MOVETO_MENU^;}'];

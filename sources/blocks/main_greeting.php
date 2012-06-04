@@ -37,7 +37,7 @@ class Block_main_greeting
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -62,9 +62,9 @@ class Block_main_greeting
 		unset($map);
 
 		$forum=get_forum_type();
-		
+
 		$out=new ocp_tempcode();
-	
+
 		if ($forum!='none')
 		{
 			// Standard welcome back vs into greeting
@@ -83,14 +83,14 @@ class Block_main_greeting
 				$out->attach(paragraph(do_lang_tempcode('WELCOME_BACK',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member))),'gfgdf9gjd'));
 			}
 		}
-	
+
 		$message=get_option('welcome_message');
 		if (has_actual_page_access(get_member(),'admin_config'))
 		{
 			if ($message!='') $message.=' [[page="_SEARCH:admin_config:category:SITE#group_GENERAL"]'.do_lang('EDIT').'[/page]]';
 		}
 		$out->attach(comcode_to_tempcode($message,NULL,true));
-	
+
 		return $out;
 	}
 

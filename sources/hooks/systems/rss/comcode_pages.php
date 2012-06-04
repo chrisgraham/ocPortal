@@ -106,7 +106,7 @@ class Hook_rss_comcode_pages
 				$view_url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
 
 				$if_comments=new ocp_tempcode();
-	
+
 				$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 			}
 		}

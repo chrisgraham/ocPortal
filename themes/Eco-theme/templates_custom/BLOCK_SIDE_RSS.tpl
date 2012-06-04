@@ -13,7 +13,7 @@
 			{+END}
 		</li>
 	{+END}
-	
+
 	{+START,IF,{TICKER}}
 		<li class="search-middle">
 		<h6>	{+START,BOX,{TITLE},,{$?,{$GET,in_panel},panel,classic},tray_open}

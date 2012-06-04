@@ -84,7 +84,7 @@ function crc32_file($filename)
 	}
 
 	return crc32(file_get_contents($filename));
-	
+
 	/* The below code is not 64-bit compatible :( */
 
 /*   $f = @fopen($filename,'rb');
@@ -124,7 +124,7 @@ function crc32_file($filename)
 		if ($data===false) break;
       $len = strlen($data);
 		if ($len==0) break;
-	
+
       for ($i = 0; $i < $len; $i++)
       {
          $byte = $reflect8table[ord($data[$i])];
@@ -161,7 +161,7 @@ function create_zip_file($file_array,$stream=false,$get_offsets=false)
 
 		flush(); // Works around weird PHP bug that sends data before headers, on some PHP versions
 	}
-	
+
 	$out='';
 
 	$offset=0;
@@ -245,7 +245,7 @@ function create_zip_file($file_array,$stream=false,$get_offsets=false)
 		$size+=strlen($packed)+strlen($file['name']);
 		$out.=$packed;
 		$out.=$file['name'];
-		
+
 		if ($stream)
 		{
 			echo $out;

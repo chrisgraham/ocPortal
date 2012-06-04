@@ -13,7 +13,7 @@
 							{SUBSCRIBED}
 						</ul>
 					{+END}
-					
+
 					<br />
 				{+END}
 
@@ -103,7 +103,7 @@
 
 								{+START,IF_PASSED,TO_DAY}{+START,IF,{$NEQ,{TO_DAY},{DAY}}}
 									&ndash;
-									
+
 									{+START,IF,{$VALUE_OPTION,html5}}
 										<time class="dtend" datetime="{TO_TIME_VCAL*}" itemprop="endDate">{TO_DAY*}</time>
 									{+END}

@@ -53,7 +53,7 @@ class Hook_content_meta_aware_comcode_page
 			'add_time_field'=>'p_add_date',
 			'edit_time_field'=>'p_edit_date',
 			'validated_field'=>'p_validated',
-			
+
 			'addon_name'=>'core_comcode_pages',
 		);
 	}

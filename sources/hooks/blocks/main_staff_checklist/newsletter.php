@@ -34,9 +34,9 @@ class Hook_checklist_newsletter
 		$limit_hours=intval(get_option('news_update_time',true));
 
 		$limit_hours=intval($limit_hours/3); // 3 news pieces (+ other stuff) per newsletter seems reasonable
-	
+
 		require_lang('newsletter');
-	
+
 		$date=get_value('newsletter_send_time');
 
 		$seconds_ago=mixed();

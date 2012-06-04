@@ -47,7 +47,7 @@ function countdown(id,direction,tailing)
 		multiplier*=multiples[i];
 		total+=window.parseInt(us[i])*multiplier;
 	}
-	
+
 	if (total>0)
 	{
 		total+=direction;
@@ -99,7 +99,7 @@ function carousel_move(id,amount)
 function _carousel_move(carousel,amount)
 {
 	var main=get_elements_by_class_name(carousel,'main')[0];
-	
+
 	if (amount>0)
 	{
 		main.scrollLeft+=3;
@@ -143,7 +143,7 @@ function _update_faders(main)
 
 	var left=imgs[imgs.length-2];
 	var right=imgs[imgs.length-1];
-	
+
 	left.style.visibility=(main.scrollLeft==0)?'hidden':'visible';
 	right.style.visibility=(main.scrollLeft+findWidth(main)>=main.scrollWidth-1)?'hidden':'visible';
 }
@@ -292,7 +292,7 @@ var tick_pos=[];
 function ticker_tick(id,width)
 {
 	if (!window.focused) return;
-	
+
 	var e=document.getElementById(id);
 	if (!e) return;
 	if (e.mouseisover) return;

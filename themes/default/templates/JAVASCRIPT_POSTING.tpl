@@ -25,7 +25,7 @@ function addAttachment(startNum,posting_field_name)
 		var btn=document.getElementById('add_another_button');
 		if (btn) btn.disabled=true;
 	}
-	
+
 	if (typeof window.trigger_resize!='undefined') trigger_resize();
 }
 

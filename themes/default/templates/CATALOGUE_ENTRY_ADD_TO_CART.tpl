@@ -7,7 +7,7 @@
 					<input type="hidden" id="quantity" name="quantity" value="1" size="5"/>
 					<input type="hidden" name="product_id" value="{PRODUCT_ID*}"/>	
 				</form>
-				
+
 				{+START,IF,{$IS_GUEST}}
 					<p class="associated_details">{!COOKIES_AS_GUEST}</p>
 				{+END}

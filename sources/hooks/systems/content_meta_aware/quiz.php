@@ -53,11 +53,11 @@ class Hook_content_meta_aware_quiz
 			'add_time_field'=>'q_add_date',
 			'edit_time_field'=>NULL,
 			'validated_field'=>'q_validated',
-			
+
 			'addon_name'=>'quizzes',
-			
+
 			'module'=>'quiz',
 		);
 	}
-	
+
 }

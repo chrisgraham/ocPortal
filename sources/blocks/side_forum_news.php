@@ -20,7 +20,7 @@
 
 class Block_side_forum_news
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_side_forum_news
 		$info['parameters']=array('param','forum','date_key','title');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_side_forum_news
 		$info['ttl']=15;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -65,7 +65,7 @@ class Block_side_forum_news
 		require_css('news');
 		require_lang('news');
 		require_css('side_blocks');
-	
+
 		$limit=array_key_exists('param',$map)?intval($map['param']):6;
 		$forum_name=array_key_exists('forum',$map)?$map['forum']:do_lang('NEWS');
 

@@ -24,7 +24,7 @@
 function authors_script()
 {
 	require_lang('authors');
-	
+
 	$start=get_param_integer('start',0);
 	$max=get_param_integer('max',300);
 
@@ -46,7 +46,7 @@ function authors_script()
 	$rows=array_unique($rows);
 
 	$field_name=get_param('field_name');
-	
+
 	$content=new ocp_tempcode();
 	$i=0;
 	foreach ($rows as $author=>$table)
@@ -61,11 +61,11 @@ function authors_script()
 				$content->attach(do_template('AUTHOR_POPUP_WINDOW_UNDEFINED',array('_GUID'=>'6210be6d1eef4bc2bda7f49947301f97','FIELD_NAME'=>$field_name,'AUTHOR'=>$author)));
 			}
 		}
-		
+
 		$i++;
 	}
 	if ($content->is_empty()) $content=paragraph(do_lang_tempcode('NO_ENTRIES'),'dfids09fi;lk;3');
-	
+
 	if ($i>=$start+$max)
 	{
 		$keep=symbol_tempcode('KEEP');
@@ -74,7 +74,7 @@ function authors_script()
 	{
 		$next_link=NULL;
 	}
-	
+
 	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'ab8d8c9d276530d82ddd84202aacf32f','TITLE'=>do_lang_tempcode('CHOOSE_AUTHOR'),'NEXT_LINK'=>$next_link,'CONTENT'=>$content));
 	$echo->evaluate_echo();
 }
@@ -198,5 +198,5 @@ function merge_authors($from,$to)
 
 	log_it('MERGE_AUTHORS',$from,$to);
 }
-	
+
 

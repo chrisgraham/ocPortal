@@ -167,7 +167,7 @@ function init__validation()
 		function do_lang($a,$param_a=NULL,$param_b=NULL,$param_c=NULL,$lang=NULL,$require_result=true)
 		{
 			if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
-			
+
 			unset($lang);
 
 			switch ($a)
@@ -196,7 +196,7 @@ function init__validation()
 			return 'none';
 		}
 	}
-	
+
 	if (!function_exists('ocp_srv'))
 	{
 		/**
@@ -327,7 +327,7 @@ function init__validation()
 		'script'=>1, // If we have one of these as self-closing in IE... it kills it!
 	);
 	if ($strict_form_accessibility) unset($POSSIBLY_EMPTY_TAGS['textarea']);
-	
+
 	global $MUST_SELFCLOSE_TAGS;
 	$MUST_SELFCLOSE_TAGS=array(
 		'img'=>1,
@@ -584,7 +584,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 	if (!isset($GLOBALS['MAIL_MODE'])) $GLOBALS['MAIL_MODE']=false;
 
 	$errors=array();
-	
+
 	$bad_root=false;
 
 	$token=_get_next_tag();
@@ -935,7 +935,7 @@ function test_entity($offset=0)
 			}
 		}
 	}
-	
+
 	if (count($errors)==0) return NULL;
 	return $errors;
 }
@@ -949,7 +949,7 @@ function test_entity($offset=0)
 function fix_entities($in)
 {
 	global $ENTITIES;
-	
+
 	$out='';
 
 	$len=strlen($in);
@@ -957,7 +957,7 @@ function fix_entities($in)
 	for ($i=0;$i<$len;$i++)
 	{
 		$out.=$in[$i];
-		
+
 		if (substr($in,$i,9)=='<![CDATA[')
 		{
 			$cdata=true;
@@ -987,7 +987,7 @@ function fix_entities($in)
 			}
 		}
 	}
-	
+
 	return $out;
 }
 
@@ -1068,7 +1068,7 @@ function _get_next_tag()
 				// Can't have loose text in form/body/etc
 				// 'x' is there for when called externally, checking on an x that has replaced, for example, a directive tag (which isn't actual text - so can't trip the error)
 				if (($in_no_mans_land!='x') && (trim($in_no_mans_land)!='') && (isset($TEXT_NO_BLOCK[$PARENT_TAG])) && ($GLOBALS['BLOCK_CONSTRAIN'])) $errors[]=array('XHTML_TEXT_NO_BLOCK',$PARENT_TAG);
-				
+
 				if (($next=='<') && (isset($OUT[$POS+2])) && ($OUT[$POS]=='!'))
 				{
 					if (($OUT[$POS+1]=='-') && ($OUT[$POS+2]=='-'))

@@ -28,7 +28,7 @@ class galleries_1_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('galleries');
 		require_code('galleries2');
 
@@ -43,7 +43,7 @@ class galleries_1_test_set extends ocp_test_case
 
 		$this->assertTrue('http://www.google.com'==$GLOBALS['SITE_DB']->query_value('images','url',array('id'=>$this->glry_id)));
 	}
-	
+
 	function tearDown()
 	{
 		delete_image($this->glry_id,false);

@@ -221,7 +221,7 @@ function page_not_found($codename,$zone)
 	foreach ($all_pages_in_zone as $possibility)
 	{
 		if (is_integer($possibility)) $possibility=strval($possibility); // e.g. '404' page has been converted to integer by PHP, grr
-		
+
 		$from=str_replace('cms_','',str_replace('admin_','',$possibility));
 		$to=str_replace('cms_','',str_replace('admin_','',$codename));
 		//$dist=levenshtein($from,$to);  If we use this, change > to < also
@@ -369,7 +369,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included=false)
 {
 	global $COMCODE_PARSE_TITLE;
-	
+
 	if (is_null($new_comcode_page_row['p_submitter']))
 	{
 		$as_admin=true;
@@ -403,7 +403,7 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 		$comcode_page_row=$new_comcode_page_row;
 		$GLOBALS['SITE_DB']->query_insert('comcode_pages',$comcode_page_row,false,true);
 	}
-	
+
 	return array($html,$comcode_page_row,$title_to_use);
 }
 

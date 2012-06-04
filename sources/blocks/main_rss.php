@@ -39,7 +39,7 @@ class Block_main_rss
 		$info['parameters']=array('param','max_entries','title','copyright');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -87,7 +87,7 @@ class Block_main_rss
 		$info['ttl']=intval(get_option('rss_update_time'));
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -136,7 +136,7 @@ class Block_main_rss
 		global $NEWS_CATS;
 		$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 		$NEWS_CATS=list_to_map('id',$NEWS_CATS);
-	
+
 		if (!array_key_exists('title',$rss->gleamed_feed)) $rss->gleamed_feed['title']=do_lang_tempcode('RSS_STREAM');
 		if (array_key_exists('title',$map)) $rss->gleamed_feed['title']=$map['title'];
 
@@ -175,7 +175,7 @@ class Block_main_rss
 			$full_url=($_full_url!='')?hyperlink($_full_url,do_lang_tempcode('VIEW'),true,false,$_title):new ocp_tempcode();
 
 			if (array_key_exists('category',$rss->gleamed_items)) $_title=do_template('BLOCK_MAIN_RSS_TITLE',array('_GUID'=>'d962c1165564f080329decffeab88ba7','CATEGORY'=>$rss->gleamed_items['category'],'TITLE'=>$_title));
-	
+
 			if (!array_key_exists('news',$item))
 			{
 				$news=(array_key_exists('news_article',$item))?$item['news_article']:'';
@@ -201,7 +201,7 @@ class Block_main_rss
 				$tails=do_template('BLOCK_MAIN_RSS_LIST_FIRST',array('_GUID'=>'5ce8a5f1fd8a9487c01b63e791618589','X'=>$author));
 				$tails->attach(do_template('BLOCK_MAIN_RSS_LIST_LAST',array('_GUID'=>'f199850d1b76cc4a6774731e1f89762e','X'=>$full_url)));
 			} else $tails=new ocp_tempcode();
-	
+
 			if (array_key_exists('category',$item))
 			{
 				global $IMG_CODES;
@@ -218,15 +218,15 @@ class Block_main_rss
 					$category=do_template('BLOCK_MAIN_RSS_CATEGORY',array('_GUID'=>'9b70a0d7524b62ea74bdb8071f4e88b5','IMG'=>$img,'CATEGORY'=>$item['category']));
 				} else $category=do_template('BLOCK_MAIN_RSS_CATEGORY_NO_IMG',array('_GUID'=>'772e44215bd2682e51a96b7480753ded','CATEGORY'=>$item['category']));
 			} else $category=new ocp_tempcode();
-			
+
 			if (array_key_exists('add_date',$item))
 			{
 				$__title=do_template('BLOCK_MAIN_RSS_FROM_TITLE',array('_GUID'=>'ba9d262682d2e7d74c393508c8d49dd6','FEED_URL'=>$url,'NEWS_TITLE'=>$_title,'DATE'=>$item['add_date']));
 			} else $__title=$_title;
-	
+
 			$content->attach(do_template('BLOCK_MAIN_RSS_SUMMARY',array('_GUID'=>'9ca64090348263449ea1fcea75c8ed5f','FEED_URL'=>$url,'NEWS_FULL'=>$news_full,'DATE'=>array_key_exists('add_date',$item)?$item['add_date']:'','DATE_RAW'=>array_key_exists('clean_add_date',$item)?strval($item['clean_add_date']):'','TAILS'=>$tails,'AUTHOR'=>$author,'CATEGORY'=>$category,'FULL_URL'=>$full_url,'FULL_URL_RAW'=>$_full_url,'NEWS_TITLE'=>$__title,'NEWS'=>$news)));
 		}
-	
+
 		if (array_key_exists('author',$rss->gleamed_feed))
 		{
 			$__author=NULL;

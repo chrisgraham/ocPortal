@@ -338,7 +338,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__topic_list()
 	{
 		require_css('ocf');
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('TOPIC_LIST',array(
@@ -363,7 +363,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__administrative__ocf_edit_forum_screen()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$orderings	="<option>1</option><option>2</option><option>3</option>";
 
@@ -403,7 +403,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__administrative__ocf_history_screen()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$content = do_lorem_template('OCF_HISTORY_POST',array('LABEL'=>lorem_phrase(),'RAND'=>placeholder_random(),'LINK'=>placeholder_url(),'BUTTONS'=>lorem_phrase(),'ACTION'=>lorem_phrase(),'ACTION_DATE_AND_TIME'=>placeholder_time(),'ACTION_DATE_AND_TIME_RAW'=>placeholder_date_raw(),'CREATE_DATE_AND_TIME_RAW'=>placeholder_date_raw(),'CREATE_DATE_AND_TIME'=>placeholder_time(),'OWNER_MEMBER'=>lorem_phrase(),'ALTERER_MEMBER'=>lorem_phrase(),'BEFORE'=>lorem_phrase()));
 
@@ -428,7 +428,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_rank_image()
 	{
 		require_css('ocf');
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('OCF_RANK_IMAGE',array(
@@ -451,7 +451,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_isolated_post()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$first_unread = do_lorem_template('OCF_TOPIC_FIRST_UNREAD');
 
@@ -519,7 +519,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__block_side_ocf_personal_topics()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
@@ -549,7 +549,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_forum_topic_list_line()
 	{
 		require_css('ocf');
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('OCF_FORUM_TOPIC_LIST_LINE',array(
@@ -570,7 +570,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_forum_list_line()
 	{
 		require_css('ocf');
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('OCF_FORUM_LIST_LINE',array(
@@ -592,7 +592,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_forum_intro_question_popup()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$content = do_lorem_template('OCF_FORUM_INTRO_QUESTION_POPUP',array('QUESTION'=>lorem_phrase(),'ANSWER'=>lorem_phrase()));
 
@@ -613,7 +613,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_topic_post_clean_wrap()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$first_unread = do_lorem_template('OCF_TOPIC_FIRST_UNREAD');
 
@@ -652,7 +652,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_wrapper()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$notifications = do_lorem_template('OCF_NOTIFICATION',array('ADDITIONAL_POSTS'=>placeholder_number(),'_ADDITIONAL_POSTS'=>lorem_phrase(),'ID'=>placeholder_id(),'U_TITLE'=>lorem_phrase(),'IGNORE_URL'=>placeholder_url(),'IGNORE_URL_2'=>placeholder_url(),'REPLY_URL'=>placeholder_url(),'TOPIC_URL'=>placeholder_url(),'POST'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph_html(),'TIME'=>placeholder_date(),'TIME_RAW'=>placeholder_date_raw(),'BY'=>lorem_phrase(),'PROFILE_LINK'=>placeholder_url(),'TYPE'=>lorem_phrase()));
 
@@ -694,7 +694,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_forum_intro_question_screen()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		return array(
 			lorem_globalise(
@@ -718,7 +718,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_forum()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		//buttons
 		$buttons=new ocp_tempcode();
@@ -727,7 +727,7 @@ class Hook_addon_registry_ocf_forum
 			$buttons->attach(do_lorem_template('SCREEN_BUTTON',array('REL'=>lorem_word(),'URL'=>placeholder_url(),'IMG'=>placeholder_img_code('page'),'TITLE'=>lorem_word(),'IMMEDIATE'=>false)));
 		}
 
-		
+
 		//topics
 		$topics = new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
@@ -750,7 +750,7 @@ class Hook_addon_registry_ocf_forum
 			$topics->attach(do_lorem_template('OCF_FORUM_TOPIC_ROW',array('BREADCRUMBS'=>placeholder_breadcrumbs(),'RAW_TIME'=>placeholder_date_raw(),'UNREAD'=>lorem_phrase(),'ID'=>placeholder_random(),'HOVER'=>lorem_phrase(),'PAGES'=>lorem_phrase(),'MARKER'=>$marker,'TOPIC_ROW_LINKS'=>$topic_row_links,'TOPIC_ROW_MODIFIERS'=>$topic_row_modifiers,'POST'=>lorem_phrase(),'EMOTICON'=>$emoticon,'DESCRIPTION'=>lorem_paragraph(),'URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'POSTER'=>$post,'NUM_POSTS'=>placeholder_number(),'NUM_VIEWS'=>placeholder_number(),'LAST_POST'=>$last_post)));
 		}
 
-		
+
 		//categories
 		$categories = new ocp_tempcode();
 		foreach (placeholder_array(1) as $k=>$v)
@@ -770,7 +770,7 @@ class Hook_addon_registry_ocf_forum
 			$categories->attach(do_lorem_template('OCF_FORUM_CATEGORY',array('CATEGORY_ID'=>placeholder_random(),'EXPAND_TYPE'=>'expand','DISPLAY'=>'','CATEGORY_TITLE'=>lorem_phrase(),'CATEGORY_DESCRIPTION'=>lorem_phrase(),'FORUMS'=>$forums)));
 		}
 
-		
+
 		//Wrap the content
 		$notifications = do_lorem_template('OCF_NOTIFICATION',array('ADDITIONAL_POSTS'=>placeholder_number(),'_ADDITIONAL_POSTS'=>lorem_phrase(),'ID'=>placeholder_random(),'U_TITLE'=>lorem_phrase(),'IGNORE_URL'=>placeholder_url(),'IGNORE_URL_2'=>placeholder_url(),'REPLY_URL'=>placeholder_url(),'TOPIC_URL'=>placeholder_url(),'POST'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph_html(),'TIME'=>placeholder_date(),'TIME_RAW'=>placeholder_date_raw(),'BY'=>lorem_phrase(),'PROFILE_LINK'=>placeholder_url(),'TYPE'=>lorem_phrase()));
 
@@ -819,7 +819,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_vforum()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$content = do_lorem_template('OCF_VFORUM',array('CONTENT'=>lorem_phrase()));
 
@@ -864,7 +864,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_whisper_choice_screen()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		return array(
 			lorem_globalise(
@@ -887,7 +887,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_quote_fcomcode()
 	{
 		require_css('ocf');
-		
+
 		return array(
 			lorem_globalise(
 				do_lorem_template('OCF_QUOTE_FCOMCODE',array(
@@ -910,7 +910,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_member_pt_rules_screen()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		return array(
 			lorem_globalise(
@@ -935,7 +935,7 @@ class Hook_addon_registry_ocf_forum
 	function tpl_preview__ocf_posting_screen_posts()
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		$posts = new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
@@ -1036,7 +1036,7 @@ class Hook_addon_registry_ocf_forum
 	function _tpl_preview__ocf_topic_wrap($voted=false)
 	{
 		require_css('ocf');
-		
+
 		require_lang('ocf');
 		require_lang('polls');
 		$warning_details = do_lorem_template('WARNING_TABLE',array('WARNING'=>lorem_phrase()));
@@ -1059,12 +1059,12 @@ class Hook_addon_registry_ocf_forum
 
 			if(!$voted)
 			{
-				
+
 				$answers = new ocp_tempcode();
 				$answer_tpl = new ocp_tempcode();
 				foreach (placeholder_array() as $k=>$v)
 				{
-				
+
 					$answer_tpl->attach(do_lorem_template('OCF_TOPIC_POLL_ANSWER_RADIO',array('REAL_BUTTON'=>'','ID'=>placeholder_random(),'ANSWER'=>lorem_phrase(),'I'=>placeholder_random())));
 				}
 				$answers->attach($answer_tpl);
@@ -1098,7 +1098,7 @@ class Hook_addon_registry_ocf_forum
 
 				$poll->attach(do_lorem_template('OCF_TOPIC_POLL_VIEW_RESULTS',array('ID'=>placeholder_random(),'NUM_CHOICES'=>$num_choices,'PRIVATE'=>$private,'QUESTION'=>lorem_phrase(),'ANSWERS'=>$answers,'REAL_BUTTON'=>'','BUTTON'=>$button,'VOTE_URL'=>placeholder_url(),'MINIMUM_SELECTIONS'=>placeholder_number(),'MAXIMUM_SELECTIONS'=>placeholder_number())));
 			}
-			
+
 			//buttons
 			$buttons = new ocp_tempcode();
 			foreach (placeholder_array(1) as $k=>$v)

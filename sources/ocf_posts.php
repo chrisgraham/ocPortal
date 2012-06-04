@@ -108,7 +108,7 @@ function ocf_display_spacer_post($linked_type,$linked_id)
 {
 	$new_description=mixed();
 	$new_post=mixed();
-	
+
 	if (addon_installed('awards'))
 	{
 		require_code('content');

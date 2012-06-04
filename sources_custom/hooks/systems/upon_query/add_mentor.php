@@ -13,10 +13,10 @@ class upon_query_add_mentor
 	{
 		if (running_script('stress_test_loader')) return;
 		if (get_page_name()=='admin_import') return;
-		
+
 		if (!isset($GLOBALS['FORUM_DB'])) return;
 		if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return;
-		
+
 		//if (strpos($query,$GLOBALS['FORUM_DB']->get_table_prefix().'f_members')!==false && strpos($query,'BY RAND')==false) // to test without registration
 		if (strpos($query,'INTO '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members')!==false)
 		{
@@ -27,7 +27,7 @@ class upon_query_add_mentor
 			$MEMBER_CACHED=NULL;
 
 			if(!isset($SESSION_CACHE) || !is_array($SESSION_CACHE)) $SESSION_CACHE=array();
-			
+
 			$mentor_usergroup=get_option('mentor_usergroup',true);
 			if (is_null($mentor_usergroup)) return;
 

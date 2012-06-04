@@ -51,7 +51,7 @@ function system_gift_transfer($reason,$amount,$member_id)
 	if (array_key_exists($member_id,$TOTAL_POINTS_CACHE)) $TOTAL_POINTS_CACHE[$member_id]+=$amount;
 	if ((array_key_exists($member_id,$POINT_INFO_CACHE)) && (array_key_exists('points_gained_given',$POINT_INFO_CACHE[$member_id])))
 		$POINT_INFO_CACHE[$member_id]['points_gained_given']+=$amount;
-	
+
 	if (get_forum_type()=='ocf')
 	{
 		require_code('ocf_posts_action');

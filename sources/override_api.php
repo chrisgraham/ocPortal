@@ -32,7 +32,7 @@ function get_function_hash($code,$function)
 	{
 		return md5(preg_replace('#\s#','',$matches[1]));
 	}
-	
+
 	return '';
 }
 
@@ -49,7 +49,7 @@ function insert_code_before__by_linenum(&$code,$function,$linenum,$newcode)
 {
 	$pos=strpos($code,'function '.$function.'(');
 	if ($pos===false) return false;
-	
+
 	$pos=strpos($code,chr(10),$pos)+1;
 	for ($i=0;$i<$linenum;$i++)
 	{
@@ -58,7 +58,7 @@ function insert_code_before__by_linenum(&$code,$function,$linenum,$newcode)
 		$pos=$next+1;
 	}
 	$code=substr($code,0,$pos)."\t".$newcode.chr(10).substr($code,$pos);
-	
+
 	return true;
 }
 
@@ -90,7 +90,7 @@ function insert_code_before__by_command(&$code,$function,$command,$newcode,$inst
 {
 	$pos=strpos($code,'function '.$function.'(');
 	if ($pos===false) return false;
-	
+
 	for ($i=0;$i<$instance_of_command;$i++)
 	{
 		$next=strpos($code,$command,$pos);
@@ -117,7 +117,7 @@ function insert_code_after__by_command(&$code,$function,$command,$newcode,$insta
 {
 	$pos=strpos($code,'function '.$function.'(');
 	if ($pos===false) return false;
-	
+
 	for ($i=0;$i<$instance_of_command;$i++)
 	{
 		$next=strpos($code,$command,$pos);
@@ -143,7 +143,7 @@ function remove_code(&$code,$function,$command,$instance_of_command=1)
 {
 	$pos=strpos($code,'function '.$function.'(');
 	if ($pos===false) return false;
-	
+
 	for ($i=0;$i<$instance_of_command;$i++)
 	{
 		$next=strpos($code,$command,$pos);
@@ -153,7 +153,7 @@ function remove_code(&$code,$function,$command,$instance_of_command=1)
 	$old_pos=$pos;
 	$pos=strpos($code,chr(10),$pos);
 	$code=substr($code,0,$pos).chr(10).substr($code,$old_pos+1);
-	
+
 	return true;
 }
 

@@ -32,7 +32,7 @@ function get_ticket_forum_id($member=NULL,$ticket_type=NULL,$create=false,$silen
 {
 	static $fid=NULL;
 	if (!is_null($fid)) return $fid;
-	
+
 	$root_forum=get_option('ticket_forum_name');
 
 	// Check the root ticket forum is valid
@@ -59,7 +59,7 @@ function get_ticket_forum_id($member=NULL,$ticket_type=NULL,$create=false,$silen
 		if (count($rows)==0)
 			$fid=ocf_make_forum($username,do_lang('SUPPORT_TICKETS_FOR_MEMBER',$username),$category_id,NULL,$fid);
 		else $fid=$rows[0]['id'];
-		
+
 	}
 	if ((!is_null($ticket_type)) && (get_option('ticket_type_forums')=='1'))
 	{

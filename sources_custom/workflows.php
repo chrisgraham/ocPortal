@@ -37,7 +37,7 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
 		// Bail out
 		fatal_exit(do_lang_tempcode('_MISSING_RESOURCE', get_translated_text($workflow_id)));
 	}
-	
+
 	// Have we been given a valid workflow to use?
 	if (!is_null($workflow_id))
 	{
@@ -73,7 +73,7 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
 			$workflow_id = $default_workflow;
 		}
 	}
-	
+
 	// Now we know the workflow is OK, what about the content?
 	// Look through the content-meta-aware hooks to find it.
 	// We don't need to worry too much about multiple hooks with this
@@ -86,12 +86,12 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
 	{
 		// Skip if this is not the hook we're after
 		if ($hook != $content_type) continue;
-		
+
 		// Otherwise load and instantiate the hook
 		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($hook));
 		$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($hook),true);
 		if (is_null($ob)) continue;		// Bail out if the hook fails
-		
+
 		// Grab information about the hook
 		$info=$ob->info();
 		$content_table = $info['table'];
@@ -109,7 +109,7 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
 			$numeric = false;
 		}
 	}
-	
+
 	// Now we have the information required to access the content.
 	// However, we still don't know if the provided ID is valid, so we
 	// have to check that too!
@@ -133,7 +133,7 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
 			warn_exit(do_lang_tempcode('_MISSING_RESOURCE', get_translated_text($workflow_id)));
 		}
 	}
-		
+
 	// If we've made it this far then we have been asked to apply a
 	// valid workflow to a valid piece of content, so let's go ahead
 
@@ -152,13 +152,13 @@ function add_content_to_workflow($content_type='', $content_id='', $workflow_id=
 		}
 	}
 	$id = $GLOBALS['SITE_DB']->query_insert('workflow_content',array('source_type'=>$content_type,'source_id'=>$content_id,'workflow_name'=>$workflow_id,'notes'=>'','original_submitter'=>get_member()),true,false,false);
-	
+
 	// Set the workflow status to 0 for each point
 	foreach (get_requirements_for_workflow($workflow_id) as $point)
 	{
 		$GLOBALS['SITE_DB']->query_insert('workflow_content_status',array('workflow_content_id'=>$id,'workflow_approval_name'=>$point,'status_code'=>0,'approved_by'=>get_member()),true,false,false);
 	}
-	
+
 	return $id;
 }
 
@@ -193,19 +193,19 @@ function add_requirement_to_workflow($requirement_id,$workflow_id,$position=NULL
 	{
 		fatal_exit(do_lang_tempcode('_MISSING_RESOURCE', 'NULL workflow'));
 	}
-	
+
 	// Make sure this workflow exists
 	if ($GLOBALS['SITE_DB']->query_select('workflow_requirements',array('workflow_name'),array('workflow_name'=>$workflow_id),'',1)==array())
 	{
 		// If not then give a warning and exit
 		warn_exit(do_lang_tempcode('_MISSING_RESOURCE', get_translated_text($workflow_id)));
 	}
-	
+
 	// If this requirement is already in this workflow then we need to
 	// update its position. However, it is easiest if we simply delete
 	// the entry here, so that the following code will apply to all cases
 	$GLOBALS['SITE_DB']->query_delete('workflow_requirements',array('workflow_name'=>$workflow_id,'workflow_approval_name'=>$requirement_id),'',1,NULL,true);
-	
+
 	// Now see what position we're adding to. We either need to determine
 	// the next position (if we've been given NULL), or else just dump
 	// the position in the record (we don't assume that positions are
@@ -218,7 +218,7 @@ function add_requirement_to_workflow($requirement_id,$workflow_id,$position=NULL
 		$current_positions = $GLOBALS['SITE_DB']->query_select('workflow_requirements',array('the_position'),array('workflow_name'=>$workflow_id),'ORDER BY the_position DESC',1);
 		$position = $current_positions[0]['the_position'] + 1;
 	}
-	
+
 	// Do the insertion.
 	// TODO: We should set the default appropriately here, since the case
 	// of adding new requirements then removing the original requirements
@@ -240,18 +240,18 @@ function approve_content_for_point($content_id,$approval_name,$user=NULL)
 	// TODO: Add some sanity checks here
 	// Grab the current user if we've not been given one
 	if (is_null($user)) $user = get_member();
-	
+
 	// Grab the current status of this point, firstly to see if we need
 	// to set it at all, but more importantly to make sure that the given
 	// parameters make sense and are valid
 	$status = $GLOBALS['SITE_DB']->query_select('workflow_content_status',array('status_code'),array('workflow_content_id'=>$content_id,'workflow_approval_name'=>$approval_name),'',1);
-	
+
 	// Now approve the point if needed
 	if ($status['status_code'] == 0)
 	{
 		$GLOBALS['SITE_DB']->query_update('workflow_content_status',array('status_code'=>1),array('workflow_content_id'=>$content_id,'workflow_approval_name'=>$approval_name),'',1);
 	}
-	
+
 	// Done
 }
 
@@ -316,10 +316,10 @@ function delete_workflow($id)
 {
 	// Grab all of the content in this workflow
 	$content = $GLOBALS['SITE_DB']->query_select('workflow_content',array('id','source_type','source_id'),array('workflow_name'=>$id));
-	
+
 	// Now remove those references
 	$GLOBALS['SITE_DB']->query_delete('workflow_content',array('workflow_name'=>$id));
-	
+
 	// Then remove their workflow status
 	foreach ($content as $content_item)
 	{
@@ -361,7 +361,7 @@ function delete_approval_point($name)
 {
 	// Grab all content awaiting this approval
 	$content = $GLOBALS['SITE_DB']->query_select('workflow_content_status', array('status_code','workflow_content_id'),array('workflow_approval_name'=>$name));
-	
+
 	// Now go through each, approving them if needed
 	foreach ($content as $content_item)
 	{
@@ -374,7 +374,7 @@ function delete_approval_point($name)
 	}
 	// Now remove these requirements en-mass from the content
 	$GLOBALS['SITE_DB']->query_delete('workflow_content_status',array('workflow_content_id'=>$name));
-	
+
 	// We have to be careful about removing requirements from workflows,
 	// since a workflow is defined by the approval points it requires.
 	// We must check to see if we're about to throw out any workflows as
@@ -395,7 +395,7 @@ function delete_approval_point($name)
 			$GLOBALS['SITE_DB']->query_delete('workflow_requirements',array('workflow_approval_name'=>$name, 'workflow_name'=>$workflow['workflow_name']),'',1);
 		}
 	}
-	
+
 	// Now we remove the permissions associated with this approval point
 	$GLOBALS['SITE_DB']->query_delete('workflow_permissions', array('workflow_approval_name'=>$name));
 }
@@ -598,25 +598,25 @@ function get_workflow_form($workflow_content_id)
 	require_lang('workflows');
 	require_code('form_templates');
 	require_code('users');
-		
+
 	// Do not let guests edit the status of content
 	if (is_guest())
 	{
 		return new ocp_tempcode();
 	}
-	
+
 	//////////////////////////////////////////////////
 	// Gather the details we need to build the form //
 	//////////////////////////////////////////////////
-	
+
 	// These will hold the form code
 	$workflow_form = new ocp_tempcode();
 	$workflow_fields = new ocp_tempcode();
 	$workflow_hidden = new ocp_tempcode();
-	
+
 	// We already know the content ID
 	$workflow_hidden->attach(form_input_hidden('content_id',strval($workflow_content_id)));
-	
+
 	// Check if this is a valid piece of content for a workflow
 	$row = $GLOBALS['SITE_DB']->query_select('workflow_content',array('*'),array('id'=>$workflow_content_id),'',1);
 	if (count($row) == 0)
@@ -630,18 +630,18 @@ function get_workflow_form($workflow_content_id)
 	$relevant_workflow = $row['workflow_name'];
 
 	$workflow_hidden->attach(form_input_hidden('workflow_id',strval($relevant_workflow)));
-	
+
 	// Make sure there are some points to approve
 	$approval_points = get_requirements_for_workflow($relevant_workflow);
 	if ($approval_points == array())
 	{
 		warn_exit(do_lang_tempcode('_MISSING_RESOURCE', get_translated_text($workflow_content_id)));
 	}
-	
+
 	/////////////////////////
 	// Approval tick boxes //
 	/////////////////////////
-	
+
 	$available_groups = $GLOBALS['FORUM_DRIVER']->get_members_groups(get_member());		// What groups our user is in
 	$existing_status = array();		// This shows the current approval status, but is not editable
 	$approval_status = array();		// This holds tick-boxes for editing the approval status
@@ -652,14 +652,14 @@ function get_workflow_form($workflow_content_id)
 	$group_names = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();		// Allows us to find readable group names
 	$permission_limit = false;		// Points are added in order, so take notice when we no longer have permission (so we can send to whoever does)
 	$next_point = NULL;		// This will store the next workflow point for which we don't have the permission to approve
-	
+
 	// Get the status of each point
 	$statuses = array();
 	foreach ($GLOBALS['SITE_DB']->query_select('workflow_content_status',array('workflow_approval_name', 'status_code'),array('workflow_content_id'=>$workflow_content_id)) as $stat)
 	{
 		$statuses[$stat['workflow_approval_name']] = $stat['status_code'];
 	}
-	
+
 	// Assume we can't do anything
 	$have_permission_over_a_point = false;
 
@@ -668,7 +668,7 @@ function get_workflow_form($workflow_content_id)
 	{
 		// Only show one tick box for each approval point, if any
 		$approval_shown = false;
-		
+
 		// Go through each group allowed to modify this value...
 		foreach (get_groups_for_point($point) as $allowed_group)
 		{
@@ -708,7 +708,7 @@ function get_workflow_form($workflow_content_id)
 				// Increment the unique ID for the array elements
 				$approve_count = $approve_count + 1;
 			}
-			
+
 			// We want the send boxes to name usergroups, rather than
 			// approval points, so we may as well add those here.
 			// Take care not to add groups we've already got!
@@ -728,7 +728,7 @@ function get_workflow_form($workflow_content_id)
 				$groups_shown[] = $allowed_group;
 			}
 		}
-		
+
 		// If it's not handled at this point, we don't have permission
 		if (!$approval_shown)
 		{
@@ -741,7 +741,7 @@ function get_workflow_form($workflow_content_id)
 			$existing_status[$approve_count][] = true;		// Disabled, we have no permission
 			// Increment the unique ID for the array elements
 			$approve_count = $approve_count + 1;
-			
+
 			// If this is the first entry we're not permitted to change and
 			// it is not already ticked...
 			if (!$permission_limit && (!array_key_exists($point,$statuses) || ($statuses[$point]==0)))
@@ -752,7 +752,7 @@ function get_workflow_form($workflow_content_id)
 				$permission_limit = true;
 			}
 		}
-		
+
 	}
 
 	// If we have no control over this workflow then don't bother showing it
@@ -764,7 +764,7 @@ function get_workflow_form($workflow_content_id)
 	///////////////////
 	// Send-to boxes //
 	///////////////////
-	
+
 	// Now we attempt to impose some sort of order to the send-to boxes.
 	// The order we're going to use is to collect groups where the sum of
 	// the workflow positions they can approve is equal, and put the
@@ -817,7 +817,7 @@ function get_workflow_form($workflow_content_id)
 		// Add this group to the collection
 		$group_order[$score][] = $group_id;
 	}
-	
+
 	// Finally we can get the tick-box details we found earlier and put
 	// them in the right order
 	$send_to_boxes = array();
@@ -866,7 +866,7 @@ function get_workflow_form($workflow_content_id)
 			}
 		}
 	}
-	
+
 	// Now tack the original submitter onto the end of the send-to list,
 	// if we know who it is
 	$submitter = get_submitter_of_workflow_content($workflow_content_id);
@@ -879,7 +879,7 @@ function get_workflow_form($workflow_content_id)
 		$submitter_details[] = do_lang_tempcode('NEXT_APPROVAL_AUTHOR',$GLOBALS['FORUM_DRIVER']->get_username($submitter));		// Description
 		$send_to_boxes[] = $submitter_details;		// Then tack it on the end
 	}
-	
+
 	/* NOTE: Not currently used; content becomes live once all points are
 	 * approved
 	///////////////////
@@ -897,7 +897,7 @@ function get_workflow_form($workflow_content_id)
 		$live_box = form_input_tick(do_lang_tempcode('WORKFLOW_LIVE'),do_lang_tempcode('WORKFLOW_LIVE_DESCRIPTION'),'validated',$validated,NULL,'1',true);
 	}			
 	*/
-	
+
 	////////////////////////
 	// Now build the form //
 	////////////////////////
@@ -907,7 +907,7 @@ function get_workflow_form($workflow_content_id)
 	{
 		return new ocp_tempcode();
 	}
-	
+
 	// Attach the title to the form first, along with usage info
 	$workflow_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>NULL,'HELP'=>do_lang_tempcode('WORKFLOW_USAGE'))));
 
@@ -916,19 +916,19 @@ function get_workflow_form($workflow_content_id)
 
 	// Attach the workflow tick boxes next
 	$workflow_fields->attach(form_input_various_ticks($approval_status,'',NULL,do_lang_tempcode('POINTS_TO_APPROVE'),false));
-	
+
 	// Add the 'live' tickbox
 	// NOTE: Not used at the moment; content becomes live once all points
 	// have been approved
 	//$workflow_fields->attach($live_box);
-	
+
 	// Add a section for notes
 	$notes = $GLOBALS['SITE_DB']->query_select('workflow_content',array('notes'),array('id'=>$workflow_content_id));
 	$workflow_fields->attach(form_input_huge(do_lang('NOTES'),do_lang('WORKFLOW_NOTES_DESCRIPTION'),'workflow_notes',$notes[0]['notes'],false,NULL,6,'',true));
-	
+
 	// Set who to send it to next
 	$workflow_fields->attach(form_input_various_ticks($send_to_boxes,do_lang_tempcode('NEXT_APPROVAL_SIDE_DESCRIPTION'),NULL,do_lang_tempcode('NEXT_APPROVAL'),false));
-	
+
 	// Set the URL for handling the response to this form
 	$post_url = build_url(array('page'=>'_SELF','type'=>'workflow'),'_SELF');
 
@@ -937,7 +937,7 @@ function get_workflow_form($workflow_content_id)
 
 	// Add all of these to the form
 	$workflow_form->attach(do_template('FORM',array('FIELDS'=>$workflow_fields,'HIDDEN'=>$workflow_hidden,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SUBMIT_WORKFLOW_CHANGES'),'SKIP_REQUIRED'=>true)));
-	
+
 	// Then pass it to whoever wanted it
 	return put_in_standard_box($workflow_form,do_lang_tempcode('WORKFLOW_STATUS'));
 }
@@ -977,11 +977,11 @@ function workflow_update_handler()
 			$approvals[$approval_id] = post_param_integer('tick_on_form__approval_'.strval($approval_id));
 		}
 	}
-	
+
 	////////////////////////
 	// Get member details //
 	////////////////////////
-	
+
 	// Find out which groups/members to inform, starting with the
 	// original submitter
 	$send_to_members = array();
@@ -1016,15 +1016,15 @@ function workflow_update_handler()
 	{
 		$send_to_members[$member['id']] = 1;
 	}
-	
+
 	////////////////////////////////////////////
 	// Now play with the database as required //
 	////////////////////////////////////////////
-	
+
 	// See which values need updating (ie. approvals have been given/withdrawn)
 	$updated_approvals = array();
 	$all_approval_statuses = array();
-	
+
 	// Grab each point's status from the database
 	$old_values = $GLOBALS['SITE_DB']->query_select('workflow_content_status',array('workflow_approval_name', 'status_code'),array('workflow_content_id'=>$content_id));
 
@@ -1089,7 +1089,7 @@ function workflow_update_handler()
 			$GLOBALS['SITE_DB']->query_update('workflow_content_status',array('status_code'=>$status_code,'approved_by'=>get_member()),array('workflow_content_id'=>$content_id,'workflow_approval_name'=>$approval_id),'',1,NULL,false,false);
 		}
 	}
-	
+
 	// Update the notes (this is done destructively, but is simplest)
 	// We append a timestamped log of the action taken
 	$notes_approved = array();
@@ -1129,14 +1129,14 @@ function workflow_update_handler()
 	// Validation is stored, for the most part, in a 'validated' field
 	// of the content's table. Those which store it elsewhere must
 	// specify this via their content-meta-aware info.
-	
+
 	// Grab lookup data from the workflows database
 	$content_details = $GLOBALS['SITE_DB']->query_select('workflow_content',array('source_type', 'source_id'),array('id'=>$content_id),'',1);
 	if ($content_details==array())
 	{
 		warn_exit(do_lang_tempcode('_MISSING_RESOURCE','workflow_content->'.strval($content_id)));
 	}
-	
+
 	// Now use it to find this content's validation field
 	$hooks=find_all_hooks('systems','content_meta_aware');
 	$found=false;		// Guilty until proven innocent again
@@ -1144,12 +1144,12 @@ function workflow_update_handler()
 	{
 		// Skip if this is not the hook we're after
 		if ($hook != $content_details[0]['source_type']) continue;
-		
+
 		// Otherwise load and instantiate the hook
 		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($hook));
 		$ob=object_factory('Hook_content_meta_aware_'.filter_naughty_harsh($hook),true);
 		if (is_null($ob)) continue;		// Bail out if the hook fails
-		
+
 		// Grab information about the hook
 		$info=$ob->info();
 		$content_table = $info['table'];
@@ -1163,7 +1163,7 @@ function workflow_update_handler()
 			// Fall back to 'validated' if nothing is specified
 			$content_validated_field = 'validated';
 		}
-		
+
 		if ($info['id_field_numeric'])		// See if we need to extract a number from the provided ID string
 		{
 			// If so then flag it with a shorter name, and use a different
@@ -1177,7 +1177,7 @@ function workflow_update_handler()
 			$numeric = false;
 		}
 	}
-	
+
 	// Now we have the details required to lookup this entry, wherever it
 	// is. Let's get its current validation status and compare to what
 	// the workflow would have it be
@@ -1204,7 +1204,7 @@ function workflow_update_handler()
 	{
 		$all_points_approved = true;
 	}
-	
+
 	// We need to act if the validation status is different to the total
 	// completion of the workflow
 	if (($content_is_validated[0][$content_validated_field]==1)!=$all_points_approved)
@@ -1224,7 +1224,7 @@ function workflow_update_handler()
 		$status_list .= ($status==1)?'approved':'not approved';
 		$status_list .= ', ';
 	}
-	
+
 	// At last we can send the email
 	require_code('notifications');
 	if (count($send_to_members) > 0)

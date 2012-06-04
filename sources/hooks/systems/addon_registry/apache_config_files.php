@@ -30,7 +30,7 @@ class Hook_addon_registry_apache_config_files
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Get the version of ocPortal this addon is for
 	 *

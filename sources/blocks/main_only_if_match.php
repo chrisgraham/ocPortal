@@ -38,7 +38,7 @@ class Block_main_only_if_match
 		$info['parameters']=array('param','caption');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

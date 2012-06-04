@@ -92,7 +92,7 @@ if (!is_null($lstring)) // Forward geopositioning (textlocation to full details)
 		if (!is_null($bits))
 		{
 			// Give out different IDs, depending on what the search fields were in.
-	
+
 			echo '[';
 
 			if (isset($bits['id'])) echo strval($bits['id']); // Category or Location

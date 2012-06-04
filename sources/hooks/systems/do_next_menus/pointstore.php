@@ -30,7 +30,7 @@ class Hook_do_next_menus_pointstore
 	function run()
 	{
 		if (!addon_installed('pointstore')) return array();
-		
+
 		return array(
 			array('usage','pointstorelog',array('admin_pointstore',array('type'=>'misc'),get_module_zone('admin_pointstore')),do_lang_tempcode('POINTSTORE_MANAGE_SALES'),('DOC_POINT_STORE')),
 			array('setup','pointstore',array('admin_pointstore',array('type'=>'p'),get_module_zone('admin_pointstore')),do_lang_tempcode('POINTSTORE_MANAGE_INVENTORY'),('DOC_POINT_STORE')),

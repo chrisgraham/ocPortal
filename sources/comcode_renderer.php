@@ -127,7 +127,7 @@ function _custom_comcode_import($connection)
 			//if (is_object($tag['tag_replace'])) $tag['tag_replace']=$tag['tag_replace']->evaluate();  Never tempcode
 			$REPLACE_TARGETS[$tag['tag_tag']]=array('replace'=>$tag['tag_replace'],'parameters'=>$tag['tag_parameters']);
 		}
-		
+
 		// From Comcode hooks
 		$hooks=find_all_hooks('systems','comcode');
 		foreach (array_keys($hooks) as $hook)
@@ -136,7 +136,7 @@ function _custom_comcode_import($connection)
 			$object=object_factory('Hook_comcode_'.filter_naughty_harsh($hook),true);
 
 			$tag=$object->get_tag();
-			
+
 			$VALID_COMCODE_TAGS[$tag['tag_tag']]=1;
 			if ($tag['tag_block_tag']==1) $BLOCK_TAGS[$tag['tag_tag']]=1;
 			if ($tag['tag_textual_tag']==1) $TEXTUAL_TAGS[$tag['tag_tag']]=1;
@@ -368,7 +368,7 @@ function test_url($url_full,$tag_type,$given_url,$source_member)
 {
 	if (get_option('check_broken_urls')=='0') return new ocp_tempcode();
 	if (strpos($url_full,'{$')!==false) return new ocp_tempcode();
-	
+
 	$temp_tpl=new ocp_tempcode();
 	if (!handle_has_checked_recently($url_full))
 	{
@@ -797,7 +797,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				$heads->attach(do_template('COMCODE_TAB_HEAD',array('TITLE'=>trim($tab),'FIRST'=>$i==0,'LAST'=>!array_key_exists($i+1,$tabs))));
 			}
-			
+
 			$temp_tpl=do_template('COMCODE_TAB_CONTROLLER',array('HEADS'=>$heads,'CONTENT'=>$embed));
 			break;
 		case 'carousel':
@@ -1829,7 +1829,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						require_code('failure');
 						relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','exp_ref',$_embed),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 					}
-					
+
 					break;
 				}
 			}
@@ -2072,7 +2072,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$url=$attributes['param'];
 				$caption=$embed;
 			}
-			
+
 			// If we weren't given a caption, use the URL, but crop if necessary
 			if ($caption->evaluate()=='')
 			{
@@ -2084,7 +2084,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					$_caption=escape_html(substr(@html_entity_decode($_caption,ENT_QUOTES,get_charset()),0,intval($max_link_length/2-3))).'&hellip;'.escape_html(substr(@html_entity_decode($_caption,ENT_QUOTES,get_charset()),intval(-$max_link_length/2)));
 				}
-				
+
 				$caption=make_string_tempcode($_caption);
 			}
 
@@ -2115,7 +2115,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			{
 				$temp_tpl=test_url($url_full,'url',$given_url,$source_member);
 			}
-			
+
 			// Render
 			if (!array_key_exists('target',$attributes)) $attributes['target']=$local?'_top':'_blank';
 			if ($attributes['target']=='blank') $attributes['target']='_blank';
@@ -2368,7 +2368,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 			// Do structure sweep
 			$urls_for=array();
-			
+
 			$old_structure_list=$STRUCTURE_LIST;
 			$STRUCTURE_LIST=array(); // reset for e.g. comcode_text_to_tempcode calls (which don't itself reset it, although _comcode_to_tempcode does for top level parses)
 
@@ -2472,9 +2472,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$levels_t=_do_contents_level($subtree_stack[0],$list_types,$base-1);
 
 			$temp_tpl=do_template('COMCODE_CONTENTS',array('_GUID'=>'ca2f5320fa930e2257a2e74e4f98e5a0','LEVELS'=>$levels_t));
-			
+
 			$STRUCTURE_LIST=$old_structure_list; // Restore, so subsequent 'title' tags have correct numbering
-			
+
 			break;
 	}
 

@@ -41,7 +41,7 @@ class Module_newsletter
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -65,7 +65,7 @@ class Module_newsletter
 
 		delete_menu_item_simple('_SEARCH:newsletter:type=misc');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -223,7 +223,7 @@ class Module_newsletter
 	{
 		return ($GLOBALS['SITE_DB']->query_value('newsletters','COUNT(*)')==0)?array():array('misc'=>'NEWSLETTER_JOIN');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -232,18 +232,18 @@ class Module_newsletter
 	function run()
 	{
 		require_lang('newsletter');
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='confirm') return $this->newsletter_confirm_joining();
 		if ($type=='do') return $this->newsletter_maintenance();
 		if ($type=='reset') return $this->newsletter_password_reset();
 		if ($type=='unsub') return $this->newsletter_unsubscribe();
 		if ($type=='misc') return $this->newsletter_form();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to sign up to the newsletter (actually, generally manage subscription).
 	 *
@@ -252,7 +252,7 @@ class Module_newsletter
 	function newsletter_form()
 	{
 		$title=get_page_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
-	
+
 		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
 		if (count($newsletters)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -409,7 +409,7 @@ class Module_newsletter
 				{
 					$GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',array('newsletter_id'=>$newsletter['id'],'email'=>$email,'the_level'=>$level));
 				}
-				
+
 				// Update name
 				$GLOBALS['SITE_DB']->query_update('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname),array('email'=>$email),'',1);
 			}
@@ -443,7 +443,7 @@ class Module_newsletter
 
 		return inform_screen($title,protect_from_escaping(do_lang('NEWSLETTER_PASSWORD_BEEN_RESET',NULL,NULL,NULL,$lang)));
 	}
-	
+
 	/**
 	 * The actualiser for unsubscribing from the newsletter.
 	 *
@@ -459,19 +459,19 @@ class Module_newsletter
 		$subscriber=$_subscriber[0];
 
 		$needed_hash=best_hash($subscriber['the_password'],'xunsub');
-		
+
 		if ($hash!=$needed_hash)
 		{
 			warn_exit(do_lang_tempcode('COULD_NOT_UNSUBSCRIBE'));
 		}
-		
+
 		$title=get_page_title('NEWSLETTER_UNSUBSCRIBED');
-		
+
 		$GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array('email'=>$subscriber['email']));
 
 		return inform_screen($title,do_lang_tempcode('FULL_NEWSLETTER_UNSUBSCRIBED',escape_html(get_site_name())));
 	}
-	
+
 	/**
 	 * Send a newsletter join confirmation.
 	 *
@@ -484,7 +484,7 @@ class Module_newsletter
 	function send_confirmation($email,$code_confirm,$password,$forename,$surname)
 	{
 		if (is_null($password)) $password=do_lang('NEWSLETTER_PASSWORD_ENCRYPTED');
-	
+
 		$_url=build_url(array('page'=>'newsletter','type'=>'confirm','email'=>$email,'confirm'=>$code_confirm),'_SELF',NULL,false,true);
 		$url=$_url->evaluate();
 		$message=do_lang('NEWSLETTER_SIGNUP_TEXT',comcode_escape($url),comcode_escape($password),array($forename,$surname,$email,get_site_name()));
@@ -501,7 +501,7 @@ class Module_newsletter
 	function newsletter_confirm_joining()
 	{
 		$title=get_page_title(get_option('newsletter_title'),false);
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
 
 		$code_confirm=get_param_integer('confirm');

@@ -51,17 +51,17 @@ class Module_admin_flagrant extends standard_aed_module
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('text');
-	
+
 		delete_config_option('system_flagrant');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -157,7 +157,7 @@ class Module_admin_flagrant extends standard_aed_module
 	{
 		return array('misc'=>'FLAGRANT_MANAGE');
 	}
-	
+
 	/**
 	 * Standard aed_module table function.
 	 *
@@ -167,9 +167,9 @@ class Module_admin_flagrant extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','the_message ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -205,10 +205,10 @@ class Module_admin_flagrant extends standard_aed_module
 
 			$activation_time=$row['activation_time'];
 			$days=is_null($activation_time)?'':float_format(round((time()-$activation_time)/60/60/24,3));
-			
+
 			$fields->attach(results_entry(array(protect_from_escaping(get_translated_tempcode($row['the_message'])),integer_format($row['days']),get_timezoned_date($row['order_time']),($row['active_now']==1)?$days:do_lang_tempcode('NA_EM'),$username,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
@@ -286,7 +286,7 @@ class Module_admin_flagrant extends standard_aed_module
 		$message=post_param('message');
 		$notes=post_param('notes','');
 		$validated=post_param_integer('validated',0);
-	
+
 		return strval(add_flagrant($message,post_param_integer('days'),$notes,$validated));
 	}
 

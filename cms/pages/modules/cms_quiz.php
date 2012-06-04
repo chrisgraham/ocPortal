@@ -119,9 +119,9 @@ class Module_cms_quiz extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','q_name ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -152,7 +152,7 @@ class Module_cms_quiz extends standard_aed_module
 
 			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz')),get_translated_text($row['q_name']))),$type,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
-		
+
 		$search_url=build_url(array('page'=>'search','id'=>'quiz'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'quiz'),get_module_zone('quiz'));
 

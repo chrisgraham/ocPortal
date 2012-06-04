@@ -49,7 +49,7 @@ class Hook_Preview_iotd
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('iotds',array('url','thumb_url'),array('id'=>post_param_integer('id')),'',1);
 				$urls=$rows[0];
-	
+
 				$url=$urls['url'];
 				$thumb_url=$urls['thumb_url'];
 			} else
@@ -70,7 +70,7 @@ class Hook_Preview_iotd
 		$thumb=do_image_thumb(url_is_local($thumb_url)?(get_custom_base_url().'/'.$thumb_url):$thumb_url,$caption,true);
 
 		$url=url_is_local($url)?(get_custom_base_url().'/'.$url):$url;
-		
+
 		$preview=do_template('IOTD',array('ID'=>'','IMAGE_URL'=>$url,'SUBMITTER'=>strval(get_member()),'VIEW_URL'=>$url,'IMAGE'=>$thumb,'CAPTION'=>$title));
 
 		return array($preview,NULL);

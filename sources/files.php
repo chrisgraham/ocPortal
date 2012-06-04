@@ -107,7 +107,7 @@ function get_file_size($url)
 function clean_file_size($bytes)
 {
 	if ($bytes<0) return '-'.clean_file_size(-$bytes);
-	
+
 	if (is_null($bytes)) return do_lang('UNKNOWN').' bytes';
 	if (floatval($bytes)>2.0*1024.0*1024.0*1024.0) return strval(intval(round(floatval($bytes)/1024.0/1024.0/1024.0))).' Gb';
 	if (floatval($bytes)>1024.0*1024.0*1024.0) return float_format(round(floatval($bytes)/1024.0/1024.0/1024.0,2)).' Gb';
@@ -141,7 +141,7 @@ function get_file_extension($name)
 function better_parse_ini_file($filename,$file=NULL)
 {
 	// NB: 'file()' function not used due to slowness compared to file_get_contents then explode
-	
+
 	if (is_null($file))
 	{
 		global $FILE_ARRAY;
@@ -422,7 +422,7 @@ function fix_permissions($path,$perms=0666) // We call this function assuming we
 		elseif ($perms==0777) @chmod($path,0755);
 		else @chmod($path,$perms);
 	}
-	
+
 	global $_CREATED_FILES; // From ocProducts PHP version, for development testing
 	if (isset($_CREATED_FILES))
 		foreach ($_CREATED_FILES as $i=>$x)

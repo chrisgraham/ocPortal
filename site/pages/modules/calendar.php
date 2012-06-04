@@ -48,7 +48,7 @@ class Module_calendar
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -67,7 +67,7 @@ class Module_calendar
 		}
 
 		delete_menu_item_simple('_SEARCH:calendar:type=misc:member_id={$USER_OVERIDE}');
-		
+
 		delete_config_option('calendar_show_stats_count_events');
 		delete_config_option('calendar_show_stats_count_events_this_week');
 		delete_config_option('calendar_show_stats_count_events_this_month');
@@ -124,7 +124,7 @@ class Module_calendar
 				'e_type'=>'AUTO_LINK',
 				'validated'=>'BINARY'
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_index('calendar_events','e_views',array('e_views'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','ces',array('e_submitter'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','publicevents',array('e_is_public'));
@@ -144,14 +144,14 @@ class Module_calendar
 			{
 				$GLOBALS['SITE_DB']->query_insert('calendar_types',array('t_external_feed'=>'','t_title'=>lang_code_to_default_content('DEFAULT_CALENDAR_TYPE__'.$type),'t_logo'=>'calendar/'.$type));
 			}
-	
+
 			$GLOBALS['SITE_DB']->create_table('calendar_reminders',array(
 				'id'=>'*AUTO',
 				'e_id'=>'AUTO_LINK',
 				'n_member_id'=>'USER',
 				'n_seconds_before'=>'INTEGER'
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_table('calendar_interests',array(
 				'i_member_id'=>'*USER',
 				't_type'=>'*AUTO_LINK'
@@ -208,7 +208,7 @@ class Module_calendar
 			$GLOBALS['SITE_DB']->create_index('calendar_events','ftjoin_etitle',array('e_title'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','ftjoin_econtent',array('e_content'));
 		}
-		
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('calendar_events','e_geo_position');
@@ -1474,7 +1474,7 @@ class Module_calendar
 			$event['e_views']++;
 			$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
-		
+
 		breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));
 
 		$GLOBALS['META_DATA']+=array(
@@ -1646,7 +1646,7 @@ class Module_calendar
 	function interests()
 	{
 		$types=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id'));
-		
+
 		$GLOBALS['SITE_DB']->query_delete('calendar_interests',array('i_member_id'=>get_member()));
 		foreach ($types as $type)
 		{

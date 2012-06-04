@@ -29,7 +29,7 @@ function make_functions_dat()
 	foreach ($files as $filename)
 	{
 		if (strpos($filename,'_custom')!==false) continue;
-	
+
 		$_filename=substr($filename,strlen(get_custom_file_base())+1);
 		if ($_filename=='sources/minikernel.php') continue;
 		$result=get_php_file_api($_filename,false);

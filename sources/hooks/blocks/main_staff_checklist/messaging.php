@@ -82,7 +82,7 @@ class Hook_checklist_messaging
 		{	
 			$img	=	'completed';
 		}
-	
+
 		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('ORDER_STATUS'=>$img));
 
 		$url=build_url(array('page'=>'admin_messaging','type'=>'misc'),get_module_zone('admin_messaging'));

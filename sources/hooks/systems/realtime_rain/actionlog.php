@@ -67,7 +67,7 @@ class Hook_realtime_rain_actionlog
 				);
 			}
 		}
-		
+
 		return $drops;
 	}
 

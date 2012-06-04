@@ -41,7 +41,7 @@ class Module_admin_version
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -98,7 +98,7 @@ class Module_admin_version
 	{
 		// A lot of "peripheral architectural" tables are defined here. Central ones are defined in the installer -- as they need to be installed before any module.
 		// This is always the first module to be installed.
-	
+
 		if (($upgrade_from<3) && (!is_null($upgrade_from))) // These are new in 3 of this module, and thus are for upgrades
 		{
 			$GLOBALS['SITE_DB']->create_table('seo_meta',array(
@@ -120,7 +120,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_table('https_pages',array(
 				'https_page_name'=>'*ID_TEXT'
 			));
-	
+
 			$GLOBALS['SITE_DB']->create_table('attachments',array(
 				'id'=>'*AUTO',
 				'a_member_id'=>'USER',
@@ -142,12 +142,12 @@ class Module_admin_version
 				'a_id'=>'INTEGER'
 			));
 		}
-	
+
 		if (($upgrade_from<4) || (is_null($upgrade_from))) // These are for fresh installs and upgrades
 		{
 			add_specific_permission('_COMCODE','reuse_others_attachments',true);
 		}
-	
+
 		if (($upgrade_from<5) || (is_null($upgrade_from))) // These are for fresh installs and upgrades
 		{
 			$GLOBALS['SITE_DB']->create_table('menu_items',array(
@@ -180,14 +180,14 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_for_type',array('trackback_for_type'));
 			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_for_id',array('trackback_for_id'));
 			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_time',array('trackback_time'));
-	
+
 			$GLOBALS['SITE_DB']->create_table('security_images',array(
 				'si_session_id'=>'*INTEGER',
 				'si_time'=>'TIME',
 				'si_code'=>'INTEGER'
 			));
 			$GLOBALS['SITE_DB']->create_index('security_images','si_time',array('si_time'));
-	
+
 			$GLOBALS['SITE_DB']->create_table('member_tracking',array(
 				'mt_member_id'=>'*USER',
 				'mt_cache_username'=>'ID_TEXT',
@@ -205,7 +205,7 @@ class Module_admin_version
 				'cache_ttl'=>'INTEGER',
 			));
 		}
-	
+
 		if (($upgrade_from<6) && (!is_null($upgrade_from)))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('config','shared_hosting_restricted','BINARY',0);
@@ -490,7 +490,7 @@ class Module_admin_version
 				'i_save_url'=>'URLPATH'
 			));
 		}
-		
+
 		if (($upgrade_from<11) && (!is_null($upgrade_from)))
 		{
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'comcode_pages SET p_submitter=2 WHERE p_submitter='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()));
@@ -622,7 +622,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('rating','rating_for_id',array('rating_for_id'));
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -632,7 +632,7 @@ class Module_admin_version
 	{
 		return array();
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

@@ -39,7 +39,7 @@ class Hook_stats_chat
 		if (get_option('chat_show_stats_count_messages',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'0e86e89171ddd8225ac41e14b18ecdb0','KEY'=>do_lang_tempcode('COUNT_CHATPOSTS'),'VALUE'=>integer_format(get_num_chatposts()))));
 		if ($bits->is_empty()) return new ocp_tempcode();
 		$chat=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'4d688c45e01ed34f257fd03100a6be6d','SECTION'=>do_lang_tempcode('SECTION_CHAT'),'CONTENT'=>$bits));
-	
+
 		return $chat;
 	}
 

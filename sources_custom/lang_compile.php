@@ -189,7 +189,7 @@ if (!function_exists('require_lang_compile'))
 			if ($bad) // Out of hope
 			{
 				if ($ignore_errors) return true;
-				
+
 				if (($codename!='critical_error') || ($lang!=get_site_default_lang()))
 				{
 					fatal_exit(do_lang_tempcode('MISSING_LANG_FILE',escape_html($codename),escape_html($lang)));

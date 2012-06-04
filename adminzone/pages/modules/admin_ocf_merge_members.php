@@ -40,7 +40,7 @@ class Module_admin_ocf_merge_members
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_ocf_merge_members
 	{
 		return array('misc'=>'MERGE_MEMBERS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -62,12 +62,12 @@ class Module_admin_ocf_merge_members
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_members';
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
-	
+
 		$type=get_param('type','misc');
-		
+
 		if ($type=='misc') return $this->gui();
 		if ($type=='actual') return $this->actual();
-	
+
 		return new ocp_tempcode();
 	}
 
@@ -79,20 +79,20 @@ class Module_admin_ocf_merge_members
 	function gui()
 	{
 		$title=get_page_title('MERGE_MEMBERS');
-	
+
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_username(do_lang_tempcode('FROM'),do_lang_tempcode('DESCRIPTION_MEMBER_FROM'),'from','',true));
 		$fields->attach(form_input_username(do_lang_tempcode('TO'),do_lang_tempcode('DESCRIPTION_MEMBER_TO'),'to','',true));
-	
+
 		$submit_name=do_lang_tempcode('MERGE_MEMBERS');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$text=do_lang_tempcode('MERGE_MEMBERS_TEXT');
 		return do_template('FORM_SCREEN',array('_GUID'=>'6f6b18d90bbe9550303ab41be0a26dcb','SKIP_VALIDATION'=>true,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'HIDDEN'=>'','TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
 	}
-	
+
 	/**
 	 * The actualiser for merging members.
 	 *
@@ -109,7 +109,7 @@ class Module_admin_ocf_merge_members
 		$from_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($from_username);
 
 		if (is_guest($from_id)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	
+
 		if ((is_null($from_id)) || (is_guest($from_id))) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$from_username));
 
 		if ($to_id==$from_id) warn_exit(do_lang_tempcode('MERGE_SAME'));
@@ -138,12 +138,12 @@ class Module_admin_ocf_merge_members
 
 		// Cache emptying ...
 		ocf_require_all_forum_stuff();
-	
+
 		require_code('ocf_posts_action');
 		require_code('ocf_posts_action2');
 		require_code('ocf_topics_action2');
 		require_code('ocf_forums_action2');
-	
+
 		// Members
 		ocf_force_update_member_post_count($to_id);
 		$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_member_id'=>$to_id));

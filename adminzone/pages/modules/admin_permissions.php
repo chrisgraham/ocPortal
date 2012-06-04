@@ -41,7 +41,7 @@ class Module_admin_permissions
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -132,7 +132,7 @@ class Module_admin_permissions
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('sp_list','p_section','ID_TEXT'); // Best to do this here, although permissions table not defined here
-	
+
 			add_specific_permission('SUBMISSION','can_submit_to_others_categories',false);
 			add_specific_permission('_COMCODE','search_engine_links',false);
 			add_specific_permission('SUBMISSION','have_personal_category',true);
@@ -164,7 +164,7 @@ class Module_admin_permissions
 				'group_id'=>'*GROUP'
 			));
 			$GLOBALS['SITE_DB']->create_index('group_zone_access','group_id',array('group_id'));
-	
+
 			// Some defaults
 			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 			$admin_groups=array_unique(array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups()));
@@ -227,7 +227,7 @@ class Module_admin_permissions
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -250,7 +250,7 @@ class Module_admin_permissions
 		if (function_exists('set_time_limit')) @set_time_limit(60);
 
 		require_lang('permissions');
-	
+
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->tree_editor();
@@ -265,10 +265,10 @@ class Module_admin_permissions
 		if ($type=='_page') return $this->set_page_access();
 		if ($type=='_specific') return $this->set_specific_permissions();
 		if ($type=='specific') return $this->interface_specific_permissions();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to absorb usergroup permissions.
 	 *
@@ -392,7 +392,7 @@ class Module_admin_permissions
 				$color=$matches[1];
 			}
 		}
-		
+
 		// Standard editing matrix
 		// NB: For permissions tree editor, default access is shown as -1 in editor for clarity (because the parent permissions are easily findable which implies the default access would mean something else which would confuse [+ this would be hard to do due to the dynamicness of the interface])
 		require_code('permissions2');
@@ -423,7 +423,7 @@ class Module_admin_permissions
 				$color=$matches[1];
 			}
 		}
-		
+
 		require_code('character_sets');
 
 		// Column headers (groups)
@@ -439,7 +439,7 @@ class Module_admin_permissions
 
 		return $header_cells;
 	}
-	
+
 	/**
 	 * The UI to choose a zone to edit permissions for pages in.
 	 *
@@ -727,7 +727,7 @@ class Module_admin_permissions
 		$url=build_url(array('page'=>'_SELF','type'=>'page'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * Get the list of sections that we can work through, in logical order.
 	 *
@@ -762,7 +762,7 @@ class Module_admin_permissions
 		}
 		if (count($_sections_prior)!=0) $_sections_prior['']=NULL;
 		$_sections=array_merge($_sections_prior,$_sections);
-		
+
 		return $_sections;
 	}
 
@@ -812,20 +812,20 @@ class Module_admin_permissions
 		$title=get_page_title('_SPECIFIC_PERMISSIONS',true,array(do_lang_tempcode($p_section)));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_specific','id'=>$p_section),'_SELF');
-	
+
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$moderator_groups=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-	
+
 		$header_cells=$this->_access_header($admin_groups,$groups);
-	
+
 		$cols=new ocp_tempcode();
 		foreach ($groups as $id=>$g_name)
 		{
 			if (in_array($id,$admin_groups)) continue;
 			$cols->attach(do_template('PERMISSION_COLUMN_SIZER'));
 		}
-		
+
 		// Find all module permission overrides
 		$all_module_overrides=array();
 		foreach (find_all_zones() as $zone)
@@ -919,7 +919,7 @@ class Module_admin_permissions
 				$cells.=str_replace('__human__',escape_html(addslashes(do_lang('PERMISSION_CELL',$permission_text,$g_name))),str_replace('__name__',$permission.'__'.strval($id),$has_permission?$true:$false));
 				if (in_array($id,$moderator_groups)) $code.='form.elements[\''.$permission.'__'.strval($id).'\'].checked=true;'; else $code.='form.elements[\''.$permission.'__'.strval($id).'\'].checked=this.value==\'+\';';
 			}
-			
+
 			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($cells);
 
 			$tpl_map=array('_GUID'=>'075f8855f0fed36b0d0f9c61108dd3de','HAS'=>$has,'ABBR'=>$permission,'PERMISSION'=>$permission_text,'CELLS'=>$cells,'CODE'=>$code);
@@ -940,7 +940,7 @@ class Module_admin_permissions
 							break;
 						}
 					}
-					
+
 					if ($m_list!='') $m_list.=escape_html(', ');
 					if ($this_overrides)
 					{
@@ -977,7 +977,7 @@ class Module_admin_permissions
 	function set_specific_permissions()
 	{
 		require_all_lang();
-		
+
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/privileges';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
 
@@ -993,7 +993,7 @@ class Module_admin_permissions
 		foreach ($_sections as $s)
 		{
 			if (is_null($s)) continue;
-			
+
 			if ($counter>array_search($p_section,$array_keys))
 			{
 				$next_section=$s['p_section'];

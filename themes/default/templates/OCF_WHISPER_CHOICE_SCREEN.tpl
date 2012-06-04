@@ -2,7 +2,7 @@
 
 <div class="ocf_whisper_lead_in">
 	<img src="{$IMG*,bigicons/subscribers}" alt="" class="right" />
-	
+
 	{+START,IF,{$HAS_SPECIFIC_PERMISSION,use_pt}}<p>{!WHISPER_TEXT}</p>{+END}
 </div>
 
@@ -24,7 +24,7 @@
 			{+END}
 		</div>
 	{+END}
-	
+
 	<div class="ocf_whisper_choose_box">
 		{+START,BOX,{!PERSONAL_POST}}
 			<form title="{!PERSONAL_POST}" action="{$URL_FOR_GET_FORM*,{URL}}" method="get">

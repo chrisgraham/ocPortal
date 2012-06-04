@@ -40,7 +40,7 @@ class Module_admin_tickets
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_tickets
 	{
 		return array('misc'=>'MANAGE_TICKET_TYPES');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -75,7 +75,7 @@ class Module_admin_tickets
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to choose a ticket type to edit, or to add a ticket.
 	 *
@@ -144,7 +144,7 @@ class Module_admin_tickets
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * The UI to edit a ticket.
 	 *
@@ -153,7 +153,7 @@ class Module_admin_tickets
 	function edit_ticket_type()
 	{
 		$title=get_page_title('EDIT_TICKET_TYPE');
-	
+
 		require_code('form_templates');
 		require_code('permissions2');
 

@@ -29,12 +29,12 @@ function ocjester_name_filter($in)
 {
 	$option=get_option('ocjester_name_changes',true);
 	if ($option=='') return $in;
-	
+
 	require_code('ocfiltering');
 
 	$passes=(count(array_intersect(@ocfilter_to_idlist_using_memory(get_option('ocjester_name_changes_shown_for',true),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
 	if (!$passes) return $in;
-	
+
 	$alphabetic=@explode("\n",$option);
 
 	if (strtoupper($in[0])!=strtolower($in[0]))

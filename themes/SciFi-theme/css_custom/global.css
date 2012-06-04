@@ -2774,7 +2774,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	width:180px;
 	text-align:center;
 	float:left;
-	
+
 }
 
 #screen_actions {
@@ -2853,7 +2853,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	#top-banner, .content-part-left, .adv-box, .ocf_member_signature .comcode_hide, .button_panel, #screen_actions_outer, .adminzone_search, hide_button, .mini_edit_me, .control_functions, .staff_actions, .ocf_page_buttons, .ocf_member_bar, .ocf_post_buttons, .ocf_topic_marker, #comments_form, .members_viewing, .member_bar_etc, .ratings, .trackbacks, #news_archive_link {
 		display: none;
 	}
-	
+
 	.content-part-right {
 		float: none;
 		width: auto;

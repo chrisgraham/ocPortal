@@ -40,7 +40,7 @@ class Module_admin_themewizard
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -91,7 +91,7 @@ class Module_admin_themewizard
 		$post_url=build_url(array('page'=>'_SELF','type'=>'step2'),'_SELF',array('keep_theme_seed','keep_theme_dark','keep_theme_source','keep_theme_algorithm'),false,true);
 		$text=do_lang_tempcode('THEMEWIZARD_1_DESCRIBE');
 		$submit_name=do_lang_tempcode('PROCEED');
-		
+
 		require_code('form_templates');
 
 		$source_theme=get_param('source_theme','default');

@@ -40,14 +40,14 @@ function init__support()
 	$HTML_ESCAPE_1=array('/&/'/*,'/'.chr(195).'/','/'.chr(195).'/'*/,'/"/','/\'/','/</','/>/'/*,'/'.chr(194).'/'*/);
 	$HTML_ESCAPE_1_STRREP=array('&'/*,chr(195),chr(195)*/,'"','\'','<','>'/*,chr(194)*/);
 	$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
-	
+
 	global $BOT_MAP,$CACHE_BOT_TYPE;
 	$BOT_MAP=NULL;
 	$CACHE_BOT_TYPE=false;
-	
+
 	global $LOCALE_FILTER;
 	$LOCALE_FILTER=NULL;
-	
+
 	global $HAS_COOKIES;
 	$HAS_COOKIES=NULL;
 
@@ -274,9 +274,9 @@ function ocp_mb_strtoupper($in)
 function is_writable_wrap($path)
 {
 	if (strtoupper(substr(PHP_OS,0,3))!='WIN') return is_writable($path);
-	
+
 	if (!file_exists($path)) return false;
-	
+
 	if (is_dir($path))
 	{
 		/*if (false) // ideal, but too dangerous as sometimes you can write files but not delete again
@@ -468,7 +468,7 @@ function multi_sort($a,$b)
 	$keys=explode(',',is_string($M_SORT_KEY)?$M_SORT_KEY:strval($M_SORT_KEY));
 	$first_key=$keys[0];
 	if ($first_key[0]=='!') $first_key=substr($first_key,1);
-	
+
 	if ((is_string($a[$first_key])) || (is_object($a[$first_key])))
 	{
 		$ret=0;
@@ -574,7 +574,7 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 	}
 
 	global $DONE_HEADER;
-	
+
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
 	if ($GLOBALS['HELPER_PANEL_TUTORIAL']===NULL) $GLOBALS['HELPER_PANEL_TUTORIAL']='';
@@ -589,12 +589,12 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 	$global->attach(do_template('GLOBAL',array('_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131','HELPER_PANEL_TUTORIAL'=>$GLOBALS['HELPER_PANEL_TUTORIAL'],'HELPER_PANEL_HTML'=>$GLOBALS['HELPER_PANEL_HTML'],'HELPER_PANEL_TEXT'=>$GLOBALS['HELPER_PANEL_TEXT'],'HELPER_PANEL_PIC'=>$GLOBALS['HELPER_PANEL_PIC'],'MESSAGE_TOP'=>$GLOBALS['ATTACHED_MESSAGES'],'MESSAGE'=>$_message,'MIDDLE'=>$middle,'BREADCRUMBS'=>breadcrumbs())));
 	if ($include_header_and_footer) $global->attach(do_footer($bail_out));
 	$global->handle_symbol_preprocessing();
-	
+
 	if (get_value('xhtml_strict')==='1')
 	{
 		$global=make_xhtml_strict($global);
 	}
-	
+
 	return $global;
 }
 
@@ -789,7 +789,7 @@ function collapse_2d_complexity($key,$value,$list)
 	{
 		$new_map[$map[$key]]=$map[$value];
 	}
-	
+
 	return $new_map;
 }
 
@@ -807,7 +807,7 @@ function collapse_1d_complexity($key,$list)
 	{
 		$new_map[]=$map[$key];
 	}
-	
+
 	return $new_map;
 }
 
@@ -870,12 +870,12 @@ function is_valid_ip($ip)
 function get_ip_address($amount=4)
 {
 //	return strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)); // Nice little test for if sessions break
-	
+
 	$fw=ocp_srv('HTTP_X_FORWARDED_FOR');
 	if (ocp_srv('HTTP_CLIENT_IP')!='') $fw=ocp_srv('HTTP_CLIENT_IP');
 	if (($fw!='') && ($fw!='127.0.0.1') && (substr($fw,0,8)!='192.168.') && (substr($fw,0,3)!='10.') && (is_valid_ip($fw)) && ($fw!=ocp_srv('SERVER_ADDR'))) $ip=$fw;
 	else $ip=ocp_srv('REMOTE_ADDR');
-	
+
 	if (!is_valid_ip($ip)) return '';
 
 	// Bizarro-filter (found "in the wild")
@@ -1043,7 +1043,7 @@ function compare_ip_address_ip6($wild,$full_parts)
 function get_flagrant()
 {
 	if (!addon_installed('flagrant')) return new ocp_tempcode();
-	
+
 	$system=(mt_rand(0,1)==0);
 	$_flagrant=NULL;
 
@@ -1356,16 +1356,16 @@ function escape_html($string)
 			@exit('String double-escaped');
 		}
 	}*/
-	
+
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$XSS_DETECT;
-	
+
 	$ret=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$string);
 
 	if ($XSS_DETECT)
 	{
 		ocp_mark_as_escaped($ret);
 	}
-	
+
 	return $ret;
 }
 
@@ -1392,7 +1392,7 @@ function browser_matches($code)
 {
 	global $BROWSER_MATCHES_CACHE;
 	if (isset($BROWSER_MATCHES_CACHE[$code])) return $BROWSER_MATCHES_CACHE[$code];
-	
+
 	$browser=strtolower(ocp_srv('HTTP_USER_AGENT'));
 	$os=strtolower(ocp_srv('HTTP_UA_OS')).' '.$browser;
 	$is_opera=strpos($browser,'opera')!==false;
@@ -1525,7 +1525,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 {
 	$user_agent_given=($user_agent!==NULL);
 	if ($user_agent===NULL) $user_agent=ocp_srv('HTTP_USER_AGENT');
-	
+
 	global $IS_MOBILE,$IS_MOBILE_TRUTH;
 
 	if (!$user_agent_given)
@@ -1665,7 +1665,7 @@ function get_bot_type()
 {
 	global $CACHE_BOT_TYPE;
 	if ($CACHE_BOT_TYPE!==false) return $CACHE_BOT_TYPE;
-	
+
 	$agent=strtolower(ocp_srv('HTTP_USER_AGENT'));
 
 	global $BOT_MAP,$SITE_INFO;
@@ -1800,7 +1800,7 @@ function has_cookies() // Will fail on users first visit, but then will catch on
 		$_COOKIE=array();
 		return false;
 	}*/
-	
+
 	if (isset($_COOKIE['has_cookies']))
 	{
 		$HAS_COOKIES=true;
@@ -1926,7 +1926,7 @@ function get_loaded_tags($limit_to=NULL,$the_tags=NULL)
 		{
 			$tag=trim($tag);
 			if ($tag=='') continue;
-			
+
 			$tags[]=array(
 				'TAG'=>$tag,
 				'LINK_LIMITEDSCOPE'=>build_url(array('page'=>'search','type'=>'results','content'=>$tag,'only_search_meta'=>'1')+$search_limiter_yes,get_module_zone('search')),
@@ -1934,7 +1934,7 @@ function get_loaded_tags($limit_to=NULL,$the_tags=NULL)
 			);
 		}
 	}
-	
+
 	return do_template('TAGS',array('TAGS'=>$tags,'TYPE'=>($limit_to===NULL)?'':$limit_to));
 }
 
@@ -1947,7 +1947,7 @@ function get_loaded_tags($limit_to=NULL,$the_tags=NULL)
 function get_zone_default_page($zone_name)
 {
 	if ($zone_name=='_SELF') $zone_name=get_zone_name();
-	
+
 	$p_test=persistant_cache_get(array('ZONE',$zone_name));
 	if ($p_test!==NULL)
 		return $p_test['zone_default_page'];

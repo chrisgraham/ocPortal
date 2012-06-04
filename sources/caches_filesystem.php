@@ -65,7 +65,7 @@ class filecache
 				while (!feof($myfile)) $contents.=fread($myfile,1024);
 			}
 		}
-		
+
 		fclose($myfile);
 
 		return $ret;

@@ -38,7 +38,7 @@ class Hook_rss_ocf_personal_topics
 		if (is_guest()) return NULL;
 
 		$member_id=get_member();
-		
+
 		if (get_forum_type()!='ocf') return NULL;
 		if (!has_actual_page_access($member_id,'forumview')) return NULL;
 		if (is_guest()) return NULL;
@@ -75,7 +75,7 @@ class Hook_rss_ocf_personal_topics
 
 			$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 		}
-		
+
 		require_lang('ocf');
 		return array($content,do_lang('PERSONAL_TOPICS'));
 	}

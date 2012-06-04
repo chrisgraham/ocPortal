@@ -42,7 +42,7 @@ class news_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('Politics'==get_translated_text($GLOBALS['SITE_DB']->query_value('news','title ',array('id'=>$this->news_id))));
 	}
-	
+
 	
 	function tearDown()
 	{

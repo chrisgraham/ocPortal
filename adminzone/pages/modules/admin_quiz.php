@@ -110,7 +110,7 @@ class Module_admin_quiz
 	function nice_get_entries()
 	{
 		require_code('form_templates');
-		
+
 		$_m=$GLOBALS['SITE_DB']->query_select('quizzes',array('id','q_name'),NULL,'ORDER BY q_add_date DESC',300);
 		$entries=new ocp_tempcode();
 		foreach ($_m as $m)
@@ -140,7 +140,7 @@ class Module_admin_quiz
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');
 		$submit_name=do_lang_tempcode('EXPORT_QUIZ');
-		
+
 		return do_template('FORM_SCREEN',array('TITLE'=>$title,'TEXT'=>do_lang_tempcode('EXPORT_QUIZ_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'POST'=>true));
 	}
 
@@ -358,7 +358,7 @@ class Module_admin_quiz
 			foreach ($all_answers as $bits=>$count)
 			{
 				list($answer,$i)=unserialize($bits);
-				
+
 				$answers->attach(paragraph(do_lang_tempcode('SURVEY_ANSWER_RESULT',escape_html($answer),integer_format($count),integer_format($i+1))));
 			}
 			if ($answers->is_empty()) $answers=do_lang_tempcode('FREE_ENTRY_ANSWER');

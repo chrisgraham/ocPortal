@@ -54,11 +54,11 @@ class Hook_content_meta_aware_news
 			'add_time_field'=>'date_and_time',
 			'edit_time_field'=>'edit_date',
 			'validated_field'=>'validated',
-			
+
 			'addon_name'=>'news',
-			
+
 			'module'=>'news',
 		);
 	}
-	
+
 }

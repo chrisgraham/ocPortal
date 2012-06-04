@@ -40,7 +40,7 @@ class Module_forumview
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -219,7 +219,7 @@ class Module_forumview
 			if (substr($key,0,3)=='kfs') $NON_CANONICAL_PARAMS[]=$key;
 
 		$type=get_param('type','misc');
-	
+
 		$current_filter_cat=get_param('category','');
 
 		$max=get_param_integer('max',intval(get_option('forum_topics_per_page')));

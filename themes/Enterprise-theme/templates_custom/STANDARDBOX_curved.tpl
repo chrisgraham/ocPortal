@@ -36,7 +36,7 @@
 					<div style="{$,padding-bottom: {$?,{$IS_NON_EMPTY,{LINKS}},0px,18px};} height: {$CSS_DIMENSION_REDUCE,{HEIGHT'},29}" class="standardbox_main_classic">
 						{CONTENT}{+START,IF_EMPTY,{LINKS}}<br class="standardbox_curved_ie_hack" />{+END}
 					</div>
-		
+
 					{+START,IF_NON_EMPTY,{LINKS}}
 						{$SET,linkbar,0}
 						<div class="standardbox_iesucks_curved_rule standardbox_links_classic community_block_tagline"> [

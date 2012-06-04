@@ -10,9 +10,9 @@
 function init__forum__pages__modules_custom__topicview($in=NULL)
 {
 	if (is_null($in)) return $in; // HipHop PHP can't do code rewrites, but will call init functions if there is none in the original. Do nothing.
-	
+
 	$in=str_replace('$_postdetails[\'post\']','ocjester_filtering_wrap($_postdetails[\'post\']->evaluate())',$in);
-	
+
 	return $in;
 }
 
@@ -33,7 +33,7 @@ function ocjester_filtering_wrap($in)
 		$x2=ocjester_filtering_wrap_2($x1);
 		$in=str_replace($before.$x1.$after,$before.$x2.$after,$in);
 	}
-	
+
 	return $in;
 }
 
@@ -52,7 +52,7 @@ function ocjester_filtering_wrap_2($in)
 			$new.=ocjester_filtering($bits[$i]);
 		}
 	}
-	
+
 	return $new;
 }
 
@@ -70,7 +70,7 @@ function ocjester_filtering($in)
 	$passes=(count(array_intersect(@ocfilter_to_idlist_using_memory(get_option('ocjester_string_changes_shown_for',true),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
 	if ($passes)
 		$in=ocjester_string_changes_filter($in);
-	
+
 	return $in;
 }
 
@@ -178,7 +178,7 @@ function ocjester_string_changes_filter($in)
 			$remap[$from]=$to;
 		}
 	}
-	
+
 	$len=strlen($in);
 	for ($i=0;$i<$len;$i++)
 	{
@@ -192,6 +192,6 @@ function ocjester_string_changes_filter($in)
 			}
 		}
 	}
-	
+
 	return $in;
 }

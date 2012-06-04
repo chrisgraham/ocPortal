@@ -45,7 +45,7 @@ class Hook_admin_setupwizard_installprofiles_shopping
 			array('ecommerce','shopping','ssl','quizzes','random_quotes','recommend','polls','tickets','news','newsletter'),
 			array());
 	}
-	
+
 	/**
 	 * Get a map of default settings associated with this installation profile
 	 *
@@ -72,7 +72,7 @@ class Hook_admin_setupwizard_installprofiles_shopping
 			'rules'=>'corporate',
 		);
 	}
-	
+
 	/**
 	 * Find details of desired blocks
 	 *
@@ -98,7 +98,7 @@ class Hook_admin_setupwizard_installprofiles_shopping
 			),
 		);
 	}
-	
+
 	/**
 	 * Get options for blocks in this profile
 	 *
@@ -112,12 +112,12 @@ class Hook_admin_setupwizard_installprofiles_shopping
 			),
 		);
 	}
-	
+
 	/**
 	 * Execute any special code needed to put this install profile into play
 	 */
 	function install_code()
 	{
 	}
-	
+
 }

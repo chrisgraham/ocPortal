@@ -41,7 +41,7 @@ class Module_admin_security
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -85,7 +85,7 @@ class Module_admin_security
 			$GLOBALS['SITE_DB']->create_index('hackattack','h_date_and_time',array('date_and_time'));
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -95,7 +95,7 @@ class Module_admin_security
 	{
 		return array('misc'=>'SECURITY_LOGGING');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -111,7 +111,7 @@ class Module_admin_security
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_security';
 
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->security_interface();
 		if ($type=='clean') return $this->clean_alerts();
 		if ($type=='view') return $this->alert_view();
@@ -200,20 +200,20 @@ class Module_admin_security
 		$id=get_param_integer('id');
 		$rows=$GLOBALS['SITE_DB']->query_select('hackattack',array('*'),array('id'=>$id));
 		$row=$rows[0];
-	
+
 		$time=get_timezoned_date($row['date_and_time']);
-	
+
 		$title=get_page_title('VIEW_ALERT',true,array(escape_html($time)));
 
 		$lookup_url=build_url(array('page'=>'admin_lookup','param'=>$row['ip']),'_SELF');
 		$member_url=build_url(array('page'=>'admin_lookup','param'=>$row['the_user']),'_SELF');
 		$reason=do_lang($row['reason'],$row['reason_param_a'],$row['reason_param_b']);
-		
+
 		$post=with_whitespace(unixify_line_format($row['data_post']));
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['the_user']);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECURITY_LOGGING'))));
 
 		return do_template('SECURITY_ALERT_SCREEN',array('_GUID'=>'6c5543151af09c79bf204bea5df61dde','TITLE'=>$title,'USER_AGENT'=>$row['user_agent'],'REFERER'=>$row['referer'],'USER_OS'=>$row['user_os'],'REASON'=>$reason,'IP'=>hyperlink($lookup_url,$row['ip']),'USERNAME'=>hyperlink($member_url,escape_html($username)),'POST'=>$post,'URL'=>$row['url']));

@@ -49,7 +49,7 @@ function initialise_image_fader(at,reentrant)
 			window.fader_timer_{_loop_key%}=window.setInterval(func{_loop_key%},{MILL%}*{IMAGES});
 		},timing_spot*{MILL%});
 	{+END}
-	
+
 	return false;
 }
 

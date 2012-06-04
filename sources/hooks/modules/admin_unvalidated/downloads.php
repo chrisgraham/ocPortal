@@ -31,7 +31,7 @@ class Hook_unvalidated_downloads
 		if (!module_installed('downloads')) return NULL;
 
 		require_lang('downloads');
-	
+
 		$info=array();
 		$info['db_table']='download_downloads';
 		$info['db_identifier']='id';
@@ -44,7 +44,7 @@ class Hook_unvalidated_downloads
 		$info['edit_type']='_ed';
 		$info['edit_identifier']='id';
 		$info['title']=do_lang_tempcode('SECTION_DOWNLOADS');
-	
+
 		return $info;
 	}
 

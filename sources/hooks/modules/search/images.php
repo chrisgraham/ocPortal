@@ -34,16 +34,16 @@ class Hook_search_images
 		if ($GLOBALS['SITE_DB']->query_value('images','COUNT(*)')==0) return NULL;
 
 		require_lang('galleries');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('IMAGES');
 		$info['default']=true;
 		$info['category']='cat';
 		$info['integer_category']=false;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
 	 *
@@ -91,14 +91,14 @@ class Hook_search_images
 			case 'title':
 				$remapped_orderer='title';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='add_date';
 				break;
 		}
-	
+
 		require_lang('galleries');
-	
+
 		// Calculate our where clause (search)
 		$sq=build_search_submitter_clauses('submitter',$author_id,$author);
 		if (is_null($sq)) return array(); else $where_clause.=$sq;

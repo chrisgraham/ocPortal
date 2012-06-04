@@ -41,7 +41,7 @@ class Module_admin_ocf_ldap
 		$info['locked']=true;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -108,7 +108,7 @@ class Module_admin_ocf_ldap
 	{
 		return array('misc'=>'LDAP_SYNC');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -122,20 +122,20 @@ class Module_admin_ocf_ldap
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');
 		require_code('ocf_groups_action2');
-	
+
 		require_lang('ocf');
-	
+
 		global $LDAP_CONNECTION;
 		if (is_null($LDAP_CONNECTION)) warn_exit(do_lang_tempcode('LDAP_DISABLED'));
-	
+
 		// Decide what we're doing
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->gui();
 		if ($type=='actual') return $this->actual();
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI for LDAP synchronisation.
 	 *
@@ -144,7 +144,7 @@ class Module_admin_ocf_ldap
 	function gui()
 	{
 		$title=get_page_title('LDAP_SYNC');
-	
+
 		$groups_add=new ocp_tempcode();
 		$groups_delete=new ocp_tempcode();
 		$members_delete=new ocp_tempcode();
@@ -191,10 +191,10 @@ class Module_admin_ocf_ldap
 		while (array_key_exists(0,$all_ldap_members));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
-	
+
 		return do_template('OCF_LDAP_SYNC_SCREEN',array('_GUID'=>'38c608ce56cf3dbafb1dd1446c65d592','URL'=>$post_url,'TITLE'=>$title,'MEMBERS_DELETE'=>$members_delete,'GROUPS_DELETE'=>$groups_delete,'GROUPS_ADD'=>$groups_add));
 	}
-	
+
 	/**
 	 * The actualiser for LDAP synchronisation.
 	 *
@@ -203,7 +203,7 @@ class Module_admin_ocf_ldap
 	function actual()
 	{
 		$title=get_page_title('LDAP_SYNC');
-	
+
 		$all_ldap_groups=ocf_get_all_ldap_groups();
 		foreach ($all_ldap_groups as $group)
 		{
@@ -220,14 +220,14 @@ class Module_admin_ocf_ldap
 				ocf_delete_group($id);
 			}
 		}
-	
+
 		$all_ldap_members=$GLOBALS['FORUM_DB']->query_select('f_members',array('id'),array('m_password_compat_scheme'=>'ldap'));
 		require_code('ocf_groups_action');
 		require_code('ocf_groups_action2');
 		foreach ($all_ldap_members as $row)
 		{
 			$id=$row['id'];
-	
+
 			if (post_param_integer('delete_member_'.strval($id),0)==1)
 			{
 				ocf_delete_member($id);

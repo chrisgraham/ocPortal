@@ -20,7 +20,7 @@
 
 class Block_main_rating
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_rating
 		$info['parameters']=array('param','page','extra_param_from');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_rating
 		$info['ttl']=60*5;
 		return $info;
 	}*/
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -62,14 +62,14 @@ class Block_main_rating
 	{
 		if (!array_key_exists('param',$map)) $map['param']='main';
 		if (!array_key_exists('page',$map)) $map['page']=get_page_name();
-	
+
 		if (array_key_exists('extra_param_from',$map))
 		{
 			$extra='_'.$map['extra_param_from'];
 		} else $extra='';
-	
+
 		require_code('feedback');
-	
+
 		$self_url=get_self_url();
 		$self_title=$map['page'];
 		$id=$map['page'].'_'.$map['param'].$extra;
@@ -79,7 +79,7 @@ class Block_main_rating
 			decache('main_rating');
 		}
 		actualise_rating(true,'block_main_rating',$id,$self_url,$self_title);
-	
+
 		return get_rating_box($self_url,$self_title,'block_main_rating',$id,true);
 	}
 

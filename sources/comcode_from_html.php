@@ -47,14 +47,14 @@ function _img_tag_fixup($matches)
 		$params=preg_replace('# '.$ex.'="[^"]*"#','',$params);
 	}
 	$params=str_replace(' ismap','',$params);
-	
+
 	$referer=post_param('http_referer',ocp_srv('HTTP_REFERER'));
 	$caller_url=looks_like_url($referer)?preg_replace('#/[^/]*$#','',$referer):get_base_url();
-	
+
 	if ((strpos($matches[0],'{$FIND_SCRIPT')===false) && (strpos($matches[0],'{$IMG')===false))
 		$new_url=qualify_url($matches[2],$caller_url);
 	else $new_url=$matches[2];
-	
+
 	return '[img'.rtrim($params).']'.$new_url.'[/img]';
 }
 
@@ -86,7 +86,7 @@ function _css_color_fixup($matches)
 	if (strlen($g)==1) $g='0'.$g;
 	$b=dechex(intval(trim($matches[4])));
 	if (strlen($b)==1) $b='0'.$b;
-	
+
 	return $matches[1].'#'.$r.$g.$b.$matches[5];
 }
 
@@ -244,7 +244,7 @@ function semihtml_to_comcode($semihtml)
 
 	require_code('xhtml');
 	$semihtml=xhtmlise_html($semihtml,true); // Needed so we can parse it right
-	
+
 	$semihtml=preg_replace('#(\[[\w\_]+)&nbsp;#','${1} ',$semihtml);
 
 	if (((get_option('eager_wysiwyg')=='0') && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
@@ -588,7 +588,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		foreach (array('b','i','u','tt','font size="[^"]*"') as $tag)
 		{
 			$tagx=(strpos($tag,' ')!==false)?substr($tag,0,strpos($tag,' ')):$tag;
-			
+
 			$semihtml=comcode_preg_replace($tagx,'#^(\['.$tag.'\])(.*)\\1(.*)\[/'.$tagx.'\](.*)\[/'.$tagx.'\]$#si','${1}${2}${3}${4}[/'.$tagx.']',$semihtml);
 
 			$semihtml=preg_replace('#(\['.$tag.'\])([^\[\]]*)\[/'.$tagx.'\]((&nbsp;|</CDATA\_\_space>|\s)*)\\1#si','${1}${2}${3}',$semihtml); // Only works in simple case, not when there are tags nested within first tag. Can't use comcode_preg_replace as we are joining two tags (i.e. not operating over single bind)
@@ -652,7 +652,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	if (!has_specific_permission(get_member(),'allow_html'))
 	{
 		$semihtml2=$semihtml;
-		
+
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<table summary="([^"]*)"([^>]*)>(.*)</table>$#siU',chr(10)."{| \${2}\${3}'.chr(10).'|}".chr(10));
 		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',chr(10)."{|".chr(10)."\${2}".chr(10)."|}".chr(10));

@@ -30,7 +30,7 @@ class Hook_sw_ocf_forum
 	function get_fields($field_defaults)
 	{
 		if (get_forum_type()!='ocf') return new ocp_tempcode();
-		
+
 		require_lang('ocf');
 		$fields=new ocp_tempcode();
 

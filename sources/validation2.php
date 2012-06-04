@@ -126,7 +126,7 @@ function init__validation2()
 		'small'=>1,
 		'big'=>1,
 	);
-	
+
 	if (get_value('html5')=='1')
 	{
 		$TAGS_INLINE+=array(
@@ -788,7 +788,7 @@ function init__validation2()
 	define('CSS_IN_CLASS',1);
 	define('CSS_EXPECTING_SEP_OR_CLASS_NAME_OR_CLASS',2);
 	define('CSS_IN_CLASS_NAME',3);
-	
+
 	define('_CSS_NO_MANS_LAND',0);
 	define('_CSS_IN_PROPERTY_KEY',1);
 	define('_CSS_IN_PROPERTY_BETWEEN',2);
@@ -1152,7 +1152,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 			$TABS_SEEN[]=$attributes['tabindex'];
 		}
 	}
-	
+
 	return $errors;
 }
 
@@ -1303,7 +1303,7 @@ function _check_attributes($tag,$attributes,$self_close,$close)
 			$IDS_SO_FAR[strtolower($value)]=1;
 		}
 	}
-	
+
 	return ($errors==array())?NULL:$errors;
 }
 
@@ -1522,15 +1522,15 @@ function _check_labelling($tag,$attributes,$self_close,$close)
 			if ($tag=='input')
 			{
 				if (!isset($attributes['type'])) return NULL;
-	
+
 				if ((($attributes['type']=='radio') || ($attributes['type']=='checkbox')) && (isset($attributes['onchange'])) && ($GLOBALS['VALIDATION_COMPAT']))
 					$errors[]=array('XHTML_IE_ONCHANGE');
 			}
-	
+
 	//		if ((!in_array('label',$TAG_STACK)) )//&& ((!isset($attributes['value']) || ($attributes['value']=='')))) // Compromise - sometimes we will use a default value as a substitute for a label. Not strictly allowed in accessibility rules, but writers mention as arguably ok (+ we need it so we don't clutter things unless we start hiding labels, which is not nice)
 			{
 				if (!isset($attributes['id'])) $attributes['id']='unnamed_'.strval(mt_rand(0,10000));
-	
+
 				if ((!isset($FOR_LABEL_IDS[$attributes['id']])) && ($attributes['id']!='x'))
 				{
 					$errors[]=array('WCAG_NO_INPUT_LABEL',$attributes['id']);

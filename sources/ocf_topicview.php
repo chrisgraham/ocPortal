@@ -192,7 +192,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 			$num_warnings=$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['p_poster'],'m_cache_warnings');
 			/*if ($num_warnings!=0)*/ $post['poster_num_warnings']=$num_warnings;
 		}
-		
+
 		// Join date
 		$post['poster_join_date']=$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['p_poster'],'m_join_time');
 		$post['poster_join_date_string']=get_timezoned_date($post['poster_join_date']);
@@ -213,7 +213,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 	// More
 	if (has_specific_permission(get_member(),'see_ip')) $post['ip_address']=$_postdetails['p_ip_address'];
 	if (!is_null($_postdetails['p_intended_solely_for'])) $post['intended_solely_for']=$_postdetails['p_intended_solely_for'];
-	
+
 	return $post;
 }
 
@@ -319,7 +319,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			$out['poll']['voted_already']=$voted_already;
 			$out['poll_id']=$topic_info['t_poll_id'];
 		}
-		
+
 		// Post query
 		$where=ocf_get_topic_where($topic_id);
 		$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
@@ -344,7 +344,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			'last_time'=>time(),
 			'meta_data'=>array(),
 		);
-						
+
 		// Post query
 		$where='p_intended_solely_for='.strval(get_member());
 		$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';

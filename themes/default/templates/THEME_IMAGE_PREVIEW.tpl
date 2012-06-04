@@ -7,7 +7,7 @@
 		{+START,IF,{UNMODIFIED}}
 			<p>{!THEME_IMAGE_CURRENTLY_UNMODIFIED}</p>
 		{+END}
-		
+
 		<p>{!RIGHT_CLICK_SAVE_AS}</p>
 	</div>
 {+END}

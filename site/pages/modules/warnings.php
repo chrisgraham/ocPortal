@@ -297,7 +297,7 @@ class Module_warnings extends standard_aed_module
 	function get_form_fields($new=true,$explanation='',$is_warning=0,$member_id=NULL)
 	{
 		if (is_null($member_id)) $member_id=get_param_integer('id',get_member());
-		
+
 		$hidden=new ocp_tempcode();
 		$fields=new ocp_tempcode();
 
@@ -444,9 +444,9 @@ class Module_warnings extends standard_aed_module
 	function nice_get_choose_table($url_map)
 	{
 		$table=new ocp_tempcode();
-		
+
 		require_code('templates_results_table');
-		
+
 		$current_ordering=get_param('sort','w_time DESC',true);
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -495,7 +495,7 @@ class Module_warnings extends standard_aed_module
 
 			$fields->attach(results_entry($map),true);
 		}
-		
+
 		$search_url=NULL;
 		$archive_url=NULL;
 
@@ -518,7 +518,7 @@ class Module_warnings extends standard_aed_module
 
 		return $entries;
 	}
-	
+
 	/**
 	 * Standard aed_module edit form filler.
 	 *
@@ -570,7 +570,7 @@ class Module_warnings extends standard_aed_module
 
 			$pt_topic_id=ocf_make_topic(NULL,'','',1,1,0,0,0,get_member(),$member_id);
 			$post_id=ocf_make_post($pt_topic_id,$_title,$message,0,true,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,false);
-			
+
 			send_pt_notification($post_id,$_title,$pt_topic_id,$member_id);
 		}
 
@@ -664,7 +664,7 @@ class Module_warnings extends standard_aed_module
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>1),array('id'=>$member_id),'',1);
 			}
 		} else $banned_member=0;
-		
+
 		// IP ban
 		$banned_ip='';
 		if (addon_installed('securitylogging'))

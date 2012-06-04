@@ -140,16 +140,16 @@ class Hook_fields_auto_increment
 		{
 			$value=strval(intval($default)-1);
 		}
-	
+
 		$test=NULL;
 		do
 		{
 			$value=strval(intval($value)+1);
-	
+
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_integer','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
 		}
 		while (!is_null($test));
-	
+
 		return $value;
 	}
 

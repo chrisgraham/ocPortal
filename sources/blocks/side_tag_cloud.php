@@ -38,7 +38,7 @@ class Block_side_tag_cloud
 		$info['parameters']=array('param','title','zone','max');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -69,7 +69,7 @@ class Block_side_tag_cloud
 		$tags=array();
 		$largest_num=0;
 		$smallest_num=mixed();
-				
+
 		$search_limiter=array('all_defaults'=>'1');
 
 		// Find all keywords, hence all tags
@@ -81,7 +81,7 @@ class Block_side_tag_cloud
 			{
 				if ($where!='') $where.=' OR ';
 				$where.=db_string_equal_to('meta_for_type',$l);
-				
+
 				$search_limiter['search_'.$l]=1;
 			}
 			$search_limiter['all_defaults']='0';
@@ -107,16 +107,16 @@ class Block_side_tag_cloud
 		arsort($tags);
 		$tags=array_slice($tags,0,$max_tags);
 		ksort($tags);
-		
+
 		if (count($tags)==0) return new ocp_tempcode();
-		
+
 		// Work out variation in sizings
 		foreach ($tags as $tag=>$count)
 		{
 			if ((is_null($smallest_num)) || ($count<$smallest_num)) $smallest_num=$count;
 			if ($count>$largest_num) $largest_num=$count;
 		}
-		
+
 		// Scale tag sizings into em figures, and generally prepare for templating
 		$max_em=2.5;
 		$min_em=0.85;
@@ -131,7 +131,7 @@ class Block_side_tag_cloud
 				$fraction=floatval($count-$smallest_num)/floatval($largest_num);
 				$em=$min_em+$fraction*($max_em-$min_em);
 			}
-			
+
 			$tpl_tags[]=array(
 				'TAG'=>$tag,
 				'COUNT'=>strval($count),

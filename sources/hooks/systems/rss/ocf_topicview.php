@@ -35,14 +35,14 @@ class Hook_rss_ocf_topicview
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('ocf_forum')) return NULL;
-		
+
 		if (get_forum_type()!='ocf') return NULL;
 		if (!has_actual_page_access(get_member(),'forumview')) return NULL;
 
 		$filters=ocfilter_to_sqlfragment($_filters,'p_topic_id','f_forums','f_parent_forum','p_cache_forum_id','id',true,true,$GLOBALS['FORUM_DB']);
 
 		$cutoff=max($cutoff,time()-60*60*24*60);
-		
+
 		if (!is_guest()) $filters.=' AND (p_poster<>'.strval(get_member()).')';
 
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_time>'.strval($cutoff).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND p_validated=1 ':'').' AND '.$filters.' ORDER BY p_time DESC,id DESC',$max);
@@ -79,7 +79,7 @@ class Hook_rss_ocf_topicview
 				$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 			}
 		}
-		
+
 		require_lang('ocf');
 		return array($content,do_lang('FORUM_TOPICS'));
 	}

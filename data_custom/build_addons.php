@@ -80,7 +80,7 @@ if (get_param_integer('export_bundled_addons',0)==1)
 		{
 			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).date('-dmY-Hm',time()).'.tar';
 		}
-		
+
 		$new_addon_files=array();
 		foreach ($addon_row['addon_files'] as $_file)
 		{
@@ -97,14 +97,14 @@ if (get_param_integer('export_addons',1)==1)
 {
 	$file_list=get_file_list_of_addons();
 	$addon_list=get_details_of_addons();
-	
+
 	foreach ($file_list as $addon => $files)
 	{
 		if (($only!==NULL) && ($only!==$addon)) continue;
 
 		if ($addon == 'proper_name')
 			continue;
-	
+
 		if (!isset($addon_list[$addon]))
 		{
 			$addon_list[$addon]=array(
@@ -116,11 +116,11 @@ if (get_param_integer('export_addons',1)==1)
 				'description' => '',
 			);
 		}
-	
+
 		$val=$addon_list[$addon];
-	
+
 		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
-	
+
 		$name = $addon_list[$addon]['Addon name'];
 		$author = $addon_list[$addon]['Author'];
 		$description = $addon_list[$addon]['Help'];
@@ -154,14 +154,14 @@ if (get_param_integer('export_themes',0)==1)
 	require_code('themes2');
 	require_code('files2');
 	$themes=find_all_themes();
-	
+
 	$page_files=get_directory_contents(get_custom_file_base().'/','');
 	foreach (array_keys($themes) as $theme)
 	{
 		if (($only!==NULL) && ($only!==$theme)) continue;
 
 		if ($theme=='default') continue;
-		
+
 		$name='';
 		$description='';
 		$author='ocProducts';
@@ -173,9 +173,9 @@ if (get_param_integer('export_themes',0)==1)
 			if (array_key_exists('description',$details)) $description=$details['description'];
 			if ((array_key_exists('author',$details)) && ($details['author']!='admin')) $author=$details['author'];
 		}
-	
+
 		$file='theme-'.preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$theme)).$version_for_name.'.tar';
-	
+
 		$files2=array();
 		$theme_files=get_directory_contents(get_custom_file_base().'/themes/'.$theme,'themes/'.$theme);
 		foreach ($theme_files as $file2)
@@ -198,7 +198,7 @@ if (get_param_integer('export_themes',0)==1)
 
 		echo show_updated_commnets_code($file,$name);
 	}
-	
+
 	if ($only!==NULL) echo "All themes have been exported to 'export/mods/'\n";
 }
 
@@ -208,7 +208,7 @@ function show_updated_commnets_code($file,$name)
 {
 return <<<END
 	Paste into ocPortal.com's OcCLE if this addon is updated: {$file}...
-	
+
 	:require_code('feedback');
 	\$id=\$GLOBALS['SITE_DB']->query_value('download_downloads','id',array('url'=>'uploads/downloads/'.rawurlencode('{$file}')));
 	\$content_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>\$id),get_module_zone('downloads'));

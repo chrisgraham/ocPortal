@@ -76,7 +76,7 @@ class Module_admin_workflow extends standard_aed_module
 	{
 		// Create required database structures
 		require_lang('workflows');
-		
+
 		// The workflow_permissions table stores which usergroups are
 		// allowed to approve which points
 		$GLOBALS['SITE_DB']->create_table('workflow_permissions',array(
@@ -85,7 +85,7 @@ class Module_admin_workflow extends standard_aed_module
 			'usergroup'=>'GROUP',		// The usergroup to give permission to
 			'validated'=>'BINARY'		// Whether this permission has been approved
 		));
-		
+
 		// The workflow_requirements table records which workflows require which points to approve
 		$GLOBALS['SITE_DB']->create_table('workflow_requirements',array(
 			'id'=>'*AUTO',		// ID for reference
@@ -94,7 +94,7 @@ class Module_admin_workflow extends standard_aed_module
 			'the_position'=>'INTEGER',		// The position of this requirement in the workflow (ie. any approval can be given at any time, but encourage users into a prespecified order)
 			'is_default'=>'BINARY'		// Keep default workflow information here, since the system config makes it difficult to display a list of strings whilst returning associated ID ints. NOTE: For the default workflow, set this to 1 for ALL of its requirements
 		));
-		
+
 		// The workflow_content table records which site resources are in
 		// which workflows, along with any notes made during the approval
 		// process
@@ -106,7 +106,7 @@ class Module_admin_workflow extends standard_aed_module
 			'notes'=>'LONG_TEXT',		// No point translating the notes, since they're transient
 			'original_submitter'=>'USER'		// Save this here since there's no standard way to discover it later (eg. through content-meta-aware hooks)
 		));
-		
+
 		// The workflow_content_status table records the status of each
 		// approval point for a piece of content and the member who
 		// approved the point (if any)
@@ -117,7 +117,7 @@ class Module_admin_workflow extends standard_aed_module
 			'status_code'=>'INTEGER',		// A code indicating the status TODO: Use TINY_INTEGER here? Can't find any other use of this type to investigate though.
 			'approved_by'=>'USER'		// Remember who set this status, if the need arises to investigate this later
 		));
-		
+
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Module_admin_workflow extends standard_aed_module
 		require_lang('workflows');
 		return array_merge(array('misc'=>'MANAGE_WORKFLOWS'),parent::get_entry_points());
 	}
-	
+
 	/**
 	 * Standard aed_module run_start.
 	 *
@@ -180,7 +180,7 @@ class Module_admin_workflow extends standard_aed_module
 		/////////////////////////////////
 		// Get all of our requirements //
 		/////////////////////////////////
-		
+
 		require_code('form_templates');
 		require_lang('workflows');
 		require_code('workflows');
@@ -188,13 +188,13 @@ class Module_admin_workflow extends standard_aed_module
 		// These will hold our form elements, visible & hidden
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
-		
+
 		// Grab all of the data we can about this workflow
 		// Make some assumptions first
 		$default = false;
 		$approval_points = array();
 		$name_string = '';
-		
+
 		// Now overwrite those assumptions if they're wrong
 		if (!is_null($id))
 		{
@@ -214,17 +214,17 @@ class Module_admin_workflow extends standard_aed_module
 			// -1 indicates an invalid ID
 			$id = -1;
 		}
-		
+
 		////////////////////
 		// Build the form //
 		////////////////////
-		
+
 		// First we must be given a name (defaulting to the given name if
 		// it has been passed). We want to show the user which names are
 		// unavailable, so scrape the database for this information.
 		$workflow_names = get_all_workflows();
 		$workflow_name_ids = array_keys($workflow_names);
-		
+
 		if (count($workflow_names) > 0)
 		{
 			$defined_names = do_lang('DEFINED_WORKFLOWS', implode(', ', $workflow_names));
@@ -233,7 +233,7 @@ class Module_admin_workflow extends standard_aed_module
 		{
 			$defined_names = do_lang('NO_DEFINED_WORKFLOWS');
 		}
-			
+
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('WORKFLOW_NAME_DESCRIPTION', $defined_names),'name',$name_string,true));
 
 		// Now we must handle the ID for this workflow. The ID is an index
@@ -245,13 +245,13 @@ class Module_admin_workflow extends standard_aed_module
 		// want ID to be a number we will set it to an invalid value (-1)
 		// to indicate a NULL status.
 		$hidden->attach(form_input_hidden('workflow_id',strval($id)));
-		
+
 		// Give the user a multiline text entry to specify the approval
 		// points for this workflow. Not as elegant as it could be, but it
 		// doesn't require Javascript.
 		$all_points = get_all_approval_points();		// We need to display which points are available
 		$points_text = array_values($all_points);		// An array of approval point names (strings)
-		
+
 		if ($points_text==array())
 		{
 			$points_list = do_lang('APPROVAL_POINTS_DESCRIPTION_EMPTY_LIST');
@@ -260,17 +260,17 @@ class Module_admin_workflow extends standard_aed_module
 		{
 			$points_list = do_lang('APPROVAL_POINTS_DESCRIPTION_LIST', implode(', ', $points_text));
 		}
-		
+
 		// Now add the approval point lines
 		$fields->attach(form_input_text(do_lang_tempcode('WORKFLOW_APPROVAL_POINTS'),do_lang_tempcode('APPROVAL_POINTS_DESCRIPTION',$points_list),'points',implode("\n",$approval_points),true,NULL,true));
 
 		// Add an option to make this default
 		$fields->attach(form_input_tick(do_lang('DEFAULT_WORKFLOW'),do_lang('DEFAULT_WORKFLOW_DESCRIPTION'),'is_default',$default));
-		
+
 		// Actions
 		$fields2 = new ocp_tempcode();
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
-		
+
 		// Add an option to redefine the approval permissions
 		$fields2->attach(form_input_tick(do_lang('REDEFINE_WORKFLOW_POINTS'), do_lang('REDEFINE_WORKFLOW_POINTS_DESC'), 'redefine_points', false));
 
@@ -407,7 +407,7 @@ class Module_admin_workflow extends standard_aed_module
 				$point_id = insert_lang($p,3);
 				$point_ids[$point_id] = $p;
 			}
-			
+
 			// Make sure that there are groups allowed to approve this point
 			$this_key = NULL;
 			foreach (array_keys($_POST) as $post_key)
@@ -468,7 +468,7 @@ class Module_admin_workflow extends standard_aed_module
 					));
 				}
 			}
-				
+
 		}
 
 		// Now replace the workflow requirements. Add the new points (existing
@@ -782,7 +782,7 @@ class Module_admin_workflow extends standard_aed_module
 		// Grab our data. We pass true so that it will create non-existant content
 		// for us (workflow and approval points)
 		list($workflow_id,$workflow_name,$approval_points,$is_default)=$this->read_in_data(true);
-		
+
 		// Now create the workflow's presence in the database, by giving
 		// it the approval points as requirements.
 		$id = build_new_workflow($workflow_id, $workflow_name, array_keys($approval_points), $is_default);
@@ -801,7 +801,7 @@ class Module_admin_workflow extends standard_aed_module
 		require_lang('workflows');
 		// Grab our data
 		list($workflow_id,$workflow_name,$approval_points,$is_default)=$this->read_in_data(false);
-		
+
 		
 	}
 

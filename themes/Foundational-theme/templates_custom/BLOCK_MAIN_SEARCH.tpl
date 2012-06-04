@@ -47,7 +47,7 @@
 		</div>
        
 	</form>
-	
+
 	<p class="associated_details">
 		<a href="{$PAGE_LINK*,site:search}">Advanced search</a>
 	</p>

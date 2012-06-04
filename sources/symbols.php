@@ -326,7 +326,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 							),'',1);
 						}
 					}
-				
+
 					$keep=symbol_tempcode('KEEP');
 					$value=find_script('snippet').'?snippet=block&auth_key='.urlencode(strval($auth_key)).'&block_map='.urlencode($param[0]).$keep->evaluate();
 				}
@@ -342,7 +342,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value=get_param($param[0],isset($param[1])?$param[1]:'',true);
 				}
 				break;
-				
+
 			case 'QUERY_STRING':
 				$value=ocp_srv('QUERY_STRING');
 				break;
@@ -404,7 +404,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value='default';
 				}
 				break;
-				
+
 			case 'REVERSE':
 				if (isset($param[0]))
 				{
@@ -447,12 +447,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'CUSTOM_BASE_URL':
 				$value=get_custom_base_url((isset($param[0]) && ($param[0]!=''))?($param[0]=='1'):NULL);
-				
+
 				if ((isset($param[1])) && ($param[1]=='1'))
 				{
 					$value=cdn_filter($value);
 				}
-				
+
 				break;
 
 			case 'LOAD_PANEL':
@@ -690,7 +690,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				require_code('images');
 				list(,$value)=_symbol_image_dims($param);
 				break;
-			
+
 			case 'IS_IN_GROUP':
 				if (isset($param[0]))
 				{
@@ -1082,7 +1082,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					foreach ($_GET as $key=>$val)
 					{
 						if (is_array($val)) continue;
-						
+
 						if (get_magic_quotes_gpc()) $val=stripslashes($val);
 
 						if ((substr($key,0,5)=='keep_') && (!skippable_keep($key,$val)) && (strpos($key,'_expand_')===false))
@@ -1122,7 +1122,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'MOBILE':
 				$value=is_mobile(NULL,array_key_exists(0,$param)?($param[0]=='1'):false)?'1':'0';
 				break;
-				
+
 			case 'VALID_FILE_TYPES':
 				$value=get_option('valid_types');
 				$types=array_flip(explode(',',$value));
@@ -1132,12 +1132,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value.=$val.',';
 				$value=substr($value,0,strlen($value)-1);
 				break;
-				
+
 			case 'BROWSER_UA':
 				$browser=get_browser_string();
 				$value=$browser;
 				break;
-				
+
 			case 'OS':
 				$os=get_os_string();
 				if (is_null($os)) $os='';
@@ -1285,7 +1285,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value=has_specific_permission(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
 				}
 				break;
-	
+
 			case 'HAS_ZONE_ACCESS':
 				if (isset($param[0]))
 				{
@@ -1328,21 +1328,21 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value=has_delete_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
 				}
 				break;
-	
+
 			case 'HAS_EDIT_PERMISSION':
 				if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')) && (isset($param[1])))
 				{
 					$value=has_edit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
 				}
 				break;
-				
+
 			case 'ENTITY_DECODE':
 				if (isset($param[0]))
 				{
 					$value=@html_entity_decode($param[0],ENT_QUOTES,get_charset());
 				}
 				break;
-	
+
 			case 'RESET_CYCLE':
 				if (isset($param[0]))
 				{
@@ -1474,7 +1474,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					}
 				}
 				break;
-				
+
 			case 'DEV_MODE':
 				$value=$GLOBALS['DEBUG_MODE']?'1':'0';
 				break;
@@ -1591,7 +1591,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))+floatval(str_replace(',','',$param[1])));
 				}
 				break;
-			
+
 			case 'WCASE':
 				if (isset($param[0]))
 				{
@@ -1850,7 +1850,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if ($value=='') $value='0px';
 				}
 				break;
-				
+
 			case 'COMMENT_COUNT':
 				if (isset($param[1]))
 				{
@@ -1905,7 +1905,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value=isset($SHIFT_VARIABLES[$key])?$SHIFT_VARIABLES[$key]->evaluate():'';
 				}
 				break;
-				
+
 			case 'NUMBER_FORMAT':
 				if (isset($param[0]))
 				{
@@ -1951,7 +1951,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if (is_object($value)) $value=$value->evaluate();
 				}
 				break;
-	
+
 			case 'VIEWS':
 				if (isset($param[2]))
 				{
@@ -2015,7 +2015,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 		// In our param we should have a map of bubbled template parameters (under 'vars') and our numbered directive parameters
 
 		if ($param===NULL) $param=array();
-		
+
 		// Closure-based Tempcode parser may send in strings, so we need to adapt...
 		foreach ($param as $key=>$val)
 		{
@@ -2033,7 +2033,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$_value=do_template('PARAM_INFO',array('MAP'=>$param['vars']));
 				$value=$_value->evaluate();
 				break;
-				
+
 			case 'CSS_INHERIT': // e.g. {+START,CSS_INHERIT,global,default,#886aa9}{+END}
 				if (isset($param[0]))
 				{
@@ -2082,7 +2082,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					}
 				}
 				break;
-				
+
 			case 'SET':
 				if (isset($param[1]))
 				{
@@ -2163,7 +2163,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$value=strval(count($array));
 				}
 				break;
-				
+
 			case 'BOX':
 				unset($param['vars']);
 				$title=isset($param[1])?$param[0]->evaluate():'';
@@ -2526,7 +2526,7 @@ function keep_symbol($param)
 		foreach ($get_vars as $key=>$val)
 		{
 			if ((get_magic_quotes_gpc()) && (is_string($val))) $val=stripslashes($val);
-			
+
 			if ((substr($key,0,5)=='keep_') && (strpos($key,'_expand_')===false) && ((!skippable_keep($key,$val)) || (($key=='keep_session') && (is_null(get_bot_type())) && (isset($param[1])) && ($param[1]=='1'))) && (is_string($val)))
 			{
 				$value.=($first?'?':'&').urlencode($key).'='.ocp_url_encode($val);

@@ -36,13 +36,13 @@ class test_browser extends UnitTestCase
 		$browser1=new SimpleBrowser();
 		$old_page=$browser1->get('http://www.google.com/');
 		$old_title=$browser1->getTitle();
-		
+
 		$browser2=new SimpleBrowser();
 		$browser2->get('http://www.google.com/');
 		$new_title=$browser2->getTitle();
 		$this->assertEqual($old_title,$new_title);
 	}
-	
+
 	function testBack()
 	{
 		$browser4=new SimpleBrowser();

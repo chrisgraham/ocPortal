@@ -38,7 +38,7 @@ class Block_main_staff_actions
 		$info['parameters']=array();
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_staff_actions
 		$info['ttl']=60*5;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -59,7 +59,7 @@ class Block_main_staff_actions
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('adminlogs');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -83,7 +83,7 @@ class Block_main_staff_actions
 		$GLOBALS['SITE_DB']->create_index('adminlogs','aip',array('ip'));
 		$GLOBALS['SITE_DB']->create_index('adminlogs','athe_type',array('the_type'));
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -97,7 +97,7 @@ class Block_main_staff_actions
 		require_all_lang();
 
 		require_css('adminzone');
-		
+
 		require_code('actionlog');
 
 		$start=get_param_integer('sa_start',0);
@@ -122,7 +122,7 @@ class Block_main_staff_actions
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['the_user']);
 			if (is_null($username)) $username=do_lang('UNKNOWN');
 			$date=get_timezoned_date($myrow['date_and_time']);
-	
+
 			if (!is_null($myrow['param_a'])) $a=$myrow['param_a']; else $a='';
 			if (!is_null($myrow['param_b'])) $b=$myrow['param_b']; else $b='';
 

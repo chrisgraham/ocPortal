@@ -16,7 +16,7 @@
 	<h2>Expanded advice</h2>
 
 	{WEBSERVICE_RESULT}
-	
+
 	<br />
 {+END}
 

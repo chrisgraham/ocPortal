@@ -38,7 +38,7 @@ class Block_side_zone_jump
 		$info['parameters']=array('table','skip','reorder');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_side_zone_jump
 		$info['ttl']=15;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -61,16 +61,16 @@ class Block_side_zone_jump
 	function run($map)
 	{
 		require_css('side_blocks');
-		
+
 		require_code('zones3');
-		
+
 		$skip=array_key_exists('skip',$map)?$map['skip']:'-1';
 		$reorder=array_key_exists('reorder',$map)?$map['reorder']:'-1';
 
 		$content=get_zone_chooser(false,($skip=='-1')?NULL:explode(',',$skip),($reorder=='-1')?NULL:explode(',',$reorder));
-	
+
 		if ((array_key_exists('table',$map)) && ($map['table']=='1')) return do_template('BLOCK_SIDE_ZONE_JUMP',array('_GUID'=>'7d99038e936b8be1f8d829d71ff40d5a','CONTENT'=>$content));
-	
+
 		return $content;
 	}
 

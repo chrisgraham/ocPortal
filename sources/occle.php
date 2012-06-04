@@ -33,7 +33,7 @@ function init__occle()
 function occle_script()
 {
 	$cli=(php_sapi_name()=='cli' && empty($_SERVER['REMOTE_ADDR']));
-	
+
 	// Closed site
 	if (!$cli)
 	{
@@ -88,14 +88,14 @@ function occle_script()
 		{
 			require_code('comcode_from_html');
 			require_code('mail');
-			
+
 			$stdin=@fopen('php://stdin','rt');
 			$stderr=@fopen('php://stderr','wt');
 			$stdout=@fopen('php://stdout','wt');
 			while (true) // Goes on until ctrl+C
 			{
 				fwrite($stdout,"\n> ");
-				
+
 				$command=fgets($stdin,102400);
 				if (trim($command)=='exit') break;
 				$temp=new virtual_bash(trim($command));
@@ -260,7 +260,7 @@ class virtual_bash
 				$this->output[STREAM_STDERR]=do_lang('PROBLEM_ACCESSING_RESPONSE')."\n".$this->output[STREAM_STDERR]; //Ugh...got to work with language strings designed for Javascript
 			else
 				$this->output[STREAM_STDERR]=do_lang('TERMINAL_PROBLEM_ACCESSING_RESPONSE');
-				
+
 			if ($blank_ok) return new ocp_tempcode();
 		}
 		elseif ($this->output[STREAM_STDERR]!='')
@@ -385,7 +385,7 @@ class virtual_bash
 							$this->parsed_input[SECTION_OPTIONS][$current_option]=NULL;
 							$option_mode=OUT_OPTION;
 							$this->parse_runtime['parse_position']+=strlen($current_option)+1;
-							
+
 							break;
 						}
 					}
@@ -397,7 +397,7 @@ class virtual_bash
 						$this->parsed_input[SECTION_OPTIONS][$current_option]=NULL;
 						$option_mode=OUT_OPTION;
 						$this->parse_runtime['parse_position']+=strlen($current_option)+1; //Because there won't be an equals
-						
+
 						break;
 					}
 					elseif ($equals_pos!==false)
@@ -423,7 +423,7 @@ class virtual_bash
 					if ($next_char!='=') break 2; //PANIC!!
 					$option_mode=IN_OPTION_VALUE;
 					$this->parse_runtime['parse_position']++;
-					
+
 					break;
 				case IN_OPTION_VALUE:
 					//Get the value, if applicable
@@ -720,9 +720,9 @@ class virtual_bash
 						//If we have anything other than a greater-than ('>') or a less-than ('<'), continue to the REDIRECT_IDENTIFIER stage
 						$extra_mode=IN_EXTRA_VALUE;
 					}
-					
+
 					$this->parse_runtime['parse_position']++;
-					
+
 					break;	
 				case IN_EXTRA_VALUE:
 					//Get the value, if applicable
@@ -730,10 +730,10 @@ class virtual_bash
 					{
 						//A pipe was used, so what follows will be a completely new command
 						/*$subsequent_command=substr($this->current_input,$this->parse_runtime['parse_position']);
-						
+
 						$virtual_bash=new virtual_bash($subsequent_command);
 						$parse_tree=$virtual_bash->return_parse_tree();
-						
+
 						$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=$parse_tree;
 						$this->parse_runtime['parse_position']+=strlen($parse_tree);*
 						$extra_mode=OUT_EXTRA;
@@ -778,7 +778,7 @@ class virtual_bash
 						{
 							//Normal mode; business as usual (quotes have not been used, so we can just strip out the extra value using string functions)
 							$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
-							
+
 							if ($space_pos!==false)
 							{
 								$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); //Get the value; up to the next space
@@ -802,7 +802,7 @@ class virtual_bash
 						}
 						else break 2; //PANIC!!
 					}
-				
+
 					break;
 				default:
 					break 2; //PANIC!!
@@ -843,7 +843,7 @@ class virtual_bash
 			chmod	-R	777		./foobar	>> output.txt
 			COMMAND	OPTION	PARAMETER	PARAMETER	EXTRA
 		*/
-		
+
 		/*Output redirection:
 			2&1> output.txt
 
@@ -1220,7 +1220,7 @@ class virtual_bash
 				foreach ($occle_state_diff as $occle_key=>$occle_val)
 				{
 					if (!is_scalar($occle_val)) continue;
-				
+
 					if ((!is_integer($occle_val)) && (!is_float($occle_val))) eval('$'.$occle_key.'=\''.addslashes($occle_val).'\';');
 					else eval('$'.$occle_key.'='.$occle_val.';');
 				}
@@ -1325,10 +1325,10 @@ class virtual_fs
 	function virtual_fs()
 	{
 		//Initialise a new virtual filesystem; setup the vfs array, and fetch the pwd from a cookie
-		
+
 		/*The pwd is stored in a flat array, each value holds the key for each level in the $this->virtual_fs array that is in the pwd:
 			$this->pwd=array('blah2','foo3','bar');
-			
+
 			$this->virtual_fs=array(
 				'blah',
 			***	'blah2'=>array(
@@ -1343,7 +1343,7 @@ class virtual_fs
 				'blah3'
 			);
 		*/
-		
+
 		//Feel free to rearrange this array as you see fit; it's easily moddable
 		/*$this->virtual_fs=array(
 			'database'=>'database', //View of the database; level 1: tables, level 2: rows (identified by ID)
@@ -1421,7 +1421,7 @@ class virtual_fs
 				foreach ($before as $i=>$entry)
 				{
 					if (is_array($entry)) $entry=$i;
-					
+
 					if (simulated_wildcard_match($entry,$end_bit,true))
 						$ret[]=preg_replace('#^.*/#','',$entry);
 				}
@@ -1752,7 +1752,7 @@ class virtual_fs
 		}
 		else return false;
 	}
-	
+
 	/**
 	 * Remove a directory under the current working directory. Equivalent to Unix "rmdir".
 	 *

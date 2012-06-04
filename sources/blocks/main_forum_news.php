@@ -38,7 +38,7 @@ class Block_main_forum_news
 		$info['parameters']=array('param','forum','member_based','date_key','title');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_forum_news
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

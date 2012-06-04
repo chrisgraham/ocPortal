@@ -14,7 +14,7 @@
 					{+END}
 				</colgroup>
 			{+END}{+END}
-	
+
 			<thead>
 				<tr>
 					{FIELDS_TITLE}

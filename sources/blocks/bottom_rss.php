@@ -20,7 +20,7 @@
 
 class Block_bottom_rss
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_bottom_rss
 		$info['parameters']=array('param','max_entries');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_bottom_rss
 		$info['ttl']=intval(get_option('rss_update_time'));
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -65,11 +65,11 @@ class Block_bottom_rss
 		require_code('rss');
 		$rss=new rss($url);
 		if (!is_null($rss->error)) return paragraph($rss->error,'gfgrtyhyyfhd');
-	
+
 		global $NEWS_CATS;
 		$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 		$NEWS_CATS=list_to_map('id',$NEWS_CATS);
-	
+
 		$_postdetailss=array();
 
 		// Now for the actual stream contents
@@ -78,7 +78,7 @@ class Block_bottom_rss
 		foreach ($rss->gleamed_items as $i=>$item)
 		{
 			if ($i>=$max) break;
-	
+
 			if (array_key_exists('full_url',$item)) $full_url=$item['full_url'];
 			elseif (array_key_exists('guid',$item)) $full_url=$item['guid'];
 			elseif (array_key_exists('comment_url',$item)) $full_url=$item['comment_url'];

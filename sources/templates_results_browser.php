@@ -94,7 +94,7 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 			$cat_url=_build_results_browser_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
 			$part->attach(do_template('RESULTS_BROWSER_CONTINUE_FIRST',array('TITLE'=>$title,'P'=>strval(1),'FIRST_URL'=>$cat_url)));
 		}
-		
+
 		// Link to previous
 		if ($start>0)
 		{
@@ -227,7 +227,7 @@ function _build_results_browser_cat_url($url_array,$post_array,$type,$root,$cate
 {
 	if (!is_null($category_id))
 		if (!is_string($category_id)) $category_id=strval($category_id);
-	
+
 	$url_array=array_merge($url_array,$post_array);
 	if (!is_null($type)) $url_array['type']=$type;
 	if (!is_null($root)) $url_array['root']=$root;

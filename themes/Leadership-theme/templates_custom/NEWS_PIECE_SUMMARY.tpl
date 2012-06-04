@@ -18,7 +18,7 @@
 			{+START,IF_NON_EMPTY,{$AVATAR*,{SUBMITTER}}}
 				<img src="{$AVATAR*,{SUBMITTER}}" title="{!AVATAR}" alt="{!AVATAR}" />
 			{+END}
-			
+
 			{+START,IF,{$OCF}}
 				<br /><br />
 				{$OCF_RANK_IMAGE,{SUBMITTER}}

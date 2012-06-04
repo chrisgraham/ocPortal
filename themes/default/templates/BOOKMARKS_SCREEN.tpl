@@ -19,7 +19,7 @@
 		document.getElementById('selected_actions_none').style.display=some_checked?'none':'block';
 
 		addFormMarkedPosts(form,'bookmark_');
-		
+
 		var folder_list=document.getElementById('folder');
 		var _fv=document.getElementById('folder_'+id);
 		var fv=_fv?_fv.value:'';

@@ -35,7 +35,7 @@ class Hook_rss_ocf_forumview
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('ocf_forum')) return NULL;
-		
+
 		if (get_forum_type()!='ocf') return NULL;
 		if (!has_actual_page_access(get_member(),'forumview')) return NULL;
 
@@ -74,7 +74,7 @@ class Hook_rss_ocf_forumview
 				$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
 			}
 		}
-		
+
 		require_lang('ocf');
 		return array($content,do_lang('SECTION_FORUMS'));
 	}

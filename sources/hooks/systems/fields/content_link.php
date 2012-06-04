@@ -97,14 +97,14 @@ class Hook_fields_content_link
 	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-		
+
 		if ($ev=='') return new ocp_tempcode();
 
 		$type=preg_replace('#^choose\_#','',substr($field['cf_type'],3));
 
 		// HACKHACK: imperfect content type naming schemes
 		if ($type=='forum_topic') $type='topic';
-		
+
 		require_code('content');
 		list($title,,$info)=content_get_details($type,$ev);
 

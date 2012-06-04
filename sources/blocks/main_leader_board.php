@@ -20,7 +20,7 @@
 
 class Block_main_leader_board
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -39,7 +39,7 @@ class Block_main_leader_board
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -52,7 +52,7 @@ class Block_main_leader_board
 		$info['ttl']=60*24*7;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -69,13 +69,13 @@ class Block_main_leader_board
 				'date_and_time'=>'*TIME'
 			));
 		}
-		
+
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
 			add_config_option('LEADERBOARD_START_DATE','leaderboard_start_date','date','return strval(filemtime(get_file_base().\'/index.php\'));','POINTS','POINT_LEADERBOARD');
 		}
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -84,7 +84,7 @@ class Block_main_leader_board
 		delete_config_option('leaderboard_start_date');
 		$GLOBALS['SITE_DB']->drop_if_exists('leader_board');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -96,7 +96,7 @@ class Block_main_leader_board
 		$limit=array_key_exists('param',$map)?intval($map['param']):5;
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('leader_board');
 		$staff=intval(array_key_exists('staff',$map)?$map['staff']:'0');
-	
+
 		require_lang('leader_board');
 		require_code('points');
 		require_css('points');
@@ -113,31 +113,31 @@ class Block_main_leader_board
 		}
 		$out=new ocp_tempcode();
 		$i=0;
-	
+
 		foreach ($rows as $member=>$points)
 		{
 			if ($i==$limit) break;
 
 			if (is_guest($member)) continue; // Should not happen, but some forum drivers might suck ;)
 			if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($member))) continue;
-	
+
 			$points_url=build_url(array('page'=>'points','type'=>'member','id'=>$member),get_module_zone('points'));
 			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
 			$name=$GLOBALS['FORUM_DRIVER']->get_username($member);
 			if (is_null($name)) continue;
-			
+
 			if ($i==0) set_value('site_bestmember',$name);
-			
+
 			$out->attach(do_template('POINTS_LEADERBOARD_ROW',array('_GUID'=>'68caa55091aade84bc7ca760e6655a45','ID'=>strval($member),'POINTS_URL'=>$points_url,'PROFILE_URL'=>$profile_url,'POINTS'=>integer_format($points),'NAME'=>$name)));
-	
+
 			$i++;
 		}
-	
+
 		$url=build_url(array('page'=>'leader_board'),$zone);
-	
+
 		return do_template('POINTS_LEADERBOARD',array('_GUID'=>'c875cce925e73f46408acc0a153a2902','URL'=>$url,'LIMIT'=>integer_format($limit),'ROWS'=>$out));
 	}
-	
+
 	/**
 	 * Calculate the leaderboard.
 	 *
@@ -155,9 +155,9 @@ class Block_main_leader_board
 			if (($staff==0) && ($GLOBALS['FORUM_DRIVER']->is_staff($id))) continue;
 			$points[$id]=total_points($id);
 		}
-	
+
 		arsort($points);
-	
+
 		$i=0;
 		$time=time();
 		foreach ($points as $id=>$num_points)

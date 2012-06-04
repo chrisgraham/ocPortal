@@ -26,7 +26,7 @@ class lang_test_set extends ocp_test_case
 	function setUp()
 	{
 		require_code('lang_compile');
-		
+
 		parent::setUp();
 	}
 
@@ -47,7 +47,7 @@ class lang_test_set extends ocp_test_case
 
 			$input=array();
 			_get_lang_file_map(get_file_base().'/lang/EN/'.$file,$input,NULL,false);
-			
+
 			foreach($input as $key=>$string)
 			{
 				$output2='';
@@ -91,7 +91,7 @@ class lang_test_set extends ocp_test_case
 			}
 		}
 	}
-	
+
 	function tearDown()
 	{
 		parent::tearDown();

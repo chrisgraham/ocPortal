@@ -20,7 +20,7 @@
 
 class Block_main_countdown
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_countdown
 		$info['parameters']=array('param','precision','tailing');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

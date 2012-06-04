@@ -30,7 +30,7 @@ class Hook_sw_galleries
 	function get_fields($field_defaults)
 	{
 		if (!addon_installed('galleries')) return new ocp_tempcode();
-		
+
 		require_lang('galleries');
 		return form_input_tick(do_lang_tempcode('KEEP_PERSONAL_GALLERIES'),do_lang_tempcode('DESCRIPTION_KEEP_PERSONAL_GALLERIES'),'keep_personal_galleries',array_key_exists('keep_personal_galleries',$field_defaults)?($field_defaults['keep_personal_galleries']=='1'):false);
 	}
@@ -41,7 +41,7 @@ class Hook_sw_galleries
 	function set_fields()
 	{
 		if (!addon_installed('galleries')) return;
-		
+
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 		$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>'have_personal_category','the_page'=>'cms_galleries'));
@@ -63,7 +63,7 @@ class Hook_sw_galleries
 	function get_blocks()
 	{
 		if (!addon_installed('galleries')) return array();
-		
+
 		return array(array('main_image_fader'=>array('NO','NO'),'main_top_galleries'=>array('YES','NO'),'main_recent_galleries'=>array('YES','NO')),array('side_root_galleries'=>array('PANEL_NONE','PANEL_NONE')));
 	}
 

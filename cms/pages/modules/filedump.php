@@ -41,14 +41,14 @@ class Module_filedump
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
 	function uninstall()
 	{
 		$GLOBALS['SITE_DB']->drop_if_exists('filedump');
-	
+
 		delete_specific_permission('delete_anything_filedump');
 		delete_specific_permission('upload_filedump');
 		delete_specific_permission('upload_anything_filedump');
@@ -56,7 +56,7 @@ class Module_filedump
 		//deldir_contents(get_custom_file_base().'/uploads/filedump',true);
 
 		delete_menu_item_simple('_SEARCH:filedump:type=misc');
-		
+
 		delete_config_option('filedump_show_stats_count_total_files');
 		delete_config_option('filedump_show_stats_count_total_space');
 	}
@@ -78,7 +78,7 @@ class Module_filedump
 				'description'=>'SHORT_TRANS',
 				'the_member'=>'USER'
 			));
-	
+
 			add_specific_permission('FILE_DUMP','upload_anything_filedump',false);
 			add_specific_permission('FILE_DUMP','upload_filedump',true);
 			add_specific_permission('FILE_DUMP','delete_anything_filedump',false);
@@ -101,7 +101,7 @@ class Module_filedump
 			$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'filedump','r_from_zone'=>'collaboration','r_to_page'=>'filedump','r_to_zone'=>'cms','r_is_transparent'=>1));
 		}
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -111,7 +111,7 @@ class Module_filedump
 	{
 		return array('misc'=>'FILE_DUMP');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -121,18 +121,18 @@ class Module_filedump
 	{
 		require_lang('filedump');
 		require_code('files2');
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='ac') return $this->module_do_add_folder();
 		if ($type=='ad') return $this->module_do_upload();
 		if ($type=='ec') return $this->module_do_delete_folder();
 		if ($type=='ed') return $this->module_do_delete_file();
 		if ($type=='misc') return $this->module_do_gui();
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The main user interface for the file dump.
 	 *
@@ -155,7 +155,7 @@ class Module_filedump
 		while (array_key_exists($i,$dirs))
 		{
 			if ($i>0) $d=$dirs[$i]; else $d=do_lang('FILE_DUMP');
-			
+
 			if (array_key_exists($i+1,$dirs))
 			{
 				$tree_url=build_url(array('page'=>'_SELF','place'=>$pre.$dirs[$i].'/'),'_SELF');
@@ -343,10 +343,10 @@ class Module_filedump
 		$return_url=build_url(array('page'=>'_SELF','type'=>'misc','place'=>$place),'_SELF');
 
 		log_it('FILEDUMP_DELETE_FILE',$file,$place);
-	
+
 		return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * The actualiser for deleting a folder.
 	 *
@@ -358,7 +358,7 @@ class Module_filedump
 
 		$file=filter_naughty(get_param('file'));
 		$place=filter_naughty(get_param('place'));
-	
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('FILE_DUMP'))));
 
 		if (post_param_integer('confirmed',0)!=1)
@@ -386,7 +386,7 @@ class Module_filedump
 			return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
 
 		} else warn_exit(do_lang_tempcode('FOLDER_DELETE_ERROR'));
-	
+
 		return new ocp_tempcode();
 	}
 
@@ -398,10 +398,10 @@ class Module_filedump
 	function module_do_add_folder()
 	{
 		$title=get_page_title('FILEDUMP_CREATE_FOLDER');
-	
+
 		$name=filter_naughty(post_param('name'));
 		$place=filter_naughty(post_param('place'));
-	
+
 		if (!file_exists(get_custom_file_base().'/uploads/filedump'.$place.$name))
 		{
 			$path=get_custom_file_base().'/uploads/filedump'.$place.$name;
@@ -410,18 +410,18 @@ class Module_filedump
 			sync_file($path);
 
 			$return_url=build_url(array('page'=>'_SELF','type'=>'misc','place'=>$place),'_SELF');
-	
+
 			log_it('FILEDUMP_CREATE_FOLDER',$name,$place);
-	
+
 			return redirect_screen($title,$return_url,do_lang_tempcode('SUCCESS'));
 		} else
 		{
 			warn_exit(do_lang_tempcode('FOLDER_OVERWRITE_ERROR'));
 		}
-	
+
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The actualiser for uploading a file.
 	 *
@@ -430,11 +430,11 @@ class Module_filedump
 	function module_do_upload()
 	{
 		if (!has_specific_permission(get_member(),'upload_filedump')) access_denied('I_ERROR');
-	
+
 		$title=get_page_title('FILEDUMP_UPLOAD');
 
 		if (function_exists('set_time_limit')) @set_time_limit(0); // Slowly uploading a file can trigger time limit, on some servers
-	
+
 		$place=filter_naughty(post_param('place'));
 
 		require_code('uploads');

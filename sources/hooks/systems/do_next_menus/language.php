@@ -30,7 +30,7 @@ class Hook_do_next_menus_language
 	function run()
 	{
 		$has_langs=false;
-		
+
 		$_dir=opendir(get_file_base().'/lang/');
 		$_langs=array();
 		while (false!==($file=readdir($_dir)))

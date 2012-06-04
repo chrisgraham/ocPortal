@@ -37,7 +37,7 @@ class Hook_rss_polls
 		unset($_filters); // Not used
 
 		if (!addon_installed('polls')) return NULL;
-		
+
 		if (!has_actual_page_access(get_member(),'polls')) return NULL;
 
 		$content=new ocp_tempcode();

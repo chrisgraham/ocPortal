@@ -47,7 +47,7 @@ function init__notifications()
 
 	// Notifications will be sent to one of the following if not to a specific list of member IDs
 	define('A_TO_ANYONE_ENABLED',NULL);
-	
+
 	define('A_NA',0x0); // Not applicable				(0 in decimal)
 	//
 	define('A_INSTANT_EMAIL',0x2); //					(2 in decimal)

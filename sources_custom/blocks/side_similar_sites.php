@@ -60,7 +60,7 @@ class Block_side_similar_sites
 
 		$setSearchTerms = "";
 		$setSearchURL = "related:".$criteria;
-		
+
 		$searchResultsArray = $this->retrieveGoogleSearch($setSearchTerms,$setSearchURL);
 
 		$out = '<ul>';
@@ -85,7 +85,7 @@ class Block_side_similar_sites
 		$googleBaseUrl = "http://ajax.googleapis.com/ajax/services/search/web";
 		$googleBaseQuery = "?v=1.0&rsz=large&q=";
 		$googleFullUrl = $googleBaseUrl . $googleBaseQuery . $searchURL . "%20" . $searchTerms;
-		
+
 		$returnGoogleSearch = http_download_file($googleFullUrl);
 
 		$returnGoogleSearch = json_decode($returnGoogleSearch,true);

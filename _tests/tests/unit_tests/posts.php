@@ -25,7 +25,7 @@ class posts_test_set extends ocp_test_case
 {
 	var $post_id;
 	var $topic_id;
-	
+
 	function setUp()
 	{
 		parent::setUp();
@@ -37,7 +37,7 @@ class posts_test_set extends ocp_test_case
 		require_code('ocf_posts_action3');
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
-		
+
 		$this->establish_admin_session();
 
 		$this->topic_id=ocf_make_topic(db_get_first_id(),'Test');
@@ -58,7 +58,7 @@ class posts_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('take care'==$GLOBALS['FORUM_DB']->query_value('f_posts','p_title ',array('id'=>$this->post_id)));
 	}
-	
+
 	function tearDown()
 	{
 		if (!ocf_delete_posts_topic($topic_id=$this->topic_id,$posts=array($this->post_id),$reason='Nothing'))

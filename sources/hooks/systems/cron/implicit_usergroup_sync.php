@@ -61,7 +61,7 @@ class Hook_cron_implicit_usergroup_sync
 						while (count($members)==400);
 					}
 				}
-			
+
 				set_value('last_implicit_sync',strval(time()));
 			}
 		}

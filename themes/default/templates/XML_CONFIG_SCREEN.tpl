@@ -5,7 +5,7 @@
 		<label for="xml" class="accessibility_hidden">XML</label>
 		<textarea name="xml" id="xml" cols="30" rows="30" class="wide_field">{XML*}</textarea>
 	</div>
-	
+
 	<div class="proceed_button">
 		<input class="button_page" id="submit_button" accesskey="u" type="submit" value="{!SAVE}" />
 	</div>

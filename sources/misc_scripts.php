@@ -24,7 +24,7 @@
 function gd_text_script()
 {
 	if (!function_exists('imagefontwidth')) return;
-	
+
 	$text=get_param('text');
 	if (get_magic_quotes_gpc()) $text=stripslashes($text);
 
@@ -188,12 +188,12 @@ function cron_bridge_script($caller)
 		echo $php_path.' -C -q --no-header '.$caller;
 		exit();
 	}
-	
+
 	global $CURRENT_SHARE_USER,$SITE_INFO;
 	if ((is_null($CURRENT_SHARE_USER)) && (array_key_exists('custom_share_domain',$SITE_INFO)))
 	{
 		require_code('files');
-		
+
 		foreach ($SITE_INFO as $key=>$val)
 		{
 			if (substr($key,0,12)=='custom_user_')
@@ -219,7 +219,7 @@ function cron_bridge_script($caller)
 		if (is_null($object)) continue;
 		$object->run();
 	}
-	
+
 	if (!headers_sent()) header('Content-type: text/plain');
 }
 
@@ -288,7 +288,7 @@ function page_link_chooser_script()
 		access_denied('ZONE_ACCESS');
 
 	require_lang('menus');
-	
+
 	require_javascript('javascript_ajax');
 	require_javascript('javascript_tree_list');
 	require_javascript('javascript_more');
@@ -447,7 +447,7 @@ function block_helper_script()
 					if ((substr($file,0,21)=='sources_custom/blocks/') || (substr($file,0,15)=='sources/blocks/'))
 					{
 						if ($addon_name=='staff_messaging') $addon_name='core_feedback_features';
-						
+
 						$addons_blocks[basename($file,'.php')]=$addon_name;
 					}
 				}
@@ -583,7 +583,7 @@ function block_helper_script()
 				{
 					$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PARAMETERS'),'HELP'=>protect_from_escaping(paragraph(do_lang_tempcode('BLOCK_HELPER_NO_PARAMETERS'),'','nothing_here')))));
 				}
-				
+
 				continue;
 			}
 
@@ -591,7 +591,7 @@ function block_helper_script()
 			{
 				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 			}
-			
+
 			foreach ($parameters as $parameter)
 			{
 				$matches=array();
@@ -617,7 +617,7 @@ function block_helper_script()
 					$has_default=true;
 					$description=preg_replace('#\s*'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\'](?-U)\.?(?U)#Ui','',$description);
 				} else $has_default=false;
-			
+
 				if (isset($defaults[$parameter]))
 				{
 					$default=$defaults[$parameter];
@@ -782,7 +782,7 @@ function block_helper_script()
 				elseif (preg_match('#'.do_lang('BLOCK_IND_EITHER').' (.+)#i',$description,$matches)!=0) // list
 				{
 					$description=preg_replace('# \('.do_lang('BLOCK_IND_EITHER').'.*\)#U','',$description);
-					
+
 					$list=new ocp_tempcode();
 					$matches2=array();
 					$num_matches=preg_match_all('#\'([^\']*)\'="([^"]*)"#',$matches[1],$matches2);
@@ -950,7 +950,7 @@ function emoticons_script()
 	}
 	if (!$current_row->is_empty())
 		$content->attach(do_template('OCF_EMOTICON_ROW',array('_GUID'=>'d13e74f7febc560dc5fc241dc7914a03','CELLS'=>$current_row)));
-	
+
 	$content=do_template('OCF_EMOTICON_TABLE',array('_GUID'=>'d3dd9bbfacede738e2aff4712b86944b','ROWS'=>$content));
 
 	global $EXTRA_HEAD;
@@ -1002,7 +1002,7 @@ function question_ui_script()
 	$_image_set=get_param('image_set',false,true);
 	$image_set=($_image_set=='')?array():explode(',',$_image_set);
 	$message=do_template('QUESTION_UI_BUTTONS',array('TITLE'=>$title,'IMAGES'=>$image_set,'BUTTONS'=>$button_set,'MESSAGE'=>$_message));
-	
+
 	global $EXTRA_HEAD;
 	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML

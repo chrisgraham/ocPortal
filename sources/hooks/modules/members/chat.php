@@ -30,7 +30,7 @@ class Hook_members_chat
 	function run($member_id)
 	{
 		if (!addon_installed('chat')) return array();
-		
+
 		$modules=array();
 		if (has_actual_page_access(get_member(),'chat',get_page_zone('chat')))
 		{

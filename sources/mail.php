@@ -137,11 +137,11 @@ function comcode_to_clean_text($message_plain)
 	$message_plain=array_key_exists(1,$match) ? $match[1] : $message_plain;
 
 	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1}',$message_plain);
-	
+
 	$message_plain=preg_replace("#\[img(.*)\]([^\[\]]*)\[/img\]#",'',$message_plain);
 
 	$message_plain=@html_entity_decode(strip_tags($message_plain),ENT_QUOTES,get_charset());
-		
+
 	$message_plain=str_replace(']http',']'.chr(10).'http',str_replace('[/url]',chr(10).'[/url]',$message_plain));
 	$message_plain=preg_replace('#\[random [^=]*="([^"]*)"[^\]]*\].*\[/random\]#Us','${1}',$message_plain);
 	$message_plain=preg_replace('#\[abbr="([^"]*)"[^\]]*\].*\[/abbr\]#Us','${1}',$message_plain);
@@ -164,7 +164,7 @@ function comcode_to_clean_text($message_plain)
 		array('',' - ','','','','','**','**','*','*','__','__','***','***'),
 		$message_plain);
 	$message_plain=preg_replace('#\[list[^\[\]]*\]#','',$message_plain);
-	
+
 	$message_plain=preg_replace('#\{\$,[^\{\}]*\}#','',$message_plain);
 
 	return trim($message_plain);
@@ -726,7 +726,7 @@ function filter_css($css,$context)
 					foreach ($selectors as $selector)
 					{
 						$selector=trim($selector);
-						
+
 						if (strpos($selector,'@media print')!==false) break;
 
 						// We let all tag-name selectors through if the tag exists in the document, unless they contain a class/ID specifier -- in which case we toe to the presence of that class/ID
@@ -788,7 +788,7 @@ function form_to_email_entry_script()
 {
 	require_lang('mail');
 	form_to_email();
-	
+
 	global $PAGE_NAME_CACHE;
 	$PAGE_NAME_CACHE='_form_to_email';
 	$title=get_page_title('MAIL_SENT');
@@ -863,7 +863,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 			$attachments[$file['tmp_name']]=$file['name'];
 		}
 	}
-	
+
 	if (addon_installed('captcha'))
 	{
 		if (post_param_integer('_security',0)==1)

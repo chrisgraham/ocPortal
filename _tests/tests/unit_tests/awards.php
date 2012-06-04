@@ -28,7 +28,7 @@ class awards_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('awards');
 
 		$this->award_id=add_award_type('test','test',1,'download',0,250);
@@ -45,7 +45,7 @@ class awards_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('songs'==$GLOBALS['SITE_DB']->query_value('award_types','a_content_type',array('id'=>$this->award_id)));
 	}
-	
+
 	function tearDown()
 	{
 		delete_award_type($this->award_id);

@@ -25,26 +25,26 @@ function init__permissions()
 {
 	global $SPECIFIC_PERMISSION_CACHE;
 	$SPECIFIC_PERMISSION_CACHE=array();
-	
+
 	global $GROUP_SPECIFIC_PERMISSION_CACHE;
 	$GROUP_SPECIFIC_PERMISSION_CACHE=array();
 
 	global $ZONE_ACCESS_CACHE;
 	$ZONE_ACCESS_CACHE=array();
-	
+
 	global $PAGE_ACCESS_CACHE;
 	$PAGE_ACCESS_CACHE=array();
-	
+
 	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR;
 	$CATEGORY_ACCESS_CACHE=array();
 	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR=array();
-	
+
 	global $SUBMIT_PERMISSION_CACHE;
 	$SUBMIT_PERMISSION_CACHE=array();
-	
+
 	global $TOTAL_PP_CACHE;
 	$TOTAL_PP_CACHE=array();
-	
+
 	global $PERMISSION_CHECK_LOGGER,$PERMISSIONS_ALREADY_LOGGED;
 	$PERMISSION_CHECK_LOGGER=NULL;
 	$PERMISSIONS_ALREADY_LOGGED=array();
@@ -272,7 +272,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 		foreach ($perhaps as $praps)
 		{
 			if (strpos($praps['page_name'],':')!==false) $found_match_key_one=true;
-			
+
 			if (($praps['group_id']==$group) && (($praps['zone_name']==$zone) || ($praps['zone_name']=='/')))
 			{
 				if (($praps['page_name']==$page) || (($at_now) && ($praps['zone_name']=='/') && (match_key_match($praps['page_name'],true))))
@@ -354,9 +354,9 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 	{
 		$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.') UNION ALL SELECT '.$select.' FROM '.$db->get_table_prefix().'member_category_access WHERE '.$catclause.'(member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',NULL,NULL,false,true);
 	}
-	
+
 	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module]=true;
-	
+
 	$CATEGORY_ACCESS_CACHE[$member]=array();
 	foreach ($perhaps as $row)
 	{
@@ -382,7 +382,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 function has_category_access($member,$module,$category)
 {
 	if (running_script('upgrader')) return true;
-	
+
 	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR;
 	if ((isset($CATEGORY_ACCESS_CACHE[$member])) && (isset($CATEGORY_ACCESS_CACHE[$member][$module.'/'.$category])))
 	{

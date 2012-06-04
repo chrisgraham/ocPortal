@@ -29,7 +29,7 @@ class Hook_fields_reference
 	function get_field_types()
 	{
 		if (!addon_installed('catalogues')) return array();
-	
+
 		require_lang('fields');
 		$cats=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
 		$ret=array();
@@ -99,7 +99,7 @@ class Hook_fields_reference
 		if ($ev=='') return new ocp_tempcode();
 
 		require_code('content');
-		
+
 		list($title)=content_get_details('catalogue_entry',$ev);
 
 		return hyperlink(build_url(array('page'=>'catalogues','type'=>'entry','id'=>$ev),get_module_zone('catalogues')),$title,false,true);

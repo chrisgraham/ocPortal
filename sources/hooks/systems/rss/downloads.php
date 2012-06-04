@@ -35,7 +35,7 @@ class Hook_rss_downloads
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
 		if (!addon_installed('downloads')) return NULL;
-		
+
 		$filters=ocfilter_to_sqlfragment($_filters,'category_id','download_categories','parent_id','category_id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
 		require_lang('downloads');

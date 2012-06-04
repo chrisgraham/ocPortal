@@ -3,9 +3,9 @@
 /*
     Program E
 	Copyright 2002, Paul Rydell
-	
+
 	This file is part of Program E.
-	
+
 	Program E is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -166,7 +166,7 @@ function reply($userinput,$uniqueid, $bot = 1){
 	$myresponse = new Response;
 
 	$myresponse->errors="";
-	
+
 	$uid=$uniqueid;
 	$selectbot=$bot;	
 
@@ -238,7 +238,7 @@ function reply($userinput,$uniqueid, $bot = 1){
 * #return string                 The response to the user's input.
 */
 function respond($sentence){
-	
+
 	global $that,$loopcounter,$patternmatched,$inputmatched;
 
 	$topic = bget("topic");
@@ -251,7 +251,7 @@ function respond($sentence){
 	$inputstarvals=array();
 	$thatstarvals=array();
 	$topicstarvals=array();
-	
+
 	debugger("respond called with sentence: $sentence",3);
 	//flush();
 
@@ -262,7 +262,7 @@ function respond($sentence){
 		$topic="<nothing>";
 	}
 
-	
+
 	if ($sentence==""){
 		return "";
 	}
@@ -273,12 +273,12 @@ function respond($sentence){
 
 		$patternmatched[]=$s_patternmatched;
 		$inputmatched[]=$s_inputmatched;
-			
+
 		if ($template!=""){
 
 			$template="<xml><TEMPLATE>" . $template . "</TEMPLATE></xml>";		
 			debugger ("found template: $template",2);			
-			
+
 
 			$root=GetXMLTree($template);
 
@@ -431,7 +431,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		return $xmlnode;
 	}
 	elseif (strtoupper($xmlnode["tag"])=="ID"){
-		
+
 		return getid();
 
 	}
@@ -468,7 +468,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		debugger("starindex: $starindex",3);
 		//print_r($inputstar);
 		return $inputstar[$starindex-1];
-		
+
 
 	}
 	elseif (strtoupper($xmlnode["tag"])=="THATSTAR"){
@@ -476,11 +476,11 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		$mynode=upperkeysarray($xmlnode["attributes"]);
 
 		//$starindex=$xmlnode["attributes"]["INDEX"];
-		
+
 		if (!((is_array($mynode))&&(isset($mynode["INDEX"])))){
 			$mynode["INDEX"]="";
 		}
-		
+
 		$starindex=$mynode["INDEX"];
 		if ($starindex==""){
 			$starindex="1";
@@ -488,12 +488,12 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		debugger("starindex: $starindex",3);
 		//print_r($inputstar);
 		return $thatstar[$starindex-1];
-		
+
 
 	}
 	elseif (strtoupper($xmlnode["tag"])=="TOPICSTAR"){
 
-		
+
 		$mynode=upperkeysarray($xmlnode["attributes"]);
 
 		//$starindex=$xmlnode["attributes"]["INDEX"];
@@ -509,13 +509,13 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		debugger("starindex: $starindex",3);
 		//print_r($inputstar);
 		return $topicstar[$starindex-1];
-		
+
 
 	}
 	elseif (strtoupper($xmlnode["tag"])=="SRAI"){
-		
+
 		// Build up a new response inside of here (using recursechildren function and then call response with it.
-		
+
 		$newresponse=recursechildren(realchild($xmlnode),$inputstar,$thatstar,$topicstar);
 
 		debugger("newresponts: $newresponse",3);
@@ -538,7 +538,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 				$liarray[]=$randomc;
 			}
 		}
-		
+
 		// Pick a random number from 0 to sizeof($liarray)-1
 		mt_srand ((float) microtime() * 1000000);
 		$lirandom= mt_rand(0,(sizeof($liarray)-1));
@@ -567,7 +567,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 	elseif (strtoupper($xmlnode["tag"])=="GET"){
 
 		$mynode=upperkeysarray($xmlnode["attributes"]);
-		
+
 		//$name=$xmlnode["attributes"]["NAME"];
 
 		$name=$mynode["NAME"];
@@ -639,13 +639,13 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 	elseif (strtoupper($xmlnode["tag"])=="INPUT"){
 
 		$mynode=upperkeysarray($xmlnode["attributes"]);
-		
+
 		//$index = $xmlnode["attributes"]["INDEX"];
 
 		if (!((is_array($mynode))&&(isset($mynode["INDEX"])))){
 			$mynode["INDEX"]="";
 		}		
-		
+
 		$index = $mynode["INDEX"];
 
 
@@ -656,7 +656,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		$index=$index-1;
 
 		return getinput($index);
-	
+
 
 	}
 	elseif (strtoupper($xmlnode["tag"])=="GOSSIP"){
@@ -692,7 +692,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 	}
 	elseif (strtoupper($xmlnode["tag"])=="THAT"){
 
-		
+
 		$mynode=upperkeysarray($xmlnode["attributes"]);
 		//$indexes = $xmlnode["attributes"]["INDEX"];
 
@@ -712,11 +712,11 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		}
 
 		return getthat($indexes[0],$indexes[1]);
-	
+
 
 	}
 	elseif (strtoupper($xmlnode["tag"])=="CONDITION"){
-	
+
 		
 		$mynode=upperkeysarray($xmlnode["attributes"]);
 
@@ -754,7 +754,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		// If this is a multi condition
 		if (($condname!="")&&($condvalue!="")){
 
-			
+
 			if ($condvalue!=""){
 				$condtype="VALUE";
 			}
@@ -772,7 +772,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 				//if ((bget($condname))==$condvalue){
 
 					return recursechildren(realchild($xmlnode),$inputstar,$thatstar,$topicstar);
-					
+
 				}
 
 			}
@@ -781,7 +781,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		}
 		// Else condname not blank and value is blank then it goes to <li>'s that have conditions in them.
 		elseif (($condname!="")&&($condvalue=="")){
-			
+
 
 			$children = $xmlnode["children"];
 
@@ -796,11 +796,11 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 					$mynode=upperkeysarray($children[$randomc]["attributes"]);
 
 					//$condvalue=$children[$randomc]["attributes"]["VALUE"];
-					
+
 					if (!((is_array($mynode))&&(isset($mynode["VALUE"])))){
 						$mynode["VALUE"]="";
 					}
-					
+
 					$condvalue=$mynode["VALUE"];
 
 
@@ -809,7 +809,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 					if ((eregi($condvalue,$checkval))||($condvalue=="^\$")){
 
 						return recursechildren(realchild($children[$randomc]),$inputstar,$thatstar,$topicstar);
-						
+
 					}
 
 				}
@@ -841,7 +841,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 					else {
 						$condvalue = "";
 					}
-								
+
 
 
 					$condvalue="^" . str_replace("*","(.*)",$condvalue) . "$";
@@ -850,7 +850,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 					if ((eregi($condvalue,bget($condname)))||(($condvalue=="^\$")&&($condname==""))){
 
 						return recursechildren(realchild($children[$randomc]),$inputstar,$thatstar,$topicstar);
-						
+
 					}
 
 
@@ -924,7 +924,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		$index=$index-1;
 
 		return getinput($index);
-	
+
 	}
 	elseif (strtoupper($xmlnode["tag"])=="BEFORETHAT"){
 
@@ -933,36 +933,36 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		$index=$index-1;
 
 		return getinput($index);
-	
+
 	}
 	elseif (strtoupper($xmlnode["tag"])=="GET_IP"){
 
 		return getid();
-	
+
 	}
 	elseif (strtoupper($xmlnode["tag"])=="GETNAME"){
 
 		$name="NAME";
 
 		return bget($name);
-	
+
 	}
 	elseif (strtoupper($xmlnode["tag"])=="GETSIZE"){
 
 		return getsize();
-	
+
 	}
 	elseif (strtoupper($xmlnode["tag"])=="GETTOPIC"){
 
 		$name="TOPIC";
 
 		return bget($name);
-	
+
 	}
 	elseif (strtoupper($xmlnode["tag"])=="GETVERSION"){
 
 		return PROGRAMEVERSION;
-	
+
 	}
 	elseif (substr(strtoupper($xmlnode["tag"]),0,4)=="GET_"){
 
@@ -980,7 +980,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		bset($name,$value);
 
 		return $value;
-	
+
 	}
 	elseif (strtoupper($xmlnode["tag"])=="SETTOPIC"){
 
@@ -991,13 +991,13 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		bset($name,$value);
 
 		return $value;
-	
+
 	}
 	elseif (substr(strtoupper($xmlnode["tag"]),0,4)=="SET_"){
 
 		$name=substr($xmlnode["tag"],4);
 		$value=recursechildren(realchild($xmlnode),$inputstar,$thatstar,$topicstar);
-		
+
 		bset($name,$value);
 
 		return $value;
@@ -1011,7 +1011,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 
 	}
 	elseif (iscustomtag(strtoupper($xmlnode["tag"]),$ctfunction)){
-		
+
 		return $ctfunction($xmlnode,$inputstar,$thatstar,$topicstar);
 
 	}
@@ -1032,9 +1032,9 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 				$atttext .= " $key=\"$value\"";
 			}
 		}
-		
+
 		$value="<$name" . $atttext;
-				
+
 		if (isset($xmlnode["children"]) || strcmp($xmlnode["value"], "") != 0) {
 			$value .= ">" . recursechildren(realchild($xmlnode),$inputstar,$thatstar,$topicstar) . "</$name>";
 		}

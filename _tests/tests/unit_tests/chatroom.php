@@ -42,7 +42,7 @@ class chatroom_test_set extends ocp_test_case
 		// Test the forum was actually created
 		$this->assertTrue('test_chat_room1'==$GLOBALS['SITE_DB']->query_value('chat_rooms','room_name ',array('id'=>$this->chatroom_id)));
 	}
-	
+
 	
 	function tearDown()
 	{

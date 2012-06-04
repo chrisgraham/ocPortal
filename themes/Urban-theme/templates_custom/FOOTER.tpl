@@ -12,7 +12,7 @@
 					{+START,IF,{$CONFIG_OPTION,bottom_show_feedback_link}}<a rel="site_contact" accesskey="9" href="{$PAGE_LINK*,_SEARCH:feedback}{+START,IF,{$NOT,{$IN_STR,{$PAGE_LINK,_SEARCH:feedback},?}}}?{+END}{+START,IF,{$NOT,{$NOT,{$IN_STR,{$PAGE_LINK,_SEARCH:feedback},?}}}}&amp;{+END}redirect={$SELF_URL*&,1}">{!FEEDBACK}</a> <span class="linkcolor">&middot;</span>{+END}
 					{+START,IF,{$CONFIG_OPTION,mobile_support}}{+START,IF,{$MOBILE,1}}<a href="{$SELF_URL*,1,0,0,keep_mobile=0}">{!NONMOBILE_VERSION}</a>{+END}{+START,IF,{$NOT,{$MOBILE,1}}}<a href="{$SELF_URL*,1,0,0,keep_mobile=1}">{!MOBILE_VERSION}</a>{+END} <span class="linkcolor">&middot;</span>{+END}
 					{+START,IF,{$NOR,{$IS_HTTPAUTH_LOGIN},{$IS_GUEST}}}<form title="{!LOGOUT}" class="inline" method="post" action="{$PAGE_LINK*,:login:logout}"><input class="buttonhyperlink" type="submit" title="{!_LOGOUT,{$USERNAME*}}" value="{!LOGOUT}" /></form>{+END}{+START,IF,{$OR,{$IS_HTTPAUTH_LOGIN},{$IS_GUEST}}}<a href="{$PAGE_LINK*,:login:{$?,{$NOR,{$GET,login_screen},{$MATCH_KEY_MATCH,:login}},redirect={$SELF_URL*&,1}}}">{!_LOGIN}</a>{+END}
-	
+
 					{+START,IF,{$AND,{$NOT,{$_GET,keep_has_js}},{$JS_ON}}}
 						<noscript>&middot; <a href="{$SELF_URL*,1,0,1}&amp;keep_has_js=0">{!MARK_JAVASCRIPT_DISABLED}</a></noscript>
 					{+END}

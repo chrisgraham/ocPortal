@@ -41,7 +41,7 @@ class Module_supermembers
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -51,7 +51,7 @@ class Module_supermembers
 	{
 		return array('!'=>'SUPER_MEMBERS');
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -62,7 +62,7 @@ class Module_supermembers
 		delete_config_option('is_on_supermember_filter');
 		delete_menu_item_simple('_SEARCH:supermembers');
 	}
-	
+
 	/**
 	 * Standard modular install function.
 	 *
@@ -93,9 +93,9 @@ class Module_supermembers
 		if (addon_installed('authors')) require_lang('authors');
 		if (addon_installed('points')) require_lang('points');
 		require_lang('supermembers');
-	
+
 		$title=get_page_title('SUPER_MEMBERS');
-	
+
 		$message=get_option('supermembers_text');
 		if (has_actual_page_access(get_member(),'admin_config'))
 		{
@@ -109,7 +109,7 @@ class Module_supermembers
 		if (count($rows)>=1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-	
+
 		// Calculate
 		$groups=new ocp_tempcode();
 		$groups_current=new ocp_tempcode();
@@ -119,7 +119,7 @@ class Module_supermembers
 			$id=$GLOBALS['FORUM_DRIVER']->pname_id($r);
 			$current_group=$GLOBALS['FORUM_DRIVER']->pname_group($r);
 			$name=$GLOBALS['FORUM_DRIVER']->pname_name($r);
-			
+
 			if (!array_key_exists($current_group,$all_usergroups)) continue;
 
 			if (($current_group!=$old_group) && (!is_null($old_group)))
@@ -138,7 +138,7 @@ class Module_supermembers
 			} else $skills=new ocp_tempcode();
 
 			$days=intval(round(floatval(time()-$GLOBALS['FORUM_DRIVER']->pnamelast_visit($r))/(60.0*60.0*24.0)));
-	
+
 			// URL's to them
 			if (addon_installed('authors'))
 			{
@@ -147,10 +147,10 @@ class Module_supermembers
 			$points_url=addon_installed('points')?build_url(array('page'=>'points','type'=>'member','id'=>$id),get_module_zone('points')):new ocp_tempcode();
 			$pm_url=$GLOBALS['FORUM_DRIVER']->member_pm_url($id);
 			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
-	
+
 			// Template
 			$groups_current->attach(do_template('SUPERMEMBERS_SCREEN_ENTRY',array('_GUID'=>'7fdddfe09a33a36762c281e8993327e3','NAME'=>$name,'DAYS'=>integer_format($days),'PROFILE_URL'=>$profile_url,'AUTHOR_URL'=>$author_url,'POINTS_URL'=>$points_url,'PM_URL'=>$pm_url,'SKILLS'=>$skills)));
-	
+
 			$old_group=$current_group;
 		}
 		if (!$groups_current->is_empty())
@@ -158,7 +158,7 @@ class Module_supermembers
 			$group_name=$all_usergroups[$old_group];
 			$groups->attach(do_template('SUPERMEMBERS_SCREEN_GROUP',array('_GUID'=>'d2cbe67dafa0dc9872f90fc8834d21ca','ENTRIES'=>$groups_current,'GROUP_NAME'=>$group_name)));
 		}
-	
+
 		return do_template('SUPERMEMBERS_SCREEN',array('_GUID'=>'93b875bc00b094810ca9cc3e2f4968b8','TITLE'=>$title,'GROUPS'=>$groups,'TEXT'=>$text));
 	}
 

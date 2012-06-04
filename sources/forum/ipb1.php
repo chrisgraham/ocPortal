@@ -42,7 +42,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	{
 		return $this->ipb_unescape($r['name']);
 	}
-	
+
 	/**
 	 * Get a member profile-row for the member of the given name.
 	 *
@@ -55,7 +55,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		if (!array_key_exists(0,$rows)) return NULL;
 		return $rows[0];
 	}
-	
+
 	/**
 	 * Get the name relating to the specified member id.
 	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
@@ -68,7 +68,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		if ($member==$this->get_guest_id()) return do_lang('GUEST');
 		return $this->ipb_unescape($this->get_member_row_field($member,'name'));
 	}
-	
+
 	/**
 	 * Find all members with a name matching the given SQL LIKE string.
 	 *
@@ -85,7 +85,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		uasort($rows,'multi_sort');
 		return $rows;
 	}
-	
+
 	/**
 	 * Get a member id from the given member's username.
 	 *
@@ -96,7 +96,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	{
 		return $this->connection->query_value_null_ok('members','id',array('name'=>$name));
 	}
-	
+
 	/**
 	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
 	 *
@@ -143,7 +143,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		$rows=$this->connection->query('SELECT fid,ftitle FROM '.$this->connection->get_table_prefix().'pfields_data WHERE ftitle LIKE \''.db_encode_like('ocp_%').'\'');
 		$values=$this->connection->query_select('pfields_content',array('*'),array('member_id'=>$member),'',1);
 		if (!array_key_exists(0,$values)) return NULL;
-	
+
 		$out=array();
 		foreach ($rows as $row)
 		{
@@ -152,7 +152,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		}
 		return $out;
 	}
-	
+
 	/**
 	 * Searches for forum auto-config at this path.
 	 *
@@ -174,7 +174,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get an array of paths to search for config at.
 	 *
@@ -294,13 +294,13 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 			$temp['message']=$myrow['post'];
 			$temp['user']=$myrow['author_id'];
 			$temp['date']=$myrow['post_date'];
-	
+
 			$out[]=$temp;
 		}
-	
+
 		return $out;
 	}
-	
+
 	/**
 	 * Get an array of topics in the given forum. Each topic is an array with the following attributes:
 	 * - id, the topic ID
@@ -375,7 +375,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		if (count($out)!=0) return $out;
 		return NULL;
 	}
-	
+
 	/**
 	 * Find the base URL to the emoticons.
 	 *
@@ -385,7 +385,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	{
 		return get_forum_base_url().'/html/emoticons/';
 	}
-	
+
 	/**
 	 * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
 	 *
@@ -407,7 +407,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
 		return $EMOTICON_CACHE;
 	}
-	
+
 	/**
 	 * Find a list of all forum skins (aka themes).
 	 *
@@ -432,7 +432,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	function _get_theme($skip_member_specific=false)
 	{
 		$def='';
-	
+
 		// Load in remapper
 		$map=file_exists(get_file_base().'/themes/map.ini')?better_parse_ini_file(get_file_base().'/themes/map.ini'):array();
 
@@ -469,7 +469,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 
 		return $def;
 	}
-	
+
 	/**
 	 * Get an IPB statistic.
 	 *
@@ -480,13 +480,13 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	{
 		global $IPB_STATS_CACHE;
 		if (!is_null($IPB_STATS_CACHE)) return $IPB_STATS_CACHE[$stat];
-	
+
 		$rows=$this->connection->query_select('stats',array('*'),NULL,'',1);
 		$IPB_STATS_CACHE=$rows[0];
-	
+
 		return $IPB_STATS_CACHE[$stat];
 	}
-	
+
 	/**
 	 * Get the number of members registered on the forum.
 	 *
@@ -506,7 +506,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	{
 		return $this->_get_stat('TOTAL_TOPICS');
 	}
-	
+
 	/**
 	 * Get the total posts ever made on the forum.
 	 *
@@ -528,7 +528,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		$group=$this->get_member_row_field($member,'mgroup');
 		return array($group);
 	}
-	
+
 	/**
 	 * Find if the given member id and password is valid. If username is NULL, then the member id is used instead.
 	 * All authorisation, cookies, and form-logins, are passed through this function.
@@ -559,7 +559,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		{
 			$rows[0]=$this->get_member_row($userid);
 		}
-	
+
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
 			$out['error']=do_lang_tempcode('_USER_NO_EXIST',$username);
@@ -593,9 +593,9 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	function get_member_row($member)
 	{
 		if (array_key_exists($member,$this->MEMBER_ROWS_CACHED)) return $this->MEMBER_ROWS_CACHED[$member];
-	
+
 		$rows=$this->connection->query_select('members',array('*'),array('id'=>$member),'',1);
-	
+
 		$this->MEMBER_ROWS_CACHED[$member]=array_key_exists(0,$rows)?$rows[0]:NULL;
 		return $this->MEMBER_ROWS_CACHED[$member];
 	}

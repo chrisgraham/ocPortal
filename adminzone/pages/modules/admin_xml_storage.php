@@ -50,7 +50,7 @@ class Module_admin_xml_storage
 	{
 		return array('misc'=>'XML_DATA_MANAGEMENT');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,11 +59,11 @@ class Module_admin_xml_storage
 	function run()
 	{
 		$type=get_param('type','misc');
-		
+
 		require_code('xml_storage');
 		require_lang('xml_storage');
 		require_lang('import');
-		
+
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/xml';
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_XML_DATA_MANAGEMENT');
 
@@ -78,7 +78,7 @@ class Module_admin_xml_storage
 			case '_export':
 				return $this->_export();
 		}
-		
+
 		return new ocp_tempcode();
 	}
 

@@ -28,7 +28,7 @@ class catalogues_category_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		
+
 		require_code('catalogues');
 		require_code('catalogues2');
 
@@ -43,7 +43,7 @@ class catalogues_category_test_set extends ocp_test_case
 
 		$this->assertTrue('Testing_category'==$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$this->cat_id)));
 	}
-	
+
 	function tearDown()
 	{
 		actual_delete_catalogue_category($this->cat_id,false);

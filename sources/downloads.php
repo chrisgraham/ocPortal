@@ -354,7 +354,7 @@ function get_download_category_tree($category_id=NULL,$tree=NULL,$title=NULL,$do
 				list($child_children,$_compound_list)=$child_children;
 				$children[0]['compound_list'].=$_compound_list;
 			}
-	
+
 			$children=array_merge($children,$child_children);
 		}
 	}
@@ -417,7 +417,7 @@ function count_download_category_children($category_id)
 {
 	static $total_categories=NULL;
 	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)');
-	
+
 	$out=array();
 	$out['num_children']=$GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)',array('parent_id'=>$category_id));
 	$out['num_downloads']=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',array('category_id'=>$category_id,'validated'=>1));
@@ -519,7 +519,7 @@ function get_download_sub_categories($category_id,$root=NULL,$zone=NULL,$order=N
 	foreach ($rows as $myrow)
 	{
 		if (!has_category_access(get_member(),'downloads',strval($myrow['id']))) continue;
-		
+
 		if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($myrow['text_original'])) $myrow['text_original']=get_translated_text($myrow['category']);
 
 		$child_id=$myrow['id'];

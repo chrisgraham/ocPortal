@@ -24,7 +24,7 @@
 function import_wordpress_db()
 {
 	disable_php_memory_limit();
-	
+
 	$data=get_wordpress_data();
 	$is_validated=post_param_integer('wp_auto_validate',0);
 	$to_own_account=post_param_integer('wp_add_to_own',0);	
@@ -37,7 +37,7 @@ function import_wordpress_db()
 	$cat_id=array();	
 
 	$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-	
+
 	$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 
 	foreach ($data as $values)
@@ -63,7 +63,7 @@ function import_wordpress_db()
 
 		// If post should go to own account
 		if ($to_own_account==1)	$member_id=get_member();			
-		
+
 		if (array_key_exists('POSTS',$values))
 		{
 			// Create posts in blog
@@ -94,7 +94,7 @@ function import_wordpress_db()
 				}
 
 				$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$member_id));
-	
+
 				if ($post['post_type']=='post') // Posts
 				{
 					$id=add_news($post['post_title'],html_to_comcode($post['post_content']),NULL,$is_validated,1,($post['comment_status']=='closed')?0:1,1,'',html_to_comcode($post['post_content']),$owner_category_id,$cat_id,NULL,$member_id,0,time(),NULL,'');
@@ -103,7 +103,7 @@ function import_wordpress_db()
 				{
 					// If dont have permission to write comcode page, skip the post
 					if (!has_submit_permission('high',get_member(),get_ip_address(),NULL,NULL))	continue;
-					
+
 					require_code('comcode');
 					// Save articles as new comcode pages
 					$zone=filter_naughty(post_param('zone','site'));
@@ -114,12 +114,12 @@ function import_wordpress_db()
 
 					// Check existancy of new page
 					$submiter=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
-	
+
 					if (!is_null($submiter)) continue; // Skip existing titled articles	- may need change
-				
+
 					require_code('submit');
 					give_submit_points('COMCODE_PAGE_ADD');
-		
+
 					if (!addon_installed('unvalidated')) $is_validated=1;
 					$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
 						'the_zone'=>$zone,
@@ -138,14 +138,14 @@ function import_wordpress_db()
 						$myfile=@fopen($fullpath,'wt');
 						if ($myfile===false) intelligent_write_error($fullpath);
 						if (fwrite($myfile,$_content)<strlen($_content)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-						
+
 						fclose($myfile);
 						sync_file($fullpath);
 					}
 
 					require_code('seo2');
 					seo_meta_set_for_explicit('comcode_page',$zone.':'.$file,post_param('meta_keywords',''),post_param('meta_description',''));
-		
+
 					require_code('permissions2');
 					set_page_permissions_from_environment($zone,$file);
 				}
@@ -237,7 +237,7 @@ function get_wordpress_data()
 			}
 		}
 	}
-	
+
 	return $data;
 }
 

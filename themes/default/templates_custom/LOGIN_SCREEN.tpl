@@ -13,7 +13,7 @@
 				<fb:login-button size="large" scope="email,user_birthday"></fb:login-button>
 			</span>
 		{+END}
-		
+
 		<h2>{!facebook:LOGIN_NATIVE_HEADER,{$SITE_NAME*}}</h2>
 	{+END}
 
@@ -84,7 +84,7 @@
 			</div>
 		</div>
 	</form>
-	
+
 	{+START,IF_NON_EMPTY,{EXTRA}}
 	<p class="login_note">
 		{EXTRA}

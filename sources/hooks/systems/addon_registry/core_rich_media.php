@@ -385,7 +385,7 @@ class Hook_addon_registry_core_rich_media
 						)));
 			$i++;
 		}
-		
+
 		$content=do_lorem_template('COMCODE_SURROUND',array('CLASS'=>'float_surrounder','CONTENT'=>$content));
 
 		return array(
@@ -484,7 +484,7 @@ class Hook_addon_registry_core_rich_media
 		require_javascript('javascript_swfupload');
 		require_javascript('javascript_posting');
 		require_javascript('javascript_editing');
-		
+
 		$content = do_lorem_template('ATTACHMENT',array(
 					'I'=>placeholder_number(),
 					'POSTING_FIELD_NAME'=>'',
@@ -1704,7 +1704,7 @@ class Hook_addon_registry_core_rich_media
 				$tag_output->attach(lorem_word_2());
 			$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		
+
 
 		//$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
 

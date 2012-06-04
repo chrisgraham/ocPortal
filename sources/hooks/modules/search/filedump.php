@@ -20,7 +20,7 @@
 
 class Hook_search_filedump
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -35,7 +35,7 @@ class Hook_search_filedump
 		if (count(get_directory_contents(get_custom_file_base().'/uploads/filedump'))==0) return NULL;
 
 		require_lang('filedump');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('FILE_DUMP');
 		$info['default']=false;
@@ -43,7 +43,7 @@ class Hook_search_filedump
 
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -79,7 +79,7 @@ class Hook_search_filedump
 		{
 			return array();
 		}
-	
+
 		require_code('files2');
 
 		$files=get_directory_contents(get_custom_file_base().'/uploads/filedump/');

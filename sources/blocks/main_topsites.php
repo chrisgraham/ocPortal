@@ -20,7 +20,7 @@
 
 class Block_main_topsites
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_topsites
 		$info['parameters']=array('param');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -75,9 +75,9 @@ class Block_main_topsites
 		foreach ($_banners as $banner)
 		{
 			$description=get_translated_tempcode($banner['caption']);
-			
+
 			$bd=show_banner($banner['name'],$banner['b_title_text'],$description,$banner['img_url'],'',$banner['site_url'],$banner['b_type']);
-			
+
 			$banners[]=array(
 				'BANNER'=>$bd,
 				'NAME'=>$banner['name'],

@@ -200,7 +200,7 @@ class Module_cms_cedi
 			require_code('awards');
 			handle_award_setting('seedy_page',strval($id));
 		}
-		
+
 		require_code('autosave');
 		clear_ocp_autosave();
 
@@ -268,7 +268,7 @@ class Module_cms_cedi
 		$page_title=get_translated_text($page['title']);
 		$description=get_translated_text($page['description']);
 		$_description=get_translated_tempcode($page['description']);
-	
+
 		$redir_url=get_param('redirect',NULL);
 		if (is_null($redir_url))
 		{

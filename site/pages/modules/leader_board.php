@@ -40,7 +40,7 @@ class Module_leader_board
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_leader_board
 	{
 		return array('!'=>'POINT_LEADERBOARD');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -63,7 +63,7 @@ class Module_leader_board
 		require_css('points');
 
 		$title=get_page_title('POINT_LEADERBOARD');
-		
+
 		$start_date=intval(get_option('leaderboard_start_date'));
 
 		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC');
@@ -86,7 +86,7 @@ class Module_leader_board
 			$nice_week=intval(($week-$first_week)/(7*24*60*60)+1);
 			$out->attach(do_template('POINTS_LEADERBOARD_WEEK',array('_GUID'=>'3a0f71bf20f9098e5711e85cf25f6549','WEEK'=>integer_format($nice_week),'ROWS'=>$week_tpl)));
 		}
-	
+
 		return do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$title,'WEEKS'=>$out));
 	}
 

@@ -32,7 +32,7 @@
 									<abbr class="dtstart" title="{TIME_VCAL*}">{$?,{$EQ,{TIME},{!ALL_DAY_EVENT}},{TIME_VCAL*},{TIME*}}</abbr>
 								{+END}
 							</td>
-	
+
 							<td class="summary"{+START,IF,{$EQ,{TIME},{!ALL_DAY_EVENT}}} colspan="2"{+END}>
 								<a href="{VIEW_URL*}" class="url"{$?,{$VALUE_OPTION,html5}, itemprop="name"}>{TITLE*}</a>
 								{+START,IF_PASSED,TO_DAY}
@@ -51,7 +51,7 @@
 				</tbody>
 			</table>
 		</div>
-		
+
 		<br />
 	{+END}
 {+END}

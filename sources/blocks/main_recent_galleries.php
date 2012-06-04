@@ -38,7 +38,7 @@ class Block_main_recent_galleries
 		$info['parameters']=array('param','zone');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular cache function.
 	 *
@@ -51,7 +51,7 @@ class Block_main_recent_galleries
 		$info['ttl']=60;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

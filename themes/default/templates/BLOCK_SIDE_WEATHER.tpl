@@ -5,7 +5,7 @@
 				<img src="{IMAGE`}" alt="{!WEATHER_IMAGE}" title=""/>
 			</span>
 		{+END}
-	
+
 		<ul class="nl">
 			<li class="compact_list associated_link_to_small"><b>{TITLE}</b></li>
 			{+START,IF_NON_EMPTY,{COND}}

@@ -32,7 +32,7 @@ function get_all_tables()
 function get_innodb_table_sql($tables,$all_tables)
 {
 	$out='';
-	
+
 	$relations=array();
 	$relation_map=get_relation_map();
 
@@ -42,10 +42,10 @@ function get_innodb_table_sql($tables,$all_tables)
 	{
 		$tables_keys=array_keys($tables);
 		$tables_values=array_values($tables);
-		
+
 		$table=$tables_keys[$loop_it];
 		$fields=$tables_values[$loop_it];
-		
+
 		$_i=strval($i);
 		$out.="		CREATE TABLE {$table_prefix}{$table}
 		(\n";
@@ -69,7 +69,7 @@ function get_innodb_table_sql($tables,$all_tables)
 				$relations[$table.'.'.$field]='translate.id';
 			if ((strpos($field,'author')!==false) && ($type=='ID_TEXT') && ($table!='authors') && ($field!='block_author') && ($field!='module_author'))
 				$relations[$table.'.'.$field]='authors.author';
-				
+
 			if (isset($relations[$table.'.'.$field]))
 			{
 				$mapped_table=preg_replace('#\..*$#','',$relations[$table.'.'.$field]);
@@ -100,7 +100,7 @@ function get_innodb_table_sql($tables,$all_tables)
 		CREATE INDEX `{$from}` ON {$table_prefix}{$from_table}({$from_field});
 		ALTER TABLE {$table_prefix}{$from_table} ADD FOREIGN KEY `{$from}` ({$from_field}) REFERENCES {$table_prefix}{$to_table} ({$to_field});\n";
 	}
-	
+
 	return $out;
 }
 
@@ -128,7 +128,7 @@ function get_innodb_data_types()
 						'URLPATH'=>'varchar(255)',
 						'MD5'=>'varchar(33)'
 	);
-	
+
 	return $type_remap;
 }
 
@@ -179,7 +179,7 @@ function get_tables_by_addon()
 	}
 
 	ksort($tables_by);
-	
+
 	return $tables_by;
 }
 
@@ -235,7 +235,7 @@ function get_table_descriptions()
 		'values'=>'arbitrary store of data values (mapping of keys to values)',
 		'zones'=>'details of all zones on the website',
 	);
-	
+
 	return $table_descriptions;
 }
 
@@ -391,14 +391,14 @@ function get_relation_map()
 		'members_gifts.gift_id'=>'gifts.id',
 		'temp_block_permissions.p_session_id'=>'sessions.id',
 	);
-	
+
 	return $relation_map;
 }
 
 function get_code_to_fix_foreign_keys() //Temp code to help fixup AUTO/AUTO_LINK key consistency so that FOREIGN KEY constraints may be added to an InnoDB database
 {
 	$out='';
-	
+
 	$temp=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type'=>'*AUTO'));
 	foreach ($temp as $t)
 	{
@@ -434,7 +434,7 @@ function get_code_to_fix_foreign_keys() //Temp code to help fixup AUTO/AUTO_LINK
 		$id=$t['m_name'];
 		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
 	}
-	
+
 	return $out;
 
 	/*

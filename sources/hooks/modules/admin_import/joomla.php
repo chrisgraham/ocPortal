@@ -48,7 +48,7 @@ class Hook_joomla
 		$info['message']=(get_param('type','misc')!='import' && get_param('type','misc')!='hook')?new ocp_tempcode():do_lang_tempcode('FORUM_CACHE_CLEAR',escape_html($cleanup_url));
 		return $info;
 	}
-	
+
 
 	/**
 	 * Standard import function.
@@ -261,7 +261,7 @@ class Hook_joomla
 			}
 		}
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -424,7 +424,7 @@ class Hook_joomla
 	{
 		return strtotime($timestamp);
 	}
-	
+
 	/**
 	 * Standard import function.
 	 *
@@ -513,7 +513,7 @@ class Hook_joomla
 				$min = $timearr[1];
 				$sec = $timearr[2];
 				$last_visit_date = mktime($hour, $min, $sec, $month, $date, $year);
-				
+
 				$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
 				$id_new=ocf_make_member($row['username'],$row['password'],$row['email'],NULL,NULL,NULL,NULL,$custom_fields,NULL,$primary_group,1,$register_date,$last_visit_date,'',NULL,'',0,0,1,$row['name'],'','',1,1,NULL,$row['sendEmail'],$row['sendEmail'],'',NULL,'',FALSE,NULL,'',1,$last_visit_date,$id,0,'*','');
 
@@ -523,7 +523,7 @@ class Hook_joomla
 		}
 		while (count($rows)>0);	
 	}
-	
+
 
 	/**
 	 * Standard import function.

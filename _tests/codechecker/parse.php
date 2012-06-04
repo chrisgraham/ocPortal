@@ -16,7 +16,7 @@
 function parse($_tokens=NULL)
 {
 	ini_set('xdebug.max_nesting_level','2000');
-	
+
 	global $tokens,$i,$OK_EXTRA_FUNCTIONS;
 	$OK_EXTRA_FUNCTIONS=NULL;
 	if (!is_null($_tokens)) $tokens=$_tokens;
@@ -792,7 +792,7 @@ function _parse_class_dec($modifiers=array())
 	$_class=_parse_class_contents($modifiers,$class['is_interface']);
 	$class=array_merge($class,$_class);
 	pparse__parser_expect('CURLY_CLOSE');
-	
+
 	return $class;
 }
 

@@ -749,7 +749,7 @@ class Hook_addon_registry_shopping
 
 		$all_rating_criteria=array();
 		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'TYPE'=>lorem_word());
-		
+
 		$line = new ocp_tempcode();
 		foreach (placeholder_array(1) as $v)
 		{

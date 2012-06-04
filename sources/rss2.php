@@ -145,7 +145,7 @@ function backend_script()
 			$date_string.='\\'.$offset[$i];
 		}
 	}
-	
+
 	$date=date($date_string);
 
 	$site_about=xmlentities(get_option('description'));
@@ -215,7 +215,7 @@ function backend_script()
 
 		$rss_cloud=do_template('RSS_CLOUD',array('_GUID'=>'a47c40a4c137ea1e5abfc71346547313','TYPE'=>($type=='news')?'':$type,'PORT'=>strval($port),'LOCAL_BASE_URL'=>$local_base_url));
 	} else $rss_cloud=new ocp_tempcode();
-	
+
 	$echo=do_template($prefix.'WRAPPER',array('FILTER'=>$filter,'CUTOFF'=>strval($cutoff),'MODE'=>$mode,'MODE_NICE'=>$mode_nice,'RSS_CLOUD'=>$rss_cloud,'VERSION'=>ocp_version_full(),'COPYRIGHT'=>$copyright,'DATE'=>$date,'LOGO_URL'=>$logo_url,'ABOUT'=>$site_about,'CONTENT'=>$content));
 	$echo->evaluate_echo();
 }

@@ -8,7 +8,7 @@
 				{COLS}
 				<col style="width: 35px" />
 			</colgroup>
-	
+
 			<thead>
 				<tr>
 					<th></th>
@@ -20,9 +20,9 @@
 				{ROWS}
 			</tbody>
 		</table></div>
-	
+
 		<input type="hidden" name="zone" value="{ZONE*}" />
-	
+
 		<br />
 		<div class="proceed_button">
 			<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />

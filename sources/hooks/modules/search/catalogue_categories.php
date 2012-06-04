@@ -20,7 +20,7 @@
 
 class Hook_search_catalogue_categories
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -34,14 +34,14 @@ class Hook_search_catalogue_categories
 		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)')==0) return NULL;
 
 		require_lang('catalogues');
-	
+
 		$info=array();
 		$info['lang']=do_lang_tempcode('CATALOGUE_CATEGORIES');
 		$info['default']=false;
-	
+
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function for search results.
 	 *
@@ -68,26 +68,26 @@ class Hook_search_catalogue_categories
 	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
 	{
 		unset($author_id);
-		
+
 		unset($limit_to);
 
 		if (!module_installed('catalogues')) return array();
-	
+
 		$remapped_orderer='';
 		switch ($sort)
 		{
 			case 'title':
 				$remapped_orderer='cc_title';
 				break;
-	
+
 			case 'add_date':
 				$remapped_orderer='cc_add_date';
 				break;
 		}
-	
+
 		require_code('catalogues');
 		require_lang('catalogues');
-	
+
 		// Calculate our where clause (search)
 		if ($author!='')
 		{

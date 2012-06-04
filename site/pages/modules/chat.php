@@ -41,7 +41,7 @@ class Module_chat
 		$info['update_require_upgrade']=1;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular uninstall function.
 	 */
@@ -126,7 +126,7 @@ class Module_chat
 
 			$GLOBALS['SITE_DB']->create_index('chat_messages','ordering',array('date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('chat_messages','room_id',array('room_id'));
-	
+
 			add_config_option('FLOOD_TIMELIMIT','chat_flood_timelimit','integer','return \'5\';','FEATURE','SECTION_CHAT');
 
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_chat',20,1,0,0,0,'','integer');
@@ -276,7 +276,7 @@ class Module_chat
 	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
 	{
 		unset($start_at);
-		
+
 		$count=$GLOBALS['SITE_DB']->query_value('chat_rooms','COUNT(*)',array('is_im'=>0));
 		$permission_page='cms_chat';
 		$tree=array();
@@ -449,7 +449,7 @@ class Module_chat
 				$fields->attach($room_link);
 			}
 		}
-	
+
 		// Extra links
 		if (has_actual_page_access($member_id,'cms_chat'))
 		{
@@ -533,7 +533,7 @@ class Module_chat
 		require_javascript('javascript_colour_picker');
 		require_javascript('javascript_posting');
 		require_css('colour_picker');
-		
+
 		$prefs=@$_COOKIE['ocp_chat_prefs'];
 		$prefs=@explode(';',$prefs);
 		//$mode=get_param('mode','');
@@ -608,7 +608,7 @@ class Module_chat
 			$adminlink=hyperlink($link,do_lang_tempcode('EDIT_CHATROOM'),true);
 		}
 		else $adminlink=new ocp_tempcode();
-	
+
 		$link=build_url(array('page'=>'_SELF','type'=>'room','id'=>$room_id),'_SELF');
 		$refreshlink=hyperlink($link,do_lang_tempcode('CHAT_REFRESH'));
 
@@ -717,7 +717,7 @@ class Module_chat
 	function blocking_interface()
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
-		
+
 		$title=get_page_title('MEMBER_BLOCKING');
 
 		require_code('form_templates');
@@ -732,7 +732,7 @@ class Module_chat
 			if (!is_null($username))
 				$fields->attach(form_input_tick(do_lang_tempcode('BLOCK_THEM',escape_html($username)),do_lang_tempcode('_BLOCK_MEMBER',$username),'block_'.strval($row['member_blocked']),true));
 		}
-		
+
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADD_BLOCK'))));
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),do_lang_tempcode('BLOCK_MEMBER_MANUAL'),'username','',false));
 
@@ -976,7 +976,7 @@ class Module_chat
 		}
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
-	
+
 	/**
 	 * List all the buddies of a member.
 	 *
@@ -1031,7 +1031,7 @@ class Module_chat
 
 		require_code('templates_results_browser');
 		$results_browser=results_browser($text_id,NULL,$start,'start',$max,'max',$max_rows,NULL,'buddies_list',true);
-		
+
 		return do_template('CHAT_BUDDIES_LIST_SCREEN',array('TITLE'=>$title,'BUDDIES'=>$buddies,'RESULTS_BROWSER'=>$results_browser));
 	}
 
@@ -1109,7 +1109,7 @@ class Module_chat
 		assign_refresh($modlink,0.0);
 		return do_template('REDIRECT_SCREEN',array('_GUID'=>'227be0596e721d4cbab81b707b6d6ba1','URL'=>$modlink,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
 	}
-	
+
 	/**
 	 * The interface for setting sound effects.
 	 *
@@ -1118,7 +1118,7 @@ class Module_chat
 	function set_effects()
 	{
 		$title=get_page_title('CHAT_SET_EFFECTS');
-		
+
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
 		require_lang('javascript');
@@ -1126,7 +1126,7 @@ class Module_chat
 		require_javascript('javascript_sound');
 		require_javascript('javascript_swfupload');
 		require_css('swfupload');
-		
+
 		// Find all sounds available
 		$library=array();
 		$dh=@opendir(get_file_base().'/data/sounds');
@@ -1157,9 +1157,9 @@ class Module_chat
 				}
 			}
 		}
-		
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_set_effects'),'_SELF');
-		
+
 		$hidden=new ocp_tempcode();
 		$redirect=get_param('redirect',NULL);
 		if (!is_null($redirect)) $hidden->attach(form_input_hidden('redirect',$redirect));
@@ -1229,7 +1229,7 @@ class Module_chat
 			foreach ($effects as $effect)
 			{
 				if (is_null($effect)) continue;
-				
+
 				if ((post_param('select_'.$effect.$suffix)=='-1') && (is_null(post_param('hidFileID_upload_'.$effect.$suffix,NULL))) && (!is_uploaded_file($_FILES['upload_'.$effect.$suffix]['tmp_name']))) // Handle special case of '-1'
 				{
 					$url='-1';

@@ -20,7 +20,7 @@
 
 class Block_main_count
 {
-	
+
 	/**
 	 * Standard modular info function.
 	 *
@@ -38,7 +38,7 @@ class Block_main_count
 		$info['parameters']=array('param','start','hit_count');
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *

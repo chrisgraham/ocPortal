@@ -20,7 +20,7 @@
 
 {+START,IF_NON_EMPTY,{DOWNLOADS}}
 	{DOWNLOADS}
-	
+
 	<div class="medborder special_category_sorter inline_block">
 		{$SET,show_sort_button,1}
 		{SORTING}

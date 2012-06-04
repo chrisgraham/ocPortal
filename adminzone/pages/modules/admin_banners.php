@@ -40,7 +40,7 @@ class Module_admin_banners
 		$info['locked']=false;
 		return $info;
 	}
-	
+
 	/**
 	 * Standard modular entry-point finder function.
 	 *
@@ -50,7 +50,7 @@ class Module_admin_banners
 	{
 		return array('misc'=>'BANNER_STATISTICS');
 	}
-	
+
 	/**
 	 * Standard modular run function.
 	 *
@@ -59,14 +59,14 @@ class Module_admin_banners
 	function run()
 	{
 		require_all_lang();
-	
+
 		$type=get_param('type','misc');
-	
+
 		if ($type=='misc') return $this->banner_statistics();
 
 		return new ocp_tempcode();
 	}
-	
+
 	/**
 	 * The UI to show a results table of banner details/statistics.
 	 *
@@ -117,7 +117,7 @@ class Module_admin_banners
 		foreach ($rows as $myrow)
 		{
 			$name=hyperlink(build_url(array('page'=>'banners','type'=>'view','source'=>$myrow['name']),get_module_zone('banners')),$myrow['name'],false,true);
-			
+
 			switch ($myrow['the_type'])
 			{
 				case 0:
@@ -133,7 +133,7 @@ class Module_admin_banners
 
 			$banner_type=$myrow['b_type'];
 			if ($banner_type=='') $banner_type=do_lang('GENERAL');
-			
+
 			$date_and_time=get_timezoned_date($myrow['add_date']);
 
 			$hits_from=integer_format($myrow['hits_from']);
@@ -146,9 +146,9 @@ class Module_admin_banners
 			else $click_through=do_lang_tempcode('NA_EM');
 
 			$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['submitter']);
-			
+
 			$importance_modulus=$myrow['importance_modulus'];
-			
+
 			$validated=($myrow['validated']==1)?do_lang('YES'):do_lang('NO');
 			if ((!is_null($myrow['expiry_date'])) && ($myrow['expiry_date']<time()))
 				$validated.=do_lang('BUT_EXPIRED');
@@ -167,6 +167,6 @@ class Module_admin_banners
 
 		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'c9270fd515e76918a37edf3f573c6da2','RESULTS_TABLE'=>$table,'TITLE'=>$title));
 	}
-	
+
 }
 

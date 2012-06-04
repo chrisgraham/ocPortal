@@ -23,17 +23,17 @@
 				{OUTPUT}
 			</div>
 		</div>
-		
+
 		{+START,IF,{$MOBILE}}
 			<script type="text/javascript">// <![CDATA[
 				var inner=document.getElementById('preview_box_inner');
 				addEventListenerAbstract(inner,browser_matches('gecko')?'DOMMouseScroll':'mousewheel',function(event) { inner.scrollTop-=event.wheelDelta?event.wheelDelta:event.detail; cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); return false; } );
 			//]]></script>
 		{+END}
-		
+
 		{+START,IF,{$JS_ON}}
 			<hr class="spaced_rule" />
-		
+
 			<form target="_self" action="{$FIND_SCRIPT*,preview}?page={$_GET&*,page}&amp;type={$_GET&*,type}&amp;utheme={$THEME&*}{$KEEP*}&amp;keep_mobile={$?,{$MOBILE},1,0}" method="post">
 				{HIDDEN}
 
