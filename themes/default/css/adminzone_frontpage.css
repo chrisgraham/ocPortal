@@ -11,12 +11,12 @@ a.top_left_toggleicon {
 	font-size: 0.8em;
 	float: left;
 	background: url('{$IMG;,checklist/toggleicon}') no-repeat 10px 0 !important;
-	opacity: 0.7;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;} display: inline-block;/*Needed for IE8*/
 }
 
 a.top_left_toggleicon:hover {
 	background: url('{$IMG;,checklist/toggleicon2}') no-repeat 10px 0 !important;
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
 .checklist_header {

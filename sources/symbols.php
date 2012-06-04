@@ -2231,21 +2231,27 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					$value='';
-					$vendors=array('','-o-','-webkit-','-ms-','-moz-');
-					foreach ($vendors as $prefix)
+					$matches=array();
+					if (preg_match('#^opacity:\s*(.*)$#s',$param[0],$matches)!=0) // Opacity, supported by all except IE8, which is done using a special filter
 					{
-						if (substr(trim($param[0]),-1)!=';') $value.='; ';
-						$matches=array();
-						if (preg_match('#^background-image:\s*(\w+-gradient)(.*)$#s',$param[0],$matches)!=0) // CSS gradients
+						$value="opacity: ".$matches[1]."\n\t-ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=".float_to_raw_string(round(floatval($matches[1])*100.0)).")\";";
+					} else // Most cases
+					{
+						$vendors=array('','-o-','-webkit-','-ms-','-moz-');
+						foreach ($vendors as $prefix)
 						{
-							$value.='background-image: '.$prefix.$matches[1].$matches[2];
-						} else
-						{
-							$value.=$prefix.$param[0];
+							if (substr(trim($param[0]),-1)!=';') $value.='; ';
+							if (preg_match('#^background-image:\s*(\w+-gradient)(.*)$#s',$param[0],$matches)!=0) // CSS gradients aren't a new property as such, they're a prefixed extension to an existing one
+							{
+								$value.='background-image: '.$prefix.$matches[1].$matches[2];
+							} else
+							{
+								$value.=$prefix.$param[0];
+							}
+							$value.="\n\t";
 						}
-						$value.="\n\t";
+						$value=rtrim($value);
 					}
-					$value=rtrim($value);
 				}
 				break;
 

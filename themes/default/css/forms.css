@@ -28,7 +28,7 @@ div.comcode_supported {
 
 .required_star {
 	float: right;
-	opacity: 0.4;
+	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 }
 
 .wysiwyg_button {
@@ -55,7 +55,7 @@ div.comcode_supported {
 }
 
 .locked_field {
-	opacity: 0.3;
+	{$BETA_CSS_PROPERTY,opacity: 0.3;}
 }
 
 /* Overrides .toggleable_tray_button */
@@ -131,8 +131,8 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 }
 
 .field_checkbox_description {
-	margin-top: -1.5em;
-	margin-{!en_left}: 25px;
+	margin-top: -1.5em !important;
+	margin-{!en_left}: 25px !important;
 }
 
 .password_strength {
@@ -194,10 +194,10 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 }
 
 .radio_list_picture {
-	opacity: 0.5;
+	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }
 .radio_list_picture:hover, .radio_list_picture.selected {
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 
 .selectable_theme_image {

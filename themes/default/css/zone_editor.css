@@ -23,7 +23,7 @@
 }
 
 .ze_tabs .tab {
-	width: 4em;
+	width: 3.4em;
 }
 
 #info_panel_left, #info_panel_right, #edit_panel_left, #edit_panel_right, #view_panel_left, #view_panel_right, #settings_panel_left, #settings_panel_right {
@@ -42,7 +42,7 @@
 }
 
 .ze_panel_expanded {
-	width: 40em;
+	width: 45em;
 }
 
 .ze_middle {

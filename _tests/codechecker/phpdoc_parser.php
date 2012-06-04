@@ -42,7 +42,7 @@ if (isset($_SERVER['argv']))
 require(dirname(__FILE__).'/php.php');
 
 $files=do_dir($OCPORTAL_PATH,true,true);
-$files[]='phpstub.php';
+$files[]='sources/phpstub.php';
 
 $classes=array();
 $global=array();
@@ -60,14 +60,7 @@ foreach ($files as $filename)
 
 	$TO_USE=$filename;
 
-	if ($filename=='phpstub.php')
-	{
-		$_filename='phpstub.php';
-		$TO_USE=getcwd().DIRECTORY_SEPARATOR.'phpstub.php';
-	} else
-	{
-		$_filename=($OCPORTAL_PATH=='')?$filename:substr($filename,strlen($OCPORTAL_PATH)+1);
-	}
+	$_filename=($OCPORTAL_PATH=='')?$filename:substr($filename,strlen($OCPORTAL_PATH)+1);
 	if ($_filename=='sources'.DIRECTORY_SEPARATOR.'minikernel.php') continue;
 	//echo 'SIGNATURES-DOING '.$_filename.cnl();
 	if (strpos($_filename,'_tests'.DIRECTORY_SEPARATOR)===0)

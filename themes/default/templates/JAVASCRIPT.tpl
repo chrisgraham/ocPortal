@@ -57,7 +57,7 @@ function script_load_stuff()
 		{
 			load_html_edit(document.forms[i]);
 		}
-form.title='';
+
 		/* Remove tooltips from forms for mouse users as they are for screenreader accessibility only */
 		if (document.forms[i].getAttribute('target')!='_blank')
 			add_event_listener_abstract(document.forms[i],'mouseover',function(form) { return function() { form.title=''; } }(document.forms[i]) );

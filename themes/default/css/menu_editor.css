@@ -15,6 +15,8 @@
 	bottom: 0;
 	background: {$GET,floating_section_background};
 	font-size: 0.9em;
+	width: 100%;
+	z-index: 100; /* Needed for Opera, else footer icons with 'transform' CSS property overlay (bug in Opera) */
 }
 
 .docked .menu_edit_main {

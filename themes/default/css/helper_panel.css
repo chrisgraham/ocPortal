@@ -82,7 +82,7 @@ body .horiz_help_panel { /* {$,Long definition to force precedence} */
 }
 
 .global_helper_panel_pic {
-	opacity: 0.2;
+	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block;/*Needed for IE8*/
 	position: absolute;
 	z-index: 2;
 	bottom: 0;

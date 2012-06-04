@@ -13,7 +13,7 @@ Most sizes are defined in 'em' units. 1em is roughly 10px, depending on font siz
 
 {!en_left} and {!en_right} usually resolve to left and right respectively. Right-to-left languages (commonly Arabic and Hebrew) will be the opposite. We only test with Left-to-right, but are likely to accept patches to fix any little glitches that may have developed over time.
 
-When editing theme CSS we recommend you comment out code your removing and heavily comment your own changes - this will make it much easier for you to upgrade your theme to new versions.
+When editing theme CSS we recommend you comment out code your removing and heavily comment your own changes - this will make it much easier for you to upgrade your theme to new versions. ocPortal minifies outputted CSS, so there is no performance penalty for doing this.
 */
 
 /*
@@ -166,6 +166,7 @@ body, textarea, input, td, th {
 
 tt, kbd, samp {
 	font-weight: bold;
+	font-size: 1.25em;
 }
 
 abbr, acronym {
@@ -495,7 +496,7 @@ header h1 {
 	content: " \00A0\00BB " !important;
 	display: inline-block;
 	font-size: 0.9em;
-	opacity: 0.5;
+	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }
 .breadcrumbs a:last-child:after {
 	content: "" !important;
@@ -542,10 +543,10 @@ body#main_website #main_website_inner, .global_middle_faux {
 	padding-{!en_right}: 1em;
 }
 
-body#popup_spacer {
+body.popup_spacer {
 	padding: 1em !important;
 }
-body#popup_spacer h2 {
+body.popup_spacer h2 {
 	margin-top: 0;
 }
 
@@ -662,7 +663,7 @@ footer .global_footer_left {
 }
 
 footer .footer_button_loading {
-	opacity: 0.4;
+	{$BETA_CSS_PROPERTY,opacity: 0.4;} display: inline-block;/*Needed for IE8*/
 }
 
 footer .global_footer_left .horizontal_buttons {
@@ -775,7 +776,7 @@ footer .global_minilinks a {
 }
 
 .img_thumb { /* Membership of this class is used as a tag to turn on the thumbnail blend effect */
-	opacity: 0.7;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 }
 
 .textarea_scroll { /* Turns off word-wrapping for a textarea: this has to be done using Javascript so that the invalid 'wrap' property isn't written into the XHTML */
@@ -849,8 +850,9 @@ div.edited {
 .media_box img, .img_thumb {
 	border: 1px solid {$GET,standard_border};
 	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
-	max-width: 100%;
+	max-width: 99%; /* Room for shadow */
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+
 }
 
 .scale_down { /* Membership of this class is used as a tag to turn on image scale-to-fit */
@@ -1078,9 +1080,12 @@ th.meta_data_title {
 	border: 0;
 
 	/* .box_inner set us in the wrong position, so fiddle around a bit to move us back to be flush */
-	margin: -0.5em 0 0.5em -0.5em;
+	margin: -0.506em 0 0.506em -0.506em; /* Would be -0.5 but Opera does not seem to like */
 	padding: 0.3em 0.8em 0.3em 0.3em;
 	width: 100%;
+}
+.box_inner>h2>.right .button_page {
+	vertical-align: top;
 }
 
 .box_inner>h1 a, .box_inner>h2 a, .box_inner>h3 a, .box_inner>h4 a, .box_inner>h5 a, .box_inner>h6 a, .toggleable_tray_title a {
@@ -1340,6 +1345,9 @@ table.scrollable_inside {
 .wide_table_wrap {
 	overflow-x: auto;
 	overflow-y: hidden;
+
+	/* To add in the extra pixel needed for 2x1/2 overhanging borders that tables have, and also to shunt the alignment to compensate http://fantasai.inkedblade.net/style/discuss/collapsed-outer-border/ */
+	padding-right: 1px;
 }
 
 .wide_table {
@@ -1438,7 +1446,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	background-color: {$GET,area_faded_background};
 	border: 1px solid {$GET,dark_border};
 	z-index: 1000;
-	opacity: 0.9;
+	{$BETA_CSS_PROPERTY,opacity: 0.9;}
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 }
 .tooltip img {
@@ -1482,7 +1490,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	padding-right: 30px;
 }
 .faded_tooltip_img {
-	opacity: 0.2;
+	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block;/*Needed for IE8*/
 }
 
 .diff del {
@@ -1730,7 +1738,7 @@ div.wysiwyg_toolbar_color_finder {
 	display: inline-block;
 }
 .site_unloading {
-	opacity: 0.2;
+	{$BETA_CSS_PROPERTY,opacity: 0.2;}
 }
 
 .ajax_tree_list_loading {
@@ -1854,10 +1862,10 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .rating_star {
-	opacity: 0.2;
+	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block;/*Needed for IE8*/
 }
 .rating_star_highlight {
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
 .trackbacks {
@@ -1916,17 +1924,17 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .post_buttons a {
-	opacity: 0.0;
+	{$BETA_CSS_PROPERTY,opacity: 0.0;} display: inline-block;/*Needed for IE8*/
 	{$BETA_CSS_PROPERTY,transition-property : opacity;}
 	{$BETA_CSS_PROPERTY,transition-duration : 0.5s;}
 }
 
 .post_buttons a[rel="add reply"] {
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
 .post_buttons:hover a {
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
 .post_show_more {
@@ -1954,11 +1962,11 @@ div.wysiwyg_toolbar_color_finder {
 
 .reviews_average {
 	font-size: 0.8em;
-	opacity: 0.7;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;} display: inline-block;/*Needed for IE8*/
 }
 
 .comments_field_name_column {
-	width: 160px;
+	width: 16em;
 }
 
 .comments_field_input_column {
@@ -2165,11 +2173,11 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	border: 1px solid {$GET,pale_border};
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 	padding: 0.5em;
-	opacity: 0.4;
+	{$BETA_CSS_PROPERTY,opacity: 0.4;} display: inline-block;/*Needed for IE8*/
 	{$BETA_CSS_PROPERTY,transition: opacity 0.6s linear;}
 }
 .quick_self_edit_link:hover {
-	opacity: 1;
+	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
 #panel_top .quick_self_edit_link {
 	display: none;
@@ -2178,14 +2186,14 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 .staff_actions {
 	margin-top: 2em;
 	font-size: 0.95em;
-	opacity: 0.4;
+	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.6s linear;}
 	background: url('{$IMG;,action}') right 3px no-repeat;
 	padding-right: 5px;
 	background-origin: content-box;
 }
 .staff_actions:hover {
-	opacity: 1;
+	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
 .staff_actions .box_inner {
 	padding-right: 25px;
@@ -2235,12 +2243,12 @@ There is 'actions_list' too (defined elsewhere). These are for links that are gi
 
 ul.associated_links_block_group.horizontal_links>li:first-child:before, p.associated_link:before, div.associated_link:before {
 	content: "( " !important;
-	opacity: 0.7;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 	font-size: 0.8em;
 }
 ul.associated_links_block_group.horizontal_links>li:last-child:after, p.associated_link:after, div.associated_link:after {
 	content: " )" !important;
-	opacity: 0.7;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 	font-size: 0.8em;
 }
 a.associated_link, form.associated_link {
@@ -2248,14 +2256,14 @@ a.associated_link, form.associated_link {
 }
 ul.associated_links_block_group>li:before, a.associated_link:before, form.associated_link:before {
 	content: "(" !important;
-	opacity: 0.7;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 }
 ul.associated_links_block_group.horizontal_links>li:after { /* Undoes the above rules for if 'horizontal_links' is set (the rule further up will run instead and the middot one below) */
 	content: "" !important;
 }
 ul.associated_links_block_group>li:after, a.associated_link:after, form.associated_link:after {
 	content: ")" !important;
-	opacity: 0.7;
+	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 }
 
 ul.associated_links_block_group.horizontal_links>li:before,
@@ -2319,6 +2327,7 @@ ul.associated_link>li {
 	padding: 0;
 	margin: 2em 0;
 	display: block;
+	list-style: none;
 	font-size: 0.9em;
 }
 ul.buttons_group, ul.associated_links_block_group {
@@ -2408,7 +2417,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	color: {$GET,native_ui_button_foreground};
 	{$BETA_CSS_PROPERTY,border-radius: 6px;}
 	background-image: url('{$IMG;,gradient}');
-	opacity: 0.85;
+	{$BETA_CSS_PROPERTY,opacity: 0.85;}
 	text-shadow: 1px 1px 1px {$GET,dark_shadow};
 	margin: 0 2px;
 }
@@ -2431,7 +2440,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 input[type="reset"].button_micro, input[type="submit"].button_micro, input[type="button"].button_micro, button.button_micro
 {
 	padding: 0 3px 1px 3px !important;
-	opacity: 1.0; /* Needed for Opera */
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} /* Needed for Opera */
 }
 input[type="reset"].wide_button, input[type="submit"].wide_button, input[type="button"].wide_button, button.wide_button, input[type="submit"].button_pageitem, input[type="button"].button_pageitem, button.button_pageitem
 {
@@ -2447,14 +2456,14 @@ input[type="submit"].wide_button:hover, input[type="submit"].button_micro:hover,
 input[type="button"].wide_button:hover, input[type="button"].button_micro:hover, input[type="button"].button_page:hover, input[type="button"].button_pageitem:hover,
 button.wide_button:hover, button.button_micro:hover, button.button_page:hover, button.button_pageitem:hover
 {
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 input[type="reset"].wide_button:disabled, input[type="reset"].button_micro:disabled, input[type="reset"].button_page:disabled, input[type="reset"].button_pageitem:disabled,
 input[type="submit"].wide_button:disabled, input[type="submit"].button_micro:disabled, input[type="submit"].button_page:disabled, input[type="submit"].button_pageitem:disabled,
 input[type="button"].wide_button:disabled, input[type="button"].button_micro:disabled, input[type="button"].button_page:disabled, input[type="button"].button_pageitem:disabled,
 button.wide_button:disabled, button.button_micro:disabled, button.button_page:disabled, button.button_pageitem:disabled
 {
-	opacity: 0.4 !important;
+	{$BETA_CSS_PROPERTY,opacity: 0.4 !important;}
 	cursor: default;
 }
 
@@ -2605,17 +2614,17 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 	height: 20px;
 	text-align: center;
 	cursor: pointer;
-	opacity: 0.6;
+	{$BETA_CSS_PROPERTY,opacity: 0.6;}
 }
 
 .tab_active {
 	font-weight: bold;
-	opacity: 1 !important;
+	{$BETA_CSS_PROPERTY,opacity: 1 !important;}
 }
 
 .tab:hover {
 	text-decoration: underline !important;
-	opacity: 1;
+	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
 
 .tab strong {
@@ -2933,7 +2942,7 @@ ul.nl, .nl ul {
 }
 
 .menu_type__zone a {
-	border-bottom: 1px transparent;
+	border-bottom: 1px solid transparent;
 	{$BETA_CSS_PROPERTY,transition: border-bottom-color 0.5s linear;}
 }
 
@@ -2965,7 +2974,7 @@ ul.nl, .nl ul {
 	vertical-align: middle;
 	color: {$GET,pale_border};
 	font-size: 0.8em;
-	opacity: 0.5;
+	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 	padding: 0 7px;
 }
 .menu_type__zone li:first-child:before {
@@ -2978,19 +2987,19 @@ ul.nl, .nl ul {
 }
 
 .menu_block .edit_menu_link a, .global_navigation .edit_menu_link_inline, #panel_top .edit_page_link_inline, #panel_bottom .edit_page_link_inline {
-	opacity: 0.4;
+	{$BETA_CSS_PROPERTY,opacity: 0.4;} display: inline-block;/*Needed for IE8*/
 	{$BETA_CSS_PROPERTY,transition: opacity 0.5s linear;}
 }
 .menu_block:hover .edit_menu_link a, .global_navigation:hover .edit_menu_link_inline, #panel_top:hover .edit_page_link_inline, #panel_bottom:hover .edit_page_link_inline {
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
 /* We hide the inline edit menu links for design reasons, they fade in on top of stuff when hovering the menu */
 div>.edit_menu_link_inline, div>.edit_page_link_inline {
-	opacity: 0 !important;
+	{$BETA_CSS_PROPERTY,opacity: 0 !important;} display: inline-block;/*Needed for IE8*/
 }
 div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
-	opacity: 1.0 !important;
+	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;} display: inline-block;/*Needed for IE8*/
 }
 .edit_menu_link_inline, .edit_page_link_inline {
 	position: absolute;
@@ -3398,10 +3407,10 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 }
 
 .adminzone_search #search_button {
-	opacity: 0.6;
+	{$BETA_CSS_PROPERTY,opacity: 0.6;} display: inline-block;/*Needed for IE8*/
 }
 .adminzone_search #search_button:hover {
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
 }
 
 /*
@@ -3441,12 +3450,12 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	.associated_links_block_group,
 	.screen_actions_outer,
 	.adminzone_search,
-	header,
 	.global_banner,
-	.toggleable_tray_button,
+	header,
 	footer,
-	.post_buttons,
 	.global_side_panel,
+	.toggleable_tray_button,
+	.post_buttons,
 	.quick_self_edit_link, .control_functions, .staff_actions,
 	.comments_form,
 	.members_viewing,

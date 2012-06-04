@@ -167,11 +167,11 @@
 	margin: 0.5em 0.5em 0.5em -0.5em;
 	padding: 0.2em;
 	font-size: 0.9em;
-	opacity: 0.5;
+	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
 }
 .chat_message>div:hover {
-	opacity: 1;
+	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
 .chat_operator_staff a:visited, .chat_operator_staff a:active, .chat_operator_staff a:hover, .chat_operator_staff a:link {
 	color: {$GET,red_highlight_text};
@@ -306,10 +306,10 @@
 }
 
 .friend_active {
-	opacity: 1.0;
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 .friend_inactive {
-	opacity: 0.4;
+	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 }
 
 .friend_actions {

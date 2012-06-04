@@ -5509,7 +5509,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		filenameField.setAttribute('id','txtFileName_'+name);
 		filenameField.setAttribute('type','text');
 		filenameField.value='';
-		filenameField.className='top_vertical_alignment';
+		filenameField.className='top_vertical_alignment button_pageitem';
 		filenameField.name='txtFileName_'+name;
 		filenameField.disabled=true;
 		subdiv.appendChild(filenameField);
@@ -5628,7 +5628,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var uploadButton=document.createElement('input');
 		uploadButton.type='button';
 		uploadButton.value='{!BROWSE;}';
-		uploadButton.className='top_vertical_alignment';
+		uploadButton.className='top_vertical_alignment button_pageitem';
 		uploadButton.id='uploadButton_'+name;
 		uploadButton.onclick=function() { return false; };
 		subdiv.appendChild(uploadButton,rep);

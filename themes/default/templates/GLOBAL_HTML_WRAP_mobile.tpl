@@ -6,9 +6,9 @@
 
 <div class="float_surrounder">
 	<article id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle">
-		{+START,IF_NON_EMPTY,{BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}{+START,IF,{$SHOW_HEADER}}
+		{+START,IF_NON_EMPTY,{$BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}{+START,IF,{$SHOW_HEADER}}
 			<nav class="global_breadcrumbs breadcrumbs" itemprop="breadcrumb" role="navigation">
-				{BREADCRUMBS}
+				{$BREADCRUMBS}
 			</nav>
 		{+END}{+END}{+END}
 
