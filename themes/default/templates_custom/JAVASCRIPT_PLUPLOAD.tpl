@@ -647,7 +647,7 @@
 				return $1 === ' ' && $2 === ' ' ? ' ' : '';
 			});
 		},
-    
+		
 		/**
 		 * Returns a given computed style of a DOM element.
 		 *
@@ -822,20 +822,20 @@
 	 *
 	 * @example
 	 * var uploader = new plupload.Uploader({
-	 *     runtimes : 'gears,html5,flash',
-	 *     browse_button : 'button_id'
+	 *		 runtimes : 'gears,html5,flash',
+	 *		 browse_button : 'button_id'
 	 * });
 	 *
 	 * uploader.bind('Init', function(up) {
-	 *     alert('Supports drag/drop: ' + (!!up.features.dragdrop));
+	 *		 alert('Supports drag/drop: ' + (!!up.features.dragdrop));
 	 * });
 	 *
 	 * uploader.bind('FilesAdded', function(up, files) {
-	 *     alert('Selected files: ' + files.length);
+	 *		 alert('Selected files: ' + files.length);
 	 * });
 	 *
 	 * uploader.bind('QueueChanged', function(up) {
-	 *     alert('Queued files: ' + uploader.files.length);
+	 *		 alert('Queued files: ' + uploader.files.length);
 	 * });
 	 *
 	 * uploader.init();
@@ -1894,7 +1894,7 @@
 
 				uploader.bind("UploadFile", function(up, file) {
 					var nativeFile = browserPlusFiles[file.id], reqParams = {},
-					    chunkSize = up.settings.chunk_size, loadProgress, chunkStack = [];
+							chunkSize = up.settings.chunk_size, loadProgress, chunkStack = [];
 
 					function uploadFile(chunk, chunks) {
 						var chunkFile;
@@ -1912,7 +1912,7 @@
 							reqParams.chunks = "" + chunks;
 						}
 
-					    chunkFile = chunkStack.shift();
+							chunkFile = chunkStack.shift();
 
 						browserPlus.Uploader.upload({
 							url : up.settings.url,
@@ -1947,10 +1947,10 @@
 									});
 								}
 
-							    if (chunkStack.length > 0) {
+									if (chunkStack.length > 0) {
 									// More chunks to be uploaded
 									uploadFile(++chunk, chunks);
-							    } else {
+									} else {
 									file.status = plupload.DONE;
 
 									up.trigger('FileUploaded', file, {
@@ -1967,7 +1967,7 @@
 											status : httpStatus
 										});
 									}
-							    }
+									}
 							} else {
 								up.trigger('Error', {
 									code : plupload.GENERIC_ERROR,
@@ -2201,7 +2201,7 @@
 					html += 'classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" '
 				}
 
-				html += 'width="100%" height="100%" style="outline:0">'  +
+				html += 'width="100%" height="100%" style="outline:0">'	+
 					'<param name="movie" value="' + uploader.settings.flash_swf_url + '" />' +
 					'<param name="flashvars" value="id=' + escape(uploader.id) + '" />' +
 					'<param name="wmode" value="transparent" />' +
@@ -2501,14 +2501,14 @@
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//  2. Redistributions in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//  3. Neither the name of Google Inc. nor the names of its contributors may be
-//     used to endorse or promote products derived from this software without
-//     specific prior written permission.
+//	1. Redistributions of source code must retain the above copyright notice,
+//		 this list of conditions and the following disclaimer.
+//	2. Redistributions in binary form must reproduce the above copyright notice,
+//		 this list of conditions and the following disclaimer in the documentation
+//		 and/or other materials provided with the distribution.
+//	3. Neither the name of Google Inc. nor the names of its contributors may be
+//		 used to endorse or promote products derived from this software without
+//		 specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
 // WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -2531,66 +2531,66 @@
 // when that happens.
 
 (function() {
-  // We are already defined. Hooray!
-  if (window.google && google.gears) {
-    return;
-  }
+	// We are already defined. Hooray!
+	if (window.google && google.gears) {
+		return;
+	}
 
-  var factory = null;
+	var factory = null;
 
-  // Firefox
-  if (typeof window.GearsFactory != 'undefined') {
-    factory = new GearsFactory();
-  } else {
-    function safariMethod()
-    {
-      // Safari
-      if ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"]) {
-        factory = document.createElement("object");
-        factory.style.display = "none";
-        factory.width = 0;
-        factory.height = 0;
-        factory.type = "application/x-googlegears";
-        document.documentElement.appendChild(factory);
-      }
-    }
+	// Firefox
+	if (typeof window.GearsFactory != 'undefined') {
+		factory = new GearsFactory();
+	} else {
+		function safariMethod()
+		{
+			// Safari
+			if ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"]) {
+				factory = document.createElement("object");
+				factory.style.display = "none";
+				factory.width = 0;
+				factory.height = 0;
+				factory.type = "application/x-googlegears";
+				document.documentElement.appendChild(factory);
+			}
+		}
 
-    if (typeof window.ActiveXObject!='undefined')
-    {
-      // IE
-      try {
-        factory = new ActiveXObject('Gears.Factory');
-        // privateSetGlobalObject is only required and supported on WinCE.
-        if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
-          factory.privateSetGlobalObject(this);
-        }
-      } catch (e) {
-        safariMethod();
-      }
-    } else
-    {
-      safariMethod();
-    }
-  }
+		if (typeof window.ActiveXObject!='undefined')
+		{
+			// IE
+			try {
+				factory = new ActiveXObject('Gears.Factory');
+				// privateSetGlobalObject is only required and supported on WinCE.
+				if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
+					factory.privateSetGlobalObject(this);
+				}
+			} catch (e) {
+				safariMethod();
+			}
+		} else
+		{
+			safariMethod();
+		}
+	}
 
-  // *Do not* define any objects if Gears is not installed. This mimics the
-  // behavior of Gears defining the objects in the future.
-  if (!factory) {
-    return;
-  }
+	// *Do not* define any objects if Gears is not installed. This mimics the
+	// behavior of Gears defining the objects in the future.
+	if (!factory) {
+		return;
+	}
 
-  // Now set up the objects, being careful not to overwrite anything.
-  //
-  // Note: In Internet Explorer for Windows Mobile, you can't add properties to
-  // the window object. However, global objects are automatically added as
-  // properties of the window object in all browsers.
-  if (!window.google) {
-    window.google = {};
-  }
+	// Now set up the objects, being careful not to overwrite anything.
+	//
+	// Note: In Internet Explorer for Windows Mobile, you can't add properties to
+	// the window object. However, global objects are automatically added as
+	// properties of the window object in all browsers.
+	if (!window.google) {
+		window.google = {};
+	}
 
-  if (!google.gears) {
-    google.gears = {factory: factory};
-  }
+	if (!google.gears) {
+		google.gears = {factory: factory};
+	}
 })();
 
 (function(window, document, plupload, undef) {
@@ -2822,7 +2822,7 @@
 					}
 
 					// Setup current chunk size
-					curChunkSize = Math.min(chunkSize, file.size - (chunk  * chunkSize));
+					curChunkSize = Math.min(chunkSize, file.size - (chunk	* chunkSize));
 
 					if (!multipart) {
 						url = plupload.buildUrl(up.settings.url, reqArgs);
@@ -3746,7 +3746,7 @@
 									position : 'relative'
 								});
 							}
-              
+							
 							plupload.extend(dropInputElm.style, {
 								position : 'absolute',
 								display : 'block',
@@ -3960,7 +3960,7 @@
 									xhr.send(formData);
 
 									return;
-								}  // if no FormData we can still try to send it directly as last resort (see below)
+								}	// if no FormData we can still try to send it directly as last resort (see below)
 
 
 								if (typeof(bin) === 'string') {
@@ -5919,7 +5919,7 @@ FileProgress.prototype.appear = function () {
 		try {
 			this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 100;
 		} catch (e) {
-			// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+			// If it is not set initially, the browser will throw an error.	This will set it if it is not set yet.
 			this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=100)";
 		}
 	} else {
@@ -5949,7 +5949,7 @@ FileProgress.prototype.disappear = function () {
 			try {
 				this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = this.opacity;
 			} catch (e) {
-				// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+				// If it is not set initially, the browser will throw an error.	This will set it if it is not set yet.
 				this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + this.opacity + ")";
 			}
 		} else {

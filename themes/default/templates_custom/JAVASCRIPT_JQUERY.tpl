@@ -2638,7 +2638,7 @@ var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^
 // Here we check if the JavaScript engine is using some sort of
 // optimization where it does not always call our comparision
 // function. If that is the case, discard the hasDuplicate value.
-//   Thus far that includes Google Chrome.
+// Thus far that includes Google Chrome.
 [0, 0].sort(function(){
 	baseHasDuplicate = false;
 	return 0;
@@ -6065,10 +6065,10 @@ jQuery.offset = {
 		if ( /static/.test( jQuery.curCSS( elem, "position" ) ) ) {
 			elem.style.position = "relative";
 		}
-		var curElem   = jQuery( elem ),
+		var curElem = jQuery( elem ),
 			curOffset = curElem.offset(),
-			curTop    = parseInt( jQuery.curCSS( elem, "top",  true ), 10 ) || 0,
-			curLeft   = parseInt( jQuery.curCSS( elem, "left", true ), 10 ) || 0;
+			curTop = parseInt( jQuery.curCSS( elem, "top",  true ), 10 ) || 0,
+			curLeft = parseInt( jQuery.curCSS( elem, "left", true ), 10 ) || 0;
 
 		if ( jQuery.isFunction( options ) ) {
 			options = options.call( elem, i, curOffset );
@@ -6100,7 +6100,7 @@ jQuery.fn.extend({
 		offsetParent = this.offsetParent(),
 
 		// Get correct offsets
-		offset       = this.offset(),
+		offset = this.offset(),
 		parentOffset = /^body|html$/i.test(offsetParent[0].nodeName) ? { top: 0, left: 0 } : offsetParent.offset();
 
 		// Subtract element margins

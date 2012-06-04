@@ -193,28 +193,28 @@ var axisRotation = new DisplayObject3D().make3DPoint(0,0,0);
 
 var Sphere = function (radius,sides, numOfItems){
 
-    numOfItems++; // Makes maths work
+	numOfItems++; // Makes maths work
 
-    //Step through the number of rings.
-    for (var j = sides ; j >= 0; j--){
+	//Step through the number of rings.
+	for (var j = sides ; j >= 0; j--){
 
-        //Step through each point on a ring.
-        for (var i = numOfItems / sides; i >= 0; i--)
-        {
-            //Space out each point evenly.
-            var angle = i * Math.PI * 2 / (numOfItems/sides);
-            var angleB = j * Math.PI * 2 / sides;
+		//Step through each point on a ring.
+		for (var i = numOfItems / sides; i >= 0; i--)
+		{
+			//Space out each point evenly.
+			var angle = i * Math.PI * 2 / (numOfItems/sides);
+			var angleB = j * Math.PI * 2 / sides;
 
-            //Figure out the x,y,z co-ordinates of each point.
-            var x =  Math.sin(angle) * Math.sin(angleB)*radius;
-            var y =  Math.cos(angle) * Math.sin(angleB)*radius;
-            var z =  Math.cos(angleB)* radius;
+			//Figure out the x,y,z co-ordinates of each point.
+			var x =  Math.sin(angle) * Math.sin(angleB)*radius;
+			var y =  Math.cos(angle) * Math.sin(angleB)*radius;
+			var z =  Math.cos(angleB)* radius;
 
-            //Put the point in an array.
-            this.pointsArray.push(this.make3DPoint(x,y,z));
-        }
+			//Put the point in an array.
+			this.pointsArray.push(this.make3DPoint(x,y,z));
+		}
 
-    };
+	};
 
 	var shuffle = function(o){ //v1.0
 		for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);

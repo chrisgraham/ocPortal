@@ -62,7 +62,7 @@ SWFUpload.QUEUE_ERROR = {
 };
 SWFUpload.UPLOAD_ERROR = {
 	HTTP_ERROR				  		: -200,
-	MISSING_UPLOAD_URL	      		: -210,
+	MISSING_UPLOAD_URL					: -210,
 	IO_ERROR				  		: -220,
 	SECURITY_ERROR			  		: -230,
 	UPLOAD_LIMIT_EXCEEDED	  		: -240,
@@ -377,47 +377,47 @@ SWFUpload.prototype.displayDebugInfo = function () {
 			"Version: ", SWFUpload.version, "\n",
 			"Movie Name: ", this.movieName, "\n",
 			"Settings:\n",
-			"\t", "upload_url:               ", this.settings.upload_url, "\n",
-			"\t", "flash_url:                ", this.settings.flash_url, "\n",
-			"\t", "use_query_string:         ", this.settings.use_query_string.toString(), "\n",
-			"\t", "requeue_on_error:         ", this.settings.requeue_on_error.toString(), "\n",
-			"\t", "http_success:             ", this.settings.http_success.join(", "), "\n",
-			"\t", "assume_success_timeout:   ", this.settings.assume_success_timeout, "\n",
-			"\t", "file_post_name:           ", this.settings.file_post_name, "\n",
-			"\t", "post_params:              ", this.settings.post_params.toString(), "\n",
-			"\t", "file_types:               ", this.settings.file_types, "\n",
-			"\t", "file_types_description:   ", this.settings.file_types_description, "\n",
-			"\t", "file_size_limit:          ", this.settings.file_size_limit, "\n",
-			"\t", "file_upload_limit:        ", this.settings.file_upload_limit, "\n",
-			"\t", "file_queue_limit:         ", this.settings.file_queue_limit, "\n",
-			"\t", "debug:                    ", this.settings.debug.toString(), "\n",
+			"\t", "upload_url:					", this.settings.upload_url, "\n",
+			"\t", "flash_url:					 ", this.settings.flash_url, "\n",
+			"\t", "use_query_string:			", this.settings.use_query_string.toString(), "\n",
+			"\t", "requeue_on_error:			", this.settings.requeue_on_error.toString(), "\n",
+			"\t", "http_success:				 ", this.settings.http_success.join(", "), "\n",
+			"\t", "assume_success_timeout:	", this.settings.assume_success_timeout, "\n",
+			"\t", "file_post_name:			  ", this.settings.file_post_name, "\n",
+			"\t", "post_params:				  ", this.settings.post_params.toString(), "\n",
+			"\t", "file_types:					", this.settings.file_types, "\n",
+			"\t", "file_types_description:	", this.settings.file_types_description, "\n",
+			"\t", "file_size_limit:			 ", this.settings.file_size_limit, "\n",
+			"\t", "file_upload_limit:		  ", this.settings.file_upload_limit, "\n",
+			"\t", "file_queue_limit:			", this.settings.file_queue_limit, "\n",
+			"\t", "debug:						  ", this.settings.debug.toString(), "\n",
 
-			"\t", "prevent_swf_caching:      ", this.settings.prevent_swf_caching.toString(), "\n",
+			"\t", "prevent_swf_caching:		", this.settings.prevent_swf_caching.toString(), "\n",
 
-			"\t", "button_placeholder_id:    ", this.settings.button_placeholder_id.toString(), "\n",
-			"\t", "button_placeholder:       ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
-			"\t", "button_image_url:         ", this.settings.button_image_url.toString(), "\n",
-			"\t", "button_width:             ", this.settings.button_width.toString(), "\n",
-			"\t", "button_height:            ", this.settings.button_height.toString(), "\n",
-			"\t", "button_text:              ", this.settings.button_text.toString(), "\n",
-			"\t", "button_text_style:        ", this.settings.button_text_style.toString(), "\n",
+			"\t", "button_placeholder_id:	 ", this.settings.button_placeholder_id.toString(), "\n",
+			"\t", "button_placeholder:		 ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
+			"\t", "button_image_url:			", this.settings.button_image_url.toString(), "\n",
+			"\t", "button_width:				 ", this.settings.button_width.toString(), "\n",
+			"\t", "button_height:				", this.settings.button_height.toString(), "\n",
+			"\t", "button_text:				  ", this.settings.button_text.toString(), "\n",
+			"\t", "button_text_style:		  ", this.settings.button_text_style.toString(), "\n",
 			"\t", "button_text_top_padding:  ", this.settings.button_text_top_padding.toString(), "\n",
 			"\t", "button_text_left_padding: ", this.settings.button_text_left_padding.toString(), "\n",
-			"\t", "button_action:            ", this.settings.button_action.toString(), "\n",
-			"\t", "button_disabled:          ", this.settings.button_disabled.toString(), "\n",
+			"\t", "button_action:				", this.settings.button_action.toString(), "\n",
+			"\t", "button_disabled:			 ", this.settings.button_disabled.toString(), "\n",
 
-			"\t", "custom_settings:          ", this.settings.custom_settings.toString(), "\n",
+			"\t", "custom_settings:			 ", this.settings.custom_settings.toString(), "\n",
 			"Event Handlers:\n",
 			"\t", "swfupload_loaded_handler assigned:  ", (typeof this.settings.swfupload_loaded_handler === "function").toString(), "\n",
 			"\t", "file_dialog_start_handler assigned: ", (typeof this.settings.file_dialog_start_handler === "function").toString(), "\n",
-			"\t", "file_queued_handler assigned:       ", (typeof this.settings.file_queued_handler === "function").toString(), "\n",
+			"\t", "file_queued_handler assigned:		 ", (typeof this.settings.file_queued_handler === "function").toString(), "\n",
 			"\t", "file_queue_error_handler assigned:  ", (typeof this.settings.file_queue_error_handler === "function").toString(), "\n",
-			"\t", "upload_start_handler assigned:      ", (typeof this.settings.upload_start_handler === "function").toString(), "\n",
-			"\t", "upload_progress_handler assigned:   ", (typeof this.settings.upload_progress_handler === "function").toString(), "\n",
-			"\t", "upload_error_handler assigned:      ", (typeof this.settings.upload_error_handler === "function").toString(), "\n",
-			"\t", "upload_success_handler assigned:    ", (typeof this.settings.upload_success_handler === "function").toString(), "\n",
-			"\t", "upload_complete_handler assigned:   ", (typeof this.settings.upload_complete_handler === "function").toString(), "\n",
-			"\t", "debug_handler assigned:             ", (typeof this.settings.debug_handler === "function").toString(), "\n"
+			"\t", "upload_start_handler assigned:		", (typeof this.settings.upload_start_handler === "function").toString(), "\n",
+			"\t", "upload_progress_handler assigned:	", (typeof this.settings.upload_progress_handler === "function").toString(), "\n",
+			"\t", "upload_error_handler assigned:		", (typeof this.settings.upload_error_handler === "function").toString(), "\n",
+			"\t", "upload_success_handler assigned:	 ", (typeof this.settings.upload_success_handler === "function").toString(), "\n",
+			"\t", "upload_complete_handler assigned:	", (typeof this.settings.upload_complete_handler === "function").toString(), "\n",
+			"\t", "debug_handler assigned:				 ", (typeof this.settings.debug_handler === "function").toString(), "\n"
 		].join("")
 	);
 };
@@ -474,7 +474,7 @@ SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
 	-- Flash control methods --
 	Your UI should use these
 	to operate SWFUpload
-   ***************************** */
+	***************************** */
 
 // WARNING: this function does not work in Flash Player 10
 // Public: selectFile causes a File Selection Dialog window to appear.  This
@@ -518,10 +518,10 @@ SWFUpload.prototype.stopUpload = function () {
 
 /* ************************
  * Settings methods
- *   These methods change the SWFUpload settings.
- *   SWFUpload settings should not be changed directly on the settings object
- *   since many of the settings need to be passed to Flash in order to take
- *   effect.
+ *	These methods change the SWFUpload settings.
+ *	SWFUpload settings should not be changed directly on the settings object
+ *	since many of the settings need to be passed to Flash in order to take
+ *	effect.
  * *********************** */
 
 // Public: getStats gets the file statistics object.
@@ -914,7 +914,7 @@ SWFUpload.prototype.uploadComplete = function (file) {
 };
 
 /* Called by SWFUpload JavaScript and Flash functions when debug is enabled. By default it writes messages to the
-   internal debug console.  You can override this event and have messages written where you want. */
+	internal debug console.  You can override this event and have messages written where you want. */
 SWFUpload.prototype.debug = function (message) {
 	this.queueEvent("debug_handler", message);
 };
@@ -932,7 +932,7 @@ SWFUpload.prototype.debug = function (message) {
 	have debug disabled you can remove these functions to reduce the file size
 	and complexity.
 ********************************** */
-   
+	
 // Private: debugMessage is the default debug_handler.  If you want to print debug messages
 // call the debug() function.  When overriding the function your own function should
 // check to see if the debug setting is true before outputting debug information.

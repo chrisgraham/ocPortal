@@ -39,14 +39,13 @@ function chat_load(room_id)
 	manage_scroll_height(document.getElementById('post'));
 
 	con.addPacketListener(
-	    function(msg) {
-	      // load extensions that are present in the packet using our ExtensionProvider
-	      msg.loadExtensions(extProvider);
-
-	      chatMessageHandler(null,msg);
-
-	    },
-       new Xmpp4Js.PacketFilter.PacketTypeFilter( "groupchat" )
+		function(msg) {
+			// load extensions that are present in the packet using our ExtensionProvider
+			msg.loadExtensions(extProvider);
+			
+			chatMessageHandler(null,msg);
+		},
+		new Xmpp4Js.PacketFilter.PacketTypeFilter( "groupchat" )
 	);
 
 	play_chat_sound('you_connect');
@@ -95,12 +94,12 @@ function xmpp_connect(username,password,onLoginCompleted)
 	sp.registerDefaultProviders();
 
 	window.con = new Xmpp4Js.Connection( {
-	   transport: {
-	       clazz: Xmpp4Js.Transport.BOSH,
-	       //endpoint: "{$FIND_SCRIPT#,xmpp_proxy}"
-			 endpoint: "http://{$DOMAIN#}:5280/http-bind/" // Same origin policy support
-	   },
-      stanzaProvider: sp
+		transport: {
+			clazz: Xmpp4Js.Transport.BOSH,
+			//endpoint: "{$FIND_SCRIPT#,xmpp_proxy}"
+			endpoint: "http://{$DOMAIN#}:5280/http-bind/" // Same origin policy support
+		},
+		stanzaProvider: sp
 	} );
 	con.on("connect", function() { onConnectForLogin(username,password,onLoginCompleted) }, this, {single: true} );
 	con.on("error", onConnectError, this, {single: true} );
@@ -115,9 +114,9 @@ function onConnectError()
 
 function onConnectForLogin(username,password,onLoginCompleted)
 {
-   var loginFlow = new Xmpp4Js.Workflow.Login({
-       con: con
-   });
+	var loginFlow = new Xmpp4Js.Workflow.Login({
+		con: con
+	});
 
 	loginFlow.on("success", onLoginCompleted );
 	loginFlow.on("failure", onConnectError );
