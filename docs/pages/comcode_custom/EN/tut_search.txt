@@ -70,7 +70,7 @@ To initiate a search while in the forum (our own [concept]OCF[/concept] forum), 
 
 ocPortal can support [url="OpenSearch"]http://www.opensearch.org/[/url], which allows your users to search your website from directly within their web browser (currently available in Firefox and Internet Explorer). It also supports 'Google Suggest' style search suggestions, based on past searches performed.
 
-By default OpenSearch is configured (via the [tt]HEADER[/tt] template) to only be active within a zone named 'docs' and for it to only search Comcode pages. You can, however, configure it to perform any search types you like via changing the code used in this template. You should make sure you have a 'favicon' before enabling OpenSearch, as it is important the web browser has one of these available to use.
+By default OpenSearch is configured (via the [tt]HTML_HEAD[/tt] template) to only be active within a zone named 'docs' and for it to only search Comcode pages. You can, however, configure it to perform any search types you like via changing the code used in this template. You should make sure you have a 'favicon' before enabling OpenSearch, as it is important the web browser has one of these available to use.
 
 [title="2"]Improving search results[/title]
 

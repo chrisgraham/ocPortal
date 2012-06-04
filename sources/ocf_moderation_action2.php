@@ -155,7 +155,7 @@ function warnings_script()
 		$_title=post_param('title');
 		$GLOBALS['FORUM_DB']->query_delete('f_saved_warnings',array('s_title'=>$_title),'',1);
 		$content=paragraph(do_lang_tempcode('SUCCESS'));
-		$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('DELETE_SAVED_WARNING'),'CONTENT'=>$content));
+		$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('DELETE_SAVED_WARNING'),'CONTENT'=>$content));
 		$echo->evaluate_echo();
 		return;
 	}
@@ -174,7 +174,7 @@ function warnings_script()
 	}
 	if ($content->is_empty()) $content=paragraph(do_lang_tempcode('NO_ENTRIES'),'rfdsfsdf3t45');
 
-	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('CHOOSE_SAVED_WARNING'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('CHOOSE_SAVED_WARNING'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->evaluate_echo();
 }
 

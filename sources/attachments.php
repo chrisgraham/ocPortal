@@ -280,7 +280,7 @@ function attachment_popup_script()
 
 	$content=do_template('ATTACHMENTS_BROWSER',array('_GUID'=>'7773aad46fb0bfe563a142030beb1a36','LIST'=>$list,'CONTENT'=>$content,'URL'=>$post_url));
 
-	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->evaluate_echo();
 }
 

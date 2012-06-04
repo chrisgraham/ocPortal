@@ -49,7 +49,7 @@ function bookmarks_script()
 			$content=add_bookmark_form($url);
 			break;
 	}
-	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ADD_BOOKMARK'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ADD_BOOKMARK'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }

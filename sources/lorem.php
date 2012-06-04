@@ -507,17 +507,19 @@ function do_lorem_template($codename,$parameters=NULL,$lang=NULL,$light_error=fa
 }
 
 /**
- * Lorem version of globalise. It will wrap the input into something that is "stable XHTML" and thus can work inside an XHTML editor
+ * Lorem version of globalise. It will wrap the input into something that is "stable XHTML" and thus can work inside an XHTML editor.
  *
  * @param  tempcode		The tempcode to put into a nice frame
  * @param  ?mixed			'Additional' message (NULL: none)
  * @param  string			The type of special message
  * @set    inform warn ""
- * @param  boolean		Whether to automatically include the header and footer templates
+ * @param  boolean		Whether to include the header/footer/panels
  * @return tempcode		Standalone page
  */
 function lorem_globalise($middle,$message=NULL,$type='',$include_header_and_footer=false)
 {
+	if (!$include_header_and_footer) $_GET['wide_high']='1'; // HACKHACK
+
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
 	global $LOREM_AVOID_GLOBALISE;
@@ -525,26 +527,10 @@ function lorem_globalise($middle,$message=NULL,$type='',$include_header_and_foot
 	if (($LOREM_AVOID_GLOBALISE) || is_full_screen_template(NULL, $middle))
 		return $middle;
 
-	$_messages=(!is_null($message))?do_lorem_template('MESSAGE',array('TYPE'=>$type,'MESSAGE'=>$message)):new ocp_tempcode();
-
 	$out=new ocp_tempcode();
-	if ($include_header_and_footer)
-	{
-		$display = do_lorem_template('HEADER',array(
-			'REFRESH'=>'',
-			'FEEDS'=>'',
-		));
-		$out->attach($display);
-	}
-	$out->attach(do_lorem_template('GLOBAL',array('MIDDLE'=>$middle)));
-	if ($include_header_and_footer)
-	{
-		$display = do_lorem_template('FOOTER',array(
-			'BAIL_OUT'=>false,
-			'ERROR_MESSAGES_DURING_OUTPUT'=>'',
-		));
-		$out->attach($display);
-	}
+	$out->attach(do_lorem_template('GLOBAL_HTML_WRAP',array(
+		'MIDDLE'=>$middle,
+	)));
 
 	$out->handle_symbol_preprocessing();
 
@@ -960,6 +946,6 @@ function is_full_screen_template($temp_name=NULL,$tempcode=NULL)
 		return ($pos!==false) && ($pos<400);
 	}
 
-	return ($temp_name=='HEADER' || $temp_name=='FOOTER' || $temp_name=='GLOBAL' || $temp_name=='RESTORE_HTML_WRAP' || $temp_name=='BASIC_HTML_WRAP' || $temp_name=='STYLED_HTML_WRAP' || $temp_name=='MAIL');
+	return ($temp_name=='GLOBAL_HTML_WRAP' || $temp_name=='RESTORE_HTML_WRAP' || $temp_name=='BASIC_HTML_WRAP' || $temp_name=='STANDALONE_HTML_WRAP' || $temp_name=='MAIL');
 }
 

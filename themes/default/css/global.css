@@ -12,6 +12,8 @@ Most sizes are defined in 'em' units. 1em is roughly 10px, depending on font siz
 'em' units are great because they scale very well. If you reduce the font size, the spacings will reduce as well, in proportion.
 
 {!en_left} and {!en_right} usually resolve to left and right respectively. Right-to-left languages (commonly Arabic and Hebrew) will be the opposite. We only test with Left-to-right, but are likely to accept patches to fix any little glitches that may have developed over time.
+
+When editing theme CSS we recommend you comment out code your removing and heavily comment your own changes - this will make it much easier for you to upgrade your theme to new versions.
 */
 
 /*
@@ -365,7 +367,7 @@ body#main_website #main_website_inner {
 /* If not #main_website, it'll be one of these (the names correspond to the templates used) */
 body#basic_html_wrap {
 }
-body#styled_html_wrap {
+body#standalone_html_wrap {
 }
 
 header {

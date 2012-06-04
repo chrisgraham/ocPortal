@@ -201,9 +201,9 @@ class Module_admin_debrand
 			afm_make_file($critical_errors_path,$critical_errors,false);
 		}
 
-		$save_header_path=get_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_custom/HEADER.tpl';
+		$save_header_path=get_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_custom/GLOBAL_HTML_WRAP.tpl';
 		$header_path=$save_header_path;
-		if (!file_exists($header_path)) $header_path=get_file_base().'/themes/default/templates/HEADER.tpl';
+		if (!file_exists($header_path)) $header_path=get_file_base().'/themes/default/templates/GLOBAL_HTML_WRAP.tpl';
 		$header_tpl=file_get_contents($header_path);
 		$header_tpl=str_replace('Copyright ocProducts Limited','',$header_tpl);
 		$myfile=@fopen($save_header_path,'wb');

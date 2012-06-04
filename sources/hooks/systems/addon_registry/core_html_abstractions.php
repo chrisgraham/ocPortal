@@ -85,7 +85,7 @@ class Hook_addon_registry_core_html_abstractions
 			'PARAGRAPH.tpl',
 			'FLOATER.tpl',
 			'BASIC_HTML_WRAP.tpl',
-			'STYLED_HTML_WRAP.tpl',
+			'STANDALONE_HTML_WRAP.tpl',
 			'HTML_HEAD.tpl',
 			'POOR_XHTML_WRAPPER.tpl',
 			'WITH_WHITESPACE.tpl'
@@ -104,7 +104,7 @@ class Hook_addon_registry_core_html_abstractions
 			'POOR_XHTML_WRAPPER.tpl' => 'poor_xhtml_wrapper',
 			'JS_REFRESH.tpl' => 'js_refresh',
 			'ANCHOR.tpl' => 'anchor',
-			'STYLED_HTML_WRAP.tpl' => 'styled_html_wrap',
+			'STANDALONE_HTML_WRAP.tpl' => 'standalone_html_wrap',
 			'META_REFRESH_LINE.tpl' => 'meta_refresh_line',
 			'HYPERLINK_POPUP_WINDOW.tpl' => 'hyperlink_popup_window',
 			'BASIC_HTML_WRAP.tpl' => 'basic_html_wrap',
@@ -175,10 +175,10 @@ class Hook_addon_registry_core_html_abstractions
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__styled_html_wrap()
+	function tpl_preview__standalone_html_wrap()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('STYLED_HTML_WRAP', array(
+			lorem_globalise(do_lorem_template('STANDALONE_HTML_WRAP', array(
 				'TITLE' => lorem_phrase(),
 				'CONTENT' => lorem_chunk_html(),
 			)), NULL, '', true)

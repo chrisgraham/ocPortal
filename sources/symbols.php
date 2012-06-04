@@ -29,7 +29,7 @@ function init__symbols()
 	$LOADED_BLOCKS=array();
 	$LOADED_PAGES=array();
 	$LOADED_PANELS=array();
-	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
+	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1,'WIDE_HIGH'=>1,'WIDE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
 	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'REQUIRE_JAVASCRIPT'=>1,'REQUIRE_CSS'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
 	$EXTRA_SYMBOLS=NULL;
 	$DOCUMENT_HELP='';
@@ -601,7 +601,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HEADER_TEXT':
-				global $ZONE,$DONE_HEADER,$SEO_TITLE,$DISPLAYED_TITLE;
+				global $ZONE,$SEO_TITLE,$DISPLAYED_TITLE;
 				if ($ZONE===NULL)
 				{
 					warn_exit(do_lang_tempcode('ZONE_NOT_INSTALLED'));
@@ -709,6 +709,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'d605c0d111742a8cd2d4ef270a1e5fe1','TYPE'=>'inform','MESSAGE'=>do_lang_tempcode('MEMORY_USAGE',float_format(round(floatval($memory_usage)/1024.0/1024.0,2))))));
 				}
 				$value=$messages_bottom->evaluate();
+				break;
+
+			case 'LATE_MESSAGES':
+				$value=static_evaluate_tempcode($GLOBALS['LATE_ATTACHED_MESSAGES']);
 				break;
 
 			case 'BREADCRUMBS':

@@ -10,7 +10,7 @@
 [html]<div class="float_surrounder">[/html]
 [exp_thumb="Configuring the HTML to an external banner/rotation" float="left"]banners_config[/exp_thumb]
 In order to use banners from an existing banner network, you often are asked to incorporate a chunk of HTML into your site. ocPortal makes this easy for you, with a config option to store this code ("Money advert-code"). If the config option is empty, then banners for the default banner category (the one by default shown in the top right, 468x60), come from the banner rotation purely; otherwise, a mix between rotation and your hard-coded banner is achieved according to the specified percentage.
-If you want a different commercial banner size to 468x60, or multiple banners, it is best to avoid the ocPortal banner system entirely. There is nothing particularly special about how ocPortal handles HTML, and you can put your Google banners in any templates or Comcode pages you wish to (for Comcode pages you will need to use the Comcode 'html' tag and should probably turn the WYSIWYG editor off). If you are having multiple commercial banners and also want to use the standard 468x60 spot for commercial banners you may want (for reasons of consistency, simplicity, and maintenance) to rip out ocPortals banner system entirely and paste your banner code into [tt]HEADER.tpl[/tt] over ocPortals default banner Tempcode. i.e. replace this:
+If you want a different commercial banner size to 468x60, or multiple banners, it is best to avoid the ocPortal banner system entirely. There is nothing particularly special about how ocPortal handles HTML, and you can put your Google banners in any templates or Comcode pages you wish to (for Comcode pages you will need to use the Comcode 'html' tag and should probably turn the WYSIWYG editor off). If you are having multiple commercial banners and also want to use the standard 468x60 spot for commercial banners you may want (for reasons of consistency, simplicity, and maintenance) to rip out ocPortals banner system entirely and paste your banner code into [tt]GLOBAL_HTML_WRAP.tpl[/tt] over ocPortals default banner Tempcode. i.e. replace this:
 [code]
 			{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
 			{+START,IF_NON_EMPTY,{$GET,BANNER}}
@@ -100,7 +100,7 @@ Each of these sets may be called up as a separate rotation, displayed in a diffe
 
 To set up a new rotation, displayed in the layout in a space of your choosing, use the following instructions.
 
-a) Copy this code from the [tt]HEADER[/tt] template:
+a) Copy this code from the [tt]GLOBAL_HTML_WRAP[/tt] template:
 [codebox]
    {$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
    {+START,IF_NON_EMPTY,{$GET,BANNER}}
@@ -138,7 +138,7 @@ If banners won't show check:
 3) Your banner is validated.
 4) Your banner has not expired.
 5) Your banner has hits assigned, is a permanent banner, or is a default banner and there aren't non-default banners obscuring it.
-6) That the banner type your banner is in is displayed (by default only the default 'General' banners are displayed, in the [tt]HEADER.tpl[/tt] template). See "Having multiple banner sets".
+6) That the banner type your banner is in is displayed (by default only the default 'General' banners are displayed, in the [tt]GLOBAL_HTML_WRAP.tpl[/tt] template). See "Having multiple banner sets".
 7) The banner type has permissions for the viewer's usergroup.
 8) The "Community advert chance" configuration option is not set to zero.
 

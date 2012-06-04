@@ -17,7 +17,7 @@ If you don't need to integrate a full web application, just a simple HTML page, 
 
 [title="3"]The old, more robust, way[/title]
 
-[box="Note" width="25em" float="right"]Relative URLs are normally read relative to the path the referencing page is in. For example, if an HTML file is loaded directory, relative URLs that file references would be relative to the path of the HTML file. This behaviour can be changed using an HTML tag 'base', but ocPortal does not use this by default; you may place a 'base' into ocPortal in HEADER.tpl if you wish, to create a common location for relative-URLs to be relative to. This is possible in ocPortal as ocPortal itself only uses absolute URLs.[/box]
+[box="Note" width="25em" float="right"]Relative URLs are normally read relative to the path the referencing page is in. For example, if an HTML file is loaded directory, relative URLs that file references would be relative to the path of the HTML file. This behaviour can be changed using an HTML tag 'base', but ocPortal does not use this by default; you may place a 'base' into ocPortal in [tt]HTML_HEAD.tpl[/tt] if you wish, to create a common location for relative-URLs to be relative to. This is possible in ocPortal as ocPortal itself only uses absolute URLs.[/box]
 
 The two main issues that present themselves are:
  - HTML files tend to have associated data files, and the path these are read from when integrated into ocPortal will not be the same as the path of the HTML file itself (as page files are located in a different location to where the index.php file that handles the page request is located)
@@ -172,7 +172,7 @@ To include that library in PHP code, you would run [tt]require_javascript('javas
 
 Edit the [tt]JAVASCRIPT_CUSTOM_GLOBALS[/tt] template and paste all the Javascript in there.
 
-Alternatively, if keeping the filenames matters, edit the [tt]HEADER[/tt] or [tt]FOOTER[/tt] template (and possibly others, such as [tt]STYLED_HTML_WRAP[/tt]) to include it in the normal documented way for the Javascript library, and upload the files. The canonical place to put extra files in ocPortal is [tt]uploads/website_specific[/tt] and reference them from there, but you can put them somewhere else if you prefer.
+Alternatively, if keeping the filenames matters, edit the [tt]HTML_HEAD[/tt] or [tt]GLOBAL_HTML_WRAP[/tt] template to include it in the normal documented way for the Javascript library, and upload the files. The canonical place to put extra files in ocPortal is [tt]uploads/website_specific[/tt] and reference them from there, but you can put them somewhere else if you prefer.
 
 [title="2"]Integrating CSS[/title]
 

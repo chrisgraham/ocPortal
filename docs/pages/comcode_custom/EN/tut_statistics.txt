@@ -97,7 +97,7 @@ The following statistics screens exist to show [concept]OCF[/concept] data:
 
 [url="Google Analytics"]http://www.google.com/analytics/[/url] is an excellent free package for analysing website activity, allowing you to spot all kinds of trends in your data.
 
-We don't consider Google Analytics a competitor to our own inbuilt analytics -- both offer different features, complementing each other. Google Analytics is easy to install, all you need to do is follow their instructions, and when prompted to add some code to your website, place that code in your [tt]FOOTER[/tt] template.
+We don't consider Google Analytics a competitor to our own inbuilt analytics -- both offer different features, complementing each other. Google Analytics is easy to install, we have support built in so you just need to enter your analytics code in the ocPortal configuration.
 
 [concepts
  1_key="SVG"            1_value="Scaleable Vector Graphics, a text-markup-based graphics format that allows infinite scalability of graphics without texture loss due to being vector-based (co-ordinate-delimited shapes) instead of pixel based (specific data for each pixel)."

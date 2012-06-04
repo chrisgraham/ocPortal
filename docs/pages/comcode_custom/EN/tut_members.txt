@@ -187,7 +187,7 @@ Note that you cannot delete certain default usergroups that are used for system 
 
 [exp_thumb="The bookmarks popup" float="right"]members_bookmarks[/exp_thumb]
 [exp_thumb="Managing bookmarks" float="right"]members_bookmarks_manage[/exp_thumb]
-If members are logged in then they may bookmark pages of your website within the site itself. The icon to do this is at the bottom of every ocPortal page unless the 'bookmarks' addon has been installed, or it has been removed from [tt]FOOTER.tpl[/tt].
+If members are logged in then they may bookmark pages of your website within the site itself. The icon to do this is at the bottom of every ocPortal page unless the 'bookmarks' addon has been installed, or it has been removed from [tt]GLOBAL_HTML_WRAP.tpl[/tt].
 
 The bookmark feature is particularly useful for:
  - members who want to keep bookmarks for different websites separate

@@ -1,13 +1,147 @@
-		{+START,IF_PASSED,ERROR_MESSAGES_DURING_OUTPUT}
-			{+START,IF,{$OR,{BAIL_OUT},{$IS_NON_EMPTY,{ERROR_MESSAGES_DURING_OUTPUT}}}}
-				{ERROR_MESSAGES_DURING_OUTPUT}
+<!DOCTYPE html>
 
-				{+START,IF,{$DEV_MODE}}
-					<script type="text/javascript">// <![CDATA[
-						{+START,IF,{$IS_NON_EMPTY,{ERROR_MESSAGES_DURING_OUTPUT}}}try { window.scrollTo(0,1000000); } catch (e) {};{+END}
-						window.fauxmodal_alert('{!PLEASE_REVIEW_ERRORS_AT_BOTTOM;}'); // Before Firefox dies with an XHTML error, let the developer see what is wrong
-					//]]></script>
+<!--
+Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
+{$BRAND_BASE_URL*}
+-->
+
+{$,We deploy as HTML5 but code and validate strictly to XHTML5}
+<html lang="{$LANG*}" dir="{!dir}">
+<head>
+	{+START,INCLUDE,HTML_HEAD}{+END}
+</head>
+
+{$,You can use main_website_inner to help you create fixed width designs; never put fixed-width stuff directly on ".website_body" or "body" because it will affects things like the preview or banner frames or popups/overlays}
+<body class="website_body" id="main_website" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+	<div id="main_website_inner">
+		{$,This is the main site header; if you like your layout in one place you can move it to GLOBAL.tpl}
+		{+START,IF,{$SHOW_HEADER}}
+			<header class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+				{$,The main logo}
+				<h1><a class="logo_outer" target="_self" href="{$PAGE_LINK*,:}" rel="home"><img class="logo" src="{$?,{$MOBILE},{$IMG*,logo/trimmed_logo},{$LOGO_URL*}}" width="{$IMG_WIDTH*,{$?,{$MOBILE},{$IMG,logo/trimmed_logo},{$LOGO_URL}}}" height="{$IMG_HEIGHT*,{$?,{$MOBILE},{$IMG,logo/trimmed_logo},{$LOGO_URL}}}" title="{!FRONT_PAGE}" alt="{$SITE_NAME*}" /></a></h1>
+
+				{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
+				<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
+
+				{$,Main menu}
+				<div class="global_navigation">
+					{$BLOCK,block=side_stored_menu,param=zone_menu,type=zone}
+				</div>
+
+				{$,Outside the Admin Zone we have a spot for the banner}
+				{+START,IF,{$NAND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}{+START,IF,{$NOT,{$MOBILE}}}
+					{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
+					{+START,IF_NON_EMPTY,{$GET,BANNER}}
+						<div class="global_banner" style="text-align: {!en_right}">{$GET,BANNER}</div>
+					{+END}
+				{+END}{+END}
+
+				{$,Inside the Admin Zone we have the Admin Zone search}
+				{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,admin,adminzone},{$EQ,{$ZONE},adminzone,cms}}}
+					<div class="adminzone_search">
+						<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,adminzone:admin:search}}" method="get" class="inline">
+							{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,adminzone:admin:search}}
+
+							<div>
+								<label for="search_content">{!ADMINZONE_SEARCH_LOST}</label> <span class="arr">&rarr;</span>
+								<input type="search" id="search_content" name="search_content" style="{$?,{$MATCH_KEY_MATCH,adminzone:admin:search},,color: gray}" onblur="if (this.value=='') { this.value='{!ADMINZONE_SEARCH;}'; this.style.color='gray'; }" onkeyup="if (typeof update_ajax_admin_search_list!='undefined') update_ajax_admin_search_list(this,event);" onfocus="require_javascript('javascript_ajax_people_lists'); require_javascript('javascript_ajax'); if (this.value=='{!ADMINZONE_SEARCH;}') this.value=''; this.style.color='black';" value="{$?,{$MATCH_KEY_MATCH,adminzone:admin:search},{$_GET*,search_content},{!ADMINZONE_SEARCH}}" title="{!ADMIN_ZONE_SEARCH_SYNTAX}" />
+								{+START,IF,{$JS_ON}}
+									<div class="accessibility_hidden"><label for="new_window">{!NEW_WINDOW}</label></div>
+									<input title="{!NEW_WINDOW}" type="checkbox" value="1" id="new_window" name="new_window" />
+								{+END}
+								<input onclick="if ((form.new_window) &amp;&amp; (form.new_window.checked)) form.target='_blank'; else form.target='_top';" id="search_button" class="button_micro" type="image" src="{$IMG*,admin_search}" alt="{!SEARCH}" value="{!SEARCH}" />
+							</div>
+						</form>
+					</div>
 				{+END}
+			</header>
+		{+END}
+
+		{$,Make sure the system knows we have not rendered our primary title for this output yet}
+		{$SET,done_first_title,0}
+		
+		{+START,IF,{$NOT,{$MOBILE}}}
+			{$,By default the top panel contains the admin menu, community menu, member bar, etc}
+			{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,top}}}
+				<div id="panel_top">
+					{$LOAD_PANEL,top}
+				</div>
+			{+END}
+		
+			{$,ocPortal may show little messages for you as it runs relating to what you are doing or the state the site is in}
+			{+START,IF_NON_EMPTY,{$MESSAGES_TOP}}
+				<div class="global_messages">
+					{$MESSAGES_TOP}
+				</div>
+			{+END}
+		
+			{$,The main panels and content; float_surrounder contains the layout into a rendering box so that the footer etc can sit underneath}
+			<div class="float_surrounder">
+				{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,left}}}
+					<div id="panel_left" class="global_side_panel" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+						{$LOAD_PANEL,left}
+					</div>
+				{+END}
+		
+				{$,Deciding whether/how to show the right panel requires some complex logic}
+				{$SET,HELPER_PANEL_TUTORIAL,{$?,{$HAS_PRIVILEGE,see_software_docs},{$HELPER_PANEL_TUTORIAL}}}
+				{$SET,helper_panel,{$OR,{$IS_NON_EMPTY,{$GET,HELPER_PANEL_TUTORIAL}},{$IS_NON_EMPTY,{$HELPER_PANEL_PIC}},{$IS_NON_EMPTY,{$HELPER_PANEL_HTML}},{$IS_NON_EMPTY,{$HELPER_PANEL_TEXT}}}}
+				{+START,IF,{$OR,{$GET,helper_panel},{$IS_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}}}
+					<div id="panel_right" class="global_side_panel{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,right}}} helper_panel{+START,IF,{$HIDE_HELP_PANEL}} helper_panel_hidden{+END}{+END}" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+						{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
+							{$LOAD_PANEL,right}
+						{+END}
+		
+						{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
+							{+START,INCLUDE,GLOBAL_HELPER_PANEL}{+END}
+						{+END}
+					</div>
+				{+END}
+		
+				<article id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle">
+					{$,Breadcrumbs}
+					{+START,IF_NON_EMPTY,{$BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}{+START,IF,{$SHOW_HEADER}}
+						<nav class="global_breadcrumbs breadcrumbs" itemprop="breadcrumb" role="navigation">
+							<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" title="{!YOU_ARE_HERE}" alt="{!YOU_ARE_HERE}" />
+							{$BREADCRUMBS}
+						</nav>
+					{+END}{+END}{+END}
+		
+					{$,Associated with the SKIP_NAVIGATION link defined further up}
+					<a id="maincontent"></a>
+		
+					{$,The main site, whatever 'page' is being loaded}
+					{MIDDLE}
+				</article>
+		
+				{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,bottom}}}
+					<div id="panel_bottom" role="complementary">
+						{$LOAD_PANEL,bottom}
+					</div>
+				{+END}
+			</div>
+		
+			{+START,IF_NON_EMPTY,{$MESSAGES_BOTTOM}}
+				<div class="global_messages">
+					{$MESSAGES_BOTTOM}
+				</div>
+			{+END}
+		{+END}
+		
+		{+START,IF,{$MOBILE}}
+			{+START,INCLUDE,GLOBAL_HTML_WRAP_mobile}{+END}
+		{+END}
+		
+		{+START,IF,{$EQ,{$CONFIG_OPTION,sitewide_im},1}}{$CHAT_IM}{+END}
+
+		{+START,IF_NON_EMPTY,{$LATE_MESSAGES}}
+			{$LATE_MESSAGES}
+
+			{+START,IF,{$DEV_MODE}}
+				<script type="text/javascript">// <![CDATA[
+					try { window.scrollTo(0,1000000); } catch (e) {};
+					window.fauxmodal_alert('{!PLEASE_REVIEW_ERRORS_AT_BOTTOM;}'); // Before Firefox dies with an XHTML error, let the developer see what is wrong
+				//]]></script>
 			{+END}
 		{+END}
 

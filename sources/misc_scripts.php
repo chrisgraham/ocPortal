@@ -142,7 +142,7 @@ function preview_script()
 
 	$output=do_template('PREVIEW_SCRIPT',array('_GUID'=>'97bd8909e8b9983a0bbf7ab68fab92f3','OUTPUT'=>$output->evaluate(),'VALIDATION'=>$validation,'KEYWORD_DENSITY'=>$keyword_density,'SPELLING'=>$spelling,'HIDDEN'=>build_keep_post_fields()));
 
-	$tpl=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'EXTRA_HEAD'=>$GLOBALS['EXTRA_HEAD'],'EXTRA_FOOT'=>$GLOBALS['EXTRA_FOOT'],'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+	$tpl=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
 	$tpl->handle_symbol_preprocessing();
 	$tpl->evaluate_echo();
 }
@@ -234,7 +234,7 @@ function iframe_script()
 
 	global $ATTACHED_MESSAGES;
 	$output->handle_symbol_preprocessing();
-	$tpl=do_template('STYLED_HTML_WRAP',array('OPENS_BELOW'=>get_param_integer('opens_below',0)==1,'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+	$tpl=do_template('STANDALONE_HTML_WRAP',array('OPENS_BELOW'=>get_param_integer('opens_below',0)==1,'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
 	$tpl->handle_symbol_preprocessing();
 	$tpl->evaluate_echo();
 }
@@ -276,7 +276,7 @@ function page_link_chooser_script()
 
 	// Display
 	$content=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'235d969528d7b81aeb17e042a17f5537','NAME'=>'tree_list'));
-	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('CHOOSE'),'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('CHOOSE'),'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
@@ -356,7 +356,7 @@ function staff_tips_script($ret=false)
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	// Display
-	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'3b5596a12c46295081f09ebe5349a479','FRAME'=>true,'TITLE'=>do_lang_tempcode('TIPS'),'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'3b5596a12c46295081f09ebe5349a479','FRAME'=>true,'TITLE'=>do_lang_tempcode('TIPS'),'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 	return NULL;
@@ -895,7 +895,7 @@ function block_helper_script()
 	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
@@ -937,7 +937,7 @@ function emoticons_script()
 	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'8acac778b145bfe7b063317fbcae7fde','TITLE'=>do_lang_tempcode('EMOTICONS_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'8acac778b145bfe7b063317fbcae7fde','TITLE'=>do_lang_tempcode('EMOTICONS_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
@@ -987,7 +987,7 @@ function question_ui_script()
 	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>escape_html($title),'POPUP'=>true,'CONTENT'=>$message));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>escape_html($title),'POPUP'=>true,'CONTENT'=>$message));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }

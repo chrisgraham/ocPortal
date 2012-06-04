@@ -568,39 +568,43 @@ function ocf_require_all_forum_stuff()
 }
 
 /**
- * Turn the tempcode lump into a standalone page (except for header/footer which is assumed already handled elsewhere).
+ * Turn the tempcode lump into a standalone page.
  *
  * @param  tempcode		The tempcode to put into a nice frame
  * @param  ?mixed			'Additional' message (NULL: none)
  * @param  string			The type of special message
  * @set    inform warn ""
- * @param  boolean		Whether to automatically include the header and footer templates
+ * @param  boolean		Whether to include the header/footer/panels
  * @return tempcode		Standalone page
  */
 function globalise($middle,$message=NULL,$type='',$include_header_and_footer=false)
 {
-	require_code('site');
+	if (!$include_header_and_footer) $_GET['wide_high']='1'; // HACKHACK
 
+	require_code('site');
 	if ($message!==NULL) attach_message($message,$type);
 
-	if (running_script('iframe'))
+	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
+
+	if (!running_script('index'))
 	{
 		global $ATTACHED_MESSAGES;
 		$middle->handle_symbol_preprocessing();
-		$tpl=do_template('STYLED_HTML_WRAP',array('TITLE'=>is_null($GLOBALS['DISPLAYED_TITLE'])?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],'EXTRA_HEAD'=>$GLOBALS['EXTRA_HEAD'],'EXTRA_FOOT'=>$GLOBALS['EXTRA_FOOT'],'MESSAGE_TOP'=>$ATTACHED_MESSAGES,'FRAME'=>true,'TARGET'=>'_self','CONTENT'=>$middle));
+		$tpl=do_template('STANDALONE_HTML_WRAP',array(
+			'TITLE'=>is_null($GLOBALS['DISPLAYED_TITLE'])?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],
+			'FRAME'=>running_script('iframe'),
+			'TARGET'=>'_self',
+			'CONTENT'=>$middle
+		));
 		$tpl->handle_symbol_preprocessing();
 		return $tpl;
 	}
 
-	global $DONE_HEADER;
-
-	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
-
 	$global=new ocp_tempcode();
-	$bail_out=(isset($DONE_HEADER) && $DONE_HEADER);
-	if (($include_header_and_footer) && (!$bail_out)) $global->attach(do_header());
-	$global->attach(do_template('GLOBAL',array('_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131','MIDDLE'=>$middle)));
-	if ($include_header_and_footer) $global->attach(do_footer($bail_out));
+	$global->attach(do_template('GLOBAL_HTML_WRAP',array(
+		'_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131',
+		'MIDDLE'=>$middle,
+	)));
 	$global->handle_symbol_preprocessing();
 
 	if (get_value('xhtml_strict')==='1')

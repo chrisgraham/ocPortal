@@ -331,7 +331,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 		$echo->handle_symbol_preprocessing();
 	} else
 	{
-		$echo->attach(do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'TARGET'=>'_top','CONTENT'=>$output)));
+		$echo->attach(do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'TARGET'=>'_top','CONTENT'=>$output)));
 	}
 	$echo->evaluate_echo();
 	exit();

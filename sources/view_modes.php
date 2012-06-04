@@ -83,9 +83,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 
 	if (function_exists('set_time_limit')) @set_time_limit(280);
 
-	$echo=do_header();
-	//$echo->evaluate_echo();
-	$echo2=new ocp_tempcode();
+	$middle_spt=new ocp_tempcode();
 
 	if (is_null($out_evaluated))
 	{
@@ -186,7 +184,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			}
 		}
 
-		$echo2=do_template('INDEX_SCREEN',array('_GUID'=>'7722ab1c391c86adccde04dbc0ef7ba9','TITLE'=>$title,'CONTENT'=>$file_links,'PRE'=>do_lang_tempcode('TXMT_PROTOCOL_EXPLAIN'),'POST'=>''));
+		$middle_spt=do_template('INDEX_SCREEN',array('_GUID'=>'7722ab1c391c86adccde04dbc0ef7ba9','TITLE'=>$title,'CONTENT'=>$file_links,'PRE'=>do_lang_tempcode('TXMT_PROTOCOL_EXPLAIN'),'POST'=>''));
 	}
 
 	// Theme images mode
@@ -209,7 +207,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			$theme_images->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'65ea324fb12a488adae780915624a268','IMG'=>$image,'DESCRIPTION'=>'','URL'=>$url,'NAME'=>$id)));
 		}
 
-		$echo2=do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'b16d40ad36f209b1a3559df6f1ebac55','TITLE'=>$title,'CONTENT'=>$theme_images,'PRE'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'POST'=>''));
+		$middle_spt=do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'b16d40ad36f209b1a3559df6f1ebac55','TITLE'=>$title,'CONTENT'=>$theme_images,'PRE'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'POST'=>''));
 	}
 
 	// Profile mode?
@@ -221,7 +219,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			xdebug_dump_function_profile($type);
 		} else
 		{
-			$echo2=make_string_tempcode('Check out the dump using KCacheGrind.');
+			$middle_spt=make_string_tempcode('Check out the dump using KCacheGrind.');
 		}
 	}
 
@@ -265,7 +263,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$post_url=build_url(array('page'=>'admin_lang','type'=>'_content','contextual'=>1),'adminzone');
 		$hidden=form_input_hidden('redirect',get_self_url(true,true));
 		$hidden=form_input_hidden('lang',user_lang());
-		$echo2=do_template('FORM_SCREEN',array('_GUID'=>'0d4dd16b023d0a7960f3eac85f54ddc4','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		$middle_spt=do_template('FORM_SCREEN',array('_GUID'=>'0d4dd16b023d0a7960f3eac85f54ddc4','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 	}
 
 	// Language mode
@@ -307,7 +305,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$post_url=build_url(array('page'=>'admin_lang','type'=>'_code2'),'adminzone');
 		$hidden=form_input_hidden('redirect',get_self_url(true,true));
 		$hidden=form_input_hidden('lang',user_lang());
-		$echo2=do_template('FORM_SCREEN',array('_GUID'=>'47a2934eaec30ed5eea635d4c462cee0','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		$middle_spt=do_template('FORM_SCREEN',array('_GUID'=>'47a2934eaec30ed5eea635d4c462cee0','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'),'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
 	}
 
 	// Template mode?
@@ -351,7 +349,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			$templates=do_template('TEMPLATE_TREE',array('_GUID'=>'ff2a2233b8b4045ba4d8777595ef64c7','HIDDEN'=>$hidden,'EDIT_URL'=>$edit_url,'TREE'=>$tree));
 		}
 
-		$echo2=do_template('TEMPLATE_LIST_SCREEN',array('_GUID'=>'ab859f67dcb635fcb4d1747d3c6a2c17','TITLE'=>$title,'TEMPLATES'=>$templates));
+		$middle_spt=do_template('TEMPLATE_LIST_SCREEN',array('_GUID'=>'ab859f67dcb635fcb4d1747d3c6a2c17','TITLE'=>$title,'TEMPLATES'=>$templates));
 	}
 
 	// Query mode?
@@ -373,12 +371,10 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		}
 		$title=get_screen_title("VIEW_PAGE_QUERIES");
 		$total=count($QUERY_LIST);
-		$echo2=do_template('QUERY_SCREEN',array('_GUID'=>'5f679c8f657b4e4ae94ae2d0ed4843fa','TITLE'=>$title,'TOTAL'=>integer_format($total),'TOTAL_TIME'=>float_format($total_time,3),'QUERIES'=>$queries));
+		$middle_spt=do_template('QUERY_SCREEN',array('_GUID'=>'5f679c8f657b4e4ae94ae2d0ed4843fa','TITLE'=>$title,'TOTAL'=>integer_format($total),'TOTAL_TIME'=>float_format($total_time,3),'QUERIES'=>$queries));
 	}
 
-	$echo->attach(globalise($echo2));
-	$echo->attach(do_footer());
-	$echo->handle_symbol_preprocessing();
+	$echo=globalise($middle_spt);
 	$echo->evaluate_echo();
 
 	exit();

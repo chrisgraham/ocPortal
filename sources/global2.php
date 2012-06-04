@@ -1819,22 +1819,13 @@ function javascript_tempcode($position=NULL)
  */
 function require_javascript($javascript)
 {
-	//if ((!array_key_exists('DONE_HEADER',$GLOBALS)) || (!$GLOBALS['DONE_HEADER']))
-	//{
-		if ($javascript=='javascript_forums_embed') // Has to be first
-		{
-			$GLOBALS['JAVASCRIPTS']=array_merge(array('javascript_forums_embed'=>1),$GLOBALS['JAVASCRIPTS']);
-		} else
-		{
-			$GLOBALS['JAVASCRIPTS'][$javascript]=1;
-		}
-	/*} else	 -- Won't work, as we can't sync with the output properly
+	if ($javascript=='javascript_forums_embed') // Has to be first
+	{
+		$GLOBALS['JAVASCRIPTS']=array_merge(array('javascript_forums_embed'=>1),$GLOBALS['JAVASCRIPTS']);
+	} else
 	{
 		$GLOBALS['JAVASCRIPTS'][$javascript]=1;
-		$file=javascript_enforce($javascript);
-		$temp=do_template('JAVASCRIPT_NEED_INLINE',array('_GUID'=>'a6c907e26c5a8dd8c65f1d36a1a674a9','CODE'=>file_get_contents($file,FILE_TEXT)));
-		$temp->evaluate_echo();
-	}*/
+	}
 }
 
 /**
@@ -1977,16 +1968,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
  */
 function require_css($css)
 {
-//	if ((!array_key_exists('DONE_HEADER',$GLOBALS)) || (!$GLOBALS['DONE_HEADER']))
-	{
-		$GLOBALS['CSSS'][$css]=1;
-	}/* else	 -- Won't work, as we can't sync with the output properly
-	{
-		$GLOBALS['CSSS'][$css]=1;
-		$file=css_enforce($css);
-		$temp=do_template('CSS_NEED_INLINE',array('_GUID'=>'b6c907e26c5a8dd8c65f1d36a1a674a9','CSS'=>file_get_contents($file,FILE_TEXT)));
-		$temp->evaluate_echo();
-	}*/
+	$GLOBALS['CSSS'][$css]=1;
 }
 
 /**

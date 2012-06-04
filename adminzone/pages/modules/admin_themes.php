@@ -1245,15 +1245,6 @@ class Module_admin_themes
 				');
 			}
 
-			if ($file=='HEADER.tpl')
-			{
-				$a=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'FOOTER'),'_SELF');
-				$b=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'STYLED_HTML_WRAP'),'_SELF');
-				$c=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'BASIC_HTML_WRAP'),'_SELF');
-				$d=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'MAIL'),'_SELF');
-				attach_message(do_lang_tempcode('HEADER_EDIT_ALSO',escape_html($a->evaluate()),escape_html($b->evaluate()),array(escape_html($c->evaluate()),escape_html($d->evaluate()))),'inform');
-			}
-
 			// Support searching
 			if (strpos($file,'/')===false)
 			{

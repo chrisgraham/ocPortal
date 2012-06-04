@@ -76,11 +76,9 @@ class Hook_addon_registry_core_primary_layout
 			'MESSAGE.tpl',
 			'helper_panel.css',
 			'messages.css',
-			'GLOBAL.tpl',
-			'GLOBAL_mobile.tpl',
+			'GLOBAL_HTML_WRAP.tpl',
+			'GLOBAL_HTML_WRAP_mobile.tpl',
 			'GLOBAL_HELPER_PANEL.tpl',
-			'FOOTER.tpl',
-			'HEADER.tpl',
 			'CLOSED_SITE.tpl',
 			'SCREEN_TITLE.tpl',
 			'SECTION_TITLE.tpl',
@@ -107,12 +105,10 @@ class Hook_addon_registry_core_primary_layout
 			'CLOSED_SITE.tpl' => 'closed_site',
 			'CSS_NEED_FULL.tpl' => 'css_need_full',
 			'MESSAGE.tpl' => 'message',
-			'HEADER.tpl' => 'main_layout',
-			'FOOTER.tpl' => 'main_layout',
 			'MAIL_SUBJECT.tpl' => 'mail_subject',
 			'MAIL.tpl' => 'mail',
-			'GLOBAL.tpl' => 'global',
-			'GLOBAL_mobile.tpl' => 'global',
+			'GLOBAL_HTML_WRAP.tpl' => 'global_html_wrap',
+			'GLOBAL_HTML_WRAP_mobile.tpl' => 'global_html_wrap',
 			'GLOBAL_HELPER_PANEL.tpl' => 'global',
 			'SCREEN_TITLE.tpl' => 'screen_title',
 			'MINOR_TITLE.tpl' => 'minor_title',
@@ -199,30 +195,6 @@ class Hook_addon_registry_core_primary_layout
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__main_layout()
-	{
-		$display = do_lorem_template('HEADER', array(
-			'REFRESH' => '',
-			'FEEDS' => '',
-		));
-		$display->attach(do_lorem_template('FOOTER', array(
-			'BAIL_OUT' => false,
-			'ERROR_MESSAGES_DURING_OUTPUT' => '',
-		)));
-		return array(
-			$display
-		);
-
-
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
 	function tpl_preview__mail_subject()
 	{
 		return array(
@@ -260,23 +232,11 @@ class Hook_addon_registry_core_primary_layout
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__global()
+	function tpl_preview__global_html_wrap()
 	{
-		$out = new ocp_tempcode();
-
-		$out->attach(do_lorem_template('HEADER', array(
-			'REFRESH' => '',
-			'FEEDS' => '',
-		)));
-
-		$out->attach(do_lorem_template('GLOBAL', array(
+		$out = do_lorem_template('GLOBAL_HTML_WRAP', array(
 			'MIDDLE' => lorem_paragraph_html(),
-		)));
-
-		$out->attach(do_lorem_template('FOOTER', array(
-			'BAIL_OUT' => false,
-			'ERROR_MESSAGES_DURING_OUTPUT' => '',
-		)));
+		));
 
 		return array(
 			$out

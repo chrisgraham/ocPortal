@@ -55,13 +55,11 @@ function init__site()
 	global $NON_CANONICAL_PARAMS;
 	$NON_CANONICAL_PARAMS=array('active_filter','keep_has_js','keep_session','redirected','redirect_url','redirect','redirect_passon','keep_devtest','keep_su','wide_print','keep_cache','keep_markers','keep_print','keep_novalidate','keep_no_query_limit','keep_avoid_memory_limit','keep_no_swfupload','keep_no_xhtml','keep_no_minify','keep_no_frames','keep_su_online','keep_show_parse_errors','keep_firephp_queries','keep_firephp','keep_fatalistic','keep_currency','keep_country','keep_mobile','keep_textonly','keep_noiepng','keep_no_debug_mode','keep_referrer','keep_timezone');
 
-	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$FAILED_TO_ATTACH_ALL_ERRORS;
+	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
 	$ATTACHED_MESSAGES=new ocp_tempcode();
 	$ATTACHED_MESSAGES_RAW=array();
-	$FAILED_TO_ATTACH_ALL_ERRORS=false;
-
-	global $DONE_HEADER;
-	$DONE_HEADER=false;
+	$LATE_ATTACHED_MESSAGES=new ocp_tempcode();
+	$LATE_ATTACHED_MESSAGES_RAW=array();
 
 	// We may fill these in from the code, or we may not
 	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SEO_TITLE;
@@ -229,7 +227,7 @@ function attach_message($message,$type='inform')
 {
 	if ((error_reporting()==0) && ($type=='warn')) return ''; // Supressing errors
 
-	global $DONE_HEADER,$ATTACH_MESSAGE_CALLED,$ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW;
+	global $ATTACH_MESSAGE_CALLED,$ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
 
 	foreach ($ATTACHED_MESSAGES_RAW as $last)
 	{
@@ -240,19 +238,6 @@ function attach_message($message,$type='inform')
 	if ($ATTACH_MESSAGE_CALLED>5)
 	{
 		critical_error('EMERGENCY',is_object($message)?$message->evaluate():$message);
-	}
-
-	if ($DONE_HEADER)
-	{
-		// Drastic measures
-		global $FAILED_TO_ATTACH_ALL_ERRORS;
-		if (!$FAILED_TO_ATTACH_ALL_ERRORS)
-		{
-			// Okay, start recording what will be shown on the bottom from this point
-			$ATTACHED_MESSAGES=new ocp_tempcode();
-			$ATTACHED_MESSAGES_RAW=array();
-			$FAILED_TO_ATTACH_ALL_ERRORS=true;
-		}
 	}
 
 	if (($type=='warn') && (strlen(is_object($message)?$message->evaluate():$message)<130))
@@ -275,9 +260,21 @@ function attach_message($message,$type='inform')
 
 	if ((get_param_integer('keep_fatalistic',0)==1) && ($type=='warn')) fatal_exit($message);
 
-	$ATTACHED_MESSAGES_RAW[]=array($message,$type);
-	$message=do_template('MESSAGE',array('_GUID'=>'ec843c8619d21fbeeb512686ea300a17','TYPE'=>$type,'MESSAGE'=>is_string($message)?escape_html($message):$message));
-	$ATTACHED_MESSAGES->attach($message);
+	$message=do_template('MESSAGE',array(
+		'_GUID'=>'ec843c8619d21fbeeb512686ea300a17',
+		'TYPE'=>$type,
+		'MESSAGE'=>is_string($message)?escape_html($message):$message
+	));
+
+	if (headers_sent())
+	{
+		$LATE_ATTACHED_MESSAGES_RAW[]=array($message,$type);
+		$LATE_ATTACHED_MESSAGES->attach($message);
+	} else
+	{
+		$ATTACHED_MESSAGES_RAW[]=array($message,$type);
+		$ATTACHED_MESSAGES->attach($message);
+	}
 
 	$ATTACH_MESSAGE_CALLED--;
 
@@ -487,46 +484,6 @@ function breadcrumb_set_self($title)
 }
 
 /**
- * Get the tempcode for the header. You will not normally need to use this function, as this is called as part of the website engine.
- *
- * @return tempcode		The site header
- */
-function do_header()
-{
-	$DONE_HEADER=true;
-
-	// Put it all together
-	$map=array(
-		'_GUID'=>'c2625aa7d8f0d5347552f6099a302930',
-	);
-
-	return do_template('HEADER',$map);
-}
-
-/**
- * Get the tempcode for the footer. You will not normally need to use this function, as this is called as part of the website engine.
- *
- * @param  boolean		Whether we are forcibly handling a bail-out (an error occurred during output and our XHTML is likely corrupted)
- * @return tempcode		The site footer
- */
-function do_footer($bail_out=false)
-{
-	$messages=new ocp_tempcode();
-	global $FAILED_TO_ATTACH_ALL_ERRORS;
-	if ($FAILED_TO_ATTACH_ALL_ERRORS)
-	{
-		global $ATTACHED_MESSAGES;
-		$messages=$ATTACHED_MESSAGES;
-	}
-
-	return do_template('FOOTER',array(
-		'_GUID'=>'0b7aa662fed823988c9267677cd0b471',
-		'BAIL_OUT'=>$bail_out,
-		'ERROR_MESSAGES_DURING_OUTPUT'=>$messages,
-	));
-}
-
-/**
  * This is it - the start of rendering of a website page.
  * Take in all inputs, sends them to the correct functions to process, gathers up all the outputs, sticks them together and echoes them.
  */
@@ -666,17 +623,7 @@ function do_site()
 	}
 
 	// Put it all together
-	$out=new ocp_tempcode(); // This is important - it makes sure the tempcode tree appears nicely
-	$out->attach(do_header());
-	$out->attach(do_template('GLOBAL',array(
-		'MIDDLE'=>$middle,
-	)));
-	$out->attach(do_footer());
-	$out->handle_symbol_preprocessing();
-	if (get_value('xhtml_strict')==='1')
-	{
-		$out=make_xhtml_strict($out);
-	}
+	$out=globalise($middle,NULL,NULL,true);
 
 	// Validation
 	$novalidate=get_param_integer('keep_novalidate',get_param_integer('novalidate',0));

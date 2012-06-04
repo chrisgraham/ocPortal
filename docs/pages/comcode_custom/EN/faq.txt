@@ -405,9 +405,7 @@ You can either change the settings for the whole of ocPortal by changing key str
 http://uk2.php.net/manual/en/function.strftime.php
 
 [b]How do I edit the XHTML head and/or the opening and closing XHTML body tags?[/b]
-The actual XHTML header and opening body tag is in [tt]HEADER.tpl[/tt].
-The actual XHTML footer (including the closing body tag) is in [tt]FOOTER.tpl[/tt].
-[tt]GLOBAL.tpl[/tt] holds the panels, and main screen together.
+As of version 9, it is all in the [tt]GLOBAL_HTML_WRAP.tpl[/tt] template.
 
 [b]How do I edit ocPortal in an HTML editor?[/b]
 It is not possible to do this, as ocPortal screens are constructed by an amalgamation of many template files. It is possible, however, to construct HTML pages, using an HTML editor. HTML pages can be placed into ocPortal zones much like a Comcode page can: however, we would advise you use Comcode pages instead.

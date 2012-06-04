@@ -71,7 +71,7 @@ Comcode pages may be selected for editing from the Comcode pages editor in the A
    </tr>
    <tr>
       <td>All</td>
-      <td>panel_left, and sometimes panel_right (and also any panel_ page may be added and used by a user, if a template such as GLOBAL.tpl references them)</td>
+      <td>panel_left, and sometimes panel_right (and also any [tt]panel_[/tt] page may be added and used by a user, if a template such as [tt]GLOBAL_HTML_WRAP.tpl[/tt] references them)</td>
       <td>Your actual menus, either side of your pages, are assembled by Comcode pages. Not all zones have menu pages, and there are other ones available that are un-used by default. They may also be turned off on a per-zone basis, by making a zone 'wide'.</td>
    </tr>
    <tr>

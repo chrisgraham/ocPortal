@@ -291,7 +291,7 @@ function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
 	if ($ret) return $tpl;
 
 	$keep=symbol_tempcode('KEEP');
-	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'aacac778b145bfe7b063317fbcae7fde','FRAME'=>true,'TARGET'=>'_top','TITLE'=>do_lang_tempcode('SHOUTBOX'),'CONTENT'=>$tpl));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'aacac778b145bfe7b063317fbcae7fde','FRAME'=>true,'TARGET'=>'_top','TITLE'=>do_lang_tempcode('SHOUTBOX'),'CONTENT'=>$tpl));
 	$echo->evaluate_echo();
 	return NULL;
 }

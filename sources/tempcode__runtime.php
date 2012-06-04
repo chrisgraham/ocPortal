@@ -768,7 +768,7 @@ class ocp_tempcode
 	{
 		foreach ($this->bits as $bit)
 		{
-			if (($bit[1]==TC_DIRECTIVE)/* || ($bit[1]==TC_SYMBOL) Makes it incredibly slow if we go over symbols, so we compromise and leave it off ; HEADER.tpl contains SET'd panels to force them to evaluate early, in case anything important is in them like CSS included */)
+			if (($bit[1]==TC_DIRECTIVE) || ($bit[1]==TC_SYMBOL))
 			{
 				if (isset($bit[3]))
 				{

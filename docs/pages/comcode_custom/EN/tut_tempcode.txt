@@ -595,6 +595,10 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<td>Attached messages, for less prominent display</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>{$LATE_MESSAGES}</td>
+		<td>Attached messages that happened after output started (after main page generation). These will usually be errors relating to the output process itself.</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>{$BREADCRUMBS}</td>
 		<td>The breadcrumbs</td>
 	</tr>

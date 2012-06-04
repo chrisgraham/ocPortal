@@ -80,14 +80,14 @@ This section will step through how to build your design, in a number of steps an
 [title="3"]Global layout of XHTML[/title]
 
 [list="1"]
-[*]You will next need to start modifying templates to incorporate your "global" XHTML (XHTML you expect to show on all pages). Start with the main ones: [tt]HEADER[/tt], [tt]GLOBAL[/tt] and [tt]FOOTER[/tt]. You can do this in ocPortal from the themes section, or you can do it in your favourite text editor (e.g. Dreamweaver) by copying for example [tt]themes/default/templates/HEADER.tpl[/tt] to [tt]themes/<yourthemename>/templates_custom/HEADER.tpl[/tt]. It will take you a bit of time to learn what default template code to keep and what can go. Basically you will want to keep:
+[*]You will next need to start modifying templates to incorporate your "global" XHTML (XHTML you expect to show on all pages). Start with the main one: [tt]GLOBAL_HTML_WRAP[/tt]. You can do this in ocPortal from the themes section, or you can do it in your favourite text editor (e.g. Dreamweaver) by copying for example [tt]themes/default/templates/GLOBAL_HTML_WRAP.tpl[/tt] to [tt]themes/<yourthemename>/templates_custom/GLOBAL_HTML_WRAP.tpl[/tt]. It will take you a bit of time to learn what default template code to keep and what can go. Basically you will want to keep:
 [list]
-	[*]most of the contents of the [tt]<head>[/tt] tag from [tt]HEADER[/tt]
-	[*]References to panels, like [tt]{$GET,panel_left}[/tt] from [tt]GLOBAL[/tt], so that panels can still be placed (assuming you have panels on your design! - or you may have a left and no right, or vice-versa). You can rearrange it all and place it in different places, and you don't need all the stuff about widths because you are allowed to make bigger assumptions than our default templates can. It is possible to hard-code panels into the [tt]GLOBAL[/tt] template instead of using separate files, but is makes it harder for webmasters to make changes. If you feel more comfortable not using panels at first this is fine.
-	[*][tt]{MIDDLE}[/tt] from [tt]GLOBAL[/tt], which is the main content of a page.
-	[*][tt]{MESSAGE_TOP}[/tt] and [tt]{MESSAGE}[/tt] from [tt]GLOBAL[/tt], which is used to put out status messages as you complete things on the site or if small errors happen.
-	[*][tt]{$JS_TEMPCODE,footer}[/tt] and the [tt]<script>[/tt] tag from [tt]FOOTER[/tt].
-	[*][tt]{$COPYRIGHT`}[/tt] from [tt]FOOTER[/tt], which should be used instead of the hard-coded copyright of your design (most designs have it).
+	[*]The contents of the [tt]<head>[/tt] tag from [tt]GLOBAL_HTML_WRAP[/tt]
+	[*]References to panels, like [tt]{$GET,panel_left}[/tt] from [tt]GLOBAL_HTML_WRAP[/tt], so that panels can still be placed (assuming you have panels on your design! - or you may have a left and no right, or vice-versa). You can rearrange it all and place it in different places, and you don't need all the stuff about widths because you are allowed to make bigger assumptions than our default templates can. It is possible to hard-code panels into the [tt]GLOBAL_HTML_WRAP[/tt] template instead of using separate files, but is makes it harder for webmasters to make changes. If you feel more comfortable not using panels at first this is fine.
+	[*][tt]{MIDDLE}[/tt] from [tt]GLOBAL_HTML_WRAP[/tt], which is the main content of a page.
+	[*][tt]{MESSAGE_TOP}[/tt] and [tt]{MESSAGE}[/tt] from [tt]GLOBAL_HTML_WRAP[/tt], which is used to put out status messages as you complete things on the site or if small errors happen.
+	[*][tt]{$JS_TEMPCODE,footer}[/tt] and the [tt]<script>[/tt] tag from [tt]GLOBAL_HTML_WRAP[/tt].
+	[*][tt]{$COPYRIGHT`}[/tt] from [tt]GLOBAL_HTML_WRAP[/tt], which should be used instead of the hard-coded copyright of your design (most designs have it).
 	[*]The rest (and there are lots, because our default theme is very thorough) can be removed.
 [/list]
 [*]If you have incorporated panels and have made the assumption that they will never be blank/hidden, then you must put [tt]supports_wide=0[/tt] into your [tt]themes/<theme>/theme.ini[/tt] file.
@@ -107,8 +107,7 @@ This section will step through how to build your design, in a number of steps an
 	[*]Comcode page: Right panel (if you have one on the design), [tt]:panel_right[/tt]
 	[*]Comcode page: Top panel (if you have one on the design), [tt]:panel_top[/tt]
 	[*]Comcode page: Bottom panel (if you have one on the design), [tt]:panel_bottom[/tt]
-	[*][tt]HEADER[/tt]: Often there will be blocks in the header, like 'search' or 'login'. You can place these using code like [tt]{$BLOCK,block=<blockname>}[/tt]
-	[*][tt]FOOTER[/tt]: Similarly sometimes the is a menu in the footer, which can be placed like [code]{$BLOCK,block=side_stored_menu,type=<menu-type>,param=<menu-name>}[/code]
+	[*][tt]GLOBAL_HTML_WRAP[/tt]: Often there will be blocks in the header, like 'search' or 'login'. You can place these using code like [tt]{$BLOCK,block=<blockname>}[/tt]. Similarly sometimes the is a menu in the footer, which can be placed like [code]{$BLOCK,block=side_stored_menu,type=<menu-type>,param=<menu-name>}[/code]
 [/list]
 [/list]
 
@@ -192,10 +191,6 @@ XHTML goes here
 
 If you have some simple content that is just plain text, it's best to just write it in Comcode. Otherwise, it does not matter a lot if you use XHTML. Comcode exists to make it easier for non-experts to write content, but you know XHTML already.
 
-[title="3"]Do I put wrapper tags in [tt]GLOBAL.tpl[/tt] or a pair that spans [tt]HEADER.tpl[/tt]/[tt]FOOTER.tpl[/tt]?[/title]
-
-It does not usually matter because these templates are always used together, so do what you feel most comfortable with. If your wrapper goes around the footer you obviously have no choice to do the latter though.
-
 [title="3"]Javascript libraries (such as jQuery)[/title]
 
 You may have used some Javascript libraries in your design. jQuery is very common nowadays. You can reference these Javascript resources very simply in the [tt]<head>[/tt] tag just like you would in any simple static website, and it won't cause any problems.
@@ -238,7 +233,7 @@ ocPortal does not handle this automatically because the conversion carries an as
 [title="3"]New panels / re-used text / content-in-layout[/title]
 
 There are three situations that may require you to add new panels to ocPortal, or to add a special content page that is included in another:
-1) [b]New panels[/b]: most designs use some combination of left/right/top/bottom panels and a header (HEADER template) and a footer (FOOTER template). But it might not always be the case, one could imagine all kinds of complex panel arrangements.
+1) [b]New panels[/b]: most designs use some combination of left/right/top/bottom panels and a header and a footer. But it might not always be the case, one could imagine all kinds of complex panel arrangements.
 2) [b]Re-used text[/b]: It might be the case that some text is used on many pages, so you don't want to keep copy & pasting it.
 3) [b]Content-in-layout[/b]: Often a design will include some content in the header that the final webmaster might want to edit. If you are your own webmaster it doesn't matter so much, but ideally it's better to give someone the name of a page to edit instead of a template.
 
@@ -369,7 +364,7 @@ The [tt]BLOCK_SIDE_PERSONAL_STATS_NO.tpl[/tt] template is displayed for non-logg
 
 When you design a page you probably only think of it as a login box, but when you make a real site you obviously need to think about what happens when someone is already logged in, as everything has to function nicely too, as it's not a static design anymore.
 
-Often designs will show the login box via a template instead, usually when it needs displaying in the header (so, the [tt]HEADER.tpl[/tt] template). Like with all blocks you can show it in a template using Tempcode like [tt]{$BLOCK,block=side_personal_stats}[/tt]. For these situations heavy template/CSS changes will probably be needed as if it is in a header it will need to be designed to look long and thin, not box shaped.
+Often designs will show the login box via a template instead, usually when it needs displaying in the header (so, the [tt]GLOBAL_HTML_WRAP.tpl[/tt] template). Like with all blocks you can show it in a template using Tempcode like [tt]{$BLOCK,block=side_personal_stats}[/tt]. For these situations heavy template/CSS changes will probably be needed as if it is in a header it will need to be designed to look long and thin, not box shaped.
 
 If you want to simulate what it looks like when you are logged out you can do it without logging out put [tt]&keep_su=Guest[/tt] on the end of the URL (or [tt]?keep_su=Guest[/tt] if you don't have a '?' symbol in the URL you're at).
 This technique is very useful because you can have one tab showing what a logged in user sees, and one tab showing what a non-logged-in user sees (a "Guest") -- you avoid having to login/logout all the time to do testing.

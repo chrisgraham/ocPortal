@@ -77,7 +77,7 @@ function authors_script()
 
 	$content=do_template('AUTHOR_POPUP',array('_GUID'=>'e18411d1bf24c6ed945b4d9064774884','CONTENT'=>$content,'NEXT_URL'=>$next_url));
 
-	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'ab8d8c9d276530d82ddd84202aacf32f','TITLE'=>do_lang_tempcode('CHOOSE_AUTHOR'),'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'ab8d8c9d276530d82ddd84202aacf32f','TITLE'=>do_lang_tempcode('CHOOSE_AUTHOR'),'CONTENT'=>$content));
 	$echo->evaluate_echo();
 }
 

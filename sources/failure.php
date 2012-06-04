@@ -286,9 +286,6 @@ function _generic_exit($text,$template)
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 	}
 
-	global $DONE_HEADER;
-	$bail_out=(isset($DONE_HEADER) && $DONE_HEADER);
-	$echo=$bail_out?new ocp_tempcode():do_header(running_script('preview') || running_script('iframe') || running_script('shoutbox'));
 	if (($template=='INFORM_SCREEN') && (is_object($GLOBALS['DISPLAYED_TITLE'])))
 	{
 		$title=get_screen_title($GLOBALS['DISPLAYED_TITLE'],false);
@@ -297,18 +294,8 @@ function _generic_exit($text,$template)
 		$title=get_screen_title(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED');
 	}
 
-	if (running_script('preview') || running_script('iframe') || running_script('shoutbox'))
-	{
-		$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$text));
-		$echo->handle_symbol_preprocessing();
-		$echo->evaluate_echo();
-		exit();
-	}
-
-	$inside=do_template($template,array('TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>true));
-	$echo->attach((running_script('preview') || running_script('iframe') || running_script('shoutbox'))?$inside:globalise($inside));
-	$echo->attach(do_footer($bail_out));
-	$echo->handle_symbol_preprocessing();
+	$middle=do_template($template,array('TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>true));
+	$echo->attach(globalise($middle));
 	$echo->evaluate_echo();
 	exit();
 }

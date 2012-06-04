@@ -80,7 +80,7 @@ Panel pages rest around your main page, if they exist. Panel pages are nothing m
  - panel_right
  - panel_top
  - panel_bottom
-The GLOBAL.tpl template defines how these panels fit together along with the main page. Templates are described in the next section.
+The [tt]GLOBAL_HTML_WRAP.tpl[/tt] template defines how these panels fit together along with the main page. Templates are described in the next section.
 
 If a zone is marked as 'wide' in its configuration, then no panels will be shown. In addition, if '&keep_wide=1'/'&wide=1' is attached to the URL, the target page for any links will also not use any panels. If '&keep_wide_high=1'/'&wide_high=1' is attached to the URL, the target page for any links will not use any panels, and will not have the standard top/bottom.
 
@@ -102,12 +102,11 @@ Another view of the structure of an ocPortal-driven website is that of the compo
 As mentioned previously, the two common ways templates are joined are:
 1) attaching/appending one to another: this is called attaching
 2) embedding one (or various, attached together) into another: this is called wrapping
-Both are used: although if we wished, we could have avoided embedded, having a combination of both techniques produces the most attractive solution. A good example of a 'wrapping' template is GLOBAL.tpl; it embeds the full menu and central pages, along with the common top/bottom, in a certain way, to make them layout appropriately. A good example of a template designed to be attached is the situation where one templates is repeated many times: a template that shows a single item in list of things is likely to be used like this.
+Both are used: although if we wished, we could have avoided embedded, having a combination of both techniques produces the most attractive solution. A good example of a 'wrapping' template is [tt]GLOBAL_HTML_WRAP.tpl[/tt]; it embeds the full menu and central pages, along with the common top/bottom, in a certain way, to make them layout appropriately. A good example of a template designed to be attached is the situation where one templates is repeated many times: a template that shows a single item in list of things is likely to be used like this.
 
 A simplified view of the part of the ocPortal template tree that is common across all pages is:
 [tt]
-   HEADER
-      GLOBAL
+   GLOBAL_HTML_WRAP
       PANEL_TOP (optional)
          ...
       PANEL_LEFT (optional)
@@ -119,7 +118,6 @@ A simplified view of the part of the ocPortal template tree that is common acros
          ...
       PANEL_BOTTOM (optional)
          ...
-   FOOTER
 [/tt]
 When something appears beneath, on the same level, it has been attached. When one of more things appear beneath, on one level deeper, they have been wrapped. As a tree structure, it is built up from the most deep parts of the tree, and wrapped/attached all the way back until the final composition exists: and then it is output.
 

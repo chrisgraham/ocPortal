@@ -63,7 +63,7 @@ class template_previews_test_set extends ocp_test_case
 		require_code('validation');
 		require_lang('validation');
 
-		global $DONE_HEADER,$RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED;
+		global $RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED;
 		$RECORD_TEMPLATES_USED=true;
 
 		$only_do_these=array( // If you want to test specific templates temporarily put the template names (without .tpl) in this array. But remove again before you commit!
@@ -89,7 +89,6 @@ class template_previews_test_set extends ocp_test_case
 
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 
-			$DONE_HEADER=false;
 			$RECORDED_TEMPLATES_USED=array();
 			$out=render_screen_preview($template,$hook,$function);
 			$flag=false;

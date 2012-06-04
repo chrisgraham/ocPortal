@@ -622,7 +622,7 @@ function comcode_helper_script()
 	}
 
 	$content->handle_symbol_preprocessing();
-	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
 	exit($echo->evaluate());
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
